@@ -13,30 +13,30 @@ import java.text.DecimalFormat;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
+import io.reactivex.Observer;
+import timber.log.Timber;
 
 @PerApplication
-public class StatusText {
+public class StatusText extends Observable<String> {
 
     @NonNull
     private final Context context;
 
     @NonNull
-    private final CurrentPosition currentPosition;
-
-    @NonNull
     private final DecimalFormat decimalFormat;
 
-    @Inject
-    public StatusText(@NonNull Context context,
-                      @NonNull CurrentPosition currentPosition,
-                      @NonNull DecimalFormat decimalFormat) {
-        this.context = context;
-        this.currentPosition = currentPosition;
-        this.decimalFormat = decimalFormat;
-    }
+    @NonNull
+    private final Observable<String> statusText;
 
-    public Observable<String> observe() {
-        return currentPosition.observe()
+    @Inject
+    StatusText(@NonNull Context context,
+               @NonNull WatchPosition watchPosition,
+               @NonNull DecimalFormat decimalFormat) {
+        this.context = context;
+        this.decimalFormat = decimalFormat;
+
+        statusText = watchPosition.observeLocation()
+                .doOnNext(__ -> Timber.i("StatusText: getting location."))
                 .map(currentLocation -> currentLocation.isPresent()
                         ? getStringForLocation(currentLocation.get())
                         : getDefaultString());
@@ -56,5 +56,10 @@ public class StatusText {
 
     private String getDefaultString() {
         return context.getString(R.string.please_wait_long);
+    }
+
+    @Override
+    protected void subscribeActual(Observer<? super String> observer) {
+        statusText.subscribe(observer);
     }
 }

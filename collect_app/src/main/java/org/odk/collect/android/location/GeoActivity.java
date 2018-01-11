@@ -96,34 +96,34 @@ public class GeoActivity
         GeoViewModel viewModel = getViewModel();
 
         // Bind Location Info:
-        viewModel.locationInfoVisibility()
+        viewModel.observeLocationInfoVisibility()
                 .compose(bindToLifecycle())
                 .subscribe(locationInfoText::setVisibility, Timber::e);
 
-        viewModel.locationInfoText()
+        viewModel.observeLocationInfoText()
                 .compose(bindToLifecycle())
                 .subscribe(locationInfoText::setText, Timber::e);
 
         // Bind Location Status:
-        viewModel.locationStatusVisibility()
+        viewModel.observeLocationStatusVisibility()
                 .compose(bindToLifecycle())
                 .subscribe(locationStatusText::setVisibility, Timber::e);
 
-        viewModel.locationStatusText()
+        viewModel.observeLocationStatusText()
                 .compose(bindToLifecycle())
                 .subscribe(locationStatusText::setText, Timber::e);
 
         // Bind Button Visibility:
-        viewModel.pauseButtonVisibility()
+        viewModel.observePauseButtonVisibility()
                 .compose(bindToLifecycle())
                 .subscribe(pauseButton::setVisibility, Timber::e);
 
         // Bind Button Enable Status:
-        viewModel.isAddLocationEnabled()
+        viewModel.observeAddLocationEnabled()
                 .compose(bindToLifecycle())
                 .subscribe(addButton::setEnabled);
 
-        viewModel.isShowLocationEnabled()
+        viewModel.observeShowLocationEnabled()
                 .compose(bindToLifecycle())
                 .subscribe(showButton::setEnabled);
 
@@ -133,15 +133,15 @@ public class GeoActivity
                 .subscribe(__ -> clearMarker(), Timber::e);
 
         // Bind Dialog events:
-        viewModel.shouldShowZoomDialog()
+        viewModel.observeShowZoomDialog()
                 .compose(bindToLifecycle())
                 .subscribe(zoomDialog::show, Timber::e);
 
-        viewModel.shouldShowGpsAlert()
+        viewModel.observeShowGpsAlert()
                 .compose(bindToLifecycle())
                 .subscribe(showGpsDisabledAlert::show, Timber::e);
 
-        viewModel.shouldShowLayers()
+        viewModel.observeShowLayers()
                 .withLatestFrom(observeMap, Rx::takeRight)
                 .compose(bindToLifecycle())
                 .subscribe(this::shouldShowLayers, Timber::e);
@@ -155,7 +155,7 @@ public class GeoActivity
         zoomDialog.zoomToLocation()
                 .map(latLng -> CameraUpdateFactory.newLatLngZoom(latLng, 16))
                 .compose(bindToLifecycle())
-                .doOnNext(Rx.logi("Zooming to location."))
+                .doOnNext(__ -> Timber.i("Zooming to location."))
                 .subscribe(this::updateCamera, Timber::e);
 
         observeMarker.filter(Optional::isPresent)

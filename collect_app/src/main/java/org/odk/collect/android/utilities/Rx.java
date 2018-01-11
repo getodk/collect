@@ -57,24 +57,4 @@ public class Rx {
     }
 
     public static void noop(Object... vars) {}
-
-    public static <T> Consumer<T> logi(String message) {
-        Timber.i(message);
-        return Rx::noop;
-    }
-
-    public static <T> Consumer<T> logd(String message) {
-        Timber.d(message);
-        return Rx::noop;
-    }
-
-    public static <T> Consumer<T> logw(String message) {
-        Timber.w(message);
-        return Rx::noop;
-    }
-
-    public static <T> Consumer<T> loge(String message) throws Exception {
-        Timber.e(message);
-        return Rx::noop;
-    }
 }

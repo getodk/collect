@@ -13,12 +13,8 @@ import com.jakewharton.rxrelay2.PublishRelay;
 
 import org.odk.collect.android.architecture.rx.RxMVVMViewModel;
 import org.odk.collect.android.location.model.ZoomData;
-import org.odk.collect.android.location.usecases.CurrentPosition;
 import org.odk.collect.android.location.usecases.InfoText;
-import org.odk.collect.android.location.usecases.InitialLocation;
 import org.odk.collect.android.location.usecases.InitialState;
-import org.odk.collect.android.location.usecases.IsDraggable;
-import org.odk.collect.android.location.usecases.IsReadOnly;
 import org.odk.collect.android.location.usecases.MarkedLocation;
 import org.odk.collect.android.location.usecases.StatusText;
 import org.odk.collect.android.location.usecases.WatchPosition;
@@ -39,19 +35,7 @@ public class GeoViewModel extends RxMVVMViewModel {
 
     // Inputs:
     @NonNull
-    private final IsDraggable isDraggable;
-
-    @NonNull
-    private final IsReadOnly isReadOnly;
-
-    @NonNull
-    private final InitialLocation initialLocation;
-
-    @NonNull
     private final WatchPosition watchPosition;
-
-    @NonNull
-    private final CurrentPosition currentPosition;
 
     @NonNull
     private final MarkedLocation markedLocation;
@@ -62,40 +46,133 @@ public class GeoViewModel extends RxMVVMViewModel {
     @NonNull
     private final StatusText statusText;
 
+    // Outputs:
     @NonNull
-    private final PublishRelay<Object> onShowLocation = PublishRelay.create();
+    private final Observable<Integer> locationInfoVisibility;
 
     @NonNull
-    private final PublishRelay<Object> onShowLayers = PublishRelay.create();
+    private final Observable<Integer> locationStatusVisibility;
 
     @NonNull
-    private final PublishRelay<Object> onClearLocation = PublishRelay.create();
+    private final Observable<Boolean> isShowLocationEnabled;
+
+    @NonNull
+    private final Observable<Object> shouldShowGpsAlert;
+
+    @NonNull
+    private final Observable<ZoomData> shouldShowZoomDialog;
+
+    @NonNull
+    private final Observable<Boolean> hasCurrentPosition;
+
+    @NonNull
+    private final Observable<LatLng> onMarkedLocation;
+
+    // Internal state:
+    @NonNull
+    private final PublishRelay<Object> 
+
+    @NonNull
+    private final PublishRelay<Object> showLocation = PublishRelay.create();
+
+    @NonNull
+    private final PublishRelay<Object> showLayers = PublishRelay.create();
+
+    @NonNull
+    private final PublishRelay<Object> clearLocation = PublishRelay.create();
 
     @NonNull
     private final PublishRelay<LatLng> shouldMarkLocation = PublishRelay.create();
 
-    // Outputs:
+    @NonNull
+    private final Observable<Object> onShowLayers = showLayers.hide();
+
+    @NonNull
+    private final Observable<Object> onClearLocation = clearLocation.hide();
 
     @Inject
     GeoViewModel(@NonNull InitialState initialState,
-                 @NonNull IsDraggable isDraggable,
-                 @NonNull IsReadOnly isReadOnly,
-                 @NonNull InitialLocation initialLocation,
                  @NonNull WatchPosition watchPosition,
-                 @NonNull CurrentPosition currentPosition,
                  @NonNull MarkedLocation markedLocation,
                  @NonNull InfoText infoText,
                  @NonNull StatusText statusText) {
 
         this.initialState = initialState;
-        this.isDraggable = isDraggable;
-        this.isReadOnly = isReadOnly;
-        this.initialLocation = initialLocation;
         this.watchPosition = watchPosition;
-        this.currentPosition = currentPosition;
         this.markedLocation = markedLocation;
         this.infoText = infoText;
         this.statusText = statusText;
+
+        // Observe Location:
+        this.hasCurrentPosition = watchPosition.observeLocation()
+                .map(Optional::isPresent)
+                .distinctUntilChanged()
+                .replay(1)
+                .refCount();
+
+        Observable<Boolean> hasInitialLocation = initialState.location()
+                .doOnNext(optional -> Timber.i("HasInitialLocation: received location, %s", optional))
+                .map(Optional::isPresent)
+                .doOnNext(__ -> Timber.i("HasInitialLocation: is present: %s.", __))
+                .distinctUntilChanged()
+                .replay(1)
+                .refCount();
+
+        Observable<Boolean> firstLocationReceived = watchPosition.observeLocation()
+                .map(Optional::isPresent)
+                .distinctUntilChanged()
+                .filter(Rx::isTrue);
+
+        this.locationInfoVisibility = hasInitialLocation
+                .map(hasLocation -> hasLocation
+                        ? View.GONE
+                        : View.VISIBLE)
+                .distinctUntilChanged();
+
+        this.locationStatusVisibility = hasInitialLocation
+                .map(hasLocation -> hasLocation
+                        ? View.GONE
+                        : View.VISIBLE)
+                .distinctUntilChanged();
+
+        this.shouldShowGpsAlert = watchPosition.observeAvailability()
+                .filter(isAvailable -> !isAvailable)
+                .map(__ -> this);
+
+        this.shouldShowZoomDialog = Observable.combineLatest(showLocation.hide(), firstLocationReceived, Rx::consume)
+                .withLatestFrom(watchPosition.observeLocation(), Rx::takeRight)
+                .doOnNext(__ -> Timber.i("ShouldShowZoomDialog: Got position."))
+                .withLatestFrom(markedLocation.observe(), (current, marked) ->
+                        new ZoomData(current.orNull(), marked.orNull()));
+
+
+        Observable<Boolean> hasMarkedLocation = markedLocation.observe()
+                .map(Optional::isPresent)
+                .distinctUntilChanged();
+
+        this.isShowLocationEnabled = Observable.combineLatest(hasCurrentPosition,
+                hasMarkedLocation,
+                Rx::or
+
+        ).distinctUntilChanged();
+
+        // Returns either the Initial location or the first location received from the GPS:
+        Observable<LatLng> shouldMarkInitialLocation = Observable.amb(ImmutableList.of(
+                initialState.location()
+                        .filter(Optional::isPresent)
+                        .map(Optional::get),
+
+                firstLocationReceived
+                        .combineLatest(watchPosition.observeLocation(), Rx::takeRight)
+                        .filter(Optional::isPresent)
+                        .map(Optional::get)
+                        .map(this::locationToLatLng)
+        ));
+
+        this.onMarkedLocation = Observable.merge(
+                shouldMarkInitialLocation,
+                shouldMarkLocation.hide()
+        );
     }
 
     @Override
@@ -105,102 +182,69 @@ public class GeoViewModel extends RxMVVMViewModel {
     }
 
     @NonNull
-    Observable<String> locationInfoText() {
-        return infoText.observe();
+    Observable<String> observeLocationInfoText() {
+        return infoText;
     }
 
     @NonNull
-    Observable<String> locationStatusText() {
-        return statusText.observe();
+    Observable<String> observeLocationStatusText() {
+        return statusText;
     }
 
     @NonNull
-    Observable<Integer> locationInfoVisibility() {
-        return hasInitialLocation()
-                .map(hasInitialLocation -> hasInitialLocation
-                        ? View.GONE
-                        : View.VISIBLE)
-                .distinctUntilChanged();
+    Observable<Integer> observeLocationInfoVisibility() {
+        return locationInfoVisibility;
     }
 
     @NonNull
-    Observable<Integer> locationStatusVisibility() {
-        return hasInitialLocation()
-                .map(hasInitialLocation -> hasInitialLocation
-                        ? View.GONE
-                        : View.VISIBLE)
-                .distinctUntilChanged();
+    Observable<Integer> observeLocationStatusVisibility() {
+        return locationStatusVisibility;
     }
 
     @NonNull
-    Observable<Integer> pauseButtonVisibility() {
+    Observable<Integer> observePauseButtonVisibility() {
         return Observable.just(View.GONE);
     }
 
     @NonNull
-    Observable<Boolean> isAddLocationEnabled() {
-        return hasCurrentLocation();
+    Observable<Boolean> observeAddLocationEnabled() {
+        return hasCurrentPosition;
     }
 
     @NonNull
-    Observable<Boolean> isShowLocationEnabled() {
-        return Observable.combineLatest(
-                hasCurrentLocation(),
-                hasMarkedLocation(),
-                Rx::or
-
-        ).distinctUntilChanged();
+    Observable<Boolean> observeShowLocationEnabled() {
+        return isShowLocationEnabled;
     }
 
     @NonNull
-    Observable<Object> shouldShowGpsAlert() {
-        return watchPosition.observeAvailability()
-                .filter(isAvailable -> !isAvailable)
-                .map(__ -> this);
+    Observable<Object> observeShowGpsAlert() {
+        return shouldShowGpsAlert;
     }
 
     @NonNull
-    Observable<ZoomData> shouldShowZoomDialog() {
-        return Observable.combineLatest(onShowLocation.hide(), observeFirstLocation(), Rx::consume)
-                .withLatestFrom(currentPosition.observe(), Rx::takeRight)
-                .withLatestFrom(markedLocation.observe(), (current, marked) ->
-                        new ZoomData(current.orNull(), marked.orNull())).hide();
+    Observable<ZoomData> observeShowZoomDialog() {
+        return shouldShowZoomDialog;
     }
 
     @NonNull
-    Observable<Object> shouldShowLayers() {
-        return onShowLayers.hide();
-    }
-
-    @NonNull
-    private Observable<LatLng> observeInitialMarkedLocation() {
-
-        return Observable.amb(ImmutableList.of(
-                initialLocation.observe()
-                        .filter(Optional::isPresent)
-                        .map(Optional::get),
-
-                observeFirstLocation()
-                        .map(this::locationToLatLng)
-        ));
+    Observable<Object> observeShowLayers() {
+        return onShowLayers;
     }
 
     @NonNull
     Observable<LatLng> observeMarkedLocation() {
-        return Observable.merge(
-                observeInitialMarkedLocation(),
-                shouldMarkLocation.hide()
-        );
+        return onMarkedLocation;
     }
 
     @NonNull
     Observable<Object> observeLocationCleared() {
-
-        return onClearLocation.hide();
+        return onClearLocation;
     }
 
+    // Inputs:
+
     Completable addLocation() {
-        return currentPosition.observe()
+        return watchPosition.observeLocation()
                 .doOnNext(locationOptional -> Timber.i("Hmm"))
                 .doOnError(throwable -> Timber.w("WTF"))
                 .filter(Optional::isPresent)
@@ -217,22 +261,22 @@ public class GeoViewModel extends RxMVVMViewModel {
     }
 
     Completable showLocation() {
-        return currentPosition.observe()
-                .doOnNext(Rx.logi("Calling should show zoom dialog."))
-                .doOnNext(onShowLocation)
+        return watchPosition.observeLocation()
+                .doOnNext(__ -> Timber.i("Calling should show zoom dialog."))
+                .doOnNext(showLocation)
                 .flatMapCompletable(__ -> Completable.complete());
     }
 
     Completable showLayers() {
         return Completable.defer(() -> {
-            onShowLayers.accept(this);
+            showLayers.accept(this);
             return Completable.complete();
         });
     }
 
     Completable clearLocation() {
         return Completable.defer(() -> {
-            onClearLocation.accept(this);
+            clearLocation.accept(this);
             return Completable.complete();
         });
     }
@@ -255,48 +299,6 @@ public class GeoViewModel extends RxMVVMViewModel {
 
     void stopWatchingLocation() {
         watchPosition.stopWatching();
-    }
-
-    @NonNull
-    private Observable<Boolean> hasCurrentLocation() {
-        return currentPosition.observe()
-                .doOnNext(Rx.logi("Received location."))
-                .map(Optional::isPresent)
-                .doOnNext(Rx.logi("Is present."))
-                .distinctUntilChanged();
-    }
-
-    @NonNull
-    private Observable<Boolean> hasMarkedLocation() {
-        return markedLocation.observe()
-                .map(Optional::isPresent)
-                .distinctUntilChanged();
-    }
-
-    @NonNull
-    private Observable<Boolean> hasInitialLocation() {
-        return initialLocation.observe()
-                .map(Optional::isPresent)
-                .distinctUntilChanged();
-    }
-
-    @NonNull
-    private Observable<Object> observeFirstLocationReceived() {
-        return hasCurrentLocation()
-                .filter(Rx::isTrue)
-                .doOnNext(Rx.logi("First location received."))
-                .withLatestFrom(hasInitialLocation(), Rx::takeRight) // Check initial location.
-                .filter(Rx::isFalse) // Only trigger if we don't have one.
-                .doOnNext(Rx.logi("Initial location is false."))
-                .cast(Object.class);
-    }
-
-    @NonNull
-    private Observable<Location> observeFirstLocation() {
-        return observeFirstLocationReceived()
-                .withLatestFrom(currentPosition.observe(), Rx::takeRight)
-                .filter(Optional::isPresent)
-                .map(Optional::get);
     }
 
     @NonNull

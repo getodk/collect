@@ -6,7 +6,11 @@ import android.support.annotation.NonNull;
 import org.joda.time.DateTime;
 import org.odk.collect.android.injection.config.scopes.PerApplication;
 
+import java.util.Date;
+
 import javax.inject.Inject;
+
+import timber.log.Timber;
 
 /**
  * @author James Knight
@@ -23,7 +27,11 @@ class IsPositionValid {
     }
 
     boolean isValid(@NonNull Location location) {
-        long millis = DateTime.now().minus(location.getTime()).getMillis();
+        Date now = new Date();
+
+        long millis = now.getTime() - location.getTime();
+
+        Timber.d("Checking location is valid, now: %s, then: %s, difference: %s.", now, new Date(location.getTime()), millis);
         return millis <= VALID_WITHIN_SECONDS * 1_000;
     }
 }

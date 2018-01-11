@@ -10,6 +10,8 @@ import com.jakewharton.rxrelay2.PublishRelay;
 import org.odk.collect.android.injection.config.scopes.PerApplication;
 import org.odk.collect.android.location.client.LocationClient;
 
+import java.util.Date;
+
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
@@ -22,7 +24,7 @@ public class WatchPosition {
     private final LocationClient locationClient;
 
     @NonNull
-    private final BehaviorRelay<Optional<Location>> locationUpdates =
+    private final BehaviorRelay<Optional<Location>> locationRelay =
             BehaviorRelay.createDefault(Optional.absent());
 
     @NonNull
@@ -45,11 +47,15 @@ public class WatchPosition {
                 locationClient.requestLocationUpdates(location -> {
                     if (location != null) {
                         Timber.i("onLocationChanged(%d) getLocation: %s", ++locationCount, location);
-                        locationUpdates.accept(Optional.of(location));
+
+                        long millis = new Date().getTime() - location.getTime();
+                        if (millis <= 5 * 1_000) {
+                            WatchPosition.this.locationRelay.accept(Optional.of(location));
+                        }
 
                     } else {
                         Timber.i("onLocationChanged(%d) null getLocation.", ++locationCount);
-                        locationUpdates.accept(Optional.absent());
+                        WatchPosition.this.locationRelay.accept(Optional.absent());
                     }
 
                 });
@@ -79,8 +85,9 @@ public class WatchPosition {
     }
 
     public Observable<Optional<Location>> observeLocation() {
-        return locationUpdates.hide();
+        return locationRelay.hide();
     }
+
     public Observable<Boolean> observeAvailability() {
         return isLocationAvailable.hide();
     }
