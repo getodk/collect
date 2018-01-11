@@ -63,6 +63,7 @@ import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.services.LocationService;
 import org.odk.collect.android.services.NotificationRegistrationService;
 import org.odk.collect.android.taskModel.NfcTrigger;
 import org.odk.collect.android.tasks.DownloadTasksTask;
@@ -118,6 +119,9 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
     private static List<TaskEntry> mTasks = null;
     private static List<TaskEntry> mMapTasks = null;
 
+    private Intent mLocationServiceIntent = null;
+    private LocationService mLocationService = null;
+
     private void initToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setTitle(getString(R.string.app_name));
@@ -154,6 +158,11 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
         // get notification registration token
         Intent intent = new Intent(this, NotificationRegistrationService.class);
         startService(intent);
+
+        // Start the location service
+        mLocationService = new LocationService(this);
+        mLocationServiceIntent = new Intent(this, mLocationService.getClass());
+        startService(mLocationServiceIntent);
 
         // Get settings if available in a file
         File f = new File(Collect.ODK_ROOT + "/collect.settings");
@@ -257,6 +266,13 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
         }
         listenerRegistered = false;
         super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        stopService(mLocationServiceIntent);
+        super.onDestroy();
+
     }
 
     public void processAdminMenu() {

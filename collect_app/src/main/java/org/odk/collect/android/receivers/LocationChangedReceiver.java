@@ -75,7 +75,7 @@ public class LocationChangedReceiver extends BroadcastReceiver {
                 if (sharedPreferences == null) {
                     sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
                 }
-                if (sharedPreferences.getBoolean(PreferenceKeys.KEY_STORE_SMAP_USER_TRAIL, false)) {
+                if (sharedPreferences.getBoolean(PreferenceKeys.KEY_SMAP_USER_LOCATION, false)) {
                     TraceUtilities.insertPoint(location);
                 }
             }

@@ -92,6 +92,7 @@ import timber.log.Timber;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOSEND;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SMAP_USER_LOCATION;
 
 /**
  * Background task for downloading tasks 
@@ -378,12 +379,24 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 
                 if(tr.settings !=null ) {
                     SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putBoolean(PreferenceKeys.KEY_STORE_SMAP_USER_TRAIL, tr.settings.ft_send_trail);
                     editor.putBoolean(PreferenceKeys.KEY_SMAP_LOCATION_TRIGGER, tr.settings.ft_location_trigger);
                     editor.putBoolean(PreferenceKeys.KEY_SMAP_ODK_STYLE_MENUS, tr.settings.ft_odk_style_menus);
                     editor.putBoolean(PreferenceKeys.KEY_SMAP_ODK_INSTANCENAME, tr.settings.ft_specify_instancename);
                     editor.putBoolean(PreferenceKeys.KEY_SMAP_ODK_ADMIN_MENU, tr.settings.ft_admin_menu);
                     editor.putBoolean(PreferenceKeys.KEY_SMAP_REVIEW_FINAL, tr.settings.ft_review_final);
+
+                    /*
+                     * Override the user trail setting if this is set from the server
+                     */
+                    if(tr.settings.ft_send_location != null && tr.settings.ft_send_location.equals("off")) {
+                        editor.putBoolean(KEY_SMAP_USER_LOCATION, false);
+                        editor.putBoolean(PreferenceKeys.KEY_SMAP_OVERRIDE_LOCATION, true);
+                    } else if(tr.settings.ft_send_location != null && tr.settings.ft_send_location.equals("on")) {
+                        editor.putBoolean(KEY_SMAP_USER_LOCATION, true);
+                        editor.putBoolean(PreferenceKeys.KEY_SMAP_OVERRIDE_LOCATION, true);
+                    } else {
+                        editor.putBoolean(PreferenceKeys.KEY_SMAP_OVERRIDE_LOCATION, false);
+                    }
 
                     /*
                      * Override the autosend setting if this is set from the server
@@ -602,7 +615,8 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
         /*
          * Set details on submitted tasks
          */
-        if(tr.settings != null && tr.settings.ft_send_trail) {
+        boolean sendLocation = (Boolean) GeneralSharedPreferences.getInstance().get(KEY_SMAP_USER_LOCATION);
+        if(tr.settings != null && sendLocation) {
             updateResponse.taskCompletionInfo = new ArrayList<TaskCompletionInfo>();   // Details on completed tasks
 
             for (TaskEntry t : nonSynchTasks) {

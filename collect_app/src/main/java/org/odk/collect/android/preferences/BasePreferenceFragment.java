@@ -41,6 +41,17 @@ public class BasePreferenceFragment extends PreferenceFragment {
 
         // start smap disable preferences overridden by the server
 
+        // Send Locations
+        Preference location = getPreferenceScreen().findPreference(PreferenceKeys.KEY_SMAP_USER_LOCATION);
+        if(location != null) {
+            boolean override_location = (Boolean) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_SMAP_OVERRIDE_LOCATION);
+            if (override_location) {
+                location.setEnabled(false);
+            } else {
+                location.setEnabled(true);
+            }
+        }
+
         // Auto Sync
         Preference autosend = getPreferenceScreen().findPreference(PreferenceKeys.KEY_AUTOSEND);
         if(autosend != null) {

@@ -34,7 +34,7 @@ public MapLocationObserver(Context context, SmapTaskMapFragment map) {
   public void onReceive(Context context, Intent intent) {
       Location locn = Collect.getInstance().getLocation();
       LatLng point = new LatLng(locn.getLatitude(), locn.getLongitude());
-      if(sharedPreferences.getBoolean(PreferenceKeys.KEY_STORE_SMAP_USER_TRAIL, false)) {
+      if(sharedPreferences.getBoolean(PreferenceKeys.KEY_SMAP_USER_LOCATION, false)) {
           mMap.updatePath(point);
       }
       //mMap.setUserLocation(Collect.getInstance().getLocation(), sharedPreferences.getBoolean(PreferencesActivity.KEY_STORE_SMAP_USER_TRAIL, false));

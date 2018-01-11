@@ -332,6 +332,9 @@ the specific language governing permissions and limitations under the License.
             </intent-filter>
         </service>
 
+        <service android:name=".services.LocationService" android:exported="false">
+        </service>
+
         <!-- end smap -->
 
         <meta-data

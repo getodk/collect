@@ -20,7 +20,7 @@ package org.odk.collect.android.taskModel;
 public class FieldTaskSettings {
     public String ft_delete;
     public boolean ft_delete_submitted;
-    public boolean ft_send_trail;
+    public String ft_send_location;
     public boolean ft_location_trigger;
     public boolean ft_odk_style_menus;
     public boolean ft_specify_instancename;
