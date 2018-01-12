@@ -408,7 +408,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
                 alertShowing = false;
 
-                return new AuthDialogUtility().createDialog(this, this);
+                return new AuthDialogUtility().createDialog(this, this, null);
         }
         return null;
     }
