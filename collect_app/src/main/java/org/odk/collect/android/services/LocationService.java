@@ -119,6 +119,9 @@ public class LocationService extends Service implements LocationListener, Locati
 
                         if (enabled) {
                             Log.i("Location Service", "=================== Recording turned on");
+                            if(locationClient != null) {
+                                locationClient.stop();
+                            }
                             locationClient = LocationClients.clientForContext(getApplicationContext());
                             locationClient.setListener(mLocationService);
                             locationClient.start();
@@ -156,6 +159,9 @@ public class LocationService extends Service implements LocationListener, Locati
         Log.i("LocationService", "======================= Stop Location Service");
         NotificationManager mNotifyMgr =
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        if(locationClient != null) {
+            locationClient.stop();
+        }
         mNotifyMgr.cancel(NotificationActivity.LOCATION_ID);
         super.onDestroy();
     }
@@ -185,15 +191,18 @@ public class LocationService extends Service implements LocationListener, Locati
         Log.i("Location Service", "=================== Location: " + location.toString());
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
-        boolean enabled = sharedPreferences.getBoolean(PreferenceKeys.KEY_SMAP_USER_LOCATION, false);
+        boolean enabledTracking = sharedPreferences.getBoolean(PreferenceKeys.KEY_SMAP_USER_LOCATION, false);
+        boolean enabledGPS = false;
 
         Collect.getInstance().setLocation(location);
 
         // Notify any activity interested that there is a new location
-        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent("locationChanged"));
+        if(enabledGPS || enabledTracking) {
+            LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent("locationChanged"));
+        }
 
         // Save the location in the database
-        if (enabled) {
+        if (enabledTracking) {
             TraceUtilities.insertPoint(location);
         }
     }

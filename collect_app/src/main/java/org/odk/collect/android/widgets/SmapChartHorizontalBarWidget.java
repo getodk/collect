@@ -55,6 +55,9 @@ public class SmapChartHorizontalBarWidget extends SmapChartWidget {
     private BarData data = null;
     private HorizontalBarChart chart = null;
     String dString = null;
+    float groupSpace = 0.06f;
+    float barSpace = 0.02f; // x2 dataset
+    float barWidth = 0.45f; // x2 dataset
 
     public SmapChartHorizontalBarWidget(Context context, FormEntryPrompt prompt, String appearance) {
         super(context, prompt, appearance);
@@ -76,16 +79,9 @@ public class SmapChartHorizontalBarWidget extends SmapChartWidget {
 
         // Add data
         if(data != null) {
-            float groupSpace = 0.06f;
-            float barSpace = 0.02f; // x2 dataset
-            float barWidth = 0.45f; // x2 dataset
             data.setBarWidth(barWidth); // set the width of each bar
             //chart.setData(data);
             data.setValueTextSize((float) 12.0);
-
-            if(!isStacked()) {
-                chart.groupBars(0f, groupSpace, barSpace); // perform the "explicit" grouping
-            }
         }
 
         XAxis xAxis = chart.getXAxis();
@@ -93,6 +89,9 @@ public class SmapChartHorizontalBarWidget extends SmapChartWidget {
         xAxis.setValueFormatter(formatter);
 
         chart.setData(data);
+        if(!isStacked() && data.getDataSetCount() > 1) {
+            chart.groupBars(0f, groupSpace, barSpace); // perform the "explicit" grouping
+        }
         chart.invalidate();
     }
 
@@ -138,24 +137,45 @@ public class SmapChartHorizontalBarWidget extends SmapChartWidget {
         return data;
     }
 
-    private BarData getGroupedBarData(String sData) {
+    private BarData getGroupedBarData(String sInput) {
         BarData data = null;
         List <BarDataSet> dataSets = new ArrayList<BarDataSet> ();
-        int [] colors = ColorTemplate.PASTEL_COLORS;
+        int [] colors = DEFAULT_COLORS;
+        String sData = "";
 
-        if(sData != null && sData.trim().length() > 0) {
+        if(sInput != null && sInput.trim().length() > 0) {
 
+            String [] components = sInput.split("==");
+            if(components.length == 1) {
+                sData = components[0];
+            } else if(components.length >= 2) {
+                sData = components[1];
+            }
+
+            // Get the data sets
             String [] barData = sData.split("::");
-
             for(int i = 0; i < barData.length; i++) {
                 ArrayList<BarEntry> entries = getGroupedBarEntries((float) i, barData[i]);
 
-                BarDataSet bds = new BarDataSet(entries, "A Label" + i);
+                String label = "";
+                if(dsLabels.size() > i) {
+                    label = dsLabels.get(i);
+
+                }
+                BarDataSet bds = new BarDataSet(entries, label);
                 bds.setColor(colors[i]);
 
                 dataSets.add(bds);
             }
+
+            ArrayList<Integer> finalColors = new ArrayList<Integer> ();
+            for(int i = 0; i < numberOfEntries(sInput); i++) {
+                finalColors.add(colors[i % colors.length]);
+            }
+
             data = new BarData((List) dataSets);
+
+
         }
 
         return data;
@@ -220,7 +240,7 @@ public class SmapChartHorizontalBarWidget extends SmapChartWidget {
     private ArrayList<BarEntry> getGroupedBarEntries(float idx, String barData) {
 
         ArrayList<BarEntry> entries = new ArrayList<> ();
-        String [] items = barData.split(" ");
+        String [] items = barData.split(":");
         float [] values = new float [items.length];
 
         for(int i = 0; i < items.length; i++) {
