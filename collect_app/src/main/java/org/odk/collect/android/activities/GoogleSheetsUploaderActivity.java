@@ -88,7 +88,7 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
 
         setTitle(getString(R.string.send_data));
 
-        // load any simple saved state...
+        // get any simple saved state...
         // resets alert message and showing dialog if the screen is rotated
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(ALERT_MSG)) {

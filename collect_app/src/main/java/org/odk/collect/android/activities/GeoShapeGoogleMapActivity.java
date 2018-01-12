@@ -55,7 +55,7 @@ import java.util.ArrayList;
 
 /**
  * Version of the GeoShapeGoogleMapActivity that uses the new Maps v2 API and Fragments to enable
- * specifying a getLocation via placing a tracker on a map.
+ * specifying a location via placing a tracker on a map.
  *
  * @author jonnordling@gmail.com
  */
@@ -209,7 +209,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
                 zoomDialog.dismiss();
             }
         });
-        // If there is a last know getLocation go there
+        // If there is a last know location go there
         if (curLocation != null) {
             curlatLng = new LatLng(curLocation.getLatitude(), curLocation.getLongitude());
             foundFirstLocation = true;
@@ -271,7 +271,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
 
     @Override
     public void onLocationChanged(Location location) {
-        // If there is a getLocation allow for user to be able to fly there
+        // If there is a location allow for user to be able to fly there
         gpsButton.setEnabled(true);
         curLocation = location;
         curlatLng = new LatLng(curLocation.getLatitude(), curLocation.getLongitude());
