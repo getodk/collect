@@ -431,7 +431,11 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             filteredFormList.addAll(formList);
         }
         sortList();
-        listView.setAdapter(new FormDownloadListAdapter(this, filteredFormList, formNamesAndURLs));
+        if (listView.getAdapter() == null) {
+            listView.setAdapter(new FormDownloadListAdapter(this, filteredFormList, formNamesAndURLs));
+        } else {
+            ((FormDownloadListAdapter) listView.getAdapter()).notifyDataSetChanged();
+        }
 
         checkPreviouslyCheckedItems();
     }
