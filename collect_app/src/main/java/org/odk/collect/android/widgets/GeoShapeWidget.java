@@ -37,7 +37,7 @@ import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
- * GeoShapeWidget is the widget that allows the user to load Collect multiple GPS points.
+ * GeoShapeWidget is the widget that allows the user to get Collect multiple GPS points.
  *
  * @author Jon Nordling (jonnordling@gmail.com)
  */

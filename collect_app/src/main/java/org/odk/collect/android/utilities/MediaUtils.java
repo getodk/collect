@@ -450,7 +450,7 @@ public class MediaUtils {
 
     @SuppressLint("NewApi")
     /**
-     * Get a file path from a Uri. This will load the the path for Storage Access
+     * Get a file path from a Uri. This will get the the path for Storage Access
      * Framework Documents, as well as the _data field for the MediaStore and
      * other file-based ContentProviders.<br>
      * <br>

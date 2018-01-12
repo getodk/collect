@@ -356,9 +356,4 @@ public class Collect extends Application implements HasActivityInjector {
     public DispatchingAndroidInjector<Activity> activityInjector() {
         return androidInjector;
     }
-
-    @Override
-    public DispatchingAndroidInjector<Activity> activityInjector() {
-        return androidInjector;
-    }
 }

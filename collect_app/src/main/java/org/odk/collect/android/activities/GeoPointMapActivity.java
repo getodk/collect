@@ -54,7 +54,7 @@ import timber.log.Timber;
 
 /**
  * Version of the GeoPointMapActivity that uses the new Maps v2 API and Fragments to enable
- * specifying a getLocation via placing a tracker on a map.
+ * specifying a location via placing a tracker on a map.
  *
  * @author guisalmon@gmail.com
  * @author jonnordling@gmail.com
@@ -242,7 +242,7 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
             }
         });
 
-        // Focuses on marked getLocation
+        // Focuses on marked location
         //showLocation.setClickable(false);
         showLocation.setEnabled(false);
         showLocation.setOnClickListener(new OnClickListener() {
@@ -300,15 +300,7 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
                 captureLocation = false;
                 draggable = intentDraggable;
                 locationFromIntent = false;
-
-                if (draggable && !readOnly) {
-                    map.setOnMarkerDragListener(GeoPointMapActivity.this);
-                    map.setOnMapLongClickListener(GeoPointMapActivity.this);
-
-                    if (marker != null) {
-                        marker.setDraggable(true);
-                    }
-                }
+                overlayMyLocationLayers();
             }
         });
 
@@ -341,7 +333,7 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
 
             }
         }
-        /*Zoom only if there's a previous getLocation*/
+        /*Zoom only if there's a previous location*/
         if (latLng != null) {
             locationInfo.setVisibility(View.GONE);
             locationStatus.setVisibility(View.GONE);
@@ -356,6 +348,32 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
         helper.setBasemap();
 
         isMapReady = true;
+        upMyLocationOverlayLayers();
+    }
+
+    private void upMyLocationOverlayLayers() {
+        if (!locationClient.isMonitoringLocation() || !isMapReady) {
+            return;
+        }
+
+        // Make sure we can access Location:
+        if (!locationClient.isLocationAvailable()) {
+            showGPSDisabledAlertToUser();
+
+        } else {
+            overlayMyLocationLayers();
+        }
+    }
+
+    private void overlayMyLocationLayers() {
+        if (draggable && !readOnly) {
+            map.setOnMarkerDragListener(this);
+            map.setOnMapLongClickListener(this);
+
+            if (marker != null) {
+                marker.setDraggable(true);
+            }
+        }
     }
 
     @Override
@@ -368,7 +386,7 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
         this.location = location;
 
         if (location != null) {
-            Timber.i("onLocationChanged(%d) getLocation: %s", locationCount, location);
+            Timber.i("onLocationChanged(%d) location: %s", locationCount, location);
 
             if (previousLocation != null) {
                 enableShowLocation(true);
@@ -392,7 +410,7 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
             }
 
         } else {
-            Timber.i("onLocationChanged(%d) null getLocation", locationCount);
+            Timber.i("onLocationChanged(%d) null location", locationCount);
         }
     }
 
@@ -450,6 +468,7 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
         if (latLng != null) {
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 16));
         }
+
     }
 
     public void showZoomDialog() {
@@ -472,7 +491,6 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
                     });
             zoomDialog = builder.create();
         }
-
         //If feature enable zoom to button else disable
         if (zoomLocationButton != null) {
             if (location != null) {
@@ -528,6 +546,7 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
     @Override
     public void onClientStart() {
         locationClient.requestLocationUpdates(this);
+        upMyLocationOverlayLayers();
     }
 
     @Override

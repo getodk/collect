@@ -174,7 +174,7 @@ public final class PRNGFixes {
          * Linux PRNG.
          *
          * Concurrency: Read requests to the underlying Linux PRNG are
-         * serialized (on sLock) to ensure that multiple threads do not load
+         * serialized (on sLock) to ensure that multiple threads do not get
          * duplicated PRNG output.
          */
 

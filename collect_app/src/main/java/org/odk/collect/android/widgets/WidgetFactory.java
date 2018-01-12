@@ -40,7 +40,7 @@ public class WidgetFactory {
     public static QuestionWidget createWidgetFromPrompt(FormEntryPrompt fep, Context context,
                                                         boolean readOnlyOverride) {
 
-        // load appearance hint and clean it up so it is lower case and never null...
+        // get appearance hint and clean it up so it is lower case and never null...
         String appearance = fep.getAppearanceHint();
         if (appearance == null) {
             appearance = "";

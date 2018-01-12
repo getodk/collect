@@ -110,7 +110,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
 
     @Override
     public void deleteFile() {
-        // load the file path and delete the file
+        // get the file path and delete the file
         String name = binaryName;
         // clean up variables
         binaryName = null;
@@ -148,7 +148,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
 
         Uri uri = (Uri) binaryuri;
 
-        // load the file path and create a copy in the instance folder
+        // get the file path and create a copy in the instance folder
         String sourcePath = getSourcePathFromUri(uri);
         String destinationPath = getDestinationPathFromSourcePath(sourcePath);
 

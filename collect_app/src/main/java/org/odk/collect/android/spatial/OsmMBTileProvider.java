@@ -38,7 +38,7 @@ public class OsmMBTileProvider extends MapTileProviderArray {
          * Call the super-constructor.
          *
          * MapTileProviderBase requires a TileSource. As far as I can tell it is
-         * only used in its method rescaleCache(...) to load the pixel size of a
+         * only used in its method rescaleCache(...) to get the pixel size of a
          * tile. It seems to me that this is inappropriate, as a MapTileProvider
          * can have multiple sources (like the module array defined below) and
          * therefore multiple tileSources which might return different values!!

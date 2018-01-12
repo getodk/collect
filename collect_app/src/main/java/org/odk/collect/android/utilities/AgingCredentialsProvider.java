@@ -103,7 +103,7 @@ public class AgingCredentialsProvider implements CredentialsProvider {
     private static Credentials matchCredentials(
             final Map<AuthScope, Credentials> map,
             final AuthScope authscope) {
-        // see if we load a direct hit
+        // see if we get a direct hit
         Credentials creds = map.get(authscope);
         if (creds == null) {
             // Nope.

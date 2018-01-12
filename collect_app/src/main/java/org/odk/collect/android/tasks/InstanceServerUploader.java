@@ -284,7 +284,7 @@ public class InstanceServerUploader extends InstanceUploader {
         // cookiestore (referenced by localContext) that will enable
         // authenticated publication to the server.
         //
-        // load instance file
+        // get instance file
 
         // Under normal operations, we upload the instanceFile to
         // the server.  However, during the save, there is a failure
@@ -539,7 +539,7 @@ public class InstanceServerUploader extends InstanceUploader {
 
                     if (!uploadOneSubmission(urlString, id, instance, toUpdate, localContext,
                             uriRemap, outcome)) {
-                        return false; // load credentials...
+                        return false; // get credentials...
                     }
                 }
             }

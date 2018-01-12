@@ -94,7 +94,7 @@ public class ExternalDataHandlerSearch extends ExternalDataHandlerBase {
     @Override
     public Object eval(Object[] args, EvaluationContext ec) {
         if (args == null || (args.length != 1 && args.length != 4 && args.length != 6)) {
-            // we should never load here since it is already handled in ExternalDataUtil
+            // we should never get here since it is already handled in ExternalDataUtil
             // .getSearchXPathExpression(String appearance)
             throw new ExternalDataException(
                     Collect.getInstance().getString(R.string.ext_search_wrong_arguments_error));

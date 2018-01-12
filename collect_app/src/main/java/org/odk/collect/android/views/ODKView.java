@@ -98,10 +98,10 @@ public class ODKView extends ScrollView implements OnLongClickListener {
 
         addGroupText(groups);
 
-        // when the grouped fields are populated by an external app, this will load true.
+        // when the grouped fields are populated by an external app, this will get true.
         boolean readOnlyOverride = false;
 
-        // load the group we are showing -- it will be the last of the groups in the groups list
+        // get the group we are showing -- it will be the last of the groups in the groups list
         if (groups != null && groups.length > 0) {
             final FormEntryCaption c = groups[groups.length - 1];
             final String intentString = c.getFormElement().getAdditionalAttribute(null, "intent");

@@ -128,7 +128,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                 instanceGoogleSheetsUploader.setUploaderListener(this);
                 instanceGoogleSheetsUploader.execute(toSendArray);
             } else {
-                // load the username, password, and server from preferences
+                // get the username, password, and server from preferences
 
                 String storedUsername = (String) settings.get(PreferenceKeys.KEY_USERNAME);
                 String storedPassword = (String) settings.get(PreferenceKeys.KEY_PASSWORD);
@@ -233,7 +233,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
 
     @Override
     public void authRequest(Uri url, HashMap<String, String> doneSoFar) {
-        // if we load an auth request, just fail
+        // if we get an auth request, just fail
         if (instanceServerUploader != null) {
             instanceServerUploader.setUploaderListener(null);
         }

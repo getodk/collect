@@ -159,7 +159,7 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
     private void setupLocationDialog() {
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "setupLocationDialog",
                 "show");
-        // dialog displayed while fetching gps getLocation
+        // dialog displayed while fetching gps location
         locationDialog = new ProgressDialog(this);
         DialogInterface.OnClickListener geoPointButtonListener =
                 new DialogInterface.OnClickListener() {
@@ -201,7 +201,7 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
             Timber.i("lastKnownLocation() lat: %f long: %f acc: %f", loc.getLatitude(), loc.getLongitude(), loc.getAccuracy());
 
         } else {
-            Timber.i("lastKnownLocation() null getLocation");
+            Timber.i("lastKnownLocation() null location");
         }
     }
 
@@ -233,7 +233,7 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
             // Bug report: cached GeoPoint is being returned as the first value.
             // Wait for the 2nd value to be returned, which is hopefully not cached?
             ++locationCount;
-            Timber.i("onLocationChanged(%d) getLocation: %s", locationCount, location);
+            Timber.i("onLocationChanged(%d) location: %s", locationCount, location);
 
             if (locationCount > 1) {
                 locationDialog.setMessage(getProviderAccuracyMessage(location));

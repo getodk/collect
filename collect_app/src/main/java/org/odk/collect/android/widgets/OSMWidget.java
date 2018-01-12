@@ -90,7 +90,7 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
         // Determine the tags required
         osmRequiredTags = prompt.getQuestion().getOsmTags();
 
-        // If an OSM File has already been saved, load the name.
+        // If an OSM File has already been saved, get the name.
         osmFileName = prompt.getAnswerText();
 
         // Setup Launch OpenMapKit Button

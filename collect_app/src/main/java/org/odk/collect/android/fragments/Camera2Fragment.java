@@ -495,7 +495,7 @@ public class Camera2Fragment extends Fragment
                 imageReader.setOnImageAvailableListener(
                         onImageAvailableListener, backgroundHandler);
 
-                // Find out if we need to swap dimension to load the preview size relative to sensor
+                // Find out if we need to swap dimension to get the preview size relative to sensor
                 // coordinate.
                 int displayRotation = activity.getWindowManager().getDefaultDisplay().getRotation();
                 //noinspection ConstantConditions
@@ -754,7 +754,7 @@ public class Camera2Fragment extends Fragment
 
     /**
      * Run the precapture sequence for capturing a still image. This method should be called when
-     * we load a response in {@link #captureCallback} from {@link #lockFocus()}.
+     * we get a response in {@link #captureCallback} from {@link #lockFocus()}.
      */
     private void runPrecaptureSequence() {
         try {
@@ -771,7 +771,7 @@ public class Camera2Fragment extends Fragment
     }
 
     /**
-     * Capture a still picture. This method should be called when we load a response in
+     * Capture a still picture. This method should be called when we get a response in
      * {@link #captureCallback} from both {@link #lockFocus()}.
      */
     private void captureStillPicture() {
