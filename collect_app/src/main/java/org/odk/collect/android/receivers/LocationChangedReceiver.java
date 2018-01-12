@@ -34,7 +34,7 @@ import org.odk.collect.android.utilities.TraceUtilities;
 
 
 /**
- * This Receiver class is used to listen for Broadcast Intents that announce
+ * This Receiver class is used to listen for Broadcast Intents that announce a new location
  */
 public class LocationChangedReceiver extends BroadcastReceiver {
 

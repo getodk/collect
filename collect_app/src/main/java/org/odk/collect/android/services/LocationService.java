@@ -20,25 +20,39 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
+import android.location.Location;
 import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
+import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.database.TraceUtilities;
+import org.odk.collect.android.location.LocationClient;
+import org.odk.collect.android.location.LocationClients;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.tasks.DownloadTasksTask;
+import org.odk.collect.android.utilities.ToastUtils;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -52,7 +66,14 @@ import timber.log.Timber;
 /*
  * Respond to a notification from the server
  */
-public class LocationService extends Service {
+public class LocationService extends Service implements LocationListener, LocationClient.LocationClientListener {
+
+    Handler mHandler = new Handler();       // Background thread to check for enabling / disabling the location listener
+    private LocationClient locationClient;
+    private boolean isRecordingLocation = false;
+    private Timer mTimer;
+    private LocationService mLocationService = null;
+
 
     public LocationService(Context applicationContext) {
         super();
@@ -61,22 +82,81 @@ public class LocationService extends Service {
     public LocationService() {
     }
 
-    private boolean isRecordingLocation = false;
-
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
         super.onStartCommand(intent, flags, startId);
         Log.i("LocationService", "======================= Start Location Service");
 
-        checkEnabled();
 
+        if (mTimer == null) {
+            mTimer = new Timer();
+        }
+        mLocationService = this;
+        mTimer.scheduleAtFixedRate(new CheckEnabledTimerTask(), 0, 10000);
 
         return START_STICKY;
+    }
+
+    class CheckEnabledTimerTask extends TimerTask {
+
+        @Override
+        public void run() {
+            // run on another thread
+            mHandler.post(new Runnable() {
+
+                @Override
+                public void run() {
+                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
+                    boolean enabled = sharedPreferences.getBoolean(PreferenceKeys.KEY_SMAP_USER_LOCATION, false);
+
+                    if (enabled == isRecordingLocation) {
+                        Log.i("Location Service", "===================   " + enabled);
+                    } else {
+
+                        NotificationManager mNotifyMgr =
+                                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+                        if (enabled) {
+                            Log.i("Location Service", "=================== Recording turned on");
+                            locationClient = LocationClients.clientForContext(getApplicationContext());
+                            locationClient.setListener(mLocationService);
+                            locationClient.start();
+
+                        /*
+                         * Notify the user
+                         */
+                            Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                            NotificationCompat.Builder mBuilder =
+                                    new NotificationCompat.Builder(getApplicationContext())
+                                            .setSmallIcon(R.drawable.ic_stat_crosshairs)
+                                            .setLargeIcon(BitmapFactory.decodeResource(Collect.getInstance().getBaseContext().getResources(),
+                                                    R.drawable.ic_stat_crosshairs))
+                                            .setSound(uri)
+                                            .setContentTitle(getString(R.string.app_name))
+                                            .setContentText(getString(R.string.smap_location_tracking));
+                            mNotifyMgr.notify(NotificationActivity.LOCATION_ID, mBuilder.build());
+
+                        } else {
+                            Log.i("Location Service", "=================== Recording turned off");
+                            locationClient.stop();
+                            mNotifyMgr.cancel(NotificationActivity.LOCATION_ID);
+                        }
+                        isRecordingLocation = enabled;
+                    }
+
+                }
+            });
+
+        }
     }
 
     @Override
     public void onDestroy() {
         Log.i("LocationService", "======================= Stop Location Service");
+        NotificationManager mNotifyMgr =
+                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        mNotifyMgr.cancel(NotificationActivity.LOCATION_ID);
         super.onDestroy();
     }
 
@@ -85,39 +165,38 @@ public class LocationService extends Service {
         return null;
     }
 
-
-
-    /*
-     * Monitor the preferences every 10 seconds to see if location logging is turned off
-     * Influenced by: https://fabcirablog.weebly.com/blog/creating-a-never-ending-background-service-in-android
-     */
-    private Timer timer;
-    private TimerTask timerTask;
-    private void checkEnabled() {
-        timer = new Timer();
-        initializeTimerTask();
-        timer.schedule(timerTask, 0, 10000);
+    @Override
+    public void onClientStart() {
+        locationClient.requestLocationUpdates(this);
     }
 
-    /*
-     * Check preferences every 10 seconds
-     */
-    public void initializeTimerTask() {
-        timerTask = new TimerTask() {
-            public void run() {
-                Log.i("Location Service", "=================== Check Enabled ++++  ");
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
-                boolean enabled = sharedPreferences.getBoolean(PreferenceKeys.KEY_SMAP_USER_LOCATION, false);
+    @Override
+    public void onClientStartFailure() {
 
-                if(enabled == isRecordingLocation) {
-                    Log.i("Location Service", "=================== No Change  " + isRecordingLocation);
-                } else if(enabled){
-                    Log.i("Location Service", "=================== Recording turned on");
-                } else {
-                    Log.i("Location Service", "=================== Recording turned off");
-                }
-                isRecordingLocation = enabled;
-            }
-        };
     }
+
+    @Override
+    public void onClientStop() {
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        Log.i("Location Service", "=================== Location: " + location.toString());
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
+        boolean enabled = sharedPreferences.getBoolean(PreferenceKeys.KEY_SMAP_USER_LOCATION, false);
+
+        Collect.getInstance().setLocation(location);
+
+        // Notify any activity interested that there is a new location
+        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent("locationChanged"));
+
+        // Save the location in the database
+        if (enabled) {
+            TraceUtilities.insertPoint(location);
+        }
+    }
+
+
 }

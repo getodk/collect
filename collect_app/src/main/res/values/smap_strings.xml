@@ -82,4 +82,5 @@
     <string name="smap_server_changed">"Changes on server - refresh to update"</string>
     <string name="smap_version_changed">"The version of the form you are opening has just been updated. Please close and reopen."</string>
     <string name="smap_been_submitted">"This form has already been submitted and cannot be opened for review"</string>
+    <string name="smap_location_tracking">"Device location is being tracked"</string>
 </resources>

@@ -14,6 +14,7 @@ public class NotificationActivity extends AppCompatActivity {
 
     public static final String NOTIFICATION_KEY = "message";
     public static final int NOTIFICATION_ID = 191919191;        // smap
+    public static final int LOCATION_ID = 191919192;            // smap
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

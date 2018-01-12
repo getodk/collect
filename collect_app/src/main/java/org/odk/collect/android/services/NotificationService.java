@@ -99,7 +99,6 @@ public class NotificationService extends GcmListenerService {
             mNotifyMgr.notify(NotificationActivity.NOTIFICATION_ID, mBuilder.build());
         }
 
-
     }
 
     private boolean isFormAutoSendOptionEnabled(NetworkInfo currentNetworkInfo) {
