@@ -80,7 +80,7 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
 
         setTitle(getString(R.string.send_data));
 
-        // load any simple saved state...
+        // get any simple saved state...
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(ALERT_MSG)) {
                 alertMsg = savedInstanceState.getString(ALERT_MSG);
@@ -95,7 +95,7 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
         if (savedInstanceState != null && savedInstanceState.containsKey(TO_SEND)) {
             selectedInstanceIDs = savedInstanceState.getLongArray(TO_SEND);
         } else {
-            // load instances to upload...
+            // get instances to upload...
             Intent intent = getIntent();
             selectedInstanceIDs = intent.getLongArrayExtra(FormEntryActivity.KEY_INSTANCES);
         }
@@ -110,7 +110,7 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
             Timber.i("onCreate: Beginning upload of %d instances!", instancesToSend.length);
         }
 
-        // load the task if we've changed orientations. If it's null it's a new upload.
+        // get the task if we've changed orientations. If it's null it's a new upload.
         instanceServerUploader = (InstanceServerUploader) getLastCustomNonConfigurationInstance();
         if (instanceServerUploader == null) {
             // setup dialog and upload task

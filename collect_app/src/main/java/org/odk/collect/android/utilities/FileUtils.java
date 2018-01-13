@@ -188,7 +188,7 @@ public class FileUtils {
         // We're just doing closest size that still fills the screen.
         int scale = Math.max(widthScale, heightScale);
 
-        // load bitmap with scale ( < 1 is the same as 1)
+        // get bitmap with scale ( < 1 is the same as 1)
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inInputShareable = true;
         options.inPurgeable = true;

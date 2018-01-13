@@ -873,7 +873,7 @@ public class FormController {
                 questionList.toArray(questions);
             }
         } else {
-            // We have a quesion, so just load the one prompt
+            // We have a quesion, so just get the one prompt
             questions[0] = getQuestionPrompt();
         }
 

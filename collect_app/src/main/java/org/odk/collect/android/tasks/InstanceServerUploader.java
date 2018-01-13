@@ -502,7 +502,7 @@ public class InstanceServerUploader extends InstanceUploader {
         String deviceId = new PropertyManager(Collect.getInstance().getApplicationContext())
                 .getSingularProperty(PropertyManager.withUri(PropertyManager.PROPMGR_DEVICE_ID));
 
-        // load shared HttpContext so that authentication and cookies are retained.
+        // get shared HttpContext so that authentication and cookies are retained.
         HttpContext localContext = Collect.getInstance().getHttpContext();
 
         Map<Uri, Uri> uriRemap = new HashMap<Uri, Uri>();
