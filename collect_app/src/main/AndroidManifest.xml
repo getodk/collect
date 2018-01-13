@@ -286,7 +286,8 @@ the specific language governing permissions and limitations under the License.
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyD1D8OvyArqGg0OezuEPrx8U08uYb4e7XY" />
+            android:value="AIzaSyBS-JQ-dnaZ_8qsbvSyr_I3rTPFd5fJsYI" />
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version"
@@ -295,7 +296,6 @@ the specific language governing permissions and limitations under the License.
         <meta-data
             android:name="firebase_crash_collection_enabled"
             android:value="@bool/FIREBASE_CRASH_ENABLED" />
-
 
         <uses-library
             android:name="com.google.android.maps"
