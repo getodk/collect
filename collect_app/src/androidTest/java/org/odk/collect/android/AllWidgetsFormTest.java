@@ -34,6 +34,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.FileWriter;
+import java.io.BufferedWriter;
 import java.text.DecimalFormat;
 import java.util.Random;
 
@@ -73,6 +76,7 @@ public class AllWidgetsFormTest {
 
     private static final String ALL_WIDGETS_FORM = "all_widgets.xml";
     private static final String FORMS_DIRECTORY = "/odk/forms/";
+    private static final String FILENAME = "/home/divya/Desktop/file.txt";
 
     private final Random random = new Random();
     private ActivityResult okResult = new ActivityResult(RESULT_OK, new Intent());
@@ -214,7 +218,7 @@ public class AllWidgetsFormTest {
 
         onVisibleEditText().perform(replaceText(stringWidgetText));
 
-        Screengrab.screenshot("Click");
+        Screengrab.screenshot("string-input");
 
         openWidgetList();
         onView(withText("String widget")).perform(click());
@@ -222,23 +226,40 @@ public class AllWidgetsFormTest {
         onVisibleEditText().check(matches(withText(stringWidgetText)));
 
         onView(withText("String widget")).perform(swipeLeft());
-        Screengrab.screenshot("FabClick");
-    }
+}
+	/*public void write(){
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILENAME))) {
+
+			String content = "This is the content to write into file\n";
+
+			bw.write(content);
+
+			// no need to close it.
+			//bw.close();
+
+             	System.out.println("Done");
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+
+		}
+    }*/
 
     public void testStringNumberWidget() {
         String stringNumberWidgetText = randomIntegerString();
 
         onVisibleEditText().perform(replaceText(stringNumberWidgetText));
+	Screengrab.screenshot("string-number");
 
         openWidgetList();
 
-        Screengrab.screenshot("stringNumber");
         onView(withText("String number widget")).perform(click());
 
         onVisibleEditText().check(matches(withText(stringNumberWidgetText)));
 
         onView(withText("String number widget")).perform(swipeLeft());
-        Screengrab.screenshot("string");
+        
     }
 
     public void testUrlWidget() {
@@ -246,10 +267,10 @@ public class AllWidgetsFormTest {
 
         intending(allOf(hasAction(Intent.ACTION_VIEW), hasData(uri)))
                 .respondWith(okResult);
-
+	
+	Screengrab.screenshot("url");
         onView(withId(R.id.simple_button)).perform(click());
         onView(withText("URL widget")).perform(swipeLeft());
-        Screengrab.screenshot("URLClick");
     }
 
     public void testExStringWidget() {
@@ -261,6 +282,7 @@ public class AllWidgetsFormTest {
 
         onView(withText("Launch")).perform(click());
         onVisibleEditText().perform(replaceText(exStringWidgetFirstText));
+	Screengrab.screenshot("ex-string");
 
         openWidgetList();
         onView(withText("Ex string widget")).perform(click());
@@ -286,6 +308,7 @@ public class AllWidgetsFormTest {
         onView(withText("Launch")).perform(click());
         onView(withText(exStringWidgetSecondText))
                 .check(matches(isDisplayed()));
+	Screengrab.screenshot("ex-string2");
 
         openWidgetList();
         onView(withText("Ex string widget")).perform(click());
@@ -297,6 +320,7 @@ public class AllWidgetsFormTest {
 
     public void testExPrinterWidget() {
         onView(withText("Initiate Printing")).perform(click());
+	Screengrab.screenshot("ex-printer");
 
         intending(hasAction("org.opendatakit.sensors.ZebraPrinter"));
         intended(hasAction("org.opendatakit.sensors.ZebraPrinter"));
@@ -312,6 +336,7 @@ public class AllWidgetsFormTest {
     public void testIntegerWidget() {
         String integerString = randomIntegerString();
         onVisibleEditText().perform(replaceText(integerString));
+	Screengrab.screenshot("integer");
 
         openWidgetList();
         onView(withText("Integer widget")).perform(click());
@@ -330,6 +355,7 @@ public class AllWidgetsFormTest {
 
         onView(withText("Launch")).perform(click());
         onVisibleEditText().perform(replaceText(exIntegerFirstValue));
+	Screengrab.screenshot("ex-integer");
 
         openWidgetList();
         onView(withText("Ex integer widget")).perform(click());
@@ -355,6 +381,7 @@ public class AllWidgetsFormTest {
         onView(withText("Launch")).perform(click());
         onView(withText(exIntegerSecondValue))
                 .check(matches(isDisplayed()));
+	Screengrab.screenshot("ex-integer2");
 
         openWidgetList();
         onView(withText("Ex integer widget")).perform(click());
@@ -367,6 +394,7 @@ public class AllWidgetsFormTest {
     public void testDecimalWidget() {
         String decimalString = randomDecimalString();
         onVisibleEditText().perform(replaceText(decimalString));
+	Screengrab.screenshot("decimal1");
 
         openWidgetList();
         onView(withText("Decimal widget")).perform(click());
@@ -385,6 +413,7 @@ public class AllWidgetsFormTest {
 
         onView(withText("Launch")).perform(click());
         onVisibleEditText().perform(replaceText(exDecimalFirstValue));
+	Screengrab.screenshot("ex-decimal");
 
         openWidgetList();
         onView(withText("Ex decimal widget")).perform(click());
@@ -410,6 +439,7 @@ public class AllWidgetsFormTest {
         onView(withText("Launch")).perform(click());
         onView(withText(exDecimalSecondValue))
                 .check(matches(isDisplayed()));
+	Screengrab.screenshot("ex-decimal2");
 
         openWidgetList();
         onView(withText("Ex decimal widget")).perform(click());
@@ -445,170 +475,210 @@ public class AllWidgetsFormTest {
         //
         //        onView(withId(R.id.answer_text)).check(matches(withText(bearing)));
         //
+	Screengrab.screenshot("bearing-widget");
         onView(withText("Bearing widget")).perform(swipeLeft());
     }
 
     public void testImageWidget() {
 
-
+	Screengrab.screenshot("image-widget");
         onView(withText("Image widget")).perform(swipeLeft());
     }
 
     public void testSelfieWidget() {
+	Screengrab.screenshot("selfie-widget");
         onView(withText("Selfie widget")).perform(swipeLeft());
     }
 
     public void testDrawWidget() {
+	Screengrab.screenshot("draw-widget");
         onView(withText("Draw widget")).perform(swipeLeft());
     }
 
     public void testAnnotateWidget() {
+	Screengrab.screenshot("annotate");
         onView(withText("Annotate widget")).perform(swipeLeft());
     }
 
     public void testSignatureWidget() {
+	Screengrab.screenshot("signature");
         onView(withText("Signature widget")).perform(swipeLeft());
     }
 
     public void testWebViewImageWidget() {
+	Screengrab.screenshot("web-view");
         onView(withText("Web view image widget")).perform(swipeLeft());
     }
 
     public void testAlignImageWidget() {
+	Screengrab.screenshot("align-image");
         onView(withText("Align image widget")).perform(swipeLeft());
     }
 
     public void testBarcodeWidget() {
+	Screengrab.screenshot("barcode-widget");
         onView(withText("Barcode widget")).perform(swipeLeft());
     }
 
     public void testAudioWidget() {
+	Screengrab.screenshot("audio");
         onView(withText("Audio widget")).perform(swipeLeft());
     }
 
     public void testVideoWidget() {
+	Screengrab.screenshot("video");
         onView(withText("Video widget")).perform(swipeLeft());
     }
 
     public void testDateNoAppearanceWidget() {
+	Screengrab.screenshot("date-no-appearance");
         onView(withText("Date widget")).perform(swipeLeft());
     }
 
     public void testDateNoCalendarAppearance() {
+	Screengrab.screenshot("date-no-calendar");
         onView(withText("Date Widget")).perform(swipeLeft());
     }
 
     public void testDateMonthYearAppearance() {
+	Screengrab.screenshot("date-with-calendar");
         onView(withText("Date widget")).perform(swipeLeft());
     }
 
     public void testDateYearAppearance() {
+	Screengrab.screenshot("date-year");
         onView(withText("Date widget")).perform(swipeLeft());
     }
 
     public void testTimeNoAppearance() {
+	Screengrab.screenshot("time-no-appearance");
         onView(withText("Time widget")).perform(swipeLeft());
     }
 
     public void testDateTimeNoAppearance() {
+	Screengrab.screenshot("date-time");
         onView(allOf(withText("Date time widget"), withEffectiveVisibility(VISIBLE)))
                 .perform(swipeLeft());
     }
 
     public void testDateTimeNoCalendarAppearance() {
+	Screengrab.screenshot("date-time-appear");
         onView(allOf(withText("Date time widget"), withEffectiveVisibility(VISIBLE)))
                 .perform(swipeLeft());
     }
 
     public void testGeopointNoAppearance() {
+	Screengrab.screenshot("geopoint");
         onView(withText("Geopoint widget")).perform(swipeLeft());
     }
 
     public void testGeopointPlacementMapApperance() {
+	Screengrab.screenshot("geopoint2");
         onView(withText("Geopoint widget")).perform(swipeLeft());
     }
 
     public void testGeopointMapsAppearance() {
+	Screengrab.screenshot("geopint-map");
         onView(withText("Geopoint widget")).perform(swipeLeft());
     }
 
     public void testGeotraceWidget() {
+	Screengrab.screenshot("geo-trace");
         onView(withText("Geotrace widget")).perform(swipeLeft());
     }
 
     public void testGeoshapeWidget() {
+	Screengrab.screenshot("geo-space");
         onView(withText("Geoshape widget")).perform(swipeLeft());
     }
 
     public void testOSMIntegrationOSMType() {
+	Screengrab.screenshot("osm");
         onView(withText("OSM integration")).perform(swipeLeft());
     }
 
     public void testOSMIntegrationBuildingType() {
+	Screengrab.screenshot("osm-build");
         onView(withText("OSM integration")).perform(swipeLeft());
     }
 
     public void testSelectOneNoAppearance() {
+	Screengrab.screenshot("select-one");
         onView(withText("Select one widget")).perform(swipeLeft());
     }
 
     public void testSpinnerWidget() {
+	Screengrab.screenshot("spinner");
         onView(withText("Spinner widget")).perform(swipeLeft());
     }
 
     public void testSelectOneAutoAdvance() {
+	Screengrab.screenshot("select-auto-advance");
         onView(withText("Select one autoadvance widget")).perform(swipeLeft());
     }
 
     public void testSelectOneSearchAppearance() {
+	Screengrab.screenshot("select-search-appearance");
         onView(withText("Select one search widget")).perform(swipeLeft());
     }
 
     public void testSelectOneSearchAutoAdvance() {
+	Screengrab.screenshot("one-auto");
         onView(withText("Select one search widget")).perform(swipeLeft());
     }
 
     public void testGridSelectNoAppearance() {
+	Screengrab.screenshot("grid-no-appearance");
         onView(withText("Grid select one widget")).perform(swipeLeft());
     }
 
     public void testGridSelectCompactAppearance() {
+	Screengrab.screenshot("grid-select-compact1");
         onView(withText("Grid select one widget")).perform(swipeLeft());
     }
 
     public void testGridSelectCompact2Appearance() {
+	Screengrab.screenshot("grid-select-compact2");
         onView(withText("Grid select one widget")).perform(swipeLeft());
     }
 
     public void testGridSelectQuickCompactAppearance() {
+	Screengrab.screenshot("grid-select1");
         onView(withText("Grid select one widget")).perform(swipeLeft());
     }
 
     public void testGridSelectQuickCompact2Appearance() {
+	Screengrab.screenshot("grid-select2");
         onView(withText("Grid select one widget")).perform(swipeLeft());
     }
 
     public void testMultiSelectWidget() {
+	Screengrab.screenshot("multi-select");
         onView(withText("Multi select widget")).perform(swipeLeft());
     }
 
     public void testGridSelectMultipleCompact() {
+	Screengrab.screenshot("grid-multi1");
         onView(withText("Grid select multiple widget")).perform(swipeLeft());
     }
 
     public void testGridSelectCompact2() {
+	Screengrab.screenshot("grid-multi2");
         onView(withText("Grid select multiple widget")).perform(swipeLeft());
     }
 
     public void testSpinnerSelectMultiple() {
+	Screengrab.screenshot("spinner-select");
         onView(withText("Spinner widget: select multiple")).perform(swipeLeft());
     }
 
     public void testLabelWidget() {
+	Screengrab.screenshot("label-widget");
         onView(withText("Label widget")).perform(swipeLeft());
     }
 
     public void testTriggerWidget() {
+	Screengrab.screenshot("trigger-widget");
         onView(withText("Trigger widget")).perform(swipeLeft());
     }
 
