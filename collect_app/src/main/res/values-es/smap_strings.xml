@@ -65,4 +65,6 @@
   <string name="smap_refresh_finished">Actualización Terminada</string>
   <string name="smap_server_changed">Hay Cambios - Favor Actualizar Formularios</string>
   <string name="smap_version_changed">La versión del formulario que usted esta abriendo No es la más actualizada. Favor cerrar y volver a abrirla.</string>
+  <string name="smap_been_submitted">Este formulario ya fué enviado al servidor y no puede ser revisado</string>
+  <string name="smap_location_tracking">Localización del dispositivo está siendo rastreada.</string>
 </resources>
