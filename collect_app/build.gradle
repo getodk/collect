@@ -256,9 +256,13 @@ dependencies {
 
     // Testing-only dependencies
     testImplementation group: 'junit', name: 'junit', version: '4.12'
-    testImplementation group: 'org.mockito', name: 'mockito-core', version: '2.12.0'
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: '2.8.47'
     testImplementation group: 'org.robolectric', name: 'robolectric', version: '3.5.1'
     testImplementation group: 'org.robolectric', name: 'shadows-multidex', version: '3.5.1'
+
+    // power mock (for mocking final methods which is not handled by mockito)
+    testImplementation group: 'org.powermock', name: 'powermock-module-junit4', version: '1.6.4'
+    testImplementation group: 'org.powermock', name: 'powermock-api-mockito2', version: '1.7.3'
 
     androidTestImplementation group: 'org.mockito', name: 'mockito-android', version: '2.11.0'
     androidTestImplementation(group: 'com.android.support.test', name: 'runner', version: '1.0.1') {

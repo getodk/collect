@@ -292,7 +292,7 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
                 Collect.getInstance().getActivityLogger().logAction(this,
                         "onCreateDialog.AUTH_DIALOG", "show");
 
-                return new AuthDialogUtility().createDialog(this, this);
+                return new AuthDialogUtility().createDialog(this, this, this.url);
         }
 
         return null;

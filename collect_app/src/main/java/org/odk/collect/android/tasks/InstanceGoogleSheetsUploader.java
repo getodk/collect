@@ -16,7 +16,6 @@ package org.odk.collect.android.tasks;
 
 import android.app.Activity;
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -25,23 +24,8 @@ import android.util.Xml;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.UserRecoverableAuthException;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
-import com.google.api.client.http.FileContent;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.services.drive.model.FileList;
-import com.google.api.services.drive.model.Permission;
-import com.google.api.services.sheets.v4.model.BatchUpdateSpreadsheetRequest;
-import com.google.api.services.sheets.v4.model.GridProperties;
-import com.google.api.services.sheets.v4.model.Request;
-import com.google.api.services.sheets.v4.model.SheetProperties;
 import com.google.api.services.sheets.v4.model.Spreadsheet;
-import com.google.api.services.sheets.v4.model.SpreadsheetProperties;
-import com.google.api.services.sheets.v4.model.UpdateSheetPropertiesRequest;
-import com.google.api.services.sheets.v4.model.UpdateSpreadsheetPropertiesRequest;
 import com.google.api.services.sheets.v4.model.ValueRange;
 
 import org.odk.collect.android.R;
@@ -51,11 +35,15 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.exception.BadUrlException;
 import org.odk.collect.android.exception.FormException;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
+import org.odk.collect.android.utilities.gdrive.DriveHelper;
+import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
+import org.odk.collect.android.utilities.gdrive.SheetsHelper;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.UrlUtils;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -65,7 +53,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -77,49 +64,62 @@ import timber.log.Timber;
  */
 public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
-    public static final int REQUEST_ACCOUNT_PICKER = 1000;
     public static final int REQUEST_AUTHORIZATION = 1001;
-    public static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1002;
-    protected static final String GOOGLE_DRIVE_ROOT_FOLDER = "Open Data Kit";
+    public static final String GOOGLE_DRIVE_ROOT_FOLDER = "Open Data Kit";
+    public static final String GOOGLE_DRIVE_SUBFOLDER = "Submissions";
+
     private static final String oauth_fail = "OAUTH Error: ";
     private static final String UPLOADED_MEDIA_URL = "https://drive.google.com/open?id=";
-    private static final String GOOGLE_DRIVE_SUBFOLDER = "Submissions";
-
 
     // needed in case of rate limiting
     private static final int GOOGLE_SLEEP_TIME = 1000;
-    protected Outcome outcome;
-    private String spreadsheetName;
-    private String spreadsheetId;
-    protected com.google.api.services.sheets.v4.Sheets sheetsService = null;
-    protected com.google.api.services.drive.Drive driveService = null;
-    private boolean hasWritePermissonToSheet = false;
-    private String spreadsheetFileName;
+
+    private final SheetsHelper sheetsHelper;
+    private final DriveHelper driveHelper;
+
+    private final GoogleAccountsManager accountsManager;
     private Integer sheetId;
-
-    protected GoogleAccountCredential credential;
-
-    private Context context;
-
+    private String sheetName;
+    private Outcome outcome;
+    private boolean hasWritePermissionToSheet = false;
     private boolean authFailed;
+    private String googleSheetsUrl = "";
+    private String spreadsheetId;
 
-    public InstanceGoogleSheetsUploader(GoogleAccountCredential credential, Context context) {
-        this.credential = credential;
-        this.context = context;
-
-        HttpTransport transport = AndroidHttp.newCompatibleTransport();
-        JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
-        sheetsService = new com.google.api.services.sheets.v4.Sheets.Builder(
-                transport, jsonFactory, credential)
-                .setApplicationName("ODK-Collect")
-                .build();
-        driveService = new com.google.api.services.drive.Drive.Builder(
-                transport, jsonFactory, credential)
-                .setApplicationName("ODK-Collect")
-                .build();
+    public InstanceGoogleSheetsUploader(GoogleAccountsManager accountsManager) {
+        this.accountsManager = accountsManager;
+        sheetsHelper = accountsManager.getSheetsHelper();
+        driveHelper = accountsManager.getDriveHelper();
     }
 
-    protected void uploadInstances(String selection, String[] selectionArgs, String token, int low, int instanceCount) {
+    /**
+     * Google sheets currently only allows a-zA-Z0-9 and dash
+     */
+
+    public static boolean isValidGoogleSheetsString(String name) {
+        return Pattern
+                .compile("^[a-zA-Z0-9\\-]+$").matcher(name).matches();
+    }
+
+    public static boolean isValidLocation(String answer) {
+        return Pattern
+                .compile("^-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\"
+                        + ".[0-9]+\\s[0-9]+\\.[0-9]+$").matcher(answer).matches();
+    }
+
+    private String getGoogleSheetsUrl(Cursor cursor) {
+        int subIdx = cursor.getColumnIndex(InstanceColumns.SUBMISSION_URI);
+        String urlString = cursor.isNull(subIdx) ? null : cursor.getString(subIdx);
+        // if we didn't find one in the content provider,
+        // try to get from settings
+        if (urlString == null) {
+            urlString = (String) GeneralSharedPreferences.getInstance()
+                    .get(PreferenceKeys.KEY_GOOGLE_SHEETS_URL);
+        }
+        return urlString;
+    }
+
+    private void uploadInstances(String selection, String[] selectionArgs, String token, int low, int instanceCount) {
         Cursor c = null;
         try {
             c = new InstancesDao().getInstancesCursor(selection, selectionArgs);
@@ -155,7 +155,9 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                     publishProgress(c.getPosition() + 1 + low, instanceCount);
                     String instance = c.getString(c
                             .getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
-                    if (!uploadOneSubmission(id, instance, jrformid, token, formFilePath)) {
+                    String urlString = getGoogleSheetsUrl(c);
+
+                    if (!uploadOneSubmission(id, instance, jrformid, token, formFilePath, urlString)) {
                         cv.put(InstanceColumns.STATUS,
                                 InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                         Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
@@ -174,41 +176,21 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     }
 
     private boolean uploadOneSubmission(String id, String instanceFilePath, String jrFormId,
-                                        String token, String formFilePath) {
+                                        String token, String formFilePath, String urlString) {
         // if the token is null fail immediately
         if (token == null) {
             outcome.results.put(id, oauth_fail + Collect.getInstance().getString(R.string.invalid_oauth));
             return false;
         }
 
-        // get spreadsheet id
-        if (spreadsheetId == null) {
-            try {
-                spreadsheetId = UrlUtils.getSpreadsheetID(id);
-            } catch (BadUrlException e) {
-                Timber.i(e);
-                outcome.results.put(id, e.getMessage());
-                return false;
-            }
-        }
-
         // checking for write permissions to the spreadsheet
-        if (!hasWritePermissonToSheet) {
+        if (!hasWritePermissionToSheet || !urlString.equals(googleSheetsUrl)) {
             try {
-                spreadsheetName = getSpreadSheetName();
+                spreadsheetId = UrlUtils.getSpreadsheetID(urlString);
 
-                //// TODO: 22/3/17 Find a better way to check the write permissions
-                List<Request> requests = new ArrayList<>();
-                requests.add(new Request()
-                        .setUpdateSpreadsheetProperties(new UpdateSpreadsheetPropertiesRequest()
-                                .setProperties(new SpreadsheetProperties()
-                                        .setTitle(spreadsheetFileName))
-                                .setFields("title")));
-
-                sheetsService.spreadsheets()
-                        .batchUpdate(spreadsheetId, new BatchUpdateSpreadsheetRequest()
-                                .setRequests(requests))
-                        .execute();
+                Spreadsheet spreadsheet = sheetsHelper.getSpreadsheet(spreadsheetId);
+                sheetId = spreadsheet.getSheets().get(0).getProperties().getSheetId();
+                sheetName = spreadsheet.getSheets().get(0).getProperties().getTitle();
             } catch (GoogleJsonResponseException e) {
                 String message = e.getMessage();
                 if (e.getDetails() != null && e.getDetails().getCode() == 403) {
@@ -216,16 +198,14 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                 }
                 outcome.results.put(id, message);
                 return false;
-            } catch (IOException e) {
+            } catch (BadUrlException | IOException e) {
+                Timber.i(e);
                 outcome.results.put(id, e.getMessage());
                 return false;
             }
-            hasWritePermissonToSheet = true;
+            hasWritePermissionToSheet = true;
+            googleSheetsUrl = urlString;
         }
-
-        HashMap<String, String> answersToUpload = new HashMap<>();
-        HashMap<String, String> mediaToUpload = new HashMap<>();
-        HashMap<String, String> uploadedMedia = new HashMap<>();
 
         // get instance file
         File instanceFile = new File(instanceFilePath);
@@ -263,6 +243,9 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
         // parses the instance file and populates the answers and photos
         // hashmaps.
+        HashMap<String, String> answersToUpload = new HashMap<>();
+        HashMap<String, String> mediaToUpload = new HashMap<>();
+
         try {
             processInstanceXML(instanceFile, answersToUpload, mediaToUpload);
         } catch (FormException e) {
@@ -298,6 +281,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         // if we have any media files to upload,
         // get the folder or create a new one
         // then upload the media files
+        HashMap<String, String> uploadedMedia = new HashMap<>();
         if (mediaToUpload.size() > 0) {
 
             for (String key : mediaToUpload.keySet()) {
@@ -326,7 +310,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
                 String folderId;
                 try {
-                    folderId = createOrGetIDOfFolderWithName(jrFormId);
+                    folderId = driveHelper.createOrGetIDOfFolderWithName(jrFormId);
                 } catch (IOException | MultipleFoldersFoundException e) {
                     Timber.e(e);
                     outcome.results.put(id, e.getMessage());
@@ -337,7 +321,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
                 // file is ready to be uploaded
                 try {
-                    uploadedFileId = uploadFileToDrive(mediaToUpload.get(key),
+                    uploadedFileId = driveHelper.uploadFileToDrive(mediaToUpload.get(key),
                             folderId, toUpload);
                 } catch (IOException e) {
                     Timber.e(e, "Exception thrown while uploading the file to drive");
@@ -362,7 +346,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         List headerFeed = null;
 
         try {
-            values = getHeaderFeed(spreadsheetId, spreadsheetName);
+            values = sheetsHelper.getHeaderFeed(spreadsheetId, sheetName);
             if (values == null || values.size() == 0) {
                 outcome.results.put(id, "No data found");
             } else {
@@ -392,23 +376,8 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             // if the headers were empty, resize the spreadsheet
             // and add the headers
 
-            //resizing the spreadsheet
-            SheetProperties sheetProperties = new SheetProperties()
-                    .setSheetId(sheetId)
-                    .setGridProperties(new GridProperties()
-                            .setColumnCount(columnNames.size()));
-
-            List<Request> requests = new ArrayList<>();
-            requests.add(new Request()
-                    .setUpdateSheetProperties(new UpdateSheetPropertiesRequest()
-                            .setProperties(sheetProperties)
-                            .setFields("gridProperties.columnCount")));
-
             try {
-                sheetsService.spreadsheets()
-                        .batchUpdate(spreadsheetId, new BatchUpdateSpreadsheetRequest()
-                                .setRequests(requests))
-                        .execute();
+                sheetsHelper.resizeSpreadSheet(spreadsheetId, sheetId, columnNames.size());
             } catch (IOException e) {
                 Timber.e(e);
                 outcome.results.put(id, e.getMessage());
@@ -417,9 +386,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
             //adding the headers
             ArrayList<Object> list = new ArrayList<>();
-            for (String column : columnNames) {
-                list.add(column);
-            }
+            list.addAll(columnNames);
 
             ArrayList<List<Object>> content = new ArrayList<>();
             content.add(list);
@@ -443,10 +410,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             // Send the new row to the API for insertion.
             // write the headers
             try {
-                sheetsService.spreadsheets().values()
-                        .append(spreadsheetId, spreadsheetName, row)
-                        .setIncludeValuesInResponse(true)
-                        .setValueInputOption("USER_ENTERED").execute();
+                sheetsHelper.insertRow(spreadsheetId, sheetName, row);
             } catch (IOException e) {
                 Timber.e(e);
                 outcome.results.put(id, e.getMessage());
@@ -458,7 +422,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         // update the feed
 
         try {
-            values = getHeaderFeed(spreadsheetId, spreadsheetName);
+            values = sheetsHelper.getHeaderFeed(spreadsheetId, sheetName);
             if (values == null || values.size() == 0) {
                 outcome.results.put(id, "No data found");
                 return false;
@@ -499,9 +463,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             row.setValues(content);
 
             try {
-                sheetsService.spreadsheets().values()
-                        .update(spreadsheetId, spreadsheetName + "!A1:1", row)
-                        .setValueInputOption("USER_ENTERED").execute();
+                sheetsHelper.insertRow(spreadsheetId, sheetName + "!A1:1", row);
             } catch (IOException e) {
                 Timber.e(e);
                 outcome.results.put(id, e.getMessage());
@@ -513,7 +475,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         // update the feed
 
         try {
-            values = getHeaderFeed(spreadsheetId, spreadsheetName);
+            values = sheetsHelper.getHeaderFeed(spreadsheetId, sheetName);
             if (values == null || values.size() == 0) {
                 outcome.results.put(id, "No data found");
                 return false;
@@ -546,15 +508,15 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
         if (missingColumns.size() > 0) {
             // we had some missing columns, so error out
-            String missingString = "";
+            StringBuilder missingString = new StringBuilder();
             for (int i = 0; i < missingColumns.size(); i++) {
-                missingString += missingColumns.get(i);
+                missingString.append(missingColumns.get(i));
                 if (i < missingColumns.size() - 1) {
-                    missingString += ", ";
+                    missingString.append(", ");
                 }
             }
             outcome.results.put(id, Collect.getInstance().getString(
-                    R.string.google_sheets_missing_columns, missingString));
+                    R.string.google_sheets_missing_columns, missingString.toString()));
             return false;
         }
 
@@ -603,9 +565,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
         // Send the new row to the API for insertion.
         try {
-            sheetsService.spreadsheets().values()
-                    .append(spreadsheetId, spreadsheetName, row)
-                    .setValueInputOption("USER_ENTERED").execute();
+            sheetsHelper.insertRow(spreadsheetId, sheetName, row);
         } catch (IOException e) {
             Timber.e(e);
             outcome.results.put(id, e.getMessage());
@@ -614,138 +574,6 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
         outcome.results.put(id, Collect.getInstance().getString(R.string.success));
         return true;
-    }
-
-    private String getSpreadSheetName() throws IOException {
-        Spreadsheet response;
-        response = sheetsService.spreadsheets()
-                .get(spreadsheetId)
-                .setIncludeGridData(false)
-                .execute();
-
-        spreadsheetFileName = response.getProperties().getTitle();
-        sheetId = response.getSheets().get(0).getProperties().getSheetId();
-        return response.getSheets().get(0).getProperties().getTitle();
-    }
-
-    private String createOrGetIDOfFolderWithName(String jrFormId)
-            throws IOException, MultipleFoldersFoundException {
-
-        String submissionsFolderId = createOrGetIDOfSubmissionsFolder();
-        return getIDOfFolderWithName(jrFormId, submissionsFolderId);
-    }
-
-    private String createOrGetIDOfSubmissionsFolder() throws IOException,
-            MultipleFoldersFoundException {
-
-        String rootFolderId = getIDOfFolderWithName(GOOGLE_DRIVE_ROOT_FOLDER, null);
-        return getIDOfFolderWithName(GOOGLE_DRIVE_SUBFOLDER, rootFolderId);
-    }
-
-    protected String getIDOfFolderWithName(String name, String inFolder)
-            throws IOException, MultipleFoldersFoundException {
-
-        com.google.api.services.drive.model.File folder = null;
-
-        // check if the folder exists
-        ArrayList<com.google.api.services.drive.model.File> files =
-                getFilesFromDrive(name, inFolder);
-
-        for (com.google.api.services.drive.model.File file : files) {
-            if (folder == null) {
-                folder = file;
-            } else {
-                throw new MultipleFoldersFoundException("Multiple \"" + name
-                        + "\" folders found");
-            }
-        }
-
-        // if the folder is not found then create a new one
-        if (folder == null) {
-            folder = createFolderInDrive(name, inFolder);
-        }
-        return folder.getId();
-
-    }
-
-    private String uploadFileToDrive(String mediaName, String destinationFolderID,
-                                     File toUpload) throws IOException {
-
-        //adding meta-data to the file
-        com.google.api.services.drive.model.File fileMetadata =
-                new com.google.api.services.drive.model.File()
-                        .setName(mediaName)
-                        .setViewersCanCopyContent(true)
-                        .setParents(Collections.singletonList(destinationFolderID));
-
-        String type = FileUtils.getMimeType(toUpload.getPath());
-        FileContent mediaContent = new FileContent(type, toUpload);
-        com.google.api.services.drive.model.File file;
-        file = driveService.files().create(fileMetadata, mediaContent)
-                .setFields("id, parents")
-                .setIgnoreDefaultVisibility(true)
-                .execute();
-
-        return file.getId();
-    }
-
-    private com.google.api.services.drive.model.File createFolderInDrive(String folderName,
-                                                                         String parentId)
-            throws IOException {
-
-        //creating a new folder
-        com.google.api.services.drive.model.File fileMetadata = new
-                com.google.api.services.drive.model.File();
-        fileMetadata.setName(folderName);
-        fileMetadata.setMimeType("application/vnd.google-apps.folder");
-        if (parentId != null) {
-            fileMetadata.setParents(Collections.singletonList(parentId));
-        }
-
-        com.google.api.services.drive.model.File folder;
-        folder = driveService.files().create(fileMetadata)
-                .setFields("id")
-                .execute();
-
-        //adding the permissions to folder
-        Permission sharePermission = new Permission()
-                .setType("anyone")
-                .setRole("reader");
-
-        driveService.permissions().create(folder.getId(), sharePermission)
-                .setFields("id")
-                .execute();
-
-        return folder;
-    }
-
-    private ArrayList<com.google.api.services.drive.model.File> getFilesFromDrive(
-            String folderName,
-            String parentId) throws IOException {
-
-        ArrayList<com.google.api.services.drive.model.File> files = new ArrayList<>();
-        FileList fileList;
-        String pageToken;
-        do {
-            if (parentId == null) {
-                fileList = driveService.files().list()
-                        .setQ("name = '" + folderName + "' and "
-                                + "mimeType = 'application/vnd.google-apps.folder'"
-                                + " and trashed=false")
-                        .execute();
-            } else {
-                fileList = driveService.files().list()
-                        .setQ("name = '" + folderName + "' and "
-                                + "mimeType = 'application/vnd.google-apps.folder'"
-                                + " and '" + parentId + "' in parents" + " and trashed=false")
-                        .execute();
-            }
-            for (com.google.api.services.drive.model.File file : fileList.getFiles()) {
-                files.add(file);
-            }
-            pageToken = fileList.getNextPageToken();
-        } while (pageToken != null);
-        return files;
     }
 
     private void getColumns(String filePath, ArrayList<String> columns)
@@ -892,55 +720,18 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     }
 
     private String getPath(ArrayList<String> path) {
-        String currentPath = "";
+        StringBuilder currentPath = new StringBuilder();
         boolean first = true;
         for (String node : path) {
             if (first) {
-                currentPath = node;
+                currentPath = new StringBuilder(node);
                 first = false;
             } else {
-                currentPath += "-" + node;
+                currentPath.append('-').append(node);
             }
         }
-        return currentPath;
+        return currentPath.toString();
     }
-
-    /**
-     * Google sheets currently only allows a-zA-Z0-9 and dash
-     */
-
-    public static boolean isValidGoogleSheetsString(String name) {
-        return Pattern
-                .compile("^[a-zA-Z0-9\\-]+$").matcher(name).matches();
-    }
-
-    public static boolean isValidLocation(String answer) {
-        return Pattern
-                .compile("^-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\"
-                        + ".[0-9]+\\s[0-9]+\\.[0-9]+$").matcher(answer).matches();
-    }
-
-    /**
-     * Fetches the spreadsheet with the provided spreadsheetId
-     * <p>
-     * get(sheetId, range) method requires two parameters
-     * <p>
-     * since we want to search the whole sheet so we provide only the sheet name as range
-     * <p>
-     * range is in A1 notation
-     * eg. Sheet1!A1:G7
-     * <p>
-     * For more info   :   https://developers.google.com/sheets/api/reference/rest/
-     */
-    private List<List<Object>> getHeaderFeed(String spreadsheetId, String spreadsheetName)
-            throws IOException {
-        ValueRange response = sheetsService.spreadsheets()
-                .values()
-                .get(spreadsheetId, spreadsheetName)
-                .execute();
-        return response.getValues();
-    }
-
 
     @Override
     protected Outcome doInBackground(Long... values) {
@@ -968,18 +759,22 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                 selectionBuf.append(")");
                 String selection = selectionBuf.toString();
 
-                String token = credential.getToken();
-                //Immediately invalidate so we get a different one if we have to try again
-                GoogleAuthUtil.invalidateToken(context, token);
+                String token = accountsManager.getCredential().getToken();
 
-                getIDOfFolderWithName(GOOGLE_DRIVE_ROOT_FOLDER, null);
+                //Immediately invalidate so we get a different one if we have to try again
+                GoogleAuthUtil.invalidateToken(accountsManager.getContext(), token);
+
+                // check if root folder exists, if not then create one
+                driveHelper.getIDOfFolderWithName(GOOGLE_DRIVE_ROOT_FOLDER, null, true);
+
                 uploadInstances(selection, selectionArgs, token, low, values.length);
                 counter++;
             }
         } catch (UserRecoverableAuthException e) {
             outcome = null;
-            if (context instanceof Activity) {
-                ((Activity) context).startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
+            Activity activity = accountsManager.getActivity();
+            if (activity != null) {
+                activity.startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
             }
         } catch (IOException | GoogleAuthException e) {
             Timber.e(e);
@@ -994,10 +789,9 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         return authFailed;
     }
 
-    public void setAuthFailed(boolean authFailed) {
-        this.authFailed = authFailed;
+    public void setAuthFailed() {
+        authFailed = false;
     }
-
 }
 
 
