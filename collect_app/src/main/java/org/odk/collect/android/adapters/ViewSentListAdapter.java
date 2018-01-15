@@ -63,8 +63,8 @@ public class ViewSentListAdapter extends SimpleCursorAdapter {
             }
         }
 
-        TextView visibilityOffCause = (TextView) view.findViewById(R.id.text4);
-        ImageView visibleOff = (ImageView) view.findViewById(R.id.visible_off);
+        TextView visibilityOffCause = view.findViewById(R.id.text4);
+        ImageView visibleOff = view.findViewById(R.id.visible_off);
         Long date = getCursor().getLong(getCursor().getColumnIndex(InstanceProviderAPI.InstanceColumns.DELETED_DATE));
 
         visibleOff.setScaleX(0.9f);

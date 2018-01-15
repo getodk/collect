@@ -35,22 +35,36 @@ import org.odk.collect.android.preferences.PreferenceKeys;
 public class AuthDialogUtility {
     private static final String TAG = "AuthDialogUtility";
 
+    private EditText username;
+    private EditText password;
+
     public AlertDialog createDialog(final Context context,
-                                    final AuthDialogUtilityResultListener resultListener) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                                    final AuthDialogUtilityResultListener resultListener, String url) {
 
         final View dialogView = LayoutInflater.from(context)
                 .inflate(R.layout.server_auth_dialog, null);
 
-        final EditText username = (EditText) dialogView.findViewById(R.id.username_edit);
-        final EditText password = (EditText) dialogView.findViewById(R.id.password_edit);
+        String overriddenUrl = null;
+        if (url != null) {
+            if (!url.startsWith(getServerFromPreferences())) {
+                overriddenUrl = url;
+                if (overriddenUrl.contains("?deviceID=")) {
+                    overriddenUrl = overriddenUrl.substring(0, overriddenUrl.indexOf("?deviceID="));
+                }
+            }
+        }
 
-        username.setText(getUserName());
-        password.setText(getPassword());
+        username = dialogView.findViewById(R.id.username_edit);
+        password = dialogView.findViewById(R.id.password_edit);
 
+        username.setText(overriddenUrl != null ? null : getUserNameFromPreferences());
+        password.setText(overriddenUrl != null ? null : getPasswordFromPreferences());
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(context.getString(R.string.server_requires_auth));
-        builder.setMessage(context.getString(R.string.server_auth_credentials, getServer()));
+        builder.setMessage(context.getString(R.string.server_auth_credentials, overriddenUrl != null ? overriddenUrl : getServerFromPreferences()));
         builder.setView(dialogView);
+        String finalOverriddenUrl = overriddenUrl;
         builder.setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -59,8 +73,12 @@ public class AuthDialogUtility {
                 String userNameValue = username.getText().toString();
                 String passwordValue = password.getText().toString();
 
-                saveCredentials(userNameValue, passwordValue);
-                setWebCredentialsFromPreferences();
+                if (finalOverriddenUrl == null) {
+                    saveCredentials(userNameValue, passwordValue);
+                    setWebCredentialsFromPreferences();
+                } else {
+                    setWebCredentials(finalOverriddenUrl);
+                }
 
                 resultListener.updatedCredentials();
             }
@@ -81,27 +99,35 @@ public class AuthDialogUtility {
     }
 
     public static void setWebCredentialsFromPreferences() {
-
-        String username = getUserName();
-        String password = getPassword();
+        String username = getUserNameFromPreferences();
+        String password = getPasswordFromPreferences();
 
         if (username == null || username.isEmpty()) {
             return;
         }
 
-        String host = Uri.parse(getServer()).getHost();
+        String host = Uri.parse(getServerFromPreferences()).getHost();
         WebUtils.addCredentials(username, password, host);
     }
 
-    private static String getServer() {
+    private void setWebCredentials(String url) {
+        if (username == null || username.getText().toString().isEmpty()) {
+            return;
+        }
+
+        String host = Uri.parse(url).getHost();
+        WebUtils.addCredentials(username.getText().toString(), password.getText().toString(), host);
+    }
+
+    private static String getServerFromPreferences() {
         return (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_SERVER_URL);
     }
 
-    private static String getPassword() {
+    private static String getPasswordFromPreferences() {
         return (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_PASSWORD);
     }
 
-    private static String getUserName() {
+    private static String getUserNameFromPreferences() {
         return (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_USERNAME);
     }
 

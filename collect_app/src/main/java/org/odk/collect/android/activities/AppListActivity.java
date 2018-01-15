@@ -117,17 +117,17 @@ abstract class AppListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        listView = (ListView) findViewById(android.R.id.list);
+        listView = findViewById(android.R.id.list);
         listView.setOnItemClickListener((AdapterView.OnItemClickListener) this);
 
-        TextView emptyView = (TextView) findViewById(android.R.id.empty);
+        TextView emptyView = findViewById(android.R.id.empty);
         listView.setEmptyView(emptyView);
 
         initToolbar();
     }
 
     private void initToolbar() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
 
         setSupportActionBar(toolbar);
     }
@@ -292,7 +292,7 @@ abstract class AppListActivity extends AppCompatActivity {
     private void setupBottomSheet() {
         bottomSheetDialog = new BottomSheetDialog(this, R.style.MaterialDialogSheet);
         View sheetView = getLayoutInflater().inflate(R.layout.bottom_sheet, null);
-        final RecyclerView recyclerView = (RecyclerView) sheetView.findViewById(R.id.recyclerView);
+        final RecyclerView recyclerView = sheetView.findViewById(R.id.recyclerView);
 
         final SortDialogAdapter adapter = new SortDialogAdapter(this, recyclerView, sortingOptions, getSelectedSortingOrder(), new RecyclerViewClickListener() {
             @Override

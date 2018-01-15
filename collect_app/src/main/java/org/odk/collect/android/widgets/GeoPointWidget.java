@@ -264,7 +264,6 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
         }
 
         updateButtonLabelsAndVisibility(true);
-        cancelWaitingForData();
     }
 
     @Override

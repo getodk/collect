@@ -26,6 +26,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.logic.FormDetails;
+import org.odk.collect.android.logic.MediaFile;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.utilities.DocumentFetchResult;
 import org.odk.collect.android.utilities.FileUtils;
@@ -77,7 +78,7 @@ public class DownloadFormsTask extends
     private static final String NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_MANIFEST =
             "http://openrosa.org/xforms/xformsManifest";
 
-    private boolean isXformsManifestNamespacedElement(Element e) {
+    static boolean isXformsManifestNamespacedElement(Element e) {
         return e.getNamespace().equalsIgnoreCase(NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_MANIFEST);
     }
 
@@ -130,7 +131,7 @@ public class DownloadFormsTask extends
      * @throws TaskCancelledException to signal that form downloading is to be canceled
      */
     private String processOneForm(int total, int count, FormDetails fd) throws TaskCancelledException {
-        publishProgress(fd.formName, String.valueOf(count), String.valueOf(total));
+        publishProgress(fd.getFormName(), String.valueOf(count), String.valueOf(total));
         String message = "";
 
         if (isCancelled()) {
@@ -143,9 +144,9 @@ public class DownloadFormsTask extends
         try {
             // get the xml file
             // if we've downloaded a duplicate, this gives us the file
-            fileResult = downloadXform(fd.formName, fd.downloadUrl);
+            fileResult = downloadXform(fd.getFormName(), fd.getDownloadUrl());
 
-            if (fd.manifestUrl != null) {
+            if (fd.getManifestUrl() != null) {
                 // use a temporary media path until everything is ok.
                 tempMediaPath = new File(Collect.CACHE_PATH,
                         String.valueOf(System.currentTimeMillis())).getAbsolutePath();
@@ -157,7 +158,7 @@ public class DownloadFormsTask extends
                     message += error;
                 }
             } else {
-                Timber.i("No Manifest for: %s", fd.formName);
+                Timber.i("No Manifest for: %s", fd.getFormName());
             }
         } catch (TaskCancelledException e) {
             Timber.i(e.getMessage());
@@ -571,28 +572,14 @@ public class DownloadFormsTask extends
         }
     }
 
-    private static class MediaFile {
-        final String filename;
-        final String hash;
-        final String downloadUrl;
-
-
-        MediaFile(String filename, String hash, String downloadUrl) {
-            this.filename = filename;
-            this.hash = hash;
-            this.downloadUrl = downloadUrl;
-        }
-    }
-
-
     private String downloadManifestAndMediaFiles(String tempMediaPath, String finalMediaPath,
             FormDetails fd, int count,
             int total) throws Exception {
-        if (fd.manifestUrl == null) {
+        if (fd.getManifestUrl() == null) {
             return null;
         }
 
-        publishProgress(Collect.getInstance().getString(R.string.fetching_manifest, fd.formName),
+        publishProgress(Collect.getInstance().getString(R.string.fetching_manifest, fd.getFormName()),
                 String.valueOf(count), String.valueOf(total));
 
         List<MediaFile> files = new ArrayList<MediaFile>();
@@ -602,13 +589,13 @@ public class DownloadFormsTask extends
         HttpClient httpclient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
 
         DocumentFetchResult result =
-                WebUtils.getXmlDocument(fd.manifestUrl, localContext, httpclient);
+                WebUtils.getXmlDocument(fd.getManifestUrl(), localContext, httpclient);
 
         if (result.errorMessage != null) {
             return result.errorMessage;
         }
 
-        String errMessage = Collect.getInstance().getString(R.string.access_error, fd.manifestUrl);
+        String errMessage = Collect.getInstance().getString(R.string.access_error, fd.getManifestUrl());
 
         if (!result.isOpenRosaResponse) {
             errMessage += Collect.getInstance().getString(R.string.manifest_server_error);
@@ -706,24 +693,24 @@ public class DownloadFormsTask extends
                 ++mediaCount;
                 publishProgress(
                         Collect.getInstance().getString(R.string.form_download_progress,
-                                fd.formName,
+                                fd.getFormName(),
                                 String.valueOf(mediaCount), String.valueOf(files.size())),
                                 String.valueOf(count),String.valueOf(total));
                 //try {
-                File finalMediaFile = new File(finalMediaDir, toDownload.filename);
-                File tempMediaFile = new File(tempMediaDir, toDownload.filename);
+                File finalMediaFile = new File(finalMediaDir, toDownload.getFilename());
+                File tempMediaFile = new File(tempMediaDir, toDownload.getFilename());
 
                 if (!finalMediaFile.exists()) {
-                    downloadFile(tempMediaFile, toDownload.downloadUrl);
+                    downloadFile(tempMediaFile, toDownload.getDownloadUrl());
                 } else {
                     String currentFileHash = FileUtils.getMd5Hash(finalMediaFile);
-                    String downloadFileHash = toDownload.hash.substring(MD5_COLON_PREFIX.length());
+                    String downloadFileHash = getMd5Hash(toDownload.getHash());
 
-                    if (!currentFileHash.contentEquals(downloadFileHash)) {
+                    if (currentFileHash != null && downloadFileHash != null && !currentFileHash.contentEquals(downloadFileHash)) {
                         // if the hashes match, it's the same file
                         // otherwise delete our current one and replace it with the new one
                         FileUtils.deleteAndReport(finalMediaFile);
-                        downloadFile(tempMediaFile, toDownload.downloadUrl);
+                        downloadFile(tempMediaFile, toDownload.getDownloadUrl());
                     } else {
                         // exists, and the hash is the same
                         // no need to download it again
@@ -767,4 +754,7 @@ public class DownloadFormsTask extends
         }
     }
 
+    static String getMd5Hash(String hash) {
+        return hash == null ? null : hash.substring(MD5_COLON_PREFIX.length());
+    }
 }

@@ -114,8 +114,6 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryWidget {
     public void setBinaryData(Object answer) {
         String s = answer.toString();
         answerDisplay.setText(s);
-
-        cancelWaitingForData();
     }
 
     @Override

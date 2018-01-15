@@ -85,7 +85,7 @@ import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
-import org.odk.collect.android.injection.DependencyProvider;
+import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.FormSavedListener;
@@ -101,6 +101,7 @@ import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.FormLoaderTask;
+import org.odk.collect.android.tasks.SaveFormIndexTask;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.tasks.SavePointTask;
@@ -144,7 +145,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         FormLoaderListener, FormSavedListener, AdvanceToNextListener,
         OnGestureListener, SavePointListener, NumberPickerDialog.NumberPickerListener,
         DependencyProvider<ActivityAvailability>,
-        CustomDatePickerDialog.CustomDatePickerDialogListener {
+        CustomDatePickerDialog.CustomDatePickerDialogListener, SaveFormIndexTask.SaveFormIndexListener {
 
     // save with every swipe forward or back. Timings indicate this takes .25
     // seconds.
@@ -272,11 +273,11 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         inAnimation = null;
         outAnimation = null;
         gestureDetector = new GestureDetector(this, this);
-        questionHolder = (LinearLayout) findViewById(R.id.questionholder);
+        questionHolder = findViewById(R.id.questionholder);
 
         initToolbar();
 
-        nextButton = (ImageButton) findViewById(R.id.form_forward_button);
+        nextButton = findViewById(R.id.form_forward_button);
         nextButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -285,7 +286,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             }
         });
 
-        backButton = (ImageButton) findViewById(R.id.form_back_button);
+        backButton = findViewById(R.id.form_back_button);
         backButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -563,7 +564,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     }
 
     private void initToolbar() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setTitle(getString(R.string.loading_form));
         setSupportActionBar(toolbar);
     }
@@ -576,6 +577,13 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         try {
             SavePointTask savePointTask = new SavePointTask(this);
             savePointTask.execute();
+
+            if (!allowMovingBackwards) {
+                FormController formController = Collect.getInstance().getFormController();
+                if (formController != null) {
+                    new SaveFormIndexTask(this, formController.getFormIndex()).execute();
+                }
+            }
         } catch (Exception e) {
             Timber.e("Could not schedule SavePointTask. Perhaps a lot of swiping is taking place?");
         }
@@ -588,8 +596,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         FormController formController = Collect.getInstance()
                 .getFormController();
         if (formController != null) {
-            outState.putString(KEY_INSTANCEPATH, formController
-                    .getInstancePath().getAbsolutePath());
+            if (formController.getInstancePath() != null) {
+                outState.putString(KEY_INSTANCEPATH, formController
+                        .getInstancePath().getAbsolutePath());
+            }
             outState.putString(KEY_XPATH,
                     formController.getXPath(formController.getFormIndex()));
             FormIndex waiting = formController.getIndexWaitingForData();
@@ -996,14 +1006,16 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         .getActivityLogger()
                         .logInstanceAction(this, "onOptionsItemSelected",
                                 "MENU_HIERARCHY_VIEW");
-                if (formController.currentPromptIsQuestion()) {
+                if (formController != null && formController.currentPromptIsQuestion()) {
                     saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 }
 
-                formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.HIERARCHY, 0, null, false, true);
+                if (formController != null) {
+                    formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.HIERARCHY,
+                            0, null, false, true);
+                }
 
-                Intent i = new Intent(this, FormHierarchyActivity.class);
-                i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
+                Intent i = new Intent(this, EditFormHierarchyActivity.class);
                 startActivityForResult(i, RequestCodes.HIERARCHY_ACTIVITY);
                 return true;
             case R.id.menu_preferences:
@@ -1031,7 +1043,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         // only try to save if the current event is a question or a field-list group
         // and current view is an ODKView (occasionally we show blank views that do not have any
         // controls to save data from)
-        if (formController.currentPromptIsQuestion() && getCurrentViewIfODKView() != null) {
+        if (formController != null && formController.currentPromptIsQuestion()
+                && getCurrentViewIfODKView() != null) {
             HashMap<FormIndex, IAnswerData> answers = getCurrentViewIfODKView()
                     .getAnswers();
             try {
@@ -1169,8 +1182,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                                 formController.getFormTitle()));
 
                 // checkbox for if finished or ready to send
-                final CheckBox instanceComplete = ((CheckBox) endView
-                        .findViewById(R.id.mark_finished));
+                final CheckBox instanceComplete = endView
+                        .findViewById(R.id.mark_finished);
                 instanceComplete.setChecked(isInstanceComplete(true));
 
                 if (!(boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_MARK_AS_FINALIZED)) {
@@ -1178,7 +1191,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 }
 
                 // edittext to change the displayed name of the instance
-                final EditText saveAs = (EditText) endView.findViewById(R.id.save_name);
+                final EditText saveAs = endView.findViewById(R.id.save_name);
 
                 // disallow carriage returns in the name
                 InputFilter returnFilter = new InputFilter() {
@@ -1197,10 +1210,14 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 if (formController.getSubmissionMetadata().instanceName == null) {
                     // no meta/instanceName field in the form -- see if we have a
                     // name for this instance from a previous save attempt...
-                    String uriMimeType = getContentResolver().getType(getIntent().getData());
+                    String uriMimeType = null;
+                    Uri instanceUri = getIntent().getData();
+                    if (instanceUri != null) {
+                        uriMimeType = getContentResolver().getType(instanceUri);
+                    }
+
                     if (saveName == null && uriMimeType != null
                             && uriMimeType.equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
-                        Uri instanceUri = getIntent().getData();
                         Cursor instance = null;
                         try {
                             instance = getContentResolver().query(instanceUri,
@@ -1222,7 +1239,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         saveName = formController.getFormTitle();
                     }
                     // present the prompt to allow user to name the form
-                    TextView sa = (TextView) endView.findViewById(R.id.save_form_as);
+                    TextView sa = endView.findViewById(R.id.save_form_as);
                     sa.setVisibility(View.VISIBLE);
                     saveAs.setText(saveName);
                     saveAs.setEnabled(true);
@@ -1246,7 +1263,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     // revisions
                     // display only the name, not the prompt, and disable edits
                     saveName = formController.getSubmissionMetadata().instanceName;
-                    TextView sa = (TextView) endView.findViewById(R.id.save_form_as);
+                    TextView sa = endView.findViewById(R.id.save_form_as);
                     sa.setVisibility(View.GONE);
                     saveAs.setText(saveName);
                     saveAs.setEnabled(false);
@@ -1256,7 +1273,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 // override the visibility settings based upon admin preferences
                 if (!(boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_SAVE_AS)) {
                     saveAs.setVisibility(View.GONE);
-                    TextView sa = (TextView) endView
+                    TextView sa = endView
                             .findViewById(R.id.save_form_as);
                     sa.setVisibility(View.GONE);
                 }
@@ -1373,7 +1390,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         try {
             FormIndex originalFormIndex = formController.getFormIndex();
             backButton.setEnabled(!formController.isCurrentQuestionFirstInForm() && allowMovingBackwards);
-            if (formController.stepToNextScreenEvent() == FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
+            if (formController.stepToPreviousEvent() == FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
                 backButton.setEnabled(allowMovingBackwards);
             }
             formController.jumpToIndex(originalFormIndex);
@@ -1421,8 +1438,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             String constraintBehavior = (String) GeneralSharedPreferences.getInstance()
                     .get(PreferenceKeys.KEY_CONSTRAINT_BEHAVIOR);
 
-            if (formController.currentPromptIsQuestion()) {
-
+            if (formController != null && formController.currentPromptIsQuestion()) {
                 // if constraint behavior says we should validate on swipe, do so
                 if (constraintBehavior.equals(PreferenceKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE)) {
                     if (!saveAnswersForCurrentScreen(EVALUATE_CONSTRAINTS)) {
@@ -1718,7 +1734,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         View view = inflater.inflate(R.layout.toast_view, null);
 
         // set the text in the view
-        TextView tv = (TextView) view.findViewById(R.id.message);
+        TextView tv = view.findViewById(R.id.message);
         tv.setText(message);
 
         Toast t = new Toast(this);
@@ -2048,32 +2064,24 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         alertDialog.show();
     }
 
-    /**
-     * this method cleans up unneeded files when the user selects 'discard and
-     * exit'
-     */
+    // Cleanup when user exits a form without saving
     private void removeTempInstance() {
-        FormController formController = Collect.getInstance()
-                .getFormController();
+        FormController formController = Collect.getInstance().getFormController();
 
-        // attempt to remove any scratch file
-        File temp = SaveToDiskTask.savepointFile(formController
-                .getInstancePath());
-        if (temp.exists()) {
-            temp.delete();
+        if (formController != null && formController.getInstancePath() != null) {
+            SaveToDiskTask.removeSavepointFiles(formController.getInstancePath().getName());
         }
 
-        boolean erase = false;
-        {
-            Cursor c = null;
-            try {
-                c = new InstancesDao().getInstancesCursorForFilePath(formController.getInstancePath()
-                        .getAbsolutePath());
-                erase = (c.getCount() < 1);
-            } finally {
-                if (c != null) {
-                    c.close();
-                }
+        boolean erase;
+
+        Cursor c = null;
+        try {
+            c = new InstancesDao().getInstancesCursorForFilePath(formController.getInstancePath()
+                    .getAbsolutePath());
+            erase = c.getCount() < 1;
+        } finally {
+            if (c != null) {
+                c.close();
             }
         }
 
@@ -2254,11 +2262,14 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                                         .logInstanceAction(this,
                                                 "onCreateDialog.PROGRESS_DIALOG", "cancel");
                                 dialog.dismiss();
-                                formLoaderTask.setFormLoaderListener(null);
-                                FormLoaderTask t = formLoaderTask;
-                                formLoaderTask = null;
-                                t.cancel(true);
-                                t.destroy();
+
+                                if (formLoaderTask != null) {
+                                    formLoaderTask.setFormLoaderListener(null);
+                                    FormLoaderTask t = formLoaderTask;
+                                    formLoaderTask = null;
+                                    t.cancel(true);
+                                    t.destroy();
+                                }
                                 finish();
                             }
                         };
@@ -2628,16 +2639,22 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             if (!showFirst) {
                 // we've just loaded a saved form, so start in the hierarchy view
 
-                Intent i = new Intent(this, FormHierarchyActivity.class);
+                if (!allowMovingBackwards) {
+                    FormIndex formIndex = SaveFormIndexTask.loadFormIndexFromFile();
+                    if (formIndex != null) {
+                        formController.jumpToIndex(formIndex);
+                        refreshCurrentView();
+                        return;
+                    }
+                }
+
                 String formMode = reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
                 if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
-                    i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
-                    startActivity(i);
+                    startActivity(new Intent(this, EditFormHierarchyActivity.class));
                     return; // so we don't show the intro screen before jumping to the hierarchy
                 } else {
                     if (ApplicationConstants.FormModes.VIEW_SENT.equalsIgnoreCase(formMode)) {
-                        i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.VIEW_SENT);
-                        startActivity(i);
+                        startActivity(new Intent(this, ViewFormHierarchyActivity.class));
                     }
                     finish();
                 }
@@ -2943,6 +2960,13 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
     @Override
     public void onSavePointError(String errorMessage) {
+        if (errorMessage != null && errorMessage.trim().length() > 0) {
+            ToastUtils.showLongToast(getString(R.string.save_point_error, errorMessage));
+        }
+    }
+
+    @Override
+    public void onSaveFormIndexError(String errorMessage) {
         if (errorMessage != null && errorMessage.trim().length() > 0) {
             ToastUtils.showLongToast(getString(R.string.save_point_error, errorMessage));
         }

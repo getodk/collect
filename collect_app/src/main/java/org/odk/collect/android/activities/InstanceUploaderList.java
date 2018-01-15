@@ -89,7 +89,7 @@ public class InstanceUploaderList extends InstanceListActivity
 
         instancesDao = new InstancesDao();
 
-        uploadButton = (Button) findViewById(R.id.upload_button);
+        uploadButton = findViewById(R.id.upload_button);
         uploadButton.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -120,7 +120,7 @@ public class InstanceUploaderList extends InstanceListActivity
             }
         });
 
-        final Button toggleSelsButton = (Button) findViewById(R.id.toggle_button);
+        final Button toggleSelsButton = findViewById(R.id.toggle_button);
         toggleSelsButton.setLongClickable(true);
         toggleSelsButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -179,7 +179,7 @@ public class InstanceUploaderList extends InstanceListActivity
 
     @Override
     public void syncComplete(String result) {
-        TextView textView = (TextView) findViewById(R.id.status_text);
+        TextView textView = findViewById(R.id.status_text);
         textView.setText(result);
     }
 
@@ -263,7 +263,7 @@ public class InstanceUploaderList extends InstanceListActivity
         }
 
         uploadButton.setEnabled(areCheckedItems());
-        Button toggleSelectionsButton = (Button) findViewById(R.id.toggle_button);
+        Button toggleSelectionsButton = findViewById(R.id.toggle_button);
         toggleButtonLabel(toggleSelectionsButton, listView);
     }
 

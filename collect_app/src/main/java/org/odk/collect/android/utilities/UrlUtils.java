@@ -14,15 +14,11 @@
 
 package org.odk.collect.android.utilities;
 
-import android.database.Cursor;
+import android.support.annotation.NonNull;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.exception.BadUrlException;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.PreferenceKeys;
-import org.odk.collect.android.provider.InstanceProviderAPI;
 
 import java.util.regex.Pattern;
 
@@ -35,35 +31,8 @@ public class UrlUtils {
         return urlPattern.matcher(url).matches();
     }
 
-    public static String getSpreadsheetID(String id)
-            throws BadUrlException {
-        Cursor cursor = null;
-        String urlString = null;
-        try {
-            // see if the submission element was defined in the form
-            cursor = new InstancesDao().getInstancesCursorForId(id);
-
-            if (cursor.getCount() > 0) {
-                cursor.moveToPosition(-1);
-                while (cursor.moveToNext()) {
-                    int subIdx = cursor.getColumnIndex(
-                            InstanceProviderAPI.InstanceColumns.SUBMISSION_URI);
-                    urlString = cursor.isNull(subIdx) ? null : cursor.getString(subIdx);
-
-                    // if we didn't find one in the content provider,
-                    // try to get from settings
-                    if (urlString == null) {
-                        urlString = (String) GeneralSharedPreferences.getInstance()
-                                .get(PreferenceKeys.KEY_GOOGLE_SHEETS_URL);
-                    }
-                }
-            }
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-
+    @NonNull
+    public static String getSpreadsheetID(String urlString) throws BadUrlException {
         // now parse the url string if we have one
         final String googleHeader = "docs.google.com/spreadsheets/d/";
         String spreadsheetId;
@@ -85,6 +54,4 @@ public class UrlUtils {
             return spreadsheetId;
         }
     }
-
-
 }

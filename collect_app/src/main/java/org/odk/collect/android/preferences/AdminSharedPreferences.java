@@ -14,6 +14,8 @@
 
 package org.odk.collect.android.preferences;
 
+import android.content.SharedPreferences.Editor;
+
 import org.odk.collect.android.application.Collect;
 
 import static org.odk.collect.android.preferences.AdminKeys.ALL_KEYS;
@@ -24,7 +26,6 @@ public class AdminSharedPreferences {
 
     private static AdminSharedPreferences instance = null;
     private android.content.SharedPreferences sharedPreferences;
-    private android.content.SharedPreferences.Editor editor;
 
     private AdminSharedPreferences() {
         sharedPreferences = Collect.getInstance().getSharedPreferences(ADMIN_PREFERENCES, 0);
@@ -39,9 +40,9 @@ public class AdminSharedPreferences {
 
     public Object get(String key) {
         if (key.equals(KEY_ADMIN_PW)) {
-            return sharedPreferences.getString(key, "");
+            return sharedPreferences.getString(key, (String) getDefault(key));
         } else {
-            return sharedPreferences.getBoolean(key, true);
+            return sharedPreferences.getBoolean(key, (Boolean) getDefault(key));
         }
     }
 
@@ -59,7 +60,7 @@ public class AdminSharedPreferences {
     }
 
     public void save(String key, Object value) {
-        editor = sharedPreferences.edit();
+        Editor editor = sharedPreferences.edit();
         if (value == null || value instanceof String) {
             editor.putString(key, (String) value);
         } else if (value instanceof Boolean) {
@@ -81,10 +82,14 @@ public class AdminSharedPreferences {
                 .apply();
     }
 
-    public void loadDefaultValues() {
+    public void loadDefaultPreferences() {
         clear();
+        reloadPreferences();
+    }
+
+    public void reloadPreferences() {
         for (String key : ALL_KEYS) {
-            save(key, getDefault(key));
+            save(key, get(key));
         }
     }
 }

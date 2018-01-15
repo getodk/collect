@@ -5,11 +5,6 @@
     <issue id="MissingRegistered" severity="warning"/>
     <issue id="AppCompatResource" severity="warning"/>
     <issue id="StaticFieldLeak" severity="warning"/>
-    <issue id="UnusedResources" severity="warning">
-        <ignore path="res/values/dimens.xml"/>
-        <ignore path="res/xml/analytics_tracker.xml"/>
-        <ignore regexp="ga_trackingId|google_crash_reporting_api_key"/>
-    </issue>
     <issue id="UnusedIds" severity="warning"/>
     <issue id="AppLinkUrlError" severity="warning" />
 
@@ -32,8 +27,13 @@
     <issue id="StringFormatInTimber" severity="error"/>
     <issue id="ApplySharedPref" severity="error"/>
     <issue id="IconLocation" severity="error"/>
+    <issue id="UnknownIdInLayout" severity="error"/>
     <issue id="UnusedNamespace" severity="error">
         <ignore path="res/values*"/>
+    </issue>
+    <issue id="UnusedResources" severity="error">
+        <ignore path="res/values/dimens.xml"/>
+        <ignore regexp="ga_trackingId|google_crash_reporting_api_key"/>
     </issue>
 
     <issue id="TimberExceptionLogging" severity="error"/>

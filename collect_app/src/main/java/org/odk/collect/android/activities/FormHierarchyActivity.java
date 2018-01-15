@@ -38,35 +38,34 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.HierarchyListAdapter;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.HierarchyElement;
-import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
+import org.odk.collect.android.views.ODKView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import timber.log.Timber;
 
-public class FormHierarchyActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public abstract class FormHierarchyActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
-    private static final int CHILD = 1;
-    private static final int EXPANDED = 2;
-    private static final int COLLAPSED = 3;
-    private static final int QUESTION = 4;
+    protected static final int CHILD = 1;
+    protected static final int EXPANDED = 2;
+    protected static final int COLLAPSED = 3;
+    protected static final int QUESTION = 4;
 
     private static final String mIndent = "     ";
-
-    private Button jumpPreviousButton;
 
     List<HierarchyElement> formList;
     TextView path;
 
     FormIndex startIndex;
     private FormIndex currentIndex;
-    private ListView listView;
-    private TextView emptyView;
+    protected Button jumpPreviousButton;
+    protected Button jumpBeginningButton;
+    protected Button jumpEndButton;
+    protected ListView listView;
 
 
     @Override
@@ -74,10 +73,10 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.hierarchy_layout);
 
-        listView = (ListView) findViewById(android.R.id.list);
+        listView = findViewById(android.R.id.list);
         listView.setOnItemClickListener(this);
-        emptyView = (TextView) findViewById(android.R.id.empty);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        TextView emptyView = findViewById(android.R.id.empty);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         FormController formController = Collect.getInstance().getFormController();
@@ -92,9 +91,9 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
 
         setTitle(formController.getFormTitle());
 
-        path = (TextView) findViewById(R.id.pathtext);
+        path = findViewById(R.id.pathtext);
 
-        jumpPreviousButton = (Button) findViewById(R.id.jumpPreviousButton);
+        jumpPreviousButton = findViewById(R.id.jumpPreviousButton);
         jumpPreviousButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,7 +103,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
             }
         });
 
-        Button jumpBeginningButton = (Button) findViewById(R.id.jumpBeginningButton);
+        jumpBeginningButton = findViewById(R.id.jumpBeginningButton);
         jumpBeginningButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -117,7 +116,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
             }
         });
 
-        Button jumpEndButton = (Button) findViewById(R.id.jumpEndButton);
+        jumpEndButton = findViewById(R.id.jumpEndButton);
         jumpEndButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,25 +129,6 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
             }
         });
 
-        String formMode = getIntent().getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
-        if (ApplicationConstants.FormModes.VIEW_SENT.equalsIgnoreCase(formMode)) {
-            Collect.getInstance().getFormController().stepToOuterScreenEvent();
-
-            Button exitButton = (Button) findViewById(R.id.exitButton);
-            exitButton.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Collect.getInstance().getActivityLogger().logInstanceAction(this, "exit",
-                            "click");
-                    setResult(RESULT_OK);
-                    finish();
-                }
-            });
-
-            exitButton.setVisibility(View.VISIBLE);
-            jumpBeginningButton.setVisibility(View.GONE);
-            jumpEndButton.setVisibility(View.GONE);
-        }
 
         refreshView();
 
@@ -189,12 +169,11 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
         super.onStop();
     }
 
-    private void goUpLevel() {
+    protected void goUpLevel() {
         Collect.getInstance().getFormController().stepToOuterScreenEvent();
 
         refreshView();
     }
-
 
     private String getCurrentPath() {
         FormController formController = Collect.getInstance().getFormController();
@@ -202,21 +181,13 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
         // move to enclosing group...
         index = formController.stepIndexOut(index);
 
-        String path = "";
+        List<FormEntryCaption> groups = new ArrayList<>();
         while (index != null) {
-
-            path =
-                    formController.getCaptionPrompt(index).getLongText()
-                            + " ("
-                            + (formController.getCaptionPrompt(index)
-                            .getMultiplicity() + 1) + ") > " + path;
-
+            groups.add(0, formController.getCaptionPrompt(index));
             index = formController.stepIndexOut(index);
         }
-        // return path?
-        return path.substring(0, path.length() - 2);
+        return ODKView.getGroupsPath(groups.toArray(new FormEntryCaption[groups.size()]));
     }
-
 
     public void refreshView() {
         try {
@@ -398,7 +369,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
     /**
      * Creates and displays dialog with the given errorMsg.
      */
-    private void createErrorDialog(String errorMsg) {
+    protected void createErrorDialog(String errorMsg) {
         Collect.getInstance()
                 .getActivityLogger()
                 .logInstanceAction(this, "createErrorDialog", "show.");
@@ -426,72 +397,6 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
         alertDialog.show();
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        HierarchyElement h = (HierarchyElement) listView.getItemAtPosition(position);
-        FormIndex index = h.getFormIndex();
-        if (index == null) {
-            goUpLevel();
-            return;
-        }
-
-        switch (h.getType()) {
-            case EXPANDED:
-                Collect.getInstance().getActivityLogger().logInstanceAction(this, "onListItemClick",
-                        "COLLAPSED", h.getFormIndex());
-                h.setType(COLLAPSED);
-                ArrayList<HierarchyElement> children = h.getChildren();
-                for (int i = 0; i < children.size(); i++) {
-                    formList.remove(position + 1);
-                }
-                h.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.expander_ic_minimized));
-                break;
-            case COLLAPSED:
-                Collect.getInstance().getActivityLogger().logInstanceAction(this, "onListItemClick",
-                        "EXPANDED", h.getFormIndex());
-                h.setType(EXPANDED);
-                ArrayList<HierarchyElement> children1 = h.getChildren();
-                for (int i = 0; i < children1.size(); i++) {
-                    Timber.i("adding child: %s", children1.get(i).getFormIndex());
-                    formList.add(position + 1 + i, children1.get(i));
-
-                }
-                h.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.expander_ic_maximized));
-                break;
-            case QUESTION:
-                Collect.getInstance().getActivityLogger().logInstanceAction(this, "onListItemClick",
-                        "QUESTION-JUMP", index);
-                Collect.getInstance().getFormController().jumpToIndex(index);
-                if (Collect.getInstance().getFormController().indexIsInFieldList()) {
-                    try {
-                        Collect.getInstance().getFormController().stepToPreviousScreenEvent();
-                    } catch (JavaRosaException e) {
-                        Timber.e(e);
-                        createErrorDialog(e.getCause().getMessage());
-                        return;
-                    }
-                }
-                setResult(RESULT_OK);
-                String formMode = getIntent().getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
-                if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
-                    finish();
-                }
-                return;
-            case CHILD:
-                Collect.getInstance().getActivityLogger().logInstanceAction(this, "onListItemClick",
-                        "REPEAT-JUMP", h.getFormIndex());
-                Collect.getInstance().getFormController().jumpToIndex(h.getFormIndex());
-                setResult(RESULT_OK);
-                refreshView();
-                return;
-        }
-
-        // Should only get here if we've expanded or collapsed a group
-        HierarchyListAdapter itla = new HierarchyListAdapter(this);
-        itla.setListItems(formList);
-        listView.setAdapter(itla);
-        listView.setSelection(position);
-    }
 
 
     @Override

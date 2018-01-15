@@ -127,10 +127,8 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
         try {
             exportData(markCompleted);
 
-            // attempt to remove any scratch file
-            File shadowInstance = savepointFile(formController.getInstancePath());
-            if (shadowInstance.exists()) {
-                FileUtils.deleteAndReport(shadowInstance);
+            if (formController.getInstancePath() != null) {
+                removeSavepointFiles(formController.getInstancePath().getName());
             }
 
             saveResult.setSaveResult(save ? SAVED_AND_EXIT : SAVED, markCompleted);
@@ -232,11 +230,26 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
     }
 
     /**
-     * Return the name of the savepoint file for a given instance.
+     * Return the savepoint file for a given instance.
      */
-    public static File savepointFile(File instancePath) {
+    static File getSavepointFile(String instanceName) {
         File tempDir = new File(Collect.CACHE_PATH);
-        return new File(tempDir, instancePath.getName() + ".save");
+        return new File(tempDir, instanceName + ".save");
+    }
+
+    /**
+     * Return the formIndex file for a given instance.
+     */
+    public static File getFormIndexFile(String instanceName) {
+        File tempDir = new File(Collect.CACHE_PATH);
+        return new File(tempDir, instanceName + ".index");
+    }
+
+    public static void removeSavepointFiles(String instanceName) {
+        File savepointFile = getSavepointFile(instanceName);
+        File formIndexFile = getFormIndexFile(instanceName);
+        FileUtils.deleteAndReport(savepointFile);
+        FileUtils.deleteAndReport(formIndexFile);
     }
 
     /**

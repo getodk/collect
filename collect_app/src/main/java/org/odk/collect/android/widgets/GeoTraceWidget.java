@@ -121,7 +121,6 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
     @Override
     public void setBinaryData(Object answer) {
         answerDisplay.setText(answer.toString());
-        cancelWaitingForData();
     }
 
     @Override

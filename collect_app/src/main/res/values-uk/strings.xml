@@ -417,8 +417,6 @@
   <string name="exit">Вийти</string>
   <string name="instance_scan_completed">Завершені сканування.</string>
   <string name="instance_scan_count">%1$d анкет додано.</string>
-  <string name="instance_sync">Імпортувати збережені форми як завершені</string>
-  <string name="instance_sync_summary">Імпортувати збережені форми з директорії екземплярів</string>
   <string name="sort_by_name_asc">За ім\'ям, А-Я</string>
   <string name="sort_by_name_desc">За ім\'ям, Я-А</string>
   <string name="sort_by_date_asc">За датою, найновіший перший</string>
@@ -466,6 +464,7 @@
   <string name="invalid_qrcode">QR код не містить коректних налаштувань</string>
   <string name="share_qrcode">Поділитись QR кодом</string>
   <string name="take_picture_instruction">Щоб зробити знімок торкніться екрану</string>
+  <string name="error_front_camera_unavailable">Фронтальна камера на цьому пристрої не доступна</string>
   <string name="request_permission">Програмі потрібен дозвіл на використання камери.</string>
   <string name="camera_error">Цей пристрій не підтримує Camera2 API.</string>
   <string name="invalid_range_widget">Цей віджет має некоректні параметри!</string>
@@ -513,4 +512,33 @@
   <string name="image_size_original">Розмір визначений камерою (за замовчуванням)</string>
   <string name="image_size_dialog_title">Максимальна кількість пікселів по довгій стороні малюнку</string>
   <string name="bearing_lack_of_sensors">Неможливо записати пеленг: у пристрої відсутній акселерометр, сенсор магнітного поля чи обидва.</string>
+  <string name="ethiopian_month_1">Мескерем</string>
+  <string name="ethiopian_month_2">Тікімт</string>
+  <string name="ethiopian_month_3">Хідар</string>
+  <string name="ethiopian_month_4">Тасас</string>
+  <string name="ethiopian_month_5">Тір</string>
+  <string name="ethiopian_month_6">Йекатіт</string>
+  <string name="ethiopian_month_7">Мегабіт</string>
+  <string name="ethiopian_month_8">Міазіа</string>
+  <string name="ethiopian_month_9">Гінбот</string>
+  <string name="ethiopian_month_10">Сені</string>
+  <string name="ethiopian_month_11">Хамлі</string>
+  <string name="ethiopian_month_12">Нехасі</string>
+  <string name="ethiopian_month_13">Пагумін</string>
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <string name="custom_date">%1$s (%2$s)</string>
+  <string name="coptic_month_1">Тоут</string>
+  <string name="coptic_month_2">Паопі</string>
+  <string name="coptic_month_3">Хатор</string>
+  <string name="coptic_month_4">Кояк</string>
+  <string name="coptic_month_5">Тобі</string>
+  <string name="coptic_month_6">Мешір</string>
+  <string name="coptic_month_7">Паремат</string>
+  <string name="coptic_month_8">Мармуті</string>
+  <string name="coptic_month_9">Пашонс</string>
+  <string name="coptic_month_10">Паоні</string>
+  <string name="coptic_month_11">Епіп</string>
+  <string name="coptic_month_12">Месорі</string>
+  <string name="coptic_month_13">Пі Когі Енавот</string>
+  <string name="multiple_media_folders_detected_notification">Знайдено більше однієї медіа директоріі, будь ласка, видаліть зайві та спробуйте знову</string>
 </resources>

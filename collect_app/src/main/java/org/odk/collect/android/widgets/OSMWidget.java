@@ -213,8 +213,6 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
         osmFileNameTextView.setText(osmFileName);
         osmFileNameHeaderTextView.setVisibility(View.VISIBLE);
         osmFileNameTextView.setVisibility(View.VISIBLE);
-
-        cancelWaitingForData();
     }
 
     @Override

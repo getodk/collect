@@ -20,7 +20,6 @@
 
 package org.odk.collect.android.activities;
 
-import android.Manifest;
 import android.accounts.AccountManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -38,13 +37,10 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.util.ExponentialBackOff;
-import com.google.api.services.drive.DriveScopes;
-
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -52,34 +48,30 @@ import org.odk.collect.android.tasks.InstanceGoogleSheetsUploader;
 import org.odk.collect.android.utilities.ArrayUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
-import pub.devrel.easypermissions.AfterPermissionGranted;
-import pub.devrel.easypermissions.EasyPermissions;
 import timber.log.Timber;
 
-import static org.odk.collect.android.tasks.InstanceGoogleSheetsUploader.REQUEST_ACCOUNT_PICKER;
+import static org.odk.collect.android.utilities.gdrive.GoogleAccountsManager.REQUEST_ACCOUNT_PICKER;
 import static org.odk.collect.android.tasks.InstanceGoogleSheetsUploader.REQUEST_AUTHORIZATION;
-import static org.odk.collect.android.tasks.InstanceGoogleSheetsUploader.REQUEST_PERMISSION_GET_ACCOUNTS;
 
 
 public class GoogleSheetsUploaderActivity extends AppCompatActivity implements InstanceUploaderListener,
-        EasyPermissions.PermissionCallbacks {
+        GoogleAccountsManager.GoogleAccountSelectionListener {
     private static final int PROGRESS_DIALOG = 1;
     private static final int GOOGLE_USER_DIALOG = 3;
     private static final String ALERT_MSG = "alertmsg";
     private static final String ALERT_SHOWING = "alertshowing";
-    private GoogleAccountCredential credential;
     private ProgressDialog progressDialog;
     private AlertDialog alertDialog;
     private String alertMsg;
     private boolean alertShowing;
     private Long[] instancesToSend;
     private InstanceGoogleSheetsUploader instanceGoogleSheetsUploader;
+
+    private GoogleAccountsManager accountsManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,10 +115,8 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
             Timber.i("onCreate: Beginning upload of %d instances!", instancesToSend.length);
         }
 
-        // Initialize credentials and service object.
-        credential = GoogleAccountCredential.usingOAuth2(
-                getApplicationContext(), Collections.singleton(DriveScopes.DRIVE))
-                .setBackOff(new ExponentialBackOff());
+        accountsManager = new GoogleAccountsManager(this);
+        accountsManager.setListener(this);
 
         getResultsFromApi();
     }
@@ -134,7 +124,7 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
     private void runTask() {
         instanceGoogleSheetsUploader = (InstanceGoogleSheetsUploader) getLastCustomNonConfigurationInstance();
         if (instanceGoogleSheetsUploader == null) {
-            instanceGoogleSheetsUploader = new InstanceGoogleSheetsUploader(credential, this);
+            instanceGoogleSheetsUploader = new InstanceGoogleSheetsUploader(accountsManager);
 
             // ensure we have a google account selected
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -163,8 +153,8 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
      * appropriate.
      */
     private void getResultsFromApi() {
-        if (credential.getSelectedAccountName() == null) {
-            chooseAccount();
+        if (!accountsManager.isGoogleAccountSelected()) {
+            accountsManager.chooseAccount();
         } else if (!isDeviceOnline()) {
             ToastUtils.showShortToast("No network connection available.");
         } else {
@@ -172,44 +162,12 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
         }
     }
 
-    /*
-     * Attempts to set the account used with the API credentials. If an account
-     * name was previously saved it will use that one; otherwise an account
-     * picker dialog will be shown to the user. Note that the setting the
-     * account to use with the credentials object requires the app to have the
-     * GET_ACCOUNTS permission, which is requested here if it is not already
-     * present. The AfterPermissionGranted annotation indicates that this
-     * function will be rerun automatically whenever the GET_ACCOUNTS permission
-     * is granted.
-     */
-    @AfterPermissionGranted(REQUEST_PERMISSION_GET_ACCOUNTS)
-    private void chooseAccount() {
-        if (EasyPermissions.hasPermissions(
-                this, Manifest.permission.GET_ACCOUNTS)) {
-            // ensure we have a google account selected
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-            String googleUsername = prefs.getString(
-                    PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT, "");
-            if (!googleUsername.equals("")) {
-                credential.setSelectedAccountName(googleUsername);
-                getResultsFromApi();
-            } else {
-                // Start a dialog from which the user can choose an account
-                Intent intentChooseAccount = credential.newChooseAccountIntent();
-                intentChooseAccount.putExtra("overrideTheme", 1);
-                intentChooseAccount.putExtra("overrideCustomTheme", 0);
-                startActivityForResult(intentChooseAccount,REQUEST_ACCOUNT_PICKER);
-            }
-        } else {
-            // Request the GET_ACCOUNTS permission via a user dialog
-            EasyPermissions.requestPermissions(
-                    this,
-                    getString(R.string.request_permissions_google_account),
-                    REQUEST_PERMISSION_GET_ACCOUNTS,
-                    Manifest.permission.GET_ACCOUNTS);
-        }
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        accountsManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
-
 
     /**
      * Called when an activity launched here (specifically, AccountPicker
@@ -226,76 +184,26 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
     protected void onActivityResult(
             int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_CANCELED) {
+            Timber.d("AUTHORIZE_DRIVE_ACCESS failed, asking to choose new account:");
+            finish();
+        }
+
         switch (requestCode) {
             case REQUEST_ACCOUNT_PICKER:
                 if (resultCode == RESULT_OK && data != null && data.getExtras() != null) {
-                    String accountName =
-                            data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-                    if (accountName != null) {
-                        SharedPreferences prefs =
-                                PreferenceManager.getDefaultSharedPreferences(this);
-                        SharedPreferences.Editor editor = prefs.edit();
-                        editor.putString(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT, accountName);
-                        editor.apply();
-                        credential.setSelectedAccountName(accountName);
-                        getResultsFromApi();
-                    }
+                    String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+                    accountsManager.setSelectedAccountName(accountName);
                 }
                 break;
             case REQUEST_AUTHORIZATION:
                 dismissDialog(PROGRESS_DIALOG);
                 if (resultCode == RESULT_OK) {
                     getResultsFromApi();
-                } else {
-                    Timber.d("AUTHORIZE_DRIVE_ACCESS failed, asking to choose new account:");
-                    finish();
                 }
                 break;
         }
-    }
-
-    /**
-     * Respond to requests for permissions at runtime for API 23 and above.
-     *
-     * @param requestCode  The request code passed in
-     *                     requestPermissions(android.app.Activity, String, int, String[])
-     * @param permissions  The requested permissions. Never null.
-     * @param grantResults The grant results for the corresponding permissions
-     *                     which is either PERMISSION_GRANTED or PERMISSION_DENIED. Never null.
-     */
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        EasyPermissions.onRequestPermissionsResult(
-                requestCode, permissions, grantResults, this);
-    }
-
-    /**
-     * Callback for when a permission is granted using the EasyPermissions
-     * library.
-     *
-     * @param requestCode The request code associated with the requested
-     *                    permission
-     * @param list        The requested permission list. Never null.
-     */
-    @Override
-    public void onPermissionsGranted(int requestCode, List<String> list) {
-        // Do nothing.
-    }
-
-    /**
-     * Callback for when a permission is denied using the EasyPermissions
-     * library.
-     *
-     * @param requestCode The request code associated with the requested
-     *                    permission
-     * @param list        The requested permission list. Never null.
-     */
-    @Override
-    public void onPermissionsDenied(int requestCode, List<String> list) {
-        // Do nothing.
     }
 
     /**
@@ -384,7 +292,7 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
         if (keys.size() == 0) {
             if (instanceGoogleSheetsUploader.isAuthFailed()) {
                 message.append(getString(R.string.google_auth_io_exception_msg));
-                instanceGoogleSheetsUploader.setAuthFailed(false);
+                instanceGoogleSheetsUploader.setAuthFailed();
             } else {
                 message.append(getString(R.string.no_forms_uploaded));
             }
@@ -416,7 +324,7 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
                 } else {
                     if (instanceGoogleSheetsUploader.isAuthFailed()) {
                         message.append(getString(R.string.google_auth_io_exception_msg));
-                        instanceGoogleSheetsUploader.setAuthFailed(false);
+                        instanceGoogleSheetsUploader.setAuthFailed();
                     } else {
                         message.append(getString(R.string.no_forms_uploaded));
                     }
@@ -512,5 +420,10 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
     @Override
     public void authRequest(Uri url, HashMap<String, String> doneSoFar) {
         // in interface, but not needed
+    }
+
+    @Override
+    public void onGoogleAccountSelected(String accountName) {
+        getResultsFromApi();
     }
 }

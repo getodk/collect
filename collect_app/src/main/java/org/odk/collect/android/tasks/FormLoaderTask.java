@@ -315,35 +315,35 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
     private boolean initializeForm(FormDef formDef, FormEntryController fec) {
         final InstanceInitializationFactory instanceInit = new InstanceInitializationFactory();
         boolean usedSavepoint = false;
+
         if (instancePath != null) {
-            File instance = new File(instancePath);
-            final File shadowInstance = SaveToDiskTask.savepointFile(instance);
-            if (shadowInstance.exists() && (shadowInstance.lastModified()
-                    > instance.lastModified())) {
-                // the savepoint is newer than the saved value of the instance.
-                // use it.
+            File instanceXml = new File(instancePath);
+
+            // Use the savepoint file only if it's newer than the last manual save
+            final File savepointFile = SaveToDiskTask.getSavepointFile(instanceXml.getName());
+            if (savepointFile.exists()
+                    && savepointFile.lastModified() > instanceXml.lastModified()) {
                 usedSavepoint = true;
-                instance = shadowInstance;
-                Timber.w("Loading instance from shadow file: %s", shadowInstance.getAbsolutePath());
+                instanceXml = savepointFile;
+                Timber.w("Loading instance from savepoint file: %s",
+                        savepointFile.getAbsolutePath());
             }
-            if (instance.exists()) {
+
+            if (instanceXml.exists()) {
                 // This order is important. Import data, then initialize.
                 try {
-                    importData(instance, fec);
+                    importData(instanceXml, fec);
                     formDef.initialize(false, instanceInit);
                 } catch (RuntimeException e) {
                     Timber.e(e);
 
-                    // SCTO-633
-                    if (usedSavepoint
-                            && !(e.getCause() instanceof XPathTypeMismatchException)) {
-                        // this means that the .save file is corrupted or 0-sized, so
-                        // don't use it.
+                    // Skip a savepoint file that is corrupted or 0-sized
+                    if (usedSavepoint && !(e.getCause() instanceof XPathTypeMismatchException)) {
                         usedSavepoint = false;
                         instancePath = null;
                         formDef.initialize(true, instanceInit);
                     } else {
-                        // this means that the saved instance is corrupted.
+                        // The saved instance is corrupted.
                         throw e;
                     }
                 }

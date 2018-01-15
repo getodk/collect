@@ -11,7 +11,8 @@ import java.util.Arrays;
 import static org.junit.Assert.assertEquals;
 
 public class FileUtilsTest {
-    @Test public void md5HashIsCorrect() throws NoSuchAlgorithmException, IOException {
+    @Test
+    public void md5HashIsCorrect() throws NoSuchAlgorithmException, IOException {
         String contents = "Hello, world";
         File tempFile = File.createTempFile("hello", "txt");
         tempFile.deleteOnExit();
@@ -23,5 +24,15 @@ public class FileUtilsTest {
             String expectedResult = "bc6e6f16b8a077ef5fbc8d59d0b931b9";  // From md5 command-line utility
             assertEquals(expectedResult, FileUtils.getMd5Hash(tempFile));
         }
+    }
+
+    @Test
+    public void mediaDirNameIsCorrect() {
+        String expected = "sample-file-media";
+
+        assertEquals(expected, FileUtils.constructMediaPath("sample-file.xml"));
+        assertEquals(expected, FileUtils.constructMediaPath("sample-file.extension"));
+        assertEquals(expected, FileUtils.constructMediaPath("sample-file.123"));
+        assertEquals(expected, FileUtils.constructMediaPath("sample-file.docx"));
     }
 }

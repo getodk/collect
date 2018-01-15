@@ -417,8 +417,8 @@
   <string name="exit">Beenden</string>
   <string name="instance_scan_completed">Scan abgeschlossen.</string>
   <string name="instance_scan_count">%1$d Formular(e) hinzugefügt.</string>
-  <string name="instance_sync">Gespeicherte Formulare als vollständig importieren</string>
-  <string name="instance_sync_summary">Importiert gespeicherte Formulare aus dem Ordner instances</string>
+  <string name="instance_sync">Formulare beim Import abschließen</string>
+  <string name="instance_sync_summary">Betrifft Formulare, die direkt dem instances-Ordner hinzugefügt werden.</string>
   <string name="sort_by_name_asc">Name, A-Z</string>
   <string name="sort_by_name_desc">Name, Z-A</string>
   <string name="sort_by_date_asc">Datum, neuestes zuerst</string>
@@ -466,6 +466,7 @@
   <string name="invalid_qrcode">QR-Code enthält keine gültigen Einstellungen</string>
   <string name="share_qrcode">QR-Code teilen</string>
   <string name="take_picture_instruction">Bildschirm berühren um ein Foto aufzunehmen</string>
+  <string name="error_front_camera_unavailable">Frontkamera bei diesem Gerät nicht verfügbar</string>
   <string name="request_permission">Die App benötigt die Kamera-Berechtigung.</string>
   <string name="camera_error">Dieses Gerät unterstützt die Camera2-API nicht.</string>
   <string name="invalid_range_widget">Dieses Widget hat ungültige Parameter!</string>
@@ -526,6 +527,39 @@
   <string name="ethiopian_month_11">Hamlie</string>
   <string name="ethiopian_month_12">Nehasie</string>
   <string name="ethiopian_month_13">Pagumien</string>
-  <!-- Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order -->
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
   <string name="custom_date">%1$s (%2$s)</string>
+  <string name="coptic_month_1">Thout</string>
+  <string name="coptic_month_2">Paopi</string>
+  <string name="coptic_month_3">Hathor</string>
+  <string name="coptic_month_4">Koiak</string>
+  <string name="coptic_month_5">Tobi</string>
+  <string name="coptic_month_6">Meshir</string>
+  <string name="coptic_month_7">Paremhat</string>
+  <string name="coptic_month_8">Parmouti</string>
+  <string name="coptic_month_9">Pashons</string>
+  <string name="coptic_month_10">Paoni</string>
+  <string name="coptic_month_11">Epip</string>
+  <string name="coptic_month_12">Mesori</string>
+  <string name="coptic_month_13">Pi Kogi Enavot</string>
+  <string name="multiple_media_folders_detected_notification">Mehr als ein media-Ordner erkannt. Bitte einen Ordner löschen und erneut versuchen.</string>
+  <string name="islamic_month_1">Muharram</string>
+  <string name="islamic_month_2">Safar</string>
+  <string name="islamic_month_3">Rabi\' al-awwal</string>
+  <string name="islamic_month_4">Rabi\' al-thani</string>
+  <string name="islamic_month_5">Jumada al-awwal</string>
+  <string name="islamic_month_6">Jumada al-thani</string>
+  <string name="islamic_month_7">Rajab</string>
+  <string name="islamic_month_8">Sha\'ban</string>
+  <string name="islamic_month_9">Ramadan</string>
+  <string name="islamic_month_10">Shawwal</string>
+  <string name="islamic_month_11">Dhu al-Qidah</string>
+  <string name="islamic_month_12">Dhu al-Hijjah</string>
+  <string name="moving_backwards_title">Rückwärts bewegen</string>
+  <string name="moving_backwards_disabled_title">Rückwärts bewegen deaktiviert</string>
+  <string name="moving_backwards_disabled_message">Das Gerät so konfigurieren, dass Anwender diese Einstellung nicht umgehen können?\n\nDie Änderungen sind:\n\n\u2022 Deaktiviere \"Gespeichertes Formular bearbeiten\"\n\u2022 Deaktiviere \"Formular speichern\"\n\u2022 Deakktiviere \"Gehe zum Prompt\"\n\u2022 Aktiviere \"Validierung beim Vorwärts-Wischen\"</string>
+  <string name="moving_backwards_enabled_title">Rückwärts bewegen aktiviert</string>
+  <string name="moving_backwards_enabled_message">Bitte überprüfen Sie die folgenden Einstellungen:\n\n\u2022 Gespeichertes Formular bearbeiten\n\u2022 Formular speichern\n\u2022 Gehe zum Prompt\n\u2022 Validierung</string>
+  <string name="yes">Ja</string>
+  <string name="no">Nein</string>
 </resources>

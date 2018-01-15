@@ -47,7 +47,7 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.exception.JavaRosaException;
-import org.odk.collect.android.injection.DependencyProvider;
+import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.TextUtils;

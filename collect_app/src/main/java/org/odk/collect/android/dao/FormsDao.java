@@ -68,6 +68,38 @@ public class FormsDao {
         return getFormsCursor(null, selection, selectionArgs, null);
     }
 
+    public String getFormMediaPath(String formId, String formVersion) {
+        String formMediaPath = null;
+
+        String[] selectionArgs;
+        String selection;
+
+        if (formVersion == null) {
+            selectionArgs = new String[]{formId};
+            selection = FormsProviderAPI.FormsColumns.JR_FORM_ID + "=? AND "
+                    + FormsProviderAPI.FormsColumns.JR_VERSION + " IS NULL";
+        } else {
+            selectionArgs = new String[]{formId, formVersion};
+            selection = FormsProviderAPI.FormsColumns.JR_FORM_ID + "=? AND "
+                    + FormsProviderAPI.FormsColumns.JR_VERSION + "=?";
+        }
+
+        String order = FormsProviderAPI.FormsColumns.DATE + " DESC"; //as long as we allow to store multiple forms with the same id and version number, choose the newest one
+
+        Cursor cursor = getFormsCursor(null, selection, selectionArgs, order);
+        if (cursor != null) {
+            try {
+                if (cursor.moveToFirst()) {
+                    int formMediaPathColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH);
+                    formMediaPath = cursor.getString(formMediaPathColumnIndex);
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+        return formMediaPath;
+    }
+
     public Cursor getFormsCursorForFormFilePath(String formFIlePath) {
         String selection = FormsProviderAPI.FormsColumns.FORM_FILE_PATH + "=?";
         String[] selectionArgs = {formFIlePath};

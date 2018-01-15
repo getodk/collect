@@ -79,8 +79,8 @@ public class SortDialogAdapter extends RecyclerView.Adapter<SortDialogAdapter.Vi
 
         ViewHolder(final View itemLayoutView) {
             super(itemLayoutView);
-            txtViewTitle = (TextView) itemLayoutView.findViewById(R.id.title);
-            imgViewIcon = (ImageView) itemLayoutView.findViewById(R.id.icon);
+            txtViewTitle = itemLayoutView.findViewById(R.id.title);
+            imgViewIcon = itemLayoutView.findViewById(R.id.icon);
 
             itemLayoutView.setOnClickListener(new View.OnClickListener() {
                 @Override

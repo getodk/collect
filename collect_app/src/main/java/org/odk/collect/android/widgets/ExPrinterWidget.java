@@ -199,7 +199,6 @@ public class ExPrinterWidget extends QuestionWidget implements BinaryWidget {
      */
     @Override
     public void setBinaryData(Object answer) {
-        cancelWaitingForData();
     }
 
     @Override

@@ -77,7 +77,7 @@
   <string name="location_provider_accuracy">%1$s käytössä. Tarkkuus %2$s m.</string>
   <string name="location_accuracy">Tarkkuus %1$s m</string>
   <string name="main_menu">Päävalikko</string>
-  <string name="main_menu_details">Helpotettua tiedonkeruuta…</string>
+  <string name="main_menu_details">Helpompaa tiedonkeruuta</string>
   <string name="manage_files">Poista tallennettu lomake</string>
   <string name="mark_finished">Merkitse lomake valmiiksi</string>
   <string name="noselect_error">Pahoittelen, et ole valinnut yhtään lomaketta!</string>
@@ -417,8 +417,8 @@
   <string name="exit">Poistu</string>
   <string name="instance_scan_completed">Skannaus valmis.</string>
   <string name="instance_scan_count">%1$d lomaketta lisätty.</string>
-  <string name="instance_sync">Tuo tallennetut lomakkeet viimeisteltyinä</string>
-  <string name="instance_sync_summary">Tuo tallennetut lomakkeet instances -kansiosta</string>
+  <string name="instance_sync">Lomakkeet viimeistellään tuodessa</string>
+  <string name="instance_sync_summary">Vaikuttaa lomakkeisiin jotka lisätään suoraan Instances -kansioon.</string>
   <string name="sort_by_name_asc">Nimi, A-Ö</string>
   <string name="sort_by_name_desc">Nimi, Ö-A</string>
   <string name="sort_by_date_asc">Päivämäärä, uusin ensin</string>
@@ -466,6 +466,7 @@
   <string name="invalid_qrcode">QR-koodi ei sisällä kelvollisia asetuksia</string>
   <string name="share_qrcode">Jaa QR-koodi</string>
   <string name="take_picture_instruction">Napsauta näyttöä ottaaksesi kuvan</string>
+  <string name="error_front_camera_unavailable">Etukamera ei ole käytettävissä tällä laitteella</string>
   <string name="request_permission">Tämä sovellus tarvitsee luvan kameran käyttöön.</string>
   <string name="camera_error">Tämä laite ei tue Camera2 API:a (ohjelmarajapintaa).</string>
   <string name="invalid_range_widget">Tällä widgetillä on väärät asetukset!</string>
@@ -526,6 +527,40 @@
   <string name="ethiopian_month_11">Ḥamle</string>
   <string name="ethiopian_month_12">Nähase</string>
   <string name="ethiopian_month_13">Ṗagʷəmen</string>
-  <!-- Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order -->
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
   <string name="custom_date">%1$s (%2$s)</string>
+  <string name="coptic_month_1">Thout</string>
+  <string name="coptic_month_2">Paopi</string>
+  <string name="coptic_month_3">Hathor</string>
+  <string name="coptic_month_4">Koiak</string>
+  <string name="coptic_month_5">Tobi</string>
+  <string name="coptic_month_6">Meshir</string>
+  <string name="coptic_month_7">Paremhat</string>
+  <string name="coptic_month_8">Parmouti</string>
+  <string name="coptic_month_9">Pashons</string>
+  <string name="coptic_month_10">Paoni</string>
+  <string name="coptic_month_11">Epip</string>
+  <string name="coptic_month_12">Mesori</string>
+  <string name="coptic_month_13">Pi Kogi Enavot</string>
+  <string name="multiple_media_folders_detected_notification">Enemmän kuin yksi mediakansio löytyi; poista yksi ja yritä uudestaan</string>
+  <string name="islamic_month_1">muhárram</string>
+  <string name="islamic_month_2">sáfar</string>
+  <string name="islamic_month_3">rabi’ al-áwwal</string>
+  <string name="islamic_month_4">rabi’ al-ákhir</string>
+  <string name="islamic_month_5">džumada-l-úla</string>
+  <string name="islamic_month_6">džumada-l-ákhira</string>
+  <string name="islamic_month_7">radžab</string>
+  <string name="islamic_month_8">ša’bán</string>
+  <string name="islamic_month_9">ramadán</string>
+  <string name="islamic_month_10">šawwal</string>
+  <string name="islamic_month_11">dhu-l-qada</string>
+  <string name="islamic_month_12">dhu-l-hiddža</string>
+  <string name="moving_backwards_title">Siirtyminen taaksepäin</string>
+  <string name="moving_backwards_disabled_title">Siirtyminen taaksepäin pois päältä</string>
+  <string name="moving_backwards_disabled_message">Määritä laitetta estääksesi käyttäjiä ohittamasta tätä asetusta?\n\nMuutokset ovat:\n\u2022 Muokkaa talletettua tomaketta pois päältä\n\u2022 Tallenna lomake pois päältä\n\u2022 Siirtyminen kehotteeseen pois päältä\n\u2022 Aseta rajoiteprosessointi vahvistustilaan eteenpäin pyyhkäistäessä</string>
+  <string name="moving_backwards_enabled_title">Siirtyminen taaksepäin päällä</string>
+  <string name="moving_backwards_enabled_message">Haluat ehkä tarkastella seuraavia asetuksia:\n\n\u2022 Muokkaa tallennettua lomaketta\n\u2022 Tallenna lomake\n\u2022 Siirry kehotteeseen\n\u2022 Rajoiteprosessointi</string>
+  <string name="yes">Kyllä</string>
+  <string name="no">Ei</string>
+  <string name="newer_version_of_a_form_info">Tämä on päivitetty versio lomakkeesta joka sinulla jo on!</string>
 </resources>

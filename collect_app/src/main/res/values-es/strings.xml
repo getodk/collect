@@ -109,8 +109,8 @@
   <string name="send_data">Enviar Formulario Finalizado</string>
   <string name="send_data_button">Enviar Formulario Finalizado (%s)</string>
   <string name="send_selected_data">Enviar seleccionado</string>
-  <string name="view_sent_forms">Ver formularios enviados</string>
-  <string name="view_sent_forms_button">Ver formularios enviados (%s)</string>
+  <string name="view_sent_forms">Ver Formularios Enviados</string>
+  <string name="view_sent_forms_button">Ver Formularios Enviados (%s)</string>
   <string name="server_auth_credentials">Nombre de usuario o contraseña no válidos para el servidor: %s</string>
   <string name="server_requires_auth">El servidor requiere autenticacion</string>
   <string name="server_url">URL</string>
@@ -216,7 +216,7 @@
   <string name="launch_printer">Iniciar Impresión</string>
   <string name="no_printer">La impresora solicitado no está instalado. Por favor, instale la impresora.</string>
   <string name="constraint_behavior">Comportamiento del proceso de restricciones</string>
-  <string name="constraint_behavior_on_swipe">Validar con deslizamiento hacia delante.</string>
+  <string name="constraint_behavior_on_swipe">Validar al desplazar hacia delante.</string>
   <string name="constraint_behavior_on_finalize">Postponer validación hasta el final</string>
   <string name="view_change_location">Ver o cambiar de localización</string>
   <string name="open_url">Abrir URL</string>
@@ -291,7 +291,7 @@
   <string name="about_preferences">Acerca de</string>
   <string name="tell_your_friends">Comparta ODK con sus colegas</string>
   <string name="tell_your_friends_msg">¡Descarga la app ODK Collect!</string>
-  <string name="leave_a_review">Favor dejar sus comentarios en Google Play Store</string>
+  <string name="leave_a_review">Actualizar Aplicación y/o Dejar comentarios en Google Play Store</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">Cartografía</string>
   <string name="map_sdk_selector_title">Cartografía SDK</string>
@@ -419,8 +419,8 @@
   <string name="exit">Salir</string>
   <string name="instance_scan_completed">Terminado el escaneo.</string>
   <string name="instance_scan_count">%1$d formularios añadidos.</string>
-  <string name="instance_sync">Importar formularios guardados como finalizados</string>
-  <string name="instance_sync_summary">Importa los formularios guardados de la carpeta de instancias</string>
+  <string name="instance_sync">Finalizar formularios en importación</string>
+  <string name="instance_sync_summary">Afecta los formularios agregados directamente a la carpeta de instances</string>
   <string name="sort_by_name_asc">Por Nombre, A-Z</string>
   <string name="sort_by_name_desc">Por Nombre, Z-A</string>
   <string name="sort_by_date_asc">Por fecha, primero el más reciente</string>
@@ -468,13 +468,14 @@
   <string name="invalid_qrcode">El código QR no contiene ajustes válidos</string>
   <string name="share_qrcode">Compartir código QR</string>
   <string name="take_picture_instruction">Toca la pantalla para tomar una foto</string>
+  <string name="error_front_camera_unavailable">Este dispositivo no tiene Cámara frontal disponible </string>
   <string name="request_permission">Esta aplicación necesita permisos para usar la cámara</string>
   <string name="camera_error">Este dispositivo no soporta el API Camera2</string>
   <string name="invalid_range_widget">Esta opción tiene parámetros inválidos</string>
   <string name="form_entry_setting">Configuración de entrada de formularios</string>
   <string name="form_entry_settings_summary">Toca para administrar elementos de entrada de formulario</string>
   <string name="user_settings">Ajustes de usuario</string>
-  <string name="user_setting_summary">Toca para administrar ajsutes generales</string>
+  <string name="user_setting_summary">Toca para administrar ajustes generales</string>
   <string name="main_menu_settings">Menú principal de ajustes</string>
   <string name="main_menu_settings_summary">Seleccione para administrar las opciones del Menú Principal</string>
   <string name="user_access_control">Control de acceso a usuario</string>
@@ -515,4 +516,28 @@
   <string name="image_size_original">Tamaño original de la cámara (por defecto)</string>
   <string name="image_size_dialog_title">Número de pixeles máximo del lado más largo de la imagen</string>
   <string name="bearing_lack_of_sensors">La Orientación no puede ser registrada: El dispositivo no tiene acelerómetro, o sensor de campo magnético o ambos.</string>
+  <string name="ethiopian_month_1">Meskerem</string>
+  <string name="ethiopian_month_2">Tikimt</string>
+  <string name="ethiopian_month_3">Hidar</string>
+  <string name="ethiopian_month_4">Tahsas</string>
+  <string name="ethiopian_month_5">Tir</string>
+  <string name="ethiopian_month_6">Yekatit</string>
+  <string name="ethiopian_month_7">Megabit</string>
+  <string name="ethiopian_month_8">Miazia</string>
+  <string name="ethiopian_month_9">Ginbot</string>
+  <string name="ethiopian_month_10">Senie</string>
+  <string name="ethiopian_month_11">Hamlie</string>
+  <string name="ethiopian_month_12">Nehasie</string>
+  <string name="ethiopian_month_13">Pagumien</string>
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <string name="custom_date">%1$s (%2$s)</string>
+  <string name="multiple_media_folders_detected_notification">Se ha detectado más de una carpeta de medios, por favor remueva una e intente de nuevo</string>
+  <string name="moving_backwards_title">Retroceder en Preguntas</string>
+  <string name="moving_backwards_disabled_title">Retroceder en Preguntas Desactivado</string>
+  <string name="moving_backwards_disabled_message">Configure el dispositivo para prevenir que los usuarios se salten esta configuración?\n\nLos cambios son:\n\u2022 Desactivar Editar Formularios Guardados\n\u2022 Desactivar Guardar Formularios\n\u2022 Desactivar Ir a Pregunta\n\u2022 Establecer Manejo de Restricciones como Validar al desplazar hacia adelante</string>
+  <string name="moving_backwards_enabled_title">Retroceder en Preguntas Activado</string>
+  <string name="moving_backwards_enabled_message">Se recomienda revisar la siguiente configuración:\n\n\u2022 Editar Formulario Guardado\n\u2022 Guardar Formularios\n\u2022 Ir a la Pregunta\n\u2022 Manejo de Restricciones</string>
+  <string name="yes">Si</string>
+  <string name="no">No</string>
+  <string name="newer_version_of_a_form_info">Esta es una versión actualizada de un formularios que ya tiene!</string>
 </resources>
