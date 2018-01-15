@@ -400,8 +400,8 @@ public class GoogleDriveActivity extends AppCompatActivity implements
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putBoolean(MY_DRIVE_KEY, myDrive);
-        ArrayList<DriveListItem> dl = new ArrayList<DriveListItem>();
-        for (int i = 0; i < adapter.getItemCount(); i++) {
+        ArrayList<DriveListItem> dl = new ArrayList<>();
+        for (int i = 0; i < (adapter != null ? adapter.getItemCount() : 0); i++) {
             dl.add(adapter.getItem(i));
         }
         outState.putParcelableArrayList(DRIVE_ITEMS_KEY, dl);
