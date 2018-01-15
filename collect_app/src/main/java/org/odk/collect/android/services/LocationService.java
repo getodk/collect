@@ -52,6 +52,7 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.tasks.DownloadTasksTask;
+import org.odk.collect.android.utilities.Constants;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.util.Timer;
@@ -73,6 +74,7 @@ public class LocationService extends Service implements LocationListener, Locati
     private boolean isRecordingLocation = false;
     private Timer mTimer;
     private LocationService mLocationService = null;
+    String TAG = "Location Service";
 
 
     public LocationService(Context applicationContext) {
@@ -86,7 +88,7 @@ public class LocationService extends Service implements LocationListener, Locati
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         super.onStartCommand(intent, flags, startId);
-        Log.i("LocationService", "======================= Start Location Service");
+        Log.i(TAG, "======================= Start Location Service");
 
 
         if (mTimer == null) {
@@ -111,14 +113,14 @@ public class LocationService extends Service implements LocationListener, Locati
                     boolean enabled = sharedPreferences.getBoolean(PreferenceKeys.KEY_SMAP_USER_LOCATION, false);
 
                     if (enabled == isRecordingLocation) {
-                        Log.i("Location Service", "===================   " + enabled);
+                        // No change
                     } else {
 
                         NotificationManager mNotifyMgr =
                                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
                         if (enabled) {
-                            Log.i("Location Service", "=================== Recording turned on");
+                            Log.i(TAG, "=================== Location Recording turned on");
                             if(locationClient != null) {
                                 locationClient.stop();
                             }
@@ -141,7 +143,7 @@ public class LocationService extends Service implements LocationListener, Locati
                             mNotifyMgr.notify(NotificationActivity.LOCATION_ID, mBuilder.build());
 
                         } else {
-                            Log.i("Location Service", "=================== Recording turned off");
+                            Log.i(TAG, "=================== Location Recording turned off");
                             locationClient.stop();
                             mNotifyMgr.cancel(NotificationActivity.LOCATION_ID);
                         }
@@ -156,7 +158,6 @@ public class LocationService extends Service implements LocationListener, Locati
 
     @Override
     public void onDestroy() {
-        Log.i("LocationService", "======================= Stop Location Service");
         NotificationManager mNotifyMgr =
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         if(locationClient != null) {
@@ -188,23 +189,55 @@ public class LocationService extends Service implements LocationListener, Locati
 
     @Override
     public void onLocationChanged(Location location) {
-        Log.i("Location Service", "=================== Location: " + location.toString());
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
         boolean enabledTracking = sharedPreferences.getBoolean(PreferenceKeys.KEY_SMAP_USER_LOCATION, false);
         boolean enabledGPS = false;
 
-        Collect.getInstance().setLocation(location);
+        if(isValidLocation(location) && isAccurateLocation(location)) {
+            Collect.getInstance().setLocation(location);
 
-        // Notify any activity interested that there is a new location
-        if(enabledGPS || enabledTracking) {
-            LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent("locationChanged"));
+            // Notify any activity interested that there is a new location
+            if (enabledGPS || enabledTracking) {
+                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent("locationChanged"));
+            }
+
+            // Save the location in the database
+            if (enabledTracking) {
+                TraceUtilities.insertPoint(location);
+            }
+        }
+    }
+
+    /*
+ * Check to see if this is a valid location
+ */
+    private boolean isValidLocation(Location location) {
+        boolean valid = true;
+        if(location == null || Math.abs(location.getLatitude()) > 90
+                || Math.abs(location.getLongitude()) > 180) {
+            valid = false;
         }
 
-        // Save the location in the database
-        if (enabledTracking) {
-            TraceUtilities.insertPoint(location);
+        // Return false if the location is 0 0, more likely than not this is a bad location
+        if(Math.abs(location.getLongitude()) == 0.0 && Math.abs(location.getLongitude()) == 0.0) {
+            valid = false;
         }
+
+        return valid;
+    }
+
+    /*
+  * Check to see if this is a valid location
+  */
+    private boolean isAccurateLocation(Location location) {
+
+        boolean accurate = true;
+        if (!location.hasAccuracy() || location.getAccuracy() >= Constants.GPS_ACCURACY) {
+            Log.d(TAG, "Ignore location. Poor accuracy.");
+            accurate = false;
+        }
+        return accurate;
     }
 
 

@@ -284,9 +284,6 @@ the specific language governing permissions and limitations under the License.
                 <action android:name="org.odk.collect.android.FormSaved" />
             </intent-filter>
         </receiver>
-        <receiver
-            android:name=".receivers.LocationChangedReceiver"
-            android:enabled="true"></receiver>
         <!-- Smap disable analytics -->
         <!-- Register AnalyticsReceiver and AnalyticsService to support background
         dispatching on non-Google Play devices.
