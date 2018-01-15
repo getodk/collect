@@ -169,7 +169,6 @@ allprojects {
 }
 
 dependencies {
-    androidTestCompile 'tools.fastlane:screengrab:1.0.0'
     implementation fileTree(dir: 'libs', include: '*.jar')
     implementation group: 'com.android.support', name: 'support-v13', version: '27.0.2'
     implementation group: 'com.android.support', name: 'customtabs', version: '27.0.2'
@@ -254,6 +253,9 @@ dependencies {
     // Makes binding to Views easy:
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+
+    // Screengrab
+    androidTestCompile 'tools.fastlane:screengrab:1.1.0'
 
     // Testing-only dependencies
     testImplementation group: 'junit', name: 'junit', version: '4.12'
