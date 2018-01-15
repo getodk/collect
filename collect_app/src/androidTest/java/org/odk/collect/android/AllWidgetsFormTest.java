@@ -34,9 +34,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.io.FileWriter;
-import java.io.BufferedWriter;
 import java.text.DecimalFormat;
 import java.util.Random;
 
@@ -54,7 +51,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasAction;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+//import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasData;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.ViewMatchers.Visibility.VISIBLE;
@@ -68,7 +65,7 @@ import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.startsWith;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.activities.FormEntryActivity.BEARING_RESULT;
+//import static org.odk.collect.android.activities.FormEntryActivity.BEARING_RESULT;
 import static org.odk.collect.android.activities.FormEntryActivity.EXTRA_TESTING_PATH;
 
 @RunWith(AndroidJUnit4.class)
@@ -76,7 +73,6 @@ public class AllWidgetsFormTest {
 
     private static final String ALL_WIDGETS_FORM = "all_widgets.xml";
     private static final String FORMS_DIRECTORY = "/odk/forms/";
-    private static final String FILENAME = "/home/divya/Desktop/file.txt";
 
     private final Random random = new Random();
     private ActivityResult okResult = new ActivityResult(RESULT_OK, new Intent());
@@ -226,25 +222,8 @@ public class AllWidgetsFormTest {
         onVisibleEditText().check(matches(withText(stringWidgetText)));
 
         onView(withText("String widget")).perform(swipeLeft());
-}
-	/*public void write(){
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILENAME))) {
-
-			String content = "This is the content to write into file\n";
-
-			bw.write(content);
-
-			// no need to close it.
-			//bw.close();
-
-             	System.out.println("Done");
-
-		} catch (IOException e) {
-
-			e.printStackTrace();
-
-		}
-    }*/
+    }
+	
 
     public void testStringNumberWidget() {
         String stringNumberWidgetText = randomIntegerString();
