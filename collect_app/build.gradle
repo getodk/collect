@@ -201,6 +201,7 @@ dependencies {
         exclude module: 'joda-time'
     }
 
+    implementation group: 'com.scand.svg', name: 'libsvg', version: '1.0', ext: 'aar'
     implementation group: 'org.osmdroid', name: 'osmdroid-android', version: '5.6.4'
     implementation group: 'org.slf4j', name: 'slf4j-android', version: '1.6.1-RC1'
     implementation group: 'pub.devrel', name: 'easypermissions', version: '0.2.1'

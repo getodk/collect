@@ -68,6 +68,8 @@ the specific language governing permissions and limitations under the License.
     <uses-permission android:name="org.odk.collect.android.permission.MAPS_RECEIVE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
 
+    <uses-sdk tools:overrideLibrary="com.scand.svg"/>
+
     <supports-screens
         android:anyDensity="true"
         android:largeScreens="true"
