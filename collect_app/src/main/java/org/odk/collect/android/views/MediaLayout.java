@@ -35,17 +35,21 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.scand.svg.SVGHelper;
+
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.AudioPlayListener;
+import org.odk.collect.android.utilities.FileExtensionUtil;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.ViewIds;
 
 import java.io.File;
+import java.io.IOException;
 
 import timber.log.Timber;
 
@@ -221,11 +225,24 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                 String imageFilename = ReferenceManager.instance().DeriveReference(imageURI).getLocalURI();
                 final File imageFile = new File(imageFilename);
                 if (imageFile.exists()) {
+                    Bitmap b = null;
                     DisplayMetrics metrics = context.getResources().getDisplayMetrics();
                     int screenWidth = metrics.widthPixels;
                     int screenHeight = metrics.heightPixels;
-                    Bitmap b = FileUtils.getBitmapScaledToDisplay(imageFile, screenHeight,
-                            screenWidth);
+                    if (FileExtensionUtil.isSVGFile(imageFilename)) {
+                        try {
+                            b = SVGHelper
+                                    .noContext()
+                                    .open(imageFile)
+                                    .checkSVGSize()
+                                    .setRequestBounds(screenWidth, screenWidth)
+                                    .getBitmap();
+                        } catch (IOException e) {
+                            Timber.e(e);
+                        }
+                    } else {
+                        b = FileUtils.getBitmapScaledToDisplay(imageFile, screenHeight, screenWidth);
+                    }
                     if (b != null) {
                         imageView = new ImageView(getContext());
                         imageView.setPadding(2, 2, 2, 2);
