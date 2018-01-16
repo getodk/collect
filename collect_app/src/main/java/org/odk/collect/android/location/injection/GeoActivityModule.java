@@ -10,6 +10,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 
 import org.odk.collect.android.injection.config.scopes.PerActivity;
 import org.odk.collect.android.location.GeoActivity;
+import org.odk.collect.android.location.map.GoogleMapViewModel;
+import org.odk.collect.android.location.map.MapViewModel;
 
 import dagger.Module;
 import dagger.Provides;
@@ -44,5 +46,11 @@ public class GeoActivityModule {
         return extras != null
                 ? extras
                 : Bundle.EMPTY;
+    }
+
+    @NonNull
+    @Provides
+    MapViewModel provideMapViewModel(@NonNull GeoActivity geoActivity) {
+        return new GoogleMapViewModel();
     }
 }

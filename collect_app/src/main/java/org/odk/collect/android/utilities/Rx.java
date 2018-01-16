@@ -11,7 +11,7 @@ public class Rx {
         return r;
     }
 
-    public static Object consume(Object... objects) {
+    public static Object toEvent(Object... objects) {
         return new Object();
     }
 

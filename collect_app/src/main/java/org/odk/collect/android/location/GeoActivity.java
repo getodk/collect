@@ -19,6 +19,7 @@ import com.jakewharton.rxrelay2.BehaviorRelay;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.architecture.rx.RxMVVMActivity;
+import org.odk.collect.android.location.map.MapViewModel;
 import org.odk.collect.android.location.usecases.LoadMap;
 import org.odk.collect.android.location.usecases.OnMapError;
 import org.odk.collect.android.location.usecases.SaveAnswer;
@@ -41,19 +42,22 @@ public class GeoActivity
 
     // Use cases:
     @Inject
-    protected LoadMap loadMap;
+    private LoadMap loadMap;
 
     @Inject
-    protected SaveAnswer saveAnswer;
+    private SaveAnswer saveAnswer;
 
     @Inject
-    protected OnMapError onMapError;
+    private OnMapError onMapError;
 
     @Inject
-    protected ZoomDialog zoomDialog;
+    private ZoomDialog zoomDialog;
 
     @Inject
-    protected ShowGpsDisabledAlert showGpsDisabledAlert;
+    private ShowGpsDisabledAlert showGpsDisabledAlert;
+
+    @Inject
+    private MapViewModel mapViewModel;
 
     // Outputs:
     @BindView(R.id.location_info)
@@ -197,8 +201,6 @@ public class GeoActivity
         // have the map first:
         Observable.combineLatest(observeZoom, observeMap, (latLng, map) -> {
             CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latLng, 16.0f);
-            map.animateCamera(update);
-
             return new Pair<>(update, map);
 
         }).subscribe(this::updateCamera, Timber::e);
@@ -330,9 +332,9 @@ public class GeoActivity
         observeMarker.firstOrError()
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .compose(bindToLifecycle())
                 .doOnSuccess(Marker::remove)
                 .map(marker -> Optional.<Marker>absent())
+                .compose(bindToLifecycle())
                 .subscribe(markerRelay, Timber::e);
     }
 

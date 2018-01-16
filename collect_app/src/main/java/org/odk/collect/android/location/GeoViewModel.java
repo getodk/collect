@@ -1,6 +1,5 @@
 package org.odk.collect.android.location;
 
-import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,7 +12,6 @@ import com.google.common.collect.ImmutableList;
 import com.jakewharton.rxrelay2.BehaviorRelay;
 import com.jakewharton.rxrelay2.PublishRelay;
 
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.architecture.rx.RxMVVMViewModel;
 import org.odk.collect.android.location.model.ZoomData;
 import org.odk.collect.android.location.usecases.InfoText;
@@ -147,7 +145,7 @@ public class GeoViewModel extends RxMVVMViewModel {
         Observable<Object> onFirstLocation = observeHasCurrentLocation
                 .filter(Rx::isTrue)
                 .distinctUntilChanged()
-                .map(Rx::consume);
+                .map(Rx::toEvent);
 
         // Returns either the Initial location or the first location received from the GPS:
         Observable<LatLng> shouldMarkInitialLocation = Observable.amb(ImmutableList.of(
@@ -170,12 +168,12 @@ public class GeoViewModel extends RxMVVMViewModel {
         Observable<Object> onFirstMarkedLocation = hasSelectedLocation
                 .filter(Rx::isTrue)
                 .distinctUntilChanged()
-                .map(Rx::consume);
+                .map(Rx::toEvent);
 
         Observable<Object> shouldZoomOnFirstLocation = onFirstMarkedLocation.withLatestFrom(hasInitialLocation, Rx::takeRight)
                 .withLatestFrom(isDraggable, (hasInitialLocation, isDraggable) -> hasInitialLocation || isDraggable)
                 .filter(Rx::isFalse)
-                .map(Rx::consume);
+                .map(Rx::toEvent);
 
         shouldShowZoomDialog = Observable.merge(showLocation.hide(), shouldZoomOnFirstLocation)
                 .doOnNext(__ -> Timber.i("Should show."))
