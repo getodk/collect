@@ -300,11 +300,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         String instancePath = null;
         boolean newForm = true;
         autoSaved = false;
-        // only check the buttons if it's enabled in preferences
-        String navigation = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_NAVIGATION);
-        if (navigation.contains(PreferenceKeys.NAVIGATION_BUTTONS)) {
-            showNavigationButtons = true;
-        }
         allowMovingBackwards = (boolean) AdminSharedPreferences.getInstance().get(KEY_MOVING_BACKWARDS);
         if (savedInstanceState != null) {
             state = savedInstanceState;
@@ -2361,6 +2356,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     protected void onResume() {
         super.onResume();
 
+        String navigation = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_NAVIGATION);
+        if (navigation.contains(PreferenceKeys.NAVIGATION_BUTTONS)) {
+            showNavigationButtons = true;
+        }
         if (errorMessage != null) {
             if (alertDialog != null && !alertDialog.isShowing()) {
                 createErrorDialog(errorMessage, EXIT);
