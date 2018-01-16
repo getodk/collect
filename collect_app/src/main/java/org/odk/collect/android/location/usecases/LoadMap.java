@@ -45,9 +45,6 @@ public class LoadMap {
                 googleMap.getUiSettings().setMyLocationButtonEnabled(false);
                 googleMap.getUiSettings().setZoomControlsEnabled(false);
 
-                googleMap.setOnMapLongClickListener(activity);
-                googleMap.setOnMarkerDragListener(activity);
-
                 MapHelper helper = new MapHelper(activity, googleMap);
                 helper.setBasemap();
 

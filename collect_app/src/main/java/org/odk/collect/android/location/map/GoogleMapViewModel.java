@@ -11,17 +11,29 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.common.base.Optional;
 import com.jakewharton.rxrelay2.BehaviorRelay;
 
+import org.odk.collect.android.injection.config.scopes.PerActivity;
+import org.odk.collect.android.location.GeoActivity;
+import org.odk.collect.android.location.usecases.LoadMap;
+import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.Rx;
+
+import javax.inject.Inject;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
-import io.reactivex.functions.Consumer;
 
 /**
  * @author James Knight
  */
 
-public class GoogleMapViewModel implements MapViewModel {
+@PerActivity
+public class GoogleMapViewModel implements MapViewModel, GoogleMap.OnMapLongClickListener, GoogleMap.OnMarkerDragListener  {
+
+    @NonNull
+    private final GeoActivity geoActivity;
+
+    @NonNull
+    private final LoadMap loadMap;
 
     // Internal state:
     @NonNull
@@ -30,20 +42,11 @@ public class GoogleMapViewModel implements MapViewModel {
 
     @NonNull
     private final BehaviorRelay<Boolean> isDraggableRelay =
-            BehaviorRelay.createDefault(true);
+            BehaviorRelay.createDefault(false);
 
     @NonNull
     private final BehaviorRelay<Optional<Marker>> markerRelay =
             BehaviorRelay.createDefault(Optional.absent());
-
-    // Inputs:
-    @NonNull
-    private final Consumer<Optional<Marker>> updateMarker =
-            markerRelay;
-
-    @NonNull
-    private final Consumer<Boolean> updateIsDraggable =
-            isDraggableRelay;
 
     // Outputs:
     @NonNull
@@ -57,6 +60,14 @@ public class GoogleMapViewModel implements MapViewModel {
     @NonNull
     private final Observable<Optional<Marker>> observeMarker =
             markerRelay.hide();
+
+    @Inject
+    GoogleMapViewModel(@NonNull GeoActivity geoActivity,
+                       @NonNull LoadMap loadMap) {
+
+        this.geoActivity = geoActivity;
+        this.loadMap = loadMap;
+    }
 
     @NonNull
     @Override
@@ -79,31 +90,39 @@ public class GoogleMapViewModel implements MapViewModel {
 
     @NonNull
     @Override
+    public Completable loadMap() {
+        return loadMap.load()
+                .doOnSuccess(googleMap -> {
+                    googleMap.setOnMapLongClickListener(this);
+                    googleMap.setOnMarkerDragListener(this);
+
+                    mapRelay.accept(googleMap);
+                })
+                .flatMapCompletable(__ -> Completable.complete());
+    }
+
+    @NonNull
+    @Override
     public Completable markLocation(@NonNull LatLng latLng) {
-        return observeMap.withLatestFrom(observeMarker, (map, markerOptional) -> {
+        return observeMap.withLatestFrom(observeMarker, observeDraggable, (map, markerOptional, isDraggable) -> {
+            Marker marker;
             if (markerOptional.isPresent()) {
-                Marker marker = markerOptional.get();
+                marker = markerOptional.get();
                 marker.setPosition(latLng);
 
-                return marker;
+            } else {
+                MarkerOptions options = new MarkerOptions()
+                        .position(latLng);
+                marker = map.addMarker(options);
             }
 
+            marker.setDraggable(isDraggable);
+            return Optional.of(marker);
 
-            MarkerOptions options = new MarkerOptions()
-                    .position(latLng);
-
-            return map.addMarker(options);
-
-        })
-                .withLatestFrom(observeDraggable, (marker, isDraggable) -> {
-                    marker.setDraggable(isDraggable);
-                    return marker;
-                })
-                .map(Optional::of)
-                .flatMapCompletable(markerOptional -> {
-                    updateMarker.accept(markerOptional);
-                    return Completable.complete();
-                });
+        }).flatMapCompletable(markerOptional -> {
+            markerRelay.accept(markerOptional);
+            return Completable.complete();
+        });
     }
 
     @NonNull
@@ -113,9 +132,9 @@ public class GoogleMapViewModel implements MapViewModel {
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .doOnSuccess(Marker::remove)
-                .map(marker -> Optional.<Marker>absent())
+                .map(__ -> Optional.<Marker>absent())
                 .flatMapCompletable(markerOptional -> {
-                    updateMarker.accept(markerOptional);
+                    markerRelay.accept(markerOptional);
                     return Completable.complete();
                 });
     }
@@ -136,8 +155,37 @@ public class GoogleMapViewModel implements MapViewModel {
     @Override
     public Completable updateIsDraggable(boolean isDraggable) {
         return Completable.defer(() -> {
-            updateIsDraggable(isDraggable);
+            isDraggableRelay.accept(isDraggable);
             return Completable.complete();
         });
+    }
+
+    @NonNull
+    @Override
+    public Completable showLayers() {
+        return observeMap.flatMapCompletable(googleMap -> {
+            new MapHelper(geoActivity, googleMap).showLayersDialog(geoActivity);
+            return Completable.complete();
+        });
+    }
+
+    @Override
+    public void onMapLongClick(LatLng latLng) {
+        markLocation(latLng);
+    }
+
+    @Override
+    public void onMarkerDragEnd(Marker marker) {
+        markerRelay.accept(Optional.of(marker));
+    }
+
+    @Override
+    public void onMarkerDragStart(Marker marker) {
+        // Do nothing.
+    }
+
+    @Override
+    public void onMarkerDrag(Marker marker) {
+        // Do nothing.
     }
 }

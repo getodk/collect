@@ -12,6 +12,7 @@ import org.odk.collect.android.injection.config.scopes.PerActivity;
 import org.odk.collect.android.location.GeoActivity;
 import org.odk.collect.android.location.map.GoogleMapViewModel;
 import org.odk.collect.android.location.map.MapViewModel;
+import org.odk.collect.android.location.usecases.LoadMap;
 
 import dagger.Module;
 import dagger.Provides;
@@ -50,7 +51,7 @@ public class GeoActivityModule {
 
     @NonNull
     @Provides
-    MapViewModel provideMapViewModel(@NonNull GeoActivity geoActivity) {
-        return new GoogleMapViewModel();
+    MapViewModel provideMapViewModel(@NonNull GoogleMapViewModel googleMapViewModel) {
+        return googleMapViewModel;
     }
 }

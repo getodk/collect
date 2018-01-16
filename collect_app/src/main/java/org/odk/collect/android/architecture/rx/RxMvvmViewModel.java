@@ -8,8 +8,8 @@ import com.trello.rxlifecycle2.LifecycleTransformer;
 import com.trello.rxlifecycle2.OutsideLifecycleException;
 import com.trello.rxlifecycle2.RxLifecycle;
 
-import org.odk.collect.android.architecture.MVVMActivity;
-import org.odk.collect.android.architecture.MVVMViewModel;
+import org.odk.collect.android.architecture.MvvmActivity;
+import org.odk.collect.android.architecture.MvvmViewModel;
 
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
@@ -19,11 +19,11 @@ import io.reactivex.subjects.BehaviorSubject;
 
 
 /**
- * A {@link MVVMActivity} subclass that provides RxLifecycle
+ * A {@link MvvmActivity} subclass that provides RxLifecycle
  * methods for binding {@link io.reactivex.Observable}'s to
  * the ViewModel lifecycle.
  */
-public class RxMVVMViewModel extends MVVMViewModel {
+public class RxMvvmViewModel extends MvvmViewModel {
 
     private final BehaviorSubject<Event> lifecycleSubject = BehaviorSubject.create();
 

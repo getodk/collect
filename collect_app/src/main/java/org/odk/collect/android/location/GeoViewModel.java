@@ -8,11 +8,10 @@ import android.view.View;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableList;
 import com.jakewharton.rxrelay2.BehaviorRelay;
 import com.jakewharton.rxrelay2.PublishRelay;
 
-import org.odk.collect.android.architecture.rx.RxMVVMViewModel;
+import org.odk.collect.android.architecture.rx.RxMvvmViewModel;
 import org.odk.collect.android.location.model.ZoomData;
 import org.odk.collect.android.location.usecases.InfoText;
 import org.odk.collect.android.location.usecases.InitialState;
@@ -24,13 +23,12 @@ import org.odk.collect.android.utilities.Rx;
 import javax.inject.Inject;
 
 import io.reactivex.Completable;
-import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import timber.log.Timber;
 
 
-public class GeoViewModel extends RxMVVMViewModel {
+public class GeoViewModel extends RxMvvmViewModel {
 
     @NonNull
     private final InitialState initialState;
@@ -70,10 +68,10 @@ public class GeoViewModel extends RxMVVMViewModel {
     // Internal state:
 
     @NonNull
-    private final BehaviorRelay<Boolean> hasCurrentLocation = BehaviorRelay.createDefault(false);
+    private final BehaviorRelay<Boolean> hasCurrentPosition = BehaviorRelay.createDefault(false);
 
     @NonNull
-    private final Observable<Boolean> observeHasCurrentLocation = hasCurrentLocation.hide();
+    private final Observable<Boolean> observeHasCurrentPosition = hasCurrentPosition.hide();
 
     @NonNull
     private final Observable<Boolean> hasInitialLocation;
@@ -118,8 +116,12 @@ public class GeoViewModel extends RxMVVMViewModel {
         this.infoText = infoText;
         this.statusText = statusText;
 
-        isDraggable = Observable.combineLatest(initialState.isDraggable(), initialState.isReadOnly(),
-                (isDraggable, isReadOnly) -> isDraggable && !isReadOnly);
+        isDraggable = Observable.combineLatest(
+                initialState.isDraggable(),
+                initialState.isReadOnly(),
+                (isDraggable, isReadOnly) ->
+                        isDraggable && !isReadOnly
+        );
 
         isReadOnly = initialState.isReadOnly();
 
@@ -132,9 +134,11 @@ public class GeoViewModel extends RxMVVMViewModel {
                 .map(Optional::isPresent)
                 .distinctUntilChanged();
 
-        Observable<Boolean> observeHasBeenCleared = hasBeenCleared.hide();
-        textVisibility = Observable.combineLatest(hasInitialLocation, observeHasBeenCleared, (hasInitial, wasCleared) -> hasInitial && !wasCleared)
-                .doOnNext(it -> Timber.i("shouldHide: %s", it))
+        textVisibility = Observable.combineLatest(
+                hasInitialLocation,
+                hasBeenCleared.hide(),
+                (hasInitial, wasCleared) ->
+                        hasInitial && !wasCleared)
                 .map(shouldHide -> shouldHide ? View.GONE : View.VISIBLE)
                 .distinctUntilChanged();
 
@@ -142,53 +146,53 @@ public class GeoViewModel extends RxMVVMViewModel {
                 .filter(isAvailable -> !isAvailable)
                 .map(__ -> this);
 
-        Observable<Object> onFirstLocation = observeHasCurrentLocation
-                .filter(Rx::isTrue)
-                .distinctUntilChanged()
-                .map(Rx::toEvent);
-
         // Returns either the Initial location or the first location received from the GPS:
-        Observable<LatLng> shouldMarkInitialLocation = Observable.amb(ImmutableList.of(
-                initialState.location()
-                        .filter(Optional::isPresent)
-                        .map(Optional::get),
-
-                onFirstLocation
-                        .flatMapSingle(__ -> watchPosition.currentLocation())
-                        .withLatestFrom(isDraggable, initialState.location(), (location, draggable, initialLocation) ->
-                                !draggable && !initialLocation.isPresent()
-                                        ? location
-                                        : Optional.<Location>absent()
-                        )
-                        .filter(Optional::isPresent)
-                        .map(Optional::get)
-                        .map(this::locationToLatLng)
-        ));
-
         Observable<Object> onFirstMarkedLocation = hasSelectedLocation
                 .filter(Rx::isTrue)
                 .distinctUntilChanged()
                 .map(Rx::toEvent);
 
-        Observable<Object> shouldZoomOnFirstLocation = onFirstMarkedLocation.withLatestFrom(hasInitialLocation, Rx::takeRight)
-                .withLatestFrom(isDraggable, (hasInitialLocation, isDraggable) -> hasInitialLocation || isDraggable)
+        Observable<Object> shouldZoomOnFirstLocation = onFirstMarkedLocation
+                .withLatestFrom(hasInitialLocation, Rx::takeRight)
+                .withLatestFrom(isDraggable, (hasInitialLocation, isDraggable) ->
+                        hasInitialLocation || isDraggable)
                 .filter(Rx::isFalse)
                 .map(Rx::toEvent);
 
         shouldShowZoomDialog = Observable.merge(showLocation.hide(), shouldZoomOnFirstLocation)
-                .doOnNext(__ -> Timber.i("Should show."))
                 .flatMapSingle(__ -> Single.zip(
-                        watchPosition.currentLocation()
-                                .doOnSuccess(it -> Timber.i("currentLocation: %s", it)),
-                        selectedLocation.get()
-                                .doOnSuccess(it -> Timber.i("get: %s", it)),
+                        watchPosition.currentLocation(),
+                        selectedLocation.get(),
                         (current, selected) -> new ZoomData(current.orNull(), selected.orNull())
-                ))
-                .doOnNext(__ -> Timber.i("Will show."));
+                ));
 
-        isShowLocationEnabled = Observable.combineLatest(observeHasCurrentLocation,
+        isShowLocationEnabled = Observable.combineLatest(observeHasCurrentPosition,
                 hasSelectedLocation,
                 Rx::or
+        );
+
+        Observable<LatLng> onFirstLocationNotInitial = observeHasCurrentPosition
+                .filter(Rx::isTrue)
+                .distinctUntilChanged()
+                .flatMapSingle(__ -> watchPosition.currentLocation())
+                .withLatestFrom(isDraggable, initialState.location(),
+                        (location, draggable, initialLocation) ->
+                                !draggable && !initialLocation.isPresent()
+                                        ? location
+                                        : Optional.<Location>absent()
+                )
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(this::locationToLatLng);
+
+        Observable<LatLng> onInitialLocation = initialState.location()
+                .filter(Optional::isPresent)
+                .map(Optional::get);
+
+        @SuppressWarnings("unchecked")
+        Observable<LatLng> shouldMarkInitialLocation = Observable.ambArray(
+                onInitialLocation,
+                onFirstLocationNotInitial
         );
 
         onMarkedLocation = Observable.merge(
@@ -205,7 +209,12 @@ public class GeoViewModel extends RxMVVMViewModel {
         watchPosition.observeLocation()
                 .compose(bindToLifecycle())
                 .map(Optional::isPresent)
-                .subscribe(hasCurrentLocation, Timber::e);
+                .subscribe(hasCurrentPosition, Timber::e);
+    }
+
+    @NonNull
+    Observable<LatLng> observeAddLocation() {
+        return onMarkedLocation;
     }
 
     @NonNull
@@ -235,8 +244,12 @@ public class GeoViewModel extends RxMVVMViewModel {
 
     @NonNull
     Observable<Boolean> observeAddLocationEnabled() {
-        return Observable.combineLatest(isReadOnly, observeHasCurrentLocation, (isReadOnly, hasCurrentLocation) ->
-                !isReadOnly && hasCurrentLocation);
+        return Observable.combineLatest(
+                isReadOnly,
+                observeHasCurrentPosition,
+                (isReadOnly, hasCurrentLocation) ->
+                        !isReadOnly && hasCurrentLocation
+        );
     }
 
     @NonNull
@@ -250,11 +263,6 @@ public class GeoViewModel extends RxMVVMViewModel {
                 (isReadOnly, hasInitialLocation, hasSelectedLocation) ->
                         !isReadOnly && (hasInitialLocation || hasSelectedLocation)
         );
-    }
-
-    @NonNull
-    Observable<Boolean> observeIsDraggable() {
-        return isDraggable;
     }
 
     @NonNull
@@ -273,13 +281,13 @@ public class GeoViewModel extends RxMVVMViewModel {
     }
 
     @NonNull
-    Observable<LatLng> observeMarkedLocation() {
-        return onMarkedLocation;
+    Observable<Object> observeLocationCleared() {
+        return onClearLocation;
     }
 
     @NonNull
-    Observable<Object> observeLocationCleared() {
-        return onClearLocation;
+    Observable<Boolean> observeIsDraggable() {
+        return isDraggable;
     }
 
     @NonNull
@@ -291,18 +299,12 @@ public class GeoViewModel extends RxMVVMViewModel {
     // Inputs:
 
     Completable addLocation() {
-        return isReadOnly.flatMapCompletable(isReadOnly -> {
-            if (isReadOnly) {
-                return Completable.complete();
-            }
-
-            return watchPosition.currentLocation()
-                    .filter(Optional::isPresent)
-                    .map(Optional::get)
-                    .map(this::locationToLatLng)
-                    .doOnSuccess(shouldMarkLocation)
-                    .flatMapCompletable(__ -> Completable.complete());
-        });
+        return watchPosition.currentLocation()
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(this::locationToLatLng)
+                .doOnSuccess(shouldMarkLocation)
+                .flatMapCompletable(__ -> Completable.complete());
     }
 
     Completable pause() {
@@ -331,16 +333,6 @@ public class GeoViewModel extends RxMVVMViewModel {
 
             return Completable.complete();
         });
-    }
-
-    Completable markLocation(@NonNull LatLng latLng) {
-        return initialState.isDraggable()
-                .firstOrError()
-                .flatMapMaybe(isDraggable -> isDraggable
-                        ? Maybe.just(latLng)
-                        : Maybe.empty())
-                .doOnSuccess(shouldMarkLocation)
-                .flatMapCompletable(__ -> Completable.complete());
     }
 
     Completable selectLocation(@NonNull LatLng latLng) {

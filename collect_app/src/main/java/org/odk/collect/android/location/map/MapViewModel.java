@@ -10,7 +10,6 @@ import io.reactivex.Observable;
 public interface MapViewModel {
 
     // Outputs:
-
     @NonNull
     Observable<LatLng> observeMarkedLocation();
 
@@ -18,6 +17,9 @@ public interface MapViewModel {
     Observable<Object> observeClearedLocation();
 
     // Inputs:
+
+    @NonNull
+    Completable loadMap();
 
     @NonNull
     Completable markLocation(@NonNull LatLng latLng);
@@ -30,4 +32,7 @@ public interface MapViewModel {
 
     @NonNull
     Completable updateIsDraggable(boolean isDraggable);
+
+    @NonNull
+    Completable showLayers();
 }

@@ -10,7 +10,7 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
  * A {@link ViewModel} subclass that provides an 'onCreate' method for simplifying
  * subscription timing.
  */
-public class MVVMViewModel extends ViewModel {
+public class MvvmViewModel extends ViewModel {
 
     private boolean wasCreated = false;
 

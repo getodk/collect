@@ -18,14 +18,14 @@ import butterknife.Unbinder;
 /**
  * A new Activity base class that uses Dagger to bootstrap VM creation.
  *
- * Create a new {@link MVVMViewModel} subclass, override getViewModelClass() to
+ * Create a new {@link MvvmViewModel} subclass, override getViewModelClass() to
  * return the subclass you've created, and you'll have access to a persistent
  * VM in your onCreate thanks to Dagger.
  *
- * @param <V> The MVVMViewModel subclass this Activity should load.
+ * @param <V> The MvvmViewModel subclass this Activity should load.
  *
  */
-public abstract class MVVMActivity<V extends MVVMViewModel>
+public abstract class MvvmActivity<V extends MvvmViewModel>
         extends InjectableActivity {
 
     @Inject
