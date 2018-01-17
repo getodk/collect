@@ -14,7 +14,9 @@ import java.util.Date;
 
 import javax.inject.Inject;
 
+import io.reactivex.Maybe;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import timber.log.Timber;
 
 @PerApplication
@@ -51,6 +53,8 @@ public class WatchPosition {
                         long millis = new Date().getTime() - location.getTime();
                         if (millis <= 5 * 1_000) {
                             WatchPosition.this.locationRelay.accept(Optional.of(location));
+                        } else {
+                            Timber.w("onLocationChanged(%d) received old location.");
                         }
 
                     } else {
@@ -88,8 +92,13 @@ public class WatchPosition {
         return locationRelay.hide();
     }
 
+    public Single<Optional<Location>> currentLocation() {
+        return observeLocation().first(Optional.absent());
+    }
+
     public Observable<Boolean> observeAvailability() {
         return isLocationAvailable.hide();
     }
+
     public Observable<Object> observeErrors() { return locationErrors.hide(); }
 }

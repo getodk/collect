@@ -58,8 +58,6 @@ public class GeoPointOsmMapActivityTest {
         activityController = Robolectric.buildActivity(GeoPointOsmMapActivity.class);
         activity = activityController.get();
         shadowActivity = shadowOf(activity);
-
-        LocationClients.setTestClient(locationClient);
     }
 
     @Test

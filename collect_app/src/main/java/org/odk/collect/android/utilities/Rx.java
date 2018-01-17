@@ -1,10 +1,5 @@
 package org.odk.collect.android.utilities;
 
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
-import timber.log.Timber;
-
 /**
  * @author James Knight
  */
@@ -12,15 +7,11 @@ import timber.log.Timber;
 public class Rx {
     public static <T> T id(T t) { return t; }
 
-    public static <L, R> L takeLeft(L l, R r) {
-        return l;
-    }
-
     public static <L, R> R takeRight(L l, R r) {
         return r;
     }
 
-    public static <L, R> Object consume(L l, R r) {
+    public static Object toEvent(Object... objects) {
         return new Object();
     }
 

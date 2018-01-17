@@ -16,6 +16,7 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.Selection;
@@ -26,6 +27,7 @@ import android.widget.EditText;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.IntegerData;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.listeners.ThousandsSeparatorTextWatcher;
 
 import java.util.Locale;
 
@@ -37,7 +39,9 @@ import java.util.Locale;
 @SuppressLint("ViewConstructor")
 public class IntegerWidget extends StringWidget {
 
-    public IntegerWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride) {
+    boolean useThousandSeparator;
+
+    public IntegerWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride, boolean useThousandSeparator) {
         super(context, prompt, readOnlyOverride, true);
 
         EditText answerText = getAnswerTextField();
@@ -48,12 +52,21 @@ public class IntegerWidget extends StringWidget {
         answerText.setHorizontallyScrolling(false);
         answerText.setSingleLine(false);
 
+        this.useThousandSeparator = useThousandSeparator;
+        if (useThousandSeparator) {
+            answerText.addTextChangedListener(new ThousandsSeparatorTextWatcher(answerText));
+        }
+
         // only allows numbers and no periods
         answerText.setKeyListener(new DigitsKeyListener(true, false));
 
         // ints can only hold 2,147,483,648. we allow 999,999,999
         InputFilter[] fa = new InputFilter[1];
         fa[0] = new InputFilter.LengthFilter(9);
+        if (useThousandSeparator) {
+            //11 since for a nine digit number , their will be 2 separators.
+            fa[0] = new InputFilter.LengthFilter(11);
+        }
         answerText.setFilters(fa);
 
         if (prompt.isReadOnly()) {
@@ -88,10 +101,23 @@ public class IntegerWidget extends StringWidget {
         return d;
     }
 
+    @NonNull
+    @Override
+    public String getAnswerText() {
+        if (useThousandSeparator) {
+            return ThousandsSeparatorTextWatcher.getOriginalString(super.getAnswerText());
+        }
+        return super.getAnswerText();
+    }
+
     @Override
     public IAnswerData getAnswer() {
         clearFocus();
         String s = getAnswerTextField().getText().toString();
+        if (useThousandSeparator) {
+            s = ThousandsSeparatorTextWatcher.getOriginalString(s);
+        }
+
         if (s.isEmpty()) {
             return null;
 

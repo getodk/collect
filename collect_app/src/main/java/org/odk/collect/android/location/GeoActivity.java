@@ -7,23 +7,16 @@ import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.common.base.Optional;
-import com.jakewharton.rxrelay2.BehaviorRelay;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.architecture.rx.RxMVVMActivity;
-import org.odk.collect.android.location.usecases.LoadMap;
+import org.odk.collect.android.architecture.rx.RxMvvmActivity;
+import org.odk.collect.android.location.map.MapViewModel;
 import org.odk.collect.android.location.usecases.OnMapError;
 import org.odk.collect.android.location.usecases.SaveAnswer;
 import org.odk.collect.android.location.usecases.ShowGpsDisabledAlert;
 import org.odk.collect.android.location.usecases.ZoomDialog;
-import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.Rx;
 
 import javax.inject.Inject;
@@ -31,17 +24,12 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.Observable;
-import io.reactivex.Single;
 import timber.log.Timber;
 
 public class GeoActivity
-        extends RxMVVMActivity<GeoViewModel>
-        implements GoogleMap.OnMapLongClickListener, GoogleMap.OnMarkerDragListener {
+        extends RxMvvmActivity<GeoViewModel> {
 
     // Use cases:
-    @Inject
-    protected LoadMap loadMap;
-
     @Inject
     protected SaveAnswer saveAnswer;
 
@@ -53,6 +41,9 @@ public class GeoActivity
 
     @Inject
     protected ShowGpsDisabledAlert showGpsDisabledAlert;
+
+    @Inject
+    protected MapViewModel mapViewModel;
 
     // Outputs:
     @BindView(R.id.location_info)
@@ -70,30 +61,24 @@ public class GeoActivity
     @BindView(R.id.pause_button)
     protected ImageButton pauseButton;
 
+    @BindView(R.id.clear_button)
+    protected ImageButton clearButton;
+
     @BindView(R.id.save_button)
     protected ImageButton saveButton;
-
-    private final BehaviorRelay<GoogleMap> mapRelay =
-            BehaviorRelay.create();
-
-    private final Observable<GoogleMap> observeMap = mapRelay.hide();
-
-    private final BehaviorRelay<Optional<Marker>> markerRelay =
-            BehaviorRelay.createDefault(Optional.absent());
-
-    private final Observable<Optional<Marker>> observeMarker = markerRelay.hide();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
 
-        // Load Map:
-        loadMap.load()
-                .compose(bindToLifecycle())
-                .subscribe(mapRelay, onMapError::onError);
-
         GeoViewModel viewModel = getViewModel();
+
+        // Bind VM Initial State:
+        viewModel.observeIsDraggable()
+                .flatMapCompletable(mapViewModel::updateIsDraggable)
+                .compose(bindToLifecycle())
+                .subscribe(Rx::noop, Timber::e);
 
         // Bind Location Info:
         viewModel.observeLocationInfoVisibility()
@@ -127,10 +112,20 @@ public class GeoActivity
                 .compose(bindToLifecycle())
                 .subscribe(showButton::setEnabled);
 
-        // Bind Button events:
-        viewModel.observeLocationCleared()
+        viewModel.observeClearLocationEnabled()
                 .compose(bindToLifecycle())
-                .subscribe(__ -> clearMarker(), Timber::e);
+                .subscribe(clearButton::setEnabled);
+
+        // Bind Button events:
+        viewModel.observeAddLocation()
+                .flatMapCompletable(mapViewModel::markLocation)
+                .compose(bindToLifecycle())
+                .subscribe(Rx::noop, Timber::e);
+
+        viewModel.observeLocationCleared()
+                .flatMapCompletable(__ -> mapViewModel.clearMarkedLocation())
+                .compose(bindToLifecycle())
+                .subscribe(Rx::noop, Timber::e);
 
         // Bind Dialog events:
         viewModel.observeShowZoomDialog()
@@ -142,58 +137,37 @@ public class GeoActivity
                 .subscribe(showGpsDisabledAlert::show, Timber::e);
 
         viewModel.observeShowLayers()
-                .withLatestFrom(observeMap, Rx::takeRight)
                 .compose(bindToLifecycle())
-                .subscribe(this::shouldShowLayers, Timber::e);
+                .flatMapCompletable(__ -> mapViewModel.showLayers())
+                .subscribe(Rx::noop, Timber::e);
 
-        // Bind location Marks:
-        viewModel.observeMarkedLocation()
+        // Bind MapViewModel:
+
+        mapViewModel.loadMap()
                 .compose(bindToLifecycle())
-                .subscribe(this::updateMarkerForPosition, Timber::e);
+                .subscribe(Rx::noop, Timber::e);
 
-        // Bind Map Zoom:
-        zoomDialog.zoomToLocation()
-                .map(latLng -> CameraUpdateFactory.newLatLngZoom(latLng, 16))
+        mapViewModel.observeMarkedLocation()
+                .flatMapCompletable(viewModel::selectLocation)
                 .compose(bindToLifecycle())
-                .doOnNext(__ -> Timber.i("Zooming to location."))
-                .subscribe(this::updateCamera, Timber::e);
+                .subscribe(Rx::noop, Timber::e);
 
-        observeMarker.filter(Optional::isPresent)
-                .map(Optional::get)
-                .map(Marker::getPosition)
+        mapViewModel.observeClearedLocation()
+                .flatMapCompletable(__ -> viewModel.clearSelectedLocation())
                 .compose(bindToLifecycle())
-                .subscribe(viewModel::markLocation, Timber::e);
+                .subscribe(Rx::noop, Timber::e);
 
-        observeMarker.filter(it -> !it.isPresent())
+        Observable<LatLng> zoomToInitialLocation = viewModel.observeInitialLocation()
+                .filter(Optional::isPresent)
+                .map(Optional::get);
+
+        Observable.merge(zoomToInitialLocation, zoomDialog.zoomToLocation())
+                .flatMapCompletable(mapViewModel::zoomToLocation)
                 .compose(bindToLifecycle())
-                .subscribe(__ -> viewModel.clearMarkedLocation(), Timber::e);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        getViewModel().startWatchingLocation();
-    }
-
-    @Override
-    protected void onStop() {
-        getViewModel().stopWatchingLocation();
-        super.onStop();
-    }
-
-    @Override
-    protected int getLayoutId() {
-        return R.layout.activity_geo;
-    }
-
-    @NonNull
-    @Override
-    protected Class<GeoViewModel> getViewModelClass() {
-        return GeoViewModel.class;
+                .subscribe(Rx::noop, Timber::e);
     }
 
     // Inputs:
-
     @OnClick(R.id.add_button)
     protected void onAddClick() {
         getViewModel().addLocation()
@@ -205,7 +179,7 @@ public class GeoActivity
     protected void onPauseClick() {
         getViewModel().pause()
                 .compose(bindToLifecycle())
-                .subscribe(Rx::noop, Timber::e);;
+                .subscribe(Rx::noop, Timber::e);
     }
 
     @OnClick(R.id.show_button)
@@ -233,72 +207,31 @@ public class GeoActivity
     protected void onSaveClick() {
         getViewModel().saveLocation()
                 .compose(bindToLifecycle())
-                .subscribe(saveAnswer::save, Timber::e, this::finish);
+                .subscribe(saveAnswer::save, Timber::e);
+    }
+
+    // MvvmActivity:
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        getViewModel().startWatchingLocation();
     }
 
     @Override
-    public void onMapLongClick(LatLng latLng) {
-        getViewModel().markLocation(latLng);
+    protected void onStop() {
+        getViewModel().stopWatchingLocation();
+        super.onStop();
     }
 
     @Override
-    public void onMarkerDragStart(Marker marker) {
-
+    protected int getLayoutId() {
+        return R.layout.activity_geo;
     }
 
+    @NonNull
     @Override
-    public void onMarkerDrag(Marker marker) {
-
+    protected Class<GeoViewModel> getViewModelClass() {
+        return GeoViewModel.class;
     }
-
-    @Override
-    public void onMarkerDragEnd(Marker marker) {
-        markerRelay.accept(Optional.of(marker));
-    }
-
-    private void shouldShowLayers(@NonNull GoogleMap googleMap) {
-        new MapHelper(this, googleMap)
-                .showLayersDialog(this);
-    }
-
-    private void updateCamera(@NonNull CameraUpdate cameraUpdate) {
-        observeMap.firstOrError()
-                .compose(bindToLifecycle())
-                .subscribe(googleMap -> googleMap.animateCamera(cameraUpdate), Timber::e);
-    }
-
-    private void updateMarkerForPosition(@Nullable LatLng position) {
-        if (position == null) {
-            clearMarker();
-            return;
-        }
-
-        observeMarker.firstOrError()
-                .flatMap(markerOptional -> {
-
-                    if (markerOptional.isPresent()) {
-                        markerOptional.get().setPosition(position);
-
-                        return Single.just(markerOptional);
-                    }
-
-                    return observeMap.firstOrError()
-                            .map(googleMap -> googleMap.addMarker(new MarkerOptions().position(position)))
-                            .map(Optional::of);
-
-                }).subscribe(markerRelay, Timber::e);
-    }
-
-    private void clearMarker() {
-        observeMarker.firstOrError()
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .compose(bindToLifecycle())
-                .subscribe(marker -> {
-                    marker.remove();
-                    markerRelay.accept(Optional.absent());
-
-                }, Timber::e);
-    }
-
 }

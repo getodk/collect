@@ -131,27 +131,27 @@ public class InstanceServerUploader extends InstanceUploader {
 
         File instanceFile = new File(instanceFilePath);
         ContentValues cv = new ContentValues();
-        Uri u = Uri.parse(urlString);
+        Uri submissionUri = Uri.parse(urlString);
         HttpClient httpclient = WebUtils.createHttpClient(CONNECTION_TIMEOUT);
 
         ResponseMessageParser messageParser = null;
         boolean openRosaServer = false;
-        if (uriRemap.containsKey(u)) {
+        if (uriRemap.containsKey(submissionUri)) {
             // we already issued a head request and got a response,
             // so we know the proper URL to send the submission to
             // and the proper scheme. We also know that it was an
             // OpenRosa compliant server.
             openRosaServer = true;
-            u = uriRemap.get(u);
+            submissionUri = uriRemap.get(submissionUri);
 
             // if https then enable preemptive basic auth...
-            if (u.getScheme().equals("https")) {
-                WebUtils.enablePreemptiveBasicAuth(localContext, u.getHost());
+            if (submissionUri.getScheme().equals("https")) {
+                WebUtils.enablePreemptiveBasicAuth(localContext, submissionUri.getHost());
             }
 
-            Timber.i("Using Uri remap for submission %s. Now: %s", id, u.toString());
+            Timber.i("Using Uri remap for submission %s. Now: %s", id, submissionUri.toString());
         } else {
-            if (u.getHost() == null) {
+            if (submissionUri.getHost() == null) {
                 Timber.i("Host name may not be null");
                 outcome.results.put(id, fail + "Host name may not be null");
                 cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
@@ -160,17 +160,19 @@ public class InstanceServerUploader extends InstanceUploader {
             }
 
             // if https then enable preemptive basic auth...
-            if (u.getScheme() != null && u.getScheme().equals("https")) {
-                WebUtils.enablePreemptiveBasicAuth(localContext, u.getHost());
+            if (submissionUri.getScheme() != null && submissionUri.getScheme().equals("https")) {
+                WebUtils.enablePreemptiveBasicAuth(localContext, submissionUri.getHost());
             }
 
-            // we need to issue a head request
-            HttpHead httpHead = WebUtils.createOpenRosaHttpHead(u);
+            // Issue a head request to confirm the server is an OpenRosa server and see if auth
+            // is required
+            // http://docs.opendatakit.org/openrosa-form-submission/#extended-transmission-considerations
+            HttpHead httpHead = WebUtils.createOpenRosaHttpHead(submissionUri);
 
             // prepare response
-            HttpResponse response = null;
+            final HttpResponse response;
             try {
-                Timber.i("Issuing HEAD request for %s to: %s", id, u.toString());
+                Timber.i("Issuing HEAD request for %s to: %s", id, submissionUri.toString());
 
                 response = httpclient.execute(httpHead, localContext);
                 int statusCode = response.getStatusLine().getStatusCode();
@@ -181,7 +183,7 @@ public class InstanceServerUploader extends InstanceUploader {
                     WebUtils.discardEntityBytes(response);
                     // we need authentication, so stop and return what we've
                     // done so far.
-                    outcome.authRequestingServer = u;
+                    outcome.authRequestingServer = submissionUri;
                     return false;
                 } else if (statusCode == 204) {
                     Header[] locations = response.getHeaders("Location");
@@ -190,12 +192,12 @@ public class InstanceServerUploader extends InstanceUploader {
                         try {
                             Uri newURI = Uri.parse(
                                     URLDecoder.decode(locations[0].getValue(), "utf-8"));
-                            if (u.getHost().equalsIgnoreCase(newURI.getHost())) {
+                            if (submissionUri.getHost().equalsIgnoreCase(newURI.getHost())) {
                                 openRosaServer = true;
                                 // trust the server to tell us a new location
                                 // ... and possibly to use https instead.
-                                uriRemap.put(u, newURI);
-                                u = newURI;
+                                uriRemap.put(submissionUri, newURI);
+                                submissionUri = newURI;
                             } else {
                                 // Don't follow a redirection attempt to a different host.
                                 // We can't tell if this is a spoof or not.
@@ -405,14 +407,14 @@ public class InstanceServerUploader extends InstanceUploader {
                 }
             }
 
-            HttpPost httppost = WebUtils.createOpenRosaHttpPost(u);
+            HttpPost httppost = WebUtils.createOpenRosaHttpPost(submissionUri);
             httppost.setEntity(builder.build());
 
             // prepare response and return uploaded
             HttpResponse response;
 
             try {
-                Timber.i("Issuing POST request for %s to: %s", id, u.toString());
+                Timber.i("Issuing POST request for %s to: %s", id, submissionUri.toString());
                 response = httpclient.execute(httppost, localContext);
                 int responseCode = response.getStatusLine().getStatusCode();
                 HttpEntity httpEntity = response.getEntity();

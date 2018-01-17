@@ -118,7 +118,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
             return;
         }
 
-        map = (MapView) findViewById(R.id.omap);
+        map = findViewById(R.id.omap);
         if (helper == null) {
             // For testing:
             helper = new MapHelper(this, map, this);
@@ -139,13 +139,13 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
             }
         }, 100);
 
-        locationStatus = (TextView) findViewById(R.id.location_status);
-        TextView locationInfo = (TextView) findViewById(R.id.location_info);
+        locationStatus = findViewById(R.id.location_status);
+        TextView locationInfo = findViewById(R.id.location_info);
 
         locationClient = LocationClients.clientForContext(this);
         locationClient.setListener(this);
 
-        ImageButton saveLocationButton = (ImageButton) findViewById(R.id.accept_location);
+        ImageButton saveLocationButton = findViewById(R.id.accept_location);
         saveLocationButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -156,7 +156,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
             }
         });
 
-        reloadLocationButton = (ImageButton) findViewById(R.id.reload_location);
+        reloadLocationButton = findViewById(R.id.reload_location);
         reloadLocationButton.setEnabled(false);
         reloadLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,8 +172,8 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 
         });
 
-        // Focuses on marked getLocation
-        showLocationButton = (ImageButton) findViewById(R.id.show_location);
+        // Focuses on marked location
+        showLocationButton = findViewById(R.id.show_location);
         showLocationButton.setVisibility(View.VISIBLE);
         showLocationButton.setEnabled(false);
         showLocationButton.setOnClickListener(new View.OnClickListener() {
@@ -189,7 +189,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
         showLocationButton.setClickable(false);
 
         // Menu Layer Toggle
-        ImageButton layersButton = (ImageButton) findViewById(R.id.layer_menu);
+        ImageButton layersButton = findViewById(R.id.layer_menu);
         layersButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -201,7 +201,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 
         zoomDialogView = getLayoutInflater().inflate(R.layout.geopoint_zoom_dialog, null);
 
-        zoomLocationButton = (Button) zoomDialogView.findViewById(R.id.zoom_location);
+        zoomLocationButton = zoomDialogView.findViewById(R.id.zoom_location);
         zoomLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -211,7 +211,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
             }
         });
 
-        zoomPointButton = (Button) zoomDialogView.findViewById(R.id.zoom_point);
+        zoomPointButton = zoomDialogView.findViewById(R.id.zoom_point);
         zoomPointButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -222,7 +222,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
             }
         });
 
-        ImageButton clearPointButton = (ImageButton) findViewById(R.id.clear);
+        ImageButton clearPointButton = findViewById(R.id.clear);
         clearPointButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -325,7 +325,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
     private void upMyLocationOverlayLayers() {
         showLocationButton.setClickable(marker != null);
 
-        // make sure we have a good getLocation provider before continuing
+        // make sure we have a good location provider before continuing
         locationClient.requestLocationUpdates(this);
 
         if (!locationClient.isLocationAvailable()) {
@@ -434,19 +434,19 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
             }
 
 
-            //if (getLocation.getLatitude() != marker.getPosition().getLatitude() & getLocation
+            //if (location.getLatitude() != marker.getPosition().getLatitude() & location
             // .getLongitude() != marker.getPosition().getLongitude()) {
             //reloadLocationButton.setEnabled(true);
             //}
             //
-            //If getLocation is accurate enough, stop updating position and make the marker
+            //If location is accurate enough, stop updating position and make the marker
             // draggable
-            //if (getLocation.getAccuracy() <= mLocationAccuracy) {
+            //if (location.getAccuracy() <= mLocationAccuracy) {
             //stopGeolocating();
             //}
 
         } else {
-            Timber.i("onLocationChanged(%d) null getLocation", locationCount);
+            Timber.i("onLocationChanged(%d) null location", locationCount);
         }
     }
 

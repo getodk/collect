@@ -16,7 +16,6 @@ package org.odk.collect.android.widgets;
 
 import android.app.Activity;
 import android.content.Context;
-import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -47,24 +46,6 @@ public class BarcodeWidget extends QuestionWidget implements BinaryWidget {
 
         getBarcodeButton = getSimpleButton(getContext().getString(R.string.get_barcode));
         getBarcodeButton.setEnabled(!prompt.isReadOnly());
-        getBarcodeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(this, "recordBarcode", "click",
-                                getFormEntryPrompt().getIndex());
-
-                waitForData();
-
-                new IntentIntegrator((Activity) getContext())
-                        .setCaptureActivity(ScannerWithFlashlightActivity.class)
-                        .setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES)
-                        .setOrientationLocked(false)
-                        .setPrompt(getContext().getString(R.string.barcode_scanner_prompt))
-                        .initiateScan();
-            }
-        });
 
         stringAnswer = getCenteredAnswerTextView();
 
@@ -108,7 +89,6 @@ public class BarcodeWidget extends QuestionWidget implements BinaryWidget {
             response = response.replaceAll("\\p{C}", "");
         }
         stringAnswer.setText(response);
-        cancelWaitingForData();
     }
 
     @Override
@@ -130,5 +110,22 @@ public class BarcodeWidget extends QuestionWidget implements BinaryWidget {
         super.cancelLongPress();
         getBarcodeButton.cancelLongPress();
         stringAnswer.cancelLongPress();
+    }
+
+    @Override
+    public void onButtonClick(int buttonId) {
+        Collect.getInstance()
+                .getActivityLogger()
+                .logInstanceAction(this, "recordBarcode", "click",
+                        getFormEntryPrompt().getIndex());
+
+        waitForData();
+
+        new IntentIntegrator((Activity) getContext())
+                .setCaptureActivity(ScannerWithFlashlightActivity.class)
+                .setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES)
+                .setOrientationLocked(false)
+                .setPrompt(getContext().getString(R.string.barcode_scanner_prompt))
+                .initiateScan();
     }
 }

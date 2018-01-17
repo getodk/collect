@@ -111,73 +111,10 @@ public class AlignedImageWidget extends QuestionWidget implements BaseImageWidge
         errorTextView.setText(R.string.selected_invalid_image);
 
         captureButton = getSimpleButton(getContext().getString(R.string.capture_image), R.id.capture_image);
-
         captureButton.setEnabled(!prompt.isReadOnly());
-        captureButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Collect collect = Collect.getInstance();
-                collect.getActivityLogger().logInstanceAction(this, "captureButton",
-                        "click", getFormEntryPrompt().getIndex());
-
-                errorTextView.setVisibility(View.GONE);
-
-                Intent i = new Intent();
-                i.setComponent(new ComponentName(ODK_CAMERA_INTENT_PACKAGE,
-                        ODK_CAMERA_TAKE_PICTURE_INTENT_COMPONENT));
-                i.putExtra(FILE_PATH_EXTRA, Collect.CACHE_PATH);
-                i.putExtra(DIMENSIONS_EXTRA, iarray);
-                i.putExtra(RETAKE_OPTION_EXTRA, false);
-
-                // We give the camera an absolute filename/path where to put the
-                // picture because of bug:
-                // http://code.google.com/p/android/issues/detail?id=1480
-                // The bug appears to be fixed in Android 2.0+, but as of feb 2,
-                // 2010, G1 phones only run 1.6. Without specifying the path the
-                // images returned by the camera in 1.6 (and earlier) are ~1/4
-                // the size. boo.
-
-                // if this gets modified, the onActivityResult in
-                // FormEntyActivity will also need to be updated.
-                try {
-                    waitForData();
-                    ((Activity) getContext()).startActivityForResult(i,
-                            RequestCodes.ALIGNED_IMAGE);
-                } catch (ActivityNotFoundException e) {
-                    Toast.makeText(getContext(),
-                            getContext().getString(R.string.activity_not_found,
-                                    "aligned image capture"),
-                            Toast.LENGTH_SHORT).show();
-                    cancelWaitingForData();
-                }
-
-            }
-        });
 
         chooseButton = getSimpleButton(getContext().getString(R.string.choose_image), R.id.choose_image);
         chooseButton.setEnabled(!prompt.isReadOnly());
-        chooseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivityLogger().logInstanceAction(this, "chooseButton", "click", getFormEntryPrompt().getIndex());
-                errorTextView.setVisibility(View.GONE);
-                Intent i = new Intent(Intent.ACTION_GET_CONTENT);
-                i.setType("image/*");
-
-                try {
-                    waitForData();
-                    ((Activity) getContext()).startActivityForResult(i,
-                            RequestCodes.IMAGE_CHOOSER);
-                } catch (ActivityNotFoundException e) {
-                    Toast.makeText(getContext(),
-                            getContext().getString(R.string.activity_not_found, "choose image"),
-                            Toast.LENGTH_SHORT).show();
-                    cancelWaitingForData();
-                }
-
-            }
-        });
 
         // finish complex layout
         LinearLayout answerLayout = new LinearLayout(getContext());
@@ -306,8 +243,6 @@ public class AlignedImageWidget extends QuestionWidget implements BaseImageWidge
         } else {
             Timber.e("NO IMAGE EXISTS at: %s", newImage.getAbsolutePath());
         }
-
-        cancelWaitingForData();
     }
 
     @Override
@@ -334,6 +269,73 @@ public class AlignedImageWidget extends QuestionWidget implements BaseImageWidge
         chooseButton.cancelLongPress();
         if (imageView != null) {
             imageView.cancelLongPress();
+        }
+    }
+
+    @Override
+    public void onButtonClick(int buttonId) {
+        switch (buttonId) {
+            case R.id.capture_image:
+                captureImage();
+                break;
+            case R.id.choose_image:
+                chooseImage();
+                break;
+        }
+    }
+
+    private void captureImage() {
+        Collect collect = Collect.getInstance();
+        collect.getActivityLogger().logInstanceAction(this, "captureButton",
+                "click", getFormEntryPrompt().getIndex());
+
+        errorTextView.setVisibility(View.GONE);
+
+        Intent i = new Intent();
+        i.setComponent(new ComponentName(ODK_CAMERA_INTENT_PACKAGE,
+                ODK_CAMERA_TAKE_PICTURE_INTENT_COMPONENT));
+        i.putExtra(FILE_PATH_EXTRA, Collect.CACHE_PATH);
+        i.putExtra(DIMENSIONS_EXTRA, iarray);
+        i.putExtra(RETAKE_OPTION_EXTRA, false);
+
+        // We give the camera an absolute filename/path where to put the
+        // picture because of bug:
+        // http://code.google.com/p/android/issues/detail?id=1480
+        // The bug appears to be fixed in Android 2.0+, but as of feb 2,
+        // 2010, G1 phones only run 1.6. Without specifying the path the
+        // images returned by the camera in 1.6 (and earlier) are ~1/4
+        // the size. boo.
+
+        // if this gets modified, the onActivityResult in
+        // FormEntyActivity will also need to be updated.
+        try {
+            waitForData();
+            ((Activity) getContext()).startActivityForResult(i,
+                    RequestCodes.ALIGNED_IMAGE);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(getContext(),
+                    getContext().getString(R.string.activity_not_found,
+                            "aligned image capture"),
+                    Toast.LENGTH_SHORT).show();
+            cancelWaitingForData();
+        }
+    }
+
+    private void chooseImage() {
+        getActivityLogger().logInstanceAction(this, "chooseButton", "click", getFormEntryPrompt().getIndex());
+        errorTextView.setVisibility(View.GONE);
+        Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+        i.setType("image/*");
+
+        try {
+            waitForData();
+            ((Activity) getContext()).startActivityForResult(i,
+                    RequestCodes.IMAGE_CHOOSER);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(getContext(),
+                    getContext().getString(R.string.activity_not_found, "choose image"),
+                    Toast.LENGTH_SHORT).show();
+            cancelWaitingForData();
         }
     }
 }

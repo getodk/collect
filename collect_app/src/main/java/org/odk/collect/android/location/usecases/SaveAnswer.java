@@ -14,6 +14,7 @@ import static android.app.Activity.RESULT_OK;
 
 @PerActivity
 public class SaveAnswer {
+
     private final ActivityLogger activityLogger;
     private final GeoActivity activity;
 

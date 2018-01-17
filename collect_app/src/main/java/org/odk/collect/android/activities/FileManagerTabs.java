@@ -37,7 +37,7 @@ public class FileManagerTabs extends AppCompatActivity {
     private FormManagerList formManagerList = FormManagerList.newInstance();
 
     private void initToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setTitle(getString(R.string.manage_files));
         setSupportActionBar(toolbar);
     }
@@ -51,7 +51,7 @@ public class FileManagerTabs extends AppCompatActivity {
 
         String[] tabNames = {getString(R.string.data), getString(R.string.forms)};
         // Get the ViewPager and set its PagerAdapter so that it can display items
-        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+        ViewPager viewPager = findViewById(R.id.pager);
 
         ArrayList<Fragment> fragments = new ArrayList<>();
         fragments.add(dataManagerList);
@@ -61,7 +61,7 @@ public class FileManagerTabs extends AppCompatActivity {
                 getSupportFragmentManager(), tabNames, fragments));
 
         // Give the SlidingTabLayout the ViewPager
-        SlidingTabLayout slidingTabLayout = (SlidingTabLayout) findViewById(R.id.tabs);
+        SlidingTabLayout slidingTabLayout = findViewById(R.id.tabs);
         // Attach the view pager to the tab strip
         slidingTabLayout.setDistributeEvenly(true);
         slidingTabLayout.setFontColor(android.R.color.white);
@@ -72,7 +72,7 @@ public class FileManagerTabs extends AppCompatActivity {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.notes);
     }
 

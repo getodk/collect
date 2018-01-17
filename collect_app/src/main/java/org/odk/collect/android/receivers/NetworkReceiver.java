@@ -13,14 +13,11 @@ import android.net.Uri;
 import android.os.Environment;
 import android.support.v4.app.NotificationCompat;
 
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.util.ExponentialBackOff;
-import com.google.api.services.drive.DriveScopes;
-
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
@@ -30,7 +27,6 @@ import org.odk.collect.android.tasks.InstanceServerUploader;
 import org.odk.collect.android.utilities.WebUtils;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
@@ -116,29 +112,21 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
             Long[] toSendArray = new Long[toUpload.size()];
             toUpload.toArray(toSendArray);
 
-            GoogleAccountCredential accountCredential;
-            // Initialize credentials and service object.
-            accountCredential = GoogleAccountCredential.usingOAuth2(
-                    Collect.getInstance(), Collections.singleton(DriveScopes.DRIVE))
-                    .setBackOff(new ExponentialBackOff());
-
             GeneralSharedPreferences settings = GeneralSharedPreferences.getInstance();
-
             String protocol = (String) settings.get(PreferenceKeys.KEY_PROTOCOL);
 
             if (protocol.equals(context.getString(R.string.protocol_google_sheets))) {
-                instanceGoogleSheetsUploader = new InstanceGoogleSheetsUploader(accountCredential, context);
-                String googleUsername = (String) settings.get(
-                        PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
-                if (googleUsername == null || googleUsername.equalsIgnoreCase("")) {
+                String googleUsername = (String) settings.get(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
+                if (googleUsername == null || googleUsername.isEmpty()) {
                     // just quit if there's no username
                     running = false;
                     return;
                 }
-                accountCredential.setSelectedAccountName(googleUsername);
+                GoogleAccountsManager accountsManager = new GoogleAccountsManager(Collect.getInstance());
+                accountsManager.getCredential().setSelectedAccountName(googleUsername);
+                instanceGoogleSheetsUploader = new InstanceGoogleSheetsUploader(accountsManager);
                 instanceGoogleSheetsUploader.setUploaderListener(this);
                 instanceGoogleSheetsUploader.execute(toSendArray);
-
             } else {
                 // load the username, password, and server from preferences
 

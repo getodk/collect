@@ -14,7 +14,6 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.location.client.LocationClient;
-import org.odk.collect.android.location.client.LocationClients;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.android.controller.ActivityController;
@@ -56,14 +55,14 @@ public class GeoPointMapActivityTest {
         activity = activityController.get();
         shadowActivity = shadowOf(activity);
 
-        LocationClients.setTestClient(locationClient);
+        // TODO: Add injectable client here.
     }
 
     @Test
     public void testLocationClientLifecycle() {
         activityController.create();
 
-        // Create should prepare map async; onClientStartWill start getLocation monitoring.
+        // Create should prepare map async; onClientStartWill start location monitoring.
         // Whichever happens second will pass forward to upMyLocationOverlayLayers.
         when(locationClient.isMonitoringLocation()).thenReturn(true);
         activity.setMapReady(true);
@@ -107,7 +106,7 @@ public class GeoPointMapActivityTest {
     public void activityShouldOpenErrorDialogIfLocationIsUnavailable() {
         activityController.create();
 
-        // Create should prepare map async; onClientStartWill start getLocation monitoring.
+        // Create should prepare map async; onClientStartWill start location monitoring.
         // Whichever happens second will pass forward to upMyLocationOverlayLayers.
         when(locationClient.isMonitoringLocation()).thenReturn(true);
         activity.setMapReady(true);

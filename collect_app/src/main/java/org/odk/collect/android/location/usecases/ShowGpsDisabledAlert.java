@@ -27,7 +27,7 @@ public class ShowGpsDisabledAlert {
         this.activity = activity;
     }
 
-    public void show(Object __) {
+    public void show(@SuppressWarnings("unused") Object __) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);
 
         alertDialogBuilder.setMessage(activity.getString(R.string.gps_enable_message))

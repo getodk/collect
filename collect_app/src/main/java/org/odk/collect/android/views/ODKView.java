@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -271,35 +272,47 @@ public class ODKView extends ScrollView implements OnLongClickListener {
      * // * Add a TextView containing the hierarchy of groups to which the question belongs. //
      */
     private void addGroupText(FormEntryCaption[] groups) {
-        StringBuilder s = new StringBuilder("");
-        String t;
-        int i;
-        // list all groups in one string
-        for (FormEntryCaption g : groups) {
-            i = g.getMultiplicity() + 1;
-            t = g.getLongText();
-            if (t != null) {
-                s.append(t);
-                if (g.repeats() && i > 0) {
-                    s.append(" (")
-                            .append(i)
-                            .append(")");
-                }
-                s.append(" > ");
-            }
-        }
+        String path = getGroupsPath(groups);
 
         // build view
-        if (s.length() > 0) {
+        if (!path.isEmpty()) {
             TextView tv = new TextView(getContext());
-            tv.setText(s.substring(0, s.length() - 3));
-            int questionFontsize = Collect.getQuestionFontsize();
-            tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, questionFontsize - 4);
+            tv.setText(path);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Collect.getQuestionFontsize() - 4);
             tv.setPadding(0, 0, 0, 5);
             view.addView(tv, layout);
         }
     }
 
+    @NonNull
+    public static String getGroupsPath(FormEntryCaption[] groups) {
+        StringBuilder path = new StringBuilder("");
+        if (groups != null) {
+            String longText;
+            int multiplicity;
+            int index = 1;
+            // list all groups in one string
+            for (FormEntryCaption group : groups) {
+                multiplicity = group.getMultiplicity() + 1;
+                longText = group.getLongText();
+                if (longText != null) {
+                    path.append(longText);
+                    if (group.repeats() && multiplicity > 0) {
+                        path
+                                .append(" (")
+                                .append(multiplicity)
+                                .append(")");
+                    }
+                    if (index < groups.length) {
+                        path.append(" > ");
+                    }
+                    index++;
+                }
+            }
+        }
+
+        return path.toString();
+    }
 
     public void setFocus(Context context) {
         if (widgets.size() > 0) {
@@ -319,6 +332,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                 if (binaryWidget.isWaitingForData()) {
                     try {
                         binaryWidget.setBinaryData(answer);
+                        binaryWidget.cancelWaitingForData();
                     } catch (Exception e) {
                         Timber.e(e);
                         ToastUtils.showLongToast(getContext().getString(R.string.error_attaching_binary_file,

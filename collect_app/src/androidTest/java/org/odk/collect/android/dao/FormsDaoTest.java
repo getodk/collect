@@ -17,6 +17,7 @@
 package org.odk.collect.android.dao;
 
 import android.database.Cursor;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.After;
@@ -55,7 +56,7 @@ public class FormsDaoTest {
     public void getAllFormsCursorTest() {
         Cursor cursor = formsDao.getFormsCursor();
         List<Form> forms = formsDao.getFormsFromCursor(cursor);
-        assertEquals(6, forms.size());
+        assertEquals(7, forms.size());
 
         assertEquals("Biggest N of Set", forms.get(0).getDisplayName());
         assertEquals("Added on Wed, Feb 22, 2017 at 15:21", forms.get(0).getDisplaySubtext());
@@ -80,7 +81,7 @@ public class FormsDaoTest {
     public void getFormsCursorForFormIdTest() {
         Cursor cursor = formsDao.getFormsCursorForFormId("Birds");
         List<Form> forms = formsDao.getFormsFromCursor(cursor);
-        assertEquals(1, forms.size());
+        assertEquals(2, forms.size());
 
         assertEquals("Birds", forms.get(0).getDisplayName());
         assertEquals("Added on Wed, Feb 22, 2017 at 17:53", forms.get(0).getDisplaySubtext());
@@ -90,7 +91,7 @@ public class FormsDaoTest {
     public void getFormsCursorTest() {
         Cursor cursor = formsDao.getFormsCursor(null, null, null, null);
         List<Form> forms = formsDao.getFormsFromCursor(cursor);
-        assertEquals(6, forms.size());
+        assertEquals(7, forms.size());
 
         assertEquals("Biggest N of Set", forms.get(0).getDisplayName());
         assertEquals("Added on Wed, Feb 22, 2017 at 15:21", forms.get(0).getDisplaySubtext());
@@ -110,11 +111,14 @@ public class FormsDaoTest {
         assertEquals("sample", forms.get(5).getDisplayName());
         assertEquals("Added on Wed, Feb 22, 2017 at 17:55", forms.get(5).getDisplaySubtext());
 
+        assertEquals("Birds", forms.get(6).getDisplayName());
+        assertEquals("Added on Wed, Feb 22, 2017 at 17:53", forms.get(6).getDisplaySubtext());
+
         String sortOrder = FormsProviderAPI.FormsColumns.DISPLAY_NAME + " COLLATE NOCASE DESC";
 
         cursor = formsDao.getFormsCursor(null, null, null, sortOrder);
         forms = formsDao.getFormsFromCursor(cursor);
-        assertEquals(6, forms.size());
+        assertEquals(7, forms.size());
 
         assertEquals("Widgets", forms.get(0).getDisplayName());
         assertEquals("Added on Wed, Feb 22, 2017 at 17:55", forms.get(0).getDisplaySubtext());
@@ -131,8 +135,11 @@ public class FormsDaoTest {
         assertEquals("Birds", forms.get(4).getDisplayName());
         assertEquals("Added on Wed, Feb 22, 2017 at 17:53", forms.get(4).getDisplaySubtext());
 
-        assertEquals("Biggest N of Set", forms.get(5).getDisplayName());
-        assertEquals("Added on Wed, Feb 22, 2017 at 15:21", forms.get(5).getDisplaySubtext());
+        assertEquals("Birds", forms.get(5).getDisplayName());
+        assertEquals("Added on Wed, Feb 22, 2017 at 17:53", forms.get(5).getDisplaySubtext());
+
+        assertEquals("Biggest N of Set", forms.get(6).getDisplayName());
+        assertEquals("Added on Wed, Feb 22, 2017 at 15:21", forms.get(6).getDisplaySubtext());
 
 
         String selection = FormsProviderAPI.FormsColumns.DISPLAY_NAME + "=?";
@@ -187,6 +194,12 @@ public class FormsDaoTest {
         assertEquals("Widgets2", forms.get(0).getJrFormId());
     }
 
+    @Test
+    public void getFormMediaPathTest() {
+        String mediaPath = formsDao.getFormMediaPath("Birds", "4");
+        assertEquals(Collect.FORMS_PATH + "/Birds_4-media", mediaPath);
+    }
+
     private void fillDatabase() throws IOException {
         assertTrue(new File(Collect.FORMS_PATH + "/Biggest N of Set.xml").createNewFile());
         Form form1 = new Form.Builder()
@@ -206,6 +219,7 @@ public class FormsDaoTest {
                 .displayName("Birds")
                 .displaySubtext("Added on Wed, Feb 22, 2017 at 17:53")
                 .jrFormId("Birds")
+                .jrVersion("3")
                 .date(1487782404899L)
                 .formMediaPath(Collect.FORMS_PATH + "/Birds-media")
                 .formFilePath(Collect.FORMS_PATH + "/Birds.xml")
@@ -265,6 +279,20 @@ public class FormsDaoTest {
                 .build();
 
         formsDao.saveForm(formsDao.getValuesFromFormObject(form6));
+
+        assertTrue(new File(Collect.FORMS_PATH + "/Birds_4.xml").createNewFile());
+        Form form7 = new Form.Builder()
+                .displayName("Birds")
+                .displaySubtext("Added on Wed, Feb 22, 2017 at 17:53")
+                .jrFormId("Birds")
+                .jrVersion("4")
+                .date(1512390303610L)
+                .formMediaPath(Collect.FORMS_PATH + "/Birds_4-media")
+                .formFilePath(Collect.FORMS_PATH + "/Birds_4.xml")
+                .jrCacheFilePath(Collect.ODK_ROOT + "/.cache/4cd980d50f884362afba842cbff3a775.formdef")
+                .build();
+
+        formsDao.saveForm(formsDao.getValuesFromFormObject(form7));
     }
 
     @After
@@ -279,7 +307,7 @@ public class FormsDaoTest {
                 ResetUtility.ResetAction.RESET_CACHE, ResetUtility.ResetAction.RESET_OSM_DROID
         );
 
-        List<Integer> failedResetActions = new ResetUtility().reset(resetActions);
+        List<Integer> failedResetActions = new ResetUtility().reset(InstrumentationRegistry.getTargetContext(), resetActions);
         assertEquals(0, failedResetActions.size());
     }
 }

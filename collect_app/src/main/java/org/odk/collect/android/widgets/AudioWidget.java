@@ -79,84 +79,11 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
 
         captureButton = getSimpleButton(getContext().getString(R.string.capture_audio), R.id.capture_audio);
         captureButton.setEnabled(!prompt.isReadOnly());
-        captureButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(this, "captureButton", "click",
-                                getFormEntryPrompt().getIndex());
-                Intent i = new Intent(
-                        android.provider.MediaStore.Audio.Media.RECORD_SOUND_ACTION);
-                i.putExtra(
-                        android.provider.MediaStore.EXTRA_OUTPUT,
-                        android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-                                .toString());
-                try {
-                    waitForData();
-                    ((Activity) getContext()).startActivityForResult(i,
-                            RequestCodes.AUDIO_CAPTURE);
-                } catch (ActivityNotFoundException e) {
-                    Toast.makeText(
-                            getContext(),
-                            getContext().getString(R.string.activity_not_found,
-                                    "audio capture"), Toast.LENGTH_SHORT)
-                            .show();
-                    cancelWaitingForData();
-                }
-
-            }
-        });
 
         chooseButton = getSimpleButton(getContext().getString(R.string.choose_sound), R.id.choose_sound);
         chooseButton.setEnabled(!prompt.isReadOnly());
-        chooseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(this, "chooseButton", "click",
-                                getFormEntryPrompt().getIndex());
-                Intent i = new Intent(Intent.ACTION_GET_CONTENT);
-                i.setType("audio/*");
-                try {
-                    waitForData();
-                    ((Activity) getContext()).startActivityForResult(i,
-                            RequestCodes.AUDIO_CHOOSER);
-                } catch (ActivityNotFoundException e) {
-                    Toast.makeText(
-                            getContext(),
-                            getContext().getString(R.string.activity_not_found,
-                                    "choose audio"), Toast.LENGTH_SHORT).show();
-                    cancelWaitingForData();
-                }
-
-            }
-        });
 
         playButton = getSimpleButton(getContext().getString(R.string.play_audio), R.id.play_audio);
-        playButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(this, "playButton", "click",
-                                getFormEntryPrompt().getIndex());
-                Intent i = new Intent("android.intent.action.VIEW");
-                File f = new File(getInstanceFolder() + File.separator
-                        + binaryName);
-                i.setDataAndType(Uri.fromFile(f), "audio/*");
-                try {
-                    getContext().startActivity(i);
-                } catch (ActivityNotFoundException e) {
-                    Toast.makeText(
-                            getContext(),
-                            getContext().getString(R.string.activity_not_found,
-                                    "play audio"), Toast.LENGTH_SHORT).show();
-                }
-
-            }
-        });
 
         // retrieve answer from data model and update ui
         binaryName = prompt.getAnswerText();
@@ -255,8 +182,6 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
         } else {
             Timber.e("Inserting Audio file FAILED");
         }
-
-        cancelWaitingForData();
     }
 
     private String getSourcePathFromUri(@NonNull Uri uri) {
@@ -290,5 +215,84 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
         captureButton.cancelLongPress();
         chooseButton.cancelLongPress();
         playButton.cancelLongPress();
+    }
+
+    @Override
+    public void onButtonClick(int buttonId) {
+        switch (buttonId) {
+            case R.id.capture_audio:
+                captureAudio();
+                break;
+            case R.id.choose_sound:
+                chooseSound();
+                break;
+            case R.id.play_audio:
+                playAudioFile();
+                break;
+        }
+    }
+
+    private void captureAudio() {
+        Collect.getInstance()
+                .getActivityLogger()
+                .logInstanceAction(this, "captureButton", "click",
+                        getFormEntryPrompt().getIndex());
+        Intent i = new Intent(
+                android.provider.MediaStore.Audio.Media.RECORD_SOUND_ACTION);
+        i.putExtra(
+                android.provider.MediaStore.EXTRA_OUTPUT,
+                android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+                        .toString());
+        try {
+            waitForData();
+            ((Activity) getContext()).startActivityForResult(i,
+                    RequestCodes.AUDIO_CAPTURE);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(
+                    getContext(),
+                    getContext().getString(R.string.activity_not_found,
+                            "audio capture"), Toast.LENGTH_SHORT)
+                    .show();
+            cancelWaitingForData();
+        }
+    }
+
+    private void chooseSound() {
+        Collect.getInstance()
+                .getActivityLogger()
+                .logInstanceAction(this, "chooseButton", "click",
+                        getFormEntryPrompt().getIndex());
+        Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+        i.setType("audio/*");
+        try {
+            waitForData();
+            ((Activity) getContext()).startActivityForResult(i,
+                    RequestCodes.AUDIO_CHOOSER);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(
+                    getContext(),
+                    getContext().getString(R.string.activity_not_found,
+                            "choose audio"), Toast.LENGTH_SHORT).show();
+            cancelWaitingForData();
+        }
+    }
+
+    private void playAudioFile() {
+        Collect.getInstance()
+                .getActivityLogger()
+                .logInstanceAction(this, "playButton", "click",
+                        getFormEntryPrompt().getIndex());
+        Intent i = new Intent("android.intent.action.VIEW");
+        File f = new File(getInstanceFolder() + File.separator
+                + binaryName);
+        i.setDataAndType(Uri.fromFile(f), "audio/*");
+        try {
+            getContext().startActivity(i);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(
+                    getContext(),
+                    getContext().getString(R.string.activity_not_found,
+                            "play audio"), Toast.LENGTH_SHORT).show();
+        }
     }
 }

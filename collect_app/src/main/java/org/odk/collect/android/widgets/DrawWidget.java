@@ -75,16 +75,6 @@ public class DrawWidget extends QuestionWidget implements BaseImageWidget {
 
         drawButton = getSimpleButton(getContext().getString(R.string.draw_image));
         drawButton.setEnabled(!prompt.isReadOnly());
-        drawButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(this, "drawButton", "click",
-                                getFormEntryPrompt().getIndex());
-                launchDrawActivity();
-            }
-        });
 
         // finish complex layout
         LinearLayout answerLayout = new LinearLayout(getContext());
@@ -223,8 +213,6 @@ public class DrawWidget extends QuestionWidget implements BaseImageWidget {
         } else {
             Timber.e("NO IMAGE EXISTS at: %s", newImage.getAbsolutePath());
         }
-
-        cancelWaitingForData();
     }
 
     @Override
@@ -250,5 +238,14 @@ public class DrawWidget extends QuestionWidget implements BaseImageWidget {
         if (imageView != null) {
             imageView.cancelLongPress();
         }
+    }
+
+    @Override
+    public void onButtonClick(int buttonId) {
+        Collect.getInstance()
+                .getActivityLogger()
+                .logInstanceAction(this, "drawButton", "click",
+                        getFormEntryPrompt().getIndex());
+        launchDrawActivity();
     }
 }

@@ -73,16 +73,6 @@ public class SignatureWidget extends QuestionWidget implements BaseImageWidget {
 
         signButton = getSimpleButton(getContext().getString(R.string.sign_button));
         signButton.setEnabled(!prompt.isReadOnly());
-        signButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(this, "signButton", "click",
-                                getFormEntryPrompt().getIndex());
-                launchSignatureActivity();
-            }
-        });
 
         // finish complex layout
         LinearLayout answerLayout = new LinearLayout(getContext());
@@ -218,8 +208,6 @@ public class SignatureWidget extends QuestionWidget implements BaseImageWidget {
         } else {
             Timber.e("NO IMAGE EXISTS at: %s", newImage.getAbsolutePath());
         }
-
-        cancelWaitingForData();
     }
 
     @Override
@@ -245,5 +233,14 @@ public class SignatureWidget extends QuestionWidget implements BaseImageWidget {
         if (imageView != null) {
             imageView.cancelLongPress();
         }
+    }
+
+    @Override
+    public void onButtonClick(int buttonId) {
+        Collect.getInstance()
+                .getActivityLogger()
+                .logInstanceAction(this, "signButton", "click",
+                        getFormEntryPrompt().getIndex());
+        launchSignatureActivity();
     }
 }

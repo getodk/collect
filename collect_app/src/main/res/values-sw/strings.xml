@@ -235,4 +235,5 @@
   <string name="analytics">Kusanya taarifa ya matumizi ya wasiojulikana</string>
   <string name="select_all">Chagua Zote</string>
   <string name="reset_settings_dialog_title">Chagua kipi cha kurekebisha</string>
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
 </resources>

@@ -25,7 +25,6 @@ import android.text.method.TextKeyListener;
 import android.text.method.TextKeyListener.Capitalize;
 import android.util.TypedValue;
 import android.view.KeyEvent;
-import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -136,58 +135,11 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
             answer.setEnabled(false);
         }
 
-        String exSpec = prompt.getAppearanceHint().replaceFirst("^ex[:]", "");
-        final String intentName = ExternalAppsUtils.extractIntentName(exSpec);
-        final Map<String, String> exParams = ExternalAppsUtils.extractParameters(exSpec);
-        final String buttonText;
-        final String errorString;
         String v = getFormEntryPrompt().getSpecialFormQuestionText("buttonText");
-        buttonText = (v != null) ? v : context.getString(R.string.launch_app);
-        v = getFormEntryPrompt().getSpecialFormQuestionText("noAppErrorString");
-        errorString = (v != null) ? v : context.getString(R.string.no_app);
+        String buttonText = (v != null) ? v : context.getString(R.string.launch_app);
 
         launchIntentButton = getSimpleButton(buttonText);
         launchIntentButton.setEnabled(!getFormEntryPrompt().isReadOnly());
-        launchIntentButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(intentName);
-                if (activityAvailability.isActivityAvailable(i)) {
-                    try {
-                        ExternalAppsUtils.populateParameters(i, exParams,
-                                getFormEntryPrompt().getIndex().getReference());
-
-                        waitForData();
-                        fireActivity(i);
-
-                    } catch (ExternalParamsException e) {
-                        Timber.e(e);
-                        onException(e.getMessage());
-                    }
-                } else {
-                    onException(errorString);
-                }
-            }
-
-            private void onException(String toastText) {
-                hasExApp = false;
-                if (!getFormEntryPrompt().isReadOnly()) {
-                    answer.setBackground(textBackground);
-                    answer.setFocusable(true);
-                    answer.setFocusableInTouchMode(true);
-                    answer.setEnabled(true);
-                }
-                launchIntentButton.setEnabled(false);
-                launchIntentButton.setFocusable(false);
-                cancelWaitingForData();
-
-                Toast.makeText(getContext(),
-                        toastText, Toast.LENGTH_SHORT)
-                        .show();
-                ExStringWidget.this.answer.requestFocus();
-                Timber.e(toastText);
-            }
-        });
 
         // finish complex layout
         LinearLayout answerLayout = new LinearLayout(getContext());
@@ -225,8 +177,6 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
     public void setBinaryData(Object answer) {
         StringData stringData = ExternalAppsUtils.asStringData(answer);
         this.answer.setText(stringData == null ? null : stringData.getValue().toString());
-
-        cancelWaitingForData();
     }
 
     @Override
@@ -289,5 +239,51 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
         }
 
         this.activityAvailability = activityUtilProvider.provide();
+    }
+
+    @Override
+    public void onButtonClick(int buttonId) {
+        String exSpec = getFormEntryPrompt().getAppearanceHint().replaceFirst("^ex[:]", "");
+        final String intentName = ExternalAppsUtils.extractIntentName(exSpec);
+        final Map<String, String> exParams = ExternalAppsUtils.extractParameters(exSpec);
+        final String errorString;
+        String v = getFormEntryPrompt().getSpecialFormQuestionText("noAppErrorString");
+        errorString = (v != null) ? v : getContext().getString(R.string.no_app);
+
+        Intent i = new Intent(intentName);
+        if (activityAvailability.isActivityAvailable(i)) {
+            try {
+                ExternalAppsUtils.populateParameters(i, exParams,
+                        getFormEntryPrompt().getIndex().getReference());
+
+                waitForData();
+                fireActivity(i);
+
+            } catch (ExternalParamsException e) {
+                Timber.e(e);
+                onException(e.getMessage());
+            }
+        } else {
+            onException(errorString);
+        }
+    }
+
+    private void onException(String toastText) {
+        hasExApp = false;
+        if (!getFormEntryPrompt().isReadOnly()) {
+            answer.setBackground(textBackground);
+            answer.setFocusable(true);
+            answer.setFocusableInTouchMode(true);
+            answer.setEnabled(true);
+        }
+        launchIntentButton.setEnabled(false);
+        launchIntentButton.setFocusable(false);
+        cancelWaitingForData();
+
+        Toast.makeText(getContext(),
+                toastText, Toast.LENGTH_SHORT)
+                .show();
+        this.answer.requestFocus();
+        Timber.e(toastText);
     }
 }

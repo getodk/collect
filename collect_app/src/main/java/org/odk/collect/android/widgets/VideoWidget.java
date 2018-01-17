@@ -94,109 +94,11 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
 
         captureButton = getSimpleButton(getContext().getString(R.string.capture_video), R.id.capture_video);
         captureButton.setEnabled(!prompt.isReadOnly());
-        captureButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(VideoWidget.this, "captureButton",
-                                "click", getFormEntryPrompt().getIndex());
-                Intent i = new Intent(
-                        android.provider.MediaStore.ACTION_VIDEO_CAPTURE);
-
-                // Need to have this ugly code to account for
-                // a bug in the Nexus 7 on 4.3 not returning the mediaUri in the data
-                // of the intent - using the MediaStore.EXTRA_OUTPUT to get the data
-                // Have it saving to an intermediate location instead of final destination
-                // to allow the current location to catch issues with the intermediate file
-                Timber.i("The build of this device is %s", MODEL);
-                if (NEXUS7.equals(MODEL) && Build.VERSION.SDK_INT == 18) {
-                    nexus7Uri = getOutputMediaFileUri(MEDIA_TYPE_VIDEO);
-                    i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, nexus7Uri);
-                } else {
-                    i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
-                            Video.Media.EXTERNAL_CONTENT_URI.toString());
-                }
-
-                SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect
-                        .getInstance());
-
-                // request high resolution if configured for that...
-                boolean highResolution = settings.getBoolean(
-                        PreferenceKeys.KEY_HIGH_RESOLUTION,
-                        VideoWidget.DEFAULT_HIGH_RESOLUTION);
-                if (highResolution) {
-                    i.putExtra(android.provider.MediaStore.EXTRA_VIDEO_QUALITY, 1);
-                }
-                try {
-                    waitForData();
-                    ((Activity) getContext()).startActivityForResult(i,
-                            RequestCodes.VIDEO_CAPTURE);
-                } catch (ActivityNotFoundException e) {
-                    Toast.makeText(
-                            getContext(),
-                            getContext().getString(R.string.activity_not_found,
-                                    "capture video"), Toast.LENGTH_SHORT)
-                            .show();
-                    cancelWaitingForData();
-                }
-
-            }
-        });
 
         chooseButton = getSimpleButton(getContext().getString(R.string.choose_video), R.id.choose_video);
         chooseButton.setEnabled(!prompt.isReadOnly());
-        chooseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(VideoWidget.this, "chooseButton",
-                                "click", getFormEntryPrompt().getIndex());
-                Intent i = new Intent(Intent.ACTION_GET_CONTENT);
-                i.setType("video/*");
-                // Intent i =
-                // new Intent(Intent.ACTION_PICK,
-                // android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
-                try {
-                    waitForData();
-                    ((Activity) getContext()).startActivityForResult(i,
-                            RequestCodes.VIDEO_CHOOSER);
-                } catch (ActivityNotFoundException e) {
-                    Toast.makeText(
-                            getContext(),
-                            getContext().getString(R.string.activity_not_found,
-                                    "choose video "), Toast.LENGTH_SHORT)
-                            .show();
-
-                    cancelWaitingForData();
-                }
-
-            }
-        });
 
         playButton = getSimpleButton(getContext().getString(R.string.play_video), R.id.play_video);
-        playButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(VideoWidget.this, "playButton",
-                                "click", getFormEntryPrompt().getIndex());
-                Intent i = new Intent("android.intent.action.VIEW");
-                File f = new File(getInstanceFolder() + File.separator
-                        + binaryName);
-                i.setDataAndType(Uri.fromFile(f), "video/*");
-                try {
-                    getContext().startActivity(i);
-                } catch (ActivityNotFoundException e) {
-                    Toast.makeText(
-                            getContext(),
-                            getContext().getString(R.string.activity_not_found,
-                                    "video video"), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
 
         // retrieve answer from data model and update ui
         binaryName = prompt.getAnswerText();
@@ -342,7 +244,6 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
         }
 
         binaryName = newVideo.getName();
-        cancelWaitingForData();
 
         // Need to have this ugly code to account for
         // a bug in the Nexus 7 on 4.3 not returning the mediaUri in the data
@@ -386,5 +287,110 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
         captureButton.cancelLongPress();
         chooseButton.cancelLongPress();
         playButton.cancelLongPress();
+    }
+
+    @Override
+    public void onButtonClick(int id) {
+        switch (id) {
+            case R.id.capture_video:
+                captureVideo();
+                break;
+            case R.id.choose_video:
+                chooseVideo();
+                break;
+            case R.id.play_video:
+                playVideoFile();
+                break;
+        }
+    }
+
+    private void captureVideo() {
+        Collect.getInstance()
+                .getActivityLogger()
+                .logInstanceAction(this, "captureButton",
+                        "click", getFormEntryPrompt().getIndex());
+        Intent i = new Intent(
+                android.provider.MediaStore.ACTION_VIDEO_CAPTURE);
+
+        // Need to have this ugly code to account for
+        // a bug in the Nexus 7 on 4.3 not returning the mediaUri in the data
+        // of the intent - using the MediaStore.EXTRA_OUTPUT to get the data
+        // Have it saving to an intermediate location instead of final destination
+        // to allow the current location to catch issues with the intermediate file
+        Timber.i("The build of this device is %s", MODEL);
+        if (NEXUS7.equals(MODEL) && Build.VERSION.SDK_INT == 18) {
+            nexus7Uri = getOutputMediaFileUri(MEDIA_TYPE_VIDEO);
+            i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, nexus7Uri);
+        } else {
+            i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
+                    Video.Media.EXTERNAL_CONTENT_URI.toString());
+        }
+
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect
+                .getInstance());
+
+        // request high resolution if configured for that...
+        boolean highResolution = settings.getBoolean(
+                PreferenceKeys.KEY_HIGH_RESOLUTION,
+                VideoWidget.DEFAULT_HIGH_RESOLUTION);
+        if (highResolution) {
+            i.putExtra(android.provider.MediaStore.EXTRA_VIDEO_QUALITY, 1);
+        }
+        try {
+            waitForData();
+            ((Activity) getContext()).startActivityForResult(i,
+                    RequestCodes.VIDEO_CAPTURE);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(
+                    getContext(),
+                    getContext().getString(R.string.activity_not_found,
+                            "capture video"), Toast.LENGTH_SHORT)
+                    .show();
+            cancelWaitingForData();
+        }
+    }
+
+    private void chooseVideo() {
+        Collect.getInstance()
+                .getActivityLogger()
+                .logInstanceAction(this, "chooseButton",
+                        "click", getFormEntryPrompt().getIndex());
+        Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+        i.setType("video/*");
+        // Intent i =
+        // new Intent(Intent.ACTION_PICK,
+        // android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
+        try {
+            waitForData();
+            ((Activity) getContext()).startActivityForResult(i,
+                    RequestCodes.VIDEO_CHOOSER);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(
+                    getContext(),
+                    getContext().getString(R.string.activity_not_found,
+                            "choose video "), Toast.LENGTH_SHORT)
+                    .show();
+
+            cancelWaitingForData();
+        }
+    }
+
+    private void playVideoFile() {
+        Collect.getInstance()
+                .getActivityLogger()
+                .logInstanceAction(this, "playButton",
+                        "click", getFormEntryPrompt().getIndex());
+        Intent i = new Intent("android.intent.action.VIEW");
+        File f = new File(getInstanceFolder() + File.separator
+                + binaryName);
+        i.setDataAndType(Uri.fromFile(f), "video/*");
+        try {
+            getContext().startActivity(i);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(
+                    getContext(),
+                    getContext().getString(R.string.activity_not_found,
+                            "video video"), Toast.LENGTH_SHORT).show();
+        }
     }
 }

@@ -20,7 +20,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -70,14 +69,6 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
         answerDisplay = getCenteredAnswerTextView();
 
         createTraceButton = getSimpleButton(getContext().getString(R.string.get_trace));
-        createTraceButton.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                waitForData();
-                startGeoTraceActivity();
-            }
-        });
 
         if (prompt.isReadOnly()) {
             createTraceButton.setEnabled(false);
@@ -130,7 +121,6 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
     @Override
     public void setBinaryData(Object answer) {
         answerDisplay.setText(answer.toString());
-        cancelWaitingForData();
     }
 
     @Override
@@ -158,5 +148,11 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
     public void setOnLongClickListener(OnLongClickListener l) {
         createTraceButton.setOnLongClickListener(l);
         answerDisplay.setOnLongClickListener(l);
+    }
+
+    @Override
+    public void onButtonClick(int buttonId) {
+        waitForData();
+        startGeoTraceActivity();
     }
 }

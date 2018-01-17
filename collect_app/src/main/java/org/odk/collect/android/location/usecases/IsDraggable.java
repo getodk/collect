@@ -18,13 +18,19 @@ public class IsDraggable {
     @NonNull
     private final InitialState initialState;
 
+    @NonNull
+    private final IsReadOnly isReadOnly;
+
     @Inject
-    IsDraggable(@NonNull InitialState initialState) {
+    IsDraggable(@NonNull InitialState initialState,
+                @NonNull IsReadOnly isReadOnly) {
         this.initialState = initialState;
+        this.isReadOnly = isReadOnly;
     }
 
     @NonNull
-    Observable<Boolean> observe() {
-        return initialState.isDraggable();
+    public Observable<Boolean> observe() {
+        return Observable.combineLatest(initialState.isDraggable(), isReadOnly.observe(),
+                (isDraggable, isReadOnly) -> isDraggable && !isReadOnly);
     }
 }

@@ -15,14 +15,22 @@ import io.reactivex.Observable;
 public class InitialLocation {
 
     @NonNull
-    private final InitialState initialState;
+    private final Observable<Optional<LatLng>> observeLocation;
+
+    @NonNull
+    private final Observable<Boolean> observePresence;
 
     @Inject
     InitialLocation(@NonNull InitialState initialState) {
-        this.initialState = initialState;
+        observeLocation = initialState.location();
+        observePresence = observeLocation.map(Optional::isPresent);
     }
 
     public Observable<Optional<LatLng>> observe() {
-        return initialState.location();
+        return observeLocation;
+    }
+
+    public Observable<Boolean> observePresence() {
+        return observePresence;
     }
 }

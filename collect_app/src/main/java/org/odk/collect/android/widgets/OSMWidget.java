@@ -10,7 +10,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -95,8 +94,7 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
         osmFileName = prompt.getAnswerText();
 
         // Setup Launch OpenMapKit Button
-        launchOpenMapKitButton = new Button(getContext());
-        launchOpenMapKitButton.setId(ViewIds.generateViewId());
+        launchOpenMapKitButton = getSimpleButton(ViewIds.generateViewId());
 
         // Button Styling
         if (osmFileName != null) {
@@ -110,25 +108,7 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
         } else {
             launchOpenMapKitButton.setText(getContext().getString(R.string.capture_osm));
         }
-        launchOpenMapKitButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
-        launchOpenMapKitButton.setPadding(20, 20, 20, 20);
         launchOpenMapKitButton.setEnabled(!prompt.isReadOnly());
-        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
-        params.setMargins(35, 30, 30, 35);
-        launchOpenMapKitButton.setLayoutParams(params);
-
-        // Launch OpenMapKit intent on click
-        launchOpenMapKitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                launchOpenMapKitButton.setBackgroundColor(OSM_BLUE);
-                Collect.getInstance().getActivityLogger().logInstanceAction(this,
-                        "launchOpenMapKitButton",
-                        "click", getFormEntryPrompt().getIndex());
-                errorTextView.setVisibility(View.GONE);
-                launchOpenMapKit();
-            }
-        });
 
         osmFileNameHeaderTextView = new TextView(context);
         osmFileNameHeaderTextView.setId(ViewIds.generateViewId());
@@ -147,6 +127,8 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
         } else {
             osmFileNameHeaderTextView.setVisibility(View.GONE);
         }
+        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
+        params.setMargins(35, 30, 30, 35);
         osmFileNameTextView.setLayoutParams(params);
 
 
@@ -231,8 +213,6 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
         osmFileNameTextView.setText(osmFileName);
         osmFileNameHeaderTextView.setVisibility(View.VISIBLE);
         osmFileNameTextView.setVisibility(View.VISIBLE);
-
-        cancelWaitingForData();
     }
 
     @Override
@@ -255,6 +235,16 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
         InputMethodManager inputManager = (InputMethodManager) context
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
+    }
+
+    @Override
+    public void onButtonClick(int buttonId) {
+        launchOpenMapKitButton.setBackgroundColor(OSM_BLUE);
+        Collect.getInstance().getActivityLogger().logInstanceAction(this,
+                "launchOpenMapKitButton",
+                "click", getFormEntryPrompt().getIndex());
+        errorTextView.setVisibility(View.GONE);
+        launchOpenMapKit();
     }
 
     @Override

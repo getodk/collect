@@ -11,7 +11,7 @@ import javax.inject.Inject;
 public class ToastUtil {
 
     @Inject
-    public ToastUtil() {
+    ToastUtil() {
 
     }
 

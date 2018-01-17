@@ -34,9 +34,9 @@ public abstract class FileManagerFragment extends AppListFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.tab_layout, container, false);
-        deleteButton = (Button) rootView.findViewById(R.id.delete_button);
+        deleteButton = rootView.findViewById(R.id.delete_button);
         deleteButton.setText(getString(R.string.delete_file));
-        toggleButton = (Button) rootView.findViewById(R.id.toggle_button);
+        toggleButton = rootView.findViewById(R.id.toggle_button);
 
         setHasOptionsMenu(true);
         return rootView;

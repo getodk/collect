@@ -97,9 +97,7 @@ public class ZoomDialog {
         zoomPointButton.setTextColor(markedLocation != null ? TEXT_ENABLED_COLOR : TEXT_DISABLED_COLOR);
 
         if (markedLocation != null) {
-            zoomPointButton.setOnClickListener(__ -> {
-                zoomToLocation(markedLocation);
-            });
+            zoomPointButton.setOnClickListener(__ -> zoomToLocation(markedLocation));
         }
     }
 

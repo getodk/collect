@@ -48,8 +48,8 @@ import static org.odk.collect.android.preferences.AdminKeys.KEY_IMPORT_SETTINGS;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_JUMP_TO;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_MOVING_BACKWARDS;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_SAVE_MID;
-import static org.odk.collect.android.preferences.AdminKeys.KEY_CONSTRAINT_BEHAVIOR;
 import static org.odk.collect.android.preferences.AdminKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM;
+import static org.odk.collect.android.preferences.PreferenceKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE;
 
 public class AdminPreferencesFragment extends BasePreferenceFragment implements Preference.OnPreferenceClickListener {
 
@@ -89,8 +89,8 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
 
                 LayoutInflater factory = LayoutInflater.from(getActivity());
                 final View dialogView = factory.inflate(R.layout.password_dialog_layout, null);
-                final EditText passwordEditText = (EditText) dialogView.findViewById(R.id.pwd_field);
-                final CheckBox passwordCheckBox = (CheckBox) dialogView.findViewById(R.id.checkBox2);
+                final EditText passwordEditText = dialogView.findViewById(R.id.pwd_field);
+                final CheckBox passwordCheckBox = dialogView.findViewById(R.id.checkBox2);
                 passwordCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -207,8 +207,6 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
             prefMgr.setSharedPreferencesMode(MODE_WORLD_READABLE);
 
             addPreferencesFromResource(R.xml.user_settings_access_preferences);
-
-            findPreference(KEY_CONSTRAINT_BEHAVIOR).setEnabled((Boolean) AdminSharedPreferences.getInstance().get(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
         }
 
         @Override
@@ -271,7 +269,7 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
             AdminSharedPreferences.getInstance().save(KEY_EDIT_SAVED, false);
             AdminSharedPreferences.getInstance().save(KEY_SAVE_MID, false);
             AdminSharedPreferences.getInstance().save(KEY_JUMP_TO, false);
-            AdminSharedPreferences.getInstance().save(KEY_CONSTRAINT_BEHAVIOR, true);
+            GeneralSharedPreferences.getInstance().save(PreferenceKeys.KEY_CONSTRAINT_BEHAVIOR, CONSTRAINT_BEHAVIOR_ON_SWIPE);
 
             findPreference(KEY_JUMP_TO).setEnabled(false);
             findPreference(KEY_SAVE_MID).setEnabled(false);

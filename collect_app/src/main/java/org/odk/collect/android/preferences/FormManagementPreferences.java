@@ -22,6 +22,7 @@ import android.view.View;
 
 import org.odk.collect.android.R;
 
+import static org.odk.collect.android.preferences.AdminKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOSEND;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_CONSTRAINT_BEHAVIOR;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_IMAGE_SIZE;
@@ -70,6 +71,7 @@ public class FormManagementPreferences extends BasePreferenceFragment {
                             return true;
                         }
                     });
+            pref.setEnabled((Boolean) AdminSharedPreferences.getInstance().get(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
         }
     }
 

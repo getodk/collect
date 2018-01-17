@@ -417,8 +417,8 @@
   <string name="exit">Avsluta</string>
   <string name="instance_scan_completed">Avslutat sökning</string>
   <string name="instance_scan_count">%1$d formulär tillagda.</string>
-  <string name="instance_sync">Importera sparade formulär som avslutade</string>
-  <string name="instance_sync_summary">Importera sparade formulär från mappen \'instances\'</string>
+  <string name="sort_by_name_asc">Namn, A-Ö</string>
+  <string name="sort_by_name_desc">Namn, Ö-A</string>
   <string name="sort_the_list">Sortera listan</string>
   <string name="request_permissions_google_account">ODK Collect behöver få tillgång till ditt Google-konto för att hämta tomma formulär och ladda upp ifyllda formulär.</string>
   <string name="filter_the_list">Filtrera listan</string>
@@ -453,6 +453,7 @@
   <string name="qrcode_with_server_password">QR-koden innehåller ditt serverlösenord. \n(Knacka för att ta bort lösenordet)</string>
   <string name="import_export_settings">Import/export inställningar</string>
   <string name="qrcode_scanner_prompt">Placera QR-koden innanför rektangeln</string>
+  <string name="barcode_scanner_prompt">Placera streckkoden innanför rektangeln</string>
   <string name="server_password">Serverlösenord</string>
   <string name="include_password_dialog">Koden innehåller lösenorden</string>
   <string name="generate">Generera</string>
@@ -479,6 +480,7 @@
   <string name="form_submission_category">Formulärinskickning</string>
   <string name="form_filling_category">Formulärifyllnad</string>
   <string name="high_resolution_title">Högupplöst video</string>
+  <string name="image_size_title">Bildstorlek</string>
   <string name="form_import_category">Importera formulär</string>
   <string name="user_and_device_identity_title">Användar- och enhetsidentitet</string>
   <string name="constraint_behavior_title">Hantering av restriktioner</string>
@@ -488,4 +490,13 @@
   <string name="form_entry">Avmarkera för att dölja i formulärinmatning</string>
   <string name="use_device_language">Använd enhetens språk</string>
   <string name="not_supported_offline_layer_format">Det valda offline-lagret använder PBF-formatet som inte stöds!</string>
+  <string name="invalid_email_address">Ogiltig e-postadress!</string>
+  <string name="sort_by">Sorteringsordning</string>
+  <string name="server">Server</string>
+  <string name="image_size_large">Stor (3 072 px)</string>
+  <string name="image_size_medium">Medium (2 048 px)</string>
+  <string name="image_size_small">Liten (1 024 px)</string>
+  <string name="image_size_very_small">Mycket liten (640 px)</string>
+  <string name="image_size_original">Ursprunglig storlek i kamera (standard)</string>
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
 </resources>
