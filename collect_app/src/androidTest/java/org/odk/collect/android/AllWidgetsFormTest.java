@@ -204,8 +204,10 @@ public class AllWidgetsFormTest {
 
     //region Widget tests.
 
+    // Screengrab.screenshot("image-name") captures screenshot of widgets.
+
     public void skipInitialLabel() {
-        Screengrab.screenshot("first");
+
         onView(withText(startsWith("This form"))).perform(swipeLeft());
 
     }
@@ -215,6 +217,7 @@ public class AllWidgetsFormTest {
 
         onVisibleEditText().perform(replaceText(stringWidgetText));
 
+        // captures screenshot of string widget
         Screengrab.screenshot("string-input");
 
         openWidgetList();
@@ -256,6 +259,7 @@ public class AllWidgetsFormTest {
     }
 
     public void testExStringWidget() {
+
         // Manually input the value:
         String exStringWidgetFirstText = randomString();
 
@@ -265,10 +269,10 @@ public class AllWidgetsFormTest {
         onView(withText("Launch")).perform(click());
         onVisibleEditText().perform(replaceText(exStringWidgetFirstText));
 
-        Screengrab.screenshot("ex-string");
-
         openWidgetList();
         onView(withText("Ex string widget")).perform(click());
+
+        Screengrab.screenshot("ex-string");
 
         onVisibleEditText().check(matches(withText(exStringWidgetFirstText)));
 
@@ -410,7 +414,6 @@ public class AllWidgetsFormTest {
 
         onVisibleEditText().check(matches(withText(exDecimalFirstValue)));
 
-        // Replace with Intent value:
         String exDecimalSecondValue = randomDecimalString();
 
         Intent stringIntent = new Intent();
@@ -473,6 +476,7 @@ public class AllWidgetsFormTest {
 
     public void testImageWidget() {
 
+        // captures screenshot of image widget
         Screengrab.screenshot("image-widget");
 
         onView(withText("Image widget")).perform(swipeLeft());
@@ -480,6 +484,7 @@ public class AllWidgetsFormTest {
 
     public void testSelfieWidget() {
 
+        // captures screenshot of selfie widget
         Screengrab.screenshot("selfie-widget");
 
         onView(withText("Selfie widget")).perform(swipeLeft());
@@ -487,6 +492,7 @@ public class AllWidgetsFormTest {
 
     public void testDrawWidget() {
 
+        // captures screenshot of
         Screengrab.screenshot("draw-widget");
 
         onView(withText("Draw widget")).perform(swipeLeft());
@@ -731,6 +737,7 @@ public class AllWidgetsFormTest {
 
     public void testSpinnerSelectMultiple() {
 
+        //
         Screengrab.screenshot("spinner-select");
 
         onView(withText("Spinner widget: select multiple")).perform(swipeLeft());
@@ -738,6 +745,7 @@ public class AllWidgetsFormTest {
 
     public void testLabelWidget() {
 
+        // captures screenshot of label widget
         Screengrab.screenshot("label-widget");
 
         onView(withText("Label widget")).perform(swipeLeft());

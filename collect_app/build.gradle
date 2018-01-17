@@ -254,7 +254,7 @@ dependencies {
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
-    // Screengrab
+    // Used to generate documentation screenshots.
     androidTestCompile 'tools.fastlane:screengrab:1.1.0'
 
     // Testing-only dependencies
@@ -285,6 +285,7 @@ dependencies {
     androidTestImplementation group: 'com.squareup.okhttp3', name: 'mockwebserver', version: '3.9.0'
 }
 
+// https://stackoverflow.com/questions/37347326/errorconflict-with-dependency-com-google-code-findbugsjsr305#
 android {
     configurations.all {
         resolutionStrategy.force 'com.google.code.findbugs:jsr305:1.3.9'
