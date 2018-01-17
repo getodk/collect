@@ -414,6 +414,7 @@ public class AllWidgetsFormTest {
 
         onVisibleEditText().check(matches(withText(exDecimalFirstValue)));
 
+        // Replace with Intent value:
         String exDecimalSecondValue = randomDecimalString();
 
         Intent stringIntent = new Intent();
@@ -476,7 +477,6 @@ public class AllWidgetsFormTest {
 
     public void testImageWidget() {
 
-        // captures screenshot of image widget
         Screengrab.screenshot("image-widget");
 
         onView(withText("Image widget")).perform(swipeLeft());
@@ -484,7 +484,6 @@ public class AllWidgetsFormTest {
 
     public void testSelfieWidget() {
 
-        // captures screenshot of selfie widget
         Screengrab.screenshot("selfie-widget");
 
         onView(withText("Selfie widget")).perform(swipeLeft());
@@ -492,7 +491,6 @@ public class AllWidgetsFormTest {
 
     public void testDrawWidget() {
 
-        // captures screenshot of
         Screengrab.screenshot("draw-widget");
 
         onView(withText("Draw widget")).perform(swipeLeft());
@@ -737,7 +735,6 @@ public class AllWidgetsFormTest {
 
     public void testSpinnerSelectMultiple() {
 
-        //
         Screengrab.screenshot("spinner-select");
 
         onView(withText("Spinner widget: select multiple")).perform(swipeLeft());
@@ -745,7 +742,6 @@ public class AllWidgetsFormTest {
 
     public void testLabelWidget() {
 
-        // captures screenshot of label widget
         Screengrab.screenshot("label-widget");
 
         onView(withText("Label widget")).perform(swipeLeft());
