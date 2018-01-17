@@ -124,6 +124,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
         mapView.setMultiTouchControls(true);
         mapView.setBuiltInZoomControls(true);
+        mapView.setTilesScaledToDpi(true);    
         mapView.getController().setZoom(zoomLevel);
 
         inflater = this.getLayoutInflater();
