@@ -115,11 +115,13 @@ public class MainMenuActivity extends AppCompatActivity {
         enterDataButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Collect.getInstance().getActivityLogger()
-                        .logAction(this, "fillBlankForm", "click");
-                Intent i = new Intent(getApplicationContext(),
-                        FormChooserList.class);
-                startActivity(i);
+                if (Collect.allowClick()) {
+                    Collect.getInstance().getActivityLogger()
+                            .logAction(this, "fillBlankForm", "click");
+                    Intent i = new Intent(getApplicationContext(),
+                            FormChooserList.class);
+                    startActivity(i);
+                }
             }
         });
 
@@ -129,12 +131,14 @@ public class MainMenuActivity extends AppCompatActivity {
         reviewDataButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Collect.getInstance().getActivityLogger()
-                        .logAction(this, ApplicationConstants.FormModes.EDIT_SAVED, "click");
-                Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
-                i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE,
-                        ApplicationConstants.FormModes.EDIT_SAVED);
-                startActivity(i);
+                if (Collect.allowClick()) {
+                    Collect.getInstance().getActivityLogger()
+                            .logAction(this, ApplicationConstants.FormModes.EDIT_SAVED, "click");
+                    Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
+                    i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE,
+                            ApplicationConstants.FormModes.EDIT_SAVED);
+                    startActivity(i);
+                }
             }
         });
 
@@ -144,11 +148,13 @@ public class MainMenuActivity extends AppCompatActivity {
         sendDataButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Collect.getInstance().getActivityLogger()
-                        .logAction(this, "uploadForms", "click");
-                Intent i = new Intent(getApplicationContext(),
-                        InstanceUploaderList.class);
-                startActivity(i);
+                if (Collect.allowClick()) {
+                    Collect.getInstance().getActivityLogger()
+                            .logAction(this, "uploadForms", "click");
+                    Intent i = new Intent(getApplicationContext(),
+                            InstanceUploaderList.class);
+                    startActivity(i);
+                }
             }
         });
 
@@ -157,12 +163,14 @@ public class MainMenuActivity extends AppCompatActivity {
         viewSentFormsButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Collect.getInstance().getActivityLogger().logAction(this,
-                        ApplicationConstants.FormModes.VIEW_SENT, "click");
-                Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
-                i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE,
-                        ApplicationConstants.FormModes.VIEW_SENT);
-                startActivity(i);
+                if (Collect.allowClick()) {
+                    Collect.getInstance().getActivityLogger().logAction(this,
+                            ApplicationConstants.FormModes.VIEW_SENT, "click");
+                    Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
+                    i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE,
+                            ApplicationConstants.FormModes.VIEW_SENT);
+                    startActivity(i);
+                }
             }
         });
 
@@ -172,27 +180,28 @@ public class MainMenuActivity extends AppCompatActivity {
         getFormsButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Collect.getInstance().getActivityLogger()
-                        .logAction(this, "downloadBlankForms", "click");
-                SharedPreferences sharedPreferences = PreferenceManager
-                        .getDefaultSharedPreferences(MainMenuActivity.this);
-                String protocol = sharedPreferences.getString(
-                        PreferenceKeys.KEY_PROTOCOL, getString(R.string.protocol_odk_default));
-                Intent i = null;
-                if (protocol.equalsIgnoreCase(getString(R.string.protocol_google_sheets))) {
-                    if (PlayServicesUtil.isGooglePlayServicesAvailable(MainMenuActivity.this)) {
-                        i = new Intent(getApplicationContext(),
-                                GoogleDriveActivity.class);
+                if (Collect.allowClick()) {
+                    Collect.getInstance().getActivityLogger()
+                            .logAction(this, "downloadBlankForms", "click");
+                    SharedPreferences sharedPreferences = PreferenceManager
+                            .getDefaultSharedPreferences(MainMenuActivity.this);
+                    String protocol = sharedPreferences.getString(
+                            PreferenceKeys.KEY_PROTOCOL, getString(R.string.protocol_odk_default));
+                    Intent i = null;
+                    if (protocol.equalsIgnoreCase(getString(R.string.protocol_google_sheets))) {
+                        if (PlayServicesUtil.isGooglePlayServicesAvailable(MainMenuActivity.this)) {
+                            i = new Intent(getApplicationContext(),
+                                    GoogleDriveActivity.class);
+                        } else {
+                            PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(MainMenuActivity.this);
+                            return;
+                        }
                     } else {
-                        PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(MainMenuActivity.this);
-                        return;
+                        i = new Intent(getApplicationContext(),
+                                FormDownloadList.class);
                     }
-                } else {
-                    i = new Intent(getApplicationContext(),
-                            FormDownloadList.class);
+                    startActivity(i);
                 }
-                startActivity(i);
-
             }
         });
 
@@ -202,11 +211,13 @@ public class MainMenuActivity extends AppCompatActivity {
         manageFilesButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Collect.getInstance().getActivityLogger()
-                        .logAction(this, "deleteSavedForms", "click");
-                Intent i = new Intent(getApplicationContext(),
-                        FileManagerTabs.class);
-                startActivity(i);
+                if (Collect.allowClick()) {
+                    Collect.getInstance().getActivityLogger()
+                            .logAction(this, "deleteSavedForms", "click");
+                    Intent i = new Intent(getApplicationContext(),
+                            FileManagerTabs.class);
+                    startActivity(i);
+                }
             }
         });
 

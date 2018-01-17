@@ -21,6 +21,7 @@ import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.multidex.MultiDex;
@@ -96,6 +97,7 @@ public class Collect extends Application implements HasActivityInjector {
 
     public static String defaultSysLanguage;
     private static Collect singleton = null;
+    private static long lastClickTime;
 
     @Inject
     protected CookieStore cookieStore;
@@ -350,6 +352,17 @@ public class Collect extends Application implements HasActivityInjector {
     private void reloadSharedPreferences() {
         GeneralSharedPreferences.getInstance().reloadPreferences();
         AdminSharedPreferences.getInstance().reloadPreferences();
+    }
+
+    // Preventing multiple clicks, using threshold of 500 ms
+    public static boolean allowClick() {
+        long elapsedRealtime = SystemClock.elapsedRealtime();
+        boolean allowClick = (lastClickTime == 0 || lastClickTime == elapsedRealtime) // just for tests
+                || elapsedRealtime - lastClickTime > 500;
+        if (allowClick) {
+            lastClickTime = elapsedRealtime;
+        }
+        return allowClick;
     }
 
     @Override
