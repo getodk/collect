@@ -247,6 +247,7 @@ public class SmapTaskListFragment extends ListFragment
     @Override
     public Loader<List<TaskEntry>> onCreateLoader(int id, Bundle args) {
         mTaskLoader = new TaskLoader(getContext());
+        updateAdapter();
         return mTaskLoader;
     }
 

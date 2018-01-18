@@ -91,6 +91,9 @@ public class SmapChartHorizontalBarWidget extends SmapChartWidget {
         chart.setData(data);
         if(!isStacked() && data.getDataSetCount() > 1) {
             chart.groupBars(0f, groupSpace, barSpace); // perform the "explicit" grouping
+        } else {
+            // Show bar bar values inside bar
+            chart.setDrawValueAboveBar(false);
         }
         chart.invalidate();
     }
