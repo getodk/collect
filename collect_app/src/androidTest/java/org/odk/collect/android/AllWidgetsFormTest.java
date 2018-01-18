@@ -655,7 +655,7 @@ public class AllWidgetsFormTest {
                 .perform(swipeLeft());
     }
 
-    public void testEthiopianDateAppearance(){
+    public void testEthiopianDateAppearance() {
 
          Screengrab.screenshot("ethopian");
 
@@ -664,7 +664,7 @@ public class AllWidgetsFormTest {
 
     }
 
-    public void testCopticDateAppearance(){
+    public void testCopticDateAppearance() {
 
         Screengrab.screenshot("coptic");
 
@@ -673,7 +673,7 @@ public class AllWidgetsFormTest {
 
     }
 
-    public void testIslamicDateAppearance(){
+    public void testIslamicDateAppearance() {
 
         Screengrab.screenshot("islamic-date");
 
@@ -904,8 +904,8 @@ public class AllWidgetsFormTest {
     //        return new ActivityResult(RESULT_OK, data);
     //    }
 
-    private String randomIntegerSeparator(){
-        int number=123456;
+    private String randomIntegerSeparator() {
+        int number = 123456;
         NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.US);
         return numberFormat.format(number);
      }
