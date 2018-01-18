@@ -161,7 +161,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 Collect.getInstance().getActivityLogger().logAction(this, "refreshForms", "");
 
                 downloadFormList();
-                filteredFormList.clear();
+                updateAdapter();
                 clearChoices();
             }
         });
