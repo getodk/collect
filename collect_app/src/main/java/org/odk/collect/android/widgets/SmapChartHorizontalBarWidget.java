@@ -97,7 +97,7 @@ public class SmapChartHorizontalBarWidget extends SmapChartWidget {
             // Show bar bar values inside bar
             chart.setDrawValueAboveBar(false);
         }
-        
+
         chart.invalidate();
     }
 
