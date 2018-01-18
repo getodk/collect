@@ -36,6 +36,8 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.R;
+import org.odk.collect.android.views.SmapChartMarker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,6 +97,7 @@ public class SmapChartHorizontalBarWidget extends SmapChartWidget {
             // Show bar bar values inside bar
             chart.setDrawValueAboveBar(false);
         }
+        
         chart.invalidate();
     }
 

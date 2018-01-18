@@ -58,6 +58,7 @@ import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ViewIds;
+import org.odk.collect.android.views.SmapChartMarker;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -85,6 +86,7 @@ public abstract class SmapChartWidget extends QuestionWidget {
     protected List<String> xLabels = null;
     protected List<String> dsLabels = null;
     IAxisValueFormatter formatter = null;
+    SmapChartMarker mv = null;
 
     public SmapChartWidget(Context context, FormEntryPrompt prompt, String appearance) {
         super(context, prompt);
@@ -126,6 +128,7 @@ public abstract class SmapChartWidget extends QuestionWidget {
 
         LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);
+        chart.setPadding(10, 0, 0, 10);
         answerLayout.addView(chart);
         addAnswerView(answerLayout);
     }
