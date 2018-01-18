@@ -34,6 +34,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Locale;
 import java.util.Random;
 
 import tools.fastlane.screengrab.Screengrab;
@@ -132,6 +134,7 @@ public class AllWidgetsFormTest {
         testExPrinterWidget();
 
         testIntegerWidget();
+        testIntegerThousandSeparators();
         testExIntegerWidget();
 
         testDecimalWidget();
@@ -139,6 +142,12 @@ public class AllWidgetsFormTest {
 
         // Doesn't work when sensor isn't available.
         testBearingWidget();
+
+        testRangeIntegerWidget();
+        testRangeVerticalAppearance();
+        testRangeDecimalWidget();
+        testRangeDecimalVertical();
+
 
         testImageWidget();
         testSelfieWidget();
@@ -164,6 +173,10 @@ public class AllWidgetsFormTest {
 
         testDateTimeNoAppearance();
         testDateTimeNoCalendarAppearance();
+
+        testEthiopianDateAppearance();
+        testCopticDateAppearance();
+        testIslamicDateAppearance();
 
         testGeopointNoAppearance();
         testGeopointPlacementMapApperance();
@@ -243,7 +256,7 @@ public class AllWidgetsFormTest {
         onVisibleEditText().check(matches(withText(stringNumberWidgetText)));
 
         onView(withText("String number widget")).perform(swipeLeft());
-        
+
     }
 
     public void testUrlWidget() {
@@ -335,6 +348,21 @@ public class AllWidgetsFormTest {
 
         onView(withText("Integer widget")).perform(swipeLeft());
     }
+
+     public void testIntegerThousandSeparators() {
+          String randomInteger = randomIntegerSeparator();
+          onVisibleEditText().perform(replaceText(randomInteger));
+
+          Screengrab.screenshot("integer-separators");
+
+          openWidgetList();
+          onView(withText("Integer widget with thousands separators")).perform(click());
+
+          onVisibleEditText().check(matches(withText(randomInteger)));
+
+          onView(withText("Integer widget with thousands separators")).perform(swipeLeft());
+
+      }
 
     public void testExIntegerWidget() {
         // Manually input the value:
@@ -475,6 +503,37 @@ public class AllWidgetsFormTest {
         onView(withText("Bearing widget")).perform(swipeLeft());
     }
 
+    public void testRangeIntegerWidget() {
+
+         Screengrab.screenshot("range-integer");
+
+         onView(withText("Range integer widget")).perform(swipeLeft());
+
+    }
+
+    public void testRangeVerticalAppearance() {
+
+         Screengrab.screenshot("range-integer-vertical");
+
+         onView(withText("Range integer widget")).perform(swipeLeft());
+
+    }
+
+    public void testRangeDecimalWidget() {
+
+          Screengrab.screenshot("range-decimal");
+
+          onView(withText("Range decimal widget")).perform(swipeLeft());
+    }
+
+    public void testRangeDecimalVertical() {
+
+          Screengrab.screenshot("range-decimal-vertical");
+
+          onView(withText("Range decimal widget")).perform(swipeLeft());
+
+    }
+
     public void testImageWidget() {
 
         Screengrab.screenshot("image-widget");
@@ -596,6 +655,33 @@ public class AllWidgetsFormTest {
                 .perform(swipeLeft());
     }
 
+    public void testEthiopianDateAppearance(){
+
+         Screengrab.screenshot("ethopian");
+
+         onView(allOf(withText("Ethiopian date widget"), withEffectiveVisibility(VISIBLE)))
+                .perform(swipeLeft());
+
+    }
+
+    public void testCopticDateAppearance(){
+
+        Screengrab.screenshot("coptic");
+
+        onView(allOf(withText("Coptic date widget"), withEffectiveVisibility(VISIBLE)))
+                .perform(swipeLeft());
+
+    }
+
+    public void testIslamicDateAppearance(){
+
+        Screengrab.screenshot("islamic-date");
+
+        onView(allOf(withText("Islamic date widget"), withEffectiveVisibility(VISIBLE)))
+                .perform(swipeLeft());
+
+    }
+
     public void testGeopointNoAppearance() {
 
         Screengrab.screenshot("geopoint");
@@ -701,7 +787,7 @@ public class AllWidgetsFormTest {
     }
 
     public void testGridSelectQuickCompactAppearance() {
-    Screengrab.screenshot("grid-select1");
+        Screengrab.screenshot("grid-select1");
         onView(withText("Grid select one widget")).perform(swipeLeft());
     }
 
@@ -817,6 +903,12 @@ public class AllWidgetsFormTest {
     //    private ActivityResult okResult(@Nullable Intent data) {
     //        return new ActivityResult(RESULT_OK, data);
     //    }
+
+    private String randomIntegerSeparator(){
+        int number=123456;
+        NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.US);
+        return numberFormat.format(number);
+     }
 
     //endregion
 
