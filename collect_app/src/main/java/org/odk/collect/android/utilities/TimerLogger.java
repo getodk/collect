@@ -1,11 +1,13 @@
 
 package org.odk.collect.android.utilities;
 
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.SystemClock;
 
 import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.form.api.FormEntryController;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.tasks.TimerSaveTask;
 
@@ -47,6 +49,7 @@ public class TimerLogger {
         EventTypes eventType;
         int fecType;
         String node;
+        Location location;  // smap
 
         long end;
         boolean endTimeSet;
@@ -54,11 +57,14 @@ public class TimerLogger {
         /*
          * Create a new event
          */
-        Event(long start, EventTypes eventType, int fecType, String node, boolean advancingPage) {
+        Event(long start, EventTypes eventType, int fecType, String node,
+              boolean advancingPage,
+              Location location) {      // smap add location
             this.start = start;
             this.eventType = eventType;
             this.fecType = fecType;
             this.node = node;
+            this.location = location;   // smap
 
             end = 0;
             endTimeSet = false;
@@ -148,8 +154,24 @@ public class TimerLogger {
                     textValue = "Unknown Event Type: " + eventType;
                     break;
             }
+            // start smap - set latitude and longitude
+            String lat = "";
+            String lon = "";
+
+            if(location != null) {
+                Double fLat = location.getLatitude();
+                Double fLon = location.getLongitude();
+                if(fLat != 0.0) {
+                    lat = String.valueOf(fLat);
+                }
+                if(fLon != 0.0) {
+                    lon = String.valueOf(fLon);
+                }
+            }
+            // end smap
             return textValue + "," + node + "," + start + ","
-                    + (end != 0 ? end : "");
+                    + (end != 0 ? end : "") + ","
+                    + lat + "," + lon;          // smap
         }
     }
 
@@ -213,7 +235,8 @@ public class TimerLogger {
                 }
             }
 
-            Event newEvent = new Event(start, eventType, fecType, node, advancingPage);
+            // smap add location
+            Event newEvent = new Event(start, eventType, fecType, node, advancingPage, Collect.getInstance().getLocation());
 
             /*
              * Close any existing interval events if the view is being exited
