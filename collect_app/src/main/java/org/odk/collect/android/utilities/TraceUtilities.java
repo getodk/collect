@@ -86,15 +86,22 @@ public class TraceUtilities {
         }
     }
 
-    public static void deleteSource() {
+    public static boolean deleteSource() {
 
         Uri dbUri =  TraceColumns.CONTENT_URI;
 
         String [] selectArgs = {""};
         selectArgs[0] = Utilities.getSource();
         String selectClause = TraceColumns.SOURCE + " = ?";
+        boolean status;
 
-        Collect.getInstance().getContentResolver().delete(dbUri, selectClause, selectArgs);
+        try {
+            Collect.getInstance().getContentResolver().delete(dbUri, selectClause, selectArgs);
+            status = true;
+        } catch (Exception e) {
+            status = false;
+        }
+        return status;
 
     }
 

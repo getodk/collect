@@ -95,5 +95,15 @@ limitations under the License.
             android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
             android:drawableRight="?android:attr/listChoiceIndicatorMultiple" />
 
+        <!-- smap -->
+        <CheckBox
+            android:id="@+id/smaplocations"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/smap_reset_locations"
+            android:padding="5dp"
+            android:button="@null"
+            android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
+            android:drawableRight="?android:attr/listChoiceIndicatorMultiple" />
     </LinearLayout>
 </ScrollView>

@@ -41,6 +41,7 @@ public class ResetDialogPreference extends DialogPreference {
     private CheckBox layers;
     private CheckBox cache;
     private CheckBox osmDroid;
+    private CheckBox smapLocations;     // smap
     private Context context;
     private ProgressDialog progressDialog;
 
@@ -58,6 +59,7 @@ public class ResetDialogPreference extends DialogPreference {
         layers = (CheckBox) view.findViewById(R.id.layers);
         cache = (CheckBox) view.findViewById(R.id.cache);
         osmDroid = (CheckBox) view.findViewById(R.id.osmdroid);
+        smapLocations = (CheckBox) view.findViewById(R.id.smaplocations);       // smap
         super.onBindDialogView(view);
     }
 
@@ -88,6 +90,9 @@ public class ResetDialogPreference extends DialogPreference {
         }
         if (osmDroid.isChecked()) {
             resetActions.add(ResetUtility.ResetAction.RESET_OSM_DROID);
+        }
+        if (smapLocations.isChecked()) {
+            resetActions.add(ResetUtility.ResetAction.SMAP_RESET_LOCATIONS);
         }
         if (!resetActions.isEmpty()) {
             showProgressDialog();
@@ -171,6 +176,15 @@ public class ResetDialogPreference extends DialogPreference {
                                 getContext().getString(R.string.error_occured)));
                     } else {
                         resultMessage.append(String.format(getContext().getString(R.string.reset_osm_tiles_result),
+                                getContext().getString(R.string.success)));
+                    }
+                    break;
+                case ResetUtility.ResetAction.SMAP_RESET_LOCATIONS:     // smap
+                    if (failedResetActions.contains(action)) {
+                        resultMessage.append(String.format(getContext().getString(R.string.smap_reset_locations_result),
+                                getContext().getString(R.string.error_occured)));
+                    } else {
+                        resultMessage.append(String.format(getContext().getString(R.string.smap_reset_locations_result),
                                 getContext().getString(R.string.success)));
                     }
                     break;

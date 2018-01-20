@@ -16,6 +16,9 @@
 
 package org.odk.collect.android.utilities;
 
+import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
+
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
@@ -61,6 +64,13 @@ public class ResetUtility {
                 case ResetAction.RESET_OSM_DROID:
                     if (deleteFolderContents(Configuration.getInstance().getOsmdroidTileCache().getPath())) {
                         failedResetActions.remove(failedResetActions.indexOf(ResetAction.RESET_OSM_DROID));
+                    }
+                    break;
+                case ResetAction.SMAP_RESET_LOCATIONS:  // smap
+                    if (TraceUtilities.deleteSource()) {
+                        Intent intent = new Intent("org.smap.smapTask.refresh");
+                        LocalBroadcastManager.getInstance(Collect.getInstance()).sendBroadcast(intent);
+                        failedResetActions.remove(failedResetActions.indexOf(ResetAction.SMAP_RESET_LOCATIONS));
                     }
                     break;
             }
@@ -131,5 +141,6 @@ public class ResetUtility {
         public static final int RESET_LAYERS = 3;
         public static final int RESET_CACHE = 4;
         public static final int RESET_OSM_DROID = 5;
+        public static final int SMAP_RESET_LOCATIONS = 6; // smap
     }
 }

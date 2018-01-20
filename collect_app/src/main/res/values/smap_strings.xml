@@ -83,4 +83,6 @@
     <string name="smap_version_changed">"The version of the form you are opening has just been updated. Please close and reopen."</string>
     <string name="smap_been_submitted">"This form has already been submitted and cannot be opened for review"</string>
     <string name="smap_location_tracking">"Device location is being tracked"</string>
+    <string name="smap_reset_locations">"Recorded GPS Trail"</string>
+    <string name="smap_reset_locations_result">"Recorded GPS Trail ::"</string>
 </resources>
