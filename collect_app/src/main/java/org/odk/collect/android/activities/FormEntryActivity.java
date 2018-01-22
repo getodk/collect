@@ -300,11 +300,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         String instancePath = null;
         boolean newForm = true;
         autoSaved = false;
-        // only check the buttons if it's enabled in preferences
-        String navigation = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_NAVIGATION);
-        if (navigation.contains(PreferenceKeys.NAVIGATION_BUTTONS)) {
-            showNavigationButtons = true;
-        }
         allowMovingBackwards = (boolean) AdminSharedPreferences.getInstance().get(KEY_MOVING_BACKWARDS);
         if (savedInstanceState != null) {
             state = savedInstanceState;
@@ -2361,6 +2356,11 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     protected void onResume() {
         super.onResume();
 
+        String navigation = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_NAVIGATION);
+        showNavigationButtons = navigation.contains(PreferenceKeys.NAVIGATION_BUTTONS);
+        backButton.setVisibility(showNavigationButtons ? View.VISIBLE : View.GONE);
+        nextButton.setVisibility(showNavigationButtons ? View.VISIBLE : View.GONE);
+
         if (errorMessage != null) {
             if (alertDialog != null && !alertDialog.isShowing()) {
                 createErrorDialog(errorMessage, EXIT);
@@ -2401,14 +2401,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
         if (saveToDiskTask != null) {
             saveToDiskTask.setFormSavedListener(this);
-        }
-
-        if (showNavigationButtons) {
-            backButton.setVisibility(View.VISIBLE);
-            nextButton.setVisibility(View.VISIBLE);
-        } else {
-            backButton.setVisibility(View.GONE);
-            nextButton.setVisibility(View.GONE);
         }
     }
 
