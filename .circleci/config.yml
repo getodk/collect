@@ -1,7 +1,7 @@
 version: 2
 jobs:
   build:
-    working_directory: ~/src
+    working_directory: ~/work
     docker:
       - image: circleci/android:api-26-alpha
     environment:
@@ -18,7 +18,7 @@ jobs:
             name: Download dependencies
             command: ./gradlew androidDependencies
         - save_cache:
-            paths: ~/src/.gradle
+            paths: ~/work/.gradle
             key: jars-{{ checksum "build.gradle" }}-{{ checksum "collect_app/build.gradle" }}
         - run:
             name: Run checks and unit tests
@@ -34,16 +34,16 @@ jobs:
                 ./gradlew assembleDebug -PdisablePreDex
                 ./gradlew assembleDebugAndroidTest -PdisablePreDex
         - persist_to_workspace:
-            root: ~/src
+            root: ~/work
             paths:
               - collect_app/build/outputs/apk/*
   test:
-    working_directory: ~/src
+    working_directory: ~/work
     docker:
       - image: google/cloud-sdk:latest
     steps:
       - attach_workspace:
-          at: ~/src
+          at: ~/work
       - run:
           name: Authorize gcloud
           command: |
