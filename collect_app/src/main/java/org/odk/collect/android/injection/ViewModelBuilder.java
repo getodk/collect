@@ -1,10 +1,11 @@
 package org.odk.collect.android.injection;
 
 import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProvider;
 
+import org.odk.collect.android.injection.config.architecture.ViewModelFactory;
 import org.odk.collect.android.injection.config.architecture.ViewModelKey;
 import org.odk.collect.android.location.GeoViewModel;
-import org.odk.collect.android.location.injection.GeoViewModelModule;
 
 import dagger.Binds;
 import dagger.Module;
@@ -17,8 +18,14 @@ import dagger.multibindings.IntoMap;
  * its injected into your injectable Activity's (see {@link ActivityBuilder}) `@Inject` annotated
  * ViewModel subclass field.
  */
-@Module(includes = GeoViewModelModule.class)
+@Module
 public abstract class ViewModelBuilder {
+
+    /**
+     * Provides our custom ViewModelFactory, do not change this unless absolutely necessary:
+     */
+    @Binds
+    abstract ViewModelProvider.Factory bindViewModelFactory(ViewModelFactory factory);
 
     @Binds
     @IntoMap
