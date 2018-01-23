@@ -173,13 +173,8 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
     }
 
     public void showAccountPickerDialog() {
-        String selectedAccount = getSelectedAccount();
-        if (selectedAccount != null && !selectedAccount.isEmpty()) {
-            selectAccount(selectedAccount);
-        } else {
-            selectFirstAccount();
-        }
-        intentChooseAccount = credential.newChooseAccountIntent();
+        Account selectedAccount = getAccountPickerCurrentAccount();
+        intentChooseAccount.putExtra("selectedAccount",selectedAccount);
         intentChooseAccount.putExtra("overrideTheme", THEME_LIGHT_ACCOUNT_PICKER);
         intentChooseAccount.putExtra("overrideCustomTheme", 0);
 
@@ -197,11 +192,17 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
         }
     }
 
-    public void selectFirstAccount() {
-        Account[] googleAccounts = credential.getAllAccounts();
-        if (googleAccounts.length > 0) {
-            credential.setSelectedAccount(googleAccounts[0]);
+    public Account getAccountPickerCurrentAccount() {
+        String selectedAccountName = getSelectedAccount();
+        if (selectedAccountName == null || selectedAccountName.isEmpty()) {
+            Account[] googleAccounts = credential.getAllAccounts();
+            if (googleAccounts != null && googleAccounts.length > 0) {
+                selectedAccountName = googleAccounts[0].name;
+            } else {
+                return null;
+            }
         }
+        return new Account(selectedAccountName,"com.google");
     }
 
     public boolean isGoogleAccountSelected() {
