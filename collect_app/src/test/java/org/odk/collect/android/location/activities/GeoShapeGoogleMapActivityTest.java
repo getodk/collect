@@ -46,8 +46,6 @@ public class GeoShapeGoogleMapActivityTest {
     public void setUp() throws Exception {
         activityController = Robolectric.buildActivity(GeoShapeGoogleMapActivity.class);
         activity = activityController.get();
-
-        LocationClients.setTestClient(locationClient);
     }
 
     @Test

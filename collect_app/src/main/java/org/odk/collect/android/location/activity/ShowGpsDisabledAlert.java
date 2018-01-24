@@ -1,4 +1,4 @@
-package org.odk.collect.android.location.usecases;
+package org.odk.collect.android.location.activity;
 
 import android.app.Activity;
 import android.content.Intent;

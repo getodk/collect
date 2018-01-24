@@ -1,4 +1,4 @@
-package org.odk.collect.android.location.map;
+package org.odk.collect.android.location.mapviewmodel;
 
 import android.support.annotation.NonNull;
 

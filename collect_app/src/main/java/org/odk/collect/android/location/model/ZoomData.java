@@ -31,5 +31,9 @@ public class ZoomData {
     public LatLng getMarkedLocation() {
         return markedLocation;
     }
+
+    public boolean isEmpty() {
+        return currentLocation == null && markedLocation == null;
+    }
 }
 

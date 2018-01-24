@@ -1,4 +1,4 @@
-package org.odk.collect.android.location.usecases;
+package org.odk.collect.android.location.viewmodel;
 
 import android.location.Location;
 import android.support.annotation.NonNull;
@@ -14,7 +14,6 @@ import java.util.Date;
 
 import javax.inject.Inject;
 
-import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import timber.log.Timber;

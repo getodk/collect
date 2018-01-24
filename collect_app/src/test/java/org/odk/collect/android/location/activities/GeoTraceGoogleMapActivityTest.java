@@ -51,8 +51,6 @@ public class GeoTraceGoogleMapActivityTest {
     public void setUp() throws Exception {
         activityController = Robolectric.buildActivity(GeoTraceGoogleMapActivity.class);
         activity = activityController.get();
-
-        LocationClients.setTestClient(locationClient);
     }
 
     @Test

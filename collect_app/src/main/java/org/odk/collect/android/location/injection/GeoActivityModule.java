@@ -10,9 +10,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 
 import org.odk.collect.android.injection.config.scopes.PerActivity;
 import org.odk.collect.android.location.GeoActivity;
-import org.odk.collect.android.location.map.GoogleMapViewModel;
-import org.odk.collect.android.location.map.MapViewModel;
-import org.odk.collect.android.location.usecases.LoadMap;
+import org.odk.collect.android.location.mapviewmodel.GoogleMapViewModel;
+import org.odk.collect.android.location.mapviewmodel.MapViewModel;
 
 import dagger.Module;
 import dagger.Provides;

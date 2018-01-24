@@ -1,4 +1,4 @@
-package org.odk.collect.android.location.usecases;
+package org.odk.collect.android.location.activity;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;

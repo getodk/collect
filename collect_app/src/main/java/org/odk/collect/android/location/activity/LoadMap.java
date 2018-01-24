@@ -1,4 +1,4 @@
-package org.odk.collect.android.location.usecases;
+package org.odk.collect.android.location.activity;
 
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;

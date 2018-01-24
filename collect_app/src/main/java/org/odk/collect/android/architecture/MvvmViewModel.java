@@ -2,6 +2,7 @@ package org.odk.collect.android.architecture;
 
 import android.arch.lifecycle.ViewModel;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
@@ -25,6 +26,12 @@ public class MvvmViewModel extends ViewModel {
 
     @OverridingMethodsMustInvokeSuper
     protected void onCreate(@Nullable Bundle bundle) {
+        onInitialState(bundle != null
+                ? bundle
+                : Bundle.EMPTY);
+    }
+
+    protected void onInitialState(@NonNull Bundle bundle) {
 
     }
 }

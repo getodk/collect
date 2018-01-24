@@ -12,11 +12,11 @@ import com.google.common.base.Optional;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.architecture.rx.RxMvvmActivity;
-import org.odk.collect.android.location.map.MapViewModel;
-import org.odk.collect.android.location.usecases.OnMapError;
-import org.odk.collect.android.location.usecases.SaveAnswer;
-import org.odk.collect.android.location.usecases.ShowGpsDisabledAlert;
-import org.odk.collect.android.location.usecases.ZoomDialog;
+import org.odk.collect.android.location.mapviewmodel.MapViewModel;
+import org.odk.collect.android.location.activity.OnMapError;
+import org.odk.collect.android.location.activity.SaveAnswer;
+import org.odk.collect.android.location.activity.ShowGpsDisabledAlert;
+import org.odk.collect.android.location.activity.ZoomDialog;
 import org.odk.collect.android.utilities.Rx;
 
 import javax.inject.Inject;
@@ -75,68 +75,68 @@ public class GeoActivity
         GeoViewModel viewModel = getViewModel();
 
         // Bind VM Initial State:
-        viewModel.observeIsDraggable()
+        viewModel.isDraggable()
                 .flatMapCompletable(mapViewModel::updateIsDraggable)
                 .compose(bindToLifecycle())
                 .subscribe(Rx::noop, Timber::e);
 
         // Bind Location Info:
-        viewModel.observeLocationInfoVisibility()
+        viewModel.locationInfoVisibility()
                 .compose(bindToLifecycle())
                 .subscribe(locationInfoText::setVisibility, Timber::e);
 
-        viewModel.observeLocationInfoText()
+        viewModel.locationInfoText()
                 .compose(bindToLifecycle())
                 .subscribe(locationInfoText::setText, Timber::e);
 
         // Bind Location Status:
-        viewModel.observeLocationStatusVisibility()
+        viewModel.locationStatusVisibility()
                 .compose(bindToLifecycle())
                 .subscribe(locationStatusText::setVisibility, Timber::e);
 
-        viewModel.observeLocationStatusText()
+        viewModel.locationStatusText()
                 .compose(bindToLifecycle())
                 .subscribe(locationStatusText::setText, Timber::e);
 
         // Bind Button Visibility:
-        viewModel.observePauseButtonVisibility()
+        viewModel.pauseButtonVisibility()
                 .compose(bindToLifecycle())
                 .subscribe(pauseButton::setVisibility, Timber::e);
 
         // Bind Button Enable Status:
-        viewModel.observeAddLocationEnabled()
+        viewModel.isAddLocationEnabled()
                 .compose(bindToLifecycle())
                 .subscribe(addButton::setEnabled);
 
-        viewModel.observeShowLocationEnabled()
+        viewModel.isShowLocationEnabled()
                 .compose(bindToLifecycle())
                 .subscribe(showButton::setEnabled);
 
-        viewModel.observeClearLocationEnabled()
+        viewModel.isClearLocationEnabled()
                 .compose(bindToLifecycle())
                 .subscribe(clearButton::setEnabled);
 
         // Bind Button events:
-        viewModel.observeAddLocation()
+        viewModel.onLocationAdded()
                 .flatMapCompletable(mapViewModel::markLocation)
                 .compose(bindToLifecycle())
                 .subscribe(Rx::noop, Timber::e);
 
-        viewModel.observeLocationCleared()
+        viewModel.onLocationCleared()
                 .flatMapCompletable(__ -> mapViewModel.clearMarkedLocation())
                 .compose(bindToLifecycle())
                 .subscribe(Rx::noop, Timber::e);
 
         // Bind Dialog events:
-        viewModel.observeShowZoomDialog()
+        viewModel.onShowZoomDialog()
                 .compose(bindToLifecycle())
                 .subscribe(zoomDialog::show, Timber::e);
 
-        viewModel.observeShowGpsAlert()
+        viewModel.onShowGpsAlert()
                 .compose(bindToLifecycle())
                 .subscribe(showGpsDisabledAlert::show, Timber::e);
 
-        viewModel.observeShowLayers()
+        viewModel.onShowLayers()
                 .compose(bindToLifecycle())
                 .flatMapCompletable(__ -> mapViewModel.showLayers())
                 .subscribe(Rx::noop, Timber::e);
@@ -157,11 +157,7 @@ public class GeoActivity
                 .compose(bindToLifecycle())
                 .subscribe(Rx::noop, Timber::e);
 
-        Observable<LatLng> zoomToInitialLocation = viewModel.observeInitialLocation()
-                .filter(Optional::isPresent)
-                .map(Optional::get);
-
-        Observable.merge(zoomToInitialLocation, zoomDialog.zoomToLocation())
+        Observable.merge(viewModel.onInitialLocation(), zoomDialog.zoomToLocation())
                 .flatMapCompletable(mapViewModel::zoomToLocation)
                 .compose(bindToLifecycle())
                 .subscribe(Rx::noop, Timber::e);

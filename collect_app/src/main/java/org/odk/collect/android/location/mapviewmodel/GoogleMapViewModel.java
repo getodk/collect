@@ -1,4 +1,4 @@
-package org.odk.collect.android.location.map;
+package org.odk.collect.android.location.mapviewmodel;
 
 import android.support.annotation.NonNull;
 
@@ -13,7 +13,7 @@ import com.jakewharton.rxrelay2.BehaviorRelay;
 
 import org.odk.collect.android.injection.config.scopes.PerActivity;
 import org.odk.collect.android.location.GeoActivity;
-import org.odk.collect.android.location.usecases.LoadMap;
+import org.odk.collect.android.location.activity.LoadMap;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.Rx;
 

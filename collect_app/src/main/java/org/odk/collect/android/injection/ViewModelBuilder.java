@@ -1,9 +1,7 @@
 package org.odk.collect.android.injection;
 
 import android.arch.lifecycle.ViewModel;
-import android.arch.lifecycle.ViewModelProvider;
 
-import org.odk.collect.android.injection.config.architecture.ViewModelFactory;
 import org.odk.collect.android.injection.config.architecture.ViewModelKey;
 import org.odk.collect.android.location.GeoViewModel;
 
@@ -20,12 +18,6 @@ import dagger.multibindings.IntoMap;
  */
 @Module
 public abstract class ViewModelBuilder {
-
-    /**
-     * Provides our custom ViewModelFactory, do not change this unless absolutely necessary:
-     */
-    @Binds
-    abstract ViewModelProvider.Factory bindViewModelFactory(ViewModelFactory factory);
 
     @Binds
     @IntoMap
