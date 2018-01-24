@@ -42,7 +42,7 @@ import java.util.List;
  */
 @SuppressLint("ViewConstructor")
 public class SelectOneWidget
-        extends TextSelectWidget
+        extends SelectTextWidget
         implements OnCheckedChangeListener, AudioPlayListener, MultiChoiceWidget {
 
     protected List<RadioButton> buttons;

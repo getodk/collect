@@ -54,7 +54,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import timber.log.Timber;
 
-public abstract class ImageMapSelectWidget extends SelectWidget {
+public abstract class SelectImageMapWidget extends SelectWidget {
     private static final String WEB_VIEW_CONTENT =
             "<!DOCTYPE html> <html>\n" +
                     "    <body>\n" +
@@ -69,7 +69,7 @@ public abstract class ImageMapSelectWidget extends SelectWidget {
     private String imageMapFilePath;
     protected List<Selection> selections = new ArrayList<>();
 
-    public ImageMapSelectWidget(Context context, FormEntryPrompt prompt) {
+    public SelectImageMapWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
         try {
@@ -251,7 +251,7 @@ public abstract class ImageMapSelectWidget extends SelectWidget {
     private class JavaScriptInterface {
         @android.webkit.JavascriptInterface
         public void onAreaClick(String areaId) {
-            ImageMapSelectWidget.this.onAreaClick(areaId);
+            SelectImageMapWidget.this.onAreaClick(areaId);
         }
     }
 }

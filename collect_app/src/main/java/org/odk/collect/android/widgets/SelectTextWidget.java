@@ -34,12 +34,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public abstract class TextSelectWidget extends SelectWidget {
+public abstract class SelectTextWidget extends SelectWidget {
     private static final String SEARCH_TEXT = "search_text";
 
     protected EditText searchStr;
 
-    public TextSelectWidget(Context context, FormEntryPrompt prompt) {
+    public SelectTextWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
     }
 

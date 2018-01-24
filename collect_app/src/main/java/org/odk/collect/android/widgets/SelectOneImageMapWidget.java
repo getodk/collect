@@ -24,7 +24,7 @@ import org.javarosa.core.model.data.SelectOneData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
 
-public class SelectOneImageMapWidget extends ImageMapSelectWidget {
+public class SelectOneImageMapWidget extends SelectImageMapWidget {
     public SelectOneImageMapWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 

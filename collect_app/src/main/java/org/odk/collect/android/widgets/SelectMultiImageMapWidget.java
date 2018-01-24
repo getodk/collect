@@ -26,7 +26,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 
 import java.util.List;
 
-public class SelectMultiImageMapWidget extends ImageMapSelectWidget {
+public class SelectMultiImageMapWidget extends SelectImageMapWidget {
     public SelectMultiImageMapWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
