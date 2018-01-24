@@ -574,4 +574,5 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="newer_version_of_a_form_info">This is an updated version of a form you already have!</string>
+    <string name="image_map_does_not_exist">Image map does not exist!</string>
 </resources>

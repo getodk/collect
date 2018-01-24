@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class TextSelectWidget extends SelectWidget {
+public abstract class TextSelectWidget extends SelectWidget {
     private static final String SEARCH_TEXT = "search_text";
 
     protected EditText searchStr;
