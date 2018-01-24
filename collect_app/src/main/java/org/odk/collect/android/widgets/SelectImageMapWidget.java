@@ -194,7 +194,7 @@ public abstract class SelectImageMapWidget extends SelectWidget {
 
         } catch (Exception e) {
             Timber.w(e);
-            return getContext().getString(R.string.image_map_does_not_exist);
+            return getContext().getString(R.string.svg_file_does_not_exist);
         }
 
         return convertDocumentToString(document);
