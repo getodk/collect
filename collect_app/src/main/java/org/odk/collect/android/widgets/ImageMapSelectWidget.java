@@ -19,6 +19,7 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.Html;
+import android.view.MotionEvent;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
@@ -31,6 +32,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.utilities.TextUtils;
+import org.odk.collect.android.views.CustomWebView;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -61,7 +63,7 @@ public abstract class ImageMapSelectWidget extends SelectWidget {
                     "    </body>\n" +
                     "</html>";
 
-    private WebView webView;
+    private CustomWebView webView;
     private TextView selectedAreasLabel;
 
     private String imageMapFilePath;
@@ -84,8 +86,13 @@ public abstract class ImageMapSelectWidget extends SelectWidget {
         webView.loadUrl("javascript:clearAreas()");
     }
 
+    @Override
+    public boolean suppressFlingGesture(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        return webView.suppressFlingGesture();
+    }
+
     private void setUpLayout() {
-        webView = new WebView(getContext());
+        webView = new CustomWebView(getContext());
         selectedAreasLabel = getAnswerTextView();
         answerLayout.addView(webView);
         answerLayout.addView(selectedAreasLabel);
