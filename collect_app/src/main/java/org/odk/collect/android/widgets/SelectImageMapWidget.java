@@ -200,9 +200,9 @@ public abstract class SelectImageMapWidget extends SelectWidget {
         return convertDocumentToString(document);
     }
 
-    private void addOnClickAttributes(NodeList node) {
-        for (int i = 0; i < node.getLength(); i++) {
-            Node path = node.item(i);
+    private void addOnClickAttributes(NodeList nodes) {
+        for (int i = 0; i < nodes.getLength(); i++) {
+            Node path = nodes.item(i);
             if (path.getNodeType() == Node.ELEMENT_NODE && path.getAttributes().getNamedItem("id") != null) {
                 ((Element) path).setAttribute("onClick","clickOnArea(this.id)");
             }
