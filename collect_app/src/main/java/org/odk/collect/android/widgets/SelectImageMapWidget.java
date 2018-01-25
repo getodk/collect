@@ -127,29 +127,14 @@ public abstract class SelectImageMapWidget extends SelectWidget {
         }
     }
 
-    public void onAreaClick(String areaId) {
-        if (isAreaSelected(areaId)) {
-            removeSelection(areaId);
-        } else {
-            SelectChoice selectChoice = getSelectedChoiceByAreaId(areaId);
-            if (selectChoice != null) {
-                selections.add(new Selection(selectChoice));
-            }
+    private void selectArea(String areaId) {
+        SelectChoice selectChoice = getSelectedChoiceByAreaId(areaId);
+        if (selectChoice != null) {
+            selections.add(new Selection(selectChoice));
         }
-
-        refreshSelectedItemsLabel();
     }
 
-    private boolean isAreaSelected(String areaId) {
-        for (Selection selection : selections) {
-            if (areaId.equalsIgnoreCase(selection.getValue())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private void removeSelection(String areaId) {
+    private void unselectArea(String areaId) {
         Selection selectionToRemove = null;
 
         for (Selection selection : selections) {
@@ -159,6 +144,10 @@ public abstract class SelectImageMapWidget extends SelectWidget {
         }
 
         selections.remove(selectionToRemove);
+    }
+
+    private void notifyChanges() {
+        refreshSelectedItemsLabel();
     }
 
     private SelectChoice getSelectedChoiceByAreaId(String areaId) {
@@ -254,8 +243,18 @@ public abstract class SelectImageMapWidget extends SelectWidget {
 
     private class JavaScriptInterface {
         @android.webkit.JavascriptInterface
-        public void onAreaClick(String areaId) {
-            SelectImageMapWidget.this.onAreaClick(areaId);
+        public void selectArea(String areaId) {
+            SelectImageMapWidget.this.selectArea(areaId);
+        }
+
+        @android.webkit.JavascriptInterface
+        public void unselectArea(String areaId) {
+            SelectImageMapWidget.this.unselectArea(areaId);
+        }
+
+        @android.webkit.JavascriptInterface
+        public void notifyChanges() {
+            SelectImageMapWidget.this.notifyChanges();
         }
     }
 }

@@ -16,27 +16,31 @@
 
 var selectedAreas = new Set();
 var originalColors = new Map();
+var lastSelectedAreaId;
 var isSingleSelect;
 
-function onAreaClick(areaId) {
-    imageMapInterface.onAreaClick(areaId);
+function selectArea(areaId) {
+    imageMapInterface.selectArea(areaId);
+}
+
+function unselectArea(areaId) {
+    imageMapInterface.unselectArea(areaId);
+}
+
+function notifyChanges() {
+    imageMapInterface.notifyChanges();
 }
 
 function addSelectedArea(selectedAreaId) {
     selectedAreas.add(selectedAreaId);
     document.getElementById(selectedAreaId).setAttribute('style', 'fill: #E65100');
+    if (Boolean(isSingleSelect)) {
+        lastSelectedAreaId = selectedAreaId;
+    }
 }
 
 function addArea(areaId) {
     originalColors.set(areaId, document.getElementById(areaId).style.color);
-}
-
-function clearAreas() {
-    selectedAreas.forEach(function(selectedAreaId) {
-        document.getElementById(selectedAreaId).setAttribute('style', 'fill: ' + originalColors.get(selectedAreaId));
-        selectedAreas.delete(selectedAreaId);
-        onAreaClick(selectedAreaId);
-    });
 }
 
 function setSelectMode(isSingleSelect) {
@@ -47,13 +51,17 @@ function clickOnArea(areaId) {
     if (selectedAreas.has(areaId)) {
         document.getElementById(areaId).setAttribute('style', 'fill: ' + originalColors.get(areaId));
         selectedAreas.delete(areaId);
-        onAreaClick(areaId);
+        unselectArea(areaId);
     } else {
-        if (Boolean(isSingleSelect)) {
-            clearAreas();
+        if (Boolean(isSingleSelect) && !!lastSelectedAreaId) {
+            document.getElementById(lastSelectedAreaId).setAttribute('style', 'fill: ' + originalColors.get(lastSelectedAreaId));
+            selectedAreas.delete(lastSelectedAreaId);
+            unselectArea(lastSelectedAreaId);
         }
         document.getElementById(areaId).setAttribute('style', 'fill: #E65100');
         selectedAreas.add(areaId);
-        onAreaClick(areaId);
+        selectArea(areaId);
+        lastSelectedAreaId = areaId;
     }
+    notifyChanges();
 }
