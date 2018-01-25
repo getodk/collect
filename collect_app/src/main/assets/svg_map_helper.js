@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+/**
+* JavaScript class which contains methods used for managing svg maps
+*/
 var selectedAreas = new Set();
 var originalColors = new Map();
 var lastSelectedAreaId;

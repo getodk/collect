@@ -24,6 +24,10 @@ import org.javarosa.core.model.data.SelectOneData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
 
+/**
+ * A widget which is responsible for multi select questions represented by
+ * an svg map. You can use maps of the world, countries, human body etc.
+ */
 public class SelectOneImageMapWidget extends SelectImageMapWidget {
     public SelectOneImageMapWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);

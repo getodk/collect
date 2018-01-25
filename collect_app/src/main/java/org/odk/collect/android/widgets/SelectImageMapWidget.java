@@ -54,6 +54,10 @@ import javax.xml.transform.stream.StreamResult;
 
 import timber.log.Timber;
 
+/**
+ * A base widget class which is responsible for sharing the code used by image map select widgets like
+ * {@link SelectOneImageMapWidget} and {@link SelectMultiImageMapWidget}.
+ */
 public abstract class SelectImageMapWidget extends SelectWidget {
     private static final String WEB_VIEW_CONTENT =
             "<!DOCTYPE html> <html>\n" +

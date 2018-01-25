@@ -26,6 +26,10 @@ import org.javarosa.form.api.FormEntryPrompt;
 
 import java.util.List;
 
+/**
+ * A widget which is responsible for single select questions represented by
+ * an svg map. You can use maps of the world, countries, human body etc.
+ */
 public class SelectMultiImageMapWidget extends SelectImageMapWidget {
     public SelectMultiImageMapWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
