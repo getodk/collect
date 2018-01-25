@@ -171,7 +171,12 @@ public abstract class SelectImageMapWidget extends SelectWidget {
             Element element = document.getDocumentElement();
             element.normalize();
 
-            NodeList nodeList = document.getElementsByTagName("g");
+            // Add default svg size if not specified
+            NodeList nodeList = document.getElementsByTagName("svg");
+            addSizeAttributesIfNeeded(nodeList);
+
+            // Add onClick attributes
+            nodeList = document.getElementsByTagName("g");
             addOnClickAttributes(nodeList);
             nodeList = document.getElementsByTagName("path");
             addOnClickAttributes(nodeList);
@@ -198,6 +203,16 @@ public abstract class SelectImageMapWidget extends SelectWidget {
             if (node.getNodeType() == Node.ELEMENT_NODE && node.getAttributes().getNamedItem("id") != null) {
                 ((Element) node).setAttribute("onClick","clickOnArea(this.id)");
             }
+        }
+    }
+
+    private void addSizeAttributesIfNeeded(NodeList nodes) {
+        Node svg = nodes.item(0);
+        if (svg.getAttributes().getNamedItem("width") == null) {
+            ((Element) svg).setAttribute("width","1000");
+        }
+        if (svg.getAttributes().getNamedItem("height") == null) {
+            ((Element) svg).setAttribute("height","1000");
         }
     }
 
