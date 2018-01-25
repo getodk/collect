@@ -132,7 +132,12 @@ public abstract class SelectImageMapWidget extends SelectWidget {
     }
 
     private void selectArea(String areaId) {
-        SelectChoice selectChoice = getSelectedChoiceByAreaId(areaId);
+        SelectChoice selectChoice = null;
+        for (SelectChoice sc : items) {
+            if (areaId.equalsIgnoreCase(sc.getValue())) {
+                selectChoice = sc;
+            }
+        }
         if (selectChoice != null) {
             selections.add(new Selection(selectChoice));
         }
@@ -152,16 +157,6 @@ public abstract class SelectImageMapWidget extends SelectWidget {
 
     private void notifyChanges() {
         refreshSelectedItemsLabel();
-    }
-
-    private SelectChoice getSelectedChoiceByAreaId(String areaId) {
-        for (SelectChoice selectChoice : items) {
-            if (areaId.equalsIgnoreCase(selectChoice.getValue())) {
-                return selectChoice;
-            }
-        }
-
-        return null;
     }
 
     private String getParsedSVGFile() {
