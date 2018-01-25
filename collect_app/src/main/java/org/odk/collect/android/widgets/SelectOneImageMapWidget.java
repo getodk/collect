@@ -39,7 +39,6 @@ public class SelectOneImageMapWidget extends SelectImageMapWidget {
         if (!selections.isEmpty()) {
             view.loadUrl("javascript:addSelectedArea('" + selections.get(0).getValue() + "')");
         }
-        view.loadUrl("javascript:setSelectMode('singleSelect')");
     }
 
     @Override

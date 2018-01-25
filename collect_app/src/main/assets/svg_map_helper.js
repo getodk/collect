@@ -16,7 +16,7 @@
 
 var selectedAreas = new Set();
 var originalColors = new Map();
-var selectMode;
+var isSingleSelect;
 
 function onAreaClick(areaId) {
     imageMapInterface.onAreaClick(areaId);
@@ -39,8 +39,8 @@ function clearAreas() {
     });
 }
 
-function setSelectMode(mode) {
-    selectMode = mode;
+function setSelectMode(isSingleSelect) {
+    this.isSingleSelect = isSingleSelect;
 }
 
 function clickOnArea(areaId) {
@@ -49,7 +49,7 @@ function clickOnArea(areaId) {
         selectedAreas.delete(areaId);
         onAreaClick(areaId);
     } else {
-        if (selectMode == 'singleSelect') {
+        if (Boolean(isSingleSelect)) {
             clearAreas();
         }
         document.getElementById(areaId).setAttribute('style', 'fill: #E65100');

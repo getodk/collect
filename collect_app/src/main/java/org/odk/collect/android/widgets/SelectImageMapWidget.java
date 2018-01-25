@@ -66,11 +66,14 @@ public abstract class SelectImageMapWidget extends SelectWidget {
     private CustomWebView webView;
     private TextView selectedAreasLabel;
 
+    private boolean isSingleSelect;
     private String imageMapFilePath;
     protected List<Selection> selections = new ArrayList<>();
 
     public SelectImageMapWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
+
+        isSingleSelect = this instanceof SelectOneImageMapWidget;
 
         try {
             imageMapFilePath = ReferenceManager.instance().DeriveReference(prompt.getImageText()).getLocalURI();
@@ -114,6 +117,7 @@ public abstract class SelectImageMapWidget extends SelectWidget {
             webView.setWebViewClient(new WebViewClient() {
                 @Override
                 public void onPageFinished(WebView view, String url) {
+                    view.loadUrl("javascript:setSelectMode(" + isSingleSelect + ")");
                     for (SelectChoice selectChoice : items) {
                         view.loadUrl("javascript:addArea('" + selectChoice.getValue() + "')");
                     }
