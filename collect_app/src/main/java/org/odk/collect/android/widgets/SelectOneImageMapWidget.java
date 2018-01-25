@@ -35,7 +35,7 @@ public class SelectOneImageMapWidget extends SelectImageMapWidget {
     }
 
     @Override
-    protected void adjustWebView(WebView view) {
+    protected void highlightSelections(WebView view) {
         if (!selections.isEmpty()) {
             view.loadUrl("javascript:addSelectedArea('" + selections.get(0).getValue() + "')");
         }

@@ -37,7 +37,7 @@ public class SelectMultiImageMapWidget extends SelectImageMapWidget {
     }
 
     @Override
-    protected void adjustWebView(WebView view) {
+    protected void highlightSelections(WebView view) {
         for (Selection selection : selections) {
             view.loadUrl("javascript:addSelectedArea('" + selection.getValue() + "')");
         }

@@ -121,7 +121,7 @@ public abstract class SelectImageMapWidget extends SelectWidget {
                     for (SelectChoice selectChoice : items) {
                         view.loadUrl("javascript:addArea('" + selectChoice.getValue() + "')");
                     }
-                    adjustWebView(view);
+                    highlightSelections(view);
                 }
             });
         }
@@ -250,7 +250,7 @@ public abstract class SelectImageMapWidget extends SelectWidget {
                 selectedAreasLabel.setText(Html.fromHtml(stringBuilder.toString())));
     }
 
-    protected abstract void adjustWebView(WebView view);
+    protected abstract void highlightSelections(WebView view);
 
     private class JavaScriptInterface {
         @android.webkit.JavascriptInterface
