@@ -56,7 +56,7 @@ If you want to debug the code that comes from the Javarosa library or you need t
 2. In your Android Studio select `File` -> `New` -> `New Module` -> `Import Gradle Project` and choose the downloaded package
 3. In the [build.gradle](https://github.com/opendatakit/collect/blob/master/collect_app/build.gradle) file add:
 ```gradle
-compile (project(path: ':javarosa-master')) {
+implementation (project(path: ':javarosa-master')) {
 	exclude module: 'joda-time'
 }
 ```
