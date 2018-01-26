@@ -53,7 +53,7 @@ New versions of ODK Collect are released on the last Sunday of each month. We fr
 
 If you want to debug the code that comes from the Javarosa library or you need to change something there for testing, the best possible solution is adding the Javarosa package as a separate module:
 1. Download and extract the code from the [Javarosa's repository](https://github.com/opendatakit/javarosa)
-2. In Android studio select `File` -> `New` -> `New Module` -> `Import Gradle Project` and choose the downloaded package
+2. In your Android Studio select `File` -> `New` -> `New Module` -> `Import Gradle Project` and choose the downloaded package
 3. In the [build.gradle](https://github.com/opendatakit/collect/blob/master/collect_app/build.gradle) file add:
 ```gradle
 compile (project(path: ':javarosa-master')) {
