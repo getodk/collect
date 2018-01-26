@@ -1,31 +1,16 @@
 package org.odk.collect.android.location;
 
-import com.jakewharton.rxrelay2.BehaviorRelay;
-
-import org.odk.collect.android.architecture.rx.RxMVVMViewModel;
-import org.odk.collect.android.injection.config.scopes.PerViewModel;
+import org.odk.collect.android.architecture.rx.RxViewModel;
+import org.odk.collect.android.injection.config.scopes.PerActivity;
 
 import javax.inject.Inject;
 
-import io.reactivex.Observable;
 
-
-@PerViewModel
-public class GeoViewModel extends RxMVVMViewModel {
-
-    private BehaviorRelay<Boolean> isReloadEnabled = BehaviorRelay.createDefault(false);
-    private BehaviorRelay<Boolean> isShowEnabled = BehaviorRelay.createDefault(false);
+@PerActivity
+public class GeoViewModel extends RxViewModel implements GeoViewModelType {
 
     @Inject
     GeoViewModel() {
 
-    }
-
-    Observable<Boolean> isReloadEnabled() {
-        return isReloadEnabled.hide();
-    }
-
-    Observable<Boolean> isShowEnabled() {
-        return isShowEnabled.hide();
     }
 }

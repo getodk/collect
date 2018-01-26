@@ -1,7 +1,5 @@
 package org.odk.collect.android.injection.config;
 
-import org.odk.collect.android.injection.ViewModelBuilder;
-import org.odk.collect.android.injection.config.architecture.ViewModelFactoryModule;
 import org.odk.collect.android.injection.config.scopes.PerApplication;
 import org.odk.collect.android.utilities.AgingCredentialsProvider;
 import org.opendatakit.httpclientandroidlib.client.CookieStore;
@@ -15,7 +13,7 @@ import dagger.Provides;
  * Add Application level providers here, i.e. if you want to
  * inject something into the Collect instance.
  */
-@Module(includes = {ViewModelFactoryModule.class, ViewModelBuilder.class})
+@Module
 class AppModule {
 
     @PerApplication

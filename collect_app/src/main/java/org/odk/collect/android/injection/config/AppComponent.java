@@ -3,7 +3,6 @@ package org.odk.collect.android.injection.config;
 import android.app.Application;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.injection.ActivityBuilder;
 import org.odk.collect.android.injection.config.scopes.PerApplication;
 
 import dagger.BindsInstance;

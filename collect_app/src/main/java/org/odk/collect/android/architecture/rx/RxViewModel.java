@@ -7,8 +7,8 @@ import com.trello.rxlifecycle2.LifecycleTransformer;
 import com.trello.rxlifecycle2.OutsideLifecycleException;
 import com.trello.rxlifecycle2.RxLifecycle;
 
-import org.odk.collect.android.architecture.MVVMActivity;
-import org.odk.collect.android.architecture.MVVMViewModel;
+import org.odk.collect.android.architecture.ViewModel;
+import org.odk.collect.android.architecture.ViewModelActivity;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
@@ -17,11 +17,11 @@ import io.reactivex.subjects.BehaviorSubject;
 
 
 /**
- * A {@link MVVMActivity} subclass that provides RxLifecycle
+ * A {@link ViewModelActivity} subclass that provides RxLifecycle
  * methods for binding {@link io.reactivex.Observable}'s to
  * the ViewModel lifecycle.
  */
-public class RxMVVMViewModel extends MVVMViewModel {
+public class RxViewModel extends ViewModel {
 
     private final BehaviorSubject<Event> lifecycleSubject = BehaviorSubject.create();
 
@@ -34,9 +34,9 @@ public class RxMVVMViewModel extends MVVMViewModel {
 
     @Override
     @OverridingMethodsMustInvokeSuper
-    protected void onCleared() {
-        super.onCleared();
-        lifecycleSubject.onNext(Event.ON_CLEAR);
+    protected void onDestroy() {
+        super.onDestroy();
+        lifecycleSubject.onNext(Event.ON_DESTROY);
     }
 
     @NonNull
@@ -46,15 +46,15 @@ public class RxMVVMViewModel extends MVVMViewModel {
 
     enum Event {
         ON_CREATE,
-        ON_CLEAR
+        ON_DESTROY
     }
 
     private static final Function<Event, Event> LIFECYCLE = lastEvent -> {
         switch (lastEvent) {
             case ON_CREATE:
-                return Event.ON_CLEAR;
+                return Event.ON_DESTROY;
 
-            case ON_CLEAR:
+            case ON_DESTROY:
                 throw new OutsideLifecycleException("Cannot bind to ViewModel lifecycle when outside of it.");
 
             default:
