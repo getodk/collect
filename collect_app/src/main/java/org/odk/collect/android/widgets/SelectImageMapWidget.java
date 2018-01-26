@@ -103,8 +103,15 @@ public abstract class SelectImageMapWidget extends SelectWidget {
         selectedAreasLabel = getAnswerTextView();
         answerLayout.addView(webView);
         answerLayout.addView(selectedAreasLabel);
-        addAnswerView(answerLayout);
 
+        // add a space to facilitate scrolling
+        int width = Math.round(getResources().getDisplayMetrics().widthPixels / getResources().getDisplayMetrics().density);
+        int paddingInDp = width / 20; // 5% of the screen
+        final float scale = getResources().getDisplayMetrics().density;
+        int paddingInPx = (int) (paddingInDp * scale + 0.5f);
+        answerLayout.setPadding(0, 0, paddingInPx, 0);
+
+        addAnswerView(answerLayout);
         setUpWebView();
     }
 
