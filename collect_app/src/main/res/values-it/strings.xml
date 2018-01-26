@@ -346,7 +346,7 @@
   <string name="select_odk_shortcut">Seleziona scorciatoia ODK</string>
   <string name="bad_uri">URI mal strutturato : %s</string>
   <string name="unrecognized_uri">URI non riconosciuto : %s</string>
-  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <!--&lt; and &gt; surrounds observetext so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&lt;nessun form caricato&gt;</string>
   <string name="settings_successfully_loaded_file_notification">Impostazioni caricate con successo da file</string>
   <string name="corrupt_settings_file_notification">Spiacente, il file di impostazioni è danneggiato e deve essere cancellato o sostituito</string>

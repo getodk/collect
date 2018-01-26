@@ -249,7 +249,7 @@
   <string name="change_server_url">Server URL</string>
   <string name="no_blank_search">Zoekveld mag niet leeg zijn.</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <!--&lt; and &gt; surrounds observetext so it will appear as <no form loaded>-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->

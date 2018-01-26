@@ -337,7 +337,7 @@
   <string name="select_odk_shortcut">Vali ODK otsetee</string>
   <string name="bad_uri">Vale veebiaadress: %s</string>
   <string name="unrecognized_uri">Tundmatu veebiaadress: %s</string>
-  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <!--&lt; and &gt; surrounds observetext so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&lt;vorm laadimata&gt;</string>
   <string name="settings_successfully_loaded_file_notification">Sätete laadimine failist õnnestus</string>
   <string name="corrupt_settings_file_notification">Sätete fail on vigane. Palun kustutage või asendage</string>

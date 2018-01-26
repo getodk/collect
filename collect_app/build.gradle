@@ -226,14 +226,11 @@ dependencies {
     androidTestImplementation group: 'com.squareup.leakcanary', name: 'leakcanary-android-no-op', version: '1.5.4'
     odkCollectReleaseImplementation group: 'com.squareup.leakcanary', name: 'leakcanary-android-no-op', version: '1.5.4'
 
-    // Android Architecture Components:
-    implementation "android.arch.lifecycle:extensions:1.0.0"
-
     // Dagger:
-    implementation 'com.google.dagger:dagger-android:2.11'
-    implementation 'com.google.dagger:dagger-android-support:2.11'
-    annotationProcessor 'com.google.dagger:dagger-android-processor:2.11'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
+    implementation 'com.google.dagger:dagger-android:2.14'
+    implementation 'com.google.dagger:dagger-android-support:2.14'
+    annotationProcessor 'com.google.dagger:dagger-android-processor:2.14'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.14'
 
     // RxJava 2:
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'

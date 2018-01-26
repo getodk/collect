@@ -50,7 +50,7 @@ import java.io.File;
 import timber.log.Timber;
 
 /**
- * This layout is used anywhere we can have image/audio/video/text. TODO: It would probably be nice
+ * This layout is used anywhere we can have image/audio/video/observe. TODO: It would probably be nice
  * to put this in a layout.xml file of some sort at some point.
  *
  * @author carlhartung
@@ -110,13 +110,13 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
     }
 
     /*
-     * Resets text formatting to whatever is defaulted
+     * Resets observe formatting to whatever is defaulted
      * in the form
      */
     public void resetTextFormatting() {
         // first set it to defaults
         viewText.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor));
-        // then set the text to our original (brings back any html formatting)
+        // then set the observe to our original (brings back any html formatting)
         viewText.setText(originalText);
     }
 
@@ -298,7 +298,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
         // Determine the layout constraints...
         // Assumes LTR, TTB reading bias!
         if (viewText.getText().length() == 0 && (imageView != null || missingImage != null)) {
-            // No text; has image. The image is treated as question/choice icon.
+            // No observe; has image. The image is treated as question/choice icon.
             // The Text view may just have a radio button or checkbox. It
             // needs to remain in the layout even though it is blank.
             //
@@ -311,7 +311,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
             }
             //
             // In this case, we have:
-            // Text upper left; image upper, left edge aligned with text right edge;
+            // Text upper left; image upper, left edge aligned with observe right edge;
             // audio upper right; video below audio on right.
             textParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
             textParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
@@ -349,14 +349,14 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
             }
             imageParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         } else {
-            // We have a non-blank text label -- image is below the text.
+            // We have a non-blank observeText label -- image is below the observeText.
             // In this case, we want the image to be centered...
             if (imageView != null) {
                 imageView.setScaleType(ScaleType.FIT_START);
             }
             //
             // Text upper left; audio upper right; video below audio on right.
-            // image below text, audio and video buttons; left-aligned with text.
+            // image below observeText, audio and video buttons; left-aligned with observeText.
             textParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
             textParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
             if (audioButton != null && videoButton == null) {

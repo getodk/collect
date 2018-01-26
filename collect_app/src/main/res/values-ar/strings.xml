@@ -351,7 +351,7 @@
   <string name="select_odk_shortcut">اختيار الاختصار</string>
   <string name="bad_uri">عنوان غير صحيح : %s</string>
   <string name="unrecognized_uri">عنوان غير معروف : %s</string>
-  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <!--&lt; and &gt; surrounds observetext so it will appear as <no form loaded>-->
   <string name="no_form_loaded">لم يتم العثور على الاستمارات…</string>
   <string name="settings_successfully_loaded_file_notification">تم تحميل ملف الاعدادت بنجاح</string>
   <string name="corrupt_settings_file_notification">ملف الإعدادات غير صحيح او تالف</string>

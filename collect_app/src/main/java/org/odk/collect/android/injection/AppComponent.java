@@ -1,9 +1,9 @@
-package org.odk.collect.android.injection.config;
+package org.odk.collect.android.injection;
 
 import android.app.Application;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.injection.config.scopes.PerApplication;
+import org.odk.collect.android.injection.scopes.PerApplication;
 
 import dagger.BindsInstance;
 import dagger.Component;

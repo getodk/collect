@@ -351,7 +351,7 @@
   <string name="select_odk_shortcut">Välj ODK genväg</string>
   <string name="bad_uri">Ogiltig URI: %s</string>
   <string name="unrecognized_uri">Okänd URI: %s</string>
-  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <!--&lt; and &gt; surrounds observetext so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&lt;inget formulär laddat&gt;</string>
   <string name="settings_successfully_loaded_file_notification">Inläsning av inställningar från fil lyckades</string>
   <string name="corrupt_settings_file_notification">Tyvärr, filen med inställningar är korrupt och bör raderas eller ersättas</string>

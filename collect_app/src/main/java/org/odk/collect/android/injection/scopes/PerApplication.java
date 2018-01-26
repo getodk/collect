@@ -1,4 +1,4 @@
-package org.odk.collect.android.injection.config.scopes;
+package org.odk.collect.android.injection.scopes;
 
 
 import java.lang.annotation.Documented;

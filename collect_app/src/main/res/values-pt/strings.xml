@@ -256,7 +256,7 @@ Escolher Imagem</string>
   <string name="no_blank_search">O campo de busca não pode estar em branco.</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">Cartografia</string>
-  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <!--&lt; and &gt; surrounds observetext so it will appear as <no form loaded>-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->

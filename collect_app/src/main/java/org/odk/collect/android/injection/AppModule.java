@@ -1,6 +1,11 @@
-package org.odk.collect.android.injection.config;
+package org.odk.collect.android.injection;
 
-import org.odk.collect.android.injection.config.scopes.PerApplication;
+import android.app.Application;
+import android.support.annotation.NonNull;
+
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.database.ActivityLogger;
+import org.odk.collect.android.injection.scopes.PerApplication;
 import org.odk.collect.android.utilities.AgingCredentialsProvider;
 import org.opendatakit.httpclientandroidlib.client.CookieStore;
 import org.opendatakit.httpclientandroidlib.client.CredentialsProvider;
@@ -18,6 +23,12 @@ class AppModule {
 
     @PerApplication
     @Provides
+    Collect provideApplication(Application application) {
+        return (Collect) application;
+    }
+
+    @PerApplication
+    @Provides
     CredentialsProvider provideCredentialsProvider() {
         // retain credentials for 7 minutes...
         return new AgingCredentialsProvider(7 * 60 * 1000);
@@ -28,5 +39,11 @@ class AppModule {
     CookieStore provideCookieStore() {
         // share all session cookies across all sessions.
         return new BasicCookieStore();
+    }
+
+    @PerApplication
+    @Provides
+    ActivityLogger provideActivityLogger(@NonNull Collect collect) {
+        return collect.getActivityLogger();
     }
 }

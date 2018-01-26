@@ -37,12 +37,12 @@ import timber.log.Timber;
  *
  * The logging database will be "/sdcard/odk/log/activityLog.db"
  *
- * Logging is enabled if the file "/sdcard/odk/log/enabled" exists.
+ * Logging is enable if the file "/sdcard/odk/log/enable" exists.
  *
  * @author mitchellsundt@gmail.com
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public final class ActivityLogger {
+public class ActivityLogger {
 
     private static class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -93,14 +93,14 @@ public final class ActivityLogger {
             "create table " + DATABASE_TABLE + " ("
                     + ID + " integer primary key autoincrement, "
                     + TIMESTAMP + " integer not null, "
-                    + DEVICEID + " text not null, "
-                    + CLASS + " text not null, "
-                    + CONTEXT + " text not null, "
-                    + ACTION + " text, "
-                    + INSTANCE_PATH + " text, "
-                    + QUESTION + " text, "
-                    + PARAM1 + " text, "
-                    + PARAM2 + " text);";
+                    + DEVICEID + " observeText not null, "
+                    + CLASS + " observeText not null, "
+                    + CONTEXT + " observeText not null, "
+                    + ACTION + " observeText, "
+                    + INSTANCE_PATH + " observeText, "
+                    + QUESTION + " observeText, "
+                    + PARAM1 + " observeText, "
+                    + PARAM2 + " observeText);";
 
     private final boolean loggingEnabled;
     private final String deviceId;

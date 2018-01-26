@@ -332,7 +332,7 @@
   <string name="select_odk_shortcut">Selecciona drecera ODK</string>
   <string name="bad_uri">URI dolenta: %s</string>
   <string name="unrecognized_uri">URI no reconeguda: %s</string>
-  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <!--&lt; and &gt; surrounds observetext so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&lt;cap formulari carregat&gt;</string>
   <string name="settings_successfully_loaded_file_notification">Configuració carregada correctament des d\'arxiu</string>
   <string name="corrupt_settings_file_notification">Arxiu de configuració corrupte. Cal se esborrat o reemplaçat</string>

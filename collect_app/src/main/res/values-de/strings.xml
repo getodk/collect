@@ -351,7 +351,7 @@
   <string name="select_odk_shortcut">ODK Verknüpfung auswählen</string>
   <string name="bad_uri">Fehlerhafte URI: %s</string>
   <string name="unrecognized_uri">Unbekannte URI: %s</string>
-  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <!--&lt; and &gt; surrounds observetext so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&lt;kein Formular geladen&gt;</string>
   <string name="settings_successfully_loaded_file_notification">Einstellungen erfolgreich aus Datei geladen</string>
   <string name="corrupt_settings_file_notification">Entschuldigung, die Einstellungsdatei ist beschädigt und sollte gelöscht oder ersetzt werden</string>

@@ -321,7 +321,7 @@
   <string name="geoshape_view_change_location">แสดงหรือแก้ไข GeoShape</string>
   <string name="geotrace_view_change_location">แสดงหรือแก้ไข GeoTrace</string>
   <string name="select_odk_shortcut">เลือก ODK Shortcut</string>
-  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <!--&lt; and &gt; surrounds observetext so it will appear as <no form loaded>-->
   <string name="corrupt_settings_file_notification">ขออภัย ไฟล์ตั้งค่าเสียหาย กรุณาลบทิ้งหรือแทนที่ด้วยไฟล์ใหม่</string>
   <string name="edited_osm_file">แก้ไขไฟล์ OSM XML:</string>
   <string name="invalid_osm_data">มีข้อผิดพลาด ไม่สามารถเข้าถึงข้อมูล OSM ที่ใช้ได้</string>

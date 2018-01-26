@@ -78,7 +78,7 @@ public class InstanceServerUploader extends InstanceUploader {
        _3GP("3gp",  ContentType.create("video/3gpp")),
         AVI("avi",  ContentType.create("video/avi")),
         AMR("amr",  ContentType.create("audio/amr")),
-        CSV("csv",  ContentType.create("text/csv")),
+        CSV("csv",  ContentType.create("observeText/csv")),
         JPG("jpg",  ContentType.create("image/jpeg")),
         MP3("mp3",  ContentType.create("audio/mp3")),
         MP4("mp4",  ContentType.create("video/mp4")),
@@ -288,7 +288,7 @@ public class InstanceServerUploader extends InstanceUploader {
 
         // Under normal operations, we upload the instanceFile to
         // the server.  However, during the save, there is a failure
-        // window that may mark the submission as complete but leave
+        // window that may observe the submission as complete but leave
         // the file-to-be-uploaded with the name "submission.xml" and
         // the plaintext submission files on disk.  In this case,
         // upload the submission.xml and all the files in the directory.

@@ -351,7 +351,7 @@
   <string name="select_odk_shortcut">Sélectionnez le raccourci ODK</string>
   <string name="bad_uri">Mauvais URI: %s</string>
   <string name="unrecognized_uri">URI non reconnu: %s</string>
-  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <!--&lt; and &gt; surrounds observetext so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&lt;aucun formulaire chargé&gt;</string>
   <string name="settings_successfully_loaded_file_notification">Paramètres chargés du fichier avec succès</string>
   <string name="corrupt_settings_file_notification">Désolé, le fichier de paramétrage est corrompu. Il doit être supprimé ou remplacé.</string>

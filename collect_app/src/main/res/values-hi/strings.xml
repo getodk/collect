@@ -351,7 +351,7 @@
   <string name="select_odk_shortcut">ODK शॉर्टकट चयन करें</string>
   <string name="bad_uri">खराब URl: %s</string>
   <string name="unrecognized_uri">अपरिचित URl: %s</string>
-  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <!--&lt; and &gt; surrounds observetext so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&amp; Lt; कोई फॉर्म लोड नहीं हुआ &amp; gt;</string>
   <string name="settings_successfully_loaded_file_notification">फाइल से सफलतापूर्वक सेटिंग्स लोड हो गईं</string>
   <string name="corrupt_settings_file_notification">क्षमा करें, सेटिंग्स फाइल ख़राब है और इसे मिटाया या प्रतिस्थापित किया जाना चाहिए</string>

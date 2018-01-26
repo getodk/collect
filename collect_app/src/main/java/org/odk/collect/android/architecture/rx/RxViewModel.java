@@ -40,7 +40,7 @@ public class RxViewModel extends ViewModel {
     }
 
     @NonNull
-    public <T> LifecycleTransformer<T> bindToLifecycle() {
+    protected <T> LifecycleTransformer<T> bindToLifecycle() {
         return RxLifecycle.bind(lifecycleSubject, LIFECYCLE);
     }
 

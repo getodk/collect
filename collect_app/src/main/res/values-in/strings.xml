@@ -351,7 +351,7 @@
   <string name="select_odk_shortcut">Pilih pintasan ODK</string>
   <string name="bad_uri">Salah URI: %s</string>
   <string name="unrecognized_uri">URI tidak dikenal: %s</string>
-  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <!--&lt; and &gt; surrounds observetext so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&lt;tidak ada formulir dimuat&gt;</string>
   <string name="settings_successfully_loaded_file_notification">Pengaturan berhasil dimuat dari file</string>
   <string name="corrupt_settings_file_notification">Maaf, file pengaturan rusak dan silahkan dihapus atau diganti</string>

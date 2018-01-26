@@ -179,7 +179,7 @@ public class ListWidget extends QuestionWidget implements MultiChoiceWidget, OnC
                     }
                 }
 
-                // build text label. Don't assign the text to the built in label to he
+                // build observeText label. Don't assign the observeText to the built in label to he
                 // button because it aligns horizontally, and we want the label on top
                 TextView label = new TextView(getContext());
                 label.setText(prompt.getSelectChoiceText(items.get(i)));

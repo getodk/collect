@@ -17,7 +17,7 @@
     </style>
 
     <style name="AlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <!-- color of the text of the buttons-->
+        <!-- color of observetext of the buttons-->
         <item name="colorAccent">@color/tintColor</item>
     </style>
 

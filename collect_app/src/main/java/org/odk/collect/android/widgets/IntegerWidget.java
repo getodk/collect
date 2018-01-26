@@ -48,7 +48,7 @@ public class IntegerWidget extends StringWidget {
         answerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         answerText.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
 
-        // needed to make long readonly text scroll
+        // needed to make long readonly observe scroll
         answerText.setHorizontallyScrolling(false);
         answerText.setSingleLine(false);
 

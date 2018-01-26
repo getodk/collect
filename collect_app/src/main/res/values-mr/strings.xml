@@ -351,7 +351,7 @@
   <string name="select_odk_shortcut">ओडीके शॉर्टकट निवडा</string>
   <string name="bad_uri">खराब युरएल %s</string>
   <string name="unrecognized_uri">अपरिचित युरएल: %s</string>
-  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <!--&lt; and &gt; surrounds observetext so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&amp; Lt; कोणतेही फॉर्म लोड झाले &amp; gt;</string>
   <string name="settings_successfully_loaded_file_notification">फाइलमधून सेटिंग्ज यशस्वीरित्या लोड झाली</string>
   <string name="corrupt_settings_file_notification">क्षमस्व, सेटिंग्ज फाईल दूषित आहेत आणि हटविल्या गेल्या किंवा पुनर्स्थित केल्या गेल्या पाहिजे</string>

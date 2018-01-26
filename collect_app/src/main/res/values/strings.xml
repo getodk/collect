@@ -361,7 +361,7 @@
     <string name="select_odk_shortcut">Select ODK Shortcut</string>
     <string name="bad_uri">Bad URI: %s</string>
     <string name="unrecognized_uri">Unrecognized URI: %s</string>
-    <!-- &lt; and &gt; surrounds the text so it will appear as <no form loaded> -->
+    <!-- &lt; and &gt; surrounds observetext so it will appear as <no form loaded> -->
     <string name="no_form_loaded">&lt;no form loaded&gt;</string>
     <string name="settings_successfully_loaded_file_notification">Settings successfully loaded from file</string>
     <string name="corrupt_settings_file_notification">Sorry, settings file is corrupt and should be deleted or replaced</string>

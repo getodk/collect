@@ -33,9 +33,9 @@ import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 /**
  * <p>Use the ODK Sensors framework to print data to a connected printer.</p>
  * <p>
- * <p>The default button text is "Print Label"
+ * <p>The default button observe is "Print Label"
  * <p>
- * <p>You may override the button text and the error text that is
+ * <p>You may override the button observeText and the error observeText that is
  * displayed when the app is missing by using jr:itext() values. The
  * special itext form values are 'buttonText' and 'noPrinterErrorString',
  * respectively.</p>
@@ -62,11 +62,11 @@ import org.odk.collect.android.widgets.interfaces.BinaryWidget;
  * of values consisting of:</p>
  * <ul><li>numeric barcode to emit (optional)</li>
  * <li>string qrcode to emit (optional)</li>
- * <li>text line 1 (optional)</li>
- * <li>additional text line (repeat as needed)</li></ul>
+ * <li>observe line 1 (optional)</li>
+ * <li>additional observe line (repeat as needed)</li></ul>
  * <p>
  * <p>E.g., if you wanted to emit a barcode of 123, a qrcode of "mycode" and
- * two text lines of "line 1" and "line 2", you would define the calculate
+ * two observe lines of "line 1" and "line 2", you would define the calculate
  * as:</p>
  * <p>
  * <pre>
@@ -76,7 +76,7 @@ import org.odk.collect.android.widgets.interfaces.BinaryWidget;
  * </pre>
  * <p>
  * <p>Depending upon what you supply, the printer may print just a
- * barcode, just a qrcode, just text, or some combination of all 3.</p>
+ * barcode, just a qrcode, just observe, or some combination of all 3.</p>
  * <p>
  * <p>Despite using &lt;br&gt; as a separator, the supplied Zebra
  * printer does not recognize html.</p>
@@ -84,7 +84,7 @@ import org.odk.collect.android.widgets.interfaces.BinaryWidget;
  * <pre>
  * &lt;input appearance="ex:change.uw.android.TEXTANSWER" ref="/printerForm/printme" &gt;
  * </pre>
- * <p>or, to customize the button text and error strings with itext:
+ * <p>or, to customize the button observe and error strings with itext:
  * <pre>
  *      ...
  *      &lt;bind nodeset="/printerForm/printme" type="string" readonly="true()"
@@ -95,14 +95,14 @@ import org.odk.collect.android.widgets.interfaces.BinaryWidget;
  *      ...
  *      &lt;itext&gt;
  *        &lt;translation lang="English"&gt;
- *          &lt;text id="printAnswer"&gt;
+ *          &lt;observe id="printAnswer"&gt;
  *            &lt;value form="short"&gt;Print your label&lt;/value&gt;
  *            &lt;value form="long"&gt;Print your label&lt;/value&gt;
  *            &lt;value form="buttonText"&gt;Print now&lt;/value&gt;
  *            &lt;value form="noPrinterErrorString"&gt;ODK Sensors Zebra Printer is not installed!
  *             Please install ODK Sensors Framework and ODK Sensors Zebra Printer from Google
  * Play.&lt;/value&gt;
- *          &lt;/text&gt;
+ *          &lt;/observe&gt;
  *        &lt;/translation&gt;
  *      &lt;/itext&gt;
  *    ...

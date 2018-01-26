@@ -136,7 +136,7 @@ public abstract class QuestionWidget
 
     private MediaLayout createQuestionMediaLayout(FormEntryPrompt prompt) {
         String promptText = prompt.getLongText();
-        // Add the text view. Textview always exists, regardless of whether there's text.
+        // Add the observeText view. Textview always exists, regardless of whether there's observeText.
         TextView questionText = new TextView(getContext());
         questionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getQuestionFontSize());
         questionText.setTypeface(null, Typeface.BOLD);
@@ -160,7 +160,7 @@ public abstract class QuestionWidget
         // shown when image is clicked
         String bigImageURI = prompt.getSpecialFormQuestionText("big-image");
 
-        // Create the layout for audio, image, text
+        // Create the layout for audio, image, observeText
         MediaLayout questionMediaLayout = new MediaLayout(getContext(), getPlayer());
         questionMediaLayout.setId(ViewIds.generateViewId()); // assign random id
         questionMediaLayout.setAVT(prompt.getIndex(), "", questionText, audioURI, imageURI, videoURI,
@@ -258,7 +258,7 @@ public abstract class QuestionWidget
     }
 
     /*
-     * Add a Views containing the question text, audio (if applicable), and image (if applicable).
+     * Add a Views containing the question observeText, audio (if applicable), and image (if applicable).
      * To satisfy the RelativeLayout constraints, we add the audio first if it exists, then the
      * TextView to fit the rest of the space, then the image if applicable.
      */
@@ -295,7 +295,7 @@ public abstract class QuestionWidget
     }
 
     /**
-     * Add a TextView containing the help text to the default location.
+     * Add a TextView containing the help observeText to the default location.
      * Override to reposition.
      */
     protected void addHelpTextView(View v) {
@@ -341,7 +341,7 @@ public abstract class QuestionWidget
 
     /**
      * Default place to put the answer
-     * (below the help text or question text if there is no help text)
+     * (below the help observeText or question observeText if there is no help observeText)
      * If you have many elements, use this first
      * and use the standard addView(view, params) to place the rest
      */

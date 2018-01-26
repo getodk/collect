@@ -337,7 +337,7 @@
   <string name="select_odk_shortcut">Wybierz skrót ODK</string>
   <string name="bad_uri">Zły URI: %s</string>
   <string name="unrecognized_uri">Nierozpoznany URI: %s</string>
-  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <!--&lt; and &gt; surrounds observetext so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&lt;brak załadowanego formularza&gt;</string>
   <string name="settings_successfully_loaded_file_notification">Ustawienia poprawnie wczytane z pliku</string>
   <string name="corrupt_settings_file_notification">Przepraszamy, plik ustawień jest uszkodzony i powinien zostać usunięty lub zamieniony</string>

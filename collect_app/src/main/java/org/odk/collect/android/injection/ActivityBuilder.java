@@ -1,6 +1,6 @@
-package org.odk.collect.android.injection.config;
+package org.odk.collect.android.injection;
 
-import org.odk.collect.android.injection.config.scopes.PerActivity;
+import org.odk.collect.android.injection.scopes.PerActivity;
 import org.odk.collect.android.location.GeoActivity;
 import org.odk.collect.android.location.injection.GeoActivityModule;
 

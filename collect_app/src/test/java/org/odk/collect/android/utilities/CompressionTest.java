@@ -10,7 +10,7 @@ import java.util.zip.DataFormatException;
 import static junit.framework.Assert.assertTrue;
 
 /**
- * Tests to verify the behaviour of compression/decompression of text
+ * Tests to verify the behaviour of compression/decompression of observe
  */
 
 public class CompressionTest {

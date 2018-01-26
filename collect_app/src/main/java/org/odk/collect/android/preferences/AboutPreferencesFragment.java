@@ -96,7 +96,7 @@ public class AboutPreferencesFragment extends BasePreferenceFragment implements 
 
             case KEY_TELL_YOUR_FRIENDS:
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                shareIntent.setType("text/plain");
+                shareIntent.setType("observeText/plain");
                 shareIntent.putExtra(Intent.EXTRA_TEXT,
                         getString(R.string.tell_your_friends_msg) + " " + GOOGLE_PLAY_URL
                                 + APP_PACKAGE_NAME);

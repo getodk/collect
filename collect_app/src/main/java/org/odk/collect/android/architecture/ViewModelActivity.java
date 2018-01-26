@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 
 import org.odk.collect.android.activities.InjectableActivity;
 
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
@@ -20,11 +21,13 @@ import butterknife.Unbinder;
  * return the subclass you've created, and you'll have access to a persistent
  * VM in your onCreate thanks to Dagger.
  *
- * @param <V> The ViewModel subclass this Activity should load.
+ * @param <V> The ViewModel subclass this Activity should get.
  *
  */
 public abstract class ViewModelActivity<V extends ViewModel>
         extends InjectableActivity {
+
+    private static final String VIEW_MODEL_STATE_KEY = "ODK_VIEWMODEL_STATE";
 
     @Inject
     protected V viewModel;
@@ -37,8 +40,21 @@ public abstract class ViewModelActivity<V extends ViewModel>
         super.onCreate(savedInstanceState);
         setContentView(getLayoutId());
 
-        viewModel.create();
+        Bundle viewModelState = savedInstanceState != null
+                ? savedInstanceState.getBundle(VIEW_MODEL_STATE_KEY)
+                : null;
+
+        viewModel.create(viewModelState);
         unbinder = ButterKnife.bind(this);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        Bundle viewModelState = new Bundle();
+        viewModel.saveState(viewModelState);
+
+        outState.putBundle(VIEW_MODEL_STATE_KEY, viewModelState);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
