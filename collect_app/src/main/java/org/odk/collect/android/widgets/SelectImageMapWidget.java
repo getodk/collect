@@ -114,6 +114,7 @@ public abstract class SelectImageMapWidget extends SelectWidget {
         if (svgMap != null) {
             webView.getSettings().setJavaScriptEnabled(true);
             webView.getSettings().setBuiltInZoomControls(true);
+            webView.getSettings().setDisplayZoomControls(false);
             webView.addJavascriptInterface(new JavaScriptInterface(), "imageMapInterface");
             webView.loadDataWithBaseURL(null, String.format(WEB_VIEW_CONTENT, svgMap), "text/html", "UTF-8", null);
             webView.setInitialScale(1);
