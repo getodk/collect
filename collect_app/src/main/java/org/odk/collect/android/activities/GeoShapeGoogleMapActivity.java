@@ -193,7 +193,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
         zoomLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (curLocation != null) {
+                if (curLocation != null && curlatLng != null) {
                     map.animateCamera(CameraUpdateFactory.newLatLngZoom(curlatLng, 17));
                 }
                 zoomDialog.dismiss();
