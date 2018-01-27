@@ -40,8 +40,6 @@ the specific language governing permissions and limitations under the License.
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
     <!-- Get permission for reliable local dispatching on non-Google Play devices. -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
-    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
     <uses-permission android:name="android.permission.CAMERA" />
 
     <uses-feature
