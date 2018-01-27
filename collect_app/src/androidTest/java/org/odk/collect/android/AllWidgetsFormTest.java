@@ -69,6 +69,14 @@ import static org.mockito.Mockito.when;
 //import static org.odk.collect.android.activities.FormEntryActivity.BEARING_RESULT;
 import static org.odk.collect.android.activities.FormEntryActivity.EXTRA_TESTING_PATH;
 
+/**
+ * Integration test that runs through a form with all question types.
+ *
+ * <a href="https://docs.fastlane.tools/actions/screengrab/"> screengrab </a> is used to generate screenshots for
+ * documentation and releases. Calls to Screengrab.screenshot("image-name") trigger screenshot
+ * creation.
+ */
+
 @RunWith(AndroidJUnit4.class)
 public class AllWidgetsFormTest {
 
