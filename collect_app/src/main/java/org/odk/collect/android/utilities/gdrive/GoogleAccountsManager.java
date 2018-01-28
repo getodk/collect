@@ -174,7 +174,7 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
 
     public void showAccountPickerDialog() {
         Account selectedAccount = getAccountPickerCurrentAccount();
-        intentChooseAccount.putExtra("selectedAccount",selectedAccount);
+        intentChooseAccount.putExtra("selectedAccount", selectedAccount);
         intentChooseAccount.putExtra("overrideTheme", THEME_LIGHT_ACCOUNT_PICKER);
         intentChooseAccount.putExtra("overrideCustomTheme", 0);
 
@@ -202,7 +202,7 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
                 return null;
             }
         }
-        return new Account(selectedAccountName,"com.google");
+        return new Account(selectedAccountName, "com.google");
     }
 
     public boolean isGoogleAccountSelected() {
