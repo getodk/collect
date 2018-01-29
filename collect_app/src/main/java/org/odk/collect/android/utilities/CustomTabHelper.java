@@ -12,6 +12,8 @@ import android.support.customtabs.CustomTabsService;
 import android.support.customtabs.CustomTabsServiceConnection;
 import android.support.customtabs.CustomTabsSession;
 
+import org.odk.collect.android.activities.WebViewActivity;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -93,8 +95,10 @@ public class CustomTabHelper {
             customTabsIntent.intent.setPackage(getPackageName(context).get(0));
             customTabsIntent.launchUrl(context, uri);
         } else {
-            //open in an external browser
-            context.startActivity(new Intent(Intent.ACTION_VIEW, uri));
+            //open in webview
+            Intent intent = new Intent(context, WebViewActivity.class);
+            intent.putExtra("url",uri.toString());
+            context.startActivity(intent);
         }
     }
 }
