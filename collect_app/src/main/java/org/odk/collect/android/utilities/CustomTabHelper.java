@@ -22,6 +22,7 @@ import java.util.List;
  */
 
 public class CustomTabHelper {
+    public static final String OPEN_URL = "url";
     private static final String CUSTOM_TAB_PACKAGE_NAME = "com.android.chrome";
     private CustomTabsClient customTabsClient;
     private CustomTabsSession customTabsSession;
@@ -97,7 +98,7 @@ public class CustomTabHelper {
         } else {
             //open in webview
             Intent intent = new Intent(context, WebViewActivity.class);
-            intent.putExtra("url",uri.toString());
+            intent.putExtra(OPEN_URL,uri.toString());
             context.startActivity(intent);
         }
     }

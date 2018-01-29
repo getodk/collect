@@ -12,6 +12,7 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.utilities.CustomTabHelper;
 
 /**
  * Created by dexter on 29/1/18.
@@ -32,7 +33,7 @@ public class WebViewActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
 
-        String url = getIntent().getStringExtra("url");
+        String url = getIntent().getStringExtra(CustomTabHelper.OPEN_URL);
         webView = (WebView) findViewById(R.id.webView);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
