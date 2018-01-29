@@ -193,6 +193,7 @@ public class SmapChartHorizontalBarWidget extends SmapChartWidget {
         float [] values = new float [items.length];
 
         float total = 0;
+        int nonZeroCount = 0;
         for(int i = 0; i < items.length; i++) {
             float f = 0f;
             try {
@@ -204,6 +205,9 @@ public class SmapChartHorizontalBarWidget extends SmapChartWidget {
                 total += f;
             }
             values[i] = f;
+            if(f > 0.0) {
+                nonZeroCount++;
+            }
         }
 
         if(isNormalised() && total > 0) {
@@ -212,7 +216,15 @@ public class SmapChartHorizontalBarWidget extends SmapChartWidget {
             }
         }
 
-        entry = new BarEntry(idx, values);
+        float [] posValues = new float [nonZeroCount];
+        for(int i = 0, j = 0; i < values.length; i++) {
+            if(values[i] > 0.0) {
+                posValues[j++] = values[i];
+            }
+        }
+
+
+        entry = new BarEntry(idx, posValues);
         return entry;
     }
 

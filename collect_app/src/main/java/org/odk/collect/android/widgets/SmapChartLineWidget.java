@@ -152,7 +152,7 @@ public class SmapChartLineWidget extends SmapChartWidget {
         clearFocus();
 
         String s = getAnswerText();
-        return !s.equals("") ? new StringData(s) : null;
+        return (s != null && !s.equals("")) ? new StringData(s) : null;
     }
 
     @Override

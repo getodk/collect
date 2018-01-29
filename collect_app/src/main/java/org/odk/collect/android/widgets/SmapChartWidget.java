@@ -128,7 +128,9 @@ public abstract class SmapChartWidget extends QuestionWidget {
 
         LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);
-        chart.setPadding(10, 0, 0, 10);
+        chart.setPadding(10, 10, 10, 10);
+        chart.setExtraLeftOffset(10);
+        chart.setExtraRightOffset(10);
         answerLayout.addView(chart);
         addAnswerView(answerLayout);
     }
