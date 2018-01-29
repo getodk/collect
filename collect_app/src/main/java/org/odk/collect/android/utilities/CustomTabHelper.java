@@ -98,7 +98,7 @@ public class CustomTabHelper {
         } else {
             //open in webview
             Intent intent = new Intent(context, WebViewActivity.class);
-            intent.putExtra(OPEN_URL,uri.toString());
+            intent.putExtra(OPEN_URL, uri.toString());
             context.startActivity(intent);
         }
     }
