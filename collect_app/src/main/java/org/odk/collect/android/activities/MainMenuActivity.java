@@ -111,16 +111,13 @@ public class MainMenuActivity extends AppCompatActivity {
         setContentView(R.layout.main_menu);
         initToolbar();
 
-        timeFormLoadingButton = (Button) findViewById(R.id.time_form_loading);
+        timeFormLoadingButton = findViewById(R.id.time_form_loading);
         timeFormLoadingButton.setText(getString(R.string.time_form_loading_button));
-        timeFormLoadingButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    TimeParseAndCache.run(Collect.FORMS_PATH);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        timeFormLoadingButton.setOnClickListener(v -> {
+            try {
+                TimeParseAndCache.run(Collect.FORMS_PATH);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         });
 

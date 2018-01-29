@@ -1,6 +1,7 @@
 package org.odk.collect.android;
 
 import org.javarosa.core.model.FormDef;
+import org.javarosa.core.model.instance.DataInstance;
 import org.javarosa.xform.util.XFormUtils;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.tasks.FormLoaderTask;
@@ -11,6 +12,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Enumeration;
 
 import timber.log.Timber;
 
@@ -19,6 +21,8 @@ public class TimeParseAndCache {
         StringBuilder errors = new StringBuilder();
         File formDir = new File(Collect.FORMS_PATH);
         if (formDir.exists() && formDir.isDirectory()) {
+            Timber.i("Title\tLines\tChildren\tNon-Main Instances\tOutput Fragments\t" +
+                    "Triggerables\tHash\tRead/Parse\tCache Write\tCache Read\n");
             for (File file : formDir.listFiles()) {
                 // Ignore invisible files that start with periods.
                 String name = file.getName();
@@ -38,31 +42,43 @@ public class TimeParseAndCache {
     }
 
     private static void timeOperations(String xmlFilename) throws IOException {
-        long lineCount = getLineCount(xmlFilename);
-
+        // Hashing
         long start = System.nanoTime();
-        String formHash = FileUtils.getMd5Hash(new File(xmlFilename));
-        double hash = timeDiff(start);
+        final String formHash = FileUtils.getMd5Hash(new File(xmlFilename));
+        final double md5HashingTime = timeDiff(start);
 
+        // Reading and Parsing
         start = System.nanoTime();
         FormDef formDefFromXml = getFormDef(xmlFilename);
-        double readParse = timeDiff(start);
+        final double readParseTime = timeDiff(start);
 
+        // Writing to cache
         start = System.nanoTime();
         FormLoaderTask.cacheFormDefIfNew(formDefFromXml, xmlFilename, Collect.CACHE_PATH);
-        double cacheWrite = timeDiff(start);
+        final double cacheWriteTime = timeDiff(start);
 
+        // Reading from cache
         File cachedFormFile = new File(Collect.CACHE_PATH + File.separator + formHash + ".formdef");
-
         start = System.nanoTime();
         FormLoaderTask.deserializeFormDef(cachedFormFile);
-        double cacheRead = timeDiff(start);
-
-        Timber.i("%s\t%d\t%d\t%.3f\t%.3f\t%.3f\t%.3f\n",
-                formDefFromXml.getTitle(), lineCount, formDefFromXml.getDeepChildCount(),
-                hash, readParse, cacheWrite, cacheRead);
-
+        final double cacheReadTime = timeDiff(start);
         cachedFormFile.delete();
+
+        Timber.i("%s\t%d\t%d\t%d\t%d\t%d\t%.3f\t%.3f\t%.3f\t%.3f\n",
+                formDefFromXml.getTitle(), getLineCount(xmlFilename), formDefFromXml.getDeepChildCount(),
+                countNonMainInstances(formDefFromXml.getNonMainInstances()),
+                formDefFromXml.getOutputFragments().size(),
+                formDefFromXml.getFormComplexityMetrics().numTriggerables,
+                md5HashingTime, readParseTime, cacheWriteTime, cacheReadTime);
+    }
+
+    private static int countNonMainInstances(Enumeration<DataInstance> nonMainInstances) {
+        int num = 0;
+        while(nonMainInstances.hasMoreElements()) {
+            ++num;
+            nonMainInstances.nextElement();
+        }
+        return num;
     }
 
     private static double timeDiff(long start) {
