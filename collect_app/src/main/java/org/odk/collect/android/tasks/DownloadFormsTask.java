@@ -240,6 +240,19 @@ public class DownloadFormsTask extends
             Timber.w("The user cancelled (or an exception happened) the download of a form at the "
                     + "very beginning.");
         } else {
+            Cursor c = null;
+            try {
+                c = formsDao.getFormsCursorForMd5Hash(FileUtils.getMd5Hash(fileResult.file));
+                if (c.getCount() > 0) {
+                    c.moveToFirst();
+                    String id = c.getString(c.getColumnIndex(FormsColumns._ID));
+                    formsDao.deleteFormsFromIDs(new String[]{id});
+                }
+            } finally {
+                if (c != null) {
+                    c.close();
+                }
+            }
             FileUtils.deleteAndReport(fileResult.getFile());
         }
 
