@@ -21,8 +21,12 @@ import timber.log.Timber;
 
 /** Times form parsing and caching, and writes to the log with Timber */
 public class TimeParseAndCache {
-    public static void run(View view) {
-        new Thread(() -> {
+
+    private static String formHash;
+    private static FormDef form;
+
+    public void run(View view) {
+        new Thread(null, () -> {
             StringBuilder errors = new StringBuilder();
             File formDir = new File(Collect.FORMS_PATH);
             if (formDir.exists() && formDir.isDirectory()) {
@@ -33,8 +37,9 @@ public class TimeParseAndCache {
                     String name = file.getName();
                     if (!name.startsWith(".") && (name.endsWith(".xml") || name.endsWith(".xhtml"))) {
                         try {
-                            timeOperations(Collect.FORMS_PATH + File.separator + name);
+                            timeOperations(view, name);
                         } catch (Exception e) {
+                            e.printStackTrace();
                             errors.append(e.getMessage()).append("\n");
                         }
                     }
@@ -46,43 +51,63 @@ public class TimeParseAndCache {
             if (errors.length() > 0) {
                 Timber.e("Errors:\n%s", errors.toString());
             }
-        }).start();
+        }, getClass().getSimpleName()).start();
 
         ToastUtils.showShortToast("Form loading timing is starting.");
     }
 
-    private static void timeOperations(String xmlFilename) throws IOException {
-        // Hashing
-        long start = System.nanoTime();
-        final String formHash = FileUtils.getMd5Hash(new File(xmlFilename));
-        final double md5HashingTime = timeDiff(start);
+    private void timeOperations(View view, String xmlFilename) throws IOException {
+        final String fullXmlFilename = Collect.FORMS_PATH + File.separator + xmlFilename;
+        final Timer t = new Timer(view, xmlFilename);
 
-        // Reading and Parsing
-        start = System.nanoTime();
-        FormDef formDefFromXml = getFormDef(xmlFilename);
-        final double readParseTime = timeDiff(start);
+        final double md5HashingTime = t.time("Hashing", () ->
+                formHash = FileUtils.getMd5Hash(new File(fullXmlFilename)));
 
-        // Writing to cache
-        start = System.nanoTime();
-        FormLoaderTask.cacheFormDefIfNew(formDefFromXml, xmlFilename, Collect.CACHE_PATH);
-        final double cacheWriteTime = timeDiff(start);
+        final double readParseTime = t.time("Reading and Parsing", () ->
+                form = getFormDef(fullXmlFilename));
 
-        // Reading from cache
-        File cachedFormFile = new File(Collect.CACHE_PATH + File.separator + formHash + ".formdef");
-        start = System.nanoTime();
-        FormLoaderTask.deserializeFormDef(cachedFormFile);
-        final double cacheReadTime = timeDiff(start);
-        cachedFormFile.delete();
+        final double cacheWriteTime = t.time("Writing to cache", () ->
+                FormLoaderTask.cacheFormDefIfNew(form, fullXmlFilename, Collect.CACHE_PATH));
+
+        final double cacheReadTime = t.time("Reading from cache", () -> {
+            File cachedFormFile =
+                    new File(Collect.CACHE_PATH + File.separator + formHash + ".formdef");
+            FormLoaderTask.deserializeFormDef(cachedFormFile);
+            cachedFormFile.delete();
+        });
 
         Timber.i("%s\t%d\t%d\t%d\t%d\t%d\t%.3f\t%.3f\t%.3f\t%.3f\n",
-                formDefFromXml.getTitle(), getLineCount(xmlFilename), formDefFromXml.getDeepChildCount(),
-                countNonMainInstances(formDefFromXml.getNonMainInstances()),
-                formDefFromXml.getOutputFragments().size(),
-                formDefFromXml.getFormComplexityMetrics().numTriggerables,
+                form.getTitle(), getLineCount(fullXmlFilename),
+                form.getDeepChildCount(),
+                countNonMainInstances(form.getNonMainInstances()),
+                form.getOutputFragments().size(),
+                form.getFormComplexityMetrics().numTriggerables,
                 md5HashingTime, readParseTime, cacheWriteTime, cacheReadTime);
     }
 
-    private static int countNonMainInstances(Enumeration<DataInstance> nonMainInstances) {
+    /** Times operations */
+    private class Timer {
+        final View view;
+        final String filename;
+
+        Timer(View view, String filename) {
+            this.view = view;
+            this.filename = filename;
+        }
+
+        /** Returns the number of milliseconds consumed by the runnable */
+        double time(String activity, Runnable runnable) {
+            String message = activity + " " + filename;
+            Timber.d(message);
+            view.post(() -> ToastUtils.showShortToast(message));
+
+            long start = System.nanoTime();
+            runnable.run();
+            return timeDiffMs(start);
+        }
+    }
+
+    private int countNonMainInstances(Enumeration<DataInstance> nonMainInstances) {
         int num = 0;
         while (nonMainInstances.hasMoreElements()) {
             ++num;
@@ -91,18 +116,22 @@ public class TimeParseAndCache {
         return num;
     }
 
-    private static double timeDiff(long start) {
+    private double timeDiffMs(long start) {
         return (System.nanoTime() - start) / 1000000D;
     }
 
-    private static FormDef getFormDef(String xmlFilename) throws IOException {
-        FileInputStream fis = new FileInputStream(xmlFilename);
-        FormDef formDefFromXml = XFormUtils.getFormFromInputStream(fis);
-        fis.close();
-        return formDefFromXml;
+    private FormDef getFormDef(String xmlFilename) {
+        try {
+            FileInputStream fis = new FileInputStream(xmlFilename);
+            FormDef formDefFromXml = XFormUtils.getFormFromInputStream(fis);
+            fis.close();
+            return formDefFromXml;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    private static long getLineCount(String xmlFilename) throws IOException {
+    private long getLineCount(String xmlFilename) throws IOException {
         BufferedReader r = new BufferedReader(new FileReader(xmlFilename));
         String line;
         long count = 0;
