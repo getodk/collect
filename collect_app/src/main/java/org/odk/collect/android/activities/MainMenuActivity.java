@@ -113,13 +113,7 @@ public class MainMenuActivity extends AppCompatActivity {
 
         timeFormLoadingButton = findViewById(R.id.time_form_loading);
         timeFormLoadingButton.setText(getString(R.string.time_form_loading_button));
-        timeFormLoadingButton.setOnClickListener(v -> {
-            try {
-                TimeParseAndCache.run(Collect.FORMS_PATH);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+        timeFormLoadingButton.setOnClickListener(TimeParseAndCache::run);
 
         // enter data button. expects a result.
         enterDataButton = findViewById(R.id.enter_data);
