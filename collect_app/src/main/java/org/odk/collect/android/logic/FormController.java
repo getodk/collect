@@ -510,14 +510,14 @@ public class FormController {
      * the group represented by the FormIndex.
      */
     private int stepOverGroup() {
-        ArrayList<FormIndex> indicies;
+        ArrayList<FormIndex> indicies = new ArrayList<>();
         GroupDef gd =
                 (GroupDef) formEntryController.getModel().getForm()
                         .getChild(getFormIndex());
         FormIndex idxChild =
                 formEntryController.getModel().incrementIndex(
                         getFormIndex(), true); // descend into group
-        indicies = getIndices(gd, idxChild);
+        indicies.addAll(getIndices(gd, idxChild));
 
         // jump to the end of the group
         formEntryController.jumpToIndex(indicies.get(indicies.size() - 1));
@@ -810,7 +810,7 @@ public class FormController {
      */
     public FormEntryPrompt[] getQuestionPrompts() throws RuntimeException {
 
-        ArrayList<FormIndex> indicies;
+        ArrayList<FormIndex> indicies = new ArrayList<>();
         FormIndex currentIndex = getFormIndex();
 
         // For questions, there is only one.
@@ -822,7 +822,7 @@ public class FormController {
             GroupDef gd = (GroupDef) element;
             // descend into group
             FormIndex idxChild = formEntryController.getModel().incrementIndex(currentIndex, true);
-            indicies = getIndices(gd, idxChild);
+            indicies.addAll(getIndices(gd, idxChild));
 
             // we only display relevant questions
             ArrayList<FormEntryPrompt> questionList = new ArrayList<FormEntryPrompt>();
@@ -853,7 +853,7 @@ public class FormController {
         return questions;
     }
 
-    private ArrayList getIndices(GroupDef gd, FormIndex idxChild) {
+    private List<FormIndex> getIndices(GroupDef gd, FormIndex idxChild) {
         ArrayList<FormIndex> indices = new ArrayList<>();
         for (int i = 0; i < gd.getChildren().size(); i++) {
             if (getEvent(idxChild) == FormEntryController.EVENT_GROUP) {
