@@ -399,6 +399,7 @@ public class FormController {
                 // no group
                 return false;
             }
+            // If at least one of groups you are inside is field list your index is in field list
             boolean groupIsFieldList;
             for (FormEntryCaption caption : captions) {
                 groupIsFieldList = groupIsFieldList(caption.getIndex());
@@ -558,6 +559,7 @@ public class FormController {
                     event = stepToPreviousEvent();
                 }
 
+                // Handle nested field-list group
                 if (getEvent() == FormEntryController.EVENT_GROUP) {
                     FormIndex currentIndex = getFormIndex();
                     IFormElement element = formEntryController.getModel().getForm().getChild(
@@ -565,6 +567,7 @@ public class FormController {
                     if (element instanceof GroupDef) {
                         GroupDef gd = (GroupDef) element;
                         if (ODKView.FIELD_LIST.equalsIgnoreCase(gd.getAppearanceAttr())) {
+                            // OK this group is a field-list... see what the parent is...
                             FormEntryCaption[] fclist = this.getCaptionHierarchy(currentIndex);
                             boolean groupIsFieldList;
                             for (FormEntryCaption caption : fclist) {
@@ -862,7 +865,6 @@ public class FormController {
                 }
             } else {
                 indices.add(idxChild);
-                // don't descend
                 idxChild = formEntryController.getModel().incrementIndex(idxChild, false);
             }
         }
