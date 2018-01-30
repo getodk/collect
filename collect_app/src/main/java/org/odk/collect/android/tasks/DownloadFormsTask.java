@@ -152,7 +152,7 @@ public class DownloadFormsTask extends
         try {
             // get the xml file
             // if we've downloaded a duplicate, this gives us the file
-            fileResult = downloadXform(fd.getFormName(), "https://files.slack.com/files-pri/T34CUEQEL-F8ZT2JCKA/download/nigeria-wards.xml");
+            fileResult = downloadXform(fd.getFormName(), fd.getDownloadUrl());
 
             if (fd.getManifestUrl() != null) {
                 // use a temporary media path until everything is ok.
@@ -190,8 +190,6 @@ public class DownloadFormsTask extends
                 parsedFields = FileUtils.parseXML(fileResult.file);
                 Timber.i("Parse finished in %.3f seconds.",
                         (System.currentTimeMillis() - start) / 1000F);
-                int j = 0;
-                while(j++ < 1000000);
             } catch (RuntimeException e) {
                 message += e.getMessage();
             }
