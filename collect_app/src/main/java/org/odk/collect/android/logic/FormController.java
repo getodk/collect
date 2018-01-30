@@ -399,8 +399,14 @@ public class FormController {
                 // no group
                 return false;
             }
-            FormEntryCaption grp = captions[captions.length - 2];
-            return groupIsFieldList(grp.getIndex());
+            boolean groupIsFieldList;
+            for (FormEntryCaption caption : captions) {
+                groupIsFieldList = groupIsFieldList(caption.getIndex());
+                if (groupIsFieldList) {
+                    return true;
+                }
+            }
+            return false;
         } else if (event == FormEntryController.EVENT_GROUP) {
             return groupIsFieldList(index);
         } else if (event == FormEntryController.EVENT_REPEAT) {
@@ -503,18 +509,14 @@ public class FormController {
      * the group represented by the FormIndex.
      */
     private int stepOverGroup() {
-        ArrayList<FormIndex> indicies = new ArrayList<FormIndex>();
+        ArrayList<FormIndex> indicies;
         GroupDef gd =
                 (GroupDef) formEntryController.getModel().getForm()
                         .getChild(getFormIndex());
         FormIndex idxChild =
                 formEntryController.getModel().incrementIndex(
                         getFormIndex(), true); // descend into group
-        for (int i = 0; i < gd.getChildren().size(); i++) {
-            indicies.add(idxChild);
-            // don't descend
-            idxChild = formEntryController.getModel().incrementIndex(idxChild, false);
-        }
+        indicies = getIndices(gd, idxChild);
 
         // jump to the end of the group
         formEntryController.jumpToIndex(indicies.get(indicies.size() - 1));
@@ -555,12 +557,7 @@ public class FormController {
                                 && !indexIsInFieldList())) {
                     event = stepToPreviousEvent();
                 }
-
-                // Work-around for broken field-list handling from 1.1.7 which breaks either
-                // build-generated forms or XLSForm-generated forms.  If the current group
-                // is a GROUP with field-list and it is nested within a group or repeat with just
-                // this containing group, and that is also a field-list, then return the parent
-                // group.
+                
                 if (getEvent() == FormEntryController.EVENT_GROUP) {
                     FormIndex currentIndex = getFormIndex();
                     IFormElement element = formEntryController.getModel().getForm().getChild(
@@ -568,15 +565,13 @@ public class FormController {
                     if (element instanceof GroupDef) {
                         GroupDef gd = (GroupDef) element;
                         if (ODKView.FIELD_LIST.equalsIgnoreCase(gd.getAppearanceAttr())) {
-                            // OK this group is a field-list... see what the parent is...
                             FormEntryCaption[] fclist = this.getCaptionHierarchy(currentIndex);
-                            if (fclist.length > 1) {
-                                FormEntryCaption fc = fclist[fclist.length - 2];
-                                GroupDef pd = (GroupDef) fc.getFormElement();
-                                if (pd.getChildren().size() == 1
-                                        && ODKView.FIELD_LIST.equalsIgnoreCase(
-                                                pd.getAppearanceAttr())) {
-                                    formEntryController.jumpToIndex(fc.getIndex());
+                            boolean groupIsFieldList;
+                            for (FormEntryCaption caption : fclist) {
+                                groupIsFieldList = groupIsFieldList(caption.getIndex());
+                                if (groupIsFieldList) {
+                                    formEntryController.jumpToIndex(caption.getIndex());
+                                    break;
                                 }
                             }
                         }
@@ -812,7 +807,7 @@ public class FormController {
      */
     public FormEntryPrompt[] getQuestionPrompts() throws RuntimeException {
 
-        ArrayList<FormIndex> indicies = new ArrayList<FormIndex>();
+        ArrayList<FormIndex> indicies;
         FormIndex currentIndex = getFormIndex();
 
         // For questions, there is only one.
@@ -824,32 +819,7 @@ public class FormController {
             GroupDef gd = (GroupDef) element;
             // descend into group
             FormIndex idxChild = formEntryController.getModel().incrementIndex(currentIndex, true);
-
-            if (gd.getChildren().size() == 1 && getEvent(idxChild)
-                    == FormEntryController.EVENT_GROUP) {
-                // if we have a group definition within a field-list attribute group, and this is
-                // the
-                // only child in the group, check to see if it is also a field-list appearance.
-                // If it is, then silently recurse into it to pick up its elements.
-                // Work-around for the inconsistent treatment of field-list groups and repeats in
-                // 1.1.7 that
-                // either breaks forms generated by build or breaks forms generated by XLSForm.
-                IFormElement nestedElement = formEntryController.getModel().getForm().getChild(
-                        idxChild);
-                if (nestedElement instanceof GroupDef) {
-                    GroupDef nestedGd = (GroupDef) nestedElement;
-                    if (ODKView.FIELD_LIST.equalsIgnoreCase(nestedGd.getAppearanceAttr())) {
-                        gd = nestedGd;
-                        idxChild = formEntryController.getModel().incrementIndex(idxChild, true);
-                    }
-                }
-            }
-
-            for (int i = 0; i < gd.getChildren().size(); i++) {
-                indicies.add(idxChild);
-                // don't descend
-                idxChild = formEntryController.getModel().incrementIndex(idxChild, false);
-            }
+            indicies = getIndices(gd, idxChild);
 
             // we only display relevant questions
             ArrayList<FormEntryPrompt> questionList = new ArrayList<FormEntryPrompt>();
@@ -880,6 +850,24 @@ public class FormController {
         return questions;
     }
 
+    private ArrayList getIndices(GroupDef gd, FormIndex idxChild) {
+        ArrayList<FormIndex> indices = new ArrayList<>();
+        for (int i = 0; i < gd.getChildren().size(); i++) {
+            if (getEvent(idxChild) == FormEntryController.EVENT_GROUP) {
+                IFormElement nestedElement = formEntryController.getModel().getForm().getChild(idxChild);
+                if (nestedElement instanceof GroupDef) {
+                    indices.addAll(getIndices((GroupDef) nestedElement,
+                            formEntryController.getModel().incrementIndex(idxChild, true)));
+                    idxChild = formEntryController.getModel().incrementIndex(idxChild, false);
+                }
+            } else {
+                indices.add(idxChild);
+                // don't descend
+                idxChild = formEntryController.getModel().incrementIndex(idxChild, false);
+            }
+        }
+        return indices;
+    }
 
     public FormEntryPrompt getQuestionPrompt(FormIndex index) {
         return formEntryController.getModel().getQuestionPrompt(index);
