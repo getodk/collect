@@ -557,7 +557,7 @@ public class FormController {
                                 && !indexIsInFieldList())) {
                     event = stepToPreviousEvent();
                 }
-                
+
                 if (getEvent() == FormEntryController.EVENT_GROUP) {
                     FormIndex currentIndex = getFormIndex();
                     IFormElement element = formEntryController.getModel().getForm().getChild(
@@ -828,7 +828,7 @@ public class FormController {
 
                 if (getEvent(index) != FormEntryController.EVENT_QUESTION) {
                     String errorMsg =
-                            "Only questions are allowed in 'field-list'.  Bad node is: "
+                            "Only questions and regular groups are allowed in 'field-list'.  Bad node is: "
                                     + index.getReference().toString(false);
                     RuntimeException e = new RuntimeException(errorMsg);
                     Timber.e(errorMsg);
