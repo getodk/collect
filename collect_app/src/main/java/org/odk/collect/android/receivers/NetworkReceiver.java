@@ -89,6 +89,9 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                 && sendnetwork);
     }
 
+    /**
+     * @param isFormAutoSendOptionEnabled represents whether the auto-send option is enabled at the app level
+     */
     private void uploadForms(Context context, boolean isFormAutoSendOptionEnabled) {
         if (!running) {
             running = true;
@@ -164,7 +167,11 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         }
     }
 
-    // If the form explicitly sets the auto-submit property, then it overrides the preferences.
+    /**
+     * @param isFormAutoSendOptionEnabled represents whether the auto-send option is enabled at the app level
+     *
+     * If the form explicitly sets the auto-submit property, then it overrides the preferences.
+     */
     private boolean isFormAutoSendEnabled(String jrFormId, boolean isFormAutoSendOptionEnabled) {
         Cursor cursor = new FormsDao().getFormsCursorForFormId(jrFormId);
         String autoSubmit = null;
