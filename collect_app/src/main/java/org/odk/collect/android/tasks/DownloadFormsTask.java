@@ -121,6 +121,15 @@ public class DownloadFormsTask extends
         return result;
     }
 
+    @Override
+    protected void onCancelled(HashMap<FormDetails, String> formDetailsStringHashMap) {
+        synchronized (this) {
+            if (stateListener != null) {
+                stateListener.formsDownloadingCancelled();
+            }
+        }
+    }
+
     /**
      * Processes one form download.
      *
@@ -133,7 +142,6 @@ public class DownloadFormsTask extends
     private String processOneForm(int total, int count, FormDetails fd) throws TaskCancelledException {
         publishProgress(fd.getFormName(), String.valueOf(count), String.valueOf(total));
         String message = "";
-
         if (isCancelled()) {
             throw new TaskCancelledException();
         }
@@ -144,7 +152,7 @@ public class DownloadFormsTask extends
         try {
             // get the xml file
             // if we've downloaded a duplicate, this gives us the file
-            fileResult = downloadXform(fd.getFormName(), fd.getDownloadUrl());
+            fileResult = downloadXform(fd.getFormName(), "https://files.slack.com/files-pri/T34CUEQEL-F8ZT2JCKA/download/nigeria-wards.xml");
 
             if (fd.getManifestUrl() != null) {
                 // use a temporary media path until everything is ok.
@@ -170,6 +178,10 @@ public class DownloadFormsTask extends
             message += getExceptionMessage(e);
         }
 
+        if (isCancelled()) {
+            cleanUp(fileResult,null, tempMediaPath);
+        }
+
         Map<String, String> parsedFields = null;
         if (fileResult != null) {
             try {
@@ -178,6 +190,8 @@ public class DownloadFormsTask extends
                 parsedFields = FileUtils.parseXML(fileResult.file);
                 Timber.i("Parse finished in %.3f seconds.",
                         (System.currentTimeMillis() - start) / 1000F);
+                int j = 0;
+                while(j++ < 1000000);
             } catch (RuntimeException e) {
                 message += e.getMessage();
             }
