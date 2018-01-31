@@ -72,12 +72,16 @@ If you dont' want to copy the Javarosa source tree you can use jar file:
 
 - In JavaRosa
 	- Change version in build.gradle
-		jar {
-		    baseName = 'opendatakit-javarosa'
-		    version = '2.7.1-SNAPSHOT'
+	```gradle
+	jar {
+	    baseName = 'opendatakit-javarosa'
+	    version = '2.7.1-SNAPSHOT'
+	```
 - In Collect
 	- Add to dependencies in build.gradle
-		compile files('~/opendatakit/javarosa/build/libs/opendatakit-javarosa-2.7.1-SNAPSHOT.jar')
+	```gradle
+	compile files('~/opendatakit/javarosa/build/libs/opendatakit-javarosa-2.7.1-SNAPSHOT.jar')
+	```	
 
 ## Using APIs for local development
 
