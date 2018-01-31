@@ -68,7 +68,7 @@ implementation(group: 'org.opendatakit', name: 'opendatakit-javarosa', version: 
 }
 ```
 
-If you dont' want to copy the Javarosa source tree you can use jar file:
+If you dont' want to copy the Javarosa source tree you can use a jar file:
 
 - In JavaRosa
 	- Change version in build.gradle
