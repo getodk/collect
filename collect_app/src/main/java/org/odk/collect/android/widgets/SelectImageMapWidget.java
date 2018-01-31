@@ -20,8 +20,10 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.Html;
 import android.view.MotionEvent;
+import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.javarosa.core.model.SelectChoice;
@@ -126,6 +128,8 @@ public abstract class SelectImageMapWidget extends SelectWidget {
             webView.loadDataWithBaseURL(null, String.format(WEB_VIEW_CONTENT, svgMap), "text/html", "UTF-8", null);
             webView.setInitialScale(1);
             webView.getSettings().setUseWideViewPort(true);
+            int height = (int) (getResources().getDisplayMetrics().heightPixels / 1.7); // about 60% of a screen
+            webView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height));
             webView.setWebViewClient(new WebViewClient() {
                 @Override
                 public void onPageFinished(WebView view, String url) {
