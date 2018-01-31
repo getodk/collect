@@ -78,7 +78,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
     private static final int PROGRESS_DIALOG = 1;
     private static final int AUTH_DIALOG = 2;
-    private static final int CANCEL_DIALOG = 3;
+    private static final int CANCELLATION_DIALOG = 3;
     private static final int MENU_PREFERENCES = Menu.FIRST;
 
     private static final String BUNDLE_SELECTED_COUNT = "selectedcount";
@@ -391,7 +391,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                                     downloadFormListTask = null;
                                 }
                                 if (downloadFormsTask != null) {
-                                    showDialog(CANCEL_DIALOG);
+                                    showDialog(CANCELLATION_DIALOG);
                                     downloadFormsTask.cancel(true);
                                 }
                             }
@@ -410,10 +410,10 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 alertShowing = false;
 
                 return new AuthDialogUtility().createDialog(this, this, null);
-            case CANCEL_DIALOG:
+            case CANCELLATION_DIALOG:
                 cancelDialog = new ProgressDialog(this);
-                cancelDialog.setTitle(getString(R.string.please_wait));
-                cancelDialog.setMessage(getString(R.string.canceling));
+                cancelDialog.setTitle(getString(R.string.canceling));
+                cancelDialog.setMessage(getString(R.string.please_wait));
                 cancelDialog.setIcon(android.R.drawable.ic_dialog_info);
                 cancelDialog.setIndeterminate(true);
                 cancelDialog.setCancelable(false);
