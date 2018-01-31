@@ -171,6 +171,7 @@ public class DownloadFormsTask extends
         } catch (TaskCancelledException e) {
             Timber.i(e.getMessage());
             cleanUp(fileResult, e.file, tempMediaPath);
+            fileResult = null;
 
             // do not download additional forms.
             throw e;
@@ -180,6 +181,7 @@ public class DownloadFormsTask extends
 
         if (isCancelled()) {
             cleanUp(fileResult,null, tempMediaPath);
+            fileResult = null;
         }
 
         Map<String, String> parsedFields = null;
@@ -252,19 +254,7 @@ public class DownloadFormsTask extends
             Timber.w("The user cancelled (or an exception happened) the download of a form at the "
                     + "very beginning.");
         } else {
-            Cursor c = null;
-            try {
-                c = formsDao.getFormsCursorForMd5Hash(FileUtils.getMd5Hash(fileResult.file));
-                if (c.getCount() > 0) {
-                    c.moveToFirst();
-                    String id = c.getString(c.getColumnIndex(FormsColumns._ID));
-                    formsDao.deleteFormsFromIDs(new String[]{id});
-                }
-            } finally {
-                if (c != null) {
-                    c.close();
-                }
-            }
+            formsDao.deleteFormsFromMd5Hash(new String[]{FileUtils.getMd5Hash(fileResult.file)});
             FileUtils.deleteAndReport(fileResult.getFile());
         }
 

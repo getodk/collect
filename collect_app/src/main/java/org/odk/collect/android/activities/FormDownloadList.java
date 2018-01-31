@@ -413,7 +413,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             case CANCEL_DIALOG:
                 cancelDialog = new ProgressDialog(this);
                 cancelDialog.setTitle(getString(R.string.please_wait));
-                cancelDialog.setMessage(getString(R.string.cancelling));
+                cancelDialog.setMessage(getString(R.string.canceling));
                 cancelDialog.setIcon(android.R.drawable.ic_dialog_info);
                 cancelDialog.setIndeterminate(true);
                 cancelDialog.setCancelable(false);
