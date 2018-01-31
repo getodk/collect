@@ -205,7 +205,7 @@ public class WidgetFactory {
                 } else if (appearance.contains("search") || appearance.contains("autocomplete")) {
                     questionWidget = new SelectOneSearchWidget(context, fep);
                 } else if (appearance.startsWith("image-map")) {
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP){
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                         questionWidget = new SelectOneImageMapWidget(context, fep);
                     } else {
                         questionWidget = new SelectOneWidget(context, fep);
@@ -244,7 +244,7 @@ public class WidgetFactory {
                 } else if (appearance.contains("autocomplete")) {
                     questionWidget = new SelectMultipleAutocompleteWidget(context, fep);
                 } else if (appearance.startsWith("image-map")) {
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP){
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                         questionWidget = new SelectMultiImageMapWidget(context, fep);
                     } else {
                         questionWidget = new SelectMultiWidget(context, fep);
