@@ -159,10 +159,8 @@ public class WidgetFactory {
                     questionWidget = new DrawWidget(context, fep);
                 } else if (appearance.startsWith("align:")) {
                     questionWidget = new AlignedImageWidget(context, fep);
-                } else if (appearance.equals("selfie")) {
-                    questionWidget = new ImageWidget(context, fep, true);
                 } else {
-                    questionWidget = new ImageWidget(context, fep, false);
+                    questionWidget = new ImageWidget(context, fep);
                 }
                 break;
             case Constants.CONTROL_OSM_CAPTURE:
