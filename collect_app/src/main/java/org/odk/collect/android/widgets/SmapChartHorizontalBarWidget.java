@@ -31,7 +31,9 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
@@ -39,6 +41,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.views.SmapChartMarker;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,6 +64,25 @@ public class SmapChartHorizontalBarWidget extends SmapChartWidget {
     float barSpace = 0.02f; // x2 dataset
     float barWidth = 0.45f; // x2 dataset
 
+    public class ValueFormatter implements IValueFormatter {
+
+        private DecimalFormat mFormat;
+
+        public ValueFormatter() {
+            mFormat = new DecimalFormat("###,###,##0.0"); // use one decimal
+        }
+
+        @Override
+        public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+            // write your logic here
+            if(value > 0.0) {
+                return mFormat.format(value);
+            } else {
+                return "";
+            }
+        }
+    }
+
     public SmapChartHorizontalBarWidget(Context context, FormEntryPrompt prompt, String appearance) {
         super(context, prompt, appearance);
 
@@ -73,6 +95,7 @@ public class SmapChartHorizontalBarWidget extends SmapChartWidget {
             data = getGroupedBarData(dString);
         }
 
+        data.setValueFormatter(new ValueFormatter());
         // Add a Horizontal Bar Widget
         chart = new HorizontalBarChart(context);
         chart.setScaleEnabled(false);
@@ -193,7 +216,7 @@ public class SmapChartHorizontalBarWidget extends SmapChartWidget {
         float [] values = new float [items.length];
 
         float total = 0;
-        int nonZeroCount = 0;
+        //int nonZeroCount = 0;
         for(int i = 0; i < items.length; i++) {
             float f = 0f;
             try {
@@ -205,9 +228,9 @@ public class SmapChartHorizontalBarWidget extends SmapChartWidget {
                 total += f;
             }
             values[i] = f;
-            if(f > 0.0) {
-                nonZeroCount++;
-            }
+            //if(f > 0.0) {
+            //    nonZeroCount++;
+            //}
         }
 
         if(isNormalised() && total > 0) {
@@ -216,15 +239,15 @@ public class SmapChartHorizontalBarWidget extends SmapChartWidget {
             }
         }
 
-        float [] posValues = new float [nonZeroCount];
-        for(int i = 0, j = 0; i < values.length; i++) {
-            if(values[i] > 0.0) {
-                posValues[j++] = values[i];
-            }
-        }
+        //float [] posValues = new float [nonZeroCount];
+        //for(int i = 0, j = 0; i < values.length; i++) {
+        //    if(values[i] > 0.0) {
+        //        posValues[j++] = values[i];
+        //    }
+        //}
 
 
-        entry = new BarEntry(idx, posValues);
+        entry = new BarEntry(idx, values);
         return entry;
     }
 
