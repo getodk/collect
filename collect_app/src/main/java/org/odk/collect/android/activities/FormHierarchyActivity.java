@@ -303,7 +303,7 @@ public abstract class FormHierarchyActivity extends AppCompatActivity implements
                             // or if it is read-only and the label is not blank.
                             String answerDisplay = FormEntryPromptUtils.getAnswerText(fp, this);
                             formList.add(
-                                    new HierarchyElement(fp.getLongText(), answerDisplay, null,
+                                    new HierarchyElement(FormEntryPromptUtils.markRequiredQuestionIfNeeded(label, fp.isRequired()), answerDisplay, null,
                                             Color.WHITE, QUESTION, fp.getIndex()));
                         }
                         break;

@@ -49,6 +49,7 @@ import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.views.MediaLayout;
@@ -142,7 +143,7 @@ public abstract class QuestionWidget
         questionText.setTypeface(null, Typeface.BOLD);
         questionText.setTextColor(ContextCompat.getColor(getContext(), R.color.primaryTextColor));
         questionText.setPadding(0, 0, 0, 7);
-        questionText.setText(promptText == null ? "" : TextUtils.textToHtml(promptText));
+        questionText.setText(promptText == null ? "" : TextUtils.textToHtml(FormEntryPromptUtils.markRequiredQuestionIfNeeded(promptText, prompt.isRequired())));
         questionText.setMovementMethod(LinkMovementMethod.getInstance());
 
         // Wrap to the size of the parent view
