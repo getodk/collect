@@ -24,6 +24,8 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,7 +33,6 @@ import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
@@ -60,8 +61,8 @@ import timber.log.Timber;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 
-public class InstanceUploaderList extends InstanceListActivity
-        implements OnLongClickListener, DiskSyncListener, AdapterView.OnItemClickListener {
+public class InstanceUploaderList extends InstanceListActivity implements
+        OnLongClickListener, DiskSyncListener, AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
     private static final String SHOW_ALL_MODE = "showAllMode";
     private static final String INSTANCE_UPLOADER_LIST_SORTING_ORDER = "instanceUploaderListSortingOrder";
 
@@ -77,7 +78,6 @@ public class InstanceUploaderList extends InstanceListActivity
     private InstanceSyncTask instanceSyncTask;
 
     private boolean showAllMode;
-    private LinearLayout llParent;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -85,7 +85,6 @@ public class InstanceUploaderList extends InstanceListActivity
         setContentView(R.layout.instance_uploader_list);
         super.onCreate(savedInstanceState);
 
-        llParent = findViewById(R.id.llParent);
         if (savedInstanceState != null) {
             showAllMode = savedInstanceState.getBoolean(SHOW_ALL_MODE);
         }
@@ -154,7 +153,6 @@ public class InstanceUploaderList extends InstanceListActivity
 
         // set title
         setTitle(getString(R.string.send_data));
-        displayStatus(getString(R.string.form_scan_starting));
 
         instanceSyncTask = new InstanceSyncTask();
         instanceSyncTask.setDiskSyncListener(this);
@@ -164,6 +162,7 @@ public class InstanceUploaderList extends InstanceListActivity
                 getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc),
                 getString(R.string.sort_by_date_asc), getString(R.string.sort_by_date_desc)
         };
+        getSupportLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
     @Override
@@ -188,11 +187,9 @@ public class InstanceUploaderList extends InstanceListActivity
 
     @Override
     public void syncComplete(String result) {
-        displayStatus(result);
-    }
-
-    private void displayStatus(String message) {
-        Snackbar.make(llParent, message, Snackbar.LENGTH_LONG).show();
+        if (result != null && !result.isEmpty()) {
+            Snackbar.make(llParent, result, Snackbar.LENGTH_LONG).show();
+        }
     }
 
     @Override
@@ -314,7 +311,7 @@ public class InstanceUploaderList extends InstanceListActivity
         String[] data = new String[]{InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT};
         int[] view = new int[]{R.id.text1, R.id.text2};
 
-        listAdapter = new SimpleCursorAdapter(this, R.layout.two_item_multiple_choice, getCursor(), data, view);
+        listAdapter = new SimpleCursorAdapter(this, R.layout.two_item_multiple_choice, null, data, view);
         listView.setAdapter(listAdapter);
         checkPreviouslyCheckedItems();
     }
@@ -326,48 +323,40 @@ public class InstanceUploaderList extends InstanceListActivity
 
     @Override
     protected void updateAdapter() {
-        listAdapter.changeCursor(getCursor());
-        checkPreviouslyCheckedItems();
+        getSupportLoaderManager().restartLoader(LOADER_ID, null, this);
         toggleButtonLabel(findViewById(R.id.toggle_button), listView);
     }
 
-    private Cursor getCursor() {
-        Cursor cursor;
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        progressBar.setVisibility(View.VISIBLE);
         if (showAllMode) {
-            cursor = instancesDao.getCompletedUndeletedInstancesCursor(getFilterText(), getSortingOrder());
+            return instancesDao.getCompletedUndeletedInstancesCursorLoader(getFilterText(), getSortingOrder());
         } else {
-            cursor = instancesDao.getFinalizedInstancesCursor(getFilterText(), getSortingOrder());
+            return instancesDao.getFinalizedInstancesCursorLoader(getFilterText(), getSortingOrder());
         }
+    }
 
-        return cursor;
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        progressBar.setVisibility(View.GONE);
+        listAdapter.changeCursor(cursor);
+        checkPreviouslyCheckedItems();
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        listAdapter.swapCursor(null);
     }
 
     private void showUnsent() {
         showAllMode = false;
-        Cursor old = listAdapter.getCursor();
-        try {
-            listAdapter.changeCursor(getCursor());
-        } finally {
-            if (old != null) {
-                old.close();
-                this.stopManagingCursor(old);
-            }
-        }
-        listView.invalidate();
+        updateAdapter();
     }
 
     private void showAll() {
         showAllMode = true;
-        Cursor old = listAdapter.getCursor();
-        try {
-            listAdapter.changeCursor(getCursor());
-        } finally {
-            if (old != null) {
-                old.close();
-                this.stopManagingCursor(old);
-            }
-        }
-        listView.invalidate();
+        updateAdapter();
     }
 
     @Override

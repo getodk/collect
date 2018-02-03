@@ -23,9 +23,10 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -45,15 +46,12 @@ import timber.log.Timber;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class FormChooserList extends FormListActivity implements DiskSyncListener, AdapterView.OnItemClickListener {
+public class FormChooserList extends FormListActivity implements
+        DiskSyncListener, AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
     private static final String FORM_CHOOSER_LIST_SORTING_ORDER = "formChooserListSortingOrder";
 
     private static final boolean EXIT = true;
-    private static final String syncMsgKey = "syncmsgkey";
-
     private DiskSyncTask diskSyncTask;
-    private LinearLayout llParent;
-    private String statusMessage;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,15 +69,6 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
 
         setTitle(getString(R.string.enter_data));
 
-        setupAdapter();
-
-        llParent = findViewById(R.id.llParent);
-        if (savedInstanceState != null && savedInstanceState.containsKey(syncMsgKey)) {
-            displayStatus(savedInstanceState.getString(syncMsgKey).trim());
-        } else {
-            displayStatus(getString(R.string.form_scan_starting));
-        }
-
         // DiskSyncTask checks the disk for any forms not already in the content provider
         // that is, put here by dragging and dropping onto the SDCard
         diskSyncTask = (DiskSyncTask) getLastCustomNonConfigurationInstance();
@@ -93,27 +82,16 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
                 getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc),
                 getString(R.string.sort_by_date_asc), getString(R.string.sort_by_date_desc),
         };
-    }
 
-    private void displayStatus(String message) {
-        Snackbar.make(llParent, message, Snackbar.LENGTH_LONG).show();
-        statusMessage = message;
+        setupAdapter();
+        getSupportLoaderManager().initLoader(LOADER_ID, null, this);
     }
-
 
     @Override
     public Object onRetainCustomNonConfigurationInstance() {
         // pass the thread on restart
         return diskSyncTask;
     }
-
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString(syncMsgKey, statusMessage);
-    }
-
 
     /**
      * Stores the path of selected form and finishes.
@@ -181,8 +159,9 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
 
     @Override
     public void syncComplete(String result) {
-        Timber.i("Disk sync task complete");
-        displayStatus(result.trim());
+        if (result != null) {
+            Snackbar.make(llParent, result.trim(), Snackbar.LENGTH_LONG).show();
+        }
     }
 
     private void setupAdapter() {
@@ -193,9 +172,7 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
                 R.id.text1, R.id.text2, R.id.text3
         };
 
-        listAdapter =
-                new VersionHidingCursorAdapter(FormsColumns.JR_VERSION, this, R.layout.two_item, getCursor(), data, view);
-
+        listAdapter = new VersionHidingCursorAdapter(FormsColumns.JR_VERSION, this, R.layout.two_item, null, data, view);
         listView.setAdapter(listAdapter);
     }
 
@@ -206,11 +183,7 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
 
     @Override
     protected void updateAdapter() {
-        listAdapter.changeCursor(getCursor());
-    }
-
-    private Cursor getCursor() {
-        return new FormsDao().getFormsCursor(getFilterText(), getSortingOrder());
+        getSupportLoaderManager().restartLoader(LOADER_ID, null, this);
     }
 
     /**
@@ -242,5 +215,22 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
         alertDialog.setCancelable(false);
         alertDialog.setButton(getString(R.string.ok), errorListener);
         alertDialog.show();
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        progressBar.setVisibility(View.VISIBLE);
+        return new FormsDao().getFormsCursorLoader(getFilterText(), getSortingOrder());
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        progressBar.setVisibility(View.GONE);
+        listAdapter.changeCursor(cursor);
+    }
+
+    @Override
+    public void onLoaderReset(Loader loader) {
+        listAdapter.swapCursor(null);
     }
 }

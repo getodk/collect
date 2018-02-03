@@ -34,7 +34,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
@@ -54,6 +56,7 @@ import timber.log.Timber;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
 
 abstract class AppListActivity extends AppCompatActivity {
+    protected static final int LOADER_ID = 0x01;
     private static final String SELECTED_INSTANCES = "selectedInstances";
     private static final String IS_SEARCH_BOX_SHOWN = "isSearchBoxShown";
     private static final String IS_BOTTOM_DIALOG_SHOWN = "isBottomDialogShown";
@@ -66,6 +69,8 @@ abstract class AppListActivity extends AppCompatActivity {
     protected Integer selectedSortingOrder;
     protected Toolbar toolbar;
     protected ListView listView;
+    protected LinearLayout llParent;
+    protected ProgressBar progressBar;
     private BottomSheetDialog bottomSheetDialog;
     private boolean isBottomDialogShown;
 
@@ -122,6 +127,8 @@ abstract class AppListActivity extends AppCompatActivity {
 
         TextView emptyView = findViewById(android.R.id.empty);
         listView.setEmptyView(emptyView);
+        progressBar = findViewById(R.id.progressBar);
+        llParent = findViewById(R.id.llParent);
 
         initToolbar();
     }
