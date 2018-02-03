@@ -225,8 +225,6 @@ public class AllWidgetsFormTest {
 
     //region Widget tests.
 
-    // Screengrab.screenshot("image-name") captures screenshot of widgets.
-
     public void skipInitialLabel() {
 
         onView(withText(startsWith("This form"))).perform(swipeLeft());
