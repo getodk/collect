@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2017 Nyoman Ribeka
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -18,6 +18,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -67,7 +68,6 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
         int instance = ++counter;
         Timber.i("[%d] doInBackground begins!", instance);
 
-        currentStatus = Collect.getInstance().getString(R.string.instance_scan_completed);
         try {
             List<String> candidateInstances = new LinkedList<String>();
             File instancesPath = new File(Collect.INSTANCES_PATH);
@@ -75,7 +75,8 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                 File[] instanceFolders = instancesPath.listFiles();
                 if (instanceFolders.length == 0) {
                     Timber.i("[%d] Empty instance folder. Stopping scan process.", instance);
-                    return currentStatus;
+                    Log.d("InstanceSyncTask", Collect.getInstance().getString(R.string.instance_scan_completed));
+                    return null;
                 }
 
                 // Build the list of potential path that we need to add to the content provider
