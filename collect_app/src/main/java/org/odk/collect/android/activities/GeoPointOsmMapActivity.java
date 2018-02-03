@@ -125,6 +125,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 
             map.setMultiTouchControls(true);
             map.setBuiltInZoomControls(true);
+            map.setTilesScaledToDpi(true);
         }
 
         marker = new Marker(map);

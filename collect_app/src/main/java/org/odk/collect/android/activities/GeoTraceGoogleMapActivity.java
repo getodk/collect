@@ -606,7 +606,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
     }
 
     private void zoomToMyLocation() {
-        if (curLocation != null) {
+        if (curLocation != null && curlatLng != null) {
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(curlatLng, 17));
         }
 

@@ -28,6 +28,7 @@
     <issue id="ApplySharedPref" severity="error"/>
     <issue id="IconLocation" severity="error"/>
     <issue id="UnknownIdInLayout" severity="error"/>
+    <issue id="IconDuplicates" severity="error"/>
     <issue id="UnusedNamespace" severity="error">
         <ignore path="res/values*"/>
     </issue>

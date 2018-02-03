@@ -102,12 +102,13 @@ the License.
         android:layout_height="wrap_content"
         android:layout_below="@id/toolbar" />
 
-    <ListView
-        android:id="@android:id/list"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/list"
+        android:scrollbars="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/buttonholder"
-        android:layout_below="@+id/searchholder" />
+        android:layout_below="@+id/searchholder"/>
 
     <TextView
         android:id="@android:id/empty"

@@ -95,6 +95,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         helper = new MapHelper(this, map, this);
         map.setMultiTouchControls(true);
         map.setBuiltInZoomControls(true);
+        map.setTilesScaledToDpi(true);
         map.setMapListener(mapViewListener);
         overlayPointPathListener();
         saveButton.setOnClickListener(new View.OnClickListener() {
