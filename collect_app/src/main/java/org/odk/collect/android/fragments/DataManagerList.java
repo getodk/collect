@@ -17,10 +17,12 @@ package org.odk.collect.android.fragments;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
+import android.support.v4.content.CursorLoader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,9 +37,6 @@ import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.DeleteInstancesTask;
 import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.utilities.ToastUtils;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import timber.log.Timber;
 
@@ -69,13 +68,12 @@ public class DataManagerList extends InstanceListFragment
     }
 
     @Override
-    public void onViewCreated(View rootView, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View rootView, Bundle savedInstanceState) {
 
         deleteButton.setOnClickListener(this);
         toggleButton.setOnClickListener(this);
 
         setupAdapter();
-        displayStatus(getString(R.string.form_scan_starting));
         instanceSyncTask = new InstanceSyncTask();
         instanceSyncTask.setDiskSyncListener(this);
         instanceSyncTask.execute();
@@ -116,19 +114,17 @@ public class DataManagerList extends InstanceListFragment
 
     @Override
     public void syncComplete(String result) {
-        displayStatus(result);
+        if (result != null && !result.isEmpty()) {
+            Snackbar.make(llParent, result, Snackbar.LENGTH_LONG).show();
+        }
     }
 
     private void setupAdapter() {
-        List<Long> checkedInstances = new ArrayList<>();
-        for (long a : getListView().getCheckedItemIds()) {
-            checkedInstances.add(a);
-        }
         String[] data = new String[]{InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT};
         int[] view = new int[]{R.id.text1, R.id.text2};
 
         listAdapter = new SimpleCursorAdapter(getActivity(),
-                R.layout.two_item_multiple_choice, getCursor(), data, view);
+                R.layout.two_item_multiple_choice, null, data, view);
         setListAdapter(listAdapter);
         checkPreviouslyCheckedItems();
     }
@@ -139,13 +135,8 @@ public class DataManagerList extends InstanceListFragment
     }
 
     @Override
-    protected void updateAdapter() {
-        listAdapter.changeCursor(getCursor());
-        super.updateAdapter();
-    }
-
-    private Cursor getCursor() {
-        return new InstancesDao().getSavedInstancesCursor(getFilterText(), getSortingOrder());
+    protected CursorLoader getCursorLoader() {
+        return new InstancesDao().getSavedInstancesCursorLoader(getFilterText(), getSortingOrder());
     }
 
     /**

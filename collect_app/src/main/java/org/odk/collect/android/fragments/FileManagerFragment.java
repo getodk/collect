@@ -14,23 +14,30 @@ limitations under the License.
 
 package org.odk.collect.android.fragments;
 
+import android.database.Cursor;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import org.odk.collect.android.R;
 
 
-public abstract class FileManagerFragment extends AppListFragment {
+public abstract class FileManagerFragment extends AppListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
+    private static final int LOADER_ID = 0x01;
     protected Button deleteButton;
     protected Button toggleButton;
     protected LinearLayout llParent;
+    protected ProgressBar progressBar;
 
     @Nullable
     @Override
@@ -41,28 +48,23 @@ public abstract class FileManagerFragment extends AppListFragment {
         deleteButton.setText(getString(R.string.delete_file));
         toggleButton = rootView.findViewById(R.id.toggle_button);
         llParent = rootView.findViewById(R.id.llParent);
+        progressBar = getActivity().findViewById(R.id.progressBar);
 
         setHasOptionsMenu(true);
         return rootView;
     }
 
-    protected void displayStatus(String message) {
-        Snackbar.make(llParent, message, Snackbar.LENGTH_LONG).show();
-    }
-
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         getListView().setItemsCanFocus(false);
         deleteButton.setEnabled(false);
 
-        if (getListView().getCount() == 0) {
-            toggleButton.setEnabled(false);
-        }
         sortingOptions = new String[]{
                 getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc),
                 getString(R.string.sort_by_date_asc), getString(R.string.sort_by_date_desc)
         };
+        getLoaderManager().initLoader(LOADER_ID, null, this);
         super.onViewCreated(view, savedInstanceState);
     }
 
@@ -89,8 +91,32 @@ public abstract class FileManagerFragment extends AppListFragment {
 
     @Override
     protected void updateAdapter() {
+        getLoaderManager().restartLoader(LOADER_ID, null, this);
         checkPreviouslyCheckedItems();
         toggleButtonLabel(toggleButton, getListView());
         deleteButton.setEnabled(areCheckedItems());
     }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        progressBar.setVisibility(View.VISIBLE);
+        return getCursorLoader();
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        progressBar.setVisibility(View.GONE);
+        listAdapter.swapCursor(cursor);
+
+        if (getListView().getCount() == 0) {
+            toggleButton.setEnabled(false);
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        listAdapter.swapCursor(null);
+    }
+
+    protected abstract CursorLoader getCursorLoader();
 }
