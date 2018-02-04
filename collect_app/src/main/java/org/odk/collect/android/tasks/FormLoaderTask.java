@@ -50,11 +50,9 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ZipUtils;
 
 import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
@@ -83,6 +81,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
     private int resultCode = 0;
     private Intent intent = null;
     private ExternalDataManager externalDataManager;
+    private FormDef formDef;
 
     protected class FECWrapper {
         FormController controller;
@@ -234,7 +233,6 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             final FormDef deserializedFormDef = deserializeFormDef(cachedForm);
             if (deserializedFormDef != null) {
                 Timber.i("Loaded in %.3f seconds.", (System.currentTimeMillis() - start) / 1000F);
-
                 return deserializedFormDef;
             }
 
@@ -255,12 +253,9 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             if (formDefFromXml == null) {
                 errorMsg = "Error reading XForm file";
             } else {
-                Timber.i("Loaded in %.3f seconds. Now saving to cache.",
+                Timber.i("Loaded in %.3f seconds.",
                         (System.currentTimeMillis() - start) / 1000F);
-                final long start2 = System.currentTimeMillis();
-                boolean saved = cacheFormDefIfNew(formDefFromXml, formPath);
-                Timber.i((saved ? "Saved" : "Found existing cached form") + " in %.3f seconds.",
-                        (System.currentTimeMillis() - start2) / 1000F);
+                formDef = formDefFromXml;
                 return formDefFromXml;
             }
         } catch (Exception e) {
@@ -269,7 +264,6 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         } finally {
             IOUtils.closeQuietly(fis);
         }
-
         return null;
     }
 
@@ -492,32 +486,6 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         return fd;
     }
 
-    /**
-     * Serializes a FormDef and saves it to the cache, if it is not already cached.
-     *
-     * @param fd       the FormDef
-     * @param filepath where to save the serialized FormDef
-     * @return whether the file was added to the cache
-     */
-    private boolean cacheFormDefIfNew(FormDef fd, String filepath) {
-        String hash = FileUtils.getMd5Hash(new File(filepath));
-        File formDef = new File(Collect.CACHE_PATH + File.separator + hash + ".formdef");
-
-        if (formDef.exists()) {
-            return false;
-        }
-
-        try {
-            DataOutputStream dos = new DataOutputStream(new FileOutputStream(formDef));
-            fd.writeExternal(dos);
-            dos.flush();
-            dos.close();
-        } catch (IOException e) {
-            Timber.e(e);
-        }
-        return true;
-    }
-
     @Override
     protected void onCancelled() {
         super.onCancelled();
@@ -535,7 +503,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                     if (wrapper == null) {
                         stateListener.loadingError(errorMsg);
                     } else {
-                        stateListener.loadingComplete(this);
+                        stateListener.loadingComplete(this, formDef);
                     }
                 }
             } catch (Exception e) {
@@ -633,5 +601,9 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             }
             ida.close();
         }
+    }
+
+    public FormDef getFormDef() {
+        return formDef;
     }
 }
