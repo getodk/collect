@@ -14,6 +14,10 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOSEND_WI
  */
 public class AutoSendPreferenceMigrator {
 
+    private AutoSendPreferenceMigrator() {
+
+    }
+
     public static void migrate() {
 
         boolean autoSendWifi = GeneralSharedPreferences.getInstance().getBoolean(KEY_AUTOSEND_WIFI, false);

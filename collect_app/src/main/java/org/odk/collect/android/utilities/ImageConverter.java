@@ -36,6 +36,9 @@ import static org.odk.collect.android.utilities.ApplicationConstants.XML_OPENROS
 
 public class ImageConverter {
 
+    private ImageConverter() {
+    }
+
     public static void execute(String imagePath, QuestionWidget questionWidget, Context context) {
         rotateImageIfNeeded(imagePath);
         scaleDownImageIfNeeded(imagePath, questionWidget, context);
@@ -92,7 +95,7 @@ public class ImageConverter {
     /**
      * This method is used to reduce an original picture size.
      * maxPixels refers to the max pixels of the long edge, the short edge is scaled proportionately.
-    */
+     */
     private static void scaleDownImage(String imagePath, int maxPixels) {
         Bitmap image = FileUtils.getBitmap(imagePath, new BitmapFactory.Options());
 

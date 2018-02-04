@@ -7,6 +7,9 @@ import org.odk.collect.android.application.Collect;
 
 public class ToastUtils {
 
+    private ToastUtils() {
+
+    }
 
     public static void showShortToast(String message) {
         showToast(message, Toast.LENGTH_SHORT);

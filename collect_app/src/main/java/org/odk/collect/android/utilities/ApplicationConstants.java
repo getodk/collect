@@ -35,6 +35,10 @@ public class ApplicationConstants {
             "sq", "sv_SE", "sw", "sw_KE", "ta", "th_TH", "ti", "tl", "tr", "uk", "ur",
             "ur_PK", "vi", "zh", "zu"};
 
+    private ApplicationConstants() {
+
+    }
+
     public static HashMap<String, Integer> getSortLabelToIconMap() {
         HashMap<String, Integer> hashMap = new HashMap<>();
         hashMap.put(Collect.getInstance().getString(R.string.sort_by_name_asc), R.drawable.ic_sort_by_alpha_black_24dp);

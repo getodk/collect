@@ -49,6 +49,7 @@ import timber.log.Timber;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class FileUtils {
+
     // Used to validate and display valid form names.
     public static final String VALID_FILENAME = "[ _\\-A-Za-z0-9]*.x[ht]*ml";
     public static final String FORMID = "formid";
@@ -56,6 +57,10 @@ public class FileUtils {
     public static final String TITLE = "title";
     public static final String SUBMISSIONURI = "submission";
     public static final String BASE64_RSA_PUBLIC_KEY = "base64RsaPublicKey";
+    static int bufSize = 16 * 1024; // May be set by unit test
+
+    private FileUtils() {
+    }
 
     public static String getMimeType(String fileUrl) throws IOException {
         FileNameMap fileNameMap = URLConnection.getFileNameMap();
@@ -126,8 +131,6 @@ public class FileUtils {
             }
         }
     }
-
-    static int bufSize = 16 * 1024; // May be set by unit test
 
     public static String getMd5Hash(File file) {
         final InputStream is;
@@ -272,9 +275,9 @@ public class FileUtils {
             dst.force(true);
             return null;
         } catch (Exception e) {
-            if (e instanceof  FileNotFoundException) {
+            if (e instanceof FileNotFoundException) {
                 Timber.e(e, "FileNotFoundException while copying file");
-            } else if (e instanceof  IOException) {
+            } else if (e instanceof IOException) {
                 Timber.e(e, "IOException while copying file");
             } else {
                 Timber.e(e, "Exception while copying file");
@@ -414,7 +417,7 @@ public class FileUtils {
     public static void checkMediaPath(File mediaDir) {
         if (mediaDir.exists() && mediaDir.isFile()) {
             Timber.e("The media folder is already there and it is a FILE!! We will need to delete "
-                            + "it and create a folder instead");
+                    + "it and create a folder instead");
             boolean deleted = mediaDir.delete();
             if (!deleted) {
                 throw new RuntimeException(

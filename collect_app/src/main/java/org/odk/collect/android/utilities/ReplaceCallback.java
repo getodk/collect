@@ -22,13 +22,8 @@ import java.util.regex.Pattern;
 // http://stackoverflow.com/a/2563382/152938
 
 public class ReplaceCallback {
-    public interface Callback {
-        /**
-         * This function is called when a match is made. The string which was matched
-         * can be obtained via match.group(), and the individual groupings via
-         * match.group(n).
-         */
-        String matchFound(MatchResult match);
+
+    private ReplaceCallback() {
     }
 
     /**
@@ -53,7 +48,7 @@ public class ReplaceCallback {
      * @param callback Callback function
      */
     public static String replace(String regex, String subject, int limit,
-            AtomicInteger count, Callback callback) {
+                                 AtomicInteger count, Callback callback) {
         StringBuffer sb = new StringBuffer();
         Matcher matcher = Pattern.compile(regex).matcher(subject);
         int i;
@@ -68,5 +63,14 @@ public class ReplaceCallback {
             count.set(i);
         }
         return sb.toString();
+    }
+
+    public interface Callback {
+        /**
+         * This function is called when a match is made. The string which was matched
+         * can be obtained via match.group(), and the individual groupings via
+         * match.group(n).
+         */
+        String matchFound(MatchResult match);
     }
 }

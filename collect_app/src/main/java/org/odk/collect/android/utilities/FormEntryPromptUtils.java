@@ -30,6 +30,9 @@ import java.util.Date;
 
 public class FormEntryPromptUtils {
 
+    private FormEntryPromptUtils() {
+    }
+
     public static String getAnswerText(FormEntryPrompt fep, Context context) {
         IAnswerData data = fep.getAnswerValue();
         final String appearance = fep.getQuestion().getAppearanceAttr();

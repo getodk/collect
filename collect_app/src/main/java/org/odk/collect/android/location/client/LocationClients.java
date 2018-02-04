@@ -13,6 +13,10 @@ import com.google.android.gms.common.GoogleApiAvailability;
  */
 public class LocationClients {
 
+    private LocationClients() {
+
+    }
+
     @Nullable
     private static LocationClient testClient = null;
 

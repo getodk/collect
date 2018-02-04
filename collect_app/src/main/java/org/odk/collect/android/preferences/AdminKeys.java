@@ -149,4 +149,8 @@ public final class AdminKeys {
     }
 
     public static final Collection<String> ALL_KEYS = allKeys();
+
+    private AdminKeys() {
+
+    }
 }
