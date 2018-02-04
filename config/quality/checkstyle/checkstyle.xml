@@ -239,9 +239,7 @@
         <module name="IllegalInstantiation" />
         <module name="InterfaceIsType" />
         <!--<module name="MethodLength" />-->
-        <!--<module name="NoWhitespaceAfter" />-->
-        <!--<module name="NoWhitespaceBefore" />-->
-        <!--<module name="WhitespaceAfter" />-->
+        <module name="WhitespaceAfter" />
         <module name="RedundantModifier" />
         <module name="HideUtilityClassConstructor" />
     </module>
