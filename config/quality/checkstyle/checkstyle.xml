@@ -242,7 +242,7 @@
         <!--<module name="NoWhitespaceAfter" />-->
         <!--<module name="NoWhitespaceBefore" />-->
         <!--<module name="WhitespaceAfter" />-->
-        <!--<module name="RedundantModifier" />-->
+        <module name="RedundantModifier" />
         <!--<module name="HideUtilityClassConstructor" />-->
     </module>
 </module>

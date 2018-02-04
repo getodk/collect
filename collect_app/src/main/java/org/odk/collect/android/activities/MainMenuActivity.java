@@ -722,7 +722,7 @@ public class MainMenuActivity extends AppCompatActivity {
      */
     private class MyContentObserver extends ContentObserver {
 
-        public MyContentObserver() {
+        MyContentObserver() {
             super(null);
         }
 
