@@ -32,18 +32,19 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
@@ -76,8 +77,7 @@ import timber.log.Timber;
 import static org.odk.collect.android.utilities.gdrive.GoogleAccountsManager.REQUEST_ACCOUNT_PICKER;
 
 public class GoogleDriveActivity extends AppCompatActivity implements View.OnClickListener,
-        TaskListener, GoogleDriveFormDownloadListener, AdapterView.OnItemClickListener,
-        GoogleAccountsManager.GoogleAccountSelectionListener {
+        TaskListener, GoogleDriveFormDownloadListener, GoogleAccountsManager.GoogleAccountSelectionListener {
 
     public static final int AUTHORIZATION_REQUEST_CODE = 4322;
     private static final int PROGRESS_DIALOG = 1;
@@ -108,7 +108,7 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
     private GetFileTask getFileTask;
     private String parentId;
     private ArrayList<DriveListItem> toDownload;
-    private ListView listView;
+    private RecyclerView listView;
     private TextView emptyView;
     private DriveHelper driveHelper;
     private GoogleAccountsManager accountsManager;
@@ -127,8 +127,9 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
 
         setProgressBarVisibility(true);
         setContentView(R.layout.drive_layout);
-        listView = findViewById(android.R.id.list);
-        listView.setOnItemClickListener(this);
+        listView = findViewById(R.id.list);
+        listView.setLayoutManager(new LinearLayoutManager(this));
+        listView.addItemDecoration(new DividerItemDecoration(listView.getContext(), LinearLayoutManager.VERTICAL));
         emptyView = findViewById(android.R.id.empty);
 
         initToolbar();
@@ -149,9 +150,8 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
 
             ArrayList<DriveListItem> dl = savedInstanceState
                     .getParcelableArrayList(DRIVE_ITEMS_KEY);
-            adapter = new FileArrayAdapter(this, R.layout.two_item_image, dl);
+            adapter = new FileArrayAdapter(this, dl, this::onListItemClick);
             listView.setAdapter(adapter);
-            adapter.setEnabled(true);
         } else {
             // new
             myDrive = false;
@@ -295,9 +295,9 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putBoolean(MY_DRIVE_KEY, myDrive);
-        ArrayList<DriveListItem> dl = new ArrayList<DriveListItem>();
-        for (int i = 0; i < listView.getCount(); i++) {
-            dl.add((DriveListItem) listView.getItemAtPosition(i));
+        ArrayList<DriveListItem> dl = new ArrayList<>();
+        for (int i = 0; i < (adapter != null ? adapter.getItemCount() : 0); i++) {
+            dl.add(adapter.getItem(i));
         }
         outState.putParcelableArrayList(DRIVE_ITEMS_KEY, dl);
         outState.putStringArray(PATH_KEY, currentPath.toArray(new String[currentPath.size()]));
@@ -307,10 +307,7 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
         super.onSaveInstanceState(outState);
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        adapter.setEnabled(false);
-        DriveListItem item = adapter.getItem(position);
+    private void onListItemClick(View view, DriveListItem item) {
         if (item != null && item.getType() == DriveListItem.DIR) {
             if (isDeviceOnline()) {
                 toDownload.clear();
@@ -319,11 +316,9 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
                 folderIdStack.push(item.getDriveId());
                 currentPath.push(item.getName());
             } else {
-                adapter.setEnabled(true);
                 createAlertDialog(getString(R.string.no_connection));
             }
         } else {
-            adapter.setEnabled(true);
             // file clicked, download the file, mark checkbox.
             CheckBox cb = view.findViewById(R.id.checkbox);
             cb.setChecked(!cb.isChecked());
@@ -758,8 +753,7 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
             }
 
             if (adapter == null) {
-                adapter = new FileArrayAdapter(GoogleDriveActivity.this, R.layout.two_item_image,
-                        dirs);
+                adapter = new FileArrayAdapter(GoogleDriveActivity.this, dirs, GoogleDriveActivity.this::onListItemClick);
                 listView.setAdapter(adapter);
             } else {
                 for (DriveListItem d : dirs) {

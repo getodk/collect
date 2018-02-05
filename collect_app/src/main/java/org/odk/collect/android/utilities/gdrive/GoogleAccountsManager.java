@@ -16,6 +16,7 @@ package org.odk.collect.android.utilities.gdrive;
 
 
 import android.Manifest;
+import android.accounts.Account;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
@@ -111,6 +112,7 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
                 .setBackOff(new ExponentialBackOff());
 
         intentChooseAccount = credential.newChooseAccountIntent();
+
     }
 
     public void setSelectedAccountName(String accountName) {
@@ -171,6 +173,8 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
     }
 
     public void showAccountPickerDialog() {
+        Account selectedAccount = getAccountPickerCurrentAccount();
+        intentChooseAccount.putExtra("selectedAccount", selectedAccount);
         intentChooseAccount.putExtra("overrideTheme", THEME_LIGHT_ACCOUNT_PICKER);
         intentChooseAccount.putExtra("overrideCustomTheme", 0);
 
@@ -186,6 +190,19 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
         if (listener != null) {
             listener.onGoogleAccountSelected(accountName);
         }
+    }
+
+    public Account getAccountPickerCurrentAccount() {
+        String selectedAccountName = getSelectedAccount();
+        if (selectedAccountName == null || selectedAccountName.isEmpty()) {
+            Account[] googleAccounts = credential.getAllAccounts();
+            if (googleAccounts != null && googleAccounts.length > 0) {
+                selectedAccountName = googleAccounts[0].name;
+            } else {
+                return null;
+            }
+        }
+        return new Account(selectedAccountName, "com.google");
     }
 
     public boolean isGoogleAccountSelected() {

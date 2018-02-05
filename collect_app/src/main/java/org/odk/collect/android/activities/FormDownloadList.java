@@ -160,9 +160,10 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             public void onClick(View v) {
                 Collect.getInstance().getActivityLogger().logAction(this, "refreshForms", "");
 
-                downloadFormList();
-                filteredFormList.clear();
+                formList.clear();
+                updateAdapter();
                 clearChoices();
+                downloadFormList();
             }
         });
 
@@ -235,7 +236,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         listView.setItemsCanFocus(false);
-        listView.setAdapter(new FormDownloadListAdapter(this, filteredFormList, formNamesAndURLs));
 
         sortingOptions = new String[]{
                 getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc)
@@ -432,8 +432,12 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             filteredFormList.addAll(formList);
         }
         sortList();
-        listView.setAdapter(new FormDownloadListAdapter(this, filteredFormList, formNamesAndURLs));
-
+        if (listView.getAdapter() == null) {
+            listView.setAdapter(new FormDownloadListAdapter(this, filteredFormList, formNamesAndURLs));
+        } else {
+            ((FormDownloadListAdapter) listView.getAdapter()).notifyDataSetChanged();
+        }
+        toggleButton.setEnabled(filteredFormList.size() > 0);
         checkPreviouslyCheckedItems();
     }
 
