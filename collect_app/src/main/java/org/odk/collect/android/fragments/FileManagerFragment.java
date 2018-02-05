@@ -30,6 +30,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.utilities.SnackbarUtils;
 
 
 public abstract class FileManagerFragment extends AppListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -111,6 +112,10 @@ public abstract class FileManagerFragment extends AppListFragment implements Loa
         if (getListView().getCount() == 0) {
             toggleButton.setEnabled(false);
         }
+    }
+
+    protected void showSnackbar(String result) {
+        SnackbarUtils.showSnackbar(llParent, result);
     }
 
     @Override

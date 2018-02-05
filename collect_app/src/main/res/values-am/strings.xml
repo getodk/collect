@@ -120,7 +120,6 @@
   <string name="keep_changes">ለውጦችን አስቀምጥ</string>
   <string name="font_size">የጽሑፍ ቅርጸ ቁምፊ መጠን</string>
   <string name="change_font_size">የጽሑፍ ቅርጸ ቁምፊ መጠን</string>
-  <string name="form_scan_starting">ቅጾችን በመቃኘት ላይ …</string>
   <string name="file_fetch_failed">ስህተት፣ %2$s ( %3$s ) በ %1$s ላይ</string>
   <string name="success">ስኬት</string>
   <string name="no_forms_uploaded">ይቅርታ፣ ምንም ቅጽ አልተጫነም፡፡</string>

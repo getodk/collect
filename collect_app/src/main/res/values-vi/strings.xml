@@ -126,7 +126,6 @@
   <string name="submission_url">Đường dẫn gửi dữ liệu</string>
   <string name="font_size">Kích thước chữ</string>
   <string name="change_font_size">Kích thước chữ</string>
-  <string name="form_scan_starting">Quét tìm biểu mẫu …</string>
   <string name="access_error">Lỗi khi truy cập %s: </string>
   <string name="manifest_server_error">Manifest không báo cáo về phiên bản của OpenRosa — máy chủ lỗi?</string>
   <string name="root_element_error">Yếu tố gốc không &amp;lt;manifest\&gt; — was %s</string>

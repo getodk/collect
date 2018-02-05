@@ -137,7 +137,6 @@
   <string name="submission_url">Tautan pengumpulan</string>
   <string name="font_size">Ukuran teks font</string>
   <string name="change_font_size">Ukuran teks font</string>
-  <string name="form_scan_starting">Sedang memindai formulir…</string>
   <string name="access_error">Terjadi kesalahan ketika mengakses %s: </string>
   <string name="manifest_server_error">Versi OpenRosa tidak terdeteksi — terjadi kesalahan pada server?</string>
   <string name="root_element_error">Penamaan elemen root bukan &amp;lt;manifest\&gt; — tapi %s</string>

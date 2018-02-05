@@ -124,7 +124,6 @@
   <string name="submission_url">Njia ya kuwasilisha</string>
   <string name="font_size">Ukubwa wa fonti za nakala</string>
   <string name="change_font_size">Ukubwa wa fonti za nakala</string>
-  <string name="form_scan_starting">Inatafuta fomu…..</string>
   <string name="access_error">Hitilafu wakati wa kupata %s:</string>
   <string name="manifest_server_error">Jibu la Manifest halina taarifa ya toleo la OpenRosa - server mbaya?</string>
   <string name="root_element_error">Msingi wa kipengele sio &lt;manifest\&gt; - ilikuwa %s</string>

@@ -133,7 +133,6 @@
   <string name="submission_url">Vormi sisestuse asukoht</string>
   <string name="font_size">Teksti suurus</string>
   <string name="change_font_size">Teksti suurus</string>
-  <string name="form_scan_starting">Otsin vorme…</string>
   <string name="access_error">%s avamisel esines viga</string>
   <string name="manifest_server_error">Serveri vastuses puudub OpenRosa versioon</string>
   <string name="root_element_error">Ei leia juurelementi &lt;manifest\&gt; — oli %s</string>

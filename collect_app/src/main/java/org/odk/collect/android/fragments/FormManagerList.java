@@ -19,7 +19,6 @@ import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.CursorLoader;
 import android.view.View;
 import android.widget.ListView;
@@ -183,7 +182,7 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
     public void syncComplete(String result) {
         Timber.i("Disk scan complete");
         if (result != null) {
-            Snackbar.make(llParent, result.trim(), Snackbar.LENGTH_LONG).show();
+            showSnackbar(result);
         }
     }
 

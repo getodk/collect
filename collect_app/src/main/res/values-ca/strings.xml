@@ -134,7 +134,6 @@
   <string name="submission_url">Carpeta de presentacions</string>
   <string name="font_size">Mida del text</string>
   <string name="change_font_size">Mida del text</string>
-  <string name="form_scan_starting">explorant formularis…</string>
   <string name="access_error">Error mentre accedeix %s: </string>
   <string name="manifest_server_error">No s\'identifica una versió d\'OpenRosa — servidor incorrecte?</string>
   <string name="root_element_error">L\'element principal no és &amp;lt;manifest\&gt; — era %s</string>

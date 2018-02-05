@@ -46,6 +46,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.listeners.RecyclerViewClickListener;
 import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.utilities.SnackbarUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -324,5 +325,9 @@ abstract class AppListActivity extends AppCompatActivity {
         if (isBottomDialogShown) {
             bottomSheetDialog.show();
         }
+    }
+
+    protected void showSnackbar(String result) {
+        SnackbarUtils.showSnackbar(llParent, result);
     }
 }

@@ -23,7 +23,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.view.Menu;
@@ -187,8 +186,8 @@ public class InstanceUploaderList extends InstanceListActivity implements
 
     @Override
     public void syncComplete(String result) {
-        if (result != null && !result.isEmpty()) {
-            Snackbar.make(llParent, result, Snackbar.LENGTH_LONG).show();
+        if (result != null) {
+            showSnackbar(result);
         }
     }
 
