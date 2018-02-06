@@ -658,9 +658,11 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
             // SharedWithMe, and root:
             String currentDir = params[0];
 
-            if (!myDrive && currentDir.equals(ROOT_KEY)) {
-                query = "sharedWithMe=true";
-                folderIdStack.removeAllElements();
+            if (!myDrive) {
+                if (currentDir.equals(ROOT_KEY) || folderIdStack.empty()) {
+                    query = "sharedWithMe=true";
+                    folderIdStack.removeAllElements();
+                }
             }
 
             query += " and trashed=false";
