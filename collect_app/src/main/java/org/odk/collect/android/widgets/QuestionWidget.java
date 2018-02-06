@@ -143,13 +143,13 @@ public abstract class QuestionWidget
         questionText.setTypeface(null, Typeface.BOLD);
         questionText.setTextColor(ContextCompat.getColor(getContext(), R.color.primaryTextColor));
         questionText.setPadding(0, 0, 0, 7);
-        questionText.setText(promptText == null ? "" : TextUtils.textToHtml(FormEntryPromptUtils.markRequiredQuestionIfNeeded(promptText, prompt.isRequired())));
+        questionText.setText(TextUtils.textToHtml(FormEntryPromptUtils.markRequiredQuestionIfNeeded(promptText, prompt.isRequired())));
         questionText.setMovementMethod(LinkMovementMethod.getInstance());
 
         // Wrap to the size of the parent view
         questionText.setHorizontallyScrolling(false);
 
-        if (promptText == null || promptText.length() == 0) {
+        if (!prompt.isRequired() && (promptText == null || promptText.length() == 0)) {
             questionText.setVisibility(GONE);
         }
 
