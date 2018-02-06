@@ -402,7 +402,6 @@
   <string name="reset_settings_dialog_title">ជ្រើសរើសអ្វីដែលត្រូវកំណត់ឡើងវិញ</string>
   <string name="reset_settings_dialog">កំណត់កម្មវិធីឡើងវិញ</string>
   <string name="reset_settings_button_reset">កំណត់ឡើងវិញ</string>
-  <string name="reset_dialog_nothing">អ្នកមិនបានជ្រើសរើសអ្វីដើម្បីកំណត់ឡើងវិញទេ។</string>
   <string name="reset_in_progress">កំពុងកំណត់ឡើងវិញ</string>
   <string name="reset_app_state_result">កំណត់លទ្ធផលឡើងវិញ</string>
   <string name="reset_app_state_warning">ទិន្នន័យដែល​បានជ្រើសរើសទាំងអស់នឹងត្រូវលុប។ ទាំងនេះមិនធ្វើវិញបានទេ។</string>

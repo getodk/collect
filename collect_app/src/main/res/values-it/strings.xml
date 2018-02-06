@@ -394,7 +394,6 @@
   <string name="reset_settings_dialog_title">Seleziona le opzioni da reimpostare</string>
   <string name="reset_settings_dialog">Reimpostare l\'applicazione</string>
   <string name="reset_settings_button_reset">Reimposta</string>
-  <string name="reset_dialog_nothing">Non hai selezionato alcun elemento da reimpostare.</string>
   <string name="reset_in_progress">Reimpostazione…</string>
   <string name="reset_app_state_result">Reimposta risultati</string>
   <string name="reset_app_state_warning">I dati selezionati verranno cancellati definitivamente. L\'operazione non può essere annullata.</string>

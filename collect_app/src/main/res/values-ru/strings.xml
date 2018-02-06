@@ -402,7 +402,6 @@
   <string name="reset_settings_dialog_title">Выберите, что хотите сбросить</string>
   <string name="reset_settings_dialog">Сброс приложения…</string>
   <string name="reset_settings_button_reset">Сброс</string>
-  <string name="reset_dialog_nothing">Вы не выбрали то, что будете сбрасывать.</string>
   <string name="reset_in_progress">Сбрасывание…</string>
   <string name="reset_app_state_result">Результаты сброса</string>
   <string name="reset_app_state_warning">Все выбранные данные будут удалены безвозвратно. Отмена не предусмотрена.</string>

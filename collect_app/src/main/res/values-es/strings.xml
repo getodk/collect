@@ -404,7 +404,6 @@
   <string name="reset_settings_dialog_title">Seleccione que restablecer</string>
   <string name="reset_settings_dialog">Restablecer aplicación</string>
   <string name="reset_settings_button_reset">Restablecer</string>
-  <string name="reset_dialog_nothing">No ha seleccionado nada para resetear.</string>
   <string name="reset_in_progress">Restableciendo</string>
   <string name="reset_app_state_result">Reestablecer resultados</string>
   <string name="reset_app_state_warning">Los datos seleccionados serán borrados permanentemente. No se puede deshacer.</string>

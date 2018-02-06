@@ -402,7 +402,6 @@
   <string name="reset_settings_dialog_title">Valitse mitä palautetaan alkutilaan</string>
   <string name="reset_settings_dialog">Palauta sovellus alkutilaan…</string>
   <string name="reset_settings_button_reset">Palautus alkutilaan</string>
-  <string name="reset_dialog_nothing">Et ole valinnut mitään palautettavaksi alkutilaan.</string>
   <string name="reset_in_progress">Palautetaan alkutilaan…</string>
   <string name="reset_app_state_result">Alkutilaan palauttamisen tulokset</string>
   <string name="reset_app_state_warning">Kaikki valittu data poistetaan pysyvästi. Peruutusmahdollisuutta ei ole.</string>

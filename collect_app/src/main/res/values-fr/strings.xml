@@ -402,7 +402,6 @@
   <string name="reset_settings_dialog_title">Sélectionnez ce que vous souhaitez réinitialiser</string>
   <string name="reset_settings_dialog">Réinitialiser l\'application …</string>
   <string name="reset_settings_button_reset">Réinitialiser</string>
-  <string name="reset_dialog_nothing">Vous n\'avez rien sélectionné à réinitialiser.</string>
   <string name="reset_in_progress">Réinitialisation en cours…</string>
   <string name="reset_app_state_result">Résultats de la réinitialisation</string>
   <string name="reset_app_state_warning">Toutes les données sélectionnées seront supprimées. Cette action ne peut pas être annulée.</string>
