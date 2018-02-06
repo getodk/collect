@@ -659,7 +659,7 @@ public class AllWidgetsFormTest {
     //region Custom TestRule.
     private class FormEntryActivityTestRule extends IntentsTestRule<FormEntryActivity> {
 
-        public FormEntryActivityTestRule() {
+        FormEntryActivityTestRule() {
             super(FormEntryActivity.class);
         }
 

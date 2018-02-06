@@ -213,7 +213,7 @@ public abstract class SelectImageMapWidget extends SelectWidget {
         for (int i = 0; i < nodes.getLength(); i++) {
             Node node = nodes.item(i);
             if (node.getNodeType() == Node.ELEMENT_NODE && node.getAttributes().getNamedItem("id") != null) {
-                ((Element) node).setAttribute("onClick","clickOnArea(this.id)");
+                ((Element) node).setAttribute("onClick", "clickOnArea(this.id)");
             }
         }
     }
@@ -221,10 +221,10 @@ public abstract class SelectImageMapWidget extends SelectWidget {
     private void addSizeAttributesIfNeeded(NodeList nodes) {
         Node svg = nodes.item(0);
         if (svg.getAttributes().getNamedItem("width") == null) {
-            ((Element) svg).setAttribute("width","1000");
+            ((Element) svg).setAttribute("width", "1000");
         }
         if (svg.getAttributes().getNamedItem("height") == null) {
-            ((Element) svg).setAttribute("height","1000");
+            ((Element) svg).setAttribute("height", "1000");
         }
     }
 

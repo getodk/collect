@@ -696,7 +696,7 @@ public class DownloadFormsTask extends
                         Collect.getInstance().getString(R.string.form_download_progress,
                                 fd.getFormName(),
                                 String.valueOf(mediaCount), String.valueOf(files.size())),
-                                String.valueOf(count),String.valueOf(total));
+                                String.valueOf(count), String.valueOf(total));
                 //try {
                 File finalMediaFile = new File(finalMediaDir, toDownload.getFilename());
                 File tempMediaFile = new File(tempMediaDir, toDownload.getFilename());

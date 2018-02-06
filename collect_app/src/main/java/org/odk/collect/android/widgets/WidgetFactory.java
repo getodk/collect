@@ -32,6 +32,10 @@ import timber.log.Timber;
  */
 public class WidgetFactory {
 
+    private WidgetFactory() {
+
+    }
+
     /**
      * Returns the appropriate QuestionWidget for the given FormEntryPrompt.
      *

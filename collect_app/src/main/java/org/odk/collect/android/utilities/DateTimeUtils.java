@@ -19,6 +19,10 @@ import java.util.Locale;
 
 public class DateTimeUtils {
 
+    private DateTimeUtils() {
+
+    }
+
     public static String getDateTimeLabel(Date date, DatePickerDetails datePickerDetails, boolean containsTime, Context context) {
         if (datePickerDetails.isGregorianType()) {
             return getGregorianDateTimeLabel(date, datePickerDetails, containsTime, null);
@@ -43,7 +47,7 @@ public class DateTimeUtils {
         String gregorianDateText = getGregorianDateTimeLabel(date, datePickerDetails, containsTime, Locale.US);
 
         DateTime customDate;
-        String[] monthArray ;
+        String[] monthArray;
         if (datePickerDetails.isEthiopianType()) {
             customDate = new DateTime(date).withChronology(EthiopicChronology.getInstance());
             monthArray = context.getResources().getStringArray(R.array.ethiopian_months);

@@ -3,16 +3,20 @@ package org.odk.collect.android.preferences;
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 
+import timber.log.Timber;
+
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_EMAIL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_MIGRATED;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_USERNAME;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
 
-import timber.log.Timber;
-
 /** Migrates existing preference values to metadata */
 public class FormMetadataMigrator {
+
+    private FormMetadataMigrator() {
+
+    }
 
     /** The migration flow, from source to target */
     static final String[][] sourceTargetValuePairs = new String[][]{

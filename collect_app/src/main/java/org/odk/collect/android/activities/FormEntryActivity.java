@@ -3013,7 +3013,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
      */
     class EmptyView extends View {
 
-        public EmptyView(Context context) {
+        EmptyView(Context context) {
             super(context);
         }
     }

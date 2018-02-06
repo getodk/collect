@@ -118,4 +118,8 @@ public final class PreferenceKeys {
 
     public static final HashMap<String, Object> GENERAL_KEYS = getHashMap();
 
+    private PreferenceKeys() {
+
+    }
+
 }

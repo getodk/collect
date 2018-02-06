@@ -9,6 +9,11 @@ import android.view.animation.ScaleAnimation;
  * Created by Ing. Oscar G. Medina Cruz on 18/06/2016.
  */
 public class AnimateUtils {
+
+    private AnimateUtils() {
+
+    }
+
     public static void scaleInAnimation(final View view, int startOffset, int duration,
                                         Interpolator interpolator, final boolean isInvisible) {
         ScaleAnimation scaleInAnimation = new ScaleAnimation(0f, 1f, 0f, 1f, Animation.RELATIVE_TO_SELF,
