@@ -48,6 +48,41 @@ New versions of ODK Collect are released on the last Sunday of each month. We fr
 
 1. Open the project in the folder of your clone from Android Studio. To run the project, click on the green arrow at the top of the screen. The emulator is very slow so we generally recommend using a physical device when possible.
 
+
+**Testing and debugging the Javarosa library**
+
+If you want to debug the code that comes from the Javarosa library or you need to change something there for testing, one of possible solutions is adding the Javarosa package as a separate module:
+1. Download and extract the code from the [Javarosa's repository](https://github.com/opendatakit/javarosa)
+2. In your Android Studio select `File` -> `New` -> `New Module` -> `Import Gradle Project` and choose the downloaded package
+3. In the [build.gradle](https://github.com/opendatakit/collect/blob/master/collect_app/build.gradle) file add:
+```gradle
+implementation (project(path: ':javarosa-master')) {
+	exclude module: 'joda-time'
+}
+```
+
+instead of:
+```gradle
+implementation(group: 'org.opendatakit', name: 'opendatakit-javarosa', version: '2.7.0') {
+        exclude module: 'joda-time'
+}
+```
+
+If you dont' want to copy the Javarosa source tree you can use a jar file:
+
+- In JavaRosa
+	- Change version in build.gradle
+	```gradle
+	jar {
+	    baseName = 'opendatakit-javarosa'
+	    version = '2.7.1-SNAPSHOT'
+	```
+- In Collect
+	- Add to dependencies in build.gradle
+	```gradle
+	compile files('~/opendatakit/javarosa/build/libs/opendatakit-javarosa-2.7.1-SNAPSHOT.jar')
+	```	
+
 ## Using APIs for local development
 
 To run functionality that makes API calls from your debug-signed builds, you may need to get an API key or otherwise authorize your app.
