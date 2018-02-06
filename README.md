@@ -19,19 +19,6 @@ ODK Collect renders forms that are compliant with the [ODK XForms standard](http
 ## Release cycle
 New versions of ODK Collect are released on the last Sunday of each month. We freeze commits to the master branch on the preceding Wednesday (except for bug fixes).
 
-## Testing a form locally
-
-1. The `All Widgets` form from the default Aggregate server is [here](https://docs.google.com/spreadsheets/d/1af_Sl8A_L8_EULbhRLHVl8OclCfco09Hq2tqb9CslwQ/edit#gid=0). You can also try [example forms](https://github.com/XLSForm/example-forms) and [test forms](https://github.com/XLSForm/test-forms) or [make your own](https://xlsform.org).
-
-1. Convert the XLSForm (xlsx) to XForm (xml). Use the [ODK website](http://opendatakit.org/xiframe/) or [XLSForm Offline](https://gumroad.com/l/xlsform-offline) or [pyxform](https://github.com/XLSForm/pyxform).
-
-1. Once you have the XForm, use [adb](https://developer.android.com/studio/command-line/adb.html) to push the form to your device (after [enabling USB debugging](https://www.kingoapp.com/root-tutorials/how-to-enable-usb-debugging-mode-on-android.htm)) or emulator.
-	```
-	adb push my_form.xml /sdcard/odk/forms/
-	```
-
-1. Launch ODK Collect and tap `Fill Blank Form`. The new form will be there.
-
 ## Setting up your development environment
 
 1. Download and install [Git](https://git-scm.com/downloads) and add it to your PATH
@@ -48,40 +35,18 @@ New versions of ODK Collect are released on the last Sunday of each month. We fr
 
 1. Open the project in the folder of your clone from Android Studio. To run the project, click on the green arrow at the top of the screen. The emulator is very slow so we generally recommend using a physical device when possible.
 
+## Testing a form locally
 
-**Testing and debugging the Javarosa library**
+1. The `All Widgets` form from the default Aggregate server is [here](https://docs.google.com/spreadsheets/d/1af_Sl8A_L8_EULbhRLHVl8OclCfco09Hq2tqb9CslwQ/edit#gid=0). You can also try [example forms](https://github.com/XLSForm/example-forms) and [test forms](https://github.com/XLSForm/test-forms) or [make your own](https://xlsform.org).
 
-If you want to debug the code that comes from the Javarosa library or you need to change something there for testing, one of possible solutions is adding the Javarosa package as a separate module:
-1. Download and extract the code from the [Javarosa's repository](https://github.com/opendatakit/javarosa)
-2. In your Android Studio select `File` -> `New` -> `New Module` -> `Import Gradle Project` and choose the downloaded package
-3. In the [build.gradle](https://github.com/opendatakit/collect/blob/master/collect_app/build.gradle) file add:
-```gradle
-implementation (project(path: ':javarosa-master')) {
-	exclude module: 'joda-time'
-}
-```
+1. Convert the XLSForm (xlsx) to XForm (xml). Use the [ODK website](http://opendatakit.org/xiframe/) or [XLSForm Offline](https://gumroad.com/l/xlsform-offline) or [pyxform](https://github.com/XLSForm/pyxform).
 
-instead of:
-```gradle
-implementation(group: 'org.opendatakit', name: 'opendatakit-javarosa', version: '2.7.0') {
-        exclude module: 'joda-time'
-}
-```
-
-If you dont' want to copy the Javarosa source tree you can use a jar file:
-
-- In JavaRosa
-	- Change version in build.gradle
-	```gradle
-	jar {
-	    baseName = 'opendatakit-javarosa'
-	    version = '2.7.1-SNAPSHOT'
+1. Once you have the XForm, use [adb](https://developer.android.com/studio/command-line/adb.html) to push the form to your device (after [enabling USB debugging](https://www.kingoapp.com/root-tutorials/how-to-enable-usb-debugging-mode-on-android.htm)) or emulator.
 	```
-- In Collect
-	- Add to dependencies in build.gradle
-	```gradle
-	compile files('~/opendatakit/javarosa/build/libs/opendatakit-javarosa-2.7.1-SNAPSHOT.jar')
-	```	
+	adb push my_form.xml /sdcard/odk/forms/
+	```
+
+1. Launch ODK Collect and tap `Fill Blank Form`. The new form will be there.
 
 ## Using APIs for local development
 
@@ -90,6 +55,42 @@ To run functionality that makes API calls from your debug-signed builds, you may
 **Google Drive and Sheets APIs** - Follow the instructions in the "Generate the signing certificate fingerprint and register your application" section from [here](https://developers.google.com/drive/android/auth). Enable the Google Drive API [here](https://console.developers.google.com/apis/api/drive/). Enable the Google Sheets API [here](https://console.developers.google.com/apis/api/sheets.googleapis.com).
 
 **Google Maps API** - Follow the instructions [here](https://developers.google.com/maps/documentation/android-api/signup) and paste your key in the `AndroidManifest` as the value for `com.google.android.geo.API_KEY`. Please be sure not to commit your personal API key to a branch that you will submit a pull request for.
+
+
+## Debugging JavaRosa
+
+JavaRosa is the form engine that powers Collect. If you want to debug or change that code while running Collect, you have two options. You can include the source tree as a module in Android Studio or include a custom jar file you build.
+
+**Source tree**
+
+1. Get the code from the [JavaRosa repo](https://github.com/opendatakit/javarosa)
+1. In Android Studio, select `File` -> `New` -> `New Module` -> `Import Gradle Project` and choose the project
+1. In Collect's `build.gradle` file, find the JavaRosa section:
+```gradle
+implementation(group: 'org.opendatakit', name: 'opendatakit-javarosa', version: 'x.y.z') {
+	exclude module: 'joda-time'
+}
+```
+1. Replace the JavaRosa section with this: 
+```gradle
+implementation (project(path: ':javarosa-master')) {
+	exclude module: 'joda-time'
+}
+```
+
+**Jar file**
+
+1. In JavaRosa, change the version in `build.gradle` and build the jar
+	```gradle
+	jar {
+	    baseName = 'opendatakit-javarosa'
+	    version = 'x.y.z-SNAPSHOT'
+	```
+
+1. In Collect, add the path to the jar to the dependencies in `build.gradle`
+	```gradle
+	compile files('/path/to/javarosa/build/libs/opendatakit-javarosa-x.y.z-SNAPSHOT.jar')
+	```	
  
 ## Contributing code
 Any and all contributions to the project are welcome. ODK Collect is used across the world primarily by organizations with a social purpose so you can have real impact!
