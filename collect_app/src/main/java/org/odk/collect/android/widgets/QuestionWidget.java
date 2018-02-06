@@ -143,13 +143,13 @@ public abstract class QuestionWidget
         questionText.setTypeface(null, Typeface.BOLD);
         questionText.setTextColor(ContextCompat.getColor(getContext(), R.color.primaryTextColor));
         questionText.setPadding(0, 0, 0, 7);
-        questionText.setText(TextUtils.textToHtml(FormEntryPromptUtils.markQuestionIfIsRequired(promptText, prompt.isRequired())));
+        questionText.setText(promptText == null ? "" : TextUtils.textToHtml(FormEntryPromptUtils.markQuestionIfIsRequired(promptText, prompt.isRequired())));
         questionText.setMovementMethod(LinkMovementMethod.getInstance());
 
         // Wrap to the size of the parent view
         questionText.setHorizontallyScrolling(false);
 
-        if (!prompt.isRequired() && (promptText == null || promptText.length() == 0)) {
+        if (promptText == null || promptText.length() == 0) {
             questionText.setVisibility(GONE);
         }
 
@@ -325,7 +325,11 @@ public abstract class QuestionWidget
             // wrap to the widget of view
             helpText.setHorizontallyScrolling(false);
             helpText.setTypeface(null, Typeface.ITALIC);
-            helpText.setText(TextUtils.textToHtml(s));
+            if (prompt.getLongText() == null) {
+                helpText.setText(TextUtils.textToHtml(FormEntryPromptUtils.markQuestionIfIsRequired(s, prompt.isRequired())));
+            } else {
+                helpText.setText(TextUtils.textToHtml(s));
+            }
             helpText.setTextColor(ContextCompat.getColor(getContext(), R.color.primaryTextColor));
             helpText.setMovementMethod(LinkMovementMethod.getInstance());
             return helpText;
