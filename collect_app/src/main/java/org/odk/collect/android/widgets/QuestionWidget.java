@@ -143,7 +143,7 @@ public abstract class QuestionWidget
         questionText.setTypeface(null, Typeface.BOLD);
         questionText.setTextColor(ContextCompat.getColor(getContext(), R.color.primaryTextColor));
         questionText.setPadding(0, 0, 0, 7);
-        questionText.setText(TextUtils.textToHtml(FormEntryPromptUtils.markRequiredQuestionIfNeeded(promptText, prompt.isRequired())));
+        questionText.setText(TextUtils.textToHtml(FormEntryPromptUtils.markQuestionIfIsRequired(promptText, prompt.isRequired())));
         questionText.setMovementMethod(LinkMovementMethod.getInstance());
 
         // Wrap to the size of the parent view

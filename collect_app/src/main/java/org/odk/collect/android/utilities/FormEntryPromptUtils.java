@@ -72,7 +72,7 @@ public class FormEntryPromptUtils {
         return fep.getAnswerText();
     }
 
-    public static String markRequiredQuestionIfNeeded(String questionText, boolean isRequired) {
+    public static String markQuestionIfIsRequired(String questionText, boolean isRequired) {
         if (isRequired) {
             if (questionText == null) {
                 questionText = "";
