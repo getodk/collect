@@ -190,7 +190,7 @@ public class FileUtils {
         // We're just doing closest size that still fills the screen.
         int scale = Math.max(widthScale, heightScale);
 
-        // get bitmap with scale ( < 1 is the same as 1)
+        // load bitmap with scale ( < 1 is the same as 1)
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inInputShareable = true;
         options.inPurgeable = true;
@@ -358,7 +358,7 @@ public class FileUtils {
             }
 
             fields.put(FORMID, (id == null) ? cur.getNamespace() : id);
-            fields.put(VERSION, (version == null) ? null : version);
+            fields.put(VERSION, version);
         } else {
             throw new IllegalStateException(xmlFile.getAbsolutePath() + " could not be parsed");
         }

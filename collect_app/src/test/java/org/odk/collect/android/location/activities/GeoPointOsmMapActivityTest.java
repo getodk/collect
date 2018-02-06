@@ -58,8 +58,6 @@ public class GeoPointOsmMapActivityTest {
         activityController = Robolectric.buildActivity(GeoPointOsmMapActivity.class);
         activity = activityController.get();
         shadowActivity = shadowOf(activity);
-
-        LocationClients.setTestClient(locationClient);
     }
 
     @Test
@@ -82,7 +80,7 @@ public class GeoPointOsmMapActivityTest {
 
         assertNull(activity.getZoomDialog());
 
-        // Second location should do something:
+        // Second getLocation should do something:
         Location secondLocation = newMockLocation();
         when(secondLocation.getProvider()).thenReturn("GPS");
         when(secondLocation.getAccuracy()).thenReturn(1.0f);

@@ -3,7 +3,6 @@ package org.odk.collect.android.injection;
 import android.arch.lifecycle.ViewModel;
 
 import org.odk.collect.android.injection.config.architecture.ViewModelKey;
-import org.odk.collect.android.injection.config.scopes.PerViewModel;
 import org.odk.collect.android.location.GeoViewModel;
 
 import dagger.Binds;
@@ -23,6 +22,5 @@ public abstract class ViewModelBuilder {
     @Binds
     @IntoMap
     @ViewModelKey(GeoViewModel.class)
-    @PerViewModel
     abstract ViewModel bindGeoViewModel(GeoViewModel geoViewModel);
 }

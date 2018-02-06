@@ -4,6 +4,8 @@ import android.app.Application;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.injection.ActivityBuilder;
+import org.odk.collect.android.injection.ViewModelBuilder;
+import org.odk.collect.android.injection.config.architecture.ViewModelFactoryModule;
 import org.odk.collect.android.injection.config.scopes.PerApplication;
 
 import dagger.BindsInstance;
@@ -20,7 +22,9 @@ import dagger.android.support.AndroidSupportInjectionModule;
 @Component(modules = {
         AndroidSupportInjectionModule.class,
         AppModule.class,
-        ActivityBuilder.class
+        ActivityBuilder.class,
+        ViewModelBuilder.class,
+        ViewModelFactoryModule.class,
 })
 public interface AppComponent {
 

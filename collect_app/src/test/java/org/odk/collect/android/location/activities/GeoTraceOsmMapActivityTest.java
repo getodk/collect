@@ -67,7 +67,6 @@ public class GeoTraceOsmMapActivityTest {
         activityController = Robolectric.buildActivity(GeoTraceOsmMapActivity.class);
         activity = activityController.get();
 
-        LocationClients.setTestClient(locationClient);
         activity.setMapView(mapView);
         activity.setMyLocationOverlay(locationOverlay);
         activity.setHelper(mapHelper);

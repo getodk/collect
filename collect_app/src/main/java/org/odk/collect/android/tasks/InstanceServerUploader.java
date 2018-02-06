@@ -284,7 +284,7 @@ public class InstanceServerUploader extends InstanceUploader {
         // cookiestore (referenced by localContext) that will enable
         // authenticated publication to the server.
         //
-        // get instance file
+        // load instance file
 
         // Under normal operations, we upload the instanceFile to
         // the server.  However, during the save, there is a failure
@@ -502,7 +502,7 @@ public class InstanceServerUploader extends InstanceUploader {
         String deviceId = new PropertyManager(Collect.getInstance().getApplicationContext())
                 .getSingularProperty(PropertyManager.withUri(PropertyManager.PROPMGR_DEVICE_ID));
 
-        // get shared HttpContext so that authentication and cookies are retained.
+        // load shared HttpContext so that authentication and cookies are retained.
         HttpContext localContext = Collect.getInstance().getHttpContext();
 
         Map<Uri, Uri> uriRemap = new HashMap<Uri, Uri>();
@@ -539,7 +539,7 @@ public class InstanceServerUploader extends InstanceUploader {
 
                     if (!uploadOneSubmission(urlString, id, instance, toUpdate, localContext,
                             uriRemap, outcome)) {
-                        return false; // get credentials...
+                        return false; // load credentials...
                     }
                 }
             }

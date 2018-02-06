@@ -230,7 +230,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 downloadFormsTask = null;
             }
         } else if (formNamesAndURLs.isEmpty() && getLastNonConfigurationInstance() == null) {
-            // first time, so get the formlist
+            // first time, so load the formlist
             downloadFormList();
         }
 

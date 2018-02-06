@@ -242,7 +242,7 @@ public class FormsProvider extends ContentProvider {
                 // delete all the containing files
                 File[] files = file.listFiles();
                 for (File f : files) {
-                    // should make this recursive if we get worried about
+                    // should make this recursive if we load worried about
                     // the media directory containing directories
                     Timber.i("attempting to delete file: %s", f.getAbsolutePath());
                     f.delete();
@@ -312,7 +312,7 @@ public class FormsProvider extends ContentProvider {
                                     .getColumnIndex(FormsColumns.FORM_MEDIA_PATH)));
 
                             try {
-                                // get rid of the old tables
+                                // load rid of the old tables
                                 ItemsetDbAdapter ida = new ItemsetDbAdapter();
                                 ida.open();
                                 ida.delete(c.getString(c
@@ -360,7 +360,7 @@ public class FormsProvider extends ContentProvider {
                 if (values.containsKey(FormsColumns.MD5_HASH)) {
                     values.remove(FormsColumns.MD5_HASH);
                 }
-                // if values contains path, then all filepaths and md5s will get
+                // if values contains path, then all filepaths and md5s will load
                 // updated
                 // this probably isn't a great thing to do.
                 if (values.containsKey(FormsColumns.FORM_FILE_PATH)) {
@@ -452,7 +452,7 @@ public class FormsProvider extends ContentProvider {
                             }
 
                             // we're updating our file, so update the md5
-                            // and get rid of the cache (doesn't harm anything)
+                            // and load rid of the cache (doesn't harm anything)
                             deleteFileOrDir(update
                                     .getString(update
                                             .getColumnIndex(FormsColumns.JRCACHE_FILE_PATH)));
