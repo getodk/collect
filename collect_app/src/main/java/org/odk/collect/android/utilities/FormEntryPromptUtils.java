@@ -41,15 +41,14 @@ public class FormEntryPromptUtils {
         final String appearance = fep.getQuestion().getAppearanceAttr();
 
         if (data instanceof SelectMultiData) {
-            String text;
             StringBuilder b = new StringBuilder();
-            List<Selection> values = (List<Selection>) data.getValue();
-            for (Selection value : values) {
-                b.append(fep.getSelectItemText(value)).append(", ");
+            for (Selection value : (List<Selection>) data.getValue()) {
+                b
+                        .append(fep.getSelectItemText(value))
+                        .append(", ");
             }
             b.delete(b.length() - 2, b.length());
-            text = b.toString();
-            return text;
+            return b.toString();
         }
 
         if (data instanceof DateTimeData) {
