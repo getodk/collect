@@ -281,7 +281,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
         addPhotos(answersToUpload, uploadedMedia);
 
-        if (!insertRow(getRowFromList(prepareListOfValues(sheetCols, columnNames, answersToUpload)), id)) {
+        if (!insertRow(getRowFromList(prepareListOfValues(sheetCols, columnNames, answersToUpload)), id, sheetName)) {
             return false;
         }
 
@@ -395,14 +395,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         ValueRange row = new ValueRange();
         row.setValues(content);
 
-        try {
-            sheetsHelper.insertRow(spreadsheetId, sheetName + "!A1:1", row);
-        } catch (IOException e) {
-            Timber.e(e);
-            outcome.results.put(id, e.getMessage());
-            return false;
-        }
-        return true;
+        return insertRow(row, id, sheetName + "!A1:1");
     }
 
     private boolean areEmptyColumns(List headerFeed) {
@@ -424,7 +417,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         return row;
     }
 
-    private boolean insertRow(ValueRange row, String id) {
+    private boolean insertRow(ValueRange row, String id, String sheetName) {
         try {
             sheetsHelper.insertRow(spreadsheetId, sheetName, row);
         } catch (IOException e) {
@@ -596,17 +589,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
              *  For more info   :   https://developers.google.com/sheets/api/reference/rest/
              */
 
-        // Send the new row to the API for insertion.
-        // write the headers
-        try {
-            sheetsHelper.insertRow(spreadsheetId, sheetName, row);
-        } catch (IOException e) {
-            Timber.e(e);
-            outcome.results.put(id, e.getMessage());
-            return false;
-        }
-
-        return true;
+        return insertRow(row, id, sheetName);
     }
 
     private boolean isColumnLengthValid(List<String> columnNames, String id) {
