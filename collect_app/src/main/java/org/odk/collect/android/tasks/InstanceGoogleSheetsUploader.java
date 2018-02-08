@@ -206,11 +206,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             return false;
         }
 
-        try {
-            Thread.sleep(GOOGLE_SLEEP_TIME);
-        } catch (InterruptedException e3) {
-            Timber.d(e3);
-        }
+        sleepThread();
 
         if (!areSubmissionColumnNamesLegal(answersToUpload, id)) {
             return false;
@@ -287,6 +283,14 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
         outcome.results.put(id, Collect.getInstance().getString(R.string.success));
         return true;
+    }
+
+    private void sleepThread() {
+        try {
+            Thread.sleep(GOOGLE_SLEEP_TIME);
+        } catch (InterruptedException e3) {
+            Timber.d(e3);
+        }
     }
 
     private List<Object> prepareListOfValues(List<String> sheetCols, List<String> columnNames,
