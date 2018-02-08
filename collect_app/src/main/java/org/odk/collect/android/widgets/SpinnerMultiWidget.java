@@ -119,10 +119,7 @@ public class SpinnerMultiWidget extends QuestionWidget implements ButtonWidget, 
                     }
                 }
             }
-
-            selectionText.setText(String.format(context.getString(R.string.selected_answer),
-                    TextUtils.join(", ", selectedValues)));
-            selectionText.setVisibility(View.VISIBLE);
+            showSelectedValues(selectedValues);
         }
 
         LinearLayout answerLayout = new LinearLayout(getContext());
@@ -201,10 +198,7 @@ public class SpinnerMultiWidget extends QuestionWidget implements ButtonWidget, 
                                 selectedValues.add(answerItems[i].toString());
                             }
                         }
-
-                        selectionText.setText(String.format(getContext().getString(R.string.selected_answer),
-                                TextUtils.join(", ", selectedValues)));
-                        selectionText.setVisibility(View.VISIBLE);
+                        showSelectedValues(selectedValues);
                     }
                 });
 
@@ -219,5 +213,15 @@ public class SpinnerMultiWidget extends QuestionWidget implements ButtonWidget, 
                 });
         AlertDialog alert = alertBuilder.create();
         alert.show();
+    }
+
+    private void showSelectedValues(List<String> selectedValues) {
+        if (selectedValues.size() > 0) {
+            selectionText.setText(String.format(getContext().getString(R.string.selected_answer),
+                    TextUtils.join(", ", selectedValues)));
+            selectionText.setVisibility(View.VISIBLE);
+        } else {
+            clearAnswer();
+        }
     }
 }
