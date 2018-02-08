@@ -241,6 +241,7 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
         } else {
             if (isDeviceOnline()) {
                 toDownload.clear();
+                folderIdStack.clear();
                 rootButton.setEnabled(false);
                 searchButton.setEnabled(false);
                 backButton.setEnabled(false);
@@ -661,7 +662,6 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
             if (!myDrive) {
                 if (currentDir.equals(ROOT_KEY) || folderIdStack.empty()) {
                     query = "sharedWithMe=true";
-                    folderIdStack.removeAllElements();
                 }
             }
 
