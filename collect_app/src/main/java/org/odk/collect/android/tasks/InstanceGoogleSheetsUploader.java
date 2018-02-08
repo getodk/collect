@@ -190,13 +190,8 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         // get instance file
         File instanceFile = new File(instanceFilePath);
 
-        // first check to see how many columns we have:
-        ArrayList<String> columnNames = new ArrayList<String>();
-        try {
-            getColumns(formFilePath, columnNames);
-        } catch (XmlPullParserException | IOException | FormException e2) {
-            Timber.e(e2, "Exception thrown while getting columns from form file");
-            outcome.results.put(id, e2.getMessage());
+        List<String> columnNames = new ArrayList<>();
+        if (!readColumnNames(formFilePath, columnNames, id)) {
             return false;
         }
 
@@ -612,7 +607,18 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         return true;
     }
 
-    private void getColumns(String filePath, ArrayList<String> columns)
+    private boolean readColumnNames(String formFilePath, List<String> columnNames, String id) {
+        try {
+            getColumns(formFilePath, columnNames);
+        } catch (XmlPullParserException | IOException | FormException e2) {
+            Timber.e(e2, "Exception thrown while getting columns from form file");
+            outcome.results.put(id, e2.getMessage());
+            return false;
+        }
+        return true;
+    }
+
+    private void getColumns(String filePath, List<String> columns)
             throws XmlPullParserException, IOException, FormException {
         File formFile = new File(filePath);
         FileInputStream in;
@@ -626,9 +632,9 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         in.close();
     }
 
-    private void readFormFeed(XmlPullParser parser, ArrayList<String> columns)
+    private void readFormFeed(XmlPullParser parser, List<String> columns)
             throws XmlPullParserException, IOException, FormException {
-        ArrayList<String> path = new ArrayList<String>();
+        ArrayList<String> path = new ArrayList<>();
 
         // we put path names in here as we go, and if we hit a duplicate we
         // blow up
