@@ -231,14 +231,8 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             return false;
         }
 
-        // make sure column names are legal
-        for (String n : columnNames) {
-            if (!isValidGoogleSheetsString(n)) {
-                outcome.results.put(id,
-                        Collect.getInstance().getString(R.string.google_sheets_invalid_column_form,
-                                n));
-                return false;
-            }
+        if (!areColumnNamesLegal(columnNames, id)) {
+            return false;
         }
 
         // parses the instance file and populates the answers and photos
@@ -568,6 +562,18 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                 if (c != null) {
                     return false;
                 }
+            }
+        }
+        return true;
+    }
+
+    private boolean areColumnNamesLegal(List<String> columnNames, String id) {
+        for (String n : columnNames) {
+            if (!isValidGoogleSheetsString(n)) {
+                outcome.results.put(id,
+                        Collect.getInstance().getString(R.string.google_sheets_invalid_column_form,
+                                n));
+                return false;
             }
         }
         return true;
