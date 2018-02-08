@@ -200,14 +200,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             return false;
         }
 
-        if (columnNames.size() == 0) {
-            outcome.results.put(id, "No columns found in the form to upload");
-            return false;
-        }
-
-        if (columnNames.size() > 255) {
-            outcome.results.put(id, Collect.getInstance().getString(R.string.sheets_max_columns,
-                    String.valueOf(columnNames.size())));
+        if (!isColumnLengthValid(columnNames, id)) {
             return false;
         }
 
@@ -598,6 +591,21 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         } catch (IOException e) {
             Timber.e(e);
             outcome.results.put(id, e.getMessage());
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean isColumnLengthValid(List<String> columnNames, String id) {
+        if (columnNames.size() == 0) {
+            outcome.results.put(id, "No columns found in the form to upload");
+            return false;
+        }
+
+        if (columnNames.size() > 255) {
+            outcome.results.put(id, Collect.getInstance().getString(R.string.sheets_max_columns,
+                    String.valueOf(columnNames.size())));
             return false;
         }
 
