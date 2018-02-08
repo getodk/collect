@@ -281,8 +281,19 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
         addPhotos(answersToUpload, uploadedMedia);
 
-        ArrayList<Object> list = new ArrayList<>();
+        List<Object> list = prepareListOfValues(sheetCols, columnNames, answersToUpload);
 
+        if (!insertRow(list, id)) {
+            return false;
+        }
+
+        outcome.results.put(id, Collect.getInstance().getString(R.string.success));
+        return true;
+    }
+
+    private List<Object> prepareListOfValues(List<String> sheetCols, List<String> columnNames,
+                                             HashMap<String, String> answersToUpload) {
+        List<Object> list = new ArrayList<>();
         for (String path : sheetCols) {
             String answer = "";
             if (path.equals(" ") || !columnNames.contains(path)) {
@@ -309,12 +320,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             list.add(answer.isEmpty() ? " " : answer);
         }
 
-        if (!insertRow(list, id)) {
-            return false;
-        }
-
-        outcome.results.put(id, Collect.getInstance().getString(R.string.success));
-        return true;
+        return list;
     }
 
     private boolean getSheetCols(List<String> sheetCols, List headerFeed, String id) {
@@ -410,7 +416,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         return false;
     }
 
-    private boolean insertRow(ArrayList<Object> list, String id) {
+    private boolean insertRow(List<Object> list, String id) {
         ArrayList<List<Object>> content = new ArrayList<>();
         content.add(list);
 
