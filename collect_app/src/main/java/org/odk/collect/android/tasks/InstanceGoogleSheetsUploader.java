@@ -309,14 +309,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             return false;
         }
 
-        // if we get here.. all has matched
-        // so write the values
-
-        // add photos to answer set
-        for (String key : uploadedMedia.keySet()) {
-            String url = uploadedMedia.get(key);
-            answersToUpload.put(key, url);
-        }
+        addPhotos(answersToUpload, uploadedMedia);
 
         ArrayList<Object> list = new ArrayList<>();
 
@@ -352,6 +345,13 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
         outcome.results.put(id, Collect.getInstance().getString(R.string.success));
         return true;
+    }
+
+    private void addPhotos(HashMap<String, String> answersToUpload, HashMap<String, String> uploadedMedia) {
+        for (String key : uploadedMedia.keySet()) {
+            String url = uploadedMedia.get(key);
+            answersToUpload.put(key, url);
+        }
     }
 
     private boolean checkForMissingColumns(List<String> missingColumns, String id) {
