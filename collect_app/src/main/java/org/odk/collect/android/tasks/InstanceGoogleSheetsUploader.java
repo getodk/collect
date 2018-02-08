@@ -281,9 +281,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
         addPhotos(answersToUpload, uploadedMedia);
 
-        List<Object> list = prepareListOfValues(sheetCols, columnNames, answersToUpload);
-
-        if (!insertRow(list, id)) {
+        if (!insertRow(getRowFromList(prepareListOfValues(sheetCols, columnNames, answersToUpload)), id)) {
             return false;
         }
 
@@ -416,13 +414,17 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         return false;
     }
 
-    private boolean insertRow(List<Object> list, String id) {
+    private ValueRange getRowFromList(List<Object> list) {
         ArrayList<List<Object>> content = new ArrayList<>();
         content.add(list);
 
         ValueRange row = new ValueRange();
         row.setValues(content);
 
+        return row;
+    }
+
+    private boolean insertRow(ValueRange row, String id) {
         try {
             sheetsHelper.insertRow(spreadsheetId, sheetName, row);
         } catch (IOException e) {
