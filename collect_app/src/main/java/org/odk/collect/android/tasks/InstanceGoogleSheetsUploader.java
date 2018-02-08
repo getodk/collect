@@ -288,7 +288,10 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     private void updateValues(List<List<Object>> values, String id) throws IOException {
         try {
             values.clear();
-            values.addAll(sheetsHelper.getHeaderFeed(spreadsheetId, sheetName));
+            List<List<Object>> headerFeed = sheetsHelper.getHeaderFeed(spreadsheetId, sheetName);
+            if (headerFeed != null && !headerFeed.isEmpty()) {
+                values.addAll(headerFeed);
+            }
             if (values.isEmpty()) {
                 outcome.results.put(id, "No data found");
             }
