@@ -204,8 +204,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             updateValues(values, id);
             if (!values.isEmpty()) {
                 headerFeed = values.get(0);
-            }
-            if (areHeadersEmpty(headerFeed)) {
+            } else {
                 resizeSpreadSheet(columnNames, id);
                 addHeaders(columnNames, id);
                 // we may have updated the feed, so get a new one update the feed
@@ -378,17 +377,6 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             outcome.results.put(id, e.getMessage());
             throw e;
         }
-    }
-
-    private boolean areHeadersEmpty(List headerFeed) {
-        if (headerFeed != null) {
-            for (Object c : headerFeed) {
-                if (c != null) {
-                    return false;
-                }
-            }
-        }
-        return true;
     }
 
     private void areColumnNamesLegal(List<String> columnNames, String id) throws Exception {
