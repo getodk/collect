@@ -247,70 +247,10 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             }
         }
 
-        /*  # NOTE #
-         *  Media files are uploaded to Google Drive of user
-         *  All media files are currently saved under folder "Open Data Kit/Submissions/formID/"
-         */
-
-        // if we have any media files to upload,
-        // get the folder or create a new one
-        // then upload the media files
         HashMap<String, String> uploadedMedia = new HashMap<>();
-        if (mediaToUpload.size() > 0) {
-
-            for (String key : mediaToUpload.keySet()) {
-                String filename = instanceFile.getParentFile() + "/" + mediaToUpload.get(key);
-                File toUpload = new File(filename);
-
-                // first check the local content provider
-                // to see if this photo still exists at the location or not
-                String selection = MediaStore.Images.Media.DATA + "=?";
-                String[] selectionArgs = {
-                        filename
-                };
-                Cursor c = Collect.getInstance().getContentResolver()
-                        .query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, selection,
-                                selectionArgs, null);
-                if (c.getCount() != 1) {
-                    c.close();
-                    try {
-                        throw new FileNotFoundException(Collect.getInstance()
-                                .getString(R.string.media_upload_error, filename));
-                    } catch (FileNotFoundException e) {
-                        Timber.e(e);
-                    }
-                }
-                c.close();
-
-                String folderId;
-                try {
-                    folderId = driveHelper.createOrGetIDOfFolderWithName(jrFormId);
-                } catch (IOException | MultipleFoldersFoundException e) {
-                    Timber.e(e);
-                    outcome.results.put(id, e.getMessage());
-                    return false;
-                }
-
-                String uploadedFileId;
-
-                // file is ready to be uploaded
-                try {
-                    uploadedFileId = driveHelper.uploadFileToDrive(mediaToUpload.get(key),
-                            folderId, toUpload);
-                } catch (IOException e) {
-                    Timber.e(e, "Exception thrown while uploading the file to drive");
-                    outcome.results.put(id, e.getMessage());
-                    return false;
-                }
-
-                //checking if file was successfully uploaded
-                if (uploadedFileId == null) {
-                    outcome.results.put(id, "Unable to upload the media files. Try again");
-                    return false;
-                }
-
-                // uploadedPhotos keeps track of the uploaded URL
-                uploadedMedia.put(key, UPLOADED_MEDIA_URL + uploadedFileId);
+        if (!mediaToUpload.isEmpty()) {
+            if (!uploadMedia(mediaToUpload, instanceFile, jrFormId, id, uploadedMedia)) {
+                return false;
             }
         }
         // All photos have been sent to Google Drive (if there were any)
@@ -581,6 +521,73 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             }
             hasWritePermissionToSheet = true;
             googleSheetsUrl = urlString;
+        }
+        return true;
+    }
+
+    /*  # NOTE #
+    *  Media files are uploaded to Google Drive of user
+    *  All media files are currently saved under folder "Open Data Kit/Submissions/formID/"
+    */
+
+    // if we have any media files to upload,
+    // get the folder or create a new one
+    // then upload the media files
+    private boolean uploadMedia(HashMap<String, String> mediaToUpload, File instanceFile,
+                             String jrFormId, String id, HashMap<String, String> uploadedMedia) {
+        for (String key : mediaToUpload.keySet()) {
+            String filename = instanceFile.getParentFile() + "/" + mediaToUpload.get(key);
+            File toUpload = new File(filename);
+
+            // first check the local content provider
+            // to see if this photo still exists at the location or not
+            String selection = MediaStore.Images.Media.DATA + "=?";
+            String[] selectionArgs = {
+                    filename
+            };
+            Cursor c = Collect.getInstance().getContentResolver()
+                    .query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, selection,
+                            selectionArgs, null);
+            if (c.getCount() != 1) {
+                c.close();
+                try {
+                    throw new FileNotFoundException(Collect.getInstance()
+                            .getString(R.string.media_upload_error, filename));
+                } catch (FileNotFoundException e) {
+                    Timber.e(e);
+                }
+            }
+            c.close();
+
+            String folderId;
+            try {
+                folderId = driveHelper.createOrGetIDOfFolderWithName(jrFormId);
+            } catch (IOException | MultipleFoldersFoundException e) {
+                Timber.e(e);
+                outcome.results.put(id, e.getMessage());
+                return false;
+            }
+
+            String uploadedFileId;
+
+            // file is ready to be uploaded
+            try {
+                uploadedFileId = driveHelper.uploadFileToDrive(mediaToUpload.get(key),
+                        folderId, toUpload);
+            } catch (IOException e) {
+                Timber.e(e, "Exception thrown while uploading the file to drive");
+                outcome.results.put(id, e.getMessage());
+                return false;
+            }
+
+            //checking if file was successfully uploaded
+            if (uploadedFileId == null) {
+                outcome.results.put(id, "Unable to upload the media files. Try again");
+                return false;
+            }
+
+            // uploadedPhotos keeps track of the uploaded URL
+            uploadedMedia.put(key, UPLOADED_MEDIA_URL + uploadedFileId);
         }
         return true;
     }
