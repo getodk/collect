@@ -269,19 +269,9 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             return false;
         }
 
-        //check if any column name is blank
-
-        boolean hasEmptyColumn = false;
-        for (Object column : headerFeed) {
-            if (column.equals("")) {
-                hasEmptyColumn = true;
-                break;
-            }
-        }
-
         // replace blank column name with a single space
 
-        if (hasEmptyColumn) {
+        if (areEmptyColumns(headerFeed)) {
             ArrayList<Object> list = new ArrayList<>();
             for (Object column : headerFeed) {
                 if (column.equals("")) {
@@ -397,6 +387,15 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
         outcome.results.put(id, Collect.getInstance().getString(R.string.success));
         return true;
+    }
+
+    private boolean areEmptyColumns(List headerFeed) {
+        for (Object column : headerFeed) {
+            if (column.equals("")) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean insertRow(ArrayList<Object> list, String id) {
