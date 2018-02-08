@@ -182,103 +182,55 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             return false;
         }
 
-        if (!areWritePermissionsGranted(id, urlString)) {
-            return false;
-        }
-
         List<String> columnNames = new ArrayList<>();
-        if (!readColumnNames(formFilePath, columnNames, id)) {
-            return false;
-        }
-
-        if (!isColumnLengthValid(columnNames, id)) {
-            return false;
-        }
-
-        if (!areColumnNamesLegal(columnNames, id)) {
-            return false;
-        }
-
         HashMap<String, String> answersToUpload = new HashMap<>();
         HashMap<String, String> mediaToUpload = new HashMap<>();
-        if (!readAnswers(instanceFile, answersToUpload, mediaToUpload, id)) {
-            return false;
-        }
-
-        sleepThread();
-
-        if (!areSubmissionColumnNamesLegal(answersToUpload, id)) {
-            return false;
-        }
-
         HashMap<String, String> uploadedMedia = new HashMap<>();
-        if (!mediaToUpload.isEmpty()) {
-            if (!uploadMedia(mediaToUpload, instanceFile, jrFormId, id, uploadedMedia)) {
-                return false;
-            }
-        }
-
         List<List<Object>> values = new ArrayList<>();
         List headerFeed = null;
-
-        if (!updateValues(values, id)) {
-            return false;
-        }
-        if (!values.isEmpty()) {
-            headerFeed = values.get(0);
-        }
-
-        if (areHeadersEmpty(headerFeed)) {
-            if (!resizeSpreadSheet(columnNames, id)) {
-                return false;
-            }
-
-            if (!addHeaders(columnNames, id)) {
-                return false;
-            }
-        }
-
-        // we may have updated the feed, so get a new one update the feed
-        if (!updateValues(values, id)) {
-            return false;
-        }
-        if (!values.isEmpty()) {
-            headerFeed = values.get(0);
-        }
-
-        if (areEmptyColumns(headerFeed)) {
-            if (!handleBlankColumnNames(headerFeed, id)) {
-                return false;
-            }
-        }
-
-        // we may have updated the feed, so get a new one update the feed
-        if (!updateValues(values, id)) {
-            return false;
-        }
-        if (!values.isEmpty()) {
-            headerFeed = values.get(0);
-        }
-
         List<String> sheetCols = new ArrayList<>();
-        if (!getSheetCols(sheetCols, headerFeed, id)) {
-            return false;
-        }
-
         List<String> missingColumns = new ArrayList<>();
-        addMissingColumns(missingColumns, sheetCols, columnNames);
-
-        if (!checkForMissingColumns(missingColumns, id)) {
+        try {
+            areWritePermissionsGranted(id, urlString);
+            readColumnNames(formFilePath, columnNames, id);
+            isColumnLengthValid(columnNames, id);
+            areColumnNamesLegal(columnNames, id);
+            readAnswers(instanceFile, answersToUpload, mediaToUpload, id);
+            sleepThread();
+            areSubmissionColumnNamesLegal(answersToUpload, id);
+            if (!mediaToUpload.isEmpty()) {
+                uploadMedia(mediaToUpload, instanceFile, jrFormId, id, uploadedMedia);
+            }
+            updateValues(values, id);
+            if (!values.isEmpty()) {
+                headerFeed = values.get(0);
+            }
+            if (areHeadersEmpty(headerFeed)) {
+                resizeSpreadSheet(columnNames, id);
+                addHeaders(columnNames, id);
+                // we may have updated the feed, so get a new one update the feed
+                updateValues(values, id);
+                if (!values.isEmpty()) {
+                    headerFeed = values.get(0);
+                }
+            }
+            if (areEmptyColumns(headerFeed)) {
+                handleBlankColumnNames(headerFeed, id);
+                // we may have updated the feed, so get a new one update the feed
+                updateValues(values, id);
+                if (!values.isEmpty()) {
+                    headerFeed = values.get(0);
+                }
+            }
+            getSheetCols(sheetCols, headerFeed, id);
+            addMissingColumns(missingColumns, sheetCols, columnNames);
+            checkForMissingColumns(missingColumns, id);
+            addPhotos(answersToUpload, uploadedMedia);
+            insertRow(getRowFromList(prepareListOfValues(sheetCols, columnNames, answersToUpload)), id, sheetName);
+            outcome.results.put(id, Collect.getInstance().getString(R.string.success));
+        } catch (Exception e) {
             return false;
         }
-
-        addPhotos(answersToUpload, uploadedMedia);
-
-        if (!insertRow(getRowFromList(prepareListOfValues(sheetCols, columnNames, answersToUpload)), id, sheetName)) {
-            return false;
-        }
-
-        outcome.results.put(id, Collect.getInstance().getString(R.string.success));
         return true;
     }
 
@@ -322,19 +274,18 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         return list;
     }
 
-    private boolean getSheetCols(List<String> sheetCols, List headerFeed, String id) {
+    private void getSheetCols(List<String> sheetCols, List headerFeed, String id) throws Exception {
         if (headerFeed != null) {
             for (Object column : headerFeed) {
                 sheetCols.add(column.toString());
             }
         } else {
             outcome.results.put(id, "couldn't get header feed");
-            return false;
+            throw new Exception();
         }
-        return true;
     }
 
-    private boolean updateValues(List<List<Object>> values, String id) {
+    private void updateValues(List<List<Object>> values, String id) throws IOException {
         try {
             values.clear();
             values.addAll(sheetsHelper.getHeaderFeed(spreadsheetId, sheetName));
@@ -344,9 +295,8 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         } catch (IOException e) {
             Timber.e(e);
             outcome.results.put(id, e.getMessage());
-            return false;
+            throw e;
         }
-        return true;
     }
 
     private void addPhotos(HashMap<String, String> answersToUpload, HashMap<String, String> uploadedMedia) {
@@ -356,7 +306,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         }
     }
 
-    private boolean checkForMissingColumns(List<String> missingColumns, String id) {
+    private void checkForMissingColumns(List<String> missingColumns, String id) throws Exception {
         if (missingColumns.size() > 0) {
             // we had some missing columns, so error out
             StringBuilder missingString = new StringBuilder();
@@ -368,9 +318,8 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             }
             outcome.results.put(id, Collect.getInstance().getString(
                     R.string.google_sheets_missing_columns, missingString.toString()));
-            return false;
+            throw new Exception();
         }
-        return true;
     }
 
     private void addMissingColumns(List<String> missingColumns, List<String> sheetCols, List<String> columnNames) {
@@ -381,7 +330,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         }
     }
 
-    private boolean handleBlankColumnNames(List headerFeed, String id) {
+    private void handleBlankColumnNames(List headerFeed, String id) throws IOException {
         ArrayList<Object> list = new ArrayList<>();
         for (Object column : headerFeed) {
             if (column.equals("")) {
@@ -396,7 +345,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         ValueRange row = new ValueRange();
         row.setValues(content);
 
-        return insertRow(row, id, sheetName + "!A1:1");
+        insertRow(row, id, sheetName + "!A1:1");
     }
 
     private boolean areEmptyColumns(List headerFeed) {
@@ -418,15 +367,14 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         return row;
     }
 
-    private boolean insertRow(ValueRange row, String id, String sheetName) {
+    private void insertRow(ValueRange row, String id, String sheetName) throws IOException {
         try {
             sheetsHelper.insertRow(spreadsheetId, sheetName, row);
         } catch (IOException e) {
             Timber.e(e);
             outcome.results.put(id, e.getMessage());
-            return false;
+            throw e;
         }
-        return true;
     }
 
     private boolean areHeadersEmpty(List headerFeed) {
@@ -440,30 +388,28 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         return true;
     }
 
-    private boolean areColumnNamesLegal(List<String> columnNames, String id) {
+    private void areColumnNamesLegal(List<String> columnNames, String id) throws Exception {
         for (String n : columnNames) {
             if (!isValidGoogleSheetsString(n)) {
                 outcome.results.put(id,
                         Collect.getInstance().getString(R.string.google_sheets_invalid_column_form,
                                 n));
-                return false;
+                throw new Exception();
             }
         }
-        return true;
     }
 
-    private boolean areSubmissionColumnNamesLegal(HashMap<String, String> answersToUpload, String id) {
+    private void areSubmissionColumnNamesLegal(HashMap<String, String> answersToUpload, String id) throws Exception {
         for (String n : answersToUpload.keySet()) {
             if (!isValidGoogleSheetsString(n)) {
                 outcome.results.put(id, Collect.getInstance()
                         .getString(R.string.google_sheets_invalid_column_instance, n));
-                return false;
+                throw new Exception();
             }
         }
-        return true;
     }
 
-    private boolean areWritePermissionsGranted(String id, String urlString) {
+    private void areWritePermissionsGranted(String id, String urlString) throws IOException, BadUrlException {
         if (!hasWritePermissionToSheet || !urlString.equals(googleSheetsUrl)) {
             try {
                 spreadsheetId = UrlUtils.getSpreadsheetID(urlString);
@@ -477,16 +423,15 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                     message = Collect.getInstance().getString(R.string.google_sheets_access_denied);
                 }
                 outcome.results.put(id, message);
-                return false;
+                throw e;
             } catch (BadUrlException | IOException e) {
                 Timber.i(e);
                 outcome.results.put(id, e.getMessage());
-                return false;
+                throw e;
             }
             hasWritePermissionToSheet = true;
             googleSheetsUrl = urlString;
         }
-        return true;
     }
 
     /*  # NOTE #
@@ -497,8 +442,8 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     // if we have any media files to upload,
     // get the folder or create a new one
     // then upload the media files
-    private boolean uploadMedia(HashMap<String, String> mediaToUpload, File instanceFile,
-                             String jrFormId, String id, HashMap<String, String> uploadedMedia) {
+    private void uploadMedia(HashMap<String, String> mediaToUpload, File instanceFile,
+                             String jrFormId, String id, HashMap<String, String> uploadedMedia) throws Exception {
         for (String key : mediaToUpload.keySet()) {
             String filename = instanceFile.getParentFile() + "/" + mediaToUpload.get(key);
             File toUpload = new File(filename);
@@ -529,7 +474,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             } catch (IOException | MultipleFoldersFoundException e) {
                 Timber.e(e);
                 outcome.results.put(id, e.getMessage());
-                return false;
+                throw e;
             }
 
             String uploadedFileId;
@@ -541,33 +486,31 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             } catch (IOException e) {
                 Timber.e(e, "Exception thrown while uploading the file to drive");
                 outcome.results.put(id, e.getMessage());
-                return false;
+                throw e;
             }
 
             //checking if file was successfully uploaded
             if (uploadedFileId == null) {
                 outcome.results.put(id, "Unable to upload the media files. Try again");
-                return false;
+                throw new Exception();
             }
 
             // uploadedPhotos keeps track of the uploaded URL
             uploadedMedia.put(key, UPLOADED_MEDIA_URL + uploadedFileId);
         }
-        return true;
     }
 
-    private boolean resizeSpreadSheet(List<String> columnNames, String id) {
+    private void resizeSpreadSheet(List<String> columnNames, String id) throws IOException {
         try {
             sheetsHelper.resizeSpreadSheet(spreadsheetId, sheetId, columnNames.size());
         } catch (IOException e) {
             Timber.e(e);
             outcome.results.put(id, e.getMessage());
-            return false;
+            throw e;
         }
-        return true;
     }
 
-    private boolean addHeaders(List<String> columnNames, String id) {
+    private void addHeaders(List<String> columnNames, String id) throws IOException {
         ArrayList<Object> list = new ArrayList<>();
         list.addAll(columnNames);
 
@@ -590,49 +533,45 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
              *  For more info   :   https://developers.google.com/sheets/api/reference/rest/
              */
 
-        return insertRow(row, id, sheetName);
+        insertRow(row, id, sheetName);
     }
 
-    private boolean isColumnLengthValid(List<String> columnNames, String id) {
+    private void isColumnLengthValid(List<String> columnNames, String id) throws Exception {
         if (columnNames.size() == 0) {
             outcome.results.put(id, "No columns found in the form to upload");
-            return false;
+            throw new Exception();
         }
 
         if (columnNames.size() > 255) {
             outcome.results.put(id, Collect.getInstance().getString(R.string.sheets_max_columns,
                     String.valueOf(columnNames.size())));
-            return false;
+            throw new Exception();
         }
-
-        return true;
     }
 
-    private boolean readColumnNames(String formFilePath, List<String> columnNames, String id) {
+    private void readColumnNames(String formFilePath, List<String> columnNames, String id) throws FormException, XmlPullParserException, IOException {
         try {
             getColumns(formFilePath, columnNames);
         } catch (XmlPullParserException | IOException | FormException e2) {
             Timber.e(e2, "Exception thrown while getting columns from form file");
             outcome.results.put(id, e2.getMessage());
-            return false;
+            throw e2;
         }
-        return true;
     }
 
-    private boolean readAnswers(File instanceFile, HashMap<String, String> answersToUpload,
-                                HashMap<String, String> mediaToUpload, String id) {
+    private void readAnswers(File instanceFile, HashMap<String, String> answersToUpload,
+                                HashMap<String, String> mediaToUpload, String id) throws FormException, IOException, XmlPullParserException {
         try {
             processInstanceXML(instanceFile, answersToUpload, mediaToUpload);
         } catch (FormException e) {
             outcome.results.put(id,
                     Collect.getInstance().getString(R.string.google_repeat_error));
-            return false;
+            throw e;
         } catch (XmlPullParserException | IOException e) {
             Timber.e(e, "Exception thrown while parsing the file");
             outcome.results.put(id, e.getMessage());
-            return false;
+            throw e;
         }
-        return true;
     }
 
     private void getColumns(String filePath, List<String> columns)
