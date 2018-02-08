@@ -390,14 +390,22 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             // https://github.com/opendatakit/collect/issues/931
             list.add(answer.isEmpty() ? " " : answer);
         }
+
+        if (!insertRow(list, id)) {
+            return false;
+        }
+
+        outcome.results.put(id, Collect.getInstance().getString(R.string.success));
+        return true;
+    }
+
+    private boolean insertRow(ArrayList<Object> list, String id) {
         ArrayList<List<Object>> content = new ArrayList<>();
         content.add(list);
 
         ValueRange row = new ValueRange();
         row.setValues(content);
 
-
-        // Send the new row to the API for insertion.
         try {
             sheetsHelper.insertRow(spreadsheetId, sheetName, row);
         } catch (IOException e) {
@@ -405,10 +413,9 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             outcome.results.put(id, e.getMessage());
             return false;
         }
-
-        outcome.results.put(id, Collect.getInstance().getString(R.string.success));
         return true;
     }
+
 
     private boolean areHeadersEmpty(List headerFeed) {
         if (headerFeed != null) {
