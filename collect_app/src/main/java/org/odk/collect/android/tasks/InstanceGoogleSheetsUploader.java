@@ -157,7 +157,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                             .getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
                     String urlString = getGoogleSheetsUrl(c);
 
-                    if (!uploadOneSubmission(id, instance, jrformid, token, formFilePath, urlString)) {
+                    if (!uploadOneSubmission(id, new File(instance), jrformid, token, formFilePath, urlString)) {
                         cv.put(InstanceColumns.STATUS,
                                 InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                         Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
@@ -175,7 +175,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         }
     }
 
-    private boolean uploadOneSubmission(String id, String instanceFilePath, String jrFormId,
+    private boolean uploadOneSubmission(String id, File instanceFile, String jrFormId,
                                         String token, String formFilePath, String urlString) {
         // if the token is null fail immediately
         if (token == null) {
@@ -186,9 +186,6 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         if (!areWritePermissionsGranted(id, urlString)) {
             return false;
         }
-
-        // get instance file
-        File instanceFile = new File(instanceFilePath);
 
         List<String> columnNames = new ArrayList<>();
         if (!readColumnNames(formFilePath, columnNames, id)) {
