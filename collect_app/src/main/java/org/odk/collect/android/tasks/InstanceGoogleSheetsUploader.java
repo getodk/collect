@@ -212,13 +212,8 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             Timber.d(e3);
         }
 
-        // make sure column names in submission are legal (may be different than form)
-        for (String n : answersToUpload.keySet()) {
-            if (!isValidGoogleSheetsString(n)) {
-                outcome.results.put(id, Collect.getInstance()
-                        .getString(R.string.google_sheets_invalid_column_instance, n));
-                return false;
-            }
+        if (!areSubmissionColumnNamesLegal(answersToUpload, id)) {
+            return false;
         }
 
         HashMap<String, String> uploadedMedia = new HashMap<>();
@@ -432,6 +427,17 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                 outcome.results.put(id,
                         Collect.getInstance().getString(R.string.google_sheets_invalid_column_form,
                                 n));
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean areSubmissionColumnNamesLegal(HashMap<String, String> answersToUpload, String id) {
+        for (String n : answersToUpload.keySet()) {
+            if (!isValidGoogleSheetsString(n)) {
+                outcome.results.put(id, Collect.getInstance()
+                        .getString(R.string.google_sheets_invalid_column_instance, n));
                 return false;
             }
         }
