@@ -183,28 +183,8 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             return false;
         }
 
-        // checking for write permissions to the spreadsheet
-        if (!hasWritePermissionToSheet || !urlString.equals(googleSheetsUrl)) {
-            try {
-                spreadsheetId = UrlUtils.getSpreadsheetID(urlString);
-
-                Spreadsheet spreadsheet = sheetsHelper.getSpreadsheet(spreadsheetId);
-                sheetId = spreadsheet.getSheets().get(0).getProperties().getSheetId();
-                sheetName = spreadsheet.getSheets().get(0).getProperties().getTitle();
-            } catch (GoogleJsonResponseException e) {
-                String message = e.getMessage();
-                if (e.getDetails() != null && e.getDetails().getCode() == 403) {
-                    message = Collect.getInstance().getString(R.string.google_sheets_access_denied);
-                }
-                outcome.results.put(id, message);
-                return false;
-            } catch (BadUrlException | IOException e) {
-                Timber.i(e);
-                outcome.results.put(id, e.getMessage());
-                return false;
-            }
-            hasWritePermissionToSheet = true;
-            googleSheetsUrl = urlString;
+        if (!areWritePermissionsGranted(id, urlString)) {
+            return false;
         }
 
         // get instance file
@@ -575,6 +555,32 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                                 n));
                 return false;
             }
+        }
+        return true;
+    }
+
+    private boolean areWritePermissionsGranted(String id, String urlString) {
+        if (!hasWritePermissionToSheet || !urlString.equals(googleSheetsUrl)) {
+            try {
+                spreadsheetId = UrlUtils.getSpreadsheetID(urlString);
+
+                Spreadsheet spreadsheet = sheetsHelper.getSpreadsheet(spreadsheetId);
+                sheetId = spreadsheet.getSheets().get(0).getProperties().getSheetId();
+                sheetName = spreadsheet.getSheets().get(0).getProperties().getTitle();
+            } catch (GoogleJsonResponseException e) {
+                String message = e.getMessage();
+                if (e.getDetails() != null && e.getDetails().getCode() == 403) {
+                    message = Collect.getInstance().getString(R.string.google_sheets_access_denied);
+                }
+                outcome.results.put(id, message);
+                return false;
+            } catch (BadUrlException | IOException e) {
+                Timber.i(e);
+                outcome.results.put(id, e.getMessage());
+                return false;
+            }
+            hasWritePermissionToSheet = true;
+            googleSheetsUrl = urlString;
         }
         return true;
     }
