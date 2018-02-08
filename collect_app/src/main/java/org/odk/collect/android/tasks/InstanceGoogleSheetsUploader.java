@@ -267,14 +267,8 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             headerFeed = values.get(0);
         }
 
-        // first, get all the columns in the spreadsheet
-        ArrayList<String> sheetCols = new ArrayList<>();
-        if (headerFeed != null) {
-            for (Object column : headerFeed) {
-                sheetCols.add(column.toString());
-            }
-        } else {
-            outcome.results.put(id, "couldn't get header feed");
+        List<String> sheetCols = new ArrayList<>();
+        if (!getSheetCols(sheetCols, headerFeed, id)) {
             return false;
         }
 
@@ -320,6 +314,18 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         }
 
         outcome.results.put(id, Collect.getInstance().getString(R.string.success));
+        return true;
+    }
+
+    private boolean getSheetCols(List<String> sheetCols, List headerFeed, String id) {
+        if (headerFeed != null) {
+            for (Object column : headerFeed) {
+                sheetCols.add(column.toString());
+            }
+        } else {
+            outcome.results.put(id, "couldn't get header feed");
+            return false;
+        }
         return true;
     }
 
