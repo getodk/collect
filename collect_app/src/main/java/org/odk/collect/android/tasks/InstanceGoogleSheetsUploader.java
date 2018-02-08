@@ -249,7 +249,6 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             if (!addHeaders(columnNames, id)) {
                 return false;
             }
-
         }
 
         // we may have updated the feed, so get a new one
@@ -269,28 +268,8 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             return false;
         }
 
-        // replace blank column name with a single space
-
         if (areEmptyColumns(headerFeed)) {
-            ArrayList<Object> list = new ArrayList<>();
-            for (Object column : headerFeed) {
-                if (column.equals("")) {
-                    list.add(" ");
-                } else {
-                    list.add(column);
-                }
-            }
-
-            ArrayList<List<Object>> content = new ArrayList<>();
-            content.add(list);
-            ValueRange row = new ValueRange();
-            row.setValues(content);
-
-            try {
-                sheetsHelper.insertRow(spreadsheetId, sheetName + "!A1:1", row);
-            } catch (IOException e) {
-                Timber.e(e);
-                outcome.results.put(id, e.getMessage());
+            if (!handleBlankColumnNames(headerFeed, id)) {
                 return false;
             }
         }
@@ -389,6 +368,31 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         return true;
     }
 
+    private boolean handleBlankColumnNames(List headerFeed, String id) {
+        ArrayList<Object> list = new ArrayList<>();
+        for (Object column : headerFeed) {
+            if (column.equals("")) {
+                list.add(" ");
+            } else {
+                list.add(column);
+            }
+        }
+
+        ArrayList<List<Object>> content = new ArrayList<>();
+        content.add(list);
+        ValueRange row = new ValueRange();
+        row.setValues(content);
+
+        try {
+            sheetsHelper.insertRow(spreadsheetId, sheetName + "!A1:1", row);
+        } catch (IOException e) {
+            Timber.e(e);
+            outcome.results.put(id, e.getMessage());
+            return false;
+        }
+        return true;
+    }
+
     private boolean areEmptyColumns(List headerFeed) {
         for (Object column : headerFeed) {
             if (column.equals("")) {
@@ -414,7 +418,6 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         }
         return true;
     }
-
 
     private boolean areHeadersEmpty(List headerFeed) {
         if (headerFeed != null) {
