@@ -302,20 +302,10 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             return false;
         }
 
-        ArrayList<String> missingColumns = new ArrayList<>();
+        List<String> missingColumns = new ArrayList<>();
         addMissingColumns(missingColumns, sheetCols, columnNames);
 
-        if (missingColumns.size() > 0) {
-            // we had some missing columns, so error out
-            StringBuilder missingString = new StringBuilder();
-            for (int i = 0; i < missingColumns.size(); i++) {
-                missingString.append(missingColumns.get(i));
-                if (i < missingColumns.size() - 1) {
-                    missingString.append(", ");
-                }
-            }
-            outcome.results.put(id, Collect.getInstance().getString(
-                    R.string.google_sheets_missing_columns, missingString.toString()));
+        if (!checkForMissingColumns(missingColumns, id)) {
             return false;
         }
 
@@ -361,6 +351,23 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         }
 
         outcome.results.put(id, Collect.getInstance().getString(R.string.success));
+        return true;
+    }
+
+    private boolean checkForMissingColumns(List<String> missingColumns, String id) {
+        if (missingColumns.size() > 0) {
+            // we had some missing columns, so error out
+            StringBuilder missingString = new StringBuilder();
+            for (int i = 0; i < missingColumns.size(); i++) {
+                missingString.append(missingColumns.get(i));
+                if (i < missingColumns.size() - 1) {
+                    missingString.append(", ");
+                }
+            }
+            outcome.results.put(id, Collect.getInstance().getString(
+                    R.string.google_sheets_missing_columns, missingString.toString()));
+            return false;
+        }
         return true;
     }
 
