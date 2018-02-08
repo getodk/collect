@@ -225,20 +225,14 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         // All photos have been sent to Google Drive (if there were any)
         // now upload data to Google Sheet
 
-        List<List<Object>> values;
+        List<List<Object>> values = new ArrayList<>();
         List headerFeed = null;
 
-        try {
-            values = sheetsHelper.getHeaderFeed(spreadsheetId, sheetName);
-            if (values == null || values.size() == 0) {
-                outcome.results.put(id, "No data found");
-            } else {
-                headerFeed = values.get(0);
-            }
-        } catch (IOException e) {
-            Timber.e(e);
-            outcome.results.put(id, e.getMessage());
+        if (!updateValues(values, id)) {
             return false;
+        }
+        if (!values.isEmpty()) {
+            headerFeed = values.get(0);
         }
 
         if (areHeadersEmpty(headerFeed)) {
@@ -251,21 +245,12 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             }
         }
 
-        // we may have updated the feed, so get a new one
-        // update the feed
-
-        try {
-            values = sheetsHelper.getHeaderFeed(spreadsheetId, sheetName);
-            if (values == null || values.size() == 0) {
-                outcome.results.put(id, "No data found");
-                return false;
-            } else {
-                headerFeed = values.get(0);
-            }
-        } catch (IOException e) {
-            Timber.e(e, "Exception thrown while getting the header feed");
-            outcome.results.put(id, e.getMessage());
+        // we may have updated the feed, so get a new one update the feed
+        if (!updateValues(values, id)) {
             return false;
+        }
+        if (!values.isEmpty()) {
+            headerFeed = values.get(0);
         }
 
         if (areEmptyColumns(headerFeed)) {
@@ -274,21 +259,12 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             }
         }
 
-        // we may have updated the feed, so get a new one
-        // update the feed
-
-        try {
-            values = sheetsHelper.getHeaderFeed(spreadsheetId, sheetName);
-            if (values == null || values.size() == 0) {
-                outcome.results.put(id, "No data found");
-                return false;
-            } else {
-                headerFeed = values.get(0);
-            }
-        } catch (IOException e) {
-            Timber.e(e, "Exception thrown while getting the header feed");
-            outcome.results.put(id, e.getMessage());
+        // we may have updated the feed, so get a new one update the feed
+        if (!updateValues(values, id)) {
             return false;
+        }
+        if (!values.isEmpty()) {
+            headerFeed = values.get(0);
         }
 
         // first, get all the columns in the spreadsheet
@@ -344,6 +320,21 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         }
 
         outcome.results.put(id, Collect.getInstance().getString(R.string.success));
+        return true;
+    }
+
+    private boolean updateValues(List<List<Object>> values, String id) {
+        try {
+            values.clear();
+            values.addAll(sheetsHelper.getHeaderFeed(spreadsheetId, sheetName));
+            if (values.isEmpty()) {
+                outcome.results.put(id, "No data found");
+            }
+        } catch (IOException e) {
+            Timber.e(e);
+            outcome.results.put(id, e.getMessage());
+            return false;
+        }
         return true;
     }
 
