@@ -216,12 +216,12 @@ public class SpinnerMultiWidget extends QuestionWidget implements ButtonWidget, 
     }
 
     private void showSelectedValues(List<String> selectedValues) {
-        if (selectedValues.size() > 0) {
+        if (selectedValues.isEmpty()) {
+            clearAnswer();
+        } else {
             selectionText.setText(String.format(getContext().getString(R.string.selected_answer),
                     TextUtils.join(", ", selectedValues)));
             selectionText.setVisibility(View.VISIBLE);
-        } else {
-            clearAnswer();
         }
     }
 }
