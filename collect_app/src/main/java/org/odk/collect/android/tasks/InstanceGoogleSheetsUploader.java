@@ -277,38 +277,10 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                 return false;
             }
 
-            //adding the headers
-            ArrayList<Object> list = new ArrayList<>();
-            list.addAll(columnNames);
-
-            ArrayList<List<Object>> content = new ArrayList<>();
-            content.add(list);
-            ValueRange row = new ValueRange();
-            row.setValues(content);
-
-            /*
-             *  Appends the data at the last row
-             *
-             *  append(spreadsheetId, range, ValueRange)
-             *
-             *  spreadsheetId   :   Unique sheet id
-             *  range           :   A1 notation range. It specifies the range within which the
-             *                      spreadsheet should be searched.
-             *              hint   "Giving only sheetName in range searches in the complete sheet"
-             *  ValueRange      :   Content that needs to be appended  (List<List<Object>>)
-             *
-             *  For more info   :   https://developers.google.com/sheets/api/reference/rest/
-             */
-
-            // Send the new row to the API for insertion.
-            // write the headers
-            try {
-                sheetsHelper.insertRow(spreadsheetId, sheetName, row);
-            } catch (IOException e) {
-                Timber.e(e);
-                outcome.results.put(id, e.getMessage());
+            if (!addHeaders(columnNames, id)) {
                 return false;
             }
+
         }
 
         // we may have updated the feed, so get a new one
@@ -593,6 +565,42 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             outcome.results.put(id, e.getMessage());
             return false;
         }
+        return true;
+    }
+
+    private boolean addHeaders(List<String> columnNames, String id) {
+        ArrayList<Object> list = new ArrayList<>();
+        list.addAll(columnNames);
+
+        ArrayList<List<Object>> content = new ArrayList<>();
+        content.add(list);
+        ValueRange row = new ValueRange();
+        row.setValues(content);
+
+            /*
+             *  Appends the data at the last row
+             *
+             *  append(spreadsheetId, range, ValueRange)
+             *
+             *  spreadsheetId   :   Unique sheet id
+             *  range           :   A1 notation range. It specifies the range within which the
+             *                      spreadsheet should be searched.
+             *              hint   "Giving only sheetName in range searches in the complete sheet"
+             *  ValueRange      :   Content that needs to be appended  (List<List<Object>>)
+             *
+             *  For more info   :   https://developers.google.com/sheets/api/reference/rest/
+             */
+
+        // Send the new row to the API for insertion.
+        // write the headers
+        try {
+            sheetsHelper.insertRow(spreadsheetId, sheetName, row);
+        } catch (IOException e) {
+            Timber.e(e);
+            outcome.results.put(id, e.getMessage());
+            return false;
+        }
+
         return true;
     }
 
