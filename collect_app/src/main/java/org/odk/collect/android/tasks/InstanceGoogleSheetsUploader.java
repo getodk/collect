@@ -303,11 +303,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         }
 
         ArrayList<String> missingColumns = new ArrayList<>();
-        for (String col : columnNames) {
-            if (!sheetCols.contains(col)) {
-                missingColumns.add(col);
-            }
-        }
+        addMissingColumns(missingColumns, sheetCols, columnNames);
 
         if (missingColumns.size() > 0) {
             // we had some missing columns, so error out
@@ -366,6 +362,14 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
         outcome.results.put(id, Collect.getInstance().getString(R.string.success));
         return true;
+    }
+
+    private void addMissingColumns(List<String> missingColumns, List<String> sheetCols, List<String> columnNames) {
+        for (String col : columnNames) {
+            if (!sheetCols.contains(col)) {
+                missingColumns.add(col);
+            }
+        }
     }
 
     private boolean handleBlankColumnNames(List headerFeed, String id) {
