@@ -200,20 +200,9 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             return false;
         }
 
-        // parses the instance file and populates the answers and photos
-        // hashmaps.
         HashMap<String, String> answersToUpload = new HashMap<>();
         HashMap<String, String> mediaToUpload = new HashMap<>();
-
-        try {
-            processInstanceXML(instanceFile, answersToUpload, mediaToUpload);
-        } catch (FormException e) {
-            outcome.results.put(id,
-                    Collect.getInstance().getString(R.string.google_repeat_error));
-            return false;
-        } catch (XmlPullParserException | IOException e) {
-            Timber.e(e, "Exception thrown while parsing the file");
-            outcome.results.put(id, e.getMessage());
+        if (!readAnswers(instanceFile, answersToUpload, mediaToUpload, id)) {
             return false;
         }
 
@@ -610,6 +599,22 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         } catch (XmlPullParserException | IOException | FormException e2) {
             Timber.e(e2, "Exception thrown while getting columns from form file");
             outcome.results.put(id, e2.getMessage());
+            return false;
+        }
+        return true;
+    }
+
+    private boolean readAnswers(File instanceFile, HashMap<String, String> answersToUpload,
+                                HashMap<String, String> mediaToUpload, String id) {
+        try {
+            processInstanceXML(instanceFile, answersToUpload, mediaToUpload);
+        } catch (FormException e) {
+            outcome.results.put(id,
+                    Collect.getInstance().getString(R.string.google_repeat_error));
+            return false;
+        } catch (XmlPullParserException | IOException e) {
+            Timber.e(e, "Exception thrown while parsing the file");
+            outcome.results.put(id, e.getMessage());
             return false;
         }
         return true;
