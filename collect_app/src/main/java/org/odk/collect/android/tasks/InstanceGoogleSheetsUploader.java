@@ -177,7 +177,6 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
     private boolean uploadOneSubmission(String id, File instanceFile, String jrFormId,
                                         String token, String formFilePath, String urlString) {
-        // if the token is null fail immediately
         if (token == null) {
             outcome.results.put(id, oauth_fail + Collect.getInstance().getString(R.string.invalid_oauth));
             return false;
@@ -218,8 +217,6 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                 return false;
             }
         }
-        // All photos have been sent to Google Drive (if there were any)
-        // now upload data to Google Sheet
 
         List<List<Object>> values = new ArrayList<>();
         List headerFeed = null;
