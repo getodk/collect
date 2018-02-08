@@ -273,14 +273,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         }
 
         if (areHeadersEmpty(headerFeed)) {
-            // if the headers were empty, resize the spreadsheet
-            // and add the headers
-
-            try {
-                sheetsHelper.resizeSpreadSheet(spreadsheetId, sheetId, columnNames.size());
-            } catch (IOException e) {
-                Timber.e(e);
-                outcome.results.put(id, e.getMessage());
+            if (!resizeSpreadSheet(columnNames, id)) {
                 return false;
             }
 
@@ -588,6 +581,17 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
             // uploadedPhotos keeps track of the uploaded URL
             uploadedMedia.put(key, UPLOADED_MEDIA_URL + uploadedFileId);
+        }
+        return true;
+    }
+
+    private boolean resizeSpreadSheet(List<String> columnNames, String id) {
+        try {
+            sheetsHelper.resizeSpreadSheet(spreadsheetId, sheetId, columnNames.size());
+        } catch (IOException e) {
+            Timber.e(e);
+            outcome.results.put(id, e.getMessage());
+            return false;
         }
         return true;
     }
