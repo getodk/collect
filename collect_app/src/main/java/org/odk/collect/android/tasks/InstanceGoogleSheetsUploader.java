@@ -358,21 +358,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             return false;
         }
 
-        // check the headers....
-        boolean emptyheaders = true;
-
-        // go through headers
-        // if they're empty, resize and add
-        if (headerFeed != null) {
-            for (Object c : headerFeed) {
-                if (c != null) {
-                    emptyheaders = false;
-                    break;
-                }
-            }
-        }
-
-        if (emptyheaders) {
+        if (areHeadersEmpty(headerFeed)) {
             // if the headers were empty, resize the spreadsheet
             // and add the headers
 
@@ -573,6 +559,17 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         }
 
         outcome.results.put(id, Collect.getInstance().getString(R.string.success));
+        return true;
+    }
+
+    private boolean areHeadersEmpty(List headerFeed) {
+        if (headerFeed != null) {
+            for (Object c : headerFeed) {
+                if (c != null) {
+                    return false;
+                }
+            }
+        }
         return true;
     }
 
