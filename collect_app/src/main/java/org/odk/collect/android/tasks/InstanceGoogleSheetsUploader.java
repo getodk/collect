@@ -157,14 +157,16 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                             .getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
                     String urlString = getGoogleSheetsUrl(c);
 
-                    if (!uploadOneSubmission(id, new File(instance), jrformid, token, formFilePath, urlString)) {
+                    if (token == null || !uploadOneSubmission(id, new File(instance), jrformid, formFilePath, urlString)) {
                         cv.put(InstanceColumns.STATUS,
                                 InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                         Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
+                        outcome.results.put(id, oauth_fail + Collect.getInstance().getString(R.string.invalid_oauth));
                         return;
                     } else {
                         cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMITTED);
                         Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
+                        outcome.results.put(id, Collect.getInstance().getString(R.string.success));
                     }
                 }
             }
@@ -176,12 +178,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     }
 
     private boolean uploadOneSubmission(String id, File instanceFile, String jrFormId,
-                                        String token, String formFilePath, String urlString) {
-        if (token == null) {
-            outcome.results.put(id, oauth_fail + Collect.getInstance().getString(R.string.invalid_oauth));
-            return false;
-        }
-
+                                        String formFilePath, String urlString) {
         List<String> columnNames = new ArrayList<>();
         HashMap<String, String> answersToUpload = new HashMap<>();
         HashMap<String, String> mediaToUpload = new HashMap<>();
@@ -220,7 +217,6 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             checkForMissingColumns(sheetColumns, columnNames, id);
             addPhotos(answersToUpload, uploadedMedia);
             insertRow(getRowFromList(prepareListOfValues(sheetColumns, columnNames, answersToUpload)), id, sheetName);
-            outcome.results.put(id, Collect.getInstance().getString(R.string.success));
         } catch (Exception e) {
             return false;
         }
