@@ -186,40 +186,40 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         HashMap<String, String> answersToUpload = new HashMap<>();
         HashMap<String, String> mediaToUpload = new HashMap<>();
         HashMap<String, String> uploadedMedia = new HashMap<>();
-        List<List<Object>> values = new ArrayList<>();
-        List headerFeed;
-        List<String> sheetCols = new ArrayList<>();
+        List<List<Object>> sheetCells = new ArrayList<>();
+        List headerRow;
+        List<String> sheetColumns = new ArrayList<>();
         try {
-            areWritePermissionsGranted(id, urlString);
+            checkWritePermissions(id, urlString);
             readColumnNames(formFilePath, columnNames, id);
-            isColumnLengthValid(columnNames, id);
-            areColumnNamesLegal(columnNames, id);
+            validColumnLength(columnNames, id);
+            validColumnNames(columnNames, id);
             readAnswers(instanceFile, answersToUpload, mediaToUpload, id);
             sleepThread();
-            areSubmissionColumnNamesLegal(answersToUpload, id);
+            validSubmissionColumnNames(answersToUpload, id);
             if (!mediaToUpload.isEmpty()) {
                 uploadMedia(mediaToUpload, instanceFile, jrFormId, id, uploadedMedia);
             }
-            updateValues(values, id);
-            if (!values.isEmpty()) {
-                headerFeed = values.get(0);
+            readSheetCells(sheetCells, id);
+            if (!sheetCells.isEmpty()) {
+                headerRow = sheetCells.get(0);
             } else { // new sheet
-                resizeSpreadSheet(columnNames, id);
+                resizeSheet(columnNames, id);
                 addHeaders(columnNames, id);
                 // we may have updated the feed, so get a new one update the feed
-                updateValues(values, id);
-                headerFeed = values.get(0);
+                readSheetCells(sheetCells, id);
+                headerRow = sheetCells.get(0);
             }
-            if (areEmptyColumns(headerFeed)) {
-                handleBlankColumnNames(headerFeed, id);
+            if (isAnyColumnEmpty(headerRow)) {
+                fixBlankColumnNames(headerRow, id);
                 // we may have updated the feed, so get a new one update the feed
-                updateValues(values, id);
-                headerFeed = values.get(0);
+                readSheetCells(sheetCells, id);
+                headerRow = sheetCells.get(0);
             }
-            getSheetCols(sheetCols, headerFeed, id);
-            checkForMissingColumns(sheetCols, columnNames, id);
+            getSheetColumns(sheetColumns, headerRow, id);
+            checkForMissingColumns(sheetColumns, columnNames, id);
             addPhotos(answersToUpload, uploadedMedia);
-            insertRow(getRowFromList(prepareListOfValues(sheetCols, columnNames, answersToUpload)), id, sheetName);
+            insertRow(getRowFromList(prepareListOfValues(sheetColumns, columnNames, answersToUpload)), id, sheetName);
             outcome.results.put(id, Collect.getInstance().getString(R.string.success));
         } catch (Exception e) {
             return false;
@@ -267,7 +267,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         return list;
     }
 
-    private void getSheetCols(List<String> sheetCols, List headerFeed, String id) throws Exception {
+    private void getSheetColumns(List<String> sheetCols, List headerFeed, String id) throws Exception {
         if (headerFeed != null) {
             for (Object column : headerFeed) {
                 sheetCols.add(column.toString());
@@ -278,7 +278,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         }
     }
 
-    private void updateValues(List<List<Object>> values, String id) throws IOException {
+    private void readSheetCells(List<List<Object>> values, String id) throws IOException {
         try {
             values.clear();
             List<List<Object>> headerFeed = sheetsHelper.getHeaderFeed(spreadsheetId, sheetName);
@@ -311,7 +311,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         }
     }
 
-    private void handleBlankColumnNames(List headerFeed, String id) throws IOException {
+    private void fixBlankColumnNames(List headerFeed, String id) throws IOException {
         ArrayList<Object> list = new ArrayList<>();
         for (Object column : headerFeed) {
             if (column.equals("")) {
@@ -329,7 +329,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         insertRow(row, id, sheetName + "!A1:1");
     }
 
-    private boolean areEmptyColumns(List headerFeed) {
+    private boolean isAnyColumnEmpty(List headerFeed) {
         for (Object column : headerFeed) {
             if (column.equals("")) {
                 return true;
@@ -358,7 +358,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         }
     }
 
-    private void areColumnNamesLegal(List<String> columnNames, String id) throws Exception {
+    private void validColumnNames(List<String> columnNames, String id) throws Exception {
         for (String n : columnNames) {
             if (!isValidGoogleSheetsString(n)) {
                 outcome.results.put(id,
@@ -369,7 +369,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         }
     }
 
-    private void areSubmissionColumnNamesLegal(HashMap<String, String> answersToUpload, String id) throws Exception {
+    private void validSubmissionColumnNames(HashMap<String, String> answersToUpload, String id) throws Exception {
         for (String n : answersToUpload.keySet()) {
             if (!isValidGoogleSheetsString(n)) {
                 outcome.results.put(id, Collect.getInstance()
@@ -379,7 +379,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         }
     }
 
-    private void areWritePermissionsGranted(String id, String urlString) throws IOException, BadUrlException {
+    private void checkWritePermissions(String id, String urlString) throws IOException, BadUrlException {
         if (!hasWritePermissionToSheet || !urlString.equals(googleSheetsUrl)) {
             try {
                 spreadsheetId = UrlUtils.getSpreadsheetID(urlString);
@@ -470,7 +470,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         }
     }
 
-    private void resizeSpreadSheet(List<String> columnNames, String id) throws IOException {
+    private void resizeSheet(List<String> columnNames, String id) throws IOException {
         try {
             sheetsHelper.resizeSpreadSheet(spreadsheetId, sheetId, columnNames.size());
         } catch (IOException e) {
@@ -506,7 +506,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         insertRow(row, id, sheetName);
     }
 
-    private void isColumnLengthValid(List<String> columnNames, String id) throws Exception {
+    private void validColumnLength(List<String> columnNames, String id) throws Exception {
         if (columnNames.size() == 0) {
             outcome.results.put(id, "No columns found in the form to upload");
             throw new Exception();
