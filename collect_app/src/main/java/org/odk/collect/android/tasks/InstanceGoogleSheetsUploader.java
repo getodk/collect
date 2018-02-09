@@ -187,9 +187,8 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         HashMap<String, String> mediaToUpload = new HashMap<>();
         HashMap<String, String> uploadedMedia = new HashMap<>();
         List<List<Object>> values = new ArrayList<>();
-        List headerFeed = null;
+        List headerFeed;
         List<String> sheetCols = new ArrayList<>();
-        List<String> missingColumns = new ArrayList<>();
         try {
             areWritePermissionsGranted(id, urlString);
             readColumnNames(formFilePath, columnNames, id);
@@ -204,26 +203,21 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             updateValues(values, id);
             if (!values.isEmpty()) {
                 headerFeed = values.get(0);
-            } else {
+            } else { // new sheet
                 resizeSpreadSheet(columnNames, id);
                 addHeaders(columnNames, id);
                 // we may have updated the feed, so get a new one update the feed
                 updateValues(values, id);
-                if (!values.isEmpty()) {
-                    headerFeed = values.get(0);
-                }
+                headerFeed = values.get(0);
             }
             if (areEmptyColumns(headerFeed)) {
                 handleBlankColumnNames(headerFeed, id);
                 // we may have updated the feed, so get a new one update the feed
                 updateValues(values, id);
-                if (!values.isEmpty()) {
-                    headerFeed = values.get(0);
-                }
+                headerFeed = values.get(0);
             }
             getSheetCols(sheetCols, headerFeed, id);
-            addMissingColumns(missingColumns, sheetCols, columnNames);
-            checkForMissingColumns(missingColumns, id);
+            checkForMissingColumns(sheetCols, columnNames, id);
             addPhotos(answersToUpload, uploadedMedia);
             insertRow(getRowFromList(prepareListOfValues(sheetCols, columnNames, answersToUpload)), id, sheetName);
             outcome.results.put(id, Collect.getInstance().getString(R.string.success));
@@ -308,26 +302,11 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         }
     }
 
-    private void checkForMissingColumns(List<String> missingColumns, String id) throws Exception {
-        if (missingColumns.size() > 0) {
-            // we had some missing columns, so error out
-            StringBuilder missingString = new StringBuilder();
-            for (int i = 0; i < missingColumns.size(); i++) {
-                missingString.append(missingColumns.get(i));
-                if (i < missingColumns.size() - 1) {
-                    missingString.append(", ");
-                }
-            }
-            outcome.results.put(id, Collect.getInstance().getString(
-                    R.string.google_sheets_missing_columns, missingString.toString()));
-            throw new Exception();
-        }
-    }
-
-    private void addMissingColumns(List<String> missingColumns, List<String> sheetCols, List<String> columnNames) {
+    private void checkForMissingColumns(List<String> sheetCols, List<String> columnNames, String id) throws Exception {
         for (String col : columnNames) {
             if (!sheetCols.contains(col)) {
-                missingColumns.add(col);
+                outcome.results.put(id, Collect.getInstance().getString(R.string.google_sheets_missing_columns, col));
+                throw new Exception();
             }
         }
     }
