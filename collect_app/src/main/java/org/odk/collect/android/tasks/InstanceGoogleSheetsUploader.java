@@ -203,14 +203,12 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             } else { // new sheet
                 resizeSheet(columnNames, id);
                 addHeaders(columnNames, id);
-                // we may have updated the feed, so get a new one update the feed
-                readSheetCells(sheetCells, id);
+                readSheetCells(sheetCells, id); // read sheet cells again to update
                 headerRow = sheetCells.get(0);
             }
             if (isAnyColumnEmpty(headerRow)) {
                 fixBlankColumnNames(headerRow, id);
-                // we may have updated the feed, so get a new one update the feed
-                readSheetCells(sheetCells, id);
+                readSheetCells(sheetCells, id); // read sheet cells again to update
                 headerRow = sheetCells.get(0);
             }
             getSheetColumns(sheetColumns, headerRow, id);
