@@ -113,10 +113,11 @@ All releases are verified on the following devices (ordered by Android version):
 * [LG Nexus 5X](https://www.gsmarena.com/lg_nexus_5x-7556.php) - Android 8.0.0
 
 Our regular code contributors use these devices (ordered by Android version): 
+* [Alcatel One Touch 5020D](https://www.gsmarena.com/alcatel_one_touch_m_pop-5242.php) - Android 4.1.1
 * [XOLO Q700s plus](http://www.gsmarena.com/xolo_q700s_plus-6624.php) - Android 4.4.2
 * [Samsung Galaxy S4 GT-I9506](http://www.gsmarena.com/samsung_i9506_galaxy_s4-5542.php) - Android 5.0.1
 * [Samsung Galaxy Tab SM-T285](http://www.gsmarena.com/samsung_galaxy_tab_a_7_0_(2016)-7880.php) - Android 5.1.1
-* [Motorola G4 4th Gen XT1625](http://www.gsmarena.com/motorola_moto_g4-8103.php) - Android 7.0
+* [Motorola G 5th Gen XT1671](https://www.gsmarena.com/motorola_moto_g5-8454.php) - Android 7.0
 
 The best way to help us test is to build from source! If you aren't a developer and want to help us test release candidates, join the [beta program](https://play.google.com/apps/testing/org.odk.collect.android)!
 
