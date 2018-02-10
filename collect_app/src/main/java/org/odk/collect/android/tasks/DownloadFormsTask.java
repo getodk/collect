@@ -327,6 +327,8 @@ public class DownloadFormsTask extends
         v.put(FormsColumns.JR_FORM_ID,              formInfo.get(FileUtils.FORMID));
         v.put(FormsColumns.SUBMISSION_URI,          formInfo.get(FileUtils.SUBMISSIONURI));
         v.put(FormsColumns.BASE64_RSA_PUBLIC_KEY,   formInfo.get(FileUtils.BASE64_RSA_PUBLIC_KEY));
+        v.put(FormsColumns.AUTO_DELETE,             formInfo.get(FileUtils.AUTO_DELETE));
+        v.put(FormsColumns.AUTO_SUBMIT,             formInfo.get(FileUtils.AUTO_SUBMIT));
         Uri uri = formsDao.saveForm(v);
         Collect.getInstance().getActivityLogger().logAction(this, "insert",
                 formFile.getAbsolutePath());
@@ -699,7 +701,7 @@ public class DownloadFormsTask extends
                         Collect.getInstance().getString(R.string.form_download_progress,
                                 fd.getFormName(),
                                 String.valueOf(mediaCount), String.valueOf(files.size())),
-                                String.valueOf(count),String.valueOf(total));
+                                String.valueOf(count), String.valueOf(total));
                 //try {
                 File finalMediaFile = new File(finalMediaDir, toDownload.getFilename());
                 File tempMediaFile = new File(tempMediaDir, toDownload.getFilename());
