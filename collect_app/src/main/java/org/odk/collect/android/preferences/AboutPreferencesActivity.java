@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Marcos Lopez Gonzalez (asturcon1234@gmail.com)
+ * Copyright 2018 Shobhit Agarwal
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,29 +19,31 @@ package org.odk.collect.android.preferences;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.view.ViewGroup;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.OpenSourceLicensesActivity;
+import org.odk.collect.android.adapters.AboutListAdapter;
 import org.odk.collect.android.utilities.CustomTabHelper;
 
 import java.util.List;
 
 import timber.log.Timber;
 
-public class AboutPreferencesActivity extends PreferenceActivity {
+public class AboutPreferencesActivity extends AppCompatActivity implements
+        AboutListAdapter.AboutItemClickListener {
 
     private static final String GOOGLE_PLAY_URL = "https://play.google.com/store/apps/details?id=";
     private static final String ODK_WEBSITE = "https://opendatakit.org";
     private static final String ODK_FORUM = "https://forum.opendatakit.org";
+
     private CustomTabHelper websiteTabHelper;
     private CustomTabHelper forumTabHelper;
     private Uri websiteUri;
@@ -50,13 +52,22 @@ public class AboutPreferencesActivity extends PreferenceActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ViewGroup root = getRootView();
-        Toolbar toolbar = (Toolbar) View.inflate(this, R.layout.toolbar, null);
-        toolbar.setTitle(R.string.about_preferences);
-        View shadow = View.inflate(this, R.layout.toolbar_action_bar_shadow, null);
+        setContentView(R.layout.about_layout);
+        initToolbar();
 
-        root.addView(toolbar, 0);
-        root.addView(shadow, 1);
+        int[][] items = {
+                {R.drawable.ic_website, R.string.odk_website, R.string.odk_website_summary},
+                {R.drawable.ic_forum, R.string.odk_forum, R.string.odk_forum_summary},
+                {R.drawable.ic_share, R.string.tell_your_friends, -1},
+                {R.drawable.ic_review_rate, R.string.leave_a_review, -1},
+                {R.drawable.ic_stars, R.string.all_open_source_licenses, -1}
+        };
+
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(new AboutListAdapter(items, this, this));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         websiteTabHelper = new CustomTabHelper();
         forumTabHelper = new CustomTabHelper();
@@ -65,25 +76,22 @@ public class AboutPreferencesActivity extends PreferenceActivity {
         forumUri = Uri.parse(ODK_FORUM);
     }
 
-    @Override
-    public void onBuildHeaders(List<Header> target) {
-        super.onBuildHeaders(target);
-        loadHeadersFromResource(R.xml.about_preference_headers, target);
+    private void initToolbar() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setTitle(getString(R.string.about_preferences));
+        setSupportActionBar(toolbar);
     }
 
     @Override
-    public void onHeaderClick(Header header, int position) {
-        switch ((int) header.id) {
-            case R.id.odk_website:
+    public void onClick(int position) {
+        switch (position) {
+            case 0:
                 websiteTabHelper.openUri(this, websiteUri);
                 break;
-            case R.id.odk_forum:
+            case 1:
                 forumTabHelper.openUri(this, forumUri);
                 break;
-            case R.id.open_source_licenses:
-                startActivity(new Intent(this, OpenSourceLicensesActivity.class));
-                break;
-            case R.id.tell_your_friends:
+            case 2:
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 shareIntent.setType("text/plain");
                 shareIntent.putExtra(Intent.EXTRA_TEXT,
@@ -92,14 +100,13 @@ public class AboutPreferencesActivity extends PreferenceActivity {
                 startActivity(Intent.createChooser(shareIntent,
                         getString(R.string.tell_your_friends)));
                 break;
-            case R.id.leave_a_review:
-                boolean reviewTaken = false;
+            case 3:
+                boolean intentStarted = false;
                 try {
                     // Open the google play store app if present
                     Intent intent = new Intent(Intent.ACTION_VIEW,
                             Uri.parse("market://details?id=" + getPackageName()));
-                    PackageManager packageManager = getPackageManager();
-                    List<ResolveInfo> list = packageManager.queryIntentActivities(intent, 0);
+                    List<ResolveInfo> list = getPackageManager().queryIntentActivities(intent, 0);
                     for (ResolveInfo info : list) {
                         ActivityInfo activity = info.activityInfo;
                         if (activity.name.contains("com.google.android")) {
@@ -108,34 +115,21 @@ public class AboutPreferencesActivity extends PreferenceActivity {
                                     activity.name);
                             intent.setComponent(name);
                             startActivity(intent);
-                            reviewTaken = true;
+                            intentStarted = true;
                         }
                     }
                 } catch (android.content.ActivityNotFoundException anfe) {
                     Timber.e(anfe);
                 }
-                if (!reviewTaken) {
+                if (!intentStarted) {
                     // Show a list of all available browsers if user doesn't have a default browser
-                    Intent intent = new Intent(Intent.ACTION_VIEW,
-                            Uri.parse(GOOGLE_PLAY_URL + getPackageName()));
-                    startActivity(intent);
+                    startActivity(new Intent(Intent.ACTION_VIEW,
+                            Uri.parse(GOOGLE_PLAY_URL + getPackageName())));
                 }
                 break;
-        }
-
-        super.onHeaderClick(header, position);
-    }
-
-    @Override
-    protected boolean isValidFragment(String fragmentName) {
-        return true;
-    }
-
-    private ViewGroup getRootView() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            return (ViewGroup) findViewById(android.R.id.list).getParent().getParent().getParent();
-        } else {
-            return (ViewGroup) findViewById(android.R.id.list).getParent();
+            case 4:
+                startActivity(new Intent(this, OpenSourceLicensesActivity.class));
+                break;
         }
     }
 
