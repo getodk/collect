@@ -173,11 +173,12 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                             .getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
                     String urlString = getGoogleSheetsUrl(c);
 
-                    if (token == null || !uploadOneSubmission(id, new File(instance), jrFormId, formFilePath, urlString)) {
+                    if (token == null) {
+                        outcome.results.put(id, oauth_fail + Collect.getInstance().getString(R.string.invalid_oauth));
+                    } else if (!uploadOneSubmission(id, new File(instance), jrFormId, formFilePath, urlString)) {
                         cv.put(InstanceColumns.STATUS,
                                 InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                         Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
-                        outcome.results.put(id, oauth_fail + Collect.getInstance().getString(R.string.invalid_oauth));
                         return;
                     } else {
                         cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMITTED);
