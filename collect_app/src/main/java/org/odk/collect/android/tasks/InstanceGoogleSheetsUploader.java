@@ -19,15 +19,24 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.util.Xml;
 
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
+import com.google.api.services.sheets.v4.model.Sheet;
 import com.google.api.services.sheets.v4.model.Spreadsheet;
 import com.google.api.services.sheets.v4.model.ValueRange;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Multimap;
 
+import org.javarosa.core.model.FormDef;
+import org.javarosa.core.model.instance.AbstractTreeElement;
+import org.javarosa.core.model.instance.TreeElement;
+import org.javarosa.xform.util.XFormUtils;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
@@ -53,8 +62,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import timber.log.Timber;
@@ -78,8 +89,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     private final DriveHelper driveHelper;
 
     private final GoogleAccountsManager accountsManager;
-    private Integer sheetId;
-    private String sheetName;
+    private String mainSheetTitle;
     private Outcome outcome;
     private boolean hasWritePermissionToSheet = false;
     private boolean authFailed;
@@ -179,46 +189,160 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
     private boolean uploadOneSubmission(String id, File instanceFile, String jrFormId,
                                         String formFilePath, String urlString) {
-        List<String> columnNames = new ArrayList<>();
-        HashMap<String, String> answersToUpload = new HashMap<>();
-        HashMap<String, String> mediaToUpload = new HashMap<>();
-        HashMap<String, String> uploadedMedia = new HashMap<>();
-        List<List<Object>> sheetCells = new ArrayList<>();
-        List headerRow;
-        List<String> sheetColumns = new ArrayList<>();
         try {
             checkWritePermissions(id, urlString);
-            readColumnNames(formFilePath, columnNames, id);
-            validColumnLength(columnNames, id);
-            validColumnNames(columnNames, id);
-            readAnswers(instanceFile, answersToUpload, mediaToUpload, id);
-            sleepThread();
-            validSubmissionColumnNames(answersToUpload, id);
-            if (!mediaToUpload.isEmpty()) {
-                uploadMedia(mediaToUpload, instanceFile, jrFormId, id, uploadedMedia);
+
+            FormDef formDefFromXml = XFormUtils.getFormFromInputStream(new FileInputStream(new File(formFilePath)));
+
+            List<TreeElement> mainLevelColumnElements = getColumnElements(formDefFromXml.getMainInstance().getRoot());
+            List<List<TreeElement>> repeatColumnElements = new ArrayList<>();
+            List<String> repeatSheetTitles = new ArrayList<>();
+            for (TreeElement mainLevelColumnElement : mainLevelColumnElements) {
+                if (mainLevelColumnElement.isRepeatable()) {
+                    List<TreeElement> elements = getColumnElements(mainLevelColumnElement);
+                    elements.add(0, mainLevelColumnElements.get(0));
+                    repeatColumnElements.add(elements);
+                    repeatSheetTitles.add(getElementTitle(mainLevelColumnElement));
+                }
             }
-            readSheetCells(sheetCells, id);
-            if (!sheetCells.isEmpty()) {
-                headerRow = sheetCells.get(0);
-            } else { // new sheet
-                resizeSheet(columnNames, id);
-                addHeaders(columnNames, id);
-                readSheetCells(sheetCells, id); // read sheet cells again to update
-                headerRow = sheetCells.get(0);
+
+            if (!repeatColumnElements.isEmpty()) {
+                for (List<TreeElement> repeatGroup : repeatColumnElements) {
+                    String sheetTitle = getElementTitle(repeatGroup.get(1).getParent());
+                    if (!doesSheetExist(sheetTitle)) {
+                        sheetsHelper.addSheet(spreadsheetId, sheetTitle);
+                    }
+                    fillSheet(repeatGroup, sheetTitle, id, instanceFile, jrFormId, null);
+                }
             }
-            if (isAnyColumnEmpty(headerRow)) {
-                fixBlankColumnNames(headerRow, id);
-                readSheetCells(sheetCells, id); // read sheet cells again to update
-                headerRow = sheetCells.get(0);
-            }
-            getSheetColumns(sheetColumns, headerRow, id);
-            checkForMissingColumns(sheetColumns, columnNames, id);
-            addPhotos(answersToUpload, uploadedMedia);
-            insertRow(getRowFromList(prepareListOfValues(sheetColumns, columnNames, answersToUpload)), id, sheetName);
+
+            fillSheet(mainLevelColumnElements, mainSheetTitle, id, instanceFile, jrFormId, repeatSheetTitles);
         } catch (Exception e) {
             return false;
         }
         return true;
+    }
+
+    private void fillSheet(List<TreeElement> columnElements, String sheetTitle,
+                           String id, File instanceFile, String jrFormId, List<String> repeatSheetTitles) throws Exception {
+        List<String> columnTitles = new ArrayList<>();
+        Multimap<String, String> answersToUpload = ArrayListMultimap.create();
+        Multimap<String, String> mediaToUpload = ArrayListMultimap.create();
+        Multimap<String, String> uploadedMedia = ArrayListMultimap.create();
+        List<List<Object>> sheetCells = new ArrayList<>();
+        List headerRow;
+        List<String> sheetColumns = new ArrayList<>();
+
+        readColumnNames(columnTitles, columnElements);
+        validColumnLength(columnTitles, id);
+        validColumnNames(columnTitles, id);
+        readAnswers(columnTitles, instanceFile, answersToUpload, mediaToUpload, id, repeatSheetTitles);
+        sleepThread();
+        validSubmissionColumnTitles(answersToUpload, id);
+        if (!mediaToUpload.isEmpty()) {
+            uploadMedia(mediaToUpload, instanceFile, jrFormId, id, uploadedMedia);
+        }
+        readSheetCells(sheetTitle, sheetCells, id);
+        if (!sheetCells.isEmpty()) {
+            headerRow = sheetCells.get(0);
+        } else { // new sheet
+            resizeSheet(getSheetId(sheetTitle), columnTitles, id);
+            addHeaders(sheetTitle, columnTitles, id);
+            readSheetCells(sheetTitle, sheetCells, id); // read sheet cells again to update
+            headerRow = sheetCells.get(0);
+        }
+        if (isAnyColumnEmpty(headerRow)) {
+            fixBlankColumnNames(sheetTitle, headerRow, id);
+            readSheetCells(sheetTitle, sheetCells, id); // read sheet cells again to update
+            headerRow = sheetCells.get(0);
+        }
+        getSheetColumns(sheetColumns, headerRow, id);
+        checkForMissingColumns(sheetColumns, columnTitles, id);
+        addPhotos(answersToUpload, uploadedMedia);
+
+        Collection<String> values = answersToUpload.get(columnTitles.get(1));
+        for (int i = 0; i < values.size(); i++) {
+            HashMap<String, String> answers = new HashMap<>();
+            for (int j = 0; j < answersToUpload.asMap().size(); j++) {
+                answers.put(columnTitles.get(j), Iterables.get(answersToUpload.get(columnTitles.get(j)), j == 0 ? 0 : i));
+            }
+            insertRow(getRowFromList(prepareListOfValues(sheetColumns, columnTitles, answers)), id, sheetTitle);
+        }
+    }
+
+    private void readColumnNames(List<String> columnNames, List<TreeElement> elements) {
+        for (TreeElement element : elements) {
+            columnNames.add(getElementTitle(element));
+        }
+    }
+
+    private boolean doesSheetExist(String sheetTitle) throws IOException {
+        for (Sheet sheet : sheetsHelper.getSpreadsheet(spreadsheetId).getSheets()) {
+            if (sheet.getProperties().getTitle().equals(sheetTitle)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private int getSheetId(String sheetTitle) throws Exception {
+        for (Sheet sheet : sheetsHelper.getSpreadsheet(spreadsheetId).getSheets()) {
+            if (sheet.getProperties().getTitle().equals(sheetTitle)) {
+                return sheet
+                        .getProperties()
+                        .getSheetId();
+            }
+        }
+        throw new Exception();
+    }
+
+    private String getElementTitle(AbstractTreeElement element) {
+        StringBuilder elementTitle = new StringBuilder();
+        while (element!= null && element.getName() != null) {
+            elementTitle.insert(0, element.getName() + "-");
+            element = element.getParent();
+        }
+
+        return elementTitle
+                .deleteCharAt(elementTitle.length() - 1)
+                .toString();
+    }
+
+    private List<TreeElement> getColumnElements(TreeElement element) {
+        List<TreeElement> columnElements = new ArrayList<>();
+        for (int i = 0; i < element.getNumChildren(); ++i) {
+            TreeElement current = element.getChildAt(i);
+            switch (current.getDataType()) {
+                case org.javarosa.core.model.Constants.DATATYPE_TEXT:
+                case org.javarosa.core.model.Constants.DATATYPE_INTEGER:
+                case org.javarosa.core.model.Constants.DATATYPE_DECIMAL:
+                case org.javarosa.core.model.Constants.DATATYPE_DATE:
+                case org.javarosa.core.model.Constants.DATATYPE_TIME:
+                case org.javarosa.core.model.Constants.DATATYPE_DATE_TIME:
+                case org.javarosa.core.model.Constants.DATATYPE_CHOICE:
+                case org.javarosa.core.model.Constants.DATATYPE_CHOICE_LIST:
+                case org.javarosa.core.model.Constants.DATATYPE_BOOLEAN:
+                case org.javarosa.core.model.Constants.DATATYPE_GEOPOINT:
+                case org.javarosa.core.model.Constants.DATATYPE_BARCODE:
+                case org.javarosa.core.model.Constants.DATATYPE_BINARY:
+                case org.javarosa.core.model.Constants.DATATYPE_LONG:
+                case org.javarosa.core.model.Constants.DATATYPE_GEOSHAPE:
+                case org.javarosa.core.model.Constants.DATATYPE_GEOTRACE:
+                case org.javarosa.core.model.Constants.DATATYPE_UNSUPPORTED:
+                    columnElements.add(current);
+                    break;
+                case org.javarosa.core.model.Constants.DATATYPE_NULL:
+                    if (current.isRepeatable()) { // repeat group
+                        columnElements.add(current);
+                    } else if (current.getNumChildren() == 0) { // assume fields that don't have children are string fields
+                        columnElements.add(current);
+                    } else { // one or more children - this is a group
+                        columnElements.addAll(getColumnElements(current));
+                    }
+                    break;
+            }
+        }
+        return columnElements;
     }
 
     private void sleepThread() {
@@ -272,10 +396,10 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         }
     }
 
-    private void readSheetCells(List<List<Object>> values, String id) throws IOException {
+    private void readSheetCells(String sheetTitle, List<List<Object>> values, String id) throws IOException {
         try {
             values.clear();
-            List<List<Object>> headerFeed = sheetsHelper.getHeaderFeed(spreadsheetId, sheetName);
+            List<List<Object>> headerFeed = sheetsHelper.getHeaderFeed(spreadsheetId, sheetTitle);
             if (headerFeed != null && !headerFeed.isEmpty()) {
                 values.addAll(headerFeed);
             }
@@ -289,10 +413,10 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         }
     }
 
-    private void addPhotos(HashMap<String, String> answersToUpload, HashMap<String, String> uploadedMedia) {
-        for (String key : uploadedMedia.keySet()) {
-            String url = uploadedMedia.get(key);
-            answersToUpload.put(key, url);
+    private void addPhotos(Multimap<String, String> answersToUpload, Multimap<String, String> uploadedMedia) {
+        for (Map.Entry entry : uploadedMedia.entries()) {
+            String url = entry.getValue().toString();
+            answersToUpload.put(entry.getKey().toString(), url);
         }
     }
 
@@ -305,7 +429,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         }
     }
 
-    private void fixBlankColumnNames(List headerFeed, String id) throws IOException {
+    private void fixBlankColumnNames(String sheetTitle, List headerFeed, String id) throws IOException {
         ArrayList<Object> list = new ArrayList<>();
         for (Object column : headerFeed) {
             if (column.equals("")) {
@@ -320,7 +444,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         ValueRange row = new ValueRange();
         row.setValues(content);
 
-        insertRow(row, id, sheetName + "!A1:1");
+        insertRow(row, id, sheetTitle + "!A1:1");
     }
 
     private boolean isAnyColumnEmpty(List headerFeed) {
@@ -363,11 +487,11 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         }
     }
 
-    private void validSubmissionColumnNames(HashMap<String, String> answersToUpload, String id) throws Exception {
-        for (String n : answersToUpload.keySet()) {
-            if (!isValidGoogleSheetsString(n)) {
+    private void validSubmissionColumnTitles(Multimap<String, String> answersToUpload, String id) throws Exception {
+        for (String value : answersToUpload.values()) {
+            if (!isValidGoogleSheetsString(value)) {
                 outcome.results.put(id, Collect.getInstance()
-                        .getString(R.string.google_sheets_invalid_column_instance, n));
+                        .getString(R.string.google_sheets_invalid_column_instance, value));
                 throw new Exception();
             }
         }
@@ -379,8 +503,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                 spreadsheetId = UrlUtils.getSpreadsheetID(urlString);
 
                 Spreadsheet spreadsheet = sheetsHelper.getSpreadsheet(spreadsheetId);
-                sheetId = spreadsheet.getSheets().get(0).getProperties().getSheetId();
-                sheetName = spreadsheet.getSheets().get(0).getProperties().getTitle();
+                mainSheetTitle = spreadsheet.getSheets().get(0).getProperties().getTitle();
             } catch (GoogleJsonResponseException e) {
                 String message = e.getMessage();
                 if (e.getDetails() != null && e.getDetails().getCode() == 403) {
@@ -406,10 +529,10 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     // if we have any media files to upload,
     // get the folder or create a new one
     // then upload the media files
-    private void uploadMedia(HashMap<String, String> mediaToUpload, File instanceFile,
-                             String jrFormId, String id, HashMap<String, String> uploadedMedia) throws Exception {
-        for (String key : mediaToUpload.keySet()) {
-            String filename = instanceFile.getParentFile() + "/" + mediaToUpload.get(key);
+    private void uploadMedia(Multimap<String, String> mediaToUpload, File instanceFile,
+                             String jrFormId, String id, Multimap<String, String> uploadedMedia) throws Exception {
+        for (Map.Entry entry : mediaToUpload.entries()) {
+            String filename = instanceFile.getParentFile() + "/" + entry.getValue();
             File toUpload = new File(filename);
 
             // first check the local content provider
@@ -445,7 +568,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
             // file is ready to be uploaded
             try {
-                uploadedFileId = driveHelper.uploadFileToDrive(mediaToUpload.get(key),
+                uploadedFileId = driveHelper.uploadFileToDrive(entry.getValue().toString(),
                         folderId, toUpload);
             } catch (IOException e) {
                 Timber.e(e, "Exception thrown while uploading the file to drive");
@@ -460,11 +583,11 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             }
 
             // uploadedPhotos keeps track of the uploaded URL
-            uploadedMedia.put(key, UPLOADED_MEDIA_URL + uploadedFileId);
+            uploadedMedia.put(entry.getKey().toString(), UPLOADED_MEDIA_URL + uploadedFileId);
         }
     }
 
-    private void resizeSheet(List<String> columnNames, String id) throws IOException {
+    private void resizeSheet(int sheetId, List<String> columnNames, String id) throws IOException {
         try {
             sheetsHelper.resizeSpreadSheet(spreadsheetId, sheetId, columnNames.size());
         } catch (IOException e) {
@@ -474,7 +597,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         }
     }
 
-    private void addHeaders(List<String> columnNames, String id) throws IOException {
+    private void addHeaders(String sheetName, List<String> columnNames, String id) throws IOException {
         ArrayList<Object> list = new ArrayList<>();
         list.addAll(columnNames);
 
@@ -491,7 +614,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
              *  spreadsheetId   :   Unique sheet id
              *  range           :   A1 notation range. It specifies the range within which the
              *                      spreadsheet should be searched.
-             *              hint   "Giving only sheetName in range searches in the complete sheet"
+             *              hint   "Giving only mainSheetTitle in range searches in the complete sheet"
              *  ValueRange      :   Content that needs to be appended  (List<List<Object>>)
              *
              *  For more info   :   https://developers.google.com/sheets/api/reference/rest/
@@ -513,125 +636,25 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         }
     }
 
-    private void readColumnNames(String formFilePath, List<String> columnNames, String id) throws FormException, XmlPullParserException, IOException {
+    private void readAnswers(List<String> columnTitles, File instanceFile, Multimap<String, String> answersToUpload,
+                             Multimap<String, String> mediaToUpload, String id, List<String> repeatSheetTitles) throws Exception {
         try {
-            getColumns(formFilePath, columnNames);
-        } catch (XmlPullParserException | IOException | FormException e2) {
-            Timber.e(e2, "Exception thrown while getting columns from form file");
-            outcome.results.put(id, e2.getMessage());
-            throw e2;
-        }
-    }
-
-    private void readAnswers(File instanceFile, HashMap<String, String> answersToUpload,
-                                HashMap<String, String> mediaToUpload, String id) throws FormException, IOException, XmlPullParserException {
-        try {
-            processInstanceXML(instanceFile, answersToUpload, mediaToUpload);
+            processInstanceXML(columnTitles, instanceFile, answersToUpload, mediaToUpload, repeatSheetTitles);
         } catch (FormException e) {
             outcome.results.put(id,
                     Collect.getInstance().getString(R.string.google_repeat_error));
             throw e;
-        } catch (XmlPullParserException | IOException e) {
+        } catch (Exception e) {
             Timber.e(e, "Exception thrown while parsing the file");
             outcome.results.put(id, e.getMessage());
             throw e;
         }
     }
 
-    private void getColumns(String filePath, List<String> columns)
-            throws XmlPullParserException, IOException, FormException {
-        File formFile = new File(filePath);
-        FileInputStream in;
-
-        in = new FileInputStream(formFile);
-        XmlPullParser parser = Xml.newPullParser();
-
-        parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-        parser.setInput(in, null);
-        readFormFeed(parser, columns);
-        in.close();
-    }
-
-    private void readFormFeed(XmlPullParser parser, List<String> columns)
-            throws XmlPullParserException, IOException, FormException {
-        ArrayList<String> path = new ArrayList<>();
-
-        // we put path names in here as we go, and if we hit a duplicate we
-        // blow up
-        boolean getPaths = false;
-        boolean inBody = false;
-        boolean isPrimaryInstanceIdentified = false;
-        int event = parser.next();
-        int depth = 0;
-        int lastpush = 0;
-        while (event != XmlPullParser.END_DOCUMENT && !isPrimaryInstanceIdentified) {
-            switch (event) {
-                case XmlPullParser.START_TAG:
-                    if (parser.getName().equalsIgnoreCase("body")
-                            || parser.getName().equalsIgnoreCase("h:body")) {
-                        inBody = true;
-                    } else if (inBody && parser.getName().equalsIgnoreCase("repeat")) {
-                        throw new FormException(Collect.getInstance().getString(
-                                R.string.google_repeat_error));
-                    }
-                    if (getPaths) {
-                        path.add(parser.getName());
-                        depth++;
-                        lastpush = depth;
-                    }
-                    if (parser.getName().equals("instance")) {
-                        getPaths = true;
-                    }
-                    break;
-                case XmlPullParser.TEXT:
-                    // skip it
-                    break;
-                case XmlPullParser.END_TAG:
-                    if (parser.getName().equals("body") || parser.getName().equals("h:body")) {
-                        inBody = false;
-                    }
-                    if (parser.getName().equals("instance")) {
-
-                        /*
-                         *  A <model> can have multiple instances as <childnodes>.
-                         *  The first and required <instance> is called the <primary instance>
-                         *  and represents the data structure of the record that will be created
-                         *  and submitted with the form.
-                         *  Additional instances are called <secondary instances>.
-                         *  So, we are breaking the loop after discovering the <primary instance> so that
-                         *  <secondary instances> don't get counted as field columns.
-                         *
-                         *  For more info read [this](https://opendatakit.github.io/xforms-spec/#instance)
-                         *
-                         *  https://github.com/opendatakit/collect/issues/1444
-                         */
-
-                        isPrimaryInstanceIdentified = true;
-                        break;
-                    }
-                    if (getPaths) {
-                        if (depth == lastpush) {
-                            columns.add(getPath(path));
-                        } else {
-                            lastpush--;
-                        }
-                        path.remove(path.size() - 1);
-                        depth--;
-                    }
-                    break;
-                default:
-                    Timber.i("DEFAULTING: %s :: %d", parser.getName(), parser.getEventType());
-                    break;
-            }
-            event = parser.next();
-        }
-    }
-
-    private void processInstanceXML(File instanceFile,
-                                    HashMap<String, String> answersToUpload,
-                                    HashMap<String, String> mediaToUpload)
-            throws XmlPullParserException, IOException,
-            FormException {
+    private void processInstanceXML(List<String> columnTitles, File instanceFile,
+                                    Multimap<String, String> answersToUpload,
+                                    Multimap<String, String> mediaToUpload, List<String> repeatSheetTitles)
+            throws Exception {
         FileInputStream in;
 
         in = new FileInputStream(instanceFile);
@@ -639,34 +662,40 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
         parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
         parser.setInput(in, null);
-        readInstanceFeed(parser, answersToUpload, mediaToUpload, instanceFile.getParentFile());
+        readInstanceFeed(columnTitles, parser, answersToUpload, mediaToUpload, instanceFile.getParentFile(), repeatSheetTitles);
         in.close();
     }
 
-    private void readInstanceFeed(XmlPullParser parser,
-                                  HashMap<String, String> answersToUpload,
-                                  HashMap<String, String> mediaToUpload, File instanceFolder)
-            throws XmlPullParserException, IOException,
-            FormException {
+    private void readInstanceFeed(List<String> columnTitles, XmlPullParser parser,
+                                  Multimap<String, String> answersToUpload,
+                                  Multimap<String, String> mediaToUpload, File instanceFolder, List<String> repeatSheetTitles)
+            throws Exception {
 
-        ArrayList<String> path = new ArrayList<String>();
+        ArrayList<String> path = new ArrayList<>();
 
         int event = parser.next();
         while (event != XmlPullParser.END_DOCUMENT) {
             switch (event) {
                 case XmlPullParser.START_TAG:
                     path.add(parser.getName());
+                    String columnTitle = getPath(path);
+                    if (repeatSheetTitles != null && repeatSheetTitles.contains(columnTitle)) { // that means it's a repeat group
+                        answersToUpload.put(columnTitle, getSheetUrl(getSheetId(columnTitle)));
+                    }
                     break;
                 case XmlPullParser.TEXT:
-                    String answer = parser.getText();
+                    columnTitle = getPath(path);
+                    if (columnTitles.contains(columnTitle)) {
+                        String answer = parser.getText();
 
-                    String filename = instanceFolder + "/" + answer;
-                    File file = new File(filename);
+                        String filename = instanceFolder + "/" + answer;
+                        File file = new File(filename);
 
-                    if (file.isFile()) {
-                        mediaToUpload.put(getPath(path), answer);
-                    } else {
-                        answersToUpload.put(getPath(path), answer);
+                        if (file.isFile()) {
+                            mediaToUpload.put(columnTitle, answer);
+                        } else {
+                            answersToUpload.put(columnTitle, answer);
+                        }
                     }
 
                     break;
@@ -679,6 +708,12 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             }
             event = parser.next();
         }
+    }
+
+    private String getSheetUrl(int sheetId) throws Exception {
+        return googleSheetsUrl.substring(0, googleSheetsUrl.lastIndexOf("/") + 1)
+                + "edit#gid="
+                + sheetId;
     }
 
     private String getPath(ArrayList<String> path) {
@@ -755,5 +790,3 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         authFailed = false;
     }
 }
-
-
