@@ -14,6 +14,10 @@ public class ArrayUtils {
     private static final long[] EMPTY_LONG_ARRAY = new long[0];
 
 
+    private ArrayUtils() {
+
+    }
+
     /**
      * <p>Converts an array of primitive longs to objects.</p>
      *

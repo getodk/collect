@@ -22,10 +22,26 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.DatabaseContext;
-import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.utilities.CustomSQLiteQueryBuilder;
 
 import timber.log.Timber;
+
+import static android.provider.BaseColumns._ID;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_DELETE;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_SUBMIT;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DATE;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DESCRIPTION;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DISPLAY_NAME;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DISPLAY_SUBTEXT;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.FORM_FILE_PATH;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JRCACHE_FILE_PATH;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JR_FORM_ID;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JR_VERSION;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.LANGUAGE;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.MD5_HASH;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.SUBMISSION_URI;
 
 /**
  * This class helps open, create, and upgrade the database file.
@@ -34,7 +50,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "forms.db";
     public static final String FORMS_TABLE_NAME = "forms";
 
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
 
     // These exist in database versions 2 and 3, but not in 4...
     private static final String TEMP_FORMS_TABLE_NAME = "forms_v4";
@@ -61,6 +77,8 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
             case 2:
             case 3:
                 success &= upgradeToVersion4(db, oldVersion);
+            case 4:
+                success &= upgradeToVersion5(db);
                 break;
             default:
                 Timber.i("Unknown version " + oldVersion);
@@ -117,55 +135,55 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
             db.execSQL("INSERT INTO "
                     + TEMP_FORMS_TABLE_NAME
                     + " ("
-                    + FormsProviderAPI.FormsColumns._ID
+                    + _ID
                     + ", "
-                    + FormsProviderAPI.FormsColumns.DISPLAY_NAME
+                    + DISPLAY_NAME
                     + ", "
-                    + FormsProviderAPI.FormsColumns.DISPLAY_SUBTEXT
+                    + DISPLAY_SUBTEXT
                     + ", "
-                    + FormsProviderAPI.FormsColumns.DESCRIPTION
+                    + DESCRIPTION
                     + ", "
-                    + FormsProviderAPI.FormsColumns.JR_FORM_ID
+                    + JR_FORM_ID
                     + ", "
-                    + FormsProviderAPI.FormsColumns.MD5_HASH
+                    + MD5_HASH
                     + ", "
-                    + FormsProviderAPI.FormsColumns.DATE
+                    + DATE
                     + ", " // milliseconds
-                    + FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH
+                    + FORM_MEDIA_PATH
                     + ", "
-                    + FormsProviderAPI.FormsColumns.FORM_FILE_PATH
+                    + FORM_FILE_PATH
                     + ", "
-                    + FormsProviderAPI.FormsColumns.LANGUAGE
+                    + LANGUAGE
                     + ", "
-                    + FormsProviderAPI.FormsColumns.SUBMISSION_URI
+                    + SUBMISSION_URI
                     + ", "
-                    + FormsProviderAPI.FormsColumns.JR_VERSION
+                    + JR_VERSION
                     + ", "
                     + ((oldVersion != 3) ? ""
-                    : (FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY + ", "))
-                    + FormsProviderAPI.FormsColumns.JRCACHE_FILE_PATH
+                    : (BASE64_RSA_PUBLIC_KEY + ", "))
+                    + JRCACHE_FILE_PATH
                     + ") SELECT "
-                    + FormsProviderAPI.FormsColumns._ID
+                    + _ID
                     + ", "
-                    + FormsProviderAPI.FormsColumns.DISPLAY_NAME
+                    + DISPLAY_NAME
                     + ", "
-                    + FormsProviderAPI.FormsColumns.DISPLAY_SUBTEXT
+                    + DISPLAY_SUBTEXT
                     + ", "
-                    + FormsProviderAPI.FormsColumns.DESCRIPTION
+                    + DESCRIPTION
                     + ", "
-                    + FormsProviderAPI.FormsColumns.JR_FORM_ID
+                    + JR_FORM_ID
                     + ", "
-                    + FormsProviderAPI.FormsColumns.MD5_HASH
+                    + MD5_HASH
                     + ", "
-                    + FormsProviderAPI.FormsColumns.DATE
+                    + DATE
                     + ", " // milliseconds
-                    + FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH
+                    + FORM_MEDIA_PATH
                     + ", "
-                    + FormsProviderAPI.FormsColumns.FORM_FILE_PATH
+                    + FORM_FILE_PATH
                     + ", "
-                    + FormsProviderAPI.FormsColumns.LANGUAGE
+                    + LANGUAGE
                     + ", "
-                    + FormsProviderAPI.FormsColumns.SUBMISSION_URI
+                    + SUBMISSION_URI
                     + ", "
                     + "CASE WHEN "
                     + MODEL_VERSION
@@ -174,8 +192,8 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
                     + MODEL_VERSION
                     + " AS TEXT) ELSE NULL END, "
                     + ((oldVersion != 3) ? ""
-                    : (FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY + ", "))
-                    + FormsProviderAPI.FormsColumns.JRCACHE_FILE_PATH + " FROM "
+                    : (BASE64_RSA_PUBLIC_KEY + ", "))
+                    + JRCACHE_FILE_PATH + " FROM "
                     + FORMS_TABLE_NAME);
 
             // risky failures here...
@@ -184,47 +202,47 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
             db.execSQL("INSERT INTO "
                     + FORMS_TABLE_NAME
                     + " ("
-                    + FormsProviderAPI.FormsColumns._ID
+                    + _ID
                     + ", "
-                    + FormsProviderAPI.FormsColumns.DISPLAY_NAME
+                    + DISPLAY_NAME
                     + ", "
-                    + FormsProviderAPI.FormsColumns.DISPLAY_SUBTEXT
+                    + DISPLAY_SUBTEXT
                     + ", "
-                    + FormsProviderAPI.FormsColumns.DESCRIPTION
+                    + DESCRIPTION
                     + ", "
-                    + FormsProviderAPI.FormsColumns.JR_FORM_ID
+                    + JR_FORM_ID
                     + ", "
-                    + FormsProviderAPI.FormsColumns.MD5_HASH
+                    + MD5_HASH
                     + ", "
-                    + FormsProviderAPI.FormsColumns.DATE
+                    + DATE
                     + ", " // milliseconds
-                    + FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH + ", "
-                    + FormsProviderAPI.FormsColumns.FORM_FILE_PATH + ", "
-                    + FormsProviderAPI.FormsColumns.LANGUAGE + ", "
-                    + FormsProviderAPI.FormsColumns.SUBMISSION_URI + ", "
-                    + FormsProviderAPI.FormsColumns.JR_VERSION + ", "
-                    + FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY + ", "
-                    + FormsProviderAPI.FormsColumns.JRCACHE_FILE_PATH + ") SELECT "
-                    + FormsProviderAPI.FormsColumns._ID + ", "
-                    + FormsProviderAPI.FormsColumns.DISPLAY_NAME
+                    + FORM_MEDIA_PATH + ", "
+                    + FORM_FILE_PATH + ", "
+                    + LANGUAGE + ", "
+                    + SUBMISSION_URI + ", "
+                    + JR_VERSION + ", "
+                    + BASE64_RSA_PUBLIC_KEY + ", "
+                    + JRCACHE_FILE_PATH + ") SELECT "
+                    + _ID + ", "
+                    + DISPLAY_NAME
                     + ", "
-                    + FormsProviderAPI.FormsColumns.DISPLAY_SUBTEXT
+                    + DISPLAY_SUBTEXT
                     + ", "
-                    + FormsProviderAPI.FormsColumns.DESCRIPTION
+                    + DESCRIPTION
                     + ", "
-                    + FormsProviderAPI.FormsColumns.JR_FORM_ID
+                    + JR_FORM_ID
                     + ", "
-                    + FormsProviderAPI.FormsColumns.MD5_HASH
+                    + MD5_HASH
                     + ", "
-                    + FormsProviderAPI.FormsColumns.DATE
+                    + DATE
                     + ", " // milliseconds
-                    + FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH + ", "
-                    + FormsProviderAPI.FormsColumns.FORM_FILE_PATH + ", "
-                    + FormsProviderAPI.FormsColumns.LANGUAGE + ", "
-                    + FormsProviderAPI.FormsColumns.SUBMISSION_URI + ", "
-                    + FormsProviderAPI.FormsColumns.JR_VERSION + ", "
-                    + FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY + ", "
-                    + FormsProviderAPI.FormsColumns.JRCACHE_FILE_PATH + " FROM "
+                    + FORM_MEDIA_PATH + ", "
+                    + FORM_FILE_PATH + ", "
+                    + LANGUAGE + ", "
+                    + SUBMISSION_URI + ", "
+                    + JR_VERSION + ", "
+                    + BASE64_RSA_PUBLIC_KEY + ", "
+                    + JRCACHE_FILE_PATH + " FROM "
                     + TEMP_FORMS_TABLE_NAME);
             db.execSQL("DROP TABLE IF EXISTS " + TEMP_FORMS_TABLE_NAME);
         } catch (SQLiteException e) {
@@ -235,25 +253,46 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
         return success;
     }
 
+    private boolean upgradeToVersion5(SQLiteDatabase db) {
+        boolean success = true;
+        try {
+            CustomSQLiteQueryBuilder
+                    .begin(db)
+                    .alter()
+                    .table(FORMS_TABLE_NAME)
+                    .addColumn(AUTO_SUBMIT, "text")
+                    .end();
+
+            CustomSQLiteQueryBuilder
+                    .begin(db)
+                    .alter()
+                    .table(FORMS_TABLE_NAME)
+                    .addColumn(AUTO_DELETE, "text")
+                    .end();
+        } catch (SQLiteException e) {
+            Timber.e(e);
+            success = false;
+        }
+        return success;
+    }
+
     private void createFormsTable(SQLiteDatabase db, String tableName) {
-        db.execSQL("CREATE TABLE " + tableName + " (" + FormsProviderAPI.FormsColumns._ID
-                + " integer primary key, " + FormsProviderAPI.FormsColumns.DISPLAY_NAME
-                + " text not null, " + FormsProviderAPI.FormsColumns.DISPLAY_SUBTEXT
-                + " text not null, " + FormsProviderAPI.FormsColumns.DESCRIPTION
-                + " text, "
-                + FormsProviderAPI.FormsColumns.JR_FORM_ID
-                + " text not null, "
-                + FormsProviderAPI.FormsColumns.JR_VERSION
-                + " text, "
-                + FormsProviderAPI.FormsColumns.MD5_HASH
-                + " text not null, "
-                + FormsProviderAPI.FormsColumns.DATE
-                + " integer not null, " // milliseconds
-                + FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH + " text not null, "
-                + FormsProviderAPI.FormsColumns.FORM_FILE_PATH + " text not null, "
-                + FormsProviderAPI.FormsColumns.LANGUAGE + " text, "
-                + FormsProviderAPI.FormsColumns.SUBMISSION_URI + " text, "
-                + FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY + " text, "
-                + FormsProviderAPI.FormsColumns.JRCACHE_FILE_PATH + " text not null);");
+        db.execSQL("CREATE TABLE " + tableName + " ("
+                + _ID + " integer primary key, "
+                + DISPLAY_NAME + " text not null, "
+                + DISPLAY_SUBTEXT + " text not null, "
+                + DESCRIPTION + " text, "
+                + JR_FORM_ID + " text not null, "
+                + JR_VERSION + " text, "
+                + MD5_HASH + " text not null, "
+                + DATE + " integer not null, " // milliseconds
+                + FORM_MEDIA_PATH + " text not null, "
+                + FORM_FILE_PATH + " text not null, "
+                + LANGUAGE + " text, "
+                + SUBMISSION_URI + " text, "
+                + BASE64_RSA_PUBLIC_KEY + " text, "
+                + JRCACHE_FILE_PATH + " text not null, "
+                + AUTO_SUBMIT + " text,"
+                + AUTO_DELETE + " text);");
     }
 }

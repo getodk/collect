@@ -19,19 +19,6 @@ ODK Collect renders forms that are compliant with the [ODK XForms standard](http
 ## Release cycle
 New versions of ODK Collect are released on the last Sunday of each month. We freeze commits to the master branch on the preceding Wednesday (except for bug fixes).
 
-## Testing a form locally
-
-1. The `All Widgets` form from the default Aggregate server is [here](https://docs.google.com/spreadsheets/d/1af_Sl8A_L8_EULbhRLHVl8OclCfco09Hq2tqb9CslwQ/edit#gid=0). You can also try [example forms](https://github.com/XLSForm/example-forms) and [test forms](https://github.com/XLSForm/test-forms) or [make your own](https://xlsform.org).
-
-1. Convert the XLSForm (xlsx) to XForm (xml). Use the [ODK website](http://opendatakit.org/xiframe/) or [XLSForm Offline](https://gumroad.com/l/xlsform-offline) or [pyxform](https://github.com/XLSForm/pyxform).
-
-1. Once you have the XForm, use [adb](https://developer.android.com/studio/command-line/adb.html) to push the form to your device (after [enabling USB debugging](https://www.kingoapp.com/root-tutorials/how-to-enable-usb-debugging-mode-on-android.htm)) or emulator.
-	```
-	adb push my_form.xml /sdcard/odk/forms/
-	```
-
-1. Launch ODK Collect and tap `Fill Blank Form`. The new form will be there.
-
 ## Setting up your development environment
 
 1. Download and install [Git](https://git-scm.com/downloads) and add it to your PATH
@@ -48,6 +35,19 @@ New versions of ODK Collect are released on the last Sunday of each month. We fr
 
 1. Open the project in the folder of your clone from Android Studio. To run the project, click on the green arrow at the top of the screen. The emulator is very slow so we generally recommend using a physical device when possible.
 
+## Testing a form locally
+
+1. The `All Widgets` form from the default Aggregate server is [here](https://docs.google.com/spreadsheets/d/1af_Sl8A_L8_EULbhRLHVl8OclCfco09Hq2tqb9CslwQ/edit#gid=0). You can also try [example forms](https://github.com/XLSForm/example-forms) and [test forms](https://github.com/XLSForm/test-forms) or [make your own](https://xlsform.org).
+
+1. Convert the XLSForm (xlsx) to XForm (xml). Use the [ODK website](http://opendatakit.org/xiframe/) or [XLSForm Offline](https://gumroad.com/l/xlsform-offline) or [pyxform](https://github.com/XLSForm/pyxform).
+
+1. Once you have the XForm, use [adb](https://developer.android.com/studio/command-line/adb.html) to push the form to your device (after [enabling USB debugging](https://www.kingoapp.com/root-tutorials/how-to-enable-usb-debugging-mode-on-android.htm)) or emulator.
+	```
+	adb push my_form.xml /sdcard/odk/forms/
+	```
+
+1. Launch ODK Collect and tap `Fill Blank Form`. The new form will be there.
+
 ## Using APIs for local development
 
 To run functionality that makes API calls from your debug-signed builds, you may need to get an API key or otherwise authorize your app.
@@ -55,6 +55,42 @@ To run functionality that makes API calls from your debug-signed builds, you may
 **Google Drive and Sheets APIs** - Follow the instructions in the "Generate the signing certificate fingerprint and register your application" section from [here](https://developers.google.com/drive/android/auth). Enable the Google Drive API [here](https://console.developers.google.com/apis/api/drive/). Enable the Google Sheets API [here](https://console.developers.google.com/apis/api/sheets.googleapis.com).
 
 **Google Maps API** - Follow the instructions [here](https://developers.google.com/maps/documentation/android-api/signup) and paste your key in the `AndroidManifest` as the value for `com.google.android.geo.API_KEY`. Please be sure not to commit your personal API key to a branch that you will submit a pull request for.
+
+
+## Debugging JavaRosa
+
+JavaRosa is the form engine that powers Collect. If you want to debug or change that code while running Collect, you have two options. You can include the source tree as a module in Android Studio or include a custom jar file you build.
+
+**Source tree**
+
+1. Get the code from the [JavaRosa repo](https://github.com/opendatakit/javarosa)
+1. In Android Studio, select `File` -> `New` -> `New Module` -> `Import Gradle Project` and choose the project
+1. In Collect's `build.gradle` file, find the JavaRosa section:
+```gradle
+implementation(group: 'org.opendatakit', name: 'opendatakit-javarosa', version: 'x.y.z') {
+	exclude module: 'joda-time'
+}
+```
+1. Replace the JavaRosa section with this: 
+```gradle
+implementation (project(path: ':javarosa-master')) {
+	exclude module: 'joda-time'
+}
+```
+
+**Jar file**
+
+1. In JavaRosa, change the version in `build.gradle` and build the jar
+	```gradle
+	jar {
+	    baseName = 'opendatakit-javarosa'
+	    version = 'x.y.z-SNAPSHOT'
+	```
+
+1. In Collect, add the path to the jar to the dependencies in `build.gradle`
+	```gradle
+	compile files('/path/to/javarosa/build/libs/opendatakit-javarosa-x.y.z-SNAPSHOT.jar')
+	```	
  
 ## Contributing code
 Any and all contributions to the project are welcome. ODK Collect is used across the world primarily by organizations with a social purpose so you can have real impact!
@@ -77,10 +113,11 @@ All releases are verified on the following devices (ordered by Android version):
 * [LG Nexus 5X](https://www.gsmarena.com/lg_nexus_5x-7556.php) - Android 8.0.0
 
 Our regular code contributors use these devices (ordered by Android version): 
+* [Alcatel One Touch 5020D](https://www.gsmarena.com/alcatel_one_touch_m_pop-5242.php) - Android 4.1.1
 * [XOLO Q700s plus](http://www.gsmarena.com/xolo_q700s_plus-6624.php) - Android 4.4.2
 * [Samsung Galaxy S4 GT-I9506](http://www.gsmarena.com/samsung_i9506_galaxy_s4-5542.php) - Android 5.0.1
 * [Samsung Galaxy Tab SM-T285](http://www.gsmarena.com/samsung_galaxy_tab_a_7_0_(2016)-7880.php) - Android 5.1.1
-* [Motorola G4 4th Gen XT1625](http://www.gsmarena.com/motorola_moto_g4-8103.php) - Android 7.0
+* [Motorola G 5th Gen XT1671](https://www.gsmarena.com/motorola_moto_g5-8454.php) - Android 7.0
 
 The best way to help us test is to build from source! If you aren't a developer and want to help us test release candidates, join the [beta program](https://play.google.com/apps/testing/org.odk.collect.android)!
 

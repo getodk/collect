@@ -17,6 +17,7 @@ import net.bytebuddy.utility.RandomString;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,7 +34,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Locale;
 import java.util.Random;
+
+import tools.fastlane.screengrab.Screengrab;
+import tools.fastlane.screengrab.UiAutomatorScreenshotStrategy;
+import tools.fastlane.screengrab.locale.LocaleTestRule;
 
 // import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
@@ -45,7 +52,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasAction;
-// import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+//import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasData;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.ViewMatchers.Visibility.VISIBLE;
@@ -59,8 +66,16 @@ import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.startsWith;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-// import static org.odk.collect.android.activities.FormEntryActivity.BEARING_RESULT;
+//import static org.odk.collect.android.activities.FormEntryActivity.BEARING_RESULT;
 import static org.odk.collect.android.activities.FormEntryActivity.EXTRA_TESTING_PATH;
+
+/**
+ * Integration test that runs through a form with all question types.
+ *
+ * <a href="https://docs.fastlane.tools/actions/screengrab/"> screengrab </a> is used to generate screenshots for
+ * documentation and releases. Calls to Screengrab.screenshot("image-name") trigger screenshot
+ * creation.
+ */
 
 @RunWith(AndroidJUnit4.class)
 public class AllWidgetsFormTest {
@@ -70,6 +85,9 @@ public class AllWidgetsFormTest {
 
     private final Random random = new Random();
     private ActivityResult okResult = new ActivityResult(RESULT_OK, new Intent());
+
+    @ClassRule
+    public static final LocaleTestRule localeTestRule = new LocaleTestRule();
 
     @Rule
     public FormEntryActivityTestRule activityTestRule = new FormEntryActivityTestRule();
@@ -97,12 +115,18 @@ public class AllWidgetsFormTest {
         IOUtils.copy(inputStream, outputStream);
     }
 
+    @BeforeClass
+    public static void beforeAll() {
+        Screengrab.setDefaultScreenshotStrategy(new UiAutomatorScreenshotStrategy());
+    }
+
     @Before
     public void prepareDependencies() {
         FormEntryActivity activity = activityTestRule.getActivity();
         activity.setActivityAvailability(activityAvailability);
         activity.setShouldOverrideAnimations(true);
     }
+
     //endregion
 
     //region Main test block.
@@ -118,6 +142,7 @@ public class AllWidgetsFormTest {
         testExPrinterWidget();
 
         testIntegerWidget();
+        testIntegerThousandSeparators();
         testExIntegerWidget();
 
         testDecimalWidget();
@@ -125,6 +150,12 @@ public class AllWidgetsFormTest {
 
         // Doesn't work when sensor isn't available.
         testBearingWidget();
+
+        testRangeIntegerWidget();
+        testRangeVerticalAppearance();
+        testRangeDecimalWidget();
+        testRangeDecimalVertical();
+
 
         testImageWidget();
         testSelfieWidget();
@@ -150,6 +181,10 @@ public class AllWidgetsFormTest {
 
         testDateTimeNoAppearance();
         testDateTimeNoCalendarAppearance();
+
+        testEthiopianDateAppearance();
+        testCopticDateAppearance();
+        testIslamicDateAppearance();
 
         testGeopointNoAppearance();
         testGeopointPlacementMapApperance();
@@ -191,13 +226,18 @@ public class AllWidgetsFormTest {
     //region Widget tests.
 
     public void skipInitialLabel() {
+
         onView(withText(startsWith("This form"))).perform(swipeLeft());
+
     }
 
     public void testStringWidget() {
         String stringWidgetText = randomString();
 
         onVisibleEditText().perform(replaceText(stringWidgetText));
+
+        // captures screenshot of string widget
+        Screengrab.screenshot("string-input");
 
         openWidgetList();
         onView(withText("String widget")).perform(click());
@@ -207,17 +247,22 @@ public class AllWidgetsFormTest {
         onView(withText("String widget")).perform(swipeLeft());
     }
 
+
     public void testStringNumberWidget() {
         String stringNumberWidgetText = randomIntegerString();
 
         onVisibleEditText().perform(replaceText(stringNumberWidgetText));
 
+        Screengrab.screenshot("string-number");
+
         openWidgetList();
+
         onView(withText("String number widget")).perform(click());
 
         onVisibleEditText().check(matches(withText(stringNumberWidgetText)));
 
         onView(withText("String number widget")).perform(swipeLeft());
+
     }
 
     public void testUrlWidget() {
@@ -226,22 +271,27 @@ public class AllWidgetsFormTest {
         intending(allOf(hasAction(Intent.ACTION_VIEW), hasData(uri)))
                 .respondWith(okResult);
 
+        Screengrab.screenshot("url");
+
         onView(withId(R.id.simple_button)).perform(click());
         onView(withText("URL widget")).perform(swipeLeft());
     }
 
     public void testExStringWidget() {
+
         // Manually input the value:
         String exStringWidgetFirstText = randomString();
 
         when(activityAvailability.isActivityAvailable(any(Intent.class)))
-                .thenReturn(false);
+               .thenReturn(false);
 
         onView(withText("Launch")).perform(click());
         onVisibleEditText().perform(replaceText(exStringWidgetFirstText));
 
         openWidgetList();
         onView(withText("Ex string widget")).perform(click());
+
+        Screengrab.screenshot("ex-string");
 
         onVisibleEditText().check(matches(withText(exStringWidgetFirstText)));
 
@@ -265,6 +315,8 @@ public class AllWidgetsFormTest {
         onView(withText(exStringWidgetSecondText))
                 .check(matches(isDisplayed()));
 
+        Screengrab.screenshot("ex-string2");
+
         openWidgetList();
         onView(withText("Ex string widget")).perform(click());
 
@@ -275,7 +327,9 @@ public class AllWidgetsFormTest {
 
     public void testExPrinterWidget() {
         onView(withText("Initiate Printing")).perform(click());
-        
+
+        Screengrab.screenshot("ex-printer");
+
         intending(hasAction("org.opendatakit.sensors.ZebraPrinter"));
         intended(hasAction("org.opendatakit.sensors.ZebraPrinter"));
 
@@ -291,6 +345,8 @@ public class AllWidgetsFormTest {
         String integerString = randomIntegerString();
         onVisibleEditText().perform(replaceText(integerString));
 
+        Screengrab.screenshot("integer");
+
         openWidgetList();
         onView(withText("Integer widget")).perform(click());
 
@@ -298,6 +354,21 @@ public class AllWidgetsFormTest {
 
         onView(withText("Integer widget")).perform(swipeLeft());
     }
+
+     public void testIntegerThousandSeparators() {
+          String randomInteger = randomIntegerSeparator();
+          onVisibleEditText().perform(replaceText(randomInteger));
+
+          Screengrab.screenshot("integer-separators");
+
+          openWidgetList();
+          onView(withText("Integer widget with thousands separators")).perform(click());
+
+          onVisibleEditText().check(matches(withText(randomInteger)));
+
+          onView(withText("Integer widget with thousands separators")).perform(swipeLeft());
+
+      }
 
     public void testExIntegerWidget() {
         // Manually input the value:
@@ -308,6 +379,8 @@ public class AllWidgetsFormTest {
 
         onView(withText("Launch")).perform(click());
         onVisibleEditText().perform(replaceText(exIntegerFirstValue));
+
+        Screengrab.screenshot("ex-integer");
 
         openWidgetList();
         onView(withText("Ex integer widget")).perform(click());
@@ -334,6 +407,8 @@ public class AllWidgetsFormTest {
         onView(withText(exIntegerSecondValue))
                 .check(matches(isDisplayed()));
 
+        Screengrab.screenshot("ex-integer2");
+
         openWidgetList();
         onView(withText("Ex integer widget")).perform(click());
 
@@ -345,6 +420,8 @@ public class AllWidgetsFormTest {
     public void testDecimalWidget() {
         String decimalString = randomDecimalString();
         onVisibleEditText().perform(replaceText(decimalString));
+
+        Screengrab.screenshot("decimal1");
 
         openWidgetList();
         onView(withText("Decimal widget")).perform(click());
@@ -363,6 +440,8 @@ public class AllWidgetsFormTest {
 
         onView(withText("Launch")).perform(click());
         onVisibleEditText().perform(replaceText(exDecimalFirstValue));
+
+        Screengrab.screenshot("ex-decimal");
 
         openWidgetList();
         onView(withText("Ex decimal widget")).perform(click());
@@ -388,6 +467,8 @@ public class AllWidgetsFormTest {
         onView(withText("Launch")).perform(click());
         onView(withText(exDecimalSecondValue))
                 .check(matches(isDisplayed()));
+
+        Screengrab.screenshot("ex-decimal2");
 
         openWidgetList();
         onView(withText("Ex decimal widget")).perform(click());
@@ -422,171 +503,346 @@ public class AllWidgetsFormTest {
         //        onView(withText("Bearing widget")).perform(click());
         //
         //        onView(withId(R.id.answer_text)).check(matches(withText(bearing)));
-        //
+
+        Screengrab.screenshot("bearing-widget");
+
         onView(withText("Bearing widget")).perform(swipeLeft());
+    }
+
+    public void testRangeIntegerWidget() {
+
+         Screengrab.screenshot("range-integer");
+
+         onView(withText("Range integer widget")).perform(swipeLeft());
+
+    }
+
+    public void testRangeVerticalAppearance() {
+
+         Screengrab.screenshot("range-integer-vertical");
+
+         onView(withText("Range integer widget")).perform(swipeLeft());
+
+    }
+
+    public void testRangeDecimalWidget() {
+
+          Screengrab.screenshot("range-decimal");
+
+          onView(withText("Range decimal widget")).perform(swipeLeft());
+    }
+
+    public void testRangeDecimalVertical() {
+
+          Screengrab.screenshot("range-decimal-vertical");
+
+          onView(withText("Range decimal widget")).perform(swipeLeft());
+
     }
 
     public void testImageWidget() {
 
+        Screengrab.screenshot("image-widget");
 
         onView(withText("Image widget")).perform(swipeLeft());
     }
 
     public void testSelfieWidget() {
+
+        Screengrab.screenshot("selfie-widget");
+
         onView(withText("Selfie widget")).perform(swipeLeft());
     }
 
     public void testDrawWidget() {
+
+        Screengrab.screenshot("draw-widget");
+
         onView(withText("Draw widget")).perform(swipeLeft());
     }
 
     public void testAnnotateWidget() {
+
+        Screengrab.screenshot("annotate");
+
         onView(withText("Annotate widget")).perform(swipeLeft());
     }
 
     public void testSignatureWidget() {
+
+        Screengrab.screenshot("signature");
+
         onView(withText("Signature widget")).perform(swipeLeft());
     }
 
     public void testWebViewImageWidget() {
+
+        Screengrab.screenshot("web-view");
+
         onView(withText("Web view image widget")).perform(swipeLeft());
     }
 
     public void testAlignImageWidget() {
+
+        Screengrab.screenshot("align-image");
+
         onView(withText("Align image widget")).perform(swipeLeft());
     }
 
     public void testBarcodeWidget() {
+
+        Screengrab.screenshot("barcode-widget");
+
         onView(withText("Barcode widget")).perform(swipeLeft());
     }
 
     public void testAudioWidget() {
+
+        Screengrab.screenshot("audio");
+
         onView(withText("Audio widget")).perform(swipeLeft());
     }
 
     public void testVideoWidget() {
+
+        Screengrab.screenshot("video");
+
         onView(withText("Video widget")).perform(swipeLeft());
     }
 
     public void testDateNoAppearanceWidget() {
+
+        Screengrab.screenshot("date-no-appearance");
+
         onView(withText("Date widget")).perform(swipeLeft());
     }
 
     public void testDateNoCalendarAppearance() {
+
+        Screengrab.screenshot("date-no-calendar");
+
         onView(withText("Date Widget")).perform(swipeLeft());
     }
 
     public void testDateMonthYearAppearance() {
+
+        Screengrab.screenshot("date-with-calendar");
+
         onView(withText("Date widget")).perform(swipeLeft());
     }
 
     public void testDateYearAppearance() {
+
+        Screengrab.screenshot("date-year");
+
         onView(withText("Date widget")).perform(swipeLeft());
     }
 
     public void testTimeNoAppearance() {
+
+        Screengrab.screenshot("time-no-appearance");
+
         onView(withText("Time widget")).perform(swipeLeft());
     }
 
     public void testDateTimeNoAppearance() {
+
+        Screengrab.screenshot("date-time");
+
         onView(allOf(withText("Date time widget"), withEffectiveVisibility(VISIBLE)))
                 .perform(swipeLeft());
     }
 
     public void testDateTimeNoCalendarAppearance() {
+
+        Screengrab.screenshot("date-time-appear");
+
         onView(allOf(withText("Date time widget"), withEffectiveVisibility(VISIBLE)))
                 .perform(swipeLeft());
     }
 
+    public void testEthiopianDateAppearance() {
+
+         Screengrab.screenshot("ethopian");
+
+         onView(allOf(withText("Ethiopian date widget"), withEffectiveVisibility(VISIBLE)))
+                .perform(swipeLeft());
+
+    }
+
+    public void testCopticDateAppearance() {
+
+        Screengrab.screenshot("coptic");
+
+        onView(allOf(withText("Coptic date widget"), withEffectiveVisibility(VISIBLE)))
+                .perform(swipeLeft());
+
+    }
+
+    public void testIslamicDateAppearance() {
+
+        Screengrab.screenshot("islamic-date");
+
+        onView(allOf(withText("Islamic date widget"), withEffectiveVisibility(VISIBLE)))
+                .perform(swipeLeft());
+
+    }
+
     public void testGeopointNoAppearance() {
+
+        Screengrab.screenshot("geopoint");
+
         onView(withText("Geopoint widget")).perform(swipeLeft());
     }
 
     public void testGeopointPlacementMapApperance() {
+
+        Screengrab.screenshot("geopoint2");
+
         onView(withText("Geopoint widget")).perform(swipeLeft());
     }
 
     public void testGeopointMapsAppearance() {
+
+        Screengrab.screenshot("geopint-map");
+
         onView(withText("Geopoint widget")).perform(swipeLeft());
     }
 
     public void testGeotraceWidget() {
+
+        Screengrab.screenshot("geo-trace");
+
         onView(withText("Geotrace widget")).perform(swipeLeft());
     }
 
     public void testGeoshapeWidget() {
+
+        Screengrab.screenshot("geo-space");
+
         onView(withText("Geoshape widget")).perform(swipeLeft());
     }
 
     public void testOSMIntegrationOSMType() {
+
+        Screengrab.screenshot("osm");
+
         onView(withText("OSM integration")).perform(swipeLeft());
     }
 
     public void testOSMIntegrationBuildingType() {
+
+        Screengrab.screenshot("osm-build");
+
         onView(withText("OSM integration")).perform(swipeLeft());
     }
 
     public void testSelectOneNoAppearance() {
+
+        Screengrab.screenshot("select-one");
+
         onView(withText("Select one widget")).perform(swipeLeft());
     }
 
     public void testSpinnerWidget() {
+
+        Screengrab.screenshot("spinner");
+
         onView(withText("Spinner widget")).perform(swipeLeft());
     }
 
     public void testSelectOneAutoAdvance() {
+
+        Screengrab.screenshot("select-auto-advance");
+
         onView(withText("Select one autoadvance widget")).perform(swipeLeft());
     }
 
     public void testSelectOneSearchAppearance() {
+        Screengrab.screenshot("select-search-appearance");
+
         onView(withText("Select one search widget")).perform(swipeLeft());
     }
 
     public void testSelectOneSearchAutoAdvance() {
+
+        Screengrab.screenshot("one-auto");
+
         onView(withText("Select one search widget")).perform(swipeLeft());
     }
 
     public void testGridSelectNoAppearance() {
+
+        Screengrab.screenshot("grid-no-appearance");
+
         onView(withText("Grid select one widget")).perform(swipeLeft());
     }
 
     public void testGridSelectCompactAppearance() {
+
+        Screengrab.screenshot("grid-select-compact1");
+
         onView(withText("Grid select one widget")).perform(swipeLeft());
     }
 
     public void testGridSelectCompact2Appearance() {
+
+       Screengrab.screenshot("grid-select-compact2");
+
         onView(withText("Grid select one widget")).perform(swipeLeft());
     }
 
     public void testGridSelectQuickCompactAppearance() {
+        Screengrab.screenshot("grid-select1");
         onView(withText("Grid select one widget")).perform(swipeLeft());
     }
 
     public void testGridSelectQuickCompact2Appearance() {
+
+        Screengrab.screenshot("grid-select2");
+
         onView(withText("Grid select one widget")).perform(swipeLeft());
     }
 
     public void testMultiSelectWidget() {
+
+        Screengrab.screenshot("multi-select");
+
         onView(withText("Multi select widget")).perform(swipeLeft());
     }
 
     public void testGridSelectMultipleCompact() {
+
+        Screengrab.screenshot("grid-multi1");
+
         onView(withText("Grid select multiple widget")).perform(swipeLeft());
     }
 
     public void testGridSelectCompact2() {
+
+        Screengrab.screenshot("grid-multi2");
+
         onView(withText("Grid select multiple widget")).perform(swipeLeft());
     }
 
     public void testSpinnerSelectMultiple() {
+
+        Screengrab.screenshot("spinner-select");
+
         onView(withText("Spinner widget: select multiple")).perform(swipeLeft());
     }
 
     public void testLabelWidget() {
+
+        Screengrab.screenshot("label-widget");
+
         onView(withText("Label widget")).perform(swipeLeft());
     }
 
     public void testTriggerWidget() {
+
+        Screengrab.screenshot("trigger-widget");
+
         onView(withText("Trigger widget")).perform(swipeLeft());
     }
 
@@ -654,12 +910,18 @@ public class AllWidgetsFormTest {
     //        return new ActivityResult(RESULT_OK, data);
     //    }
 
+    private String randomIntegerSeparator() {
+        int number = 123456;
+        NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.US);
+        return numberFormat.format(number);
+     }
+
     //endregion
 
     //region Custom TestRule.
     private class FormEntryActivityTestRule extends IntentsTestRule<FormEntryActivity> {
 
-        public FormEntryActivityTestRule() {
+        FormEntryActivityTestRule() {
             super(FormEntryActivity.class);
         }
 

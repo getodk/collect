@@ -19,6 +19,7 @@ import android.text.Html;
 import java.util.regex.MatchResult;
 
 public class TextUtils {
+
     private static ReplaceCallback.Callback createHeader = new ReplaceCallback.Callback() {
         public String matchFound(MatchResult match) {
             int level = match.group(1).length();
@@ -63,6 +64,10 @@ public class TextUtils {
             return stylesOutput.toString();
         }
     };
+
+    private TextUtils() {
+
+    }
 
     protected static String markdownToHtml(String text) {
 

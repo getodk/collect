@@ -98,6 +98,6 @@ public class ThousandsSeparatorTextWatcher implements TextWatcher {
     * Returns the string after removing all the thousands separators.
     * */
     public static String getOriginalString(String string) {
-        return string.replace(thousandSeparator,"");
+        return string.replace(thousandSeparator, "");
     }
 }

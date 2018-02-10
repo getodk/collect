@@ -506,28 +506,20 @@ public class FormsProvider extends ContentProvider {
 
         sFormsProjectionMap = new HashMap<>();
         sFormsProjectionMap.put(FormsColumns._ID, FormsColumns._ID);
-        sFormsProjectionMap.put(FormsColumns.DISPLAY_NAME,
-                FormsColumns.DISPLAY_NAME);
-        sFormsProjectionMap.put(FormsColumns.DISPLAY_SUBTEXT,
-                FormsColumns.DISPLAY_SUBTEXT);
-        sFormsProjectionMap.put(FormsColumns.DESCRIPTION,
-                FormsColumns.DESCRIPTION);
-        sFormsProjectionMap.put(FormsColumns.JR_FORM_ID,
-                FormsColumns.JR_FORM_ID);
-        sFormsProjectionMap.put(FormsColumns.JR_VERSION,
-                FormsColumns.JR_VERSION);
-        sFormsProjectionMap.put(FormsColumns.SUBMISSION_URI,
-                FormsColumns.SUBMISSION_URI);
-        sFormsProjectionMap.put(FormsColumns.BASE64_RSA_PUBLIC_KEY,
-                FormsColumns.BASE64_RSA_PUBLIC_KEY);
+        sFormsProjectionMap.put(FormsColumns.DISPLAY_NAME, FormsColumns.DISPLAY_NAME);
+        sFormsProjectionMap.put(FormsColumns.DISPLAY_SUBTEXT, FormsColumns.DISPLAY_SUBTEXT);
+        sFormsProjectionMap.put(FormsColumns.DESCRIPTION, FormsColumns.DESCRIPTION);
+        sFormsProjectionMap.put(FormsColumns.JR_FORM_ID, FormsColumns.JR_FORM_ID);
+        sFormsProjectionMap.put(FormsColumns.JR_VERSION, FormsColumns.JR_VERSION);
+        sFormsProjectionMap.put(FormsColumns.SUBMISSION_URI, FormsColumns.SUBMISSION_URI);
+        sFormsProjectionMap.put(FormsColumns.BASE64_RSA_PUBLIC_KEY, FormsColumns.BASE64_RSA_PUBLIC_KEY);
         sFormsProjectionMap.put(FormsColumns.MD5_HASH, FormsColumns.MD5_HASH);
         sFormsProjectionMap.put(FormsColumns.DATE, FormsColumns.DATE);
-        sFormsProjectionMap.put(FormsColumns.FORM_MEDIA_PATH,
-                FormsColumns.FORM_MEDIA_PATH);
-        sFormsProjectionMap.put(FormsColumns.FORM_FILE_PATH,
-                FormsColumns.FORM_FILE_PATH);
-        sFormsProjectionMap.put(FormsColumns.JRCACHE_FILE_PATH,
-                FormsColumns.JRCACHE_FILE_PATH);
+        sFormsProjectionMap.put(FormsColumns.FORM_MEDIA_PATH, FormsColumns.FORM_MEDIA_PATH);
+        sFormsProjectionMap.put(FormsColumns.FORM_FILE_PATH, FormsColumns.FORM_FILE_PATH);
+        sFormsProjectionMap.put(FormsColumns.JRCACHE_FILE_PATH, FormsColumns.JRCACHE_FILE_PATH);
         sFormsProjectionMap.put(FormsColumns.LANGUAGE, FormsColumns.LANGUAGE);
+        sFormsProjectionMap.put(FormsColumns.AUTO_DELETE, FormsColumns.AUTO_DELETE);
+        sFormsProjectionMap.put(FormsColumns.AUTO_SUBMIT, FormsColumns.AUTO_SUBMIT);
     }
 }

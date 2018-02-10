@@ -56,6 +56,9 @@ import timber.log.Timber;
 
 public class QRCodeUtils {
 
+    private QRCodeUtils() {
+    }
+
     public static String decodeFromBitmap(Bitmap bitmap) {
         BinaryBitmap binaryBitmap = getBinaryBitmap(bitmap);
 

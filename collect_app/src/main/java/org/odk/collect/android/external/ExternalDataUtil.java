@@ -59,6 +59,10 @@ public final class ExternalDataUtil {
     private static final String FALLBACK_COLUMN_SEPARATOR = " ";
     public static final String JR_IMAGES_PREFIX = "jr://images/";
 
+    private ExternalDataUtil() {
+
+    }
+
     public static String toSafeColumnName(String columnName, Map<String, String> cache) {
         String cachedName = cache.get(columnName);
         if (cachedName == null) {

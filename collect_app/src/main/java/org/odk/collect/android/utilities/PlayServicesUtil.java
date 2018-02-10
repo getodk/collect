@@ -17,6 +17,9 @@ public class PlayServicesUtil {
 
     private static GoogleApiAvailability googleApiAvailability;
 
+    private PlayServicesUtil() {
+    }
+
     /**
      * Check that Google Play services APK is installed and up to date.
      *

@@ -37,7 +37,9 @@ import timber.log.Timber;
  */
 public final class ZipUtils {
 
-    static final String t = "ZipUtils";
+    private ZipUtils() {
+
+    }
 
     public static void unzip(File[] zipFiles) {
         for (File zipFile : zipFiles) {
@@ -78,7 +80,7 @@ public final class ZipUtils {
     }
 
     private static File doExtractInTheSameFolder(File zipFile, ZipInputStream zipInputStream,
-            ZipEntry zipEntry) throws IOException {
+                                                 ZipEntry zipEntry) throws IOException {
         File targetFile;
         String fileName = zipEntry.getName();
 
