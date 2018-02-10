@@ -186,7 +186,7 @@ the specific language governing permissions and limitations under the License.
             android:name=".activities.InstanceUploaderActivity"
             android:label="@string/app_name" />
         <activity
-            android:name=".preferences.AboutPreferencesActivity"
+            android:name=".activities.AboutActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.SettingsTheme" />
         <activity

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.preferences;
+package org.odk.collect.android.activities;
 
 import android.content.ComponentName;
 import android.content.Intent;
@@ -29,7 +29,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.OpenSourceLicensesActivity;
 import org.odk.collect.android.adapters.AboutListAdapter;
 import org.odk.collect.android.utilities.CustomTabHelper;
 
@@ -37,7 +36,7 @@ import java.util.List;
 
 import timber.log.Timber;
 
-public class AboutPreferencesActivity extends AppCompatActivity implements
+public class AboutActivity extends AppCompatActivity implements
         AboutListAdapter.AboutItemClickListener {
 
     private static final String GOOGLE_PLAY_URL = "https://play.google.com/store/apps/details?id=";
