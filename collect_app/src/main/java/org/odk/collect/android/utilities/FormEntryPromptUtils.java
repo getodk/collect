@@ -42,12 +42,12 @@ public class FormEntryPromptUtils {
 
         if (data instanceof SelectMultiData) {
             StringBuilder b = new StringBuilder();
+            String sep = "";
             for (Selection value : (List<Selection>) data.getValue()) {
-                b
-                        .append(fep.getSelectItemText(value))
-                        .append(", ");
+                b.append(sep);
+                sep = ", ";
+                b.append(fep.getSelectItemText(value));
             }
-            b.delete(b.length() - 2, b.length());
             return b.toString();
         }
 
