@@ -62,7 +62,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -87,13 +89,14 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
     private final SheetsHelper sheetsHelper;
     private final DriveHelper driveHelper;
-
     private final GoogleAccountsManager accountsManager;
-    private String mainSheetTitle;
     private Outcome outcome;
-    private boolean hasWritePermissionToSheet = false;
+
+    private boolean hasWritePermissionToSheet;
     private boolean authFailed;
-    private String googleSheetsUrl = "";
+
+    private String mainSheetTitle;
+    private String googleSheetsUrl;
     private String spreadsheetId;
 
     public InstanceGoogleSheetsUploader(GoogleAccountsManager accountsManager) {
@@ -105,16 +108,19 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     /**
      * Google sheets currently only allows a-zA-Z0-9 and dash
      */
-
     public static boolean isValidGoogleSheetsString(String name) {
         return Pattern
-                .compile("^[a-zA-Z0-9\\-]+$").matcher(name).matches();
+                .compile("^[a-zA-Z0-9\\-]+$")
+                .matcher(name)
+                .matches();
     }
 
     public static boolean isValidLocation(String answer) {
         return Pattern
                 .compile("^-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\"
-                        + ".[0-9]+\\s[0-9]+\\.[0-9]+$").matcher(answer).matches();
+                        + ".[0-9]+\\s[0-9]+\\.[0-9]+$")
+                .matcher(answer)
+                .matches();
     }
 
     private String getGoogleSheetsUrl(Cursor cursor) {
@@ -141,18 +147,18 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                         return;
                     }
                     String id = c.getString(c.getColumnIndex(InstanceColumns._ID));
-                    String jrformid = c.getString(c.getColumnIndex(InstanceColumns.JR_FORM_ID));
+                    String jrFormId = c.getString(c.getColumnIndex(InstanceColumns.JR_FORM_ID));
                     Uri toUpdate = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, id);
                     ContentValues cv = new ContentValues();
 
-                    Cursor formcursor = new FormsDao().getFormsCursorForFormId(jrformid);
+                    Cursor formCursor = new FormsDao().getFormsCursorForFormId(jrFormId);
                     String md5 = null;
                     String formFilePath = null;
-                    if (formcursor.getCount() > 0) {
-                        formcursor.moveToFirst();
-                        md5 = formcursor
-                                .getString(formcursor.getColumnIndex(FormsColumns.MD5_HASH));
-                        formFilePath = formcursor.getString(formcursor
+                    if (formCursor.getCount() > 0) {
+                        formCursor.moveToFirst();
+                        md5 = formCursor
+                                .getString(formCursor.getColumnIndex(FormsColumns.MD5_HASH));
+                        formFilePath = formCursor.getString(formCursor
                                 .getColumnIndex(FormsColumns.FORM_FILE_PATH));
                     }
 
@@ -167,7 +173,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                             .getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
                     String urlString = getGoogleSheetsUrl(c);
 
-                    if (token == null || !uploadOneSubmission(id, new File(instance), jrformid, formFilePath, urlString)) {
+                    if (token == null || !uploadOneSubmission(id, new File(instance), jrFormId, formFilePath, urlString)) {
                         cv.put(InstanceColumns.STATUS,
                                 InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                         Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
@@ -246,7 +252,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         if (!sheetCells.isEmpty()) {
             headerRow = sheetCells.get(0);
         } else { // new sheet
-            resizeSheet(getSheetId(sheetTitle), columnTitles, id);
+            resizeSheet(getSheetId(sheetTitle), columnTitles.size(), id);
             addHeaders(sheetTitle, columnTitles, id);
             readSheetCells(sheetTitle, sheetCells, id); // read sheet cells again to update
             headerRow = sheetCells.get(0);
@@ -358,9 +364,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         List<Object> list = new ArrayList<>();
         for (String path : sheetCols) {
             String answer = "";
-            if (path.equals(" ") || !columnNames.contains(path)) {
-                //ignores the blank fields and extra fields
-            } else if (columnNames.contains(path)) { // if column present in sheet
+            if (!path.equals(" ") && columnNames.contains(path)) {
                 if (answersToUpload.containsKey(path)) {
                     answer = answersToUpload.get(path);
                     // Check to see if answer is a location, if so, get rid of accuracy
@@ -415,8 +419,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
     private void addPhotos(Multimap<String, String> answersToUpload, Multimap<String, String> uploadedMedia) {
         for (Map.Entry entry : uploadedMedia.entries()) {
-            String url = entry.getValue().toString();
-            answersToUpload.put(entry.getKey().toString(), url);
+            answersToUpload.put(entry.getKey().toString(), entry.getValue().toString());
         }
     }
 
@@ -430,7 +433,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     }
 
     private void fixBlankColumnNames(String sheetTitle, List headerFeed, String id) throws IOException {
-        ArrayList<Object> list = new ArrayList<>();
+        List<Object> list = new ArrayList<>();
         for (Object column : headerFeed) {
             if (column.equals("")) {
                 list.add(" ");
@@ -438,13 +441,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                 list.add(column);
             }
         }
-
-        ArrayList<List<Object>> content = new ArrayList<>();
-        content.add(list);
-        ValueRange row = new ValueRange();
-        row.setValues(content);
-
-        insertRow(row, id, sheetTitle + "!A1:1");
+        insertRow(new ValueRange().setValues(Collections.singletonList(list)), id, sheetTitle + "!A1:1");
     }
 
     private boolean isAnyColumnEmpty(List headerFeed) {
@@ -457,13 +454,8 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     }
 
     private ValueRange getRowFromList(List<Object> list) {
-        ArrayList<List<Object>> content = new ArrayList<>();
-        content.add(list);
-
-        ValueRange row = new ValueRange();
-        row.setValues(content);
-
-        return row;
+        return new ValueRange()
+                .setValues(Collections.singletonList(list));
     }
 
     private void insertRow(ValueRange row, String id, String sheetName) throws IOException {
@@ -477,21 +469,21 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     }
 
     private void validColumnNames(List<String> columnNames, String id) throws Exception {
-        for (String n : columnNames) {
-            if (!isValidGoogleSheetsString(n)) {
+        for (String columnName : columnNames) {
+            if (!isValidGoogleSheetsString(columnName)) {
                 outcome.results.put(id,
                         Collect.getInstance().getString(R.string.google_sheets_invalid_column_form,
-                                n));
+                                columnName));
                 throw new Exception();
             }
         }
     }
 
     private void validSubmissionColumnTitles(Multimap<String, String> answersToUpload, String id) throws Exception {
-        for (String value : answersToUpload.values()) {
-            if (!isValidGoogleSheetsString(value)) {
+        for (String answer : answersToUpload.values()) {
+            if (!isValidGoogleSheetsString(answer)) {
                 outcome.results.put(id, Collect.getInstance()
-                        .getString(R.string.google_sheets_invalid_column_instance, value));
+                        .getString(R.string.google_sheets_invalid_column_instance, answer));
                 throw new Exception();
             }
         }
@@ -501,7 +493,6 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         if (!hasWritePermissionToSheet || !urlString.equals(googleSheetsUrl)) {
             try {
                 spreadsheetId = UrlUtils.getSpreadsheetID(urlString);
-
                 Spreadsheet spreadsheet = sheetsHelper.getSpreadsheet(spreadsheetId);
                 mainSheetTitle = spreadsheet.getSheets().get(0).getProperties().getTitle();
             } catch (GoogleJsonResponseException e) {
@@ -541,11 +532,11 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             String[] selectionArgs = {
                     filename
             };
-            Cursor c = Collect.getInstance().getContentResolver()
+            Cursor cursor = Collect.getInstance().getContentResolver()
                     .query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, selection,
                             selectionArgs, null);
-            if (c.getCount() != 1) {
-                c.close();
+            if (cursor != null && cursor.getCount() != 1) {
+                cursor.close();
                 try {
                     throw new FileNotFoundException(Collect.getInstance()
                             .getString(R.string.media_upload_error, filename));
@@ -553,7 +544,6 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                     Timber.e(e);
                 }
             }
-            c.close();
 
             String folderId;
             try {
@@ -587,9 +577,9 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         }
     }
 
-    private void resizeSheet(int sheetId, List<String> columnNames, String id) throws IOException {
+    private void resizeSheet(int sheetId, int size, String id) throws IOException {
         try {
-            sheetsHelper.resizeSpreadSheet(spreadsheetId, sheetId, columnNames.size());
+            sheetsHelper.resizeSpreadSheet(spreadsheetId, sheetId, size);
         } catch (IOException e) {
             Timber.e(e);
             outcome.results.put(id, e.getMessage());
@@ -598,29 +588,26 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     }
 
     private void addHeaders(String sheetName, List<String> columnNames, String id) throws IOException {
-        ArrayList<Object> list = new ArrayList<>();
+        List<Object> list = new ArrayList<>();
         list.addAll(columnNames);
 
-        ArrayList<List<Object>> content = new ArrayList<>();
+        List<List<Object>> content = new ArrayList<>();
         content.add(list);
-        ValueRange row = new ValueRange();
-        row.setValues(content);
 
-            /*
-             *  Appends the data at the last row
-             *
-             *  append(spreadsheetId, range, ValueRange)
-             *
-             *  spreadsheetId   :   Unique sheet id
-             *  range           :   A1 notation range. It specifies the range within which the
-             *                      spreadsheet should be searched.
-             *              hint   "Giving only mainSheetTitle in range searches in the complete sheet"
-             *  ValueRange      :   Content that needs to be appended  (List<List<Object>>)
-             *
-             *  For more info   :   https://developers.google.com/sheets/api/reference/rest/
-             */
-
-        insertRow(row, id, sheetName);
+        /*
+         *  Appends the data at the last row
+         *
+         *  append(spreadsheetId, range, ValueRange)
+         *
+         *  spreadsheetId   :   Unique sheet id
+         *  range           :   A1 notation range. It specifies the range within which the
+         *                      spreadsheet should be searched.
+         *              hint   "Giving only mainSheetTitle in range searches in the complete sheet"
+         *  ValueRange      :   Content that needs to be appended  (List<List<Object>>)
+         *
+         *  For more info   :   https://developers.google.com/sheets/api/reference/rest/
+         */
+        insertRow(new ValueRange().setValues(content), id, sheetName);
     }
 
     private void validColumnLength(List<String> columnNames, String id) throws Exception {
@@ -641,8 +628,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         try {
             processInstanceXML(columnTitles, instanceFile, answersToUpload, mediaToUpload, repeatSheetTitles);
         } catch (FormException e) {
-            outcome.results.put(id,
-                    Collect.getInstance().getString(R.string.google_repeat_error));
+            outcome.results.put(id, Collect.getInstance().getString(R.string.google_repeat_error));
             throw e;
         } catch (Exception e) {
             Timber.e(e, "Exception thrown while parsing the file");
@@ -653,11 +639,10 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
     private void processInstanceXML(List<String> columnTitles, File instanceFile,
                                     Multimap<String, String> answersToUpload,
-                                    Multimap<String, String> mediaToUpload, List<String> repeatSheetTitles)
-            throws Exception {
-        FileInputStream in;
+                                    Multimap<String, String> mediaToUpload,
+                                    List<String> repeatSheetTitles) throws Exception {
 
-        in = new FileInputStream(instanceFile);
+        FileInputStream in = new FileInputStream(instanceFile);
         XmlPullParser parser = Xml.newPullParser();
 
         parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
@@ -668,11 +653,10 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
     private void readInstanceFeed(List<String> columnTitles, XmlPullParser parser,
                                   Multimap<String, String> answersToUpload,
-                                  Multimap<String, String> mediaToUpload, File instanceFolder, List<String> repeatSheetTitles)
-            throws Exception {
+                                  Multimap<String, String> mediaToUpload, File instanceFolder,
+                                  List<String> repeatSheetTitles) throws Exception {
 
-        ArrayList<String> path = new ArrayList<>();
-
+        List<String> path = new ArrayList<>();
         int event = parser.next();
         while (event != XmlPullParser.END_DOCUMENT) {
             switch (event) {
@@ -687,11 +671,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                     columnTitle = getPath(path);
                     if (columnTitles.contains(columnTitle)) {
                         String answer = parser.getText();
-
-                        String filename = instanceFolder + "/" + answer;
-                        File file = new File(filename);
-
-                        if (file.isFile()) {
+                        if (new File(instanceFolder + "/" + answer).isFile()) {
                             mediaToUpload.put(columnTitle, answer);
                         } else {
                             answersToUpload.put(columnTitle, answer);
@@ -711,18 +691,15 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     }
 
     private String getSheetUrl(int sheetId) throws Exception {
-        return googleSheetsUrl.substring(0, googleSheetsUrl.lastIndexOf("/") + 1)
-                + "edit#gid="
-                + sheetId;
+        return googleSheetsUrl.substring(0,
+                googleSheetsUrl.lastIndexOf("/") + 1) + "edit#gid=" + sheetId;
     }
 
-    private String getPath(ArrayList<String> path) {
+    private String getPath(List<String> path) {
         StringBuilder currentPath = new StringBuilder();
-        boolean first = true;
         for (String node : path) {
-            if (first) {
+            if (path.indexOf(node) == 0) {
                 currentPath = new StringBuilder(node);
-                first = false;
             } else {
                 currentPath.append('-').append(node);
             }
@@ -786,7 +763,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         return authFailed;
     }
 
-    public void setAuthFailed() {
+    public void setAuthFailedForFalse() {
         authFailed = false;
     }
 }

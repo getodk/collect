@@ -292,7 +292,7 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
         if (keys.size() == 0) {
             if (instanceGoogleSheetsUploader.isAuthFailed()) {
                 message.append(getString(R.string.google_auth_io_exception_msg));
-                instanceGoogleSheetsUploader.setAuthFailed();
+                instanceGoogleSheetsUploader.setAuthFailedForFalse();
             } else {
                 message.append(getString(R.string.no_forms_uploaded));
             }
@@ -324,7 +324,7 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
                 } else {
                     if (instanceGoogleSheetsUploader.isAuthFailed()) {
                         message.append(getString(R.string.google_auth_io_exception_msg));
-                        instanceGoogleSheetsUploader.setAuthFailed();
+                        instanceGoogleSheetsUploader.setAuthFailedForFalse();
                     } else {
                         message.append(getString(R.string.no_forms_uploaded));
                     }
