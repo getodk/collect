@@ -14,13 +14,13 @@
 
 package org.odk.collect.android.utilities.gdrive;
 
-
 import android.support.annotation.NonNull;
 
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.services.sheets.v4.Sheets;
+import com.google.api.services.sheets.v4.model.AddSheetRequest;
 import com.google.api.services.sheets.v4.model.BatchUpdateSpreadsheetRequest;
 import com.google.api.services.sheets.v4.model.GridProperties;
 import com.google.api.services.sheets.v4.model.Request;
@@ -33,6 +33,7 @@ import com.google.api.services.sheets.v4.model.ValueRange;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class SheetsHelper {
@@ -106,6 +107,14 @@ public class SheetsHelper {
         }
 
         sheetsService.insertRow(spreadsheetId, sheetName, row);
+    }
+
+    public void addSheet(String spreadsheetId, String sheetName) throws IOException {
+        AddSheetRequest addSheetRequest = new AddSheetRequest();
+        addSheetRequest.setProperties(new SheetProperties().setTitle(sheetName));
+        Request request = new Request();
+        request.setAddSheet(addSheetRequest);
+        sheetsService.batchUpdate(spreadsheetId, Collections.singletonList(request));
     }
 
     /**
