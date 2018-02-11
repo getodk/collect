@@ -180,7 +180,7 @@ public class DownloadFormsTask extends
         }
 
         if (isCancelled()) {
-            cleanUp(fileResult,null, tempMediaPath);
+            cleanUp(fileResult, null, tempMediaPath);
             fileResult = null;
         }
 
