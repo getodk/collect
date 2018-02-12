@@ -20,6 +20,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
@@ -221,8 +222,16 @@ public class ResetDialogPreference extends DialogPreference implements CompoundB
         if (preferences.isChecked() || instances.isChecked() || forms.isChecked()
                 || layers.isChecked() || cache.isChecked() || osmDroid.isChecked()) {
             ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+            ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_POSITIVE)
+                    .setTextColor(((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_NEGATIVE).getCurrentTextColor());
         } else {
             ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+            ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_POSITIVE)
+                    .setTextColor(getPartiallyTransparentColor(((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_NEGATIVE).getCurrentTextColor()));
         }
+    }
+
+    private int getPartiallyTransparentColor(int color) {
+        return Color.argb(150, Color.red(color), Color.green(color), Color.blue(color));
     }
 }
