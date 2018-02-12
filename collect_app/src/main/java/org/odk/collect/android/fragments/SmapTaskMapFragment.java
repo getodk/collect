@@ -506,8 +506,10 @@ public class SmapTaskMapFragment extends Fragment
     }
 
     public void updatePath(LatLng point) {
-        mPoints.add(point);
-        mPath.setPoints(mPoints);
+        if(mPath != null && mPoints != null) {
+            mPoints.add(point);
+            mPath.setPoints(mPoints);
+        }
     }
 
     /*
