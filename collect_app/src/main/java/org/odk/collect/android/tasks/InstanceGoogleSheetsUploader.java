@@ -650,19 +650,23 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
         List<String> path = new ArrayList<>();
         int event = parser.next();
+        boolean emptyAnswer = false;
         while (event != XmlPullParser.END_DOCUMENT) {
             switch (event) {
                 case XmlPullParser.START_TAG:
+                    emptyAnswer = true;
                     path.add(parser.getName());
                     String columnTitle = getPath(path);
                     if (repeatSheetTitles != null && repeatSheetTitles.contains(columnTitle)) { // that means it's a repeat group
                         Integer sheetId = getSheetId(columnTitle);
                         if (sheetId != null && !answersToUpload.values().contains(getSheetUrl(sheetId))) {
+                            emptyAnswer = false;
                             answersToUpload.put(columnTitle, getSheetUrl(sheetId));
                         }
                     }
                     break;
                 case XmlPullParser.TEXT:
+                    emptyAnswer = false;
                     columnTitle = getPath(path);
                     if (columnTitles.contains(columnTitle)) {
                         String answer = parser.getText();
@@ -675,6 +679,11 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
                     break;
                 case XmlPullParser.END_TAG:
+                    columnTitle = getPath(path);
+                    if (emptyAnswer && columnTitles.contains(columnTitle)
+                            && (repeatSheetTitles == null || !repeatSheetTitles.contains(columnTitle))) {
+                        answersToUpload.put(columnTitle, "");
+                    }
                     path.remove(path.size() - 1);
                     break;
                 default:
