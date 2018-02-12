@@ -215,11 +215,13 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
             if (!repeatColumnElements.isEmpty()) {
                 for (List<TreeElement> repeatGroup : repeatColumnElements) {
-                    String sheetTitle = getElementTitle(repeatGroup.get(1).getParent());
-                    if (!doesSheetExist(sheetTitle)) {
-                        sheetsHelper.addSheet(spreadsheetId, sheetTitle);
+                    if (repeatGroup.size() > 1) {
+                        String sheetTitle = getElementTitle(repeatGroup.get(1).getParent());
+                        if (!doesSheetExist(sheetTitle)) {
+                            sheetsHelper.addSheet(spreadsheetId, sheetTitle);
+                        }
+                        fillSheet(repeatGroup, sheetTitle, id, instanceFile, jrFormId, null);
                     }
-                    fillSheet(repeatGroup, sheetTitle, id, instanceFile, jrFormId, null);
                 }
             }
 
@@ -291,7 +293,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         return false;
     }
 
-    private int getSheetId(String sheetTitle) throws Exception {
+    private Integer getSheetId(String sheetTitle) throws Exception {
         for (Sheet sheet : sheetsHelper.getSpreadsheet(spreadsheetId).getSheets()) {
             if (sheet.getProperties().getTitle().equals(sheetTitle)) {
                 return sheet
@@ -299,7 +301,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                         .getSheetId();
             }
         }
-        throw new Exception();
+        return null;
     }
 
     private String getElementTitle(AbstractTreeElement element) {
@@ -654,7 +656,10 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                     path.add(parser.getName());
                     String columnTitle = getPath(path);
                     if (repeatSheetTitles != null && repeatSheetTitles.contains(columnTitle)) { // that means it's a repeat group
-                        answersToUpload.put(columnTitle, getSheetUrl(getSheetId(columnTitle)));
+                        Integer sheetId = getSheetId(columnTitle);
+                        if (sheetId != null) {
+                            answersToUpload.put(columnTitle, getSheetUrl(sheetId));
+                        }
                     }
                     break;
                 case XmlPullParser.TEXT:
