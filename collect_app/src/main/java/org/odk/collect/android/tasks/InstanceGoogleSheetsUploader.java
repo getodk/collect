@@ -657,7 +657,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                     String columnTitle = getPath(path);
                     if (repeatSheetTitles != null && repeatSheetTitles.contains(columnTitle)) { // that means it's a repeat group
                         Integer sheetId = getSheetId(columnTitle);
-                        if (sheetId != null) {
+                        if (sheetId != null && !answersToUpload.values().contains(getSheetUrl(sheetId))) {
                             answersToUpload.put(columnTitle, getSheetUrl(sheetId));
                         }
                     }
