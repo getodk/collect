@@ -245,7 +245,6 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         validColumnNames(columnTitles, id);
         readAnswers(columnTitles, instanceFile, answersToUpload, mediaToUpload, id, repeatSheetTitles);
         sleepThread();
-        validSubmissionColumnTitles(answersToUpload, id);
         if (!mediaToUpload.isEmpty()) {
             uploadMedia(mediaToUpload, instanceFile, jrFormId, id, uploadedMedia);
         }
@@ -475,16 +474,6 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                 outcome.results.put(id,
                         Collect.getInstance().getString(R.string.google_sheets_invalid_column_form,
                                 columnName));
-                throw new Exception();
-            }
-        }
-    }
-
-    private void validSubmissionColumnTitles(Multimap<String, String> answersToUpload, String id) throws Exception {
-        for (String answer : answersToUpload.values()) {
-            if (!isValidGoogleSheetsString(answer)) {
-                outcome.results.put(id, Collect.getInstance()
-                        .getString(R.string.google_sheets_invalid_column_instance, answer));
                 throw new Exception();
             }
         }
