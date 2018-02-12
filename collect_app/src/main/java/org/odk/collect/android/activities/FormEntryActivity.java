@@ -112,6 +112,7 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.FormDefCache;
 import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.TimerLogger;
@@ -121,9 +122,7 @@ import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.RangeWidget;
 import org.odk.collect.android.widgets.StringWidget;
 
-import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -131,16 +130,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import io.reactivex.Completable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
 
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
 import static android.content.DialogInterface.BUTTON_POSITIVE;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_MOVING_BACKWARDS;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
+import static org.odk.collect.android.utilities.FormDefCache.writeCacheAsync;
 
 /**
  * FormEntryActivity is responsible for displaying questions, animating
@@ -251,7 +249,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
     private boolean shouldOverrideAnimations = false;
 
-    private CompositeDisposable compositeDisposable;
+    private final CompositeDisposable formDefCacheCompositeDisposable = new CompositeDisposable();
 
     /**
      * Called when the activity is first created.
@@ -270,8 +268,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         }
 
         setContentView(R.layout.form_entry);
-
-        compositeDisposable = new CompositeDisposable();
 
         errorMessage = null;
 
@@ -2331,7 +2327,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             }
         }
         releaseOdkView();
-        compositeDisposable.dispose();
+        formDefCacheCompositeDisposable.dispose();
         super.onDestroy();
 
     }
@@ -2493,51 +2489,39 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         }
 
         refreshCurrentView();
+
         if (formDef != null) {
-            final long start = System.currentTimeMillis();
-            Timber.i("Started saving the form");
-            compositeDisposable.add(getFormDefCacheCompletable(formDef).subscribe(
-                    () -> {
-                        Timber.i("Saved the form in %.3f seconds.",
-                                (System.currentTimeMillis() - start) / 1000F);
-                    }, Timber::e
-            ));
-        }
-    }
+            final File cachedFormDefFile = FormDefCache.getCacheFile(new File(formPath));
 
-    /**
-     * Returns a RxJava Completable for serializing a FormDef and saving it in cache, if it is not already cached.
-     * @param formDef - The FormDef to be cached.
-     * @return RxJava Completable.
-     */
-    private Completable getFormDefCacheCompletable(final FormDef formDef) {
-        return Completable.create(e -> {
-
-            String hash = FileUtils.getMd5Hash(new File(formPath));
-            File formDefFile = new File(Collect.CACHE_PATH + File.separator + hash + ".formdef");
-
-            if (formDefFile.exists()) {
-                Timber.i("FormDef already cached.");
-                if (!e.isDisposed()) {
-                    e.onComplete();
-                }
-                return;
-            }
-            try {
-                DataOutputStream dos = new DataOutputStream(new FileOutputStream(formDefFile));
-                formDef.writeExternal(dos);
-                dos.flush();
-                dos.close();
-            } catch (IOException exception) {
-                Timber.e(exception);
-            }
-
-            if (!e.isDisposed()) {
-                e.onComplete();
+            if (cachedFormDefFile.exists()) {
+                Timber.i("FormDef %s is already in the cache", cachedFormDefFile.toString());
             } else {
-                Timber.i("Subscription disposed before completing");
+                try {
+                    final long formSaveStart = System.currentTimeMillis();
+                    final File tempCacheFile = File.createTempFile("cache", null,
+                            new File(Collect.CACHE_PATH));
+                    Timber.i("Started saving %s to the cache via temp file %s",
+                            formDef.getTitle(), tempCacheFile.getName());
+
+                    Disposable formDefCacheDisposable = writeCacheAsync(formDef, tempCacheFile).subscribe(
+                            () -> {
+                                if (tempCacheFile.renameTo(cachedFormDefFile)) {
+                                    Timber.i("Renamed %s to %s",
+                                            tempCacheFile.getName(), cachedFormDefFile.getName());
+                                    Timber.i("Caching %s took %.3f seconds.", formDef.getTitle(),
+                                            (System.currentTimeMillis() - formSaveStart) / 1000F);
+                                } else {
+                                    Timber.e("Unable to rename temporary file %s to cache file %s",
+                                            tempCacheFile.toString(), cachedFormDefFile.toString());
+                                }
+                            }, Timber::e
+                    );
+                    formDefCacheCompositeDisposable.add(formDefCacheDisposable);
+                } catch (IOException e) {
+                    Timber.e(e);
+                }
             }
-        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+        }
     }
 
     /**

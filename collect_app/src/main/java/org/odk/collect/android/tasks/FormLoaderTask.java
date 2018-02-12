@@ -27,7 +27,6 @@ import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.core.model.instance.utils.DefaultAnswerResolver;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.core.reference.RootTranslator;
-import org.javarosa.core.util.externalizable.ExtUtil;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryModel;
 import org.javarosa.xform.parse.XFormParser;
@@ -47,9 +46,9 @@ import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.logic.FileReferenceFactory;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.FormDefCache;
 import org.odk.collect.android.utilities.ZipUtils;
 
-import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
@@ -124,7 +123,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         final String formPath = path[0];
         final File formXml = new File(formPath);
 
-        final FormDef formDef = createFormDefFromCacheOrXml(formPath, formXml);
+        final FormDef formDef = createFormDefFromCacheOrXml(formXml);
 
         if (errorMsg != null || formDef == null) {
             return null;
@@ -219,28 +218,13 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         return data;
     }
 
-    private FormDef createFormDefFromCacheOrXml(String formPath, File formXml) {
-        final String formHash = FileUtils.getMd5Hash(formXml);
-
+    private FormDef createFormDefFromCacheOrXml(File formXml) {
         publishProgress(
                 Collect.getInstance().getString(R.string.survey_loading_reading_form_message));
 
-        final File cachedForm = new File(Collect.CACHE_PATH + File.separator + formHash + ".formdef");
-        if (cachedForm.exists()) {
-            Timber.i("Attempting to load %s from cached file: %s.",
-                    formXml.getName(), cachedForm.getAbsolutePath());
-            final long start = System.currentTimeMillis();
-            final FormDef deserializedFormDef = deserializeFormDef(cachedForm);
-            if (deserializedFormDef != null) {
-                Timber.i("Loaded in %.3f seconds.", (System.currentTimeMillis() - start) / 1000F);
-                return deserializedFormDef;
-            }
-
-            // An error occurred with deserialization. Remove the file, and make a
-            // new .formdef from xml.
-            Timber.w("Deserialization FAILED! Deleting cache file: %s",
-                    cachedForm.getAbsolutePath());
-            cachedForm.delete();
+        final FormDef formDefFromCache = new FormDefCache().readCache(formXml);
+        if (formDefFromCache != null) {
+            return formDefFromCache;
         }
 
         FileInputStream fis = null;
@@ -455,35 +439,6 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                             fec.getModel().getForm().getLocalizer());
         }
         Timber.i("Done importing data");
-    }
-
-    /**
-     * Read serialized {@link FormDef} from file and recreate as object.
-     *
-     * @param formDef serialized FormDef file
-     * @return {@link FormDef} object
-     */
-    public FormDef deserializeFormDef(File formDef) {
-
-        // TODO: any way to remove reliance on jrsp?
-        FileInputStream fis = null;
-        FormDef fd = null;
-        try {
-            // create new form def
-            fd = new FormDef();
-            fis = new FileInputStream(formDef);
-            DataInputStream dis = new DataInputStream(fis);
-
-            // read serialized formdef into new formdef
-            fd.readExternal(dis, ExtUtil.defaultPrototypes());
-            dis.close();
-
-        } catch (Exception e) {
-            Timber.e(e);
-            fd = null;
-        }
-
-        return fd;
     }
 
     @Override
