@@ -19,7 +19,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.util.Xml;
 
 import com.google.android.gms.auth.GoogleAuthException;
@@ -55,14 +54,12 @@ import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.UrlUtils;
 import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -266,7 +263,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         }
         getSheetColumns(sheetColumns, headerRow, id);
         checkForMissingColumns(sheetColumns, columnTitles, id);
-        addPhotos(answersToUpload, uploadedMedia);
+        addMediaFiles(answersToUpload, uploadedMedia);
 
         Collection<String> values = answersToUpload.get(columnTitles.get(1));
         for (int i = 0; i < values.size(); i++) {
@@ -419,7 +416,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         }
     }
 
-    private void addPhotos(Multimap<String, String> answersToUpload, Multimap<String, String> uploadedMedia) {
+    private void addMediaFiles(Multimap<String, String> answersToUpload, Multimap<String, String> uploadedMedia) {
         for (Map.Entry entry : uploadedMedia.entries()) {
             answersToUpload.put(entry.getKey().toString(), entry.getValue().toString());
         }
@@ -564,7 +561,6 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                 throw new Exception();
             }
 
-            // uploadedPhotos keeps track of the uploaded URL
             uploadedMedia.put(entry.getKey().toString(), UPLOADED_MEDIA_URL + uploadedFileId);
         }
     }
