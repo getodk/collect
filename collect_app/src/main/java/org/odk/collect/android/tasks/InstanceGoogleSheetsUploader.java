@@ -232,21 +232,20 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     private void fillSheet(List<TreeElement> columnElements, String sheetTitle,
                            String id, File instanceFile, String jrFormId, List<String> repeatSheetTitles) throws Exception {
         List<String> columnTitles = new ArrayList<>();
-        Multimap<String, String> answersToUpload = ArrayListMultimap.create();
-        Multimap<String, String> mediaToUpload = ArrayListMultimap.create();
-        Multimap<String, String> uploadedMedia = ArrayListMultimap.create();
-        List<List<Object>> sheetCells = new ArrayList<>();
         List headerRow;
-        List<String> sheetColumns = new ArrayList<>();
 
         readColumnNames(columnTitles, columnElements);
         validColumnLength(columnTitles, id);
         validColumnNames(columnTitles, id);
+        Multimap<String, String> answersToUpload = ArrayListMultimap.create();
+        Multimap<String, String> mediaToUpload = ArrayListMultimap.create();
+        Multimap<String, String> uploadedMedia = ArrayListMultimap.create();
         readAnswers(columnTitles, instanceFile, answersToUpload, mediaToUpload, id, repeatSheetTitles);
         sleepThread();
         if (!mediaToUpload.isEmpty()) {
             uploadMedia(mediaToUpload, instanceFile, jrFormId, id, uploadedMedia);
         }
+        List<List<Object>> sheetCells = new ArrayList<>();
         readSheetCells(sheetTitle, sheetCells, id);
         if (!sheetCells.isEmpty()) {
             headerRow = sheetCells.get(0);
@@ -261,6 +260,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             readSheetCells(sheetTitle, sheetCells, id); // read sheet cells again to update
             headerRow = sheetCells.get(0);
         }
+        List<String> sheetColumns = new ArrayList<>();
         getSheetColumns(sheetColumns, headerRow, id);
         checkForMissingColumns(sheetColumns, columnTitles, id);
         addMediaFiles(answersToUpload, uploadedMedia);
@@ -303,7 +303,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
     private String getElementTitle(AbstractTreeElement element) {
         StringBuilder elementTitle = new StringBuilder();
-        while (element!= null && element.getName() != null) {
+        while (element != null && element.getName() != null) {
             elementTitle.insert(0, element.getName() + "-");
             element = element.getParent();
         }
@@ -692,7 +692,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
     private String getSheetUrl(int sheetId) throws Exception {
         return googleSheetsUrl.substring(0,
-                googleSheetsUrl.lastIndexOf("/") + 1) + "edit#gid=" + sheetId;
+                googleSheetsUrl.lastIndexOf('/') + 1) + "edit#gid=" + sheetId;
     }
 
     private String getPath(List<String> path) {

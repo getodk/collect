@@ -344,7 +344,6 @@
   <string name="zoom_to_location">Приблизить к текущему местоположению</string>
   <string name="zoom_to_feature">Приблизить к сохранённой географической особенности</string>
   <string name="google_sheets_invalid_column_form">\'n%1$s\' является неправильным названием столбца в сохранённом экземпляре.  Google Таблицы требуют, чтобы в названии столбцов использовались только буквы, цифры и дефисы.</string>
-  <string name="google_sheets_invalid_column_instance">\'n%1$s\' является неправильным названием столбца в сохранённом экземпляре.  Google Таблицы требуют, чтобы в названии столбцов использовались только буквы, цифры и дефисы.</string>
   <string name="geoshape_view_change_location">Показать или посмотреть геофигуру</string>
   <string name="geotrace_view_change_location">Показать или изменить геослед</string>
   <string name="bearing">Азимут: %.3f</string>

@@ -344,7 +344,6 @@
   <string name="zoom_to_location">ពង្រីក/បង្រួមទៅកាន់ទីតាំងរបស់អ្នក</string>
   <string name="zoom_to_feature">ពង្រីក/បង្រួមទៅកាន់លក្ខណៈពិសេសដែលរក្សាទុក</string>
   <string name="google_sheets_invalid_column_form">\'n%1$s\' គឺ​ជា​ឈ្មោះ​ជួរ​ឈរ​មិន​ត្រឹម​ត្រូវ​នៅ​ក្នុង​សំណុំ​បែប​បទ​របស់​អ្នក។ សន្លឹក Google អនុញ្ញាត​ឱ្យ​តែ​តួ​អក្សរ​ ​ក្រម​លេខ​ និង​សហសញ្ញា​ក្នុង​ឈ្មោះ​ជួរ​ឈរ</string>
-  <string name="google_sheets_invalid_column_instance">\'n%1$s\' គឺ​ជា​ឈ្មោះ​ជួរ​ឈរ​មិន​ត្រឹម​ត្រូវ​នៅ​ក្នុងឯកសារដែលបានរក្សាទុក​របស់​អ្នក។ សន្លឹក Google អនុញ្ញាត​ឱ្យ​តែ​តួ​អក្សរ​ ​ក្រម​លេខ​ និង​សហសញ្ញា​ក្នុង​ឈ្មោះ​ជួរ​ឈរ</string>
   <string name="geoshape_view_change_location">មើល ឬផ្លាស់ប្តូរ GeoShape</string>
   <string name="geotrace_view_change_location">មើល ឬផ្លាស់ប្តូរ GeoTrace</string>
   <string name="bearing">ទ្រង់ទ្រាយ៖ %.3f</string>

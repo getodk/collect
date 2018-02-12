@@ -341,7 +341,6 @@
   <string name="zoom_to_location">वर्तमान स्थानावर झूम</string>
   <string name="zoom_to_feature">जतन केलेल्या वैशिष्ट्य पर्यंत झूम करा</string>
   <string name="google_sheets_invalid_column_form">आपल्या फॉर्ममध्ये  \'n%1$s\'  एक अवैध स्तंभ नाव आहे. गूगल पत्रक केवळ स्तंभ नावांमध्ये अल्फान्यूमेरिक वर्ण आणि हायफनला अनुमती देतात.</string>
-  <string name="google_sheets_invalid_column_instance">आपल्या जतन केलेल्या घटनेमध्ये \'n%1$s\'  एक अवैध स्तंभ नाव आहे. गूगल पत्रक केवळ स्तंभ नावांमध्ये अल्फान्यूमेरिक वर्ण आणि हायफनला अनुमती देतात</string>
   <string name="geoshape_view_change_location">जिओ शेप पहा किंवा बदला</string>
   <string name="geotrace_view_change_location">जिओ ट्रेस पहा किंवा बदला</string>
   <string name="bearing">असणारा:%.3f</string>

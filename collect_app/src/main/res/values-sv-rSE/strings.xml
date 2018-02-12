@@ -341,7 +341,6 @@
   <string name="zoom_to_location">Zooma till nuvarande position</string>
   <string name="zoom_to_feature">Zooma till sparat objekt</string>
   <string name="google_sheets_invalid_column_form">\'n%1$s\' är ett ogiltigt kolumnnamn i ditt formulär. Google Sheets tillåter endast alfanumeriska tecken och bindestreck i kolumnnamnet.</string>
-  <string name="google_sheets_invalid_column_instance">\'n%1$s\' är ett ogiltigt kolumnnamn i din sparade instans. Google Sheets tillåter endast alfanumeriska tecken och bindestreck i kolumnnamnet.</string>
   <string name="geoshape_view_change_location">Visa eller redigera GeoShape</string>
   <string name="geotrace_view_change_location">Visa eller redigera GeoTrace</string>
   <string name="bearing">Riktning: %.3f</string>

@@ -327,7 +327,6 @@
   <string name="zoom_to_location">Zbliżenie na bieżącą lokalizację</string>
   <string name="zoom_to_feature">Zbliżenie na zapisaną właściwość</string>
   <string name="google_sheets_invalid_column_form">\'n%1$s\' jest niepoprawną nazwą kolumny w twoim formularzu. Google Sheets umożliwia używanie jedynie znaków alfanumerycznych i myślników w nazwach kolumn</string>
-  <string name="google_sheets_invalid_column_instance">\'n%1$s\' jest niepoprawną nazwą kolumny w twojej zapisane instancji. Google Sheets umożliwia używanie wyłącznie znaków alfanumerycznych i myślników w nazwach kolumn</string>
   <string name="geoshape_view_change_location">Pokaż lub Zmień GeoShape</string>
   <string name="geotrace_view_change_location">Pokaż lub Zmień GeoTrace</string>
   <string name="bearing">Namiar: %.3f</string>

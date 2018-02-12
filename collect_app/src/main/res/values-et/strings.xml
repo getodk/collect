@@ -327,7 +327,6 @@
   <string name="zoom_to_location">Liigu hetke asukohta</string>
   <string name="zoom_to_feature">Liigu salvestatud asukohta</string>
   <string name="google_sheets_invalid_column_form">Teie vormi tulba nimi \'n%1$s\' ei ole korrektne. Google Sheets lubab tulbanimes ainult numbreid tähti ja sidekriipse</string>
-  <string name="google_sheets_invalid_column_instance">Teie salvestatud tulba nimi \'n%1$s\' ei ole korrektne. Google Sheets lubab tulbanimes ainult numbreid tähti ja sidekriipse</string>
   <string name="geoshape_view_change_location">Vaata või muuda polügooni</string>
   <string name="geotrace_view_change_location">Vaata või muuda rada</string>
   <string name="bearing">Suund: %.3f</string>

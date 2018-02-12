@@ -344,7 +344,6 @@
   <string name="zoom_to_location">Aktuellen Standort heranzoomen</string>
   <string name="zoom_to_feature">Gespeicherten Punkt heranzoomen</string>
   <string name="google_sheets_invalid_column_form">\'n%1$s\' ist ein ungültiger Spaltenname in ihrem Formular. Google Sheets erlaubt nur alphanumerische Zeichen und Bindestriche in Spaltennamen</string>
-  <string name="google_sheets_invalid_column_instance">\'n%1$s\' ist ein ungültiger Spaltenname in ihrer gespeicherten Instanz. Google Sheets erlaubt nur alphanumerische Zeichen und Bindestriche in Spaltennamen</string>
   <string name="geoshape_view_change_location">GeoShape anzeigen oder ändern</string>
   <string name="geotrace_view_change_location">GeoTrace anzeigen oder ändern</string>
   <string name="bearing">Kompass-Peilung: %.3f</string>
