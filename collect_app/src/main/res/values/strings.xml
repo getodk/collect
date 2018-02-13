@@ -13,7 +13,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation"
            tools:locale="en">
     <!--//debug-->
-    <string name="GOOGLE_API_KEY_DEBUG">AIzaSyAhgn7DBgdTyWRFXTN4ri0ZAjULokKP0K8</string>
+    <string name="GOOGLE_API_KEY_DEBUG">Replace it with your debug key</string>
     <!--release-->
     <string name="GOOGLE_API_KEY">AIzaSyBS-JQ-dnaZ_8qsbvSyr_I3rTPFd5fJsYI</string>
 
