@@ -38,6 +38,11 @@ import timber.log.Timber;
 
 import static junit.framework.Assert.assertEquals;
 
+/**
+ * This test has been created in order to check indices while navigating through a form.
+ * It's especially important while navigate through a form which contains nested regular groups
+ * and nested groups with field-list appearance since it might be tricky.
+ */
 @RunWith(AndroidJUnit4.class)
 public class FormNavigationTestCase {
 
@@ -45,39 +50,39 @@ public class FormNavigationTestCase {
 
     @Test
     public void formNavigationTestCase() throws IOException {
-        String formName = "form1.xml";
+        String formName = "simpleFieldList.xml";
         prepareFile(formName);
         testIndexes(formName, new String[] {"-1, ", "0, ", "-1, ", "0, "});
 
-        formName = "form2.xml";
+        formName = "fieldListInFieldList.xml";
         prepareFile(formName);
         testIndexes(formName, new String[] {"-1, ", "0, ", "-1, ", "0, "});
 
-        formName = "form3.xml";
+        formName = "regularGroupWithFieldListGroupInside.xml";
         prepareFile(formName);
         testIndexes(formName, new String[] {"-1, ", "0, 0, ", "-1, ", "0, 0, "});
 
-        formName = "form4.xml";
+        formName = "twoNestedRegularGroups.xml";
         prepareFile(formName);
         testIndexes(formName, new String[] {"-1, ", "0, 0, 0, ", "0, 0, 1, ", "0, 0, 2, ", "-1, ", "0, 0, 2, "});
 
-        formName = "form5.xml";
+        formName = "regularGroupWithQuestionAndRegularGroupInside.xml";
         prepareFile(formName);
         testIndexes(formName, new String[] {"-1, ", "0, 0, ", "0, 1, 0, ", "0, 1, 1, ", "-1, ", "0, 1, 1, "});
 
-        formName = "form6.xml";
+        formName = "regularGroupWithQuestionsAndRegularGroupInside.xml";
         prepareFile(formName);
         testIndexes(formName, new String[] {"-1, ", "0, 0, ", "0, 1, 0, ", "0, 2, ", "-1, ", "0, 2, "});
 
-        formName = "form7.xml";
+        formName = "fieldListWithQuestionAndRegularGroupInside.xml";
         prepareFile(formName);
         testIndexes(formName, new String[] {"-1, ", "0, ", "-1, ", "0, "});
 
-        formName = "form8.xml";
+        formName = "fieldListWithQuestionsAndRegularGroupsInside.xml";
         prepareFile(formName);
         testIndexes(formName, new String[] {"-1, ", "0, ", "-1, ", "0, "});
 
-        formName = "form9.xml";
+        formName = "threeNestedFieldListGroups.xml";
         prepareFile(formName);
         testIndexes(formName, new String[] {"-1, ", "0, ", "-1, ", "0, "});
     }

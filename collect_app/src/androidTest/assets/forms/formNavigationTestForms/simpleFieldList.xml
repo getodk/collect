@@ -1,9 +1,9 @@
 <h:html xmlns="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jr="http://openrosa.org/javarosa">
     <h:head>
-        <h:title>form2</h:title>
+        <h:title>simpleFieldList</h:title>
         <model>
             <instance>
-                <data id="build_form2_1517303824">
+                <data id="build_form1_1517264936">
                     <meta>
                         <instanceID/>
                     </meta>
@@ -44,7 +44,7 @@
     <h:body>
         <group appearance="field-list">
             <label ref="jr:itext('/data/G1:label')"/>
-            <group appearance="field-list">
+            <group>
                 <label ref="jr:itext('/data/G1/G2:label')"/>
                 <input ref="/data/G1/G2/T1">
                     <label ref="jr:itext('/data/G1/G2/T1:label')"/>

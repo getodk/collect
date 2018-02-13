@@ -512,10 +512,7 @@ public class FormController {
         GroupDef gd =
                 (GroupDef) formEntryController.getModel().getForm()
                         .getChild(getFormIndex());
-        FormIndex idxChild =
-                formEntryController.getModel().incrementIndex(
-                        getFormIndex(), true); // descend into group
-        List<FormIndex> indices = getIndices(gd, idxChild);
+        List<FormIndex> indices = getIndicesForGroup(gd);
 
         // jump to the end of the group
         formEntryController.jumpToIndex(indices.get(indices.size() - 1));
@@ -565,7 +562,7 @@ public class FormController {
                     if (element instanceof GroupDef) {
                         GroupDef gd = (GroupDef) element;
                         if (ODKView.FIELD_LIST.equalsIgnoreCase(gd.getAppearanceAttr())) {
-                            // OK this group is a field-list... see what the parent is...
+                            // jump to outermost containing field-list
                             FormEntryCaption[] fclist = this.getCaptionHierarchy(currentIndex);
                             for (FormEntryCaption caption : fclist) {
                                 if (groupIsFieldList(caption.getIndex())) {
@@ -805,32 +802,22 @@ public class FormController {
      * Returns an array of question promps.
      */
     public FormEntryPrompt[] getQuestionPrompts() throws RuntimeException {
-
-        List<FormIndex> indices = new ArrayList<>();
-        FormIndex currentIndex = getFormIndex();
-
         // For questions, there is only one.
         // For groups, there could be many, but we set that below
         FormEntryPrompt[] questions = new FormEntryPrompt[1];
 
-        IFormElement element = formEntryController.getModel().getForm().getChild(currentIndex);
+        IFormElement element = formEntryController.getModel().getForm().getChild(getFormIndex());
         if (element instanceof GroupDef) {
             GroupDef gd = (GroupDef) element;
-            // descend into group
-            FormIndex idxChild = formEntryController.getModel().incrementIndex(currentIndex, true);
-            indices.addAll(getIndices(gd, idxChild));
-
             // we only display relevant questions
             List<FormEntryPrompt> questionList = new ArrayList<>();
-            for (int i = 0; i < indices.size(); i++) {
-                FormIndex index = indices.get(i);
-
+            for (FormIndex index : getIndicesForGroup(gd)) {
                 if (getEvent(index) != FormEntryController.EVENT_QUESTION) {
                     String errorMsg =
                             "Only questions and regular groups are allowed in 'field-list'.  Bad node is: "
                                     + index.getReference().toString(false);
                     RuntimeException e = new RuntimeException(errorMsg);
-                    Timber.e(errorMsg);
+                    Timber.w(errorMsg);
                     throw e;
                 }
 
@@ -842,27 +829,33 @@ public class FormController {
                 questionList.toArray(questions);
             }
         } else {
-            // We have a quesion, so just get the one prompt
+            // We have a question, so just get the one prompt
             questions[0] = getQuestionPrompt();
         }
 
         return questions;
     }
 
-    private List<FormIndex> getIndices(GroupDef gd, FormIndex idxChild) {
+    /** Recursively gets all indices contained in this group and its children */
+    private List<FormIndex> getIndicesForGroup(GroupDef gd) {
+        return getIndicesForGroup(gd,
+                formEntryController.getModel().incrementIndex(getFormIndex(), true));
+    }
+
+    private List<FormIndex> getIndicesForGroup(GroupDef gd, FormIndex currentChildIndex) {
         List<FormIndex> indices = new ArrayList<>();
         for (int i = 0; i < gd.getChildren().size(); i++) {
             final FormEntryModel formEntryModel = formEntryController.getModel();
-            if (getEvent(idxChild) == FormEntryController.EVENT_GROUP) {
-                IFormElement nestedElement = formEntryModel.getForm().getChild(idxChild);
+            if (getEvent(currentChildIndex) == FormEntryController.EVENT_GROUP) {
+                IFormElement nestedElement = formEntryModel.getForm().getChild(currentChildIndex);
                 if (nestedElement instanceof GroupDef) {
-                    indices.addAll(getIndices((GroupDef) nestedElement,
-                            formEntryModel.incrementIndex(idxChild, true)));
-                    idxChild = formEntryModel.incrementIndex(idxChild, false);
+                    indices.addAll(getIndicesForGroup((GroupDef) nestedElement,
+                            formEntryModel.incrementIndex(currentChildIndex, true)));
+                    currentChildIndex = formEntryModel.incrementIndex(currentChildIndex, false);
                 }
             } else {
-                indices.add(idxChild);
-                idxChild = formEntryModel.incrementIndex(idxChild, false);
+                indices.add(currentChildIndex);
+                currentChildIndex = formEntryModel.incrementIndex(currentChildIndex, false);
             }
         }
         return indices;
