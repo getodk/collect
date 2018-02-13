@@ -44,315 +44,60 @@ public class FormNavigationTestCase {
     private static final String FORMS_DIRECTORY = "/odk/forms/";
 
     @Test
-    public void test1() throws IOException {
+    public void formNavigationTestCase() throws IOException {
         String formName = "form1.xml";
         prepareFile(formName);
+        testIndexes(formName, new String[] {"-1, ", "0, ", "-1, ", "0, "});
 
-        FormLoaderTask formLoaderTask = new FormLoaderTask(formPath(formName), null, null);
-        formLoaderTask.setFormLoaderListener(new FormLoaderListener() {
-            @Override
-            public void loadingComplete(FormLoaderTask task) {
-                try {
-                    FormController formController = task.getFormController();
-                    assertEquals("-1, ", formController.getFormIndex().toString());
-                    formController.stepToNextScreenEvent();
-                    assertEquals("0, ", formController.getFormIndex().toString());
-                    formController.stepToNextScreenEvent();
-                    assertEquals("-1, ", formController.getFormIndex().toString());
-                    formController.stepToPreviousScreenEvent();
-                    assertEquals("0, ", formController.getFormIndex().toString());
-                } catch (Exception e) {
-                    Timber.i(e);
-                }
-            }
+        formName = "form2.xml";
+        prepareFile(formName);
+        testIndexes(formName, new String[] {"-1, ", "0, ", "-1, ", "0, "});
 
-            @Override
-            public void loadingError(String errorMsg) {
-            }
+        formName = "form3.xml";
+        prepareFile(formName);
+        testIndexes(formName, new String[] {"-1, ", "0, 0, ", "-1, ", "0, 0, "});
 
-            @Override
-            public void onProgressStep(String stepMessage) {
+        formName = "form4.xml";
+        prepareFile(formName);
+        testIndexes(formName, new String[] {"-1, ", "0, 0, 0, ", "0, 0, 1, ", "0, 0, 2, ", "-1, ", "0, 0, 2, "});
 
-            }
-        });
-        formLoaderTask.execute(formPath(formName));
+        formName = "form5.xml";
+        prepareFile(formName);
+        testIndexes(formName, new String[] {"-1, ", "0, 0, ", "0, 1, 0, ", "0, 1, 1, ", "-1, ", "0, 1, 1, "});
+
+        formName = "form6.xml";
+        prepareFile(formName);
+        testIndexes(formName, new String[] {"-1, ", "0, 0, ", "0, 1, 0, ", "0, 2, ", "-1, ", "0, 2, "});
+
+        formName = "form7.xml";
+        prepareFile(formName);
+        testIndexes(formName, new String[] {"-1, ", "0, ", "-1, ", "0, "});
+
+        formName = "form8.xml";
+        prepareFile(formName);
+        testIndexes(formName, new String[] {"-1, ", "0, ", "-1, ", "0, "});
+
+        formName = "form9.xml";
+        prepareFile(formName);
+        testIndexes(formName, new String[] {"-1, ", "0, ", "-1, ", "0, "});
     }
 
-    @Test
-    public void test2() throws IOException {
-        String formName = "form2.xml";
-        prepareFile(formName);
-
+    private void testIndexes(String formName, String[] expectedIndexes) {
         FormLoaderTask formLoaderTask = new FormLoaderTask(formPath(formName), null, null);
         formLoaderTask.setFormLoaderListener(new FormLoaderListener() {
             @Override
             public void loadingComplete(FormLoaderTask task) {
                 try {
-                    FormController formController = task.getFormController();
-                    assertEquals("-1, ", formController.getFormIndex().toString());
-                    formController.stepToNextScreenEvent();
-                    assertEquals("0, ", formController.getFormIndex().toString());
-                    formController.stepToNextScreenEvent();
-                    assertEquals("-1, ", formController.getFormIndex().toString());
-                    formController.stepToPreviousScreenEvent();
-                    assertEquals("0, ", formController.getFormIndex().toString());
-                } catch (Exception e) {
-                    Timber.i(e);
-                }
-            }
-
-            @Override
-            public void loadingError(String errorMsg) {
-            }
-
-            @Override
-            public void onProgressStep(String stepMessage) {
-
-            }
-        });
-        formLoaderTask.execute(formPath(formName));
-    }
-
-    @Test
-    public void test3() throws IOException {
-        String formName = "form3.xml";
-        prepareFile(formName);
-
-        FormLoaderTask formLoaderTask = new FormLoaderTask(formPath(formName), null, null);
-        formLoaderTask.setFormLoaderListener(new FormLoaderListener() {
-            @Override
-            public void loadingComplete(FormLoaderTask task) {
-                try {
-                    FormController formController = task.getFormController();
-                    assertEquals("-1, ", formController.getFormIndex().toString());
-                    formController.stepToNextScreenEvent();
-                    assertEquals("0, 0, ", formController.getFormIndex().toString());
-                    formController.stepToNextScreenEvent();
-                    assertEquals("-1, ", formController.getFormIndex().toString());
-                    formController.stepToPreviousScreenEvent();
-                    assertEquals("0, 0, ", formController.getFormIndex().toString());
-                } catch (Exception e) {
-                    Timber.i(e);
-                }
-            }
-
-            @Override
-            public void loadingError(String errorMsg) {
-            }
-
-            @Override
-            public void onProgressStep(String stepMessage) {
-
-            }
-        });
-        formLoaderTask.execute(formPath(formName));
-    }
-
-    @Test
-    public void test4() throws IOException {
-        String formName = "form4.xml";
-        prepareFile(formName);
-
-        FormLoaderTask formLoaderTask = new FormLoaderTask(formPath(formName), null, null);
-        formLoaderTask.setFormLoaderListener(new FormLoaderListener() {
-            @Override
-            public void loadingComplete(FormLoaderTask task) {
-                try {
-                    FormController formController = task.getFormController();
-                    assertEquals("-1, ", formController.getFormIndex().toString());
-                    formController.stepToNextScreenEvent();
-                    assertEquals("0, 0, 0, ", formController.getFormIndex().toString());
-                    formController.stepToNextScreenEvent();
-                    assertEquals("0, 0, 1, ", formController.getFormIndex().toString());
-                    formController.stepToNextScreenEvent();
-                    assertEquals("0, 0, 2, ", formController.getFormIndex().toString());
-                    formController.stepToNextScreenEvent();
-                    assertEquals("-1, ", formController.getFormIndex().toString());
-                    formController.stepToPreviousScreenEvent();
-                    assertEquals("0, 0, 2, ", formController.getFormIndex().toString());
-                } catch (Exception e) {
-                    Timber.i(e);
-                }
-            }
-
-            @Override
-            public void loadingError(String errorMsg) {
-            }
-
-            @Override
-            public void onProgressStep(String stepMessage) {
-
-            }
-        });
-        formLoaderTask.execute(formPath(formName));
-    }
-
-    @Test
-    public void test5() throws IOException {
-        String formName = "form5.xml";
-        prepareFile(formName);
-
-        FormLoaderTask formLoaderTask = new FormLoaderTask(formPath(formName), null, null);
-        formLoaderTask.setFormLoaderListener(new FormLoaderListener() {
-            @Override
-            public void loadingComplete(FormLoaderTask task) {
-                try {
-                    FormController formController = task.getFormController();
-                    assertEquals("-1, ", formController.getFormIndex().toString());
-                    formController.stepToNextScreenEvent();
-                    assertEquals("0, 0, ", formController.getFormIndex().toString());
-                    formController.stepToNextScreenEvent();
-                    assertEquals("0, 1, 0, ", formController.getFormIndex().toString());
-                    formController.stepToNextScreenEvent();
-                    assertEquals("0, 1, 1, ", formController.getFormIndex().toString());
-                    formController.stepToNextScreenEvent();
-                    assertEquals("-1, ", formController.getFormIndex().toString());
-                    formController.stepToPreviousScreenEvent();
-                    assertEquals("0, 1, 1, ", formController.getFormIndex().toString());
-                } catch (Exception e) {
-                    Timber.i(e);
-                }
-            }
-
-            @Override
-            public void loadingError(String errorMsg) {
-            }
-
-            @Override
-            public void onProgressStep(String stepMessage) {
-
-            }
-        });
-        formLoaderTask.execute(formPath(formName));
-    }
-
-    @Test
-    public void test6() throws IOException {
-        String formName = "form6.xml";
-        prepareFile(formName);
-
-        FormLoaderTask formLoaderTask = new FormLoaderTask(formPath(formName), null, null);
-        formLoaderTask.setFormLoaderListener(new FormLoaderListener() {
-            @Override
-            public void loadingComplete(FormLoaderTask task) {
-                try {
-                    FormController formController = task.getFormController();
-                    assertEquals("-1, ", formController.getFormIndex().toString());
-                    formController.stepToNextScreenEvent();
-                    assertEquals("0, 0, ", formController.getFormIndex().toString());
-                    formController.stepToNextScreenEvent();
-                    assertEquals("0, 1, 0, ", formController.getFormIndex().toString());
-                    formController.stepToNextScreenEvent();
-                    assertEquals("0, 2, ", formController.getFormIndex().toString());
-                    formController.stepToNextScreenEvent();
-                    assertEquals("-1, ", formController.getFormIndex().toString());
-                    formController.stepToPreviousScreenEvent();
-                    assertEquals("0, 2, ", formController.getFormIndex().toString());
-                } catch (Exception e) {
-                    Timber.i(e);
-                }
-            }
-
-            @Override
-            public void loadingError(String errorMsg) {
-            }
-
-            @Override
-            public void onProgressStep(String stepMessage) {
-
-            }
-        });
-        formLoaderTask.execute(formPath(formName));
-    }
-
-    @Test
-    public void test7() throws IOException {
-        String formName = "form7.xml";
-        prepareFile(formName);
-
-        FormLoaderTask formLoaderTask = new FormLoaderTask(formPath(formName), null, null);
-        formLoaderTask.setFormLoaderListener(new FormLoaderListener() {
-            @Override
-            public void loadingComplete(FormLoaderTask task) {
-                try {
-                    FormController formController = task.getFormController();
-                    assertEquals("-1, ", formController.getFormIndex().toString());
-                    formController.stepToNextScreenEvent();
-                    assertEquals("0, ", formController.getFormIndex().toString());
-                    formController.stepToNextScreenEvent();
-                    assertEquals("-1, ", formController.getFormIndex().toString());
-                    formController.stepToPreviousScreenEvent();
-                    assertEquals("0, ", formController.getFormIndex().toString());
-                } catch (Exception e) {
-                    Timber.i(e);
-                }
-            }
-
-            @Override
-            public void loadingError(String errorMsg) {
-            }
-
-            @Override
-            public void onProgressStep(String stepMessage) {
-
-            }
-        });
-        formLoaderTask.execute(formPath(formName));
-    }
-
-    @Test
-    public void test8() throws IOException {
-        String formName = "form8.xml";
-        prepareFile(formName);
-
-        FormLoaderTask formLoaderTask = new FormLoaderTask(formPath(formName), null, null);
-        formLoaderTask.setFormLoaderListener(new FormLoaderListener() {
-            @Override
-            public void loadingComplete(FormLoaderTask task) {
-                try {
-                    FormController formController = task.getFormController();
-                    assertEquals("-1, ", formController.getFormIndex().toString());
-                    formController.stepToNextScreenEvent();
-                    assertEquals("0, ", formController.getFormIndex().toString());
-                    formController.stepToNextScreenEvent();
-                    assertEquals("-1, ", formController.getFormIndex().toString());
-                    formController.stepToPreviousScreenEvent();
-                    assertEquals("0, ", formController.getFormIndex().toString());
-                } catch (Exception e) {
-                    Timber.i(e);
-                }
-            }
-
-            @Override
-            public void loadingError(String errorMsg) {
-            }
-
-            @Override
-            public void onProgressStep(String stepMessage) {
-
-            }
-        });
-        formLoaderTask.execute(formPath(formName));
-    }
-
-    @Test
-    public void test9() throws IOException {
-        String formName = "form9.xml";
-        prepareFile(formName);
-
-        FormLoaderTask formLoaderTask = new FormLoaderTask(formPath(formName), null, null);
-        formLoaderTask.setFormLoaderListener(new FormLoaderListener() {
-            @Override
-            public void loadingComplete(FormLoaderTask task) {
-                try {
-                    FormController formController = task.getFormController();
-                    assertEquals("-1, ", formController.getFormIndex().toString());
-                    formController.stepToNextScreenEvent();
-                    assertEquals("0, ", formController.getFormIndex().toString());
-                    formController.stepToNextScreenEvent();
-                    assertEquals("-1, ", formController.getFormIndex().toString());
-                    formController.stepToPreviousScreenEvent();
-                    assertEquals("0, ", formController.getFormIndex().toString());
+                    for (int i = 0; i < expectedIndexes.length - 1; i++) {
+                        FormController formController = task.getFormController();
+                        assertEquals(expectedIndexes[i], formController.getFormIndex().toString());
+                        if (i < expectedIndexes.length - 2) {
+                            formController.stepToNextScreenEvent();
+                        } else {
+                            formController.stepToPreviousScreenEvent();
+                        }
+                        assertEquals(expectedIndexes[i + 1], formController.getFormIndex().toString());
+                    }
                 } catch (Exception e) {
                     Timber.i(e);
                 }
