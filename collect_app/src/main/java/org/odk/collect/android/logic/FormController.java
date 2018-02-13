@@ -36,6 +36,7 @@ import org.javarosa.core.services.transport.payload.ByteArrayPayload;
 import org.javarosa.core.util.JavaRosaCoreModule;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
+import org.javarosa.form.api.FormEntryModel;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.model.xform.XFormSerializingVisitor;
 import org.javarosa.model.xform.XFormsModule;
@@ -400,10 +401,8 @@ public class FormController {
                 return false;
             }
             // If at least one of groups you are inside is field list your index is in field list
-            boolean groupIsFieldList;
             for (FormEntryCaption caption : captions) {
-                groupIsFieldList = groupIsFieldList(caption.getIndex());
-                if (groupIsFieldList) {
+                if (groupIsFieldList(caption.getIndex())) {
                     return true;
                 }
             }
@@ -510,17 +509,16 @@ public class FormController {
      * the group represented by the FormIndex.
      */
     private int stepOverGroup() {
-        ArrayList<FormIndex> indicies = new ArrayList<>();
         GroupDef gd =
                 (GroupDef) formEntryController.getModel().getForm()
                         .getChild(getFormIndex());
         FormIndex idxChild =
                 formEntryController.getModel().incrementIndex(
                         getFormIndex(), true); // descend into group
-        indicies.addAll(getIndices(gd, idxChild));
+        List<FormIndex> indices = getIndices(gd, idxChild);
 
         // jump to the end of the group
-        formEntryController.jumpToIndex(indicies.get(indicies.size() - 1));
+        formEntryController.jumpToIndex(indices.get(indices.size() - 1));
         return stepToNextEvent(STEP_OVER_GROUP);
     }
 
@@ -569,10 +567,8 @@ public class FormController {
                         if (ODKView.FIELD_LIST.equalsIgnoreCase(gd.getAppearanceAttr())) {
                             // OK this group is a field-list... see what the parent is...
                             FormEntryCaption[] fclist = this.getCaptionHierarchy(currentIndex);
-                            boolean groupIsFieldList;
                             for (FormEntryCaption caption : fclist) {
-                                groupIsFieldList = groupIsFieldList(caption.getIndex());
-                                if (groupIsFieldList) {
+                                if (groupIsFieldList(caption.getIndex())) {
                                     formEntryController.jumpToIndex(caption.getIndex());
                                     break;
                                 }
@@ -810,7 +806,7 @@ public class FormController {
      */
     public FormEntryPrompt[] getQuestionPrompts() throws RuntimeException {
 
-        ArrayList<FormIndex> indicies = new ArrayList<>();
+        List<FormIndex> indices = new ArrayList<>();
         FormIndex currentIndex = getFormIndex();
 
         // For questions, there is only one.
@@ -822,12 +818,12 @@ public class FormController {
             GroupDef gd = (GroupDef) element;
             // descend into group
             FormIndex idxChild = formEntryController.getModel().incrementIndex(currentIndex, true);
-            indicies.addAll(getIndices(gd, idxChild));
+            indices.addAll(getIndices(gd, idxChild));
 
             // we only display relevant questions
-            ArrayList<FormEntryPrompt> questionList = new ArrayList<FormEntryPrompt>();
-            for (int i = 0; i < indicies.size(); i++) {
-                FormIndex index = indicies.get(i);
+            List<FormEntryPrompt> questionList = new ArrayList<>();
+            for (int i = 0; i < indices.size(); i++) {
+                FormIndex index = indices.get(i);
 
                 if (getEvent(index) != FormEntryController.EVENT_QUESTION) {
                     String errorMsg =
@@ -854,18 +850,19 @@ public class FormController {
     }
 
     private List<FormIndex> getIndices(GroupDef gd, FormIndex idxChild) {
-        ArrayList<FormIndex> indices = new ArrayList<>();
+        List<FormIndex> indices = new ArrayList<>();
         for (int i = 0; i < gd.getChildren().size(); i++) {
+            final FormEntryModel formEntryModel = formEntryController.getModel();
             if (getEvent(idxChild) == FormEntryController.EVENT_GROUP) {
-                IFormElement nestedElement = formEntryController.getModel().getForm().getChild(idxChild);
+                IFormElement nestedElement = formEntryModel.getForm().getChild(idxChild);
                 if (nestedElement instanceof GroupDef) {
                     indices.addAll(getIndices((GroupDef) nestedElement,
-                            formEntryController.getModel().incrementIndex(idxChild, true)));
-                    idxChild = formEntryController.getModel().incrementIndex(idxChild, false);
+                            formEntryModel.incrementIndex(idxChild, true)));
+                    idxChild = formEntryModel.incrementIndex(idxChild, false);
                 }
             } else {
                 indices.add(idxChild);
-                idxChild = formEntryController.getModel().incrementIndex(idxChild, false);
+                idxChild = formEntryModel.incrementIndex(idxChild, false);
             }
         }
         return indices;
