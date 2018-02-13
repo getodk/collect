@@ -171,7 +171,6 @@ public class DownloadFormsTask extends
         } catch (TaskCancelledException e) {
             Timber.i(e.getMessage());
             cleanUp(fileResult, e.file, tempMediaPath);
-            fileResult = null;
 
             // do not download additional forms.
             throw e;
@@ -289,7 +288,7 @@ public class DownloadFormsTask extends
     private UriResult findExistingOrCreateNewUri(File formFile, Map<String, String> formInfo) {
         Cursor cursor = null;
         final Uri uri;
-        String formFilePath = formFile.getAbsolutePath();
+        final String formFilePath = formFile.getAbsolutePath();
         String mediaPath = FileUtils.constructMediaPath(formFilePath);
         final boolean isNew;
 
