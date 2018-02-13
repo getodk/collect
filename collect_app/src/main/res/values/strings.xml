@@ -15,7 +15,7 @@
     <!--//debug-->
     <string name="GOOGLE_API_KEY_DEBUG">AIzaSyAhgn7DBgdTyWRFXTN4ri0ZAjULokKP0K8</string>
     <!--release-->
-    <!--<string name="GOOGLE_API_KEY">AIzaSyBS-JQ-dnaZ_8qsbvSyr_I3rTPFd5fJsYI</string>-->
+    <string name="GOOGLE_API_KEY">AIzaSyBS-JQ-dnaZ_8qsbvSyr_I3rTPFd5fJsYI</string>
 
     <string name="show_password">Show password</string>
     <string name="activity_not_found">No activity found to handle: %s</string>

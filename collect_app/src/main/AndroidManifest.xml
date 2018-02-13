@@ -285,7 +285,7 @@ the specific language governing permissions and limitations under the License.
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/GOOGLE_API_KEY_DEBUG"
+            android:value="@string/GOOGLE_API_KEY"
             />
 
         <meta-data
