@@ -64,12 +64,10 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
     private static final int GOOGLE_USER_DIALOG = 3;
     private static final String ALERT_MSG = "alertmsg";
     private static final String ALERT_SHOWING = "alertshowing";
-    private static final String INSTANCE_UPLOADED = "instanceuploaded";
     private ProgressDialog progressDialog;
     private AlertDialog alertDialog;
     private String alertMsg;
     private boolean alertShowing;
-    private boolean isInstanceUploaded;
     private Long[] instancesToSend;
     private InstanceGoogleSheetsUploader instanceGoogleSheetsUploader;
 
@@ -87,7 +85,6 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
         // default initializers
         alertMsg = getString(R.string.please_wait);
         alertShowing = false;
-        isInstanceUploaded = false;
 
         setTitle(getString(R.string.send_data));
 
@@ -99,9 +96,6 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
             }
             if (savedInstanceState.containsKey(ALERT_SHOWING)) {
                 alertShowing = savedInstanceState.getBoolean(ALERT_SHOWING, false);
-            }
-            if (savedInstanceState.containsKey(INSTANCE_UPLOADED)) {
-                isInstanceUploaded = savedInstanceState.getBoolean(INSTANCE_UPLOADED,false);
             }
         }
 
@@ -130,11 +124,6 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
     private void runTask() {
         instanceGoogleSheetsUploader = (InstanceGoogleSheetsUploader) getLastCustomNonConfigurationInstance();
         if (instanceGoogleSheetsUploader == null) {
-            if (isInstanceUploaded) {
-                // some of the instances  may be already uploaded on Google Sheets
-                finish();
-            }
-            isInstanceUploaded = true;
             instanceGoogleSheetsUploader = new InstanceGoogleSheetsUploader(accountsManager);
 
             // ensure we have a google account selected
@@ -252,7 +241,6 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
         super.onSaveInstanceState(outState);
         outState.putString(ALERT_MSG, alertMsg);
         outState.putBoolean(ALERT_SHOWING, alertShowing);
-        outState.putBoolean(INSTANCE_UPLOADED, isInstanceUploaded);
     }
 
     @Override
@@ -282,6 +270,7 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
             }
             instanceGoogleSheetsUploader.setUploaderListener(null);
         }
+        finish();
         super.onDestroy();
     }
 
