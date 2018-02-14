@@ -21,12 +21,15 @@ import android.content.Context;
 import org.javarosa.core.model.data.DateData;
 import org.javarosa.core.model.data.DateTimeData;
 import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.model.data.SelectMultiData;
+import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Date;
+import java.util.List;
 
 public class FormEntryPromptUtils {
 
@@ -36,6 +39,17 @@ public class FormEntryPromptUtils {
     public static String getAnswerText(FormEntryPrompt fep, Context context) {
         IAnswerData data = fep.getAnswerValue();
         final String appearance = fep.getQuestion().getAppearanceAttr();
+
+        if (data instanceof SelectMultiData) {
+            StringBuilder b = new StringBuilder();
+            String sep = "";
+            for (Selection value : (List<Selection>) data.getValue()) {
+                b.append(sep);
+                sep = ", ";
+                b.append(fep.getSelectItemText(value));
+            }
+            return b.toString();
+        }
 
         if (data instanceof DateTimeData) {
             return DateTimeUtils.getDateTimeLabel((Date) data.getValue(),
