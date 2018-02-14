@@ -315,36 +315,42 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
     private List<TreeElement> getColumnElements(TreeElement element) {
         List<TreeElement> columnElements = new ArrayList<>();
+        TreeElement prior = null;
         for (int i = 0; i < element.getNumChildren(); ++i) {
             TreeElement current = element.getChildAt(i);
-            switch (current.getDataType()) {
-                case org.javarosa.core.model.Constants.DATATYPE_TEXT:
-                case org.javarosa.core.model.Constants.DATATYPE_INTEGER:
-                case org.javarosa.core.model.Constants.DATATYPE_DECIMAL:
-                case org.javarosa.core.model.Constants.DATATYPE_DATE:
-                case org.javarosa.core.model.Constants.DATATYPE_TIME:
-                case org.javarosa.core.model.Constants.DATATYPE_DATE_TIME:
-                case org.javarosa.core.model.Constants.DATATYPE_CHOICE:
-                case org.javarosa.core.model.Constants.DATATYPE_CHOICE_LIST:
-                case org.javarosa.core.model.Constants.DATATYPE_BOOLEAN:
-                case org.javarosa.core.model.Constants.DATATYPE_GEOPOINT:
-                case org.javarosa.core.model.Constants.DATATYPE_BARCODE:
-                case org.javarosa.core.model.Constants.DATATYPE_BINARY:
-                case org.javarosa.core.model.Constants.DATATYPE_LONG:
-                case org.javarosa.core.model.Constants.DATATYPE_GEOSHAPE:
-                case org.javarosa.core.model.Constants.DATATYPE_GEOTRACE:
-                case org.javarosa.core.model.Constants.DATATYPE_UNSUPPORTED:
-                    columnElements.add(current);
-                    break;
-                case org.javarosa.core.model.Constants.DATATYPE_NULL:
-                    if (current.isRepeatable()) { // repeat group
+            if ((prior != null) && (prior.getName().equals(current.getName()))) { // avoid duplicated elements
+                prior = current;
+            } else {
+                switch (current.getDataType()) {
+                    case org.javarosa.core.model.Constants.DATATYPE_TEXT:
+                    case org.javarosa.core.model.Constants.DATATYPE_INTEGER:
+                    case org.javarosa.core.model.Constants.DATATYPE_DECIMAL:
+                    case org.javarosa.core.model.Constants.DATATYPE_DATE:
+                    case org.javarosa.core.model.Constants.DATATYPE_TIME:
+                    case org.javarosa.core.model.Constants.DATATYPE_DATE_TIME:
+                    case org.javarosa.core.model.Constants.DATATYPE_CHOICE:
+                    case org.javarosa.core.model.Constants.DATATYPE_CHOICE_LIST:
+                    case org.javarosa.core.model.Constants.DATATYPE_BOOLEAN:
+                    case org.javarosa.core.model.Constants.DATATYPE_GEOPOINT:
+                    case org.javarosa.core.model.Constants.DATATYPE_BARCODE:
+                    case org.javarosa.core.model.Constants.DATATYPE_BINARY:
+                    case org.javarosa.core.model.Constants.DATATYPE_LONG:
+                    case org.javarosa.core.model.Constants.DATATYPE_GEOSHAPE:
+                    case org.javarosa.core.model.Constants.DATATYPE_GEOTRACE:
+                    case org.javarosa.core.model.Constants.DATATYPE_UNSUPPORTED:
                         columnElements.add(current);
-                    } else if (current.getNumChildren() == 0) { // assume fields that don't have children are string fields
-                        columnElements.add(current);
-                    } else { // one or more children - this is a group
-                        columnElements.addAll(getColumnElements(current));
-                    }
-                    break;
+                        break;
+                    case org.javarosa.core.model.Constants.DATATYPE_NULL:
+                        if (current.isRepeatable()) { // repeat group
+                            columnElements.add(current);
+                        } else if (current.getNumChildren() == 0) { // assume fields that don't have children are string fields
+                            columnElements.add(current);
+                        } else { // one or more children - this is a group
+                            columnElements.addAll(getColumnElements(current));
+                        }
+                        break;
+                }
+                prior = current;
             }
         }
         return columnElements;
