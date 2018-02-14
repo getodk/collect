@@ -3,6 +3,7 @@
     <PreferenceScreen
         android:layout="@layout/about_preferences_item"
         android:key="odk_website"
+        android:icon="@android:drawable/ic_menu_help"
         android:summary="@string/odk_website_summary"
         android:title="@string/odk_website"/>
 
@@ -10,21 +11,27 @@
         android:layout="@layout/about_preferences_item"
         android:key="odk_forum"
         android:summary="@string/odk_forum_summary"
-        android:title="@string/odk_forum"/>
+        android:title="@string/odk_forum"
+        android:icon="@android:drawable/ic_menu_myplaces"/>
 
     <PreferenceScreen
         android:layout="@layout/about_preferences_item"
         android:key="tell_your_friends"
-        android:title="@string/tell_your_friends" />
+        android:title="@string/tell_your_friends"
+        android:icon="@android:drawable/ic_menu_share"
+        />
 
     <PreferenceScreen
         android:layout="@layout/about_preferences_item"
         android:key="leave_a_review"
-        android:title="@string/leave_a_review" />
+        android:title="@string/leave_a_review"
+        android:icon="@android:drawable/ic_menu_edit"
+        />
 
     <PreferenceScreen
         android:layout="@layout/about_preferences_item"
         android:key="open_source_licenses"
+        android:icon="@android:drawable/ic_input_get"
         android:title="@string/all_open_source_licenses" />
 
 
