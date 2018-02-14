@@ -12,6 +12,11 @@
 -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation"
            tools:locale="en">
+    <!--//debug-->
+    <string name="GOOGLE_API_KEY_DEBUG">Replace it with your debug key</string>
+    <!--release-->
+    <string name="GOOGLE_API_KEY">AIzaSyBS-JQ-dnaZ_8qsbvSyr_I3rTPFd5fJsYI</string>
+
     <string name="show_password">Show password</string>
     <string name="activity_not_found">No activity found to handle: %s</string>
     <string name="add_another">Add Group</string>
