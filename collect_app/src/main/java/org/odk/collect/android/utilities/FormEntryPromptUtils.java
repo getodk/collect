@@ -74,4 +74,15 @@ public class FormEntryPromptUtils {
 
         return fep.getAnswerText();
     }
+
+    public static String markQuestionIfIsRequired(String questionText, boolean isRequired) {
+        if (isRequired) {
+            if (questionText == null) {
+                questionText = "";
+            }
+            questionText = "<span style=\"color:#F44336\">*</span> " + questionText;
+        }
+
+        return questionText;
+    }
 }

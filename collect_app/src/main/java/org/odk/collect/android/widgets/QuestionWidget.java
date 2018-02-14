@@ -49,6 +49,7 @@ import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.views.MediaLayout;
@@ -142,13 +143,14 @@ public abstract class QuestionWidget
         questionText.setTypeface(null, Typeface.BOLD);
         questionText.setTextColor(ContextCompat.getColor(getContext(), R.color.primaryTextColor));
         questionText.setPadding(0, 0, 0, 7);
-        questionText.setText(promptText == null ? "" : TextUtils.textToHtml(promptText));
+        questionText.setText(TextUtils.textToHtml(FormEntryPromptUtils.markQuestionIfIsRequired(promptText, prompt.isRequired())));
         questionText.setMovementMethod(LinkMovementMethod.getInstance());
 
         // Wrap to the size of the parent view
         questionText.setHorizontallyScrolling(false);
 
-        if (promptText == null || promptText.length() == 0) {
+        if ((promptText == null || promptText.isEmpty())
+                && !(prompt.isRequired() && (prompt.getHelpText() == null || prompt.getHelpText().isEmpty()))) {
             questionText.setVisibility(GONE);
         }
 
@@ -324,7 +326,11 @@ public abstract class QuestionWidget
             // wrap to the widget of view
             helpText.setHorizontallyScrolling(false);
             helpText.setTypeface(null, Typeface.ITALIC);
-            helpText.setText(TextUtils.textToHtml(s));
+            if (prompt.getLongText() == null || prompt.getLongText().isEmpty()) {
+                helpText.setText(TextUtils.textToHtml(FormEntryPromptUtils.markQuestionIfIsRequired(s, prompt.isRequired())));
+            } else {
+                helpText.setText(TextUtils.textToHtml(s));
+            }
             helpText.setTextColor(ContextCompat.getColor(getContext(), R.color.primaryTextColor));
             helpText.setMovementMethod(LinkMovementMethod.getInstance());
             return helpText;
