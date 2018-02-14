@@ -14,7 +14,7 @@
     <item
         android:id="@+id/menu_save_preferences"
         android:title="@string/save_preferences"
-        android:icon="@drawable/ic_save_grey_32dp"
+        android:icon="@drawable/ic_save_black_36dp"
         app:showAsAction="always"
         />
 
