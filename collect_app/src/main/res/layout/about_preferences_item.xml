@@ -15,13 +15,12 @@
         android:layout_weight="1">
 
         <ImageView
-            android:id="@+android:id/icon"
+            android:id="@android:id/icon"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:backgroundTint="@color/black"
-            android:src="@drawable/ic_menu_save" />
+            android:background="@color/grey" />
 
         <TextView
             android:id="@android:id/title"
