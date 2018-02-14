@@ -16,12 +16,10 @@
         android:title="@string/share"
         android:icon="@drawable/ic_menu_share"
         app:showAsAction="always" />
-
     <item
         android:id="@+id/menu_save_preferences"
         android:actionProviderClass="android.widget.ShareActionProvider"
         android:title="@string/save_preferences"
         android:icon="@drawable/ic_save_black_36dp"
-        app:showAsAction="always"
-		/>
+        app:showAsAction="always"/>
 </menu>
