@@ -1,5 +1,6 @@
 package org.odk.collect.android.utilities;
 
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -96,10 +97,15 @@ public class CustomTabHelper {
             customTabsIntent.intent.setPackage(getPackageName(context).get(0));
             customTabsIntent.launchUrl(context, uri);
         } else {
-            //open in webview
-            Intent intent = new Intent(context, WebViewActivity.class);
-            intent.putExtra(OPEN_URL, uri.toString());
-            context.startActivity(intent);
+            try {
+                //open in external browser
+                context.startActivity(new Intent(Intent.ACTION_VIEW, uri));
+            } catch (ActivityNotFoundException e) {
+                //open in webview
+                Intent intent = new Intent(context, WebViewActivity.class);
+                intent.putExtra(OPEN_URL, uri.toString());
+                context.startActivity(intent);
+            }
         }
     }
 }
