@@ -58,6 +58,11 @@ public class AppModule {
         return new RxEventBus();
     }
 
+    @Provides
+    Context bindContext(Application application) {
+        return application;
+    }
+
     @PerApplication
     @Provides
     CredentialsProvider provideCredentialsProvider() {

@@ -14,9 +14,13 @@
 
 package org.odk.collect.android.preferences;
 
+import android.content.Context;
 import android.content.SharedPreferences.Editor;
 
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.injection.config.scopes.PerApplication;
+
+import javax.inject.Inject;
 
 import static org.odk.collect.android.preferences.AdminKeys.ALL_KEYS;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
@@ -27,8 +31,14 @@ public class AdminSharedPreferences {
     private static AdminSharedPreferences instance;
     private final android.content.SharedPreferences sharedPreferences;
 
-    private AdminSharedPreferences() {
+    public AdminSharedPreferences() {
         sharedPreferences = Collect.getInstance().getSharedPreferences(ADMIN_PREFERENCES, 0);
+    }
+
+    @Inject
+    @PerApplication
+    public AdminSharedPreferences(Context context) {
+        sharedPreferences = context.getSharedPreferences(ADMIN_PREFERENCES, 0);
     }
 
     public static synchronized AdminSharedPreferences getInstance() {
