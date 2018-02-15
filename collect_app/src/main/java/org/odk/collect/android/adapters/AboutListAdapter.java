@@ -70,7 +70,7 @@ public class AboutListAdapter extends RecyclerView.Adapter<AboutListAdapter.View
             this.listener = listener;
             imageView = view.findViewById(R.id.imageView);
             title = view.findViewById(R.id.title);
-            summary = view.findViewById(R.id.sumary);
+            summary = view.findViewById(R.id.summary);
             view.setOnClickListener(this);
         }
 

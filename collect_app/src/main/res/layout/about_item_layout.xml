@@ -41,7 +41,7 @@ limitations under the License.
         tools:text="@string/odk_website" />
 
     <TextView
-        android:id="@+id/sumary"
+        android:id="@+id/summary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/title"
