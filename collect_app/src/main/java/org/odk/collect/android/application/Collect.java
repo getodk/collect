@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.application;
 
-import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -65,8 +64,8 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
-import dagger.android.DispatchingAndroidInjector;
-import dagger.android.HasActivityInjector;
+import dagger.android.AndroidInjector;
+import dagger.android.DaggerApplication;
 import timber.log.Timber;
 
 import static org.odk.collect.android.logic.PropertyManager.PROPMGR_USERNAME;
@@ -80,7 +79,7 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
  *
  * @author carlhartung
  */
-public class Collect extends Application implements HasActivityInjector {
+public class Collect extends DaggerApplication {
 
     // Storage paths
     public static final String ODK_ROOT = Environment.getExternalStorageDirectory()
@@ -113,9 +112,6 @@ public class Collect extends Application implements HasActivityInjector {
     private ExternalDataManager externalDataManager;
     private Tracker tracker;
     private AppComponent applicationComponent;
-
-    @Inject
-    DispatchingAndroidInjector<Activity> androidInjector;
 
     public static Collect getInstance() {
         return singleton;
@@ -184,6 +180,17 @@ public class Collect extends Application implements HasActivityInjector {
             }
         }
         return false;
+    }
+
+    // Preventing multiple clicks, using threshold of 1000 ms
+    public static boolean allowClick() {
+        long elapsedRealtime = SystemClock.elapsedRealtime();
+        boolean allowClick = (lastClickTime == 0 || lastClickTime == elapsedRealtime) // just for tests
+                || elapsedRealtime - lastClickTime > 1000;
+        if (allowClick) {
+            lastClickTime = elapsedRealtime;
+        }
+        return allowClick;
     }
 
     public ActivityLogger getActivityLogger() {
@@ -259,12 +266,6 @@ public class Collect extends Application implements HasActivityInjector {
         super.onCreate();
         singleton = this;
 
-        applicationComponent = DaggerAppComponent.builder()
-                .application(this)
-                .build();
-
-        applicationComponent.inject(this);
-
         try {
             JobManager
                     .create(this)
@@ -295,6 +296,11 @@ public class Collect extends Application implements HasActivityInjector {
         }
 
         setupLeakCanary();
+    }
+
+    @Override
+    protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
+        return DaggerAppComponent.builder().application(this).build();
     }
 
     protected RefWatcher setupLeakCanary() {
@@ -329,22 +335,6 @@ public class Collect extends Application implements HasActivityInjector {
         return tracker;
     }
 
-
-    private static class CrashReportingTree extends Timber.Tree {
-        @Override
-        protected void log(int priority, String tag, String message, Throwable t) {
-            if (priority == Log.VERBOSE || priority == Log.DEBUG || priority == Log.INFO) {
-                return;
-            }
-
-            Crashlytics.log(priority, tag, message);
-
-            if (t != null && priority == Log.ERROR) {
-                Crashlytics.logException(t);
-            }
-        }
-    }
-
     public void initProperties() {
         PropertyManager mgr = new PropertyManager(this);
 
@@ -363,17 +353,6 @@ public class Collect extends Application implements HasActivityInjector {
         AdminSharedPreferences.getInstance().reloadPreferences();
     }
 
-    // Preventing multiple clicks, using threshold of 1000 ms
-    public static boolean allowClick() {
-        long elapsedRealtime = SystemClock.elapsedRealtime();
-        boolean allowClick = (lastClickTime == 0 || lastClickTime == elapsedRealtime) // just for tests
-                || elapsedRealtime - lastClickTime > 1000;
-        if (allowClick) {
-            lastClickTime = elapsedRealtime;
-        }
-        return allowClick;
-    }
-
     public AppComponent getComponent() {
         return applicationComponent;
     }
@@ -382,8 +361,18 @@ public class Collect extends Application implements HasActivityInjector {
         this.applicationComponent = applicationComponent;
     }
 
-    @Override
-    public DispatchingAndroidInjector<Activity> activityInjector() {
-        return androidInjector;
+    private static class CrashReportingTree extends Timber.Tree {
+        @Override
+        protected void log(int priority, String tag, String message, Throwable t) {
+            if (priority == Log.VERBOSE || priority == Log.DEBUG || priority == Log.INFO) {
+                return;
+            }
+
+            Crashlytics.log(priority, tag, message);
+
+            if (t != null && priority == Log.ERROR) {
+                Crashlytics.logException(t);
+            }
+        }
     }
 }
