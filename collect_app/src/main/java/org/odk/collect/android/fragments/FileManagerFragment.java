@@ -82,6 +82,7 @@ public abstract class FileManagerFragment extends AppListFragment {
     @Override
     protected void updateAdapter() {
         checkPreviouslyCheckedItems();
+        toggleButtonLabel(toggleButton, getListView());
         deleteButton.setEnabled(areCheckedItems());
     }
 }
