@@ -429,11 +429,17 @@ public class FormController {
                 && indexIsInFieldList()));
     }
 
-    public boolean isCurrentQuestionFirstInForm() throws JavaRosaException {
+    public boolean isCurrentQuestionFirstInForm() {
+        boolean isFirstQuestion = true;
         FormIndex originalFormIndex = getFormIndex();
-        boolean firstQuestion = (stepToPreviousScreenEvent() == FormEntryController.EVENT_BEGINNING_OF_FORM);
+        try {
+            isFirstQuestion =  stepToPreviousScreenEvent() == FormEntryController.EVENT_BEGINNING_OF_FORM
+                    && stepToNextScreenEvent() != FormEntryController.EVENT_PROMPT_NEW_REPEAT;
+        } catch (JavaRosaException e) {
+            Timber.e(e);
+        }
         jumpToIndex(originalFormIndex);
-        return firstQuestion;
+        return isFirstQuestion;
     }
 
     /**
