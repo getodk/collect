@@ -11,9 +11,6 @@ import android.support.customtabs.CustomTabsIntent;
 import android.support.customtabs.CustomTabsService;
 import android.support.customtabs.CustomTabsServiceConnection;
 import android.support.customtabs.CustomTabsSession;
-import android.support.v4.content.ContextCompat;
-
-import org.odk.collect.android.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,10 +90,6 @@ public class CustomTabHelper {
         if (getPackageName(context).size() != 0) {
             //open in chrome custom tab
             new CustomTabsIntent.Builder()
-                    .setToolbarColor(ContextCompat.getColor(context, R.color.tintColor))
-                    .setSecondaryToolbarColor(ContextCompat.getColor(context, R.color.primaryTextColor))
-                    .setStartAnimations(context, R.anim.slide_in_right, R.anim.slide_out_left)
-                    .setExitAnimations(context, R.anim.slide_in_left, R.anim.slide_out_right)
                     .build()
                     .launchUrl(context, uri);
         } else {
