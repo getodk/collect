@@ -32,6 +32,7 @@ import org.odk.collect.android.activities.DrawActivity;
 import org.odk.collect.android.application.Collect;
 
 import java.io.File;
+import java.util.Locale;
 
 import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
 import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
@@ -94,12 +95,7 @@ public class AnnotateWidget extends BaseImageWidget {
         answerLayout.addView(annotateButton);
         answerLayout.addView(errorTextView);
 
-        // and hide the capture, choose and annotate button if read-only
-        if (getFormEntryPrompt().isReadOnly()) {
-            captureButton.setVisibility(View.GONE);
-            chooseButton.setVisibility(View.GONE);
-            annotateButton.setVisibility(View.GONE);
-        }
+        hideButtonsIfNeeded();
         errorTextView.setVisibility(View.GONE);
     }
 
@@ -164,6 +160,17 @@ public class AnnotateWidget extends BaseImageWidget {
             case R.id.choose_image:
                 chooseImage();
                 break;
+        }
+    }
+
+    private void hideButtonsIfNeeded() {
+        if (getFormEntryPrompt().isReadOnly()) {
+            captureButton.setVisibility(View.GONE);
+            chooseButton.setVisibility(View.GONE);
+            annotateButton.setVisibility(View.GONE);
+        } else if (getFormEntryPrompt().getAppearanceHint() != null
+                && getFormEntryPrompt().getAppearanceHint().toLowerCase(Locale.ENGLISH).contains("new")) {
+            chooseButton.setVisibility(View.GONE);
         }
     }
 
