@@ -273,7 +273,7 @@
       <bind nodeset="/all-widgets/table_list_test/table_list_2" type="select"/>
       <bind nodeset="/all-widgets/table_list_test/list_widget" type="select1"/>
       <bind nodeset="/all-widgets/table_list_test/list_multi_widget" type="select"/>
-      <bind nodeset="/all-widgets/my_trigger" required="true()"/>
+      <bind nodeset="/all-widgets/my_trigger"/>
       <bind calculate="concat('uuid:', uuid())" nodeset="/all-widgets/meta/instanceID" readonly="true()" type="string"/>
     </model>
   </h:head>
