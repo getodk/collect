@@ -736,7 +736,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         }
         if (cancelDialog.isShowing()) {
             cancelDialog.dismiss();
-            finish();
         }
     }
 
