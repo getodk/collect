@@ -265,6 +265,7 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
             }
         } else {
             onException(errorString);
+            setFocus(getContext());
         }
     }
 
