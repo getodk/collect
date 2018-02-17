@@ -21,29 +21,58 @@ public class FormDefCache {
     /**
      * Returns a RxJava Completable for serializing a FormDef and saving it in cache.
      *
-     * @param formDef       - The FormDef to be cached.
-     * @param tempCacheFile - The temporary file into which to write the serialized FormDef.
+     * @param formDef           - The FormDef to be cached.
+     * @param cachedFormDefFile - The File object used for saving the cached FormDef
      * @return RxJava Completable.
      */
-    public static Completable writeCacheAsync(FormDef formDef, File tempCacheFile) {
+    public static Completable writeCacheAsync(FormDef formDef, File cachedFormDefFile) {
         return Completable.create(emitter -> {
+            final long formSaveStart = System.currentTimeMillis();
+            final File tempCacheFile = File.createTempFile("cache", null,
+                    new File(Collect.CACHE_PATH));
+            Timber.i("Started saving %s to the cache via temp file %s",
+                    formDef.getTitle(), tempCacheFile.getName());
+
+            Exception caughtException = null;
             try {
                 DataOutputStream dos = new DataOutputStream(new FileOutputStream(tempCacheFile));
                 formDef.writeExternal(dos);
-                dos.flush();
                 dos.close();
             } catch (IOException exception) {
-                Timber.e(exception);
+                caughtException = exception;
             }
 
-            if (emitter.isDisposed()) {
+            final boolean tempFileNeedsDeleting =
+                    emitter.isDisposed()        // It is no longer wanted
+                    || caughtException != null; // or there was an error creating it
+
+            // Delete or rename the temp file
+            if (tempFileNeedsDeleting) {
                 Timber.i("Deleting no-longer-wanted temp cache file %s for form %s",
                         tempCacheFile.getName(), formDef.getTitle());
                 if (!tempCacheFile.delete()) {
                     Timber.e("Unable to delete " + tempCacheFile.getName());
                 }
             } else {
-                emitter.onComplete();
+                if (tempCacheFile.renameTo(cachedFormDefFile)) {
+                    Timber.i("Renamed %s to %s",
+                            tempCacheFile.getName(), cachedFormDefFile.getName());
+                    Timber.i("Caching %s took %.3f seconds.", formDef.getTitle(),
+                            (System.currentTimeMillis() - formSaveStart) / 1000F);
+                } else {
+                    Timber.e("Unable to rename temporary file %s to cache file %s",
+                            tempCacheFile.toString(), cachedFormDefFile.toString());
+                }
+            }
+
+            if (!emitter.isDisposed()) {
+                if (caughtException == null) {
+                    emitter.onComplete();
+                } else {
+                    emitter.onError(caughtException);
+                }
+            } else if (caughtException != null) { // The client is no longer there, so log the exception
+                Timber.e(caughtException);
             }
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }

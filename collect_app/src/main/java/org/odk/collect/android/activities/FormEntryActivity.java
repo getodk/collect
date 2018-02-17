@@ -2496,30 +2496,9 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             if (cachedFormDefFile.exists()) {
                 Timber.i("FormDef %s is already in the cache", cachedFormDefFile.toString());
             } else {
-                try {
-                    final long formSaveStart = System.currentTimeMillis();
-                    final File tempCacheFile = File.createTempFile("cache", null,
-                            new File(Collect.CACHE_PATH));
-                    Timber.i("Started saving %s to the cache via temp file %s",
-                            formDef.getTitle(), tempCacheFile.getName());
-
-                    Disposable formDefCacheDisposable = writeCacheAsync(formDef, tempCacheFile).subscribe(
-                            () -> {
-                                if (tempCacheFile.renameTo(cachedFormDefFile)) {
-                                    Timber.i("Renamed %s to %s",
-                                            tempCacheFile.getName(), cachedFormDefFile.getName());
-                                    Timber.i("Caching %s took %.3f seconds.", formDef.getTitle(),
-                                            (System.currentTimeMillis() - formSaveStart) / 1000F);
-                                } else {
-                                    Timber.e("Unable to rename temporary file %s to cache file %s",
-                                            tempCacheFile.toString(), cachedFormDefFile.toString());
-                                }
-                            }, Timber::e
-                    );
-                    formDefCacheCompositeDisposable.add(formDefCacheDisposable);
-                } catch (IOException e) {
-                    Timber.e(e);
-                }
+                Disposable formDefCacheDisposable =
+                        writeCacheAsync(formDef, cachedFormDefFile).subscribe(() -> {}, Timber::e);
+                formDefCacheCompositeDisposable.add(formDefCacheDisposable);
             }
         }
     }
