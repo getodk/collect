@@ -107,6 +107,7 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
     }
 
     private void generateCode() {
+        shareIntent = null;
         progressBar.setVisibility(VISIBLE);
         qrImageView.setVisibility(GONE);
         addPasswordStatusString();
@@ -133,8 +134,8 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
             String preferencesString = SharedPreferencesUtils.getJSONFromPreferences(getSelectedPasswordKeys());
             String md5Hash = FileUtils.getMd5Hash(preferencesString);
 
-            boolean shouldGenerateQRCode = true;
-            Bitmap bitmap;
+            boolean shouldWriteToDisk = true;
+            Bitmap bitmap = null;
 
             File md5CacheFile = new File(MD5_CACHE_PATH);
             if (md5CacheFile.exists()) {
@@ -145,36 +146,36 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
                  * then don't generate QRCode and read the one saved in disk
                  */
                 if (md5Cache.trim().equals(md5Hash)) {
-                    shouldGenerateQRCode = false;
+                    Timber.i("Loading QRCode from the disk...");
+                    bitmap = BitmapFactory.decodeFile(QR_CODE_FILEPATH);
+                    shouldWriteToDisk = false;
                 }
             }
 
-
-            if (!shouldGenerateQRCode) {
-                Timber.i("Loading QRCode from the disk...");
-                bitmap = BitmapFactory.decodeFile(QR_CODE_FILEPATH);
-            } else {
+            // If the file is not found in the disk or md5Hash not matched
+            if (bitmap == null) {
                 Timber.i("Generating QRCode...");
                 bitmap = QRCodeUtils.generateQRBitMap(preferencesString, QR_CODE_WIDTH, QR_CODE_HEIGHT);
+                shouldWriteToDisk = true;
             }
 
             if (bitmap != null) {
                 // Send the QRCode to the observer
                 emitter.onNext(bitmap);
-            }
 
-            if (shouldGenerateQRCode) {
                 // Save the QRCode to disk
-                Timber.i("Saving QR Code to disk... : " + QR_CODE_FILEPATH);
-                FileUtils.saveBitmapToFile(bitmap, QR_CODE_FILEPATH);
+                if (shouldWriteToDisk) {
+                    Timber.i("Saving QR Code to disk... : " + QR_CODE_FILEPATH);
+                    FileUtils.saveBitmapToFile(bitmap, QR_CODE_FILEPATH);
 
-                // update .md5 file
-                Timber.i("Updated .md5 file contents");
-                FileUtils.writeToFile(md5CacheFile, md5Hash, false);
+                    // update .md5 file
+                    Timber.i("Updated .md5 file contents");
+                    FileUtils.writeToFile(md5CacheFile, md5Hash, false);
+                }
+
+                // Send the task completion event
+                emitter.onComplete();
             }
-
-            // Send the task completion event
-            emitter.onComplete();
         });
     }
 
@@ -314,7 +315,9 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_item_share:
-                getActivity().startActivity(Intent.createChooser(shareIntent, getString(R.string.share_qrcode)));
+                if (shareIntent != null) {
+                    startActivity(Intent.createChooser(shareIntent, getString(R.string.share_qrcode)));
+                }
                 return true;
             case R.id.menu_save_preferences:
                 File writeDir = new File(Collect.SETTINGS);
