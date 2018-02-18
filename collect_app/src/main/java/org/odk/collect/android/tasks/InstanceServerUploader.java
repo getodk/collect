@@ -78,7 +78,7 @@ public class InstanceServerUploader extends InstanceUploader {
        _3GP("3gp",  ContentType.create("video/3gpp")),
         AVI("avi",  ContentType.create("video/avi")),
         AMR("amr",  ContentType.create("audio/amr")),
-        CSV("csv",  ContentType.create("observeText/csv")),
+        CSV("csv",  ContentType.create("text/csv")),
         JPG("jpg",  ContentType.create("image/jpeg")),
         MP3("mp3",  ContentType.create("audio/mp3")),
         MP4("mp4",  ContentType.create("video/mp4")),

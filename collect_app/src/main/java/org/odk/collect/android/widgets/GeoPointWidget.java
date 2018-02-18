@@ -119,7 +119,7 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
         answerLayout.addView(answerDisplay);
         addAnswerView(answerLayout);
 
-        // Set vars Label/observeText for button enable view or collect...
+        // Set vars Label/text for button enable view or collect...
         boolean dataAvailable = false;
         String s = prompt.getAnswerText();
         if (s != null && !s.equals("")) {
@@ -131,7 +131,7 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
     }
 
     private void updateButtonLabelsAndVisibility(boolean dataAvailable) {
-        // BUT for mapsV2, we only show the getLocationButton, altering its observeText.
+        // BUT for mapsV2, we only show the getLocationButton, altering its text.
         // for maps, we show the view button.
 
         if (useMapsV2 && useMaps) {

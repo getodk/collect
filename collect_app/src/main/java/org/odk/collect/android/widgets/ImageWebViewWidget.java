@@ -121,7 +121,7 @@ public class ImageWebViewWidget extends QuestionWidget implements FileWidget {
             String html = "<body>" + constructImageElement() + "</body>";
 
             imageDisplay.loadDataWithBaseURL("file:///" + getInstanceFolder()
-                    + File.separator, html, "observeText/html", "utf-8", "");
+                    + File.separator, html, "text/html", "utf-8", "");
             answerLayout.addView(imageDisplay);
         }
         addAnswerView(answerLayout);
@@ -202,7 +202,7 @@ public class ImageWebViewWidget extends QuestionWidget implements FileWidget {
             // update HTML to not hold image file reference.
             String html = "<body></body>";
             imageDisplay.loadDataWithBaseURL("file:///" + getInstanceFolder()
-                    + File.separator, html, "observeText/html", "utf-8", "");
+                    + File.separator, html, "text/html", "utf-8", "");
 
             imageDisplay.setVisibility(View.INVISIBLE);
         }

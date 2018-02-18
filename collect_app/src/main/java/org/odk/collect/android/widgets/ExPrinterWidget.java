@@ -35,7 +35,7 @@ import org.odk.collect.android.widgets.interfaces.BinaryWidget;
  * <p>
  * <p>The default button observe is "Print Label"
  * <p>
- * <p>You may override the button observeText and the error observeText that is
+ * <p>You may override the button text and the error text that is
  * displayed when the app is missing by using jr:itext() values. The
  * special itext form values are 'buttonText' and 'noPrinterErrorString',
  * respectively.</p>

@@ -337,7 +337,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             return;
         }
 
-        // Check to see if this is a screen flip or a new form get.
+        // Check to see if this is a screen flip or a new form load.
         Object data = getLastCustomNonConfigurationInstance();
         if (data instanceof FormLoaderTask) {
             formLoaderTask = (FormLoaderTask) data;
@@ -349,7 +349,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     refreshCurrentView();
                 } else {
                     Timber.w("Reloading form and restoring state.");
-                    // we need to launch the form loader to get the form
+                    // we need to launch the form loader to load the form
                     // controller...
                     formLoaderTask = new FormLoaderTask(instancePath,
                             startingXPath, waitingXPath);

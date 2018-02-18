@@ -58,7 +58,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  * <p>
  * <p>The default button text is "Launch"
  * <p>
- * <p>You may override the button observeText and the error observeText that is
+ * <p>You may override the button text and the error text that is
  * displayed when the app is missing by using jr:itext() values.
  * <p>
  * <p>To use this widget, define an appearance on the &lt;input/&gt;

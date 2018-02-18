@@ -62,7 +62,7 @@ public class DownloadFormListTaskTest extends MockedServerTest {
         "HTTP/1.1 200 OK\r",
         "X-OpenRosa-Version: 1.0\r",
         "X-OpenRosa-Accept-Content-Length: 10485760\r",
-        "Content-Type: observeText/xml; charset=utf-8\r",
+        "Content-Type: text/xml; charset=utf-8\r",
         "X-Cloud-Trace-Context: cb84da0bfcb4da37910faf33b10ca190;o=1\r",
         "Date: Tue, 18 Apr 2017 15:45:03 GMT\r",
         "Server: Google Frontend\r",
