@@ -44,6 +44,7 @@ import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.utilities.CompressionUtils;
+import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.QRCodeUtils;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
@@ -75,6 +76,7 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
     private static final int SELECT_PHOTO = 111;
     private static final int QR_CODE_WIDTH = 400; // in pixels
     private static final int QR_CODE_HEIGHT = 400; // in pixels
+    private static final String QR_CODE_FILENAME = "collect-settings.jpeg"; // stored under odk/settings/
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
     private final boolean[] checkedItems = new boolean[]{true, true};
@@ -115,8 +117,7 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
                     progressBar.setVisibility(GONE);
                     qrImageView.setVisibility(VISIBLE);
                     qrImageView.setImageBitmap(bitmap);
-                    updateShareIntent(bitmap);
-                }, Timber::e);
+                }, Timber::e, this::updateShareIntent);
         compositeDisposable.add(disposable);
     }
 
@@ -128,9 +129,17 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
 
     private Observable<Bitmap> getQRCodeGeneratorObservable() {
         return Observable.create(emitter -> {
-            Bitmap bitmap = QRCodeUtils.generateQRBitMap(getSelectedPasswordKeys(), QR_CODE_WIDTH, QR_CODE_HEIGHT);
+            String preferencesString = SharedPreferencesUtils.getJSONFromPreferences(getSelectedPasswordKeys());
+            Bitmap bitmap = QRCodeUtils.generateQRBitMap(preferencesString, QR_CODE_WIDTH, QR_CODE_HEIGHT);
             if (bitmap != null) {
+                // Send the qr code to the observer
                 emitter.onNext(bitmap);
+
+                // Save the qr code to disk
+                String filePath = Collect.SETTINGS + File.separator + QR_CODE_FILENAME;
+                Timber.i("Saving QR Code to disk... : " + filePath);
+                FileUtils.saveBitmapToFile(bitmap, filePath);
+                emitter.onComplete();
             }
         });
     }
@@ -149,14 +158,13 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
         editQRCode.setText(status);
     }
 
-    private void updateShareIntent(Bitmap qrCode) throws IOException {
-        // Send an intent to share saved image
+    private void updateShareIntent() {
+        // Initialize the intent to share qr code
         shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
         shareIntent.setType("image/*");
 
-        // Save the bitmap to a file
-        File shareFile = QRCodeUtils.saveBitmapToCache(qrCode);
+        File shareFile = new File(Collect.SETTINGS + File.separator + QR_CODE_FILENAME);
         shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + shareFile));
     }
 

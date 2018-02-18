@@ -36,14 +36,10 @@ import com.google.zxing.multi.qrcode.QRCodeMultiReader;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
-import org.json.JSONException;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
@@ -91,22 +87,9 @@ public class QRCodeUtils {
         return new BinaryBitmap(new HybridBinarizer(source));
     }
 
-    public static File saveBitmapToCache(Bitmap qrCode) throws IOException {
-        //Save the bitmap to a file
-        File cache = Collect.getInstance().getApplicationContext().getExternalCacheDir();
-        File shareFile = new File(cache, "shareImage.jpeg");
-        FileOutputStream out = new FileOutputStream(shareFile);
-        qrCode.compress(Bitmap.CompressFormat.JPEG, 100, out);
-        out.close();
-        return shareFile;
-    }
-
-    public static Bitmap generateQRBitMap(Collection<String> keys, int width, int height)
-            throws IOException, JSONException, WriterException {
+    public static Bitmap generateQRBitMap(String data, int width, int height) throws IOException, WriterException {
         long time = System.currentTimeMillis();
-
-        String jsonObject = SharedPreferencesUtils.getJSONFromPreferences(keys);
-        String compressedData = CompressionUtils.compress(jsonObject);
+        String compressedData = CompressionUtils.compress(data);
 
         // Maximum capacity for QR Codes is 4,296 characters (Alphanumeric)
         if (compressedData.length() > 4000) {
