@@ -43,7 +43,7 @@ public class SharedPreferencesUtils {
 
     private final Context context = Collect.getInstance();
 
-    String getJSONFromPreferences(Collection<String> keys) throws JSONException {
+    public static String getJSONFromPreferences(Collection<String> keys) throws JSONException {
         keys.addAll(GENERAL_KEYS.keySet());
 
         SharedPreferencesUtils obj = new SharedPreferencesUtils();

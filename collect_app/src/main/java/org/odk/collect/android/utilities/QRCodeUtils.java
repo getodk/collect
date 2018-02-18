@@ -102,15 +102,12 @@ public class QRCodeUtils {
     }
 
     public static Bitmap generateQRBitMap(Collection<String> keys) {
-        String content;
         try {
-            SharedPreferencesUtils obj = new SharedPreferencesUtils();
-            content = obj.getJSONFromPreferences(keys);
-            String compressedData = CompressionUtils.compress(content);
+            String jsonObject = SharedPreferencesUtils.getJSONFromPreferences(keys);
+            String compressedData = CompressionUtils.compress(jsonObject);
 
             //Maximum capacity for QR Codes is 4,296 characters (Alphanumeric)
             if (compressedData.length() > 4000) {
-                ToastUtils.showLongToast(Collect.getInstance().getString(R.string.encoding_max_limit));
                 Timber.e(Collect.getInstance().getString(R.string.encoding_max_limit));
                 return null;
             }
