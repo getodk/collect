@@ -16,7 +16,6 @@ package org.odk.collect.android.fragments;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -30,7 +29,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -84,6 +82,7 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
     private ProgressBar progressBar;
     private Intent shareIntent;
     private TextView editQRCode;
+    private AlertDialog dialog;
 
     @Nullable
     @Override
@@ -98,10 +97,8 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
         progressBar = view.findViewById(R.id.progressBar);
         editQRCode = view.findViewById(R.id.edit_qrcode);
         editQRCode.setOnClickListener(this);
-        Button scan = view.findViewById(R.id.btnScan);
-        scan.setOnClickListener(this);
-        Button select = view.findViewById(R.id.btnSelect);
-        select.setOnClickListener(this);
+        view.findViewById(R.id.btnScan).setOnClickListener(this);
+        view.findViewById(R.id.btnSelect).setOnClickListener(this);
         generateCode();
         return view;
     }
@@ -111,13 +108,10 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
         qrImageView.setVisibility(GONE);
         addPasswordStatusString();
 
-        long time = System.currentTimeMillis();
-
         Disposable disposable = getQRCodeGeneratorObservable()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(bitmap -> {
-                    Timber.i("QR Code generation took : %d ms", (System.currentTimeMillis() - time));
                     progressBar.setVisibility(GONE);
                     qrImageView.setVisibility(VISIBLE);
                     qrImageView.setImageBitmap(bitmap);
@@ -170,8 +164,7 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnScan:
-                IntentIntegrator integrator = IntentIntegrator.forFragment(this);
-                integrator
+                IntentIntegrator.forFragment(this)
                         .setCaptureActivity(ScannerWithFlashlightActivity.class)
                         .setBeepEnabled(true)
                         .setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES)
@@ -187,36 +180,29 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
                 break;
 
             case R.id.edit_qrcode:
-                String[] items = new String[]{
-                        getString(R.string.admin_password),
-                        getString(R.string.server_password)};
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-                        .setTitle(R.string.include_password_dialog)
-                        .setMultiChoiceItems(items, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                                checkedItems[which] = isChecked;
-                            }
-                        })
-                        .setCancelable(false)
-                        .setPositiveButton(R.string.generate, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                generateCode();
-                                dialog.dismiss();
-                            }
-                        })
-                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                AlertDialog dialog = builder.create();
+                if (dialog == null) {
+                    dialog = createAlertDialog();
+                }
                 dialog.show();
                 break;
         }
+    }
+
+    private AlertDialog createAlertDialog() {
+        String[] items = new String[]{
+                getString(R.string.admin_password),
+                getString(R.string.server_password)};
+
+        return new AlertDialog.Builder(getActivity())
+                .setTitle(R.string.include_password_dialog)
+                .setMultiChoiceItems(items, checkedItems, (dialog, which, isChecked) -> checkedItems[which] = isChecked)
+                .setCancelable(false)
+                .setPositiveButton(R.string.generate, (dialog, which) -> {
+                    generateCode();
+                    dialog.dismiss();
+                })
+                .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
+                .create();
     }
 
     @Override

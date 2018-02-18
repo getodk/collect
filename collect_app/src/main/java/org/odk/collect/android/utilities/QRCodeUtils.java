@@ -103,6 +103,8 @@ public class QRCodeUtils {
 
     public static Bitmap generateQRBitMap(Collection<String> keys, int width, int height)
             throws IOException, JSONException, WriterException {
+        long time = System.currentTimeMillis();
+
         String jsonObject = SharedPreferencesUtils.getJSONFromPreferences(keys);
         String compressedData = CompressionUtils.compress(jsonObject);
 
@@ -122,6 +124,7 @@ public class QRCodeUtils {
                 bmp.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
             }
         }
+        Timber.i("QR Code generation took : %d ms", (System.currentTimeMillis() - time));
         return bmp;
     }
 }
