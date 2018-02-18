@@ -25,10 +25,12 @@ import org.kxml2.kdom.Node;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -146,6 +148,19 @@ public class FileUtils {
         }
 
         return getMd5Hash(is);
+    }
+
+    public static String getMd5Hash(String message) throws NoSuchAlgorithmException {
+        MessageDigest md = MessageDigest.getInstance("MD5");
+        md.reset();
+        md.update(message.getBytes());
+        byte[] digest = md.digest();
+        BigInteger bigInt = new BigInteger(1, digest);
+        StringBuilder builder = new StringBuilder(bigInt.toString(16));
+        while (builder.length() < 32) {
+            builder.insert(0, "0");
+        }
+        return builder.toString();
     }
 
     public static String getMd5Hash(InputStream is) {
@@ -503,5 +518,28 @@ public class FileUtils {
         }
 
         return bitmap;
+    }
+
+    public static String readFile(File file) {
+        StringBuilder sb = new StringBuilder();
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                sb.append(line).append('\n');
+            }
+        } catch (IOException e) {
+            Timber.e(e);
+        }
+        return sb.toString();
+    }
+
+    public static void writeToFile(File file, String message, boolean append) {
+        try (FileOutputStream overWrite = new FileOutputStream(file, append)) {
+            overWrite.write(message.getBytes());
+            overWrite.flush();
+            overWrite.close();
+        } catch (IOException e) {
+            Timber.e(e);
+        }
     }
 }
