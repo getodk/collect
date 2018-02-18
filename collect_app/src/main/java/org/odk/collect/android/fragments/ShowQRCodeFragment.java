@@ -21,7 +21,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
@@ -45,10 +44,10 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.listeners.QRCodeListener;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.utilities.CompressionUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
+import org.odk.collect.android.utilities.QRCodeUtils;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
@@ -60,21 +59,27 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.zip.DataFormatException;
 
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PASSWORD;
-import static org.odk.collect.android.utilities.QRCodeUtils.decodeFromBitmap;
-import static org.odk.collect.android.utilities.QRCodeUtils.generateQRBitMap;
-import static org.odk.collect.android.utilities.QRCodeUtils.saveBitmapToCache;
 
 
-public class ShowQRCodeFragment extends Fragment implements View.OnClickListener, QRCodeListener {
+public class ShowQRCodeFragment extends Fragment implements View.OnClickListener {
 
     private static final int SELECT_PHOTO = 111;
-    private boolean[] checkedItems = new boolean[]{true, true};
+    private static final int QR_CODE_WIDTH = 400; // in pixels
+    private static final int QR_CODE_HEIGHT = 400; // in pixels
+
+    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private final boolean[] checkedItems = new boolean[]{true, true};
     private ImageView qrImageView;
     private ProgressBar progressBar;
     private Intent shareIntent;
@@ -101,9 +106,39 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
         return view;
     }
 
-    public void generateCode() {
+    private void generateCode() {
+        progressBar.setVisibility(VISIBLE);
+        qrImageView.setVisibility(GONE);
         addPasswordStatusString();
-        new GenerateQRCode(this).execute();
+
+        long time = System.currentTimeMillis();
+
+        Disposable disposable = getQRCodeGeneratorObservable()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(bitmap -> {
+                    Timber.i("QR Code generation took : %d ms", (System.currentTimeMillis() - time));
+                    progressBar.setVisibility(GONE);
+                    qrImageView.setVisibility(VISIBLE);
+                    qrImageView.setImageBitmap(bitmap);
+                    updateShareIntent(bitmap);
+                }, Timber::e);
+        compositeDisposable.add(disposable);
+    }
+
+    @Override
+    public void onDestroy() {
+        compositeDisposable.dispose();
+        super.onDestroy();
+    }
+
+    private Observable<Bitmap> getQRCodeGeneratorObservable() {
+        return Observable.create(emitter -> {
+            Bitmap bitmap = QRCodeUtils.generateQRBitMap(getSelectedPasswordKeys(), QR_CODE_WIDTH, QR_CODE_HEIGHT);
+            if (bitmap != null) {
+                emitter.onNext(bitmap);
+            }
+        });
     }
 
     private void addPasswordStatusString() {
@@ -121,14 +156,13 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
     }
 
     private void updateShareIntent(Bitmap qrCode) throws IOException {
-
         // Send an intent to share saved image
         shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
         shareIntent.setType("image/*");
 
         // Save the bitmap to a file
-        File shareFile = saveBitmapToCache(qrCode);
+        File shareFile = QRCodeUtils.saveBitmapToCache(qrCode);
         shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + shareFile));
     }
 
@@ -209,7 +243,7 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
                             .openInputStream(imageUri);
 
                     final Bitmap bitmap = BitmapFactory.decodeStream(imageStream);
-                    String response = decodeFromBitmap(bitmap);
+                    String response = QRCodeUtils.decodeFromBitmap(bitmap);
                     if (response != null) {
                         applySettings(response);
                     }
@@ -224,9 +258,8 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
 
 
     private void applySettings(String content) {
-        String decompressedData;
         try {
-            decompressedData = CompressionUtils.decompress(content);
+            String decompressedData = CompressionUtils.decompress(content);
             JSONObject jsonObject = new JSONObject(decompressedData);
             SharedPreferencesUtils prefUtils = new SharedPreferencesUtils();
             prefUtils.savePreferencesFromJSON(jsonObject);
@@ -280,28 +313,6 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
         return super.onOptionsItemSelected(item);
     }
 
-
-    @Override
-    public void preExecute() {
-        progressBar.setVisibility(VISIBLE);
-        qrImageView.setVisibility(GONE);
-    }
-
-    @Override
-    public void bitmapGenerated(Bitmap bitmap) {
-        progressBar.setVisibility(GONE);
-        qrImageView.setVisibility(VISIBLE);
-
-        if (bitmap != null) {
-            qrImageView.setImageBitmap(bitmap);
-            try {
-                updateShareIntent(bitmap);
-            } catch (IOException e) {
-                Timber.e(e);
-            }
-        }
-    }
-
     private Collection<String> getSelectedPasswordKeys() {
         Collection<String> keys = new ArrayList<>();
 
@@ -314,30 +325,5 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
             keys.add(KEY_PASSWORD);
         }
         return keys;
-    }
-
-    private class GenerateQRCode extends AsyncTask<Void, Void, Bitmap> {
-        private final QRCodeListener listener;
-
-        GenerateQRCode(QRCodeListener listener) {
-            this.listener = listener;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            listener.preExecute();
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap bitmap) {
-            super.onPostExecute(bitmap);
-            listener.bitmapGenerated(bitmap);
-        }
-
-        @Override
-        protected Bitmap doInBackground(Void... params) {
-            return generateQRBitMap(getSelectedPasswordKeys());
-        }
     }
 }
