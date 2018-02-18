@@ -101,37 +101,27 @@ public class QRCodeUtils {
         return shareFile;
     }
 
-    public static Bitmap generateQRBitMap(Collection<String> keys) {
-        try {
-            String jsonObject = SharedPreferencesUtils.getJSONFromPreferences(keys);
-            String compressedData = CompressionUtils.compress(jsonObject);
+    public static Bitmap generateQRBitMap(Collection<String> keys, int width, int height)
+            throws IOException, JSONException, WriterException {
+        String jsonObject = SharedPreferencesUtils.getJSONFromPreferences(keys);
+        String compressedData = CompressionUtils.compress(jsonObject);
 
-            //Maximum capacity for QR Codes is 4,296 characters (Alphanumeric)
-            if (compressedData.length() > 4000) {
-                Timber.e(Collect.getInstance().getString(R.string.encoding_max_limit));
-                return null;
-            }
-
-            Map<EncodeHintType, ErrorCorrectionLevel> hints = new HashMap<>();
-            hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
-            QRCodeWriter qrCodeWriter = new QRCodeWriter();
-            BitMatrix bitMatrix = qrCodeWriter
-                    .encode(compressedData, BarcodeFormat.QR_CODE, 400, 400, hints);
-
-            int width = bitMatrix.getWidth();
-            int height = bitMatrix.getHeight();
-
-            Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
-
-            for (int x = 0; x < width; x++) {
-                for (int y = 0; y < height; y++) {
-                    bmp.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
-                }
-            }
-            return bmp;
-        } catch (WriterException | IOException | JSONException e) {
-            Timber.e(e);
+        // Maximum capacity for QR Codes is 4,296 characters (Alphanumeric)
+        if (compressedData.length() > 4000) {
+            throw new IOException(Collect.getInstance().getString(R.string.encoding_max_limit));
         }
-        return null;
+
+        Map<EncodeHintType, ErrorCorrectionLevel> hints = new HashMap<>();
+        hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
+        QRCodeWriter qrCodeWriter = new QRCodeWriter();
+        BitMatrix bitMatrix = qrCodeWriter.encode(compressedData, BarcodeFormat.QR_CODE, width, height, hints);
+
+        Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                bmp.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
+            }
+        }
+        return bmp;
     }
 }
