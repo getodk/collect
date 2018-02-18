@@ -88,7 +88,7 @@ public class QRCodeUtils {
     }
 
     public static Bitmap generateQRBitMap(String data, int width, int height) throws IOException, WriterException {
-        long time = System.currentTimeMillis();
+        final long time = System.currentTimeMillis();
         String compressedData = CompressionUtils.compress(data);
 
         // Maximum capacity for QR Codes is 4,296 characters (Alphanumeric)
