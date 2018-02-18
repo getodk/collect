@@ -1,6 +1,7 @@
 apply plugin: 'checkstyle'
 apply plugin: 'findbugs'
 apply plugin: 'pmd'
+apply plugin: 'jacoco'
 
 /*
  * Copyright 2015 Vincent Brison.
@@ -90,5 +91,51 @@ android {
         lintConfig file("$configDir/lint/lint.xml")
         htmlOutput file("$reportsDir/lint/lint-result.html")
         xmlOutput file("$reportsDir/lint/lint-result.xml")
+    }
+}
+
+def coverageSourceDirs = [
+        'src/main/java',
+        'src/debug/java'
+]
+
+
+task jacocoTestReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
+    group = 'Reporting'
+    description = 'Generate JaCoCo coverage reports'
+
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+
+    classDirectories = fileTree(
+            dir: 'build/intermediates/classes/debug',
+            excludes: [
+                    '**/R.class',
+                    '**/R$*.class',
+                    '**/*$ViewInjector*.*',
+                    '**/*$ViewBinder*.*',
+                    '**/BuildConfig.*',
+                    '**/Manifest*.*',
+                    '**/Dagger*.*',
+                    '**/*Module_Provide*Factory.*',
+                    '**/*_Factory.*',
+                    '**/*_MembersInjector.*',
+            ]
+    )
+
+    sourceDirectories = files(coverageSourceDirs)
+    executionData = fileTree(
+            dir: "$buildDir",
+            include: ['jacoco/testDebugUnitTest.exec', 'outputs/code-coverage/connected/*coverage.ec']
+    )
+
+    doFirst {
+        files('build/intermediates/classes/debug').getFiles().each { file ->
+            if (file.name.contains('$$')) {
+                file.renameTo(file.path.replace('$$', '$'))
+            }
+        }
     }
 }
