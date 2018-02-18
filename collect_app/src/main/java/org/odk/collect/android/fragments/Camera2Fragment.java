@@ -82,15 +82,34 @@ public class Camera2Fragment extends Fragment
     /**
      * Conversion from screen rotation to JPEG orientation.
      */
+
+    /*
+     * For front camera only.
+     * Bug fixed on 2018.2.17.
+     */
+
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
     private static final int REQUEST_CAMERA_PERMISSION = 1;
     private static final String FRAGMENT_DIALOG = "dialog";
 
+    /**
+    * Fowling code only suits for back camera
+    *
+    * static {
+    * ORIENTATIONS.append(Surface.ROTATION_0, 90);
+    * ORIENTATIONS.append(Surface.ROTATION_90, 0);
+    * ORIENTATIONS.append(Surface.ROTATION_180, 270);
+    * ORIENTATIONS.append(Surface.ROTATION_270, 180);
+    * }
+    *
+    * For front camera, we use this:
+    * */
+
     static {
-        ORIENTATIONS.append(Surface.ROTATION_0, 90);
-        ORIENTATIONS.append(Surface.ROTATION_90, 0);
-        ORIENTATIONS.append(Surface.ROTATION_180, 270);
-        ORIENTATIONS.append(Surface.ROTATION_270, 180);
+        ORIENTATIONS.append(Surface.ROTATION_0, 0);
+        ORIENTATIONS.append(Surface.ROTATION_90, 90);
+        ORIENTATIONS.append(Surface.ROTATION_180, 180);
+        ORIENTATIONS.append(Surface.ROTATION_270, 270);
     }
 
     /**
@@ -819,13 +838,23 @@ public class Camera2Fragment extends Fragment
      *
      * @param rotation The screen rotation.
      * @return The JPEG orientation (one of 0, 90, 270, and 360)
+     * <p>
+     * Back Sensor orientation is 90 for most devices, or 270 for some devices (eg. Nexus 5X)
+     * Front Sensor is normally 270.
+     * <p>
+     * Following code use only for back camera , not suitable for front camera
+     * {@code return (ORIENTATIONS.get(rotation) + sensorOrientation + 270) % 360;}
+     * <p>
+     * <p>
+     * The final degrees the jpeg need to be rotated will be the sum degrees of screen orientation and
+     * {@link CameraDevice } 's orientation.Just like the code below.
+     * And orientation is always the degrees something needs to rotate clockwise to be upright.
      */
     private int getOrientation(int rotation) {
-        // Sensor orientation is 90 for most devices, or 270 for some devices (eg. Nexus 5X)
-        // We have to take that into account and rotate JPEG properly.
-        // For devices with orientation of 90, we simply return our mapping from ORIENTATIONS.
-        // For devices with orientation of 270, we need to rotate the JPEG 180 degrees.
-        return (ORIENTATIONS.get(rotation) + sensorOrientation + 270) % 360;
+
+        // After bug #1552 fixed on 2018.2.17, we use this orientation expression to amend the camera direction.
+
+        return (ORIENTATIONS.get(rotation) + sensorOrientation) % 360;
     }
 
     /**
