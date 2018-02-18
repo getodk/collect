@@ -92,15 +92,19 @@ public class Camera2Fragment extends Fragment
     private static final int REQUEST_CAMERA_PERMISSION = 1;
     private static final String FRAGMENT_DIALOG = "dialog";
 
-//    Fowling code only suits for back camera
-//    static {
-//        ORIENTATIONS.append(Surface.ROTATION_0, 90);
-//        ORIENTATIONS.append(Surface.ROTATION_90, 0);
-//        ORIENTATIONS.append(Surface.ROTATION_180, 270);
-//        ORIENTATIONS.append(Surface.ROTATION_270, 180);
-//    }
+    /**
+    * Fowling code only suits for back camera
+    *
+    * static {
+    * ORIENTATIONS.append(Surface.ROTATION_0, 90);
+    * ORIENTATIONS.append(Surface.ROTATION_90, 0);
+    * ORIENTATIONS.append(Surface.ROTATION_180, 270);
+    * ORIENTATIONS.append(Surface.ROTATION_270, 180);
+    * }
+    *
+    * For front camera, we use this:
+    * */
 
-    //    For front camera, we use this
     static {
         ORIENTATIONS.append(Surface.ROTATION_0, 0);
         ORIENTATIONS.append(Surface.ROTATION_90, 90);
@@ -834,17 +838,17 @@ public class Camera2Fragment extends Fragment
      *
      * @param rotation The screen rotation.
      * @return The JPEG orientation (one of 0, 90, 270, and 360)
-     *
-     *  Back Sensor orientation is 90 for most devices, or 270 for some devices (eg. Nexus 5X)
-     *  Front Sensor is normally 270.
-     *
-     *  Following code use only for back camera , not suitable for front camera
-     *  {@code return (ORIENTATIONS.get(rotation) + sensorOrientation + 270) % 360;}
-     *
-     *
-     *  The final degrees the jpeg need to be rotated will be the sum degrees of screen orientation and
-     *  {@link CameraDevice } 's orientation.Just like the code below.
-     *  And orientation is always the degrees something needs to rotate clockwise to be upright.
+     * <p>
+     * Back Sensor orientation is 90 for most devices, or 270 for some devices (eg. Nexus 5X)
+     * Front Sensor is normally 270.
+     * <p>
+     * Following code use only for back camera , not suitable for front camera
+     * {@code return (ORIENTATIONS.get(rotation) + sensorOrientation + 270) % 360;}
+     * <p>
+     * <p>
+     * The final degrees the jpeg need to be rotated will be the sum degrees of screen orientation and
+     * {@link CameraDevice } 's orientation.Just like the code below.
+     * And orientation is always the degrees something needs to rotate clockwise to be upright.
      */
     private int getOrientation(int rotation) {
 
