@@ -349,7 +349,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     refreshCurrentView();
                 } else {
                     Timber.w("Reloading form and restoring state.");
-                    // we need to launch the form loader to load the form
+                    // we need to launch the form loader to get the form
                     // controller...
                     formLoaderTask = new FormLoaderTask(instancePath,
                             startingXPath, waitingXPath);

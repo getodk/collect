@@ -66,7 +66,7 @@ import timber.log.Timber;
 import static org.odk.collect.android.utilities.ApplicationConstants.XML_OPENROSA_NAMESPACE;
 
 /**
- * LocationConverter class for encrypting submissions during the SaveToDiskTask.
+ * Utility class for encrypting submissions during the SaveToDiskTask.
  *
  * @author mitchellsundt@gmail.com
  */

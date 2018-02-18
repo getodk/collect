@@ -76,13 +76,13 @@ public class CurrentLocation implements LocationClient.LocationClientListener {
 
     private void receivedLocation(@Nullable Location location) {
         if (location == null) {
-            Timber.i("onLocationChanged(%d) null getLocation.", ++locationCount);
+            Timber.i("onLocationChanged(%d) null location.", ++locationCount);
             locationRelay.accept(Optional.absent());
 
             return;
         }
 
-        Timber.i("onLocationChanged(%d) getLocation: %s", ++locationCount, location);
+        Timber.i("onLocationChanged(%d) location: %s", ++locationCount, location);
         if (!isLocationValid.isValid(location)) {
             Timber.w("onLocationChanged(%d) received invalid location.");
             return;

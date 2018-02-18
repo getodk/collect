@@ -110,13 +110,13 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
     }
 
     /*
-     * Resets observe formatting to whatever is defaulted
+     * Resets text formatting to whatever is defaulted
      * in the form
      */
     public void resetTextFormatting() {
         // first set it to defaults
         viewText.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor));
-        // then set the observe to our original (brings back any html formatting)
+        // then set the text to our original (brings back any html formatting)
         viewText.setText(originalText);
     }
 
@@ -311,7 +311,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
             }
             //
             // In this case, we have:
-            // Text upper left; image upper, left edge aligned with observe right edge;
+            // Text upper left; image upper, left edge aligned with text right edge;
             // audio upper right; video below audio on right.
             textParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
             textParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);

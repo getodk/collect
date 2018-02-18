@@ -37,7 +37,7 @@ import timber.log.Timber;
  *
  * The logging database will be "/sdcard/odk/log/activityLog.db"
  *
- * Logging is enable if the file "/sdcard/odk/log/enable" exists.
+ * Logging is enabled if the file "/sdcard/odk/log/enabled" exists.
  *
  * @author mitchellsundt@gmail.com
  * @author Carl Hartung (carlhartung@gmail.com)

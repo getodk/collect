@@ -67,7 +67,7 @@ public class AndroidLocationClientTest {
         TestClientListener testListener = new TestClientListener();
         androidLocationClient.setListener(testListener);
 
-        // Without any providers enabled, startViewModel shouldn't be called, but startFailure should be:
+        // Without any providers enabled, start shouldn't be called, but startFailure should be:
         androidLocationClient.start();
         assertFalse(testListener.wasStartCalled());
         assertTrue(testListener.wasStartFailureCalled());
