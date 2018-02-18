@@ -18,6 +18,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
+import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.RadioButton;
@@ -101,7 +102,11 @@ public class SelectOneWidget
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
         for (RadioButton r : buttons) {
-            r.setOnLongClickListener(l);
+            r.setOnLongClickListener(new OnLongClickListener() {
+                public boolean onLongClick(View arg0) {
+                    return true;
+                }
+            });
         }
     }
 
