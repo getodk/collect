@@ -138,7 +138,7 @@ jobs:
           command: |
             if [[ "$CIRCLE_PROJECT_USERNAME" == "opendatakit" ]]; then \
               mkdir firebase
-              gsutil -m cp -r -U "`gsutil ls gs://opendatakit-collect-test-results | tail -1`*" /root/workspace/firebase/ | true
+              gsutil -m cp -r -U "`gsutil ls gs://opendatakit-collect-test-results | tail -1`*" /root/work/firebase/ | true
             fi
       - *persist_firebase_workspace
       - store_test_results:
