@@ -1,28 +1,77 @@
 version: 2
+
+references:
+
+  ## Cache
+
+  cache_key: &cache_key
+    key: jars-{{ checksum "build.gradle" }}-{{ checksum "collect_app/build.gradle" }}
+  restore_cache: &restore_cache
+    restore_cache:
+      <<: *cache_key
+  save_cache: &save_cache
+    save_cache:
+      <<: *cache_key
+      paths:
+        - ~/work/.gradle
+
+  accept_licenses : &accept_licenses
+    run:
+      name: Accept licenses
+      command: yes | sdkmanager --licenses || true
+
+  ## Workspace
+
+ workspace: &workspace
+  ~/work
+  attach_debug_workspace: &attach_debug_workspace
+    attach_workspace:
+      at: *workspace
+  persist_debug_workspace: &persist_debug_workspace
+    persist_to_workspace:
+      root: *workspace
+      paths:
+        - collect_app/build/outputs/androidTest-results
+        - collect_app/build/outputs/apk
+        - collect_app/build/outputs/code-coverage
+        - collect_app/build/test-results
+  attach_firebase_workspace: &attach_firebase_workspace
+    attach_workspace:
+      at: *workspace
+  persist_firebase_workspace: &persist_firebase_workspace
+    persist_to_workspace:
+      root: *workspace
+      paths:
+        - firebase
+
+  ## Docker image configurations
+
+  android_config: &android_config
+    working_directory: *workspace
+    docker:
+      - image: circleci/android:api-26-alpha
+    environment:
+      # Least invasive change to resolve out-of-memory error: https://discuss.circleci.com/t/circle-ci-v2-and-android-memory-issues/11207/9
+      _JAVA_OPTIONS: "-Xmx1024m"
+  gcloud_config: &gcloud_config
+    working_directory: *workspace
+    docker:
+      - image: google/cloud-sdk:latest
+
 jobs:
 
   ## Build debug APK and instrumented test APK
 
   build_debug:
-    working_directory: ~/work
-    docker:
-      - image: circleci/android:api-26-alpha
-    environment:
-        # Least invasive change to resolve out-of-memory error: https://discuss.circleci.com/t/circle-ci-v2-and-android-memory-issues/11207/9
-        _JAVA_OPTIONS: "-Xmx1024m"
+    <<: *android_config
     steps:
         - checkout
-        - restore_cache:
-            key: jars-{{ checksum "build.gradle" }}-{{ checksum "collect_app/build.gradle" }}
-        - run:
-            name: Accept licenses
-            command: yes | sdkmanager --licenses || true
+        - *restore_cache
+        - *accept_licenses
         - run:
             name: Download dependencies
             command: ./gradlew androidDependencies
-        - save_cache:
-            paths: ~/work/.gradle
-            key: jars-{{ checksum "build.gradle" }}-{{ checksum "collect_app/build.gradle" }}
+        - *save_cache
         - run:
             name: Run code quality checks
             command: ./gradlew pmd checkstyle lint findbugs
@@ -34,53 +83,36 @@ jobs:
             command: |
                 ./gradlew assembleDebug -PdisablePreDex
                 ./gradlew assembleDebugAndroidTest -PdisablePreDex
-        - persist_to_workspace:
-            root: ~/work
-            paths:
-              - collect_app/build/outputs/apk/*
+        - *persist_debug_workspace
 
   ## Run unit tests
 
   test_unit:
-    working_directory: ~/work
-    docker:
-      - image: circleci/android:api-26-alpha
-    environment:
-        # Least invasive change to resolve out-of-memory error: https://discuss.circleci.com/t/circle-ci-v2-and-android-memory-issues/11207/9
-        _JAVA_OPTIONS: "-Xmx1024m"
+    <<: *android_config
     steps:
         - checkout
-        - restore_cache:
-            key: jars-{{ checksum "build.gradle" }}-{{ checksum "collect_app/build.gradle" }}
-        - run:
-            name: Accept licenses
-            command: yes | sdkmanager --licenses || true
+        - *restore_cache
+        - *accept_licenses
         - run:
             name: Download dependencies
             command: ./gradlew androidDependencies
-        - save_cache:
-            paths: ~/work/.gradle
-            key: jars-{{ checksum "build.gradle" }}-{{ checksum "collect_app/build.gradle" }}
+        - *save_cache
         - run:
             name: Run unit tests
             command: ./gradlew testDebugUnitTest
+        - *persist_debug_workspace
         - store_artifacts:
             path: collect_app/build/reports
             destination: reports
         - store_test_results:
             path: collect_app/build/test-results
-        - persist_to_workspace:
-            root: ~/work
 
   ## Run instrumented tests
 
   test_instrumented:
-    working_directory: ~/work
-    docker:
-      - image: google/cloud-sdk:latest
+    <<: *gcloud_config
     steps:
-      - attach_workspace:
-          at: ~/work
+      - *attach_debug_workspace
       - run:
           name: Authorize gcloud
           command: |
@@ -97,21 +129,25 @@ jobs:
               --app collect_app/build/outputs/apk/debug/*.apk \
               --test collect_app/build/outputs/apk/androidTest/debug/*.apk \
               --device model=Nexus5,version=21,locale=en,orientation=portrait \
-              --results-bucket opendatakit-collect-test-results
+              --results-bucket opendatakit-collect-test-results \
+              --environment-variables coverage=true,coverageFile=/sdcard/tmp/code-coverage/connected/coverage.ec \
+              --directories-to-pull=/sdcard/tmp --timeout 20m
             fi
       - run:
           name: Copy integration test results
           command: |
             if [[ "$CIRCLE_PROJECT_USERNAME" == "opendatakit" ]]; then \
-              mkdir test-results
-              gsutil -m cp -r -U `gsutil ls gs://opendatakit-collect-test-results | tail -1` test-results | true
+              mkdir firebase
+              gsutil -m cp -r -U "`gsutil ls gs://opendatakit-collect-test-results | tail -1`*" /root/workspace/firebase/ | true
             fi
+      - *persist_firebase_workspace
       - store_test_results:
-          path: test-results
+          path: firebase/
+          destination: /firebase/
 
 workflows:
   version: 2
-  build_test:
+  workflow:
     jobs:
       - build_debug
       - test_unit
