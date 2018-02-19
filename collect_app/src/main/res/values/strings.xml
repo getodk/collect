@@ -294,9 +294,9 @@
     <string name="username_error_whitespace">Leading or trailing whitespace not allowed in usernames</string>
     <string name="google_play_services_error_occured">Unable to access Google Maps. Is Google Play Services installed?</string>
     <string name="about_preferences">About</string>
-    <string name="tell_your_friends">Share ODK Collect with your colleagues</string>
+    <string name="tell_your_friends">Share Us !</string>
     <string name="tell_your_friends_msg">Download the ODK Collect app!</string>
-    <string name="leave_a_review">Leave a review on the Google Play Store</string>
+    <string name="leave_a_review">Review us at Google Play Store</string>
     <!-- Geo string added in feature-geofeatures branch-->
     <string name="map_preferences">Mapping</string>
     <string name="map_sdk_selector_title">Mapping SDK</string>
@@ -377,11 +377,11 @@
     <string name="parser_exception">XPathParser Exception: \"%s\"</string>
     <string name="selected_answer">Selected: %s</string>
     <string name="version_number">Version: %s</string>
-    <string name="odk_website">Visit the ODK website</string>
-    <string name="odk_website_summary">Open Data Kit (ODK) is used to collect data for social good in challenging environments.</string>
-    <string name="odk_forum">Join the ODK forum</string>
-    <string name="odk_forum_summary">Join the forum to get support, request features, contribute code/translations!</string>
-    <string name="all_open_source_licenses">Open source libraries and licenses</string>
+    <string name="odk_website">About Us</string>
+    <string name="odk_website_summary">Visit our Open Data Kit(ODK) Website and get to know more about us</string>
+    <string name="odk_forum">Join Us</string>
+    <string name="odk_forum_summary">Join us at the ODK forum and be a part of a vibrant , thriving and ever-growing open source community! </string>
+    <string name="all_open_source_licenses">Open Source Libraries and Licenses</string>
 
     <!-- %1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8" -->
     <string name="west">W %1$s%2$s%3$s</string>
@@ -576,4 +576,5 @@
     <string name="newer_version_of_a_form_info">This is an updated version of a form you already have!</string>
     <string name="svg_file_does_not_exist">SVG file does not exist!</string>
     <string name="svg_not_supported_device">ImageMap widget requires Android 5 (Lollipop) or newer. Your device is not supported!</string>
+    <string name="about_image_content_desc">Allocates the Icon for the custom PreferenceScreen Option</string>
 </resources>

@@ -1,25 +1,37 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceScreen
+        android:icon="@android:drawable/ic_menu_help"
         android:key="odk_website"
+        android:layout="@layout/about_preferences_item"
         android:summary="@string/odk_website_summary"
-        android:title="@string/odk_website"/>
+        android:title="@string/odk_website" />
 
     <PreferenceScreen
+        android:icon="@android:drawable/ic_menu_myplaces"
         android:key="odk_forum"
+        android:layout="@layout/about_preferences_item"
         android:summary="@string/odk_forum_summary"
-        android:title="@string/odk_forum"/>
+        android:title="@string/odk_forum" />
 
     <PreferenceScreen
+        android:icon="@android:drawable/ic_menu_share"
         android:key="tell_your_friends"
+        android:layout="@layout/about_preferences_item"
         android:title="@string/tell_your_friends" />
 
     <PreferenceScreen
+        android:icon="@android:drawable/ic_menu_edit"
         android:key="leave_a_review"
+        android:layout="@layout/about_preferences_item"
         android:title="@string/leave_a_review" />
 
     <PreferenceScreen
+        android:layout_height="match_parent"
+        android:icon="@android:drawable/ic_menu_info_details"
         android:key="open_source_licenses"
+        android:layout="@layout/about_preferences_item"
         android:title="@string/all_open_source_licenses" />
+
 
 </PreferenceScreen>
