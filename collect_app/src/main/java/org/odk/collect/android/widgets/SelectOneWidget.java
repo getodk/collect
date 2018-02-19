@@ -18,6 +18,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.RadioButton;
@@ -130,6 +131,12 @@ public class SelectOneWidget
         radioButton.setId(ViewIds.generateViewId());
         radioButton.setEnabled(!getFormEntryPrompt().isReadOnly());
         radioButton.setFocusable(!getFormEntryPrompt().isReadOnly());
+
+        if (isLanguageRTL(getContext())) {
+            radioButton.setGravity(Gravity.END);
+        } else {
+            radioButton.setGravity(Gravity.START);
+        }
 
         if (items.get(index).getValue().equals(selectedValue)) {
             radioButton.setChecked(true);

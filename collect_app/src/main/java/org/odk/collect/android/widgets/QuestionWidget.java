@@ -22,10 +22,10 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
@@ -46,9 +46,9 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.exception.JavaRosaException;
-import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.utilities.ViewIds;
@@ -59,6 +59,7 @@ import org.odk.collect.android.widgets.interfaces.Widget;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
@@ -125,7 +126,7 @@ public abstract class QuestionWidget
         addHelpTextView(getHelpTextView());
     }
 
-    /** Releases resources held by this widget */
+    /** Releases resources held by this widget*/
     public void release() {
         if (player != null) {
             player.release();
@@ -133,7 +134,20 @@ public abstract class QuestionWidget
         }
     }
 
-    protected void injectDependencies(DependencyProvider dependencyProvider) {}
+    /**
+     * author: vrjgamer
+     * This function checks if current set language is RTL
+     * it returns true if its RTL else false.
+     */
+    public static boolean isLanguageRTL(Context context) {
+        Locale currentLocale = context.getResources().getConfiguration().locale;
+        int directionality = Character.getDirectionality(currentLocale.getDisplayName().charAt(0));
+        return directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT ||
+                directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC;
+    }
+
+    protected void injectDependencies(DependencyProvider dependencyProvider) {
+    }
 
     private MediaLayout createQuestionMediaLayout(FormEntryPrompt prompt) {
         String promptText = prompt.getLongText();
