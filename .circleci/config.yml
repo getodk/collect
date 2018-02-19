@@ -145,6 +145,31 @@ jobs:
           path: firebase/
           destination: /firebase/
 
+  ## Submit JaCoCo coverage report
+
+  report_coverage:
+    <<: *android_config
+    steps:
+      - checkout
+      - *restore_cache
+      - run:
+          name: Download dependencies
+          command: ./gradlew androidDependencies
+      - *attach_debug_workspace
+      - *attach_firebase_workspace
+      - run:
+          name: Move Firebase coverage report
+          command: mkdir -p collect_app/build/outputs/code-coverage/connected && cp firebase/Nexus5-21-en-portrait/artifacts/coverage.ec collect_app/build/outputs/code-coverage/connected/coverage.ec
+      - run:
+          name: Generate JaCoCo report
+          command: ./gradlew -PciBuild=true jacocoTestReport
+      - run:
+          name: Upload coverage report to CodeCov
+          command: bash <(curl -s https://codecov.io/bash)
+      - store_artifacts:
+          path: collect_app/build/reports/
+          destination: /reports/
+
 workflows:
   version: 2
   workflow:
@@ -158,3 +183,7 @@ workflows:
           filters:
             branches:
               only: master
+      - report_coverage:
+          requires:
+            - test_unit
+            - test_instrumented
