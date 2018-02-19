@@ -27,7 +27,7 @@ import io.reactivex.Completable;
 import io.reactivex.Observable;
 
 
-public class GeoViewModel
+public class  GeoViewModel
         extends RxViewModel
         implements GeoViewModelType {
 

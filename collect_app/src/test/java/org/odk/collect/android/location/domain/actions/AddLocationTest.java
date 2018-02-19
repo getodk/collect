@@ -1,6 +1,5 @@
 package org.odk.collect.android.location.domain.actions;
 
-import android.graphics.Path;
 import android.location.Location;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -11,12 +10,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.odk.collect.android.location.client.LocationClient;
 import org.odk.collect.android.location.domain.state.CurrentLocation;
 import org.odk.collect.android.location.domain.state.SelectedLocation;
 
 import io.reactivex.Completable;
-import io.reactivex.Observable;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
@@ -24,7 +21,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.location.TestUtility.locationToLatLng;
-import static org.odk.collect.android.location.TestUtility.randomLatLng;
 import static org.odk.collect.android.location.TestUtility.randomLocation;
 
 @RunWith(MockitoJUnitRunner.class)
