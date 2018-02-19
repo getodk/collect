@@ -126,6 +126,7 @@ jobs:
           command: |
             if [[ "$CIRCLE_PROJECT_USERNAME" == "opendatakit" ]]; then \
               echo "y" | gcloud firebase test android run \
+              --type instrumentation \
               --app collect_app/build/outputs/apk/debug/*.apk \
               --test collect_app/build/outputs/apk/androidTest/debug/*.apk \
               --device model=Nexus5,version=21,locale=en,orientation=portrait \
