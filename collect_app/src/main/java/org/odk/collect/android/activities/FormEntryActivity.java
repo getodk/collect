@@ -2242,7 +2242,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     protected Dialog onCreateDialog(int id) {
         switch (id) {
             case PROGRESS_DIALOG:
-                Timber.i("Creating PROGRESS_DIALOG");
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "onCreateDialog.PROGRESS_DIALOG",
@@ -2276,7 +2275,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         loadingButtonListener);
                 return progressDialog;
             case SAVING_DIALOG:
-                Timber.i("Creating SAVING_DIALOG");
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "onCreateDialog.SAVING_DIALOG",
@@ -2323,7 +2321,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
      * Dismiss any showing dialogs that we manually manage.
      */
     private void dismissDialogs() {
-        Timber.i("Dismiss dialogs");
         if (alertDialog != null && alertDialog.isShowing()) {
             alertDialog.dismiss();
         }
@@ -2470,7 +2467,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private int animationCompletionSet = 0;
 
     private void afterAllAnimations() {
-        Timber.i("afterAllAnimations");
         if (staleView != null) {
             if (staleView instanceof ODKView) {
                 // http://code.google.com/p/android/issues/detail?id=8488
@@ -2487,9 +2483,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
     @Override
     public void onAnimationEnd(Animation animation) {
-        Timber.i("onAnimationEnd %s",
-                ((animation == inAnimation) ? "in"
-                        : ((animation == outAnimation) ? "out" : "other")));
         if (inAnimation == animation) {
             animationCompletionSet |= 1;
         } else if (outAnimation == animation) {
@@ -2505,18 +2498,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
     @Override
     public void onAnimationRepeat(Animation animation) {
-        // Added by AnimationListener interface.
-        Timber.i("onAnimationRepeat %s",
-                ((animation == inAnimation) ? "in"
-                        : ((animation == outAnimation) ? "out" : "other")));
     }
 
     @Override
     public void onAnimationStart(Animation animation) {
-        // Added by AnimationListener interface.
-        Timber.i("onAnimationStart %s",
-                ((animation == inAnimation) ? "in"
-                        : ((animation == outAnimation) ? "out" : "other")));
     }
 
     /**
