@@ -80,9 +80,8 @@ public class Camera2Fragment extends Fragment
         implements View.OnClickListener, FragmentCompat.OnRequestPermissionsResultCallback {
 
     /**
-     * Conversion from screen rotation to JPEG orientation,For front camera only.
+     * Conversion from screen rotation to JPEG orientation. For front camera only.
      */
-
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
     private static final int REQUEST_CAMERA_PERMISSION = 1;
     private static final String FRAGMENT_DIALOG = "dialog";
