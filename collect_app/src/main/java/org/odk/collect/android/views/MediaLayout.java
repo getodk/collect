@@ -295,7 +295,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                 && !CheckBox.class.isAssignableFrom(text.getClass());
 
         // Determine the layout constraints...
-        if(!QuestionWidget.isLanguageRTL(getContext())) {
+        if (!QuestionWidget.isLanguageRTL(getContext())) {
             // Language is LTR
             if (viewText.getText().length() == 0 && (imageView != null || missingImage != null)) {
                 // No text; has image. The image is treated as question/choice icon.
