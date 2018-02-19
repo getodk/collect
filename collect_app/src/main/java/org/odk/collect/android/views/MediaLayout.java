@@ -392,7 +392,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                     textParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                 }
             }
-        }else{
+        } else {
             //Language is RTL
             if (viewText.getText().length() == 0 && (imageView != null || missingImage != null)) {
                 // No text; has image. The image is treated as question/choice icon.
