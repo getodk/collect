@@ -1,6 +1,9 @@
 version: 2
 jobs:
-  build:
+
+  ## Build debug APK and instrumented test APK
+
+  build_debug:
     working_directory: ~/work
     docker:
       - image: circleci/android:api-26-alpha
@@ -21,13 +24,11 @@ jobs:
             paths: ~/work/.gradle
             key: jars-{{ checksum "build.gradle" }}-{{ checksum "collect_app/build.gradle" }}
         - run:
-            name: Run checks and unit tests
-            command: ./gradlew pmd checkstyle lint findbugs testDebugUnitTest
+            name: Run code quality checks
+            command: ./gradlew pmd checkstyle lint findbugs
         - store_artifacts:
             path: collect_app/build/reports
             destination: reports
-        - store_test_results:
-            path: collect_app/build/test-results
         - run:
             name: Assemble debug and test builds
             command: |
@@ -37,7 +38,45 @@ jobs:
             root: ~/work
             paths:
               - collect_app/build/outputs/apk/*
-  test:
+
+  ## Run unit tests
+
+  test_unit:
+    working_directory: ~/work
+    docker:
+      - image: circleci/android:api-26-alpha
+    environment:
+        # Least invasive change to resolve out-of-memory error: https://discuss.circleci.com/t/circle-ci-v2-and-android-memory-issues/11207/9
+        _JAVA_OPTIONS: "-Xmx1024m"
+    steps:
+        - checkout
+        - restore_cache:
+            key: jars-{{ checksum "build.gradle" }}-{{ checksum "collect_app/build.gradle" }}
+        - run:
+            name: Accept licenses
+            command: yes | sdkmanager --licenses || true
+        - run:
+            name: Download dependencies
+            command: ./gradlew androidDependencies
+        - save_cache:
+            paths: ~/work/.gradle
+            key: jars-{{ checksum "build.gradle" }}-{{ checksum "collect_app/build.gradle" }}
+        - run:
+            name: Run unit tests
+            command: ./gradlew testDebugUnitTest
+        - persist_to_workspace:
+            root: ~/work
+            paths:
+              - collect_app/build/outputs/apk/*
+        - store_artifacts:
+            path: collect_app/build/reports
+            destination: reports
+        - store_test_results:
+            path: collect_app/build/test-results
+
+  ## Run instrumented tests
+
+  test_instrumented:
     working_directory: ~/work
     docker:
       - image: google/cloud-sdk:latest
@@ -71,14 +110,16 @@ jobs:
             fi
       - store_test_results:
           path: test-results
+
 workflows:
   version: 2
   build_test:
     jobs:
-      - build
-      - test:
+      - build_debug
+      - test_unit
+      - test_instrumented:
           requires:
-            - build
+            - build_debug
           # We'd like to also filter by username and remove the if/fi above, but username filtering is not supported in CircleCI
           filters:
             branches:
