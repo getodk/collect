@@ -39,6 +39,7 @@ import org.odk.collect.android.utilities.MediaUtil;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 
 import java.io.File;
+import java.util.Locale;
 
 import timber.log.Timber;
 
@@ -101,11 +102,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
         answerLayout.addView(playButton);
         addAnswerView(answerLayout);
 
-        // and hide the capture and choose button if read-only
-        if (getFormEntryPrompt().isReadOnly()) {
-            captureButton.setVisibility(View.GONE);
-            chooseButton.setVisibility(View.GONE);
-        }
+        hideButtonsIfNeeded();
     }
 
     @Override
@@ -181,6 +178,16 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
             Timber.i("Setting current answer to %s", newAudio.getName());
         } else {
             Timber.e("Inserting Audio file FAILED");
+        }
+    }
+
+    private void hideButtonsIfNeeded() {
+        if (getFormEntryPrompt().isReadOnly()) {
+            captureButton.setVisibility(View.GONE);
+            chooseButton.setVisibility(View.GONE);
+        } else if (getFormEntryPrompt().getAppearanceHint() != null
+                && getFormEntryPrompt().getAppearanceHint().toLowerCase(Locale.ENGLISH).contains("new")) {
+            chooseButton.setVisibility(View.GONE);
         }
     }
 

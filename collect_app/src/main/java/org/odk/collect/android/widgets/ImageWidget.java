@@ -32,6 +32,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.MediaUtils;
 
 import java.io.File;
+import java.util.Locale;
 
 import timber.log.Timber;
 
@@ -95,13 +96,7 @@ public class ImageWidget extends BaseImageWidget {
         answerLayout.addView(chooseButton);
         answerLayout.addView(errorTextView);
 
-        // and hide the capture and choose button if read-only
-        if (getFormEntryPrompt().isReadOnly()) {
-            captureButton.setVisibility(View.GONE);
-            chooseButton.setVisibility(View.GONE);
-        } else if (selfie) {
-            chooseButton.setVisibility(View.GONE);
-        }
+        hideButtonsIfNeeded(appearance);
         errorTextView.setVisibility(View.GONE);
 
 
@@ -152,6 +147,16 @@ public class ImageWidget extends BaseImageWidget {
             case R.id.choose_image:
                 chooseImage();
                 break;
+        }
+    }
+
+    private void hideButtonsIfNeeded(String appearance) {
+        if (getFormEntryPrompt().isReadOnly()) {
+            captureButton.setVisibility(View.GONE);
+            chooseButton.setVisibility(View.GONE);
+        } else if (selfie || ((appearance != null
+                && appearance.toLowerCase(Locale.ENGLISH).contains("new")))) {
+            chooseButton.setVisibility(View.GONE);
         }
     }
 
