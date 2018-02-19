@@ -64,15 +64,13 @@ jobs:
         - run:
             name: Run unit tests
             command: ./gradlew testDebugUnitTest
-        - persist_to_workspace:
-            root: ~/work
-            paths:
-              - collect_app/build/outputs/apk/*
         - store_artifacts:
             path: collect_app/build/reports
             destination: reports
         - store_test_results:
             path: collect_app/build/test-results
+        - persist_to_workspace:
+            root: ~/work
 
   ## Run instrumented tests
 
