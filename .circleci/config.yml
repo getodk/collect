@@ -22,8 +22,8 @@ references:
 
   ## Workspace
 
- workspace: &workspace
-  ~/work
+  workspace: &workspace
+    ~/work
   attach_debug_workspace: &attach_debug_workspace
     attach_workspace:
       at: *workspace
