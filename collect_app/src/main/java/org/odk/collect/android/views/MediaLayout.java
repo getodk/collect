@@ -294,7 +294,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
         boolean isNotAMultipleChoiceField = !RadioButton.class.isAssignableFrom(text.getClass())
                 && !CheckBox.class.isAssignableFrom(text.getClass());
 
-        // Determine the layout constraints...
+        // Determine the layout constraints
         if (!QuestionWidget.isLanguageRTL(getContext())) {
             // Language is LTR
             if (viewText.getText().length() == 0 && (imageView != null || missingImage != null)) {
