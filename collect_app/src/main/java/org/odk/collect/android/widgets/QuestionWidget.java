@@ -133,15 +133,15 @@ public abstract class QuestionWidget
         }
     }
 
-	//source:: https://stackoverflow.com/questions/18996183/identifying-rtl-language-in-android/23203698#23203698
-	public static boolean isRTL() {
-		return isRTL(Locale.getDefault());
-	}
+//source:: https://stackoverflow.com/questions/18996183/identifying-rtl-language-in-android/23203698#23203698
+    public static boolean isRTL() {
+        return isRTL(Locale.getDefault());
+    }
 
-	public static boolean isRTL(Locale locale) {
-		final int directionality = Character.getDirectionality(locale.getDisplayName().charAt(0));
-		return directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT || directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC;
-	}
+    private static boolean isRTL(Locale locale) {
+        final int directionality = Character.getDirectionality(locale.getDisplayName().charAt(0));
+        return directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT || directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC;
+    }
 	
     protected void injectDependencies(DependencyProvider dependencyProvider) {}
 
