@@ -132,6 +132,7 @@ public abstract class QuestionWidget
             player = null;
         }
     }
+
     /**
      * author: vrjgamer
      * This function checks if current set language is RTL
