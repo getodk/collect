@@ -1,6 +1,7 @@
 apply plugin: 'checkstyle'
 apply plugin: 'findbugs'
 apply plugin: 'pmd'
+apply plugin: 'jacoco'
 
 /*
  * Copyright 2015 Vincent Brison.
@@ -17,6 +18,10 @@ apply plugin: 'pmd'
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+jacoco {
+    toolVersion '0.7.9'
+}
 
 // Add checkstyle, findbugs, pmd and lint to the check task.
 check.dependsOn 'checkstyle', 'findbugs', 'pmd', 'lint'
@@ -90,5 +95,44 @@ android {
         lintConfig file("$configDir/lint/lint.xml")
         htmlOutput file("$reportsDir/lint/lint-result.html")
         xmlOutput file("$reportsDir/lint/lint-result.xml")
+    }
+}
+
+def coverageSourceDirs = [
+        "${project.projectDir}/src/main/java",
+        "${project.projectDir}/src/debug/java"
+]
+
+
+task jacocoTestReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
+    description = 'Generate JaCoCo coverage reports'
+
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+
+    sourceDirectories = files(coverageSourceDirs)
+    classDirectories = fileTree(
+            dir: "${buildDir}/intermediates/classes/debug",
+            excludes: ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*',
+                       '**/*Test*.*', 'android/**/*.*',
+                       '**/*_MembersInjector.class',
+                       '**/Dagger*Component.class',
+                       '**/Dagger*Component$Builder.class',
+                       '**/*_*Factory.class',
+                       '**/*ComponentImpl.class',
+                       '**/*SubComponentBuilder.class'])
+    executionData = fileTree(
+            dir: "$buildDir",
+            include: ["jacoco/testDebugUnitTest.exec", "outputs/code-coverage/connected/*coverage.ec"]
+    )
+
+    doFirst {
+        files('build/intermediates/classes/debug').getFiles().each { file ->
+            if (file.name.contains('$$')) {
+                file.renameTo(file.path.replace('$$', '$'))
+            }
+        }
     }
 }

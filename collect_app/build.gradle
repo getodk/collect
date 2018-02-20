@@ -96,6 +96,7 @@ android {
                 signingConfig signingConfigs.release
             }
             minifyEnabled(true)
+            testCoverageEnabled(true)
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
             resValue("bool", "FIREBASE_CRASH_ENABLED", "false")
         }
@@ -105,12 +106,12 @@ android {
                 signingConfig signingConfigs.release
             }
             minifyEnabled(true)
+            testCoverageEnabled(true)
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
             resValue("bool", "FIREBASE_CRASH_ENABLED", "true")
         }
         debug {
             debuggable(true)
-            // Allows AndroidTest JaCoCo reports to be generated
             testCoverageEnabled(true)
             resValue("bool", "FIREBASE_CRASH_ENABLED", "false")
         }
@@ -151,7 +152,18 @@ android {
         javaMaxHeapSize '2048M'
     }
 
-    testOptions.unitTests.includeAndroidResources true
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+            returnDefaultValues = true
+
+            all {
+                jacoco {
+                    includeNoLocationClasses = true
+                }
+            }
+        }
+    }
 }
 
 configurations.all {
