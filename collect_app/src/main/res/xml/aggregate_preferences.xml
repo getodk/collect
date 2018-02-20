@@ -1,0 +1,23 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory
+        android:key="@string/server_preferences"
+        android:title="@string/aggregate_preferences">
+        <EditTextPreference
+            android:dialogTitle="@string/change_server_url"
+            android:inputType="textNoSuggestions"
+            android:key="server_url"
+            android:title="@string/server_url" />
+        <EditTextPreference
+            android:dialogTitle="@string/change_username"
+            android:inputType="textNoSuggestions"
+            android:key="username"
+            android:title="@string/username" />
+        <EditTextPreference
+            android:dialogTitle="@string/change_password"
+            android:inputType="textPassword"
+            android:key="password"
+            android:title="@string/password" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

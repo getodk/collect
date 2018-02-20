@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/user_defined">
+        <EditTextPreference
+            android:inputType="textNoSuggestions"
+            android:key="metadata_username"
+            android:title="@string/username" />
+        <EditTextPreference
+            android:inputType="phone"
+            android:key="metadata_phonenumber"
+            android:title="@string/phone_number" />
+        <EditTextPreference
+            android:inputType="textEmailAddress"
+            android:key="metadata_email"
+            android:maxLength="254"
+            android:title="@string/email" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/device_defined">
+        <EditTextPreference
+            android:selectable="false"
+            android:key="deviceid"
+            android:title="@string/device_id" />
+        <EditTextPreference
+            android:selectable="false"
+            android:key="subscriberid"
+            android:title="@string/subscriber_id" />
+        <EditTextPreference
+            android:selectable="false"
+            android:key="simserial"
+            android:title="@string/sim_serial_id" />
+    </PreferenceCategory>
+</PreferenceScreen>

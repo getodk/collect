@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <CheckBoxPreference
+        android:key="moving_backwards"
+        android:title="@string/moving_backwards_title" />
+
+    <PreferenceCategory android:title="@string/form_entry">
+        <CheckBoxPreference
+            android:key="access_settings"
+            android:title="@string/general_preferences" />
+        <CheckBoxPreference
+            android:key="change_language"
+            android:title="@string/change_language" />
+        <CheckBoxPreference
+            android:key="jump_to"
+            android:title="@string/view_hierarchy" />
+        <CheckBoxPreference
+            android:key="save_mid"
+            android:title="@string/save_mid" />
+        <CheckBoxPreference
+            android:key="save_as"
+            android:title="@string/save_form_as" />
+        <CheckBoxPreference
+            android:key="mark_as_finalized"
+            android:title="@string/mark_finished" />
+    </PreferenceCategory>
+</PreferenceScreen>

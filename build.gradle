@@ -1,0 +1,33 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    repositories {
+        jcenter()
+        google()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath 'com.trickyandroid:jacoco-everywhere:0.2.1'
+        classpath 'com.google.gms:google-services:3.0.0'
+    }
+    configurations.all {
+        resolutionStrategy {
+            // use old jacoco so Robolectric test coverage is included in reports
+            // track https://github.com/paveldudka/JacocoEverywhere/issues/14 for a less hacky solution
+            force 'org.jacoco:org.jacoco.core:0.7.2.201409121644'
+        }
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+        maven { url = 'https://oss.sonatype.org/content/groups/public' }
+        maven {
+            url "https://maven.google.com"
+        }
+    }
+}
+
+configurations.all {
+    transitive = true
+}

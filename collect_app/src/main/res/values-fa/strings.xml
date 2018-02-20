@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <string name="add_another">اضافه کردن گروه</string>
+  <string name="cancel">انصراف</string>
+  <string name="cancel_loading_form">انصراف</string>
+  <string name="cancel_location">انصراف</string>
+  <string name="capture_audio">ثبت صدا</string>
+  <string name="capture_image">عکس گرفتن</string>
+  <string name="capture_osm">اجرای ابزار نقشه</string>
+  <string name="capture_video">ثبت ویدیو</string>
+  <string name="change_language">تغییر زبان</string>
+  <string name="change_password">پسورد</string>
+  <string name="change_username">اسم کاربری</string>
+  <string name="clear_answer">حذف پاسخ</string>
+  <string name="clear_answer_ask">آیا پاسخ حذف شود؟</string>
+  <string name="clear_answer_no">انصراف</string>
+  <string name="data">ذخیره فرم</string>
+  <string name="data_saved_error">متاسفانه فرم ذخیره نشد</string>
+  <string name="data_saved_ok">فرم با موفقیت ثبت شد</string>
+  <string name="delete_repeat_no">انصراف</string>
+  <string name="discard_answer">حذف پاسخ</string>
+  <string name="do_not_change">انصراف</string>
+  <string name="do_not_exit">انصراف</string>
+  <string name="entering_repeat">اضافه کردن گروه</string>
+  <string name="get_location">ثبت مکان</string>
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Geo string added in feature-geofeatures branch-->
+  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+</resources>

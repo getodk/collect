@@ -1,0 +1,50 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <Preference
+        android:key="odk_preferences"
+        android:summary="@string/admin_access_settings"
+        android:title="@string/general_preferences">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="org.odk.collect.android.preferences.PreferencesActivity"
+            android:targetPackage="org.odk.collect.android">
+            <extra
+                android:name="adminMode"
+                android:value="true" />
+        </intent>
+    </Preference>
+
+    <Preference
+        android:key="admin_password"
+        android:title="@string/admin_password" />
+
+    <org.odk.collect.android.preferences.ResetDialogPreference
+        android:dialogTitle="@string/reset_settings_dialog_title"
+        android:key="reset_settings"
+        android:negativeButtonText="@string/cancel"
+        android:positiveButtonText="@string/reset_settings_button_reset"
+        android:title="@string/reset_settings_dialog" />
+
+    <PreferenceScreen
+        android:key="import_settings"
+        android:title="@string/import_settings" />
+
+    <PreferenceCategory android:title="@string/user_access_control">
+
+        <PreferenceScreen
+            android:key="main_menu"
+            android:summary="@string/main_menu_settings_summary"
+            android:title="@string/main_menu_settings" />
+
+        <PreferenceScreen
+            android:key="user_settings"
+            android:summary="@string/user_setting_summary"
+            android:title="@string/user_settings" />
+
+        <PreferenceScreen
+            android:key="form_entry"
+            android:summary="@string/form_entry_settings_summary"
+            android:title="@string/form_entry_setting" />
+
+    </PreferenceCategory>
+</PreferenceScreen>

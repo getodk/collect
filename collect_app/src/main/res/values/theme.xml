@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppThemeBase.Collect"/>
+
+    <style name="AppThemeBase" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:scrollbarThumbHorizontal">@drawable/thumb</item>
+        <item name="android:scrollbarThumbVertical">@drawable/thumb</item>
+        <item name="android:scrollbarSize">1.75mm</item>
+        <item name="android:scrollbarAlwaysDrawVerticalTrack">true</item>
+        <item name="android:fadeScrollbars">false</item>
+        <item name="colorAccent">@color/tintColor</item>
+        <item name="android:fontFamily">@string/font_family_regular</item>
+        <item name="android:panelBackground">@android:color/white</item>
+        <item name="alertDialogTheme">@style/AlertDialogTheme</item>
+        <item name="searchViewStyle">@style/SearchViewTheme</item>
+    </style>
+
+    <style name="AlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <!-- color of the text of the buttons-->
+        <item name="colorAccent">@color/tintColor</item>
+    </style>
+
+    <style name="AppTheme.SettingsTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorAccent">@color/tintColor</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:panelBackground">@android:color/white</item>
+        <item name="android:listDivider">@null</item>
+        <item name="android:dividerHeight">0dp</item>
+    </style>
+
+    <style name="SearchViewTheme" parent="Widget.AppCompat.Light.SearchView">
+        <item name="searchHintIcon">@null</item>
+    </style>
+</resources>
