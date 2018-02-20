@@ -131,14 +131,14 @@ public class SelectOneWidget
         radioButton.setId(ViewIds.generateViewId());
         radioButton.setEnabled(!getFormEntryPrompt().isReadOnly());
         radioButton.setFocusable(!getFormEntryPrompt().isReadOnly());
-		
-		//adapt radioButton text as per language direction
-		if (isRTL()) {
+
+        //adapt radioButton text as per language direction
+        if (isRTL()) {
             radioButton.setGravity(Gravity.END);
         } else {
             radioButton.setGravity(Gravity.START);
         }
-		
+
         if (items.get(index).getValue().equals(selectedValue)) {
             radioButton.setChecked(true);
         }

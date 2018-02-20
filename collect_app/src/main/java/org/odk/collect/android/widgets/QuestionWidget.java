@@ -132,7 +132,7 @@ public abstract class QuestionWidget
             player = null;
         }
     }
-    
+
     //source::https://stackoverflow.com/questions/18996183/identifying-rtl-language-in-android/23203698#23203698
     public static boolean isRTL() {
         return isRTL(Locale.getDefault());
