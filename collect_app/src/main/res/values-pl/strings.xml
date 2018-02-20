@@ -383,7 +383,6 @@
   <string name="reset_settings_dialog_title">Wybierz co zresetować</string>
   <string name="reset_settings_dialog">Resetuj aplikację…</string>
   <string name="reset_settings_button_reset">Reset</string>
-  <string name="reset_dialog_nothing">Nie wybrałeś niczego do zresetowania.</string>
   <string name="reset_in_progress">Resetowanie…</string>
   <string name="reset_app_state_result">Wyniki resetu</string>
   <string name="reset_app_state_warning">Wszystkie wybrane dane zostaną trwale usunięte. Nie ma możliwości cofnięcia operacji.</string>

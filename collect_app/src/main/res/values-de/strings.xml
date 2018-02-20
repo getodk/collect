@@ -402,7 +402,6 @@
   <string name="reset_settings_dialog_title">Auswählen, was zurückgesetzt werden soll</string>
   <string name="reset_settings_dialog">Anwendung (App) zurücksetzen…</string>
   <string name="reset_settings_button_reset">Zurücksetzen (Reset)</string>
-  <string name="reset_dialog_nothing">Sie haben nichts zum Zurücksetzen ausgewählt .</string>
   <string name="reset_in_progress">Zurücksetzen…</string>
   <string name="reset_app_state_result">Zurücksetzen-Ergebnisse</string>
   <string name="reset_app_state_warning">Alle ausgewählten Daten werden dauerhaft gelöscht. Es gibt kein Rückgängig-Machen.</string>

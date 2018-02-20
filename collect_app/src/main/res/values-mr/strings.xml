@@ -402,7 +402,6 @@
   <string name="reset_settings_dialog_title">काय रीसेट करावे ते निवडा</string>
   <string name="reset_settings_dialog">अनुप्रयोग रीसेट करा …</string>
   <string name="reset_settings_button_reset">रीसेट करा</string>
-  <string name="reset_dialog_nothing">रीसेट करण्यासाठी आपण काहीही निवडले नाही.</string>
   <string name="reset_in_progress">रीसेट करत आहे …</string>
   <string name="reset_app_state_result">परिणाम रीसेट करा</string>
   <string name="reset_app_state_warning">सर्व निवडलेला डेटा कायमचा हटविला जाईल. तेथे पूर्ववत नाही</string>

@@ -354,7 +354,6 @@
   <string name="reset_settings_dialog_title">เลือกสิ่งที่ต้องตั้งค่าใหม่</string>
   <string name="reset_settings_dialog">ตั้งค่าใหม่…</string>
   <string name="reset_settings_button_reset">ตั้งค่าใหม่</string>
-  <string name="reset_dialog_nothing">คุณยังไม่ได้เลือกอะไรให้ตั้งค่าใหม่</string>
   <string name="reset_in_progress">กำลังตั้งค่าเริ่มต้นใหม่</string>
   <string name="reset_app_state_result">ผลการตั้งค่าใหม่</string>
   <string name="reset_app_state_warning">ข้อมูลที่เลือกไว้ทั้งหมดจะถูกลบ และไม่สามารถย้อนกลับได้</string>

@@ -365,7 +365,6 @@
   <string name="reset_settings_dialog_title">Zgjidh çfarë do të rivendoset</string>
   <string name="reset_settings_dialog">Rivendos aplikacionin…</string>
   <string name="reset_settings_button_reset">Rivendos</string>
-  <string name="reset_dialog_nothing">Nuk keni zgjedhur asgjë për rivendosje.</string>
   <string name="reset_in_progress">Duke rivendosur…</string>
   <string name="reset_app_state_result">Rivendos rezultatet</string>
   <string name="reset_app_state_warning">Të gjitha të dhënat do të fshihen përgjithmonë. Ky veprim nuk mund të kthehet mbrapsht. </string>

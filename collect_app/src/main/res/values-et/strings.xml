@@ -383,7 +383,6 @@
   <string name="reset_settings_dialog_title">Vali mida lähtestada</string>
   <string name="reset_settings_dialog">Rakenduse lähtestamine…</string>
   <string name="reset_settings_button_reset">Lähtesta</string>
-  <string name="reset_dialog_nothing">Ühtegi elementi ei ole lähtestamiseks valitud.</string>
   <string name="reset_in_progress">Lähtestamine…</string>
   <string name="reset_app_state_result">Lähtesta tulemused</string>
   <string name="reset_app_state_warning">Kogu valitud andmestik kustutatakse jäädavalt. </string>

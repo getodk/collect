@@ -402,7 +402,6 @@
   <string name="reset_settings_dialog_title">Pilih apa yang mau di ulang</string>
   <string name="reset_settings_dialog">ulang aplikasi</string>
   <string name="reset_settings_button_reset">Ulang</string>
-  <string name="reset_dialog_nothing">Anda belum memilih apapun untuk disetel ulang.</string>
   <string name="reset_in_progress">Mengatur ulang…</string>
   <string name="reset_app_state_result">Atur ulang hasilnya</string>
   <string name="reset_app_state_warning">Semua data terpilih akan dihapus secara permanen. Tidak  dapat dibatalkan.</string>

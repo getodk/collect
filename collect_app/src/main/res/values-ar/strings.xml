@@ -402,7 +402,6 @@
   <string name="reset_settings_dialog_title">مسح واستعادة الإعدادات الافتراضية لعناوين مربع الحوار</string>
   <string name="reset_settings_dialog">مسح واستعادة الإعدادات الافتراضية لمربع الحوار</string>
   <string name="reset_settings_button_reset">مسح واستعادة الإعدادات الافتراضية…</string>
-  <string name="reset_dialog_nothing">لم يتم اختيار اي خيار للإستعادة</string>
   <string name="reset_in_progress">جاري عملية المسح والاستعادة</string>
   <string name="reset_app_state_result">نتائج عملية المسح والاستعادة</string>
   <string name="reset_app_state_warning">تحذير… سيتم حذف البيانات المحددة. ولا امكانية للتراجع</string>
