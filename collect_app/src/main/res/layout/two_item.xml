@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:minHeight="?android:attr/listPreferredItemHeight"
-    android:paddingBottom="8dip"
-    android:paddingLeft="8dip"
-    android:paddingRight="8dip"
-    android:paddingTop="4dip">
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:minHeight="?android:attr/listPreferredItemHeight"
+  android:paddingBottom="8dip"
+  android:paddingLeft="8dip"
+  android:paddingRight="8dip"
+  android:paddingTop="4dip">
 
     <TextView
         android:id="@+id/text1"
@@ -60,6 +61,6 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:src="@drawable/visibility_off"
+      app:srcCompat="@drawable/visibility_off"
         android:visibility="gone" />
 </RelativeLayout>

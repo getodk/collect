@@ -14,9 +14,10 @@ the License.
 -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_alignParentTop="true">
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_alignParentTop="true">
     <!-- Toolbar -->
     <include layout="@layout/toolbar" />
 
@@ -92,7 +93,7 @@ the License.
             android:layout_width="60dp"
             android:layout_height="match_parent"
             android:enabled="false"
-            android:src="@drawable/ic_action_action_search" />
+            app:srcCompat="@drawable/ic_action_action_search" />
 
     </LinearLayout>
 
