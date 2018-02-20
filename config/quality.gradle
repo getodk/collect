@@ -19,6 +19,10 @@ apply plugin: 'jacoco'
  * limitations under the License.
  */
 
+jacoco {
+    toolVersion '0.7.9'
+}
+
 // Add checkstyle, findbugs, pmd and lint to the check task.
 check.dependsOn 'checkstyle', 'findbugs', 'pmd', 'lint'
 
@@ -100,9 +104,7 @@ def coverageSourceDirs = [
 ]
 
 
-task jacocoTestReport(type: JacocoReport) {
-    dependsOn 'createDebugCoverageReport'
-    dependsOn 'testDebugUnitTest'
+task jacocoTestReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
     description = 'Generate JaCoCo coverage reports'
 
     reports {
