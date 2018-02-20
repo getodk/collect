@@ -126,12 +126,13 @@ jobs:
           command: |
             if [[ "$CIRCLE_PROJECT_USERNAME" == "opendatakit" ]]; then \
               echo "y" | gcloud firebase test android run \
+              --type instrumentation \
               --app collect_app/build/outputs/apk/debug/*.apk \
               --test collect_app/build/outputs/apk/androidTest/debug/*.apk \
               --device model=Nexus5,version=21,locale=en,orientation=portrait \
               --results-bucket opendatakit-collect-test-results \
-              --environment-variables coverage=true,coverageFile="/sdcard/tmp/code-coverage/connected/coverage.ec" \
-              --directories-to-pull /sdcard/tmp --timeout 20m
+              --environment-variables coverage=true,coverageFile=/sdcard/coverage.ec \
+              --directories-to-pull /sdcard --timeout 20m
             fi
       - run:
           name: Copy integration test results
