@@ -279,7 +279,6 @@
   <string name="show_map_sdk">Afișați opțiuni SDK hartă</string>
   <string name="openmap_streets">OSM Streets</string>
   <string name="openmap_usgs_topo">USGS National Map Topo</string>
-  <string name="openmap_usgs_sat">USGS National Map Sat</string>
   <string name="streets">Străzi</string>
   <string name="terrain">Teren</string>
   <string name="hybrid">Hibrid</string>

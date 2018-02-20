@@ -299,7 +299,6 @@
   <string name="show_map_sdk">मैप SDK विकल्प दिखायें </string>
   <string name="openmap_streets">OSM स्ट्रीट</string>
   <string name="openmap_usgs_topo">USGS National Map Topo</string>
-  <string name="openmap_usgs_sat">USGS National Map Sat</string>
   <string name="openmap_stamen_terrain">स्टैमन टेरेन</string>
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
   <string name="openmap_cartodb_darkmatter">CartoDB डार्क मैटर</string>

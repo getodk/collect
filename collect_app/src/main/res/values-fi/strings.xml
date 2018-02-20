@@ -11,6 +11,7 @@
   <string name="cancel">Peruuta</string>
   <string name="cancel_loading_form">Peruuta</string>
   <string name="cancel_location">Peruuta</string>
+  <string name="canceling">Perutaan</string>
   <string name="cannot_edit_completed_form">Tätä lomaketta ei voi muokata, kun se on merkitty vimeistellyksi. Se saattaa olla salattu.</string>
   <string name="capture_audio">Äänitä</string>
   <string name="capture_image">Ota kuva</string>
@@ -298,8 +299,9 @@
   <string name="openstreetmap_sdk">OpenStreetMap SDK</string>
   <string name="show_map_sdk">Näytä Map SDK:n valikko</string>
   <string name="openmap_streets">OSM Streets</string>
-  <string name="openmap_usgs_topo">USGS National Map Topo</string>
-  <string name="openmap_usgs_sat">USGS National Map Sat</string>
+  <string name="openmap_usgs_topo">USGS National Map topografinen</string>
+  <string name="openmap_usgs_sat">USGS National Map hybridi</string>
+  <string name="openmap_usgs_img">USGS National Map kuvat</string>
   <string name="openmap_stamen_terrain">Stamen Terrain</string>
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
@@ -562,4 +564,6 @@
   <string name="yes">Kyllä</string>
   <string name="no">Ei</string>
   <string name="newer_version_of_a_form_info">Tämä on päivitetty versio lomakkeesta joka sinulla jo on!</string>
+  <string name="svg_file_does_not_exist">SVG-tiedosto puuttuu!</string>
+  <string name="svg_not_supported_device">ImageMap-widget vaatii Android-versiota 5 (Lollipop) tai uudempaa. Laitteesi ei ole tuettu!</string>
 </resources>

@@ -299,7 +299,6 @@
   <string name="show_map_sdk">Показать опции набора разработчика для нанесения на карту</string>
   <string name="openmap_streets">OSM Улицы</string>
   <string name="openmap_usgs_topo">Топосъёмка национальной карты USGS</string>
-  <string name="openmap_usgs_sat">Спутник национальной карты USGS</string>
   <string name="openmap_stamen_terrain">Stamen ландшафт</string>
   <string name="openmap_cartodb_positron">CartoDB Позитрон</string>
   <string name="openmap_cartodb_darkmatter">CartoDB тёмная материя</string>
