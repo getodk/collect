@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <ListPreference
-        android:dialogTitle="@string/change_protocol"
-        android:entries="@array/protocol_entries"
-        android:entryValues="@array/protocol_entry_values"
-        android:key="protocol"
-        android:title="@string/type" />
-</PreferenceScreen>
