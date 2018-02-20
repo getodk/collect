@@ -264,6 +264,13 @@ public class DataManagerList extends InstanceListFragment
             case R.id.toggle_button:
                 ListView lv = getListView();
                 boolean allChecked = toggleChecked(lv);
+                if(allChecked){
+                    for (int i = 0; i < lv.getCount(); i++) {
+                        selectedInstances.add(lv.getItemIdAtPosition(i));
+                    }
+                }else{
+                    selectedInstances.clear();
+                }
                 toggleButtonLabel(toggleButton, getListView());
                 deleteButton.setEnabled(allChecked);
                 break;
