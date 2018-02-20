@@ -160,7 +160,10 @@ jobs:
       - *attach_firebase_workspace
       - run:
           name: Move Firebase coverage report
-          command: mkdir -p collect_app/build/outputs/code-coverage/connected && cp firebase/Nexus5-21-en-portrait/artifacts/coverage.ec collect_app/build/outputs/code-coverage/connected/coverage.ec
+          command: |
+            if [[ "$CIRCLE_PROJECT_USERNAME" == "opendatakit" ]]; then \
+              mkdir -p collect_app/build/outputs/code-coverage/connected && cp firebase/Nexus5-21-en-portrait/artifacts/coverage.ec collect_app/build/outputs/code-coverage/connected/coverage.ec
+            fi
       - run:
           name: Generate JaCoCo report
           command: ./gradlew -PciBuild=true jacocoTestReport
