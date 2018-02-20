@@ -299,7 +299,6 @@
   <string name="show_map_sdk">عرض خيارات الخريطة</string>
   <string name="openmap_streets">اخريطة لطرق</string>
   <string name="openmap_usgs_topo">خرطة البنية</string>
-  <string name="openmap_usgs_sat">خريطة الاقمار الاصطناعية</string>
   <string name="openmap_stamen_terrain">خريطة التضاريس</string>
   <string name="openmap_cartodb_positron">خريطة CartoDB</string>
   <string name="openmap_cartodb_darkmatter">خريطة CartoDB</string>

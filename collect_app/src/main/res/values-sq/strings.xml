@@ -269,7 +269,6 @@
   <string name="leave_a_review">Ler një koment në Google Play Store</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="openmap_streets">Rrugë OSM</string>
-  <string name="openmap_usgs_sat">Sat i Hartave Kombëtare USGS</string>
   <string name="streets">Rrugë</string>
   <string name="terrain">Terren</string>
   <string name="hybrid">Hibride</string>
