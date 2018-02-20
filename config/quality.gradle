@@ -95,13 +95,14 @@ android {
 }
 
 def coverageSourceDirs = [
-        'src/main/java',
-        'src/debug/java'
+        "${project.projectDir}/src/main/java",
+        "${project.projectDir}/src/debug/java"
 ]
 
 
-task jacocoTestReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
-    group = 'Reporting'
+task jacocoTestReport(type: JacocoReport) {
+    dependsOn 'createDebugCoverageReport'
+    dependsOn 'testDebugUnitTest'
     description = 'Generate JaCoCo coverage reports'
 
     reports {
@@ -109,26 +110,20 @@ task jacocoTestReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
         html.enabled = true
     }
 
-    classDirectories = fileTree(
-            dir: 'build/intermediates/classes/debug',
-            excludes: [
-                    '**/R.class',
-                    '**/R$*.class',
-                    '**/*$ViewInjector*.*',
-                    '**/*$ViewBinder*.*',
-                    '**/BuildConfig.*',
-                    '**/Manifest*.*',
-                    '**/Dagger*.*',
-                    '**/*Module_Provide*Factory.*',
-                    '**/*_Factory.*',
-                    '**/*_MembersInjector.*',
-            ]
-    )
-
     sourceDirectories = files(coverageSourceDirs)
+    classDirectories = fileTree(
+            dir: "${buildDir}/intermediates/classes/debug",
+            excludes: ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*',
+                       '**/*Test*.*', 'android/**/*.*',
+                       '**/*_MembersInjector.class',
+                       '**/Dagger*Component.class',
+                       '**/Dagger*Component$Builder.class',
+                       '**/*_*Factory.class',
+                       '**/*ComponentImpl.class',
+                       '**/*SubComponentBuilder.class'])
     executionData = fileTree(
             dir: "$buildDir",
-            include: ['jacoco/testDebugUnitTest.exec', 'outputs/code-coverage/connected/*coverage.ec']
+            include: ["jacoco/testDebugUnitTest.exec", "outputs/code-coverage/connected/*coverage.ec"]
     )
 
     doFirst {
