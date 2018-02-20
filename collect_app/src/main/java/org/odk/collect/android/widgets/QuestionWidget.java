@@ -53,7 +53,6 @@ import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.views.MediaLayout;
-import org.odk.collect.android.widgets.interfaces.BaseImageWidget;
 import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 import org.odk.collect.android.widgets.interfaces.Widget;
 
@@ -126,14 +125,13 @@ public abstract class QuestionWidget
         addHelpTextView(getHelpTextView());
     }
 
-    /** Releases resources held by this widget*/
+    /** Releases resources held by this widget */
     public void release() {
         if (player != null) {
             player.release();
             player = null;
         }
     }
-
     /**
      * author: vrjgamer
      * This function checks if current set language is RTL
@@ -146,8 +144,7 @@ public abstract class QuestionWidget
                 directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC;
     }
 
-    protected void injectDependencies(DependencyProvider dependencyProvider) {
-    }
+    protected void injectDependencies(DependencyProvider dependencyProvider) {}
 
     private MediaLayout createQuestionMediaLayout(FormEntryPrompt prompt) {
         String promptText = prompt.getLongText();
