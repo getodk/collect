@@ -19,11 +19,12 @@ package org.odk.collect.android;
 import android.content.res.AssetManager;
 import android.os.Environment;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.runner.AndroidJUnit4;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.tasks.FormLoaderTask;
@@ -33,6 +34,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
 
 import timber.log.Timber;
 
@@ -40,68 +42,65 @@ import static junit.framework.Assert.assertEquals;
 
 /**
  * This test has been created in order to check indices while navigating through a form.
- * It's especially important while navigate through a form which contains nested regular groups
- * and nested groups with field-list appearance since it might be tricky.
+ * It's especially important while navigate through a form which contains nested groups and if we
+ * use groups with field-list appearance because in that case we need to collect all indices of
+ * questions we want to display on one page (we need to recursively get all indices contained in
+ * such a group and its children). It might be also tricky when navigate backwards because then we
+ * need to navigate to an index of the first question of all we want to display on one page.
  */
-@RunWith(AndroidJUnit4.class)
+@RunWith(Parameterized.class)
 public class FormNavigationTestCase {
 
     private static final String FORMS_DIRECTORY = "/odk/forms/";
 
-    @Test
-    public void formNavigationTestCase() throws IOException {
-        String formName = "simpleFieldList.xml";
-        prepareFile(formName);
-        testIndexes(formName, new String[] {"-1, ", "0, ", "-1, ", "0, "});
-
-        formName = "fieldListInFieldList.xml";
-        prepareFile(formName);
-        testIndexes(formName, new String[] {"-1, ", "0, ", "-1, ", "0, "});
-
-        formName = "regularGroupWithFieldListGroupInside.xml";
-        prepareFile(formName);
-        testIndexes(formName, new String[] {"-1, ", "0, 0, ", "-1, ", "0, 0, "});
-
-        formName = "twoNestedRegularGroups.xml";
-        prepareFile(formName);
-        testIndexes(formName, new String[] {"-1, ", "0, 0, 0, ", "0, 0, 1, ", "0, 0, 2, ", "-1, ", "0, 0, 2, "});
-
-        formName = "regularGroupWithQuestionAndRegularGroupInside.xml";
-        prepareFile(formName);
-        testIndexes(formName, new String[] {"-1, ", "0, 0, ", "0, 1, 0, ", "0, 1, 1, ", "-1, ", "0, 1, 1, "});
-
-        formName = "regularGroupWithQuestionsAndRegularGroupInside.xml";
-        prepareFile(formName);
-        testIndexes(formName, new String[] {"-1, ", "0, 0, ", "0, 1, 0, ", "0, 2, ", "-1, ", "0, 2, "});
-
-        formName = "fieldListWithQuestionAndRegularGroupInside.xml";
-        prepareFile(formName);
-        testIndexes(formName, new String[] {"-1, ", "0, ", "-1, ", "0, "});
-
-        formName = "fieldListWithQuestionsAndRegularGroupsInside.xml";
-        prepareFile(formName);
-        testIndexes(formName, new String[] {"-1, ", "0, ", "-1, ", "0, "});
-
-        formName = "threeNestedFieldListGroups.xml";
-        prepareFile(formName);
-        testIndexes(formName, new String[] {"-1, ", "0, ", "-1, ", "0, "});
+    @Parameters(name = "{0}")
+    public static Iterable<Object[]> data() {
+        return Arrays.asList(new Object[][] {
+                {"simpleFieldList.xml", new String[] {"-1, ", "0, ", "-1, ", "0, "}},
+                {"fieldListInFieldList.xml", new String[] {"-1, ", "0, ", "-1, ", "0, "}},
+                {"regularGroupWithFieldListGroupInside.xml", new String[] {"-1, ", "0, 0, ", "-1, ", "0, 0, "}},
+                {"twoNestedRegularGroups.xml", new String[] {"-1, ", "0, 0, 0, ", "0, 0, 1, ", "0, 0, 2, ", "-1, ", "0, 0, 2, "}},
+                {"regularGroupWithQuestionAndRegularGroupInside.xml", new String[] {"-1, ", "0, 0, ", "0, 1, 0, ", "0, 1, 1, ", "-1, ", "0, 1, 1, "}},
+                {"regularGroupWithQuestionsAndRegularGroupInside.xml", new String[] {"-1, ", "0, 0, ", "0, 1, 0, ", "0, 2, ", "-1, ", "0, 2, "}},
+                {"fieldListWithQuestionAndRegularGroupInside.xml", new String[] {"-1, ", "0, ", "-1, ", "0, "}},
+                {"fieldListWithQuestionsAndRegularGroupsInside.xml", new String[] {"-1, ", "0, ", "-1, ", "0, "}},
+                {"threeNestedFieldListGroups.xml", new String[] {"-1, ", "0, ", "-1, ", "0, "}}
+        });
     }
 
-    private void testIndexes(String formName, String[] expectedIndexes) {
+    private String formName;
+    private String[] expectedIndices;
+
+    public FormNavigationTestCase(String formName, String[] expectedIndices) {
+        this.formName = formName;
+        this.expectedIndices = expectedIndices;
+    }
+
+    @Test
+    public void formNavigationTestCase() {
+        testIndices(formName, expectedIndices);
+    }
+
+    private void testIndices(String formName, String[] expectedIndices) {
+        try {
+            prepareFile(formName);
+        } catch (IOException e) {
+            Timber.i(e);
+        }
         FormLoaderTask formLoaderTask = new FormLoaderTask(formPath(formName), null, null);
         formLoaderTask.setFormLoaderListener(new FormLoaderListener() {
             @Override
             public void loadingComplete(FormLoaderTask task) {
                 try {
-                    for (int i = 0; i < expectedIndexes.length - 1; i++) {
+                    for (int i = 0; i < expectedIndices.length - 1; i++) {
                         FormController formController = task.getFormController();
-                        assertEquals(expectedIndexes[i], formController.getFormIndex().toString());
-                        if (i < expectedIndexes.length - 2) {
+                        assertEquals(expectedIndices[i], formController.getFormIndex().toString());
+                        if (i < expectedIndices.length - 2) {
                             formController.stepToNextScreenEvent();
                         } else {
                             formController.stepToPreviousScreenEvent();
                         }
-                        assertEquals(expectedIndexes[i + 1], formController.getFormIndex().toString());
+                        assertEquals(expectedIndices[i + 1], formController.getFormIndex().toString());
                     }
                 } catch (Exception e) {
                     Timber.i(e);
