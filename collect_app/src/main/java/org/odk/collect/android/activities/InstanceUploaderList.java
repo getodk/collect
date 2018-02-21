@@ -131,6 +131,9 @@ public class InstanceUploaderList extends InstanceListActivity
                 boolean allChecked = toggleChecked(lv);
                 toggleButtonLabel(toggleSelsButton, lv);
                 uploadButton.setEnabled(allChecked);
+                if (!allChecked) {
+                    selectedInstances.clear();
+                }
             }
         });
         toggleSelsButton.setOnLongClickListener(this);
@@ -318,6 +321,7 @@ public class InstanceUploaderList extends InstanceListActivity
     protected void updateAdapter() {
         listAdapter.changeCursor(getCursor());
         checkPreviouslyCheckedItems();
+        toggleButtonLabel(findViewById(R.id.toggle_button), listView);
     }
 
     private Cursor getCursor() {

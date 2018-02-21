@@ -294,7 +294,6 @@
   <string name="show_map_sdk">Mostra Opzioni per mappa SDK</string>
   <string name="openmap_streets">Strade OSM</string>
   <string name="openmap_usgs_topo">Mappa Topologia Nazionale USGS</string>
-  <string name="openmap_usgs_sat">Mappa Satellitare Nazionale USGS</string>
   <string name="openmap_stamen_terrain">Stamen Terrain</string>
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
@@ -394,7 +393,6 @@
   <string name="reset_settings_dialog_title">Seleziona le opzioni da reimpostare</string>
   <string name="reset_settings_dialog">Reimpostare l\'applicazione</string>
   <string name="reset_settings_button_reset">Reimposta</string>
-  <string name="reset_dialog_nothing">Non hai selezionato alcun elemento da reimpostare.</string>
   <string name="reset_in_progress">Reimpostazione…</string>
   <string name="reset_app_state_result">Reimposta risultati</string>
   <string name="reset_app_state_warning">I dati selezionati verranno cancellati definitivamente. L\'operazione non può essere annullata.</string>

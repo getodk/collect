@@ -11,7 +11,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
-import org.odk.collect.android.preferences.AboutPreferencesActivity;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
@@ -66,12 +65,12 @@ public class MainActivityTest {
         assertNotNull(menu);
         assertNotNull(mainMenuActivity.onCreateOptionsMenu(menu));
 
-        //Test for AboutPreferencesActivity
+        //Test for AboutActivity
         mainMenuActivity.onOptionsItemSelected(menu.getItem(0));
         ShadowActivity shadowActivity = shadowOf(mainMenuActivity);
         Intent startedIntent = shadowActivity.getNextStartedActivity();
         ShadowIntent shadowIntent = shadowOf(startedIntent);
-        assertEquals(AboutPreferencesActivity.class.getName(), shadowIntent.getIntentClass().getName());
+        assertEquals(AboutActivity.class.getName(), shadowIntent.getIntentClass().getName());
 
         //Test for About Menu Title
         String menuTitle = mainMenuActivity.getResources().getString(R.string.about_preferences);

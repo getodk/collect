@@ -78,6 +78,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
     private static final int PROGRESS_DIALOG = 1;
     private static final int AUTH_DIALOG = 2;
+    private static final int CANCELLATION_DIALOG = 3;
     private static final int MENU_PREFERENCES = Menu.FIRST;
 
     private static final String BUNDLE_SELECTED_COUNT = "selectedcount";
@@ -101,6 +102,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
     private AlertDialog alertDialog;
     private ProgressDialog progressDialog;
+    private ProgressDialog cancelDialog;
     private Button downloadButton;
 
     private DownloadFormListTask downloadFormListTask;
@@ -380,18 +382,17 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                             public void onClick(DialogInterface dialog, int which) {
                                 Collect.getInstance().getActivityLogger().logAction(this,
                                         "onCreateDialog.PROGRESS_DIALOG", "OK");
-                                dialog.dismiss();
                                 // we use the same progress dialog for both
                                 // so whatever isn't null is running
+                                dialog.dismiss();
                                 if (downloadFormListTask != null) {
                                     downloadFormListTask.setDownloaderListener(null);
                                     downloadFormListTask.cancel(true);
                                     downloadFormListTask = null;
                                 }
                                 if (downloadFormsTask != null) {
-                                    downloadFormsTask.setDownloaderListener(null);
+                                    showDialog(CANCELLATION_DIALOG);
                                     downloadFormsTask.cancel(true);
-                                    downloadFormsTask = null;
                                 }
                             }
                         };
@@ -409,6 +410,14 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 alertShowing = false;
 
                 return new AuthDialogUtility().createDialog(this, this, null);
+            case CANCELLATION_DIALOG:
+                cancelDialog = new ProgressDialog(this);
+                cancelDialog.setTitle(getString(R.string.canceling));
+                cancelDialog.setMessage(getString(R.string.please_wait));
+                cancelDialog.setIcon(android.R.drawable.ic_dialog_info);
+                cancelDialog.setIndeterminate(true);
+                cancelDialog.setCancelable(false);
+                return cancelDialog;
         }
         return null;
     }
@@ -438,6 +447,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             ((FormDownloadListAdapter) listView.getAdapter()).notifyDataSetChanged();
         }
         toggleButton.setEnabled(filteredFormList.size() > 0);
+        toggleButtonLabel(toggleButton, listView);
         checkPreviouslyCheckedItems();
     }
 
@@ -717,6 +727,17 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         }
 
         createAlertDialog(getString(R.string.download_forms_result), b.toString().trim(), EXIT);
+    }
+
+    @Override
+    public void formsDownloadingCancelled() {
+        if (downloadFormsTask != null) {
+            downloadFormsTask.setDownloaderListener(null);
+            downloadFormsTask = null;
+        }
+        if (cancelDialog.isShowing()) {
+            cancelDialog.dismiss();
+        }
     }
 
     @Override

@@ -93,9 +93,9 @@ public class CustomTabHelper {
     public void openUri(Context context, Uri uri) {
         if (getPackageName(context).size() != 0) {
             //open in chrome custom tab
-            CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder().build();
-            customTabsIntent.intent.setPackage(getPackageName(context).get(0));
-            customTabsIntent.launchUrl(context, uri);
+            new CustomTabsIntent.Builder()
+                    .build()
+                    .launchUrl(context, uri);
         } else {
             try {
                 //open in external browser

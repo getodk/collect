@@ -62,6 +62,10 @@ When a pull request is first created, @opendatakit-bot tags it as `needs review`
 
 Small fixes that target very particular bugs may occasionally be merged without a second review.
 
+## Triage Issues [![Open Source Helpers](https://www.codetriage.com/opendatakit/collect/badges/users.svg)](https://www.codetriage.com/opendatakit/collect)
+
+In addition to contributing code, you can help to triage issues. This can include reproducing bug reports, or asking for vital information such as version numbers or reproduction instructions. If you would like to start triaging issues, one easy way to get started is to [subscribe to opendatakit/collect on CodeTriage](https://www.codetriage.com/opendatakit/collect).
+
 ## Style guidelines
 Follow the [Android style rules](http://source.android.com/source/code-style.html) and the [Google Java style guide](https://google.github.io/styleguide/javaguide.html).
 

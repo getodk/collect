@@ -248,6 +248,9 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
                 boolean allChecked = toggleChecked(lv);
                 toggleButtonLabel(toggleButton, getListView());
                 deleteButton.setEnabled(allChecked);
+                if (!allChecked) {
+                    selectedInstances.clear();
+                }
                 break;
         }
     }
