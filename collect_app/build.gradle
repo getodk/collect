@@ -96,7 +96,6 @@ android {
                 signingConfig signingConfigs.release
             }
             minifyEnabled(true)
-            testCoverageEnabled(true)
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
             resValue("bool", "FIREBASE_CRASH_ENABLED", "false")
         }
@@ -106,7 +105,6 @@ android {
                 signingConfig signingConfigs.release
             }
             minifyEnabled(true)
-            testCoverageEnabled(true)
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
             resValue("bool", "FIREBASE_CRASH_ENABLED", "true")
         }
