@@ -265,8 +265,13 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
             }
         } else {
             onException(errorString);
-            setFocus(getContext());
+            showKeyboard(getContext());
         }
+    }
+
+    private void showKeyboard(Context context) {
+        InputMethodManager inputManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.showSoftInput(answer, 0);
     }
 
     private void onException(String toastText) {
