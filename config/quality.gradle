@@ -20,7 +20,7 @@ apply plugin: 'jacoco'
  */
 
 jacoco {
-    toolVersion '0.7.9'
+    toolVersion '0.7.4+'
 }
 
 // Add checkstyle, findbugs, pmd and lint to the check task.
