@@ -57,6 +57,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.zip.DataFormatException;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -76,27 +79,27 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
     private final boolean[] checkedItems = new boolean[]{true, true};
-    private ImageView qrImageView;
-    private ProgressBar progressBar;
+
+    @BindView(R.id.qr_iv)
+    ImageView qrImageView;
+    @BindView(R.id.progressBar)
+    ProgressBar progressBar;
+    @BindView(R.id.edit_qrcode)
+    TextView editQRCode;
+
     private Intent shareIntent;
-    private TextView editQRCode;
     private AlertDialog dialog;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.show_qrcode_fragment, container, false);
+        ButterKnife.bind(this, view);
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.import_export_settings));
         ((AdminPreferencesActivity) getActivity()).setSupportActionBar(toolbar);
         setHasOptionsMenu(true);
         setRetainInstance(true);
-        qrImageView = view.findViewById(R.id.qr_iv);
-        progressBar = view.findViewById(R.id.progressBar);
-        editQRCode = view.findViewById(R.id.edit_qrcode);
-        editQRCode.setOnClickListener(this);
-        view.findViewById(R.id.btnScan).setOnClickListener(this);
-        view.findViewById(R.id.btnSelect).setOnClickListener(this);
         generateCode();
         return view;
     }
@@ -146,7 +149,7 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
         shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + QR_CODE_FILEPATH));
     }
 
-    @Override
+    @OnClick({R.id.btnScan, R.id.btnSelect, R.id.edit_qrcode})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnScan:
