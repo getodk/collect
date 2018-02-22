@@ -46,9 +46,6 @@ import java.util.Map;
 
 import timber.log.Timber;
 
-/**
- * Created by shobhit on 13/4/17.
- */
 
 public class QRCodeUtils {
 

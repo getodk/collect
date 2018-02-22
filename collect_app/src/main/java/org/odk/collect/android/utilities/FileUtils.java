@@ -536,7 +536,6 @@ public class FileUtils {
     public static void writeToFile(File file, String message, boolean append) {
         try (FileOutputStream overWrite = new FileOutputStream(file, append)) {
             overWrite.write(message.getBytes());
-            overWrite.flush();
             overWrite.close();
         } catch (IOException e) {
             Timber.e(e);
