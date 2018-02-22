@@ -87,7 +87,7 @@ public class QRCodeUtils {
         return new BinaryBitmap(new HybridBinarizer(source));
     }
 
-    public static Bitmap generateQRBitMap(String data, int width, int height) throws IOException, WriterException {
+    public static Bitmap generateQRBitMap(String data, int sideLength) throws IOException, WriterException {
         final long time = System.currentTimeMillis();
         String compressedData = CompressionUtils.compress(data);
 
@@ -99,11 +99,11 @@ public class QRCodeUtils {
         Map<EncodeHintType, ErrorCorrectionLevel> hints = new HashMap<>();
         hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
-        BitMatrix bitMatrix = qrCodeWriter.encode(compressedData, BarcodeFormat.QR_CODE, width, height, hints);
+        BitMatrix bitMatrix = qrCodeWriter.encode(compressedData, BarcodeFormat.QR_CODE, sideLength, sideLength, hints);
 
-        Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
+        Bitmap bmp = Bitmap.createBitmap(sideLength, sideLength, Bitmap.Config.RGB_565);
+        for (int x = 0; x < sideLength; x++) {
+            for (int y = 0; y < sideLength; y++) {
                 bmp.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
             }
         }

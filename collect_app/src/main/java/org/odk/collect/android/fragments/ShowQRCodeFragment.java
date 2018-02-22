@@ -74,8 +74,7 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PASSWORD;
 public class ShowQRCodeFragment extends Fragment implements View.OnClickListener {
 
     private static final int SELECT_PHOTO = 111;
-    private static final int QR_CODE_WIDTH = 400; // in pixels
-    private static final int QR_CODE_HEIGHT = 400; // in pixels
+    private static final int QR_CODE_SIDE_LENGTH = 400; // in pixels
     private static final String QR_CODE_FILEPATH = Collect.SETTINGS + File.separator + "collect-settings.jpeg";
     private static final String MD5_CACHE_PATH = Collect.SETTINGS + File.separator + ".md5";
 
@@ -155,7 +154,7 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
             // If the file is not found in the disk or md5Hash not matched
             if (bitmap == null) {
                 Timber.i("Generating QRCode...");
-                bitmap = QRCodeUtils.generateQRBitMap(preferencesString, QR_CODE_WIDTH, QR_CODE_HEIGHT);
+                bitmap = QRCodeUtils.generateQRBitMap(preferencesString, QR_CODE_SIDE_LENGTH);
                 shouldWriteToDisk = true;
             }
 
