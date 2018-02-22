@@ -28,6 +28,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -43,16 +44,15 @@ public class SharedPreferencesUtils {
 
     private final Context context = Collect.getInstance();
 
-    public static String getJSONFromPreferences(Collection<String> keys) throws JSONException {
+    public static String getJSONFromPreferences(Collection<String> passwordKeys) throws JSONException {
+        Collection<String> keys = new ArrayList<>(passwordKeys);
         keys.addAll(GENERAL_KEYS.keySet());
-
-        SharedPreferencesUtils obj = new SharedPreferencesUtils();
-        JSONObject sharedPrefJson = obj.getModifiedPrefs(keys);
+        JSONObject sharedPrefJson = getModifiedPrefs(keys);
         Timber.i(sharedPrefJson.toString());
         return sharedPrefJson.toString();
     }
 
-    private JSONObject getModifiedPrefs(Collection<String> keys) throws JSONException {
+    private static JSONObject getModifiedPrefs(Collection<String> keys) throws JSONException {
         JSONObject prefs = new JSONObject();
         JSONObject adminPrefs = new JSONObject();
         JSONObject generalPrefs = new JSONObject();
