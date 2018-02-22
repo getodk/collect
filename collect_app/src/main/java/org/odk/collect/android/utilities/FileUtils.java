@@ -506,16 +506,16 @@ public class FileUtils {
     }
 
     public static byte[] read(File file) {
-        byte[] getBytes = {};
+        byte[] bytes = {};
         try {
-            getBytes = new byte[(int) file.length()];
+            bytes = new byte[(int) file.length()];
             InputStream is = new FileInputStream(file);
-            is.read(getBytes);
+            is.read(bytes);
             is.close();
         } catch (IOException e) {
             Timber.e(e);
         }
-        return getBytes;
+        return bytes;
     }
 
     public static void write(File file, byte[] data) {
