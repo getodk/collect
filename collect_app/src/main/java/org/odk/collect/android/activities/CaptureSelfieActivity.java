@@ -40,7 +40,7 @@ import timber.log.Timber;
 public class CaptureSelfieActivity extends Activity {
     private Camera camera;
     private CameraPreview preview;
-    private Camera.CameraInfo mCameraInfo;
+    private Camera.CameraInfo cameraInfo;
 
     /**
      * Conversion from screen rotation constant to the number of degrees.
@@ -118,7 +118,7 @@ public class CaptureSelfieActivity extends Activity {
 
             if (camInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
                 camera = Camera.open(camNo);
-                mCameraInfo = camInfo;
+                cameraInfo = camInfo;
                 camera.setDisplayOrientation(90);
 
             }
@@ -126,11 +126,11 @@ public class CaptureSelfieActivity extends Activity {
 
         // Set the rotation of the camera which the output picture need.
         if (camera != null) {
-            Camera.Parameters mParameters;
-            mParameters = camera.getParameters();
+            Camera.Parameters parameters;
+            parameters = camera.getParameters();
             int rotation = ORIENTATIONS.get(getWindowManager().getDefaultDisplay().getRotation());
-            mParameters.setRotation(calcCameraRotation(rotation));
-            camera.setParameters(mParameters);
+            parameters.setRotation(calcCameraRotation(rotation));
+            camera.setParameters(parameters);
         } else {
             Timber.e("No Available front camera");
         }
@@ -193,6 +193,6 @@ public class CaptureSelfieActivity extends Activity {
      * @return Number of degrees to rotate image in order for it to view correctly.
      */
     private int calcCameraRotation(int screenOrientationDegrees) {
-        return (mCameraInfo.orientation + screenOrientationDegrees) % 360;
+        return (cameraInfo.orientation + screenOrientationDegrees) % 360;
     }
 }
