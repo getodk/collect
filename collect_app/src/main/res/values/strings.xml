@@ -296,7 +296,7 @@
     <string name="google_play_services_error_occured">Unable to access Google Maps. Is Google Play Services installed?</string>
     <string name="about_preferences">About</string>
     <string name="tell_your_friends">Share ODK Collect with your colleagues</string>
-    <string name="tell_your_friends_msg">Download the ODK Collect app!</string>
+    <string name="tell_your_friends_msg">Liberate your colleagues from the age-old mechanism of using paper for data collection!</string>
     <string name="leave_a_review">Leave a review on the Google Play Store</string>
     <!-- Geo string added in feature-geofeatures branch-->
     <string name="map_preferences">Mapping</string>
@@ -378,10 +378,10 @@
     <string name="parser_exception">XPathParser Exception: \"%s\"</string>
     <string name="selected_answer">Selected: %s</string>
     <string name="version_number">Version: %s</string>
-    <string name="odk_website">Visit the ODK website</string>
-    <string name="odk_website_summary">Open Data Kit (ODK) is used to collect data for social good in challenging environments.</string>
-    <string name="odk_forum">Join the ODK forum</string>
-    <string name="odk_forum_summary">Join the forum to get support, request features, contribute code/translations!</string>
+    <string name="odk_website">Visit us</string>
+    <string name="odk_website_summary">Visit our website and get familiar with the wonderful things Open Data Kit (ODK) does.</string>
+    <string name="odk_forum">Join us</string>
+    <string name="odk_forum_summary">Join the ODK forum and be a part of an ever-growing and vibrant community. </string>
     <string name="all_open_source_licenses">Open source libraries and licenses</string>
 
     <!-- %1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8" -->

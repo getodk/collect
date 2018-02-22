@@ -57,7 +57,7 @@ public class AboutActivity extends AppCompatActivity implements
         int[][] items = {
                 {R.drawable.ic_website, R.string.odk_website, R.string.odk_website_summary},
                 {R.drawable.ic_forum, R.string.odk_forum, R.string.odk_forum_summary},
-                {R.drawable.ic_share, R.string.tell_your_friends, -1},
+                {R.drawable.ic_share, R.string.tell_your_friends,R.string.tell_your_friends_msg},
                 {R.drawable.ic_review_rate, R.string.leave_a_review, -1},
                 {R.drawable.ic_stars, R.string.all_open_source_licenses, -1}
         };
