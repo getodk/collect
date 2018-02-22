@@ -15,6 +15,7 @@
 package org.odk.collect.android.utilities;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 
@@ -39,15 +40,23 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 
+import java.io.File;
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.reactivex.Observable;
 import timber.log.Timber;
 
 
 public class QRCodeUtils {
+    public static final String QR_CODE_FILEPATH = Collect.SETTINGS + File.separator + "collect-settings.jpeg";
+    private static final int QR_CODE_SIDE_LENGTH = 400; // in pixels
+    private static final String MD5_CACHE_PATH = Collect.SETTINGS + File.separator + ".md5";
 
     private QRCodeUtils() {
     }
@@ -106,5 +115,58 @@ public class QRCodeUtils {
         }
         Timber.i("QR Code generation took : %d ms", (System.currentTimeMillis() - time));
         return bmp;
+    }
+
+    public static Observable<Bitmap> getQRCodeGeneratorObservable(Collection<String> selectedPasswordKeys) {
+        return Observable.create(emitter -> {
+            String preferencesString = SharedPreferencesUtils.getJSONFromPreferences(selectedPasswordKeys);
+
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(preferencesString.getBytes());
+            byte[] messageDigest = md.digest();
+
+            boolean shouldWriteToDisk = true;
+            Bitmap bitmap = null;
+
+            File mdCacheFile = new File(MD5_CACHE_PATH);
+            if (mdCacheFile.exists()) {
+                byte[] cachedMessageDigest = FileUtils.read(mdCacheFile);
+
+                /*
+                 * If the messageDigest generated from the preferences is equal to cachedMessageDigest
+                 * then don't generate QRCode and read the one saved in disk
+                 */
+                if (Arrays.equals(messageDigest, cachedMessageDigest)) {
+                    Timber.i("Loading QRCode from the disk...");
+                    bitmap = BitmapFactory.decodeFile(QR_CODE_FILEPATH);
+                    shouldWriteToDisk = false;
+                }
+            }
+
+            // If the file is not found in the disk or md5Hash not matched
+            if (bitmap == null) {
+                Timber.i("Generating QRCode...");
+                bitmap = QRCodeUtils.generateQRBitMap(preferencesString, QR_CODE_SIDE_LENGTH);
+                shouldWriteToDisk = true;
+            }
+
+            if (bitmap != null) {
+                // Send the QRCode to the observer
+                emitter.onNext(bitmap);
+
+                // Save the QRCode to disk
+                if (shouldWriteToDisk) {
+                    Timber.i("Saving QR Code to disk... : " + QR_CODE_FILEPATH);
+                    FileUtils.saveBitmapToFile(bitmap, QR_CODE_FILEPATH);
+
+                    // update .md5 file
+                    Timber.i("Updated .md5 file contents");
+                    FileUtils.write(mdCacheFile, messageDigest);
+                }
+
+                // Send the task completion event
+                emitter.onComplete();
+            }
+        });
     }
 }

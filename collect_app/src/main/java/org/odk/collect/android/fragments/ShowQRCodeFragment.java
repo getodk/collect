@@ -44,7 +44,6 @@ import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.utilities.CompressionUtils;
-import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.QRCodeUtils;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
@@ -54,13 +53,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.MessageDigest;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.zip.DataFormatException;
 
-import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -71,14 +67,12 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PASSWORD;
+import static org.odk.collect.android.utilities.QRCodeUtils.QR_CODE_FILEPATH;
 
 
 public class ShowQRCodeFragment extends Fragment implements View.OnClickListener {
 
     private static final int SELECT_PHOTO = 111;
-    private static final int QR_CODE_SIDE_LENGTH = 400; // in pixels
-    private static final String QR_CODE_FILEPATH = Collect.SETTINGS + File.separator + "collect-settings.jpeg";
-    private static final String MD5_CACHE_PATH = Collect.SETTINGS + File.separator + ".md5";
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
     private final boolean[] checkedItems = new boolean[]{true, true};
@@ -113,7 +107,7 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
         qrImageView.setVisibility(GONE);
         addPasswordStatusString();
 
-        Disposable disposable = getQRCodeGeneratorObservable()
+        Disposable disposable = QRCodeUtils.getQRCodeGeneratorObservable(getSelectedPasswordKeys())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(bitmap -> {
@@ -128,59 +122,6 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
     public void onDestroy() {
         compositeDisposable.dispose();
         super.onDestroy();
-    }
-
-    private Observable<Bitmap> getQRCodeGeneratorObservable() {
-        return Observable.create(emitter -> {
-            String preferencesString = SharedPreferencesUtils.getJSONFromPreferences(getSelectedPasswordKeys());
-
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            md.update(preferencesString.getBytes());
-            byte[] messageDigest = md.digest();
-
-            boolean shouldWriteToDisk = true;
-            Bitmap bitmap = null;
-
-            File mdCacheFile = new File(MD5_CACHE_PATH);
-            if (mdCacheFile.exists()) {
-                byte[] cachedMessageDigest = FileUtils.read(mdCacheFile);
-
-                /*
-                 * If the messageDigest generated from the preferences is equal to cachedMessageDigest
-                 * then don't generate QRCode and read the one saved in disk
-                 */
-                if (Arrays.equals(messageDigest, cachedMessageDigest)) {
-                    Timber.i("Loading QRCode from the disk...");
-                    bitmap = BitmapFactory.decodeFile(QR_CODE_FILEPATH);
-                    shouldWriteToDisk = false;
-                }
-            }
-
-            // If the file is not found in the disk or md5Hash not matched
-            if (bitmap == null) {
-                Timber.i("Generating QRCode...");
-                bitmap = QRCodeUtils.generateQRBitMap(preferencesString, QR_CODE_SIDE_LENGTH);
-                shouldWriteToDisk = true;
-            }
-
-            if (bitmap != null) {
-                // Send the QRCode to the observer
-                emitter.onNext(bitmap);
-
-                // Save the QRCode to disk
-                if (shouldWriteToDisk) {
-                    Timber.i("Saving QR Code to disk... : " + QR_CODE_FILEPATH);
-                    FileUtils.saveBitmapToFile(bitmap, QR_CODE_FILEPATH);
-
-                    // update .md5 file
-                    Timber.i("Updated .md5 file contents");
-                    FileUtils.write(mdCacheFile, messageDigest);
-                }
-
-                // Send the task completion event
-                emitter.onComplete();
-            }
-        });
     }
 
     private void addPasswordStatusString() {
