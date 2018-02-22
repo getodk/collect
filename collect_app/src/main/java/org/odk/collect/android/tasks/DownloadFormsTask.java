@@ -121,6 +121,15 @@ public class DownloadFormsTask extends
         return result;
     }
 
+    @Override
+    protected void onCancelled(HashMap<FormDetails, String> formDetailsStringHashMap) {
+        synchronized (this) {
+            if (stateListener != null) {
+                stateListener.formsDownloadingCancelled();
+            }
+        }
+    }
+
     /**
      * Processes one form download.
      *
@@ -133,7 +142,6 @@ public class DownloadFormsTask extends
     private String processOneForm(int total, int count, FormDetails fd) throws TaskCancelledException {
         publishProgress(fd.getFormName(), String.valueOf(count), String.valueOf(total));
         String message = "";
-
         if (isCancelled()) {
             throw new TaskCancelledException();
         }
@@ -168,6 +176,11 @@ public class DownloadFormsTask extends
             throw e;
         } catch (Exception e) {
             message += getExceptionMessage(e);
+        }
+
+        if (isCancelled()) {
+            cleanUp(fileResult, null, tempMediaPath);
+            fileResult = null;
         }
 
         Map<String, String> parsedFields = null;
@@ -229,9 +242,6 @@ public class DownloadFormsTask extends
             }
 
             cleanUp(fileResult, null, tempMediaPath);
-        } catch (TaskCancelledException e) {
-            Timber.i(e.getMessage());
-            cleanUp(fileResult, e.file, tempMediaPath);
         }
     }
 
@@ -240,6 +250,7 @@ public class DownloadFormsTask extends
             Timber.w("The user cancelled (or an exception happened) the download of a form at the "
                     + "very beginning.");
         } else {
+            formsDao.deleteFormsFromMd5Hash(FileUtils.getMd5Hash(fileResult.file));
             FileUtils.deleteAndReport(fileResult.getFile());
         }
 
@@ -267,59 +278,35 @@ public class DownloadFormsTask extends
     }
 
     /**
-     * Checks a form file whether it is a new one or if it matches an old one.
+     * Creates a new form in the database, if none exists with the same absolute path. Returns
+     * information with the URI, media path, and whether the form is new.
      *
      * @param formFile the form definition file
-     * @param formInfo the parse results
+     * @param formInfo certain fields extracted from the parsed XML form, such as title and form ID
      * @return a {@link org.odk.collect.android.tasks.DownloadFormsTask.UriResult} object
-     * @throws TaskCancelledException if the user cancels the task during the download.
      */
-    private UriResult findExistingOrCreateNewUri(File formFile, Map<String, String> formInfo)
-            throws TaskCancelledException {
+    private UriResult findExistingOrCreateNewUri(File formFile, Map<String, String> formInfo) {
         Cursor cursor = null;
         final Uri uri;
-        String mediaPath;
+        final String formFilePath = formFile.getAbsolutePath();
+        String mediaPath = FileUtils.constructMediaPath(formFilePath);
         final boolean isNew;
 
-        final String formFilePath = formFile.getAbsolutePath();
-        mediaPath = FileUtils.constructMediaPath(formFilePath);
         FileUtils.checkMediaPath(new File(mediaPath));
 
         try {
             cursor = formsDao.getFormsCursorForFormFilePath(formFile.getAbsolutePath());
-
             isNew = cursor.getCount() <= 0;
 
             if (isNew) {
-                // doesn't exist, so insert it
-                ContentValues v = new ContentValues();
-
-                v.put(FormsColumns.FORM_FILE_PATH, formFilePath);
-                v.put(FormsColumns.FORM_MEDIA_PATH, mediaPath);
-
-                if (isCancelled()) {
-                    throw new TaskCancelledException(formFile);
-                }
-
-                v.put(FormsColumns.DISPLAY_NAME, formInfo.get(FileUtils.TITLE));
-                v.put(FormsColumns.JR_VERSION, formInfo.get(FileUtils.VERSION));
-                v.put(FormsColumns.JR_FORM_ID, formInfo.get(FileUtils.FORMID));
-                v.put(FormsColumns.SUBMISSION_URI, formInfo.get(FileUtils.SUBMISSIONURI));
-                v.put(FormsColumns.BASE64_RSA_PUBLIC_KEY, formInfo.get(FileUtils.BASE64_RSA_PUBLIC_KEY));
-                v.put(FormsColumns.AUTO_DELETE, formInfo.get(FileUtils.AUTO_DELETE));
-                v.put(FormsColumns.AUTO_SUBMIT, formInfo.get(FileUtils.AUTO_SUBMIT));
-                uri = formsDao.saveForm(v);
-                Collect.getInstance().getActivityLogger().logAction(this, "insert",
-                        formFile.getAbsolutePath());
-
+                uri = saveNewForm(formInfo, formFile, mediaPath);
             } else {
                 cursor.moveToFirst();
-                uri =
-                        Uri.withAppendedPath(FormsColumns.CONTENT_URI,
-                                cursor.getString(cursor.getColumnIndex(FormsColumns._ID)));
+                uri = Uri.withAppendedPath(FormsColumns.CONTENT_URI,
+                        cursor.getString(cursor.getColumnIndex(FormsColumns._ID)));
                 mediaPath = cursor.getString(cursor.getColumnIndex(FormsColumns.FORM_MEDIA_PATH));
                 Collect.getInstance().getActivityLogger().logAction(this, "refresh",
-                        formFile.getAbsolutePath());
+                        formFilePath);
             }
         } finally {
             if (cursor != null) {
@@ -328,6 +315,23 @@ public class DownloadFormsTask extends
         }
 
         return new UriResult(uri, mediaPath, isNew);
+    }
+
+    private Uri saveNewForm(Map<String, String> formInfo, File formFile, String mediaPath) {
+        final ContentValues v = new ContentValues();
+        v.put(FormsColumns.FORM_FILE_PATH,          formFile.getAbsolutePath());
+        v.put(FormsColumns.FORM_MEDIA_PATH,         mediaPath);
+        v.put(FormsColumns.DISPLAY_NAME,            formInfo.get(FileUtils.TITLE));
+        v.put(FormsColumns.JR_VERSION,              formInfo.get(FileUtils.VERSION));
+        v.put(FormsColumns.JR_FORM_ID,              formInfo.get(FileUtils.FORMID));
+        v.put(FormsColumns.SUBMISSION_URI,          formInfo.get(FileUtils.SUBMISSIONURI));
+        v.put(FormsColumns.BASE64_RSA_PUBLIC_KEY,   formInfo.get(FileUtils.BASE64_RSA_PUBLIC_KEY));
+        v.put(FormsColumns.AUTO_DELETE,             formInfo.get(FileUtils.AUTO_DELETE));
+        v.put(FormsColumns.AUTO_SUBMIT,             formInfo.get(FileUtils.AUTO_SUBMIT));
+        Uri uri = formsDao.saveForm(v);
+        Collect.getInstance().getActivityLogger().logAction(this, "insert",
+                formFile.getAbsolutePath());
+        return uri;
     }
 
     /**

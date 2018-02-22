@@ -133,16 +133,16 @@ public abstract class QuestionWidget
         }
     }
 
-    /**
-     * author: vrjgamer
-     * This function checks if current set language is RTL
-     * it returns true if its RTL else false.
-     */
-    public static boolean isLanguageRTL(Context context) {
-        Locale currentLocale = context.getResources().getConfiguration().locale;
-        int directionality = Character.getDirectionality(currentLocale.getDisplayName().charAt(0));
-        return directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT ||
-                directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC;
+
+    //source::https://stackoverflow.com/questions/18996183/identifying-rtl-language-in-android/23203698#23203698
+    public static boolean isCurrentLanguageRTL() {
+        return isRTL(Locale.getDefault());
+    }
+
+    private static boolean isRTL(Locale locale) {
+        final int directionality = Character.getDirectionality(locale.getDisplayName().charAt(0));
+        return directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT 
+        || directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC;
     }
 
     protected void injectDependencies(DependencyProvider dependencyProvider) {}

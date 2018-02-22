@@ -1,49 +1,118 @@
 version: 2
-jobs:
-  build:
-    working_directory: ~/work
+
+references:
+
+  ## Cache
+
+  cache_key: &cache_key
+    key: jars-{{ checksum "build.gradle" }}-{{ checksum "collect_app/build.gradle" }}
+  restore_cache: &restore_cache
+    restore_cache:
+      <<: *cache_key
+  save_cache: &save_cache
+    save_cache:
+      <<: *cache_key
+      paths:
+        - ~/work/.gradle
+
+  accept_licenses : &accept_licenses
+    run:
+      name: Accept licenses
+      command: yes | sdkmanager --licenses || true
+
+  ## Workspace
+
+  workspace: &workspace
+    ~/work
+  attach_debug_workspace: &attach_debug_workspace
+    attach_workspace:
+      at: *workspace
+  persist_debug_workspace: &persist_debug_workspace
+    persist_to_workspace:
+      root: *workspace
+      paths:
+        - collect_app/build/outputs/androidTest-results
+        - collect_app/build/outputs/apk
+        - collect_app/build/outputs/code-coverage
+        - collect_app/build/test-results
+  attach_firebase_workspace: &attach_firebase_workspace
+    attach_workspace:
+      at: *workspace
+  persist_firebase_workspace: &persist_firebase_workspace
+    persist_to_workspace:
+      root: *workspace
+      paths:
+        - firebase
+
+  ## Docker image configurations
+
+  android_config: &android_config
+    working_directory: *workspace
     docker:
       - image: circleci/android:api-26-alpha
     environment:
-        # Least invasive change to resolve out-of-memory error: https://discuss.circleci.com/t/circle-ci-v2-and-android-memory-issues/11207/9
-        _JAVA_OPTIONS: "-Xmx1024m"
+      # Least invasive change to resolve out-of-memory error: https://discuss.circleci.com/t/circle-ci-v2-and-android-memory-issues/11207/9
+      _JAVA_OPTIONS: "-Xmx1024m"
+  gcloud_config: &gcloud_config
+    working_directory: *workspace
+    docker:
+      - image: google/cloud-sdk:latest
+
+jobs:
+
+  ## Build debug APK and instrumented test APK
+
+  build_debug:
+    <<: *android_config
     steps:
         - checkout
-        - restore_cache:
-            key: jars-{{ checksum "build.gradle" }}-{{ checksum "collect_app/build.gradle" }}
-        - run:
-            name: Accept licenses
-            command: yes | sdkmanager --licenses || true
+        - *restore_cache
+        - *accept_licenses
         - run:
             name: Download dependencies
             command: ./gradlew androidDependencies
-        - save_cache:
-            paths: ~/work/.gradle
-            key: jars-{{ checksum "build.gradle" }}-{{ checksum "collect_app/build.gradle" }}
+        - *save_cache
         - run:
-            name: Run checks and unit tests
-            command: ./gradlew pmd checkstyle lint findbugs testDebugUnitTest
+            name: Run code quality checks
+            command: ./gradlew pmd checkstyle lint findbugs
         - store_artifacts:
             path: collect_app/build/reports
             destination: reports
-        - store_test_results:
-            path: collect_app/build/test-results
         - run:
             name: Assemble debug and test builds
             command: |
                 ./gradlew assembleDebug -PdisablePreDex
                 ./gradlew assembleDebugAndroidTest -PdisablePreDex
-        - persist_to_workspace:
-            root: ~/work
-            paths:
-              - collect_app/build/outputs/apk/*
-  test:
-    working_directory: ~/work
-    docker:
-      - image: google/cloud-sdk:latest
+        - *persist_debug_workspace
+
+  ## Run unit tests
+
+  test_unit:
+    <<: *android_config
     steps:
-      - attach_workspace:
-          at: ~/work
+        - checkout
+        - *restore_cache
+        - *accept_licenses
+        - run:
+            name: Download dependencies
+            command: ./gradlew androidDependencies
+        - *save_cache
+        - run:
+            name: Run unit tests
+            command: ./gradlew testDebugUnitTest
+        - *persist_debug_workspace
+        - store_artifacts:
+            path: collect_app/build/reports
+            destination: reports
+        - store_test_results:
+            path: collect_app/build/test-results
+
+  ## Run instrumented tests
+
+  test_instrumented:
+    <<: *gcloud_config
+    steps:
+      - *attach_debug_workspace
       - run:
           name: Authorize gcloud
           command: |
@@ -57,28 +126,71 @@ jobs:
           command: |
             if [[ "$CIRCLE_PROJECT_USERNAME" == "opendatakit" ]]; then \
               echo "y" | gcloud firebase test android run \
+              --type instrumentation \
               --app collect_app/build/outputs/apk/debug/*.apk \
               --test collect_app/build/outputs/apk/androidTest/debug/*.apk \
               --device model=Nexus5,version=21,locale=en,orientation=portrait \
-              --results-bucket opendatakit-collect-test-results
+              --results-bucket opendatakit-collect-test-results \
+              --environment-variables coverage=true,coverageFile=/sdcard/coverage.ec \
+              --directories-to-pull /sdcard --timeout 20m
             fi
       - run:
           name: Copy integration test results
           command: |
             if [[ "$CIRCLE_PROJECT_USERNAME" == "opendatakit" ]]; then \
-              mkdir test-results
-              gsutil -m cp -r -U `gsutil ls gs://opendatakit-collect-test-results | tail -1` test-results | true
+              mkdir firebase
+              gsutil -m cp -r -U "`gsutil ls gs://opendatakit-collect-test-results | tail -1`*" /root/work/firebase/ | true
             fi
+      - *persist_firebase_workspace
       - store_test_results:
-          path: test-results
+          path: firebase/
+          destination: /firebase/
+
+  ## Submit JaCoCo coverage report
+
+  report_coverage:
+    <<: *android_config
+    steps:
+      - checkout
+      - *restore_cache
+      - run:
+          name: Download dependencies
+          command: ./gradlew androidDependencies
+      - *attach_debug_workspace
+      - *attach_firebase_workspace
+      - run:
+          name: Move Firebase coverage report
+          command: |
+            if [[ "$CIRCLE_PROJECT_USERNAME" == "opendatakit" ]]; then \
+              mkdir -p collect_app/build/outputs/code-coverage/connected && cp firebase/Nexus5-21-en-portrait/artifacts/coverage.ec collect_app/build/outputs/code-coverage/connected/coverage.ec
+            fi
+      - run:
+          name: Generate JaCoCo report
+          command: ./gradlew -PciBuild=true jacocoTestReport
+      - run:
+          name: Upload coverage report to CodeCov
+          command: bash <(curl -s https://codecov.io/bash)
+      - store_artifacts:
+          path: collect_app/build/reports/
+          destination: /reports/
+
 workflows:
   version: 2
-  build_test:
+  workflow:
     jobs:
-      - build
-      - test:
+      - build_debug
+      - test_unit
+      - test_instrumented:
           requires:
-            - build
+            - build_debug
+          # We'd like to also filter by username and remove the if/fi above, but username filtering is not supported in CircleCI
+          filters:
+            branches:
+              only: master
+      - report_coverage:
+          requires:
+            - test_unit
+            - test_instrumented
           # We'd like to also filter by username and remove the if/fi above, but username filtering is not supported in CircleCI
           filters:
             branches:

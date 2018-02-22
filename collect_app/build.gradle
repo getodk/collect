@@ -110,7 +110,6 @@ android {
         }
         debug {
             debuggable(true)
-            // Allows AndroidTest JaCoCo reports to be generated
             testCoverageEnabled(true)
             resValue("bool", "FIREBASE_CRASH_ENABLED", "false")
         }
@@ -151,7 +150,18 @@ android {
         javaMaxHeapSize '2048M'
     }
 
-    testOptions.unitTests.includeAndroidResources true
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+            returnDefaultValues = true
+
+            all {
+                jacoco {
+                    includeNoLocationClasses = true
+                }
+            }
+        }
+    }
 }
 
 configurations.all {
@@ -197,7 +207,7 @@ dependencies {
     implementation group: 'commons-io', name: 'commons-io', version: '2.5'
     implementation group: 'net.sf.kxml', name: 'kxml2', version: '2.3.0'
     implementation group: 'net.sf.opencsv', name: 'opencsv', version: '2.3'
-    implementation(group: 'org.opendatakit', name: 'opendatakit-javarosa', version: '2.7.0') {
+    implementation(group: 'org.opendatakit', name: 'opendatakit-javarosa', version: '2.8.0-SNAPSHOT') {
         exclude module: 'joda-time'
     }
 

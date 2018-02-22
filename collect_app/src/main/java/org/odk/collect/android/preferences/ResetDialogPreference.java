@@ -16,18 +16,21 @@
 
 package org.odk.collect.android.preferences;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.os.Bundle;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog;
 import org.odk.collect.android.utilities.ResetUtility;
-import org.odk.collect.android.utilities.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +40,7 @@ import timber.log.Timber;
 import static org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog.RESET_SETTINGS_RESULT_DIALOG_TAG;
 import static org.odk.collect.android.utilities.ResetUtility.ResetAction.RESET_PREFERENCES;
 
-public class ResetDialogPreference extends DialogPreference {
+public class ResetDialogPreference extends DialogPreference implements CompoundButton.OnCheckedChangeListener {
     private CheckBox preferences;
     private CheckBox instances;
     private CheckBox forms;
@@ -61,7 +64,20 @@ public class ResetDialogPreference extends DialogPreference {
         layers = view.findViewById(R.id.layers);
         cache = view.findViewById(R.id.cache);
         osmDroid = view.findViewById(R.id.osmdroid);
+        preferences.setOnCheckedChangeListener(this);
+        instances.setOnCheckedChangeListener(this);
+        forms.setOnCheckedChangeListener(this);
+        layers.setOnCheckedChangeListener(this);
+        cache.setOnCheckedChangeListener(this);
+        osmDroid.setOnCheckedChangeListener(this);
+
         super.onBindDialogView(view);
+    }
+
+    @Override
+    public void showDialog(Bundle bundle) {
+        super.showDialog(bundle);
+        adjustResetButtonAccessibility();
     }
 
     @Override
@@ -103,8 +119,6 @@ public class ResetDialogPreference extends DialogPreference {
                 }
             };
             new Thread(runnable).start();
-        } else {
-            ToastUtils.showLongToast(R.string.reset_dialog_nothing);
         }
     }
 
@@ -197,5 +211,27 @@ public class ResetDialogPreference extends DialogPreference {
                 }
             }));
         }
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        adjustResetButtonAccessibility();
+    }
+
+    private void adjustResetButtonAccessibility() {
+        if (preferences.isChecked() || instances.isChecked() || forms.isChecked()
+                || layers.isChecked() || cache.isChecked() || osmDroid.isChecked()) {
+            ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+            ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_POSITIVE)
+                    .setTextColor(((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_NEGATIVE).getCurrentTextColor());
+        } else {
+            ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+            ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_POSITIVE)
+                    .setTextColor(getPartiallyTransparentColor(((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_NEGATIVE).getCurrentTextColor()));
+        }
+    }
+
+    private int getPartiallyTransparentColor(int color) {
+        return Color.argb(150, Color.red(color), Color.green(color), Color.blue(color));
     }
 }
