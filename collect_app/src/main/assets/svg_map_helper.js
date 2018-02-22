@@ -34,6 +34,12 @@ function notifyChanges() {
     imageMapInterface.notifyChanges();
 }
 
+function clearAreas() {
+    selectedAreas.forEach(function(areaId) {
+        clickOnArea(areaId);
+    });
+}
+
 function addSelectedArea(selectedAreaId) {
     selectedAreas.add(selectedAreaId);
     document.getElementById(selectedAreaId).setAttribute('style', 'fill: #E65100');
