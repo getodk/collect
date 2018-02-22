@@ -54,7 +54,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.MessageDigest;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.zip.DataFormatException;
 
@@ -131,20 +133,23 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
     private Observable<Bitmap> getQRCodeGeneratorObservable() {
         return Observable.create(emitter -> {
             String preferencesString = SharedPreferencesUtils.getJSONFromPreferences(getSelectedPasswordKeys());
-            String md5Hash = FileUtils.getMd5Hash(preferencesString);
+
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(preferencesString.getBytes());
+            byte[] messageDigest = md.digest();
 
             boolean shouldWriteToDisk = true;
             Bitmap bitmap = null;
 
-            File md5CacheFile = new File(MD5_CACHE_PATH);
-            if (md5CacheFile.exists()) {
-                String md5Cache = FileUtils.readFile(md5CacheFile);
+            File mdCacheFile = new File(MD5_CACHE_PATH);
+            if (mdCacheFile.exists()) {
+                byte[] cachedMessageDigest = FileUtils.read(mdCacheFile);
 
                 /*
-                 * If the md5Hash generated from the preferences is equal to md5Cache
+                 * If the messageDigest generated from the preferences is equal to cachedMessageDigest
                  * then don't generate QRCode and read the one saved in disk
                  */
-                if (md5Cache.trim().equals(md5Hash)) {
+                if (Arrays.equals(messageDigest, cachedMessageDigest)) {
                     Timber.i("Loading QRCode from the disk...");
                     bitmap = BitmapFactory.decodeFile(QR_CODE_FILEPATH);
                     shouldWriteToDisk = false;
@@ -169,7 +174,7 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
 
                     // update .md5 file
                     Timber.i("Updated .md5 file contents");
-                    FileUtils.writeToFile(md5CacheFile, md5Hash, false);
+                    FileUtils.write(mdCacheFile, messageDigest);
                 }
 
                 // Send the task completion event
