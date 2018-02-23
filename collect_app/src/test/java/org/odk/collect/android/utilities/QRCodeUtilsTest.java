@@ -23,8 +23,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.zip.DataFormatException;
 
-import timber.log.Timber;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -39,13 +37,9 @@ public class QRCodeUtilsTest {
 
     private final File savedFile = new File(QR_CODE_FILEPATH);
     private final File md5File = new File(MD5_CACHE_PATH);
-    private final LogStackTree logStackTree = new LogStackTree();
 
     @Before
     public void setup() {
-        Timber.plant(logStackTree);
-        logStackTree.clear();
-
         savedFile.delete();
         md5File.delete();
     }
@@ -76,7 +70,9 @@ public class QRCodeUtilsTest {
         assertNull(errorThrown.get());
         assertTrue(isFinished.get());
 
-        assertGeneratedNewFiles();
+        // assert files are saved
+        assertTrue(savedFile.exists());
+        assertTrue(md5File.exists());
 
         String expectedData = "{\"general\":{},\"admin\":{}}";
         assertQRContains(generatedBitmap.get(), expectedData);
@@ -98,6 +94,9 @@ public class QRCodeUtilsTest {
         assertTrue(savedFile.exists());
         assertTrue(md5File.exists());
 
+        final long lastModifiedQRCode = savedFile.lastModified();
+        final long lastModifiedCache = md5File.lastModified();
+
         AtomicBoolean isFinished = new AtomicBoolean(false);
         AtomicReference<Bitmap> generatedBitmap = new AtomicReference<>();
         AtomicReference<Throwable> errorThrown = new AtomicReference<>();
@@ -111,7 +110,9 @@ public class QRCodeUtilsTest {
         assertNull(errorThrown.get());
         assertTrue(isFinished.get());
 
-        assertRestoredFromCache();
+        // assert that files were not modified
+        assertEquals(lastModifiedCache, md5File.lastModified());
+        assertEquals(lastModifiedQRCode, savedFile.lastModified());
 
         // verify that the md5 data in the cached file is correct
         assertCachedFileIsCorrect(expectedData.getBytes(), md5File);
@@ -133,20 +134,5 @@ public class QRCodeUtilsTest {
         assertNotNull(bitmap);
         String result = QRCodeUtils.decodeFromBitmap(bitmap);
         assertEquals(data, result);
-    }
-
-    private void assertGeneratedNewFiles() {
-        assertEquals(logStackTree.pop(), "Updated .md5 file contents");
-        assertEquals(logStackTree.pop(), "Saving QR Code to disk... : " + QR_CODE_FILEPATH);
-
-        assertTrue(savedFile.exists());
-        assertTrue(md5File.exists());
-    }
-
-    private void assertRestoredFromCache() {
-        assertEquals(logStackTree.pop(), "Loading QRCode from the disk...");
-
-        assertTrue(savedFile.exists());
-        assertTrue(md5File.exists());
     }
 }
