@@ -44,6 +44,7 @@ public class ColorPickerDialog extends Dialog {
         void colorChanged(String key, int color);
     }
 
+    private static final float SCALE_FACTOR = 3;
     private OnColorChangedListener listener;
     private int initialColor;
     private int defaultColor;
@@ -146,7 +147,7 @@ public class ColorPickerDialog extends Dialog {
             // Initializes the Paint that will draw the View
             paint = new Paint(Paint.ANTI_ALIAS_FLAG);
             paint.setTextAlign(Paint.Align.CENTER);
-            paint.setTextSize(12);
+            paint.setTextSize(12 * SCALE_FACTOR);
         }
 
         // Get the current selected color from the hue bar
@@ -231,7 +232,7 @@ public class ColorPickerDialog extends Dialog {
                     paint.setColor(Color.BLACK);
                     paint.setStrokeWidth(3);
                 }
-                canvas.drawLine(x + 10, 0, x + 10, 40, paint);
+                canvas.drawLine((x + 10)* SCALE_FACTOR, 0* SCALE_FACTOR, (x + 10) * SCALE_FACTOR, 40 * SCALE_FACTOR, paint);
             }
 
             // Display the main field colors using LinearGradient
@@ -239,10 +240,10 @@ public class ColorPickerDialog extends Dialog {
                 int[] colors = new int[2];
                 colors[0] = mainColors[x];
                 colors[1] = Color.BLACK;
-                Shader shader = new LinearGradient(0, 50, 0, 306, colors, null,
+                Shader shader = new LinearGradient(0, 50 * SCALE_FACTOR, 0, 306 * SCALE_FACTOR, colors, null,
                         Shader.TileMode.REPEAT);
                 paint.setShader(shader);
-                canvas.drawLine(x + 10, 50, x + 10, 306, paint);
+                canvas.drawLine((x + 10) * SCALE_FACTOR, 50 * SCALE_FACTOR, (x + 10) * SCALE_FACTOR, 306 * SCALE_FACTOR, paint);
             }
             paint.setShader(null);
 
@@ -257,21 +258,21 @@ public class ColorPickerDialog extends Dialog {
             // Draw a 'button' with the currently selected color
             paint.setStyle(Paint.Style.FILL);
             paint.setColor(currentColor);
-            canvas.drawRect(10, 316, 138, 356, paint);
+            canvas.drawRect(10 * SCALE_FACTOR, 316 * SCALE_FACTOR, 138 * SCALE_FACTOR, 356 * SCALE_FACTOR, paint);
 
             // Set the text color according to the brightness of the color
             paint.setColor(getInverseColor(currentColor));
-            canvas.drawText(getContext().getString(R.string.ok), 74, 340,
+            canvas.drawText(getContext().getString(R.string.ok), 74 * SCALE_FACTOR, 340 * SCALE_FACTOR,
                     paint);
 
             // Draw a 'button' with the default color
             paint.setStyle(Paint.Style.FILL);
             paint.setColor(defaultColor);
-            canvas.drawRect(138, 316, 266, 356, paint);
+            canvas.drawRect(138 * SCALE_FACTOR, 316 * SCALE_FACTOR, 266 * SCALE_FACTOR, 356 * SCALE_FACTOR, paint);
 
             // Set the text color according to the brightness of the color
             paint.setColor(getInverseColor(defaultColor));
-            canvas.drawText(getContext().getString(R.string.cancel), 202, 340,
+            canvas.drawText(getContext().getString(R.string.cancel), 202 * SCALE_FACTOR, 340 * SCALE_FACTOR,
                     paint);
         }
 
@@ -285,7 +286,7 @@ public class ColorPickerDialog extends Dialog {
 
         @Override
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            setMeasuredDimension(276, 366);
+            setMeasuredDimension((int) (276 * SCALE_FACTOR), (int) (366 * SCALE_FACTOR));
         }
 
         private boolean afterFirstDown = false;
@@ -330,7 +331,7 @@ public class ColorPickerDialog extends Dialog {
             }
 
             // If the touch event is located in the hue bar
-            if (x > 10 && x < 266 && y > 0 && y < 40) {
+            if (x > 10 * SCALE_FACTOR && x < 266 * SCALE_FACTOR && y > 0 * SCALE_FACTOR && y < 40 * SCALE_FACTOR) {
                 // Update the main field colors
                 currentHue = (255 - x) * 360 / 255;
                 updateMainColors();
@@ -348,7 +349,7 @@ public class ColorPickerDialog extends Dialog {
             }
 
             // If the touch event is located in the main field
-            if (x > 10 && x < 266 && y > 50 && y < 306) {
+            if (x > 10 * SCALE_FACTOR && x < 266 * SCALE_FACTOR && y > 50 * SCALE_FACTOR && y < 306 * SCALE_FACTOR) {
                 currentX = (int) x;
                 currentY = (int) y;
                 int transX = currentX - 10;
@@ -364,13 +365,13 @@ public class ColorPickerDialog extends Dialog {
 
             // If the touch event is located in the left button, notify the
             // listener with the current color
-            if (x > 10 && x < 138 && y > 316 && y < 356) {
+            if (x > 10 * SCALE_FACTOR && x < 138 * SCALE_FACTOR && y > 316 * SCALE_FACTOR && y < 356 * SCALE_FACTOR) {
                 listener.colorChanged("", currentColor);
             }
 
             // If the touch event is located in the right button, notify the
             // listener with the default color
-            if (x > 138 && x < 266 && y > 316 && y < 356) {
+            if (x > 138 * SCALE_FACTOR && x < 266 * SCALE_FACTOR && y > 316 * SCALE_FACTOR && y < 356 * SCALE_FACTOR) {
                 listener.colorChanged("", defaultColor);
             }
 
