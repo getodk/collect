@@ -337,8 +337,8 @@ public class ColorPickerDialog extends Dialog {
                 updateMainColors();
 
                 // Update the current selected color
-                int transX = currentX - 10;
-                int transY = currentY - 60;
+                int transX = (int) ((currentX / SCALE_FACTOR - 10));
+                int transY = (int) ((currentY / SCALE_FACTOR - 60));
                 int index = 256 * (transY - 1) + transX;
                 if (index > 0 && index < mainColors.length) {
                     currentColor = mainColors[256 * (transY - 1) + transX];
@@ -352,8 +352,8 @@ public class ColorPickerDialog extends Dialog {
             if (x > 10 * SCALE_FACTOR && x < 266 * SCALE_FACTOR && y > 50 * SCALE_FACTOR && y < 306 * SCALE_FACTOR) {
                 currentX = (int) x;
                 currentY = (int) y;
-                int transX = currentX - 10;
-                int transY = currentY - 60;
+                int transX = (int) ((currentX / SCALE_FACTOR - 10));
+                int transY = (int) ((currentY / SCALE_FACTOR - 60));
                 int index = 256 * (transY - 1) + transX;
                 if (index > 0 && index < mainColors.length) {
                     // Update the current color
