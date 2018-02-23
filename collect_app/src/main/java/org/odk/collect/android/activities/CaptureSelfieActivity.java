@@ -106,7 +106,7 @@ public class CaptureSelfieActivity extends Activity {
     }
 
     /**
-     * Get an available front {@link Camera} instance, and do some initialization for it.
+     * Gets an available front {@link Camera} instance, and does some initialization for it.
      *
      * @return an available front {@link Camera} instance
      */
@@ -126,8 +126,7 @@ public class CaptureSelfieActivity extends Activity {
 
         // Set the rotation of the camera which the output picture need.
         if (camera != null) {
-            Camera.Parameters parameters;
-            parameters = camera.getParameters();
+            Camera.Parameters parameters = camera.getParameters();
             int rotation = ORIENTATIONS.get(getWindowManager().getDefaultDisplay().getRotation());
             parameters.setRotation(calcCameraRotation(rotation));
             camera.setParameters(parameters);
@@ -182,7 +181,7 @@ public class CaptureSelfieActivity extends Activity {
     }
 
     /**
-     * Calculate the front camera rotation
+     * Calculates the front camera rotation
      * <p>
      * This calculation is applied to the output JPEG either via Exif Orientation tag
      * or by actually transforming the bitmap. (Determined by vendor camera API implementation)
