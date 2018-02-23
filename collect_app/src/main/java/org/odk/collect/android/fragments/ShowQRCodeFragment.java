@@ -149,32 +149,26 @@ public class ShowQRCodeFragment extends Fragment {
         shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + QR_CODE_FILEPATH));
     }
 
-    @OnClick({R.id.btnScan, R.id.btnSelect, R.id.tvPasswordWarning})
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btnScan:
-                IntentIntegrator.forFragment(this)
-                        .setCaptureActivity(ScannerWithFlashlightActivity.class)
-                        .setBeepEnabled(true)
-                        .setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES)
-                        .setOrientationLocked(false)
-                        .setPrompt(getString(R.string.qrcode_scanner_prompt))
-                        .initiateScan();
-                break;
-
-            case R.id.btnSelect:
-                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-                photoPickerIntent.setType("image/*");
-                startActivityForResult(photoPickerIntent, SELECT_PHOTO);
-                break;
-
-            case R.id.tvPasswordWarning:
-                showAlertDialog();
-                break;
-        }
+    @OnClick(R.id.btnScan)
+    void scanButtonClicked() {
+        IntentIntegrator.forFragment(this)
+                .setCaptureActivity(ScannerWithFlashlightActivity.class)
+                .setBeepEnabled(true)
+                .setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES)
+                .setOrientationLocked(false)
+                .setPrompt(getString(R.string.qrcode_scanner_prompt))
+                .initiateScan();
     }
 
-    private void showAlertDialog() {
+    @OnClick(R.id.btnSelect)
+    void chooseButtonClicked() {
+        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+        photoPickerIntent.setType("image/*");
+        startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+    }
+
+    @OnClick(R.id.tvPasswordWarning)
+    void passwordWarningClicked() {
         if (dialog == null) {
             final String[] items = new String[]{
                     getString(R.string.admin_password),
