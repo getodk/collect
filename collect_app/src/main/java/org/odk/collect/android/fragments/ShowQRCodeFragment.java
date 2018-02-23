@@ -73,19 +73,19 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PASSWORD;
 import static org.odk.collect.android.utilities.QRCodeUtils.QR_CODE_FILEPATH;
 
 
-public class ShowQRCodeFragment extends Fragment implements View.OnClickListener {
+public class ShowQRCodeFragment extends Fragment {
 
     private static final int SELECT_PHOTO = 111;
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
     private final boolean[] checkedItems = new boolean[]{true, true};
 
-    @BindView(R.id.qr_iv)
-    ImageView qrImageView;
+    @BindView(R.id.ivQRcode)
+    ImageView ivQRCode;
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
-    @BindView(R.id.edit_qrcode)
-    TextView editQRCode;
+    @BindView(R.id.tvPasswordWarning)
+    TextView tvPasswordWarning;
 
     private Intent shareIntent;
     private AlertDialog dialog;
@@ -107,7 +107,7 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
     private void generateCode() {
         shareIntent = null;
         progressBar.setVisibility(VISIBLE);
-        qrImageView.setVisibility(GONE);
+        ivQRCode.setVisibility(GONE);
         addPasswordStatusString();
 
         Disposable disposable = QRCodeUtils.getQRCodeGeneratorObservable(getSelectedPasswordKeys())
@@ -115,8 +115,8 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(bitmap -> {
                     progressBar.setVisibility(GONE);
-                    qrImageView.setVisibility(VISIBLE);
-                    qrImageView.setImageBitmap(bitmap);
+                    ivQRCode.setVisibility(VISIBLE);
+                    ivQRCode.setImageBitmap(bitmap);
                 }, Timber::e, this::updateShareIntent);
         compositeDisposable.add(disposable);
     }
@@ -138,7 +138,7 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
         } else {
             status = getString(R.string.qrcode_without_passwords);
         }
-        editQRCode.setText(status);
+        tvPasswordWarning.setText(status);
     }
 
     private void updateShareIntent() {
@@ -149,7 +149,7 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
         shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + QR_CODE_FILEPATH));
     }
 
-    @OnClick({R.id.btnScan, R.id.btnSelect, R.id.edit_qrcode})
+    @OnClick({R.id.btnScan, R.id.btnSelect, R.id.tvPasswordWarning})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnScan:
@@ -168,30 +168,30 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
                 startActivityForResult(photoPickerIntent, SELECT_PHOTO);
                 break;
 
-            case R.id.edit_qrcode:
-                if (dialog == null) {
-                    dialog = createAlertDialog();
-                }
-                dialog.show();
+            case R.id.tvPasswordWarning:
+                showAlertDialog();
                 break;
         }
     }
 
-    private AlertDialog createAlertDialog() {
-        String[] items = new String[]{
-                getString(R.string.admin_password),
-                getString(R.string.server_password)};
+    private void showAlertDialog() {
+        if (dialog == null) {
+            final String[] items = new String[]{
+                    getString(R.string.admin_password),
+                    getString(R.string.server_password)};
 
-        return new AlertDialog.Builder(getActivity())
-                .setTitle(R.string.include_password_dialog)
-                .setMultiChoiceItems(items, checkedItems, (dialog, which, isChecked) -> checkedItems[which] = isChecked)
-                .setCancelable(false)
-                .setPositiveButton(R.string.generate, (dialog, which) -> {
-                    generateCode();
-                    dialog.dismiss();
-                })
-                .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
-                .create();
+            dialog = new AlertDialog.Builder(getActivity())
+                    .setTitle(R.string.include_password_dialog)
+                    .setMultiChoiceItems(items, checkedItems, (dialog, which, isChecked) -> checkedItems[which] = isChecked)
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.generate, (dialog, which) -> {
+                        generateCode();
+                        dialog.dismiss();
+                    })
+                    .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
+                    .create();
+        }
+        dialog.show();
     }
 
     @Override
