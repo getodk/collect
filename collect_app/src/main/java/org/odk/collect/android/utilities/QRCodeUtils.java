@@ -128,6 +128,14 @@ public class QRCodeUtils {
             boolean shouldWriteToDisk = true;
             Bitmap bitmap = null;
 
+            // check if settings directory exists, if not then create one
+            File writeDir = new File(Collect.SETTINGS);
+            if (!writeDir.exists()) {
+                if (!writeDir.mkdirs()) {
+                    Timber.e("Error creating directory " + writeDir.getAbsolutePath());
+                }
+            }
+
             File mdCacheFile = new File(MD5_CACHE_PATH);
             if (mdCacheFile.exists()) {
                 byte[] cachedMessageDigest = FileUtils.read(mdCacheFile);
