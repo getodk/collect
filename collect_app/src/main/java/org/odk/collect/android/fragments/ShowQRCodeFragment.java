@@ -33,6 +33,9 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.zxing.ChecksumException;
+import com.google.zxing.FormatException;
+import com.google.zxing.NotFoundException;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -43,14 +46,12 @@ import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
-import org.odk.collect.android.utilities.CompressionUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.QRCodeUtils;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -216,8 +217,15 @@ public class ShowQRCodeFragment extends Fragment {
                     if (response != null) {
                         applySettings(response);
                     }
-                } catch (FileNotFoundException e) {
+                } catch (FormatException | NotFoundException | ChecksumException e) {
+                    Timber.i(e);
+                    ToastUtils.showLongToast("QR Code not found in the selected image");
+                } catch (IOException e) {
                     Timber.e(e);
+                    ToastUtils.showLongToast("Unable to read the settings");
+                } catch (DataFormatException e) {
+                    Timber.e(e);
+                    ToastUtils.showShortToast(getString(R.string.invalid_qrcode));
                 }
             } else {
                 Timber.i("Choosing QR code from sdcard cancelled");
@@ -228,15 +236,10 @@ public class ShowQRCodeFragment extends Fragment {
 
     private void applySettings(String content) {
         try {
-            String decompressedData = CompressionUtils.decompress(content);
-            JSONObject jsonObject = new JSONObject(decompressedData);
+            JSONObject jsonObject = new JSONObject(content);
             SharedPreferencesUtils prefUtils = new SharedPreferencesUtils();
             prefUtils.savePreferencesFromJSON(jsonObject);
-        } catch (DataFormatException e) {
-            Timber.e(e);
-            ToastUtils.showShortToast(getString(R.string.invalid_qrcode));
-            return;
-        } catch (IOException | JSONException e) {
+        } catch (JSONException e) {
             Timber.e(e);
             return;
         }

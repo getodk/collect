@@ -48,6 +48,7 @@ import java.util.Collection;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.zip.DataFormatException;
 
 import io.reactivex.Observable;
 import timber.log.Timber;
@@ -55,31 +56,21 @@ import timber.log.Timber;
 
 public class QRCodeUtils {
     public static final String QR_CODE_FILEPATH = Collect.SETTINGS + File.separator + "collect-settings.jpeg";
+    static final String MD5_CACHE_PATH = Collect.SETTINGS + File.separator + ".md5";
     private static final int QR_CODE_SIDE_LENGTH = 400; // in pixels
-    private static final String MD5_CACHE_PATH = Collect.SETTINGS + File.separator + ".md5";
 
     private QRCodeUtils() {
     }
 
-    public static String decodeFromBitmap(Bitmap bitmap) {
-        BinaryBitmap binaryBitmap = getBinaryBitmap(bitmap);
-
-        Map<DecodeHintType, Object> tmpHintsMap = new EnumMap<DecodeHintType, Object>(
-                DecodeHintType.class);
-
+    public static String decodeFromBitmap(Bitmap bitmap) throws DataFormatException, IOException, FormatException, ChecksumException, NotFoundException {
+        Map<DecodeHintType, Object> tmpHintsMap = new EnumMap<>(DecodeHintType.class);
         tmpHintsMap.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
         tmpHintsMap.put(DecodeHintType.POSSIBLE_FORMATS, BarcodeFormat.QR_CODE);
         tmpHintsMap.put(DecodeHintType.PURE_BARCODE, Boolean.FALSE);
 
         Reader reader = new QRCodeMultiReader();
-        try {
-            Result result = reader.decode(binaryBitmap, tmpHintsMap);
-            return result.getText();
-        } catch (FormatException | NotFoundException | ChecksumException e) {
-            Timber.i(e);
-            ToastUtils.showLongToast("QR Code not found in the selected image");
-        }
-        return null;
+        Result result = reader.decode(getBinaryBitmap(bitmap), tmpHintsMap);
+        return CompressionUtils.decompress(result.getText());
     }
 
     @NonNull
@@ -154,7 +145,7 @@ public class QRCodeUtils {
             // If the file is not found in the disk or md5Hash not matched
             if (bitmap == null) {
                 Timber.i("Generating QRCode...");
-                bitmap = QRCodeUtils.generateQRBitMap(preferencesString, QR_CODE_SIDE_LENGTH);
+                bitmap = generateQRBitMap(preferencesString, QR_CODE_SIDE_LENGTH);
                 shouldWriteToDisk = true;
             }
 
