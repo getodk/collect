@@ -128,7 +128,7 @@ public class AboutActivity extends AppCompatActivity implements
                 }
                 break;
             case 4:
-                Intent intent = new Intent(AboutActivity.this, WebViewActivity.class);
+                Intent intent = new Intent(this, WebViewActivity.class);
                 intent.putExtra(CustomTabHelper.OPEN_URL, LICENSES_HTML_PATH);
                 startActivity(intent);
                 break;
