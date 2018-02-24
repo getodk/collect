@@ -56,7 +56,9 @@ import static android.support.test.espresso.intent.matcher.IntentMatchers.hasAct
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasData;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.ViewMatchers.Visibility.VISIBLE;
+import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -841,7 +843,19 @@ public class AllWidgetsFormTest {
 
     public void testTriggerWidget() {
 
+        boolean checkBoxBoolean = randomBoolean();
+
+        if (checkBoxBoolean) {
+            onVisibleCheckBox().perform(click());
+        }
+
+        // captures screenshot of trigger widget
         Screengrab.screenshot("trigger-widget");
+
+        openWidgetList();
+        onView(withText("Trigger widget")).perform(click());
+
+        onVisibleCheckBox().check(matches(checkBoxBoolean ? isChecked() : isNotChecked()));
 
         onView(withText("Trigger widget")).perform(swipeLeft());
     }
@@ -862,6 +876,10 @@ public class AllWidgetsFormTest {
         return onView(withClassName(endsWith("EditText")));
     }
 
+    private ViewInteraction onVisibleCheckBox() {
+        return onView(withClassName(endsWith("CheckBox")));
+    }
+
     // private void openWidget(String name) {
     //     openWidgetList();
     //     onView(withText(name)).perform(click());
@@ -877,6 +895,10 @@ public class AllWidgetsFormTest {
 
     private String randomString() {
         return RandomString.make();
+    }
+
+    private boolean randomBoolean()  {
+        return random.nextBoolean();
     }
 
     private int randomInt() {
