@@ -48,6 +48,8 @@ public class AboutActivity extends AppCompatActivity implements
     private Uri websiteUri;
     private Uri forumUri;
 
+    private boolean handlingClickFlag = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,52 +85,57 @@ public class AboutActivity extends AppCompatActivity implements
 
     @Override
     public void onClick(int position) {
-        switch (position) {
-            case 0:
-                websiteTabHelper.openUri(this, websiteUri);
-                break;
-            case 1:
-                forumTabHelper.openUri(this, forumUri);
-                break;
-            case 2:
-                Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                shareIntent.setType("text/plain");
-                shareIntent.putExtra(Intent.EXTRA_TEXT,
-                        getString(R.string.tell_your_friends_msg) + " " + GOOGLE_PLAY_URL
-                                + getPackageName());
-                startActivity(Intent.createChooser(shareIntent,
-                        getString(R.string.tell_your_friends)));
-                break;
-            case 3:
-                boolean intentStarted = false;
-                try {
-                    // Open the google play store app if present
-                    Intent intent = new Intent(Intent.ACTION_VIEW,
-                            Uri.parse("market://details?id=" + getPackageName()));
-                    List<ResolveInfo> list = getPackageManager().queryIntentActivities(intent, 0);
-                    for (ResolveInfo info : list) {
-                        ActivityInfo activity = info.activityInfo;
-                        if (activity.name.contains("com.google.android")) {
-                            ComponentName name = new ComponentName(
-                                    activity.applicationInfo.packageName,
-                                    activity.name);
-                            intent.setComponent(name);
-                            startActivity(intent);
-                            intentStarted = true;
+        //debounce clicks
+        //actions that do not change the activity should set the flag to false once they finish!
+        if (!handlingClickFlag) {
+            handlingClickFlag = true;
+            switch (position) {
+                case 0:
+                    websiteTabHelper.openUri(this, websiteUri);
+                    break;
+                case 1:
+                    forumTabHelper.openUri(this, forumUri);
+                    break;
+                case 2:
+                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                    shareIntent.setType("text/plain");
+                    shareIntent.putExtra(Intent.EXTRA_TEXT,
+                            getString(R.string.tell_your_friends_msg) + " " + GOOGLE_PLAY_URL
+                                    + getPackageName());
+                    startActivity(Intent.createChooser(shareIntent,
+                            getString(R.string.tell_your_friends)));
+                    break;
+                case 3:
+                    boolean intentStarted = false;
+                    try {
+                        // Open the google play store app if present
+                        Intent intent = new Intent(Intent.ACTION_VIEW,
+                                Uri.parse("market://details?id=" + getPackageName()));
+                        List<ResolveInfo> list = getPackageManager().queryIntentActivities(intent, 0);
+                        for (ResolveInfo info : list) {
+                            ActivityInfo activity = info.activityInfo;
+                            if (activity.name.contains("com.google.android")) {
+                                ComponentName name = new ComponentName(
+                                        activity.applicationInfo.packageName,
+                                        activity.name);
+                                intent.setComponent(name);
+                                startActivity(intent);
+                                intentStarted = true;
+                            }
                         }
+                    } catch (android.content.ActivityNotFoundException anfe) {
+                        Timber.e(anfe);
                     }
-                } catch (android.content.ActivityNotFoundException anfe) {
-                    Timber.e(anfe);
-                }
-                if (!intentStarted) {
-                    // Show a list of all available browsers if user doesn't have a default browser
-                    startActivity(new Intent(Intent.ACTION_VIEW,
-                            Uri.parse(GOOGLE_PLAY_URL + getPackageName())));
-                }
-                break;
-            case 4:
-                startActivity(new Intent(this, OpenSourceLicensesActivity.class));
-                break;
+                    if (!intentStarted) {
+                        // Show a list of all available browsers if user doesn't have a default browser
+                        startActivity(new Intent(Intent.ACTION_VIEW,
+                                Uri.parse(GOOGLE_PLAY_URL + getPackageName())));
+                    }
+                    break;
+                case 4:
+                    startActivity(new Intent(this, OpenSourceLicensesActivity.class));
+                    break;
+            }
         }
     }
 
@@ -144,5 +151,11 @@ public class AboutActivity extends AppCompatActivity implements
         unbindService(websiteTabHelper.getServiceConnection());
         unbindService(forumTabHelper.getServiceConnection());
         super.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        handlingClickFlag = false;
     }
 }
