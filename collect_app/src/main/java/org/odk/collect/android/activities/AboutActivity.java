@@ -48,7 +48,7 @@ public class AboutActivity extends AppCompatActivity implements
     private Uri websiteUri;
     private Uri forumUri;
 
-    private boolean handlingClickFlag = false;
+    private boolean handlingClickFlag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
