@@ -299,7 +299,6 @@
   <string name="show_map_sdk">عرض خيارات الخريطة</string>
   <string name="openmap_streets">اخريطة لطرق</string>
   <string name="openmap_usgs_topo">خرطة البنية</string>
-  <string name="openmap_usgs_sat">خريطة الاقمار الاصطناعية</string>
   <string name="openmap_stamen_terrain">خريطة التضاريس</string>
   <string name="openmap_cartodb_positron">خريطة CartoDB</string>
   <string name="openmap_cartodb_darkmatter">خريطة CartoDB</string>
@@ -402,7 +401,6 @@
   <string name="reset_settings_dialog_title">مسح واستعادة الإعدادات الافتراضية لعناوين مربع الحوار</string>
   <string name="reset_settings_dialog">مسح واستعادة الإعدادات الافتراضية لمربع الحوار</string>
   <string name="reset_settings_button_reset">مسح واستعادة الإعدادات الافتراضية…</string>
-  <string name="reset_dialog_nothing">لم يتم اختيار اي خيار للإستعادة</string>
   <string name="reset_in_progress">جاري عملية المسح والاستعادة</string>
   <string name="reset_app_state_result">نتائج عملية المسح والاستعادة</string>
   <string name="reset_app_state_warning">تحذير… سيتم حذف البيانات المحددة. ولا امكانية للتراجع</string>

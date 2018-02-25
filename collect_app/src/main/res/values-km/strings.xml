@@ -299,7 +299,6 @@
   <string name="show_map_sdk">បង្ហាញ​ជម្រើស​ផែនទី​ SDK</string>
   <string name="openmap_streets">ផ្លូវ OSM</string>
   <string name="openmap_usgs_topo">USGS National Map Topo</string>
-  <string name="openmap_usgs_sat">USGS National Map Sat</string>
   <string name="openmap_stamen_terrain">Stamen Terrain</string>
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
@@ -402,7 +401,6 @@
   <string name="reset_settings_dialog_title">ជ្រើសរើសអ្វីដែលត្រូវកំណត់ឡើងវិញ</string>
   <string name="reset_settings_dialog">កំណត់កម្មវិធីឡើងវិញ</string>
   <string name="reset_settings_button_reset">កំណត់ឡើងវិញ</string>
-  <string name="reset_dialog_nothing">អ្នកមិនបានជ្រើសរើសអ្វីដើម្បីកំណត់ឡើងវិញទេ។</string>
   <string name="reset_in_progress">កំពុងកំណត់ឡើងវិញ</string>
   <string name="reset_app_state_result">កំណត់លទ្ធផលឡើងវិញ</string>
   <string name="reset_app_state_warning">ទិន្នន័យដែល​បានជ្រើសរើសទាំងអស់នឹងត្រូវលុប។ ទាំងនេះមិនធ្វើវិញបានទេ។</string>
