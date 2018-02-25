@@ -299,7 +299,6 @@
   <string name="show_map_sdk">मैप SDK विकल्प दिखायें </string>
   <string name="openmap_streets">OSM स्ट्रीट</string>
   <string name="openmap_usgs_topo">USGS National Map Topo</string>
-  <string name="openmap_usgs_sat">USGS National Map Sat</string>
   <string name="openmap_stamen_terrain">स्टैमन टेरेन</string>
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
   <string name="openmap_cartodb_darkmatter">CartoDB डार्क मैटर</string>
@@ -402,7 +401,6 @@
   <string name="reset_settings_dialog_title">क्या रीसेट करना है, चुनें</string>
   <string name="reset_settings_dialog">एप्लिकेशन रीसेट करें …</string>
   <string name="reset_settings_button_reset">रीसेट</string>
-  <string name="reset_dialog_nothing">आपने रीसेट करने के लिए कुछ भी नहीं चुना है।</string>
   <string name="reset_in_progress">रीसेट किया जा रहा …</string>
   <string name="reset_app_state_result">परिणाम रीसेट करें</string>
   <string name="reset_app_state_warning">सभी चयनित डेटा को स्थायी रूप से मिटा दिया जाएगा. वापस नहीं ला सकते</string>

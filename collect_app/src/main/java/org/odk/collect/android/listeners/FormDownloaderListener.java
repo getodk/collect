@@ -26,4 +26,6 @@ public interface FormDownloaderListener {
     void formsDownloadingComplete(HashMap<FormDetails, String> result);
 
     void progressUpdate(String currentFile, int progress, int total);
+
+    void formsDownloadingCancelled();
 }

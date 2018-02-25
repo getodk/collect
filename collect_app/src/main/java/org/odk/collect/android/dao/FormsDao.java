@@ -129,6 +129,28 @@ public class FormsDao {
         Collect.getInstance().getContentResolver().delete(FormsProviderAPI.FormsColumns.CONTENT_URI, selection, idsToDelete);
     }
 
+    public void deleteFormsFromMd5Hash(String... hashes) {
+        List<String> idsToDelete = new ArrayList<>();
+        Cursor c = null;
+        try {
+            for (String hash : hashes) {
+                c = getFormsCursorForMd5Hash(hash);
+                if (c.getCount() > 0) {
+                    c.moveToFirst();
+                    String id = c.getString(c.getColumnIndex(FormsProviderAPI.FormsColumns._ID));
+                    idsToDelete.add(id);
+                }
+                c.close();
+                c = null;
+            }
+        } finally {
+            if (c != null) {
+                c.close();
+            }
+        }
+        deleteFormsFromIDs(idsToDelete.toArray(new String[idsToDelete.size()]));
+    }
+
     public Uri saveForm(ContentValues values) {
         return Collect.getInstance().getContentResolver().insert(FormsProviderAPI.FormsColumns.CONTENT_URI, values);
     }

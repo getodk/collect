@@ -299,7 +299,6 @@
   <string name="show_map_sdk">Visa Map SDK alternativ</string>
   <string name="openmap_streets">OSM Streets</string>
   <string name="openmap_usgs_topo">USGS National Map Topo</string>
-  <string name="openmap_usgs_sat">USGS National Map Sat</string>
   <string name="openmap_stamen_terrain">Stamen Terrain</string>
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
@@ -402,7 +401,6 @@
   <string name="reset_settings_dialog_title">Välj vad som skall återställas</string>
   <string name="reset_settings_dialog">Återställ programmet…</string>
   <string name="reset_settings_button_reset">Återställ</string>
-  <string name="reset_dialog_nothing">Du har inte valt någonting att återställa</string>
   <string name="reset_in_progress">Återställer…</string>
   <string name="reset_app_state_result">Återställningsresultat</string>
   <string name="reset_app_state_warning">All vald data kommer att raderas permanent och kan inte ångras.</string>

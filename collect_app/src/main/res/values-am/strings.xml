@@ -4,10 +4,10 @@
   <string name="activity_not_found">የሚስተናገዱ ምንም እንቅስቃሴዎች አልተገኙም: 1 %s</string>
   <string name="add_another">ቡድን ጨምር</string>
   <string name="add_another_repeat">ተጨማሪ \" 1 %s \" ቡድን ጨምር?</string>
-  <string name="add_repeat">አዲስ \" 1 %s \" ቡድን ጨምር?</string>
+  <string name="add_repeat">አዲስ \" %s \" ቡድን ጨምር?</string>
   <string name="add_repeat_no">አትጨምር</string>
   <string name="audio_file_error">ምንም የድምጽ ፋይል አልተገለጸም፡፡</string>
-  <string name="audio_file_invalid">ፋይል: 1 %s ትክክለኛ ኦዲዮ ፋይል አይደለም፡፡</string>
+  <string name="audio_file_invalid">ፋይል: %s ትክክለኛ ኦዲዮ ፋይል አይደለም፡፡</string>
   <string name="cancel">ሰርዝ</string>
   <string name="cancel_loading_form">ሰርዝ</string>
   <string name="cancel_location">ሰርዝ</string>
@@ -56,7 +56,7 @@
   <string name="file_missing">ፋይል፡ 1 %s ይጎድላል</string>
   <string name="finished_disk_scan">ስካን ተጠናቋል፡፡ ሁሉም ቅጾች ተጭነዋል፡፡</string>
   <string name="forms">ባዶ ቅጾች</string>
-  <string name="getting_location">አካባቢን በመጫን ላይ</string>
+  <string name="getting_location">ቦታን በመጫን ላይ</string>
   <string name="get_barcode">ባርኮድ ያግኙ</string>
   <string name="get_forms">አዲስ ቅጽ</string>
   <string name="get_location">ቦታን መዝግብ</string>
@@ -68,13 +68,13 @@
   <string name="leave_repeat_yes">አትጨምር</string>
   <string name="leaving_repeat_ask">አንድ ተጨማሪ ቡድን ይጨመር?</string>
   <string name="list_failed_with_error">የቅፅ ዝርዝሩ አልተሳካም፡፡ 1 %s</string>
-  <string name="loading_form">ቅጹን በመጫን ላይ</string>
+  <string name="loading_form">ቅጽ በመጫን ላይ</string>
   <string name="load_remote_form_error">የቅጽ ዝርዝር ማግኘት ላይ ስህተት ተከስቷል</string>
   <string name="main_menu">ዋና ምናሌ</string>
   <string name="main_menu_details">የውሂብ መሰብሰብ ይበልጥ ቀላል ሆነ …</string>
   <string name="manage_files">የተሞላዉን ቅጽ ያጥፉ</string>
   <string name="mark_finished">ቅጹን እንደተጠናቀቀ ምልክት አድርግ</string>
-  <string name="noselect_error">ይቅርታ፣ ምንም ቅጾች አልመረጡም!</string>
+  <string name="noselect_error">ይቅርታ፣ ምንም ቅጽ አልመረጡም!</string>
   <string name="no_connection">ምንም የአውታረ መረብ ግንኙነት የለም</string>
   <string name="no_items_display">ምንም የሚታይ የለም</string>
   <string name="no_items_display_forms">ምንም የሚታይ ነገር የለም:: \n\n አንድ ባዶ ቅጽ በማግኘትና በመሙላት ይሞክሩ::</string>
@@ -99,7 +99,8 @@
   <string name="save_enter_data_description">በ 1 %s መጨረሻ ላይ ነዎት</string>
   <string name="saving_form">ቅጽን በማስቀመጥ ላይ</string>
   <string name="sending_items">1 %1$s ከ 2 %2$s ቅጽ (ዎች) በመላክ ላይ</string>
-  <string name="send_data">የተጠናቆ የተሞላዉን  ቅጽ ይላኩ</string>
+  <string name="send_data">ተጠናቆ የተሞላ  ቅጽ ላክ</string>
+  <string name="send_data_button">ተጠናቆ የተሞላ ቅጽ ላክ (%s)</string>
   <string name="send_selected_data">የተመረጠውን ላክ</string>
   <string name="view_sent_forms">ተሞልቶ የተላከዉን  ቅጽ ይመልከቱ</string>
   <string name="view_sent_forms_button">ተሞልቶ የተላከዉን ቅጽ ( 1 %s ) ይመልከቱ</string>
@@ -120,7 +121,7 @@
   <string name="font_size">የጽሑፍ ቅርጸ ቁምፊ መጠን</string>
   <string name="change_font_size">የጽሑፍ ቅርጸ ቁምፊ መጠን</string>
   <string name="form_scan_starting">ቅጾችን በመቃኘት ላይ …</string>
-  <string name="file_fetch_failed">ስህተት፣ 1 %2$s ( 2 %3$s ) በ 3 %1$s ላይ</string>
+  <string name="file_fetch_failed">ስህተት፣ %2$s ( %3$s ) በ %1$s ላይ</string>
   <string name="success">ስኬት</string>
   <string name="no_forms_uploaded">ይቅርታ፣ ምንም ቅጽ አልተጫነም፡፡</string>
   <string name="upload_results">ውጤቶችን ጫን</string>
@@ -269,7 +270,7 @@
   <string name="language">ቋንቋ</string>
   <string name="phone_number">ስልክ ቁጥር</string>
   <string name="email">የ ኢሜል አድራሻ</string>
-  <string name="select_date">ቀን ይምረጡ</string>
+  <string name="select_date">ቀን ምረጥ</string>
   <string name="select_time">ሰዓት ምረጥ</string>
   <string name="share">አጋራ</string>
   <string name="generate">ፍጠር</string>
