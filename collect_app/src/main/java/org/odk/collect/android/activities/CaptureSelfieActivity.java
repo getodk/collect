@@ -131,7 +131,7 @@ public class CaptureSelfieActivity extends Activity {
             parameters.setRotation(calcCameraRotation(rotation));
             camera.setParameters(parameters);
         } else {
-            Timber.e("No Available front camera");
+            Timber.w("No Available front camera");
         }
 
         return camera;
