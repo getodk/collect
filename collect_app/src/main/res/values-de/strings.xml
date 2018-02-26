@@ -11,6 +11,7 @@
   <string name="cancel">Abbrechen</string>
   <string name="cancel_loading_form">Abbrechen</string>
   <string name="cancel_location">Abbrechen</string>
+  <string name="canceling">Abbrechen</string>
   <string name="cannot_edit_completed_form">Dieses Formular kann nicht mehr geändert werden, nachdem es als vollständig markiert wurde. Möglicherweise ist es verschlüsselt.</string>
   <string name="capture_audio">Tonaufnahme starten</string>
   <string name="capture_image">Foto machen</string>
