@@ -221,7 +221,9 @@ public class AllWidgetsFormTest {
 
         testLabelWidget();
 
-        testTriggerWidget();
+        testTriggerWidget(false);
+
+        testTriggerWidget(true);
     }
     //endregion
 
@@ -841,11 +843,9 @@ public class AllWidgetsFormTest {
         onView(withText("Label widget")).perform(swipeLeft());
     }
 
-    public void testTriggerWidget() {
+    public void testTriggerWidget(boolean check) {
 
-        boolean checkBoxBoolean = randomBoolean();
-
-        if (checkBoxBoolean) {
+        if (check) {
             onVisibleCheckBox().perform(click());
         }
 
@@ -855,9 +855,11 @@ public class AllWidgetsFormTest {
         openWidgetList();
         onView(withText("Trigger widget")).perform(click());
 
-        onVisibleCheckBox().check(matches(checkBoxBoolean ? isChecked() : isNotChecked()));
+        onVisibleCheckBox().check(matches(check ? isChecked() : isNotChecked()));
 
-        onView(withText("Trigger widget")).perform(swipeLeft());
+        if (check) {
+            onView(withText("Trigger widget")).perform(swipeLeft());
+        }
     }
 
     public void testSubmission() {
