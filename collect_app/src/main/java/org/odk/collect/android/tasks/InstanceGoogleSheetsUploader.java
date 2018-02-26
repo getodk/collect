@@ -199,34 +199,14 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             FormDef formDefFromXml = XFormUtils.getFormFromInputStream(new FileInputStream(new File(formFilePath)));
 
             List<TreeElement> mainLevelColumnElements = getColumnElements(formDefFromXml.getMainInstance().getRoot());
-            TreeElement instanceIDColumn = getInstanceIDColumn(mainLevelColumnElements);
-
             List<List<TreeElement>> repeatColumnElements = new ArrayList<>();
             List<String> repeatSheetTitles = new ArrayList<>();
-            for (TreeElement mainLevelColumnElement : mainLevelColumnElements) {
-                if (mainLevelColumnElement.isRepeatable()) {
-                    if (instanceIDColumn == null) {
-                        outcome.results.put(id, "This form contains repeatable group so it should contain an instanceID!");
-                        return false;
-                    }
 
-                    List<TreeElement> elements = getColumnElements(mainLevelColumnElement);
-                    elements.add(0, instanceIDColumn);
-                    repeatColumnElements.add(elements);
-                    repeatSheetTitles.add(getElementTitle(mainLevelColumnElement));
-                }
-            }
+            readRepeats(mainLevelColumnElements, id, repeatColumnElements, repeatSheetTitles);
 
             if (!repeatColumnElements.isEmpty()) {
-                for (List<TreeElement> repeatGroup : repeatColumnElements) {
-                    if (repeatGroup.size() > 1) {
-                        String sheetTitle = getElementTitle(repeatGroup.get(1).getParent());
-                        if (!doesSheetExist(sheetTitle)) {
-                            sheetsHelper.addSheet(spreadsheetId, sheetTitle);
-                        }
-                        fillSheet(repeatGroup, sheetTitle, id, instanceFile, jrFormId, null);
-                    }
-                }
+                createNewSheetsIfNeeded(repeatColumnElements);
+                uploadAnswersFromRepeatGroups(repeatColumnElements, id, instanceFile, jrFormId, repeatSheetTitles);
             }
 
             fillSheet(mainLevelColumnElements, mainSheetTitle, id, instanceFile, jrFormId, repeatSheetTitles);
@@ -234,6 +214,43 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             return false;
         }
         return true;
+    }
+
+    private void createNewSheetsIfNeeded(List<List<TreeElement>> repeatColumnElements) throws IOException {
+        for (List<TreeElement> repeatGroup : repeatColumnElements) {
+            String sheetTitle = getElementTitle(repeatGroup.get(1).getParent());
+            if (!doesSheetExist(sheetTitle)) {
+                sheetsHelper.addSheet(spreadsheetId, sheetTitle);
+            }
+        }
+    }
+
+    private void uploadAnswersFromRepeatGroups(List<List<TreeElement>> repeatColumnElements, String id, File instanceFile, String jrFormId, List<String> repeatSheetTitles) throws Exception {
+        for (List<TreeElement> repeatGroup : repeatColumnElements) {
+            if (repeatGroup.size() > 1) {
+                fillSheet(repeatGroup, getElementTitle(repeatGroup.get(1).getParent()), id, instanceFile, jrFormId, repeatSheetTitles);
+            }
+        }
+    }
+
+    private void readRepeats(List<TreeElement> mainLevelColumnElements, String id, List<List<TreeElement>> repeatColumnElements,
+                             List<String> repeatSheetTitles) throws Exception {
+        TreeElement instanceIDColumn = getInstanceIDColumn(mainLevelColumnElements);
+        for (TreeElement mainLevelColumnElement : mainLevelColumnElements) {
+            if (mainLevelColumnElement.isRepeatable()) {
+                if (instanceIDColumn == null) {
+                    outcome.results.put(id, "This form contains repeatable group so it should contain an instanceID!");
+                    throw new Exception();
+                }
+
+                List<TreeElement> elements = getColumnElements(mainLevelColumnElement);
+                elements.add(0, instanceIDColumn);
+                repeatColumnElements.add(elements);
+                repeatSheetTitles.add(getElementTitle(mainLevelColumnElement));
+
+                readRepeats(elements, id, repeatColumnElements, repeatSheetTitles);
+            }
+        }
     }
 
     private TreeElement getInstanceIDColumn(List<TreeElement> elements) {
@@ -285,7 +302,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         for (int i = 0; i < values.size(); i++) {
             HashMap<String, String> answers = new HashMap<>();
             for (int j = 0; j < answersToUpload.asMap().size(); j++) {
-                answers.put(columnTitles.get(j), Iterables.get(answersToUpload.get(columnTitles.get(j)), j == 0 ? 0 : i));
+                answers.put(columnTitles.get(j), Iterables.get(answersToUpload.get(columnTitles.get(j)), j == 0 || repeatSheetTitles.contains(columnTitles.get(j)) ? 0 : i));
             }
             insertRow(getRowFromList(prepareListOfValues(sheetColumns, columnTitles, answers)), id, sheetTitle);
         }
@@ -675,7 +692,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                     emptyAnswer = true;
                     path.add(parser.getName());
                     String columnTitle = getPath(path);
-                    if (repeatSheetTitles != null && repeatSheetTitles.contains(columnTitle)) { // that means it's a repeat group
+                    if (repeatSheetTitles.contains(columnTitle) && columnTitles.contains(columnTitle)) { // that means it's a repeat group
                         Integer sheetId = getSheetId(columnTitle);
                         if (sheetId != null && !answersToUpload.values().contains(getSheetUrl(sheetId))) {
                             emptyAnswer = false;
@@ -698,8 +715,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                     break;
                 case XmlPullParser.END_TAG:
                     columnTitle = getPath(path);
-                    if (emptyAnswer && columnTitles.contains(columnTitle)
-                            && (repeatSheetTitles == null || !repeatSheetTitles.contains(columnTitle))) {
+                    if (emptyAnswer && columnTitles.contains(columnTitle) && !repeatSheetTitles.contains(columnTitle)) {
                         answersToUpload.put(columnTitle, "");
                     }
                     path.remove(path.size() - 1);
