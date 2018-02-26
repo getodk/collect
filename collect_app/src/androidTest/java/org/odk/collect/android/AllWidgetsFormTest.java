@@ -899,10 +899,6 @@ public class AllWidgetsFormTest {
         return RandomString.make();
     }
 
-    private boolean randomBoolean()  {
-        return random.nextBoolean();
-    }
-
     private int randomInt() {
         return Math.abs(random.nextInt());
     }
