@@ -39,6 +39,7 @@ import timber.log.Timber;
 public class AboutActivity extends AppCompatActivity implements
         AboutListAdapter.AboutItemClickListener {
 
+    private static final String LICENSES_HTML_PATH = "file:///android_asset/open_source_licenses.html";
     private static final String GOOGLE_PLAY_URL = "https://play.google.com/store/apps/details?id=";
     private static final String ODK_WEBSITE = "https://opendatakit.org";
     private static final String ODK_FORUM = "https://forum.opendatakit.org";
@@ -127,7 +128,9 @@ public class AboutActivity extends AppCompatActivity implements
                 }
                 break;
             case 4:
-                startActivity(new Intent(this, OpenSourceLicensesActivity.class));
+                Intent intent = new Intent(this, WebViewActivity.class);
+                intent.putExtra(CustomTabHelper.OPEN_URL, LICENSES_HTML_PATH);
+                startActivity(intent);
                 break;
         }
     }

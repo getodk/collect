@@ -128,9 +128,6 @@ the specific language governing permissions and limitations under the License.
             android:label="@string/app_name"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".activities.OpenSourceLicensesActivity"
-            android:label="@string/all_open_source_licenses" />
-        <activity
             android:name=".activities.GoogleDriveActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
