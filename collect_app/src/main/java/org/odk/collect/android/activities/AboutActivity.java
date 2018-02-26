@@ -84,7 +84,7 @@ public class AboutActivity extends AppCompatActivity implements
 
     @Override
     public void onClick(int position) {
-        if(Collect.allowClick()) {
+        if (Collect.allowClick()) {
             switch (position) {
                 case 0:
                     websiteTabHelper.openUri(this, websiteUri);
