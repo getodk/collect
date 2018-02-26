@@ -199,12 +199,19 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             FormDef formDefFromXml = XFormUtils.getFormFromInputStream(new FileInputStream(new File(formFilePath)));
 
             List<TreeElement> mainLevelColumnElements = getColumnElements(formDefFromXml.getMainInstance().getRoot());
+            TreeElement instanceIDColumn = getInstanceIDColumn(mainLevelColumnElements);
+
             List<List<TreeElement>> repeatColumnElements = new ArrayList<>();
             List<String> repeatSheetTitles = new ArrayList<>();
             for (TreeElement mainLevelColumnElement : mainLevelColumnElements) {
                 if (mainLevelColumnElement.isRepeatable()) {
+                    if (instanceIDColumn == null) {
+                        outcome.results.put(id, "This form contains repeatable group so it should contain an instanceID!");
+                        return false;
+                    }
+
                     List<TreeElement> elements = getColumnElements(mainLevelColumnElement);
-                    elements.add(0, mainLevelColumnElements.get(0));
+                    elements.add(0, instanceIDColumn);
                     repeatColumnElements.add(elements);
                     repeatSheetTitles.add(getElementTitle(mainLevelColumnElement));
                 }
@@ -227,6 +234,15 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             return false;
         }
         return true;
+    }
+
+    private TreeElement getInstanceIDColumn(List<TreeElement> elements) {
+        for (TreeElement element : elements) {
+            if (element.getName().equals("instanceID")) {
+                return element;
+            }
+        }
+        return null;
     }
 
     private void fillSheet(List<TreeElement> columnElements, String sheetTitle,
