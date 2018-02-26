@@ -11,6 +11,7 @@
   <string name="cancel">キャンセル</string>
   <string name="cancel_loading_form">キャンセル</string>
   <string name="cancel_location">キャンセル</string>
+  <string name="canceling">キャンセル中</string>
   <string name="cannot_edit_completed_form">確定済になっているため、このフォームは編集できません。暗号化されているかもしれません。</string>
   <string name="capture_audio">サウンドを録音</string>
   <string name="capture_image">写真を撮影</string>

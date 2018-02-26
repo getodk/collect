@@ -11,6 +11,7 @@
   <string name="cancel">Скасувати</string>
   <string name="cancel_loading_form">Скасувати</string>
   <string name="cancel_location">Скасувати</string>
+  <string name="canceling">Скасування</string>
   <string name="cannot_edit_completed_form">Після позначення завершеною ця анкета не може бути відредагована. Може бути зашифрованою.</string>
   <string name="capture_audio">Записати звук</string>
   <string name="capture_image">Сфотографувати</string>
@@ -299,6 +300,8 @@
   <string name="show_map_sdk">Відобразити налаштування Map SDK</string>
   <string name="openmap_streets">OSM Вулиці</string>
   <string name="openmap_usgs_topo">USGS топографічна національна карта</string>
+  <string name="openmap_usgs_sat">USGS Національна мапа Гібрид</string>
+  <string name="openmap_usgs_img">USGS Національна мапа Картинки</string>
   <string name="openmap_stamen_terrain">Stamen Ландшафт</string>
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
@@ -415,6 +418,8 @@
   <string name="exit">Вийти</string>
   <string name="instance_scan_completed">Завершені сканування.</string>
   <string name="instance_scan_count">%1$d анкет додано.</string>
+  <string name="instance_sync">Завершувати форми під час імпорту</string>
+  <string name="instance_sync_summary">Брати до уваги форми додані безпосередньо до директорії екземплярів.</string>
   <string name="sort_by_name_asc">За ім\'ям, А-Я</string>
   <string name="sort_by_name_desc">За ім\'ям, Я-А</string>
   <string name="sort_by_date_asc">За датою, найновіший перший</string>
@@ -539,4 +544,26 @@
   <string name="coptic_month_12">Месорі</string>
   <string name="coptic_month_13">Пі Когі Енавот</string>
   <string name="multiple_media_folders_detected_notification">Знайдено більше однієї медіа директоріі, будь ласка, видаліть зайві та спробуйте знову</string>
+  <string name="islamic_month_1">Мухарам</string>
+  <string name="islamic_month_2">Сафар</string>
+  <string name="islamic_month_3">Рабі аль-аваль</string>
+  <string name="islamic_month_4">Рабі аль-тані</string>
+  <string name="islamic_month_5">Джумада аль-аваль</string>
+  <string name="islamic_month_6">Джумада аль-тані</string>
+  <string name="islamic_month_7">Раджаб</string>
+  <string name="islamic_month_8">Сабан</string>
+  <string name="islamic_month_9">Рамадан</string>
+  <string name="islamic_month_10">Шаваль</string>
+  <string name="islamic_month_11">Ду аль-кідах</string>
+  <string name="islamic_month_12">Ду аль-хіджах</string>
+  <string name="moving_backwards_title">Переміщення назад</string>
+  <string name="moving_backwards_disabled_title">Переміщення назад відключене</string>
+  <string name="moving_backwards_disabled_message">Бажаєте налаштувати цей пристрій аби заборонити користувачам оминати ці налаштування?\n\nВнесені зміни:\n\u2022 Відключено Виправити Збережену Анкету\n\u2022 Відключено Зберегти Анкету\n\u2022 Відключено Швидкій Перехід\n\u2022 Обробка обмежень встановлена на Перевіряти під час переходу вперед</string>
+  <string name="moving_backwards_enabled_title">Переміщення назад включене</string>
+  <string name="moving_backwards_enabled_message">Можливи Ви захочете переглянути наступні налаштування:\n\n\u2022 Виправити Збережену Анкету\n\u2022 Зберегти Анкету\n\u2022 Швидкий Перехід\n\u2022 Обробка обмежень</string>
+  <string name="yes">Так</string>
+  <string name="no">Ні</string>
+  <string name="newer_version_of_a_form_info">Ви вже маєте найновішу версію анкети!</string>
+  <string name="svg_file_does_not_exist">SVG файл не існує!</string>
+  <string name="svg_not_supported_device">Віджет ImageMap поребує Android 5 (Lollipop) або новіший. Ваш пристрій не підтримується!</string>
 </resources>
