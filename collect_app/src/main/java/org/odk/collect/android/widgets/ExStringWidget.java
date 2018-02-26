@@ -265,7 +265,6 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
             }
         } else {
             onException(errorString);
-            showKeyboard(getContext());
         }
     }
 
@@ -290,6 +289,7 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
                 toastText, Toast.LENGTH_SHORT)
                 .show();
         this.answer.requestFocus();
+        showKeyboard(getContext());
         Timber.e(toastText);
     }
 }
