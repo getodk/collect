@@ -58,6 +58,7 @@ public class ValidatorTest {
 
     @Test
     public void urlValidationTest() {
+        //  https://en.wikipedia.org/wiki/Template:URL/testcases
         assertTrue(Validator.isUrlValid("http://www.example.com"));
         assertTrue(Validator.isUrlValid("https://www.example.com"));
         assertTrue(Validator.isUrlValid("http://www.example.com/"));
