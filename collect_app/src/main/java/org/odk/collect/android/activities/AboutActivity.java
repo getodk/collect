@@ -30,6 +30,7 @@ import android.support.v7.widget.Toolbar;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.AboutListAdapter;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.CustomTabHelper;
 
 import java.util.List;
@@ -47,8 +48,6 @@ public class AboutActivity extends AppCompatActivity implements
     private CustomTabHelper forumTabHelper;
     private Uri websiteUri;
     private Uri forumUri;
-
-    private boolean handlingClickFlag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,10 +84,7 @@ public class AboutActivity extends AppCompatActivity implements
 
     @Override
     public void onClick(int position) {
-        //debounce clicks
-        //actions that do not change the activity should set the flag to false once they finish!
-        if (!handlingClickFlag) {
-            handlingClickFlag = true;
+        if(Collect.allowClick()) {
             switch (position) {
                 case 0:
                     websiteTabHelper.openUri(this, websiteUri);
@@ -151,11 +147,5 @@ public class AboutActivity extends AppCompatActivity implements
         unbindService(websiteTabHelper.getServiceConnection());
         unbindService(forumTabHelper.getServiceConnection());
         super.onDestroy();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        handlingClickFlag = false;
     }
 }
