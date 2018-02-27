@@ -268,8 +268,9 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
         }
     }
 
-    private void showKeyboard(Context context) {
-        InputMethodManager inputManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+    private void focusAnswer() {
+        answer.requestFocus();
+        InputMethodManager inputManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.showSoftInput(answer, 0);
     }
 
@@ -288,8 +289,8 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
         Toast.makeText(getContext(),
                 toastText, Toast.LENGTH_SHORT)
                 .show();
-        this.answer.requestFocus();
-        showKeyboard(getContext());
         Timber.e(toastText);
+
+        focusAnswer();
     }
 }
