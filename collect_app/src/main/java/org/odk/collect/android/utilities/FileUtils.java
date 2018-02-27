@@ -466,20 +466,10 @@ public class FileUtils {
     }
 
     public static void saveBitmapToFile(Bitmap bitmap, String path) {
-        FileOutputStream out = null;
-        try {
-            out = new FileOutputStream(path);
+        try (FileOutputStream out = new FileOutputStream(path)) {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
         } catch (Exception e) {
             Timber.e(e);
-        } finally {
-            try {
-                if (out != null) {
-                    out.close();
-                }
-            } catch (IOException e) {
-                Timber.e(e);
-            }
         }
     }
 
