@@ -290,6 +290,7 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
             listFiles(ROOT_KEY, searchText.getText().toString());
         } else {
             ToastUtils.showShortToast(R.string.no_blank_search);
+            listFiles(ROOT_KEY);
         }
     }
 
