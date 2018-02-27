@@ -79,6 +79,7 @@ import org.odk.collect.android.adapters.IconMenuListAdapter;
 import org.odk.collect.android.adapters.model.IconMenuItem;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.dao.helpers.FormsDaoHelper;
 import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
 import org.odk.collect.android.exception.GDriveConnectionException;
 import org.odk.collect.android.exception.JavaRosaException;
@@ -235,8 +236,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
     private boolean showNavigationButtons;
 
-    private FormsDao formsDao;
-
     private Bundle state;
 
     @NonNull
@@ -261,8 +260,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         }
 
         setContentView(R.layout.form_entry);
-
-        formsDao = new FormsDao();
 
         errorMessage = null;
 
@@ -431,43 +428,28 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                                 + FormsColumns.JR_VERSION + "=?";
                     }
 
-                    {
-                        Cursor formCursor = null;
-                        try {
-                            formCursor = formsDao.getFormsCursor(selection, selectionArgs);
-                            if (formCursor.getCount() == 1) {
-                                formCursor.moveToFirst();
-                                formPath = formCursor
-                                        .getString(formCursor
-                                                .getColumnIndex(FormsColumns.FORM_FILE_PATH));
-                            } else if (formCursor.getCount() < 1) {
-                                this.createErrorDialog(
-                                        getString(
-                                                R.string.parent_form_not_present,
-                                                jrFormId)
-                                                + ((jrVersion == null) ? ""
-                                                : "\n"
-                                                + getString(R.string.version)
-                                                + " "
-                                                + jrVersion),
-                                        EXIT);
-                                return;
-                            } else if (formCursor.getCount() > 1) {
-                                // still take the first entry, but warn that
-                                // there are multiple rows.
-                                // user will need to hand-edit the SQLite
-                                // database to fix it.
-                                formCursor.moveToFirst();
-                                formPath = formCursor.getString(
-                                        formCursor.getColumnIndex(FormsColumns.FORM_FILE_PATH));
-                                this.createErrorDialog(
-                                        getString(R.string.survey_multiple_forms_error), EXIT);
-                                return;
-                            }
-                        } finally {
-                            if (formCursor != null) {
-                                formCursor.close();
-                            }
+                    int formCount = FormsDaoHelper.getFormsCount(selection, selectionArgs);
+                    if (formCount < 1) {
+                        createErrorDialog(getString(
+                                R.string.parent_form_not_present,
+                                jrFormId)
+                                        + ((jrVersion == null) ? ""
+                                        : "\n"
+                                        + getString(R.string.version)
+                                        + " "
+                                        + jrVersion),
+                                EXIT);
+                        return;
+                    } else {
+                        formPath = FormsDaoHelper.getFormPath(selection, selectionArgs);
+
+                        // still take the first entry, but warn that
+                        // there are multiple rows.
+                        // user will need to hand-edit the SQLite
+                        // database to fix it.
+                        if (formCount > 1) {
+                            createErrorDialog(getString(R.string.survey_multiple_forms_error), EXIT);
+                            return;
                         }
                     }
                 } else if (uriMimeType != null
@@ -2149,7 +2131,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                                 String selection = FormsColumns.FORM_FILE_PATH
                                         + "=?";
                                 String[] selectArgs = {formPath};
-                                int updated = formsDao.updateForm(values, selection, selectArgs);
+                                int updated = new FormsDao().updateForm(values, selection, selectArgs);
                                 Timber.i("Updated language to: %s in %d rows",
                                         languages[whichButton],
                                         updated);
@@ -2486,20 +2468,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         String[] languageTest = formController.getLanguages();
         if (languageTest != null) {
             String defaultLanguage = formController.getLanguage();
-            String newLanguage = "";
-            Cursor c = null;
-            try {
-                c = formsDao.getFormsCursorForFormFilePath(formPath);
-                if (c.getCount() == 1) {
-                    c.moveToFirst();
-                    newLanguage = c.getString(c
-                            .getColumnIndex(FormsColumns.LANGUAGE));
-                }
-            } finally {
-                if (c != null) {
-                    c.close();
-                }
-            }
+            String newLanguage = FormsDaoHelper.getFormLanguage(formPath);
 
             long start = System.currentTimeMillis();
             Timber.i("calling formController.setLanguage");
