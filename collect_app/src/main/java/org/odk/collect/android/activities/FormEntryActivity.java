@@ -79,13 +79,11 @@ import org.odk.collect.android.adapters.IconMenuListAdapter;
 import org.odk.collect.android.adapters.model.IconMenuItem;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
-import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.exception.GDriveConnectionException;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
-import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.FormSavedListener;
@@ -98,18 +96,19 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
-import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.tasks.SaveFormIndexTask;
-import org.odk.collect.android.utilities.ActivityAvailability;
-import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.tasks.SavePointTask;
 import org.odk.collect.android.tasks.SaveResult;
 import org.odk.collect.android.tasks.SaveToDiskTask;
+import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.DbUtils;
+import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.TimerLogger;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -584,16 +583,18 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         }
     }
 
+    private FormController getFormController() {
+        return Collect.getInstance().getFormController();
+    }
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(KEY_FORMPATH, formPath);
-        FormController formController = Collect.getInstance()
-                .getFormController();
+        FormController formController = getFormController();
         if (formController != null) {
             if (formController.getInstancePath() != null) {
-                outState.putString(KEY_INSTANCEPATH, formController
-                        .getInstancePath().getAbsolutePath());
+                outState.putString(KEY_INSTANCEPATH, getInstancePath());
             }
             outState.putString(KEY_XPATH,
                     formController.getXPath(formController.getFormIndex()));
@@ -629,8 +630,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             // try to save this callback data to the FormLoaderTask
             if (formLoaderTask != null
                     && formLoaderTask.getStatus() != AsyncTask.Status.FINISHED) {
-                formLoaderTask.setActivityResult(requestCode, resultCode,
-                        intent);
+                formLoaderTask.setActivityResult(requestCode, resultCode, intent);
             } else {
                 Timber.e("Got an activityResult without any pending form loader");
             }
@@ -722,8 +722,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 File fi = new File(Collect.TMPFILE_PATH);
                 String instanceFolder = formController.getInstancePath()
                         .getParent();
-                String s = instanceFolder + File.separator
-                        + System.currentTimeMillis() + ".jpg";
+                String s = instanceFolder + File.separator + System.currentTimeMillis() + ".jpg";
 
                 File nf = new File(s);
                 if (!fi.renameTo(nf)) {
@@ -747,8 +746,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         .getStringExtra(android.provider.MediaStore.EXTRA_OUTPUT);
                 fi = new File(path);
                 instanceFolder = formController.getInstancePath().getParent();
-                s = instanceFolder + File.separator + System.currentTimeMillis()
-                        + ".jpg";
+                s = instanceFolder + File.separator + System.currentTimeMillis() + ".jpg";
 
                 nf = new File(s);
                 if (!fi.renameTo(nf)) {
@@ -772,12 +770,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                  */
 
                 showDialog(SAVING_IMAGE_DIALOG);
-                Runnable runnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        saveChosenImage(intent.getData());
-                    }
-                };
+                Runnable runnable = () -> saveChosenImage(intent.getData());
                 new Thread(runnable).start();
 
                 break;
@@ -993,7 +986,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         .logInstanceAction(this, "onOptionsItemSelected",
                                 "MENU_SAVE");
                 // don't exit
-                saveDataToDisk(DO_NOT_EXIT, isInstanceComplete(false), null);
+                saveDataToDisk(DO_NOT_EXIT, DbUtils.isInstanceComplete(false), null);
                 return true;
             case R.id.menu_goto:
                 state = null;
@@ -1179,7 +1172,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 // checkbox for if finished or ready to send
                 final CheckBox instanceComplete = endView
                         .findViewById(R.id.mark_finished);
-                instanceComplete.setChecked(isInstanceComplete(true));
+                instanceComplete.setChecked(DbUtils.isInstanceComplete(true));
 
                 if (!(boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_MARK_AS_FINALIZED)) {
                     instanceComplete.setVisibility(View.GONE);
@@ -2001,7 +1994,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 if (item.getTextResId() == R.string.keep_changes) {
                     Collect.getInstance().getActivityLogger()
                             .logInstanceAction(this, "createQuitDialog", "saveAndExit");
-                    saveDataToDisk(EXIT, isInstanceComplete(false),
+                    saveDataToDisk(EXIT, DbUtils.isInstanceComplete(false),
                             null);
                 } else {
                     Collect.getInstance().getActivityLogger()
@@ -2049,46 +2042,24 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             SaveToDiskTask.removeSavepointFiles(formController.getInstancePath().getName());
         }
 
-        boolean erase;
-
-        Cursor c = null;
-        try {
-            c = new InstancesDao().getInstancesCursorForFilePath(formController.getInstancePath()
-                    .getAbsolutePath());
-            erase = c.getCount() < 1;
-        } finally {
-            if (c != null) {
-                c.close();
-            }
-        }
-
         // if it's not already saved, erase everything
-        if (erase) {
+        if (!DbUtils.isInstanceAvailable(getInstancePath())) {
             // delete media first
-            String instanceFolder = formController.getInstancePath()
-                    .getParent();
+            String instanceFolder = formController.getInstancePath().getParent();
             Timber.i("Attempting to delete: %s", instanceFolder);
-            int images = MediaUtils
-                    .deleteImagesInFolderFromMediaProvider(formController
-                            .getInstancePath().getParentFile());
-            int audio = MediaUtils
-                    .deleteAudioInFolderFromMediaProvider(formController
-                            .getInstancePath().getParentFile());
-            int video = MediaUtils
-                    .deleteVideoInFolderFromMediaProvider(formController
-                            .getInstancePath().getParentFile());
+            File file = formController.getInstancePath().getParentFile();
+            int images = MediaUtils.deleteImagesInFolderFromMediaProvider(file);
+            int audio = MediaUtils.deleteAudioInFolderFromMediaProvider(file);
+            int video = MediaUtils.deleteVideoInFolderFromMediaProvider(file);
 
             Timber.i("Removed from content providers: %d image files, %d audio files and %d audio files.",
                     images, audio, video);
-            File f = new File(instanceFolder);
-            if (f.exists() && f.isDirectory()) {
-                for (File del : f.listFiles()) {
-                    Timber.i("Deleting file: %s", del.getAbsolutePath());
-                    del.delete();
-                }
-                f.delete();
-            }
+            FileUtils.purgeMediaPath(instanceFolder);
         }
+    }
+
+    private String getInstancePath() {
+        return getFormController().getInstancePath().getAbsolutePath();
     }
 
     /**
@@ -2565,12 +2536,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         boolean hasUsedSavepoint = task.hasUsedSavepoint();
 
         if (hasUsedSavepoint) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    ToastUtils.showLongToast(R.string.savepoint_used);
-                }
-            });
+            runOnUiThread(() -> ToastUtils.showLongToast(R.string.savepoint_used));
         }
 
         // Set saved answer path
@@ -2711,51 +2677,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         }
     }
 
-    /**
-     * Checks the database to determine if the current instance being edited has
-     * already been 'marked completed'. A form can be 'unmarked' complete and
-     * then resaved.
-     *
-     * @return true if form has been marked completed, false otherwise.
-     */
-    private boolean isInstanceComplete(boolean end) {
-        // default to false if we're mid form
-        boolean complete = false;
-
-        FormController formController = Collect.getInstance().getFormController();
-        if (formController != null) {
-            // if we're at the end of the form, then check the preferences
-            if (end) {
-                // First get the value from the preferences
-                complete = (boolean) GeneralSharedPreferences
-                        .getInstance()
-                        .get(PreferenceKeys.KEY_COMPLETED_DEFAULT);
-            }
-
-            // Then see if we've already marked this form as complete before
-            Cursor c = null;
-            try {
-                c = new InstancesDao().getInstancesCursorForFilePath(formController.getInstancePath()
-                        .getAbsolutePath());
-                if (c != null && c.getCount() > 0) {
-                    c.moveToFirst();
-                    String status = c.getString(c
-                            .getColumnIndex(InstanceColumns.STATUS));
-                    if (InstanceProviderAPI.STATUS_COMPLETE.compareTo(status) == 0) {
-                        complete = true;
-                    }
-                }
-            } finally {
-                if (c != null) {
-                    c.close();
-                }
-            }
-        } else {
-            Timber.w("FormController has a null value");
-        }
-        return complete;
-    }
-
     public void next() {
         if (!beenSwiped) {
             beenSwiped = true;
@@ -2768,29 +2689,12 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
      * requested.
      */
     private void finishReturnInstance() {
-        FormController formController = Collect.getInstance()
-                .getFormController();
         String action = getIntent().getAction();
-        if (Intent.ACTION_PICK.equals(action)
-                || Intent.ACTION_EDIT.equals(action)) {
+        if (Intent.ACTION_PICK.equals(action) || Intent.ACTION_EDIT.equals(action)) {
             // caller is waiting on a picked form
-            Cursor c = null;
-            try {
-                c = new InstancesDao().getInstancesCursorForFilePath(formController.getInstancePath()
-                        .getAbsolutePath());
-                if (c.getCount() > 0) {
-                    // should only be one...
-                    c.moveToFirst();
-                    String id = c.getString(c
-                            .getColumnIndex(InstanceColumns._ID));
-                    Uri instance = Uri.withAppendedPath(
-                            InstanceColumns.CONTENT_URI, id);
-                    setResult(RESULT_OK, new Intent().setData(instance));
-                }
-            } finally {
-                if (c != null) {
-                    c.close();
-                }
+            Uri uri = DbUtils.getLastInstanceUri(getInstancePath());
+            if (uri != null) {
+                setResult(RESULT_OK, new Intent().setData(uri));
             }
         }
         finish();
@@ -2912,9 +2816,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     }
 
     private void sendSavedBroadcast() {
-        Intent i = new Intent();
-        i.setAction("org.odk.collect.android.FormSaved");
-        this.sendBroadcast(i);
+        sendBroadcast(new Intent("org.odk.collect.android.FormSaved"));
     }
 
     @Override
