@@ -55,9 +55,10 @@ import timber.log.Timber;
 
 
 public class QRCodeUtils {
-    public static final String QR_CODE_FILEPATH = Collect.SETTINGS + File.separator + "collect-settings.jpeg";
-    static final String MD5_CACHE_PATH = Collect.SETTINGS + File.separator + ".md5";
+    public static final String QR_CODE_FILEPATH = Collect.SETTINGS + File.separator + "collect-settings.png";
     private static final int QR_CODE_SIDE_LENGTH = 400; // in pixels
+    private static final String SETTINGS_MD5_FILE = ".collect-settings-hash";
+    static final String MD5_CACHE_PATH = Collect.SETTINGS + File.separator + SETTINGS_MD5_FILE;
 
     private QRCodeUtils() {
     }
@@ -158,9 +159,8 @@ public class QRCodeUtils {
                     Timber.i("Saving QR Code to disk... : " + QR_CODE_FILEPATH);
                     FileUtils.saveBitmapToFile(bitmap, QR_CODE_FILEPATH);
 
-                    // update .md5 file
-                    Timber.i("Updated .md5 file contents");
                     FileUtils.write(mdCacheFile, messageDigest);
+                    Timber.i("Updated %s file contents", SETTINGS_MD5_FILE);
                 }
 
                 // Send the task completion event
