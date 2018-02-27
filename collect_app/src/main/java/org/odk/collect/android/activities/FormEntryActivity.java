@@ -79,6 +79,7 @@ import org.odk.collect.android.adapters.IconMenuListAdapter;
 import org.odk.collect.android.adapters.model.IconMenuItem;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.dao.helpers.ContentResolverHelper;
 import org.odk.collect.android.dao.helpers.FormsDaoHelper;
 import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
 import org.odk.collect.android.exception.GDriveConnectionException;
@@ -92,6 +93,7 @@ import org.odk.collect.android.listeners.FormSavedListener;
 import org.odk.collect.android.listeners.SavePointListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.FormController.FailedConstraint;
+import org.odk.collect.android.logic.FormInfo;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
@@ -119,7 +121,6 @@ import org.odk.collect.android.widgets.RangeWidget;
 import org.odk.collect.android.widgets.StringWidget;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -370,47 +371,25 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
                 } else if (uriMimeType != null && uriMimeType.equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
                     // get the formId and version for this instance...
-                    String jrFormId;
-                    String jrVersion;
-                    {
-                        Cursor instanceCursor = null;
-                        try {
-                            instanceCursor = getContentResolver().query(uri,
-                                    null, null, null, null);
-                            if (instanceCursor == null || instanceCursor.getCount() != 1) {
-                                this.createErrorDialog(getString(R.string.bad_uri, uri), EXIT);
-                                return;
-                            } else {
-                                instanceCursor.moveToFirst();
-                                instancePath = instanceCursor
-                                        .getString(instanceCursor
-                                                .getColumnIndex(
-                                                        InstanceColumns.INSTANCE_FILE_PATH));
-                                Collect.getInstance()
-                                        .getActivityLogger()
-                                        .logAction(this, "instanceLoaded",
-                                                instancePath);
 
-                                jrFormId = instanceCursor
-                                        .getString(instanceCursor
-                                                .getColumnIndex(InstanceColumns.JR_FORM_ID));
-                                int idxJrVersion = instanceCursor
-                                        .getColumnIndex(InstanceColumns.JR_VERSION);
+                    FormInfo formInfo = ContentResolverHelper.getFormDetails(uri);
 
-                                jrVersion = instanceCursor.isNull(idxJrVersion) ? null
-                                        : instanceCursor
-                                        .getString(idxJrVersion);
-                            }
-                        } finally {
-                            if (instanceCursor != null) {
-                                instanceCursor.close();
-                            }
-                        }
+                    if (formInfo == null) {
+                        createErrorDialog(getString(R.string.bad_uri, uri), EXIT);
+                        return;
                     }
+
+                    instancePath = formInfo.getInstancePath();
+                    Collect.getInstance()
+                            .getActivityLogger()
+                            .logAction(this, "instanceLoaded",
+                                    instancePath);
+
+                    String jrFormId = formInfo.getFormID();
+                    String jrVersion = formInfo.getFormVersion();
 
                     String[] selectionArgs;
                     String selection;
-
                     if (jrVersion == null) {
                         selectionArgs = new String[]{jrFormId};
                         selection = FormsColumns.JR_FORM_ID + "=? AND "
@@ -447,74 +426,61 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     }
                 } else if (uriMimeType != null
                         && uriMimeType.equals(FormsColumns.CONTENT_ITEM_TYPE)) {
-                    Cursor c = null;
-                    try {
-                        c = getContentResolver().query(uri, null, null, null,
-                                null);
-                        if (c == null || c.getCount() != 1) {
-                            this.createErrorDialog(getString(R.string.bad_uri, uri), EXIT);
-                            return;
-                        } else {
-                            c.moveToFirst();
-                            formPath = c.getString(c.getColumnIndex(FormsColumns.FORM_FILE_PATH));
-                            // This is the fill-blank-form code path.
-                            // See if there is a savepoint for this form that
-                            // has never been
-                            // explicitly saved
-                            // by the user. If there is, open this savepoint
-                            // (resume this filled-in
-                            // form).
-                            // Savepoints for forms that were explicitly saved
-                            // will be recovered
-                            // when that
-                            // explicitly saved instance is edited via
-                            // edit-saved-form.
-                            final String filePrefix = formPath.substring(
-                                    formPath.lastIndexOf('/') + 1,
-                                    formPath.lastIndexOf('.'))
-                                    + "_";
-                            final String fileSuffix = ".xml.save";
-                            File cacheDir = new File(Collect.CACHE_PATH);
-                            File[] files = cacheDir.listFiles(new FileFilter() {
-                                @Override
-                                public boolean accept(File pathname) {
-                                    String name = pathname.getName();
-                                    return name.startsWith(filePrefix)
-                                            && name.endsWith(fileSuffix);
-                                }
-                            });
-                            // see if any of these savepoints are for a
-                            // filled-in form that has never been
-                            // explicitly saved by the user...
-                            for (File candidate : files) {
-                                String instanceDirName = candidate.getName()
-                                        .substring(
-                                                0,
-                                                candidate.getName().length()
-                                                        - fileSuffix.length());
-                                File instanceDir = new File(
-                                        Collect.INSTANCES_PATH + File.separator
-                                                + instanceDirName);
-                                File instanceFile = new File(instanceDir,
-                                        instanceDirName + ".xml");
-                                if (instanceDir.exists()
-                                        && instanceDir.isDirectory()
-                                        && !instanceFile.exists()) {
-                                    // yes! -- use this savepoint file
-                                    instancePath = instanceFile
-                                            .getAbsolutePath();
-                                    break;
-                                }
+                    formPath = ContentResolverHelper.getFormPath(uri);
+                    if (formPath == null) {
+                        createErrorDialog(getString(R.string.bad_uri, uri), EXIT);
+                        return;
+                    } else {
+                        // This is the fill-blank-form code path.
+                        // See if there is a savepoint for this form that
+                        // has never been
+                        // explicitly saved
+                        // by the user. If there is, open this savepoint
+                        // (resume this filled-in
+                        // form).
+                        // Savepoints for forms that were explicitly saved
+                        // will be recovered
+                        // when that
+                        // explicitly saved instance is edited via
+                        // edit-saved-form.
+                        final String filePrefix = formPath.substring(
+                                formPath.lastIndexOf('/') + 1,
+                                formPath.lastIndexOf('.'))
+                                + "_";
+                        final String fileSuffix = ".xml.save";
+                        File cacheDir = new File(Collect.CACHE_PATH);
+                        File[] files = cacheDir.listFiles(pathname -> {
+                            String name = pathname.getName();
+                            return name.startsWith(filePrefix)
+                                    && name.endsWith(fileSuffix);
+                        });
+                        // see if any of these savepoints are for a
+                        // filled-in form that has never been
+                        // explicitly saved by the user...
+                        for (File candidate : files) {
+                            String instanceDirName = candidate.getName()
+                                    .substring(
+                                            0,
+                                            candidate.getName().length()
+                                                    - fileSuffix.length());
+                            File instanceDir = new File(
+                                    Collect.INSTANCES_PATH + File.separator
+                                            + instanceDirName);
+                            File instanceFile = new File(instanceDir,
+                                    instanceDirName + ".xml");
+                            if (instanceDir.exists()
+                                    && instanceDir.isDirectory()
+                                    && !instanceFile.exists()) {
+                                // yes! -- use this savepoint file
+                                instancePath = instanceFile
+                                        .getAbsolutePath();
+                                break;
                             }
-                        }
-                    } finally {
-                        if (c != null) {
-                            c.close();
                         }
                     }
                 } else {
                     Timber.e("Unrecognized URI: %s", uri);
-                    this.createErrorDialog(getString(R.string.unrecognized_uri, uri), EXIT);
+                    createErrorDialog(getString(R.string.unrecognized_uri, uri), EXIT);
                     return;
                 }
 
