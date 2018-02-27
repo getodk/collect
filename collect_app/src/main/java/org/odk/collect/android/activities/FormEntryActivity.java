@@ -227,7 +227,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private ImageButton nextButton;
     private ImageButton backButton;
 
-    private Toolbar toolbar;
     private ODKView odkView;
 
     enum AnimationType {
@@ -274,21 +273,15 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         initToolbar();
 
         nextButton = findViewById(R.id.form_forward_button);
-        nextButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                beenSwiped = true;
-                showNextView();
-            }
+        nextButton.setOnClickListener(v -> {
+            beenSwiped = true;
+            showNextView();
         });
 
         backButton = findViewById(R.id.form_back_button);
-        backButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                beenSwiped = true;
-                showPreviousView();
-            }
+        backButton.setOnClickListener(v -> {
+            beenSwiped = true;
+            showPreviousView();
         });
 
         String startingXPath = null;
@@ -377,8 +370,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
                 } else if (uriMimeType != null && uriMimeType.equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
                     // get the formId and version for this instance...
-                    String jrFormId = null;
-                    String jrVersion = null;
+                    String jrFormId;
+                    String jrVersion;
                     {
                         Cursor instanceCursor = null;
                         try {
@@ -540,9 +533,9 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     }
 
     private void initToolbar() {
-        toolbar = findViewById(R.id.toolbar);
-        setTitle(getString(R.string.loading_form));
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        setTitle(getString(R.string.loading_form));
     }
 
     /**
@@ -824,35 +817,26 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 final File newImage = new File(destImagePath);
                 FileUtils.copyFile(chosenImage, newImage);
                 ImageConverter.execute(newImage.getPath(), getWidgetWaitingForBinaryData(), this);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        dismissDialog(SAVING_IMAGE_DIALOG);
-                        if (getCurrentViewIfODKView() != null) {
-                            getCurrentViewIfODKView().setBinaryData(newImage);
-                        }
-                        saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                        refreshCurrentView();
+                runOnUiThread(() -> {
+                    dismissDialog(SAVING_IMAGE_DIALOG);
+                    if (getCurrentViewIfODKView() != null) {
+                        getCurrentViewIfODKView().setBinaryData(newImage);
                     }
+                    saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+                    refreshCurrentView();
                 });
             } else {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        dismissDialog(SAVING_IMAGE_DIALOG);
-                        Timber.e("Could not receive chosen image");
-                        showCustomToast(getString(R.string.error_occured), Toast.LENGTH_SHORT);
-                    }
+                runOnUiThread(() -> {
+                    dismissDialog(SAVING_IMAGE_DIALOG);
+                    Timber.e("Could not receive chosen image");
+                    showCustomToast(getString(R.string.error_occured), Toast.LENGTH_SHORT);
                 });
             }
         } catch (GDriveConnectionException e) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    dismissDialog(SAVING_IMAGE_DIALOG);
-                    Timber.e("Could not receive chosen image due to connection problem");
-                    showCustomToast(getString(R.string.gdrive_connection_exception), Toast.LENGTH_LONG);
-                }
+            runOnUiThread(() -> {
+                dismissDialog(SAVING_IMAGE_DIALOG);
+                Timber.e("Could not receive chosen image due to connection problem");
+                showCustomToast(getString(R.string.gdrive_connection_exception), Toast.LENGTH_LONG);
             });
         }
     }
@@ -1752,17 +1736,14 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
                             @Override
                             public void run() {
-                                FormEntryActivity.this.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        try {
-                                            Thread.sleep(500);
-                                        } catch (InterruptedException e) {
-                                            //This is rare
-                                            Timber.e(e);
-                                        }
-                                        showNextView();
+                                FormEntryActivity.this.runOnUiThread(() -> {
+                                    try {
+                                        Thread.sleep(500);
+                                    } catch (InterruptedException e) {
+                                        //This is rare
+                                        Timber.e(e);
                                     }
+                                    showNextView();
                                 });
                             }
                         }.start();
