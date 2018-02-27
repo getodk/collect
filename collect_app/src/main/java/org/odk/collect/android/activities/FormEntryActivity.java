@@ -79,6 +79,7 @@ import org.odk.collect.android.adapters.IconMenuListAdapter;
 import org.odk.collect.android.adapters.model.IconMenuItem;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
 import org.odk.collect.android.exception.GDriveConnectionException;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataManager;
@@ -104,7 +105,6 @@ import org.odk.collect.android.tasks.SaveResult;
 import org.odk.collect.android.tasks.SaveToDiskTask;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.utilities.DbUtils;
 import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
@@ -986,7 +986,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         .logInstanceAction(this, "onOptionsItemSelected",
                                 "MENU_SAVE");
                 // don't exit
-                saveDataToDisk(DO_NOT_EXIT, DbUtils.isInstanceComplete(false), null);
+                saveDataToDisk(DO_NOT_EXIT, InstancesDaoHelper.isInstanceComplete(false), null);
                 return true;
             case R.id.menu_goto:
                 state = null;
@@ -1172,7 +1172,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 // checkbox for if finished or ready to send
                 final CheckBox instanceComplete = endView
                         .findViewById(R.id.mark_finished);
-                instanceComplete.setChecked(DbUtils.isInstanceComplete(true));
+                instanceComplete.setChecked(InstancesDaoHelper.isInstanceComplete(true));
 
                 if (!(boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_MARK_AS_FINALIZED)) {
                     instanceComplete.setVisibility(View.GONE);
@@ -1994,7 +1994,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 if (item.getTextResId() == R.string.keep_changes) {
                     Collect.getInstance().getActivityLogger()
                             .logInstanceAction(this, "createQuitDialog", "saveAndExit");
-                    saveDataToDisk(EXIT, DbUtils.isInstanceComplete(false),
+                    saveDataToDisk(EXIT, InstancesDaoHelper.isInstanceComplete(false),
                             null);
                 } else {
                     Collect.getInstance().getActivityLogger()
@@ -2043,7 +2043,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         }
 
         // if it's not already saved, erase everything
-        if (!DbUtils.isInstanceAvailable(getInstancePath())) {
+        if (!InstancesDaoHelper.isInstanceAvailable(getInstancePath())) {
             // delete media first
             String instanceFolder = formController.getInstancePath().getParent();
             Timber.i("Attempting to delete: %s", instanceFolder);
@@ -2692,7 +2692,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         String action = getIntent().getAction();
         if (Intent.ACTION_PICK.equals(action) || Intent.ACTION_EDIT.equals(action)) {
             // caller is waiting on a picked form
-            Uri uri = DbUtils.getLastInstanceUri(getInstancePath());
+            Uri uri = InstancesDaoHelper.getLastInstanceUri(getInstancePath());
             if (uri != null) {
                 setResult(RESULT_OK, new Intent().setData(uri));
             }
