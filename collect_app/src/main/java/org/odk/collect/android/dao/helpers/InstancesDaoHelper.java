@@ -26,7 +26,11 @@ import org.odk.collect.android.provider.InstanceProviderAPI;
 
 import timber.log.Timber;
 
-public class InstancesDaoHelper {
+public final class InstancesDaoHelper {
+
+    private InstancesDaoHelper() {
+
+    }
 
     /**
      * Checks the database to determine if the current instance being edited has

@@ -19,7 +19,11 @@ import android.database.Cursor;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.provider.FormsProviderAPI;
 
-public class FormsDaoHelper {
+public final class FormsDaoHelper {
+
+    private FormsDaoHelper() {
+
+    }
 
     public static int getFormsCount(String selection, String[] selectionArgs) {
         int count = -1;

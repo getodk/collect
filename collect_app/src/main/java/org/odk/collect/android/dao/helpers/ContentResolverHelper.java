@@ -23,8 +23,11 @@ import org.odk.collect.android.logic.FormInfo;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 
-public class ContentResolverHelper {
+public final class ContentResolverHelper {
 
+    private ContentResolverHelper() {
+
+    }
 
     public static FormInfo getFormDetails(Uri uri) {
         FormInfo formInfo = null;
