@@ -341,7 +341,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             saveToDiskTask = (SaveToDiskTask) data;
         } else if (data == null) {
             if (!newForm) {
-                if (Collect.getInstance().getFormController() != null) {
+                if (getFormController() != null) {
                     refreshCurrentView();
                 } else {
                     Timber.w("Reloading form and restoring state.");
@@ -555,7 +555,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             savePointTask.execute();
 
             if (!allowMovingBackwards) {
-                FormController formController = Collect.getInstance().getFormController();
+                FormController formController = getFormController();
                 if (formController != null) {
                     new SaveFormIndexTask(this, formController.getFormIndex()).execute();
                 }
@@ -605,8 +605,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-        FormController formController = Collect.getInstance()
-                .getFormController();
+        FormController formController = getFormController();
         if (formController == null) {
             // we must be in the midst of a reload of the FormController.
             // try to save this callback data to the FormLoaderTask
@@ -815,10 +814,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
     private void saveChosenImage(Uri selectedImage) {
         // Copy file to sdcard
-        String instanceFolder1 = Collect.getInstance().getFormController().getInstancePath()
-                .getParent();
-        String destImagePath = instanceFolder1 + File.separator
-                + System.currentTimeMillis() + ".jpg";
+        String instanceFolder1 = getFormController().getInstancePath().getParent();
+        String destImagePath = instanceFolder1 + File.separator + System.currentTimeMillis() + ".jpg";
 
         File chosenImage;
         try {
@@ -888,9 +885,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
      * changes, so they're resynchronized here.
      */
     public void refreshCurrentView() {
-        FormController formController = Collect.getInstance()
-                .getFormController();
-        int event = formController.getEvent();
+        int event = getFormController().getEvent();
 
         // When we refresh, repeat dialog state isn't maintained, so step back
         // to the previous
@@ -932,8 +927,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         menu.findItem(R.id.menu_goto).setVisible(useability)
                 .setEnabled(useability);
 
-        FormController formController = Collect.getInstance()
-                .getFormController();
+        FormController formController = getFormController();
 
         useability = (boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_CHANGE_LANGUAGE)
                 && (formController != null)
@@ -952,8 +946,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        FormController formController = Collect.getInstance()
-                .getFormController();
+        FormController formController = getFormController();
         switch (item.getItemId()) {
             case R.id.menu_languages:
                 Collect.getInstance()
@@ -1008,8 +1001,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
      * etc...), true otherwise.
      */
     private boolean saveAnswersForCurrentScreen(boolean evaluateConstraints) {
-        FormController formController = Collect.getInstance()
-                .getFormController();
+        FormController formController = getFormController();
         // only try to save if the current event is a question or a field-list group
         // and current view is an ODKView (occasionally we show blank views that do not have any
         // controls to save data from)
@@ -1048,8 +1040,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         super.onCreateContextMenu(menu, v, menuInfo);
         Collect.getInstance().getActivityLogger()
                 .logInstanceAction(this, "onCreateContextMenu", "show");
-        FormController formController = Collect.getInstance()
-                .getFormController();
+        FormController formController = getFormController();
 
         menu.add(0, v.getId(), 0, getString(R.string.clear_answer));
         if (formController.indexContainsRepeatableGroup()) {
@@ -1105,8 +1096,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
      */
     @Override
     public Object onRetainCustomNonConfigurationInstance() {
-        FormController formController = Collect.getInstance()
-                .getFormController();
+        FormController formController = getFormController();
         // if a form is loading, pass the loader task
         if (formLoaderTask != null
                 && formLoaderTask.getStatus() != AsyncTask.Status.FINISHED) {
@@ -1133,8 +1123,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
      * @return newly created View
      */
     private View createView(int event, boolean advancingPage) {
-        FormController formController = Collect.getInstance()
-                .getFormController();
+        FormController formController = getFormController();
 
         setTitle(formController.getFormTitle());
 
@@ -1383,8 +1372,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private void showNextView() {
         state = null;
         try {
-            FormController formController = Collect.getInstance()
-                    .getFormController();
+            FormController formController = getFormController();
 
             // get constraint behavior preference value with appropriate default
             String constraintBehavior = (String) GeneralSharedPreferences.getInstance()
@@ -1459,7 +1447,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         if (allowMovingBackwards) {
             state = null;
             try {
-                FormController formController = Collect.getInstance().getFormController();
+                FormController formController = getFormController();
                 if (formController != null) {
                     // The answer is saved on a back swipe, but question constraints are
                     // ignored.
@@ -1599,11 +1587,11 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "showView", logString);
 
-        FormController formController = Collect.getInstance().getFormController();
+        FormController formController = getFormController();
         if (formController.getEvent() == FormEntryController.EVENT_QUESTION
                 || formController.getEvent() == FormEntryController.EVENT_GROUP
                 || formController.getEvent() == FormEntryController.EVENT_REPEAT) {
-            FormEntryPrompt[] prompts = Collect.getInstance().getFormController()
+            FormEntryPrompt[] prompts = getFormController()
                     .getQuestionPrompts();
             for (FormEntryPrompt p : prompts) {
                 List<TreeElement> attrs = p.getBindAttributes();
@@ -1633,8 +1621,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
      * Creates and displays a dialog displaying the violated constraint.
      */
     private void createConstraintToast(FormIndex index, int saveStatus) {
-        FormController formController = Collect.getInstance()
-                .getFormController();
+        FormController formController = getFormController();
         String constraintText;
         switch (saveStatus) {
             case FormEntryController.ANSWER_CONSTRAINT_VIOLATED:
@@ -1717,8 +1704,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             @Override
             public void onClick(DialogInterface dialog, int i) {
                 shownAlertDialogIsGroupRepeat = false;
-                FormController formController = Collect.getInstance()
-                        .getFormController();
+                FormController formController = getFormController();
                 switch (i) {
                     case BUTTON_POSITIVE: // yes, repeat
                         Collect.getInstance()
@@ -1785,8 +1771,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 }
             }
         };
-        FormController formController = Collect.getInstance()
-                .getFormController();
+        FormController formController = getFormController();
         if (formController.getLastRepeatCount() > 0) {
             alertDialog.setTitle(getString(R.string.leaving_repeat_ask));
             alertDialog.setMessage(getString(R.string.add_another_repeat,
@@ -1859,8 +1844,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 .getActivityLogger()
                 .logInstanceAction(this, "createDeleteRepeatConfirmDialog",
                         "show");
-        FormController formController = Collect.getInstance()
-                .getFormController();
+        FormController formController = getFormController();
 
         alertDialog = new AlertDialog.Builder(this).create();
         String name = formController.getLastRepeatedGroupName();
@@ -1874,8 +1858,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int i) {
-                FormController formController = Collect.getInstance()
-                        .getFormController();
+                FormController formController = getFormController();
                 switch (i) {
                     case BUTTON_POSITIVE: // yes
                         Collect.getInstance()
@@ -1947,7 +1930,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private void createQuitDialog() {
         String title;
         {
-            FormController formController = Collect.getInstance().getFormController();
+            FormController formController = getFormController();
             title = (formController == null) ? null : formController.getFormTitle();
             if (title == null) {
                 title = getString(R.string.no_form_loaded);
@@ -1988,7 +1971,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         manager.close();
                     }
 
-                    FormController formController = Collect.getInstance().getFormController();
+                    FormController formController = getFormController();
                     if (formController != null) {
                         formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);
                     }
@@ -2018,7 +2001,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
     // Cleanup when user exits a form without saving
     private void removeTempInstance() {
-        FormController formController = Collect.getInstance().getFormController();
+        FormController formController = getFormController();
 
         if (formController != null && formController.getInstancePath() != null) {
             SaveToDiskTask.removeSavepointFiles(formController.getInstancePath().getName());
@@ -2104,8 +2087,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private void createLanguageDialog() {
         Collect.getInstance().getActivityLogger()
                 .logInstanceAction(this, "createLanguageDialog", "show");
-        FormController formController = Collect.getInstance()
-                .getFormController();
+        FormController formController = getFormController();
         final String[] languages = formController.getLanguages();
         int selected = -1;
         if (languages != null) {
@@ -2143,10 +2125,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                                                 "createLanguageDialog",
                                                 "changeLanguage."
                                                         + languages[whichButton]);
-                                FormController formController = Collect
-                                        .getInstance().getFormController();
-                                formController
-                                        .setLanguage(languages[whichButton]);
+                                FormController formController = getFormController();
+                                formController.setLanguage(languages[whichButton]);
                                 dialog.dismiss();
                                 if (formController.currentPromptIsQuestion()) {
                                     saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
@@ -2263,8 +2243,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
     @Override
     protected void onPause() {
-        FormController formController = Collect.getInstance()
-                .getFormController();
+        FormController formController = getFormController();
         dismissDialogs();
         // make sure we're not already saving to disk. if we are, currentPrompt
         // is getting constantly updated
@@ -2301,7 +2280,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             }
         }
 
-        FormController formController = Collect.getInstance().getFormController();
+        FormController formController = getFormController();
         Collect.getInstance().getActivityLogger().open();
 
         if (formLoaderTask != null) {
@@ -2579,8 +2558,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         dismissDialog(SAVING_DIALOG);
 
         int saveStatus = saveResult.getSaveResult();
-        FormController formController = Collect.getInstance()
-                .getFormController();
+        FormController formController = getFormController();
         switch (saveStatus) {
             case SaveToDiskTask.SAVED:
                 ToastUtils.showShortToast(R.string.data_saved_ok);
