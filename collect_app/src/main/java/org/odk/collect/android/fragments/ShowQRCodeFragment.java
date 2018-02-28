@@ -143,7 +143,7 @@ public class ShowQRCodeFragment extends Fragment {
     }
 
     private void updateShareIntent() {
-        // Initialize the intent to share QRCode
+        // Initialize the intent to share QR Code
         shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
         shareIntent.setType("image/*");
