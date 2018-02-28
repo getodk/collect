@@ -286,7 +286,6 @@
   <string name="show_map_sdk">Pokaż Opcje Map SDK</string>
   <string name="openmap_streets">Ulice OSM</string>
   <string name="openmap_usgs_topo">USGS National Map Topo</string>
-  <string name="openmap_usgs_sat">USGS National Map Sat</string>
   <string name="openmap_stamen_terrain">Teren Stamen</string>
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
@@ -383,7 +382,6 @@
   <string name="reset_settings_dialog_title">Wybierz co zresetować</string>
   <string name="reset_settings_dialog">Resetuj aplikację…</string>
   <string name="reset_settings_button_reset">Reset</string>
-  <string name="reset_dialog_nothing">Nie wybrałeś niczego do zresetowania.</string>
   <string name="reset_in_progress">Resetowanie…</string>
   <string name="reset_app_state_result">Wyniki resetu</string>
   <string name="reset_app_state_warning">Wszystkie wybrane dane zostaną trwale usunięte. Nie ma możliwości cofnięcia operacji.</string>

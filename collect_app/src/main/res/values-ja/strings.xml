@@ -11,6 +11,7 @@
   <string name="cancel">キャンセル</string>
   <string name="cancel_loading_form">キャンセル</string>
   <string name="cancel_location">キャンセル</string>
+  <string name="canceling">キャンセル中</string>
   <string name="cannot_edit_completed_form">確定済になっているため、このフォームは編集できません。暗号化されているかもしれません。</string>
   <string name="capture_audio">サウンドを録音</string>
   <string name="capture_image">写真を撮影</string>
@@ -299,7 +300,8 @@
   <string name="show_map_sdk">マップ SDK オプションを表示</string>
   <string name="openmap_streets">OSM 道路</string>
   <string name="openmap_usgs_topo">USGS National Map Topo</string>
-  <string name="openmap_usgs_sat">USGS National Map Sat</string>
+  <string name="openmap_usgs_sat">USGS ナショナルマップ ハイブリッド</string>
+  <string name="openmap_usgs_img">USGS ナショナルマップ画像</string>
   <string name="openmap_stamen_terrain">Stamen Terrain</string>
   <string name="openmap_cartodb_positron">CartoDB ポジトロン</string>
   <string name="openmap_cartodb_darkmatter">CartoDB ダークマター</string>
@@ -402,7 +404,6 @@
   <string name="reset_settings_dialog_title">リセットするものを選択</string>
   <string name="reset_settings_dialog">アプリケーションのリセット…</string>
   <string name="reset_settings_button_reset">リセット</string>
-  <string name="reset_dialog_nothing">リセットするものが選択されていません。</string>
   <string name="reset_in_progress">リセットしています…</string>
   <string name="reset_app_state_result">結果のリセット</string>
   <string name="reset_app_state_warning">選択したデータはすべて完全に削除されます。元に戻すことはできません。</string>
@@ -562,4 +563,7 @@
   <string name="moving_backwards_enabled_message">次の設定を確認することができます:\n\n\u2022 保存したフォームの編集\n\u2022 フォームの保存\n\u2022 プロンプトに移動\n\u2022 制約処理</string>
   <string name="yes">はい</string>
   <string name="no">いいえ</string>
+  <string name="newer_version_of_a_form_info">これはすでにお持ちのフォームの更新版です!</string>
+  <string name="svg_file_does_not_exist">SVG ファイルが存在しません!</string>
+  <string name="svg_not_supported_device">ImageMap ウィジェットは Android 5 (Lollipop) 以降が必要です。お使いのデバイスはサポートされていません!</string>
 </resources>

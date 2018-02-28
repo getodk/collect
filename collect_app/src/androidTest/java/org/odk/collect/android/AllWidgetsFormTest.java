@@ -56,7 +56,9 @@ import static android.support.test.espresso.intent.matcher.IntentMatchers.hasAct
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasData;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.ViewMatchers.Visibility.VISIBLE;
+import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -219,7 +221,9 @@ public class AllWidgetsFormTest {
 
         testLabelWidget();
 
-        testTriggerWidget();
+        testTriggerWidget(false);
+
+        testTriggerWidget(true);
     }
     //endregion
 
@@ -839,11 +843,23 @@ public class AllWidgetsFormTest {
         onView(withText("Label widget")).perform(swipeLeft());
     }
 
-    public void testTriggerWidget() {
+    public void testTriggerWidget(boolean check) {
 
+        if (check) {
+            onVisibleCheckBox().perform(click());
+        }
+
+        // captures screenshot of trigger widget
         Screengrab.screenshot("trigger-widget");
 
-        onView(withText("Trigger widget")).perform(swipeLeft());
+        openWidgetList();
+        onView(withText("Trigger widget")).perform(click());
+
+        onVisibleCheckBox().check(matches(check ? isChecked() : isNotChecked()));
+
+        if (check) {
+            onView(withText("Trigger widget")).perform(swipeLeft());
+        }
     }
 
     public void testSubmission() {
@@ -860,6 +876,10 @@ public class AllWidgetsFormTest {
 
     private ViewInteraction onVisibleEditText() {
         return onView(withClassName(endsWith("EditText")));
+    }
+
+    private ViewInteraction onVisibleCheckBox() {
+        return onView(withClassName(endsWith("CheckBox")));
     }
 
     // private void openWidget(String name) {

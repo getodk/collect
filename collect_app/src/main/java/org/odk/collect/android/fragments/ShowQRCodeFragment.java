@@ -32,6 +32,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.zxing.ChecksumException;
 import com.google.zxing.FormatException;
@@ -165,7 +166,12 @@ public class ShowQRCodeFragment extends Fragment {
     void chooseButtonClicked() {
         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
         photoPickerIntent.setType("image/*");
-        startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+        if (photoPickerIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+        } else {
+            ToastUtils.showShortToast(getString(R.string.activity_not_found, "select image"));
+            Timber.w(getString(R.string.activity_not_found, "select image"));
+        }
     }
 
     @OnClick(R.id.tvPasswordWarning)

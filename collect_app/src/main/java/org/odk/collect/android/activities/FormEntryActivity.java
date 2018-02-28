@@ -1347,7 +1347,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 }
 
                 if (showNavigationButtons) {
-                    adjustBackNavigationButtonVisibility();
+                    backButton.setEnabled(!formController.isCurrentQuestionFirstInForm() && allowMovingBackwards);
                     nextButton.setEnabled(true);
                 }
                 return odkView;
@@ -1374,24 +1374,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         if (odkView != null) {
             odkView.releaseWidgetResources();
             odkView = null;
-        }
-    }
-
-    /**
-     * Disables the back button if it is first question....
-     */
-    private void adjustBackNavigationButtonVisibility() {
-        FormController formController = Collect.getInstance().getFormController();
-        try {
-            FormIndex originalFormIndex = formController.getFormIndex();
-            backButton.setEnabled(!formController.isCurrentQuestionFirstInForm() && allowMovingBackwards);
-            if (formController.stepToPreviousEvent() == FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
-                backButton.setEnabled(allowMovingBackwards);
-            }
-            formController.jumpToIndex(originalFormIndex);
-        } catch (JavaRosaException e) {
-            backButton.setEnabled(allowMovingBackwards);
-            Timber.e(e);
         }
     }
 

@@ -19,6 +19,8 @@ package org.odk.collect.android.activities;
 import android.app.Activity;
 import android.hardware.Camera;
 import android.os.Bundle;
+import android.util.SparseIntArray;
+import android.view.Surface;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -38,6 +40,19 @@ import timber.log.Timber;
 public class CaptureSelfieActivity extends Activity {
     private Camera camera;
     private CameraPreview preview;
+    private Camera.CameraInfo cameraInfo;
+
+    /**
+     * Conversion from screen rotation constant to the number of degrees.
+     */
+    private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
+
+    static {
+        ORIENTATIONS.append(Surface.ROTATION_0, 0);
+        ORIENTATIONS.append(Surface.ROTATION_90, 90);
+        ORIENTATIONS.append(Surface.ROTATION_180, 180);
+        ORIENTATIONS.append(Surface.ROTATION_270, 270);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +105,11 @@ public class CaptureSelfieActivity extends Activity {
         }
     }
 
+    /**
+     * Gets an available front {@link Camera} instance, and does some initialization for it.
+     *
+     * @return an available front {@link Camera} instance
+     */
     private Camera getCameraInstance() {
         Camera camera = null;
         for (int camNo = 0; camNo < Camera.getNumberOfCameras(); camNo++) {
@@ -98,9 +118,22 @@ public class CaptureSelfieActivity extends Activity {
 
             if (camInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
                 camera = Camera.open(camNo);
+                cameraInfo = camInfo;
                 camera.setDisplayOrientation(90);
+
             }
         }
+
+        // Set the rotation of the camera which the output picture need.
+        if (camera != null) {
+            Camera.Parameters parameters = camera.getParameters();
+            int rotation = ORIENTATIONS.get(getWindowManager().getDefaultDisplay().getRotation());
+            parameters.setRotation(calcCameraRotation(rotation));
+            camera.setParameters(parameters);
+        } else {
+            Timber.w("No Available front camera");
+        }
+
         return camera;
     }
 
@@ -145,5 +178,20 @@ public class CaptureSelfieActivity extends Activity {
             }
         }
         return false; // No front-facing camera found
+    }
+
+    /**
+     * Calculates the front camera rotation
+     * <p>
+     * This calculation is applied to the output JPEG either via Exif Orientation tag
+     * or by actually transforming the bitmap. (Determined by vendor camera API implementation)
+     * <p>
+     * Note: This is not the same calculation as the display orientation
+     *
+     * @param screenOrientationDegrees Screen orientation in degrees
+     * @return Number of degrees to rotate image in order for it to view correctly.
+     */
+    private int calcCameraRotation(int screenOrientationDegrees) {
+        return (cameraInfo.orientation + screenOrientationDegrees) % 360;
     }
 }
