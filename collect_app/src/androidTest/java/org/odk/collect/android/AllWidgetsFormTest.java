@@ -940,10 +940,12 @@ public class AllWidgetsFormTest {
                 SeekBar seekBar = (SeekBar) view;
                 seekBar.setProgress(progress);
             }
+
             @Override
             public String getDescription() {
                 return "Set a progress on a SeekBar";
             }
+
             @Override
             public Matcher<View> getConstraints() {
                 return ViewMatchers.isAssignableFrom(SeekBar.class);
