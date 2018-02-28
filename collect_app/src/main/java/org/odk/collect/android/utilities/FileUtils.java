@@ -369,7 +369,7 @@ public class FileUtils {
             final Element submission = model.getElement(xforms, "submission");
             final String base64RsaPublicKey = submission.getAttributeValue(null, "base64RsaPublicKey");
             final String autoDelete = submission.getAttributeValue(null, "auto-delete");
-            final String autoSubmit = submission.getAttributeValue(null, "auto-submit");
+            final String autoSubmit = submission.getAttributeValue(null, "auto-send");
             fields.put(SUBMISSIONURI, submission.getAttributeValue(null, "action"));
             fields.put(BASE64_RSA_PUBLIC_KEY,
                     (base64RsaPublicKey == null || base64RsaPublicKey.trim().length() == 0)
