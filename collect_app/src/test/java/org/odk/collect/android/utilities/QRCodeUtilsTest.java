@@ -82,12 +82,12 @@ public class QRCodeUtilsTest {
     }
 
     @Test
-    public void readQRCodeFromDiskIfCacheExists() throws NoSuchAlgorithmException, IOException, WriterException, DataFormatException, ChecksumException, NotFoundException, FormatException {
+    public void readQRCodeFromDiskIfCacheExists() throws NoSuchAlgorithmException, IOException, WriterException {
         String expectedData = "{\"general\":{},\"admin\":{}}";
 
         // stubbing cache and bitmap files
         new File(Collect.SETTINGS).mkdirs();
-        FileUtils.saveBitmapToFile(QRCodeUtils.generateQRBitMap(expectedData, 100), QR_CODE_FILEPATH);
+        FileUtils.saveBitmapToFile(QRCodeUtils.generateQRBitMap(expectedData, 100), QR_CODE_FILEPATH, Bitmap.CompressFormat.PNG);
         FileUtils.write(md5File, getDigest(expectedData.getBytes()));
 
         // verify that QRCode and md5 cache files exist

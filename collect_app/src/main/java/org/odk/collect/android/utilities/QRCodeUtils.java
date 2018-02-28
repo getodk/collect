@@ -138,7 +138,9 @@ public class QRCodeUtils {
                  */
                 if (Arrays.equals(messageDigest, cachedMessageDigest)) {
                     Timber.i("Loading QRCode from the disk...");
-                    bitmap = BitmapFactory.decodeFile(QR_CODE_FILEPATH);
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                    bitmap = FileUtils.getBitmap(QR_CODE_FILEPATH, options);
                     shouldWriteToDisk = false;
                 }
             }
@@ -157,7 +159,7 @@ public class QRCodeUtils {
                 // Save the QRCode to disk
                 if (shouldWriteToDisk) {
                     Timber.i("Saving QR Code to disk... : " + QR_CODE_FILEPATH);
-                    FileUtils.saveBitmapToFile(bitmap, QR_CODE_FILEPATH);
+                    FileUtils.saveBitmapToFile(bitmap, QR_CODE_FILEPATH, Bitmap.CompressFormat.PNG);
 
                     FileUtils.write(mdCacheFile, messageDigest);
                     Timber.i("Updated %s file contents", SETTINGS_MD5_FILE);

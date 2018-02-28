@@ -465,9 +465,14 @@ public class FileUtils {
         }
     }
 
-    public static void saveBitmapToFile(Bitmap bitmap, String path) {
+    public static void saveBitmapToFile(Bitmap bitmap, String path, Bitmap.CompressFormat... format) {
+        Bitmap.CompressFormat compressFormat = Bitmap.CompressFormat.JPEG;
+        if (format[0] != null) {
+            compressFormat = format[0];
+        }
+
         try (FileOutputStream out = new FileOutputStream(path)) {
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            bitmap.compress(compressFormat, 100, out);
         } catch (Exception e) {
             Timber.e(e);
         }
