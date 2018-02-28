@@ -343,7 +343,6 @@
   <string name="zoom_to_where">Маштабувати до…</string>
   <string name="zoom_to_location">Маштабувати до поточного розташування</string>
   <string name="zoom_to_feature">Маштабувати до збереженої ознаки</string>
-  <string name="google_sheets_invalid_column_form">\'n%1$s\' це помилкове ім\'я колонкиу Вашій анкеті. Google Сторінки дозволяють в іменах колонок тільки буквено-цифрові символи та дефіси.</string>
   <string name="geoshape_view_change_location">Переглянути чи змінити ГеоФігуру</string>
   <string name="geotrace_view_change_location">Переглянути чи змінити ГеоМаршрут</string>
   <string name="bearing">Пеленг: %.3f</string>

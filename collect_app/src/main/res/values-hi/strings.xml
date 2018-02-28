@@ -340,7 +340,6 @@
   <string name="zoom_to_where">पर ज़ूम करें …</string>
   <string name="zoom_to_location">वर्तमान लोकेशन पर ज़ूम करें</string>
   <string name="zoom_to_feature">संरक्षित फीचर पर ज़ूम करें</string>
-  <string name="google_sheets_invalid_column_form">\'n%1$s\' आपके फ़ॉर्म में एक अमान्य स्तंभ नाम है गूगल शीट स्तंभ नामों में केवल अल्फ़ान्यूमेरिक वर्ण और हाइफ़न की अनुमति देता है</string>
   <string name="geoshape_view_change_location">जिओ शेप देखें या बदलें </string>
   <string name="geotrace_view_change_location">जिओ ट्रेस देखें या बदलें </string>
   <string name="bearing">बीअरिंग: %.3f</string>

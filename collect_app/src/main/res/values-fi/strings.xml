@@ -343,7 +343,6 @@
   <string name="zoom_to_where">Zoomaa…</string>
   <string name="zoom_to_location">Zoomaa nykysijaintiin</string>
   <string name="zoom_to_feature">Zoomaa tallennettuun ominaisuuteen</string>
-  <string name="google_sheets_invalid_column_form">\'n%1$s\' ei ole sallittu sarakenimi lomakkeessasi. Google Sheets sallii ainoastaan alfanumeeriset merkit ja väliviivat sarakenimissä</string>
   <string name="geoshape_view_change_location">Tarkastele tai Muuta GeoShape</string>
   <string name="geotrace_view_change_location">Tarkastele tai Muuta GeoTrace</string>
   <string name="bearing">Suuntima: %.3f</string>

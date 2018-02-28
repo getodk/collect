@@ -335,7 +335,6 @@
   <string name="zoom_to_where">Ingrandisci su…</string>
   <string name="zoom_to_location">Ingrandisci la posizione corrente</string>
   <string name="zoom_to_feature">Ingrandisci l\'elemento salvato</string>
-  <string name="google_sheets_invalid_column_form">\'n%1$s\' è un nome di colonna non valido nella tua form. Google Sheets permette solamente caratteri alfanumerici e trattini nei nomi delle colonne</string>
   <string name="geoshape_view_change_location">Guarda o Cambia Geo-contorno</string>
   <string name="geotrace_view_change_location">Guarda o Cambia Geo-tracciatura</string>
   <string name="bearing">Orientamento: %.3f </string>

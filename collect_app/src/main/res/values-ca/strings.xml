@@ -322,7 +322,6 @@
   <string name="discard">Descarta</string>
   <string name="zoom_to_location">Zoom a posició actual</string>
   <string name="zoom_to_feature">Zoom a característica desada</string>
-  <string name="google_sheets_invalid_column_form">\'n%1$s\' és un nom de columna invàlid al vostre formulari. Google Sheets només permet caràcters alfanumèrics i guions com nom de columna</string>
   <string name="geoshape_view_change_location">Visualitza o modifica GeoShape</string>
   <string name="geotrace_view_change_location">Visualitza o modifica GeoShape</string>
   <string name="bearing">Rumb: %.3f</string>
