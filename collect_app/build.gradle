@@ -135,12 +135,8 @@ android {
 
 
             debuggable(true)
-            // Allows AndroidTest JaCoCo reports to be generated
-            //testCoverageEnabled(true)  // smap
             testCoverageEnabled(false)    // smap
-            //minifyEnabled(true)
             minifyEnabled(false)
-            //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
             resValue("bool", "FIREBASE_CRASH_ENABLED", "false")
         }
     }
@@ -172,8 +168,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     dexOptions {
@@ -224,6 +220,7 @@ dependencies {
     implementation group: 'com.android.support', name: 'cardview-v7', version: '27.0.2'
     implementation group: 'com.android.support', name: 'multidex', version: '1.0.2'
     //implementation group: 'com.google.android.gms', name: 'play-services-analytics', version: '10.0.1'  // smap
+    implementation group: 'com.android.support', name: 'exifinterface', version: '27.0.2'
     implementation group: 'com.google.android.gms', name: 'play-services-auth', version: '10.0.1'
     implementation group: 'com.google.android.gms', name: 'play-services-maps', version: '10.0.1'
     implementation group: 'com.google.android.gms', name: 'play-services-gcm', version: '10.0.1'    // smap
@@ -243,9 +240,10 @@ dependencies {
     implementation group: 'commons-io', name: 'commons-io', version: '2.5'
     implementation group: 'net.sf.kxml', name: 'kxml2', version: '2.3.0'
     implementation group: 'net.sf.opencsv', name: 'opencsv', version: '2.3'
-    implementation(group: 'org.opendatakit', name: 'opendatakit-javarosa', version: '2.7.0') {
+    implementation(group: 'org.opendatakit', name: 'opendatakit-javarosa', version: '2.8.0') {
         exclude module: 'joda-time'
     }
+
     implementation group: 'org.osmdroid', name: 'osmdroid-android', version: '5.6.4'
     implementation group: 'org.slf4j', name: 'slf4j-android', version: '1.6.1-RC1'
     implementation group: 'pub.devrel', name: 'easypermissions', version: '0.2.1'
@@ -271,6 +269,7 @@ dependencies {
     //androidTestImplementation group: 'com.squareup.leakcanary', name: 'leakcanary-android-no-op', version: '1.5.4'
     //odkCollectReleaseImplementation group: 'com.squareup.leakcanary', name: 'leakcanary-android-no-op', version: '1.5.4'
 
+    // Android Architecture Components:
     implementation "android.arch.lifecycle:extensions:1.0.0"
 
     // smap aws
@@ -283,32 +282,54 @@ dependencies {
     // charts
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
 
+    // Dagger:
+    implementation 'com.google.dagger:dagger-android:2.11'
+    implementation 'com.google.dagger:dagger-android-support:2.11'
+    annotationProcessor 'com.google.dagger:dagger-android-processor:2.11'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
+
+    // RxJava 2:
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.6'
+
+    // Better "Subjects" for Rx:
+    implementation 'com.jakewharton.rxrelay2:rxrelay:2.0.0'
+
+    // Android bindings for Rx:
+    implementation 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
+
+    // RxLifecycle (binds subscription cleanup to component lifecycle):
+    implementation 'com.trello.rxlifecycle2:rxlifecycle:2.2.1'
+    implementation 'com.trello.rxlifecycle2:rxlifecycle-android:2.2.1'
+    implementation 'com.trello.rxlifecycle2:rxlifecycle-android-lifecycle:2.2.1'
+
+    // Makes binding to Views easy:
+    implementation 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+
+    // Used to generate documentation screenshots.
+    androidTestCompile 'tools.fastlane:screengrab:1.1.0'
+
     // Testing-only dependencies
-// smap comment out testing
-//    testImplementation group: 'junit', name: 'junit', version: '4.12'
-//    testImplementation group: 'org.mockito', name: 'mockito-core', version: '2.12.0'
-//    testImplementation group: 'org.robolectric', name: 'robolectric', version: '3.5.1'
-//    testImplementation group: 'org.robolectric', name: 'shadows-multidex', version: '3.5.1'
+    //testImplementation group: 'junit', name: 'junit', version: '4.12'
+    //testImplementation group: 'org.mockito', name: 'mockito-core', version: '2.8.47'
+    //testImplementation group: 'org.robolectric', name: 'robolectric', version: '3.5.1'
+    //testImplementation group: 'org.robolectric', name: 'shadows-multidex', version: '3.5.1'
 
-//    androidTestImplementation group: 'org.mockito', name: 'mockito-android', version: '2.11.0'
-//    androidTestImplementation(group: 'com.android.support.test', name: 'runner', version: '1.0.1') {
-//        exclude group: 'com.android.support', module: 'support-annotations'
-//    }
+    // power mock (for mocking final methods which is not handled by mockito)
+    //testImplementation group: 'org.powermock', name: 'powermock-module-junit4', version: '1.6.4'
+    //testImplementation group: 'org.powermock', name: 'powermock-api-mockito2', version: '1.7.3'
 
-//    androidTestImplementation(group: 'com.android.support.test.espresso', name: 'espresso-core', version: '3.0.1') {
-//        exclude group: 'com.android.support', module: 'support-annotations'
-//        exclude group: 'com.google.code.findbugs', module: 'jsr305'
-//    }
+    //androidTestImplementation group: 'org.mockito', name: 'mockito-android', version: '2.11.0'
+    //androidTestImplementation(group: 'com.android.support.test', name: 'runner', version: '1.0.1') {
+    //    exclude group: 'com.android.support', module: 'support-annotations'
 
-//    androidTestImplementation(group: 'com.android.support.test.espresso', name: 'espresso-intents', version: '3.0.1') {
-//        exclude group: 'com.android.support', module: 'support-annotations'
-//        exclude group: 'com.google.code.findbugs', module: 'jsr305'
-//    }
-
-//    androidTestImplementation group: 'com.squareup.okhttp3', name: 'mockwebserver', version: '3.9.0'
-// End smap commenting out
 }
+
 
 // Must be at bottom to prevent dependency collisions
 // https://developers.google.com/android/guides/google-services-plugin
 apply plugin: 'com.google.gms.google-services'
+
+
+

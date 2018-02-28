@@ -104,47 +104,49 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
      */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Cursor c = (Cursor) listView.getAdapter().getItem(position);
-        startManagingCursor(c);
-        Uri instanceUri =
-                ContentUris.withAppendedId(InstanceColumns.CONTENT_URI,
-                        c.getLong(c.getColumnIndex(InstanceColumns._ID)));
+        if (Collect.allowClick()) {
+            Cursor c = (Cursor) listView.getAdapter().getItem(position);
+            startManagingCursor(c);
+            Uri instanceUri =
+                    ContentUris.withAppendedId(InstanceColumns.CONTENT_URI,
+                            c.getLong(c.getColumnIndex(InstanceColumns._ID)));
 
-        Collect.getInstance().getActivityLogger().logAction(this, "onListItemClick",
-                instanceUri.toString());
+            Collect.getInstance().getActivityLogger().logAction(this, "onListItemClick",
+                    instanceUri.toString());
 
-        if (view.findViewById(R.id.visible_off).getVisibility() != View.VISIBLE) {
-            String action = getIntent().getAction();
-            if (Intent.ACTION_PICK.equals(action)) {
-                // caller is waiting on a picked form
-                setResult(RESULT_OK, new Intent().setData(instanceUri));
-            } else {
-                // the form can be edited if it is incomplete or if, when it was
-                // marked as complete, it was determined that it could be edited
-                // later.
-                String status = c.getString(c.getColumnIndex(InstanceColumns.STATUS));
-                String strCanEditWhenComplete =
-                        c.getString(c.getColumnIndex(InstanceColumns.CAN_EDIT_WHEN_COMPLETE));
-
-                boolean canEdit = status.equals(InstanceProviderAPI.STATUS_INCOMPLETE)
-                        || Boolean.parseBoolean(strCanEditWhenComplete);
-                if (!canEdit) {
-                    createErrorDialog(getString(R.string.cannot_edit_completed_form),
-                            DO_NOT_EXIT);
-                    return;
-                }
-                // caller wants to view/edit a form, so launch formentryactivity
-                Intent parentIntent = this.getIntent();
-                Intent intent = new Intent(Intent.ACTION_EDIT, instanceUri);
-                String formMode = parentIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
-                if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
-                    intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
+            if (view.findViewById(R.id.visible_off).getVisibility() != View.VISIBLE) {
+                String action = getIntent().getAction();
+                if (Intent.ACTION_PICK.equals(action)) {
+                    // caller is waiting on a picked form
+                    setResult(RESULT_OK, new Intent().setData(instanceUri));
                 } else {
-                    intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.VIEW_SENT);
+                    // the form can be edited if it is incomplete or if, when it was
+                    // marked as complete, it was determined that it could be edited
+                    // later.
+                    String status = c.getString(c.getColumnIndex(InstanceColumns.STATUS));
+                    String strCanEditWhenComplete =
+                            c.getString(c.getColumnIndex(InstanceColumns.CAN_EDIT_WHEN_COMPLETE));
+
+                    boolean canEdit = status.equals(InstanceProviderAPI.STATUS_INCOMPLETE)
+                            || Boolean.parseBoolean(strCanEditWhenComplete);
+                    if (!canEdit) {
+                        createErrorDialog(getString(R.string.cannot_edit_completed_form),
+                                DO_NOT_EXIT);
+                        return;
+                    }
+                    // caller wants to view/edit a form, so launch formentryactivity
+                    Intent parentIntent = this.getIntent();
+                    Intent intent = new Intent(Intent.ACTION_EDIT, instanceUri);
+                    String formMode = parentIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
+                    if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
+                        intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
+                    } else {
+                        intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.VIEW_SENT);
+                    }
+                    startActivity(intent);
                 }
-                startActivity(intent);
+                finish();
             }
-            finish();
         }
     }
 
@@ -170,7 +172,7 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
 
     @Override
     public void syncComplete(String result) {
-        TextView textView = (TextView) findViewById(R.id.status_text);
+        TextView textView = findViewById(R.id.status_text);
         textView.setText(result);
     }
 

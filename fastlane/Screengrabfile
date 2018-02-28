@@ -1,0 +1,15 @@
+# remove the leading '#' to uncomment lines
+
+app_package_name 'org.odk.collect.android'
+# use_tests_in_packages ['your.screenshot.tests.package']
+
+#app_apk_path 'collect_app/build/outputs/apk/debug/apk-name'
+#tests_apk_path 'collect_app/build/outputs/apk/androidTest/debug/test-apk-name'
+
+locales ['en-US']
+
+# clear all previously generated screenshots in your local output directory before creating new ones
+clear_previous_screenshots true
+
+# For more information about all available options run
+#   screengrab --help

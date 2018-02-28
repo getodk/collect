@@ -54,6 +54,10 @@ public class ExternalAppsUtils {
     private static final String LEFT_PARENTHESIS = "(";
     private static final String RIGHT_PARENTHESIS = ")";
 
+    private ExternalAppsUtils() {
+
+    }
+
     public static String extractIntentName(String exString) {
         if (!exString.contains(LEFT_PARENTHESIS)) {
             if (exString.contains(RIGHT_PARENTHESIS)) {

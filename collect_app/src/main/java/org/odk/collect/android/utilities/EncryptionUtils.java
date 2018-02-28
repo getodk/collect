@@ -203,7 +203,7 @@ public class EncryptionUtils {
                 md.update(elementSignatureSource.toString().getBytes(UTF_8));
                 messageDigest = md.digest();
             } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
-                Timber.e(e,"Exception thrown while constructing md5 hash.");
+                Timber.e(e, "Exception thrown while constructing md5 hash.");
                 throw new IllegalArgumentException(e.getMessage());
             }
 
@@ -340,7 +340,7 @@ public class EncryptionUtils {
             } catch (ClassNotFoundException e) {
                 String msg = String.format(Collect.getInstance()
                         .getString(R.string.phone_does_not_have_base64_class), String.valueOf(version));
-                Timber.e(e,"%s due to %s", msg, e.getMessage());
+                Timber.e(e, "%s due to %s", msg, e.getMessage());
                 throw new EncryptionException(msg, e);
             }
 

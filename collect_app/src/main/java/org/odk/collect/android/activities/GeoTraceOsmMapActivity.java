@@ -40,8 +40,8 @@ import android.widget.Spinner;
 import com.google.android.gms.location.LocationListener;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.location.LocationClient;
-import org.odk.collect.android.location.LocationClients;
+import org.odk.collect.android.location.client.LocationClient;
+import org.odk.collect.android.location.client.LocationClients;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.widgets.GeoTraceWidget;
 import org.osmdroid.tileprovider.IRegisterReceiver;
@@ -111,7 +111,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
         // For testing purposes:
         if (mapView == null) {
-            mapView = (MapView) findViewById(R.id.geotrace_mapview);
+            mapView = findViewById(R.id.geotrace_mapview);
         }
 
         if (helper == null) {
@@ -124,15 +124,16 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
         mapView.setMultiTouchControls(true);
         mapView.setBuiltInZoomControls(true);
+        mapView.setTilesScaledToDpi(true);    
         mapView.getController().setZoom(zoomLevel);
 
         inflater = this.getLayoutInflater();
         traceSettingsView = inflater.inflate(R.layout.geotrace_dialog, null);
         polygonPolylineView = inflater.inflate(R.layout.polygon_polyline_dialog, null);
-        timeDelay = (Spinner) traceSettingsView.findViewById(R.id.trace_delay);
+        timeDelay = traceSettingsView.findViewById(R.id.trace_delay);
         timeDelay.setSelection(3);
-        timeUnits = (Spinner) traceSettingsView.findViewById(R.id.trace_scale);
-        layersButton = (ImageButton) findViewById(R.id.layers);
+        timeUnits = traceSettingsView.findViewById(R.id.trace_scale);
+        layersButton = findViewById(R.id.layers);
         layersButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -142,7 +143,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
             }
         });
 
-        locationButton = (ImageButton) findViewById(R.id.show_location);
+        locationButton = findViewById(R.id.show_location);
         locationButton.setEnabled(false);
         locationButton.setOnClickListener(new View.OnClickListener() {
 
@@ -154,7 +155,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
         });
 
-        clearButton = (ImageButton) findViewById(R.id.clear);
+        clearButton = findViewById(R.id.clear);
         clearButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -165,7 +166,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
         });
 
-        ImageButton saveButton = (ImageButton) findViewById(R.id.geotrace_save);
+        ImageButton saveButton = findViewById(R.id.geotrace_save);
         saveButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -181,15 +182,15 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
         if (mapMarkers == null || mapMarkers.size() == 0) {
             clearButton.setEnabled(false);
         }
-        manualCaptureButton = (Button) findViewById(R.id.manual_button);
+        manualCaptureButton = findViewById(R.id.manual_button);
         manualCaptureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 addLocationMarker();
             }
         });
-        pauseButton = (ImageButton) findViewById(R.id.pause);
-        playButton = (ImageButton) findViewById(R.id.play);
+        pauseButton = findViewById(R.id.pause);
+        playButton = findViewById(R.id.play);
         playButton.setEnabled(false);
         beenPaused = false;
         traceMode = 1;
@@ -202,7 +203,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
                     if (!beenPaused) {
                         alert.show();
                     } else {
-                        RadioGroup rb = (RadioGroup) traceSettingsView.findViewById(
+                        RadioGroup rb = traceSettingsView.findViewById(
                                 R.id.radio_group);
                         int radioButtonID = rb.getCheckedRadioButtonId();
                         View radioButton = rb.findViewById(radioButtonID);
@@ -263,7 +264,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
         }
 
 
-        Button polygonSaveButton = (Button) polygonPolylineView.findViewById(R.id.polygon_save);
+        Button polygonSaveButton = polygonPolylineView.findViewById(R.id.polygon_save);
         polygonSaveButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -280,7 +281,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
             }
         });
-        Button polylineSaveButton = (Button) polygonPolylineView.findViewById(R.id.polyline_save);
+        Button polylineSaveButton = polygonPolylineView.findViewById(R.id.polyline_save);
         polylineSaveButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -293,7 +294,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
         zoomDialogView = getLayoutInflater().inflate(R.layout.geoshape_zoom_dialog, null);
 
-        zoomLocationButton = (Button) zoomDialogView.findViewById(R.id.zoom_location);
+        zoomLocationButton = zoomDialogView.findViewById(R.id.zoom_location);
         zoomLocationButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -304,7 +305,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
             }
         });
 
-        zoomPointButton = (Button) zoomDialogView.findViewById(R.id.zoom_shape);
+        zoomPointButton = zoomDialogView.findViewById(R.id.zoom_shape);
         zoomPointButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -587,7 +588,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
     }
 
     private void startGeoTrace() {
-        RadioGroup rb = (RadioGroup) traceSettingsView.findViewById(R.id.radio_group);
+        RadioGroup rb = traceSettingsView.findViewById(R.id.radio_group);
         int radioButtonID = rb.getCheckedRadioButtonId();
         View radioButton = rb.findViewById(radioButtonID);
         int idx = rb.indexOfChild(radioButton);

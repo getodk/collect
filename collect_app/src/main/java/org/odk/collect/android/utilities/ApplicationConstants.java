@@ -35,14 +35,18 @@ public class ApplicationConstants {
             "sq", "sv_SE", "sw", "sw_KE", "ta", "th_TH", "ti", "tl", "tr", "uk", "ur",
             "ur_PK", "vi", "zh", "zu"};
 
+    private ApplicationConstants() {
+
+    }
+
     public static HashMap<String, Integer> getSortLabelToIconMap() {
         HashMap<String, Integer> hashMap = new HashMap<>();
-        hashMap.put(Collect.getInstance().getString(R.string.sort_by_name_asc), R.drawable.ic_sort_by_alpha_black_24dp);
-        hashMap.put(Collect.getInstance().getString(R.string.sort_by_name_desc), R.drawable.ic_sort_by_alpha_black_24dp_2);
-        hashMap.put(Collect.getInstance().getString(R.string.sort_by_date_asc), R.drawable.ic_access_time_black_24dp);
-        hashMap.put(Collect.getInstance().getString(R.string.sort_by_date_desc), R.drawable.ic_access_time_black_24dp_2);
-        hashMap.put(Collect.getInstance().getString(R.string.sort_by_status_asc), R.drawable.ic_assignment_turned_in_black_24dp);
-        hashMap.put(Collect.getInstance().getString(R.string.sort_by_status_desc), R.drawable.ic_assignment_late_black_24dp);
+        hashMap.put(Collect.getInstance().getString(R.string.sort_by_name_asc), R.drawable.ic_sort_by_alpha);
+        hashMap.put(Collect.getInstance().getString(R.string.sort_by_name_desc), R.drawable.ic_sort_by_alpha);
+        hashMap.put(Collect.getInstance().getString(R.string.sort_by_date_asc), R.drawable.ic_access_time);
+        hashMap.put(Collect.getInstance().getString(R.string.sort_by_date_desc), R.drawable.ic_access_time);
+        hashMap.put(Collect.getInstance().getString(R.string.sort_by_status_asc), R.drawable.ic_assignment_turned_in);
+        hashMap.put(Collect.getInstance().getString(R.string.sort_by_status_desc), R.drawable.ic_assignment_late);
         return hashMap;
     }
 

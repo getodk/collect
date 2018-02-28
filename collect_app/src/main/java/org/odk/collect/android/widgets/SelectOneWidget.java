@@ -18,6 +18,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.RadioButton;
@@ -42,7 +43,7 @@ import java.util.List;
  */
 @SuppressLint("ViewConstructor")
 public class SelectOneWidget
-        extends SelectWidget
+        extends SelectTextWidget
         implements OnCheckedChangeListener, AudioPlayListener, MultiChoiceWidget {
 
     protected List<RadioButton> buttons;
@@ -130,6 +131,13 @@ public class SelectOneWidget
         radioButton.setId(ViewIds.generateViewId());
         radioButton.setEnabled(!getFormEntryPrompt().isReadOnly() && !readOnlyOverride);   // smap add readOnlyOverride
         radioButton.setFocusable(!getFormEntryPrompt().isReadOnly());
+
+        //adapt radioButton text as per language direction
+        if (isRTL()) {
+            radioButton.setGravity(Gravity.END);
+        } else {
+            radioButton.setGravity(Gravity.START);
+        }
 
         if (items.get(index).getValue().equals(selectedValue)) {
             radioButton.setChecked(true);

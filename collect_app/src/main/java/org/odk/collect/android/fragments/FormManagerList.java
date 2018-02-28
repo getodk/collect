@@ -203,7 +203,7 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
     @Override
     public void syncComplete(String result) {
         Timber.i("Disk scan complete");
-        TextView tv = (TextView) rootView.findViewById(R.id.status_text);
+        TextView tv = rootView.findViewById(R.id.status_text);
         tv.setText(result);
     }
 
@@ -246,8 +246,18 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
             case R.id.toggle_button:
                 ListView lv = getListView();
                 boolean allChecked = toggleChecked(lv);
+                if (allChecked) {
+                    for (int i = 0; i < lv.getCount(); i++) {
+                        selectedInstances.add(lv.getItemIdAtPosition(i));
+                    }
+                } else {
+                    selectedInstances.clear();
+                }
                 toggleButtonLabel(toggleButton, getListView());
                 deleteButton.setEnabled(allChecked);
+                if (!allChecked) {
+                    selectedInstances.clear();
+                }
                 break;
         }
     }

@@ -18,6 +18,8 @@ import android.content.Context;
 
 import org.javarosa.core.model.Constants;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.R;
+import org.odk.collect.android.utilities.ToastUtils;
 
 import java.util.Locale;
 
@@ -29,6 +31,10 @@ import timber.log.Timber;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class WidgetFactory {
+
+    private WidgetFactory() {
+
+    }
 
     /**
      * Returns the appropriate QuestionWidget for the given FormEntryPrompt.
@@ -164,16 +170,14 @@ public class WidgetFactory {
                     questionWidget = new ImageWebViewWidget(context, fep);
                 } else if (appearance.contains("signature")) {            // smap change to contains rather than equals
                     questionWidget = new SignatureWidget(context, fep);
-                } else if (appearance.contains("annotate")) {           // smap change to contains rather than equals, may have other appearance settings
+                } else if (appearance.contains("annotate")) {
                     questionWidget = new AnnotateWidget(context, fep);
                 } else if (appearance.contains("draw")) {                 // smap change to contains rather than equals
                     questionWidget = new DrawWidget(context, fep);
                 } else if (appearance.contains("align:")) {                 // smap change to contains rather than equals
                     questionWidget = new AlignedImageWidget(context, fep);
-                } else if (appearance.contains("selfie")) {                 // smap change to contains rather than equals
-                    questionWidget = new ImageWidget(context, fep, true);
                 } else {
-                    questionWidget = new ImageWidget(context, fep, false);
+                    questionWidget = new ImageWidget(context, fep);
                 }
                 break;
             case Constants.CONTROL_OSM_CAPTURE:
@@ -219,6 +223,13 @@ public class WidgetFactory {
                     questionWidget = new LabelWidget(context, fep);
                 } else if (appearance.contains("search") || appearance.contains("autocomplete")) {
                     questionWidget = new SelectOneSearchWidget(context, fep, readOnlyOverride);     // smap
+                } else if (appearance.startsWith("image-map")) {
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                        questionWidget = new SelectOneImageMapWidget(context, fep);
+                    } else {
+                        questionWidget = new SelectOneWidget(context, fep);
+                        ToastUtils.showLongToast(R.string.svg_not_supported_device);
+                    }
                 } else {
                     questionWidget = new SelectOneWidget(context, fep, readOnlyOverride);   // smap - add readOnlyOverride
                 }
@@ -251,6 +262,13 @@ public class WidgetFactory {
                     questionWidget = new LabelWidget(context, fep);
                 } else if (appearance.contains("autocomplete")) {
                     questionWidget = new SelectMultipleAutocompleteWidget(context, fep, readOnlyOverride);  // smap
+                } else if (appearance.startsWith("image-map")) {
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                        questionWidget = new SelectMultiImageMapWidget(context, fep);
+                    } else {
+                        questionWidget = new SelectMultiWidget(context, fep);
+                        ToastUtils.showLongToast(R.string.svg_not_supported_device);
+                    }
                 } else {
                     questionWidget = new SelectMultiWidget(context, fep,  readOnlyOverride);
                 }

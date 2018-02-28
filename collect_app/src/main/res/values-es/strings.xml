@@ -11,6 +11,7 @@
   <string name="cancel">Cancelar</string>
   <string name="cancel_loading_form">Cancelar</string>
   <string name="cancel_location">Cancelar</string>
+  <string name="canceling">Cancelando</string>
   <string name="cannot_edit_completed_form">Este formulario no puede ser editado una vez que ha sido marcado como finalizado. Puede estar encriptado</string>
   <string name="capture_audio">Grabar el Sonido</string>
   <string name="capture_image">Tomar la Foto</string>
@@ -28,7 +29,6 @@
   <string name="data_saved_error">¡Atención, el formulario no se ha guardado correctamente!</string>
   <string name="data_saved_ok">Formulario guardado correctamente</string>
   <string name="save_point_error">Error al guardar punto de recuperación: %s</string>
-  <string name="save_form_index_error">Error al guardar el índice de formulario de recuperación: %s</string>
   <string name="default_completed">Considerar finalizado por defecto</string>
   <string name="default_completed_summary">Marcar el formulario como terminado por defecto</string>
   <string name="delete_confirm">¿Borrar %s formulario(s)?</string>
@@ -302,7 +302,8 @@
   <string name="show_map_sdk">Mostrar Opciones del Mapa SDK</string>
   <string name="openmap_streets">Calles OSM</string>
   <string name="openmap_usgs_topo">USGS Mapa Topográfico Nacional</string>
-  <string name="openmap_usgs_sat">USGS Mapa Nacional Satelital</string>
+  <string name="openmap_usgs_sat">USGS Mapa Nacional Hibrido</string>
+  <string name="openmap_usgs_img">USGS Mapa Nacional Satélite</string>
   <string name="openmap_stamen_terrain">Terreno Stamen</string>
   <string name="openmap_cartodb_positron">Positron CartoDB</string>
   <string name="openmap_cartodb_darkmatter">Materia Obscura CartoDB</string>
@@ -405,7 +406,6 @@
   <string name="reset_settings_dialog_title">Seleccione que restablecer</string>
   <string name="reset_settings_dialog">Restablecer aplicación</string>
   <string name="reset_settings_button_reset">Restablecer</string>
-  <string name="reset_dialog_nothing">No ha seleccionado nada para resetear.</string>
   <string name="reset_in_progress">Restableciendo</string>
   <string name="reset_app_state_result">Reestablecer resultados</string>
   <string name="reset_app_state_warning">Los datos seleccionados serán borrados permanentemente. No se puede deshacer.</string>
@@ -532,7 +532,32 @@
   <string name="ethiopian_month_13">Pagumien</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
   <string name="custom_date">%1$s (%2$s)</string>
+  <string name="coptic_month_1">Thout</string>
+  <string name="coptic_month_2">Paopi</string>
+  <string name="coptic_month_3">Hathor</string>
+  <string name="coptic_month_4">Koiak</string>
+  <string name="coptic_month_5">Tobi</string>
+  <string name="coptic_month_6">Meshir</string>
+  <string name="coptic_month_7">Paremhat</string>
+  <string name="coptic_month_8">Parmouti</string>
+  <string name="coptic_month_9">Pashons</string>
+  <string name="coptic_month_10">Paoni</string>
+  <string name="coptic_month_11">Epip</string>
+  <string name="coptic_month_12">Mesori</string>
+  <string name="coptic_month_13">Pi Kogi Enavot</string>
   <string name="multiple_media_folders_detected_notification">Se ha detectado más de una carpeta de medios, por favor remueva una e intente de nuevo</string>
+  <string name="islamic_month_1">Muharram</string>
+  <string name="islamic_month_2">Safar</string>
+  <string name="islamic_month_3">Rabi\' al-awwal</string>
+  <string name="islamic_month_4">Rabi\' al-thani</string>
+  <string name="islamic_month_5">Jumada al-awwal</string>
+  <string name="islamic_month_6">Jumada al-thani</string>
+  <string name="islamic_month_7">Rajab</string>
+  <string name="islamic_month_8">Sha\'ban</string>
+  <string name="islamic_month_9">Ramadan</string>
+  <string name="islamic_month_10">Shawwal</string>
+  <string name="islamic_month_11">Dhu al-Qidah</string>
+  <string name="islamic_month_12">Dhu al-Hijjah</string>
   <string name="moving_backwards_title">Retroceder en Preguntas</string>
   <string name="moving_backwards_disabled_title">Retroceder en Preguntas Desactivado</string>
   <string name="moving_backwards_disabled_message">Configure el dispositivo para prevenir que los usuarios se salten esta configuración?\n\nLos cambios son:\n\u2022 Desactivar Editar Formularios Guardados\n\u2022 Desactivar Guardar Formularios\n\u2022 Desactivar Ir a Pregunta\n\u2022 Establecer Manejo de Restricciones como Validar al desplazar hacia adelante</string>
@@ -541,4 +566,6 @@
   <string name="yes">Si</string>
   <string name="no">No</string>
   <string name="newer_version_of_a_form_info">Esta es una versión actualizada de un formularios que ya tiene!</string>
+  <string name="svg_file_does_not_exist">Archivo SVG no existe</string>
+  <string name="svg_not_supported_device">Pregunta tipo ImageMap requiere mínimo Android 5 (Lollipop). Su dispositivo tiene una versión menor!</string>
 </resources>

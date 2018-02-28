@@ -138,8 +138,10 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
                     }
                 }
 
-                //Delete the forms not found in sdcard from the database
-                formsDao.deleteFormsFromIDs(idsToDelete.toArray(new String[idsToDelete.size()]));
+                if (!idsToDelete.isEmpty()) {
+                    //Delete the forms not found in sdcard from the database
+                    formsDao.deleteFormsFromIDs(idsToDelete.toArray(new String[idsToDelete.size()]));
+                }
 
                 // Step3: go through uriToUpdate to parse and update each in turn.
                 // This is slow because buildContentValues(...) is slow.
@@ -296,6 +298,8 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
         if (base64RsaPublicKey != null) {
             updateValues.put(FormsColumns.BASE64_RSA_PUBLIC_KEY, base64RsaPublicKey);
         }
+        updateValues.put(FormsColumns.AUTO_DELETE, fields.get(FileUtils.AUTO_DELETE));
+        updateValues.put(FormsColumns.AUTO_SUBMIT, fields.get(FileUtils.AUTO_SUBMIT));
         
         // Note, the path doesn't change here, but it needs to be included so the
         // update will automatically update the .md5 and the cache path.

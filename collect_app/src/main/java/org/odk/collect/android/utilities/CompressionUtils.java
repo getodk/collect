@@ -30,6 +30,11 @@ import timber.log.Timber;
  */
 
 public class CompressionUtils {
+
+    private CompressionUtils() {
+
+    }
+
     public static String compress(String data) throws IOException {
         if (data == null || data.length() == 0) {
             return data;

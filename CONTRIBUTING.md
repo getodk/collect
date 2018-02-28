@@ -13,7 +13,7 @@ To contribute code to ODK Collect, you will need to open a [pull request](https:
 
         git checkout -b NAME_OF_YOUR_BRANCH
 
-1. If there is an [issue](https://github.com/opendatakit/collect/issues) corresponding to what you will work on, put `@opendatakit-bot claim` as a comment on issue to say you are claiming it. If there is no issue yet, create one to provide background on the problem you are solving.
+1. If there is an [issue](https://github.com/opendatakit/collect/issues) corresponding to what you will work on, put `@opendatakit-bot claim` as a comment on issue to say you are claiming it. If this is your first time contributing to the repo, the bot will send you an invite. Once you accept this invite, the bot will assign you to the issue. If there is no issue yet, create one to provide background on the problem you are solving.
 
 1. Once you've made incremental progress towards you goal, commit your changes with a meaningful commit message. Use [keywords for closing issues](https://help.github.com/articles/closing-issues-via-commit-messages/) to refer to issues and have them automatically close when your changes are merged.
 
@@ -58,9 +58,13 @@ We try to have at least two people review every pull request and we encourage ev
 - Was the change verified with several different devices and Android versions?
 - Is the code easy to understand and to maintain?
 
-Pull requests that need more [black-box testing](https://en.wikipedia.org/wiki/Black-box_testing) are tagged with `needs testing`. Pull requests that need more complete reviews including black-box testing but also review of approach and/or appropriateness are tagged with `reviews wanted`. Any contributor is encouraged to participate in both kinds of reviews!
+When a pull request is first created, @opendatakit-bot tags it as `needs review` to indicate that code review is needed. Community members review the code and leave their comments, verifying that the changes included are relevant and properly address the issue. A maintainer does a thorough code review and when satisfied with the code, tags the pull request as `needs testing` to indicate the need for a manual [black-box testing](https://en.wikipedia.org/wiki/Black-box_testing) pass. A pull request may go back and forth between `needs testing` and `needs review` until the behavior is thoroughly verified. Once the behavior has been thoroughly verified, the pull request is tagged as `behavior verified`. A maintainer then merges the changes. Pull requests that need more complete reviews including review of approach and/or appropriateness are tagged with `reviews wanted`. Any community member is encouraged to participate in the review process!
 
 Small fixes that target very particular bugs may occasionally be merged without a second review.
+
+## Triage Issues [![Open Source Helpers](https://www.codetriage.com/opendatakit/collect/badges/users.svg)](https://www.codetriage.com/opendatakit/collect)
+
+In addition to contributing code, you can help to triage issues. This can include reproducing bug reports, or asking for vital information such as version numbers or reproduction instructions. If you would like to start triaging issues, one easy way to get started is to [subscribe to opendatakit/collect on CodeTriage](https://www.codetriage.com/opendatakit/collect).
 
 ## Style guidelines
 Follow the [Android style rules](http://source.android.com/source/code-style.html) and the [Google Java style guide](https://google.github.io/styleguide/javaguide.html).

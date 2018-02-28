@@ -176,7 +176,7 @@
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="sent_on_date_at_time">\'सेंड ऑन\' ईईई, एमएमएम डीडी, य्य्य \'एचएच: एमएम</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="sending_failed_on_date_at_time">\'ईईई, एमएमएम डीडी, येय\' एचएच: एमएम \'वर पाठविणे अयशस्वी झाले</string>
+  <string name="sending_failed_on_date_at_time">\'ईईई, एमएमएम डीडी, येय एचएच: एमएम \'वर पाठविणे अयशस्वी झाले</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="deleted_on_date_at_time">\'EEE वर हटविले\', \'एमएमएम डीडी, याय\' \'एचएच: एमएम\'</string>
   <string name="version">आवृत्ती:</string>
@@ -299,7 +299,6 @@
   <string name="show_map_sdk">नकाशा एसडीके पर्याय दर्शवा</string>
   <string name="openmap_streets">ओपन स्ट्रीट नकाशा रस्ते</string>
   <string name="openmap_usgs_topo">यूएसजीएस राष्ट्रीय नकाशा टोपो</string>
-  <string name="openmap_usgs_sat">यूएसजीएस राष्ट्रीय नकाशा उपग्रह</string>
   <string name="openmap_stamen_terrain">स्टेमेन टेरेइन</string>
   <string name="openmap_cartodb_positron">कार्टो डीबी पॉझिट्रॉन</string>
   <string name="openmap_cartodb_darkmatter">कार्टो डीबी गडद बाब</string>
@@ -402,7 +401,6 @@
   <string name="reset_settings_dialog_title">काय रीसेट करावे ते निवडा</string>
   <string name="reset_settings_dialog">अनुप्रयोग रीसेट करा …</string>
   <string name="reset_settings_button_reset">रीसेट करा</string>
-  <string name="reset_dialog_nothing">रीसेट करण्यासाठी आपण काहीही निवडले नाही.</string>
   <string name="reset_in_progress">रीसेट करत आहे …</string>
   <string name="reset_app_state_result">परिणाम रीसेट करा</string>
   <string name="reset_app_state_warning">सर्व निवडलेला डेटा कायमचा हटविला जाईल. तेथे पूर्ववत नाही</string>

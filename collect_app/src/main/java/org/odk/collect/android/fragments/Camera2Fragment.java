@@ -80,17 +80,17 @@ public class Camera2Fragment extends Fragment
         implements View.OnClickListener, FragmentCompat.OnRequestPermissionsResultCallback {
 
     /**
-     * Conversion from screen rotation to JPEG orientation.
+     * Conversion from screen rotation to JPEG orientation. For front camera only.
      */
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
     private static final int REQUEST_CAMERA_PERMISSION = 1;
     private static final String FRAGMENT_DIALOG = "dialog";
 
     static {
-        ORIENTATIONS.append(Surface.ROTATION_0, 90);
-        ORIENTATIONS.append(Surface.ROTATION_90, 0);
-        ORIENTATIONS.append(Surface.ROTATION_180, 270);
-        ORIENTATIONS.append(Surface.ROTATION_270, 180);
+        ORIENTATIONS.append(Surface.ROTATION_0, 0);
+        ORIENTATIONS.append(Surface.ROTATION_90, 90);
+        ORIENTATIONS.append(Surface.ROTATION_180, 180);
+        ORIENTATIONS.append(Surface.ROTATION_270, 270);
     }
 
     /**
@@ -406,7 +406,7 @@ public class Camera2Fragment extends Fragment
 
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
-        textureView = (TextureView) view.findViewById(R.id.texture);
+        textureView = view.findViewById(R.id.texture);
         textureView.setOnClickListener(this);
     }
 
@@ -819,13 +819,16 @@ public class Camera2Fragment extends Fragment
      *
      * @param rotation The screen rotation.
      * @return The JPEG orientation (one of 0, 90, 270, and 360)
+     * <p>
+     * The back sensor orientation is 90 for most devices, or 270 for some devices (eg. Nexus 5X)
+     * The front sensor orientation is 270 for most devices.
+     * <p>
+     * The final number of degrees the JPEG needs to be rotated will be the sum of screen orientation and
+     * {@link CameraDevice }'s orientation. Just like the code below.
+     * And orientation is always the number of degrees something needs to rotate clockwise to be upright.
      */
     private int getOrientation(int rotation) {
-        // Sensor orientation is 90 for most devices, or 270 for some devices (eg. Nexus 5X)
-        // We have to take that into account and rotate JPEG properly.
-        // For devices with orientation of 90, we simply return our mapping from ORIENTATIONS.
-        // For devices with orientation of 270, we need to rotate the JPEG 180 degrees.
-        return (ORIENTATIONS.get(rotation) + sensorOrientation + 270) % 360;
+        return (ORIENTATIONS.get(rotation) + sensorOrientation) % 360;
     }
 
     /**

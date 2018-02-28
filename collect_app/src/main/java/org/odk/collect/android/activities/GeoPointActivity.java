@@ -28,8 +28,8 @@ import com.google.android.gms.location.LocationListener;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.location.LocationClient;
-import org.odk.collect.android.location.LocationClients;
+import org.odk.collect.android.location.client.LocationClient;
+import org.odk.collect.android.location.client.LocationClients;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoPointWidget;
 

@@ -16,8 +16,7 @@
 
 package org.odk.collect.android.utilities;
 
-import android.content.Intent;
-import android.support.v4.content.LocalBroadcastManager;
+import android.content.Context;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
@@ -35,7 +34,7 @@ public class ResetUtility {
 
     private List<Integer> failedResetActions;
 
-    public List<Integer> reset(List<Integer> resetActions) {
+    public List<Integer> reset(Context context, List<Integer> resetActions) {
 
         failedResetActions = new ArrayList<>();
         failedResetActions.addAll(resetActions);
@@ -43,7 +42,7 @@ public class ResetUtility {
         for (int action : resetActions) {
             switch (action) {
                 case ResetAction.RESET_PREFERENCES:
-                    resetPreferences();
+                    resetPreferences(context);
                     break;
                 case ResetAction.RESET_INSTANCES:
                     resetInstances();
@@ -79,7 +78,7 @@ public class ResetUtility {
         return failedResetActions;
     }
 
-    private void resetPreferences() {
+    private void resetPreferences(Context context) {
         GeneralSharedPreferences.getInstance().loadDefaultPreferences();
         AdminSharedPreferences.getInstance().loadDefaultPreferences();
 
@@ -88,6 +87,8 @@ public class ResetUtility {
 
         boolean deletedSettingsFile = !new File(Collect.ODK_ROOT + "/collect.settings").exists()
                 || (new File(Collect.ODK_ROOT + "/collect.settings").delete());
+        
+        new LocaleHelper().updateLocale(context);
 
         if (deletedSettingsFolderContest && deletedSettingsFile) {
             failedResetActions.remove(failedResetActions.indexOf(ResetAction.RESET_PREFERENCES));

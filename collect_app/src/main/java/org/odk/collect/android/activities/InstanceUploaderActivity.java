@@ -299,12 +299,7 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
                 Collect.getInstance().getActivityLogger().logAction(this,
                         "onCreateDialog.AUTH_DIALOG", "show");
 
-
-                // Get the server, username, and password from the settings
-                SharedPreferences sharedPreferences =
-                        PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-
-                return new AuthDialogUtility().createDialog(this, this);
+                return new AuthDialogUtility().createDialog(this, this, this.url);
         }
 
         return null;

@@ -86,7 +86,7 @@ import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
-import org.odk.collect.android.injection.DependencyProvider;
+import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.FormSavedListener;
@@ -284,11 +284,11 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         inAnimation = null;
         outAnimation = null;
         gestureDetector = new GestureDetector(this, this);
-        questionHolder = (LinearLayout) findViewById(R.id.questionholder);
+        questionHolder = findViewById(R.id.questionholder);
 
         initToolbar();
 
-        nextButton = (ImageButton) findViewById(R.id.form_forward_button);
+        nextButton = findViewById(R.id.form_forward_button);
         nextButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -297,7 +297,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             }
         });
 
-        backButton = (ImageButton) findViewById(R.id.form_back_button);
+        backButton = findViewById(R.id.form_back_button);
         backButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -311,11 +311,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         String instancePath = null;
         boolean newForm = true;
         autoSaved = false;
-        // only check the buttons if it's enabled in preferences
-        String navigation = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_NAVIGATION);
-        if (navigation.contains(PreferenceKeys.NAVIGATION_BUTTONS)) {
-            showNavigationButtons = true;
-        }
         allowMovingBackwards = (boolean) AdminSharedPreferences.getInstance().get(KEY_MOVING_BACKWARDS);
         if (savedInstanceState != null) {
             state = savedInstanceState;
@@ -597,7 +592,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     }
 
     private void initToolbar() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setTitle(getString(R.string.loading_form));
         setSupportActionBar(toolbar);
     }
@@ -612,7 +607,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             savePointTask.execute();
 
             if (!allowMovingBackwards) {
-                new SaveFormIndexTask(this, Collect.getInstance().getFormController().getFormIndex()).execute();
+                FormController formController = Collect.getInstance().getFormController();
+                if (formController != null) {
+                    new SaveFormIndexTask(this, formController.getFormIndex()).execute();
+                }
             }
         } catch (Exception e) {
             Timber.e("Could not schedule SavePointTask. Perhaps a lot of swiping is taking place?");
@@ -1051,8 +1049,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                             0, null, false, true);
                 }
 
-                Intent i = new Intent(this, FormHierarchyActivity.class);
-                i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
+                Intent i = new Intent(this, EditFormHierarchyActivity.class);
                 startActivityForResult(i, RequestCodes.HIERARCHY_ACTIVITY);
                 return true;
             case R.id.menu_preferences:
@@ -1231,8 +1228,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                                 formController.getFormTitle()));
 
                 // checkbox for if finished or ready to send
-                final CheckBox instanceComplete = ((CheckBox) endView
-                        .findViewById(R.id.mark_finished));
+                final CheckBox instanceComplete = endView
+                        .findViewById(R.id.mark_finished);
                 instanceComplete.setChecked(isInstanceComplete(true));
 
                 if (!(boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_MARK_AS_FINALIZED)) {
@@ -1240,7 +1237,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 }
 
                 // edittext to change the displayed name of the instance
-                final EditText saveAs = (EditText) endView.findViewById(R.id.save_name);
+                final EditText saveAs = endView.findViewById(R.id.save_name);
 
                 // disallow carriage returns in the name
                 InputFilter returnFilter = new InputFilter() {
@@ -1292,7 +1289,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         saveName = formController.getFormTitle();
                     }
                     // present the prompt to allow user to name the form
-                    TextView sa = (TextView) endView.findViewById(R.id.save_form_as);
+                    TextView sa = endView.findViewById(R.id.save_form_as);
                     //sa.setVisibility(View.VISIBLE); smap
                     saveAs.setText(saveName);
                     saveAs.setEnabled(true);
@@ -1319,7 +1316,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     // revisions
                     // display only the name, not the prompt, and disable edits
                     saveName = formController.getSubmissionMetadata().instanceName;
-                    TextView sa = (TextView) endView.findViewById(R.id.save_form_as);
+                    TextView sa = endView.findViewById(R.id.save_form_as);
                     sa.setVisibility(View.GONE);
                     saveAs.setText(saveName);
                     saveAs.setEnabled(false);
@@ -1331,7 +1328,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 // override the visibility settings based upon admin preferences
                 if (!(boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_SAVE_AS)) {
                     saveAs.setVisibility(View.GONE);
-                    TextView sa = (TextView) endView
+                    TextView sa = endView
                             .findViewById(R.id.save_form_as);
                     sa.setVisibility(View.GONE);
                 }
@@ -1411,7 +1408,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 }
 
                 if (showNavigationButtons) {
-                    adjustBackNavigationButtonVisibility();
+                    backButton.setEnabled(!formController.isCurrentQuestionFirstInForm() && allowMovingBackwards);
                     nextButton.setEnabled(true);
                 }
                 return odkView;
@@ -1438,24 +1435,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         if (odkView != null) {
             odkView.releaseWidgetResources();
             odkView = null;
-        }
-    }
-
-    /**
-     * Disables the back button if it is first question....
-     */
-    private void adjustBackNavigationButtonVisibility() {
-        FormController formController = Collect.getInstance().getFormController();
-        try {
-            FormIndex originalFormIndex = formController.getFormIndex();
-            backButton.setEnabled(!formController.isCurrentQuestionFirstInForm() && allowMovingBackwards);
-            if (formController.stepToNextScreenEvent() == FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
-                backButton.setEnabled(allowMovingBackwards);
-            }
-            formController.jumpToIndex(originalFormIndex);
-        } catch (JavaRosaException e) {
-            backButton.setEnabled(allowMovingBackwards);
-            Timber.e(e);
         }
     }
 
@@ -1793,7 +1772,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         View view = inflater.inflate(R.layout.toast_view, null);
 
         // set the text in the view
-        TextView tv = (TextView) view.findViewById(R.id.message);
+        TextView tv = view.findViewById(R.id.message);
         tv.setText(message);
 
         Toast t = new Toast(this);
@@ -2131,18 +2110,13 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         alertDialog.show();
     }
 
-    /**
-     * this method cleans up unneeded files when the user selects 'discard and
-     * exit'
-     */
+    // Cleanup when user exits a form without saving
     private void removeTempInstance() {
         FormController formController = Collect.getInstance().getFormController();
 
-        // attempt to remove any scratch file
-        File tempInstanceFile = SaveToDiskTask.getSavepointFile(formController.getInstancePath().getName());
-        File tempIndexFile = SaveToDiskTask.getFormIndexFile(formController.getInstancePath().getName());
-        FileUtils.deleteAndReport(tempInstanceFile);
-        FileUtils.deleteAndReport(tempIndexFile);
+        if (formController != null && formController.getInstancePath() != null) {
+            SaveToDiskTask.removeSavepointFiles(formController.getInstancePath().getName());
+        }
 
         boolean erase;
 
@@ -2319,7 +2293,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     protected Dialog onCreateDialog(int id) {
         switch (id) {
             case PROGRESS_DIALOG:
-                Timber.i("Creating PROGRESS_DIALOG");
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "onCreateDialog.PROGRESS_DIALOG",
@@ -2353,7 +2326,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         loadingButtonListener);
                 return progressDialog;
             case SAVING_DIALOG:
-                Timber.i("Creating SAVING_DIALOG");
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "onCreateDialog.SAVING_DIALOG",
@@ -2400,7 +2372,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
      * Dismiss any showing dialogs that we manually manage.
      */
     private void dismissDialogs() {
-        Timber.i("Dismiss dialogs");
         if (alertDialog != null && alertDialog.isShowing()) {
             alertDialog.dismiss();
         }
@@ -2432,6 +2403,11 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     @Override
     protected void onResume() {
         super.onResume();
+
+        String navigation = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_NAVIGATION);
+        showNavigationButtons = navigation.contains(PreferenceKeys.NAVIGATION_BUTTONS);
+        backButton.setVisibility(showNavigationButtons ? View.VISIBLE : View.GONE);
+        nextButton.setVisibility(showNavigationButtons ? View.VISIBLE : View.GONE);
 
         if (errorMessage != null) {
             if (alertDialog != null && !alertDialog.isShowing()) {
@@ -2476,14 +2452,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
         if (saveToDiskTask != null) {
             saveToDiskTask.setFormSavedListener(this);
-        }
-
-        if (showNavigationButtons) {
-            backButton.setVisibility(View.VISIBLE);
-            nextButton.setVisibility(View.VISIBLE);
-        } else {
-            backButton.setVisibility(View.GONE);
-            nextButton.setVisibility(View.GONE);
         }
     }
 
@@ -2553,7 +2521,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private int animationCompletionSet = 0;
 
     private void afterAllAnimations() {
-        Timber.i("afterAllAnimations");
         if (staleView != null) {
             if (staleView instanceof ODKView) {
                 // http://code.google.com/p/android/issues/detail?id=8488
@@ -2570,9 +2537,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
     @Override
     public void onAnimationEnd(Animation animation) {
-        Timber.i("onAnimationEnd %s",
-                ((animation == inAnimation) ? "in"
-                        : ((animation == outAnimation) ? "out" : "other")));
         if (inAnimation == animation) {
             animationCompletionSet |= 1;
         } else if (outAnimation == animation) {
@@ -2588,18 +2552,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
     @Override
     public void onAnimationRepeat(Animation animation) {
-        // Added by AnimationListener interface.
-        Timber.i("onAnimationRepeat %s",
-                ((animation == inAnimation) ? "in"
-                        : ((animation == outAnimation) ? "out" : "other")));
     }
 
     @Override
     public void onAnimationStart(Animation animation) {
-        // Added by AnimationListener interface.
-        Timber.i("onAnimationStart %s",
-                ((animation == inAnimation) ? "in"
-                        : ((animation == outAnimation) ? "out" : "other")));
     }
 
     /**
@@ -2727,16 +2683,13 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     }
                 }
 
-                Intent i = new Intent(this, FormHierarchyActivity.class);
                 String formMode = reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
                 if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
-                    i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
-                    startActivity(i);
+                    startActivity(new Intent(this, EditFormHierarchyActivity.class));
                     return; // so we don't show the intro screen before jumping to the hierarchy
                 } else {
                     if (ApplicationConstants.FormModes.VIEW_SENT.equalsIgnoreCase(formMode)) {
-                        i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.VIEW_SENT);
-                        startActivity(i);
+                        startActivity(new Intent(this, ViewFormHierarchyActivity.class));
                     }
                     finish();
                 }
@@ -3108,7 +3061,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
      */
     class EmptyView extends View {
 
-        public EmptyView(Context context) {
+        EmptyView(Context context) {
             super(context);
         }
     }

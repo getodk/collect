@@ -11,7 +11,8 @@
   <string name="cancel">Annuler</string>
   <string name="cancel_loading_form">Annuler</string>
   <string name="cancel_location">Annuler</string>
-  <string name="cannot_edit_completed_form">Ce formulaire ne peut pas être édité une fois finalisé. Il est peut-être encrypté.</string>
+  <string name="canceling">En train d\'annuler</string>
+  <string name="cannot_edit_completed_form">Ce formulaire ne peut pas être modifié une fois finalisé. Il est peut-être encrypté.</string>
   <string name="capture_audio">Enregistrer de l\'audio</string>
   <string name="capture_image">Prendre une photo</string>
   <string name="capture_osm">Lancer OpenMapKit</string>
@@ -299,7 +300,8 @@
   <string name="show_map_sdk">Options fond de carte SDK</string>
   <string name="openmap_streets">OSM Streets</string>
   <string name="openmap_usgs_topo">USGS National Map Topo</string>
-  <string name="openmap_usgs_sat">USGS National Map Sat</string>
+  <string name="openmap_usgs_sat">USGS Carte nationale hybride</string>
+  <string name="openmap_usgs_img">Les images de la carte nationale USGS</string>
   <string name="openmap_stamen_terrain">Stamen Terrain</string>
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
@@ -402,7 +404,6 @@
   <string name="reset_settings_dialog_title">Sélectionnez ce que vous souhaitez réinitialiser</string>
   <string name="reset_settings_dialog">Réinitialiser l\'application …</string>
   <string name="reset_settings_button_reset">Réinitialiser</string>
-  <string name="reset_dialog_nothing">Vous n\'avez rien sélectionné à réinitialiser.</string>
   <string name="reset_in_progress">Réinitialisation en cours…</string>
   <string name="reset_app_state_result">Résultats de la réinitialisation</string>
   <string name="reset_app_state_warning">Toutes les données sélectionnées seront supprimées. Cette action ne peut pas être annulée.</string>
@@ -418,6 +419,7 @@
   <string name="instance_scan_completed">Recherche terminée.</string>
   <string name="instance_scan_count">%1$d formulaires ajoutés.</string>
   <string name="instance_sync">Importer les formulaires enregistrés comme terminés</string>
+  <string name="instance_sync_summary">Impacte sur les formulaires ajoutés directement au dossier instances.</string>
   <string name="sort_by_name_asc">Nom, A-Z</string>
   <string name="sort_by_name_desc">Nom, Z-A</string>
   <string name="sort_by_date_asc">Date, la plus récente en premier</string>
@@ -542,4 +544,26 @@
   <string name="coptic_month_12">Mesori</string>
   <string name="coptic_month_13">Pi Kogi Enavot</string>
   <string name="multiple_media_folders_detected_notification">Plusieurs répertoires média détectés, retirez-en un puis réessayer svp</string>
+  <string name="islamic_month_1">Muharram</string>
+  <string name="islamic_month_2">Safar</string>
+  <string name="islamic_month_3">Rabi\' al-awwal</string>
+  <string name="islamic_month_4">Rabi\' al-thani</string>
+  <string name="islamic_month_5">Jumada al-awwal</string>
+  <string name="islamic_month_6">Jumada al-thani</string>
+  <string name="islamic_month_7">Rajab</string>
+  <string name="islamic_month_8">Sha\'ban</string>
+  <string name="islamic_month_9">Ramadan</string>
+  <string name="islamic_month_10">Shawwal</string>
+  <string name="islamic_month_11">Dhu al-Qidah</string>
+  <string name="islamic_month_12">Dhu al-Hijjah</string>
+  <string name="moving_backwards_title">mouvement en recul</string>
+  <string name="moving_backwards_disabled_title">mouvement en recul désactivé</string>
+  <string name="moving_backwards_disabled_message">Paramétrer le terminal à empêcher les utilisateurs de contourner ce paramètre ? \n\nLes modifications sont:\n\u2022 Désactiver Modifier formulaire sauvegardé\n\u2022 Désactiver sauvegarder le formulaire\n\u2022 Désactiver Aller à la ligne de saisie\n\u2022 Définir le traitement de contrainte au moment de balayage vers l\'avant</string>
+  <string name="moving_backwards_enabled_title">Le recul est activé</string>
+  <string name="moving_backwards_enabled_message">Vous pourrez vouloir consulter les paramètres suivants :\n\n\u2022 Modifier le formulaire sauvegardé\n\u2022 Sauvegarder le formulaire\n\u2022 Aller à la ligne de saisie\n\u2022 Traitement des contraints</string>
+  <string name="yes">Oui</string>
+  <string name="no">Non</string>
+  <string name="newer_version_of_a_form_info">Ceci est une version mise à jour d\'un formulaire que vous avez déjà !</string>
+  <string name="svg_file_does_not_exist">Le fichier SVG n\'existe pas !</string>
+  <string name="svg_not_supported_device">Le widget ImageMap nécessite Android 5 (Lollipop) ou plus récent. Votre appareil n\'est pas compatible !</string>
 </resources>

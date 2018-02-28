@@ -88,13 +88,14 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.geoshape_osm_layout);
         setTitle(getString(R.string.geoshape_title)); // Setting title of the action
-        ImageButton saveButton = (ImageButton) findViewById(R.id.save);
-        clearButton = (ImageButton) findViewById(R.id.clear);
+        ImageButton saveButton = findViewById(R.id.save);
+        clearButton = findViewById(R.id.clear);
 
-        map = (MapView) findViewById(R.id.geoshape_mapview);
+        map = findViewById(R.id.geoshape_mapview);
         helper = new MapHelper(this, map, this);
         map.setMultiTouchControls(true);
         map.setBuiltInZoomControls(true);
+        map.setTilesScaledToDpi(true);
         map.setMapListener(mapViewListener);
         overlayPointPathListener();
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -111,7 +112,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
                 }
             }
         });
-        ImageButton layersButton = (ImageButton) findViewById(R.id.layers);
+        ImageButton layersButton = findViewById(R.id.layers);
         layersButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -120,7 +121,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
 
             }
         });
-        locationButton = (ImageButton) findViewById(R.id.gps);
+        locationButton = findViewById(R.id.gps);
         locationButton.setEnabled(false);
         locationButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -165,7 +166,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
 
         zoomDialogView = getLayoutInflater().inflate(R.layout.geoshape_zoom_dialog, null);
 
-        zoomLocationButton = (Button) zoomDialogView.findViewById(R.id.zoom_location);
+        zoomLocationButton = zoomDialogView.findViewById(R.id.zoom_location);
         zoomLocationButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -176,7 +177,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
             }
         });
 
-        zoomPointButton = (Button) zoomDialogView.findViewById(R.id.zoom_shape);
+        zoomPointButton = zoomDialogView.findViewById(R.id.zoom_shape);
         zoomPointButton.setOnClickListener(new View.OnClickListener() {
 
             @Override

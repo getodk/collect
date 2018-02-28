@@ -113,7 +113,7 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
     @Override
     public void onResume() {
         super.onResume();
-        gregorianDateText = (TextView) getDialog().findViewById(R.id.date_gregorian);
+        gregorianDateText = getDialog().findViewById(R.id.date_gregorian);
         setUpPickers();
     }
 
@@ -127,14 +127,14 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
     }
 
     private void setUpPickers() {
-        dayPicker = (NumberPicker) getDialog().findViewById(R.id.day_picker);
+        dayPicker = getDialog().findViewById(R.id.day_picker);
         dayPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
                 updateGregorianDateLabel();
             }
         });
-        monthPicker = (NumberPicker) getDialog().findViewById(R.id.month_picker);
+        monthPicker = getDialog().findViewById(R.id.month_picker);
         monthPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
@@ -142,7 +142,7 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
                 updateGregorianDateLabel();
             }
         });
-        yearPicker = (NumberPicker) getDialog().findViewById(R.id.year_picker);
+        yearPicker = getDialog().findViewById(R.id.year_picker);
         yearPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {

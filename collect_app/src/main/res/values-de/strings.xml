@@ -11,6 +11,7 @@
   <string name="cancel">Abbrechen</string>
   <string name="cancel_loading_form">Abbrechen</string>
   <string name="cancel_location">Abbrechen</string>
+  <string name="canceling">Abbrechen</string>
   <string name="cannot_edit_completed_form">Dieses Formular kann nicht mehr geändert werden, nachdem es als vollständig markiert wurde. Möglicherweise ist es verschlüsselt.</string>
   <string name="capture_audio">Tonaufnahme starten</string>
   <string name="capture_image">Foto machen</string>
@@ -299,7 +300,8 @@
   <string name="show_map_sdk">Map-SDK-Optionen anzeigen</string>
   <string name="openmap_streets">OSM Straßen</string>
   <string name="openmap_usgs_topo">USGS Topografische Karte</string>
-  <string name="openmap_usgs_sat">USGS Satelliten Karte</string>
+  <string name="openmap_usgs_sat">USGS National Karte Hybrid</string>
+  <string name="openmap_usgs_img">USGS National Karte Imagery</string>
   <string name="openmap_stamen_terrain">Stamen Terrain</string>
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
@@ -402,7 +404,6 @@
   <string name="reset_settings_dialog_title">Auswählen, was zurückgesetzt werden soll</string>
   <string name="reset_settings_dialog">Anwendung (App) zurücksetzen…</string>
   <string name="reset_settings_button_reset">Zurücksetzen (Reset)</string>
-  <string name="reset_dialog_nothing">Sie haben nichts zum Zurücksetzen ausgewählt .</string>
   <string name="reset_in_progress">Zurücksetzen…</string>
   <string name="reset_app_state_result">Zurücksetzen-Ergebnisse</string>
   <string name="reset_app_state_warning">Alle ausgewählten Daten werden dauerhaft gelöscht. Es gibt kein Rückgängig-Machen.</string>
@@ -562,4 +563,7 @@
   <string name="moving_backwards_enabled_message">Bitte überprüfen Sie die folgenden Einstellungen:\n\n\u2022 Gespeichertes Formular bearbeiten\n\u2022 Formular speichern\n\u2022 Gehe zum Prompt\n\u2022 Validierung</string>
   <string name="yes">Ja</string>
   <string name="no">Nein</string>
+  <string name="newer_version_of_a_form_info">Dies ist eine aktualisierte Version eines bereits vorhandenen Formulars!</string>
+  <string name="svg_file_does_not_exist">SVG-Datei existiert nicht!</string>
+  <string name="svg_not_supported_device">ImageMap Widget benötigt Android 5 (Lollipop) oder neuer. Ihr Gerät wird nicht unterstützt!</string>
 </resources>

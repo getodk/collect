@@ -68,7 +68,7 @@ public final class PreferenceKeys {
     private static final String AUTOSEND_OFF                = "off";
     static final String GOOGLE_MAPS_BASEMAP_DEFAULT         = "streets";
     static final String OSM_BASEMAP_KEY                     = "osmdroid";
-    static final String OSM_MAPS_BASEMAP_DEFAULT            = "mapquest_streets";
+    static final String OSM_MAPS_BASEMAP_DEFAULT            = "openmap_streets";
 
     // start smap
     public static final String KEY_SMAP_REVIEW_FINAL = "review_final";    // Allow review of Form after finalising
@@ -149,5 +149,9 @@ public final class PreferenceKeys {
     );
 
     public static final HashMap<String, Object> GENERAL_KEYS = getHashMap();
+
+    private PreferenceKeys() {
+
+    }
 
 }
