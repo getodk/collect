@@ -310,6 +310,8 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             if (instanceXml.exists()) {
                 // This order is important. Import data, then initialize.
                 try {
+                    Timber.i("Importing data");
+                    publishProgress(Collect.getInstance().getString(R.string.survey_loading_reading_data_message));
                     importData(instanceXml, fec);
                     formDef.initialize(false, instanceInit);
                 } catch (RuntimeException e) {
@@ -399,11 +401,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         }
     }
 
-    private void importData(File instanceFile, FormEntryController fec) {
-        Timber.i("Importing data");
-        publishProgress(
-                Collect.getInstance().getString(R.string.survey_loading_reading_data_message));
-
+    static void importData(File instanceFile, FormEntryController fec) {
         // convert files into a byte array
         byte[] fileBytes = FileUtils.getFileAsBytes(instanceFile);
 
