@@ -73,7 +73,7 @@ public class FormController {
     /**
      * OpenRosa metadata tag names.
      */
-    private static final String INSTANCE_ID = "instanceID";
+    public static final String INSTANCE_ID = "instanceID";
     private static final String INSTANCE_NAME = "instanceName";
 
     /*
