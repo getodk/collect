@@ -14,9 +14,12 @@
 
 package org.odk.collect.android.logic;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 
-public class FormDetails implements Serializable {
+public class FormDetails implements Parcelable {
     private static final long serialVersionUID = 1L;
 
     private String errorStr;
@@ -43,6 +46,29 @@ public class FormDetails implements Serializable {
         this.isNewerFormVersionAvailable = isNewerFormVersionAvailable;
         this.areNewerMediaFilesAvailable = areNewerMediaFilesAvailable;
     }
+
+    protected FormDetails(Parcel in) {
+        errorStr = in.readString();
+        formName = in.readString();
+        downloadUrl = in.readString();
+        manifestUrl = in.readString();
+        formID = in.readString();
+        formVersion = in.readString();
+        isNewerFormVersionAvailable = in.readByte() != 0;
+        areNewerMediaFilesAvailable = in.readByte() != 0;
+    }
+
+    public static final Creator<FormDetails> CREATOR = new Creator<FormDetails>() {
+        @Override
+        public FormDetails createFromParcel(Parcel in) {
+            return new FormDetails(in);
+        }
+
+        @Override
+        public FormDetails[] newArray(int size) {
+            return new FormDetails[size];
+        }
+    };
 
     public String getErrorStr() {
         return errorStr;
@@ -74,5 +100,22 @@ public class FormDetails implements Serializable {
 
     public boolean areNewerMediaFilesAvailable() {
         return areNewerMediaFilesAvailable;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(errorStr);
+        parcel.writeString(formName);
+        parcel.writeString(downloadUrl);
+        parcel.writeString(manifestUrl);
+        parcel.writeString(formID);
+        parcel.writeString(formVersion);
+        parcel.writeByte((byte) (isNewerFormVersionAvailable ? 1 : 0));
+        parcel.writeByte((byte) (areNewerMediaFilesAvailable ? 1 : 0));
     }
 }
