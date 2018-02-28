@@ -202,14 +202,20 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             List<List<TreeElement>> repeatColumnElements = new ArrayList<>();
             List<String> repeatSheetTitles = new ArrayList<>();
 
-            readRepeats(mainLevelColumnElements, id, repeatColumnElements, repeatSheetTitles);
+            if (!readRepeats(mainLevelColumnElements, id, repeatColumnElements, repeatSheetTitles)) {
+                return false;
+            }
 
             if (!repeatColumnElements.isEmpty()) {
                 createNewSheetsIfNeeded(repeatColumnElements);
-                uploadAnswersFromRepeatGroups(repeatColumnElements, id, instanceFile, jrFormId, repeatSheetTitles);
+                if (!uploadAnswersFromRepeatGroups(repeatColumnElements, id, instanceFile, jrFormId, repeatSheetTitles)) {
+                    return false;
+                }
             }
 
-            fillSheet(mainLevelColumnElements, mainSheetTitle, id, instanceFile, jrFormId, repeatSheetTitles);
+            if (!fillSheet(mainLevelColumnElements, mainSheetTitle, id, instanceFile, jrFormId, repeatSheetTitles)) {
+                return false;
+            }
         } catch (Exception e) {
             return false;
         }
@@ -225,22 +231,25 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         }
     }
 
-    private void uploadAnswersFromRepeatGroups(List<List<TreeElement>> repeatColumnElements, String id, File instanceFile, String jrFormId, List<String> repeatSheetTitles) throws Exception {
+    private boolean uploadAnswersFromRepeatGroups(List<List<TreeElement>> repeatColumnElements, String id, File instanceFile, String jrFormId, List<String> repeatSheetTitles) throws Exception {
         for (List<TreeElement> repeatGroup : repeatColumnElements) {
             if (repeatGroup.size() > 1) {
-                fillSheet(repeatGroup, getElementTitle(repeatGroup.get(1).getParent()), id, instanceFile, jrFormId, repeatSheetTitles);
+                if (!fillSheet(repeatGroup, getElementTitle(repeatGroup.get(1).getParent()), id, instanceFile, jrFormId, repeatSheetTitles)) {
+                    return false;
+                }
             }
         }
+        return true;
     }
 
-    private void readRepeats(List<TreeElement> mainLevelColumnElements, String id, List<List<TreeElement>> repeatColumnElements,
+    private boolean readRepeats(List<TreeElement> mainLevelColumnElements, String id, List<List<TreeElement>> repeatColumnElements,
                              List<String> repeatSheetTitles) throws Exception {
         TreeElement instanceIDColumn = getInstanceIDColumn(mainLevelColumnElements);
         for (TreeElement mainLevelColumnElement : mainLevelColumnElements) {
             if (mainLevelColumnElement.isRepeatable()) {
                 if (instanceIDColumn == null) {
                     outcome.results.put(id, "This form contains repeatable group so it should contain an instanceID!");
-                    throw new Exception();
+                    return false;
                 }
 
                 List<TreeElement> elements = getColumnElements(mainLevelColumnElement);
@@ -251,6 +260,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                 readRepeats(elements, id, repeatColumnElements, repeatSheetTitles);
             }
         }
+        return true;
     }
 
     private TreeElement getInstanceIDColumn(List<TreeElement> elements) {
@@ -262,21 +272,27 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         return null;
     }
 
-    private void fillSheet(List<TreeElement> columnElements, String sheetTitle,
+    private boolean fillSheet(List<TreeElement> columnElements, String sheetTitle,
                            String id, File instanceFile, String jrFormId, List<String> repeatSheetTitles) throws Exception {
         List<String> columnTitles = new ArrayList<>();
         List headerRow;
 
         readColumnNames(columnTitles, columnElements);
-        validColumnLength(columnTitles, id);
-        validColumnNames(columnTitles, id);
+        if (!areColumnLengthsValid(columnTitles, id)) {
+            return false;
+        }
+        if (!areColumnNamesValid(columnTitles, id)) {
+            return false;
+        }
         Multimap<String, String> answersToUpload = ArrayListMultimap.create();
         Multimap<String, String> mediaToUpload = ArrayListMultimap.create();
         Multimap<String, String> uploadedMedia = ArrayListMultimap.create();
         readAnswers(columnTitles, instanceFile, answersToUpload, mediaToUpload, id, repeatSheetTitles);
         sleepThread();
         if (!mediaToUpload.isEmpty()) {
-            uploadMedia(mediaToUpload, instanceFile, jrFormId, id, uploadedMedia);
+            if (!uploadMedia(mediaToUpload, instanceFile, jrFormId, id, uploadedMedia)) {
+                return false;
+            }
         }
         List<List<Object>> sheetCells = new ArrayList<>();
         readSheetCells(sheetTitle, sheetCells, id);
@@ -293,9 +309,14 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             readSheetCells(sheetTitle, sheetCells, id); // read sheet cells again to update
             headerRow = sheetCells.get(0);
         }
-        List<String> sheetColumns = new ArrayList<>();
-        getSheetColumns(sheetColumns, headerRow, id);
-        checkForMissingColumns(sheetColumns, columnTitles, id);
+        if (headerRow == null) {
+            outcome.results.put(id, "couldn't get header feed");
+            return false;
+        }
+        List<String> sheetColumns = getSheetColumns(headerRow);
+        if (!doesMissingColumnsExist(sheetColumns, columnTitles, id)) {
+            return false;
+        }
         addMediaFiles(answersToUpload, uploadedMedia);
 
         Collection<String> values = answersToUpload.get(columnTitles.get(1));
@@ -306,6 +327,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             }
             insertRow(getRowFromList(prepareListOfValues(sheetColumns, columnTitles, answers)), id, sheetTitle);
         }
+        return true;
     }
 
     private void readColumnNames(List<String> columnNames, List<TreeElement> elements) {
@@ -427,15 +449,13 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         return list;
     }
 
-    private void getSheetColumns(List<String> sheetCols, List headerFeed, String id) throws Exception {
-        if (headerFeed != null) {
-            for (Object column : headerFeed) {
-                sheetCols.add(column.toString());
-            }
-        } else {
-            outcome.results.put(id, "couldn't get header feed");
-            throw new Exception();
+    private List<String> getSheetColumns(List headerRow) {
+        List<String> sheetCols = new ArrayList<>();
+        for (Object column : headerRow) {
+            sheetCols.add(column.toString());
         }
+
+        return sheetCols;
     }
 
     private void readSheetCells(String sheetTitle, List<List<Object>> values, String id) throws IOException {
@@ -461,13 +481,14 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         }
     }
 
-    private void checkForMissingColumns(List<String> sheetCols, List<String> columnNames, String id) throws Exception {
+    private boolean doesMissingColumnsExist(List<String> sheetCols, List<String> columnNames, String id) throws Exception {
         for (String col : columnNames) {
             if (!sheetCols.contains(col)) {
                 outcome.results.put(id, Collect.getInstance().getString(R.string.google_sheets_missing_columns, col));
-                throw new Exception();
+                return false;
             }
         }
+        return true;
     }
 
     private void fixBlankColumnNames(String sheetTitle, List headerFeed, String id) throws IOException {
@@ -506,15 +527,16 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         }
     }
 
-    private void validColumnNames(List<String> columnNames, String id) throws Exception {
+    private boolean areColumnNamesValid(List<String> columnNames, String id) throws Exception {
         for (String columnName : columnNames) {
             if (!isValidGoogleSheetsString(columnName)) {
                 outcome.results.put(id,
                         Collect.getInstance().getString(R.string.google_sheets_invalid_column_form,
                                 columnName));
-                throw new Exception();
+                return false;
             }
         }
+        return true;
     }
 
     private void checkWritePermissions(String id, String urlString) throws IOException, BadUrlException {
@@ -548,7 +570,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     // if we have any media files to upload,
     // get the folder or create a new one
     // then upload the media files
-    private void uploadMedia(Multimap<String, String> mediaToUpload, File instanceFile,
+    private boolean uploadMedia(Multimap<String, String> mediaToUpload, File instanceFile,
                              String jrFormId, String id, Multimap<String, String> uploadedMedia) throws Exception {
         for (Map.Entry entry : mediaToUpload.entries()) {
             String filename = instanceFile.getParentFile() + "/" + entry.getValue();
@@ -597,11 +619,12 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             //checking if file was successfully uploaded
             if (uploadedFileId == null) {
                 outcome.results.put(id, "Unable to upload the media files. Try again");
-                throw new Exception();
+                return false;
             }
 
             uploadedMedia.put(entry.getKey().toString(), UPLOADED_MEDIA_URL + uploadedFileId);
         }
+        return true;
     }
 
     private void resizeSheet(int sheetId, int size, String id) throws IOException {
@@ -637,17 +660,18 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         insertRow(new ValueRange().setValues(content), id, sheetName);
     }
 
-    private void validColumnLength(List<String> columnNames, String id) throws Exception {
+    private boolean areColumnLengthsValid(List<String> columnNames, String id) throws Exception {
         if (columnNames.size() == 0) {
             outcome.results.put(id, "No columns found in the form to upload");
-            throw new Exception();
+            return false;
         }
 
         if (columnNames.size() > 255) {
             outcome.results.put(id, Collect.getInstance().getString(R.string.sheets_max_columns,
                     String.valueOf(columnNames.size())));
-            throw new Exception();
+            return false;
         }
+        return true;
     }
 
     private void readAnswers(List<String> columnTitles, File instanceFile, Multimap<String, String> answersToUpload,
