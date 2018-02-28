@@ -105,16 +105,6 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         driveHelper = accountsManager.getDriveHelper();
     }
 
-    /**
-     * Google sheets currently only allows a-zA-Z0-9 and dash
-     */
-    public static boolean isGoogleSheetsStringValid(String name) {
-        return Pattern
-                .compile("^[a-zA-Z0-9\\-]+$")
-                .matcher(name)
-                .matches();
-    }
-
     public static boolean isLocationValid(String answer) {
         return Pattern
                 .compile("^-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\"
@@ -280,9 +270,6 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                            File instanceFile, String jrFormId, List<String> repeatSheetTitles) throws Exception {
         List<String> columnTitles = getColumnTitles(columnElements);
         if (!isNumberOfColumnsValid(columnTitles.size())) {
-            return false;
-        }
-        if (!areColumnTitlesValid(columnTitles)) {
             return false;
         }
         Multimap<String, String> answersToUpload = ArrayListMultimap.create();
@@ -526,18 +513,6 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             outcome.results.put(id, e.getMessage());
             throw e;
         }
-    }
-
-    private boolean areColumnTitlesValid(List<String> columnNames) {
-        for (String columnName : columnNames) {
-            if (!isGoogleSheetsStringValid(columnName)) {
-                outcome.results.put(id,
-                        Collect.getInstance().getString(R.string.google_sheets_invalid_column_form,
-                                columnName));
-                return false;
-            }
-        }
-        return true;
     }
 
     private void setUpSpreadsheet(String urlString) throws IOException, BadUrlException {
