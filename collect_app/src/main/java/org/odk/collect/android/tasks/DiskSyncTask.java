@@ -26,7 +26,7 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.UrlUtils;
+import org.odk.collect.android.utilities.Validator;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -286,7 +286,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
         }
         String submission = fields.get(FileUtils.SUBMISSIONURI);
         if (submission != null) {
-            if (UrlUtils.isValidUrl(submission)) {
+            if (Validator.isUrlValid(submission)) {
                 updateValues.put(FormsColumns.SUBMISSION_URI, submission);
             } else {
                 throw new IllegalArgumentException(
