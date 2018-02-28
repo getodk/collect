@@ -923,7 +923,7 @@ public class AllWidgetsFormTest {
             @Override
             public void describeTo(Description description) {
                 description.appendText("expected: ");
-                description.appendText(""+expectedProgress);
+                description.appendText(String.valueOf(expectedProgress));
             }
 
             @Override
