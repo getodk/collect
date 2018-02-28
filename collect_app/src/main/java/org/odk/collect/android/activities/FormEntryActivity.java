@@ -535,7 +535,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         FormController formController = getFormController();
         if (formController != null) {
             if (formController.getInstancePath() != null) {
-                outState.putString(KEY_INSTANCEPATH, getInstancePath());
+                outState.putString(KEY_INSTANCEPATH, getAbsoluteInstancePath());
             }
             outState.putString(KEY_XPATH,
                     formController.getXPath(formController.getFormIndex()));
@@ -1955,7 +1955,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         }
 
         // if it's not already saved, erase everything
-        if (!InstancesDaoHelper.isInstanceAvailable(getInstancePath())) {
+        if (!InstancesDaoHelper.isInstanceAvailable(getAbsoluteInstancePath())) {
             // delete media first
             String instanceFolder = formController.getInstancePath().getParent();
             Timber.i("Attempting to delete: %s", instanceFolder);
@@ -1970,7 +1970,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         }
     }
 
-    private String getInstancePath() {
+    private String getAbsoluteInstancePath() {
         return getFormController().getInstancePath().getAbsolutePath();
     }
 
@@ -2586,7 +2586,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         String action = getIntent().getAction();
         if (Intent.ACTION_PICK.equals(action) || Intent.ACTION_EDIT.equals(action)) {
             // caller is waiting on a picked form
-            Uri uri = InstancesDaoHelper.getLastInstanceUri(getInstancePath());
+            Uri uri = InstancesDaoHelper.getLastInstanceUri(getAbsoluteInstancePath());
             if (uri != null) {
                 setResult(RESULT_OK, new Intent().setData(uri));
             }
