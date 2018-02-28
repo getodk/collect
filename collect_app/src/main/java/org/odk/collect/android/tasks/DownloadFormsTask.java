@@ -327,7 +327,7 @@ public class DownloadFormsTask extends
         v.put(FormsColumns.SUBMISSION_URI,          formInfo.get(FileUtils.SUBMISSIONURI));
         v.put(FormsColumns.BASE64_RSA_PUBLIC_KEY,   formInfo.get(FileUtils.BASE64_RSA_PUBLIC_KEY));
         v.put(FormsColumns.AUTO_DELETE,             formInfo.get(FileUtils.AUTO_DELETE));
-        v.put(FormsColumns.AUTO_SUBMIT,             formInfo.get(FileUtils.AUTO_SUBMIT));
+        v.put(FormsColumns.AUTO_SEND,             formInfo.get(FileUtils.AUTO_SEND));
         Uri uri = formsDao.saveForm(v);
         Collect.getInstance().getActivityLogger().logAction(this, "insert",
                 formFile.getAbsolutePath());

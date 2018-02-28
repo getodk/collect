@@ -32,7 +32,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_SUBMIT;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_SEND;
 
 public class NetworkReceiver extends BroadcastReceiver implements InstanceUploaderListener {
 
@@ -158,20 +158,20 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
     /**
      * @param isFormAutoSendOptionEnabled represents whether the auto-send option is enabled at the app level
      *
-     * If the form explicitly sets the auto-submit property, then it overrides the preferences.
+     * If the form explicitly sets the auto-send property, then it overrides the preferences.
      */
     private boolean isFormAutoSendEnabled(String jrFormId, boolean isFormAutoSendOptionEnabled) {
         Cursor cursor = new FormsDao().getFormsCursorForFormId(jrFormId);
-        String autoSubmit = null;
+        String autoSend = null;
         if (cursor != null && cursor.moveToFirst()) {
             try {
-                int autoSubmitColumnIndex = cursor.getColumnIndex(AUTO_SUBMIT);
-                autoSubmit = cursor.getString(autoSubmitColumnIndex);
+                int autoSendColumnIndex = cursor.getColumnIndex(AUTO_SEND);
+                autoSend = cursor.getString(autoSendColumnIndex);
             } finally {
                 cursor.close();
             }
         }
-        return autoSubmit == null ? isFormAutoSendOptionEnabled : Boolean.valueOf(autoSubmit);
+        return autoSend == null ? isFormAutoSendOptionEnabled : Boolean.valueOf(autoSend);
     }
 
     @Override
