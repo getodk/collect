@@ -25,6 +25,10 @@ public final class FormsDaoHelper {
 
     }
 
+    /**
+     * Returns the number of rows with the given query.
+     * If the cursor fails to open then returns -1.
+     */
     public static int getFormsCount(String selection, String[] selectionArgs) {
         int count = -1;
         try (Cursor c = new FormsDao().getFormsCursor(selection, selectionArgs)) {
