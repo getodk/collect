@@ -159,7 +159,7 @@ public class QRCodeUtils {
                 // Save the QRCode to disk
                 if (shouldWriteToDisk) {
                     Timber.i("Saving QR Code to disk... : " + QR_CODE_FILEPATH);
-                    FileUtils.saveBitmapToFile(bitmap, QR_CODE_FILEPATH, Bitmap.CompressFormat.PNG);
+                    FileUtils.saveBitmapToFile(bitmap, QR_CODE_FILEPATH);
 
                     FileUtils.write(mdCacheFile, messageDigest);
                     Timber.i("Updated %s file contents", SETTINGS_MD5_FILE);

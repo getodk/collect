@@ -465,10 +465,12 @@ public class FileUtils {
         }
     }
 
-    public static void saveBitmapToFile(Bitmap bitmap, String path, Bitmap.CompressFormat... format) {
-        Bitmap.CompressFormat compressFormat = Bitmap.CompressFormat.JPEG;
-        if (format[0] != null) {
-            compressFormat = format[0];
+    public static void saveBitmapToFile(Bitmap bitmap, String path) {
+        Bitmap.CompressFormat compressFormat;
+        if (path.endsWith(".png")) {
+            compressFormat = Bitmap.CompressFormat.PNG;
+        } else {
+            compressFormat = Bitmap.CompressFormat.JPEG;
         }
 
         try (FileOutputStream out = new FileOutputStream(path)) {

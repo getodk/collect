@@ -76,7 +76,7 @@ public class QRCodeUtilsTest {
 
         // stubbing cache and bitmap files
         new File(Collect.SETTINGS).mkdirs();
-        FileUtils.saveBitmapToFile(QRCodeUtils.generateQRBitMap(expectedData, 100), QR_CODE_FILEPATH, Bitmap.CompressFormat.PNG);
+        FileUtils.saveBitmapToFile(QRCodeUtils.generateQRBitMap(expectedData, 100), QR_CODE_FILEPATH);
         FileUtils.write(md5File, getDigest(expectedData.getBytes()));
 
         // verify that QRCode and md5 cache files exist
