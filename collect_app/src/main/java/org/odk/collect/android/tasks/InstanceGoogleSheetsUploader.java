@@ -219,28 +219,30 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                     return false;
                 }
                 createSheetsIfNeeded(instanceElement);
-                handleRepeatableGroups(instanceElement, instanceIDElement);
             }
-            uploadOneInstance(instanceElement, instanceFile, mainSheetTitle);
+            uploadOneInstance(instanceElement, instanceIDElement, instanceFile, mainSheetTitle);
         } catch (Exception e) {
             return false;
         }
         return true;
     }
 
-    private void uploadOneInstance(TreeElement element, File instanceFile, String sheetTitle) throws Exception {
-        insertRow(element, instanceFile, sheetTitle);
+    private void uploadOneInstance(TreeElement element, TreeElement instanceIDElement, File instanceFile, String sheetTitle) throws Exception {
+        insertRow(element, instanceIDElement, instanceFile, sheetTitle);
 
         for (int i = 0 ; i < element.getNumChildren(); i++) {
             TreeElement child = element.getChildAt(i);
             if (child.isRepeatable()) {
-                uploadOneInstance(child, instanceFile, getTitle(child));
+                uploadOneInstance(child, instanceIDElement, instanceFile, getTitle(child));
             }
         }
     }
 
-    private boolean insertRow(TreeElement element, File instanceFile, String sheetTitle) throws Exception {
+    private boolean insertRow(TreeElement element, TreeElement instanceIDElement, File instanceFile, String sheetTitle) throws Exception {
         List<String> columnTitles = getColumnTitles(element);
+        if (element.isRepeatable()) {
+            columnTitles.add(0, getTitle(instanceIDElement));
+        }
         if (!isNumberOfColumnsValid(columnTitles.size())) {
             return false;
         }
@@ -260,8 +262,25 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             sheetCells = getSheetCells(sheetTitle); // read sheet cells again to update
         }
 
-        insertRow(getRowFromObjects(prepareListOfValues(sheetCells.get(0), columnTitles, getAnswers(getChildElements(element), instanceFile))), sheetTitle);
+        HashMap<String, String> answers = getAnswers(getChildElements(element), instanceFile);
+        if (shouldRowBeInserted(answers)) {
+            if (element.isRepeatable()) {
+                answers.put(getTitle(instanceIDElement), instanceIDElement.getValue().getDisplayText());
+            }
+            insertRow(getRowFromObjects(prepareListOfValues(sheetCells.get(0), columnTitles, answers)), sheetTitle);
+        }
         return true;
+    }
+
+    // Ignore rows with all empty answers added by a user and extra repeatable groups added
+    // by Javarosa https://github.com/opendatakit/javarosa/issues/266
+    private boolean shouldRowBeInserted(HashMap<String, String> answers) {
+        for (String answer : answers.values()) {
+            if (answer != null && !answer.trim().isEmpty()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void insertRow(ValueRange row, String sheetName) throws IOException {
@@ -322,16 +341,6 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         }
 
         return UPLOADED_MEDIA_URL + uploadedFileId;
-    }
-
-    private void handleRepeatableGroups(TreeElement element, TreeElement instanceID) {
-        for (int i = 0 ; i < element.getNumChildren(); i++) {
-            TreeElement childElement = element.getChildAt(i);
-            if (childElement.isRepeatable()) {
-                childElement.addChild(instanceID);
-                handleRepeatableGroups(childElement, instanceID);
-            }
-        }
     }
 
     private TreeElement getInstanceElement(String formFilePath, File instanceFile) throws FileNotFoundException {
