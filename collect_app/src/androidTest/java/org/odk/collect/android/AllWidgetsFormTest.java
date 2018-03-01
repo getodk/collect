@@ -532,7 +532,7 @@ public class AllWidgetsFormTest {
         Screengrab.screenshot("range-integer");
 
         openWidgetList();
-        onVisibleListView().atPosition(12).perform(click());
+        onView(withText("Range integer widget")).perform(click());
 
         onVisibleSeekBar().check(matches(withProgress(randomValue)));
 
@@ -548,11 +548,11 @@ public class AllWidgetsFormTest {
         Screengrab.screenshot("range-integer-vertical");
 
         openWidgetList();
-        onVisibleListView().atPosition(13).perform(click());
+        onView(withText("Range vertical integer widget")).perform(click());
 
         onVisibleSeekBar().check(matches(withProgress(randomValue)));
 
-        onView(withText("Range integer widget")).perform(swipeLeft());
+        onView(withText("Range vertical integer widget")).perform(swipeLeft());
 
     }
 
@@ -564,7 +564,7 @@ public class AllWidgetsFormTest {
         Screengrab.screenshot("range-decimal");
 
         openWidgetList();
-        onVisibleListView().atPosition(14).perform(click());
+        onView(withText("Range decimal widget")).perform(click());
 
         onVisibleSeekBar().check(matches(withProgress(randomValue)));
 
@@ -580,11 +580,11 @@ public class AllWidgetsFormTest {
         Screengrab.screenshot("range-decimal-vertical");
 
         openWidgetList();
-        onVisibleListView().atPosition(15).perform(click());
+        onView(withText("Range vertical decimal widget")).perform(click());
 
         onVisibleSeekBar().check(matches(withProgress(randomValue)));
 
-        onView(withText("Range decimal widget")).perform(swipeLeft());
+        onView(withText("Range vertical decimal widget")).perform(swipeLeft());
 
     }
 
@@ -951,10 +951,6 @@ public class AllWidgetsFormTest {
                 return ViewMatchers.isAssignableFrom(SeekBar.class);
             }
         };
-    }
-
-    private DataInteraction onVisibleListView() {
-        return onData(anything()).inAdapterView(withClassName(endsWith("ListView")));
     }
 
     private ViewInteraction onVisibleSeekBar() {
