@@ -26,7 +26,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.javarosa.core.model.SelectChoice;
@@ -38,6 +37,7 @@ import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.ExternalDataUtil;
+import org.odk.collect.android.views.CustomSpinner;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
 import java.util.List;
@@ -52,7 +52,7 @@ import java.util.List;
 @SuppressLint("ViewConstructor")
 public class SpinnerWidget extends QuestionWidget implements MultiChoiceWidget {
     List<SelectChoice> items;
-    Spinner spinner;
+    CustomSpinner spinner;
     String[] choices;
 
     public SpinnerWidget(Context context, FormEntryPrompt prompt) {
