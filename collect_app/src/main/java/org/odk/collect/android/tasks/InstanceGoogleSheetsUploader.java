@@ -249,8 +249,9 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         List<List<Object>> sheetCells = getSheetCells(sheetTitle);
         if (sheetCells != null && !sheetCells.isEmpty()) { // we are editing an existed sheet
             if (isAnyColumnHeaderEmpty(sheetCells.get(0))) {
-                // Insert a header row again to fill empty cells
-                insertRow(columnTitles, sheetTitle + "!A1:1");
+                // Insert a header row again to fill empty headers
+                sheetsHelper.updateRow(spreadsheetId, sheetTitle + "!A1",
+                        new ValueRange().setValues(Collections.singletonList(columnTitles)));
                 sheetCells = getSheetCells(sheetTitle); // read sheet cells again to update
             }
             if (isAnyMissingColumn(sheetCells.get(0), columnTitles)) {

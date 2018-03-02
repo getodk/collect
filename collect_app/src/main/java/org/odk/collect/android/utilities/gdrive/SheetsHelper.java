@@ -109,6 +109,14 @@ public class SheetsHelper {
         sheetsService.insertRow(spreadsheetId, sheetName, row);
     }
 
+    public void updateRow(String spreadsheetId, String sheetName, ValueRange row) throws IOException {
+        if (row == null) {
+            throw new IllegalArgumentException("ValueRange cannot be null");
+        }
+
+        sheetsService.updateRow(spreadsheetId, sheetName, row);
+    }
+
     public void addSheet(String spreadsheetId, String sheetName) throws IOException {
         AddSheetRequest addSheetRequest = new AddSheetRequest();
         addSheetRequest.setProperties(new SheetProperties().setTitle(sheetName));
@@ -203,6 +211,13 @@ public class SheetsHelper {
         public void insertRow(String spreadsheetId, String sheetName, ValueRange row) throws IOException {
             sheets.spreadsheets().values()
                     .append(spreadsheetId, sheetName, row)
+                    .setIncludeValuesInResponse(true)
+                    .setValueInputOption("USER_ENTERED").execute();
+        }
+
+        public void updateRow(String spreadsheetId, String sheetName, ValueRange row) throws IOException {
+            sheets.spreadsheets().values()
+                    .update(spreadsheetId, sheetName, row)
                     .setIncludeValuesInResponse(true)
                     .setValueInputOption("USER_ENTERED").execute();
         }
