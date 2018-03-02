@@ -28,7 +28,7 @@ import timber.log.Timber;
 
 import static android.provider.BaseColumns._ID;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_DELETE;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_SUBMIT;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_SEND;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DATE;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DESCRIPTION;
@@ -260,7 +260,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
                     .begin(db)
                     .alter()
                     .table(FORMS_TABLE_NAME)
-                    .addColumn(AUTO_SUBMIT, "text")
+                    .addColumn(AUTO_SEND, "text")
                     .end();
 
             CustomSQLiteQueryBuilder
@@ -292,7 +292,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
                 + SUBMISSION_URI + " text, "
                 + BASE64_RSA_PUBLIC_KEY + " text, "
                 + JRCACHE_FILE_PATH + " text not null, "
-                + AUTO_SUBMIT + " text,"
+                + AUTO_SEND + " text,"
                 + AUTO_DELETE + " text);");
     }
 }

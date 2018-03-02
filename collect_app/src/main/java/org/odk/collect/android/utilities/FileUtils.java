@@ -58,7 +58,7 @@ public class FileUtils {
     public static final String SUBMISSIONURI = "submission";
     public static final String BASE64_RSA_PUBLIC_KEY = "base64RsaPublicKey";
     public static final String AUTO_DELETE = "autoDelete";
-    public static final String AUTO_SUBMIT = "autoSubmit";
+    public static final String AUTO_SEND = "autoSend";
     static int bufSize = 16 * 1024; // May be set by unit test
 
     private FileUtils() {
@@ -369,13 +369,14 @@ public class FileUtils {
             final Element submission = model.getElement(xforms, "submission");
             final String base64RsaPublicKey = submission.getAttributeValue(null, "base64RsaPublicKey");
             final String autoDelete = submission.getAttributeValue(null, "auto-delete");
-            final String autoSubmit = submission.getAttributeValue(null, "auto-submit");
+            final String autoSend = submission.getAttributeValue(null, "auto-send");
+
             fields.put(SUBMISSIONURI, submission.getAttributeValue(null, "action"));
             fields.put(BASE64_RSA_PUBLIC_KEY,
                     (base64RsaPublicKey == null || base64RsaPublicKey.trim().length() == 0)
                             ? null : base64RsaPublicKey.trim());
             fields.put(AUTO_DELETE, autoDelete);
-            fields.put(AUTO_SUBMIT, autoSubmit);
+            fields.put(AUTO_SEND, autoSend);
         } catch (Exception e) {
             Timber.i("XML file %s does not have a submission element", xmlFile.getAbsolutePath());
             // and that's totally fine.
