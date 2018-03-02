@@ -584,7 +584,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             return false;
         }
 
-        if (numberOfColumns > 255) {
+        if (numberOfColumns > 256) {
             outcome.results.put(id, Collect.getInstance().getString(R.string.sheets_max_columns,
                     String.valueOf(numberOfColumns)));
             return false;
