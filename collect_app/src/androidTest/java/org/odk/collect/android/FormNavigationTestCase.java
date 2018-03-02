@@ -43,10 +43,10 @@ import static junit.framework.Assert.assertEquals;
 
 /**
  * This test has been created in order to check indices while navigating through a form.
- * It's especially important while navigate through a form which contains nested groups and if we
+ * It's especially important while navigating through a form that contains nested groups and if we
  * use groups with field-list appearance because in that case we need to collect all indices of
  * questions we want to display on one page (we need to recursively get all indices contained in
- * such a group and its children). It might be also tricky when navigate backwards because then we
+ * such a group and its children). It might be also tricky when navigating backwards because then we
  * need to navigate to an index of the first question of all we want to display on one page.
  */
 @RunWith(Parameterized.class)
@@ -95,12 +95,14 @@ public class FormNavigationTestCase {
                 try {
                     for (int i = 0; i < expectedIndices.length - 1; i++) {
                         FormController formController = task.getFormController();
+                        // check the current index
                         assertEquals(expectedIndices[i], formController.getFormIndex().toString());
                         if (i < expectedIndices.length - 2) {
                             formController.stepToNextScreenEvent();
                         } else {
                             formController.stepToPreviousScreenEvent();
                         }
+                        // check the index again after navigating
                         assertEquals(expectedIndices[i + 1], formController.getFormIndex().toString());
                     }
                 } catch (Exception e) {
@@ -120,6 +122,9 @@ public class FormNavigationTestCase {
         formLoaderTask.execute(formPath(formName)).get();
     }
 
+    /*
+    FormLoaderTask loads forms from SD card so we need to put each form there
+     */
     private void prepareFile(String formName) throws IOException {
         String pathname = formPath(formName);
 
