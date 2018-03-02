@@ -268,7 +268,6 @@
   <string name="no_google_account">Pas de compte Google choisi!</string>
   <string name="google_set_account">Vous avez choisi Google Sheets comme serveur. Merci de sélectionner un compte Google correspondant dans les paramètres généraux avant de continuer.</string>
   <string name="invalid_oauth">OAuth 2 token non valable</string>
-  <string name="google_repeat_error">Les répétitions ne sont pas prises en charge par les Google Sheets en ce moment.</string>
   <string name="media_upload_error">Impossible de télécharger une photo qui n\'existe pas: %1$s</string>
   <string name="odk_auth_auth_fail">Erreur d\'authentification d\'envoi automatique ODK, assurez-vous que vos paramètres sont corrects</string>
   <string name="odk_auto_note">Notification d\'envoi automatique ODK</string>

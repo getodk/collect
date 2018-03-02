@@ -268,7 +268,6 @@
   <string name="no_google_account">Ei valittua Google-tiliä!</string>
   <string name="google_set_account">Palvelimesi on Google Sheets, valitse vastaava Google-tili yleisasetuksissa ennen jatkamista</string>
   <string name="invalid_oauth">OAuth 2 token ei kelpaa</string>
-  <string name="google_repeat_error">Google Sheets ei tällä hetkellä tue toistoja.</string>
   <string name="media_upload_error">Olematonta valokuvaa ei voitu lähettää: %1$s</string>
   <string name="odk_auth_auth_fail">Automaattisen ODK-lähetyksen vahvistus epäonnistui, varmista että asetuksesi ovat oikein</string>
   <string name="odk_auto_note">Automaattisen ODK-lähetyksen ilmoitus</string>

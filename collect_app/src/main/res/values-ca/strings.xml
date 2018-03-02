@@ -262,7 +262,6 @@
   <string name="no_google_account">Compte Google no seleccionada!</string>
   <string name="google_set_account">Heu seleccionat Google Sheets com a servidor, si us plau, seleccioneu el compte Google abans de seguir</string>
   <string name="invalid_oauth">OAuth 2 token invàlid </string>
-  <string name="google_repeat_error">De moment Google Sheets no admet repeticions</string>
   <string name="notification_error">Error mostrant notificació</string>
   <string name="delete_after_send">Esborra despres d\'enviar</string>
   <string name="delete_after_send_summary">Esborra formularis tancats i arxius multimedia després d\'enviar a servidor</string>

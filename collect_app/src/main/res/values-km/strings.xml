@@ -268,7 +268,6 @@
   <string name="no_google_account">គ្មាន​គណនី​ Google បាន​ជ្រើស​រើស</string>
   <string name="google_set_account">អ្នក​បាន​ជ្រើស​សន្លឹក​ Google ជា​ម៉ាស៊ីន​មេ​របស់​អ្នក​សូម​ជ្រើស​រើស​គណនី Google ត្រូវគ្នា ដែលឋិតក្នុងការកំណត់ទូទៅមុននឹងបន្ត</string>
   <string name="invalid_oauth">មិនត្រឹមត្រូវសញ្ញាសម្ងាត់ OAuth 2</string>
-  <string name="google_repeat_error">សំនួរម្តង​ទៀត​មិនត្រូវបានគាំទ្រដោយសន្លឹក Google ទេនៅពេលនេះ</string>
   <string name="media_upload_error">បរាជ័យក្នុងការផ្ទុកឡើងរូបថតដែលមិនមាន: %1$s</string>
   <string name="odk_auth_auth_fail">​ការផ្ទៀង​ផ្ទាត់​បរាជ័យដើម្បីឲ្យ ODK ផ្ញើរចេញដោយស្វ័យប្រវត្តិ សូមធ្វើឲ្យប្រាកដថា​ការកំណត់របស់​អ្នក​ត្រឹម​ត្រូវ</string>
   <string name="odk_auto_note">ការជូនដំណឹងពីការផ្ញើរចេញដោយ​ស្វ័យ​ប្រវត្តិរបស់​ ODK </string>

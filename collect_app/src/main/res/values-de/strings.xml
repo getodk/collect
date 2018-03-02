@@ -268,7 +268,6 @@
   <string name="no_google_account">Kein Google-Konto ausgewählt!</string>
   <string name="google_set_account">Sie haben Google Sheets als Server ausgewählt. Bitte geben Sie unter den Einstellungen ein Google-Konto an, bevor Sie fortfahren.</string>
   <string name="invalid_oauth">Ungültiger OAuth2-Token</string>
-  <string name="google_repeat_error">Wiederholungen werden zur Zeit von Google Sheets nicht unterstützt.</string>
   <string name="media_upload_error">Nicht vorhandenes Foto konnte nicht hochgeladen werden: %1$s</string>
   <string name="odk_auth_auth_fail">Auto-Send-Authentifizierungsfehler, bitte überprüfen Sie Ihre Einstellungen.</string>
   <string name="odk_auto_note">ODK Auto-Send Benachrichtigung</string>

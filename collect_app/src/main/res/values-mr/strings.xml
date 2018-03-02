@@ -267,7 +267,6 @@
   <string name="no_google_account">कोणतेही गूगल खाते निवडलेले नाही!</string>
   <string name="google_set_account">आपण गूगल पत्रक आपल्या सर्व्हर म्हणून निवडले आहे, कृपया सुरू ठेवण्यापूर्वी सामान्य सेटिंग्जमध्ये संबंधित गूगल खाते निवडा</string>
   <string name="invalid_oauth">अवैध OAuth 2 टोकन</string>
-  <string name="google_repeat_error">पुनरावृत्ती गूगल पत्रके द्वारे यावेळी समर्थित नाहीत.</string>
   <string name="media_upload_error">अस्तित्वात नाही असा फोटो अपलोड करण्यात अयशस्वी:  %1$s</string>
   <string name="odk_auth_auth_fail">ओडीके ऑटोसॅन्ड प्रमाणीकरण अयशस्वी, कृपया आपली सेटिंग्ज योग्य असल्याची खात्री करा.</string>
   <string name="odk_auto_note">ओडीके ऑटोसॅन्ड सूचना.</string>

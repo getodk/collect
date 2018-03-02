@@ -282,7 +282,6 @@
     <string name="no_google_account">No Google Account Selected!</string>
     <string name="google_set_account">You have selected Google Sheets as your server, please select a corresponding Google account in the General Settings before continuing</string>
     <string name="invalid_oauth">Invalid OAuth 2 token</string>
-    <string name="google_repeat_error">Repeats are not supported by Google Sheets at this time.</string>
     <string name="media_upload_error">Failed to upload photo that does not exist: %1$s</string>
     <string name="odk_auth_auth_fail">ODK auto send authentication failure, please make sure your settings are correct</string>
     <string name="odk_auto_note">ODK Auto Send Notification</string>

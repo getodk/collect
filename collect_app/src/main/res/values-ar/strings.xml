@@ -267,7 +267,6 @@
   <string name="no_google_account">لم يتم اختيار حساب جوجل!</string>
   <string name="google_set_account">لقد قمت باختيار صفحات الجوجل كخادم لك، أرجو اختيار حساب الجوجل  المتوافق عن طريق الاعدادت العامة قبل الاستمرار</string>
   <string name="invalid_oauth">الرمز غير صالح</string>
-  <string name="google_repeat_error">التكرارات غير مدعومة من قبل صفحات الجوجل بهذا الوقت</string>
   <string name="media_upload_error">حدث خطاء اثناء رفع الوسائط الى خادم البيانات الصورة التالية غير موجودة : %1$s</string>
   <string name="odk_auth_auth_fail">فشل في عملية التحقق من بيانات المصادقة</string>
   <string name="odk_auto_note">ملاحظات تلقائية</string>

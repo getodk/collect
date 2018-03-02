@@ -268,7 +268,6 @@
   <string name="no_google_account">Tidak ada Akun Google yang dipilih!</string>
   <string name="google_set_account">Google Sheet telah dipilih sebagai server kamu, silahkan tentukan akun Google pada Pengaturan Umum sebelum melanjutkan</string>
   <string name="invalid_oauth">Token OAuth 2 tidak sesuai</string>
-  <string name="google_repeat_error">Pengulangan belum didukung oleh Google Sheet.</string>
   <string name="media_upload_error">Gagal mengunggah foto: %1$s</string>
   <string name="odk_auth_auth_fail">ODK pengiriman otomatis gagal berotentikasi, pastikan pengaturannya benar</string>
   <string name="odk_auto_note">Notifikasi ODK Kirim otomatis</string>

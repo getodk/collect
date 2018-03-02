@@ -261,7 +261,6 @@
   <string name="no_google_account">Google kontot ei ole valitud!</string>
   <string name="google_set_account">Olete serveriks valinud Google Sheets-i. Enne jätkamist palun valige vastav Google konto üldsätetest</string>
   <string name="invalid_oauth">Vale OAuth 2 token</string>
-  <string name="google_repeat_error">Google Sheets ei toata hetkel vormiosa korduseid.</string>
   <string name="notification_error">Viga teate näitamisel </string>
   <string name="delete_after_send">Kustuta peale saatmist</string>
   <string name="delete_after_send_summary">Peale serverisse saatmist kustutab lõpetatud vormid ja meedia</string>

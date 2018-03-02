@@ -254,7 +254,6 @@
   <string name="no_google_account">Ingen Goggle-konto er valgt!</string>
   <string name="google_set_account">Du har valgt Google Sheets som din server. Nå må du angi en Google-konto i Generelle innstillinger før du fortsetter.</string>
   <string name="invalid_oauth">Ugyldig OAuth2 token.</string>
-  <string name="google_repeat_error">Google Sheets støtter ikke gjentagelser. </string>
   <string name="notification_error">Feil ved visning av kvitteringstekst</string>
   <string name="delete_after_send">Slett etter innsendt.</string>
   <string name="delete_after_send_summary">Sletter fullførte skjemaer og media etter at de er sendt til serveren</string>

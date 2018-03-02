@@ -267,7 +267,6 @@
   <string name="no_google_account">Inget Google-konto valt!</string>
   <string name="google_set_account">Du har valt Google Sheets som din server, vänligen välj motsvarande Google-konto under allmänna inställningar innan du fortsätter</string>
   <string name="invalid_oauth">Ogiltigt OAuth 2 token</string>
-  <string name="google_repeat_error">Repeterande grupper stöds inte av Google Sheets för närvarande.</string>
   <string name="media_upload_error">Misslyckades med att ladda upp bild som inte finns: %1$s</string>
   <string name="odk_auth_auth_fail">ODK autentiseringsfel vid automatisk sändning. Kontrollera att inställningarna är korrekta.</string>
   <string name="odk_auto_note">ODK notifiering vid automatisk sändning</string>

@@ -93,6 +93,8 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     private String id;
     private String jrFormId;
 
+    private Spreadsheet spreadsheet;
+
     public InstanceGoogleSheetsUploader(GoogleAccountsManager accountsManager) {
         this.accountsManager = accountsManager;
         sheetsHelper = accountsManager.getSheetsHelper();
@@ -220,29 +222,26 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                 }
                 createSheetsIfNeeded(instanceElement);
             }
-            uploadOneInstance(instanceElement, instanceIDElement, instanceFile, mainSheetTitle);
+            insertRows(instanceElement, instanceIDElement, instanceFile, mainSheetTitle);
         } catch (Exception e) {
             return false;
         }
         return true;
     }
 
-    private void uploadOneInstance(TreeElement element, TreeElement instanceIDElement, File instanceFile, String sheetTitle) throws Exception {
+    private void insertRows(TreeElement element, TreeElement instanceIDElement, File instanceFile, String sheetTitle) throws Exception {
         insertRow(element, instanceIDElement, instanceFile, sheetTitle);
 
         for (int i = 0 ; i < element.getNumChildren(); i++) {
             TreeElement child = element.getChildAt(i);
             if (child.isRepeatable()) {
-                uploadOneInstance(child, instanceIDElement, instanceFile, getTitle(child));
+                insertRows(child, instanceIDElement, instanceFile, getElementTitle(child));
             }
         }
     }
 
     private boolean insertRow(TreeElement element, TreeElement instanceIDElement, File instanceFile, String sheetTitle) throws Exception {
-        List<String> columnTitles = getColumnTitles(element);
-        if (element.isRepeatable()) {
-            columnTitles.add(0, getTitle(instanceIDElement));
-        }
+        List<Object> columnTitles = getColumnTitles(element, instanceIDElement);
         if (!isNumberOfColumnsValid(columnTitles.size())) {
             return false;
         }
@@ -250,26 +249,39 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         List<List<Object>> sheetCells = getSheetCells(sheetTitle);
         if (sheetCells != null && !sheetCells.isEmpty()) { // we are editing an existed sheet
             if (isAnyColumnHeaderEmpty(sheetCells.get(0))) {
-                fixBlankColumnHeaders(sheetTitle, columnTitles);
+                // Insert a header row again to fill empty cells
+                insertRow(columnTitles, sheetTitle + "!A1:1");
                 sheetCells = getSheetCells(sheetTitle); // read sheet cells again to update
             }
-            if (doesMissingColumnsExist(sheetCells.get(0), columnTitles)) {
+            if (isAnyMissingColumn(sheetCells.get(0), columnTitles)) {
+                outcome.results.put(id, Collect.getInstance().getString(R.string.google_sheets_missing_columns));
                 return false;
             }
         } else { // new sheet
             resizeSheet(getSheetId(sheetTitle), columnTitles.size());
-            insertRow(getRowFromObjects(new ArrayList<>(columnTitles)), sheetTitle);
+            insertRow(columnTitles, sheetTitle);
             sheetCells = getSheetCells(sheetTitle); // read sheet cells again to update
         }
 
         HashMap<String, String> answers = getAnswers(getChildElements(element), instanceFile);
         if (shouldRowBeInserted(answers)) {
             if (element.isRepeatable()) {
-                answers.put(getTitle(instanceIDElement), instanceIDElement.getValue().getDisplayText());
+                answers.put(getElementTitle(instanceIDElement), instanceIDElement.getValue().getDisplayText());
             }
-            insertRow(getRowFromObjects(prepareListOfValues(sheetCells.get(0), columnTitles, answers)), sheetTitle);
+            insertRow(prepareListOfValues(sheetCells.get(0), columnTitles, answers), sheetTitle);
         }
         return true;
+    }
+
+    private void insertRow(List<Object> rowElements, String sheetName) throws IOException {
+        try {
+            sheetsHelper.insertRow(spreadsheetId, sheetName,
+                    new ValueRange().setValues(Collections.singletonList(rowElements)));
+        } catch (IOException e) {
+            Timber.e(e);
+            outcome.results.put(id, e.getMessage());
+            throw e;
+        }
     }
 
     // Ignore rows with all empty answers added by a user and extra repeatable groups added
@@ -283,35 +295,22 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         return false;
     }
 
-    private void insertRow(ValueRange row, String sheetName) throws IOException {
-        try {
-            sheetsHelper.insertRow(spreadsheetId, sheetName, row);
-        } catch (IOException e) {
-            Timber.e(e);
-            outcome.results.put(id, e.getMessage());
-            throw e;
-        }
-    }
-
-    private String uploadMediaFile(File instanceFile, String fileName) throws IOException, MultipleFoldersFoundException {
-        String filename = instanceFile.getParentFile() + "/" + fileName;
-        File toUpload = new File(filename);
+    private String uploadMediaFile(File instanceFile, String fileName)
+            throws IOException, MultipleFoldersFoundException {
+        String filePath = instanceFile.getParentFile() + "/" + fileName;
+        File toUpload = new File(filePath);
 
         // first check the local content provider
         // to see if this photo still exists at the location or not
         String selection = MediaStore.Images.Media.DATA + "=?";
-        String[] selectionArgs = {filename};
+        String[] selectionArgs = {filePath};
         Cursor cursor = Collect.getInstance().getContentResolver()
                 .query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, selection,
                         selectionArgs, null);
         if (cursor != null && cursor.getCount() != 1) {
             cursor.close();
-            try {
-                throw new FileNotFoundException(Collect.getInstance()
-                        .getString(R.string.media_upload_error, filename));
-            } catch (FileNotFoundException e) {
-                Timber.e(e);
-            }
+            throw new FileNotFoundException(Collect.getInstance()
+                    .getString(R.string.media_upload_error, filePath));
         }
 
         String folderId;
@@ -327,7 +326,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
         // file is ready to be uploaded
         try {
-            uploadedFileId = driveHelper.uploadFileToDrive(fileName, folderId, toUpload);
+            uploadedFileId = driveHelper.uploadFileToDrive(filePath, folderId, toUpload);
         } catch (IOException e) {
             Timber.e(e, "Exception thrown while uploading the file to drive");
             outcome.results.put(id, e.getMessage());
@@ -339,14 +338,12 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             outcome.results.put(id, "Unable to upload the media files. Try again");
             return null;
         }
-
-        return UPLOADED_MEDIA_URL + uploadedFileId;
+        return getHyperlink(UPLOADED_MEDIA_URL + uploadedFileId, fileName);
     }
 
     private TreeElement getInstanceElement(String formFilePath, File instanceFile) throws FileNotFoundException {
         FormDef formDef = XFormUtils.getFormFromInputStream(new FileInputStream(new File(formFilePath)));
         FormLoaderTask.importData(instanceFile, new FormEntryController(new FormEntryModel(formDef)));
-
         return formDef
                 .getMainInstance()
                 .getRoot();
@@ -359,7 +356,6 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                 return true;
             }
         }
-
         return false;
     }
 
@@ -370,44 +366,47 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                 sheetsHelper.addSheet(spreadsheetId, sheetTitle);
             }
         }
+        spreadsheet = sheetsHelper.getSpreadsheet(spreadsheetId);
     }
 
-    private Set<String> getSheetTitles(TreeElement element) throws IOException {
+    private Set<String> getSheetTitles(TreeElement element) {
         Set<String> sheetTitles = new HashSet<>();
         for (int i = 0 ; i < element.getNumChildren(); i++) {
             TreeElement childElement = element.getChildAt(i);
             if (childElement.isRepeatable()) {
-                sheetTitles.add(getTitle(childElement));
+                sheetTitles.add(getElementTitle(childElement));
                 sheetTitles.addAll(getSheetTitles(childElement));
             }
         }
-
         return sheetTitles;
     }
 
     private HashMap<String, String> getAnswers(List<TreeElement> elements, File instanceFile) throws Exception {
         HashMap<String, String> answers = new HashMap<>();
         for (TreeElement element : elements) {
+            String elementTitle = getElementTitle(element);
             if (element.isRepeatable()) {
-                answers.put(getTitle(element), getSheetUrl(getSheetId(getTitle(element))));
+                answers.put(elementTitle, getHyperlink(getSheetUrl(getSheetId(elementTitle)), elementTitle));
             } else {
                 String answer = element.getValue() != null ? element.getValue().getDisplayText() : "";
                 if (new File(instanceFile.getParentFile() + "/" + answer).isFile()) {
-                    answers.put(getTitle(element), uploadMediaFile(instanceFile, answer));
+                    answers.put(elementTitle, uploadMediaFile(instanceFile, answer));
                 } else {
-                    answers.put(getTitle(element), answer);
+                    answers.put(elementTitle, answer);
                 }
             }
         }
         return answers;
     }
 
-    private List<String> getColumnTitles(TreeElement element) {
-        List<String> columnTitles = new ArrayList<>();
-        for (TreeElement child : getChildElements(element)) {
-            columnTitles.add(getTitle(child));
+    private List<Object> getColumnTitles(TreeElement element, TreeElement instanceIDElement) {
+        List<Object> columnTitles = new ArrayList<>();
+        if (element.isRepeatable()) {
+            columnTitles.add(0, getElementTitle(instanceIDElement));
         }
-
+        for (TreeElement child : getChildElements(element)) {
+            columnTitles.add(getElementTitle(child));
+        }
         return columnTitles;
     }
 
@@ -420,8 +419,8 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         return null;
     }
 
-    private boolean doesSheetExist(String sheetTitle) throws IOException {
-        for (Sheet sheet : sheetsHelper.getSpreadsheet(spreadsheetId).getSheets()) {
+    private boolean doesSheetExist(String sheetTitle) {
+        for (Sheet sheet : spreadsheet.getSheets()) {
             if (sheet.getProperties().getTitle().equals(sheetTitle)) {
                 return true;
             }
@@ -429,35 +428,34 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         return false;
     }
 
-    private Integer getSheetId(String sheetTitle) throws Exception {
-        for (Sheet sheet : sheetsHelper.getSpreadsheet(spreadsheetId).getSheets()) {
-            if (sheet.getProperties().getTitle().equals(sheetTitle)) {
-                return sheet
-                        .getProperties()
-                        .getSheetId();
+    private boolean isAnyMissingColumn(List<Object> columnHeaders, List<Object> columnTitles) {
+        for (Object columnTitle : columnTitles) {
+            if (!columnHeaders.contains(columnTitle)) {
+                outcome.results.put(id, Collect.getInstance().getString(R.string.google_sheets_missing_columns, columnTitle));
+                return true;
             }
         }
-        return null;
+        return false;
     }
 
-    private String getTitle(AbstractTreeElement element) {
+    private String getElementTitle(AbstractTreeElement element) {
         StringBuilder elementTitle = new StringBuilder();
         while (element != null && element.getName() != null) {
             elementTitle.insert(0, element.getName() + "-");
             element = element.getParent();
         }
-
         return elementTitle
                 .deleteCharAt(elementTitle.length() - 1)
                 .toString();
     }
 
     private List<TreeElement> getChildElements(TreeElement element) {
-        List<TreeElement> columnElements = new ArrayList<>();
+        List<TreeElement> elements = new ArrayList<>();
         TreeElement prior = null;
         for (int i = 0; i < element.getNumChildren(); ++i) {
             TreeElement current = element.getChildAt(i);
-            if ((prior != null) && (prior.getName().equals(current.getName()))) { // avoid duplicated elements
+            // avoid duplicated elements https://github.com/opendatakit/javarosa/issues/248
+            if ((prior != null) && (prior.getName().equals(current.getName()))) {
                 prior = current;
             } else {
                 switch (current.getDataType()) {
@@ -477,37 +475,35 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                     case org.javarosa.core.model.Constants.DATATYPE_GEOSHAPE:
                     case org.javarosa.core.model.Constants.DATATYPE_GEOTRACE:
                     case org.javarosa.core.model.Constants.DATATYPE_UNSUPPORTED:
-                        columnElements.add(current);
+                        elements.add(current);
                         break;
                     case org.javarosa.core.model.Constants.DATATYPE_NULL:
                         if (current.isRepeatable()) { // repeat group
-                            columnElements.add(current);
+                            elements.add(current);
                         } else if (current.getNumChildren() == 0) { // assume fields that don't have children are string fields
-                            columnElements.add(current);
+                            elements.add(current);
                         } else { // one or more children - this is a group
-                            columnElements.addAll(getChildElements(current));
+                            elements.addAll(getChildElements(current));
                         }
                         break;
                 }
                 prior = current;
             }
         }
-        return columnElements;
+        return elements;
     }
 
-    private List<Object> prepareListOfValues(List<Object> columnHeaders, List<String> columnNames,
-                                             HashMap<String, String> answersToUpload) {
+    private List<Object> prepareListOfValues(List<Object> columnHeaders, List<Object> columnTitles,
+                                             HashMap<String, String> answers) {
         List<Object> list = new ArrayList<>();
         for (Object path : columnHeaders) {
             String answer = "";
-            if (!path.equals(" ") && columnNames.contains(path.toString())) {
-                if (answersToUpload.containsKey(path.toString())) {
-                    answer = answersToUpload.get(path.toString());
+            if (!path.equals(" ") && columnTitles.contains(path.toString())) {
+                if (answers.containsKey(path.toString())) {
+                    answer = answers.get(path.toString());
                     // Check to see if answer is a location, if so, get rid of accuracy
-                    // and altitude
-                    // try to match a fairly specific pattern to determine
-                    // if it's a location
-                    // [-]#.# [-]#.# #.# #.#
+                    // and altitude, try to match a fairly specific pattern to determine
+                    // if it's a location [-]#.# [-]#.# #.# #.#
 
                     if (isLocationValid(answer)) {
                         // get rid of everything after the second space
@@ -521,43 +517,20 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             // https://github.com/opendatakit/collect/issues/931
             list.add(answer.isEmpty() ? " " : answer);
         }
-
         return list;
     }
 
     private List<List<Object>> getSheetCells(String sheetTitle) throws IOException {
-        List<List<Object>> sheetCells;
         try {
-            sheetCells = sheetsHelper.getHeaderFeed(spreadsheetId, sheetTitle);
+            return sheetsHelper.getHeaderFeed(spreadsheetId, sheetTitle);
         } catch (IOException e) {
             Timber.e(e);
             outcome.results.put(id, e.getMessage());
             throw e;
         }
-
-        return sheetCells;
     }
 
-    private boolean doesMissingColumnsExist(List<Object> columnHeaders, List<String> columnTitles) {
-        for (String columnTitle : columnTitles) {
-            if (!columnHeaders.contains(columnTitle)) {
-                outcome.results.put(id, Collect.getInstance().getString(R.string.google_sheets_missing_columns, columnTitle));
-                return true;
-            }
-        }
-        return false;
-    }
-
-    // Insert a header row again to fill empty cells
-    private void fixBlankColumnHeaders(String sheetTitle, List columnTitles) throws IOException {
-        List<Object> list = new ArrayList<>();
-        for (Object columnTitle : columnTitles) {
-            list.add(columnTitle.toString().isEmpty() ? " " : columnTitle);
-        }
-        insertRow(getRowFromObjects(list), sheetTitle + "!A1:1");
-    }
-
-    private boolean isAnyColumnHeaderEmpty(List columnHeaders) {
+    private boolean isAnyColumnHeaderEmpty(List<Object> columnHeaders) {
         for (Object columnHeader : columnHeaders) {
             if (columnHeader.toString().isEmpty()) {
                 return true;
@@ -566,15 +539,11 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         return false;
     }
 
-    private ValueRange getRowFromObjects(List<Object> list) {
-        return new ValueRange().setValues(Collections.singletonList(list));
-    }
-
     private void setUpSpreadsheet(String urlString) throws IOException, BadUrlException {
         if (!hasWritePermissionToSheet || !urlString.equals(googleSheetsUrl)) {
             try {
                 spreadsheetId = UrlUtils.getSpreadsheetID(urlString);
-                Spreadsheet spreadsheet = sheetsHelper.getSpreadsheet(spreadsheetId);
+                spreadsheet = sheetsHelper.getSpreadsheet(spreadsheetId);
                 mainSheetTitle = spreadsheet
                         .getSheets()
                         .get(0)
@@ -597,13 +566,15 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         }
     }
 
-    private void resizeSheet(int sheetId, int expectedSize) throws IOException {
-        try {
-            sheetsHelper.resizeSpreadSheet(spreadsheetId, sheetId, expectedSize);
-        } catch (IOException e) {
-            Timber.e(e);
-            outcome.results.put(id, e.getMessage());
-            throw e;
+    private void resizeSheet(Integer sheetId, int expectedSize) throws IOException {
+        if (sheetId != null) {
+            try {
+                sheetsHelper.resizeSpreadSheet(spreadsheetId, sheetId, expectedSize);
+            } catch (IOException e) {
+                Timber.e(e);
+                outcome.results.put(id, e.getMessage());
+                throw e;
+            }
         }
     }
 
@@ -621,8 +592,25 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         return true;
     }
 
-    private String getSheetUrl(int sheetId) {
-        return googleSheetsUrl.substring(0, googleSheetsUrl.lastIndexOf('/') + 1) + "edit#gid=" + sheetId;
+    private Integer getSheetId(String sheetTitle) {
+        for (Sheet sheet : spreadsheet.getSheets()) {
+            if (sheet.getProperties().getTitle().equals(sheetTitle)) {
+                return sheet
+                        .getProperties()
+                        .getSheetId();
+            }
+        }
+        return null;
+    }
+
+    private String getHyperlink(String url, String title) {
+        return "=HYPERLINK(\"" + url + "\", \"" + title + "\")";
+    }
+
+    private String getSheetUrl(Integer sheetId) {
+        return sheetId == null
+                ? null
+                : googleSheetsUrl.substring(0, googleSheetsUrl.lastIndexOf('/') + 1) + "edit#gid=" + sheetId;
     }
 
     private String getSpreadsheetUrl(Cursor cursor) {
@@ -636,8 +624,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
     public static boolean isLocationValid(String answer) {
         return Pattern
-                .compile("^-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\"
-                        + ".[0-9]+\\s[0-9]+\\.[0-9]+$")
+                .compile("^-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\.[0-9]+\\s[0-9]+\\.[0-9]+$")
                 .matcher(answer)
                 .matches();
     }
