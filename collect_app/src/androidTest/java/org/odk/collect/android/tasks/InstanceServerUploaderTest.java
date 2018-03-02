@@ -65,7 +65,7 @@ public class InstanceServerUploaderTest extends MockedServerTest {
         POST: {
             RecordedRequest r = nextRequest();
             assertEquals("POST", r.getMethod());
-            assertEquals("/submission", r.getPath());
+            assertMatches("/submission\\?deviceID=\\w+%3A\\w+", r.getPath());
             assertMatches("Dalvik/.* org.odk.collect.android/.*", r.getHeader("User-Agent"));
             assertEquals("1.0", r.getHeader("X-OpenRosa-Version"));
             assertEquals("gzip,deflate", r.getHeader("Accept-Encoding"));
