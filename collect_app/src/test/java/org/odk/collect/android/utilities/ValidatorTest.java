@@ -55,4 +55,59 @@ public class ValidatorTest {
         assertFalse(Validator.isEmailAddressValid("email@"));
         assertFalse(Validator.isEmailAddressValid("email.domain.com"));
     }
+
+    @Test
+    public void urlValidationTest() {
+        //  https://en.wikipedia.org/wiki/Template:URL/testcases
+        assertTrue(Validator.isUrlValid("http://www.example.com"));
+        assertTrue(Validator.isUrlValid("https://www.example.com"));
+        assertTrue(Validator.isUrlValid("http://www.example.com/"));
+        assertTrue(Validator.isUrlValid("https://www.EXAMPLE.cOm"));
+        assertTrue(Validator.isUrlValid("HTTPS://www.EXAMPLE.cOm/"));
+        assertTrue(Validator.isUrlValid("https://www.example.com/"));
+        assertTrue(Validator.isUrlValid("http://example.com"));
+        assertTrue(Validator.isUrlValid("https://example.com"));
+        assertTrue(Validator.isUrlValid("http://www.example.com/foo/bar"));
+        assertTrue(Validator.isUrlValid("http://www.example.com/foo/bar/"));
+        assertTrue(Validator.isUrlValid("http://www.example.com/foO/BaR"));
+        assertTrue(Validator.isUrlValid("https://www.example.com/foo/bar"));
+        assertTrue(Validator.isUrlValid("http://example.com/foo/bar"));
+        assertTrue(Validator.isUrlValid("https://example.com/foo/bar"));
+        assertTrue(Validator.isUrlValid("http://example.com/foo/bar"));
+        assertTrue(Validator.isUrlValid("http://www.example.com?foo=BaR"));
+        assertTrue(Validator.isUrlValid("http://www.example.com#fooBaR"));
+        assertTrue(Validator.isUrlValid("http://www.example.com"));
+        assertTrue(Validator.isUrlValid("http://www.example.com:8080"));
+        assertTrue(Validator.isUrlValid("http://www.example.com:8080/foo/bar"));
+        assertTrue(Validator.isUrlValid("http://www.example.com/#"));
+        assertTrue(Validator.isUrlValid("http://www.example.com/?"));
+        assertTrue(Validator.isUrlValid("http://www.example2.com"));
+        assertTrue(Validator.isUrlValid("http://www.sho.com/site/dexter/home.sho"));
+        assertTrue(Validator.isUrlValid("http://www.example.com/foo%20bar"));
+        assertTrue(Validator.isUrlValid("http://example.com/foo/bar"));
+        assertTrue(Validator.isUrlValid("https://example.com/foo/bar"));
+        assertTrue(Validator.isUrlValid("http://عمان.icom.museum"));
+        assertTrue(Validator.isUrlValid("http://www.example.com/foo/bar?a=b&c=d"));
+
+        assertFalse(Validator.isUrlValid("http://"));
+        assertFalse(Validator.isUrlValid("example.com"));
+        assertFalse(Validator.isUrlValid("EXAMPLE.COM"));
+        assertFalse(Validator.isUrlValid("www.example.com"));
+        assertFalse(Validator.isUrlValid("WWW.EXAMPLE.COM"));
+        assertFalse(Validator.isUrlValid("ftp://example.com"));
+        assertFalse(Validator.isUrlValid("ftp://www.example.com"));
+        assertFalse(Validator.isUrlValid("example.com/foo/bar"));
+        assertFalse(Validator.isUrlValid("www.example.com/foo/bar"));
+        assertFalse(Validator.isUrlValid("www.example.com:8080"));
+        assertFalse(Validator.isUrlValid("www.example.com:8080/foo/bar"));
+        assertFalse(Validator.isUrlValid("www.example.com/foo%20bar"));
+        assertFalse(Validator.isUrlValid("example.com/foo/bar"));
+        assertFalse(Validator.isUrlValid("www.example.com/foo/bar"));
+        assertFalse(Validator.isUrlValid("www.example.com/foo/bar"));
+        assertFalse(Validator.isUrlValid("www.example.com/foo/捦挺挎/bar"));
+        assertFalse(Validator.isUrlValid("عمان.icom.museum"));
+        assertFalse(Validator.isUrlValid("1964thetribute.com"));
+        assertFalse(Validator.isUrlValid("http:/www.example.com"));
+        assertFalse(Validator.isUrlValid("http:www.example.com"));
+    }
 }

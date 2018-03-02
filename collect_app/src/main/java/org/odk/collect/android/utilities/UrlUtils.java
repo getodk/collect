@@ -20,26 +20,16 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.BadUrlException;
 
-import java.util.regex.Pattern;
-
 public class UrlUtils {
 
     private UrlUtils() {
 
     }
 
-    public static boolean isValidUrl(String url) {
-
-        final Pattern urlPattern = Pattern.compile("^https?:\\/\\/.+$", Pattern.CASE_INSENSITIVE);
-
-        return urlPattern.matcher(url).matches();
-    }
-
     @NonNull
     public static String getSpreadsheetID(String urlString) throws BadUrlException {
         // now parse the url string if we have one
         final String googleHeader = "docs.google.com/spreadsheets/d/";
-        String spreadsheetId;
         if (urlString == null || urlString.length() < googleHeader.length()) {
             throw new BadUrlException(
                     Collect.getInstance().getString(R.string.invalid_sheet_id, urlString));
@@ -50,12 +40,11 @@ public class UrlUtils {
                 // if there wasn't a "/", just try to get the end
                 end = urlString.length();
             }
-            if (start == -1 || end == -1) {
+            if (start == -1) {
                 throw new BadUrlException(
                         Collect.getInstance().getString(R.string.invalid_sheet_id, urlString));
             }
-            spreadsheetId = urlString.substring(start, end);
-            return spreadsheetId;
+            return urlString.substring(start, end);
         }
     }
 }

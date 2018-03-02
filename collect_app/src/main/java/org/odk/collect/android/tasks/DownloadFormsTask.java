@@ -30,7 +30,7 @@ import org.odk.collect.android.logic.MediaFile;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.utilities.DocumentFetchResult;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.UrlUtils;
+import org.odk.collect.android.utilities.Validator;
 import org.odk.collect.android.utilities.WebUtils;
 import org.opendatakit.httpclientandroidlib.Header;
 import org.opendatakit.httpclientandroidlib.HttpEntity;
@@ -215,7 +215,7 @@ public class DownloadFormsTask extends
 
     private boolean isSubmissionOk(Map<String, String> parsedFields) {
         String submission = parsedFields.get(FileUtils.SUBMISSIONURI);
-        return submission == null || UrlUtils.isValidUrl(submission);
+        return submission == null || Validator.isUrlValid(submission);
     }
 
     private void installEverything(String tempMediaPath, FileResult fileResult, Map<String, String> parsedFields) {
@@ -327,7 +327,7 @@ public class DownloadFormsTask extends
         v.put(FormsColumns.SUBMISSION_URI,          formInfo.get(FileUtils.SUBMISSIONURI));
         v.put(FormsColumns.BASE64_RSA_PUBLIC_KEY,   formInfo.get(FileUtils.BASE64_RSA_PUBLIC_KEY));
         v.put(FormsColumns.AUTO_DELETE,             formInfo.get(FileUtils.AUTO_DELETE));
-        v.put(FormsColumns.AUTO_SUBMIT,             formInfo.get(FileUtils.AUTO_SUBMIT));
+        v.put(FormsColumns.AUTO_SEND,             formInfo.get(FileUtils.AUTO_SEND));
         Uri uri = formsDao.saveForm(v);
         Collect.getInstance().getActivityLogger().logAction(this, "insert",
                 formFile.getAbsolutePath());
