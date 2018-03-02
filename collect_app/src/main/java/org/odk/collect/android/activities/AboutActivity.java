@@ -55,11 +55,11 @@ public class AboutActivity extends AppCompatActivity implements
         initToolbar();
 
         int[][] items = {
-                {R.drawable.ic_website, R.string.odk_website, R.string.odk_website_summary},
-                {R.drawable.ic_forum, R.string.odk_forum, R.string.odk_forum_summary},
-                {R.drawable.ic_share, R.string.tell_your_friends, -1},
+                {R.drawable.ic_website, R.string.smap_visit_website, -1},                   // smap
                 {R.drawable.ic_review_rate, R.string.leave_a_review, -1},
-                {R.drawable.ic_stars, R.string.all_open_source_licenses, -1}
+                //{R.drawable.ic_forum, R.string.odk_forum, R.string.odk_forum_summary},    // smap
+                //{R.drawable.ic_share, R.string.tell_your_friends, -1},                    // smap
+                //{R.drawable.ic_stars, R.string.all_open_source_licenses, -1}              // smap
         };
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
@@ -71,13 +71,17 @@ public class AboutActivity extends AppCompatActivity implements
         websiteTabHelper = new CustomTabHelper();
         forumTabHelper = new CustomTabHelper();
 
-        websiteUri = Uri.parse(ODK_WEBSITE);
+        websiteUri = Uri.parse(getString(R.string.app_url));    // smap
         forumUri = Uri.parse(ODK_FORUM);
     }
 
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
-        setTitle(getString(R.string.about_preferences));
+        setTitle(getString(R.string.about_preferences) +
+                " " +
+                getString(R.string.version) +
+                " " +
+                getString(R.string.app_version));
         setSupportActionBar(toolbar);
     }
 
@@ -88,18 +92,6 @@ public class AboutActivity extends AppCompatActivity implements
                 websiteTabHelper.openUri(this, websiteUri);
                 break;
             case 1:
-                forumTabHelper.openUri(this, forumUri);
-                break;
-            case 2:
-                Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                shareIntent.setType("text/plain");
-                shareIntent.putExtra(Intent.EXTRA_TEXT,
-                        getString(R.string.tell_your_friends_msg) + " " + GOOGLE_PLAY_URL
-                                + getPackageName());
-                startActivity(Intent.createChooser(shareIntent,
-                        getString(R.string.tell_your_friends)));
-                break;
-            case 3:
                 boolean intentStarted = false;
                 try {
                     // Open the google play store app if present
@@ -125,6 +117,18 @@ public class AboutActivity extends AppCompatActivity implements
                     startActivity(new Intent(Intent.ACTION_VIEW,
                             Uri.parse(GOOGLE_PLAY_URL + getPackageName())));
                 }
+                break;
+            case 2:
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_TEXT,
+                        getString(R.string.tell_your_friends_msg) + " " + GOOGLE_PLAY_URL
+                                + getPackageName());
+                startActivity(Intent.createChooser(shareIntent,
+                        getString(R.string.tell_your_friends)));
+                break;
+            case 3:
+                forumTabHelper.openUri(this, forumUri);
                 break;
             case 4:
                 startActivity(new Intent(this, OpenSourceLicensesActivity.class));

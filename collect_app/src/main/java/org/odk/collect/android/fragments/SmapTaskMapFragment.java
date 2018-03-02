@@ -18,24 +18,18 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -43,8 +37,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -66,22 +58,19 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.AboutActivity;
 import org.odk.collect.android.activities.SmapMain;
 import org.odk.collect.android.adapters.TaskListArrayAdapter;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.loaders.MapDataLoader;
 import org.odk.collect.android.loaders.MapEntry;
 import org.odk.collect.android.loaders.MapLocationObserver;
 import org.odk.collect.android.loaders.PointEntry;
 import org.odk.collect.android.loaders.TaskEntry;
-import org.odk.collect.android.loaders.TaskLoader;
-import org.odk.collect.android.preferences.AboutPreferencesActivity;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.PreferencesActivity;
-import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.tasks.DeleteInstancesTask;
 import org.odk.collect.android.tasks.InstanceSyncTask;
@@ -94,14 +83,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 
 import timber.log.Timber;
-
-import static org.odk.collect.android.R.id.map;
-import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_ASC;
-import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_DESC;
-import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
-import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_DESC;
-import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_STATUS_ASC;
-import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_STATUS_DESC;
 
 /**
  * Responsible for displaying tasks on the main fieldTask screen
@@ -245,7 +226,7 @@ public class SmapTaskMapFragment extends Fragment
                         .getActivityLogger()
                         .logAction(this, "onOptionsItemSelected",
                                 "MENU_ABOUT");
-                Intent aboutIntent = new Intent(getActivity(), AboutPreferencesActivity.class);
+                Intent aboutIntent = new Intent(getActivity(), AboutActivity.class);
                 startActivity(aboutIntent);
                 return true;
             case R.id.menu_general_preferences:

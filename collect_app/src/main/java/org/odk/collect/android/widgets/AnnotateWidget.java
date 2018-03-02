@@ -168,7 +168,7 @@ public class AnnotateWidget extends BaseImageWidget {
             captureButton.setVisibility(View.GONE);
             chooseButton.setVisibility(View.GONE);
             annotateButton.setVisibility(View.GONE);
-        } else if (nochoose(prompt)) {
+        } else if (nochoose(getFormEntryPrompt())) {
             chooseButton.setVisibility(View.GONE);
         }
     }

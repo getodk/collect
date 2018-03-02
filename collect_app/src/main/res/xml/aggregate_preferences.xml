@@ -1,6 +1,9 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <!-- smap change title to server preferences-->
+    <!--
+        smap change title to server preferences
+        smap change dialog titles for username and password
+    -->
     <PreferenceCategory
         android:key="@string/server_preferences"
         android:title="@string/server_preferences">
@@ -12,14 +15,14 @@
         <EditTextPreference
             android:id="@+id/username"
             android:defaultValue="@string/default_username"
-            android:dialogTitle="@string/change_username"
+            android:dialogTitle="@string/username"
             android:inputType="textNoSuggestions"
             android:key="username"
             android:title="@string/username" />
         <EditTextPreference
             android:id="@+id/password"
             android:defaultValue="@string/default_password"
-            android:dialogTitle="@string/change_password"
+            android:dialogTitle="@string/server_password"
             android:inputType="textPassword"
             android:key="password"
             android:title="@string/password" />

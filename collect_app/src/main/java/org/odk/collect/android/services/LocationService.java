@@ -22,43 +22,27 @@ import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.media.RingtoneManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
-import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import com.google.android.gms.gcm.GcmListenerService;
-import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.TraceUtilities;
-import org.odk.collect.android.location.LocationClient;
-import org.odk.collect.android.location.LocationClients;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.location.client.LocationClient;
+import org.odk.collect.android.location.client.LocationClients;
 import org.odk.collect.android.preferences.PreferenceKeys;
-import org.odk.collect.android.preferences.PreferencesActivity;
-import org.odk.collect.android.tasks.DownloadTasksTask;
 import org.odk.collect.android.utilities.Constants;
-import org.odk.collect.android.utilities.ToastUtils;
 
 import java.util.Timer;
 import java.util.TimerTask;
-
-import timber.log.Timber;
 
 /**
  * Created by neilpenman on 2018-01-11.

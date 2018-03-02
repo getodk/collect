@@ -53,82 +53,8 @@ public class ImageWidget extends BaseImageWidget {
 
     public ImageWidget(Context context, final FormEntryPrompt prompt) {
         super(context, prompt);
-<<<<<<< HEAD
-        this.selfie = selfie;
-
-        errorTextView = new TextView(context);
-        errorTextView.setId(ViewIds.generateViewId());
-        errorTextView.setText(R.string.selected_invalid_image);
-
-        captureButton = getSimpleButton(getContext().getString(R.string.capture_image), R.id.capture_image);
-        captureButton.setEnabled(!prompt.isReadOnly());
-      
-        chooseButton = getSimpleButton(getContext().getString(R.string.choose_image), R.id.choose_image);
-        chooseButton.setEnabled(!prompt.isReadOnly());
-
-        // finish complex layout
-        LinearLayout answerLayout = new LinearLayout(getContext());
-        answerLayout.setOrientation(LinearLayout.VERTICAL);
-        answerLayout.addView(captureButton);
-        answerLayout.addView(chooseButton);
-        answerLayout.addView(errorTextView);
-
-        // and hide the capture and choose button if read-only
-        if (prompt.isReadOnly()) {
-            captureButton.setVisibility(View.GONE);
-            chooseButton.setVisibility(View.GONE);
-        } else if (selfie) {
-            chooseButton.setVisibility(View.GONE);
-        }
-        // Smap hide the choose button if appearance is nochoose
-        if(nochoose(prompt)) {
-            chooseButton.setVisibility(View.GONE);
-        }
-        errorTextView.setVisibility(View.GONE);
-
-
-        if (selfie) {
-            boolean isFrontCameraAvailable;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                isFrontCameraAvailable = CaptureSelfieActivityNewApi.isFrontCameraAvailable();
-            } else {
-                isFrontCameraAvailable = CaptureSelfieActivity.isFrontCameraAvailable();
-            }
-
-            if (!isFrontCameraAvailable) {
-                captureButton.setEnabled(false);
-                errorTextView.setText(R.string.error_front_camera_unavailable);
-                errorTextView.setVisibility(View.VISIBLE);
-            }
-
-        }
-
-        // retrieve answer from data model and update ui
-        binaryName = prompt.getAnswerText();
-
-        // Only add the imageView if the user has taken a picture
-        if (binaryName != null) {
-            DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-            int screenWidth = metrics.widthPixels;
-            int screenHeight = metrics.heightPixels;
-
-            File f = new File(getInstanceFolder() + File.separator + binaryName);
-
-            Bitmap bmp = null;
-            if (f.exists()) {
-                bmp = FileUtils.getBitmapScaledToDisplay(f, screenHeight, screenWidth);
-                if (bmp == null) {
-                    errorTextView.setVisibility(View.VISIBLE);
-                }
-            }
-
-            imageView = getAnswerImageView(bmp);
-            answerLayout.addView(imageView);
-        }
-=======
         setUpLayout();
         setUpBinary();
->>>>>>> v_1_13_0
         addAnswerView(answerLayout);
     }
 
@@ -228,7 +154,7 @@ public class ImageWidget extends BaseImageWidget {
         if (getFormEntryPrompt().isReadOnly()) {
             captureButton.setVisibility(View.GONE);
             chooseButton.setVisibility(View.GONE);
-        } else if (selfie || nochoose(prompt)) {
+        } else if (selfie || nochoose(getFormEntryPrompt())) {
             chooseButton.setVisibility(View.GONE);
         }
     }

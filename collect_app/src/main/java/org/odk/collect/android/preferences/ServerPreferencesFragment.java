@@ -51,6 +51,8 @@ import org.odk.collect.android.utilities.WebUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
 import static android.app.Activity.RESULT_OK;
 import static org.odk.collect.android.utilities.gdrive.GoogleAccountsManager.REQUEST_ACCOUNT_PICKER;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FORMLIST_URL;

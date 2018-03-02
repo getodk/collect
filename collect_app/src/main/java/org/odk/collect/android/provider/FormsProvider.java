@@ -42,12 +42,15 @@ import java.util.Locale;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_DELETE;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_SUBMIT;
+
 public class FormsProvider extends ContentProvider {
 
     private static final String t = "FormsProvider";
 
     private static final String DATABASE_NAME = "forms.db";
-    private static final int DATABASE_VERSION = 7;    // smap must be greater than 4
+    private static final int DATABASE_VERSION = 8;    // smap must be greater than 4
     private static final String FORMS_TABLE_NAME = "forms";
 
     private static HashMap<String, String> sFormsProjectionMap;
@@ -99,7 +102,9 @@ public class FormsProvider extends ContentProvider {
                     + FormsColumns.LANGUAGE + " text, "
                     + FormsColumns.SUBMISSION_URI + " text, "
                     + FormsColumns.BASE64_RSA_PUBLIC_KEY + " text, "
-                    + FormsColumns.JRCACHE_FILE_PATH + " text not null );");
+                    + FormsColumns.JRCACHE_FILE_PATH + " text not null, "
+                    + FormsColumns.AUTO_SUBMIT + " text,"
+                    + FormsColumns.AUTO_DELETE + " text);");
         }
 
         @Override
@@ -262,6 +267,19 @@ public class FormsProvider extends ContentProvider {
                 } catch (Exception e) {
                     // Catch errors, its possible the user upgraded then downgraded
                     Timber.w("Error in upgrading to forms database version 7");
+                    e.printStackTrace();
+                }
+            }
+
+            if (oldVersion < 8) {
+                try {
+                    db.execSQL("ALTER TABLE " + FORMS_TABLE_NAME + " ADD COLUMN " +
+                            FormsColumns.AUTO_SUBMIT + " text;");
+                    db.execSQL("ALTER TABLE " + FORMS_TABLE_NAME + " ADD COLUMN " +
+                            FormsColumns.AUTO_DELETE + " text;");
+                } catch (Exception e) {
+                    // Catch errors, its possible the user upgraded then downgraded
+                    Timber.w("Error in upgrading to forms database version 8");
                     e.printStackTrace();
                 }
             }

@@ -227,7 +227,7 @@ public class WidgetFactory {
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                         questionWidget = new SelectOneImageMapWidget(context, fep);
                     } else {
-                        questionWidget = new SelectOneWidget(context, fep);
+                        questionWidget = new SelectOneWidget(context, fep, readOnlyOverride);   // smap
                         ToastUtils.showLongToast(R.string.svg_not_supported_device);
                     }
                 } else {
@@ -266,7 +266,7 @@ public class WidgetFactory {
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                         questionWidget = new SelectMultiImageMapWidget(context, fep);
                     } else {
-                        questionWidget = new SelectMultiWidget(context, fep);
+                        questionWidget = new SelectMultiWidget(context, fep, readOnlyOverride); // smap
                         ToastUtils.showLongToast(R.string.svg_not_supported_device);
                     }
                 } else {

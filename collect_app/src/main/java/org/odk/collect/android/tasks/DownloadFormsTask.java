@@ -227,7 +227,8 @@ public class DownloadFormsTask extends
         return submission == null || UrlUtils.isValidUrl(submission);
     }
 
-    private void installEverything(String tempMediaPath, FileResult fileResult, Map<String, String> parsedFields, FormDetails fd) {     // smap add fd
+    private void installEverything(String tempMediaPath, FileResult fileResult, Map<String,
+            String> parsedFields, FormDetails fd) throws TaskCancelledException {     // smap add fd
         UriResult uriResult = null;
         try {
             uriResult = findExistingOrCreateNewUri(fileResult.file, parsedFields, STFileUtils.getSource(fd.getDownloadUrl()), fd.getTasksOnly());  // smap add soure and tasks_only
@@ -309,7 +310,7 @@ public class DownloadFormsTask extends
             isNew = cursor.getCount() <= 0;
 
             if (isNew) {
-                uri = saveNewForm(formInfo, formFile, mediaPath);
+                uri = saveNewForm(formInfo, formFile, mediaPath, tasks_only, source);
             } else {
                 cursor.moveToFirst();
                 uri = Uri.withAppendedPath(FormsColumns.CONTENT_URI,
@@ -327,7 +328,8 @@ public class DownloadFormsTask extends
         return new UriResult(uri, mediaPath, isNew);
     }
 
-    private Uri saveNewForm(Map<String, String> formInfo, File formFile, String mediaPath) {
+    private Uri saveNewForm(Map<String, String> formInfo, File formFile, String mediaPath,
+                            boolean tasks_only, String source) {    // smap add tasks_only and source
         final ContentValues v = new ContentValues();
         v.put(FormsColumns.FORM_FILE_PATH,          formFile.getAbsolutePath());
         v.put(FormsColumns.FORM_MEDIA_PATH,         mediaPath);
