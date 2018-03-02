@@ -294,7 +294,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                 && !CheckBox.class.isAssignableFrom(text.getClass());
 
         // Determine the layout constraints...
-        boolean isLanguageRTL = QuestionWidget.isLanguageRTL();
+        boolean isLanguageRTL = QuestionWidget.isCurrentLanguageRTL();
         int alignParentStart = isLanguageRTL ? RelativeLayout.ALIGN_RIGHT : RelativeLayout.ALIGN_LEFT;
         int alignParentEnd = isLanguageRTL ? RelativeLayout.ALIGN_LEFT : RelativeLayout.ALIGN_RIGHT;
         int endOf = isLanguageRTL ? RelativeLayout.LEFT_OF : RelativeLayout.RIGHT_OF;
