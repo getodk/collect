@@ -196,6 +196,12 @@ public class InstanceServerUploader extends InstanceUploader {
                                 openRosaServer = true;
                                 // trust the server to tell us a new location
                                 // ... and possibly to use https instead.
+                                // Re-add params if server didn't respond with params
+                                if (newURI.getQuery() == null) {
+                                    newURI = newURI.buildUpon()
+                                            .encodedQuery(submissionUri.getEncodedQuery())
+                                            .build();
+                                }
                                 uriRemap.put(submissionUri, newURI);
                                 submissionUri = newURI;
                             } else {
