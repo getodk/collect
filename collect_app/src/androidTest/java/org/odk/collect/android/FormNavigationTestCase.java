@@ -35,6 +35,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
+import java.util.concurrent.ExecutionException;
 
 import timber.log.Timber;
 
@@ -77,11 +78,11 @@ public class FormNavigationTestCase {
     }
 
     @Test
-    public void formNavigationTestCase() {
+    public void formNavigationTestCase() throws ExecutionException, InterruptedException {
         testIndices(formName, expectedIndices);
     }
 
-    private void testIndices(String formName, String[] expectedIndices) {
+    private void testIndices(String formName, String[] expectedIndices) throws ExecutionException, InterruptedException {
         try {
             prepareFile(formName);
         } catch (IOException e) {
@@ -116,7 +117,7 @@ public class FormNavigationTestCase {
 
             }
         });
-        formLoaderTask.execute(formPath(formName));
+        formLoaderTask.execute(formPath(formName)).get();
     }
 
     private void prepareFile(String formName) throws IOException {
