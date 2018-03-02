@@ -29,6 +29,7 @@ import org.javarosa.form.api.FormEntryPrompt;
  * an svg map. You can use maps of the world, countries, human body etc.
  */
 public class SelectOneImageMapWidget extends SelectImageMapWidget {
+
     public SelectOneImageMapWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
