@@ -30,6 +30,7 @@ import android.support.v7.widget.Toolbar;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.AboutListAdapter;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.CustomTabHelper;
 
 import java.util.List;
@@ -84,54 +85,56 @@ public class AboutActivity extends AppCompatActivity implements
 
     @Override
     public void onClick(int position) {
-        switch (position) {
-            case 0:
-                websiteTabHelper.openUri(this, websiteUri);
-                break;
-            case 1:
-                forumTabHelper.openUri(this, forumUri);
-                break;
-            case 2:
-                Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                shareIntent.setType("text/plain");
-                shareIntent.putExtra(Intent.EXTRA_TEXT,
-                        getString(R.string.tell_your_friends_msg) + " " + GOOGLE_PLAY_URL
-                                + getPackageName());
-                startActivity(Intent.createChooser(shareIntent,
-                        getString(R.string.tell_your_friends)));
-                break;
-            case 3:
-                boolean intentStarted = false;
-                try {
-                    // Open the google play store app if present
-                    Intent intent = new Intent(Intent.ACTION_VIEW,
-                            Uri.parse("market://details?id=" + getPackageName()));
-                    List<ResolveInfo> list = getPackageManager().queryIntentActivities(intent, 0);
-                    for (ResolveInfo info : list) {
-                        ActivityInfo activity = info.activityInfo;
-                        if (activity.name.contains("com.google.android")) {
-                            ComponentName name = new ComponentName(
-                                    activity.applicationInfo.packageName,
-                                    activity.name);
-                            intent.setComponent(name);
-                            startActivity(intent);
-                            intentStarted = true;
+        if (Collect.allowClick()) {
+            switch (position) {
+                case 0:
+                    websiteTabHelper.openUri(this, websiteUri);
+                    break;
+                case 1:
+                    forumTabHelper.openUri(this, forumUri);
+                    break;
+                case 2:
+                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                    shareIntent.setType("text/plain");
+                    shareIntent.putExtra(Intent.EXTRA_TEXT,
+                            getString(R.string.tell_your_friends_msg) + " " + GOOGLE_PLAY_URL
+                                    + getPackageName());
+                    startActivity(Intent.createChooser(shareIntent,
+                            getString(R.string.tell_your_friends)));
+                    break;
+                case 3:
+                    boolean intentStarted = false;
+                    try {
+                        // Open the google play store app if present
+                        Intent intent = new Intent(Intent.ACTION_VIEW,
+                                Uri.parse("market://details?id=" + getPackageName()));
+                        List<ResolveInfo> list = getPackageManager().queryIntentActivities(intent, 0);
+                        for (ResolveInfo info : list) {
+                            ActivityInfo activity = info.activityInfo;
+                            if (activity.name.contains("com.google.android")) {
+                                ComponentName name = new ComponentName(
+                                        activity.applicationInfo.packageName,
+                                        activity.name);
+                                intent.setComponent(name);
+                                startActivity(intent);
+                                intentStarted = true;
+                            }
                         }
+                    } catch (android.content.ActivityNotFoundException anfe) {
+                        Timber.e(anfe);
                     }
-                } catch (android.content.ActivityNotFoundException anfe) {
-                    Timber.e(anfe);
-                }
-                if (!intentStarted) {
-                    // Show a list of all available browsers if user doesn't have a default browser
-                    startActivity(new Intent(Intent.ACTION_VIEW,
-                            Uri.parse(GOOGLE_PLAY_URL + getPackageName())));
-                }
-                break;
-            case 4:
-                Intent intent = new Intent(this, WebViewActivity.class);
-                intent.putExtra(CustomTabHelper.OPEN_URL, LICENSES_HTML_PATH);
-                startActivity(intent);
-                break;
+                    if (!intentStarted) {
+                        // Show a list of all available browsers if user doesn't have a default browser
+                        startActivity(new Intent(Intent.ACTION_VIEW,
+                                Uri.parse(GOOGLE_PLAY_URL + getPackageName())));
+                    }
+                    break;
+                case 4:
+                    Intent intent = new Intent(this, WebViewActivity.class);
+                    intent.putExtra(CustomTabHelper.OPEN_URL, LICENSES_HTML_PATH);
+                    startActivity(intent);
+                    break;
+            }
         }
     }
 
