@@ -186,7 +186,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
             audioButton.setId(ViewIds.generateViewId()); // random ID to be used by the
             // relative layout.
         }
-            //otherwise No audio file specified, so ignore.
+        //otherwise No audio file specified, so ignore.
 
         // Then set up the video button
         if (videoURI != null) {
@@ -210,7 +210,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
             });
             videoButton.setId(ViewIds.generateViewId());
         }
-            //otherwise No video file specified, so ignore.
+        //otherwise No video file specified, so ignore.
 
         // Now set up the image view
         String errorMsg = null;
@@ -287,7 +287,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                 Timber.e(e, "Invalid image reference due to %s ", e.getMessage());
             }
         }
-            //otherwise There's no imageURI listed, so just ignore it.
+        //otherwise There's no imageURI listed, so just ignore it.
 
         // e.g., for TextView that flag will be true
         boolean isNotAMultipleChoiceField = !RadioButton.class.isAssignableFrom(text.getClass())
