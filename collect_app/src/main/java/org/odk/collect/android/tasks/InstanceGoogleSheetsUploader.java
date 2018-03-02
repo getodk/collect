@@ -31,6 +31,7 @@ import com.google.api.services.sheets.v4.model.ValueRange;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.instance.AbstractTreeElement;
 import org.javarosa.core.model.instance.TreeElement;
+import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryModel;
 import org.javarosa.xform.util.XFormUtils;
@@ -234,7 +235,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
         for (int i = 0 ; i < element.getNumChildren(); i++) {
             TreeElement child = element.getChildAt(i);
-            if (child.isRepeatable()) {
+            if (child.isRepeatable() && child.getMultiplicity() != TreeReference.INDEX_TEMPLATE) {
                 insertRows(child, instanceIDElement, instanceFile, getElementTitle(child));
             }
         }
