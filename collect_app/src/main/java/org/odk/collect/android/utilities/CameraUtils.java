@@ -1,17 +1,30 @@
 package org.odk.collect.android.utilities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.hardware.Camera;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraManager;
 import android.os.Build;
+import android.util.SparseIntArray;
+import android.view.Surface;
 
 import org.odk.collect.android.application.Collect;
 
 import timber.log.Timber;
 
 public class CameraUtils {
+
+    private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
+
+    static {
+        ORIENTATIONS.append(Surface.ROTATION_0, 0);
+        ORIENTATIONS.append(Surface.ROTATION_90, 90);
+        ORIENTATIONS.append(Surface.ROTATION_180, 180);
+        ORIENTATIONS.append(Surface.ROTATION_270, 270);
+    }
+
     public static boolean isFrontCameraAvailable() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             try {
@@ -43,5 +56,37 @@ public class CameraUtils {
             }
             return false; // No front-facing camera found
         }
+    }
+
+    public static Camera getCameraInstance(Activity activity, int cameraId) {
+        Camera camera = Camera.open(cameraId);
+        camera.setDisplayOrientation(90);
+
+        // Set the rotation of the camera which the output picture need.
+        Camera.Parameters parameters = camera.getParameters();
+        int rotation = ORIENTATIONS.get(activity.getWindowManager().getDefaultDisplay().getRotation());
+        parameters.setRotation(calcCameraRotation(cameraId, rotation));
+        camera.setParameters(parameters);
+
+        return camera;
+    }
+
+    public static int getFrontCameraId() {
+        for (int camNo = 0; camNo < Camera.getNumberOfCameras(); camNo++) {
+            Camera.CameraInfo camInfo = new Camera.CameraInfo();
+            Camera.getCameraInfo(camNo, camInfo);
+
+            if (camInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+                return camNo;
+            }
+        }
+        Timber.w("No Available front camera");
+        return -1;
+    }
+
+    public static int calcCameraRotation(int cameraId, int screenOrientationDegrees) {
+        Camera.CameraInfo camInfo = new Camera.CameraInfo();
+        Camera.getCameraInfo(cameraId, camInfo);
+        return (camInfo.orientation + screenOrientationDegrees) % 360;
     }
 }
