@@ -40,6 +40,7 @@ import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
+import java.util.Locale;
 
 import timber.log.Timber;
 
@@ -466,7 +467,7 @@ public class FileUtils {
     }
 
     public static void saveBitmapToFile(Bitmap bitmap, String path) {
-        final Bitmap.CompressFormat compressFormat = path.toLowerCase().endsWith(".png") ?
+        final Bitmap.CompressFormat compressFormat = path.toLowerCase(Locale.getDefault()).endsWith(".png") ?
                 Bitmap.CompressFormat.PNG : Bitmap.CompressFormat.JPEG;
 
         try (FileOutputStream out = new FileOutputStream(path)) {
