@@ -85,14 +85,8 @@ the License.
             android:paddingEnd="8dip"
             android:paddingLeft="8dip"
             android:paddingRight="8dip"
-            android:paddingStart="8dip" />
-
-        <ImageButton
-            android:id="@+id/search_button"
-            android:layout_width="60dp"
-            android:layout_height="match_parent"
-            android:enabled="false"
-            android:src="@drawable/ic_action_action_search" />
+            android:paddingStart="8dip"
+            android:hint="@string/search" />
 
     </LinearLayout>
 
