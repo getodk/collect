@@ -14,11 +14,8 @@
 
 package org.odk.collect.android.utilities;
 
-import android.content.Context;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.ActionListener;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
@@ -41,8 +38,6 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PASSWORD;
 
 
 public class SharedPreferencesUtils {
-
-    private final Context context = Collect.getInstance();
 
     public static String getJSONFromPreferences(Collection<String> passwordKeys) throws JSONException {
         Collection<String> keys = new ArrayList<>(passwordKeys);

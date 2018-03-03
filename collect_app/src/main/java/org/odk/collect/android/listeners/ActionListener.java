@@ -20,13 +20,13 @@ public interface ActionListener {
     /**
      * The operation succeeded
      */
-    public void onSuccess();
+    void onSuccess();
 
     /**
      * The operation failed
      *
      * @param exception which caused the failure
      */
-    public void onFailure(Exception exception);
+    void onFailure(Exception exception);
 }
 
