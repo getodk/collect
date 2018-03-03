@@ -56,6 +56,8 @@ public class FormNavigationTestCase {
 
     @Parameters(name = "{0}")
     public static Iterable<Object[]> data() {
+        // Expected indices when swiping forward until the end of the form and back once.
+        // An index of -1 indicates the start or end of a form
         return Arrays.asList(new Object[][] {
                 {"simpleFieldList.xml", new String[] {"-1, ", "0, ", "-1, ", "0, "}},
                 {"fieldListInFieldList.xml", new String[] {"-1, ", "0, ", "-1, ", "0, "}},
@@ -93,6 +95,8 @@ public class FormNavigationTestCase {
             @Override
             public void loadingComplete(FormLoaderTask task) {
                 try {
+                    // For each form, simulate swiping forward through screens until the end of the
+                    // form and then swiping back once. Verify the expected indices before and after each swipe
                     for (int i = 0; i < expectedIndices.length - 1; i++) {
                         FormController formController = task.getFormController();
                         // check the current index
