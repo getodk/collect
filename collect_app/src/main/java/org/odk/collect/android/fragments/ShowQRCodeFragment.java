@@ -39,12 +39,11 @@ import com.google.zxing.NotFoundException;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.ActionListener;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.QRCodeUtils;
@@ -240,19 +239,21 @@ public class ShowQRCodeFragment extends Fragment {
 
 
     private void applySettings(String content) {
-        try {
-            JSONObject jsonObject = new JSONObject(content);
-            SharedPreferencesUtils prefUtils = new SharedPreferencesUtils();
-            prefUtils.savePreferencesFromJSON(jsonObject);
-        } catch (JSONException e) {
-            Timber.e(e);
-            return;
-        }
+        SharedPreferencesUtils.savePreferencesFromString(content, new ActionListener() {
+            @Override
+            public void onSuccess() {
+                ToastUtils.showLongToast(Collect.getInstance().getString(R.string.successfully_imported_settings));
+                getActivity().finish();
+                final LocaleHelper localeHelper = new LocaleHelper();
+                localeHelper.updateLocale(getActivity());
+                ((CollectAbstractActivity) getActivity()).goToTheMainActivityAndCloseAllOthers();
+            }
 
-        getActivity().finish();
-        final LocaleHelper localeHelper = new LocaleHelper();
-        localeHelper.updateLocale(getActivity());
-        ((CollectAbstractActivity) getActivity()).goToTheMainActivityAndCloseAllOthers();
+            @Override
+            public void onFailure(Exception exception) {
+                Timber.e(exception);
+            }
+        });
     }
 
     @Override

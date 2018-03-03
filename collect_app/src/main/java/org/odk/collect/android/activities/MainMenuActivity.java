@@ -242,7 +242,7 @@ public class MainMenuActivity extends AppCompatActivity {
         // Give JSON file preference
         if (j.exists()) {
             SharedPreferencesUtils sharedPrefs = new SharedPreferencesUtils();
-            boolean success = sharedPrefs.loadSharedPreferencesFromJSONFile(j);
+            boolean success = SharedPreferencesUtils.loadSharedPreferencesFromJSONFile(j);
             if (success) {
                 ToastUtils.showLongToast(R.string.settings_successfully_loaded_file_notification);
                 j.delete();
