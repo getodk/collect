@@ -37,7 +37,11 @@ import static org.odk.collect.android.preferences.PreferenceKeys.GENERAL_KEYS;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PASSWORD;
 
 
-public class SharedPreferencesUtils {
+public final class SharedPreferencesUtils {
+
+    private SharedPreferencesUtils() {
+
+    }
 
     public static String getJSONFromPreferences(Collection<String> passwordKeys) throws JSONException {
         Collection<String> keys = new ArrayList<>(passwordKeys);
