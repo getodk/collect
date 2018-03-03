@@ -179,11 +179,10 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
     }
 
     @Override
-    public void syncComplete(String result) {
+    public void syncComplete(@NonNull String result) {
         Timber.i("Disk scan complete");
-        if (result != null) {
-            showSnackbar(result);
-        }
+        hideProgressBarAndAllow();
+        showSnackbar(result);
     }
 
     @Override

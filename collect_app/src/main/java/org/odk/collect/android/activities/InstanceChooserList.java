@@ -22,6 +22,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.view.View;
@@ -38,6 +39,8 @@ import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
+
+import timber.log.Timber;
 
 /**
  * Responsible for displaying all the valid instances in the instance directory.
@@ -170,10 +173,10 @@ public class InstanceChooserList extends InstanceListActivity implements
     }
 
     @Override
-    public void syncComplete(String result) {
-        if (result != null) {
-            showSnackbar(result);
-        }
+    public void syncComplete(@NonNull String result) {
+        Timber.i("Disk scan complete");
+        hideProgressBarAndAllow();
+        showSnackbar(result);
     }
 
     @Override
@@ -214,9 +217,10 @@ public class InstanceChooserList extends InstanceListActivity implements
         getSupportLoaderManager().restartLoader(LOADER_ID, null, this);
     }
 
+    @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        progressBar.setVisibility(View.VISIBLE);
+        showProgressBar();
         if (editMode) {
             return new InstancesDao().getUnsentInstancesCursorLoader(getFilterText(), getSortingOrder());
         } else {
@@ -225,13 +229,13 @@ public class InstanceChooserList extends InstanceListActivity implements
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        progressBar.setVisibility(View.GONE);
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
+        hideProgressBarIfAllowed();
         listAdapter.changeCursor(cursor);
     }
 
     @Override
-    public void onLoaderReset(Loader loader) {
+    public void onLoaderReset(@NonNull Loader loader) {
         listAdapter.swapCursor(null);
     }
 

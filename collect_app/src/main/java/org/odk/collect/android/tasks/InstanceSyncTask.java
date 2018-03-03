@@ -18,7 +18,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -52,7 +51,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
 
     private static int counter = 0;
 
-    private String currentStatus;
+    private String currentStatus = "";
     private DiskSyncListener diskSyncListener;
 
     public String getStatusMessage() {
@@ -75,7 +74,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                 File[] instanceFolders = instancesPath.listFiles();
                 if (instanceFolders.length == 0) {
                     Timber.i("[%d] Empty instance folder. Stopping scan process.", instance);
-                    Log.d("InstanceSyncTask", Collect.getInstance().getString(R.string.instance_scan_completed));
+                    Timber.d(Collect.getInstance().getString(R.string.instance_scan_completed));
                     return null;
                 }
 

@@ -22,6 +22,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.view.View;
@@ -120,7 +121,6 @@ public class FormChooserList extends FormListActivity implements
         }
     }
 
-
     @Override
     protected void onResume() {
         diskSyncTask.setDiskSyncListener(this);
@@ -131,13 +131,11 @@ public class FormChooserList extends FormListActivity implements
         }
     }
 
-
     @Override
     protected void onPause() {
         diskSyncTask.setDiskSyncListener(null);
         super.onPause();
     }
-
 
     @Override
     protected void onStart() {
@@ -151,16 +149,14 @@ public class FormChooserList extends FormListActivity implements
         super.onStop();
     }
 
-
     /**
      * Called by DiskSyncTask when the task is finished
      */
-
     @Override
-    public void syncComplete(String result) {
-        if (result != null) {
-            showSnackbar(result);
-        }
+    public void syncComplete(@NonNull String result) {
+        Timber.i("Disk scan complete");
+        hideProgressBarAndAllow();
+        showSnackbar(result);
     }
 
     private void setupAdapter() {
@@ -216,20 +212,21 @@ public class FormChooserList extends FormListActivity implements
         alertDialog.show();
     }
 
+    @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        progressBar.setVisibility(View.VISIBLE);
+        showProgressBar();
         return new FormsDao().getFormsCursorLoader(getFilterText(), getSortingOrder());
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        progressBar.setVisibility(View.GONE);
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
+        hideProgressBarIfAllowed();
         listAdapter.changeCursor(cursor);
     }
 
     @Override
-    public void onLoaderReset(Loader loader) {
+    public void onLoaderReset(@NonNull Loader loader) {
         listAdapter.swapCursor(null);
     }
 }

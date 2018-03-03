@@ -14,13 +14,10 @@ limitations under the License.
 
 package org.odk.collect.android.utilities;
 
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.TextView;
-
-/**
- * @author Shobhit Agarwal
- */
 
 public final class SnackbarUtils {
     private static final int LONG_DURATION_MS = 3500;

@@ -112,10 +112,10 @@ public class DataManagerList extends InstanceListFragment
     }
 
     @Override
-    public void syncComplete(String result) {
-        if (result != null) {
-            showSnackbar(result);
-        }
+    public void syncComplete(@NonNull String result) {
+        Timber.i("Disk scan complete");
+        hideProgressBarAndAllow();
+        showSnackbar(result);
     }
 
     private void setupAdapter() {

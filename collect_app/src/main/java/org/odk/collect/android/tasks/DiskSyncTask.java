@@ -19,7 +19,6 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -48,7 +47,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
 
     private static int counter = 0;
     private DiskSyncListener listener;
-    private String statusMessage;
+    private String statusMessage = "";
     private FormsDao formsDao;
 
     @Override
@@ -216,7 +215,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
             if (errors.length() != 0) {
                 statusMessage = errors.toString();
             } else {
-                Log.d("DiskSyncTask", Collect.getInstance().getString(R.string.finished_disk_scan));
+                Timber.d(Collect.getInstance().getString(R.string.finished_disk_scan));
             }
             return statusMessage;
         } finally {
@@ -308,8 +307,8 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
         return updateValues;
     }
 
-    public void setDiskSyncListener(DiskSyncListener l) {
-        listener = l;
+    public void setDiskSyncListener(DiskSyncListener listener) {
+        this.listener = listener;
     }
 
     @Override

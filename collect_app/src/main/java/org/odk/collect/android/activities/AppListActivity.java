@@ -19,6 +19,7 @@ package org.odk.collect.android.activities;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.view.MenuItemCompat;
@@ -80,6 +81,9 @@ abstract class AppListActivity extends AppCompatActivity {
     private boolean isSearchBoxShown;
 
     private SearchView searchView;
+
+    private boolean canHideProgressBar;
+    private boolean progressBarVisible;
 
     // toggles to all checked or all unchecked
     // returns:
@@ -327,7 +331,28 @@ abstract class AppListActivity extends AppCompatActivity {
         }
     }
 
-    protected void showSnackbar(String result) {
+    protected void showSnackbar(@NonNull String result) {
         SnackbarUtils.showSnackbar(llParent, result);
+    }
+
+    protected void hideProgressBarIfAllowed() {
+        if (canHideProgressBar && progressBarVisible) {
+            hideProgressBar();
+        }
+    }
+
+    protected void hideProgressBarAndAllow() {
+        this.canHideProgressBar = true;
+        hideProgressBar();
+    }
+
+    private void hideProgressBar() {
+        progressBar.setVisibility(View.GONE);
+        progressBarVisible = false;
+    }
+
+    protected void showProgressBar() {
+        progressBar.setVisibility(View.VISIBLE);
+        progressBarVisible = true;
     }
 }

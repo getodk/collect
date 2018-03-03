@@ -39,6 +39,8 @@ public abstract class FileManagerFragment extends AppListFragment implements Loa
     protected Button toggleButton;
     protected LinearLayout llParent;
     protected ProgressBar progressBar;
+    protected boolean canHideProgressBar;
+    private boolean progressBarVisible;
 
     @Nullable
     @Override
@@ -98,15 +100,16 @@ public abstract class FileManagerFragment extends AppListFragment implements Loa
         deleteButton.setEnabled(areCheckedItems());
     }
 
+    @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        progressBar.setVisibility(View.VISIBLE);
+        showProgressBar();
         return getCursorLoader();
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        progressBar.setVisibility(View.GONE);
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
+        hideProgressBarIfAllowed();
         listAdapter.swapCursor(cursor);
 
         if (getListView().getCount() == 0) {
@@ -114,14 +117,35 @@ public abstract class FileManagerFragment extends AppListFragment implements Loa
         }
     }
 
-    protected void showSnackbar(String result) {
-        SnackbarUtils.showSnackbar(llParent, result);
-    }
-
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
         listAdapter.swapCursor(null);
     }
 
     protected abstract CursorLoader getCursorLoader();
+
+    protected void hideProgressBarIfAllowed() {
+        if (canHideProgressBar && progressBarVisible) {
+            hideProgressBar();
+        }
+    }
+
+    protected void hideProgressBarAndAllow() {
+        this.canHideProgressBar = true;
+        hideProgressBar();
+    }
+
+    private void hideProgressBar() {
+        progressBar.setVisibility(View.GONE);
+        progressBarVisible = false;
+    }
+
+    protected void showProgressBar() {
+        progressBar.setVisibility(View.VISIBLE);
+        progressBarVisible = true;
+    }
+
+    protected void showSnackbar(@NonNull String result) {
+        SnackbarUtils.showSnackbar(llParent, result);
+    }
 }
