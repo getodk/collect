@@ -265,7 +265,6 @@ Escolher Imagem</string>
   <string name="delete_after_send">Apagar depois de enviado</string>
   <string name="delete_after_send_summary">Apaga formulários completos e arquivos de mídia depois de enviados ao servidor.</string>
   <string name="change_server_url">Servidor URL</string>
-  <string name="no_blank_search">O campo de busca não pode estar em branco.</string>
   <string name="send_in_progress">Envio automático em segundo plano sendo executado, por favor tente novamente em alguns instantes</string>
   <string name="about_preferences">Sobre</string>
   <!--Geo string added in feature-geofeatures branch-->

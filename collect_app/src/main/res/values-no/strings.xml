@@ -260,7 +260,6 @@
   <string name="delete_after_send_summary">Sletter fullførte skjemaer og media etter at de er sendt til serveren</string>
   <string name="change_server_url">Server URL</string>
   <string name="google_search_browse">Søk etter skjemaer.  Eller velg \'Min disk\' nedenfor for å bla igjennom.</string>
-  <string name="no_blank_search">Søkefeltet kan ikke være tomt.</string>
   <string name="send_in_progress">Bakgrunnssending kjører, vennligst prøv igjen senere</string>
   <string name="sheets_max_columns">Maks antall kolonner er 255, ditt skjema har %s. Det er ikke mulig å laste opp dette regnearket.</string>
   <string name="invalid_sheet_id">Ugyldig ark id: %1$s</string>
