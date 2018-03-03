@@ -466,12 +466,8 @@ public class FileUtils {
     }
 
     public static void saveBitmapToFile(Bitmap bitmap, String path) {
-        Bitmap.CompressFormat compressFormat;
-        if (path.endsWith(".png")) {
-            compressFormat = Bitmap.CompressFormat.PNG;
-        } else {
-            compressFormat = Bitmap.CompressFormat.JPEG;
-        }
+        final Bitmap.CompressFormat compressFormat = path.toLowerCase().endsWith(".png") ?
+                Bitmap.CompressFormat.PNG : Bitmap.CompressFormat.JPEG;
 
         try (FileOutputStream out = new FileOutputStream(path)) {
             bitmap.compress(compressFormat, 100, out);
