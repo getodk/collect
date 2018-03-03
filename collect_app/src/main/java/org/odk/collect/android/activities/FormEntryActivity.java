@@ -123,7 +123,6 @@ import org.odk.collect.android.widgets.RangeWidget;
 import org.odk.collect.android.widgets.StringWidget;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -2497,7 +2496,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 Timber.i("FormDef %s is already in the cache", cachedFormDefFile.toString());
             } else {
                 Disposable formDefCacheDisposable =
-                        writeCacheAsync(formDef, cachedFormDefFile).subscribe(() -> {}, Timber::e);
+                        writeCacheAsync(formDef, cachedFormDefFile).subscribe(() -> { }, Timber::e);
                 formDefCacheCompositeDisposable.add(formDefCacheDisposable);
             }
         }
