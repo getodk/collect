@@ -704,46 +704,47 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
                 entry.instancePath = duplicateInstance(formPath, entry.instancePath, entry);
             }
 
-            cInstanceProvider.moveToFirst();
-            long idx = cInstanceProvider.getLong(cInstanceProvider.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID));
-            if(idx > 0) {
-                Uri instanceUri = ContentUris.withAppendedId(InstanceProviderAPI.InstanceColumns.CONTENT_URI, idx);
-                surveyNotes = cInstanceProvider.getString(
-                        cInstanceProvider.getColumnIndex(InstanceProviderAPI.InstanceColumns.T_SURVEY_NOTES));
-                // Start activity to complete form
+            if(cInstanceProvider.moveToFirst()) {
+                long idx = cInstanceProvider.getLong(cInstanceProvider.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID));
+                if(idx > 0) {
+                    Uri instanceUri = ContentUris.withAppendedId(InstanceProviderAPI.InstanceColumns.CONTENT_URI, idx);
+                    surveyNotes = cInstanceProvider.getString(
+                            cInstanceProvider.getColumnIndex(InstanceProviderAPI.InstanceColumns.T_SURVEY_NOTES));
+                    // Start activity to complete form
 
-                // Use an explicit intent
-                Intent i = new Intent(this, org.odk.collect.android.activities.FormEntryActivity.class);
-                i.setData(instanceUri);
+                    // Use an explicit intent
+                    Intent i = new Intent(this, org.odk.collect.android.activities.FormEntryActivity.class);
+                    i.setData(instanceUri);
 
-                //Intent i = new Intent(Intent.ACTION_EDIT, instanceUri);
+                    //Intent i = new Intent(Intent.ACTION_EDIT, instanceUri);
 
-                //i.putExtra(FormEntryActivity.KEY_FORMPATH, formPath);    // TODO Don't think this is needed
-                i.putExtra(FormEntryActivity.KEY_TASK, taskId);
-                i.putExtra(FormEntryActivity.KEY_SURVEY_NOTES, surveyNotes);
-                i.putExtra(FormEntryActivity.KEY_CAN_UPDATE, canUpdate);
-                i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
-                if (instancePath != null) {    // TODO Don't think this is needed
-                    i.putExtra(FormEntryActivity.KEY_INSTANCEPATH, instancePath);
-                }
-                startActivity(i);
-
-                // If More than one instance is found pointing towards a single file path then report the error and delete the extrat
-                int instanceCount = cInstanceProvider.getCount();
-                if (instanceCount > 1) {
-                    FirebaseCrash.report(new Exception("Unique instance not found: deleting extra, count is:" +
-                            cInstanceProvider.getCount()));
-                    /*
-                    cInstanceProvider.moveToNext();
-                    while(!cInstanceProvider.isAfterLast()) {
-
-                        Long id = cInstanceProvider.getLong(cInstanceProvider.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID));
-                        Uri taskUri = Uri.withAppendedPath(InstanceProviderAPI.InstanceColumns.CONTENT_URI, id.toString());
-                        Collect.getInstance().getContentResolver().delete(taskUri, null, null);
-
-                        cInstanceProvider.moveToNext();
+                    //i.putExtra(FormEntryActivity.KEY_FORMPATH, formPath);    // TODO Don't think this is needed
+                    i.putExtra(FormEntryActivity.KEY_TASK, taskId);
+                    i.putExtra(FormEntryActivity.KEY_SURVEY_NOTES, surveyNotes);
+                    i.putExtra(FormEntryActivity.KEY_CAN_UPDATE, canUpdate);
+                    i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
+                    if (instancePath != null) {    // TODO Don't think this is needed
+                        i.putExtra(FormEntryActivity.KEY_INSTANCEPATH, instancePath);
                     }
-                    */
+                    startActivity(i);
+
+                    // If More than one instance is found pointing towards a single file path then report the error and delete the extrat
+                    int instanceCount = cInstanceProvider.getCount();
+                    if (instanceCount > 1) {
+                        FirebaseCrash.report(new Exception("Unique instance not found: deleting extra, count is:" +
+                                cInstanceProvider.getCount()));
+                        /*
+                        cInstanceProvider.moveToNext();
+                        while(!cInstanceProvider.isAfterLast()) {
+
+                            Long id = cInstanceProvider.getLong(cInstanceProvider.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID));
+                            Uri taskUri = Uri.withAppendedPath(InstanceProviderAPI.InstanceColumns.CONTENT_URI, id.toString());
+                            Collect.getInstance().getContentResolver().delete(taskUri, null, null);
+
+                            cInstanceProvider.moveToNext();
+                        }
+                        */
+                    }
                 }
             } else {
                 FirebaseCrash.report(new Exception("Task not found for instance path:" + instancePath));
