@@ -18,21 +18,14 @@ package org.odk.collect.android.activities;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.Context;
-import android.hardware.camera2.CameraAccessException;
-import android.hardware.camera2.CameraCharacteristics;
-import android.hardware.camera2.CameraManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.fragments.Camera2Fragment;
 import org.odk.collect.android.utilities.ToastUtils;
-
-import timber.log.Timber;
 
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class CaptureSelfieActivityNewApi extends Activity {
@@ -50,26 +43,5 @@ public class CaptureSelfieActivityNewApi extends Activity {
                     .commit();
         }
         ToastUtils.showLongToast(R.string.take_picture_instruction);
-    }
-
-    public static boolean isFrontCameraAvailable() {
-        try {
-            //https://developer.android.com/reference/android/hardware/camera2/CameraCharacteristics.html
-            CameraManager cameraManager = (CameraManager) Collect.getInstance()
-                    .getSystemService(Context.CAMERA_SERVICE);
-            if (cameraManager != null) {
-                String[] cameraId = cameraManager.getCameraIdList();
-                for (String id : cameraId) {
-                    CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(id);
-                    Integer facing = characteristics.get(CameraCharacteristics.LENS_FACING);
-                    if (facing != null && facing == CameraCharacteristics.LENS_FACING_FRONT) {
-                        return true;
-                    }
-                }
-            }
-        } catch (CameraAccessException | NullPointerException e) {
-            Timber.e(e);
-        }
-        return false; // No front-facing camera found
     }
 }
