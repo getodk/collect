@@ -10,8 +10,8 @@
     the specific language governing permissions and limitations under the
     License.
 -->
-<resources xmlns:tools="http://schemas.android.com/tools" tools:locale="en"
-           tools:ignore="MissingTranslation">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation"
+           tools:locale="en">
     <string name="show_password">Show password</string>
     <string name="activity_not_found">No activity found to handle: %s</string>
     <string name="add_another">Add Group</string>
@@ -23,6 +23,7 @@
     <string name="cancel">Cancel</string>
     <string name="cancel_loading_form">Cancel</string>
     <string name="cancel_location">Cancel</string>
+    <string name="canceling">Canceling</string>
     <string name="cannot_edit_completed_form">This form cannot be edited once it has been marked as finalized. It may be encrypted.</string>
     <string name="capture_audio">Record Sound</string>
     <string name="capture_image">Take Picture</string>
@@ -40,7 +41,6 @@
     <string name="data_saved_error">Sorry, form save failed!</string>
     <string name="data_saved_ok">Form successfully saved!</string>
     <string name="save_point_error">Error saving recovery point: %s</string>
-    <string name="save_form_index_error">Error saving recovery form index: %s</string>
     <string name="default_completed">Default to finalized</string>
     <string name="default_completed_summary">Mark form as finalized by default</string>
     <string name="delete_confirm">Delete %s form(s)?</string>
@@ -307,7 +307,8 @@
     <string name="show_map_sdk">Show Map SDK Options</string>
     <string name="openmap_streets">OSM Streets</string>
     <string name="openmap_usgs_topo">USGS National Map Topo</string>
-    <string name="openmap_usgs_sat">USGS National Map Sat</string>
+    <string name="openmap_usgs_sat">USGS National Map Hybrid</string>
+    <string name="openmap_usgs_img">USGS National Map Imagery</string>
     <string name="openmap_stamen_terrain">Stamen Terrain</string>
     <string name="openmap_cartodb_positron">CartoDB Positron</string>
     <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
@@ -413,7 +414,6 @@
     <string name="reset_settings_dialog_title">Select what to reset</string>
     <string name="reset_settings_dialog">Reset application…</string>
     <string name="reset_settings_button_reset">Reset</string>
-    <string name="reset_dialog_nothing">You have not selected anything to reset.</string>
     <string name="reset_in_progress">Resetting…</string>
     <string name="reset_app_state_result">Reset results</string>
     <string name="reset_app_state_warning">All selected data will be deleted permanently. There is no undo.</string>
@@ -574,4 +574,6 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="newer_version_of_a_form_info">This is an updated version of a form you already have!</string>
+    <string name="svg_file_does_not_exist">SVG file does not exist!</string>
+    <string name="svg_not_supported_device">ImageMap widget requires Android 5 (Lollipop) or newer. Your device is not supported!</string>
 </resources>

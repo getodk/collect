@@ -269,7 +269,6 @@
   <string name="leave_a_review">Ler një koment në Google Play Store</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="openmap_streets">Rrugë OSM</string>
-  <string name="openmap_usgs_sat">Sat i Hartave Kombëtare USGS</string>
   <string name="streets">Rrugë</string>
   <string name="terrain">Terren</string>
   <string name="hybrid">Hibride</string>
@@ -365,7 +364,6 @@
   <string name="reset_settings_dialog_title">Zgjidh çfarë do të rivendoset</string>
   <string name="reset_settings_dialog">Rivendos aplikacionin…</string>
   <string name="reset_settings_button_reset">Rivendos</string>
-  <string name="reset_dialog_nothing">Nuk keni zgjedhur asgjë për rivendosje.</string>
   <string name="reset_in_progress">Duke rivendosur…</string>
   <string name="reset_app_state_result">Rivendos rezultatet</string>
   <string name="reset_app_state_warning">Të gjitha të dhënat do të fshihen përgjithmonë. Ky veprim nuk mund të kthehet mbrapsht. </string>

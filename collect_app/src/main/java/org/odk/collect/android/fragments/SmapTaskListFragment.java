@@ -38,9 +38,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -48,15 +45,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.AboutActivity;
 import org.odk.collect.android.activities.FormDownloadList;
 import org.odk.collect.android.activities.SmapMain;
 import org.odk.collect.android.adapters.SortDialogAdapter;
@@ -67,14 +63,11 @@ import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.listeners.RecyclerViewClickListener;
 import org.odk.collect.android.loaders.TaskEntry;
 import org.odk.collect.android.loaders.TaskLoader;
-import org.odk.collect.android.preferences.AboutPreferencesActivity;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.FormsProviderAPI;
-import org.odk.collect.android.provider.InstanceProviderAPI;
-import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.DeleteInstancesTask;
 import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -397,7 +390,7 @@ public class SmapTaskListFragment extends ListFragment
                         .getActivityLogger()
                         .logAction(this, "onOptionsItemSelected",
                                 "MENU_ABOUT");
-                Intent aboutIntent = new Intent(getActivity(), AboutPreferencesActivity.class);
+                Intent aboutIntent = new Intent(getActivity(), AboutActivity.class);
                 startActivity(aboutIntent);
                 return true;
             case R.id.menu_general_preferences:

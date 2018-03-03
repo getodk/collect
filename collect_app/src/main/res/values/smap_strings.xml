@@ -85,4 +85,5 @@
     <string name="smap_location_tracking">"Device location is being tracked"</string>
     <string name="smap_reset_locations">"Recorded GPS Trail"</string>
     <string name="smap_reset_locations_result">"Recorded GPS Trail ::"</string>
+    <string name="smap_visit_website">"Visit the website"</string>
 </resources>

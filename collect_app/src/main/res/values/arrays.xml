@@ -93,6 +93,7 @@ the specific language governing permissions and limitations under the License. -
         <item>openmap_streets</item>
         <item>openmap_usgs_topo</item>
         <item>openmap_usgs_sat</item>
+        <item>openmap_usgs_img</item>
         <item>openmap_stamen_terrain</item>
         <item>openmap_cartodb_positron</item>
         <item>openmap_cartodb_darkmatter</item>
@@ -101,6 +102,7 @@ the specific language governing permissions and limitations under the License. -
         <item>@string/openmap_streets</item>
         <item>@string/openmap_usgs_topo</item>
         <item>@string/openmap_usgs_sat</item>
+        <item>@string/openmap_usgs_img</item>
         <item>@string/openmap_stamen_terrain</item>
         <item>@string/openmap_cartodb_positron</item>
         <item>@string/openmap_cartodb_darkmatter</item>

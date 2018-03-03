@@ -18,14 +18,12 @@ import org.odk.collect.android.listeners.FormDownloaderListener;
 
 import android.support.v4.app.NotificationCompat;
 
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.util.ExponentialBackOff;
-import com.google.api.services.drive.DriveScopes;
-
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.listeners.TaskDownloaderListener;
 import org.odk.collect.android.logic.FormDetails;
@@ -41,13 +39,13 @@ import org.odk.collect.android.utilities.Utilities;
 import org.odk.collect.android.utilities.WebUtils;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_SUBMIT;
 import static android.content.Context.NOTIFICATION_SERVICE;
 
 public class NetworkReceiver extends BroadcastReceiver implements TaskDownloaderListener,
@@ -177,7 +175,7 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
     }
 
     /* smap comment out upload forms
-    private void uploadForms(Context context) {
+    private void uploadForms(Context context, boolean isFormAutoSendOptionEnabled) {
         if (!running) {
             running = true;
 
@@ -187,9 +185,13 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
             try {
                 if (c != null && c.getCount() > 0) {
                     c.move(-1);
+                    String formId;
                     while (c.moveToNext()) {
-                        Long l = c.getLong(c.getColumnIndex(InstanceColumns._ID));
-                        toUpload.add(l);
+                        formId = c.getString(c.getColumnIndex(InstanceColumns.JR_FORM_ID));
+                        if (isFormAutoSendEnabled(formId, isFormAutoSendOptionEnabled)) {
+                            Long l = c.getLong(c.getColumnIndex(InstanceColumns._ID));
+                            toUpload.add(l);
+                        }
                     }
                 }
             } finally {
@@ -206,29 +208,21 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
             Long[] toSendArray = new Long[toUpload.size()];
             toUpload.toArray(toSendArray);
 
-            GoogleAccountCredential accountCredential;
-            // Initialize credentials and service object.
-            accountCredential = GoogleAccountCredential.usingOAuth2(
-                    Collect.getInstance(), Collections.singleton(DriveScopes.DRIVE))
-                    .setBackOff(new ExponentialBackOff());
-
             GeneralSharedPreferences settings = GeneralSharedPreferences.getInstance();
-
             String protocol = (String) settings.get(PreferenceKeys.KEY_PROTOCOL);
 
             if (protocol.equals(context.getString(R.string.protocol_google_sheets))) {
-                instanceGoogleSheetsUploader = new InstanceGoogleSheetsUploader(accountCredential, context);
-                String googleUsername = (String) settings.get(
-                        PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
-                if (googleUsername == null || googleUsername.equalsIgnoreCase("")) {
+                String googleUsername = (String) settings.get(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
+                if (googleUsername == null || googleUsername.isEmpty()) {
                     // just quit if there's no username
                     running = false;
                     return;
                 }
-                accountCredential.setSelectedAccountName(googleUsername);
+                GoogleAccountsManager accountsManager = new GoogleAccountsManager(Collect.getInstance());
+                accountsManager.getCredential().setSelectedAccountName(googleUsername);
+                instanceGoogleSheetsUploader = new InstanceGoogleSheetsUploader(accountsManager);
                 instanceGoogleSheetsUploader.setUploaderListener(this);
                 instanceGoogleSheetsUploader.execute(toSendArray);
-
             } else {
                 // get the username, password, and server from preferences
 
@@ -248,6 +242,21 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
 	            }
 	            }
 
+
+
+    private boolean isFormAutoSendEnabled(String jrFormId, boolean isFormAutoSendOptionEnabled) {
+        Cursor cursor = new FormsDao().getFormsCursorForFormId(jrFormId);
+        String autoSubmit = null;
+        if (cursor != null && cursor.moveToFirst()) {
+            try {
+                int autoSubmitColumnIndex = cursor.getColumnIndex(AUTO_SUBMIT);
+                autoSubmit = cursor.getString(autoSubmitColumnIndex);
+            } finally {
+                cursor.close();
+            }
+        }
+        return autoSubmit == null ? isFormAutoSendOptionEnabled : Boolean.valueOf(autoSubmit);
+    }
 
     @Override
     public void uploadingComplete(HashMap<String, String> result) {
@@ -369,6 +378,12 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
         // do nothing
 
     }
+
+    @Override
+    public void formsDownloadingCancelled() {
+        // do nothing
+    }
+
 
     @Override
     public void progressUpdate(String currentFile, int progress, int total) {

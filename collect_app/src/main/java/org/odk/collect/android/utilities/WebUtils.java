@@ -86,6 +86,10 @@ public final class WebUtils {
     public static final String ACCEPT_ENCODING_HEADER = "Accept-Encoding";
     public static final String GZIP_CONTENT_ENCODING = "gzip";
 
+    private WebUtils() {
+
+    }
+
     private static List<AuthScope> buildAuthScopes(String host) {
         List<AuthScope> asList = new ArrayList<>();
 
@@ -121,7 +125,7 @@ public final class WebUtils {
      * for accessing this host.
      */
     public static void addCredentials(String username, String password,
-            String host) {
+                                      String host) {
         // to ensure that this is the only authentication available for this
         // host...
         clearHostCredentials(host);
@@ -268,7 +272,7 @@ public final class WebUtils {
      * http context and client objects involved in the web connection.
      */
     public static DocumentFetchResult getXmlDocument(String urlString,
-            HttpContext localContext, HttpClient httpclient) {
+                                                     HttpContext localContext, HttpClient httpclient) {
         URI u;
         try {
             URL url = new URL(urlString);

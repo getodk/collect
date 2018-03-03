@@ -28,6 +28,9 @@ import org.odk.collect.android.application.Collect;
  */
 public class UiUtils {
 
+    private UiUtils() {
+    }
+
     public static int getDimen(@DimenRes int dimenResId) {
         return Collect.getInstance().getResources().getDimensionPixelSize(dimenResId);
     }

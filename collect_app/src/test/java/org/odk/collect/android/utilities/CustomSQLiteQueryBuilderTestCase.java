@@ -64,4 +64,19 @@ public class CustomSQLiteQueryBuilderTestCase {
     public void insertIntoTest() {
         assertEquals("INSERT INTO testTableName", new CustomSQLiteQueryBuilder().insertInto("testTableName").getQuery().toString());
     }
+
+    @Test
+    public void alterTest() {
+        assertEquals("ALTER ", new CustomSQLiteQueryBuilder().alter().getQuery().toString());
+    }
+
+    @Test
+    public void tableTest() {
+        assertEquals("TABLE testTableName ", new CustomSQLiteQueryBuilder().table("testTableName").getQuery().toString());
+    }
+
+    @Test
+    public void addColumnTest() {
+        assertEquals("ADD COLUMN Test text not null", new CustomSQLiteQueryBuilder().addColumn("Test", "text not null").getQuery().toString());
+    }
 }

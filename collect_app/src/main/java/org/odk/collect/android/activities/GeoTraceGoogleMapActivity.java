@@ -49,8 +49,8 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.location.LocationClient;
-import org.odk.collect.android.location.LocationClients;
+import org.odk.collect.android.location.client.LocationClient;
+import org.odk.collect.android.location.client.LocationClients;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoTraceWidget;
@@ -118,11 +118,11 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 
         setContentView(R.layout.geotrace_google_layout);
 
-        clearButton = (ImageButton) findViewById(R.id.clear);
-        playButton = (ImageButton) findViewById(R.id.play);
-        layersButton = (ImageButton) findViewById(R.id.layers);
-        manualButton = (Button) findViewById(R.id.manual_button);
-        layersButton = (ImageButton) findViewById(R.id.layers);
+        clearButton = findViewById(R.id.clear);
+        playButton = findViewById(R.id.play);
+        layersButton = findViewById(R.id.layers);
+        manualButton = findViewById(R.id.manual_button);
+        layersButton = findViewById(R.id.layers);
 
         locationClient = LocationClients.clientForContext(this);
         locationClient.setListener(this);
@@ -166,10 +166,10 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
         inflater = this.getLayoutInflater();
         traceSettingsView = inflater.inflate(R.layout.geotrace_dialog, null);
         polygonPolylineView = inflater.inflate(R.layout.polygon_polyline_dialog, null);
-        timeDelay = (Spinner) traceSettingsView.findViewById(R.id.trace_delay);
+        timeDelay = traceSettingsView.findViewById(R.id.trace_delay);
         timeDelay.setSelection(3);
-        timeUnits = (Spinner) traceSettingsView.findViewById(R.id.trace_scale);
-        pauseButton = (ImageButton) findViewById(R.id.pause);
+        timeUnits = traceSettingsView.findViewById(R.id.trace_scale);
+        pauseButton = findViewById(R.id.pause);
         pauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
@@ -190,7 +190,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
         });
 
 
-        ImageButton saveButton = (ImageButton) findViewById(R.id.geotrace_save);
+        ImageButton saveButton = findViewById(R.id.geotrace_save);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -209,7 +209,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
                     if (!beenPaused) {
                         alert.show();
                     } else {
-                        RadioGroup rb = (RadioGroup) traceSettingsView.findViewById(
+                        RadioGroup rb = traceSettingsView.findViewById(
                                 R.id.radio_group);
                         int radioButtonID = rb.getCheckedRadioButtonId();
                         View radioButton = rb.findViewById(radioButtonID);
@@ -241,7 +241,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
             }
         });
 
-        Button polygonSave = (Button) polygonPolylineView.findViewById(R.id.polygon_save);
+        Button polygonSave = polygonPolylineView.findViewById(R.id.polygon_save);
         polygonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -255,7 +255,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
                 }
             }
         });
-        Button polylineSave = (Button) polygonPolylineView.findViewById(R.id.polyline_save);
+        Button polylineSave = polygonPolylineView.findViewById(R.id.polyline_save);
         polylineSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -273,7 +273,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
             }
         });
 
-        ImageButton locationButton = (ImageButton) findViewById(R.id.show_location);
+        ImageButton locationButton = findViewById(R.id.show_location);
         locationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -283,7 +283,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 
         zoomDialogView = getLayoutInflater().inflate(R.layout.geoshape_zoom_dialog, null);
 
-        zoomLocationButton = (Button) zoomDialogView.findViewById(R.id.zoom_location);
+        zoomLocationButton = zoomDialogView.findViewById(R.id.zoom_location);
         zoomLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -292,7 +292,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
             }
         });
 
-        zoomPointButton = (Button) zoomDialogView.findViewById(R.id.zoom_shape);
+        zoomPointButton = zoomDialogView.findViewById(R.id.zoom_shape);
         zoomPointButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -452,7 +452,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 
         zoomDialogView = getLayoutInflater().inflate(R.layout.geoshape_zoom_dialog, null);
 
-        zoomLocationButton = (Button) zoomDialogView.findViewById(R.id.zoom_location);
+        zoomLocationButton = zoomDialogView.findViewById(R.id.zoom_location);
         zoomLocationButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -463,7 +463,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
             }
         });
 
-        zoomPointButton = (Button) zoomDialogView.findViewById(R.id.zoom_shape);
+        zoomPointButton = zoomDialogView.findViewById(R.id.zoom_shape);
         zoomPointButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -479,7 +479,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
     }
 
     private void startGeoTrace() {
-        RadioGroup rb = (RadioGroup) traceSettingsView.findViewById(R.id.radio_group);
+        RadioGroup rb = traceSettingsView.findViewById(R.id.radio_group);
         int radioButtonID = rb.getCheckedRadioButtonId();
         View radioButton = rb.findViewById(radioButtonID);
         int idx = rb.indexOfChild(radioButton);
@@ -606,7 +606,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
     }
 
     private void zoomToMyLocation() {
-        if (curLocation != null) {
+        if (curLocation != null && curlatLng != null) {
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(curlatLng, 17));
         }
 

@@ -116,7 +116,7 @@ public class DataManagerList extends InstanceListFragment
 
     @Override
     public void syncComplete(String result) {
-        TextView textView = (TextView) rootView.findViewById(R.id.status_text);
+        TextView textView = rootView.findViewById(R.id.status_text);
         textView.setText(result);
     }
 
@@ -190,7 +190,7 @@ public class DataManagerList extends InstanceListFragment
 
     @Override
     public void progressUpdate(int progress, int total) {
-        String message = String.format(getResources().getString(R.string.deleting_form_dialog_update_message),progress,total);
+        String message = String.format(getResources().getString(R.string.deleting_form_dialog_update_message), progress, total);
         progressDialog.setMessage(message);
     }
 
@@ -264,8 +264,18 @@ public class DataManagerList extends InstanceListFragment
             case R.id.toggle_button:
                 ListView lv = getListView();
                 boolean allChecked = toggleChecked(lv);
+                if (allChecked) {
+                    for (int i = 0; i < lv.getCount(); i++) {
+                        selectedInstances.add(lv.getItemIdAtPosition(i));
+                    }
+                } else {
+                    selectedInstances.clear();
+                }
                 toggleButtonLabel(toggleButton, getListView());
                 deleteButton.setEnabled(allChecked);
+                if (!allChecked) {
+                    selectedInstances.clear();
+                }
                 break;
         }
     }

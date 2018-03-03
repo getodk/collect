@@ -34,13 +34,13 @@ public class DatabaseContext extends ContextWrapper {
     }
 
     @Override
-    public File getDatabasePath(String name)  {
+    public File getDatabasePath(String name) {
         return new File(path + File.separator + name);
     }
 
     @Override
     public SQLiteDatabase openOrCreateDatabase(String name, int mode, SQLiteDatabase.CursorFactory factory, DatabaseErrorHandler errorHandler) {
-        return openOrCreateDatabase(name,mode, factory);
+        return openOrCreateDatabase(name, mode, factory);
     }
 
     @Override

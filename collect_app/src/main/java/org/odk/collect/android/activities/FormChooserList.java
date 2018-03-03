@@ -71,7 +71,7 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
         setupAdapter();
 
         if (savedInstanceState != null && savedInstanceState.containsKey(syncMsgKey)) {
-            TextView tv = (TextView) findViewById(R.id.status_text);
+            TextView tv = findViewById(R.id.status_text);
             tv.setText((savedInstanceState.getString(syncMsgKey)).trim());
         }
 
@@ -101,7 +101,7 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        TextView tv = (TextView) findViewById(R.id.status_text);
+        TextView tv = findViewById(R.id.status_text);
         outState.putString(syncMsgKey, tv.getText().toString().trim());
     }
 
@@ -111,30 +111,32 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
      */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        // get uri to form
-        long idFormsTable = listView.getAdapter().getItemId(position);
-        Uri formUri = ContentUris.withAppendedId(FormsColumns.CONTENT_URI, idFormsTable);
+        if (Collect.allowClick()) {
+            // get uri to form
+            long idFormsTable = listView.getAdapter().getItemId(position);
+            Uri formUri = ContentUris.withAppendedId(FormsColumns.CONTENT_URI, idFormsTable);
 
-        Collect.getInstance().getActivityLogger().logAction(this, "onListItemClick",
+            Collect.getInstance().getActivityLogger().logAction(this, "onListItemClick",
                 formUri.toString());
 
-        String action = getIntent().getAction();
-        if (Intent.ACTION_PICK.equals(action)) {
-            // caller is waiting on a picked form
-            setResult(RESULT_OK, new Intent().setData(formUri));
-        } else {
-            // caller wants to view/edit a form, so launch formentryactivity
-            // startActivity(new Intent(Intent.ACTION_EDIT, formUri)); smap
+            String action = getIntent().getAction();
+            if (Intent.ACTION_PICK.equals(action)) {
+                // caller is waiting on a picked form
+                setResult(RESULT_OK, new Intent().setData(formUri));
+            } else {
+                // caller wants to view/edit a form, so launch formentryactivity
+                // startActivity(new Intent(Intent.ACTION_EDIT, formUri)); smap
 
-            // start smap
-            Intent i = new Intent(this, org.odk.collect.android.activities.FormEntryActivity.class);
-            //i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
-            i.setData(formUri);
-            startActivity(i);
-            // end smap
+                // start smap
+                Intent i = new Intent(this, org.odk.collect.android.activities.FormEntryActivity.class);
+                //i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
+                i.setData(formUri);
+                startActivity(i);
+                // end smap
+            }
+
+            finish();
         }
-
-        finish();
     }
 
 
@@ -176,7 +178,7 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
     @Override
     public void syncComplete(String result) {
         Timber.i("Disk sync task complete");
-        TextView tv = (TextView) findViewById(R.id.status_text);
+        TextView tv = findViewById(R.id.status_text);
         tv.setText(result.trim());
     }
 

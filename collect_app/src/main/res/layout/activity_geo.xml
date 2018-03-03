@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#BF000000"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="0dip">
+
+        <TextView
+            android:id="@+id/location_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dip"
+            android:textColor="#FFFFFF"
+            tools:text="@string/geopoint_instruction" />
+
+        <TextView
+            android:id="@+id/location_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="3dip"
+            android:textColor="#FFFFFF"
+            tools:text="@string/please_wait_long"
+            tools:visibility="visible" />
+
+        <FrameLayout
+            android:id="@+id/map_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:paddingBottom="10dip"
+        android:paddingTop="50dip">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/add_button"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:padding="15dp"
+                android:src="@drawable/ic_add_location_black_36dp"
+                tools:visibility="visible" />
+
+            <ImageButton
+                android:id="@+id/pause_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:layout_margin="5dp"
+                android:visibility="gone"
+                android:src="@drawable/ic_pause_black_36dp" />
+
+            <ImageButton
+                android:id="@+id/show_button"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:padding="15dp"
+                android:src="@drawable/ic_my_location_black_36dp" />
+
+            <ImageButton
+                android:id="@+id/layers_button"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:padding="15dp"
+                android:src="@drawable/ic_layers_black_36dp" />
+
+            <ImageButton
+                android:id="@+id/clear_button"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:padding="15dp"
+                android:src="@drawable/ic_delete_black_36dp" />
+
+            <ImageButton
+                android:id="@+id/save_button"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:padding="15dp"
+                android:src="@drawable/ic_save_black_36dp" />
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>

@@ -45,8 +45,8 @@ import com.google.android.gms.maps.model.PolygonOptions;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.location.LocationClient;
-import org.odk.collect.android.location.LocationClients;
+import org.odk.collect.android.location.client.LocationClient;
+import org.odk.collect.android.location.client.LocationClients;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoShapeWidget;
@@ -91,10 +91,10 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
         setContentView(R.layout.geoshape_google_layout);
 
         // Do this here so we can test it:
-        gpsButton = (ImageButton) findViewById(R.id.gps);
+        gpsButton = findViewById(R.id.gps);
         gpsButton.setEnabled(false);
 
-        clearButton = (ImageButton) findViewById(R.id.clear);
+        clearButton = findViewById(R.id.clear);
 
         locationClient = LocationClients.clientForContext(this);
         locationClient.setListener(this);
@@ -160,7 +160,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
                 }
             }
         });
-        ImageButton returnButton = (ImageButton) findViewById(R.id.save);
+        ImageButton returnButton = findViewById(R.id.save);
         returnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -179,7 +179,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
             }
         }
 
-        ImageButton layersButton = (ImageButton) findViewById(R.id.layers);
+        ImageButton layersButton = findViewById(R.id.layers);
         layersButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -189,18 +189,18 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
 
         zoomDialogView = getLayoutInflater().inflate(R.layout.geoshape_zoom_dialog, null);
 
-        zoomLocationButton = (Button) zoomDialogView.findViewById(R.id.zoom_location);
+        zoomLocationButton = zoomDialogView.findViewById(R.id.zoom_location);
         zoomLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (curLocation != null) {
+                if (curLocation != null && curlatLng != null) {
                     map.animateCamera(CameraUpdateFactory.newLatLngZoom(curlatLng, 17));
                 }
                 zoomDialog.dismiss();
             }
         });
 
-        zoomPointButton = (Button) zoomDialogView.findViewById(R.id.zoom_shape);
+        zoomPointButton = zoomDialogView.findViewById(R.id.zoom_shape);
         zoomPointButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

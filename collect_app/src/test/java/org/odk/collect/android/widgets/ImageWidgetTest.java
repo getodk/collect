@@ -31,7 +31,7 @@ public class ImageWidgetTest extends FileWidgetTest<ImageWidget> {
     @NonNull
     @Override
     public ImageWidget createWidget() {
-        return new ImageWidget(RuntimeEnvironment.application, formEntryPrompt, true);
+        return new ImageWidget(RuntimeEnvironment.application, formEntryPrompt);
     }
 
     @NonNull

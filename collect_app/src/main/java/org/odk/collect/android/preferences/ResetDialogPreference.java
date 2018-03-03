@@ -16,25 +16,31 @@
 
 package org.odk.collect.android.preferences;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.os.Bundle;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.fragments.dialogs.SimpleDialog;
+import org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog;
 import org.odk.collect.android.utilities.ResetUtility;
-import org.odk.collect.android.utilities.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import timber.log.Timber;
 
-public class ResetDialogPreference extends DialogPreference {
+import static org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog.RESET_SETTINGS_RESULT_DIALOG_TAG;
+import static org.odk.collect.android.utilities.ResetUtility.ResetAction.RESET_PREFERENCES;
+
+public class ResetDialogPreference extends DialogPreference implements CompoundButton.OnCheckedChangeListener {
     private CheckBox preferences;
     private CheckBox instances;
     private CheckBox forms;
@@ -53,14 +59,26 @@ public class ResetDialogPreference extends DialogPreference {
 
     @Override
     public void onBindDialogView(View view) {
-        preferences = (CheckBox) view.findViewById(R.id.preferences);
-        instances = (CheckBox) view.findViewById(R.id.instances);
-        forms = (CheckBox) view.findViewById(R.id.forms);
-        layers = (CheckBox) view.findViewById(R.id.layers);
-        cache = (CheckBox) view.findViewById(R.id.cache);
-        osmDroid = (CheckBox) view.findViewById(R.id.osmdroid);
+        preferences = view.findViewById(R.id.preferences);
+        instances = view.findViewById(R.id.instances);
+        forms = view.findViewById(R.id.forms);
+        layers = view.findViewById(R.id.layers);
+        cache = view.findViewById(R.id.cache);
+        osmDroid = view.findViewById(R.id.osmdroid);
         smapLocations = (CheckBox) view.findViewById(R.id.smaplocations);       // smap
+        preferences.setOnCheckedChangeListener(this);
+        instances.setOnCheckedChangeListener(this);
+        forms.setOnCheckedChangeListener(this);
+        layers.setOnCheckedChangeListener(this);
+        cache.setOnCheckedChangeListener(this);
+        osmDroid.setOnCheckedChangeListener(this);
         super.onBindDialogView(view);
+    }
+
+    @Override
+    public void showDialog(Bundle bundle) {
+        super.showDialog(bundle);
+        adjustResetButtonAccessibility();
     }
 
     @Override
@@ -74,7 +92,7 @@ public class ResetDialogPreference extends DialogPreference {
         final List<Integer> resetActions = new ArrayList<>();
 
         if (preferences.isChecked()) {
-            resetActions.add(ResetUtility.ResetAction.RESET_PREFERENCES);
+            resetActions.add(RESET_PREFERENCES);
         }
         if (instances.isChecked()) {
             resetActions.add(ResetUtility.ResetAction.RESET_INSTANCES);
@@ -99,14 +117,12 @@ public class ResetDialogPreference extends DialogPreference {
             Runnable runnable = new Runnable() {
                 @Override
                 public void run() {
-                    List<Integer> failedResetActions = new ResetUtility().reset(resetActions);
+                    List<Integer> failedResetActions = new ResetUtility().reset(getContext(), resetActions);
                     hideProgressDialog();
                     handleResult(resetActions, failedResetActions);
                 }
             };
             new Thread(runnable).start();
-        } else {
-            ToastUtils.showLongToast(R.string.reset_dialog_nothing);
         }
     }
 
@@ -121,11 +137,11 @@ public class ResetDialogPreference extends DialogPreference {
         progressDialog.dismiss();
     }
 
-    private void handleResult(List<Integer> resetActions, List<Integer> failedResetActions) {
+    private void handleResult(final List<Integer> resetActions, List<Integer> failedResetActions) {
         final StringBuilder resultMessage = new StringBuilder();
         for (int action : resetActions) {
             switch (action) {
-                case ResetUtility.ResetAction.RESET_PREFERENCES:
+                case RESET_PREFERENCES:
                     if (failedResetActions.contains(action)) {
                         resultMessage.append(String.format(getContext().getString(R.string.reset_settings_result),
                                 getContext().getString(R.string.error_occured)));
@@ -194,21 +210,41 @@ public class ResetDialogPreference extends DialogPreference {
             }
         }
         if (!((AdminPreferencesActivity) getContext()).isInstanceStateSaved()) {
-            showResultDialog(String.valueOf(resultMessage));
+            ((AdminPreferencesActivity) getContext()).runOnUiThread(new Thread(new Runnable() {
+                public void run() {
+                    if (resetActions.contains(RESET_PREFERENCES)) {
+                        ((AdminPreferencesActivity) getContext()).recreate();
+                    }
+                    ResetSettingsResultDialog resetSettingsResultDialog = ResetSettingsResultDialog.newInstance(String.valueOf(resultMessage));
+                    try {
+                        resetSettingsResultDialog.show(((AdminPreferencesActivity) getContext()).getSupportFragmentManager(), RESET_SETTINGS_RESULT_DIALOG_TAG);
+                    } catch (ClassCastException e) {
+                        Timber.i(e);
+                    }
+                }
+            }));
         }
     }
 
-    private void showResultDialog(final String resultMessage) {
-        String dialogTitle = getContext().getString(R.string.reset_app_state_result);
-        int iconID = android.R.drawable.ic_dialog_info;
-        String buttonTitle = getContext().getString(R.string.ok);
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        adjustResetButtonAccessibility();
+    }
 
-        SimpleDialog simpleDialog = SimpleDialog.newInstance(dialogTitle, iconID, resultMessage, buttonTitle, false);
-
-        try {
-            simpleDialog.show(((AdminPreferencesActivity) getContext()).getSupportFragmentManager(), SimpleDialog.COLLECT_DIALOG_TAG);
-        } catch (ClassCastException e) {
-            Timber.i(e);
+    private void adjustResetButtonAccessibility() {
+        if (preferences.isChecked() || instances.isChecked() || forms.isChecked()
+                || layers.isChecked() || cache.isChecked() || osmDroid.isChecked()) {
+            ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+            ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_POSITIVE)
+                    .setTextColor(((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_NEGATIVE).getCurrentTextColor());
+        } else {
+            ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+            ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_POSITIVE)
+                    .setTextColor(getPartiallyTransparentColor(((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_NEGATIVE).getCurrentTextColor()));
         }
+    }
+
+    private int getPartiallyTransparentColor(int color) {
+        return Color.argb(150, Color.red(color), Color.green(color), Color.blue(color));
     }
 }

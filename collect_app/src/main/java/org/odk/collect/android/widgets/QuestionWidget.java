@@ -22,7 +22,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
@@ -47,18 +46,19 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.exception.JavaRosaException;
-import org.odk.collect.android.injection.DependencyProvider;
+import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.views.MediaLayout;
-import org.odk.collect.android.widgets.interfaces.BaseImageWidget;
 import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 import org.odk.collect.android.widgets.interfaces.Widget;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
@@ -133,6 +133,16 @@ public abstract class QuestionWidget
         }
     }
 
+    //source::https://stackoverflow.com/questions/18996183/identifying-rtl-language-in-android/23203698#23203698
+    public static boolean isRTL() {
+        return isRTL(Locale.getDefault());
+    }
+
+    private static boolean isRTL(Locale locale) {
+        final int directionality = Character.getDirectionality(locale.getDisplayName().charAt(0));
+        return directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT || directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC;
+    }
+
     protected void injectDependencies(DependencyProvider dependencyProvider) {}
 
     private MediaLayout createQuestionMediaLayout(FormEntryPrompt prompt) {
@@ -143,17 +153,18 @@ public abstract class QuestionWidget
         questionText.setTypeface(null, Typeface.BOLD);
         questionText.setTextColor(ContextCompat.getColor(getContext(), R.color.primaryTextColor));
         questionText.setPadding(0, 0, 0, 7);
-        questionText.setText(promptText == null ? "" : TextUtils.textToHtml(promptText));
+        questionText.setText(TextUtils.textToHtml(FormEntryPromptUtils.markQuestionIfIsRequired(promptText, prompt.isRequired())));
         questionText.setMovementMethod(LinkMovementMethod.getInstance());
 
         // Wrap to the size of the parent view
         questionText.setHorizontallyScrolling(false);
 
-        if (promptText == null || promptText.length() == 0) {
+        if ((promptText == null || promptText.isEmpty())
+                && !(prompt.isRequired() && (prompt.getHelpText() == null || prompt.getHelpText().isEmpty()))) {
             questionText.setVisibility(GONE);
         }
 
-        String imageURI = prompt.getImageText();
+        String imageURI = this instanceof SelectImageMapWidget ? null : prompt.getImageText();
         String audioURI = prompt.getAudioText();
         String videoURI = prompt.getSpecialFormQuestionText("video");
 
@@ -325,7 +336,11 @@ public abstract class QuestionWidget
             // wrap to the widget of view
             helpText.setHorizontallyScrolling(false);
             helpText.setTypeface(null, Typeface.ITALIC);
-            helpText.setText(TextUtils.textToHtml(s));
+            if (prompt.getLongText() == null || prompt.getLongText().isEmpty()) {
+                helpText.setText(TextUtils.textToHtml(FormEntryPromptUtils.markQuestionIfIsRequired(s, prompt.isRequired())));
+            } else {
+                helpText.setText(TextUtils.textToHtml(s));
+            }
             helpText.setTextColor(ContextCompat.getColor(getContext(), R.color.primaryTextColor));
             helpText.setMovementMethod(LinkMovementMethod.getInstance());
             return helpText;
@@ -416,8 +431,7 @@ public abstract class QuestionWidget
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (button.isClickable()) {
-                    disableViewForOneSecond(button);
+                if (Collect.allowClick()) {
                     ((ButtonWidget) questionWidget).onButtonClick(withId);
                 }
             }
@@ -461,27 +475,12 @@ public abstract class QuestionWidget
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (questionWidget instanceof BaseImageWidget) {
-                    if (imageView.isClickable()) {
-                        disableViewForOneSecond(imageView);
-                        ((BaseImageWidget) questionWidget).onImageClick();
-                    }
+                if (questionWidget instanceof BaseImageWidget && Collect.allowClick()) {
+                    ((BaseImageWidget) questionWidget).onImageClick();
                 }
             }
         });
         return imageView;
-    }
-
-    // This method is used to avoid opening more than one dialog or activity when user quickly clicks the button several times:
-    // https://github.com/opendatakit/collect/issues/1624
-    protected void disableViewForOneSecond(final View view) {
-        view.setClickable(false);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                view.setClickable(true);
-            }
-        }, 500);
     }
 
     /**
@@ -515,7 +514,7 @@ public abstract class QuestionWidget
         boolean nochoose = false;
         String appearance = prompt.getQuestion().getAppearanceAttr();
 
-        if (appearance != null && appearance.contains("nochoose")) {
+        if (appearance != null && (appearance.contains("nochoose") || appearance.contains("new"))) {
             nochoose = true;
         }
         return nochoose;

@@ -3,6 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="org.odk.collect.android">
 
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
+
+    <!-- Allows changing locales -->
+    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
+
     <application
         android:name=".application.TestCollect"
         tools:replace="android:name" />

@@ -405,6 +405,11 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
         mProgressDialog.setMessage(mProgressMsg);
     }
 
+    @Override
+    public void formsDownloadingCancelled() {
+       // ignore
+    }
+
     /*
      * Task Download overrides
      */

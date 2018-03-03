@@ -42,8 +42,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.location.LocationClient;
-import org.odk.collect.android.location.LocationClients;
+import org.odk.collect.android.location.client.LocationClient;
+import org.odk.collect.android.location.client.LocationClients;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoPointWidget;
@@ -123,10 +123,10 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
             return;
         }
 
-        locationStatus = (TextView) findViewById(R.id.location_status);
-        locationInfo = (TextView) findViewById(R.id.location_info);
-        reloadLocation = (ImageButton) findViewById(R.id.reload_location);
-        showLocation = (ImageButton) findViewById(R.id.show_location);
+        locationStatus = findViewById(R.id.location_status);
+        locationInfo = findViewById(R.id.location_info);
+        reloadLocation = findViewById(R.id.reload_location);
+        showLocation = findViewById(R.id.show_location);
 
         locationClient = LocationClients.clientForContext(this);
         locationClient.setListener(this);
@@ -207,7 +207,7 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
         helper = new MapHelper(this, map);
 
 
-        ImageButton acceptLocation = (ImageButton) findViewById(R.id.accept_location);
+        ImageButton acceptLocation = findViewById(R.id.accept_location);
 
         acceptLocation.setOnClickListener(new OnClickListener() {
             @Override
@@ -253,7 +253,7 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
         });
 
         // Menu Layer Toggle
-        ImageButton layers = (ImageButton) findViewById(R.id.layer_menu);
+        ImageButton layers = findViewById(R.id.layer_menu);
         layers.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -261,7 +261,7 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
             }
         });
         zoomDialogView = getLayoutInflater().inflate(R.layout.geopoint_zoom_dialog, null);
-        zoomLocationButton = (Button) zoomDialogView.findViewById(R.id.zoom_location);
+        zoomLocationButton = zoomDialogView.findViewById(R.id.zoom_location);
         zoomLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -270,7 +270,7 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
             }
         });
 
-        zoomPointButton = (Button) zoomDialogView.findViewById(R.id.zoom_point);
+        zoomPointButton = zoomDialogView.findViewById(R.id.zoom_point);
         zoomPointButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -279,7 +279,7 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
             }
         });
 
-        ImageButton clearPointButton = (ImageButton) findViewById(R.id.clear);
+        ImageButton clearPointButton = findViewById(R.id.clear);
         clearPointButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

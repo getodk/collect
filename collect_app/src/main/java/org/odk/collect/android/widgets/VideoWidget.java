@@ -116,17 +116,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
         answerLayout.addView(playButton);
         addAnswerView(answerLayout);
 
-        // and hide the capture and choose button if read-only
-        if (getFormEntryPrompt().isReadOnly()) {
-            captureButton.setVisibility(View.GONE);
-            chooseButton.setVisibility(View.GONE);
-        }
-
-        // smap hide the choose button if appearance is nochoose
-        if(nochoose(prompt)) {
-            chooseButton.setVisibility(View.GONE);
-        }
-
+        hideButtonsIfNeeded();
     }
 
     /*
@@ -258,6 +248,15 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
             int delCount = fileToDelete.delete() ? 1 : 0;
 
             Timber.i("Deleting original capture of file: %s count: %d", uri.toString(), delCount);
+        }
+    }
+
+    private void hideButtonsIfNeeded() {
+        if (getFormEntryPrompt().isReadOnly()) {
+            captureButton.setVisibility(View.GONE);
+            chooseButton.setVisibility(View.GONE);
+        } else if (nochoose(getFormEntryPrompt())) {
+            chooseButton.setVisibility(View.GONE);
         }
     }
 

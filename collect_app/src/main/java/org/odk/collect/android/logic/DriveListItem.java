@@ -34,12 +34,10 @@ public class DriveListItem implements Comparable<DriveListItem>, Parcelable {
     private DateTime date;
     private int type;
 
+    private boolean selected;
 
     public static final int FILE = 1;
     public static final int DIR = 2;
-    public static final int UP = 3;
-    public static final int MY_DRIVE = 4;
-    public static final int SHARED_WITH_ME = 5;
 
     public DriveListItem(String n, String d, DateTime dt, String p, String img, int type,
             String driveId, String parentId) {
@@ -83,6 +81,14 @@ public class DriveListItem implements Comparable<DriveListItem>, Parcelable {
 
     public String getParentId() {
         return parentId;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 
     public int compareTo(DriveListItem o) {
