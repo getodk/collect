@@ -41,6 +41,7 @@ the specific language governing permissions and limitations under the License.
     <!-- Get permission for reliable local dispatching on non-Google Play devices. -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -306,7 +307,7 @@ the specific language governing permissions and limitations under the License.
             android:exported="true"
             android:label="@string/app_name" />
         <activity android:name=".activities.WebViewActivity" />
-        <activity android:name=".activities.CaptureSelfieVideoActivity"></activity>
+        <activity android:name=".activities.CaptureSelfieVideoActivity" />
     </application>
 
 </manifest>

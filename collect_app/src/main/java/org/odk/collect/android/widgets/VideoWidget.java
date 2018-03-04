@@ -70,7 +70,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
 
-    private static final String NEXUS7 = "Nexus 7";
+    public static final String NEXUS7 = "Nexus 7";
     private static final String DIRECTORY_PICTURES = "Pictures";
 
     @NonNull
@@ -149,7 +149,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
      *  For Nexus 7 fix ...
      *  See http://developer.android.com/guide/topics/media/camera.html for more info
      */
-    private static File getOutputMediaFile(int type) {
+    public static File getOutputMediaFile(int type) {
         // To be safe, you should check that the SDCard is mounted
         // using Environment.getExternalStorageState() before doing this.
 
