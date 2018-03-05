@@ -14,6 +14,6 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
     @NonNull
     @Override
     public SelectOneWidget createWidget() {
-        return new SelectOneWidget(RuntimeEnvironment.application, formEntryPrompt);
+        return new SelectOneWidget(RuntimeEnvironment.application, formEntryPrompt, false);
     }
 }

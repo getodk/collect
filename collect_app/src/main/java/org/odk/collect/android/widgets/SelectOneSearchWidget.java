@@ -35,7 +35,7 @@ import java.util.List;
 @SuppressLint("ViewConstructor")
 public class SelectOneSearchWidget extends SelectOneWidget implements OnCheckedChangeListener, AudioPlayListener {
     public SelectOneSearchWidget(Context context, FormEntryPrompt prompt) {
-        super(context, prompt);
+        super(context, prompt, false);
     }
 
     @Override

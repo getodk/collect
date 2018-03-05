@@ -16,17 +16,27 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.support.annotation.Nullable;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.R;
+import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.utilities.ViewIds;
@@ -44,12 +54,17 @@ import java.util.List;
 @SuppressLint("ViewConstructor")
 public class SelectOneWidget
         extends SelectTextWidget
-        implements OnCheckedChangeListener, AudioPlayListener, MultiChoiceWidget {
+        implements OnCheckedChangeListener, AudioPlayListener, MultiChoiceWidget, View.OnClickListener {
+
+    @Nullable
+    private AdvanceToNextListener listener;
 
     protected List<RadioButton> buttons;
     protected String selectedValue;
 
-    public SelectOneWidget(Context context, FormEntryPrompt prompt) {
+    private boolean autoAdvance;
+
+    public SelectOneWidget(Context context, FormEntryPrompt prompt, boolean autoAdvance) {
         super(context, prompt);
         buttons = new ArrayList<>();
 
@@ -57,7 +72,12 @@ public class SelectOneWidget
             selectedValue = ((Selection) prompt.getAnswerValue().getValue()).getValue();
         }
 
+        this.autoAdvance = autoAdvance;
         createLayout();
+
+        if (context instanceof AdvanceToNextListener) {
+            listener = (AdvanceToNextListener) context;
+        }
     }
 
     @Override
@@ -149,12 +169,25 @@ public class SelectOneWidget
     }
 
     protected void createLayout() {
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        Bitmap b = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.expander_ic_right);
+
         if (items != null) {
             for (int i = 0; i < items.size(); i++) {
+                @SuppressLint("InflateParams")
+                RelativeLayout thisParentLayout = (RelativeLayout) inflater.inflate(R.layout.quick_select_layout, null);
+
                 RadioButton radioButton = createRadioButton(i);
+                radioButton.setOnClickListener(this);
+
+                ImageView rightArrow = (ImageView) thisParentLayout.getChildAt(1);
+                rightArrow.setImageBitmap(autoAdvance ? b : null);
+
                 buttons.add(radioButton);
 
-                answerLayout.addView(createMediaLayout(i, radioButton));
+                LinearLayout questionLayout = (LinearLayout) thisParentLayout.getChildAt(0);
+                questionLayout.addView(createMediaLayout(i, radioButton));
+                answerLayout.addView(thisParentLayout);
             }
             addAnswerView(answerLayout);
         }
@@ -181,4 +214,10 @@ public class SelectOneWidget
         onCheckedChanged(button, isSelected);
     }
 
+    @Override
+    public void onClick(View view) {
+        if (autoAdvance && listener != null) {
+            listener.advance();
+        }
+    }
 }

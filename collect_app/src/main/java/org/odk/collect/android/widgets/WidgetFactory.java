@@ -114,13 +114,7 @@ public class WidgetFactory {
                     case Constants.DATATYPE_TEXT:
                         String query = fep.getQuestion().getAdditionalAttribute(null, "query");
                         if (query != null) {
-                            if (appearance.startsWith("quick")) {
-                                questionWidget = new ItemsetWidget(context, fep, readOnlyOverride,
-                                        true);
-                            } else {
-                                questionWidget = new ItemsetWidget(context, fep, readOnlyOverride,
-                                        false);
-                            }
+                            questionWidget = new ItemsetWidget(context, fep, appearance.startsWith("quick"));
                         } else if (appearance.startsWith("printer")) {
                             questionWidget = new ExPrinterWidget(context, fep);
                         } else if (appearance.startsWith("ex:")) {
@@ -195,7 +189,7 @@ public class WidgetFactory {
                 } else if (appearance.startsWith("minimal")) {
                     questionWidget = new SpinnerWidget(context, fep);
                 } else if (appearance.startsWith("quick")) {
-                    questionWidget = new SelectOneAutoAdvanceWidget(context, fep);
+                    questionWidget = new SelectOneWidget(context, fep, true);
                 } else if (appearance.equals("list-nolabel")) {
                     questionWidget = new ListWidget(context, fep, false);
                 } else if (appearance.equals("list")) {
@@ -207,7 +201,7 @@ public class WidgetFactory {
                 } else if (appearance.startsWith("image-map")) {
                     questionWidget = new SelectOneImageMapWidget(context, fep);
                 } else {
-                    questionWidget = new SelectOneWidget(context, fep);
+                    questionWidget = new SelectOneWidget(context, fep, false);
                 }
                 break;
             case Constants.CONTROL_SELECT_MULTI:
