@@ -62,24 +62,37 @@ public class ItemsetWidget extends SelectOneWidget {
     }
 
     private List<SelectChoice> getItems() {
-        List<SelectChoice> items = new ArrayList<>();
-        ItemsetDbAdapter adapter = new ItemsetDbAdapter();
+        String nodesetString = getNodesetString();
 
+        List<String> arguments = new ArrayList<>();
+        String selectionString = getSelectionStringAndPopulateArguments(getQueryString(nodesetString), arguments);
+
+        FormController formController = Collect.getInstance().getFormController();
+        String[] selectionArgs = getSelectionArgs(arguments, nodesetString, formController);
+
+        return selectionArgs == null ? null : getItemsFromDatabase(selectionString, selectionArgs, formController);
+    }
+
+    private String getNodesetString() {
         // the format of the query should be something like this:
         // query="instance('cities')/root/item[state=/data/state and county=/data/county]"
         // "query" is what we're using to notify that this is an itemset widget.
-        String nodesetStr = getFormEntryPrompt().getQuestion().getAdditionalAttribute(null, "query");
+        return getFormEntryPrompt().getQuestion().getAdditionalAttribute(null, "query");
+    }
 
+    private String getQueryString(String nodesetStr) {
         // isolate the string between between the [ ] characters
-        String queryString = nodesetStr.substring(nodesetStr.indexOf('[') + 1, nodesetStr.lastIndexOf(']'));
+        return nodesetStr.substring(nodesetStr.indexOf('[') + 1, nodesetStr.lastIndexOf(']'));
+    }
 
-        StringBuilder selection = new StringBuilder();
+    private String getSelectionStringAndPopulateArguments(String queryString, List<String> arguments) {
+        StringBuilder selectionString = new StringBuilder();
         // add the list name as the first argument, which will always be there
-        selection.append("list_name=?");
+        selectionString.append("list_name=?");
 
         // check to see if there are any arguments
         if (queryString.indexOf('=') != -1) {
-            selection.append(" and ");
+            selectionString.append(" and ");
         }
 
         // can't just split on 'and' or 'or' because they have different
@@ -87,7 +100,6 @@ public class ItemsetWidget extends SelectOneWidget {
         // must include the spaces in indexOf so we don't match words like "land"
         int andIndex;
         int orIndex = -1;
-        ArrayList<String> arguments = new ArrayList<>();
 
         while ((andIndex = queryString.indexOf(" and ")) != -1 || (orIndex = queryString.indexOf(" or ")) != -1) {
             if (andIndex != -1) {
@@ -96,7 +108,7 @@ public class ItemsetWidget extends SelectOneWidget {
                         .split("=");
 
                 if (pair.length == 2) {
-                    selection
+                    selectionString
                             .append(QUOTATION_MARK)
                             .append(pair[0].trim())
                             .append(QUOTATION_MARK)
@@ -104,7 +116,7 @@ public class ItemsetWidget extends SelectOneWidget {
 
                     arguments
                             .add(pair[1]
-                            .trim());
+                                    .trim());
                 }
                 // move string forward to after " and "
                 queryString = queryString.substring(andIndex + 5, queryString.length());
@@ -113,7 +125,7 @@ public class ItemsetWidget extends SelectOneWidget {
                 String[] pair = subString.split("=");
 
                 if (pair.length == 2) {
-                    selection
+                    selectionString
                             .append(QUOTATION_MARK)
                             .append(pair[0].trim())
                             .append(QUOTATION_MARK)
@@ -126,28 +138,28 @@ public class ItemsetWidget extends SelectOneWidget {
             }
         }
 
-        // parse the last segment (or only segment if there are no 'and' or 'or'
-        // clauses
+        // parse the last segment (or only segment if there are no 'and' or 'or' clauses
         String[] pair = queryString.split("=");
         if (pair.length == 2) {
-            selection
+            selectionString
                     .append(QUOTATION_MARK)
                     .append(pair[0].trim())
                     .append(QUOTATION_MARK)
                     .append("=?");
             arguments.add(pair[1].trim());
         }
+        return selectionString.toString();
+    }
 
+    private String[] getSelectionArgs(List<String> arguments, String nodesetStr, FormController formController) {
         // +1 is for the list_name
         String[] selectionArgs = new String[arguments.size() + 1];
 
         // parse out the list name, between the ''
         String listName = nodesetStr.substring(nodesetStr.indexOf('\'') + 1, nodesetStr.lastIndexOf('\''));
 
-        boolean nullArgs = false; // can't have any null arguments
         selectionArgs[0] = listName; // first argument is always listname
 
-        FormController formController = Collect.getInstance().getFormController();
         if (formController == null) {
             Timber.w("Can't instantiate ItemsetWidget with a null FormController.");
             return null;
@@ -175,7 +187,7 @@ public class ItemsetWidget extends SelectOneWidget {
                 Object value = xpr.eval(form.getMainInstance(), ec);
 
                 if (value == null) {
-                    nullArgs = true;
+                    return null;
                 } else {
                     if (value instanceof XPathNodeset) {
                         value = ((XPathNodeset) value).getValAt(0);
@@ -184,13 +196,15 @@ public class ItemsetWidget extends SelectOneWidget {
                 }
             }
         }
+        return selectionArgs;
+    }
 
-        if (nullArgs) {
-            return null;
-        }
+    private List<SelectChoice> getItemsFromDatabase(String selection, String[] selectionArgs, FormController formController) {
+        List<SelectChoice> items = new ArrayList<>();
+        ItemsetDbAdapter adapter = new ItemsetDbAdapter();
 
         File itemsetFile =  new FileUtil()
-                        .getItemsetFile(formController.getMediaFolder().getAbsolutePath());
+                .getItemsetFile(formController.getMediaFolder().getAbsolutePath());
 
         if (itemsetFile.exists()) {
             adapter.open();
@@ -198,7 +212,7 @@ public class ItemsetWidget extends SelectOneWidget {
             // name of the itemset table for this form
             String pathHash = ItemsetDbAdapter.getMd5FromString(itemsetFile.getAbsolutePath());
             try {
-                Cursor c = adapter.query(pathHash, selection.toString(), selectionArgs);
+                Cursor c = adapter.query(pathHash, selection, selectionArgs);
                 if (c != null) {
                     c.move(-1);
                     int index = 0;
