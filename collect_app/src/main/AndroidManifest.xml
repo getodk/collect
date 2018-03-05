@@ -308,6 +308,7 @@ the specific language governing permissions and limitations under the License.
             android:label="@string/app_name" />
         <activity android:name=".activities.WebViewActivity" />
         <activity android:name=".activities.CaptureSelfieVideoActivity" />
+        <activity android:name=".activities.CaptureSelfieVideoActivityNewApi" />
     </application>
 
 </manifest>
