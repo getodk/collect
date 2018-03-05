@@ -373,7 +373,7 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
         }
 
         if (adapter == null) {
-            adapter = new FileArrayAdapter(GoogleDriveActivity.this, filteredList, GoogleDriveActivity.this::onListItemClick);
+            adapter = new FileArrayAdapter(this, filteredList, this::onListItemClick);
             listView.setAdapter(adapter);
         } else {
             adapter.notifyDataSetChanged();
