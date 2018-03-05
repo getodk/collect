@@ -343,32 +343,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         outState.putSerializable(FORMLIST, formList);
         outState.putSerializable(SELECTED_FORMS, selectedForms);
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        Collect.getInstance().getActivityLogger().logAction(this, "onCreateOptionsMenu", "show");
-        super.onCreateOptionsMenu(menu);
-
-        menu
-                .add(0, MENU_PREFERENCES, 0, R.string.general_preferences)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-        return true;
-    }
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case MENU_PREFERENCES:
-                Collect.getInstance().getActivityLogger().logAction(this, "onMenuItemSelected",
-                        "MENU_PREFERENCES");
-                Intent i = new Intent(this, PreferencesActivity.class);
-                startActivity(i);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
+    
 
     @Override
     protected Dialog onCreateDialog(int id) {
