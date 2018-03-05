@@ -188,6 +188,10 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonWidget
                 switch (action) {
                     case MotionEvent.ACTION_DOWN:
                         v.getParent().requestDisallowInterceptTouchEvent(true);
+                        if (actualValue == null) {
+                            actualValue = rangeStart;
+                            setUpActualValueLabel();
+                        }
                         break;
                     case MotionEvent.ACTION_UP:
                         v.getParent().requestDisallowInterceptTouchEvent(false);
