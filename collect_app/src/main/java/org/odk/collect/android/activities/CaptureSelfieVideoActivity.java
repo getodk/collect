@@ -1,9 +1,11 @@
 package org.odk.collect.android.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.hardware.Camera;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -16,6 +18,7 @@ import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.views.CameraPreview;
 import org.odk.collect.android.widgets.VideoWidget;
 
+import java.io.File;
 import java.io.IOException;
 
 import timber.log.Timber;
@@ -26,6 +29,7 @@ public class CaptureSelfieVideoActivity extends Activity {
     private int cameraId;
     private boolean recording = false;
     private MediaRecorder mediaRecorder;
+    String outputFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +78,9 @@ public class CaptureSelfieVideoActivity extends Activity {
 
                     recording = false;
 
-                    setResult(RESULT_OK);
+                    Intent i = new Intent();
+                    i.setData(Uri.fromFile(new File(outputFile)));
+                    setResult(RESULT_OK, i);
                     finish();
                 }
             }
@@ -100,7 +106,8 @@ public class CaptureSelfieVideoActivity extends Activity {
         mediaRecorder.setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH));
 
         // Step 4: Set output file
-        mediaRecorder.setOutputFile(VideoWidget.getOutputMediaFile(VideoWidget.MEDIA_TYPE_VIDEO).toString());
+        outputFile = VideoWidget.getOutputMediaFile(VideoWidget.MEDIA_TYPE_VIDEO).toString();
+        mediaRecorder.setOutputFile(outputFile);
 
         // Step 5: Set the preview output
         mediaRecorder.setPreviewDisplay(camPreview.getHolder().getSurface());
