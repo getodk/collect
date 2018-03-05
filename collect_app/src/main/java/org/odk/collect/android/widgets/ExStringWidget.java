@@ -260,12 +260,18 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
                 fireActivity(i);
 
             } catch (ExternalParamsException e) {
-                Timber.e(e);
+                Timber.d(e);
                 onException(e.getMessage());
             }
         } else {
             onException(errorString);
         }
+    }
+
+    private void focusAnswer() {
+        answer.requestFocus();
+        InputMethodManager inputManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.showSoftInput(answer, 0);
     }
 
     private void onException(String toastText) {
@@ -283,7 +289,7 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
         Toast.makeText(getContext(),
                 toastText, Toast.LENGTH_SHORT)
                 .show();
-        this.answer.requestFocus();
-        Timber.e(toastText);
+        Timber.d(toastText);
+        focusAnswer();
     }
 }

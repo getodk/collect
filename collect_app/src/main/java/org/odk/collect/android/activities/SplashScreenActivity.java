@@ -159,7 +159,7 @@ public class SplashScreenActivity extends Activity {
                 Timber.e(e, "Unable to close file input stream");
             }
         } catch (FileNotFoundException e) {
-            Timber.e(e);
+            Timber.d(e);
         }
         return b;
     }

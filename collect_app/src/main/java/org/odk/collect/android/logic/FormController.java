@@ -436,7 +436,7 @@ public class FormController {
             isFirstQuestion =  stepToPreviousScreenEvent() == FormEntryController.EVENT_BEGINNING_OF_FORM
                     && stepToNextScreenEvent() != FormEntryController.EVENT_PROMPT_NEW_REPEAT;
         } catch (JavaRosaException e) {
-            Timber.e(e);
+            Timber.d(e);
         }
         jumpToIndex(originalFormIndex);
         return isFirstQuestion;

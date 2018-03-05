@@ -6,15 +6,22 @@ import android.content.Intent;
 import android.content.res.AssetManager;
 import android.net.Uri;
 import android.os.Environment;
-// import android.support.annotation.Nullable;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.UiController;
+import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
+import android.support.test.espresso.matcher.BoundedMatcher;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
+import android.view.View;
+import android.widget.SeekBar;
 
 import net.bytebuddy.utility.RandomString;
 
 import org.apache.commons.io.IOUtils;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
@@ -24,7 +31,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
-// import org.odk.collect.android.activities.BearingActivity;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.utilities.ActivityAvailability;
 
@@ -42,7 +48,6 @@ import tools.fastlane.screengrab.Screengrab;
 import tools.fastlane.screengrab.UiAutomatorScreenshotStrategy;
 import tools.fastlane.screengrab.locale.LocaleTestRule;
 
-// import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -52,7 +57,6 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasAction;
-//import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasData;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.ViewMatchers.Visibility.VISIBLE;
@@ -68,8 +72,13 @@ import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.startsWith;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-//import static org.odk.collect.android.activities.FormEntryActivity.BEARING_RESULT;
 import static org.odk.collect.android.activities.FormEntryActivity.EXTRA_TESTING_PATH;
+
+// import android.support.annotation.Nullable;
+// import org.odk.collect.android.activities.BearingActivity;
+// import static android.app.Activity.RESULT_CANCELED;
+//import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+//import static org.odk.collect.android.activities.FormEntryActivity.BEARING_RESULT;
 
 /**
  * Integration test that runs through a form with all question types.
@@ -515,32 +524,65 @@ public class AllWidgetsFormTest {
 
     public void testRangeIntegerWidget() {
 
-         Screengrab.screenshot("range-integer");
+        int randomValue = randomInt() % 9;
+        onVisibleSeekBar().perform(setProgress(randomValue));
 
-         onView(withText("Range integer widget")).perform(swipeLeft());
+        Screengrab.screenshot("range-integer");
+
+        openWidgetList();
+        onView(withText("Range integer widget")).perform(click());
+
+        onVisibleSeekBar().check(matches(withProgress(randomValue)));
+
+        onView(withText("Range integer widget")).perform(swipeLeft());
 
     }
 
     public void testRangeVerticalAppearance() {
 
-         Screengrab.screenshot("range-integer-vertical");
+        int randomValue = randomInt() % 9;
+        onVisibleSeekBar().perform(setProgress(randomValue));
 
-         onView(withText("Range integer widget")).perform(swipeLeft());
+        Screengrab.screenshot("range-integer-vertical");
+
+        openWidgetList();
+        onView(withText("Range vertical integer widget")).perform(click());
+
+        onVisibleSeekBar().check(matches(withProgress(randomValue)));
+
+        onView(withText("Range vertical integer widget")).perform(swipeLeft());
 
     }
 
     public void testRangeDecimalWidget() {
 
-          Screengrab.screenshot("range-decimal");
+        int randomValue = randomInt() % 8;
+        onVisibleSeekBar().perform(setProgress(randomValue));
 
-          onView(withText("Range decimal widget")).perform(swipeLeft());
+        Screengrab.screenshot("range-decimal");
+
+        openWidgetList();
+        onView(withText("Range decimal widget")).perform(click());
+
+        onVisibleSeekBar().check(matches(withProgress(randomValue)));
+
+        onView(withText("Range decimal widget")).perform(swipeLeft());
+
     }
 
     public void testRangeDecimalVertical() {
 
-          Screengrab.screenshot("range-decimal-vertical");
+        int randomValue = randomInt() % 8;
+        onVisibleSeekBar().perform(setProgress(randomValue));
 
-          onView(withText("Range decimal widget")).perform(swipeLeft());
+        Screengrab.screenshot("range-decimal-vertical");
+
+        openWidgetList();
+        onView(withText("Range vertical decimal widget")).perform(click());
+
+        onVisibleSeekBar().check(matches(withProgress(randomValue)));
+
+        onView(withText("Range vertical decimal widget")).perform(swipeLeft());
 
     }
 
@@ -872,6 +914,45 @@ public class AllWidgetsFormTest {
         return Environment.getExternalStorageDirectory().getPath()
                 + FORMS_DIRECTORY
                 + ALL_WIDGETS_FORM;
+    }
+
+    public static Matcher<View> withProgress(final int expectedProgress) {
+        return new BoundedMatcher<View, SeekBar>(SeekBar.class) {
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("expected: ");
+                description.appendText(String.valueOf(expectedProgress));
+            }
+
+            @Override
+            public boolean matchesSafely(SeekBar seekBar) {
+                return seekBar.getProgress() == expectedProgress;
+            }
+        };
+    }
+
+    public static ViewAction setProgress(final int progress) {
+        return new ViewAction() {
+            @Override
+            public void perform(UiController uiController, View view) {
+                SeekBar seekBar = (SeekBar) view;
+                seekBar.setProgress(progress);
+            }
+
+            @Override
+            public String getDescription() {
+                return "Set a progress on a SeekBar";
+            }
+
+            @Override
+            public Matcher<View> getConstraints() {
+                return ViewMatchers.isAssignableFrom(SeekBar.class);
+            }
+        };
+    }
+
+    private ViewInteraction onVisibleSeekBar() {
+        return onView(withId(R.id.seek_bar));
     }
 
     private ViewInteraction onVisibleEditText() {

@@ -222,7 +222,7 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
                         applySettings(response);
                     }
                 } catch (FileNotFoundException e) {
-                    Timber.e(e);
+                    Timber.d(e);
                 }
             } else {
                 Timber.i("Choosing QR code from sdcard cancelled");

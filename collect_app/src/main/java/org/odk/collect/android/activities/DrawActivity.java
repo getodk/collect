@@ -88,7 +88,7 @@ public class DrawActivity extends AppCompatActivity {
         try {
             saveFile(savepointImage);
         } catch (FileNotFoundException e) {
-            Timber.e(e);
+            Timber.d(e);
         }
         if (savepointImage.exists()) {
             outState.putString(SAVEPOINT_IMAGE, savepointImage.getAbsolutePath());
