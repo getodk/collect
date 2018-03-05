@@ -31,18 +31,20 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
@@ -93,7 +95,6 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
     private Button rootButton;
     private Button backButton;
     private Button downloadButton;
-    private EditText searchText;
     private Stack<String> currentPath = new Stack<>();
     private Stack<String> folderIdStack = new Stack<>();
     private String alertMsg;
@@ -111,6 +112,7 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
     private TextView emptyView;
     private DriveHelper driveHelper;
     private GoogleAccountsManager accountsManager;
+    SearchView searchView;
 
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -205,29 +207,38 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
         downloadButton = findViewById(R.id.download_button);
         downloadButton.setOnClickListener(this);
 
-        searchText = findViewById(R.id.search_text);
-
-        searchText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                updateAdapter(s);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
         accountsManager = new GoogleAccountsManager(this);
         accountsManager.setListener(this);
         driveHelper = accountsManager.getDriveHelper();
         getResultsFromApi();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(final Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.drive_menu, menu);
+
+        final MenuItem searchItem = menu.findItem(R.id.menu_filter);
+        searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setQueryHint(getResources().getString(R.string.search));
+        searchView.setMaxWidth(Integer.MAX_VALUE);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                updateAdapter(query);
+                searchView.clearFocus();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                updateAdapter(newText);
+                return false;
+            }
+        });
+
+        return super.onCreateOptionsMenu(menu);
     }
 
     /*
@@ -303,7 +314,7 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
                 toDownload.clear();
                 filteredList.clear();
                 driveList.clear();
-                searchText.setText(null);
+                searchView.setQuery("", false);
                 listFiles(item.getDriveId());
                 folderIdStack.push(item.getDriveId());
                 currentPath.push(item.getName());
@@ -623,7 +634,7 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onClick(View v) {
-        searchText.setText("");
+        searchView.setQuery("", false);
         switch (v.getId()) {
             case R.id.root_button:
                 getResultsFromApi();
