@@ -33,6 +33,7 @@ import android.widget.RelativeLayout;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
+import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
@@ -69,7 +70,11 @@ public class SelectOneWidget
         buttons = new ArrayList<>();
 
         if (prompt.getAnswerValue() != null) {
-            selectedValue = ((Selection) prompt.getAnswerValue().getValue()).getValue();
+            if (this instanceof ItemsetWidget) {
+                selectedValue = prompt.getAnswerValue().getDisplayText();
+            } else { // Regular SelectOneWidget
+                selectedValue = ((Selection) prompt.getAnswerValue().getValue()).getValue();
+            }
         }
 
         this.autoAdvance = autoAdvance;
@@ -94,7 +99,8 @@ public class SelectOneWidget
     @Override
     public IAnswerData getAnswer() {
         int i = getCheckedId();
-        return i == -1 ? null : new SelectOneData(new Selection(items.get(i)));
+        return i == -1 ? null :
+                (this instanceof ItemsetWidget ? new StringData(items.get(i).getValue()) : new SelectOneData(new Selection(items.get(i))));
     }
 
     public int getCheckedId() {
