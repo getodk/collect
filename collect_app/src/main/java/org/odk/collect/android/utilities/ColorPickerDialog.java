@@ -226,7 +226,7 @@ public class ColorPickerDialog extends Dialog {
                 // color
                 if (translatedHue != x) {
                     paint.setColor(hueBarColors[x]);
-                    paint.setStrokeWidth(1);
+                    paint.setStrokeWidth(SCALE_FACTOR);
                 } else {
                     // else display a slightly larger black line
                     paint.setColor(Color.BLACK);
