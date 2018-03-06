@@ -74,6 +74,19 @@
                     android:layout_height="10dp"/>
 
                 <Button
+                    android:id="@+id/time_form_loading"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="20dp"
+                    android:textAllCaps="false"
+                    android:textSize="21sp"
+                    android:textStyle="normal"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"/>
+
+                <Button
                     android:id="@+id/enter_data"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

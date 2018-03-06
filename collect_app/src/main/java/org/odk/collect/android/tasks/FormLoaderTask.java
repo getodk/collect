@@ -469,7 +469,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
      * @param formDef serialized FormDef file
      * @return {@link FormDef} object
      */
-    public FormDef deserializeFormDef(File formDef) {
+    public static FormDef deserializeFormDef(File formDef) {
 
         // TODO: any way to remove reliance on jrsp?
         FileInputStream fis = null;
@@ -495,13 +495,14 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
     /**
      * Serializes a FormDef and saves it to the cache, if it is not already cached.
      *
-     * @param fd       the FormDef
-     * @param filepath where to save the serialized FormDef
+     * @param fd        the FormDef
+     * @param filepath  where to save the serialized FormDef
+     * @param cachePath the path to the cache
      * @return whether the file was added to the cache
      */
-    private boolean cacheFormDefIfNew(FormDef fd, String filepath) {
+    public static boolean cacheFormDefIfNew(FormDef fd, String filepath, String cachePath) {
         String hash = FileUtils.getMd5Hash(new File(filepath));
-        File formDef = new File(Collect.CACHE_PATH + File.separator + hash + ".formdef");
+        File formDef = new File(cachePath + File.separator + hash + ".formdef");
 
         if (formDef.exists()) {
             return false;
@@ -516,6 +517,10 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             Timber.e(e);
         }
         return true;
+    }
+
+    private static boolean cacheFormDefIfNew(FormDef fd, String filepath) {
+        return cacheFormDefIfNew(fd, filepath, Collect.CACHE_PATH);
     }
 
     @Override

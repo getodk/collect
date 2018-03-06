@@ -44,6 +44,7 @@ import android.widget.TextView;
 import com.google.android.gms.analytics.GoogleAnalytics;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.TimeParseAndCache;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.preferences.AdminKeys;
@@ -81,6 +82,7 @@ public class MainMenuActivity extends AppCompatActivity {
 
     private static final boolean EXIT = true;
     // buttons
+    private Button timeFormLoadingButton;
     private Button enterDataButton;
     private Button manageFilesButton;
     private Button sendDataButton;
@@ -107,6 +109,10 @@ public class MainMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_menu);
         initToolbar();
+
+        timeFormLoadingButton = findViewById(R.id.time_form_loading);
+        timeFormLoadingButton.setText(getString(R.string.time_form_loading_button));
+        timeFormLoadingButton.setOnClickListener(view -> new TimeParseAndCache().run(view));
 
         // enter data button. expects a result.
         enterDataButton = findViewById(R.id.enter_data);
