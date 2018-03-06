@@ -31,21 +31,13 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.TextView;
+import android.widget.ListView;
 
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 import com.google.api.services.drive.Drive;
@@ -76,9 +68,11 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.gdrive.GoogleAccountsManager.REQUEST_ACCOUNT_PICKER;
 
-public class GoogleDriveActivity extends AppCompatActivity implements View.OnClickListener,
-        TaskListener, GoogleDriveFormDownloadListener, GoogleAccountsManager.GoogleAccountSelectionListener {
+public class GoogleDriveActivity extends FormListActivity implements View.OnClickListener,
+        TaskListener, GoogleDriveFormDownloadListener, GoogleAccountsManager.GoogleAccountSelectionListener,
+        AdapterView.OnItemClickListener {
 
+    private static final String DRIVE_DOWNLOAD_LIST_SORTING_ORDER = "driveDownloadListSortingOrder";
     public static final int AUTHORIZATION_REQUEST_CODE = 4322;
     private static final int PROGRESS_DIALOG = 1;
     private static final int GOOGLE_USER_DIALOG = 3;
@@ -108,11 +102,8 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
     private ArrayList<DriveListItem> toDownload;
     private List<DriveListItem> filteredList;
     private List<DriveListItem> driveList;
-    private RecyclerView listView;
-    private TextView emptyView;
     private DriveHelper driveHelper;
     private GoogleAccountsManager accountsManager;
-    SearchView searchView;
 
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -122,17 +113,11 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        setContentView(R.layout.drive_layout);
         super.onCreate(savedInstanceState);
 
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-
         setProgressBarVisibility(true);
-        setContentView(R.layout.drive_layout);
-        listView = findViewById(R.id.list);
-        listView.setLayoutManager(new LinearLayoutManager(this));
-        listView.addItemDecoration(new DividerItemDecoration(listView.getContext(), LinearLayoutManager.VERTICAL));
-        emptyView = findViewById(android.R.id.empty);
-
         initToolbar();
 
         parentId = null;
@@ -153,8 +138,7 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
 
             ArrayList<DriveListItem> dl = savedInstanceState
                     .getParcelableArrayList(DRIVE_ITEMS_KEY);
-            adapter = new FileArrayAdapter(this, dl, this::onListItemClick);
-            listView.setAdapter(adapter);
+            filteredList.addAll(dl);
         } else {
             // new
             myDrive = false;
@@ -207,38 +191,17 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
         downloadButton = findViewById(R.id.download_button);
         downloadButton.setOnClickListener(this);
 
+        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        listView.setItemsCanFocus(false);
+
+        sortingOptions = new String[]{
+                getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc)
+        };
+
         accountsManager = new GoogleAccountsManager(this);
         accountsManager.setListener(this);
         driveHelper = accountsManager.getDriveHelper();
         getResultsFromApi();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(final Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.drive_menu, menu);
-
-        final MenuItem searchItem = menu.findItem(R.id.menu_filter);
-        searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-        searchView.setQueryHint(getResources().getString(R.string.search));
-        searchView.setMaxWidth(Integer.MAX_VALUE);
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                updateAdapter(query);
-                searchView.clearFocus();
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                updateAdapter(newText);
-                return false;
-            }
-        });
-
-        return super.onCreateOptionsMenu(menu);
     }
 
     /*
@@ -297,42 +260,13 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
     protected void onSaveInstanceState(Bundle outState) {
         outState.putBoolean(MY_DRIVE_KEY, myDrive);
         ArrayList<DriveListItem> dl = new ArrayList<>();
-        for (int i = 0; i < (adapter != null ? adapter.getItemCount() : 0); i++) {
-            dl.add(adapter.getItem(i));
-        }
+        dl.addAll(filteredList);
         outState.putParcelableArrayList(DRIVE_ITEMS_KEY, dl);
         outState.putStringArray(PATH_KEY, currentPath.toArray(new String[currentPath.size()]));
         outState.putString(PARENT_KEY, parentId);
         outState.putBoolean(ALERT_SHOWING_KEY, alertShowing);
         outState.putString(ALERT_MSG_KEY, alertMsg);
         super.onSaveInstanceState(outState);
-    }
-
-    private void onListItemClick(View view, DriveListItem item) {
-        if (item != null && item.getType() == DriveListItem.DIR) {
-            if (isDeviceOnline()) {
-                toDownload.clear();
-                filteredList.clear();
-                driveList.clear();
-                searchView.setQuery("", false);
-                listFiles(item.getDriveId());
-                folderIdStack.push(item.getDriveId());
-                currentPath.push(item.getName());
-            } else {
-                createAlertDialog(getString(R.string.no_connection));
-            }
-        } else {
-            // file clicked, download the file, mark checkbox.
-            CheckBox cb = view.findViewById(R.id.checkbox);
-            cb.setChecked(!cb.isChecked());
-
-            if (toDownload.contains(item) && !cb.isChecked()) {
-                toDownload.remove(item);
-            } else {
-                toDownload.add(item);
-            }
-            downloadButton.setEnabled(toDownload.size() > 0);
-        }
     }
 
     private void getFiles() {
@@ -353,7 +287,9 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
         getFileTask.execute(toDownload);
     }
 
-    private void updateAdapter(CharSequence charSequence) {
+    @Override
+    protected void updateAdapter() {
+        CharSequence charSequence = getFilterText();
         filteredList.clear();
 
         if (charSequence.length() > 0) {
@@ -366,51 +302,46 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
             filteredList.addAll(driveList);
         }
 
-        if (filteredList.size() == 0) {
-            emptyView.setVisibility(View.VISIBLE);
-        } else {
-            emptyView.setVisibility(View.INVISIBLE);
-        }
-
+        sortList();
         if (adapter == null) {
-            adapter = new FileArrayAdapter(this, filteredList, this::onListItemClick);
+            adapter = new FileArrayAdapter(this, filteredList);
             listView.setAdapter(adapter);
         } else {
             adapter.notifyDataSetChanged();
         }
 
-        adapter.sort(new Comparator<DriveListItem>() {
-            @Override
-            public int compare(DriveListItem lhs, DriveListItem rhs) {
-                if (lhs.getType() != rhs.getType()) {
-                    if (lhs.getType() == DriveListItem.DIR) {
-                        return -1;
-                    } else {
-                        return 1;
-                    }
-                } else {
-                    return lhs.getName().compareTo(rhs.getName());
-                }
-            }
-        });
-
         adapter.notifyDataSetChanged();
         checkPreviouslyCheckedItems();
     }
 
-    private void checkPreviouslyCheckedItems() {
-        for (int i = 0; i < adapter.getItemCount(); i++) {
-            DriveListItem item = adapter.getItem(i);
+    @Override
+    protected void checkPreviouslyCheckedItems() {
+        listView.clearChoices();
+        for (int i = 0; i < listView.getCount(); i++) {
+            DriveListItem item = (DriveListItem) listView.getAdapter().getItem(i);
             if (toDownload.contains(item)) {
-                RecyclerView.ViewHolder viewHolder = listView.findViewHolderForAdapterPosition(i);
-                if (viewHolder != null) {
-                    View view = viewHolder.itemView;
-                    CheckBox cb = view.findViewById(R.id.checkbox);
-                    cb.setChecked(true);
-                }
-
+                listView.setItemChecked(i, true);
             }
         }
+    }
+
+    private void sortList() {
+        Collections.sort(filteredList, new Comparator<DriveListItem>() {
+            @Override
+            public int compare(DriveListItem lhs, DriveListItem rhs) {
+                if (getSortingOrder().equals(SORT_BY_NAME_ASC)) {
+                    return lhs.getName().compareToIgnoreCase(rhs.getName());
+                } else {
+                    return rhs.getName().compareToIgnoreCase(lhs.getName());
+
+                }
+            }
+        });
+    }
+
+    @Override
+    protected String getSortingOrderKey() {
+        return DRIVE_DOWNLOAD_LIST_SORTING_ORDER;
     }
 
     @Override
@@ -634,7 +565,6 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onClick(View v) {
-        searchView.setQuery("", false);
         switch (v.getId()) {
             case R.id.root_button:
                 getResultsFromApi();
@@ -645,6 +575,7 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
                 rootButton.setEnabled(false);
                 downloadButton.setEnabled(false);
                 toDownload.clear();
+                driveList.clear();
                 if (isDeviceOnline()) {
                     if (folderIdStack.empty()) {
                         parentId = ROOT_KEY;
@@ -668,6 +599,34 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void onGoogleAccountSelected(String accountName) {
         getResultsFromApi();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        DriveListItem item = filteredList.get(position);
+        if (item != null && item.getType() == DriveListItem.DIR) {
+            if (isDeviceOnline()) {
+                toDownload.clear();
+                driveList.clear();
+                clearSearchView();
+                listFiles(item.getDriveId());
+                folderIdStack.push(item.getDriveId());
+                currentPath.push(item.getName());
+            } else {
+                createAlertDialog(getString(R.string.no_connection));
+            }
+        } else {
+            // file clicked, download the file, mark checkbox.
+            CheckBox cb = view.findViewById(R.id.checkbox);
+            cb.setChecked(!cb.isChecked());
+
+            if (toDownload.contains(item) && !cb.isChecked()) {
+                toDownload.remove(item);
+            } else {
+                toDownload.add(item);
+            }
+            downloadButton.setEnabled(toDownload.size() > 0);
+        }
     }
 
     private class RetrieveDriveFileContentsAsyncTask extends
@@ -806,7 +765,7 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
             Collections.sort(forms);
             driveList.addAll(dirs);
             driveList.addAll(forms);
-            updateAdapter("");
+            updateAdapter();
         }
     }
 

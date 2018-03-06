@@ -19,10 +19,10 @@ package org.odk.collect.android.adapters;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -31,57 +31,47 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.logic.DriveListItem;
 
 import java.text.SimpleDateFormat;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class FileArrayAdapter extends RecyclerView.Adapter<FileArrayAdapter.ViewHolder> {
+import io.reactivex.annotations.NonNull;
+
+public class FileArrayAdapter extends ArrayAdapter {
 
     private Context context;
     private List<DriveListItem> items;
 
-    public interface OnItemClickListener {
-        void onItemClick(View v, DriveListItem item);
-    }
 
-    private final OnItemClickListener listener;
-
-    public FileArrayAdapter(Context context, List<DriveListItem> objects, OnItemClickListener listener) {
+    public FileArrayAdapter(Context context, List<DriveListItem> filteredDriveList) {
+        super(context, R.layout.two_item_image, filteredDriveList);
         this.context = context;
-        items = objects;
-        this.listener = listener;
+        items = filteredDriveList;
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    private class ViewHolder {
         ImageView imageView;
         TextView text1;
         TextView text2;
         CheckBox checkBox;
-
-        ViewHolder(View v) {
-            super(v);
-            imageView = v.findViewById(R.id.image);
-            text1 = v.findViewById(R.id.text1);
-            text2 = v.findViewById(R.id.text2);
-            checkBox = v.findViewById(R.id.checkbox);
-        }
-
-        void bind(final DriveListItem item, final OnItemClickListener listener) {
-            itemView.setOnClickListener(v -> listener.onItemClick(v, item));
-        }
     }
 
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.two_item_image, parent, false);
-        return new ViewHolder(v);
-    }
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+        View row = convertView;
+        final ViewHolder holder;
+        if (row == null) {
+            holder = new ViewHolder();
+            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            row = inflater.inflate(R.layout.two_item_image, parent, false);
 
-    @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.bind(items.get(position), listener);
+            holder.imageView = row.findViewById(R.id.image);
+            holder.text1 = row.findViewById(R.id.text1);
+            holder.text2 = row.findViewById(R.id.text2);
+            holder.checkBox = row.findViewById(R.id.checkbox);
+            row.setTag(holder);
+        } else {
+            holder = (ViewHolder) row.getTag();
+        }
 
         final DriveListItem o = items.get(position);
         if (o != null) {
@@ -117,27 +107,6 @@ public class FileArrayAdapter extends RecyclerView.Adapter<FileArrayAdapter.View
             holder.checkBox.setChecked(o.isSelected());
             holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> o.setSelected(buttonView.isChecked()));
         }
-    }
-
-    @Override
-    public int getItemCount() {
-        return items.size();
-    }
-
-    public DriveListItem getItem(int i) {
-        return items.get(i);
-    }
-
-    public void add(DriveListItem item) {
-        items.add(item);
-    }
-
-    public void addAll(List<DriveListItem> items) {
-        this.items.addAll(items);
-    }
-
-    public void sort(Comparator<DriveListItem> comparator) {
-        Collections.sort(items, comparator);
-        notifyItemRangeChanged(0, getItemCount());
+        return row;
     }
 }
