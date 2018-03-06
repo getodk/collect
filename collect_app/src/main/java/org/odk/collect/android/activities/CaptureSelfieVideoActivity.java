@@ -91,7 +91,6 @@ public class CaptureSelfieVideoActivity extends Activity {
 
     private boolean prepareVideoRecorder(){
 
-        camera = CameraUtils.getCameraInstance(this, cameraId);
         mediaRecorder = new MediaRecorder();
 
         // Step 1: Unlock and set camera to MediaRecorder
@@ -136,18 +135,11 @@ public class CaptureSelfieVideoActivity extends Activity {
         }
     }
 
-    private void releaseCamera(){
-        if (camera != null){
-            camera.release();        // release the camera for other applications
-            camera = null;
-        }
-    }
-
     @Override
     protected void onPause() {
         super.onPause();
         releaseMediaRecorder();       // if you are using MediaRecorder, release it first
-        releaseCamera();              // release the camera immediately on pause event
+        camera = null;              // release the camera immediately on pause event
     }
 
 
