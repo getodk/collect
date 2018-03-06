@@ -332,7 +332,7 @@ public class ColorPickerDialog extends Dialog {
             }
 
             // If the touch event is located in the hue bar
-            if (x > 10 * scaleFactor && x < 266 * scaleFactor && y > 0 * scaleFactor && y < 40 * scaleFactor) {
+            if (x > 10 * scaleFactor && x < 266 * scaleFactor && y > 0 && y < 40 * scaleFactor) {
                 // Update the main field colors
                 currentHue = (255 - x / scaleFactor) * 360 / 255;
                 updateMainColors();
