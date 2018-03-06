@@ -69,7 +69,6 @@ public abstract class QuestionWidget
         implements Widget, AudioPlayListener {
 
     private static final int DEFAULT_PLAY_COLOR = Color.BLUE;
-    private static final int DEFAULT_PLAY_BACKGROUND_COLOR = Color.WHITE;
 
     private final int questionFontSize;
     private final FormEntryPrompt formEntryPrompt;
@@ -80,7 +79,6 @@ public abstract class QuestionWidget
     private Bundle state;
 
     private int playColor = DEFAULT_PLAY_COLOR;
-    private int playBackgroundColor = DEFAULT_PLAY_BACKGROUND_COLOR;
 
     public QuestionWidget(Context context, FormEntryPrompt prompt) {
         super(context);
@@ -187,17 +185,6 @@ public abstract class QuestionWidget
             }
         }
         questionMediaLayout.setPlayTextColor(getPlayColor());
-
-        String playBackgroundColorString = prompt.getFormElement().getAdditionalAttribute(null,
-                "playBackgroundColor");
-        if (playBackgroundColorString != null) {
-            try {
-                playBackgroundColor = Color.parseColor(playBackgroundColorString);
-            } catch (IllegalArgumentException e) {
-                Timber.e(e, "Argument %s is incorrect", playBackgroundColorString);
-            }
-        }
-        questionMediaLayout.setPlayTextBackgroundColor(getPlayBackgroundColor());
 
         return questionMediaLayout;
     }
@@ -602,9 +589,5 @@ public abstract class QuestionWidget
 
     public int getPlayColor() {
         return playColor;
-    }
-
-    public int getPlayBackgroundColor() {
-        return playBackgroundColor;
     }
 }

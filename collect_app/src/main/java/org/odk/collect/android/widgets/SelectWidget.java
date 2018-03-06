@@ -145,7 +145,6 @@ public abstract class SelectWidget extends QuestionWidget {
 
         mediaLayout.setAudioListener(this);
         mediaLayout.setPlayTextColor(getPlayColor());
-        mediaLayout.setPlayTextBackgroundColor(getPlayBackgroundColor());
         playList.add(mediaLayout);
 
         if (index != items.size() - 1) {
