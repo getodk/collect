@@ -26,17 +26,13 @@ public final class FormsDaoHelper {
     }
 
     public static int getFormsCount(String selection, String[] selectionArgs) {
-        int count = -1;
         try (Cursor c = new FormsDao().getFormsCursor(selection, selectionArgs)) {
             if (c != null) {
-                count = c.getCount();
+                return c.getCount();
             }
         }
-        if (count == -1) {
-            throw new RuntimeException("Could not open the cursor properly");
-        } else {
-            return count;
-        }
+
+        throw new RuntimeException("Unable to get the forms count");
     }
 
     public static String getFormPath(String selection, String[] selectionArgs) {
