@@ -45,6 +45,7 @@ import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.ActionListener;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
+import org.odk.collect.android.utilities.CompressionUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.QRCodeUtils;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
@@ -204,7 +205,11 @@ public class ShowQRCodeFragment extends Fragment {
                 // request was canceled...
                 Timber.i("QR code scanning cancelled");
             } else {
-                applySettings(result.getContents());
+                try {
+                    applySettings(CompressionUtils.decompress(result.getContents()));
+                } catch (IOException | DataFormatException e) {
+                    Timber.e(e);
+                }
                 return;
             }
         }
