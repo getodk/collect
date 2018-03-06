@@ -11,6 +11,7 @@
   <string name="cancel">បោះបង់</string>
   <string name="cancel_loading_form">បោះបង់</string>
   <string name="cancel_location">បោះបង់</string>
+  <string name="canceling">កំពុង​បោះបង់</string>
   <string name="cannot_edit_completed_form">ទម្រង់នេះមិនអាចកែប្រែម្តងទៀតទេ, វាត្រូវបានគេសម្គាល់ថាបានបញ្ចប់ហើយ។ វាប្រហែលជាត្រូវបានអ៊ិនគ្រីប។</string>
   <string name="capture_audio">ថត​សំឡេង</string>
   <string name="capture_image">ថត​រូបភាព</string>
@@ -299,6 +300,8 @@
   <string name="show_map_sdk">បង្ហាញ​ជម្រើស​ផែនទី​ SDK</string>
   <string name="openmap_streets">ផ្លូវ OSM</string>
   <string name="openmap_usgs_topo">USGS National Map Topo</string>
+  <string name="openmap_usgs_sat">ផែនទីជាតិ Hybrid USGS </string>
+  <string name="openmap_usgs_img">ផែនទីជាតិរូបភាព USGS </string>
   <string name="openmap_stamen_terrain">Stamen Terrain</string>
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
@@ -560,4 +563,7 @@
   <string name="moving_backwards_enabled_message">អ្នកប្រហែលជាចង់មើលម្តងទៀតអំពីការកំណត់៖ \n\n\u2022 កែប្រែទម្រង់ដែលបានរក្សាទុក\n\u2022 រក្សាទុកទម្រង់\n\u2022 ទៅកាន់កន្លែងបញ្ចូល\n\u2022 កំពុងដំណើរការកំហិត</string>
   <string name="yes">បាទ/ចាស</string>
   <string name="no">ទេ</string>
+  <string name="newer_version_of_a_form_info">នេះគឺជាកំណែថ្មីនៃទម្រង់ដែលអ្នកមានរួចហើយ!</string>
+  <string name="svg_file_does_not_exist">ឯកសារ SVG មិនត្រូវបានរកឃើញ</string>
+  <string name="svg_not_supported_device">ធាតុក្រាហ្វិក​រូបភាព​ផែនទី​ទាមទារ Android ជំនាន់ទី ៥ (Lollipop) ឬ​ជំនាន់ថ្មី។ ឧបករណ៍​របស់​អ្នក​មិន​ត្រូវ​បាន​គាំ​ទ្រទេ។</string>
 </resources>

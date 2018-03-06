@@ -11,6 +11,7 @@
   <string name="cancel">Cancelar</string>
   <string name="cancel_loading_form">Cancelar</string>
   <string name="cancel_location">Cancelar</string>
+  <string name="canceling">Cancelando</string>
   <string name="cannot_edit_completed_form">Este formulario no puede ser editado una vez que ha sido marcado como finalizado. Puede estar encriptado</string>
   <string name="capture_audio">Grabar el Sonido</string>
   <string name="capture_image">Tomar la Foto</string>
@@ -565,4 +566,6 @@
   <string name="yes">Si</string>
   <string name="no">No</string>
   <string name="newer_version_of_a_form_info">Esta es una versión actualizada de un formularios que ya tiene!</string>
+  <string name="svg_file_does_not_exist">Archivo SVG no existe</string>
+  <string name="svg_not_supported_device">Pregunta tipo ImageMap requiere mínimo Android 5 (Lollipop). Su dispositivo tiene una versión menor!</string>
 </resources>
