@@ -233,7 +233,7 @@ public class ColorPickerDialog extends Dialog {
                     paint.setColor(Color.BLACK);
                     paint.setStrokeWidth(3);
                 }
-                canvas.drawLine((x + 10)* scaleFactor, 0* scaleFactor, (x + 10) * scaleFactor, 40 * scaleFactor, paint);
+                canvas.drawLine((x + 10) * scaleFactor, 0, (x + 10) * scaleFactor, 40 * scaleFactor, paint);
             }
 
             // Display the main field colors using LinearGradient
@@ -287,7 +287,7 @@ public class ColorPickerDialog extends Dialog {
 
         @Override
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            setMeasuredDimension((int) (276 * scaleFactor), (int) (366 * scaleFactor));
+            setMeasuredDimension(276 * scaleFactor, 366 * scaleFactor);
         }
 
         private boolean afterFirstDown = false;
@@ -338,8 +338,8 @@ public class ColorPickerDialog extends Dialog {
                 updateMainColors();
 
                 // Update the current selected color
-                int transX = (int) ((currentX / scaleFactor - 10));
-                int transY = (int) ((currentY / scaleFactor - 60));
+                int transX = (currentX / scaleFactor - 10);
+                int transY = (currentY / scaleFactor - 60);
                 int index = 256 * (transY - 1) + transX;
                 if (index > 0 && index < mainColors.length) {
                     currentColor = mainColors[256 * (transY - 1) + transX];
@@ -353,8 +353,8 @@ public class ColorPickerDialog extends Dialog {
             if (x > 10 * scaleFactor && x < 266 * scaleFactor && y > 50 * scaleFactor && y < 306 * scaleFactor) {
                 currentX = (int) x;
                 currentY = (int) y;
-                int transX = (int) ((currentX / scaleFactor - 10));
-                int transY = (int) ((currentY / scaleFactor - 60));
+                int transX = (currentX / scaleFactor - 10);
+                int transY = (currentY / scaleFactor - 60);
                 int index = 256 * (transY - 1) + transX;
                 if (index > 0 && index < mainColors.length) {
                     // Update the current color
