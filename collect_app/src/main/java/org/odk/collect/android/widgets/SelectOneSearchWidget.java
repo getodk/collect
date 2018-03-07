@@ -42,7 +42,7 @@ public class SelectOneSearchWidget extends SelectOneWidget implements OnCheckedC
     protected void addButtonsToLayout(List<Integer> tagList) {
         for (int i = 0; i < buttons.size(); i++) {
             if (tagList == null || tagList.contains(i)) {
-                answerLayout.addView(buttons.get(i));
+                answerLayout.addView(createMediaLayout(i, buttons.get(i)));
             }
         }
     }
