@@ -44,7 +44,7 @@ public class ColorPickerDialog extends Dialog {
         void colorChanged(String key, int color);
     }
 
-    // scale factor for the dialog, with the height of 90% of screen height
+    /** scale factor for the dialog, with the height of 90% of screen height */
     private static int scaleFactor;
     private OnColorChangedListener listener;
     private int initialColor;
@@ -338,8 +338,8 @@ public class ColorPickerDialog extends Dialog {
                 updateMainColors();
 
                 // Update the current selected color
-                int transX = (currentX / scaleFactor - 10);
-                int transY = (currentY / scaleFactor - 60);
+                int transX = currentX / scaleFactor - 10;
+                int transY = currentY / scaleFactor - 60;
                 int index = 256 * (transY - 1) + transX;
                 if (index > 0 && index < mainColors.length) {
                     currentColor = mainColors[256 * (transY - 1) + transX];
@@ -353,8 +353,8 @@ public class ColorPickerDialog extends Dialog {
             if (x > 10 * scaleFactor && x < 266 * scaleFactor && y > 50 * scaleFactor && y < 306 * scaleFactor) {
                 currentX = (int) x;
                 currentY = (int) y;
-                int transX = (currentX / scaleFactor - 10);
-                int transY = (currentY / scaleFactor - 60);
+                int transX = currentX / scaleFactor - 10;
+                int transY = currentY / scaleFactor - 60;
                 int index = 256 * (transY - 1) + transX;
                 if (index > 0 && index < mainColors.length) {
                     // Update the current color
@@ -395,7 +395,6 @@ public class ColorPickerDialog extends Dialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         scaleFactor = (int) (getContext().getResources().getDisplayMetrics().heightPixels * 0.9 / 366);
-
 
         OnColorChangedListener l = new OnColorChangedListener() {
             public void colorChanged(String key, int color) {
