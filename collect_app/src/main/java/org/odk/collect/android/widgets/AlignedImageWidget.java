@@ -88,7 +88,7 @@ public class AlignedImageWidget extends BaseImageWidget {
             } catch (ActivityNotFoundException e) {
                 Toast.makeText(getContext(),
                         getContext().getString(R.string.activity_not_found,
-                                "view image"),
+                                getContext().getString(R.string.view_image_format_args)),
                         Toast.LENGTH_SHORT).show();
             }
         }
@@ -191,7 +191,7 @@ public class AlignedImageWidget extends BaseImageWidget {
         } catch (ActivityNotFoundException e) {
             Toast.makeText(getContext(),
                     getContext().getString(R.string.activity_not_found,
-                            "aligned image capture"),
+                            getContext().getString(R.string.aligned_image_capture_format_args)),
                     Toast.LENGTH_SHORT).show();
             cancelWaitingForData();
         }
@@ -209,7 +209,7 @@ public class AlignedImageWidget extends BaseImageWidget {
                     RequestCodes.IMAGE_CHOOSER);
         } catch (ActivityNotFoundException e) {
             Toast.makeText(getContext(),
-                    getContext().getString(R.string.activity_not_found, "choose image"),
+                    getContext().getString(R.string.activity_not_found, getContext().getString(R.string.choose_image_format_args)),
                     Toast.LENGTH_SHORT).show();
             cancelWaitingForData();
         }

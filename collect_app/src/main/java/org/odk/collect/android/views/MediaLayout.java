@@ -145,7 +145,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
             if (i.resolveActivity(getContext().getPackageManager()) != null) {
                 getContext().startActivity(i);
             } else {
-                ToastUtils.showShortToast(getContext().getString(R.string.activity_not_found, "view video"));
+                ToastUtils.showShortToast(getContext().getString(R.string.activity_not_found, getContext().getString(R.string.view_video_format_args)));
             }
         }
     }
@@ -255,7 +255,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                                     } catch (ActivityNotFoundException e) {
                                         Timber.d(e, "No Activity found to handle due to %s", e.getMessage());
                                         ToastUtils.showShortToast(getContext().getString(R.string.activity_not_found,
-                                                "view image"));
+                                                getContext().getString(R.string.view_image_format_args)));
                                     }
                                 } else {
                                     if (viewText instanceof RadioButton) {
