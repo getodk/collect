@@ -68,6 +68,7 @@ public abstract class QuestionWidget
         extends RelativeLayout
         implements Widget, AudioPlayListener {
 
+
     private final int DEFAULT_PLAY_COLOR = ContextCompat.getColor(getContext() , R.color.tintColor);
 
     private final int questionFontSize;
