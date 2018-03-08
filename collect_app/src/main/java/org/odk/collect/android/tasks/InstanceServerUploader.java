@@ -53,6 +53,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
+import java.net.URI;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.net.UnknownHostException;
@@ -164,10 +165,19 @@ public class InstanceServerUploader extends InstanceUploader {
                 WebUtils.enablePreemptiveBasicAuth(localContext, submissionUri.getHost());
             }
 
+            URI uri;
+            try {
+                uri = URI.create(submissionUri.toString());
+            } catch (IllegalArgumentException e) {
+                Timber.i(e);
+                outcome.results.put(id, Collect.getInstance().getString(R.string.url_error));
+                return false;
+            }
+
             // Issue a head request to confirm the server is an OpenRosa server and see if auth
             // is required
             // http://docs.opendatakit.org/openrosa-form-submission/#extended-transmission-considerations
-            HttpHead httpHead = WebUtils.createOpenRosaHttpHead(submissionUri);
+            HttpHead httpHead = WebUtils.createOpenRosaHttpHead(uri);
 
             // prepare response
             final HttpResponse response;
