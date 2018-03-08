@@ -158,7 +158,7 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
             } else {
                 getLocationButton.setVisibility(View.VISIBLE);
                 getLocationButton.setText(getContext().getString(
-                        dataAvailable ? R.string.get_point : R.string.get_point));
+                        dataAvailable ? R.string.view_change_location : R.string.get_point));
             }
 
             if (useMaps) {
