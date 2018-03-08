@@ -96,7 +96,6 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
             // (it's a spanned thing...)
             viewText.setText(viewText.getText().toString());
             viewText.setTextColor(playTextColor);
-            viewText.setBackgroundColor(playBackgroundTextColor);
             audioButton.playAudio();
         }
     }
