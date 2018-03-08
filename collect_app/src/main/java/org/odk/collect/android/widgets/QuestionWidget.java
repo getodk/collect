@@ -68,8 +68,6 @@ public abstract class QuestionWidget
         extends RelativeLayout
         implements Widget, AudioPlayListener {
 
-    private static final int DEFAULT_PLAY_COLOR = Color.BLUE;
-
     private final int questionFontSize;
     private final FormEntryPrompt formEntryPrompt;
     private final MediaLayout questionMediaLayout;
@@ -78,7 +76,7 @@ public abstract class QuestionWidget
 
     private Bundle state;
 
-    private int playColor = DEFAULT_PLAY_COLOR;
+    private int playColor = ContextCompat.getColor(getContext() , R.color.tintColor);
 
     public QuestionWidget(Context context, FormEntryPrompt prompt) {
         super(context);
