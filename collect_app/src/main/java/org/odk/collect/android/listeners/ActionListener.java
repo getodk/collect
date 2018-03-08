@@ -1,5 +1,4 @@
-/*
- * Copyright (C) 2017 Shobhit
+/* Copyright (C) 2018 Shobhit
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -14,14 +13,20 @@
 
 package org.odk.collect.android.listeners;
 
-import android.graphics.Bitmap;
-
 /**
- * Created by shobhit on 12/4/17.
+ * Interface for callback invocation on an application action
  */
+public interface ActionListener {
+    /**
+     * The operation succeeded
+     */
+    void onSuccess();
 
-public interface QRCodeListener {
-    void preExecute();
-
-    void bitmapGenerated(Bitmap bitmap);
+    /**
+     * The operation failed
+     *
+     * @param exception which caused the failure
+     */
+    void onFailure(Exception exception);
 }
+
