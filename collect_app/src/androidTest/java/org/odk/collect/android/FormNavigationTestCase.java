@@ -57,18 +57,31 @@ public class FormNavigationTestCase {
     @Parameters(name = "{0}")
     public static Iterable<Object[]> data() {
         // Expected indices when swiping forward until the end of the form and back once.
-        // An index of -1 indicates the start or end of a form
-        return Arrays.asList(new Object[][] {
-                {"simpleFieldList.xml", new String[] {"-1, ", "0, ", "-1, ", "0, "}},
-                {"fieldListInFieldList.xml", new String[] {"-1, ", "0, ", "-1, ", "0, "}},
-                {"regularGroupWithFieldListGroupInside.xml", new String[] {"-1, ", "0, 0, ", "-1, ", "0, 0, "}},
-                {"twoNestedRegularGroups.xml", new String[] {"-1, ", "0, 0, 0, ", "0, 0, 1, ", "0, 0, 2, ", "-1, ", "0, 0, 2, "}},
-                {"regularGroupWithQuestionAndRegularGroupInside.xml", new String[] {"-1, ", "0, 0, ", "0, 1, 0, ", "0, 1, 1, ", "-1, ", "0, 1, 1, "}},
-                {"regularGroupWithQuestionsAndRegularGroupInside.xml", new String[] {"-1, ", "0, 0, ", "0, 1, 0, ", "0, 2, ", "-1, ", "0, 2, "}},
-                {"fieldListWithQuestionAndRegularGroupInside.xml", new String[] {"-1, ", "0, ", "-1, ", "0, "}},
-                {"fieldListWithQuestionsAndRegularGroupsInside.xml", new String[] {"-1, ", "0, ", "-1, ", "0, "}},
-                {"threeNestedFieldListGroups.xml", new String[] {"-1, ", "0, ", "-1, ", "0, "}}
-        });
+        // An index of -1 indicates the start or end of a form.
+        return Arrays.asList(
+                ei("simpleFieldList.xml",
+                        "-1, ", "0, ", "-1, ", "0, "),
+                ei("fieldListInFieldList.xml",
+                        "-1, ", "0, ", "-1, ", "0, "),
+                ei("regularGroupWithFieldListGroupInside.xml",
+                        "-1, ", "0, 0, ", "-1, ", "0, 0, "),
+                ei("twoNestedRegularGroups.xml",
+                        "-1, ", "0, 0, 0, ", "0, 0, 1, ", "0, 0, 2, ", "-1, ", "0, 0, 2, "),
+                ei("regularGroupWithQuestionAndRegularGroupInside.xml",
+                        "-1, ", "0, 0, ", "0, 1, 0, ", "0, 1, 1, ", "-1, ", "0, 1, 1, "),
+                ei("regularGroupWithQuestionsAndRegularGroupInside.xml",
+                        "-1, ", "0, 0, ", "0, 1, 0, ", "0, 2, ", "-1, ", "0, 2, "),
+                ei("fieldListWithQuestionAndRegularGroupInside.xml",
+                        "-1, ", "0, ", "-1, ", "0, "),
+                ei("fieldListWithQuestionsAndRegularGroupsInside.xml",
+                        "-1, ", "0, ", "-1, ", "0, "),
+                ei("threeNestedFieldListGroups.xml",
+                        "-1, ", "0, ", "-1, ", "0, "));
+    }
+
+    /** Expected indices for each form */
+    private static Object[] ei(String formName, String... expectedIndices) {
+        return new Object[] {formName, expectedIndices};
     }
 
     private String formName;
@@ -86,7 +99,7 @@ public class FormNavigationTestCase {
 
     private void testIndices(String formName, String[] expectedIndices) throws ExecutionException, InterruptedException {
         try {
-            prepareFile(formName);
+            copyToSdCard(formName);
         } catch (IOException e) {
             Timber.i(e);
         }
@@ -96,7 +109,7 @@ public class FormNavigationTestCase {
             public void loadingComplete(FormLoaderTask task) {
                 try {
                     // For each form, simulate swiping forward through screens until the end of the
-                    // form and then swiping back once. Verify the expected indices before and after each swipe
+                    // form and then swiping back once. Verify the expected indices before and after each swipe.
                     for (int i = 0; i < expectedIndices.length - 1; i++) {
                         FormController formController = task.getFormController();
                         // check the current index
@@ -126,10 +139,10 @@ public class FormNavigationTestCase {
         formLoaderTask.execute(formPath(formName)).get();
     }
 
-    /*
-    FormLoaderTask loads forms from SD card so we need to put each form there
+    /**
+     * FormLoaderTask loads forms from SD card so we need to put each form there
      */
-    private void prepareFile(String formName) throws IOException {
+    private void copyToSdCard(String formName) throws IOException {
         String pathname = formPath(formName);
 
         AssetManager assetManager = InstrumentationRegistry.getContext().getAssets();

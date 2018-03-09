@@ -400,7 +400,7 @@ public class FormController {
                 // no group
                 return false;
             }
-            // If at least one of groups you are inside is field list your index is in field list
+            // If at least one of the groups you are inside is a field list, your index is in a field list
             for (FormEntryCaption caption : captions) {
                 if (groupIsFieldList(caption.getIndex())) {
                     return true;
