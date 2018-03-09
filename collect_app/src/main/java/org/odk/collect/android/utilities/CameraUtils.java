@@ -16,7 +16,7 @@ import timber.log.Timber;
 public class CameraUtils {
 
     private CameraUtils() {
-        
+
     }
 
     public static boolean isFrontCameraAvailable() {
