@@ -177,8 +177,8 @@ public final class WebUtils {
                 DateFormat.format("E, dd MMM yyyy hh:mm:ss zz", g).toString());
     }
 
-    public static HttpHead createOpenRosaHttpHead(Uri u) {
-        HttpHead req = new HttpHead(URI.create(u.toString()));
+    public static HttpHead createOpenRosaHttpHead(URI uri) {
+        HttpHead req = new HttpHead(uri);
         setCollectHeaders(req);
         setOpenRosaHeaders(req);
         return req;
