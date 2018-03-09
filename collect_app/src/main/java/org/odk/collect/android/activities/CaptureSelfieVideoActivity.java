@@ -137,9 +137,9 @@ public class CaptureSelfieVideoActivity extends Activity {
 
     @Override
     protected void onPause() {
-        super.onPause();
         releaseMediaRecorder();       // if you are using MediaRecorder, release it first
-        camera = null;              // release the camera immediately on pause event
+        camera = null;
+        super.onPause();
     }
 
 
