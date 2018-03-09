@@ -42,6 +42,7 @@ import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.listeners.FormListDownloaderListener;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.services.DownloadFormService;
 import org.odk.collect.android.tasks.DownloadFormListTask;
 import org.odk.collect.android.tasks.DownloadFormsTask;
 import org.odk.collect.android.utilities.AuthDialogUtility;
@@ -73,8 +74,11 @@ import timber.log.Timber;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class FormDownloadList extends FormListActivity implements FormListDownloaderListener,
-        FormDownloaderListener, AuthDialogUtility.AuthDialogUtilityResultListener, AdapterView.OnItemClickListener {
+        AuthDialogUtility.AuthDialogUtilityResultListener, AdapterView.OnItemClickListener {
     private static final String FORM_DOWNLOAD_LIST_SORTING_ORDER = "formDownloadListSortingOrder";
+
+    private static final String ACTION_DOWNLOAD_FORM = "downloadForm";
+    private static final String FORM_LIST = "formList" ;
 
     private static final int PROGRESS_DIALOG = 1;
     private static final int AUTH_DIALOG = 2;
@@ -106,7 +110,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     private Button downloadButton;
 
     private DownloadFormListTask downloadFormListTask;
-    private DownloadFormsTask downloadFormsTask;
     private Button toggleButton;
 
     private HashMap<String, FormDetails> formNamesAndURLs = new HashMap<String, FormDetails>();
@@ -220,17 +223,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 } catch (IllegalArgumentException e) {
                     Timber.i("Attempting to close a dialog that was not previously opened");
                 }
-                downloadFormsTask = null;
-            }
-        } else if (getLastNonConfigurationInstance() instanceof DownloadFormsTask) {
-            downloadFormsTask = (DownloadFormsTask) getLastNonConfigurationInstance();
-            if (downloadFormsTask.getStatus() == AsyncTask.Status.FINISHED) {
-                try {
-                    dismissDialog(PROGRESS_DIALOG);
-                } catch (IllegalArgumentException e) {
-                    Timber.i("Attempting to close a dialog that was not previously opened");
-                }
-                downloadFormsTask = null;
+
             }
         } else if (formNamesAndURLs.isEmpty() && getLastNonConfigurationInstance() == null) {
             // first time, so get the formlist
@@ -391,10 +384,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                                     downloadFormListTask.cancel(true);
                                     downloadFormListTask = null;
                                 }
-                                if (downloadFormsTask != null) {
-                                    showDialog(CANCELLATION_DIALOG);
-                                    downloadFormsTask.cancel(true);
-                                }
                             }
                         };
                 progressDialog.setTitle(getString(R.string.downloading_data));
@@ -500,11 +489,12 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
         if (totalCount > 0) {
             // show dialog box
-            showDialog(PROGRESS_DIALOG);
-
-            downloadFormsTask = new DownloadFormsTask();
-            downloadFormsTask.setDownloaderListener(this);
-            downloadFormsTask.execute(filesToDownload);
+           Intent downloadFormIntent = new Intent(this, DownloadFormService.class);
+           Bundle bundle = new Bundle();
+           bundle.putParcelableArrayList(FORM_LIST,filesToDownload);
+           downloadFormIntent.putExtras(bundle);
+           downloadFormIntent.setAction(ACTION_DOWNLOAD_FORM);
+           startService(downloadFormIntent);
         } else {
             ToastUtils.showShortToast(R.string.noselect_error);
         }
@@ -513,11 +503,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
     @Override
     public Object onRetainCustomNonConfigurationInstance() {
-        if (downloadFormsTask != null) {
-            return downloadFormsTask;
-        } else {
             return downloadFormListTask;
-        }
     }
 
 
@@ -525,9 +511,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     protected void onDestroy() {
         if (downloadFormListTask != null) {
             downloadFormListTask.setDownloaderListener(null);
-        }
-        if (downloadFormsTask != null) {
-            downloadFormsTask.setDownloaderListener(null);
         }
         super.onDestroy();
     }
@@ -537,9 +520,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     protected void onResume() {
         if (downloadFormListTask != null) {
             downloadFormListTask.setDownloaderListener(this);
-        }
-        if (downloadFormsTask != null) {
-            downloadFormsTask.setDownloaderListener(this);
         }
         if (alertShowing) {
             createAlertDialog(alertTitle, alertMsg, shouldExit);
@@ -697,49 +677,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         alertShowing = true;
         this.shouldExit = shouldExit;
         alertDialog.show();
-    }
-
-
-    @Override
-    public void progressUpdate(String currentFile, int progress, int total) {
-        alertMsg = getString(R.string.fetching_file, currentFile, String.valueOf(progress), String.valueOf(total));
-        progressDialog.setMessage(alertMsg);
-    }
-
-
-    @Override
-    public void formsDownloadingComplete(HashMap<FormDetails, String> result) {
-        if (downloadFormsTask != null) {
-            downloadFormsTask.setDownloaderListener(null);
-        }
-
-        if (progressDialog.isShowing()) {
-            // should always be true here
-            progressDialog.dismiss();
-        }
-
-        Set<FormDetails> keys = result.keySet();
-        StringBuilder b = new StringBuilder();
-        for (FormDetails k : keys) {
-            b.append(k.getFormName() + " ("
-                    + ((k.getFormVersion() != null)
-                    ? (this.getString(R.string.version) + ": " + k.getFormVersion() + " ")
-                    : "") + "ID: " + k.getFormID() + ") - " + result.get(k));
-            b.append("\n\n");
-        }
-
-        createAlertDialog(getString(R.string.download_forms_result), b.toString().trim(), EXIT);
-    }
-
-    @Override
-    public void formsDownloadingCancelled() {
-        if (downloadFormsTask != null) {
-            downloadFormsTask.setDownloaderListener(null);
-            downloadFormsTask = null;
-        }
-        if (cancelDialog.isShowing()) {
-            cancelDialog.dismiss();
-        }
     }
 
     @Override

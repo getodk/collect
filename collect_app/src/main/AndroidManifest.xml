@@ -305,6 +305,8 @@ the specific language governing permissions and limitations under the License.
 
         <activity
             android:name=".activities.WebViewActivity" />
+
+        <service android:name=".services.DownloadFormService"/>
     </application>
 
 </manifest>
