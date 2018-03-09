@@ -27,6 +27,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.AboutListAdapter;
@@ -121,7 +122,10 @@ public class AboutActivity extends AppCompatActivity implements
                             }
                         }
                     } catch (android.content.ActivityNotFoundException anfe) {
-                        Timber.e(anfe);
+                        Toast.makeText(Collect.getInstance(),
+                                getString(R.string.activity_not_found, "market view"),
+                                Toast.LENGTH_SHORT).show();
+                        Timber.d(anfe);
                     }
                     if (!intentStarted) {
                         // Show a list of all available browsers if user doesn't have a default browser

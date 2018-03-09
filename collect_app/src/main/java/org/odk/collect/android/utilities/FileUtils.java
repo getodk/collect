@@ -121,7 +121,7 @@ public class FileUtils {
             return bytes;
 
         } catch (FileNotFoundException e) {
-            Timber.e(e, "Cannot find file %s", file.getName());
+            Timber.d(e, "Cannot find file %s", file.getName());
             return null;
 
         } finally {
@@ -141,7 +141,7 @@ public class FileUtils {
             is = new FileInputStream(file);
 
         } catch (FileNotFoundException e) {
-            Timber.e(e, "Cache file %s not found", file.getAbsolutePath());
+            Timber.d(e, "Cache file %s not found", file.getAbsolutePath());
             return null;
 
         }
@@ -300,7 +300,7 @@ public class FileUtils {
         try {
             is = new FileInputStream(xmlFile);
         } catch (FileNotFoundException e1) {
-            Timber.e(e1);
+            Timber.d(e1);
             throw new IllegalStateException(e1);
         }
 

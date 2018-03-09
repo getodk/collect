@@ -1236,7 +1236,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         event = formController.stepToNextScreenEvent();
                         createErrorDialog(e.getMessage(), DO_NOT_EXIT);
                     } catch (JavaRosaException e1) {
-                        Timber.e(e1);
+                        Timber.d(e1);
                         createErrorDialog(e.getMessage() + "\n\n" + e1.getCause().getMessage(),
                                 DO_NOT_EXIT);
                     }
@@ -1277,7 +1277,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     event = formController.stepToNextScreenEvent();
                     createErrorDialog(getString(R.string.survey_internal_error), EXIT);
                 } catch (JavaRosaException e) {
-                    Timber.e(e);
+                    Timber.d(e);
                     createErrorDialog(e.getCause().getMessage(), EXIT);
                 }
                 return createView(event, advancingPage);
@@ -1297,7 +1297,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             event = formController.stepToNextScreenEvent();
 
         } catch (JavaRosaException e) {
-            Timber.e(e);
+            Timber.d(e);
             createErrorDialog(e.getMessage() + "\n\n" + e.getCause().getMessage(), DO_NOT_EXIT);
         }
 
@@ -1383,7 +1383,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     break;
             }
         } catch (JavaRosaException e) {
-            Timber.e(e);
+            Timber.d(e);
             createErrorDialog(e.getCause().getMessage(), DO_NOT_EXIT);
         }
     }
@@ -1437,7 +1437,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     Timber.w("FormController has a null value");
                 }
             } catch (JavaRosaException e) {
-                Timber.e(e);
+                Timber.d(e);
                 createErrorDialog(e.getCause().getMessage(), DO_NOT_EXIT);
             }
         } else {
