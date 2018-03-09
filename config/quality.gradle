@@ -20,7 +20,12 @@ apply plugin: 'jacoco'
  */
 
 jacoco {
-    toolVersion '0.7.4+'
+    // https://bintray.com/bintray/jcenter/org.jacoco:org.jacoco.core
+    toolVersion = '0.8.0'
+}
+
+tasks.withType(Test) {
+    jacoco.includeNoLocationClasses = true
 }
 
 // Add checkstyle, findbugs, pmd and lint to the check task.
@@ -115,8 +120,12 @@ task jacocoTestReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
     sourceDirectories = files(coverageSourceDirs)
     classDirectories = fileTree(
             dir: "${buildDir}/intermediates/classes/debug",
-            excludes: ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*',
-                       '**/*Test*.*', 'android/**/*.*',
+            excludes: ['**/R.class',
+                       '**/R$*.class',
+                       '**/BuildConfig.*',
+                       '**/Manifest*.*',
+                       '**/*Test*.*',
+                       'android/**/*.*',
                        '**/*_MembersInjector.class',
                        '**/Dagger*Component.class',
                        '**/Dagger*Component$Builder.class',
