@@ -7,7 +7,6 @@ import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraManager;
 import android.os.Build;
-import android.util.SparseIntArray;
 import android.view.Surface;
 
 import org.odk.collect.android.application.Collect;
@@ -16,13 +15,8 @@ import timber.log.Timber;
 
 public class CameraUtils {
 
-    private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
-
-    static {
-        ORIENTATIONS.append(Surface.ROTATION_0, 0);
-        ORIENTATIONS.append(Surface.ROTATION_90, 90);
-        ORIENTATIONS.append(Surface.ROTATION_180, 180);
-        ORIENTATIONS.append(Surface.ROTATION_270, 270);
+    private CameraUtils() {
+        
     }
 
     public static boolean isFrontCameraAvailable() {
@@ -64,11 +58,27 @@ public class CameraUtils {
 
         // Set the rotation of the camera which the output picture need.
         Camera.Parameters parameters = camera.getParameters();
-        int rotation = ORIENTATIONS.get(activity.getWindowManager().getDefaultDisplay().getRotation());
+        int rotation = getRotationInt(activity.getWindowManager().getDefaultDisplay().getRotation());
         parameters.setRotation(calcCameraRotation(cameraId, rotation));
         camera.setParameters(parameters);
 
         return camera;
+    }
+
+    private static int getRotationInt(int rotation) {
+        switch (rotation) {
+            case Surface.ROTATION_0:
+                return 0;
+            case Surface.ROTATION_90:
+                return 90;
+            case Surface.ROTATION_180:
+                return 180;
+            case Surface.ROTATION_270:
+                return 270;
+            default:
+                Timber.e(new IllegalArgumentException(), "Invalid rotation");
+                return -1;
+        }
     }
 
     public static int getFrontCameraId() {

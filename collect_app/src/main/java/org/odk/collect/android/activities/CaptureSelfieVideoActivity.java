@@ -89,7 +89,7 @@ public class CaptureSelfieVideoActivity extends Activity {
         ToastUtils.showLongToast("Tap the screen to start recording");
     }
 
-    private boolean prepareVideoRecorder(){
+    private boolean prepareVideoRecorder() {
 
         mediaRecorder = new MediaRecorder();
 
