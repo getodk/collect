@@ -329,11 +329,16 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
         Collections.sort(filteredList, new Comparator<DriveListItem>() {
             @Override
             public int compare(DriveListItem lhs, DriveListItem rhs) {
-                if (getSortingOrder().equals(SORT_BY_NAME_ASC)) {
+                if (lhs.getType() != rhs.getType()) {
+                    if (lhs.getType() == DriveListItem.DIR) {
+                        return -1;
+                    } else {
+                        return 1;
+                    }
+                } else if (getSortingOrder().equals(SORT_BY_NAME_ASC)) {
                     return lhs.getName().compareToIgnoreCase(rhs.getName());
                 } else {
                     return rhs.getName().compareToIgnoreCase(lhs.getName());
-
                 }
             }
         });
