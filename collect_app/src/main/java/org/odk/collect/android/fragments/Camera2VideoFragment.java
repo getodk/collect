@@ -11,7 +11,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
@@ -42,7 +41,6 @@ import android.view.ViewGroup;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.views.AutoFitTextureView;
 
 import java.io.File;
 import java.io.IOException;
@@ -87,9 +85,9 @@ public class Camera2VideoFragment extends Fragment
     }
 
     /**
-     * An {@link AutoFitTextureView} for camera preview.
+     * An {@link TextureView} for camera preview.
      */
-    private AutoFitTextureView textureView;
+    private TextureView textureView;
 
     /**
      * A reference to the opened {@link android.hardware.camera2.CameraDevice}.
@@ -266,7 +264,7 @@ public class Camera2VideoFragment extends Fragment
 
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
-        textureView = (AutoFitTextureView) view.findViewById(R.id.texture);
+        textureView = view.findViewById(R.id.texture);
         textureView.setOnClickListener(this);
     }
 
@@ -423,12 +421,6 @@ public class Camera2VideoFragment extends Fragment
                 break;
             }
 
-            int orientation = getResources().getConfiguration().orientation;
-            if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                textureView.setAspectRatio(previewSize.getWidth(), previewSize.getHeight());
-            } else {
-                textureView.setAspectRatio(previewSize.getHeight(), previewSize.getWidth());
-            }
             configureTransform(width, height);
             mediaRecorder = new MediaRecorder();
             manager.openCamera(cameraId, stateCallback, null);
