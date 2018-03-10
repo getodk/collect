@@ -35,9 +35,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import io.reactivex.annotations.NonNull;
+import android.support.annotation.NonNull;
 
-public class FileArrayAdapter extends ArrayAdapter {
+public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
 
     private Context context;
     private List<DriveListItem> items;
@@ -56,7 +56,7 @@ public class FileArrayAdapter extends ArrayAdapter {
         CheckBox checkBox;
     }
 
-    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+    public @NonNull View getView(int position, View convertView, @NonNull ViewGroup parent) {
         View row = convertView;
         final ViewHolder holder;
         if (row == null) {
