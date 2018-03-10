@@ -23,6 +23,9 @@ import java.io.IOException;
 
 import timber.log.Timber;
 
+/*https://github.com/googlesamples/android-MediaRecorder/blob/master/Application/src/main/
+    java/com/example/android/mediarecorder/MainActivity.java*/
+
 public class CaptureSelfieVideoActivity extends Activity {
     private Camera camera;
     private CameraPreview camPreview;

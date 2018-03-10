@@ -53,6 +53,9 @@ import java.util.concurrent.TimeUnit;
 
 import timber.log.Timber;
 
+/*https://github.com/googlesamples/android-Camera2Video/blob/master/Application/src/main/java/com/
+ example/android/camera2video/Camera2VideoFragment.java*/
+
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class Camera2VideoFragment extends Fragment
         implements View.OnClickListener, FragmentCompat.OnRequestPermissionsResultCallback {
