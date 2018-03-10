@@ -29,7 +29,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CaptureSelfieActivity;
 import org.odk.collect.android.activities.CaptureSelfieActivityNewApi;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 
 import java.io.File;
@@ -102,11 +101,19 @@ public class ImageWidget extends BaseImageWidget {
 
 
         if (selfie) {
-            if (!CameraUtils.isFrontCameraAvailable()) {
+            boolean isFrontCameraAvailable;
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                isFrontCameraAvailable = CaptureSelfieActivity.isFrontCameraAvailable();
+            } else {
+                isFrontCameraAvailable = CaptureSelfieActivityNewApi.isFrontCameraAvailable();
+            }
+
+            if (!isFrontCameraAvailable) {
                 captureButton.setEnabled(false);
                 errorTextView.setText(R.string.error_front_camera_unavailable);
                 errorTextView.setVisibility(View.VISIBLE);
             }
+
         }
     }
 
