@@ -22,6 +22,6 @@ public class CaptureSelfieVideoActivityNewApi extends Activity {
                     .replace(R.id.container, Camera2VideoFragment.newInstance())
                     .commit();
         }
-        ToastUtils.showLongToast("Tap to start recording");
+        ToastUtils.showLongToast(getString(R.string.start_video_capture_instruction));
     }
 }

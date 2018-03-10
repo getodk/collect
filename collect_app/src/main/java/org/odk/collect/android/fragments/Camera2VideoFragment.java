@@ -624,7 +624,7 @@ public class Camera2VideoFragment extends Fragment
 
                             // Start recording
                             mediaRecorder.start();
-                            ToastUtils.showLongToast("Recording started. Tap again to stop");
+                            ToastUtils.showLongToast(getActivity().getString(R.string.stop_video_capture_instruction));
                         }
                     });
                 }

@@ -67,7 +67,7 @@ public class CaptureSelfieVideoActivity extends Activity {
                         mediaRecorder.start();
 
                         // inform the user that recording has started
-                        ToastUtils.showLongToast("Recording started. Tap again to stop");
+                        ToastUtils.showLongToast(getString(R.string.stop_video_capture_instruction));
                         recording = true;
                     } else {
                         // prepare didn't work, release the camera
@@ -89,7 +89,7 @@ public class CaptureSelfieVideoActivity extends Activity {
             }
         });
 
-        ToastUtils.showLongToast("Tap the screen to start recording");
+        ToastUtils.showLongToast(getString(R.string.start_video_capture_instruction));
     }
 
     private boolean prepareVideoRecorder() {
