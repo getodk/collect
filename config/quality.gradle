@@ -1,6 +1,3 @@
-apply plugin: 'checkstyle'
-apply plugin: 'findbugs'
-apply plugin: 'pmd'
 apply plugin: 'jacoco'
 
 /*
@@ -28,29 +25,40 @@ tasks.withType(Test) {
     jacoco.includeNoLocationClasses = true
 }
 
-// Add checkstyle, findbugs, pmd and lint to the check task.
-check.dependsOn 'checkstyle', 'findbugs', 'pmd', 'lint'
-
-def configDir = "${project.rootDir}/config/quality"
+def configDir = "${project.rootDir}/config"
 def reportsDir = "${project.buildDir}/reports"
 
-// Required to use fileExtensions property in checkstyle file
+//------------------------Checkstyle------------------------//
+
+apply plugin: 'checkstyle'
+
 checkstyle.toolVersion = '7.6.1'
 
 task checkstyle(type: Checkstyle) {
-    configFile file("$configDir/checkstyle/checkstyle.xml")
-    configProperties.checkstyleSuppressionsPath = file("$configDir/checkstyle/suppressions.xml").absolutePath
+    configFile file("$configDir/checkstyle.xml")
+
+    ignoreFailures false // Fail early
+    showViolations true
+
     source 'src'
     include '**/*.java'
     exclude '**/gen/**'
     classpath = files()
 }
 
+//------------------------Findbugs------------------------//
+
+apply plugin: 'findbugs'
+
 task findbugs(type: FindBugs, dependsOn: "assembleDebug") {
-    ignoreFailures = false
-    effort = "max"
-    reportLevel = "high"
-    excludeFilter = new File("$configDir/findbugs/findbugs-filter.xml")
+
+    ignoreFailures false // Fail early
+    effort = 'max'
+
+    // Reporting only high priority problems {Possible reportLevels: 'high', 'medium', 'low'}
+    reportLevel = 'high'
+
+    excludeFilter = new File("$configDir/findbugs-filter.xml")
     classes = files("${project.rootDir}/collect_app/build/intermediates/classes")
 
     source 'src'
@@ -71,9 +79,13 @@ task findbugs(type: FindBugs, dependsOn: "assembleDebug") {
     classpath = files()
 }
 
+//------------------------Pmd------------------------//
+
+apply plugin: 'pmd'
+
 task pmd(type: Pmd) {
-    ignoreFailures = false
-    ruleSetFiles = files("$configDir/pmd/pmd-ruleset.xml")
+    ignoreFailures = false // Fail early
+    ruleSetFiles = files("$configDir/pmd-ruleset.xml")
     ruleSets = []
 
     source 'src'
@@ -92,12 +104,14 @@ task pmd(type: Pmd) {
     }
 }
 
+//------------------------Lint------------------------//
+
 android {
     lintOptions {
         abortOnError true
         xmlReport true
         htmlReport true
-        lintConfig file("$configDir/lint/lint.xml")
+        lintConfig file("$configDir/lint.xml")
         htmlOutput file("$reportsDir/lint/lint-result.html")
         xmlOutput file("$reportsDir/lint/lint-result.xml")
     }
