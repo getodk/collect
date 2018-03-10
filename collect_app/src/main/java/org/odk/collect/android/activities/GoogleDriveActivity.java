@@ -330,15 +330,10 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
             @Override
             public int compare(DriveListItem lhs, DriveListItem rhs) {
                 if (lhs.getType() != rhs.getType()) {
-                    if (lhs.getType() == DriveListItem.DIR) {
-                        return -1;
-                    } else {
-                        return 1;
-                    }
-                } else if (getSortingOrder().equals(SORT_BY_NAME_ASC)) {
-                    return lhs.getName().compareToIgnoreCase(rhs.getName());
+                    return lhs.getType() == DriveListItem.DIR ? -1 : 1;
                 } else {
-                    return rhs.getName().compareToIgnoreCase(lhs.getName());
+                    int compareName = lhs.getName().compareToIgnoreCase(rhs.getName());
+                    return getSortingOrder().equals(SORT_BY_NAME_ASC) ? compareName : -compareName;
                 }
             }
         });
