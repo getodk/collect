@@ -132,9 +132,9 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
         if (selfie) {
             boolean isFrontCameraAvailable;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                isFrontCameraAvailable = CaptureSelfieActivity.isFrontCameraAvailable();
-            } else {
                 isFrontCameraAvailable = CaptureSelfieActivityNewApi.isFrontCameraAvailable();
+            } else {
+                isFrontCameraAvailable = CaptureSelfieActivity.isFrontCameraAvailable();
             }
 
             if (!isFrontCameraAvailable) {
