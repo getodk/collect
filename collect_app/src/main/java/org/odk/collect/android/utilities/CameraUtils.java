@@ -75,7 +75,7 @@ public class CameraUtils {
         return (camInfo.orientation + screenOrientationDegrees) % 360;
     }
 
-    public static void savePhoto (String path, byte[] data) {
+    public static void savePhoto(String path, byte[] data) {
         File tempFile = new File(path);
         FileOutputStream fos;
         try {
