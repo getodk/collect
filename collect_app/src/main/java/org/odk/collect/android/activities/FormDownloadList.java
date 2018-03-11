@@ -143,6 +143,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         });
 
         toggleButton = findViewById(R.id.toggle_button);
+        toggleButton.setEnabled(listView.getCheckedItemCount() > 0);
         toggleButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -661,6 +662,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             Intent intent = new Intent("org.smap.smapTask.refresh");  // smap refresh task list
             LocalBroadcastManager.getInstance(Collect.getInstance()).sendBroadcast(intent);
 
+            toggleButton.setEnabled(listView.getCheckedItemCount() > 0);
             toggleButtonLabel(toggleButton, listView);
         }
     }

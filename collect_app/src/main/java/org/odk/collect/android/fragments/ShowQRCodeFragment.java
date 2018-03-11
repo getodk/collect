@@ -35,6 +35,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -150,7 +151,14 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
             case R.id.btnSelect:
                 Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
                 photoPickerIntent.setType("image/*");
-                startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+                if (photoPickerIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                    startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+                } else {
+                    Toast.makeText(getActivity(),
+                            getString(R.string.activity_not_found, "select image"),
+                            Toast.LENGTH_SHORT).show();
+                    Timber.w(getString(R.string.activity_not_found, "select image"));
+                }
                 break;
 
             case R.id.edit_qrcode:

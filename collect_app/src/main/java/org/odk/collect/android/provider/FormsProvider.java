@@ -763,7 +763,7 @@ public class FormsProvider extends ContentProvider {
         sFormsProjectionMap.put(FormsColumns.JRCACHE_FILE_PATH, FormsColumns.JRCACHE_FILE_PATH);
         sFormsProjectionMap.put(FormsColumns.LANGUAGE, FormsColumns.LANGUAGE);
         sFormsProjectionMap.put(FormsColumns.AUTO_DELETE, FormsColumns.AUTO_DELETE);
-        sFormsProjectionMap.put(FormsColumns.AUTO_SUBMIT, FormsColumns.AUTO_SUBMIT);
+        sFormsProjectionMap.put(FormsColumns.AUTO_SEND, FormsColumns.AUTO_SEND);
     }
 
 }

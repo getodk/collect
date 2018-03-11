@@ -39,14 +39,14 @@ import com.google.gson.reflect.TypeToken;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.preferences.filters.ControlCharacterFilter;
 import org.odk.collect.android.preferences.filters.WhitespaceFilter;
 import org.odk.collect.android.services.NotificationRegistrationService;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.utilities.UrlUtils;
+import org.odk.collect.android.utilities.Validator;
 import org.odk.collect.android.utilities.WebUtils;
+import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,9 +54,9 @@ import java.util.List;
 import timber.log.Timber;
 
 import static android.app.Activity.RESULT_OK;
-import static org.odk.collect.android.utilities.gdrive.GoogleAccountsManager.REQUEST_ACCOUNT_PICKER;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FORMLIST_URL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_URL;
+import static org.odk.collect.android.utilities.gdrive.GoogleAccountsManager.REQUEST_ACCOUNT_PICKER;
 
 
 public class ServerPreferencesFragment extends BasePreferenceFragment implements View.OnTouchListener,
@@ -244,7 +244,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                     url = url.substring(0, url.length() - 1);
                 }
 
-                if (UrlUtils.isValidUrl(url)) {
+                if (Validator.isUrlValid(url)) {
                     preference.setSummary(newValue.toString());
                     SharedPreferences prefs = PreferenceManager
                             .getDefaultSharedPreferences(getActivity().getApplicationContext());
@@ -318,7 +318,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                     url = url.substring(0, url.length() - 1);
                 }
 
-                if (UrlUtils.isValidUrl(url)) {
+                if (Validator.isUrlValid(url)) {
                     preference.setSummary(url + "\n\n" + getString(R.string.google_sheets_url_hint));
                 } else if (url.length() == 0) {
                     preference.setSummary(getString(R.string.google_sheets_url_hint));
