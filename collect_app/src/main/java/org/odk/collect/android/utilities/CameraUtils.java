@@ -4,6 +4,10 @@ import android.app.Activity;
 import android.hardware.Camera;
 import android.view.Surface;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 import timber.log.Timber;
 
 public class CameraUtils {
@@ -54,9 +58,33 @@ public class CameraUtils {
         return -1;
     }
 
+    /**
+     * Calculates the front camera rotation
+     * <p>
+     * This calculation is applied to the output JPEG either via Exif Orientation tag
+     * or by actually transforming the bitmap. (Determined by vendor camera API implementation)
+     * <p>
+     * Note: This is not the same calculation as the display orientation
+     *
+     * @param screenOrientationDegrees Screen orientation in degrees
+     * @return Number of degrees to rotate image in order for it to view correctly.
+     */
     public static int calcCameraRotation(int cameraId, int screenOrientationDegrees) {
         Camera.CameraInfo camInfo = new Camera.CameraInfo();
         Camera.getCameraInfo(cameraId, camInfo);
         return (camInfo.orientation + screenOrientationDegrees) % 360;
+    }
+
+    public static void savePhoto (String path, byte[] data) {
+        File tempFile = new File(path);
+        FileOutputStream fos;
+        try {
+            fos = new FileOutputStream(tempFile);
+            fos.write(data);
+            fos.flush();
+            fos.close();
+        } catch (IOException e) {
+            Timber.e(e);
+        }
     }
 }

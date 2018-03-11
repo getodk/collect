@@ -60,10 +60,9 @@ import android.view.ViewGroup;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.utilities.CameraUtils;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -889,16 +888,7 @@ public class Camera2Fragment extends Fragment
             byte[] bytes = new byte[buffer.remaining()];
             buffer.get(bytes);
 
-            File tempFile = new File(Collect.TMPFILE_PATH);
-            FileOutputStream fos;
-            try {
-                fos = new FileOutputStream(tempFile);
-                fos.write(bytes);
-                fos.flush();
-                fos.close();
-            } catch (IOException e) {
-                Timber.e(e);
-            }
+            CameraUtils.savePhoto(Collect.TMPFILE_PATH, bytes);
         }
     }
 
