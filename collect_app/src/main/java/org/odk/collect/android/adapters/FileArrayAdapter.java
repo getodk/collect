@@ -54,59 +54,61 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
         TextView text1;
         TextView text2;
         CheckBox checkBox;
-    }
 
-    public @NonNull View getView(int position, View convertView, @NonNull ViewGroup parent) {
-        View row = convertView;
-        final ViewHolder holder;
-        if (row == null) {
-            holder = new ViewHolder();
-            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row = inflater.inflate(R.layout.two_item_image, parent, false);
-
-            holder.imageView = row.findViewById(R.id.image);
-            holder.text1 = row.findViewById(R.id.text1);
-            holder.text2 = row.findViewById(R.id.text2);
-            holder.checkBox = row.findViewById(R.id.checkbox);
-            row.setTag(holder);
-        } else {
-            holder = (ViewHolder) row.getTag();
+        ViewHolder(View view) {
+            imageView = view.findViewById(R.id.image);
+            text1 = view.findViewById(R.id.text1);
+            text2 = view.findViewById(R.id.text2);
+            checkBox = view.findViewById(R.id.checkbox);
         }
 
-        final DriveListItem o = items.get(position);
-        if (o != null) {
-
+        void onBind(DriveListItem item) {
             String dateModified = null;
-            if (o.getDate() != null) {
+            if (item.getDate() != null) {
                 dateModified = new SimpleDateFormat(context.getString(
                         R.string.modified_on_date_at_time), Locale.getDefault())
-                        .format(new Date(o.getDate().getValue()));
+                        .format(new Date(item.getDate().getValue()));
             }
 
-            if (o.getType() == DriveListItem.FILE) {
+            if (item.getType() == DriveListItem.FILE) {
                 Drawable d = ContextCompat.getDrawable(context, R.drawable.ic_file_download);
-                holder.imageView.setImageDrawable(d);
-                holder.checkBox.setVisibility(View.VISIBLE);
+                imageView.setImageDrawable(d);
+                checkBox.setVisibility(View.VISIBLE);
             }
-            if (o.getType() == DriveListItem.DIR) {
+            if (item.getType() == DriveListItem.DIR) {
                 Drawable d = ContextCompat.getDrawable(context, R.drawable.ic_folder);
-                holder.imageView.setImageDrawable(d);
-                holder.checkBox.setVisibility(View.GONE);
+                imageView.setImageDrawable(d);
+                checkBox.setVisibility(View.GONE);
             }
 
-            if (holder.text1 != null) {
-                holder.text1.setText(o.getName());
+            if (text1 != null) {
+                text1.setText(item.getName());
             }
-            if (holder.text2 != null) {
-                holder.text2.setText(dateModified);
+            if (text2 != null) {
+                text2.setText(dateModified);
             }
 
             //in some cases, it will prevent unwanted situations
-            holder.checkBox.setOnCheckedChangeListener(null);
+            checkBox.setOnCheckedChangeListener(null);
             //if true, your checkbox will be selected, else unselected
-            holder.checkBox.setChecked(o.isSelected());
-            holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> o.setSelected(buttonView.isChecked()));
+            checkBox.setChecked(item.isSelected());
+            checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> item.setSelected(buttonView.isChecked()));
         }
-        return row;
+    }
+
+    @NonNull
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+        final ViewHolder holder;
+        View view;
+        if (convertView == null) {
+            view = LayoutInflater.from(getContext()).inflate(R.layout.two_item_image, parent, false);
+            holder = new ViewHolder(view);
+            view.setTag(holder);
+        } else {
+            view = convertView;
+            holder = (ViewHolder) convertView.getTag();
+        }
+        holder.onBind(items.get(position));
+        return view;
     }
 }
