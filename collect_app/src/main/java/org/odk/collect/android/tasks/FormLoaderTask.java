@@ -222,7 +222,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         publishProgress(
                 Collect.getInstance().getString(R.string.survey_loading_reading_form_message));
 
-        final FormDef formDefFromCache = new FormDefCache().readCache(formXml);
+        final FormDef formDefFromCache = FormDefCache.readCache(formXml);
         if (formDefFromCache != null) {
             return formDefFromCache;
         }

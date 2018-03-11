@@ -21,6 +21,7 @@ import android.os.Environment;
 import android.support.test.InstrumentationRegistry;
 
 import org.apache.commons.io.IOUtils;
+import org.javarosa.core.model.FormDef;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -106,7 +107,7 @@ public class FormNavigationTestCase {
         FormLoaderTask formLoaderTask = new FormLoaderTask(formPath(formName), null, null);
         formLoaderTask.setFormLoaderListener(new FormLoaderListener() {
             @Override
-            public void loadingComplete(FormLoaderTask task) {
+            public void loadingComplete(FormLoaderTask task, FormDef fd) {
                 try {
                     // For each form, simulate swiping forward through screens until the end of the
                     // form and then swiping back once. Verify the expected indices before and after each swipe.
