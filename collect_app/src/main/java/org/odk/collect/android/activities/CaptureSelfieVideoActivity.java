@@ -105,7 +105,7 @@ public class CaptureSelfieVideoActivity extends Activity {
         mediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
 
         // Step 3: Set a CamcorderProfile (requires API Level 8 or higher)
-        mediaRecorder.setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH));
+        mediaRecorder.setProfile(CamcorderProfile.get(cameraId, CamcorderProfile.QUALITY_HIGH));
 
         // Step 4: Set output file
         outputFile = VideoWidget.getOutputMediaFile(VideoWidget.MEDIA_TYPE_VIDEO).toString();
