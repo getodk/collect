@@ -39,13 +39,10 @@ import android.support.annotation.NonNull;
 
 public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
 
-    private Context context;
     private List<DriveListItem> items;
-
 
     public FileArrayAdapter(Context context, List<DriveListItem> filteredDriveList) {
         super(context, R.layout.two_item_image, filteredDriveList);
-        this.context = context;
         items = filteredDriveList;
     }
 
@@ -65,32 +62,23 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
         void onBind(DriveListItem item) {
             String dateModified = null;
             if (item.getDate() != null) {
-                dateModified = new SimpleDateFormat(context.getString(
+                dateModified = new SimpleDateFormat(getContext().getString(
                         R.string.modified_on_date_at_time), Locale.getDefault())
                         .format(new Date(item.getDate().getValue()));
             }
 
             if (item.getType() == DriveListItem.FILE) {
-                Drawable d = ContextCompat.getDrawable(context, R.drawable.ic_file_download);
+                Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.ic_file_download);
                 imageView.setImageDrawable(d);
                 checkBox.setVisibility(View.VISIBLE);
-            }
-            if (item.getType() == DriveListItem.DIR) {
-                Drawable d = ContextCompat.getDrawable(context, R.drawable.ic_folder);
+            } else {
+                Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.ic_folder);
                 imageView.setImageDrawable(d);
                 checkBox.setVisibility(View.GONE);
             }
 
-            if (text1 != null) {
-                text1.setText(item.getName());
-            }
-            if (text2 != null) {
-                text2.setText(dateModified);
-            }
-
-            //in some cases, it will prevent unwanted situations
-            checkBox.setOnCheckedChangeListener(null);
-            //if true, your checkbox will be selected, else unselected
+            text1.setText(item.getName());
+            text2.setText(dateModified);
             checkBox.setChecked(item.isSelected());
             checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> item.setSelected(buttonView.isChecked()));
         }
