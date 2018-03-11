@@ -18,6 +18,11 @@ import timber.log.Timber;
 
 /** Methods for reading from and writing to the FormDef cache */
 public class FormDefCache {
+
+    private FormDefCache() {
+        // Private constructor
+    }
+
     /**
      * Returns a RxJava Completable for serializing a FormDef and saving it in cache.
      *
