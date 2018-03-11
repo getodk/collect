@@ -50,7 +50,7 @@ import java.io.File;
 import timber.log.Timber;
 
 /**
- * This layout is used anywhere we can have image/audio/video/text. TODO: It would probably be nice
+ * This layout is used anywhere we can have image/audio/video/observe. TODO: It would probably be nice
  * to put this in a layout.xml file of some sort at some point.
  *
  * @author carlhartung
@@ -298,7 +298,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
         // Determine the layout constraints...
         // Assumes LTR, TTB reading bias!
         if (viewText.getText().length() == 0 && (imageView != null || missingImage != null)) {
-            // No text; has image. The image is treated as question/choice icon.
+            // No observe; has image. The image is treated as question/choice icon.
             // The Text view may just have a radio button or checkbox. It
             // needs to remain in the layout even though it is blank.
             //

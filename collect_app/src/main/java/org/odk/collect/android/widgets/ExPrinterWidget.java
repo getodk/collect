@@ -76,7 +76,7 @@ import org.odk.collect.android.widgets.interfaces.BinaryWidget;
  * </pre>
  * <p>
  * <p>Depending upon what you supply, the printer may print just a
- * barcode, just a qrcode, just text, or some combination of all 3.</p>
+ * barcode, just a qrcode, just observe, or some combination of all 3.</p>
  * <p>
  * <p>Despite using &lt;br&gt; as a separator, the supplied Zebra
  * printer does not recognize html.</p>
@@ -102,7 +102,7 @@ import org.odk.collect.android.widgets.interfaces.BinaryWidget;
  *            &lt;value form="noPrinterErrorString"&gt;ODK Sensors Zebra Printer is not installed!
  *             Please install ODK Sensors Framework and ODK Sensors Zebra Printer from Google
  * Play.&lt;/value&gt;
- *          &lt;/text&gt;
+ *          &lt;/observe&gt;
  *        &lt;/translation&gt;
  *      &lt;/itext&gt;
  *    ...

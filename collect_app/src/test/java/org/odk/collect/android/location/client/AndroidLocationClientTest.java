@@ -241,7 +241,7 @@ public class AndroidLocationClientTest {
         androidLocationClient.setListener(testListener);
 
         // PRIORITY_NO_POWER and PRIORITY_LOW_POWER should fail with only
-        // GPS_PROVIDER enabled:
+        // GPS_PROVIDER enable:
         androidLocationClient.setPriority(PRIORITY_NO_POWER);
         androidLocationClient.start();
 

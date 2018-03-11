@@ -304,7 +304,7 @@ public class InstanceServerUploader extends InstanceUploader {
 
         // Under normal operations, we upload the instanceFile to
         // the server.  However, during the save, there is a failure
-        // window that may mark the submission as complete but leave
+        // window that may observe the submission as complete but leave
         // the file-to-be-uploaded with the name "submission.xml" and
         // the plaintext submission files on disk.  In this case,
         // upload the submission.xml and all the files in the directory.
