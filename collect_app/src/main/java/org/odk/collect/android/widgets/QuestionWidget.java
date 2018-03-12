@@ -504,7 +504,7 @@ public abstract class QuestionWidget
                 }
                 formController.jumpToIndex(startFormIndex);
             } catch (JavaRosaException e) {
-                Timber.e(e);
+                Timber.d(e);
             }
         }
     }

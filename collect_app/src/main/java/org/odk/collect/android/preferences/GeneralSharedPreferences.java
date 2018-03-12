@@ -71,7 +71,7 @@ public class GeneralSharedPreferences {
         save(key, defaultValue);
     }
 
-    public void save(String key, Object value) {
+    public GeneralSharedPreferences save(String key, Object value) {
         editor = sharedPreferences.edit();
         if (value == null || value instanceof String) {
             editor.putString(key, (String) value);
@@ -89,6 +89,7 @@ public class GeneralSharedPreferences {
             throw new RuntimeException("Unhandled preference value type: " + value);
         }
         editor.apply();
+        return this;
     }
 
     public boolean getBoolean(String key, boolean value) {

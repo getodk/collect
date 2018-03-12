@@ -260,7 +260,7 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
                 fireActivity(i);
 
             } catch (ExternalParamsException e) {
-                Timber.e(e);
+                Timber.d(e);
                 onException(e.getMessage());
             }
         } else {
@@ -289,8 +289,7 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
         Toast.makeText(getContext(),
                 toastText, Toast.LENGTH_SHORT)
                 .show();
-        Timber.e(toastText);
-
+        Timber.d(toastText);
         focusAnswer();
     }
 }
