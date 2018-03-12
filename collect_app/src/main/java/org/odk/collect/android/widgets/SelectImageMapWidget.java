@@ -92,6 +92,7 @@ public abstract class SelectImageMapWidget extends SelectWidget {
 
     @Override
     public void clearAnswer() {
+        selections.clear();
         webView.loadUrl("javascript:clearAreas()");
     }
 
