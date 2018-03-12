@@ -241,11 +241,13 @@ public class FormsProvider extends ContentProvider {
 
                 // delete all the containing files
                 File[] files = file.listFiles();
-                for (File f : files) {
-                    // should make this recursive if we get worried about
-                    // the media directory containing directories
-                    Timber.i("attempting to delete file: %s", f.getAbsolutePath());
-                    f.delete();
+                if (files != null) {
+                    for (File f : files) {
+                        // should make this recursive if we get worried about
+                        // the media directory containing directories
+                        Timber.i("attempting to delete file: %s", f.getAbsolutePath());
+                        f.delete();
+                    }
                 }
             }
             file.delete();
