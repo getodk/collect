@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply from: '../config/quality.gradle'
+apply from: '../config/jacoco.gradle'
 
 import com.android.ddmlib.DdmPreferences
 

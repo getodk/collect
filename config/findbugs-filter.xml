@@ -16,19 +16,39 @@
   -->
 
 <FindBugsFilter>
-    <!-- http://stackoverflow.com/questions/7568579/eclipsefindbugs-exclude-filter-files-doesnt-work -->
+
+    <!-- Do not check auto-generated resources classes -->
     <Match>
-        <Class name="~.*\.R\$.*"/>
+        <Class name="~.*\.R\$.*" />
     </Match>
+
+    <!-- Do not check auto-generated manifest classes -->
     <Match>
-        <Class name="~.*\.Manifest\$.*"/>
+        <Class name="~.*\.Manifest\$.*" />
     </Match>
+
+    <!-- Do not check auto-generated classes (Dagger puts $ into class names) -->
+    <Match>
+        <Class name="~.*Dagger*.*" />
+    </Match>
+
     <!-- All bugs in test classes, except for JUnit-specific bugs -->
     <Match>
-        <Class name="~.*\.*Test"/>
+        <Class name="~.*\.*Test" />
         <Not>
-            <Bug code="IJU"/>
+            <Bug code="IJU" />
         </Not>
+    </Match>
+
+    <!-- Ignore ButterKnife auto-generated classes -->
+    <Match>
+        <Class name="~.*\$\$ViewBinder*" />
+    </Match>
+    <Match>
+        <Class name="~.*\$\$ViewBinder\$InnerUnbinder*" />
+    </Match>
+    <Match>
+        <Class name="~.*ViewBinding\$.*" />
     </Match>
 
     <Match>
