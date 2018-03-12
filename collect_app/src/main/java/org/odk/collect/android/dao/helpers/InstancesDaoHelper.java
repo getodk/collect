@@ -44,7 +44,7 @@ public final class InstancesDaoHelper {
         boolean complete = false;
 
         FormController formController = Collect.getInstance().getFormController();
-        if (formController != null) {
+        if (formController != null && formController.getInstancePath() != null) {
             // First check if we're at the end of the form, then check the preferences
             complete = end && (boolean) GeneralSharedPreferences.getInstance()
                     .get(PreferenceKeys.KEY_COMPLETED_DEFAULT);
