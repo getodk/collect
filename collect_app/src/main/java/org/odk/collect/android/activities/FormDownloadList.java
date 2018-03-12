@@ -19,15 +19,12 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.SparseBooleanArray;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -41,7 +38,6 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.listeners.FormListDownloaderListener;
 import org.odk.collect.android.logic.FormDetails;
-import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.tasks.DownloadFormListTask;
 import org.odk.collect.android.tasks.DownloadFormsTask;
 import org.odk.collect.android.utilities.AuthDialogUtility;
@@ -79,7 +75,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     private static final int PROGRESS_DIALOG = 1;
     private static final int AUTH_DIALOG = 2;
     private static final int CANCELLATION_DIALOG = 3;
-    private static final int MENU_PREFERENCES = Menu.FIRST;
 
     private static final String BUNDLE_SELECTED_COUNT = "selectedcount";
     private static final String BUNDLE_FORM_MAP = "formmap";
@@ -342,31 +337,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         outState.putBoolean(SHOULD_EXIT, shouldExit);
         outState.putSerializable(FORMLIST, formList);
         outState.putSerializable(SELECTED_FORMS, selectedForms);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        Collect.getInstance().getActivityLogger().logAction(this, "onCreateOptionsMenu", "show");
-        super.onCreateOptionsMenu(menu);
-
-        menu
-                .add(0, MENU_PREFERENCES, 0, R.string.general_preferences)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-        return true;
-    }
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case MENU_PREFERENCES:
-                Collect.getInstance().getActivityLogger().logAction(this, "onMenuItemSelected",
-                        "MENU_PREFERENCES");
-                Intent i = new Intent(this, PreferencesActivity.class);
-                startActivity(i);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
 
