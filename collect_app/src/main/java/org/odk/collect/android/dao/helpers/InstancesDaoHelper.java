@@ -62,7 +62,7 @@ public final class InstancesDaoHelper {
                 }
             }
         } else {
-            Timber.w("FormController has a null value");
+            Timber.w("FormController or its instanceFile field has a null value");
         }
         return complete;
     }
