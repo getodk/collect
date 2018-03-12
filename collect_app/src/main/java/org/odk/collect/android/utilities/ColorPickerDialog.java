@@ -87,6 +87,7 @@ public class ColorPickerDialog extends Dialog {
     }
 
     private static class ColorPickerView extends View {
+
         public static final int DIALOG_MARGIN = 10;
         public static final int NUMBER_OF_HUES = 256;
         public static final int DEFAULT_WIDTH = NUMBER_OF_HUES + 2 * DIALOG_MARGIN;
