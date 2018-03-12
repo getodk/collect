@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Nafundi
+ * Copyright (C) 2018 Nafundi
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -41,6 +41,7 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.exception.BadUrlException;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
+import org.odk.collect.android.utilities.UrlUtils;
 import org.odk.collect.android.utilities.gdrive.DriveHelper;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.utilities.gdrive.SheetsHelper;
@@ -50,7 +51,6 @@ import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.utilities.UrlUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -61,6 +61,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -77,21 +78,14 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     public static final String GOOGLE_DRIVE_ROOT_FOLDER = "Open Data Kit";
     public static final String GOOGLE_DRIVE_SUBFOLDER = "Submissions";
 
-    private static final String oauth_fail = "OAUTH Error: ";
     private static final String UPLOADED_MEDIA_URL = "https://drive.google.com/open?id=";
 
     private final SheetsHelper sheetsHelper;
     private final DriveHelper driveHelper;
     private final GoogleAccountsManager accountsManager;
-    private Outcome outcome;
 
-    private boolean hasWritePermissionToSheet;
     private boolean authFailed;
 
-    private String mainSheetTitle;
-    private String googleSheetsUrl;
-    private String spreadsheetId;
-    private String id;
     private String jrFormId;
 
     private Spreadsheet spreadsheet;
@@ -104,11 +98,19 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
     @Override
     protected Outcome doInBackground(Long... values) {
-        outcome = new Outcome();
+        final Outcome outcome = new Outcome();
         int counter = 0;
 
         try {
             while (counter * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER < values.length) {
+                String token = accountsManager.getCredential().getToken();
+
+                //Immediately invalidate so we get a different one if we have to try again
+                GoogleAuthUtil.invalidateToken(accountsManager.getContext(), token);
+
+                // check if root folder exists, if not then create one
+                driveHelper.getIDOfFolderWithName(GOOGLE_DRIVE_ROOT_FOLDER, null, true);
+
                 int low = counter * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER;
                 int high = (counter + 1) * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER;
                 if (high > values.length) {
@@ -126,25 +128,16 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                 }
 
                 selectionBuf.append(")");
-                String selection = selectionBuf.toString();
 
-                String token = accountsManager.getCredential().getToken();
-
-                //Immediately invalidate so we get a different one if we have to try again
-                GoogleAuthUtil.invalidateToken(accountsManager.getContext(), token);
-
-                // check if root folder exists, if not then create one
-                driveHelper.getIDOfFolderWithName(GOOGLE_DRIVE_ROOT_FOLDER, null, true);
-
-                uploadInstances(selection, selectionArgs, token, low, values.length);
+                outcome.messagesByInstanceId.putAll(uploadInstances(selectionBuf.toString(), selectionArgs, low, values.length));
                 counter++;
             }
         } catch (UserRecoverableAuthException e) {
-            outcome = null;
             Activity activity = accountsManager.getActivity();
             if (activity != null) {
                 activity.startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
             }
+            return null;
         } catch (IOException | GoogleAuthException e) {
             Timber.e(e);
             authFailed = true;
@@ -154,17 +147,17 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         return outcome;
     }
 
-    private void uploadInstances(String selection, String[] selectionArgs, String token, int low, int instanceCount) {
-        Cursor cursor = null;
-        try {
-            cursor = new InstancesDao().getInstancesCursor(selection, selectionArgs);
+    private Map<String, String> uploadInstances(String selection, String[] selectionArgs, int low, int instanceCount) {
+        final Map<String, String> messagesByInstanceId = new HashMap<>();
+
+        try (Cursor cursor = new InstancesDao().getInstancesCursor(selection, selectionArgs)) {
             if (cursor.getCount() > 0) {
                 cursor.moveToPosition(-1);
                 while (cursor.moveToNext()) {
                     if (isCancelled()) {
-                        return;
+                        return messagesByInstanceId;
                     }
-                    id = cursor.getString(cursor.getColumnIndex(InstanceColumns._ID));
+                    final String id = cursor.getString(cursor.getColumnIndex(InstanceColumns._ID));
                     jrFormId = cursor.getString(cursor.getColumnIndex(InstanceColumns.JR_FORM_ID));
                     Uri toUpdate = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, id);
                     ContentValues cv = new ContentValues();
@@ -183,54 +176,45 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                     if (md5 == null) {
                         // fail and exit
                         Timber.e("no md5");
-                        return;
+                        return messagesByInstanceId;
                     }
 
                     publishProgress(cursor.getPosition() + 1 + low, instanceCount);
                     String instance = cursor.getString(cursor
                             .getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
 
-                    if (token == null) {
-                        outcome.results.put(id, oauth_fail + Collect.getInstance().getString(R.string.invalid_oauth));
-                        return;
-                    } else if (!uploadOneInstance(new File(instance), formFilePath, getSpreadsheetUrl(cursor))) {
-                        cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
-                        Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
-                        return;
-                    } else {
+                    try {
+                        uploadOneInstance(new File(instance), formFilePath, getGoogleSeetsUrl(cursor));
                         cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMITTED);
                         Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
-                        outcome.results.put(id, Collect.getInstance().getString(R.string.success));
+                        messagesByInstanceId.put(id, Collect.getInstance().getString(R.string.success));
+                    } catch (UploadException e) {
+                        Timber.e(e);
+                        messagesByInstanceId.put(id, e.getMessage() != null ? e.getMessage() : e.getCause().getMessage());
+                        cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
+                        Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
                     }
                 }
             }
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
         }
+        return messagesByInstanceId;
     }
 
-    private boolean uploadOneInstance(File instanceFile, String formFilePath, String spreadsheetUrl) {
-        try {
-            TreeElement instanceElement = getInstanceElement(formFilePath, instanceFile);
-            setUpSpreadsheet(spreadsheetUrl);
-            TreeElement instanceIDElement = getInstanceIDElement(getChildElements(instanceElement));
-            if (hasRepeatableGroups(instanceElement)) {
-                if (instanceIDElement == null) {
-                    outcome.results.put(id, "This form contains repeatable group so it should contain an instanceID!");
-                    return false;
-                }
-                createSheetsIfNeeded(instanceElement);
+    private void uploadOneInstance(File instanceFile, String formFilePath, String spreadsheetUrl) throws UploadException {
+        TreeElement instanceElement = getInstanceElement(formFilePath, instanceFile);
+        setUpSpreadsheet(spreadsheetUrl);
+        TreeElement instanceIDElement = getInstanceIDElement(getChildElements(instanceElement));
+        if (hasRepeatableGroups(instanceElement)) {
+            if (instanceIDElement == null) {
+                throw new UploadException(Collect.getInstance().getString(R.string.lack_of_instance_id));
             }
-            insertRows(instanceElement, instanceIDElement, instanceFile, mainSheetTitle);
-        } catch (Exception e) {
-            return false;
+            createSheetsIfNeeded(instanceElement);
         }
-        return true;
+        insertRows(instanceElement, instanceIDElement, instanceFile, spreadsheet.getSheets().get(0).getProperties().getTitle());
     }
 
-    private void insertRows(TreeElement element, TreeElement instanceIDElement, File instanceFile, String sheetTitle) throws Exception {
+    private void insertRows(TreeElement element, TreeElement instanceIDElement, File instanceFile, String sheetTitle)
+            throws UploadException {
         insertRow(element, instanceIDElement, instanceFile, sheetTitle);
 
         for (int i = 0 ; i < element.getNumChildren(); i++) {
@@ -241,48 +225,41 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         }
     }
 
-    private boolean insertRow(TreeElement element, TreeElement instanceIDElement, File instanceFile, String sheetTitle) throws Exception {
-        List<Object> columnTitles = getColumnTitles(element, instanceIDElement);
-        if (!isNumberOfColumnsValid(columnTitles.size())) {
-            return false;
-        }
+    private void insertRow(TreeElement element, TreeElement instanceIDElement, File instanceFile, String sheetTitle)
+            throws UploadException {
+        List<Object> columnTitles = getColumnTitles(element);
+        ensureNumberOfColumnsIsValid(columnTitles.size());
 
-        List<List<Object>> sheetCells = getSheetCells(sheetTitle);
-        if (sheetCells != null && !sheetCells.isEmpty()) { // we are editing an existed sheet
-            if (isAnyColumnHeaderEmpty(sheetCells.get(0))) {
-                // Insert a header row again to fill empty headers
-                sheetsHelper.updateRow(spreadsheetId, sheetTitle + "!A1",
+        try {
+            List<List<Object>> sheetCells = getSheetCells(sheetTitle);
+            if (sheetCells != null && !sheetCells.isEmpty()) { // we are editing an existed sheet
+                if (isAnyColumnHeaderEmpty(sheetCells.get(0))) {
+                    // Insert a header row again to fill empty headers
+                    sheetsHelper.updateRow(spreadsheet.getSpreadsheetId(), sheetTitle + "!A1",
+                            new ValueRange().setValues(Collections.singletonList(columnTitles)));
+                    sheetCells = getSheetCells(sheetTitle); // read sheet cells again to update
+                }
+                disallowMissingColumns(sheetCells.get(0), columnTitles);
+            } else { // new sheet
+                Integer sheetId = getSheetId(sheetTitle);
+                if (sheetId != null) {
+                    sheetsHelper.resizeSpreadSheet(spreadsheet.getSpreadsheetId(), sheetId, columnTitles.size());
+                }
+                sheetsHelper.insertRow(spreadsheet.getSpreadsheetId(), sheetTitle,
                         new ValueRange().setValues(Collections.singletonList(columnTitles)));
                 sheetCells = getSheetCells(sheetTitle); // read sheet cells again to update
             }
-            if (isAnyMissingColumn(sheetCells.get(0), columnTitles)) {
-                outcome.results.put(id, Collect.getInstance().getString(R.string.google_sheets_missing_columns));
-                return false;
-            }
-        } else { // new sheet
-            resizeSheet(getSheetId(sheetTitle), columnTitles.size());
-            insertRow(columnTitles, sheetTitle);
-            sheetCells = getSheetCells(sheetTitle); // read sheet cells again to update
-        }
 
-        HashMap<String, String> answers = getAnswers(getChildElements(element), instanceFile);
-        if (shouldRowBeInserted(answers)) {
-            if (element.isRepeatable()) {
-                answers.put(getElementTitle(instanceIDElement), instanceIDElement.getValue().getDisplayText());
+            HashMap<String, String> answers = getAnswers(getChildElements(element), instanceFile);
+            if (shouldRowBeInserted(answers)) {
+                if (element.isRepeatable()) {
+                    answers.put(INSTANCE_ID, instanceIDElement.getValue().getDisplayText());
+                }
+                sheetsHelper.insertRow(spreadsheet.getSpreadsheetId(), sheetTitle,
+                        new ValueRange().setValues(Collections.singletonList(prepareListOfValues(sheetCells.get(0), columnTitles, answers))));
             }
-            insertRow(prepareListOfValues(sheetCells.get(0), columnTitles, answers), sheetTitle);
-        }
-        return true;
-    }
-
-    private void insertRow(List<Object> rowElements, String sheetName) throws IOException {
-        try {
-            sheetsHelper.insertRow(spreadsheetId, sheetName,
-                    new ValueRange().setValues(Collections.singletonList(rowElements)));
         } catch (IOException e) {
-            Timber.e(e);
-            outcome.results.put(id, e.getMessage());
-            throw e;
+            throw new UploadException(e);
         }
     }
 
@@ -298,7 +275,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     }
 
     private String uploadMediaFile(File instanceFile, String fileName)
-            throws IOException, MultipleFoldersFoundException {
+            throws UploadException {
         String filePath = instanceFile.getParentFile() + "/" + fileName;
         File toUpload = new File(filePath);
 
@@ -311,7 +288,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                         selectionArgs, null);
         if (cursor != null && cursor.getCount() != 1) {
             cursor.close();
-            throw new FileNotFoundException(Collect.getInstance()
+            throw new UploadException(Collect.getInstance()
                     .getString(R.string.media_upload_error, filePath));
         }
 
@@ -320,8 +297,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             folderId = driveHelper.createOrGetIDOfFolderWithName(jrFormId);
         } catch (IOException | MultipleFoldersFoundException e) {
             Timber.e(e);
-            outcome.results.put(id, e.getMessage());
-            throw e;
+            throw new UploadException(e.getMessage());
         }
 
         String uploadedFileId;
@@ -331,24 +307,25 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             uploadedFileId = driveHelper.uploadFileToDrive(filePath, folderId, toUpload);
         } catch (IOException e) {
             Timber.e(e, "Exception thrown while uploading the file to drive");
-            outcome.results.put(id, e.getMessage());
-            throw e;
+            throw new UploadException(e.getMessage());
         }
 
         //checking if file was successfully uploaded
         if (uploadedFileId == null) {
-            outcome.results.put(id, "Unable to upload the media files. Try again");
-            return null;
+            throw new UploadException("Unable to upload the media files. Try again");
         }
         return getHyperlink(UPLOADED_MEDIA_URL + uploadedFileId, fileName);
     }
 
-    private TreeElement getInstanceElement(String formFilePath, File instanceFile) throws FileNotFoundException {
-        FormDef formDef = XFormUtils.getFormFromInputStream(new FileInputStream(new File(formFilePath)));
+    private TreeElement getInstanceElement(String formFilePath, File instanceFile) throws UploadException {
+        FormDef formDef;
+        try {
+            formDef = XFormUtils.getFormFromInputStream(new FileInputStream(new File(formFilePath)));
+        } catch (FileNotFoundException e) {
+            throw new UploadException(e);
+        }
         FormLoaderTask.importData(instanceFile, new FormEntryController(new FormEntryModel(formDef)));
-        return formDef
-                .getMainInstance()
-                .getRoot();
+        return formDef.getMainInstance().getRoot();
     }
 
     private boolean hasRepeatableGroups(TreeElement element) {
@@ -361,14 +338,18 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         return false;
     }
 
-    private void createSheetsIfNeeded(TreeElement element) throws IOException {
+    private void createSheetsIfNeeded(TreeElement element) throws UploadException {
         Set<String> sheetTitles = getSheetTitles(element);
-        for (String sheetTitle : sheetTitles) {
-            if (!doesSheetExist(sheetTitle)) {
-                sheetsHelper.addSheet(spreadsheetId, sheetTitle);
+        try {
+            for (String sheetTitle : sheetTitles) {
+                if (!doesSheetExist(sheetTitle)) {
+                    sheetsHelper.addSheet(spreadsheet.getSpreadsheetId(), sheetTitle);
+                }
             }
+            spreadsheet = sheetsHelper.getSpreadsheet(spreadsheet.getSpreadsheetId());
+        } catch (IOException e) {
+            throw new UploadException(e);
         }
-        spreadsheet = sheetsHelper.getSpreadsheet(spreadsheetId);
     }
 
     private Set<String> getSheetTitles(TreeElement element) {
@@ -383,7 +364,8 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         return sheetTitles;
     }
 
-    private HashMap<String, String> getAnswers(List<TreeElement> elements, File instanceFile) throws Exception {
+    private HashMap<String, String> getAnswers(List<TreeElement> elements, File instanceFile)
+            throws UploadException {
         HashMap<String, String> answers = new HashMap<>();
         for (TreeElement element : elements) {
             String elementTitle = getElementTitle(element);
@@ -392,7 +374,8 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             } else {
                 String answer = element.getValue() != null ? element.getValue().getDisplayText() : "";
                 if (new File(instanceFile.getParentFile() + "/" + answer).isFile()) {
-                    answers.put(elementTitle, uploadMediaFile(instanceFile, answer));
+                    String mediaHyperlink = uploadMediaFile(instanceFile, answer);
+                    answers.put(elementTitle, mediaHyperlink);
                 } else {
                     answers.put(elementTitle, answer);
                 }
@@ -401,10 +384,10 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         return answers;
     }
 
-    private List<Object> getColumnTitles(TreeElement element, TreeElement instanceIDElement) {
+    private List<Object> getColumnTitles(TreeElement element) {
         List<Object> columnTitles = new ArrayList<>();
         if (element.isRepeatable()) {
-            columnTitles.add(0, getElementTitle(instanceIDElement));
+            columnTitles.add(0, INSTANCE_ID);
         }
         for (TreeElement child : getChildElements(element)) {
             columnTitles.add(getElementTitle(child));
@@ -430,16 +413,15 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         return false;
     }
 
-    private boolean isAnyMissingColumn(List<Object> columnHeaders, List<Object> columnTitles) {
+    private void disallowMissingColumns(List<Object> columnHeaders, List<Object> columnTitles) throws UploadException {
         for (Object columnTitle : columnTitles) {
             if (!columnHeaders.contains(columnTitle)) {
-                outcome.results.put(id, Collect.getInstance().getString(R.string.google_sheets_missing_columns, columnTitle));
-                return true;
+                throw new UploadException(Collect.getInstance().getString(R.string.google_sheets_missing_columns, columnTitle));
             }
         }
-        return false;
     }
 
+    // This  method builds a column name by joining all of the containing group names using "-" as a separator
     private String getElementTitle(AbstractTreeElement element) {
         StringBuilder elementTitle = new StringBuilder();
         while (element != null && element.getName() != null) {
@@ -523,13 +505,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     }
 
     private List<List<Object>> getSheetCells(String sheetTitle) throws IOException {
-        try {
-            return sheetsHelper.getHeaderFeed(spreadsheetId, sheetTitle);
-        } catch (IOException e) {
-            Timber.e(e);
-            outcome.results.put(id, e.getMessage());
-            throw e;
-        }
+        return sheetsHelper.getSheetCells(spreadsheet.getSpreadsheetId(), sheetTitle);
     }
 
     private boolean isAnyColumnHeaderEmpty(List<Object> columnHeaders) {
@@ -541,57 +517,33 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         return false;
     }
 
-    private void setUpSpreadsheet(String urlString) throws IOException, BadUrlException {
-        if (!hasWritePermissionToSheet || !urlString.equals(googleSheetsUrl)) {
+    private void setUpSpreadsheet(String urlString) throws UploadException {
+        if (spreadsheet == null || spreadsheet.getSpreadsheetUrl() == null || !urlString.equals(spreadsheet.getSpreadsheetUrl())) {
             try {
-                spreadsheetId = UrlUtils.getSpreadsheetID(urlString);
-                spreadsheet = sheetsHelper.getSpreadsheet(spreadsheetId);
-                mainSheetTitle = spreadsheet
-                        .getSheets()
-                        .get(0)
-                        .getProperties()
-                        .getTitle();
+                spreadsheet = sheetsHelper.getSpreadsheet(UrlUtils.getSpreadsheetID(urlString));
+                spreadsheet.setSpreadsheetUrl(urlString);
             } catch (GoogleJsonResponseException e) {
                 String message = e.getMessage();
                 if (e.getDetails() != null && e.getDetails().getCode() == 403) {
                     message = Collect.getInstance().getString(R.string.google_sheets_access_denied);
                 }
-                outcome.results.put(id, message);
-                throw e;
-            } catch (BadUrlException | IOException e) {
+                throw new UploadException(message);
+            } catch (IOException | BadUrlException e) {
                 Timber.i(e);
-                outcome.results.put(id, e.getMessage());
-                throw e;
-            }
-            hasWritePermissionToSheet = true;
-            googleSheetsUrl = urlString;
-        }
-    }
-
-    private void resizeSheet(Integer sheetId, int expectedSize) throws IOException {
-        if (sheetId != null) {
-            try {
-                sheetsHelper.resizeSpreadSheet(spreadsheetId, sheetId, expectedSize);
-            } catch (IOException e) {
-                Timber.e(e);
-                outcome.results.put(id, e.getMessage());
-                throw e;
+                throw new UploadException(e.getMessage());
             }
         }
     }
 
-    private boolean isNumberOfColumnsValid(int numberOfColumns) {
+    private void ensureNumberOfColumnsIsValid(int numberOfColumns) throws UploadException {
         if (numberOfColumns == 0) {
-            outcome.results.put(id, "No columns found in the form to upload");
-            return false;
+            throw new UploadException(Collect.getInstance().getString(R.string.no_columns_to_upload));
         }
 
         if (numberOfColumns > 256) {
-            outcome.results.put(id, Collect.getInstance().getString(R.string.sheets_max_columns,
+            throw new UploadException(Collect.getInstance().getString(R.string.sheets_max_columns,
                     String.valueOf(numberOfColumns)));
-            return false;
         }
-        return true;
     }
 
     private Integer getSheetId(String sheetTitle) {
@@ -612,10 +564,10 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     private String getSheetUrl(Integer sheetId) {
         return sheetId == null
                 ? null
-                : googleSheetsUrl.substring(0, googleSheetsUrl.lastIndexOf('/') + 1) + "edit#gid=" + sheetId;
+                : spreadsheet.getSpreadsheetUrl().substring(0, spreadsheet.getSpreadsheetUrl().lastIndexOf('/') + 1) + "edit#gid=" + sheetId;
     }
 
-    private String getSpreadsheetUrl(Cursor cursor) {
+    private String getGoogleSeetsUrl(Cursor cursor) {
         int subIdx = cursor.getColumnIndex(InstanceColumns.SUBMISSION_URI);
         String urlString = cursor.isNull(subIdx) ? null : cursor.getString(subIdx);
         // if we didn't find one in the content provider, try to get from settings
@@ -635,7 +587,18 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         return authFailed;
     }
 
-    public void setAuthFailedForFalse() {
+    public void setAuthFailedToFalse() {
         authFailed = false;
+    }
+
+    /** An exception that results in the cancellation of an instance upload, and the presentation of an error to the user */
+    static class UploadException extends Exception {
+        UploadException(String message) {
+            super(message);
+        }
+
+        UploadException(Throwable cause) {
+            super(cause);
+        }
     }
 }

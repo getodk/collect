@@ -260,7 +260,6 @@
   <string name="drive_get_file">Pobieram %1$s i pliki medialne.</string>
   <string name="no_google_account">Nie wybrałeś konta Google!</string>
   <string name="google_set_account">Wybrałeś Google Sheets jako twój serwer, wybierz odpowiadające mu konto Google w Ustawieniach Ogólnych zanim będziesz kontynuowć.</string>
-  <string name="invalid_oauth">Niewłaściwy token OAuth 2</string>
   <string name="notification_error">Błąd przy wyświetlaniu tekstu powiadomienia</string>
   <string name="delete_after_send">Skasuj po wysłaniu</string>
   <string name="delete_after_send_summary">Usuń zakończone formularze i pliki medialne po wysłaniu na serwer.</string>

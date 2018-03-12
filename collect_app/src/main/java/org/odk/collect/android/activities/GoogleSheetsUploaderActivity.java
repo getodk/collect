@@ -282,7 +282,7 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
             // probably got an auth request, so ignore
             return;
         }
-        Timber.i("uploadingComplete: Processing results ( %d ) from upload of %d instances!",
+        Timber.i("uploadingComplete: Processing messagesByInstanceId ( %d ) from upload of %d instances!",
                 result.size(), instancesToSend.length);
 
         StringBuilder selection = new StringBuilder();
@@ -292,7 +292,7 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
         if (keys.size() == 0) {
             if (instanceGoogleSheetsUploader.isAuthFailed()) {
                 message.append(getString(R.string.google_auth_io_exception_msg));
-                instanceGoogleSheetsUploader.setAuthFailedForFalse();
+                instanceGoogleSheetsUploader.setAuthFailedToFalse();
             } else {
                 message.append(getString(R.string.no_forms_uploaded));
             }
@@ -324,7 +324,7 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
                 } else {
                     if (instanceGoogleSheetsUploader.isAuthFailed()) {
                         message.append(getString(R.string.google_auth_io_exception_msg));
-                        instanceGoogleSheetsUploader.setAuthFailedForFalse();
+                        instanceGoogleSheetsUploader.setAuthFailedToFalse();
                     } else {
                         message.append(getString(R.string.no_forms_uploaded));
                     }

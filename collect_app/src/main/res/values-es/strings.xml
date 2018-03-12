@@ -269,7 +269,6 @@
   <string name="drive_get_file">Obteniendo %1$s y archivos multimedia.</string>
   <string name="no_google_account">!Cuenta Google no Seleccionada¡</string>
   <string name="google_set_account">Ha seleccionado Google Sheets como servidor, por favor, seleccionar la correspondiente cuenta Google en Características Generales antes de continuar</string>
-  <string name="invalid_oauth">OAuth 2 token Invalido.</string>
   <string name="media_upload_error">Fallo al cargar foto que no existe:%1$s</string>
   <string name="odk_auth_auth_fail">Falla de autenticación en envío automático. Favor verificar sus ajustes en servidor</string>
   <string name="odk_auto_note">Notificación de Envío Automático de servidor</string>

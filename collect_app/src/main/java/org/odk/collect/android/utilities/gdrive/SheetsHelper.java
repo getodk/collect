@@ -137,7 +137,7 @@ public class SheetsHelper {
      * <p>
      * For more info   :   https://developers.google.com/sheets/api/reference/rest/
      */
-    public List<List<Object>> getHeaderFeed(String spreadsheetId, String sheetName) throws IOException {
+    public List<List<Object>> getSheetCells(String spreadsheetId, String sheetName) throws IOException {
         ValueRange response = sheetsService.getSpreadsheet(spreadsheetId, sheetName);
         return response.getValues();
     }

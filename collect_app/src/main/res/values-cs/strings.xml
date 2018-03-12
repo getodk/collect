@@ -248,7 +248,6 @@
   <string name="other_preferences">Ostatní nastavení platformy</string>
   <string name="drive_get_file">Získávám %1$s a mediální soubory</string>
   <string name="no_google_account">Není vybrán žádný účet Google!</string>
-  <string name="invalid_oauth">Neplatný kód OAuth 2</string>
   <string name="notification_error">Chyba při zobrazení oznámení</string>
   <string name="delete_after_send">Vymazat po odeslání</string>
   <string name="delete_after_send_summary">Vymaže dokončené dotazníky a média po odeslání na server</string>

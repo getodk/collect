@@ -267,7 +267,6 @@
   <string name="drive_get_file">Отримання %1$s та медіа файлів.</string>
   <string name="no_google_account">Не вибраний жоден обліковий запис Google!</string>
   <string name="google_set_account">Ви обрали своїм сервером Google Сторінки, для продовження, будь ласка, вкажіть відповідний обліковий запис Google в Загальних налаштуваннях</string>
-  <string name="invalid_oauth">Невірна OAuth 2 мітка</string>
   <string name="media_upload_error">Невдалося завантажити неіснуюче фото: %1$s</string>
   <string name="odk_auth_auth_fail">Помилка авторизації під час автоматичного надсилання, будь ласка, перевірте налаштування</string>
   <string name="odk_auto_note">Сповіщення автоматичного надсилання ODK</string>
