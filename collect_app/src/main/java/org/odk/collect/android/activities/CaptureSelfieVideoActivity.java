@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.hardware.Camera;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -13,7 +14,6 @@ import android.widget.FrameLayout;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.CameraUtils;
-import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.views.CameraPreview;
 import org.odk.collect.android.widgets.VideoWidget;
@@ -85,7 +85,7 @@ public class CaptureSelfieVideoActivity extends Activity {
                         releaseCamera();
 
                         Intent i = new Intent();
-                        i.setData(MediaUtils.getVideoUriFromMediaProvider(outputFile));
+                        i.setData(Uri.fromFile(new File(outputFile)));
                         setResult(RESULT_OK, i);
                     } catch (RuntimeException e) {
                         // RuntimeException is thrown when stop() is called immediately after start().
