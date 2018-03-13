@@ -258,7 +258,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
             Toast.makeText(
                     getContext(),
                     getContext().getString(R.string.activity_not_found,
-                            getContext().getString(R.string.audio_capture_format_args)), Toast.LENGTH_SHORT)
+                            getContext().getString(R.string.capture_audio)), Toast.LENGTH_SHORT)
                     .show();
             cancelWaitingForData();
         }
@@ -279,7 +279,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
             Toast.makeText(
                     getContext(),
                     getContext().getString(R.string.activity_not_found,
-                            getContext().getString(R.string.choose_audio_format_args)), Toast.LENGTH_SHORT).show();
+                            getContext().getString(R.string.choose_audio)), Toast.LENGTH_SHORT).show();
             cancelWaitingForData();
         }
     }
@@ -299,7 +299,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
             Toast.makeText(
                     getContext(),
                     getContext().getString(R.string.activity_not_found,
-                            getContext().getString(R.string.play_audio_format_args)), Toast.LENGTH_SHORT).show();
+                            getContext().getString(R.string.play_audio)), Toast.LENGTH_SHORT).show();
         }
     }
 }

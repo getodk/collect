@@ -154,9 +154,9 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
                     startActivityForResult(photoPickerIntent, SELECT_PHOTO);
                 } else {
                     Toast.makeText(getActivity(),
-                            getString(R.string.activity_not_found, getString(R.string.select_image_format_args)),
+                            getString(R.string.activity_not_found, getString(R.string.choose_image)),
                             Toast.LENGTH_SHORT).show();
-                    Timber.w(getString(R.string.activity_not_found, getString(R.string.select_image_format_args)));
+                    Timber.w(getString(R.string.activity_not_found, getString(R.string.choose_image)));
                 }
                 break;
 

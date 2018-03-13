@@ -317,7 +317,7 @@ public class ImageWebViewWidget extends QuestionWidget implements FileWidget {
             Toast.makeText(
                     getContext(),
                     getContext().getString(R.string.activity_not_found,
-                            getContext().getString(R.string.image_capture_format_args)), Toast.LENGTH_SHORT)
+                            getContext().getString(R.string.capture_image)), Toast.LENGTH_SHORT)
                     .show();
             cancelWaitingForData();
         }
@@ -340,7 +340,7 @@ public class ImageWebViewWidget extends QuestionWidget implements FileWidget {
             Toast.makeText(
                     getContext(),
                     getContext().getString(R.string.activity_not_found,
-                            getContext().getString(R.string.choose_image_format_args)), Toast.LENGTH_SHORT).show();
+                            getContext().getString(R.string.choose_image)), Toast.LENGTH_SHORT).show();
             cancelWaitingForData();
         }
     }
