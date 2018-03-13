@@ -74,12 +74,20 @@ public class CaptureSelfieVideoActivity extends Activity {
                         releaseMediaRecorder();
                     }
                 } else {
-                    // stop recording and release camera
-                    mediaRecorder.stop();  // stop the recording
+                    try {
+                        mediaRecorder.stop();  // stop the recording
+                    } catch (RuntimeException e) {
+                        // RuntimeException is thrown when stop() is called immediately after start().
+                        // In this case the output file is not properly constructed ans should be deleted.
+                        Timber.d("RuntimeException: stop() is called immediately after start()");
+                        //noinspection ResultOfMethodCallIgnored
+                        new File(outputFile).delete();
+                    }
                     releaseMediaRecorder(); // release the MediaRecorder object
                     camera.lock();         // take camera access back from MediaRecorder
 
                     recording = false;
+                    releaseCamera();
 
                     Intent i = new Intent();
                     i.setData(Uri.fromFile(new File(outputFile)));
@@ -138,10 +146,23 @@ public class CaptureSelfieVideoActivity extends Activity {
         }
     }
 
+    private void releaseCamera(){
+        if (camera != null){
+            // release the camera for other applications
+            try {
+                camera.release();
+                Timber.w("Camera released");
+            } catch (Exception e) {
+                Timber.d("Camera has been already released");
+            }
+            camera = null;
+        }
+    }
+
     @Override
     protected void onPause() {
         releaseMediaRecorder();       // if you are using MediaRecorder, release it first
-        camera = null;
+        releaseCamera();
         super.onPause();
     }
 
