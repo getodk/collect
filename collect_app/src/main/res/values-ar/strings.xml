@@ -276,7 +276,6 @@
   <string name="delete_after_send_summary">حذف الاستمارة النهائية والوسائط المتعددة بعد ارسالها الى الخادم</string>
   <string name="change_server_url">رابط الخادم</string>
   <string name="google_search_browse">ابحث عن الاستمارات. أو اختار  \'My Drive\' من الاسفل لكي تتصفح</string>
-  <string name="no_blank_search">حقل البحث لا يمكن ان يكون فارغا.</string>
   <string name="google_sheets_url">رابط اوراق جوجل</string>
   <string name="send_in_progress">خلفية الارسال تعمل. يرجى المحاولة مرة أخرى في وقت قريب</string>
   <string name="sheets_max_columns">الحد الأقصى لعدد الأعمدة هو 255، استماراتك تحتوي على %s. غير قادر على تحميل الجدول.</string>

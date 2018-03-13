@@ -279,7 +279,6 @@
   <string name="delete_after_send_summary">Eliminar formularios finalizados y archivos multimedia después de enviar al servidor</string>
   <string name="change_server_url">URL del Servidor</string>
   <string name="google_search_browse">Busca en formularios. O selecciona  \'My Drive\' debajo para visualizar.</string>
-  <string name="no_blank_search">Campo de búsqueda no puede estar en blanco.</string>
   <string name="google_sheets_url">URL alterno para envío</string>
   <string name="send_in_progress">Envio funcionando, reintentar en breve</string>
   <string name="sheets_max_columns">Máximo de columnas = 255, su formulario tiene %s. No se puede subir la hoja.</string>

@@ -214,7 +214,6 @@
   <string name="delete_after_send">ከላክ በኋላ ይሰርዙ</string>
   <string name="delete_after_send_summary">ወደ ሰርቨር ከተላኩ በኋላ የተጠናቀቁ ቅጾችን እና ሚዲያዎችን ይሰርዛል</string>
   <string name="google_search_browse">ቅጾችን ይፈልጉ፡፡ ወይም ለማሰስ ከታች \"የእኔ Drive\" ን ይምረጡ.</string>
-  <string name="no_blank_search">ፍለጋ ባዶ ሊሆን አይችልም</string>
   <string name="about_preferences">ስለ</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">ካርታ</string>

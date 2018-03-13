@@ -254,7 +254,6 @@
   <string name="delete_after_send">ລຶບພາຍຫຼັງສົ່ງແລ້ວ</string>
   <string name="delete_after_send_summary">ລຶບຟອມທີ່ສຳເລັດແລ້ວ ແລະ ສື່ ຫຼັງຈາກສົ່ງຫາເສີບເວີ</string>
   <string name="change_server_url">URL ຂອງເສີບເວີ</string>
-  <string name="no_blank_search">ຫ້ອງຊອກຫາບໍ່ຄວນຫວ່າງເປົ່າ</string>
   <!--Geo string added in feature-geofeatures branch-->
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->

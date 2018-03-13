@@ -277,7 +277,6 @@
   <string name="delete_after_send_summary">Удаляет завершённые формы и их медиа после отправки данных на сервер</string>
   <string name="change_server_url">URL сервера</string>
   <string name="google_search_browse">Поиск форм. Или выберите \'Мой диск\' ниже для просмотра.</string>
-  <string name="no_blank_search">Поле поиска не может быть пустым.</string>
   <string name="google_sheets_url">Резервный URL отправки</string>
   <string name="send_in_progress">Выполняется отправка в фоне, попробуйте снова через некоторое время.</string>
   <string name="sheets_max_columns">Наибольшее допустимое количество колонок 255, на Вашей форме их %s. Не удалось загрузить в таблицу.</string>

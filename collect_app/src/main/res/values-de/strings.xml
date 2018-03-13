@@ -277,7 +277,6 @@
   <string name="delete_after_send_summary">Löscht abgeschlossene Formulare und Medien nach dem Senden zum Server</string>
   <string name="change_server_url">Server URL</string>
   <string name="google_search_browse">Nach Formularen suchen. Oder \'My Drive\' wählen um zu browsen.</string>
-  <string name="no_blank_search">Suchfeld darf nicht leer sein.</string>
   <string name="google_sheets_url">Ersatzspeicherort-URL</string>
   <string name="send_in_progress">Sendevorgang läuft im Hintergrund. Bitte versuchen Sie es später nochmal.</string>
   <string name="sheets_max_columns">Max. Anzahl an Spalten ist 255. Ihr Formular hat %s Spalten. Tabelle konnte nicht hochgeladen werden.</string>
