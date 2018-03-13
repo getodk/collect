@@ -289,6 +289,10 @@ abstract class AppListActivity extends AppCompatActivity {
         return filterText != null ? filterText : "";
     }
 
+    protected void clearSearchView() {
+        searchView.setQuery("", false);
+    }
+
     private void setupBottomSheet() {
         bottomSheetDialog = new BottomSheetDialog(this, R.style.MaterialDialogSheet);
         View sheetView = getLayoutInflater().inflate(R.layout.bottom_sheet, null);

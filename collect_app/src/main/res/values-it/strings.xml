@@ -273,7 +273,6 @@
   <string name="delete_after_send_summary">Elimina moduli finalizzati e media dopo l\'\'invio al server</string>
   <string name="change_server_url">Server URL</string>
   <string name="google_search_browse">Ricerca per form o seleziona \'My Drive\' in basso.</string>
-  <string name="no_blank_search">Il campo ricerca non può essere vuoto.</string>
   <string name="google_sheets_url">URL di destinazione predefinito</string>
   <string name="send_in_progress">Invio in background in corso, perpiacere riprova più tardi</string>
   <string name="sheets_max_columns">Numero massimo di colonne ammesse è 255, la tua form ha %s. Impossibile caricare il foglio.</string>

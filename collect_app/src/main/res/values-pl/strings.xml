@@ -267,7 +267,6 @@
   <string name="delete_after_send_summary">Usuń zakończone formularze i pliki medialne po wysłaniu na serwer.</string>
   <string name="change_server_url">Serwer URL</string>
   <string name="google_search_browse">Wyszukaj formularze. Lub wybierz poniżej \'Mój Dysk\' by przejrzeć</string>
-  <string name="no_blank_search">Pole wyszukiwania nie może być puste.</string>
   <string name="send_in_progress">Trwa wysyłka w tle, spróbuj wkrótce ponownie</string>
   <string name="sheets_max_columns">Maksymalna liczba kolumn wynosi 255, twój formularz posiada %s. Nie można załadować do arkusza kalkulacyjnego.</string>
   <string name="invalid_sheet_id">niepoprawne id arkusza: %1$s</string>
