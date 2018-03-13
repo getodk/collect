@@ -131,14 +131,14 @@ public class FormController {
 
     private File mediaFolder;
     @Nullable
-    private File instancePath;
+    private File instanceFile;
     private FormEntryController formEntryController;
     private FormIndex indexWaitingForData = null;
 
-    public FormController(File mediaFolder, FormEntryController fec, File instancePath) {
+    public FormController(File mediaFolder, FormEntryController fec, File instanceFile) {
         this.mediaFolder = mediaFolder;
         formEntryController = fec;
-        this.instancePath = instancePath;
+        this.instanceFile = instanceFile;
     }
 
     public FormDef getFormDef() {
@@ -150,12 +150,12 @@ public class FormController {
     }
 
     @Nullable
-    public File getInstancePath() {
-        return instancePath;
+    public File getInstanceFile() {
+        return instanceFile;
     }
 
-    public void setInstancePath(File instancePath) {
-        this.instancePath = instancePath;
+    public void setInstanceFile(File instanceFile) {
+        this.instanceFile = instanceFile;
     }
 
     public void setIndexWaitingForData(FormIndex index) {
@@ -168,7 +168,7 @@ public class FormController {
 
     public TimerLogger getTimerLogger() {
         if (timerLogger == null) {
-            setTimerLogger(new TimerLogger(getInstancePath(), this));
+            setTimerLogger(new TimerLogger(getInstanceFile(), this));
         }
         return timerLogger;
     }

@@ -541,7 +541,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         outState.putString(KEY_FORMPATH, formPath);
         FormController formController = getFormController();
         if (formController != null) {
-            if (formController.getInstancePath() != null) {
+            if (formController.getInstanceFile() != null) {
                 outState.putString(KEY_INSTANCEPATH, getAbsoluteInstancePath());
             }
             outState.putString(KEY_XPATH,
@@ -667,7 +667,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 // file
                 ImageConverter.execute(Collect.TMPFILE_PATH, getWidgetWaitingForBinaryData(), this);
                 File fi = new File(Collect.TMPFILE_PATH);
-                String instanceFolder = formController.getInstancePath()
+                String instanceFolder = formController.getInstanceFile()
                         .getParent();
                 String s = instanceFolder + File.separator + System.currentTimeMillis() + ".jpg";
 
@@ -692,7 +692,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 String path = intent
                         .getStringExtra(android.provider.MediaStore.EXTRA_OUTPUT);
                 fi = new File(path);
-                instanceFolder = formController.getInstancePath().getParent();
+                instanceFolder = formController.getInstanceFile().getParent();
                 s = instanceFolder + File.separator + System.currentTimeMillis() + ".jpg";
 
                 nf = new File(s);
@@ -780,7 +780,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
     private void saveChosenImage(Uri selectedImage) {
         // Copy file to sdcard
-        String instanceFolder1 = getFormController().getInstancePath().getParent();
+        String instanceFolder1 = getFormController().getInstanceFile().getParent();
         String destImagePath = instanceFolder1 + File.separator + System.currentTimeMillis() + ".jpg";
 
         File chosenImage;
@@ -1957,16 +1957,16 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private void removeTempInstance() {
         FormController formController = getFormController();
 
-        if (formController != null && formController.getInstancePath() != null) {
-            SaveToDiskTask.removeSavepointFiles(formController.getInstancePath().getName());
+        if (formController != null && formController.getInstanceFile() != null) {
+            SaveToDiskTask.removeSavepointFiles(formController.getInstanceFile().getName());
         }
 
         // if it's not already saved, erase everything
         if (!InstancesDaoHelper.isInstanceAvailable(getAbsoluteInstancePath())) {
             // delete media first
-            String instanceFolder = formController.getInstancePath().getParent();
+            String instanceFolder = formController.getInstanceFile().getParent();
             Timber.i("Attempting to delete: %s", instanceFolder);
-            File file = formController.getInstancePath().getParentFile();
+            File file = formController.getInstanceFile().getParentFile();
             int images = MediaUtils.deleteImagesInFolderFromMediaProvider(file);
             int audio = MediaUtils.deleteAudioInFolderFromMediaProvider(file);
             int video = MediaUtils.deleteVideoInFolderFromMediaProvider(file);
@@ -1978,7 +1978,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     }
 
     private String getAbsoluteInstancePath() {
-        return getFormController().getInstancePath().getAbsolutePath();
+        return getFormController().getInstanceFile().getAbsolutePath();
     }
 
     /**
@@ -2441,7 +2441,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         }
 
         // Set saved answer path
-        if (formController.getInstancePath() == null) {
+        if (formController.getInstanceFile() == null) {
 
             // Create new answer folder.
             String time = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss",
@@ -2452,7 +2452,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     + time;
             if (FileUtils.createFolder(path)) {
                 File instanceFile = new File(path + File.separator + file + "_" + time + ".xml");
-                formController.setInstancePath(instanceFile);
+                formController.setInstanceFile(instanceFile);
             }
 
             formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_START, 0, null, false, true);

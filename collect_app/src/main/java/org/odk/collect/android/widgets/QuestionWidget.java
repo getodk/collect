@@ -556,7 +556,7 @@ public abstract class QuestionWidget
             return null;
         }
 
-        return formController.getInstancePath().getParent();
+        return formController.getInstanceFile().getParent();
     }
 
     @NonNull

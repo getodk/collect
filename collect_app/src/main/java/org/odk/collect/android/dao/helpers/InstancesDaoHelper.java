@@ -44,13 +44,13 @@ public final class InstancesDaoHelper {
         boolean complete = false;
 
         FormController formController = Collect.getInstance().getFormController();
-        if (formController != null) {
+        if (formController != null && formController.getInstanceFile() != null) {
             // First check if we're at the end of the form, then check the preferences
             complete = end && (boolean) GeneralSharedPreferences.getInstance()
                     .get(PreferenceKeys.KEY_COMPLETED_DEFAULT);
 
             // Then see if we've already marked this form as complete before
-            String path = formController.getInstancePath().getAbsolutePath();
+            String path = formController.getInstanceFile().getAbsolutePath();
             try (Cursor c = new InstancesDao().getInstancesCursorForFilePath(path)) {
                 if (c != null && c.getCount() > 0) {
                     c.moveToFirst();
@@ -62,7 +62,7 @@ public final class InstancesDaoHelper {
                 }
             }
         } else {
-            Timber.w("FormController has a null value");
+            Timber.w("FormController or its instanceFile field has a null value");
         }
         return complete;
     }
