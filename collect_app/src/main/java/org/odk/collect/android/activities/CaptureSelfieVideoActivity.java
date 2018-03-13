@@ -146,8 +146,8 @@ public class CaptureSelfieVideoActivity extends Activity {
         }
     }
 
-    private void releaseCamera(){
-        if (camera != null){
+    private void releaseCamera() {
+        if (camera != null) {
             // release the camera for other applications
             try {
                 camera.release();
