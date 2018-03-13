@@ -35,13 +35,14 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.common.collect.ImmutableList;
+import com.jaredrummler.android.colorpicker.ColorPickerDialog;
+import com.jaredrummler.android.colorpicker.ColorPickerDialogListener;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.IconMenuListAdapter;
 import org.odk.collect.android.adapters.model.IconMenuItem;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.AnimateUtils;
-import org.odk.collect.android.utilities.ColorPickerDialog;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.views.DrawView;
@@ -59,7 +60,7 @@ import timber.log.Timber;
  *
  * @author BehrAtherton@gmail.com
  */
-public class DrawActivity extends AppCompatActivity {
+public class DrawActivity extends AppCompatActivity{
     public static final String OPTION = "option";
     public static final String OPTION_SIGNATURE = "signature";
     public static final String OPTION_ANNOTATE = "annotate";
@@ -361,14 +362,33 @@ public class DrawActivity extends AppCompatActivity {
     public void setColor(View view) {
         if (view.getVisibility() == View.VISIBLE) {
             fabActions.performClick();
-            ColorPickerDialog cpd = new ColorPickerDialog(this,
-                    new ColorPickerDialog.OnColorChangedListener() {
-                        public void colorChanged(String key, int color) {
-                            drawView.setColor(color);
-                        }
-                    }, "key", drawView.getColor(), drawView.getColor(),
-                    getString(R.string.select_drawing_color));
-            cpd.show();
+//            ColorPickerDialog cpd = new ColorPickerDialog(this,
+//                    new ColorPickerDialog.OnColorChangedListener() {
+//                        public void colorChanged(String key, int color) {
+//                            drawView.setColor(color);
+//                        }
+//                    }, "key", drawView.getColor(), drawView.getColor(),
+//                    getString(R.string.select_drawing_color));
+//            cpd.show();
+
+            ColorPickerDialog colorPickerDialog = ColorPickerDialog.newBuilder()
+                    .setDialogTitle(ColorPickerDialog.TYPE_CUSTOM)
+                    .setColor(drawView.getColor())
+                    .create();
+
+            colorPickerDialog.setColorPickerDialogListener(new ColorPickerDialogListener() {
+                @Override
+                public void onColorSelected(int dialogId, int color) {
+                    drawView.setColor(color);
+                }
+
+                @Override
+                public void onDialogDismissed(int dialogId) {
+
+                }
+            });
+            colorPickerDialog.show(getFragmentManager(), "asd");
+
         }
     }
 }

@@ -250,6 +250,9 @@ dependencies {
     // Android bindings for Rx:
     implementation 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
 
+    // Color picker dialog
+    implementation 'com.jaredrummler:colorpicker:1.0.2'
+
     // RxLifecycle (binds subscription cleanup to component lifecycle):
     implementation 'com.trello.rxlifecycle2:rxlifecycle:2.2.1'
     implementation 'com.trello.rxlifecycle2:rxlifecycle-android:2.2.1'
