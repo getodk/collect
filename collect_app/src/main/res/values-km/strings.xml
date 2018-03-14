@@ -564,5 +564,4 @@
   <string name="no">ទេ</string>
   <string name="newer_version_of_a_form_info">នេះគឺជាកំណែថ្មីនៃទម្រង់ដែលអ្នកមានរួចហើយ!</string>
   <string name="svg_file_does_not_exist">ឯកសារ SVG មិនត្រូវបានរកឃើញ</string>
-  <string name="svg_not_supported_device">ធាតុក្រាហ្វិក​រូបភាព​ផែនទី​ទាមទារ Android ជំនាន់ទី ៥ (Lollipop) ឬ​ជំនាន់ថ្មី។ ឧបករណ៍​របស់​អ្នក​មិន​ត្រូវ​បាន​គាំ​ទ្រទេ។</string>
 </resources>
