@@ -12,8 +12,11 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.location.FusedLocationProviderApi;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 
 import timber.log.Timber;
@@ -43,10 +46,7 @@ class GoogleLocationClient
     private static final long DEFAULT_FASTEST_UPDATE_INTERVAL = 2500;
 
     @NonNull
-    private final FusedLocationProviderApi fusedLocationProviderApi;
-
-    @NonNull
-    private final GoogleApiClient googleApiClient;
+    private final FusedLocationProviderClient fusedLocationProviderClient;
 
     @Nullable
     private LocationClientListener locationClientListener;
@@ -57,6 +57,9 @@ class GoogleLocationClient
     private long updateInterval = DEFAULT_UPDATE_INTERVAL;
     private long fastestUpdateInterval = DEFAULT_FASTEST_UPDATE_INTERVAL;
 
+    @Nullable
+    private GoogleLocationCallback locationCallback = null;
+
     /**
      * Constructs a new GoogleLocationClient with the provided Context.
      * <p>
@@ -65,7 +68,7 @@ class GoogleLocationClient
      * @param context The Context where the GoogleLocationClient will be running.
      */
     GoogleLocationClient(@NonNull Context context) {
-        this(locationServicesClientForContext(context), LocationServices.FusedLocationApi,
+        this(LocationServices.getFusedLocationProviderClient(context),
                 (LocationManager) context.getSystemService(Context.LOCATION_SERVICE));
     }
 
@@ -75,46 +78,34 @@ class GoogleLocationClient
      * <p>
      * This Constructor should only be used for testing.
      *
-     * @param googleApiClient          The GoogleApiClient for managing the LocationClient's connection
-     *                                 to Play Services.
-     * @param fusedLocationProviderApi The FusedLocationProviderApi for fetching the User's
+     * @param fusedLocationProviderClient The FusedLocationProviderApi for fetching the User's
      *                                 location.
      */
-    GoogleLocationClient(@NonNull GoogleApiClient googleApiClient,
-                         @NonNull FusedLocationProviderApi fusedLocationProviderApi,
+    GoogleLocationClient(@NonNull FusedLocationProviderClient fusedLocationProviderClient,
                          @NonNull LocationManager locationManager) {
         super(locationManager);
-
-        this.googleApiClient = googleApiClient;
-        this.fusedLocationProviderApi = fusedLocationProviderApi;
+        this.fusedLocationProviderClient = fusedLocationProviderClient;
     }
 
     // LocationClient:
 
     public void start() {
-        googleApiClient.registerConnectionCallbacks(this);
-        googleApiClient.registerConnectionFailedListener(this);
-
-        googleApiClient.connect();
+        if (locationClientListener != null) {
+            locationClientListener.onClientStart();
+        }
     }
 
     public void stop() {
         stopLocationUpdates();
-
-        googleApiClient.unregisterConnectionCallbacks(this);
-        googleApiClient.unregisterConnectionFailedListener(this);
-
-        if (googleApiClient.isConnected()) {
-            googleApiClient.disconnect();
-
-        } else {
-            onConnectionSuspended(0);
+        if (locationClientListener != null) {
+            locationClientListener.onClientStop();
         }
     }
 
     public void requestLocationUpdates(@NonNull LocationListener locationListener) {
         if (!isMonitoringLocation()) {
-            fusedLocationProviderApi.requestLocationUpdates(googleApiClient, createLocationRequest(), this);
+            locationCallback = new GoogleLocationCallback();
+            fusedLocationProviderClient.requestLocationUpdates(createLocationRequest(), locationCallback, null);
         }
 
         this.locationListener = locationListener;
@@ -125,8 +116,11 @@ class GoogleLocationClient
             return;
         }
 
+        if (locationCallback != null) {
+            fusedLocationProviderClient.removeLocationUpdates(locationCallback);
+        }
+
         locationListener = null;
-        fusedLocationProviderApi.removeLocationUpdates(googleApiClient, this);
     }
 
     @Override
@@ -137,11 +131,8 @@ class GoogleLocationClient
     @Override
     public Location getLastLocation() {
         // We need to block if the Client isn't already connected:
-        if (!googleApiClient.isConnected()) {
-            googleApiClient.blockingConnect();
-        }
 
-        return fusedLocationProviderApi.getLastLocation(googleApiClient);
+        return fusedLocationProviderClient.getLastLocation().getResult();
     }
 
     @Override
@@ -228,5 +219,13 @@ class GoogleLocationClient
         return new GoogleApiClient.Builder(context)
                 .addApi(LocationServices.API)
                 .build();
+    }
+
+    private class GoogleLocationCallback extends LocationCallback {
+        @Override
+        public void onLocationResult(LocationResult locationResult) {
+            super.onLocationResult(locationResult);
+            GoogleLocationClient.this.onLocationChanged(locationResult.getLastLocation());
+        }
     }
 }
