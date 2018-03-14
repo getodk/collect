@@ -33,7 +33,7 @@
             android:visibility="gone" />
 
         <ImageView
-            android:id="@+id/qr_iv"
+            android:id="@+id/ivQRcode"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:contentDescription="@string/qr_code" />
@@ -85,7 +85,7 @@
             android:tint="#ffff00" />
 
         <TextView
-            android:id="@+id/edit_qrcode"
+            android:id="@+id/tvPasswordWarning"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"

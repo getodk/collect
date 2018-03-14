@@ -232,6 +232,7 @@
     <string name="constraint_behavior_on_swipe">Validate upon forward swipe</string>
     <string name="constraint_behavior_on_finalize">Defer validation until finalized</string>
     <string name="view_change_location">View or Change Location</string>
+    <string name="change_location">Change Location</string>
     <string name="open_url">Open Url</string>
     <string name="get_bearing">Record Bearing</string>
     <string name="replace_bearing">Replace Bearing</string>
@@ -290,7 +291,6 @@
     <string name="delete_after_send_summary">Deletes finalized forms and media after sending to server</string>
     <string name="change_server_url">Server URL</string>
     <string name="google_search_browse">Search for forms. Or select \'My Drive\' below to browse.</string>
-    <string name="no_blank_search">Search field cannot be blank.</string>
     <string name="google_sheets_url">Fallback submission URL</string>
     <string name="send_in_progress">Background send running, please try again shortly</string>
     <string name="sheets_max_columns">Max number of columns is 255, your form has %s. Unable to upload to spreadsheet.</string>

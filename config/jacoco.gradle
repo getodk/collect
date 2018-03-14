@@ -1,0 +1,55 @@
+apply plugin: 'jacoco'
+
+jacoco {
+    // https://bintray.com/bintray/jcenter/org.jacoco:org.jacoco.core
+    toolVersion = '0.8.0'
+}
+
+tasks.withType(Test) {
+    jacoco.includeNoLocationClasses = true
+}
+
+task jacocoTestReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
+    description = 'Generate JaCoCo coverage reports'
+
+    doFirst {
+        files('build/intermediates/classes/debug').getFiles().each { file ->
+            if (file.name.contains('$$')) {
+                file.renameTo(file.path.replace('$$', '$'))
+            }
+        }
+    }
+
+    classDirectories = fileTree(
+            dir: "${buildDir}/intermediates/classes/debug",
+            excludes: ['**/R.class',
+                       '**/R$*.class',
+                       '**/*$ViewInjector*.*',
+                       '**/*$ViewBinder*.*',
+                       '**/BuildConfig.*',
+                       '**/Manifest*.*',
+                       '**/*$Lambda$*.*', // Jacoco can not handle several "$" in class name.
+                       '**/*$inlined$*.*', // Kotlin specific, Jacoco can not handle several "$" in class name.
+                       '**/*Module.*', // Modules for Dagger.
+                       '**/*Dagger*.*', // Dagger auto-generated code.
+                       '**/*MembersInjector*.*', // Dagger auto-generated code.
+                       '**/*_Provide*Factory*.*'] // Dagger auto-generated code.
+    )
+
+    def coverageSourceDirs = [
+            "${project.projectDir}/src/main/java",
+            "${project.projectDir}/src/debug/java"
+    ]
+
+    additionalSourceDirs = files(coverageSourceDirs)
+    sourceDirectories = files(coverageSourceDirs)
+    executionData = fileTree(
+            dir: "$buildDir",
+            include: ["jacoco/testDebugUnitTest.exec", "outputs/code-coverage/connected/*coverage.ec"]
+    )
+
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+}

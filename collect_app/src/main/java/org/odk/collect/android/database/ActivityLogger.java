@@ -176,7 +176,7 @@ public final class ActivityLogger {
     }
 
     private String getInstancePath(FormController formController) {
-        File f = formController.getInstancePath();
+        File f = formController.getInstanceFile();
         if (f == null) {
             return "<not-yet-specified>";
         } else {

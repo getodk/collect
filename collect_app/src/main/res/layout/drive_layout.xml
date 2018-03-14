@@ -61,59 +61,24 @@ the License.
 
     </LinearLayout>
 
-
-    <LinearLayout
-        android:id="@+id/searchholder"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar"
-        android:layout_gravity="center_vertical"
-        android:background="#ECECEC"
-        android:orientation="horizontal">
-
-        <EditText
-            android:id="@+id/search_text"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1.0"
-            android:ellipsize="end"
-            android:imeOptions="actionSearch"
-            android:inputType="textShortMessage"
-            android:maxLines="1"
-            android:minHeight="50dp"
-            android:paddingBottom="0dip"
-            android:paddingEnd="8dip"
-            android:paddingLeft="8dip"
-            android:paddingRight="8dip"
-            android:paddingStart="8dip" />
-
-        <ImageButton
-            android:id="@+id/search_button"
-            android:layout_width="60dp"
-            android:layout_height="match_parent"
-            android:enabled="false"
-            android:src="@drawable/ic_action_action_search" />
-
-    </LinearLayout>
-
     <include
         layout="@layout/toolbar_action_bar_shadow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/toolbar" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/list"
+    <ListView
+        android:id="@android:id/list"
         android:scrollbars="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/buttonholder"
-        android:layout_below="@+id/searchholder"/>
+        android:layout_below="@id/toolbar"/>
 
     <TextView
         android:id="@android:id/empty"
         android:layout_above="@+id/buttonholder"
-        android:layout_below="@+id/searchholder"
+        android:layout_below="@id/toolbar"
         style="@style/emptyViewStyle"
         android:text="@string/google_search_browse" />
 </RelativeLayout>

@@ -69,7 +69,6 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
     private MediaPlayer player;
     private AudioPlayListener audioPlayListener;
     private int playTextColor;
-    private int playBackgroundTextColor;
     
     private Context context;
 
@@ -96,17 +95,12 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
             // (it's a spanned thing...)
             viewText.setText(viewText.getText().toString());
             viewText.setTextColor(playTextColor);
-            viewText.setBackgroundColor(playBackgroundTextColor);
             audioButton.playAudio();
         }
     }
 
     public void setPlayTextColor(int textColor) {
         playTextColor = textColor;
-    }
-
-    public void setPlayTextBackgroundColor(int textColor) {
-        playBackgroundTextColor = textColor;
     }
 
     /*
