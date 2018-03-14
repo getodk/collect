@@ -188,7 +188,7 @@ public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
                         Bitmap b =
                                 FileUtils
                                         .getBitmapScaledToDisplay(imageFile, screenHeight,
-                                                screenWidth);
+                                                screenWidth, false);
                         if (b != null) {
 
                             if (b.getWidth() > maxColumnWidth) {

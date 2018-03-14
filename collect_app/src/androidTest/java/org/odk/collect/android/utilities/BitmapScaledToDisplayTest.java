@@ -116,12 +116,12 @@ public class BitmapScaledToDisplayTest {
         }
 
         ScaleImageTest scaleBitmapToDisplay(int windowHeight, int windowWidth) {
-            scaledBitmap = FileUtils.getBitmapScaledToDisplay(imageFile, windowHeight, windowWidth);
+            scaledBitmap = FileUtils.getBitmapScaledToDisplay(imageFile, windowHeight, windowWidth, false);
             return this;
         }
 
         ScaleImageTest accuratelyScaleBitmapToDisplay(int windowHeight, int windowWidth) {
-            scaledBitmap = FileUtils.getBitmapAccuratelyScaledToDisplay(imageFile, windowHeight, windowWidth);
+            scaledBitmap = FileUtils.getBitmapScaledToDisplay(imageFile, windowHeight, windowWidth, true);
             return this;
         }
 

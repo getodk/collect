@@ -219,7 +219,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                     int screenWidth = metrics.widthPixels;
                     int screenHeight = metrics.heightPixels;
                     Bitmap b = FileUtils.getBitmapScaledToDisplay(imageFile, screenHeight,
-                            screenWidth);
+                            screenWidth, false);
                     if (b != null) {
                         imageView = new ImageView(getContext());
                         imageView.setPadding(2, 2, 2, 2);

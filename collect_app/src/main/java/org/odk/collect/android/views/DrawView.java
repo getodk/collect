@@ -87,8 +87,8 @@ public class DrawView extends View {
 
     public void resetImage(int w, int h) {
         if (backgroundBitmapFile.exists()) {
-            bitmap = FileUtils.getBitmapAccuratelyScaledToDisplay(
-                    backgroundBitmapFile, h, w).copy(
+            bitmap = FileUtils.getBitmapScaledToDisplay(
+                    backgroundBitmapFile, h, w, true).copy(
                     Bitmap.Config.ARGB_8888, true);
             canvas = new Canvas(bitmap);
         } else {

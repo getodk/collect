@@ -168,7 +168,7 @@ public class ListMultiWidget extends QuestionWidget implements MultiChoiceWidget
                                 int screenHeight = metrics.heightPixels;
                                 b =
                                         FileUtils.getBitmapScaledToDisplay(imageFile, screenHeight,
-                                                screenWidth);
+                                                screenWidth, false);
                             } catch (OutOfMemoryError e) {
                                 errorMsg = "ERROR: " + e.getMessage();
                             }
