@@ -53,6 +53,7 @@ import java.io.FileOutputStream;
 import java.util.List;
 
 import timber.log.Timber;
+import yuku.ambilwarna.AmbilWarnaDialog;
 
 /**
  * Modified from the FingerPaint example found in The Android Open Source
@@ -371,23 +372,36 @@ public class DrawActivity extends AppCompatActivity{
 //                    getString(R.string.select_drawing_color));
 //            cpd.show();
 
-            ColorPickerDialog colorPickerDialog = ColorPickerDialog.newBuilder()
-                    .setDialogTitle(ColorPickerDialog.TYPE_CUSTOM)
-                    .setColor(drawView.getColor())
-                    .create();
+//            ColorPickerDialog colorPickerDialog = ColorPickerDialog.newBuilder()
+//                    .setDialogTitle(ColorPickerDialog.TYPE_CUSTOM)
+//                    .setColor(drawView.getColor())
+//                    .create();
+//
+//            colorPickerDialog.setColorPickerDialogListener(new ColorPickerDialogListener() {
+//                @Override
+//                public void onColorSelected(int dialogId, int color) {
+//                    drawView.setColor(color);
+//                }
+//
+//                @Override
+//                public void onDialogDismissed(int dialogId) {
+//
+//                }
+//            });
+//            colorPickerDialog.show(getFragmentManager(), "asd");
 
-            colorPickerDialog.setColorPickerDialogListener(new ColorPickerDialogListener() {
+            AmbilWarnaDialog dialog = new AmbilWarnaDialog(this, drawView.getColor(), new AmbilWarnaDialog.OnAmbilWarnaListener() {
                 @Override
-                public void onColorSelected(int dialogId, int color) {
+                public void onCancel(AmbilWarnaDialog dialog) {
+
+                }
+
+                @Override
+                public void onOk(AmbilWarnaDialog dialog, int color) {
                     drawView.setColor(color);
                 }
-
-                @Override
-                public void onDialogDismissed(int dialogId) {
-
-                }
             });
-            colorPickerDialog.show(getFragmentManager(), "asd");
+            dialog.show();
 
         }
     }
