@@ -184,7 +184,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                             .getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
 
                     try {
-                        uploadOneInstance(new File(instance), formFilePath, getGoogleSeetsUrl(cursor));
+                        uploadOneInstance(new File(instance), formFilePath, getGoogleSheetsUrl(cursor));
                         cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMITTED);
                         Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
                         messagesByInstanceId.put(id, Collect.getInstance().getString(R.string.success));
@@ -421,7 +421,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         }
     }
 
-    // This  method builds a column name by joining all of the containing group names using "-" as a separator
+    /** This method builds a column name by joining all of the containing group names using "-" as a separator */
     private String getElementTitle(AbstractTreeElement element) {
         StringBuilder elementTitle = new StringBuilder();
         while (element != null && element.getName() != null) {
@@ -567,7 +567,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                 : spreadsheet.getSpreadsheetUrl().substring(0, spreadsheet.getSpreadsheetUrl().lastIndexOf('/') + 1) + "edit#gid=" + sheetId;
     }
 
-    private String getGoogleSeetsUrl(Cursor cursor) {
+    private String getGoogleSheetsUrl(Cursor cursor) {
         int subIdx = cursor.getColumnIndex(InstanceColumns.SUBMISSION_URI);
         String urlString = cursor.isNull(subIdx) ? null : cursor.getString(subIdx);
         // if we didn't find one in the content provider, try to get from settings

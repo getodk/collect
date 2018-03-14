@@ -282,7 +282,7 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
             // probably got an auth request, so ignore
             return;
         }
-        Timber.i("uploadingComplete: Processing messagesByInstanceId ( %d ) from upload of %d instances!",
+        Timber.i("uploadingComplete: Processing results ( %d ) from upload of %d instances!",
                 result.size(), instancesToSend.length);
 
         StringBuilder selection = new StringBuilder();

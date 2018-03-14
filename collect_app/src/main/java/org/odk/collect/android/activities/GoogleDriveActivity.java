@@ -461,7 +461,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
         setProgressBarIndeterminateVisibility(false);
 
         if (results == null) {
-            // if messagesByInstanceId was null, then got a google exception
+            // if results was null, then got a google exception
             // requiring the user to authorize
             return;
         }

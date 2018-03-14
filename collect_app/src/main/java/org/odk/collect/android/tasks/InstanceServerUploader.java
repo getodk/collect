@@ -170,7 +170,7 @@ public class InstanceServerUploader extends InstanceUploader {
                 uri = URI.create(submissionUri.toString());
             } catch (IllegalArgumentException e) {
                 Timber.i(e);
-                outcome.results.put(id, Collect.getInstance().getString(R.string.url_error));
+                outcome.messagesByInstanceId.put(id, Collect.getInstance().getString(R.string.url_error));
                 return false;
             }
 
