@@ -564,5 +564,4 @@
   <string name="no">いいえ</string>
   <string name="newer_version_of_a_form_info">これはすでにお持ちのフォームの更新版です!</string>
   <string name="svg_file_does_not_exist">SVG ファイルが存在しません!</string>
-  <string name="svg_not_supported_device">ImageMap ウィジェットは Android 5 (Lollipop) 以降が必要です。お使いのデバイスはサポートされていません!</string>
 </resources>

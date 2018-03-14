@@ -540,5 +540,4 @@
   <string name="no">Tidak</string>
   <string name="newer_version_of_a_form_info">Ini adalah form versi baru dari form yang ada</string>
   <string name="svg_file_does_not_exist">Berkas SVG tidak ada!</string>
-  <string name="svg_not_supported_device">Widget ImageMap membutuhkan Android versi 5 (Lollipop) atau versi lebih baru. Perangkat Anda tidak mendukung!</string>
 </resources>
