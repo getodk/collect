@@ -28,11 +28,11 @@ import timber.log.Timber;
 
 public class ItemsetDao {
 
-    public String getItemLabel(String itemName, String tableName, String language) {
+    public String getItemLabel(String itemName, String mediaFolderPath, String language) {
         String itemLabel = null;
 
         ItemsetDbAdapter adapter = new ItemsetDbAdapter();
-        File itemsetFile =  new FileUtil().getItemsetFile(tableName);
+        File itemsetFile =  new FileUtil().getItemsetFile(mediaFolderPath);
         if (itemsetFile.exists()) {
             adapter.open();
 

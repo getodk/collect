@@ -177,7 +177,7 @@ public abstract class SelectOneAbstractWidget extends SelectTextWidget
         readItems();
 
         LayoutInflater inflater = LayoutInflater.from(getContext());
-        Bitmap b = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.expander_ic_right);
+        Bitmap rightArrowBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.expander_ic_right);
 
         if (items != null) {
             for (int i = 0; i < items.size(); i++) {
@@ -188,7 +188,7 @@ public abstract class SelectOneAbstractWidget extends SelectTextWidget
                 radioButton.setOnClickListener(this);
 
                 ImageView rightArrow = (ImageView) thisParentLayout.getChildAt(1);
-                rightArrow.setImageBitmap(autoAdvance ? b : null);
+                rightArrow.setImageBitmap(autoAdvance ? rightArrowBitmap : null);
 
                 buttons.add(radioButton);
 
