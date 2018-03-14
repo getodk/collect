@@ -14,6 +14,12 @@
            tools:locale="en">
     <string name="show_password">Show password</string>
     <string name="activity_not_found">No activity found to handle: %s</string>
+    <string name="view_image">View Image</string>
+    <string name="annotate_image">Annotate Image</string>
+    <string name="aligned_image_capture">Aligned Image Capture</string>
+    <string name="signature_capture">Signature Capture</string>
+    <string name="view_video">View Video</string>
+    <string name="choose_audio">Choose Audio</string>
     <string name="add_another">Add Group</string>
     <string name="add_another_repeat">Add another \"%s\" group?</string>
     <string name="add_repeat">Add a new \"%s\" group?</string>

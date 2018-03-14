@@ -168,8 +168,8 @@ public class ShowQRCodeFragment extends Fragment {
         if (photoPickerIntent.resolveActivity(getActivity().getPackageManager()) != null) {
             startActivityForResult(photoPickerIntent, SELECT_PHOTO);
         } else {
-            ToastUtils.showShortToast(getString(R.string.activity_not_found, "select image"));
-            Timber.w(getString(R.string.activity_not_found, "select image"));
+            ToastUtils.showShortToast(getString(R.string.activity_not_found, getString(R.string.choose_image)));
+            Timber.w(getString(R.string.activity_not_found, getString(R.string.choose_image)));
         }
     }
 
