@@ -46,8 +46,6 @@ public abstract class SelectWidget extends QuestionWidget {
         answerLayout = new LinearLayout(context);
         answerLayout.setOrientation(LinearLayout.VERTICAL);
         playList = new ArrayList<>();
-
-        readItems();
     }
 
     @Override

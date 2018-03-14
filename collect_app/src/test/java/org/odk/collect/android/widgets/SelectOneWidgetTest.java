@@ -9,7 +9,7 @@ import org.robolectric.RuntimeEnvironment;
  * @author James Knight
  */
 
-public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWidget> {
+public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneAbstractWidget> {
 
     @NonNull
     @Override

@@ -18,6 +18,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
+import android.support.annotation.NonNull;
 import android.widget.TextView;
 
 import org.javarosa.core.model.FormDef;
@@ -48,12 +49,34 @@ import timber.log.Timber;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public class ItemsetWidget extends SelectOneWidget {
+public class ItemsetWidget extends SelectOneAbstractWidget {
 
     private static final String QUOTATION_MARK = "\"";
 
-    public ItemsetWidget(Context context, FormEntryPrompt prompt, boolean autoAdvance) {
-        super(context, prompt, autoAdvance);
+    private FormEntryPrompt formEntryPrompt;
+    private XPathParseTool parseTool;
+    private ItemsetDbAdapter adapter;
+    private FileUtil fileUtil;
+
+    protected ItemsetWidget(Context context, FormEntryPrompt formEntryPrompt, boolean autoAdvanceToNext) {
+        this(context, formEntryPrompt, autoAdvanceToNext, new XPathParseTool(), new ItemsetDbAdapter(), new FileUtil());
+    }
+
+    public ItemsetWidget(Context context,
+                         FormEntryPrompt formEntryPrompt,
+                         boolean autoAdvance,
+                         @NonNull XPathParseTool parseTool,
+                         @NonNull ItemsetDbAdapter adapter,
+                         @NonNull FileUtil fileUtil) {
+
+        super(context, formEntryPrompt, autoAdvance);
+
+        this.formEntryPrompt = formEntryPrompt;
+        this.parseTool = parseTool;
+        this.adapter = adapter;
+        this.fileUtil = fileUtil;
+
+        createLayout();
     }
 
     @Override
@@ -77,7 +100,7 @@ public class ItemsetWidget extends SelectOneWidget {
         // the format of the query should be something like this:
         // query="instance('cities')/root/item[state=/data/state and county=/data/county]"
         // "query" is what we're using to notify that this is an itemset widget.
-        return getFormEntryPrompt().getQuestion().getAdditionalAttribute(null, "query");
+        return formEntryPrompt.getQuestion().getAdditionalAttribute(null, "query");
     }
 
     private String getQueryString(String nodesetStr) {
@@ -169,7 +192,7 @@ public class ItemsetWidget extends SelectOneWidget {
         for (int i = 0; i < arguments.size(); i++) {
             XPathExpression xpr;
             try {
-                xpr = new XPathParseTool().parseXPath(arguments.get(i));
+                xpr = parseTool.parseXPath(arguments.get(i));
             } catch (XPathSyntaxException e) {
                 Timber.e(e);
                 TextView error = new TextView(getContext());
@@ -181,7 +204,7 @@ public class ItemsetWidget extends SelectOneWidget {
             if (xpr != null) {
                 FormDef form = formController.getFormDef();
                 TreeElement treeElement = form.getMainInstance().resolveReference(
-                        getFormEntryPrompt().getIndex().getReference());
+                        formEntryPrompt.getIndex().getReference());
                 EvaluationContext ec = new EvaluationContext(form.getEvaluationContext(),
                         treeElement.getRef());
                 Object value = xpr.eval(form.getMainInstance(), ec);
@@ -201,10 +224,8 @@ public class ItemsetWidget extends SelectOneWidget {
 
     private List<SelectChoice> getItemsFromDatabase(String selection, String[] selectionArgs, FormController formController) {
         List<SelectChoice> items = new ArrayList<>();
-        ItemsetDbAdapter adapter = new ItemsetDbAdapter();
 
-        File itemsetFile =  new FileUtil()
-                .getItemsetFile(formController.getMediaFolder().getAbsolutePath());
+        File itemsetFile =  fileUtil.getItemsetFile(formController.getMediaFolder().getAbsolutePath());
 
         if (itemsetFile.exists()) {
             adapter.open();
