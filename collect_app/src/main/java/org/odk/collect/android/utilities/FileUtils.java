@@ -71,19 +71,12 @@ public class FileUtils {
     }
 
     public static boolean createFolder(String path) {
-        boolean made = true;
         File dir = new File(path);
-        if (!dir.exists()) {
-            made = dir.mkdirs();
-        }
-        return made;
+        return dir.exists() || dir.mkdirs();
     }
 
     public static byte[] getFileAsBytes(File file) {
-        byte[] bytes = null;
-        InputStream is = null;
-        try {
-            is = new FileInputStream(file);
+        try (InputStream is = new FileInputStream(file)) {
 
             // Get the size of the file
             long length = file.length();
@@ -93,7 +86,7 @@ public class FileUtils {
             }
 
             // Create the byte array to hold the data
-            bytes = new byte[(int) length];
+            byte[] bytes = new byte[(int) length];
 
             // Read in the bytes
             int offset = 0;
@@ -123,15 +116,9 @@ public class FileUtils {
         } catch (FileNotFoundException e) {
             Timber.d(e, "Cannot find file %s", file.getName());
             return null;
-
-        } finally {
-            // Close the input stream
-            try {
-                is.close();
-            } catch (IOException e) {
-                Timber.e(e, "Cannot close input stream for file %s", file.getName());
-                return null;
-            }
+        } catch (IOException e) {
+            Timber.e(e, "Cannot close input stream for file %s", file.getName());
+            return null;
         }
     }
 
@@ -149,7 +136,7 @@ public class FileUtils {
         return getMd5Hash(is);
     }
 
-    public static String getMd5Hash(InputStream is) {
+    private static String getMd5Hash(InputStream is) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
             final byte[] buffer = new byte[bufSize];
@@ -162,13 +149,13 @@ public class FileUtils {
                 md.update(buffer, 0, result);
             }
 
-            String md5 = new BigInteger(1, md.digest()).toString(16);
+            StringBuilder md5 = new StringBuilder(new BigInteger(1, md.digest()).toString(16));
             while (md5.length() < 32) {
-                md5 = "0" + md5;
+                md5.insert(0, "0");
             }
 
             is.close();
-            return md5;
+            return md5.toString();
 
         } catch (NoSuchAlgorithmException e) {
             Timber.e(e);
@@ -181,25 +168,25 @@ public class FileUtils {
     }
 
 
-    public static Bitmap getBitmapScaledToDisplay(File f, int screenHeight, int screenWidth) {
-        // Determine image size of f
-        BitmapFactory.Options o = new BitmapFactory.Options();
-        o.inJustDecodeBounds = true;
-        getBitmap(f.getAbsolutePath(), o);
+    public static Bitmap getBitmapScaledToDisplay(File file, int screenHeight, int screenWidth) {
+        // Determine image size of file
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        getBitmap(file.getAbsolutePath(), options);
 
-        int heightScale = o.outHeight / screenHeight;
-        int widthScale = o.outWidth / screenWidth;
+        int heightScale = options.outHeight / screenHeight;
+        int widthScale = options.outWidth / screenWidth;
 
         // Powers of 2 work faster, sometimes, according to the doc.
         // We're just doing closest size that still fills the screen.
         int scale = Math.max(widthScale, heightScale);
 
         // get bitmap with scale ( < 1 is the same as 1)
-        BitmapFactory.Options options = new BitmapFactory.Options();
+        options = new BitmapFactory.Options();
         options.inInputShareable = true;
         options.inPurgeable = true;
         options.inSampleSize = scale;
-        Bitmap b = getBitmap(f.getAbsolutePath(), options);
+        Bitmap b = getBitmap(file.getAbsolutePath(), options);
         if (b != null) {
             Timber.i("Screen is %dx%d.  Image has been scaled down by %d to %dx%d",
                     screenHeight, screenWidth, scale, b.getHeight(), b.getWidth());
