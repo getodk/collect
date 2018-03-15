@@ -25,12 +25,16 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.TextUtils;
+import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import timber.log.Timber;
 
 /**
  * SelctMultiWidget handles multiple selection fields using checkboxes.
@@ -43,9 +47,11 @@ public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWi
     protected ArrayList<CheckBox> checkBoxes;
     private boolean checkboxInit = true;
     private List<Selection> ve;
+    private Context context;
 
     public SelectMultiWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
+        this.context = context;
         checkBoxes = new ArrayList<>();
         ve = new ArrayList<>();
         if (getFormEntryPrompt().getAnswerValue() != null) {
@@ -131,6 +137,15 @@ public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWi
                     } else {
                         buttonView.setChecked(true);
                     }
+                }
+
+                // show warning when selected choice value has spaces
+                int index = (int) checkBox.getTag();
+                String value = items.get(index).getValue();
+                if (isChecked && value != null && value.contains(" ")){
+                    String errorMsg = context.getString(R.string.invalid_space_in_answer, value);
+                    Timber.e(errorMsg);
+                    ToastUtils.showLongToast(errorMsg);
                 }
             }
         });
