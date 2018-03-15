@@ -19,9 +19,11 @@ package org.odk.collect.android.fragments.dialogs;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.NumberPicker;
 import android.widget.TextView;
@@ -87,27 +89,47 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new AlertDialog.Builder(getActivity())
-                .setTitle(R.string.select_date)
-                .setView(R.layout.custom_date_picker_dialog)
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        FormController formController = Collect.getInstance().getFormController();
-                        if (formController != null) {
-                            formController.setIndexWaitingForData(formIndex);
+        // fix: #2003
+        Context context = getActivity();
+        //change the theme to Holo_Light which won't cause previous bug
+        if (isSamsungDevice()) {
+            context = new ContextThemeWrapper(getActivity(), android.R.style.Theme_Holo_Light_Dialog);
+        }
+            return new AlertDialog.Builder(context)
+                    .setTitle(R.string.select_date)
+                    .setView(R.layout.custom_date_picker_dialog)
+                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            FormController formController = Collect.getInstance().getFormController();
+                            if (formController != null) {
+                                formController.setIndexWaitingForData(formIndex);
+                            }
+                            listener.onDateChanged(getDateAsGregorian(getOriginalDate()));
+                            dismiss();
                         }
-                        listener.onDateChanged(getDateAsGregorian(getOriginalDate()));
-                        dismiss();
-                    }
-                })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        dismiss();
-                    }
-                })
-                .create();
+                    })
+                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            dismiss();
+                        }
+                    })
+                    .create();
+
+    }
+
+    // check if it is a Samsung device
+    private static boolean isSamsungDevice() {
+        return (Build.MANUFACTURER.equalsIgnoreCase("samsung")
+                && isBetweenAndroidVersions(
+                Build.VERSION_CODES.LOLLIPOP,
+                Build.VERSION_CODES.LOLLIPOP_MR1));
+    }
+
+    //check Android SDK version
+    private static boolean isBetweenAndroidVersions(int min, int max) {
+        return Build.VERSION.SDK_INT >= min && Build.VERSION.SDK_INT <= max;
     }
 
     @Override
