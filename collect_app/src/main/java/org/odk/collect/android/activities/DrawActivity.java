@@ -59,7 +59,7 @@ import yuku.ambilwarna.AmbilWarnaDialog;
  *
  * @author BehrAtherton@gmail.com
  */
-public class DrawActivity extends AppCompatActivity{
+public class DrawActivity extends AppCompatActivity {
     public static final String OPTION = "option";
     public static final String OPTION_SIGNATURE = "signature";
     public static final String OPTION_ANNOTATE = "annotate";
