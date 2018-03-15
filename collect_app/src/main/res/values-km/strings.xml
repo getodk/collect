@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">បង្ហាញ​ពាក្យសម្ងាត់</string>
   <string name="activity_not_found">គ្មានសកម្មភាពដើម្បីដោះស្រាយបាន : %s</string>
   <string name="add_another">បន្ថែម​ក្រុម</string>
@@ -192,7 +192,6 @@
   <string name="draw_image">រូបគំនូរវាស</string>
   <string name="reset_image">ធ្វើសារឡើងវិញ</string>
   <string name="set_color">កំណត់ពណ៌</string>
-  <string name="select_drawing_color">ជ្រើសរើសពណ៌សម្រាប់គូរ</string>
   <string name="admin_preferences">ការកំណត់របស់ Admin</string>
   <string name="admin_access_settings">ប៉ះសម្រាប់កំណត់ដំណើរការរបស់ Admin</string>
   <string name="save_mid">រក្សាទុកសំណុំ​បែប​បទ</string>

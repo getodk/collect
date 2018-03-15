@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">Показать пароль</string>
   <string name="activity_not_found">Случилось что-то страшное: %s</string>
   <string name="add_another">Добавить группу</string>
@@ -192,7 +192,6 @@
   <string name="draw_image">Нарисовать изображение</string>
   <string name="reset_image">Сброс</string>
   <string name="set_color">Выбрать цвет</string>
-  <string name="select_drawing_color">Выбрать цвет</string>
   <string name="admin_preferences">Администрирование</string>
   <string name="admin_access_settings">Нажмите для админского доступа к настройкам</string>
   <string name="save_mid">Сохранить форму</string>

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">Mostra a senha</string>
   <string name="activity_not_found">Não foi encontrada nenhuma atividade por ser tratada: %s</string>
   <string name="add_another">Adicionar Grupo</string>
@@ -188,7 +188,6 @@ Escolher Imagem</string>
   <string name="draw_image">Desenhar Imagem</string>
   <string name="reset_image">Reset</string>
   <string name="set_color">Definir Cor</string>
-  <string name="select_drawing_color">Definir cor para desenhar</string>
   <string name="admin_preferences">Configurações Administrativas</string>
   <string name="admin_access_settings">Toque para acesso administrativo às configurações</string>
   <string name="save_mid">Mid-form saving</string>

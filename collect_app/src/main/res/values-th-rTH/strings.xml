@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">แสดงรหัสผ่าน</string>
   <string name="activity_not_found">ไม่มีกิจกรรมให้ดำเนินการ: %s</string>
   <string name="add_another">เพิ่มกลุ่ม</string>
@@ -185,7 +185,6 @@
   <string name="draw_image">ภาพวาด</string>
   <string name="reset_image">ตั้งค่าใหม่</string>
   <string name="set_color">เลือกสี</string>
-  <string name="select_drawing_color">เลือกสีสำหรับวาด</string>
   <string name="admin_preferences">ตั้งค่าสำหรับผู้ควบคุมระบบ</string>
   <string name="admin_access_settings">Tap for admin access to settings</string>
   <string name="save_mid">บันทึกแบบสำรวจ</string>

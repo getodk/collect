@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">Mostra clau d\'accés</string>
   <string name="activity_not_found">Cap activitat pendent trobada: %s</string>
   <string name="add_another">Afegir grup</string>
@@ -188,7 +188,6 @@
   <string name="draw_image">Esbós</string>
   <string name="reset_image">Reset</string>
   <string name="set_color">Definir Color</string>
-  <string name="select_drawing_color">Selecciona color</string>
   <string name="admin_preferences">Opcions d\'Administrador</string>
   <string name="admin_access_settings">Polsa per entrar a Configuració</string>
   <string name="save_mid">Desar mig formulari</string>

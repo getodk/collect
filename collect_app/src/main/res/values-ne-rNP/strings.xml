@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">पासवर्ड देखाउन</string>
   <string name="activity_not_found">प्रयोग गर्न कुनै पनि क्रियाकलाप भेटिएन: %s </string>
   <string name="add_another">समूह थप्नुहोस् </string>
@@ -192,7 +192,6 @@
   <string name="draw_image">तस्बिर कोर्नुहोस् </string>
   <string name="reset_image">पहिलाकै ठाउँमा ल्याउनुहोस् </string>
   <string name="set_color">रंग छान्नुहोस् </string>
-  <string name="select_drawing_color">चित्र बनाउनको लागि रंग छान्नुहोस् </string>
   <string name="admin_preferences">एडमिन सेटिङ्स</string>
   <string name="admin_access_settings">सेटिंग मा प्रशासक प्रवेशको लागि थिच्नुहोस्</string>
   <string name="save_mid">फारम संचित गर्नुहोस् </string>

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">عرض كلمة المرور</string>
   <string name="activity_not_found">لا يوجد مهمات للمعالجة: %s</string>
   <string name="add_another">إضافة مجموعة</string>
@@ -191,7 +191,6 @@
   <string name="draw_image">تخطيط الصورة</string>
   <string name="reset_image">اعادة تعيين</string>
   <string name="set_color">تحديد اللون</string>
-  <string name="select_drawing_color">اختر لون الرسم</string>
   <string name="admin_preferences">إعدادات المدير</string>
   <string name="admin_access_settings">انقر للوصول الى اعدادات المدير</string>
   <string name="save_mid">حفظ الاستمارة</string>

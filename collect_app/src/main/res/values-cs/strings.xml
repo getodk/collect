@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="activity_not_found">Nenalezena žádná aktivita k řešení: %s</string>
   <string name="add_another">Přidat skupinu</string>
   <string name="add_another_repeat">Přidat další \"%s\" skupinu?</string>
@@ -180,7 +180,6 @@
   <string name="draw_image">Sketch Image</string>
   <string name="reset_image">Resetovat</string>
   <string name="set_color">Nastavit barvu</string>
-  <string name="select_drawing_color">Vybrat barvu čáry</string>
   <string name="admin_preferences">Administrátorská nastavení</string>
   <string name="admin_access_settings">Klepněte pro administrátorský přístup do Nastavení</string>
   <string name="save_mid">Uložit dotazník</string>

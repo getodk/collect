@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">Показати пароль</string>
   <string name="activity_not_found">Не знайдено жодного процесу для: %s</string>
   <string name="add_another">Додати групу</string>
@@ -192,7 +192,6 @@
   <string name="draw_image">Ескіз зображення</string>
   <string name="reset_image">Скинути</string>
   <string name="set_color">Колір</string>
-  <string name="select_drawing_color">Обрати колір для малювання</string>
   <string name="admin_preferences">Адміністрування</string>
   <string name="admin_access_settings">Клікніть для адміністративного доступу до налаштувань</string>
   <string name="save_mid">Зберегти анкету</string>

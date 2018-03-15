@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="activity_not_found">არ არსებობს განსახილველი ფუნქცია: %s</string>
   <string name="add_another">ჯგუფის დამატება</string>
   <string name="add_another_repeat">დავამატოთ \"%s\"-ის ახალი ჯგუფი?</string>
@@ -182,7 +182,6 @@
   <string name="draw_image">მონახაზის სურათი</string>
   <string name="reset_image">გადატვირთვა</string>
   <string name="set_color">ფერის დაყენება</string>
-  <string name="select_drawing_color">სახატავი ფერის არჩევა</string>
   <string name="admin_preferences">ადმინისტრატორის პაროლი</string>
   <string name="admin_access_settings">დააჭირეთ პარამეტრებისადმი ადმინისტრატორის სახელით შესვლისთვის</string>
   <string name="save_mid">ნაწილობრივ შენახვა</string>
