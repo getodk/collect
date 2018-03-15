@@ -35,8 +35,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.common.collect.ImmutableList;
-import com.jaredrummler.android.colorpicker.ColorPickerDialog;
-import com.jaredrummler.android.colorpicker.ColorPickerDialogListener;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.IconMenuListAdapter;
@@ -363,33 +361,6 @@ public class DrawActivity extends AppCompatActivity{
     public void setColor(View view) {
         if (view.getVisibility() == View.VISIBLE) {
             fabActions.performClick();
-//            ColorPickerDialog cpd = new ColorPickerDialog(this,
-//                    new ColorPickerDialog.OnColorChangedListener() {
-//                        public void colorChanged(String key, int color) {
-//                            drawView.setColor(color);
-//                        }
-//                    }, "key", drawView.getColor(), drawView.getColor(),
-//                    getString(R.string.select_drawing_color));
-//            cpd.show();
-
-//            ColorPickerDialog colorPickerDialog = ColorPickerDialog.newBuilder()
-//                    .setDialogTitle(ColorPickerDialog.TYPE_CUSTOM)
-//                    .setColor(drawView.getColor())
-//                    .create();
-//
-//            colorPickerDialog.setColorPickerDialogListener(new ColorPickerDialogListener() {
-//                @Override
-//                public void onColorSelected(int dialogId, int color) {
-//                    drawView.setColor(color);
-//                }
-//
-//                @Override
-//                public void onDialogDismissed(int dialogId) {
-//
-//                }
-//            });
-//            colorPickerDialog.show(getFragmentManager(), "asd");
-
             AmbilWarnaDialog dialog = new AmbilWarnaDialog(this, drawView.getColor(), new AmbilWarnaDialog.OnAmbilWarnaListener() {
                 @Override
                 public void onCancel(AmbilWarnaDialog dialog) {

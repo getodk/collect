@@ -251,7 +251,6 @@ dependencies {
     implementation 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
 
     // Color picker dialog
-    implementation 'com.jaredrummler:colorpicker:1.0.2'
     implementation 'com.github.yukuku:ambilwarna:2.0.1'
 
     // RxLifecycle (binds subscription cleanup to component lifecycle):
