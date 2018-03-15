@@ -564,5 +564,4 @@
   <string name="no">Ні</string>
   <string name="newer_version_of_a_form_info">Ви вже маєте найновішу версію анкети!</string>
   <string name="svg_file_does_not_exist">SVG файл не існує!</string>
-  <string name="svg_not_supported_device">Віджет ImageMap поребує Android 5 (Lollipop) або новіший. Ваш пристрій не підтримується!</string>
 </resources>

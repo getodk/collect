@@ -564,5 +564,4 @@
   <string name="no">Нет</string>
   <string name="newer_version_of_a_form_info">Это обновлённая версия формы, которая у вас уже есть!</string>
   <string name="svg_file_does_not_exist">SVG файл не найден!</string>
-  <string name="svg_not_supported_device">Поле ввода ImageMap доступно на Android 5 (Lollipop) и выше. Ваше устройство не поддерживается!</string>
 </resources>

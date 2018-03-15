@@ -564,5 +564,4 @@
   <string name="no">Nein</string>
   <string name="newer_version_of_a_form_info">Dies ist eine aktualisierte Version eines bereits vorhandenen Formulars!</string>
   <string name="svg_file_does_not_exist">SVG-Datei existiert nicht!</string>
-  <string name="svg_not_supported_device">ImageMap Widget benötigt Android 5 (Lollipop) oder neuer. Ihr Gerät wird nicht unterstützt!</string>
 </resources>

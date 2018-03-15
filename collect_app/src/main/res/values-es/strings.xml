@@ -566,5 +566,4 @@
   <string name="no">No</string>
   <string name="newer_version_of_a_form_info">Esta es una versión actualizada de un formularios que ya tiene!</string>
   <string name="svg_file_does_not_exist">Archivo SVG no existe</string>
-  <string name="svg_not_supported_device">Pregunta tipo ImageMap requiere mínimo Android 5 (Lollipop). Su dispositivo tiene una versión menor!</string>
 </resources>
