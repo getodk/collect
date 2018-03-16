@@ -144,9 +144,8 @@ public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWi
                 String value = items.get(index).getValue();
                 if (isChecked && value != null && value.contains(" ")) {
 
-                    String errorMsg = context.getString(R.string.invalid_space_in_answer, value);
-                    Timber.e(errorMsg);
-                    ToastUtils.showLongToast(errorMsg);
+                    String warning = context.getString(R.string.invalid_space_in_answer, value);
+                    ToastUtils.showLongToast(warning);
                 }
             }
         });
