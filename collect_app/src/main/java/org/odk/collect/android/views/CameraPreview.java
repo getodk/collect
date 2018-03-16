@@ -59,7 +59,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             try {
                 camera.stopPreview();
                 camera.release();
-                Timber.w("Camera released");
+                Timber.i("Camera released");
             } catch (Exception e) {
                 Timber.d("Camera has been already released");
             }
