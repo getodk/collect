@@ -135,7 +135,7 @@ public abstract class SelectImageMapWidget extends SelectWidget {
             webView.setWebViewClient(new WebViewClient() {
                 @Override
                 public void onPageFinished(WebView view, String url) {
-                    view.loadUrl("javascript:setSelectMode(" + false + ")");
+                    view.loadUrl("javascript:setSelectMode(" + isSingleSelect + ")");
                     for (SelectChoice selectChoice : items) {
                         view.loadUrl("javascript:addArea('" + selectChoice.getValue() + "')");
                     }
@@ -155,7 +155,6 @@ public abstract class SelectImageMapWidget extends SelectWidget {
         if (selectChoice != null) {
             selections.add(new Selection(selectChoice));
         }
-        Log.d("======>", "selectArea: " + selectChoice.toString());
     }
 
     private void unselectArea(String areaId) {
@@ -166,7 +165,6 @@ public abstract class SelectImageMapWidget extends SelectWidget {
                 selectionToRemove = selection;
             }
         }
-        Log.d("======>", "unselectArea: " + areaId);
         selections.remove(selectionToRemove);
     }
 
