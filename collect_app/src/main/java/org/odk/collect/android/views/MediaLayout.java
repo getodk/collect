@@ -365,15 +365,15 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
             if (audioButton != null && videoButton == null) {
                 audioParams.addRule(alignParentEnd);
                 audioParams.setMargins(11, 0, 11, 0);
-                textParams.addRule(startOf, audioButton.getId());
+                //textParams.addRule(startOf, audioButton.getId());
             } else if (audioButton == null && videoButton != null) {
                 videoParams.addRule(alignParentEnd);
                 videoParams.setMargins(11, 0, 11, 0);
-                textParams.addRule(startOf, videoButton.getId());
+                //textParams.addRule(startOf, videoButton.getId());
             } else if (audioButton != null && videoButton != null) {
                 audioParams.addRule(alignParentEnd);
                 audioParams.setMargins(11, 0, 11, 0);
-                textParams.addRule(startOf, audioButton.getId());
+               // textParams.addRule(startOf, audioButton.getId());
                 videoParams.addRule(alignParentEnd);
                 videoParams.setMargins(11, 20, 11, 0);
                 videoParams.addRule(RelativeLayout.BELOW, audioButton.getId());
