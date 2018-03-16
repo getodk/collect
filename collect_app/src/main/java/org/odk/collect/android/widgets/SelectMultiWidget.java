@@ -18,9 +18,12 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 
+import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
@@ -34,7 +37,6 @@ import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 import java.util.ArrayList;
 import java.util.List;
 
-import timber.log.Timber;
 
 /**
  * SelctMultiWidget handles multiple selection fields using checkboxes.
@@ -155,6 +157,13 @@ public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWi
 
     protected void createLayout() {
         if (items != null) {
+
+            // check if any values have spaces
+            String valuesWithSpaces = getValuesWithSpaces();
+            if (valuesWithSpaces != null) {
+                answerLayout.addView(createWarning(valuesWithSpaces));
+            }
+
             for (int i = 0; i < items.size(); i++) {
                 CheckBox checkBox = createCheckBox(i);
                 checkBoxes.add(checkBox);
@@ -163,6 +172,25 @@ public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWi
             addAnswerView(answerLayout);
         }
         checkboxInit = false;
+    }
+
+    protected View createWarning(String valuesWithSpaces) {
+        TextView warning = new TextView(getContext());
+        warning.setText(getContext().getResources().getString(R.string.invalid_space_in_answer, valuesWithSpaces));
+        warning.setPadding(10, 10, 10, 10);
+        return warning;
+    }
+
+    protected String getValuesWithSpaces() {
+        StringBuilder valuesWithSpaces = new StringBuilder();
+        for (SelectChoice selectChoice : items) {
+            String value = selectChoice.getValue();
+            if (value.contains(" ")) {
+                valuesWithSpaces.append(value);
+                valuesWithSpaces.append(",");
+            }
+        }
+        return valuesWithSpaces.length() > 0 ? valuesWithSpaces.substring(0, valuesWithSpaces.length() - 1) : null;
     }
 
     @Override
