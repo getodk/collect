@@ -15,8 +15,8 @@
  */
 
 /**
-* JavaScript class which contains methods used for managing svg maps
-*/
+ * JavaScript class which contains methods used for managing svg maps
+ */
 var selectedAreas = [];
 var originalColors = {};
 var lastSelectedAreaId;
@@ -61,28 +61,28 @@ function setSelectMode(isSingleSelect) {
 }
 
 function clickOnArea(areaId) {
-        if (Boolean(isSingleSelect)){
-             // single select mode
-            if (Boolean(isSingleSelect) && !!lastSelectedAreaId) {
-                document.getElementById(lastSelectedAreaId).setAttribute('style', 'fill: ' + originalColors[lastSelectedAreaId]);
-                selectedAreas.splice(selectedAreas.indexOf(lastSelectedAreaId), 1);
-                unselectArea(lastSelectedAreaId);
-            }
+    if (Boolean(isSingleSelect)) {
+        // single select mode
+        if (Boolean(isSingleSelect) && !!lastSelectedAreaId) {
+            document.getElementById(lastSelectedAreaId).setAttribute('style', 'fill: ' + originalColors[lastSelectedAreaId]);
+            selectedAreas.splice(selectedAreas.indexOf(lastSelectedAreaId), 1);
+            unselectArea(lastSelectedAreaId);
+        }
+        document.getElementById(areaId).setAttribute('style', 'fill: #E65100');
+        selectedAreas.push(areaId);
+        selectArea(areaId);
+        lastSelectedAreaId = areaId;
+    } else {
+        // multiple select mode
+        if (selectedAreas.indexOf(areaId) !== -1) {
+            document.getElementById(areaId).setAttribute('style', 'fill: ' + originalColors[areaId]);
+            selectedAreas.splice(selectedAreas.indexOf(areaId), 1);
+            unselectArea(areaId);
+        } else {
             document.getElementById(areaId).setAttribute('style', 'fill: #E65100');
             selectedAreas.push(areaId);
             selectArea(areaId);
-            lastSelectedAreaId = areaId;
-        }else{
-             // multiple select mode
-            if (selectedAreas.indexOf(areaId) !== -1) {
-                document.getElementById(areaId).setAttribute('style', 'fill: ' + originalColors[areaId]);
-                selectedAreas.splice(selectedAreas.indexOf(areaId), 1);
-                unselectArea(areaId);
-            }else{
-                 document.getElementById(areaId).setAttribute('style', 'fill: #E65100');
-                 selectedAreas.push(areaId);
-                 selectArea(areaId);
-            }
         }
+    }
     notifyChanges();
 }
