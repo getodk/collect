@@ -23,6 +23,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.NumberPicker;
@@ -95,7 +96,7 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
         if (isSamsungDevice()) {
             context = new ContextThemeWrapper(getActivity(), android.R.style.Theme_Holo_Light_Dialog);
         }
-            return new AlertDialog.Builder(context)
+        return new AlertDialog.Builder(context)
                     .setTitle(R.string.select_date)
                     .setView(R.layout.custom_date_picker_dialog)
                     .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
