@@ -85,7 +85,7 @@
     <string name="get_location">Record Location</string>
     <string name="provider_disabled_error">Sorry, Location providers are disabled!</string>
     <string name="invalid_answer_error">Sorry, this response is invalid!</string>
-    <string name="invalid_space_in_answer">Invalid Answer: The value \"%s\" should not have any spaces</string>
+    <string name="invalid_space_in_answer">Warning: underlying value \"%s\" has spaces</string>
     <string name="jump_to_beginning">Go To Start</string>
     <string name="jump_to_end">Go To End</string>
     <string name="jump_to_previous">Go Up</string>
