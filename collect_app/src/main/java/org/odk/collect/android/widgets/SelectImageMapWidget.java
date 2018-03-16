@@ -19,7 +19,6 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.Html;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
 import android.webkit.WebView;
@@ -165,6 +164,7 @@ public abstract class SelectImageMapWidget extends SelectWidget {
                 selectionToRemove = selection;
             }
         }
+
         selections.remove(selectionToRemove);
     }
 

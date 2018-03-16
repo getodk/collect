@@ -113,13 +113,11 @@
     <string name="default_splash_path">ODK默认图片</string>
     <string name="select_another_image">选择其他图片</string>
     <string name="use_odk_default">使用默认图片</string>
-    <string name="view_sent_forms">查看已上传表格</string>
     <string name="change_splash_path">修改图片</string>
     <string name="keep_changes">保存修改</string>
     <string name="change_formlist_url">表格列表路径 (附加到服务器URL之后)</string>
     <string name="change_protocol">服务器平台</string>
     <string name="change_submission_url">提交路径 (附加到服务器URL之后)</string>
-    <string name="instance_scan_completed">扫描完毕</string>
     <string name="formlist_url">表格列表路径</string>
     <string name="submission_url">提交路径</string>
     <string name="font_size">字体大小</string>
@@ -139,7 +137,6 @@
     <string name="choose_sound">选择音频</string>
     <string name="choose_video">选择视频</string>
     <string name="choose_image">选择图片</string>
-    <string name="select_all">全选</string>
     <string name="selected">选定: </string>
     <string name="select_answer">选择回答</string>
     <string name="save_form_as">重命名表格:</string>
@@ -197,8 +194,6 @@
     <string name="swipe_buttons_navigation">使用滑动和按钮</string>
     <string name="launch_printer">初始化打印</string>
     <string name="no_printer">请求的打印机未被安装. 请安装打印机.</string>
-    <string name="no_items_display_forms">没有可显示内容.\n\n请尝试获取并且填写一个空白表单.</string>
-    <string name="no_items_display_sent_forms">没有可显示内容.\n\n在查看前请确定您已经上传过表单.</string>
     <string name="constraint_behavior">约束检查</string>
     <string name="constraint_behavior_on_swipe">向前滑动时验证</string>
     <string name="constraint_behavior_on_finalize">推迟检验直到完成</string>
