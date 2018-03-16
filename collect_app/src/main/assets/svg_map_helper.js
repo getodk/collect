@@ -15,8 +15,8 @@
  */
 
 /**
- * JavaScript class which contains methods used for managing svg maps
- */
+* JavaScript class which contains methods used for managing svg maps
+*/
 var selectedAreas = [];
 var originalColors = {};
 var lastSelectedAreaId;
