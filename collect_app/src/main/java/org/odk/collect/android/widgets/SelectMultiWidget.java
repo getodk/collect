@@ -146,7 +146,7 @@ public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWi
                 String value = items.get(index).getValue();
                 if (isChecked && value != null && value.contains(" ")) {
 
-                    String warning = context.getString(R.string.invalid_space_in_answer, value);
+                    String warning = context.getString(R.string.invalid_space_in_answer_singular, value);
                     ToastUtils.showLongToast(warning);
                 }
             }
@@ -176,7 +176,13 @@ public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWi
 
     protected View createWarning(String valuesWithSpaces) {
         TextView warning = new TextView(getContext());
-        warning.setText(getContext().getResources().getString(R.string.invalid_space_in_answer, valuesWithSpaces));
+
+        if (!valuesWithSpaces.contains(",")) {
+            warning.setText(getContext().getResources().getString(R.string.invalid_space_in_answer_singular, valuesWithSpaces));
+        } else {
+            warning.setText(getContext().getResources().getString(R.string.invalid_space_in_answer_plural, valuesWithSpaces));
+        }
+
         warning.setPadding(10, 10, 10, 10);
         return warning;
     }
