@@ -178,8 +178,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
         // First set up the audio button
         if (audioURI != null) {
             // An audio file is specified
-            audioButton = new AudioButton(getContext(), this.index, this.selectionDesignator, audioURI,
-                    player);
+            audioButton = new AudioButton(getContext(), this.index, this.selectionDesignator, audioURI,                    player);
             audioButton.setPadding(22, 12, 22, 12);
             audioButton.setBackgroundColor(Color.LTGRAY);
             audioButton.setOnClickListener(this);
@@ -373,7 +372,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
             } else if (audioButton != null && videoButton != null) {
                 audioParams.addRule(alignParentEnd);
                 audioParams.setMargins(11, 0, 11, 0);
-               // textParams.addRule(startOf, audioButton.getId());
+                //textParams.addRule(startOf, audioButton.getId());
                 videoParams.addRule(alignParentEnd);
                 videoParams.setMargins(11, 20, 11, 0);
                 videoParams.addRule(RelativeLayout.BELOW, audioButton.getId());
