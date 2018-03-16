@@ -135,7 +135,7 @@ public abstract class SelectImageMapWidget extends SelectWidget {
             webView.setWebViewClient(new WebViewClient() {
                 @Override
                 public void onPageFinished(WebView view, String url) {
-                    view.loadUrl("javascript:setSelectMode(" + isSingleSelect + ")");
+                    view.loadUrl("javascript:setSelectMode(" + false + ")");
                     for (SelectChoice selectChoice : items) {
                         view.loadUrl("javascript:addArea('" + selectChoice.getValue() + "')");
                     }
