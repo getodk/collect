@@ -18,7 +18,6 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
-import android.provider.MediaStore;
 
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
@@ -274,20 +273,11 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         return false;
     }
 
-    private String uploadMediaFile(File instanceFile, String fileName)
-            throws UploadException {
+    private String uploadMediaFile(File instanceFile, String fileName) throws UploadException {
         String filePath = instanceFile.getParentFile() + "/" + fileName;
         File toUpload = new File(filePath);
 
-        // first check the local content provider
-        // to see if this photo still exists at the location or not
-        String selection = MediaStore.Images.Media.DATA + "=?";
-        String[] selectionArgs = {filePath};
-        Cursor cursor = Collect.getInstance().getContentResolver()
-                .query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, selection,
-                        selectionArgs, null);
-        if (cursor != null && cursor.getCount() != 1) {
-            cursor.close();
+        if (!new File(filePath).exists()) {
             throw new UploadException(Collect.getInstance()
                     .getString(R.string.media_upload_error, filePath));
         }
@@ -310,7 +300,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             throw new UploadException(e.getMessage());
         }
 
-        //checking if file was successfully uploaded
+        // checking if file was successfully uploaded
         if (uploadedFileId == null) {
             throw new UploadException("Unable to upload the media files. Try again");
         }
