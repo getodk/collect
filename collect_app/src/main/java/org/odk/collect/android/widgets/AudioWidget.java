@@ -69,14 +69,15 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
     private String binaryName;
 
     public AudioWidget(Context context, FormEntryPrompt prompt) {
-        this(context, prompt, new FileUtil(), new MediaUtil());
+        this(context, prompt, new FileUtil(), new MediaUtil(), new AudioController());
     }
 
-    AudioWidget(Context context, FormEntryPrompt prompt, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil) {
+    AudioWidget(Context context, FormEntryPrompt prompt, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil, AudioController audioController) {
         super(context, prompt);
 
         this.fileUtil = fileUtil;
         this.mediaUtil = mediaUtil;
+        this.audioController = audioController;
 
         captureButton = getSimpleButton(getContext().getString(R.string.capture_audio), R.id.capture_audio);
         captureButton.setEnabled(!prompt.isReadOnly());
@@ -84,7 +85,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
         chooseButton = getSimpleButton(getContext().getString(R.string.choose_sound), R.id.choose_sound);
         chooseButton.setEnabled(!prompt.isReadOnly());
 
-        audioController = new AudioController(context, getPlayer(), getFormEntryPrompt());
+        audioController.init(context, getPlayer(), getFormEntryPrompt());
 
         // retrieve answer from data model and update ui
         binaryName = prompt.getAnswerText();

@@ -46,9 +46,6 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
     private static final int SEEK_FORWARD_TIME = 5000; // 5 seconds
     private static final int SEEK_BACKWARD_TIME = 5000; // 5 seconds
 
-    private final Context context;
-    private final MediaPlayer mediaPlayer;
-
     @BindView(R.id.currentDuration)
     TextView currentDurationLabel;
     @BindView(R.id.totalDuration)
@@ -58,6 +55,8 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
     @BindView(R.id.seekBar)
     SeekBar seekBar;
 
+    private Context context;
+    private MediaPlayer mediaPlayer;
     private Handler seekHandler = new Handler();
 
     /**
@@ -81,7 +80,10 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
     private FormEntryPrompt formEntryPrompt;
     private View view;
 
-    AudioController(Context context, MediaPlayer mediaPlayer, FormEntryPrompt formEntryPrompt) {
+    AudioController() {
+    }
+
+    void init(Context context, MediaPlayer mediaPlayer, FormEntryPrompt formEntryPrompt) {
         this.context = context;
         this.mediaPlayer = mediaPlayer;
         this.formEntryPrompt = formEntryPrompt;
