@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 University of Washington
+ * Copyright (C) 2018 Shobhit Agarwal
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -62,8 +62,8 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
     @NonNull
     private MediaUtil mediaUtil;
 
+    private AudioController audioController;
     private Button captureButton;
-    private Button playButton;
     private Button chooseButton;
 
     private String binaryName;
@@ -84,14 +84,14 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
         chooseButton = getSimpleButton(getContext().getString(R.string.choose_sound), R.id.choose_sound);
         chooseButton.setEnabled(!prompt.isReadOnly());
 
-        playButton = getSimpleButton(getContext().getString(R.string.play_audio), R.id.play_audio);
+        audioController = new AudioController(context, getPlayer(), getFormEntryPrompt());
 
         // retrieve answer from data model and update ui
         binaryName = prompt.getAnswerText();
         if (binaryName != null) {
-            playButton.setEnabled(true);
+            audioController.setMedia(getAudioFile());
         } else {
-            playButton.setEnabled(false);
+            audioController.hidePlayer();
         }
 
         // finish complex layout
@@ -99,7 +99,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
         answerLayout.setOrientation(LinearLayout.VERTICAL);
         answerLayout.addView(captureButton);
         answerLayout.addView(chooseButton);
-        answerLayout.addView(playButton);
+        answerLayout.addView(audioController.getPlayerLayout());
         addAnswerView(answerLayout);
 
         hideButtonsIfNeeded();
@@ -122,9 +122,8 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
         // remove the file
         deleteFile();
 
-
-        // reset buttons
-        playButton.setEnabled(false);
+        // hide audio player
+        audioController.hidePlayer();
     }
 
     @Override
@@ -213,7 +212,6 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
     public void setOnLongClickListener(OnLongClickListener l) {
         captureButton.setOnLongClickListener(l);
         chooseButton.setOnLongClickListener(l);
-        playButton.setOnLongClickListener(l);
     }
 
     @Override
@@ -221,7 +219,6 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
         super.cancelLongPress();
         captureButton.cancelLongPress();
         chooseButton.cancelLongPress();
-        playButton.cancelLongPress();
     }
 
     @Override
@@ -232,9 +229,6 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
                 break;
             case R.id.choose_sound:
                 chooseSound();
-                break;
-            case R.id.play_audio:
-                playAudioFile();
                 break;
         }
     }
@@ -284,22 +278,10 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
         }
     }
 
-    private void playAudioFile() {
-        Collect.getInstance()
-                .getActivityLogger()
-                .logInstanceAction(this, "playButton", "click",
-                        getFormEntryPrompt().getIndex());
-        Intent i = new Intent("android.intent.action.VIEW");
-        File f = new File(getInstanceFolder() + File.separator
-                + binaryName);
-        i.setDataAndType(Uri.fromFile(f), "audio/*");
-        try {
-            getContext().startActivity(i);
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(
-                    getContext(),
-                    getContext().getString(R.string.activity_not_found,
-                            getContext().getString(R.string.play_audio)), Toast.LENGTH_SHORT).show();
-        }
+    /**
+     * Returns the audio file added to the widget for the current instance
+     */
+    private File getAudioFile() {
+        return new File(getInstanceFolder() + File.separator + binaryName);
     }
 }

@@ -144,7 +144,7 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
         });
         mediaPlayer.setOnCompletionListener(player -> {
             Timber.i("Completed");
-            playButton.setBackgroundResource(R.drawable.ic_play_arrow_black_24dp);
+            playButton.setImageResource(R.drawable.ic_play_arrow_black_24dp);
         });
     }
 
@@ -193,7 +193,7 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
                 .logInstanceAction(this, "play", "click",
                         formEntryPrompt.getIndex());
 
-        playButton.setBackgroundResource(R.drawable.ic_pause_black_24dp);
+        playButton.setImageResource(R.drawable.ic_pause_black_24dp);
         mediaPlayer.start();
         updateProgressBar();
         return State.PLAYING;
@@ -205,7 +205,7 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
                 .logInstanceAction(this, "pause", "click",
                         formEntryPrompt.getIndex());
 
-        playButton.setBackgroundResource(R.drawable.ic_play_arrow_black_24dp);
+        playButton.setImageResource(R.drawable.ic_play_arrow_black_24dp);
         mediaPlayer.pause();
         seekHandler.removeCallbacks(updateTimeTask);
         return State.PAUSED;
