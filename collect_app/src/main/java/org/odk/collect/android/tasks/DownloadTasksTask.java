@@ -28,6 +28,7 @@ import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -39,6 +40,7 @@ import com.google.gson.JsonSyntaxException;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.database.Assignment;
 import org.odk.collect.android.database.TaskAssignment;
 import org.odk.collect.android.listeners.FormDownloaderListener;
@@ -47,6 +49,7 @@ import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceUploader.Outcome;
@@ -56,6 +59,7 @@ import org.odk.collect.android.loaders.TaskEntry;
 import org.odk.collect.android.taskModel.FormLocator;
 import org.odk.collect.android.taskModel.TaskCompletionInfo;
 import org.odk.collect.android.taskModel.TaskResponse;
+import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ManageForm;
 import org.odk.collect.android.utilities.ManageForm.ManageFormDetails;
 import org.odk.collect.android.utilities.ManageFormResponse;
@@ -74,6 +78,7 @@ import org.opendatakit.httpclientandroidlib.client.methods.HttpPost;
 import org.opendatakit.httpclientandroidlib.message.BasicNameValuePair;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 
+import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -85,6 +90,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -118,6 +124,8 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 
     String username = null;
     String password = null;
+
+    private FormsDao formsDao;
 	
 	/*
 	 * class used to store status of existing tasks in the database and their database id
@@ -841,6 +849,8 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 
           	// Delete any forms no longer required
         	mf.deleteForms(formMap, results);
+
+        	processSharedFiles();
     	}
     	
     	return dfResults;
@@ -870,6 +880,91 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 		}
 		cInstanceProvider.close();
     	return exists;
+    }
+
+    /*
+     * Remove any shared media files from the current organisation that are not referenced by a form
+     */
+    private void processSharedFiles() {
+
+        HashMap<String, String> referencedFiles = new HashMap<> ();
+
+        formsDao = new FormsDao();
+        String tag = "Process Shared Files";
+
+        File orgMediaDir = new File(Utilities.getOrgMediaPath());
+        Log.i(tag,"====================== Check shared files");
+        if (orgMediaDir.exists() && orgMediaDir.isDirectory()) {
+
+            //publishProgress(Collect.getInstance().getString(R.string.smap_downloading, sharedMedia.size())); TODO
+
+            // 1. Get the list of shared files
+            File[] sharedFiles = orgMediaDir.listFiles();
+            for(File sf : sharedFiles) {
+                Log.i(tag, "Shared File: " + sf.getAbsolutePath());
+            }
+
+            // 2. Get the files used by this organisation
+            if(sharedFiles.length > 0) {
+                List<UriFile> uriToUpdate = new ArrayList<UriFile>();
+                Cursor cursor = null;
+                try {
+                    cursor = formsDao.getFormsCursor();
+                    if (cursor == null) {
+                        publishProgress("Internal Error: Unable to access Forms content provider\r\n");
+                        return;
+                    }
+
+                    cursor.moveToPosition(-1);
+
+                    while (cursor.moveToNext()) {
+                        // Get the media files for each form
+                        String f = cursor.getString(
+                                cursor.getColumnIndex(FormsProviderAPI.FormsColumns.FORM_FILE_PATH));
+                        if (f != null) {
+                            int idx = f.lastIndexOf('.');
+                            if (idx >= 0) {
+                                String mPath = f.substring(0, idx) + "-media";
+                                File mDir = new File(mPath);
+                                Log.i(tag, "Media Dir is: " + mPath);
+                                if (mDir.exists() && mDir.isDirectory()) {
+                                    File[] mFiles = mDir.listFiles();
+                                    for (File mf : mFiles) {
+                                        Log.i(tag, "Adding reference file: " + mf.getName());
+                                        referencedFiles.put(mf.getName(), mf.getName());
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                } finally {
+                    if (cursor != null) {
+                        cursor.close();
+                    }
+                }
+
+                // 3. Remove shared files that are not referenced
+                for(File sf : sharedFiles) {
+                    if(referencedFiles.get(sf.getName()) == null) {
+                        Log.i(tag, "Deleting shared file: " + sf.getName());
+                        sf.delete();
+                    } else {
+                        Log.i(tag, "Retaining shared file: " + sf.getName());
+                    }
+                }
+            }
+        }
+    }
+
+    private static class UriFile {
+        public final Uri uri;
+        public final File file;
+
+        UriFile(Uri uri, File file) {
+            this.uri = uri;
+            this.file = file;
+        }
     }
     
 }

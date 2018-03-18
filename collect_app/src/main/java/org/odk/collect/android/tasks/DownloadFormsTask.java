@@ -34,6 +34,7 @@ import org.odk.collect.android.utilities.DocumentFetchResult;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.STFileUtils;   // smap
 import org.odk.collect.android.utilities.UrlUtils;
+import org.odk.collect.android.utilities.Utilities;
 import org.odk.collect.android.utilities.Validator;
 import org.odk.collect.android.utilities.WebUtils;
 import org.opendatakit.httpclientandroidlib.Header;
@@ -154,7 +155,9 @@ public class DownloadFormsTask extends
         }
 
         String tempMediaPath = null;
+        String orgTempMediaPath = null;     // smap
         final String finalMediaPath;
+        String orgMediaPath = null;          // smap
         FileResult fileResult = null;
         try {
             String deviceId = new PropertyManager(Collect.getInstance().getApplicationContext())
@@ -168,10 +171,12 @@ public class DownloadFormsTask extends
                 // use a temporary media path until everything is ok.
                 tempMediaPath = new File(Collect.CACHE_PATH,
                         String.valueOf(System.currentTimeMillis())).getAbsolutePath();
+                orgTempMediaPath = new File(tempMediaPath + "_org").getAbsolutePath();      // smap
                 finalMediaPath = FileUtils.constructMediaPath(
                         fileResult.getFile().getAbsolutePath());
+                orgMediaPath = Utilities.getOrgMediaPath();                                         // smap
                 String error = downloadManifestAndMediaFiles(tempMediaPath, finalMediaPath, fd,
-                        count, total);
+                        count, total, orgTempMediaPath, orgMediaPath);                              // smap added org paths
                 if (error != null) {
                     message += error;
                 }
@@ -180,7 +185,7 @@ public class DownloadFormsTask extends
             }
         } catch (TaskCancelledException e) {
             Timber.i(e.getMessage());
-            cleanUp(fileResult, e.file, tempMediaPath);
+            cleanUp(fileResult, e.file, tempMediaPath, orgTempMediaPath);   // smap
 
             // do not download additional forms.
             throw e;
@@ -189,7 +194,7 @@ public class DownloadFormsTask extends
         }
 
         if (isCancelled()) {
-            cleanUp(fileResult, null, tempMediaPath);
+            cleanUp(fileResult, null, tempMediaPath, orgTempMediaPath);     // smap
             fileResult = null;
         }
 
@@ -210,7 +215,7 @@ public class DownloadFormsTask extends
 
         if (!isCancelled() && message.isEmpty() && parsedFields != null) {
             if (isSubmissionOk(parsedFields)) {
-                installEverything(tempMediaPath, fileResult, parsedFields, fd);
+                installEverything(tempMediaPath, fileResult, parsedFields, fd, orgTempMediaPath, orgMediaPath);     // Added organisation paths
                 installed = true;
             } else {
                 message += Collect.getInstance().getString(R.string.xform_parse_error,
@@ -218,7 +223,7 @@ public class DownloadFormsTask extends
             }
         }
         if (!installed) {
-            cleanUp(fileResult, null, tempMediaPath);
+            cleanUp(fileResult, null, tempMediaPath, orgTempMediaPath);     // smap
         }
         return message;
     }
@@ -229,7 +234,8 @@ public class DownloadFormsTask extends
     }
 
     private void installEverything(String tempMediaPath, FileResult fileResult, Map<String,
-            String> parsedFields, FormDetails fd) throws TaskCancelledException {     // smap add fd
+            String> parsedFields, FormDetails fd, String orgTempMediaPath, String orgMediaPath)   // smap added organisational paths
+            throws TaskCancelledException {     // smap add fd
         UriResult uriResult = null;
         try {
             uriResult = findExistingOrCreateNewUri(fileResult.file, parsedFields, STFileUtils.getSource(fd.getDownloadUrl()), fd.getTasksOnly());  // smap add soure and tasks_only
@@ -237,7 +243,19 @@ public class DownloadFormsTask extends
 
             // move the media files in the media folder
             if (tempMediaPath != null) {
+
+                File orgMediaDir = new File(orgMediaPath);                      // smap
+                File orgTempMediaDir = new File(orgTempMediaPath);              // smap
+                File[] orgTempFiles = orgTempMediaDir.listFiles();              // smap
+                for (File mf : orgTempFiles) {                                  // smap Save a copy the media files in the org media directory
+                    try {
+                        org.apache.commons.io.FileUtils.copyFileToDirectory(mf, orgMediaDir, true);
+                    } catch (Exception e) {
+                    }
+                }
+
                 File formMediaPath = new File(uriResult.getMediaPath());
+                FileUtils.moveMediaFiles(orgTempMediaPath, formMediaPath);      // smap Move org files first and overwrite with form level
                 FileUtils.moveMediaFiles(tempMediaPath, formMediaPath);
             }
         } catch (IOException e) {
@@ -252,11 +270,11 @@ public class DownloadFormsTask extends
                 Timber.w("Deleted %d rows using uri %s", deletedCount, uri.toString());
             }
 
-            cleanUp(fileResult, null, tempMediaPath);
+            cleanUp(fileResult, null, tempMediaPath, orgTempMediaPath);     // smap add organisation
         }
     }
 
-    private void cleanUp(FileResult fileResult, File fileOnCancel, String tempMediaPath) {
+    private void cleanUp(FileResult fileResult, File fileOnCancel, String tempMediaPath, String orgTempMediaPath) {     // smap add org
         if (fileResult == null) {
             Timber.w("The user cancelled (or an exception happened) the download of a form at the "
                     + "very beginning.");
@@ -269,6 +287,9 @@ public class DownloadFormsTask extends
 
         if (tempMediaPath != null) {
             FileUtils.purgeMediaPath(tempMediaPath);
+        }
+        if (orgTempMediaPath != null) {     // smap
+            FileUtils.purgeMediaPath(orgTempMediaPath);
         }
     }
 
@@ -611,7 +632,10 @@ public class DownloadFormsTask extends
 
     private String downloadManifestAndMediaFiles(String tempMediaPath, String finalMediaPath,
                                                  FormDetails fd, int count,
-                                                 int total) throws Exception {
+                                                 int total,
+                                                 String orgTempMediaPath,   // smap
+                                                 String orgMediaPath        // smap
+                ) throws Exception {
         if (fd.getManifestUrl() == null) {
             return null;
         }
@@ -721,10 +745,14 @@ public class DownloadFormsTask extends
         int mediaCount = 0;
         if (files.size() > 0) {
             File tempMediaDir = new File(tempMediaPath);
+            File orgTempMediaDir = new File(orgTempMediaPath);  // smap organisational media
             File finalMediaDir = new File(finalMediaPath);
+            File orgMediaDir = new File (orgMediaPath);         // smap organisational media
 
             FileUtils.checkMediaPath(tempMediaDir);
+            FileUtils.checkMediaPath(orgTempMediaDir);          // smap
             FileUtils.checkMediaPath(finalMediaDir);
+            FileUtils.checkMediaPath(orgMediaDir);              // smap
 
             for (MediaFile toDownload : files) {
                 ++mediaCount;
@@ -734,8 +762,17 @@ public class DownloadFormsTask extends
                                 String.valueOf(mediaCount), String.valueOf(files.size())),
                                 String.valueOf(count), String.valueOf(total));
                 //try {
-                File finalMediaFile = new File(finalMediaDir, toDownload.getFilename());
-                File tempMediaFile = new File(tempMediaDir, toDownload.getFilename());
+                // start smap organisational media
+                File finalMediaFile = null;
+                File tempMediaFile = null;
+                if(toDownload.getDownloadUrl().endsWith("organisation")) {
+                    finalMediaFile = new File(orgMediaDir, toDownload.getFilename());
+                    tempMediaFile = new File(orgTempMediaDir, toDownload.getFilename());
+                } else {
+                    finalMediaFile = new File(finalMediaDir, toDownload.getFilename());
+                    tempMediaFile = new File(tempMediaDir, toDownload.getFilename());
+                }
+                // end smap
 
                 if (!finalMediaFile.exists()) {
                     downloadFile(tempMediaFile, toDownload.getDownloadUrl());
@@ -753,6 +790,10 @@ public class DownloadFormsTask extends
                         // no need to download it again
                         Timber.i("Skipping media file fetch -- file hashes identical: %s",
                                 finalMediaFile.getAbsolutePath());
+
+                        if(toDownload.getDownloadUrl().endsWith("organisation")) {  // smap Lets get this file and copy it to the form
+                            org.apache.commons.io.FileUtils.copyFileToDirectory(finalMediaFile, finalMediaDir, true);
+                        }
                     }
                 }
                 //  } catch (Exception e) {
