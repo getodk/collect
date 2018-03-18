@@ -385,7 +385,6 @@
   <string name="not_exactly_one_record_for_this_instance">Tällä instanssilla ei ole täsmälleen yhtä tietuetta!</string>
   <string name="not_exactly_one_blank_form_for_this_form_id">Tätä jr_form_id:tä ei vastaa täsmälleen yksi tyhjä lomake.</string>
   <string name="no_form_id_specified">FormId määrittämättä???</string>
-  <string name="phone_does_not_have_base64_class">Laitteella ei ole Base64 -luokkaa mutta API -taso on %s.</string>
   <string name="phone_does_not_support_rsa">Laite ei tue RSA-salausta.</string>
   <string name="invalid_rsa_public_key">Kelvoton julkinen RSA-avain.</string>
   <string name="encryption_error_message">%s Lomaketta ei ole tallennettu viimeisteltynä.</string>

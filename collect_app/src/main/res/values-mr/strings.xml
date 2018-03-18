@@ -382,7 +382,6 @@
   <string name="not_exactly_one_record_for_this_instance">या घटनेसाठी नक्की एक रेकॉर्ड नाही!</string>
   <string name="not_exactly_one_blank_form_for_this_form_id">या jr_form_id शी न जुळणारे एक रिक्त स्वरूप</string>
   <string name="no_form_id_specified">फॉर्मID निर्दिष्ट नाही ???</string>
-  <string name="phone_does_not_have_base64_class">फोनजवळ Base64 वर्ग नाही परंतु API स्तर%s. आहे</string>
   <string name="phone_does_not_support_rsa">फोन RSA एन्क्रिप्शनचे समर्थन करत नाही.</string>
   <string name="invalid_rsa_public_key">Invalid RSA public key.</string>
   <string name="encryption_error_message">%s फॉर्म अंतिम रूपाने जतन केले गेले नाही.</string>

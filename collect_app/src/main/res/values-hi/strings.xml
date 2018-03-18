@@ -382,7 +382,6 @@
   <string name="not_exactly_one_record_for_this_instance">इस इंस्टैंस के लिए बिल्कुल सही एक रिकॉर्ड नहीं है!</string>
   <string name="not_exactly_one_blank_form_for_this_form_id">jr_form_id से एक खाली फॉर्म भी सही मैच नहीं करता है।</string>
   <string name="no_form_id_specified">कोई FormId निर्दिष्ट नहीं ???</string>
-  <string name="phone_does_not_have_base64_class">फोन में Base64 क्लास नहीं है लेकिन API स्तर %sहै  .</string>
   <string name="phone_does_not_support_rsa">फोन RSA एन्क्रिप्शन का समर्थन नहीं करता है</string>
   <string name="invalid_rsa_public_key">अमान्य RSA पब्लिक कुंजी</string>
   <string name="encryption_error_message">%s फॉर्म फाइनल के जैसे संरक्षित नहीं गया है.</string>

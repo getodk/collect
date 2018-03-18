@@ -374,7 +374,6 @@
   <string name="not_exactly_one_record_for_this_instance">Neanche un risultato per questa ricerca!</string>
   <string name="not_exactly_one_blank_form_for_this_form_id">Nessuno dei moduli vuoti corrisponde a questo jr_form_id.</string>
   <string name="no_form_id_specified">Nessun FormId specificato???</string>
-  <string name="phone_does_not_have_base64_class">Il telefono non supporta la classe Base64, ma la versione API è %s.</string>
   <string name="phone_does_not_support_rsa">Il telefono non supporta la crittografia RSA.</string>
   <string name="invalid_rsa_public_key">Chiave RSA pubblica non valida.</string>
   <string name="encryption_error_message">%s Il modulo non è stato ancora salvato come completato.</string>

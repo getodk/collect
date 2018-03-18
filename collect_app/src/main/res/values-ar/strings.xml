@@ -382,7 +382,6 @@
   <string name="not_exactly_one_record_for_this_instance">لايوجد تطابق لهذا السجل في الاستمارة</string>
   <string name="not_exactly_one_blank_form_for_this_form_id">معرف الاستمارة لا يتطابق مع الاستمارة الفارغة</string>
   <string name="no_form_id_specified">لم يتم تحديد عنوان الاستمارة</string>
-  <string name="phone_does_not_have_base64_class">الهاتف لايحتوي على مكون Base64 لكن API : %s</string>
   <string name="phone_does_not_support_rsa">الهاتف لايدعم خاصية RSA</string>
   <string name="invalid_rsa_public_key">مفتاح الـ RSA العام غير صالح</string>
   <string name="encryption_error_message">الاستمارة لم يتم حفظها كنهائية %s </string>

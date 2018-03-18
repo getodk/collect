@@ -345,7 +345,6 @@
   <string name="not_exactly_one_record_for_this_instance">Nuk ka vetëm një të dhënë regjistruar për këtë kërkesë!</string>
   <string name="not_exactly_one_blank_form_for_this_form_id">Kjo jr_form_id nuk përputhet vetëm me një formular bosh.</string>
   <string name="no_form_id_specified">Nuk është specifikuar numër identifikimi për formën/at???</string>
-  <string name="phone_does_not_have_base64_class">Telefoni nuk ka Base64 class, por niveli API është %s</string>
   <string name="phone_does_not_support_rsa">Telefoni nuk mund të suportojë enkriptim RSA</string>
   <string name="invalid_rsa_public_key">Çelësi publik RSA i pavlefshëm.</string>
   <string name="encryption_error_message">Formulari %s nuk është ruajtur si i finalizuar</string>

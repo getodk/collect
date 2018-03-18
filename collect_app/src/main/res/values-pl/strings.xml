@@ -363,7 +363,6 @@
   <string name="not_exactly_one_record_for_this_instance">Więcej niż jeden zapis dla tego wystąpienia!</string>
   <string name="not_exactly_one_blank_form_for_this_form_id">Więcej niż jeden pusty formularz odpowiada temu jr_form_id.</string>
   <string name="no_form_id_specified">Nie wybrano FormID???</string>
-  <string name="phone_does_not_have_base64_class">Telefon nie ma klasy Base64 ale poziom API jest %s.</string>
   <string name="phone_does_not_support_rsa">Telefon nie wspiera szyfrowania RSA.</string>
   <string name="invalid_rsa_public_key">Niepoprawny klucz publiczny RSA.</string>
   <string name="encryption_error_message">Formularz %s nie został zapisany jako zakończony.</string>

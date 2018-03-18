@@ -387,7 +387,6 @@
   <string name="not_exactly_one_record_for_this_instance">No hay exactamente un registro para esta instancia!</string>
   <string name="not_exactly_one_blank_form_for_this_form_id">No hay exactamente un formulario en blanco que corresponda a este jr_form_id.</string>
   <string name="no_form_id_specified">No se especifo el FormID???</string>
-  <string name="phone_does_not_have_base64_class">El teléfono no tiene una clase Base64 pero el nivel de API es %s.</string>
   <string name="phone_does_not_support_rsa">El teléfono no es compatible con el cifrado RSA.</string>
   <string name="invalid_rsa_public_key">Clave publica RSA Invalida.</string>
   <string name="encryption_error_message">%s del Formulario no ha sido guardada como finalizado.</string>

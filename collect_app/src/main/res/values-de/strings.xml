@@ -385,7 +385,6 @@
   <string name="not_exactly_one_record_for_this_instance">Mehr als genau ein Datensatz für diese Instanz!</string>
   <string name="not_exactly_one_blank_form_for_this_form_id">Mehr als genau ein leeres Formular passt auf diese jr_form_id.</string>
   <string name="no_form_id_specified">Keine FormId angegeben?</string>
-  <string name="phone_does_not_have_base64_class">Gerät hat keine Base64 class obwohl das API level %s ist.</string>
   <string name="phone_does_not_support_rsa">Gerät unterstützt RSA-Verschlüsselung nicht.</string>
   <string name="invalid_rsa_public_key">Ungültiger RSA public key.</string>
   <string name="encryption_error_message">%s Formular wurde nicht als vollständig gespeichert.</string>
