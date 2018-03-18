@@ -43,7 +43,7 @@ import java.util.Locale;
 import timber.log.Timber;
 
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_DELETE;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_SUBMIT;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_SEND;
 
 public class FormsProvider extends ContentProvider {
 
@@ -103,7 +103,7 @@ public class FormsProvider extends ContentProvider {
                     + FormsColumns.SUBMISSION_URI + " text, "
                     + FormsColumns.BASE64_RSA_PUBLIC_KEY + " text, "
                     + FormsColumns.JRCACHE_FILE_PATH + " text not null, "
-                    + FormsColumns.AUTO_SUBMIT + " text,"
+                    + FormsColumns.AUTO_SEND + " text,"
                     + FormsColumns.AUTO_DELETE + " text);");
         }
 
@@ -274,7 +274,7 @@ public class FormsProvider extends ContentProvider {
             if (oldVersion < 8) {
                 try {
                     db.execSQL("ALTER TABLE " + FORMS_TABLE_NAME + " ADD COLUMN " +
-                            FormsColumns.AUTO_SUBMIT + " text;");
+                            FormsColumns.AUTO_SEND + " text;");
                     db.execSQL("ALTER TABLE " + FORMS_TABLE_NAME + " ADD COLUMN " +
                             FormsColumns.AUTO_DELETE + " text;");
                 } catch (Exception e) {

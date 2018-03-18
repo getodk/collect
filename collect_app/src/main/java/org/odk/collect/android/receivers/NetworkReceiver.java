@@ -248,7 +248,7 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
      * @param isFormAutoSendOptionEnabled represents whether the auto-send option is enabled at the app level
      *
      * If the form explicitly sets the auto-send property, then it overrides the preferences.
-     */
+     *
     private boolean isFormAutoSendEnabled(String jrFormId, boolean isFormAutoSendOptionEnabled) {
         Cursor cursor = new FormsDao().getFormsCursorForFormId(jrFormId);
         String autoSend = null;

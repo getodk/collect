@@ -192,12 +192,25 @@ public class InstanceProvider extends ContentProvider {
                 }
             }
             if (oldVersion < 9) {
-                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                        InstanceColumns.DELETED_DATE + " date;");
+                try {
+                    db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
+                            InstanceColumns.DELETED_DATE + " date;");
+                }catch(Exception e) {
+                    // Catch errors, its possible the user upgraded then downgraded
+                    Timber.w("Error in upgrading to database version 9");
+                    e.printStackTrace();
+                }
+
             }
             if (oldVersion < 10) {
-                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                        InstanceColumns.T_UPDATED + " integer;");
+        	    try {
+                    db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
+                            InstanceColumns.T_UPDATED + " integer;");
+                }catch(Exception e) {
+                    // Catch errors, its possible the user upgraded then downgraded
+                    Timber.w("Error in upgrading to database version 10");
+                    e.printStackTrace();
+                }
             }
             Timber.w("Successfully upgraded database from version %d to %d, without destroying all the old data",
                     initialVersion, newVersion);
