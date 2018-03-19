@@ -69,7 +69,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
     private MediaPlayer player;
     private AudioPlayListener audioPlayListener;
     private int playTextColor;
-    
+
     private Context context;
 
     private CharSequence originalText;
@@ -218,8 +218,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                     DisplayMetrics metrics = context.getResources().getDisplayMetrics();
                     int screenWidth = metrics.widthPixels;
                     int screenHeight = metrics.heightPixels;
-                    Bitmap b = FileUtils.getBitmapScaledToDisplay(imageFile, screenHeight,
-                            screenWidth, false);
+                    Bitmap b = FileUtils.getBitmapScaledToDisplay(imageFile, screenHeight, screenWidth);
                     if (b != null) {
                         imageView = new ImageView(getContext());
                         imageView.setPadding(2, 2, 2, 2);
@@ -234,7 +233,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                                         this, "onClick",
                                         "showImagePromptBigImage" + MediaLayout.this.selectionDesignator,
                                         MediaLayout.this.index);
-                                    
+
                                     try {
                                         File bigImage = new File(ReferenceManager
                                                 .instance()

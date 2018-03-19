@@ -167,17 +167,21 @@ public class FileUtils {
         }
     }
 
+    public static Bitmap getBitmapScaledToDisplay(File file, int screenHeight, int screenWidth) {
+        return getBitmapScaledToDisplay(file, screenHeight, screenWidth, false);
+    }
+
     /**
      * Scales image according to the given display
      *
-     * @param file            containing the image
-     * @param screenHeight    height of the display
-     * @param screenWidth     width of the display
-     * @param scaleAccurately determines whether to scale more precisely without caring about
-     *                        efficient decoding and to maximize use of space on the screen
+     * @param file           containing the image
+     * @param screenHeight   height of the display
+     * @param screenWidth    width of the display
+     * @param upscaleEnabled determines whether the image should be up-scaled or not
+     *                       if the window size is greater than the image size
      * @return scaled bitmap
      */
-    public static Bitmap getBitmapScaledToDisplay(File file, int screenHeight, int screenWidth, boolean scaleAccurately) {
+    public static Bitmap getBitmapScaledToDisplay(File file, int screenHeight, int screenWidth, boolean upscaleEnabled) {
         // Determine image size of file
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
@@ -185,21 +189,7 @@ public class FileUtils {
 
         Bitmap bitmap;
         double scale;
-        if (!scaleAccurately) {
-            int heightScale = options.outHeight / screenHeight;
-            int widthScale = options.outWidth / screenWidth;
-
-            // Powers of 2 work faster, sometimes, according to the doc.
-            // We're just doing closest size that still fills the screen.
-            scale = Math.max(widthScale, heightScale);
-
-            // get bitmap with scale ( < 1 is the same as 1)
-            options = new BitmapFactory.Options();
-            options.inInputShareable = true;
-            options.inPurgeable = true;
-            options.inSampleSize = (int) scale;
-            bitmap = getBitmap(file.getAbsolutePath(), options);
-        } else {
+        if (upscaleEnabled) {
             // Load full size bitmap image
             options = new BitmapFactory.Options();
             options.inInputShareable = true;
@@ -214,6 +204,20 @@ public class FileUtils {
             double newWidth = Math.ceil(options.outWidth / scale);
 
             bitmap = Bitmap.createScaledBitmap(bitmap, (int) newWidth, (int) newHeight, false);
+        } else {
+            int heightScale = options.outHeight / screenHeight;
+            int widthScale = options.outWidth / screenWidth;
+
+            // Powers of 2 work faster, sometimes, according to the doc.
+            // We're just doing closest size that still fills the screen.
+            scale = Math.max(widthScale, heightScale);
+
+            // get bitmap with scale ( < 1 is the same as 1)
+            options = new BitmapFactory.Options();
+            options.inInputShareable = true;
+            options.inPurgeable = true;
+            options.inSampleSize = (int) scale;
+            bitmap = getBitmap(file.getAbsolutePath(), options);
         }
 
         if (bitmap != null) {
