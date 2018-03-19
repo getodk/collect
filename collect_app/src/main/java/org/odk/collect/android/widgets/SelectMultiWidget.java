@@ -20,8 +20,9 @@ import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.TextView;
+
+import com.google.common.base.Joiner;
 
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
@@ -46,23 +47,17 @@ import java.util.List;
  */
 @SuppressLint("ViewConstructor")
 public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWidget {
-    protected ArrayList<CheckBox> checkBoxes;
+    protected final List<CheckBox> checkBoxes = new ArrayList<>();
     private boolean checkboxInit = true;
-    private List<Selection> ve;
+    private final List<Selection> ve;
     private final Context context;
 
     public SelectMultiWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
         this.context = context;
-        checkBoxes = new ArrayList<>();
-        ve = new ArrayList<>();
-        if (getFormEntryPrompt().getAnswerValue() != null) {
-            //noinspection unchecked
-            ve = (List<Selection>) getFormEntryPrompt().getAnswerValue().getValue();
-        } else {
-            ve = new ArrayList<>();
-        }
-
+        //noinspection unchecked
+        ve = getFormEntryPrompt().getAnswerValue() == null ? new ArrayList<>() :
+                (List<Selection>) getFormEntryPrompt().getAnswerValue().getValue();
         createLayout();
     }
 
@@ -104,13 +99,8 @@ public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWi
     }
 
     protected CheckBox createCheckBox(int index) {
-        String choiceName = getFormEntryPrompt().getSelectChoiceText(items.get(index));
-        CharSequence choiceDisplayName;
-        if (choiceName != null) {
-            choiceDisplayName = TextUtils.textToHtml(choiceName);
-        } else {
-            choiceDisplayName = "";
-        }
+        final String choiceName = getFormEntryPrompt().getSelectChoiceText(items.get(index));
+        final CharSequence choiceDisplayName = choiceName == null ? "" : TextUtils.textToHtml(choiceName);
         // no checkbox group so id by answer + offset
         CheckBox checkBox = new CheckBox(getContext());
         checkBox.setTag(index);
@@ -130,25 +120,15 @@ public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWi
         }
 
         // when clicked, check for readonly before toggling
-        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (!checkboxInit && getFormEntryPrompt().isReadOnly()) {
-                    if (buttonView.isChecked()) {
-                        buttonView.setChecked(false);
-                    } else {
-                        buttonView.setChecked(true);
-                    }
-                }
+        checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (!checkboxInit && getFormEntryPrompt().isReadOnly()) {
+                buttonView.setChecked(!buttonView.isChecked());
+            }
 
-                // show warning when selected choice value has spaces
-                int index = (int) checkBox.getTag();
-                String value = items.get(index).getValue();
-                if (isChecked && value != null && value.contains(" ")) {
-
-                    String warning = context.getString(R.string.invalid_space_in_answer_singular, value);
-                    ToastUtils.showLongToast(warning);
-                }
+            // show warning when selected choice value has spaces
+            String value = items.get((int) checkBox.getTag()).getValue();
+            if (isChecked && value != null && value.contains(" ")) {
+                ToastUtils.showLongToast(context.getString(R.string.invalid_space_in_answer_singular, value));
             }
         });
 
@@ -174,7 +154,7 @@ public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWi
         checkboxInit = false;
     }
 
-    protected View createWarning(String valuesWithSpaces) {
+    private View createWarning(String valuesWithSpaces) {
         TextView warning = new TextView(getContext());
 
         warning.setText(getContext().getResources().getString((valuesWithSpaces.contains(",") ?
@@ -184,16 +164,15 @@ public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWi
         return warning;
     }
 
-    protected String getValuesWithSpaces() {
-        StringBuilder valuesWithSpaces = new StringBuilder();
+    private String getValuesWithSpaces() {
+        final List<String> valuesWithSpaces = new ArrayList<>();
         for (SelectChoice selectChoice : items) {
             String value = selectChoice.getValue();
             if (value.contains(" ")) {
-                valuesWithSpaces.append(value);
-                valuesWithSpaces.append(",");
+                valuesWithSpaces.add(value);
             }
         }
-        return valuesWithSpaces.length() > 0 ? valuesWithSpaces.substring(0, valuesWithSpaces.length() - 1) : null;
+        return valuesWithSpaces.isEmpty() ? null : Joiner.on(", ").join(valuesWithSpaces);
     }
 
     @Override
