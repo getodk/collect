@@ -137,7 +137,6 @@ public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWi
 
     protected void createLayout() {
         if (items != null) {
-
             // check if any values have spaces
             String valuesWithSpaces = getValuesWithSpaces();
             if (valuesWithSpaces != null) {
