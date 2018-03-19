@@ -16,95 +16,44 @@ import static org.junit.Assert.assertEquals;
 public class BitmapScaledToDisplayTest {
 
     @Test
+    @SuppressWarnings("ParenPad")
     public void scaleDownBitmapWhenPossible() {
-        new ScaleImageTest()
-                .createBitmap(1000, 1000)
-                .scaleBitmapToDisplay(500, 500)
-                .assertScaledBitmapDimensions(500, 500);
-
-        new ScaleImageTest()
-                .createBitmap(600, 800)
-                .scaleBitmapToDisplay(600, 200)
-                .assertScaledBitmapDimensions(150, 200);
-
-        new ScaleImageTest()
-                .createBitmap(500, 400)
-                .scaleBitmapToDisplay(250, 200)
-                .assertScaledBitmapDimensions(250, 200);
-
-        new ScaleImageTest()
-                .createBitmap(2000, 800)
-                .scaleBitmapToDisplay(300, 400)
-                .assertScaledBitmapDimensions(333, 133);
+        runScaleTest(1000,   1000,    500,    500,    500,    500,    false);
+        runScaleTest( 600,    800,    600,    200,    150,    200,    false);
+        runScaleTest( 500,    400,    250,    200,    250,    200,    false);
+        runScaleTest(2000,    800,    300,    400,    333,    133,    false);
     }
 
     @Test
+    @SuppressWarnings("ParenPad")
     public void doNotScaleDownBitmapWhenNotPossible() {
-        new ScaleImageTest()
-                .createBitmap(1000, 1000)
-                .scaleBitmapToDisplay(2000, 2000)
-                .assertScaledBitmapDimensions(1000, 1000);
-
-        new ScaleImageTest()
-                .createBitmap(600, 800)
-                .scaleBitmapToDisplay(600, 800)
-                .assertScaledBitmapDimensions(600, 800);
-
-        new ScaleImageTest()
-                .createBitmap(500, 400)
-                .scaleBitmapToDisplay(600, 600)
-                .assertScaledBitmapDimensions(500, 400);
-
-        new ScaleImageTest()
-                .createBitmap(2000, 800)
-                .scaleBitmapToDisplay(4000, 2000)
-                .assertScaledBitmapDimensions(2000, 800);
+        runScaleTest(1000,   1000,    2000,   2000,   1000,   1000,   false);
+        runScaleTest( 600,    800,     600,    800,    600,    800,   false);
+        runScaleTest( 500,    400,     600,    600,    500,    400,   false);
+        runScaleTest(2000,    800,    4000,   2000,   2000,    800,   false);
     }
 
     @Test
+    @SuppressWarnings("ParenPad")
     public void accuratelyScaleBitmapToDisplay() {
-        new ScaleImageTest()
-                .createBitmap(1000, 1000)
-                .accuratelyScaleBitmapToDisplay(500, 500)
-                .assertScaledBitmapDimensions(500, 500);
-
-        new ScaleImageTest()
-                .createBitmap(600, 800)
-                .accuratelyScaleBitmapToDisplay(600, 200)
-                .assertScaledBitmapDimensions(150, 200);
-
-        new ScaleImageTest()
-                .createBitmap(500, 400)
-                .accuratelyScaleBitmapToDisplay(250, 200)
-                .assertScaledBitmapDimensions(250, 200);
-
-        new ScaleImageTest()
-                .createBitmap(2000, 800)
-                .accuratelyScaleBitmapToDisplay(300, 400)
-                .assertScaledBitmapDimensions(300, 120);
-
-        new ScaleImageTest()
-                .createBitmap(1000, 1000)
-                .accuratelyScaleBitmapToDisplay(2000, 2000)
-                .assertScaledBitmapDimensions(2000, 2000);
-
-        new ScaleImageTest()
-                .createBitmap(600, 800)
-                .accuratelyScaleBitmapToDisplay(600, 800)
-                .assertScaledBitmapDimensions(600, 800);
-
-        new ScaleImageTest()
-                .createBitmap(500, 400)
-                .accuratelyScaleBitmapToDisplay(600, 600)
-                .assertScaledBitmapDimensions(600, 480);
-
-        new ScaleImageTest()
-                .createBitmap(2000, 800)
-                .accuratelyScaleBitmapToDisplay(4000, 2000)
-                .assertScaledBitmapDimensions(4000, 1600);
+        runScaleTest(1000,   1000,    500,    500,    500,    500,    true);
+        runScaleTest( 600,    800,    600,    200,    150,    200,    true);
+        runScaleTest( 500,    400,    250,    200,    250,    200,    true);
+        runScaleTest(2000,    800,    300,    400,    300,    120,    true);
+        runScaleTest(1000,   1000,   2000,   2000,   2000,   2000,    true);
+        runScaleTest( 600,    800,    600,    800,    600,    800,    true);
+        runScaleTest( 500,    400,    600,    600,    600,    480,    true);
+        runScaleTest(2000,    800,   4000,   2000,   4000,   1600,    true);
     }
 
-    class ScaleImageTest {
+    private void runScaleTest(int imageHeight, int imageWidth, int windowHeight, int windowWidth, int expectedHeight, int expectedWidth, boolean shouldScaleAccurately) {
+        new ScaleImageTest()
+                .createBitmap(imageHeight, imageWidth)
+                .scaleBitmapToDisplay(windowHeight, windowWidth, shouldScaleAccurately)
+                .assertScaledBitmapDimensions(expectedHeight, expectedWidth);
+    }
+
+    private static class ScaleImageTest {
         private final File cache = Collect.getInstance().getApplicationContext().getExternalCacheDir();
         private final File imageFile = new File(cache, "testImage.jpeg");
         private Bitmap scaledBitmap;
@@ -115,13 +64,8 @@ public class BitmapScaledToDisplayTest {
             return this;
         }
 
-        ScaleImageTest scaleBitmapToDisplay(int windowHeight, int windowWidth) {
-            scaledBitmap = FileUtils.getBitmapScaledToDisplay(imageFile, windowHeight, windowWidth, false);
-            return this;
-        }
-
-        ScaleImageTest accuratelyScaleBitmapToDisplay(int windowHeight, int windowWidth) {
-            scaledBitmap = FileUtils.getBitmapScaledToDisplay(imageFile, windowHeight, windowWidth, true);
+        ScaleImageTest scaleBitmapToDisplay(int windowHeight, int windowWidth, boolean shouldScaleAccurately) {
+            scaledBitmap = FileUtils.getBitmapScaledToDisplay(imageFile, windowHeight, windowWidth, shouldScaleAccurately);
             return this;
         }
 
