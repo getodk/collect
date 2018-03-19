@@ -127,7 +127,7 @@ public class DateTimeUtils {
     }
 
     /**
-     * Function to convert milliseconds time to Hours:Minutes:Seconds Format
+     * Converts milliseconds time to Hours:Minutes:Seconds format
      */
     public static String millisToTimer(long milliseconds) {
         StringBuilder sb = new StringBuilder();

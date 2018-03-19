@@ -55,14 +55,17 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
     @BindView(R.id.seekBar)
     SeekBar seekBar;
 
+    private View view;
+    private State state;
     private Context context;
     private MediaPlayer mediaPlayer;
-    private Handler seekHandler = new Handler();
+    private FormEntryPrompt formEntryPrompt;
+    private final Handler seekHandler = new Handler();
 
     /**
      * Background Runnable thread
      */
-    private Runnable updateTimeTask = new Runnable() {
+    private final Runnable updateTimeTask = new Runnable() {
         public void run() {
             try {
                 if (mediaPlayer.isPlaying()) {
@@ -75,13 +78,6 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
             }
         }
     };
-
-    private State state;
-    private FormEntryPrompt formEntryPrompt;
-    private View view;
-
-    AudioController() {
-    }
 
     void init(Context context, MediaPlayer mediaPlayer, FormEntryPrompt formEntryPrompt) {
         this.context = context;
@@ -106,19 +102,19 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
      * Seeks media to the new position and updates timer
      */
     private void seekTo(int newPosition) {
-        if (newPosition < 0) {
-            newPosition = 0;
-        } else if (newPosition > mediaPlayer.getDuration()) {
-            newPosition = mediaPlayer.getDuration();
-        }
-
-        mediaPlayer.seekTo(newPosition);
+        mediaPlayer.seekTo(Math.min(Math.max(0, newPosition), mediaPlayer.getDuration()));
         updateTimer();
     }
 
     @OnClick(R.id.playBtn)
     void playClicked() {
-        state = mediaPlayer.isPlaying() ? pause() : play();
+        if (mediaPlayer.isPlaying()) {
+            pause();
+            state = State.PAUSED;
+        } else {
+            play();
+            state = State.PLAYING;
+        }
     }
 
     private void updateTimer() {
@@ -189,7 +185,7 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
         }
     }
 
-    private State play() {
+    private void play() {
         Collect.getInstance()
                 .getActivityLogger()
                 .logInstanceAction(this, "play", "click",
@@ -198,10 +194,9 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
         playButton.setImageResource(R.drawable.ic_pause_black_24dp);
         mediaPlayer.start();
         updateProgressBar();
-        return State.PLAYING;
     }
 
-    private State pause() {
+    private void pause() {
         Collect.getInstance()
                 .getActivityLogger()
                 .logInstanceAction(this, "pause", "click",
@@ -210,7 +205,6 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
         playButton.setImageResource(R.drawable.ic_play_arrow_black_24dp);
         mediaPlayer.pause();
         seekHandler.removeCallbacks(updateTimeTask);
-        return State.PAUSED;
     }
 
     public void setMedia(File file) {
