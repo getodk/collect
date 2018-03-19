@@ -49,7 +49,7 @@ public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWi
     protected ArrayList<CheckBox> checkBoxes;
     private boolean checkboxInit = true;
     private List<Selection> ve;
-    private Context context;
+    private final Context context;
 
     public SelectMultiWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -177,11 +177,8 @@ public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWi
     protected View createWarning(String valuesWithSpaces) {
         TextView warning = new TextView(getContext());
 
-        if (!valuesWithSpaces.contains(",")) {
-            warning.setText(getContext().getResources().getString(R.string.invalid_space_in_answer_singular, valuesWithSpaces));
-        } else {
-            warning.setText(getContext().getResources().getString(R.string.invalid_space_in_answer_plural, valuesWithSpaces));
-        }
+        warning.setText(getContext().getResources().getString((valuesWithSpaces.contains(",") ?
+                R.string.invalid_space_in_answer_plural : R.string.invalid_space_in_answer_singular), valuesWithSpaces));
 
         warning.setPadding(10, 10, 10, 10);
         return warning;
