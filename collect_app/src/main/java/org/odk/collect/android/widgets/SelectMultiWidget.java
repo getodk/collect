@@ -39,7 +39,7 @@ import java.util.List;
 
 
 /**
- * SelctMultiWidget handles multiple selection fields using checkboxes.
+ * SelectMultiWidget handles multiple selection fields using checkboxes.
  *
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
