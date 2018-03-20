@@ -165,7 +165,8 @@ public class DownloadFormsTask extends
 
             // get the xml file
             // if we've downloaded a duplicate, this gives us the file
-            fileResult = downloadXform(fd.getFormName(), fd.getDownloadUrl() + "&deviceID=" + deviceId);
+            fileResult = downloadXform(fd.getFormName(), fd.getDownloadUrl() + "&deviceID=" + deviceId,
+                    fd.isNewerFormVersionAvailable());  // smap add flag on newer form version available
 
             if (fd.getManifestUrl() != null) {
                 // use a temporary media path until everything is ok.
@@ -375,7 +376,7 @@ public class DownloadFormsTask extends
      * Takes the formName and the URL and attempts to download the specified file. Returns a file
      * object representing the downloaded file.
      */
-    public FileResult downloadXform(String formName, String url)
+    public FileResult downloadXform(String formName, String url, boolean download)      // smap add download flag
             throws IOException, TaskCancelledException, Exception {
         // clean up friendly form name...
         String rootName = formName.replaceAll("[^\\p{L}\\p{Digit}]", " ");
@@ -386,40 +387,44 @@ public class DownloadFormsTask extends
         String path = Collect.FORMS_PATH + File.separator + rootName + ".xml";
         int i = 2;
         File f = new File(path);
-        while (f.exists()) {
-            path = Collect.FORMS_PATH + File.separator + rootName + "_" + i + ".xml";
-            f = new File(path);
-            i++;
-        }
 
-        downloadFile(f, url);
-
-        boolean isNew = true;
-
-        // we've downloaded the file, and we may have renamed it
-        // make sure it's not the same as a file we already have
-        Cursor c = null;
-        try {
-            c = formsDao.getFormsCursorForMd5Hash(FileUtils.getMd5Hash(f));
-            if (c.getCount() > 0) {
-                // Should be at most, 1
-                c.moveToFirst();
-
-                isNew = false;
-
-                // delete the file we just downloaded, because it's a duplicate
-                Timber.w("A duplicate file has been found, we need to remove the downloaded file "
-                        + "and return the other one.");
-                FileUtils.deleteAndReport(f);
-
-                // set the file returned to the file we already had
-                String existingPath = c.getString(c.getColumnIndex(FormsColumns.FORM_FILE_PATH));
-                f = new File(existingPath);
-                Timber.w("Will use %s", existingPath);
+        boolean isNew = false;      // smap
+        if(download) {              // smap
+            while (f.exists()) {
+                path = Collect.FORMS_PATH + File.separator + rootName + "_" + i + ".xml";
+                f = new File(path);
+                i++;
             }
-        } finally {
-            if (c != null) {
-                c.close();
+
+            downloadFile(f, url);
+
+            isNew = true;
+
+            // we've downloaded the file, and we may have renamed it
+            // make sure it's not the same as a file we already have
+            Cursor c = null;
+            try {
+                c = formsDao.getFormsCursorForMd5Hash(FileUtils.getMd5Hash(f));
+                if (c.getCount() > 0) {
+                    // Should be at most, 1
+                    c.moveToFirst();
+
+                    isNew = false;
+
+                    // delete the file we just downloaded, because it's a duplicate
+                    Timber.w("A duplicate file has been found, we need to remove the downloaded file "
+                            + "and return the other one.");
+                    FileUtils.deleteAndReport(f);
+
+                    // set the file returned to the file we already had
+                    String existingPath = c.getString(c.getColumnIndex(FormsColumns.FORM_FILE_PATH));
+                    f = new File(existingPath);
+                    Timber.w("Will use %s", existingPath);
+                }
+            } finally {
+                if (c != null) {
+                    c.close();
+                }
             }
         }
 

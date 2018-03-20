@@ -825,8 +825,12 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
         			if(form.hasManifest) {
         				form.manifestUrl = serverUrl + "/xformsManifest?key=" + form.ident;
         			}
-        			
-        			FormDetails fd = new FormDetails(form.name, form.url, form.manifestUrl, form.ident, formVersionString, form.tasks_only);
+
+        			//FormDetails fd = new FormDetails(form.name, form.url, form.manifestUrl, form.ident, formVersionString, form.tasks_only);
+                    FormDetails fd = new FormDetails(form.name, form.url, form.manifestUrl, form.ident, formVersionString,
+                            !mfd.exists,        // New form version available
+                            form.hasManifest,   // Are newer media files available
+                            form.tasks_only);
         			toDownload.add(fd);
         		} else {
                     // Update form details
