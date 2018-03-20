@@ -249,7 +249,6 @@
   <string name="drive_get_file">Duke ngarkuar %1$s dhe file-t media.</string>
   <string name="no_google_account">Nuk keni përzgjedhur një llogari në Google!</string>
   <string name="google_set_account">Keni përzgjedhur Google Sheets si server, lutemi, zjidhni një llogari në  Google në parametrat e përgjithshëm përpara se të vazhdoni.</string>
-  <string name="google_repeat_error">Google Sheets nuk suporton përsërtije në këtë moment.</string>
   <string name="media_upload_error">Foto nuk mund të dërgohet pasi nuk ekziston: %1$s</string>
   <string name="odk_auth_auth_fail">Autentikimi i dërgimit automatik të ODK dështoi, lutemi sigurohuni që parametrat janë të saktë.</string>
   <string name="odk_auto_note">Njoftim ODK për dërgimin automatik </string>

@@ -281,9 +281,7 @@
     <string name="drive_get_file">Getting %1$s and media files.</string>
     <string name="no_google_account">No Google Account Selected!</string>
     <string name="google_set_account">You have selected Google Sheets as your server, please select a corresponding Google account in the General Settings before continuing</string>
-    <string name="invalid_oauth">Invalid OAuth 2 token</string>
-    <string name="google_repeat_error">Repeats are not supported by Google Sheets at this time.</string>
-    <string name="media_upload_error">Failed to upload photo that does not exist: %1$s</string>
+    <string name="media_upload_error">Failed to upload media file that does not exist: %1$s</string>
     <string name="odk_auth_auth_fail">ODK auto send authentication failure, please make sure your settings are correct</string>
     <string name="odk_auto_note">ODK Auto Send Notification</string>
     <string name="notification_error">Error displaying notification text</string>
@@ -360,8 +358,6 @@
     <string name="zoom_to_where">Zoom to…</string>
     <string name="zoom_to_location">Zoom to current location</string>
     <string name="zoom_to_feature">Zoom to saved feature</string>
-    <string name="google_sheets_invalid_column_form">\'n%1$s\' is an invalid column name in your form. Google Sheets only allows alphanumeric characters and hyphens in column names</string>
-    <string name="google_sheets_invalid_column_instance">\'n%1$s\' is an invalid column name in your saved instance. Google Sheets only allows alphanumeric characters and hyphens in column names</string>
     <string name="geoshape_view_change_location">View or Change GeoShape</string>
     <string name="geotrace_view_change_location">View or Change GeoTrace</string>
     <string name="bearing">Bearing: %.3f</string>
@@ -585,4 +581,6 @@
     <string name="no">No</string>
     <string name="newer_version_of_a_form_info">This is an updated version of a form you already have!</string>
     <string name="svg_file_does_not_exist">SVG file does not exist!</string>
+    <string name="lack_of_instance_id">Forms with repeats must define an instanceID.</string>
+    <string name="no_columns_to_upload">No columns found in the form to upload.</string>
 </resources>

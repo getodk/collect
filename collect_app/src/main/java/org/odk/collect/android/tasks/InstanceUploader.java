@@ -49,11 +49,11 @@ public abstract class InstanceUploader extends AsyncTask<Long, Integer, Instance
         synchronized (this) {
             if (outcome != null && stateListener != null) {
                 if (outcome.authRequestingServer != null) {
-                    stateListener.authRequest(outcome.authRequestingServer, outcome.results);
+                    stateListener.authRequest(outcome.authRequestingServer, outcome.messagesByInstanceId);
                 } else {
-                    stateListener.uploadingComplete(outcome.results);
+                    stateListener.uploadingComplete(outcome.messagesByInstanceId);
 
-                    Set<String> keys = outcome.results.keySet();
+                    Set<String> keys = outcome.messagesByInstanceId.keySet();
                     Iterator<String> it = keys.iterator();
                     int count = keys.size();
                     while (count > 0) {
@@ -153,8 +153,9 @@ public abstract class InstanceUploader extends AsyncTask<Long, Integer, Instance
         }
     }
 
-    public static class Outcome {
+    static class Outcome {
         Uri authRequestingServer = null;
-        public HashMap<String, String> results = new HashMap<String, String>();
+        boolean invalidOAuth;
+        HashMap<String, String> messagesByInstanceId = new HashMap<>();
     }
 }

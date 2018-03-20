@@ -266,8 +266,6 @@
   <string name="drive_get_file"> %1$s आणि मीडिया फायली मिळवत आहे</string>
   <string name="no_google_account">कोणतेही गूगल खाते निवडलेले नाही!</string>
   <string name="google_set_account">आपण गूगल पत्रक आपल्या सर्व्हर म्हणून निवडले आहे, कृपया सुरू ठेवण्यापूर्वी सामान्य सेटिंग्जमध्ये संबंधित गूगल खाते निवडा</string>
-  <string name="invalid_oauth">अवैध OAuth 2 टोकन</string>
-  <string name="google_repeat_error">पुनरावृत्ती गूगल पत्रके द्वारे यावेळी समर्थित नाहीत.</string>
   <string name="media_upload_error">अस्तित्वात नाही असा फोटो अपलोड करण्यात अयशस्वी:  %1$s</string>
   <string name="odk_auth_auth_fail">ओडीके ऑटोसॅन्ड प्रमाणीकरण अयशस्वी, कृपया आपली सेटिंग्ज योग्य असल्याची खात्री करा.</string>
   <string name="odk_auto_note">ओडीके ऑटोसॅन्ड सूचना.</string>
@@ -340,8 +338,6 @@
   <string name="zoom_to_where">झूम टु …</string>
   <string name="zoom_to_location">वर्तमान स्थानावर झूम</string>
   <string name="zoom_to_feature">जतन केलेल्या वैशिष्ट्य पर्यंत झूम करा</string>
-  <string name="google_sheets_invalid_column_form">आपल्या फॉर्ममध्ये  \'n%1$s\'  एक अवैध स्तंभ नाव आहे. गूगल पत्रक केवळ स्तंभ नावांमध्ये अल्फान्यूमेरिक वर्ण आणि हायफनला अनुमती देतात.</string>
-  <string name="google_sheets_invalid_column_instance">आपल्या जतन केलेल्या घटनेमध्ये \'n%1$s\'  एक अवैध स्तंभ नाव आहे. गूगल पत्रक केवळ स्तंभ नावांमध्ये अल्फान्यूमेरिक वर्ण आणि हायफनला अनुमती देतात</string>
   <string name="geoshape_view_change_location">जिओ शेप पहा किंवा बदला</string>
   <string name="geotrace_view_change_location">जिओ ट्रेस पहा किंवा बदला</string>
   <string name="bearing">असणारा:%.3f</string>
