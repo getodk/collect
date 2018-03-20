@@ -33,7 +33,7 @@ import java.util.List;
  * @author Raghu Mittal (raghu.mittal@handsrel.com)
  */
 @SuppressLint("ViewConstructor")
-public class SelectOneSearchWidget extends SelectOneAbstractWidget implements OnCheckedChangeListener, AudioPlayListener {
+public class SelectOneSearchWidget extends AbstractSelectOneWidget implements OnCheckedChangeListener, AudioPlayListener {
     public SelectOneSearchWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt, false);
         createLayout();

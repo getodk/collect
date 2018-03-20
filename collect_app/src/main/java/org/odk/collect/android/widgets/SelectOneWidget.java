@@ -20,7 +20,7 @@ import android.content.Context;
 
 import org.javarosa.form.api.FormEntryPrompt;
 
-public class SelectOneWidget extends SelectOneAbstractWidget {
+public class SelectOneWidget extends AbstractSelectOneWidget {
     public SelectOneWidget(Context context, FormEntryPrompt prompt, boolean autoAdvance) {
         super(context, prompt, autoAdvance);
         createLayout();

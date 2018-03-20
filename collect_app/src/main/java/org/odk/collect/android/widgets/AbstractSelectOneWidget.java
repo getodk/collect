@@ -53,7 +53,7 @@ import java.util.List;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public abstract class SelectOneAbstractWidget extends SelectTextWidget
+public abstract class AbstractSelectOneWidget extends SelectTextWidget
         implements OnCheckedChangeListener, AudioPlayListener, MultiChoiceWidget, View.OnClickListener {
 
     @Nullable
@@ -64,7 +64,7 @@ public abstract class SelectOneAbstractWidget extends SelectTextWidget
 
     private boolean autoAdvance;
 
-    public SelectOneAbstractWidget(Context context, FormEntryPrompt prompt, boolean autoAdvance) {
+    public AbstractSelectOneWidget(Context context, FormEntryPrompt prompt, boolean autoAdvance) {
         super(context, prompt);
         buttons = new ArrayList<>();
 
