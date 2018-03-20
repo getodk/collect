@@ -53,10 +53,10 @@ public class ItemsetWidget extends AbstractSelectOneWidget {
 
     private static final String QUOTATION_MARK = "\"";
 
-    private FormEntryPrompt formEntryPrompt;
-    private XPathParseTool parseTool;
-    private ItemsetDbAdapter adapter;
-    private FileUtil fileUtil;
+    private final FormEntryPrompt formEntryPrompt;
+    private final XPathParseTool parseTool;
+    private final ItemsetDbAdapter adapter;
+    private final FileUtil fileUtil;
 
     protected ItemsetWidget(Context context, FormEntryPrompt formEntryPrompt, boolean autoAdvanceToNext) {
         this(context, formEntryPrompt, autoAdvanceToNext, new XPathParseTool(), new ItemsetDbAdapter(), new FileUtil());
