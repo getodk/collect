@@ -133,7 +133,7 @@ public class SelectOneWidget
         radioButton.setFocusable(!getFormEntryPrompt().isReadOnly());
 
         //adapt radioButton text as per language direction
-        if (isRTL()) {
+        if (isCurrentLanguageRTL()) {
             radioButton.setGravity(Gravity.END);
         } else {
             radioButton.setGravity(Gravity.START);
