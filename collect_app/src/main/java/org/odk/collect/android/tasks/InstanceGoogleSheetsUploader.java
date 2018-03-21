@@ -244,7 +244,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         ensureNumberOfColumnsIsValid(columnTitles.size());
 
         if (isCancelled()) {
-            throw new UploadException("Instance Upload Cancelled");
+            throw new UploadException(Collect.getInstance().getString(R.string.instance_upload_cancelled));
         }
 
         try {
@@ -270,7 +270,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             HashMap<String, String> answers = getAnswers(element, instanceFile, parentKey, key);
 
             if (isCancelled()) {
-                throw new UploadException("Instance Upload Cancelled");
+                throw new UploadException(Collect.getInstance().getString(R.string.instance_upload_cancelled));
             }
 
             if (shouldRowBeInserted(answers)) {
