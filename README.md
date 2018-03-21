@@ -25,13 +25,13 @@ ODK Collect renders forms that are compliant with the [ODK XForms standard](http
 
 ## Learn more about ODK Collect
 * ODK website: [https://opendatakit.org](https://opendatakit.org)
-* ODK Collect usage documentation: [http://docs.opendatakit.org/collect-intro/](http://docs.opendatakit.org/collect-intro/)
+* ODK Collect usage documentation: [https://docs.opendatakit.org/collect-intro/](https://docs.opendatakit.org/collect-intro/)
 * ODK forum: [https://forum.opendatakit.org](https://forum.opendatakit.org)
 * ODK developer Slack chat: [http://slack.opendatakit.org](http://slack.opendatakit.org) 
-* ODK developer Slack archive: [http://opendatakit.slackarchive.io](http://opendatakit.slackarchive.io) 
+* ODK developer Slack archive: [https://opendatakit.slackarchive.io](https://opendatakit.slackarchive.io) 
 
 ## Release cycle
-New versions of ODK Collect are generally released on the last Sunday of a month. We freeze commits to the master branch on the preceding Wednesday (except for bug fixes). Releases can be called by any community member and generally happy every 2 months. [@yanokwa](https://github.com/yanokwa) pushes the releases to the Play Store.
+New versions of ODK Collect are generally released on the last Sunday of a month. We freeze commits to the master branch on the preceding Wednesday (except for bug fixes). Releases can be requested by any community member and generally happen every 2 months. [@yanokwa](https://github.com/yanokwa) pushes the releases to the Play Store.
 
 ## Setting up your development environment
 
