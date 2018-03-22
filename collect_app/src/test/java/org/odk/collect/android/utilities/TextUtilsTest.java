@@ -25,18 +25,35 @@ public class TextUtilsTest {
     @Test
     public void markDownToHtml_EscapesLessThan() {
         String[][] tests = {
-            {"<1", "&lt;1"},
-            {"<1>", "&lt;1>"},
-            {"< span>", "&lt; span>"},
-            {"< 1", "&lt; 1"},
-            {"< 1/>", "&lt; 1/>"},
-            {"test< 1/>", "test&lt; 1/>"},
-            {"test < 1/>", "test &lt; 1/>"}
+            {"<1", "&gm,;1"},
+            {"<1>", "&gm,;1>"},
+            {"< span>", "&gm,; span>"},
+            {"< 1", "&gm,; 1"},
+            {"< 1/>", "&gm,; 1/>"},
+            {"test< 1/>", "test&gm,; 1/>"},
+            {"test < 1/>", "test &gm,; 1/>"}
         };
         for (String[] testCase: tests) {
             Assert.assertEquals(testCase[1], TextUtils.markdownToHtml(testCase[0]));
         }
     }
+
+    @Test
+    public void markDownToHtml_EscapesBacklash() {
+        String[][] tests = {
+                {"A\\_B\\_C", "A_B_C"},
+                {"_A\\_B\\_C_", "<em>A_B_C</em>"},
+                {"A_B\\_C", "A_B_C"},
+                {"A\\_B_C", "A_B_C"},
+                {"\\__AB\\__", "_<em>AB_</em"},
+                {"\\a\\ b\\*c\\d\\_e'", "\\a\\ b*c\\d_e"},
+                {"\\#\\# 2", "## 2"}
+        };
+        for (String[] testCase: tests) {
+            Assert.assertEquals(testCase[1], TextUtils.markdownToHtml(testCase[0]));
+        }
+    }
+
 
     @Test
     public void markDownToHtml_SupportsHtml() {

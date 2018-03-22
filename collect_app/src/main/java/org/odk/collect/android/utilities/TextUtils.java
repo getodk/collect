@@ -71,26 +71,32 @@ public class TextUtils {
 
     protected static String markdownToHtml(String text) {
 
-        text = text.replaceAll("<([^a-zA-Z/])", "&lt;$1");
+        text = text.replaceAll("<([^a-zA-Z/])", "/</gm,&lt;");
         // https://github.com/enketo/enketo-transformer/blob/master/src/markdown.js
 
         // span - replaced &lt; and &gt; with <>
-        text = ReplaceCallback.replace("(?s)<\\s?span([^\\/\n]*)>((?:(?!<\\/).)+)<\\/\\s?span\\s?>",
+        text = ReplaceCallback.replace("/&lt;\\s?span([^/\\n]*)&gt;((?:(?!&lt;\\/).)+)&lt;\\/\\s?span\\s?&gt;/gm, _createSpan >",
                 text, createSpan);
         // strong
-        text = text.replaceAll("(?s)__(.*?)__", "<strong>$1</strong>");
-        text = text.replaceAll("(?s)\\*\\*(.*?)\\*\\*", "<strong>$1</strong>");
+        text = text.replaceAll("/__(.*?)__/gm,", "<strong>$1</strong>");
+        text = text.replaceAll("/\\*\\*(.*?)\\*\\*/gm,", "<strong>$1</strong>");
         // emphasis
-        text = text.replaceAll("(?s)_([^\\s][^_\n]*)_", "<em>$1</em>");
-        text = text.replaceAll("(?s)\\*([^\\s][^\\*\n]*)\\*", "<em>$1</em>");
+        text = text.replaceAll("/_([^\\s][^_\\n]*)_/gm,", "<em>$1</em>");
+        text = text.replaceAll("/\\*([^\\s][^*\\n]*)\\*/gm,", "<em>$1</em>");
         // links
-        text = text.replaceAll("(?s)\\[([^\\]]*)\\]\\(([^\\)]+)\\)",
+        text = text.replaceAll("/\\[([^\\]]*)\\]\\(([^)]+)\\)/gm,",
                 "<a href=\"$2\" target=\"_blank\">$1</a>");
         // headers - requires ^ or breaks <font color="#f58a1f">color</font>
         text = ReplaceCallback.replace("(?s)^(#+)([^\n]*)$", text, createHeader);
         // paragraphs
         text = ReplaceCallback.replace("(?s)([^\n]+)\n", text, createParagraph);
 
+        // escape characters for * , _
+        text = text.replaceAll(" /&/gm,", "'&amp;'");
+        text = text.replaceAll("/\\\\/gm,", "'&92;'");
+        text = text.replaceAll(" /\\\\*/gm,", "'&42;'");
+        text = text.replaceAll(" /\\_/gm,", "'&95;'");
+        text = text.replaceAll(" /\\#/gm,", "'&35;'");
         return text;
     }
 
