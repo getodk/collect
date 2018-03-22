@@ -266,8 +266,6 @@
   <string name="drive_get_file">الحصول على %1$s وملفات الوسائط.</string>
   <string name="no_google_account">لم يتم اختيار حساب جوجل!</string>
   <string name="google_set_account">لقد قمت باختيار صفحات الجوجل كخادم لك، أرجو اختيار حساب الجوجل  المتوافق عن طريق الاعدادت العامة قبل الاستمرار</string>
-  <string name="invalid_oauth">الرمز غير صالح</string>
-  <string name="google_repeat_error">التكرارات غير مدعومة من قبل صفحات الجوجل بهذا الوقت</string>
   <string name="media_upload_error">حدث خطاء اثناء رفع الوسائط الى خادم البيانات الصورة التالية غير موجودة : %1$s</string>
   <string name="odk_auth_auth_fail">فشل في عملية التحقق من بيانات المصادقة</string>
   <string name="odk_auto_note">ملاحظات تلقائية</string>
@@ -340,8 +338,6 @@
   <string name="zoom_to_where">التقريب الى…</string>
   <string name="zoom_to_location">التقريب الى موقع الحالي</string>
   <string name="zoom_to_feature">التقريب الى الميزة المحفوظة</string>
-  <string name="google_sheets_invalid_column_form">اسم الحقل غير صحيح في الاستمارة. اوراق جوجل تعتمد فقد الحروف و الارقام في عملية تسمية الاعمدة\'n%1$s\'</string>
-  <string name="google_sheets_invalid_column_instance">اسم الحقل غير صحيح في الاستمارة المحفوظة. اوراق جوجل تعتمد فقد الحروف و الارقام في عملية تسمية الاعمدة\'n%1$s\'</string>
   <string name="geoshape_view_change_location">عرض التغييرات في الموقع لـ GeoShape</string>
   <string name="geotrace_view_change_location">عرض التغييرات في الموقع لـ GeoTrace</string>
   <string name="bearing">تحمل %.3f</string>

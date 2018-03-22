@@ -48,8 +48,8 @@ public class InstanceServerUploaderTest extends MockedServerTest {
 
         // then
         assertNull(o.authRequestingServer);
-        assertEquals(1, o.results.size());
-        assertEquals("success", o.results.get(id.toString()));
+        assertEquals(1, o.messagesByInstanceId.size());
+        assertEquals("success", o.messagesByInstanceId.get(id.toString()));
 
         // and
         HEAD: {

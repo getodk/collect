@@ -208,7 +208,6 @@
   <string name="other_preferences">ሌሎች ስርዓተ ቅንብሮች</string>
   <string name="no_google_account">ምንም የ Google መለያ አልተመረጠም!</string>
   <string name="google_set_account">Google ሉሆችን እንደ አገልጋይዎ መርጠዋል, እባክዎ ከመቀጠልዎ በፊት በአጠቃላይ ቅንብሮች ውስጥ ተዛማጅ የ Google መለያ ይምረጡ</string>
-  <string name="google_repeat_error">ድጋሚዎች በዚህ ጊዜ በ Google ሉሆች አይደገፉም.</string>
   <string name="media_upload_error">የሌለውን ፎቶ መስቀል አልተሳካም፣ 1 %1$s</string>
   <string name="notification_error">የማሳወቂያ ጽሁፍ በማሳየት ላይ ስህተት</string>
   <string name="delete_after_send">ከላክ በኋላ ይሰርዙ</string>

@@ -258,7 +258,6 @@ Escolher Imagem</string>
   <string name="other_preferences">Configurações de outras plataformas.</string>
   <string name="drive_get_file">Obtendo %1$s e arquivos de mídia.</string>
   <string name="no_google_account">Nenhuma conta do Google foi selecionada!</string>
-  <string name="invalid_oauth">Modo OAuth 2 inválido</string>
   <string name="odk_auth_auth_fail">Falha na autenticação para envio automático, por favor verifique se as configurações estão corretas</string>
   <string name="odk_auto_note">Notificação de envio automático</string>
   <string name="notification_error">Erro ao exibir texto de notificação.</string>

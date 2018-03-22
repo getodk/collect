@@ -265,8 +265,6 @@
   <string name="drive_get_file">Caricamento %1$s e media files.</string>
   <string name="no_google_account">Nessun Account Google selezionato!</string>
   <string name="google_set_account">Hai selezionato Google Sheets come tuo server. Perpiacere seleziona un corrispondente account Google nelle Impostazioni Generali prima di procedere.</string>
-  <string name="invalid_oauth">Token OAuth 2 non valido</string>
-  <string name="google_repeat_error">Le ripetizioni non sono ancora supportate da Google Sheets.</string>
   <string name="media_upload_error">Impossibile fare l\'upload di una foto inesistente: %1$s</string>
   <string name="notification_error">Errore di visualizzazione nella notifica</string>
   <string name="delete_after_send">Elimina dopo invio</string>
@@ -335,8 +333,6 @@
   <string name="zoom_to_where">Ingrandisci su…</string>
   <string name="zoom_to_location">Ingrandisci la posizione corrente</string>
   <string name="zoom_to_feature">Ingrandisci l\'elemento salvato</string>
-  <string name="google_sheets_invalid_column_form">\'n%1$s\' è un nome di colonna non valido nella tua form. Google Sheets permette solamente caratteri alfanumerici e trattini nei nomi delle colonne</string>
-  <string name="google_sheets_invalid_column_instance">\'n%1$s\' è un nome di colonna non valido nella tua form salvata. Google Sheets permette solamente caratteri alfanumerici e trattini nei nomi delle colonne</string>
   <string name="geoshape_view_change_location">Guarda o Cambia Geo-contorno</string>
   <string name="geotrace_view_change_location">Guarda o Cambia Geo-tracciatura</string>
   <string name="bearing">Orientamento: %.3f </string>

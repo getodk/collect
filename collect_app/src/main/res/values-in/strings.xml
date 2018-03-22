@@ -267,8 +267,6 @@
   <string name="drive_get_file">Mendapatkan %1$s dan berkas media.</string>
   <string name="no_google_account">Tidak ada Akun Google yang dipilih!</string>
   <string name="google_set_account">Google Sheet telah dipilih sebagai server kamu, silahkan tentukan akun Google pada Pengaturan Umum sebelum melanjutkan</string>
-  <string name="invalid_oauth">Token OAuth 2 tidak sesuai</string>
-  <string name="google_repeat_error">Pengulangan belum didukung oleh Google Sheet.</string>
   <string name="media_upload_error">Gagal mengunggah foto: %1$s</string>
   <string name="odk_auth_auth_fail">ODK pengiriman otomatis gagal berotentikasi, pastikan pengaturannya benar</string>
   <string name="odk_auto_note">Notifikasi ODK Kirim otomatis</string>
@@ -343,8 +341,6 @@
   <string name="zoom_to_where">Zoom ke…</string>
   <string name="zoom_to_location">Zoom ke lokasi saat ini</string>
   <string name="zoom_to_feature">Zoom ke fitur yang tersimpan</string>
-  <string name="google_sheets_invalid_column_form">\'n%1$s\' merupakan nama kolom yang tidak valid dalam formulir Anda. Google Sheets hanya memungkinkan karakter alfanumerik dan tanda hubung pada nama kolom</string>
-  <string name="google_sheets_invalid_column_instance">\'n%1$s\' merupakan nama kolom yang tidak valid dalam permintaan tersimpan Anda. Google Sheets hanya memungkinkan karakter alfanumerik dan tanda hubung pada nama kolom</string>
   <string name="geoshape_view_change_location">Tampilkan atau Ubah GeoShape</string>
   <string name="geotrace_view_change_location">Tampilkan atau Ubah GeoTrace</string>
   <string name="bearing">Bantalan: %.3f</string>

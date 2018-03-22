@@ -258,7 +258,6 @@
   <string name="other_preferences">Andere platform instellingen</string>
   <string name="google_preferences">Google Sheets instellingen</string>
   <string name="no_google_account">Geen Google account geselecteerd!</string>
-  <string name="invalid_oauth">Ongeldig OAuth 2 token</string>
   <string name="delete_after_send">Verwijderen na versturen</string>
   <string name="delete_after_send_summary">Verwijderd afgeronde formulieren en media na verzending</string>
   <string name="change_server_url">Server URL</string>

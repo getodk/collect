@@ -249,7 +249,6 @@
   <string name="other_preferences">ການຕັ້ງຄ່າ platform ອື່ນໆ</string>
   <string name="drive_get_file">ໄດ້ %1$s ຂອງເອກະສານ.</string>
   <string name="no_google_account">ບໍ່ໄດ້ເລືອກບັນຊີຂອງ Google</string>
-  <string name="invalid_oauth">OAuth 2 token ບໍ່ຖືກຕ້ອງ</string>
   <string name="notification_error">ຂໍ້ຜິດພາດສະແດງຂໍ້ຄວາມແຈ້ງເຕືອນ</string>
   <string name="delete_after_send">ລຶບພາຍຫຼັງສົ່ງແລ້ວ</string>
   <string name="delete_after_send_summary">ລຶບຟອມທີ່ສຳເລັດແລ້ວ ແລະ ສື່ ຫຼັງຈາກສົ່ງຫາເສີບເວີ</string>

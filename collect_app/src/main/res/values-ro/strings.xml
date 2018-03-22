@@ -255,8 +255,6 @@
   <string name="drive_get_file">Preluare %1$s și fișiere media.</string>
   <string name="no_google_account">Niciun cont Google nu a fost selectat!</string>
   <string name="google_set_account">Ați selectat Google Sheets ca server, vă rugăm să selectați un cont Google asociat în Setări generale înainte de a continua</string>
-  <string name="invalid_oauth">Token OAuth 2 invalid</string>
-  <string name="google_repeat_error">Repetările nu sunt suportate de Google Sheets în acest moment.</string>
   <string name="notification_error">Eroare la afișarea textului notificării</string>
   <string name="delete_after_send">Ștergeți după trimitere</string>
   <string name="delete_after_send_summary">Ștergeți formulare finalizate și fișierele media după trimiterea către server</string>
