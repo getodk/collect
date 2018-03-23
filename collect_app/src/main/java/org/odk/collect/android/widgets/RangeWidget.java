@@ -183,15 +183,13 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonWidget
         // fix Problems with Range Widgets with RTL languages #1983
         if (isRTL()) {
             float rotate = seekBar.getRotation();
-            if(Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT){
+            if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT ||
+                    Build.VERSION.SDK_INT == Build.VERSION_CODES.JELLY_BEAN_MR2) {
                 seekBar.setRotation(180 - rotate);
-            }else if(Build.VERSION.SDK_INT == Build.VERSION_CODES.JELLY_BEAN_MR1){
+            } else if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT ||
+                    Build.VERSION.SDK_INT == Build.VERSION_CODES.JELLY_BEAN_MR1) {
                 seekBar.setRotation(360 - rotate);
-            }else if(Build.VERSION.SDK_INT == Build.VERSION_CODES.JELLY_BEAN_MR2){
-                seekBar.setRotation(180 - rotate);
-            }else if(Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT){
-                seekBar.setRotation(360 - rotate);
-            }else {
+            } else {
                 seekBar.setRotation(rotate);
             }
         }
