@@ -36,7 +36,6 @@ limitations under the License.
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/imageView"
-        android:layout_toRightOf="@id/imageView"
         android:textDirection="locale"
         android:textSize="@dimen/text_size_medium"
         tools:text="@string/odk_website" />
@@ -48,7 +47,6 @@ limitations under the License.
         android:layout_below="@id/title"
         android:layout_marginTop="@dimen/margin_medium"
         android:layout_toEndOf="@id/imageView"
-        android:layout_toRightOf="@id/imageView"
         android:textColor="@color/grey"
         android:textDirection="locale"
         android:textSize="@dimen/text_size_small"
