@@ -16,6 +16,7 @@
 
 package org.odk.collect.android.widgets;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Build;
 import android.support.annotation.IdRes;
@@ -39,6 +40,7 @@ import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 
 import java.math.BigDecimal;
+import java.util.Locale;
 
 import timber.log.Timber;
 
@@ -179,6 +181,15 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonWidget
         seekBar.setMax(elementCount);
         seekBar.setProgress(progress);
         seekBar.setOnSeekBarChangeListener(this);
+        // fix Problems with Range Widgets with RTL languages #1983
+        if (isRTL()) {
+            float rotate = seekBar.getRotation();
+            if(Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT){
+                seekBar.setRotation(180 - rotate);
+            }else if(Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT){
+                seekBar.setRotation(360 - rotate);
+            }
+        }
 
         seekBar.setOnTouchListener(new SeekBar.OnTouchListener() {
             @Override
@@ -201,6 +212,17 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonWidget
                 return true;
             }
         });
+    }
+
+    // check if it's RTL languages
+    public static boolean isRTL() {
+        return isRTL(Locale.getDefault());
+    }
+
+    public static boolean isRTL(Locale locale) {
+        final int directionality = Character.getDirectionality(locale.getDisplayName().charAt(0));
+        return directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT ||
+                directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC;
     }
 
     private void disableWidget() {
