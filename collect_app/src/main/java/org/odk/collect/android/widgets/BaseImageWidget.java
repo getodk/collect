@@ -34,7 +34,7 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 
@@ -60,7 +60,6 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
 
     @Override
     public void clearAnswer() {
-        // remove the file
         deleteFile();
         if (imageView != null) {
             imageView.setImageDrawable(null);
@@ -71,14 +70,11 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
 
     @Override
     public void deleteFile() {
-        // get the file path and delete the file
-        String name = binaryName;
-        // clean up variables
+        MediaManager
+                .getInstance()
+                .markOriginalFileOrDelete(getFormEntryPrompt().getIndex().toString(),
+                getInstanceFolder() + File.separator + binaryName);
         binaryName = null;
-        // delete from media provider
-        int del = MediaUtils.deleteImageFileFromMediaProvider(
-                getInstanceFolder() + File.separator + name);
-        Timber.i("Deleted %d rows from media content provider", del);
     }
 
     @Override
@@ -99,6 +95,10 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
             values.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis());
             values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
             values.put(MediaStore.Images.Media.DATA, newImage.getAbsolutePath());
+
+            MediaManager
+                    .getInstance()
+                    .markRecentFile(getFormEntryPrompt().getIndex().toString(), newImage.getAbsolutePath());
 
             Uri imageURI = getContext().getContentResolver().insert(
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);

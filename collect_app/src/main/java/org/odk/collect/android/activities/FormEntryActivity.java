@@ -114,6 +114,7 @@ import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormDefCache;
 import org.odk.collect.android.utilities.ImageConverter;
+import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.TimerLogger;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -1930,6 +1931,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);
                     }
                     removeTempInstance();
+                    MediaManager.getInstance().revertChanges();
                     finishReturnInstance();
                 }
                 alertDialog.dismiss();

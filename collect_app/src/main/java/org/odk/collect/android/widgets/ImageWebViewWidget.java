@@ -41,7 +41,7 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 
@@ -183,14 +183,11 @@ public class ImageWebViewWidget extends QuestionWidget implements FileWidget {
 
     @Override
     public void deleteFile() {
-        // get the file path and delete the file
-        String name = binaryName;
-        // clean up variables
+        MediaManager
+                .getInstance()
+                .markOriginalFileOrDelete(getFormEntryPrompt().getIndex().toString(),
+                getInstanceFolder() + File.separator + binaryName);
         binaryName = null;
-        // delete from media provider
-        int del = MediaUtils.deleteImageFileFromMediaProvider(
-                getInstanceFolder() + File.separator + name);
-        Timber.i("Deleted %d rows from media content provider", del);
     }
 
     @Override
@@ -241,6 +238,10 @@ public class ImageWebViewWidget extends QuestionWidget implements FileWidget {
             values.put(Images.Media.DATE_TAKEN, System.currentTimeMillis());
             values.put(Images.Media.MIME_TYPE, "image/jpeg");
             values.put(Images.Media.DATA, newImage.getAbsolutePath());
+
+            MediaManager
+                    .getInstance()
+                    .markRecentFile(getFormEntryPrompt().getIndex().toString(), newImage.getAbsolutePath());
 
             Uri imageURI = getContext().getContentResolver().insert(
                     Images.Media.EXTERNAL_CONTENT_URI, values);

@@ -33,6 +33,7 @@ import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.EncryptionUtils;
 import org.odk.collect.android.utilities.EncryptionUtils.EncryptedFormInformation;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.MediaManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -265,6 +266,8 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
         ByteArrayPayload payload = formController.getFilledInFormXml();
         // write out xml
         String instancePath = formController.getInstanceFile().getAbsolutePath();
+
+        MediaManager.getInstance().saveChanges();
 
         publishProgress(Collect.getInstance().getString(R.string.survey_saving_saving_message));
 
