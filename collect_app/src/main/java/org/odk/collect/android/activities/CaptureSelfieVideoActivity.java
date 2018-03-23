@@ -47,7 +47,7 @@ public class CaptureSelfieVideoActivity extends Activity {
     private int cameraId;
     private boolean recording = false;
     private MediaRecorder mediaRecorder;
-    String outputFile;
+    private String outputFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

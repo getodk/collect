@@ -56,13 +56,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.fragments.dialogs.ErrorDialog;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
@@ -268,7 +268,7 @@ public class Camera2VideoFragment extends Fragment
 
         // Pick the smallest of those, assuming we found any
         if (bigEnough.size() > 0) {
-            return Collections.min(bigEnough, new CompareSizesByArea());
+            return Collections.min(bigEnough, new Camera2Fragment.CompareSizesByArea());
         } else {
             Timber.e("Couldn't find any suitable preview size");
             return choices[0];
@@ -307,13 +307,11 @@ public class Camera2VideoFragment extends Fragment
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.texture: {
-                if (isRecordingVideo) {
-                    stopRecordingVideo();
-                } else {
-                    startRecordingVideo();
-                }
+        if (view.getId() == R.id.texture) {
+            if (isRecordingVideo) {
+                stopRecordingVideo();
+            } else {
+                startRecordingVideo();
             }
         }
     }
@@ -681,48 +679,6 @@ public class Camera2VideoFragment extends Fragment
         i.setData(Uri.fromFile(new File(nextVideoAbsolutePath)));
         activity.setResult(Activity.RESULT_OK, i);
         activity.finish();
-    }
-
-    /**
-     * Compares two {@code Size}s based on their areas.
-     */
-    static class CompareSizesByArea implements Comparator<Size> {
-
-        @Override
-        public int compare(Size lhs, Size rhs) {
-            // We cast here to ensure the multiplications won't overflow
-            return Long.signum((long) lhs.getWidth() * lhs.getHeight() -
-                    (long) rhs.getWidth() * rhs.getHeight());
-        }
-
-    }
-
-    public static class ErrorDialog extends DialogFragment {
-
-        private static final String ARG_MESSAGE = "message";
-
-        public static ErrorDialog newInstance(String message) {
-            ErrorDialog dialog = new ErrorDialog();
-            Bundle args = new Bundle();
-            args.putString(ARG_MESSAGE, message);
-            dialog.setArguments(args);
-            return dialog;
-        }
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            final Activity activity = getActivity();
-            return new AlertDialog.Builder(activity)
-                    .setMessage(getArguments().getString(ARG_MESSAGE))
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            activity.finish();
-                        }
-                    })
-                    .create();
-        }
-
     }
 
     public static class ConfirmationDialog extends DialogFragment {
