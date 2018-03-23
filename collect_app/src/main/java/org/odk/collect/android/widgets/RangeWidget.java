@@ -16,7 +16,6 @@
 
 package org.odk.collect.android.widgets;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Build;
 import android.support.annotation.IdRes;
@@ -192,6 +191,8 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonWidget
                 seekBar.setRotation(180 - rotate);
             }else if(Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT){
                 seekBar.setRotation(360 - rotate);
+            }else {
+                seekBar.setRotation(rotate);
             }
         }
 
