@@ -72,7 +72,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
         this(context, prompt, new FileUtil(), new MediaUtil(), new AudioController());
     }
 
-    AudioWidget(Context context, FormEntryPrompt prompt, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil, AudioController audioController) {
+    AudioWidget(Context context, FormEntryPrompt prompt, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil, @NonNull AudioController audioController) {
         super(context, prompt);
 
         this.fileUtil = fileUtil;
@@ -87,6 +87,16 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
 
         audioController.init(context, getPlayer(), getFormEntryPrompt());
 
+        // finish complex layout
+        LinearLayout answerLayout = new LinearLayout(getContext());
+        answerLayout.setOrientation(LinearLayout.VERTICAL);
+        answerLayout.addView(captureButton);
+        answerLayout.addView(chooseButton);
+        answerLayout.addView(audioController.getPlayerLayout(answerLayout));
+        addAnswerView(answerLayout);
+
+        hideButtonsIfNeeded();
+
         // retrieve answer from data model and update ui
         binaryName = prompt.getAnswerText();
         if (binaryName != null) {
@@ -94,16 +104,6 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
         } else {
             audioController.hidePlayer();
         }
-
-        // finish complex layout
-        LinearLayout answerLayout = new LinearLayout(getContext());
-        answerLayout.setOrientation(LinearLayout.VERTICAL);
-        answerLayout.addView(captureButton);
-        answerLayout.addView(chooseButton);
-        answerLayout.addView(audioController.getPlayerLayout());
-        addAnswerView(answerLayout);
-
-        hideButtonsIfNeeded();
     }
 
     @Override

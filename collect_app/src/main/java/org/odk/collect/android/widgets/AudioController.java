@@ -21,6 +21,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -85,7 +86,6 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
         this.formEntryPrompt = formEntryPrompt;
 
         initMediaPlayer();
-        initControlsLayout();
     }
 
     @OnClick(R.id.fastForwardBtn)
@@ -128,8 +128,8 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
         seekBar.setProgress(mediaPlayer.getCurrentPosition());
     }
 
-    private void initControlsLayout() {
-        view = LayoutInflater.from(context).inflate(R.layout.media_player_layout, null);
+    private void initControlsLayout(ViewGroup parent) {
+        view = LayoutInflater.from(context).inflate(R.layout.media_player_layout, parent, false);
         ButterKnife.bind(this, view);
         seekBar.setOnSeekBarChangeListener(this);
     }
@@ -222,7 +222,8 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
         view.setVisibility(GONE);
     }
 
-    View getPlayerLayout() {
+    View getPlayerLayout(ViewGroup parent) {
+        initControlsLayout(parent);
         return view;
     }
 

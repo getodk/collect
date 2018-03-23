@@ -18,10 +18,7 @@ limitations under the License.
     android:id="@+id/mediaPlayer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/margin_small"
-    android:layout_marginLeft="@dimen/margin_medium"
-    android:layout_marginRight="@dimen/margin_medium"
-    android:layout_marginTop="@dimen/margin_small"
+    android:layout_margin="7dp"
     android:background="#eee"
     android:padding="@dimen/padding_large">
 
@@ -35,6 +32,8 @@ limitations under the License.
         android:layout_toLeftOf="@id/playBtn"
         android:layout_toStartOf="@id/playBtn"
         android:background="?android:attr/selectableItemBackground"
+        android:minHeight="@dimen/touch_target_size"
+        android:minWidth="@dimen/touch_target_size"
         android:padding="@dimen/padding_medium"
         app:srcCompat="@drawable/ic_fast_rewind_black_24dp" />
 
@@ -46,6 +45,8 @@ limitations under the License.
         android:layout_marginLeft="@dimen/margin_small"
         android:layout_marginRight="@dimen/margin_small"
         android:background="?android:attr/selectableItemBackground"
+        android:minHeight="@dimen/touch_target_size"
+        android:minWidth="@dimen/touch_target_size"
         android:padding="@dimen/padding_medium"
         app:srcCompat="@drawable/ic_play_arrow_black_24dp" />
 
@@ -58,6 +59,8 @@ limitations under the License.
         android:layout_toEndOf="@id/playBtn"
         android:layout_toRightOf="@id/playBtn"
         android:background="?android:attr/selectableItemBackground"
+        android:minHeight="@dimen/touch_target_size"
+        android:minWidth="@dimen/touch_target_size"
         android:padding="@dimen/padding_medium"
         app:srcCompat="@drawable/ic_fast_forward_black_24dp" />
 
@@ -87,5 +90,8 @@ limitations under the License.
         android:id="@+id/seekBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/currentDuration" />
+        android:layout_below="@+id/currentDuration"
+        android:paddingEnd="0dp"
+        android:paddingStart="0dp"
+        android:thumbOffset="3dp" />
 </RelativeLayout>
