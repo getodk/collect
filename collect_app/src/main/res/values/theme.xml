@@ -14,6 +14,8 @@
         <item name="android:panelBackground">@android:color/white</item>
         <item name="alertDialogTheme">@style/AlertDialogTheme</item>
         <item name="searchViewStyle">@style/SearchViewTheme</item>
+        <item name="editTextStyle">@style/EditTextStyle.Alignment</item>
+        <item name="android:textViewStyle">@style/TextViewStyle.TextDirection</item>
     </style>
 
     <style name="AlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
@@ -33,4 +35,16 @@
     <style name="SearchViewTheme" parent="Widget.AppCompat.Light.SearchView">
         <item name="searchHintIcon">@null</item>
     </style>
+
+    <!-- For API >= 17: To fix RTL problem -->
+    <style name="EditTextStyle.Alignment" parent="@android:style/Widget.EditText">
+        <item name="android:textAlignment">viewStart</item>
+        <item name="android:gravity">start</item>
+        <item name="android:textDirection">locale</item>
+    </style>
+
+    <style name="TextViewStyle.TextDirection" parent="android:Widget.TextView">
+        <item name="android:textDirection">locale</item>
+    </style>
+
 </resources>
