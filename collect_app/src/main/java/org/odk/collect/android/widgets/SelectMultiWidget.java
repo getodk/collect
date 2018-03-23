@@ -139,6 +139,8 @@ public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWi
     }
 
     protected void createLayout() {
+        readItems();
+
         if (items != null) {
             for (int i = 0; i < items.size(); i++) {
                 CheckBox checkBox = createCheckBox(i);

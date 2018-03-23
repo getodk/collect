@@ -9,11 +9,11 @@ import org.robolectric.RuntimeEnvironment;
  * @author James Knight
  */
 
-public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWidget> {
+public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<AbstractSelectOneWidget> {
 
     @NonNull
     @Override
     public SelectOneWidget createWidget() {
-        return new SelectOneWidget(RuntimeEnvironment.application, formEntryPrompt);
+        return new SelectOneWidget(RuntimeEnvironment.application, formEntryPrompt, false);
     }
 }
