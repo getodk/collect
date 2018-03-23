@@ -359,7 +359,6 @@
   <string name="not_exactly_one_record_for_this_instance">Ei leidu täpselt üks kirje!</string>
   <string name="not_exactly_one_blank_form_for_this_form_id">Ei leidu täpselt ühte tühja vormi, mis vastaks jr_form_id.</string>
   <string name="no_form_id_specified">Vormi ID määramata?</string>
-  <string name="phone_does_not_have_base64_class">Telefonil ei ole Base64 klassi, API aste on: %s</string>
   <string name="phone_does_not_support_rsa">Telefon ei toeta RSA krüpteerimist.</string>
   <string name="invalid_rsa_public_key">RSA avalik võti on sobimatu.</string>
   <string name="encryption_error_message">%s vorm ei ole salvestatud ja lõpetatud.</string>

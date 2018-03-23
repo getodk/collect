@@ -381,7 +381,6 @@
   <string name="not_exactly_one_record_for_this_instance">Більше одного запису для цього екземпляру анкети!</string>
   <string name="not_exactly_one_blank_form_for_this_form_id">Більше однієї чистої анкети відповідають jr_form_id.</string>
   <string name="no_form_id_specified">Не зазначений FormId???</string>
-  <string name="phone_does_not_have_base64_class">Телефон не має Base64 class проте рівень API %s.</string>
   <string name="phone_does_not_support_rsa">Телефон не підтримує RSA кодування.</string>
   <string name="invalid_rsa_public_key">Некоректний відкритий ключ RSA.</string>
   <string name="encryption_error_message">%s анкета не була збережена як завершена.</string>

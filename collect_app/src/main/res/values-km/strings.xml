@@ -381,7 +381,6 @@
   <string name="not_exactly_one_record_for_this_instance">ពុំមានទិន្នន័យណាមួយដែលត្រូវនឹង instance នេះ!</string>
   <string name="not_exactly_one_blank_form_for_this_form_id">មិន​មាន​សំណុំ​បែប​បទ​ទទេរពិតប្រាកដមួយដែលត្រូវគ្នានឹង jr_form_id នេះ។</string>
   <string name="no_form_id_specified">មិនបញ្ជាក់ពី ID របស់ទម្រង់???</string>
-  <string name="phone_does_not_have_base64_class">ទូរស័ព្ទពុំ​មាន class Base64 ប៉ុន្តែកម្រិត API គឺ %s.</string>
   <string name="phone_does_not_support_rsa">ទូរស័ព្ទមិនបានគាំទ្រការអ៊ីនគ្រីបប្រភេទ RSA</string>
   <string name="invalid_rsa_public_key">កូនសោរសាធាណះ RSA មិនត្រឹមត្រូវ</string>
   <string name="encryption_error_message">%s ទម្រង់មិនត្រូវបានរក្សាជាទម្រង់បញ្ចប់។</string>

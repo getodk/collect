@@ -381,7 +381,6 @@
   <string name="not_exactly_one_record_for_this_instance">Tidak sesuai dengan recor dimaksud dalam permintaan!</string>
   <string name="not_exactly_one_blank_form_for_this_form_id">Tidak ada satu pun formulir kosong yang sesuai dengan jr_form_id ini.</string>
   <string name="no_form_id_specified">FormId tidak disebutkan.</string>
-  <string name="phone_does_not_have_base64_class">Telepon tidak memiliki Base64 class namun tingkat API adalah %s.</string>
   <string name="phone_does_not_support_rsa">Ponsel tidak mendukung enkripsi RSA.</string>
   <string name="invalid_rsa_public_key">RSA public key tidak valid.</string>
   <string name="encryption_error_message">%s tersimpan sebagai formulir belum selesai.</string>

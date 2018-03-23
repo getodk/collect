@@ -381,7 +381,6 @@
   <string name="not_exactly_one_record_for_this_instance">Для этого экземпляра должна быть ровно одна запись!</string>
   <string name="not_exactly_one_blank_form_for_this_form_id">Более одной пустой формы имеют совпадают с jr_form_id этой формы.</string>
   <string name="no_form_id_specified">Не указан FormId???</string>
-  <string name="phone_does_not_have_base64_class">У телефона нет класса Base64, хотя уровень API %s.</string>
   <string name="phone_does_not_support_rsa">Телефон не поддерживает шифрование RSA.</string>
   <string name="invalid_rsa_public_key">Неправильный публичный ключ RSA.</string>
   <string name="encryption_error_message">%s Форма не была сохранена как завёршенная.</string>
