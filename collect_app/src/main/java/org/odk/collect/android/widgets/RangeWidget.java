@@ -188,6 +188,8 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonWidget
                 seekBar.setRotation(180 - rotate);
             }else if(Build.VERSION.SDK_INT == Build.VERSION_CODES.JELLY_BEAN_MR1){
                 seekBar.setRotation(360 - rotate);
+            }else if(Build.VERSION.SDK_INT == Build.VERSION_CODES.JELLY_BEAN_MR2){
+                seekBar.setRotation(180 - rotate);
             }else if(Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT){
                 seekBar.setRotation(360 - rotate);
             }
