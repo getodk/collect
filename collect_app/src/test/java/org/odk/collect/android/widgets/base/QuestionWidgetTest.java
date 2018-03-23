@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.widgets.ItemsetWidgetTest;
 import org.odk.collect.android.widgets.interfaces.Widget;
 
 import java.util.Random;
@@ -69,7 +70,7 @@ public abstract class QuestionWidgetTest<W extends Widget, A extends IAnswerData
     @Test
     public void getAnswerShouldReturnExistingAnswerIfPromptHasExistingAnswer() {
         A answer = getInitialAnswer();
-        if (answer instanceof StringData) {
+        if (answer instanceof StringData && !(this instanceof ItemsetWidgetTest)) {
             when(formEntryPrompt.getAnswerText()).thenReturn((String) answer.getValue());
         } else {
             when(formEntryPrompt.getAnswerValue()).thenReturn(answer);

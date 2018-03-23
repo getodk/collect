@@ -36,7 +36,7 @@ import java.util.Locale;
 
 /**
  * A base widget class which is responsible for sharing the code used by simple select widgets like
- * {@link SelectOneWidget} and {@link SelectMultiWidget}.
+ * {@link AbstractSelectOneWidget} and {@link SelectMultiWidget}.
  */
 public abstract class SelectTextWidget extends SelectWidget {
     private static final String SEARCH_TEXT = "search_text";

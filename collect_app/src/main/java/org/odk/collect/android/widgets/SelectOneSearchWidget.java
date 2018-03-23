@@ -33,9 +33,10 @@ import java.util.List;
  * @author Raghu Mittal (raghu.mittal@handsrel.com)
  */
 @SuppressLint("ViewConstructor")
-public class SelectOneSearchWidget extends SelectOneWidget implements OnCheckedChangeListener, AudioPlayListener {
+public class SelectOneSearchWidget extends AbstractSelectOneWidget implements OnCheckedChangeListener, AudioPlayListener {
     public SelectOneSearchWidget(Context context, FormEntryPrompt prompt) {
-        super(context, prompt);
+        super(context, prompt, false);
+        createLayout();
     }
 
     @Override
@@ -57,6 +58,8 @@ public class SelectOneSearchWidget extends SelectOneWidget implements OnCheckedC
 
     @Override
     protected void createLayout() {
+        readItems();
+
         if (items != null) {
             for (int i = 0; i < items.size(); i++) {
                 buttons.add(createRadioButton(i));

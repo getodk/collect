@@ -46,15 +46,6 @@ public abstract class SelectWidget extends QuestionWidget {
         answerLayout = new LinearLayout(context);
         answerLayout.setOrientation(LinearLayout.VERTICAL);
         playList = new ArrayList<>();
-
-        // SurveyCTO-added support for dynamic select content (from .csv files)
-        XPathFuncExpr xpathFuncExpr = ExternalDataUtil.getSearchXPathExpression(
-                prompt.getAppearanceHint());
-        if (xpathFuncExpr != null) {
-            items = ExternalDataUtil.populateExternalChoices(prompt, xpathFuncExpr);
-        } else {
-            items = prompt.getSelectChoices();
-        }
     }
 
     @Override
@@ -99,6 +90,16 @@ public abstract class SelectWidget extends QuestionWidget {
         });
         // plays the question text
         super.playAllPromptText();
+    }
+
+    protected void readItems() {
+        // SurveyCTO-added support for dynamic select content (from .csv files)
+        XPathFuncExpr xpathFuncExpr = ExternalDataUtil.getSearchXPathExpression(getFormEntryPrompt().getAppearanceHint());
+        if (xpathFuncExpr != null) {
+            items = ExternalDataUtil.populateExternalChoices(getFormEntryPrompt(), xpathFuncExpr);
+        } else {
+            items = getFormEntryPrompt().getSelectChoices();
+        }
     }
 
     private void playNextSelectItem() {
