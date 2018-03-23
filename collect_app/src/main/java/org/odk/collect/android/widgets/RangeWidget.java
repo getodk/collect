@@ -217,7 +217,6 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonWidget
         });
     }
 
-
     private void disableWidget() {
         ToastUtils.showLongToast(R.string.invalid_range_widget);
         if (isPickerAppearance) {
