@@ -217,16 +217,6 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonWidget
         });
     }
 
-    // check if it's RTL languages
-    public static boolean isRTL() {
-        return isRTL(Locale.getDefault());
-    }
-
-    public static boolean isRTL(Locale locale) {
-        final int directionality = Character.getDirectionality(locale.getDisplayName().charAt(0));
-        return directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT ||
-                directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC;
-    }
 
     private void disableWidget() {
         ToastUtils.showLongToast(R.string.invalid_range_widget);
