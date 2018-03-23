@@ -27,10 +27,11 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import org.javarosa.form.api.FormEntryPrompt;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.utilities.DateTimeUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -80,6 +81,15 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
         }
     };
 
+    /**
+     * Converts {@param millis} to mm:ss format
+     *
+     * @return formatted time as string
+     */
+    private static String getTime(long millis) {
+        return new DateTime(millis, DateTimeZone.UTC).toString("mm:ss");
+    }
+
     void init(Context context, MediaPlayer mediaPlayer, FormEntryPrompt formEntryPrompt) {
         this.context = context;
         this.mediaPlayer = mediaPlayer;
@@ -118,11 +128,8 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
     }
 
     private void updateTimer() {
-        String totalDuration = DateTimeUtils.millisToTimer(mediaPlayer.getDuration());
-        String currentDuration = DateTimeUtils.millisToTimer(mediaPlayer.getCurrentPosition());
-
-        totalDurationLabel.setText(totalDuration);
-        currentDurationLabel.setText(currentDuration);
+        totalDurationLabel.setText(getTime(mediaPlayer.getDuration()));
+        currentDurationLabel.setText(getTime(mediaPlayer.getCurrentPosition()));
 
         seekBar.setMax(mediaPlayer.getDuration());
         seekBar.setProgress(mediaPlayer.getCurrentPosition());

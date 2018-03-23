@@ -125,29 +125,4 @@ public class DateTimeUtils {
 
         return new DatePickerDetails(datePickerType, datePickerMode);
     }
-
-    /**
-     * Converts milliseconds time to Hours:Minutes:Seconds format
-     */
-    public static String millisToTimer(long milliseconds) {
-        StringBuilder sb = new StringBuilder();
-
-        // Convert total duration into time
-        int hours = (int) (milliseconds / (1000 * 60 * 60));
-        int minutes = (int) (milliseconds % (1000 * 60 * 60)) / (1000 * 60);
-        int seconds = (int) ((milliseconds % (1000 * 60 * 60)) % (1000 * 60) / 1000);
-
-        // Add hours if there
-        if (hours > 0) {
-            sb.append(hours).append(':');
-        }
-
-        // Add minutes
-        sb.append(minutes < 10 ? '0' : "").append(minutes).append(':');
-
-        // Add seconds
-        sb.append(seconds < 10 ? '0' : "").append(seconds);
-
-        return sb.toString();
-    }
 }
