@@ -179,7 +179,7 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonWidget
         seekBar.setMax(elementCount);
         seekBar.setProgress(progress);
         seekBar.setOnSeekBarChangeListener(this);
-        // fix Problems with Range Widgets with RTL languages #1983
+        // fix Problems with Range Widgets with RTL languages #1983.
         if (isRTL()) {
             float rotate = seekBar.getRotation();
             if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT ||
