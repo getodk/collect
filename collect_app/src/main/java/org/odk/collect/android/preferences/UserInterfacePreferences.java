@@ -38,6 +38,7 @@ import timber.log.Timber;
 import static android.app.Activity.RESULT_CANCELED;
 import static org.odk.collect.android.preferences.PreferenceKeys.GOOGLE_MAPS_BASEMAP_DEFAULT;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_APP_LANGUAGE;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_APP_THEME;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FONT_SIZE;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_MAP_BASEMAP;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_MAP_SDK;
@@ -55,6 +56,7 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.user_interface_preferences);
 
+        initThemePrefs();
         initNavigationPrefs();
         initFontSizePref();
         initLanguagePrefs();
@@ -76,20 +78,30 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
         }
     }
 
+    private void initThemePrefs() {
+        final ListPreference pref = (ListPreference) findPreference(KEY_APP_THEME);
+
+        if (pref != null) {
+            pref.setSummary(pref.getEntry());
+            pref.setOnPreferenceChangeListener((preference, newValue) -> {
+                int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
+                String entry = (String) ((ListPreference) preference).getEntries()[index];
+                preference.setSummary(entry);
+                return true;
+            });
+        }
+    }
+
     private void initNavigationPrefs() {
         final ListPreference pref = (ListPreference) findPreference(KEY_NAVIGATION);
 
         if (pref != null) {
             pref.setSummary(pref.getEntry());
-            pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
-                    String entry = (String) ((ListPreference) preference).getEntries()[index];
-                    preference.setSummary(entry);
-                    return true;
-                }
+            pref.setOnPreferenceChangeListener((preference, newValue) -> {
+                int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
+                String entry = (String) ((ListPreference) preference).getEntries()[index];
+                preference.setSummary(entry);
+                return true;
             });
         }
     }
@@ -99,15 +111,11 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
 
         if (pref != null) {
             pref.setSummary(pref.getEntry());
-            pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
-                    CharSequence entry = ((ListPreference) preference).getEntries()[index];
-                    preference.setSummary(entry);
-                    return true;
-                }
+            pref.setOnPreferenceChangeListener((preference, newValue) -> {
+                int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
+                CharSequence entry = ((ListPreference) preference).getEntries()[index];
+                preference.setSummary(entry);
+                return true;
             });
         }
     }
@@ -133,27 +141,23 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
                 pref.setValueIndex(0);
             }
             pref.setSummary(pref.getEntry());
-            pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            pref.setOnPreferenceChangeListener((preference, newValue) -> {
+                int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
+                String entry = (String) ((ListPreference) preference).getEntries()[index];
+                preference.setSummary(entry);
 
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
-                    String entry = (String) ((ListPreference) preference).getEntries()[index];
-                    preference.setSummary(entry);
+                SharedPreferences.Editor edit = PreferenceManager
+                        .getDefaultSharedPreferences(getActivity()).edit();
+                edit.putString(KEY_APP_LANGUAGE, newValue.toString());
+                edit.apply();
 
-                    SharedPreferences.Editor edit = PreferenceManager
-                            .getDefaultSharedPreferences(getActivity()).edit();
-                    edit.putString(KEY_APP_LANGUAGE, newValue.toString());
-                    edit.apply();
+                localeHelper.updateLocale(getActivity());
 
-                    localeHelper.updateLocale(getActivity());
-
-                    Intent intent = new Intent(getActivity().getBaseContext(), MainMenuActivity.class);
-                    getActivity().startActivity(intent);
-                    getActivity().overridePendingTransition(0, 0);
-                    getActivity().finishAffinity();
-                    return true;
-                }
+                Intent intent = new Intent(getActivity().getBaseContext(), MainMenuActivity.class);
+                getActivity().startActivity(intent);
+                getActivity().overridePendingTransition(0, 0);
+                getActivity().finishAffinity();
+                return true;
             });
         }
     }
@@ -176,29 +180,25 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
         }
 
         mapSdk.setSummary(mapSdk.getEntry());
-        mapSdk.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+        mapSdk.setOnPreferenceChangeListener((preference, newValue) -> {
 
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-
-                int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
-                if (index == 0) {
-                    mapBasemap.setEntryValues(R.array.map_google_basemap_selector_entry_values);
-                    mapBasemap.setEntries(R.array.map_google_basemap_selector_entries);
-                    mapBasemap.setValue(GOOGLE_MAPS_BASEMAP_DEFAULT);
-                    mapBasemap.setSummary(mapBasemap.getEntry());
-                } else {
-                    // Else its OSM Maps
-                    mapBasemap.setEntryValues(R.array.map_osm_basemap_selector_entry_values);
-                    mapBasemap.setEntries(R.array.map_osm_basemap_selector_entries);
-                    mapBasemap.setValue(OSM_MAPS_BASEMAP_DEFAULT);
-                    mapBasemap.setSummary(mapBasemap.getEntry());
-                }
-
-                String entry = (String) ((ListPreference) preference).getEntries()[index];
-                preference.setSummary(entry);
-                return true;
+            int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
+            if (index == 0) {
+                mapBasemap.setEntryValues(R.array.map_google_basemap_selector_entry_values);
+                mapBasemap.setEntries(R.array.map_google_basemap_selector_entries);
+                mapBasemap.setValue(GOOGLE_MAPS_BASEMAP_DEFAULT);
+                mapBasemap.setSummary(mapBasemap.getEntry());
+            } else {
+                // Else its OSM Maps
+                mapBasemap.setEntryValues(R.array.map_osm_basemap_selector_entry_values);
+                mapBasemap.setEntries(R.array.map_osm_basemap_selector_entries);
+                mapBasemap.setValue(OSM_MAPS_BASEMAP_DEFAULT);
+                mapBasemap.setSummary(mapBasemap.getEntry());
             }
+
+            String entry = (String) ((ListPreference) preference).getEntries()[index];
+            preference.setSummary(entry);
+            return true;
         });
 
         if (mapSdk.getValue().equals(OSM_BASEMAP_KEY)) {
@@ -209,14 +209,11 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
             mapBasemap.setEntries(R.array.map_google_basemap_selector_entries);
         }
         mapBasemap.setSummary(mapBasemap.getEntry());
-        mapBasemap.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
-                String entry = (String) ((ListPreference) preference).getEntries()[index];
-                preference.setSummary(entry);
-                return true;
-            }
+        mapBasemap.setOnPreferenceChangeListener((preference, newValue) -> {
+            int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
+            String entry = (String) ((ListPreference) preference).getEntries()[index];
+            preference.setSummary(entry);
+            return true;
         });
     }
 
