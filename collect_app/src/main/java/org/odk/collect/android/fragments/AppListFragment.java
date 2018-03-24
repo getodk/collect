@@ -54,7 +54,7 @@ abstract class AppListFragment extends ListFragment {
     protected String[] sortingOptions;
     protected SimpleCursorAdapter listAdapter;
     protected LinkedHashSet<Long> selectedInstances = new LinkedHashSet<>();
-    View rootView;
+    protected View rootView;
     private Integer selectedSortingOrder;
     private BottomSheetDialog bottomSheetDialog;
     private String filterText;
@@ -103,6 +103,7 @@ abstract class AppListFragment extends ListFragment {
         super.onCreateOptionsMenu(menu, inflater);
 
         inflater.inflate(R.menu.list_menu, menu);
+        ThemeUtils.setMenuTint(getContext(), menu);
 
         final MenuItem sortItem = menu.findItem(R.id.menu_sort);
         final MenuItem searchItem = menu.findItem(R.id.menu_filter);

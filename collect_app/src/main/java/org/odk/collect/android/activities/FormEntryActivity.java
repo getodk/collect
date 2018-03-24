@@ -28,7 +28,6 @@ import android.provider.MediaStore.Images;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -113,6 +112,7 @@ import org.odk.collect.android.utilities.FormDefCache;
 import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.TimerLogger;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.views.ODKView;
@@ -146,7 +146,7 @@ import static org.odk.collect.android.utilities.FormDefCache.writeCacheAsync;
  * @author Thomas Smyth, Sassafras Tech Collective (tom@sassafrastech.com; constraint behavior
  *         option)
  */
-public class FormEntryActivity extends AppCompatActivity implements AnimationListener,
+public class FormEntryActivity extends BaseActivity implements AnimationListener,
         FormLoaderListener, FormSavedListener, AdvanceToNextListener,
         OnGestureListener, SavePointListener, NumberPickerDialog.NumberPickerListener,
         DependencyProvider<ActivityAvailability>,
@@ -820,7 +820,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
     private QuestionWidget getWidgetWaitingForBinaryData() {
         QuestionWidget questionWidget = null;
-        for (QuestionWidget qw :  ((ODKView) currentView).getWidgets()) {
+        for (QuestionWidget qw : ((ODKView) currentView).getWidgets()) {
             if (qw.isWaitingForData()) {
                 questionWidget = qw;
             }
@@ -869,7 +869,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 .logInstanceAction(this, "onCreateOptionsMenu", "show");
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.form_menu, menu);
-
+        ThemeUtils.setMenuTint(this, menu);
         return true;
     }
 

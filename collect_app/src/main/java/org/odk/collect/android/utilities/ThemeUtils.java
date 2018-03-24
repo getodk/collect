@@ -14,6 +14,11 @@
 
 package org.odk.collect.android.utilities;
 
+import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.support.v4.graphics.drawable.DrawableCompat;
+import android.view.Menu;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
@@ -26,7 +31,7 @@ public final class ThemeUtils {
 
     }
 
-    private static boolean isDarkTheme() {
+    public static boolean isDarkTheme() {
         String theme = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_APP_THEME);
         return theme.equals(Collect.getInstance().getString(R.string.app_theme_dark));
     }
@@ -41,5 +46,24 @@ public final class ThemeUtils {
 
     public static int getBottomDialogTheme() {
         return isDarkTheme() ? R.style.DarkMaterialDialogSheet : R.style.LightMaterialDialogSheet;
+    }
+
+    public static void setIconTint(Context context, Drawable... drawables) {
+        if (!isDarkTheme()) {
+            return;
+        }
+
+        for (Drawable drawable : drawables) {
+            DrawableCompat.setTint(drawable, context.getResources().getColor(R.color.white));
+        }
+    }
+
+    public static void setMenuTint(Context context, Menu menu) {
+        for (int i = 0; i < menu.size(); i++) {
+            Drawable menuIcon = menu.getItem(i).getIcon();
+            if (menuIcon != null) {
+                setIconTint(context, menuIcon);
+            }
+        }
     }
 }

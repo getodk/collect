@@ -15,6 +15,7 @@
 package org.odk.collect.android.adapters;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -26,6 +27,7 @@ import android.widget.TextView;
 import org.odk.collect.android.R;
 import org.odk.collect.android.listeners.RecyclerViewClickListener;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.ThemeUtils;
 
 public class SortDialogAdapter extends RecyclerView.Adapter<SortDialogAdapter.ViewHolder> {
     private final RecyclerViewClickListener listener;
@@ -34,35 +36,25 @@ public class SortDialogAdapter extends RecyclerView.Adapter<SortDialogAdapter.Vi
     private final RecyclerView recyclerView;
     private String[] sortList;
 
-    public SortDialogAdapter(Context context, RecyclerView recyclerView, String[] sortList, int selectedSortingOrder, RecyclerViewClickListener recyclerViewClickListener) {
+    public SortDialogAdapter(Context context, RecyclerView recyclerView, String[] sortList, int selectedSortingOrder, RecyclerViewClickListener listener) {
         this.context = context;
         this.recyclerView = recyclerView;
         this.sortList = sortList;
         this.selectedSortingOrder = selectedSortingOrder;
-        listener = recyclerViewClickListener;
+        this.listener = listener;
     }
 
+    @NonNull
     @Override
-    public SortDialogAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public SortDialogAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemLayoutView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.sort_item_layout, parent, false);
         return new ViewHolder(itemLayoutView);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        viewHolder.txtViewTitle.setText(sortList[position]);
-        viewHolder.imgViewIcon.setImageResource(ApplicationConstants.getSortLabelToIconMap().get(sortList[position]));
-        viewHolder.imgViewIcon.setImageDrawable(DrawableCompat.wrap(viewHolder.imgViewIcon.getDrawable()).mutate());
-
-        if (position == selectedSortingOrder) {
-            viewHolder.txtViewTitle.setTextColor(context.getResources().getColor(R.color.tintColor));
-            DrawableCompat.setTint(viewHolder.imgViewIcon.getDrawable(),
-                    context.getResources().getColor(R.color.tintColor));
-        } else {
-            viewHolder.txtViewTitle.setTextColor(context.getResources().getColor(R.color.black));
-            DrawableCompat.setTintList(viewHolder.imgViewIcon.getDrawable(), null);
-        }
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
+        viewHolder.bind(sortList[position]);
     }
 
     // Return the size of your itemsData (invoked by the layout manager)
@@ -71,32 +63,49 @@ public class SortDialogAdapter extends RecyclerView.Adapter<SortDialogAdapter.Vi
         return sortList.length;
     }
 
-    // inner class to hold a reference to each item of RecyclerView 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView txtViewTitle;
-        ImageView imgViewIcon;
+        private TextView tvTitle;
+        private ImageView ivIcon;
 
         ViewHolder(final View itemLayoutView) {
             super(itemLayoutView);
-            txtViewTitle = itemLayoutView.findViewById(R.id.title);
-            imgViewIcon = itemLayoutView.findViewById(R.id.icon);
-
-            itemLayoutView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.onItemClicked(ViewHolder.this, getLayoutPosition());
-                }
-            });
+            tvTitle = itemLayoutView.findViewById(R.id.title);
+            ivIcon = itemLayoutView.findViewById(R.id.icon);
+            itemLayoutView.setOnClickListener(v -> listener.onItemClicked(this, getLayoutPosition()));
         }
 
-        public void updateItemColor(int selectedSortingOrder) {
-            ViewHolder previousHolder = (ViewHolder) recyclerView.findViewHolderForAdapterPosition(selectedSortingOrder);
-            previousHolder.txtViewTitle.setTextColor(context.getResources().getColor(R.color.black));
-            DrawableCompat.setTintList(previousHolder.imgViewIcon.getDrawable(), null);
+        public void updateItemColor(int position) {
+            ViewHolder previousHolder = (ViewHolder) recyclerView.findViewHolderForAdapterPosition(position);
+            previousHolder.setUnselected();
+            setSelected();
+        }
 
-            txtViewTitle.setTextColor(context.getResources().getColor(R.color.tintColor));
-            DrawableCompat.setTint(imgViewIcon.getDrawable(), context.getResources().getColor(R.color.tintColor));
+        void setUnselected() {
+            if (ThemeUtils.isDarkTheme()) {
+                tvTitle.setTextColor(context.getResources().getColor(R.color.white));
+                ThemeUtils.setIconTint(context, ivIcon.getDrawable());
+            } else {
+                tvTitle.setTextColor(context.getResources().getColor(R.color.black));
+                DrawableCompat.setTintList(ivIcon.getDrawable(), null);
+            }
+        }
+
+        void setSelected() {
+            tvTitle.setTextColor(context.getResources().getColor(R.color.tintColor));
+            DrawableCompat.setTint(ivIcon.getDrawable(), context.getResources().getColor(R.color.tintColor));
+        }
+
+        void bind(String sortOrder) {
+            tvTitle.setText(sortOrder);
+            ivIcon.setImageResource(ApplicationConstants.getSortLabelToIconMap().get(sortOrder));
+            ivIcon.setImageDrawable(DrawableCompat.wrap(ivIcon.getDrawable()).mutate());
+
+            if (getAdapterPosition() == selectedSortingOrder) {
+                setSelected();
+            } else {
+                setUnselected();
+            }
         }
     }
 }

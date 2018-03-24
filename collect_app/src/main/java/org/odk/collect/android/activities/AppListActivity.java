@@ -30,7 +30,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -177,20 +176,18 @@ abstract class AppListActivity extends AppCompatActivity {
         isSearchBoxShown = state.getBoolean(IS_SEARCH_BOX_SHOWN);
         isBottomDialogShown = state.getBoolean(IS_BOTTOM_DIALOG_SHOWN);
         savedFilterText = state.getString(SEARCH_TEXT);
-
     }
 
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.list_menu, menu);
+        getMenuInflater().inflate(R.menu.list_menu, menu);
+        ThemeUtils.setMenuTint(this, menu);
 
         final MenuItem sortItem = menu.findItem(R.id.menu_sort);
         final MenuItem searchItem = menu.findItem(R.id.menu_filter);
         searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setQueryHint(getResources().getString(R.string.search));
         searchView.setMaxWidth(Integer.MAX_VALUE);
-
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -308,7 +305,7 @@ abstract class AppListActivity extends AppCompatActivity {
 
     private void setupBottomSheet() {
         bottomSheetDialog = new BottomSheetDialog(this, ThemeUtils.getBottomDialogTheme());
-        View sheetView = getLayoutInflater().inflate(R.layout.bottom_sheet, null);
+        final View sheetView = getLayoutInflater().inflate(R.layout.bottom_sheet, null);
         final RecyclerView recyclerView = sheetView.findViewById(R.id.recyclerView);
 
         final SortDialogAdapter adapter = new SortDialogAdapter(this, recyclerView, sortingOptions, getSelectedSortingOrder(), new RecyclerViewClickListener() {
