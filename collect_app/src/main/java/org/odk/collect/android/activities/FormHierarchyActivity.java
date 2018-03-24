@@ -19,7 +19,6 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.View;
@@ -48,7 +47,7 @@ import java.util.List;
 
 import timber.log.Timber;
 
-public abstract class FormHierarchyActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public abstract class FormHierarchyActivity extends BaseActivity implements AdapterView.OnItemClickListener {
 
     protected static final int CHILD = 1;
     protected static final int EXPANDED = 2;

@@ -22,14 +22,13 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 
 import java.util.Locale;
 
-public class BearingActivity extends AppCompatActivity implements SensorEventListener {
+public class BearingActivity extends BaseActivity implements SensorEventListener {
     private ProgressDialog bearingDialog;
 
     private SensorManager sensorManager;

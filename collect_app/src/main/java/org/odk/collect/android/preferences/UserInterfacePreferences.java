@@ -87,6 +87,7 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
                 int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
                 String entry = (String) ((ListPreference) preference).getEntries()[index];
                 preference.setSummary(entry);
+                startMainMenuActivity();
                 return true;
             });
         }
@@ -152,11 +153,7 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
                 edit.apply();
 
                 localeHelper.updateLocale(getActivity());
-
-                Intent intent = new Intent(getActivity().getBaseContext(), MainMenuActivity.class);
-                getActivity().startActivity(intent);
-                getActivity().overridePendingTransition(0, 0);
-                getActivity().finishAffinity();
+                startMainMenuActivity();
                 return true;
             });
         }
@@ -244,5 +241,12 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
         GeneralSharedPreferences.getInstance().save(KEY_SPLASH_PATH, path);
         Preference splashPathPreference = findPreference(KEY_SPLASH_PATH);
         splashPathPreference.setSummary(path);
+    }
+
+    private void startMainMenuActivity() {
+        Intent intent = new Intent(getActivity().getBaseContext(), MainMenuActivity.class);
+        getActivity().startActivity(intent);
+        getActivity().overridePendingTransition(0, 0);
+        getActivity().finishAffinity();
     }
 }

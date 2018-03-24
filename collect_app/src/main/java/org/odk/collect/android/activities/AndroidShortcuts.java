@@ -22,7 +22,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.v7.app.AppCompatActivity;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.dao.FormsDao;
@@ -36,7 +35,7 @@ import java.util.ArrayList;
  * @author ctsims
  * @author carlhartung (modified for ODK)
  */
-public class AndroidShortcuts extends AppCompatActivity {
+public class AndroidShortcuts extends BaseActivity {
 
     private Uri[] commands;
     private String[] names;

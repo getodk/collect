@@ -16,7 +16,6 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.Activity;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.view.View;
@@ -32,7 +31,7 @@ import org.odk.collect.android.views.CameraPreview;
 
 import timber.log.Timber;
 
-public class CaptureSelfieActivity extends Activity {
+public class CaptureSelfieActivity extends BaseActivity {
     private Camera camera;
     private CameraPreview preview;
     private int cameraId;

@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -47,7 +46,7 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SPLASH_PATH;
 
-public class SplashScreenActivity extends Activity {
+public class SplashScreenActivity extends BaseActivity {
 
     private static final int mSplashTimeout = 2000; // milliseconds
     private static final boolean EXIT = true;
