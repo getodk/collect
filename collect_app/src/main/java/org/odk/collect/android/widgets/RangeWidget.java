@@ -39,7 +39,6 @@ import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 
 import java.math.BigDecimal;
-import java.util.Locale;
 
 import timber.log.Timber;
 
