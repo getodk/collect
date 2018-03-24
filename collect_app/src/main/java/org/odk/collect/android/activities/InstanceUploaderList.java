@@ -80,6 +80,8 @@ public class InstanceUploaderList extends InstanceListActivity implements
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Timber.i("onCreate");
+        updateTheme();
         setContentView(R.layout.instance_uploader_list);
         super.onCreate(savedInstanceState);
 

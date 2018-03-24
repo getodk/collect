@@ -64,6 +64,7 @@ public class FormChooserList extends FormListActivity implements
             return;
         }
 
+        updateTheme();
         setContentView(R.layout.chooser_list_layout);
         super.onCreate(savedInstanceState);
 

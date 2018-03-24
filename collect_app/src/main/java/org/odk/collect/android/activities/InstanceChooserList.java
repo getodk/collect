@@ -71,6 +71,7 @@ public class InstanceChooserList extends InstanceListActivity implements
             return;
         }
 
+        updateTheme();
         setContentView(R.layout.chooser_list_layout);
         super.onCreate(savedInstanceState);
 

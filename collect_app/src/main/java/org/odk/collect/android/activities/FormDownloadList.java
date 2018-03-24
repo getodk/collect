@@ -118,6 +118,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     @SuppressWarnings("unchecked")
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        updateTheme();
         setContentView(R.layout.remote_file_manage_list);
         super.onCreate(savedInstanceState);
         setTitle(getString(R.string.get_forms));

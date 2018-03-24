@@ -114,6 +114,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     @Override
     public void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        updateTheme();
         setContentView(R.layout.drive_layout);
         super.onCreate(savedInstanceState);
 

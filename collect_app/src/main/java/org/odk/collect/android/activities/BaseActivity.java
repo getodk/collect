@@ -22,7 +22,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 
-abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -30,12 +30,16 @@ abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
     }
 
-    private void updateTheme() {
-        String theme = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_APP_THEME);
-        if (theme.equals(getString(R.string.app_theme_light))) {
-            setTheme(R.style.LightAppTheme);
-        } else {
+    protected void updateTheme() {
+        if (isDarkTheme()) {
             setTheme(R.style.DarkAppTheme);
+        } else {
+            setTheme(R.style.LightAppTheme);
         }
+    }
+
+    public boolean isDarkTheme() {
+        String theme = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_APP_THEME);
+        return theme.equals(getString(R.string.app_theme_dark));
     }
 }

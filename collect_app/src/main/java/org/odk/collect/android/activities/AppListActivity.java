@@ -305,7 +305,7 @@ abstract class AppListActivity extends BaseActivity {
     }
 
     private void setupBottomSheet() {
-        bottomSheetDialog = new BottomSheetDialog(this, R.style.MaterialDialogSheet);
+        bottomSheetDialog = new BottomSheetDialog(this, isDarkTheme() ? R.style.DarkMaterialDialogSheet : R.style.LightMaterialDialogSheet);
         View sheetView = getLayoutInflater().inflate(R.layout.bottom_sheet, null);
         final RecyclerView recyclerView = sheetView.findViewById(R.id.recyclerView);
 
