@@ -25,7 +25,7 @@ public class TextUtilsTest {
 
 
     @Test
-    public void markDownToHtmlEscapesBacklash() {
+    public void markDownToHtmlEscapesBackSlash() {
         String[][] tests = {
                 {"A\\_B\\_C", "A_B_C"},
                 {"_A\\_B\\_C_", "<em>A_B_C</em>"},

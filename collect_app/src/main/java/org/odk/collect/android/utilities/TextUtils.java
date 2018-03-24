@@ -92,11 +92,12 @@ public class TextUtils {
         text = ReplaceCallback.replace("(?s)([^\n]+)\n", text, createParagraph);
 
         // "\" will be used as escape character for *, _
-        text = text.replaceAll(" /&/gm", "'&amp;'");
-        text = text.replaceAll("/\\\\/gm", "'&92;'");
-        text = text.replaceAll(" /\\\\*/gm", "'&42;'");
-        text = text.replaceAll(" /\\_/gm", "'&95;'");
-        text = text.replaceAll(" /\\#/gm", "'&35;'");
+        text = text
+                .replaceAll(" /&/gm", "'&amp;'")
+                .replaceAll("/\\\\/gm", "'&92;'")
+                .replaceAll(" /\\\\*/gm", "'&42;'")
+                .replaceAll(" /\\_/gm", "'&95;'")
+                .replaceAll(" /\\#/gm", "'&35;'");
         return text;
     }
 
