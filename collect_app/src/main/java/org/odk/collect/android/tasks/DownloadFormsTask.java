@@ -250,7 +250,11 @@ public class DownloadFormsTask extends
                 File[] orgTempFiles = orgTempMediaDir.listFiles();              // smap
                 for (File mf : orgTempFiles) {                                  // smap Save a copy the media files in the org media directory
                     try {
-                        org.apache.commons.io.FileUtils.copyFileToDirectory(mf, orgMediaDir, true);
+                        if(mf.getName().endsWith(".json")) {
+                            org.apache.commons.io.FileUtils.moveFileToDirectory(mf, orgMediaDir, true);     // Move json files
+                        } else {
+                            org.apache.commons.io.FileUtils.copyFileToDirectory(mf, orgMediaDir, true);     // For other files only a copy is saved
+                        }
                     } catch (Exception e) {
                     }
                 }
@@ -779,7 +783,12 @@ public class DownloadFormsTask extends
                 }
                 // end smap
 
-                if (!finalMediaFile.exists()) {
+                if(finalMediaFile.getName().endsWith(".json")) {      // smap
+                    // Process incremental json files
+                    // 2. Ensure final form directory has an empty file of this name to record that it is in use
+                    File jsonFile = new File(finalMediaDir.getPath() + "/" + finalMediaFile.getName());
+                    jsonFile.createNewFile();
+                } else if (!finalMediaFile.exists()) {
                     downloadFile(tempMediaFile, toDownload.getDownloadUrl());
                 } else {
                     String currentFileHash = FileUtils.getMd5Hash(finalMediaFile);

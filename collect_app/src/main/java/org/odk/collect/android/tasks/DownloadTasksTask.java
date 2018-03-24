@@ -854,7 +854,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
           	// Delete any forms no longer required
         	mf.deleteForms(formMap, results);
 
-        	processSharedFiles();
+        	processSharedFiles();   // Remove shared files no longer used, load shared sql files
     	}
     	
     	return dfResults;
