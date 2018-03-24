@@ -22,10 +22,8 @@ public class TextUtilsTest {
         Assert.assertNull(observed);
     }
 
-
-
     @Test
-    public void markDownToHtmlEscapesBackSlash() {
+    public void markDownToHtmlEscapesBackslash() {
         String[][] tests = {
                 {"A\\_B\\_C", "A_B_C"},
                 {"_A\\_B\\_C_", "<em>A_B_C</em>"},
@@ -55,10 +53,7 @@ public class TextUtilsTest {
         for (String[] testCase: tests) {
             Assert.assertEquals(testCase[1], TextUtils.markdownToHtml(testCase[0]));
         }
-
-
     }
-
 
     @Test
     public void markDownToHtml_SupportsHtml() {
