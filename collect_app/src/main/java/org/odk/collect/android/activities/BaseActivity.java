@@ -18,28 +18,13 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
-import org.odk.collect.android.R;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.utilities.ThemeUtils;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        updateTheme();
+        setTheme(ThemeUtils.getAppTheme());
         super.onCreate(savedInstanceState);
-    }
-
-    protected void updateTheme() {
-        if (isDarkTheme()) {
-            setTheme(R.style.DarkAppTheme);
-        } else {
-            setTheme(R.style.LightAppTheme);
-        }
-    }
-
-    public boolean isDarkTheme() {
-        String theme = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_APP_THEME);
-        return theme.equals(getString(R.string.app_theme_dark));
     }
 }

@@ -38,6 +38,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.listeners.RecyclerViewClickListener;
 import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.utilities.ThemeUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -171,7 +172,7 @@ abstract class AppListFragment extends ListFragment {
             return;
         }
 
-        bottomSheetDialog = new BottomSheetDialog(activity, activity.isDarkTheme() ? R.style.DarkMaterialDialogSheet : R.style.LightMaterialDialogSheet);
+        bottomSheetDialog = new BottomSheetDialog(activity, ThemeUtils.getBottomDialogTheme());
         View sheetView = getActivity().getLayoutInflater().inflate(R.layout.bottom_sheet, null);
         final RecyclerView recyclerView = sheetView.findViewById(R.id.recyclerView);
 

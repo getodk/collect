@@ -39,6 +39,7 @@ import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.ThemeUtils;
 
 import timber.log.Timber;
 
@@ -71,7 +72,7 @@ public class InstanceChooserList extends InstanceListActivity implements
             return;
         }
 
-        updateTheme();
+        setTheme(ThemeUtils.getAppTheme());
         setContentView(R.layout.chooser_list_layout);
         super.onCreate(savedInstanceState);
 

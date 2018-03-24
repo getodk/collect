@@ -18,8 +18,9 @@ package org.odk.collect.android.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
-public abstract class CollectAbstractActivity extends BaseActivity {
+public abstract class CollectAbstractActivity extends AppCompatActivity {
 
     private boolean isInstanceStateSaved;
 

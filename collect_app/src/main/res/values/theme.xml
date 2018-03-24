@@ -18,6 +18,22 @@
         <item name="searchViewStyle">@style/SearchViewTheme</item>
     </style>
 
+    <style name="DarkAlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/tintColor</item>
+    </style>
+
+    <style name="AppTheme.SettingsTheme.Dark" parent="BaseDarkAppTheme">
+        <item name="android:textDirection" tools:targetApi="17">locale</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:listDivider">@null</item>
+        <item name="android:dividerHeight">0dp</item>
+    </style>
+
+    <style name="SearchViewTheme.Dark" parent="Widget.AppCompat.Light.SearchView">
+        <item name="searchHintIcon">@null</item>
+    </style>
+
+
     <!--Light Theme-->
     <style name="LightAppTheme" parent="BaseLightAppTheme.Collect" />
 
@@ -40,12 +56,9 @@
         <item name="colorAccent">@color/tintColor</item>
     </style>
 
-    <style name="AppTheme.SettingsTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme.SettingsTheme.Light" parent="BaseLightAppTheme">
         <item name="android:textDirection" tools:targetApi="17">locale</item>
-        <item name="colorAccent">@color/tintColor</item>
-        <item name="android:textColor">@color/primaryTextColor</item>
         <item name="android:textSize">18sp</item>
-        <item name="android:panelBackground">@android:color/white</item>
         <item name="android:listDivider">@null</item>
         <item name="android:dividerHeight">0dp</item>
     </style>

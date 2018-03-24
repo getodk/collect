@@ -35,6 +35,7 @@ import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.tasks.DiskSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.VersionHidingCursorAdapter;
 
 import timber.log.Timber;
@@ -64,7 +65,7 @@ public class FormChooserList extends FormListActivity implements
             return;
         }
 
-        updateTheme();
+        setTheme(ThemeUtils.getAppTheme());
         setContentView(R.layout.chooser_list_layout);
         super.onCreate(savedInstanceState);
 

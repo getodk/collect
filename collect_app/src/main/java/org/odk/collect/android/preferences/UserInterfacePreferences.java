@@ -86,8 +86,10 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
             pref.setOnPreferenceChangeListener((preference, newValue) -> {
                 int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
                 String entry = (String) ((ListPreference) preference).getEntries()[index];
-                preference.setSummary(entry);
-                startMainMenuActivity();
+                if (!pref.getEntry().equals(entry)) {
+                    preference.setSummary(entry);
+                    startMainMenuActivity();
+                }
                 return true;
             });
         }

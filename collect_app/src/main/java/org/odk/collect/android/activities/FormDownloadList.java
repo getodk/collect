@@ -41,6 +41,7 @@ import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.tasks.DownloadFormListTask;
 import org.odk.collect.android.tasks.DownloadFormsTask;
 import org.odk.collect.android.utilities.AuthDialogUtility;
+import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.util.ArrayList;
@@ -118,7 +119,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     @SuppressWarnings("unchecked")
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        updateTheme();
+        setTheme(ThemeUtils.getAppTheme());
         setContentView(R.layout.remote_file_manage_list);
         super.onCreate(savedInstanceState);
         setTitle(getString(R.string.get_forms));

@@ -23,6 +23,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog;
 import org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog;
+import org.odk.collect.android.utilities.ThemeUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -74,6 +75,7 @@ public class AdminPreferencesActivity extends CollectAbstractActivity implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(ThemeUtils.getSettingsTheme());
         super.onCreate(savedInstanceState);
 
         setTitle(R.string.admin_preferences);

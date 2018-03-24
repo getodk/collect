@@ -50,6 +50,7 @@ import org.odk.collect.android.listeners.GoogleDriveFormDownloadListener;
 import org.odk.collect.android.listeners.TaskListener;
 import org.odk.collect.android.logic.DriveListItem;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.gdrive.DriveHelper;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
@@ -114,7 +115,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     @Override
     public void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-        updateTheme();
+        setTheme(ThemeUtils.getAppTheme());
         setContentView(R.layout.drive_layout);
         super.onCreate(savedInstanceState);
 

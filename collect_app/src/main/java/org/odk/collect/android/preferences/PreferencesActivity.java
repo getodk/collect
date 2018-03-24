@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.utilities.ThemeUtils;
 
 import java.util.Collection;
 import java.util.List;
@@ -95,7 +96,7 @@ public class PreferencesActivity extends PreferenceActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        setTheme(ThemeUtils.getSettingsTheme());
         super.onCreate(savedInstanceState);
 
         ViewGroup root = getRootView();

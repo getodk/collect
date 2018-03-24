@@ -23,6 +23,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -46,6 +47,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.listeners.RecyclerViewClickListener;
 import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.SnackbarUtils;
 
 import java.util.ArrayList;
@@ -56,7 +58,7 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
 
-abstract class AppListActivity extends BaseActivity {
+abstract class AppListActivity extends AppCompatActivity {
     protected static final int LOADER_ID = 0x01;
     private static final String SELECTED_INSTANCES = "selectedInstances";
     private static final String IS_SEARCH_BOX_SHOWN = "isSearchBoxShown";
@@ -305,7 +307,7 @@ abstract class AppListActivity extends BaseActivity {
     }
 
     private void setupBottomSheet() {
-        bottomSheetDialog = new BottomSheetDialog(this, isDarkTheme() ? R.style.DarkMaterialDialogSheet : R.style.LightMaterialDialogSheet);
+        bottomSheetDialog = new BottomSheetDialog(this, ThemeUtils.getBottomDialogTheme());
         View sheetView = getLayoutInflater().inflate(R.layout.bottom_sheet, null);
         final RecyclerView recyclerView = sheetView.findViewById(R.id.recyclerView);
 

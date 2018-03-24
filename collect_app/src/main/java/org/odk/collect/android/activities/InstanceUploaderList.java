@@ -45,6 +45,7 @@ import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.receivers.NetworkReceiver;
 import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.utilities.PlayServicesUtil;
+import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.util.ArrayList;
@@ -81,7 +82,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Timber.i("onCreate");
-        updateTheme();
+        setTheme(ThemeUtils.getAppTheme());
         setContentView(R.layout.instance_uploader_list);
         super.onCreate(savedInstanceState);
 
