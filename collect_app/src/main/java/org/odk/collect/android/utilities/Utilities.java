@@ -89,6 +89,11 @@ public class Utilities {
         return source;
     }
 
+    public static String getOrgMediaPath() {
+        String source = getSource();
+        return Collect.FORMS_PATH + File.separator + "smap_media" + File.separator + source;
+    }
+
     public static TaskEntry getTaskWithIdOrPath(long id, String instancePath) {
 
         TaskEntry entry = null;

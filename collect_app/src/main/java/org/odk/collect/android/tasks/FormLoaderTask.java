@@ -43,6 +43,7 @@ import org.odk.collect.android.external.ExternalDataManagerImpl;
 import org.odk.collect.android.external.ExternalDataReader;
 import org.odk.collect.android.external.ExternalDataReaderImpl;
 import org.odk.collect.android.external.handler.ExternalDataHandlerPull;
+import org.odk.collect.android.external.handler.SmapRemoteDataHandlerLookup;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.logic.FileReferenceFactory;
 import org.odk.collect.android.logic.FormController;
@@ -141,6 +142,13 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         ExternalDataHandler externalDataHandlerPull = new ExternalDataHandlerPull(
                 externalDataManager);
         formDef.getEvaluationContext().addFunctionHandler(externalDataHandlerPull);
+
+        /*
+         * smap start add lookup data function handler
+         */
+        SmapRemoteDataHandlerLookup remoteDataHandlerLookup = new SmapRemoteDataHandlerLookup();
+        formDef.getEvaluationContext().addFunctionHandler(remoteDataHandlerLookup);
+        // smap end
 
         try {
             loadExternalData(formMediaDir);
