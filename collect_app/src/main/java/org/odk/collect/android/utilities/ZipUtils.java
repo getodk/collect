@@ -58,33 +58,12 @@ public final class ZipUtils {
         }
     }
 
-    public static File extractFirstZipEntry(File zipFile, boolean deleteAfterUnzip)
-            throws IOException {
-        ZipInputStream zipInputStream = null;
-        File targetFile = null;
-        try {
-            zipInputStream = new ZipInputStream(new FileInputStream(zipFile));
-            ZipEntry zipEntry = zipInputStream.getNextEntry();
-            if (zipEntry != null) {
-                targetFile = doExtractInTheSameFolder(zipFile, zipInputStream, zipEntry);
-            }
-        } finally {
-            IOUtils.closeQuietly(zipInputStream);
-        }
-
-        if (deleteAfterUnzip && targetFile != null && targetFile.exists()) {
-            FileUtils.deleteAndReport(zipFile);
-        }
-
-        return targetFile;
-    }
-
     private static File doExtractInTheSameFolder(File zipFile, ZipInputStream zipInputStream,
                                                  ZipEntry zipEntry) throws IOException {
         File targetFile;
         String fileName = zipEntry.getName();
 
-        Timber.w("Found zipEntry with name: %s", fileName);
+        Timber.i("Found zipEntry with name: %s", fileName);
 
         if (fileName.contains("/") || fileName.contains("\\")) {
             // that means that this is a directory of a file inside a directory, so ignore it
@@ -102,7 +81,7 @@ public final class ZipUtils {
             IOUtils.closeQuietly(fileOutputStream);
         }
 
-        Timber.w("Extracted file \"%s\" out of %s", fileName, zipFile.getName());
+        Timber.i("Extracted file \"%s\" out of %s", fileName, zipFile.getName());
         return targetFile;
     }
 }
