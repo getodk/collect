@@ -21,7 +21,6 @@ import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -45,6 +44,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.location.client.LocationClient;
 import org.odk.collect.android.location.client.LocationClients;
 import org.odk.collect.android.spatial.MapHelper;
+import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoPointWidget;
 
@@ -59,7 +59,7 @@ import timber.log.Timber;
  * @author guisalmon@gmail.com
  * @author jonnordling@gmail.com
  */
-public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDragListener, OnMapLongClickListener,
+public class GeoPointMapActivity extends BaseActivity implements OnMarkerDragListener, OnMapLongClickListener,
         LocationClient.LocationClientListener, LocationListener {
 
     private static final String LOCATION_COUNT = "locationCount";
@@ -344,6 +344,9 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
             foundFirstLocation = true;
             zoomToPoint();
         }
+
+        ThemeUtils.setIconTint(this, reloadLocation, showLocation, layers,
+                clearPointButton, acceptLocation);
 
         helper.setBasemap();
 

@@ -22,7 +22,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -48,6 +47,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.location.client.LocationClient;
 import org.odk.collect.android.location.client.LocationClients;
 import org.odk.collect.android.spatial.MapHelper;
+import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoShapeWidget;
 
@@ -60,7 +60,7 @@ import java.util.ArrayList;
  * @author jonnordling@gmail.com
  */
 
-public class GeoShapeGoogleMapActivity extends FragmentActivity implements LocationListener,
+public class GeoShapeGoogleMapActivity extends BaseActivity implements LocationListener,
         OnMarkerDragListener, OnMapLongClickListener, LocationClient.LocationClientListener {
 
     private LocationClient locationClient;
@@ -217,6 +217,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
             showZoomDialog();
         }
 
+        ThemeUtils.setIconTint(this, gpsButton, clearButton, layersButton, returnButton);
         helper.setBasemap();
     }
 

@@ -22,7 +22,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
-import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -52,6 +51,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.location.client.LocationClient;
 import org.odk.collect.android.location.client.LocationClients;
 import org.odk.collect.android.spatial.MapHelper;
+import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoTraceWidget;
 
@@ -68,7 +68,7 @@ import java.util.concurrent.TimeUnit;
  *
  * @author jonnordling@gmail.com
  */
-public class GeoTraceGoogleMapActivity extends FragmentActivity implements LocationListener,
+public class GeoTraceGoogleMapActivity extends BaseActivity implements LocationListener,
         OnMarkerDragListener, OnMapLongClickListener, LocationClient.LocationClientListener {
 
     private ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
@@ -319,6 +319,9 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
         }
 
         helper.setBasemap();
+
+        ThemeUtils.setIconTint(this, playButton, pauseButton, locationButton, layersButton,
+                clearButton, saveButton);
     }
 
     private void overlayIntentTrace(String str) {

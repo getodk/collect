@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
@@ -43,6 +42,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.location.client.LocationClient;
 import org.odk.collect.android.location.client.LocationClients;
 import org.odk.collect.android.spatial.MapHelper;
+import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.widgets.GeoTraceWidget;
 import org.osmdroid.tileprovider.IRegisterReceiver;
 import org.osmdroid.util.BoundingBox;
@@ -60,7 +60,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 
-public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceiver,
+public class GeoTraceOsmMapActivity extends BaseActivity implements IRegisterReceiver,
         LocationListener, LocationClient.LocationClientListener {
 
     private ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
@@ -124,7 +124,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
         mapView.setMultiTouchControls(true);
         mapView.setBuiltInZoomControls(true);
-        mapView.setTilesScaledToDpi(true);    
+        mapView.setTilesScaledToDpi(true);
         mapView.getController().setZoom(zoomLevel);
 
         inflater = this.getLayoutInflater();
@@ -322,6 +322,9 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
         locationClient = LocationClients.clientForContext(this);
         locationClient.setListener(this);
+
+        ThemeUtils.setIconTint(this, playButton, pauseButton, locationButton, layersButton,
+                clearButton, saveButton);
     }
 
     @Override

@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -33,6 +32,7 @@ import android.widget.ImageButton;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.spatial.MapHelper;
+import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.widgets.GeoShapeWidget;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.events.MapListener;
@@ -59,7 +59,7 @@ import java.util.List;
  */
 
 
-public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceiver {
+public class GeoShapeOsmMapActivity extends BaseActivity implements IRegisterReceiver {
     private MapView map;
     private ArrayList<Marker> mapMarkers = new ArrayList<Marker>();
     private Polyline polyline;
@@ -188,6 +188,8 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
                 zoomDialog.dismiss();
             }
         });
+
+        ThemeUtils.setIconTint(this, locationButton, layersButton, clearButton, saveButton);
     }
 
     @Override
