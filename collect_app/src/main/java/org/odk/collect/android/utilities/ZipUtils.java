@@ -69,7 +69,7 @@ public final class ZipUtils {
 
         // extract the new file
         try (
-            targetFile = new File(zipFile.getParentFile(), fileName);
+            File targetFile = new File(zipFile.getParentFile(), fileName);
             FileOutputStream fileOutputStream = null
         ) {
             fileOutputStream = new FileOutputStream(targetFile);
