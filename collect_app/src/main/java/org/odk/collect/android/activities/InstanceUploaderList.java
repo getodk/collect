@@ -45,13 +45,10 @@ import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.receivers.NetworkReceiver;
 import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.utilities.PlayServicesUtil;
-import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import timber.log.Timber;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores
@@ -66,9 +63,6 @@ public class InstanceUploaderList extends InstanceListActivity implements
     private static final String SHOW_ALL_MODE = "showAllMode";
     private static final String INSTANCE_UPLOADER_LIST_SORTING_ORDER = "instanceUploaderListSortingOrder";
 
-    private static final int MENU_PREFERENCES = Menu.FIRST;
-    private static final int MENU_SHOW_UNSENT = MENU_PREFERENCES + 1;
-
     private static final int INSTANCE_UPLOADER = 0;
 
     private Button uploadButton;
@@ -81,10 +75,8 @@ public class InstanceUploaderList extends InstanceListActivity implements
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Timber.i("onCreate");
-        setTheme(ThemeUtils.getAppTheme());
-        setContentView(R.layout.instance_uploader_list);
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.instance_uploader_list);
 
         if (savedInstanceState != null) {
             showAllMode = savedInstanceState.getBoolean(SHOW_ALL_MODE);
@@ -230,26 +222,18 @@ public class InstanceUploaderList extends InstanceListActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         logger.logAction(this, "onCreateOptionsMenu", "show");
-        super.onCreateOptionsMenu(menu);
-
-        menu
-                .add(0, MENU_PREFERENCES, 0, R.string.general_preferences)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-
-        menu
-                .add(0, MENU_SHOW_UNSENT, 1, R.string.change_view)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-        return true;
+        getMenuInflater().inflate(R.menu.instance_uploader_menu, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case MENU_PREFERENCES:
+            case R.id.menu_preferences:
                 logger.logAction(this, "onMenuItemSelected", "MENU_PREFERENCES");
                 createPreferencesMenu();
                 return true;
-            case MENU_SHOW_UNSENT:
+            case R.id.menu_change_view:
                 logger.logAction(this, "onMenuItemSelected", "MENU_SHOW_UNSENT");
                 showSentAndUnsentChoices();
                 return true;

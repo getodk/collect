@@ -112,7 +112,6 @@ import org.odk.collect.android.utilities.FormDefCache;
 import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtils;
-import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.TimerLogger;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.views.ODKView;
@@ -867,10 +866,8 @@ public class FormEntryActivity extends BaseActivity implements AnimationListener
     public boolean onCreateOptionsMenu(Menu menu) {
         Collect.getInstance().getActivityLogger()
                 .logInstanceAction(this, "onCreateOptionsMenu", "show");
-        super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.form_menu, menu);
-        ThemeUtils.setMenuTint(this, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override

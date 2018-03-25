@@ -428,10 +428,8 @@ public class MainMenuActivity extends BaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         Collect.getInstance().getActivityLogger()
                 .logAction(this, "onCreateOptionsMenu", "show");
-        super.onCreateOptionsMenu(menu);
-
         getMenuInflater().inflate(R.menu.main_menu, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -442,16 +440,14 @@ public class MainMenuActivity extends BaseActivity {
                         .getActivityLogger()
                         .logAction(this, "onOptionsItemSelected",
                                 "MENU_ABOUT");
-                Intent aboutIntent = new Intent(this, AboutActivity.class);
-                startActivity(aboutIntent);
+                startActivity(new Intent(this, AboutActivity.class));
                 return true;
             case R.id.menu_general_preferences:
                 Collect.getInstance()
                         .getActivityLogger()
                         .logAction(this, "onOptionsItemSelected",
                                 "MENU_PREFERENCES");
-                Intent ig = new Intent(this, PreferencesActivity.class);
-                startActivity(ig);
+                startActivity(new Intent(this, PreferencesActivity.class));
                 return true;
             case R.id.menu_admin_preferences:
                 Collect.getInstance().getActivityLogger()
@@ -459,9 +455,7 @@ public class MainMenuActivity extends BaseActivity {
                 String pw = adminPreferences.getString(
                         AdminKeys.KEY_ADMIN_PW, "");
                 if ("".equalsIgnoreCase(pw)) {
-                    Intent i = new Intent(getApplicationContext(),
-                            AdminPreferencesActivity.class);
-                    startActivity(i);
+                    startActivity(new Intent(this, AdminPreferencesActivity.class));
                 } else {
                     showDialog(PASSWORD_DIALOG);
                     Collect.getInstance().getActivityLogger()
