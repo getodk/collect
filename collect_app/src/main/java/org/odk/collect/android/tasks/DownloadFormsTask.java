@@ -200,7 +200,7 @@ public class DownloadFormsTask extends
         }
 
         Map<String, String> parsedFields = null;
-        if (fileResult != null) {
+        if (fileResult != null && fileResult.file.exists()) {       // smap add check for exists
             try {
                 final long start = System.currentTimeMillis();
                 Timber.w("Parsing document %s", fileResult.file.getAbsolutePath());
@@ -284,8 +284,10 @@ public class DownloadFormsTask extends
             Timber.w("The user cancelled (or an exception happened) the download of a form at the "
                     + "very beginning.");
         } else {
-            formsDao.deleteFormsFromMd5Hash(FileUtils.getMd5Hash(fileResult.file));
-            FileUtils.deleteAndReport(fileResult.getFile());
+            if(fileResult.file.exists()) {  // smap
+                formsDao.deleteFormsFromMd5Hash(FileUtils.getMd5Hash(fileResult.file));
+                FileUtils.deleteAndReport(fileResult.getFile());
+            }
         }
 
         FileUtils.deleteAndReport(fileOnCancel);
@@ -430,9 +432,11 @@ public class DownloadFormsTask extends
                     c.close();
                 }
             }
-        }
 
-        return new FileResult(f, isNew);
+        }
+        return new FileResult(f, isNew);    // smap
+
+
     }
 
     /**

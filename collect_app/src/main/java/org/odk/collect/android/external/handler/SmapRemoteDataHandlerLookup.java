@@ -85,7 +85,7 @@ public class SmapRemoteDataHandlerLookup implements IFunctionHandler {
         try {
             HttpContext localContext = Collect.getInstance().getHttpContext();
             HttpClient httpclient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
-            WebUtils.getXmlDocument(fd.getManifestUrl(), localContext, httpclient);
+            //WebUtils.getXmlDocument(fd.getManifestUrl(), localContext, httpclient); TODO
             return ExternalDataUtil.nullSafe("lookup value");
 
         } catch (Exception e) {
