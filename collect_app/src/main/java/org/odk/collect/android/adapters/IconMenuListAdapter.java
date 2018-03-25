@@ -27,6 +27,7 @@ import android.widget.TextView;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.model.IconMenuItem;
+import org.odk.collect.android.utilities.ThemeUtils;
 
 import java.util.List;
 
@@ -73,6 +74,7 @@ public class IconMenuListAdapter extends BaseAdapter {
 
     private void refreshView(IconMenuItem item, TextView convertView) {
         convertView.setText(item.getTextResId());
+        ThemeUtils.setIconTint(context, context.getResources().getDrawable(item.getImageResId()));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             convertView.setCompoundDrawablesRelativeWithIntrinsicBounds(item.getImageResId(), 0, 0, 0);
         } else {

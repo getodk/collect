@@ -77,35 +77,30 @@ public class SortDialogAdapter extends RecyclerView.Adapter<SortDialogAdapter.Vi
 
         public void updateItemColor(int position) {
             ViewHolder previousHolder = (ViewHolder) recyclerView.findViewHolderForAdapterPosition(position);
-            previousHolder.setUnselected();
-            setSelected();
+            previousHolder.setSelected(false);
+            setSelected(true);
         }
 
-        void setUnselected() {
-            if (ThemeUtils.isDarkTheme()) {
-                tvTitle.setTextColor(context.getResources().getColor(R.color.white));
-                ThemeUtils.setIconTint(context, ivIcon.getDrawable());
+        void setSelected(boolean isSelected) {
+            if (isSelected) {
+                tvTitle.setTextColor(context.getResources().getColor(R.color.tintColor));
+                DrawableCompat.setTint(ivIcon.getDrawable(), context.getResources().getColor(R.color.tintColor));
             } else {
-                tvTitle.setTextColor(context.getResources().getColor(R.color.black));
-                DrawableCompat.setTintList(ivIcon.getDrawable(), null);
+                if (ThemeUtils.isDarkTheme()) {
+                    tvTitle.setTextColor(context.getResources().getColor(R.color.white));
+                    ThemeUtils.setIconTint(context, ivIcon.getDrawable());
+                } else {
+                    tvTitle.setTextColor(context.getResources().getColor(R.color.black));
+                    DrawableCompat.setTintList(ivIcon.getDrawable(), null);
+                }
             }
-        }
-
-        void setSelected() {
-            tvTitle.setTextColor(context.getResources().getColor(R.color.tintColor));
-            DrawableCompat.setTint(ivIcon.getDrawable(), context.getResources().getColor(R.color.tintColor));
         }
 
         void bind(String sortOrder) {
             tvTitle.setText(sortOrder);
             ivIcon.setImageResource(ApplicationConstants.getSortLabelToIconMap().get(sortOrder));
             ivIcon.setImageDrawable(DrawableCompat.wrap(ivIcon.getDrawable()).mutate());
-
-            if (getAdapterPosition() == selectedSortingOrder) {
-                setSelected();
-            } else {
-                setUnselected();
-            }
+            setSelected(getAdapterPosition() == selectedSortingOrder);
         }
     }
 }

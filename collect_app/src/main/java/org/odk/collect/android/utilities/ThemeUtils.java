@@ -49,12 +49,8 @@ public final class ThemeUtils {
     }
 
     public static void setIconTint(Context context, Drawable... drawables) {
-        if (!isDarkTheme()) {
-            return;
-        }
-
         for (Drawable drawable : drawables) {
-            DrawableCompat.setTint(drawable, context.getResources().getColor(R.color.white));
+            DrawableCompat.setTint(drawable, context.getResources().getColor(isDarkTheme() ? R.color.white : R.color.black));
         }
     }
 

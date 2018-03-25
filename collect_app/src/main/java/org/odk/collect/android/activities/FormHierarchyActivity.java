@@ -16,7 +16,6 @@ package org.odk.collect.android.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
@@ -303,7 +302,7 @@ public abstract class FormHierarchyActivity extends BaseActivity implements Adap
                             String answerDisplay = FormEntryPromptUtils.getAnswerText(fp, this, formController);
                             formList.add(
                                     new HierarchyElement(FormEntryPromptUtils.markQuestionIfIsRequired(label, fp.isRequired()), answerDisplay, null,
-                                            Color.WHITE, QUESTION, fp.getIndex()));
+                                            QUESTION, fp.getIndex()));
                         }
                         break;
                     case FormEntryController.EVENT_GROUP:
@@ -331,7 +330,6 @@ public abstract class FormHierarchyActivity extends BaseActivity implements Adap
                             HierarchyElement group =
                                     new HierarchyElement(fc.getLongText(), null, ContextCompat
                                             .getDrawable(getApplicationContext(), R.drawable.expander_ic_minimized),
-                                            Color.WHITE,
                                             COLLAPSED, fc.getIndex());
                             formList.add(group);
                         }
@@ -346,7 +344,7 @@ public abstract class FormHierarchyActivity extends BaseActivity implements Adap
                         repeatLabel += " (" + (fc.getMultiplicity() + 1) + ")";
                         // Add this group name to the drop down list for this repeating group.
                         HierarchyElement h = formList.get(formList.size() - 1);
-                        h.addChild(new HierarchyElement(repeatLabel, null, null, Color.WHITE, CHILD, fc.getIndex()));
+                        h.addChild(new HierarchyElement(repeatLabel, null, null, CHILD, fc.getIndex()));
                         break;
                 }
                 event =
