@@ -43,8 +43,7 @@ public final class ZipUtils {
 
     public static void unzip(File[] zipFiles) {
         for (File zipFile : zipFiles) {
-            try (ZipInputStream zipInputStream = null) {
-                zipInputStream = new ZipInputStream(new FileInputStream(zipFile));
+            try (ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(zipFile))) {
                 ZipEntry zipEntry;
                 while ((zipEntry = zipInputStream.getNextEntry()) != null) {
                     doExtractInTheSameFolder(zipFile, zipInputStream, zipEntry);
@@ -57,6 +56,7 @@ public final class ZipUtils {
 
     private static void doExtractInTheSameFolder(File zipFile, ZipInputStream zipInputStream,
                                                  ZipEntry zipEntry) throws IOException {
+        File targetFile;
         String fileName = zipEntry.getName();
 
         Timber.i("Found zipEntry with name: %s", fileName);
@@ -64,15 +64,12 @@ public final class ZipUtils {
         if (fileName.contains("/") || fileName.contains("\\")) {
             // that means that this is a directory of a file inside a directory, so ignore it
             Timber.w("Ignored: %s", fileName);
-            return null;
+            return;
         }
 
         // extract the new file
-        try (
-            File targetFile = new File(zipFile.getParentFile(), fileName);
-            FileOutputStream fileOutputStream = null
-        ) {
-            fileOutputStream = new FileOutputStream(targetFile);
+        targetFile = new File(zipFile.getParentFile(), fileName);
+        try (FileOutputStream fileOutputStream = new FileOutputStream(targetFile)) {
             IOUtils.copy(zipInputStream, fileOutputStream);
         }
 
