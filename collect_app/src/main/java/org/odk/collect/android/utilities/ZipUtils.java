@@ -43,8 +43,7 @@ public final class ZipUtils {
 
     public static void unzip(File[] zipFiles) {
         for (File zipFile : zipFiles) {
-            ZipInputStream zipInputStream = null;
-            try {
+            try (ZipInputStream zipInputStream = null) {
                 zipInputStream = new ZipInputStream(new FileInputStream(zipFile));
                 ZipEntry zipEntry;
                 while ((zipEntry = zipInputStream.getNextEntry()) != null) {
@@ -52,15 +51,12 @@ public final class ZipUtils {
                 }
             } catch (Exception e) {
                 Timber.e(e);
-            } finally {
-                IOUtils.closeQuietly(zipInputStream);
             }
         }
     }
 
-    private static File doExtractInTheSameFolder(File zipFile, ZipInputStream zipInputStream,
+    private static void doExtractInTheSameFolder(File zipFile, ZipInputStream zipInputStream,
                                                  ZipEntry zipEntry) throws IOException {
-        File targetFile;
         String fileName = zipEntry.getName();
 
         Timber.i("Found zipEntry with name: %s", fileName);
@@ -72,16 +68,14 @@ public final class ZipUtils {
         }
 
         // extract the new file
-        targetFile = new File(zipFile.getParentFile(), fileName);
-        FileOutputStream fileOutputStream = null;
-        try {
+        try (
+            targetFile = new File(zipFile.getParentFile(), fileName);
+            FileOutputStream fileOutputStream = null
+        ) {
             fileOutputStream = new FileOutputStream(targetFile);
             IOUtils.copy(zipInputStream, fileOutputStream);
-        } finally {
-            IOUtils.closeQuietly(fileOutputStream);
         }
 
         Timber.i("Extracted file \"%s\" out of %s", fileName, zipFile.getName());
-        return targetFile;
     }
 }
