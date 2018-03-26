@@ -59,7 +59,7 @@ import timber.log.Timber;
  * @author guisalmon@gmail.com
  * @author jonnordling@gmail.com
  */
-public class GeoPointMapActivity extends BaseActivity implements OnMarkerDragListener, OnMapLongClickListener,
+public class GeoPointMapActivity extends CollectAbstractActivity implements OnMarkerDragListener, OnMapLongClickListener,
         LocationClient.LocationClientListener, LocationListener {
 
     private static final String LOCATION_COUNT = "locationCount";

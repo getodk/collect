@@ -58,7 +58,7 @@ import timber.log.Timber;
  *
  * @author BehrAtherton@gmail.com
  */
-public class DrawActivity extends BaseActivity {
+public class DrawActivity extends CollectAbstractActivity {
     public static final String OPTION = "option";
     public static final String OPTION_SIGNATURE = "signature";
     public static final String OPTION_ANNOTATE = "annotate";

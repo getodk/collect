@@ -34,7 +34,7 @@ import org.odk.collect.android.utilities.ToastUtils;
 import timber.log.Timber;
 
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-public class CaptureSelfieActivityNewApi extends BaseActivity {
+public class CaptureSelfieActivityNewApi extends CollectAbstractActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

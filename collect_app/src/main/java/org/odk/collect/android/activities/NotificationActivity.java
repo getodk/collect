@@ -8,7 +8,7 @@ import android.widget.TextView;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 
-public class NotificationActivity extends BaseActivity {
+public class NotificationActivity extends CollectAbstractActivity {
 
     public static final String NOTIFICATION_KEY = "message";
 

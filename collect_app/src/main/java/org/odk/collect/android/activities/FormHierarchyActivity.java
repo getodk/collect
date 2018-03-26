@@ -46,7 +46,7 @@ import java.util.List;
 
 import timber.log.Timber;
 
-public abstract class FormHierarchyActivity extends BaseActivity implements AdapterView.OnItemClickListener {
+public abstract class FormHierarchyActivity extends CollectAbstractActivity implements AdapterView.OnItemClickListener {
 
     protected static final int CHILD = 1;
     protected static final int EXPANDED = 2;

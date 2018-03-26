@@ -74,7 +74,7 @@ import timber.log.Timber;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class MainMenuActivity extends BaseActivity {
+public class MainMenuActivity extends CollectAbstractActivity {
 
     private static final int PASSWORD_DIALOG = 1;
 

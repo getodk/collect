@@ -30,7 +30,7 @@ import org.odk.collect.android.views.SlidingTabLayout;
 
 import java.util.ArrayList;
 
-public class FileManagerTabs extends BaseActivity {
+public class FileManagerTabs extends CollectAbstractActivity {
 
     private DataManagerList dataManagerList = DataManagerList.newInstance();
     private FormManagerList formManagerList = FormManagerList.newInstance();

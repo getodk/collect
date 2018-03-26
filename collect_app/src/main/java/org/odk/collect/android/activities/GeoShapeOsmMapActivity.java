@@ -59,7 +59,7 @@ import java.util.List;
  */
 
 
-public class GeoShapeOsmMapActivity extends BaseActivity implements IRegisterReceiver {
+public class GeoShapeOsmMapActivity extends CollectAbstractActivity implements IRegisterReceiver {
     private MapView map;
     private ArrayList<Marker> mapMarkers = new ArrayList<Marker>();
     private Polyline polyline;

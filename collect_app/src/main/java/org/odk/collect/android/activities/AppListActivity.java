@@ -54,7 +54,7 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
 
-abstract class AppListActivity extends BaseActivity {
+abstract class AppListActivity extends CollectAbstractActivity {
     protected static final int LOADER_ID = 0x01;
     private static final String SELECTED_INSTANCES = "selectedInstances";
     private static final String IS_SEARCH_BOX_SHOWN = "isSearchBoxShown";

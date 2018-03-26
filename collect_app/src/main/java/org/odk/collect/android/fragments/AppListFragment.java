@@ -32,7 +32,7 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.BaseActivity;
+import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.adapters.SortDialogAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ActivityLogger;
@@ -167,7 +167,7 @@ abstract class AppListFragment extends ListFragment {
     }
 
     private void setupBottomSheet() {
-        BaseActivity activity = (BaseActivity) getActivity();
+        CollectAbstractActivity activity = (CollectAbstractActivity) getActivity();
         if (activity == null) {
             Timber.e("Activity is null");
             return;

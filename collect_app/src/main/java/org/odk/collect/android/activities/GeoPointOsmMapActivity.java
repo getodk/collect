@@ -56,7 +56,7 @@ import timber.log.Timber;
  *
  * @author jonnordling@gmail.com
  */
-public class GeoPointOsmMapActivity extends BaseActivity implements LocationListener,
+public class GeoPointOsmMapActivity extends CollectAbstractActivity implements LocationListener,
         Marker.OnMarkerDragListener, MapEventsReceiver, IRegisterReceiver,
         LocationClient.LocationClientListener {
 

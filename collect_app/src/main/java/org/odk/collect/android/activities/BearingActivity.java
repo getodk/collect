@@ -28,7 +28,7 @@ import org.odk.collect.android.application.Collect;
 
 import java.util.Locale;
 
-public class BearingActivity extends BaseActivity implements SensorEventListener {
+public class BearingActivity extends CollectAbstractActivity implements SensorEventListener {
     private ProgressDialog bearingDialog;
 
     private SensorManager sensorManager;

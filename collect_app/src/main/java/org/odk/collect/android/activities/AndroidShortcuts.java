@@ -35,7 +35,7 @@ import java.util.ArrayList;
  * @author ctsims
  * @author carlhartung (modified for ODK)
  */
-public class AndroidShortcuts extends BaseActivity {
+public class AndroidShortcuts extends CollectAbstractActivity {
 
     private Uri[] commands;
     private String[] names;

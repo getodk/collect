@@ -46,7 +46,7 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SPLASH_PATH;
 
-public class SplashScreenActivity extends BaseActivity {
+public class SplashScreenActivity extends CollectAbstractActivity {
 
     private static final int mSplashTimeout = 2000; // milliseconds
     private static final boolean EXIT = true;

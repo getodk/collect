@@ -9,7 +9,7 @@ import dagger.android.AndroidInjection;
  * @author James Knight
  */
 
-public abstract class InjectableActivity extends BaseActivity {
+public abstract class InjectableActivity extends CollectAbstractActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         AndroidInjection.inject(this);

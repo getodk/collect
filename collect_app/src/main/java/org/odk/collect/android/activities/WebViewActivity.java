@@ -27,7 +27,7 @@ import android.widget.ProgressBar;
 import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.CustomTabHelper;
 
-public class WebViewActivity extends BaseActivity {
+public class WebViewActivity extends CollectAbstractActivity {
 
     private WebView webView;
     private ProgressBar progressBar;

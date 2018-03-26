@@ -31,7 +31,7 @@ import org.odk.collect.android.views.CameraPreview;
 
 import timber.log.Timber;
 
-public class CaptureSelfieActivity extends BaseActivity {
+public class CaptureSelfieActivity extends CollectAbstractActivity {
     private Camera camera;
     private CameraPreview preview;
     private int cameraId;

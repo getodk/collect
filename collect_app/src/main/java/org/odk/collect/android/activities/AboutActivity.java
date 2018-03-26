@@ -37,7 +37,7 @@ import java.util.List;
 
 import timber.log.Timber;
 
-public class AboutActivity extends BaseActivity implements
+public class AboutActivity extends CollectAbstractActivity implements
         AboutListAdapter.AboutItemClickListener {
 
     private static final String LICENSES_HTML_PATH = "file:///android_asset/open_source_licenses.html";

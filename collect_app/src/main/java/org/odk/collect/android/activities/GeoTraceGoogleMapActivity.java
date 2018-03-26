@@ -68,7 +68,7 @@ import java.util.concurrent.TimeUnit;
  *
  * @author jonnordling@gmail.com
  */
-public class GeoTraceGoogleMapActivity extends BaseActivity implements LocationListener,
+public class GeoTraceGoogleMapActivity extends CollectAbstractActivity implements LocationListener,
         OnMarkerDragListener, OnMapLongClickListener, LocationClient.LocationClientListener {
 
     private ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();

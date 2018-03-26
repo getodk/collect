@@ -36,7 +36,7 @@ import java.text.DecimalFormat;
 
 import timber.log.Timber;
 
-public class GeoPointActivity extends BaseActivity implements LocationListener,
+public class GeoPointActivity extends CollectAbstractActivity implements LocationListener,
         LocationClient.LocationClientListener {
 
     // Default values for requesting Location updates.

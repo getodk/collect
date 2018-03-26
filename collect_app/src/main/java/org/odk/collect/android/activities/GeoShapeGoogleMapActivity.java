@@ -60,7 +60,7 @@ import java.util.ArrayList;
  * @author jonnordling@gmail.com
  */
 
-public class GeoShapeGoogleMapActivity extends BaseActivity implements LocationListener,
+public class GeoShapeGoogleMapActivity extends CollectAbstractActivity implements LocationListener,
         OnMarkerDragListener, OnMapLongClickListener, LocationClient.LocationClientListener {
 
     private LocationClient locationClient;
