@@ -26,6 +26,7 @@ import static org.odk.collect.android.preferences.AdminKeys.ALLOW_OTHER_WAYS_OF_
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOSEND;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_CONSTRAINT_BEHAVIOR;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_IMAGE_SIZE;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
 
 public class FormManagementPreferences extends BasePreferenceFragment {
 
@@ -37,6 +38,7 @@ public class FormManagementPreferences extends BasePreferenceFragment {
         initConstraintBehaviorPref();
         initAutoSendPrefs();
         initImageSizePrefs();
+        initPeriodicFormUpdatesCheckPref();
     }
 
     @Override
@@ -52,7 +54,6 @@ public class FormManagementPreferences extends BasePreferenceFragment {
             toolbar.setTitle(R.string.general_preferences);
         }
     }
-
 
     private void initConstraintBehaviorPref() {
         final ListPreference pref = (ListPreference) findPreference(KEY_CONSTRAINT_BEHAVIOR);
@@ -74,7 +75,7 @@ public class FormManagementPreferences extends BasePreferenceFragment {
             pref.setEnabled((Boolean) AdminSharedPreferences.getInstance().get(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
         }
     }
-
+    
     private void initAutoSendPrefs() {
         final ListPreference autosend = (ListPreference) findPreference(KEY_AUTOSEND);
 
@@ -111,5 +112,20 @@ public class FormManagementPreferences extends BasePreferenceFragment {
                 return true;
             }
         });
+    }
+
+    private void initPeriodicFormUpdatesCheckPref() {
+        final ListPreference pref = (ListPreference) findPreference(KEY_PERIODIC_FORM_UPDATES_CHECK);
+
+        if (pref != null) {
+            pref.setSummary(pref.getEntry());
+            pref.setOnPreferenceChangeListener(
+                    (preference, newValue) -> {
+                        int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
+                        CharSequence entry = ((ListPreference) preference).getEntries()[index];
+                        preference.setSummary(entry);
+                        return true;
+                    });
+        }
     }
 }

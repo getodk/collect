@@ -584,4 +584,11 @@
     <string name="svg_file_does_not_exist">SVG file does not exist!</string>
     <string name="lack_of_instance_id">Forms with repeats must define an instanceID.</string>
     <string name="no_columns_to_upload">No columns found in the form to upload.</string>
+    <string name="form_update_category">Form update</string>
+    <string name="periodic_form_updates_check_title">Periodic form updates check</string>
+    <string name="never">Never</string>
+    <string name="every_fifteen_minutes">Every fifteen minutes</string>
+    <string name="every_one_hour">Every one hour</string>
+    <string name="every_six_hours">Every six hours</string>
+    <string name="every_one_day">Every one day</string>
 </resources>

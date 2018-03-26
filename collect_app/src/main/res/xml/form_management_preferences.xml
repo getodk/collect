@@ -48,4 +48,16 @@
             android:summary="@string/instance_sync_summary"
             android:title="@string/instance_sync" />
     </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="form_update"
+        android:title="@string/form_update_category">
+        <ListPreference
+            android:dialogTitle="@string/periodic_form_updates_check_title"
+            android:entries="@array/periodic_form_updates_check_entries"
+            android:entryValues="@array/periodic_form_updates_check_entry_values"
+            android:defaultValue="@string/never_value"
+            android:key="periodic_form_updates_check"
+            android:title="@string/periodic_form_updates_check_title" />
+    </PreferenceCategory>
 </PreferenceScreen>

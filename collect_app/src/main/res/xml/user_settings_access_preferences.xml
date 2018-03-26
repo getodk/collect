@@ -26,6 +26,9 @@
             android:key="instance_form_sync"
             android:title="@string/instance_sync" />
         <CheckBoxPreference
+            android:key="periodic_form_updates_check"
+            android:title="@string/periodic_form_updates_check_title" />
+        <CheckBoxPreference
             android:key="default_to_finalized"
             android:title="@string/default_completed" />
         <CheckBoxPreference
