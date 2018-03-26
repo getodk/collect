@@ -16,7 +16,6 @@ package org.odk.collect.android.preferences;
 
 import android.os.Bundle;
 import android.preference.ListPreference;
-import android.preference.Preference;
 import android.support.annotation.Nullable;
 import android.view.View;
 
@@ -35,10 +34,10 @@ public class FormManagementPreferences extends BasePreferenceFragment {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.form_management_preferences);
 
-        initConstraintBehaviorPref();
-        initAutoSendPrefs();
-        initImageSizePrefs();
-        initPeriodicFormUpdatesCheckPref();
+        initListPref(KEY_CONSTRAINT_BEHAVIOR);
+        initListPref(KEY_AUTOSEND);
+        initListPref(KEY_IMAGE_SIZE);
+        initListPref(KEY_PERIODIC_FORM_UPDATES_CHECK);
     }
 
     @Override
@@ -55,77 +54,20 @@ public class FormManagementPreferences extends BasePreferenceFragment {
         }
     }
 
-    private void initConstraintBehaviorPref() {
-        final ListPreference pref = (ListPreference) findPreference(KEY_CONSTRAINT_BEHAVIOR);
+    private void initListPref(String key) {
+        final ListPreference pref = (ListPreference) findPreference(key);
 
         if (pref != null) {
             pref.setSummary(pref.getEntry());
-            pref.setOnPreferenceChangeListener(
-                    new Preference.OnPreferenceChangeListener() {
-
-                        @Override
-                        public boolean onPreferenceChange(Preference preference, Object newValue) {
-                            int index = ((ListPreference) preference).findIndexOfValue(
-                                    newValue.toString());
-                            CharSequence entry = ((ListPreference) preference).getEntries()[index];
-                            preference.setSummary(entry);
-                            return true;
-                        }
-                    });
-            pref.setEnabled((Boolean) AdminSharedPreferences.getInstance().get(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
-        }
-    }
-    
-    private void initAutoSendPrefs() {
-        final ListPreference autosend = (ListPreference) findPreference(KEY_AUTOSEND);
-
-        if (autosend == null) {
-            return;
-        }
-
-        autosend.setSummary(autosend.getEntry());
-        autosend.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
+            pref.setOnPreferenceChangeListener((preference, newValue) -> {
                 int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
-                String entry = (String) ((ListPreference) preference).getEntries()[index];
+                CharSequence entry = ((ListPreference) preference).getEntries()[index];
                 preference.setSummary(entry);
                 return true;
+            });
+            if (key.equals(KEY_CONSTRAINT_BEHAVIOR)) {
+                pref.setEnabled((Boolean) AdminSharedPreferences.getInstance().get(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
             }
-        });
-    }
-
-    private void initImageSizePrefs() {
-        final ListPreference imageSize = (ListPreference) findPreference(KEY_IMAGE_SIZE);
-
-        if (imageSize == null) {
-            return;
-        }
-
-        imageSize.setSummary(imageSize.getEntry());
-        imageSize.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
-                String entry = (String) ((ListPreference) preference).getEntries()[index];
-                preference.setSummary(entry);
-                return true;
-            }
-        });
-    }
-
-    private void initPeriodicFormUpdatesCheckPref() {
-        final ListPreference pref = (ListPreference) findPreference(KEY_PERIODIC_FORM_UPDATES_CHECK);
-
-        if (pref != null) {
-            pref.setSummary(pref.getEntry());
-            pref.setOnPreferenceChangeListener(
-                    (preference, newValue) -> {
-                        int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
-                        CharSequence entry = ((ListPreference) preference).getEntries()[index];
-                        preference.setSummary(entry);
-                        return true;
-                    });
         }
     }
 }
