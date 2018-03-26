@@ -88,7 +88,7 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
                 String entry = (String) ((ListPreference) preference).getEntries()[index];
                 if (!pref.getEntry().equals(entry)) {
                     preference.setSummary(entry);
-                    startMainMenuActivity();
+                    MainMenuActivity.startActivityAndCloseAllOthers(getActivity());
                 }
                 return true;
             });
@@ -155,7 +155,7 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
                 edit.apply();
 
                 localeHelper.updateLocale(getActivity());
-                startMainMenuActivity();
+                MainMenuActivity.startActivityAndCloseAllOthers(getActivity());
                 return true;
             });
         }
@@ -243,12 +243,5 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
         GeneralSharedPreferences.getInstance().save(KEY_SPLASH_PATH, path);
         Preference splashPathPreference = findPreference(KEY_SPLASH_PATH);
         splashPathPreference.setSummary(path);
-    }
-
-    private void startMainMenuActivity() {
-        Intent intent = new Intent(getActivity().getBaseContext(), MainMenuActivity.class);
-        getActivity().startActivity(intent);
-        getActivity().overridePendingTransition(0, 0);
-        getActivity().finishAffinity();
     }
 }

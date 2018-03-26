@@ -16,7 +16,6 @@
 
 package org.odk.collect.android.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.Nullable;
@@ -57,11 +56,5 @@ public abstract class CollectAbstractActivity extends AppCompatActivity {
 
     public boolean isInstanceStateSaved() {
         return isInstanceStateSaved;
-    }
-
-    public void goToTheMainActivityAndCloseAllOthers() {
-        startActivity(new Intent(this, MainMenuActivity.class));
-        overridePendingTransition(0, 0);
-        finishAffinity();
     }
 }

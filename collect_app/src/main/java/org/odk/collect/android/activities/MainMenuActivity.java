@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.activities;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -100,6 +101,12 @@ public class MainMenuActivity extends CollectAbstractActivity {
     private MyContentObserver contentObserver = new MyContentObserver();
 
     // private static boolean DO_NOT_EXIT = false;
+
+    public static void startActivityAndCloseAllOthers(Activity activity) {
+        activity.startActivity(new Intent(activity, MainMenuActivity.class));
+        activity.overridePendingTransition(0, 0);
+        activity.finishAffinity();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

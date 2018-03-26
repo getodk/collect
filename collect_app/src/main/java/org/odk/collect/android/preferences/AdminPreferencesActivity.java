@@ -21,6 +21,7 @@ import android.preference.PreferenceManager;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
+import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog;
 import org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog;
 import org.odk.collect.android.utilities.ThemeUtils;
@@ -95,6 +96,6 @@ public class AdminPreferencesActivity extends CollectAbstractActivity implements
 
     @Override
     public void onDialogClosed() {
-        goToTheMainActivityAndCloseAllOthers();
+        MainMenuActivity.startActivityAndCloseAllOthers(this);
     }
 }
