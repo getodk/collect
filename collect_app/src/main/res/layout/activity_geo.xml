@@ -102,7 +102,7 @@
                 android:layout_margin="5dp"
                 android:layout_weight="1"
                 android:padding="15dp"
-                android:src="@drawable/ic_save_black_36dp" />
+                app:srcCompat="@drawable/ic_save_black_36dp" />
         </LinearLayout>
     </ScrollView>
 </FrameLayout>

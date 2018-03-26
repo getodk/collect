@@ -2,9 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="#BF000000"
-    >
+    android:background="#BF000000">
 
 
     <TextView
@@ -112,7 +112,7 @@
             android:layout_height="match_parent"
             android:padding="15dp"
             android:layout_margin="5dp"
-            android:src="@drawable/ic_save_black_36dp" />
+            app:srcCompat="@drawable/ic_save_black_36dp" />
     </LinearLayout>
     </ScrollView>
 
