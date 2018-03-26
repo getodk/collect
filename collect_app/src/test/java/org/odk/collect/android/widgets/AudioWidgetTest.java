@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.view.View;
+import android.view.ViewGroup;
 
 import net.bytebuddy.utility.RandomString;
 
@@ -42,7 +43,7 @@ public class AudioWidgetTest extends FileWidgetTest<AudioWidget> {
     @NonNull
     @Override
     public AudioWidget createWidget() {
-        when(audioController.getPlayerLayout()).thenReturn(mock(View.class));
+        when(audioController.getPlayerLayout(any(ViewGroup.class))).thenReturn(mock(View.class));
         return new AudioWidget(RuntimeEnvironment.application, formEntryPrompt, fileUtil, mediaUtil, audioController);
     }
 
