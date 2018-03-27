@@ -100,7 +100,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
         this.mediaUtil = mediaUtil;
 
         String appearance = getFormEntryPrompt().getAppearanceHint();
-        selfie = appearance != null && appearance.equalsIgnoreCase("selfie");
+        selfie = appearance != null && (appearance.equalsIgnoreCase("selfie") || appearance.equalsIgnoreCase("new-front"));
 
         captureButton = getSimpleButton(getContext().getString(R.string.capture_video), R.id.capture_video);
         captureButton.setEnabled(!prompt.isReadOnly());
