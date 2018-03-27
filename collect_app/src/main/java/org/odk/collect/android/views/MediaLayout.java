@@ -120,6 +120,12 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
         viewText.setText(originalText);
     }
 
+    public void resetAudioButtonBitmap() {
+        if (audioButton != null) {
+            audioButton.setImageBitmap(bitmap_play);
+        }
+    }
+
     public void playVideo() {
         if (videoURI != null) {
             String videoFilename = "";
@@ -448,6 +454,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
     public void onClick(View v) {
         if (audioPlayListener != null) {
             audioPlayListener.resetQuestionTextColor();
+            audioPlayListener.resetAudioButtonImage();
         }
         if (player.isPlaying()) {
             Timber.e("===> player.stop");
@@ -467,7 +474,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
             public void onCompletion(MediaPlayer mediaPlayer) {
                 resetTextFormatting();
                 mediaPlayer.reset();
-                audioButton.setImageBitmap(bitmap_stop);
+                audioButton.setImageBitmap(bitmap_play);
             }
         });
     }
