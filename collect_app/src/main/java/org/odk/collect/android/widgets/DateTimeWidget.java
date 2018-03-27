@@ -76,7 +76,7 @@ public class DateTimeWidget extends QuestionWidget implements BinaryWidget {
     public IAnswerData getAnswer() {
         clearFocus();
 
-        if (dateWidget.isNullAnswer() && timeWidget.isNullAnswer()) {
+        if (isNullAnswer()) {
             return null;
         } else {
             if (timeWidget.isNullAnswer()) {
@@ -154,5 +154,11 @@ public class DateTimeWidget extends QuestionWidget implements BinaryWidget {
 
     @Override
     public void onButtonClick(int buttonId) {
+    }
+
+    private boolean isNullAnswer() {
+        return getFormEntryPrompt().isRequired()
+                ? dateWidget.isNullAnswer() || timeWidget.isNullAnswer()
+                : dateWidget.isNullAnswer() && timeWidget.isNullAnswer();
     }
 }
