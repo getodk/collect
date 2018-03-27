@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">पासवर्ड दिखायें </string>
   <string name="activity_not_found">%s:के नियंत्रण के लिए कोई क्रिया नहीं मिली</string>
   <string name="add_another"> समूह जोड़ें</string>
@@ -190,7 +190,6 @@
   <string name="draw_image">स्केच इमेज</string>
   <string name="reset_image">रीसेट</string>
   <string name="set_color">रंग सेट करें</string>
-  <string name="select_drawing_color">ड्राइंग रंग चुनें</string>
   <string name="admin_preferences">एडमिन सेटिंग</string>
   <string name="admin_access_settings">सेटिंग तक एडमिन पहुंच के लिए टैप करें</string>
   <string name="save_mid">फॉर्म संरक्षित करें</string>

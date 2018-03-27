@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">Visa lösenordet</string>
   <string name="activity_not_found">Ingen aktivitet finns för att hantera: %s</string>
   <string name="add_another">Lägg till grupp</string>
@@ -190,7 +190,6 @@
   <string name="draw_image">Skissa i bild</string>
   <string name="reset_image">Återställ</string>
   <string name="set_color">Välj färg</string>
-  <string name="select_drawing_color">Välj pennfärg</string>
   <string name="admin_preferences">Administratörsinställningar</string>
   <string name="admin_access_settings">Knacka för administratörstillgång till inställningarna</string>
   <string name="save_mid">Spara formulär</string>

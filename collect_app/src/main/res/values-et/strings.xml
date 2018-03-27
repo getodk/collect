@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="activity_not_found">%s teostamiseks ei leidu toimingut</string>
   <string name="add_another">Lisa grupp</string>
   <string name="add_another_repeat">Lisa veel üks \"%s\" grupp?</string>
@@ -186,7 +186,6 @@
   <string name="draw_image">Joonista pilt</string>
   <string name="reset_image">Lähtesta</string>
   <string name="set_color">Värvi määramine</string>
-  <string name="select_drawing_color">Vali värv joonistamiseks </string>
   <string name="admin_preferences">Administraatori seaded</string>
   <string name="admin_access_settings">Administraatori seadetele ligipääsuks puudutage</string>
   <string name="save_mid">Salvesta vorm</string>

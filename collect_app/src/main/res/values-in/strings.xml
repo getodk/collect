@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">Tunjukan sandi</string>
   <string name="activity_not_found">Tidak ditemukan aktivitas untuk menyelesaikan: %s</string>
   <string name="add_another">Tambah grup</string>
@@ -191,7 +191,6 @@
   <string name="draw_image">Sketsa Gambar</string>
   <string name="reset_image">Set Ulang</string>
   <string name="set_color">Atur Warna</string>
-  <string name="select_drawing_color">Pilih Warna</string>
   <string name="admin_preferences">Pengaturan Admin</string>
   <string name="admin_access_settings">Tekan untuk akses admin ke pengaturan</string>
   <string name="save_mid">Menyimpan di tengah formulir</string>

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="activity_not_found">Hakuna shughuli iliyopatikana kushughulikia: %s</string>
   <string name="add_another">Ongeza Kikundi</string>
   <string name="add_another_repeat">Ongeza Kikundi \"%s\" kingine </string>
@@ -175,7 +175,6 @@
   <string name="draw_image">chora picha</string>
   <string name="reset_image">fanya upya</string>
   <string name="set_color">weka rangi</string>
-  <string name="select_drawing_color">Chagua rangi ya kuchora</string>
   <string name="admin_preferences">Settings za admin</string>
   <string name="admin_access_settings">bonyeza ili upenye kama admin</string>
   <string name="save_mid">Hifadhi Fomu</string>

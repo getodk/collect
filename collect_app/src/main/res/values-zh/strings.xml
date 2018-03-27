@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="activity_not_found">没找到与 %s 对应的活动</string>
   <string name="add_another">添加</string>
   <string name="add_another_repeat">继续添加 \"%s\"?</string>
@@ -173,7 +173,6 @@
   <string name="draw_image">生成图像</string>
   <string name="reset_image">重置</string>
   <string name="set_color">选择颜色</string>
-  <string name="select_drawing_color">选择绘画颜色</string>
   <string name="admin_preferences">管理员设置</string>
   <string name="admin_access_settings">点击进入管理员设置</string>
   <string name="save_mid">保存表格</string>

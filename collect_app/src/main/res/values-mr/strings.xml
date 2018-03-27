@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">संकेतशब्द दर्शवा</string>
   <string name="activity_not_found">हाताळण्यासाठी कोणतीही गतिविधी आढळली नाही: %s</string>
   <string name="add_another">गट जोडा</string>
@@ -190,7 +190,6 @@
   <string name="draw_image">स्केच प्रतिमा</string>
   <string name="reset_image">रीसेट करा</string>
   <string name="set_color">रंग सेट करा</string>
-  <string name="select_drawing_color">रेखांकन रंग निवडा</string>
   <string name="admin_preferences">प्रशासन सेटिंग्ज</string>
   <string name="admin_access_settings">सेटिंग्जमध्ये प्रशासकीय प्रवेशासाठी टॅप करा</string>
   <string name="save_mid">फॉर्म जतन करा</string>

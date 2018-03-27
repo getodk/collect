@@ -41,7 +41,6 @@ import org.odk.collect.android.adapters.IconMenuListAdapter;
 import org.odk.collect.android.adapters.model.IconMenuItem;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.AnimateUtils;
-import org.odk.collect.android.utilities.ColorPickerDialog;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.views.DrawView;
@@ -52,6 +51,7 @@ import java.io.FileOutputStream;
 import java.util.List;
 
 import timber.log.Timber;
+import yuku.ambilwarna.AmbilWarnaDialog;
 
 /**
  * Modified from the FingerPaint example found in The Android Open Source
@@ -361,14 +361,19 @@ public class DrawActivity extends AppCompatActivity {
     public void setColor(View view) {
         if (view.getVisibility() == View.VISIBLE) {
             fabActions.performClick();
-            ColorPickerDialog cpd = new ColorPickerDialog(this,
-                    new ColorPickerDialog.OnColorChangedListener() {
-                        public void colorChanged(String key, int color) {
-                            drawView.setColor(color);
-                        }
-                    }, "key", drawView.getColor(), drawView.getColor(),
-                    getString(R.string.select_drawing_color));
-            cpd.show();
+            AmbilWarnaDialog dialog = new AmbilWarnaDialog(this, drawView.getColor(), new AmbilWarnaDialog.OnAmbilWarnaListener() {
+                @Override
+                public void onCancel(AmbilWarnaDialog dialog) {
+
+                }
+
+                @Override
+                public void onOk(AmbilWarnaDialog dialog, int color) {
+                    drawView.setColor(color);
+                }
+            });
+            dialog.show();
+
         }
     }
 }

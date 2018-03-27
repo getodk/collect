@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">Wachtwoord tonen</string>
   <string name="activity_not_found">Geen programma gevonden voor: %s</string>
   <string name="add_another">Groep toevoegen</string>
@@ -187,7 +187,6 @@
   <string name="draw_image">Sketch Image</string>
   <string name="reset_image">Reset</string>
   <string name="set_color">Set Color</string>
-  <string name="select_drawing_color">Select Drawing Color</string>
   <string name="admin_preferences">Admin Settings</string>
   <string name="admin_access_settings">Tap for admin access to settings</string>
   <string name="save_mid">Formulier opslaan</string>
