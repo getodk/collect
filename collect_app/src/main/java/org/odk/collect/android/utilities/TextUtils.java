@@ -71,7 +71,7 @@ public class TextUtils {
 
     public static String markdownToHtml(String text) {
 
-        text = text.replaceAll("<([^a-zA-Z/])", "&gm;$1");
+        text = text.replaceAll("<([^a-zA-Z/])", "&lt;$1");
         // https://github.com/enketo/enketo-transformer/blob/master/src/markdown.js
 
         // span - replaced &lt; and &gt; with <>

@@ -41,13 +41,13 @@ public class TextUtilsTest {
     public void markDownToHtml_EscapesLessThan() {
 
         String[][] tests = {
-                {"<1", "&gm;1"},
-                {"<1>", "&gm;1>"},
-                {"< span>", "&gm; span>"},
-                {"< 1", "&gm; 1"},
-                {"< 1/>", "&gm; 1/>"},
-                {"test < 1/>", "test &gm; 1/>"},
-                {"test < 1/>", "test &gm; 1/>"}
+                {"<1", "&lt;1"},
+                {"<1>", "&lt;1>"},
+                {"< span>", "&lt; span>"},
+                {"< 1", "&lt; 1"},
+                {"< 1/>", "&lt; 1/>"},
+                {"test < 1/>", "test &lt; 1/>"},
+                {"test < 1/>", "test &lt; 1/>"}
         };
 
         for (String[] testCase: tests) {
@@ -72,7 +72,7 @@ public class TextUtilsTest {
     @Test
     public void textToHtml_SupportsEscapedLt() {
         String[] tests = {
-                "&gm; 1",
+                "<1",
         };
 
         for (String testCase: tests) {
