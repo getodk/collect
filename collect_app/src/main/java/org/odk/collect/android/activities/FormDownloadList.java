@@ -53,6 +53,9 @@ import java.util.Set;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.utilities.DownloadFormListUtils.DL_AUTH_REQUIRED;
+import static org.odk.collect.android.utilities.DownloadFormListUtils.DL_ERROR_MSG;
+
 /**
  * Responsible for displaying, adding and deleting all the valid forms in the forms directory. One
  * caveat. If the server requires authentication, a dialog will pop up asking when you request the
@@ -579,14 +582,14 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             return;
         }
 
-        if (result.containsKey(DownloadFormListTask.DL_AUTH_REQUIRED)) {
+        if (result.containsKey(DL_AUTH_REQUIRED)) {
             // need authorization
             showDialog(AUTH_DIALOG);
-        } else if (result.containsKey(DownloadFormListTask.DL_ERROR_MSG)) {
+        } else if (result.containsKey(DL_ERROR_MSG)) {
             // Download failed
             String dialogMessage =
                     getString(R.string.list_failed_with_error,
-                            result.get(DownloadFormListTask.DL_ERROR_MSG).getErrorStr());
+                            result.get(DL_ERROR_MSG).getErrorStr());
             String dialogTitle = getString(R.string.load_remote_form_error);
             createAlertDialog(dialogTitle, dialogMessage, DO_NOT_EXIT);
         } else {
