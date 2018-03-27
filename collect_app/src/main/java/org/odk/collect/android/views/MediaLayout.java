@@ -457,12 +457,10 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
             audioPlayListener.resetAudioButtonImage();
         }
         if (player.isPlaying()) {
-            Timber.e("===> player.stop");
             player.stop();
             audioButton.setImageBitmap(bitmap_play);
 
         } else {
-            Timber.e("===> playAudio");
             playAudio();
             Bitmap b =
                     BitmapFactory.decodeResource(getContext().getResources(),
