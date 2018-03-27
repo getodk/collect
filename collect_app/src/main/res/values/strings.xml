@@ -581,6 +581,8 @@
     <string name="no">No</string>
     <string name="newer_version_of_a_form_info">This is an updated version of a form you already have!</string>
     <string name="svg_file_does_not_exist">SVG file does not exist!</string>
+    <string name="start_video_capture_instruction">Tap the screen to start recording</string>
+    <string name="stop_video_capture_instruction">Recording started. Tap again to stop</string>
     <string name="lack_of_instance_id">Forms with repeats must define an instanceID.</string>
     <string name="no_columns_to_upload">No columns found in the form to upload.</string>
 </resources>
