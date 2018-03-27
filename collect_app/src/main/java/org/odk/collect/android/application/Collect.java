@@ -30,6 +30,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import com.evernote.android.job.JobManager;
+import com.evernote.android.job.JobManagerCreateException;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.google.firebase.crash.FirebaseCrash;
@@ -52,6 +54,7 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.PRNGFixes;
+import org.odk.collect.android.utilities.ServerPollingJobCreator;
 import org.opendatakit.httpclientandroidlib.client.CookieStore;
 import org.opendatakit.httpclientandroidlib.client.CredentialsProvider;
 import org.opendatakit.httpclientandroidlib.client.protocol.HttpClientContext;
@@ -265,6 +268,14 @@ public class Collect extends Application implements HasActivityInjector {
                 .inject(this);
 
         reloadSharedPreferences();
+
+        try {
+            JobManager
+                    .create(this)
+                    .addJobCreator(new ServerPollingJobCreator());
+        } catch (JobManagerCreateException e) {
+            Timber.e(e);
+        }
 
         PRNGFixes.apply();
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);

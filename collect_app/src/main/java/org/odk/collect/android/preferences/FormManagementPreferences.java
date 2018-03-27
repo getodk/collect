@@ -20,6 +20,7 @@ import android.support.annotation.Nullable;
 import android.view.View;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.tasks.ServerPollingJob;
 
 import static org.odk.collect.android.preferences.AdminKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOSEND;
@@ -63,6 +64,9 @@ public class FormManagementPreferences extends BasePreferenceFragment {
                 int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
                 CharSequence entry = ((ListPreference) preference).getEntries()[index];
                 preference.setSummary(entry);
+                if (key.equals(KEY_PERIODIC_FORM_UPDATES_CHECK)) {
+                    ServerPollingJob.schedulePeriodicJob((String) newValue);
+                }
                 return true;
             });
             if (key.equals(KEY_CONSTRAINT_BEHAVIOR)) {
