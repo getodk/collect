@@ -92,8 +92,7 @@
   <string name="parse_legacy_formlist_failed">सर्भरले एग्रिगेट संस्करण 0.9.x संग मिल्ने उपलब्ध-फारम पठाएन: %s</string>
   <string name="parse_openrosa_formlist_failed">सर्भरले ओपनरोजा संस्करण 1.0 संग मिल्ने उपलब्ध-फारम पठाएन: %s</string>
   <string name="password">पासवर्ड </string>
-  <string name="play_audio">आवाज सुन्नुहोस्</string>
-  <string name="play_video">भिडियो हेर्नुहोस्</string>
+    <string name="play_video">भिडियो हेर्नुहोस्</string>
   <string name="please_wait">कृपया केही समय पर्खनुहोस् </string>
   <string name="please_wait_long">कृपया पर्खनुहोस् । केही समय लाग्न सक्छ । </string>
   <string name="quit_application">बाहिर निस्कनुहोस् %s </string>

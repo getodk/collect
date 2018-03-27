@@ -92,8 +92,7 @@
   <string name="parse_legacy_formlist_failed">Tidak terdapat berkas formulir di server yang cocok dengan Aggregate 0.9.x. : %s </string>
   <string name="parse_openrosa_formlist_failed">Tidak terdapat berkas formulir di server yang cocok dengan OpenRosa version 1.0 standard: %s</string>
   <string name="password">Kata sandi</string>
-  <string name="play_audio">Mainkan suara</string>
-  <string name="play_video">Mainkan video</string>
+    <string name="play_video">Mainkan video</string>
   <string name="please_wait">Silahkan tunggu.</string>
   <string name="please_wait_long">Silahkan tunggu. Proses ini membutuhkan beberapa menit.</string>
   <string name="quit_application">Keluar dari %s</string>

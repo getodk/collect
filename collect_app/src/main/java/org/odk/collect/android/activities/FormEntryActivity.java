@@ -234,6 +234,11 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private ImageButton backButton;
 
     private ODKView odkView;
+    private boolean doSwipe = true;
+
+    public void allowSwiping(boolean doSwipe) {
+        this.doSwipe = doSwipe;
+    }
 
     enum AnimationType {
         LEFT, RIGHT, FADE
@@ -2624,7 +2629,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         String navigation = (String) GeneralSharedPreferences.getInstance()
                 .get(PreferenceKeys.KEY_NAVIGATION);
 
-        if (navigation.contains(PreferenceKeys.NAVIGATION_SWIPE)) {
+        if (navigation.contains(PreferenceKeys.NAVIGATION_SWIPE) && doSwipe) {
             // Looks for user swipes. If the user has swiped, move to the
             // appropriate screen.
 

@@ -92,8 +92,7 @@
   <string name="parse_legacy_formlist_failed">El servidor no ha servido un formulario compatible con Aggregate 0.9.x  : %s</string>
   <string name="parse_openrosa_formlist_failed">El servidor no ha dado un formulario compatible con el estandar de OpenRosa version 1.0: %s</string>
   <string name="password">Contraseña</string>
-  <string name="play_audio">Reproducir el Sonido</string>
-  <string name="play_video">Reproducir el Video</string>
+    <string name="play_video">Reproducir el Video</string>
   <string name="please_wait">Por favor, espere un momento.</string>
   <string name="please_wait_long">Por favor espere. Esto podria demorarse unos minutos.</string>
   <string name="quit_application">Salir %s</string>

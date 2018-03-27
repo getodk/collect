@@ -92,8 +92,7 @@
   <string name="parse_legacy_formlist_failed">Der Server hat kein Vorhandene-Formulare Dokument geliefert, welches mit Aggregate 0.9.x. kompatibel ist : %s</string>
   <string name="parse_openrosa_formlist_failed">Der Server hat kein Vorhandene-Formulare-Dokument geliefert, welches mit dem OpenRosa-Version-1.0-Standard kompatibel ist: %s</string>
   <string name="password">Passwort</string>
-  <string name="play_audio">Tonaufnahme abspielen</string>
-  <string name="play_video">Video abspielen</string>
+    <string name="play_video">Video abspielen</string>
   <string name="please_wait">Bitte haben Sie einen Moment Geduld.</string>
   <string name="please_wait_long">Bitte warten. Dies kann einige Minuten dauern.</string>
   <string name="quit_application">%s beenden</string>
