@@ -100,7 +100,7 @@ public class ViewFormHierarchyActivity extends FormHierarchyActivity {
                     try {
                         Collect.getInstance().getFormController().stepToPreviousScreenEvent();
                     } catch (JavaRosaException e) {
-                        Timber.e(e);
+                        Timber.d(e);
                         createErrorDialog(e.getCause().getMessage());
                         return;
                     }

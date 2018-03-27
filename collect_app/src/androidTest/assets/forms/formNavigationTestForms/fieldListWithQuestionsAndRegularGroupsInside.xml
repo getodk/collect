@@ -1,0 +1,101 @@
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jr="http://openrosa.org/javarosa">
+    <h:head>
+        <h:title>fieldListWithQuestionsAndRegularGroupsInside</h:title>
+        <model>
+            <instance>
+                <data id="build_form8_1517310417">
+                    <meta>
+                        <instanceID/>
+                    </meta>
+                    <G1>
+                        <T1/>
+                        <G2>
+                            <T2/>
+                            <T3/>
+                        </G2>
+                        <T4/>
+                        <G3>
+                            <T5/>
+                            <T6/>
+                        </G3>
+                        <T7/>
+                    </G1>
+                </data>
+            </instance>
+            <itext>
+                <translation lang="English">
+                    <text id="/data/G1:label">
+                        <value>G1</value>
+                    </text>
+                    <text id="/data/G1/T1:label">
+                        <value>T1</value>
+                    </text>
+                    <text id="/data/G1/G2:label">
+                        <value>G2</value>
+                    </text>
+                    <text id="/data/G1/G2/T2:label">
+                        <value>T2</value>
+                    </text>
+                    <text id="/data/G1/G2/T3:label">
+                        <value>T3</value>
+                    </text>
+                    <text id="/data/G1/T4:label">
+                        <value>T4</value>
+                    </text>
+                    <text id="/data/G1/G3:label">
+                        <value>G3</value>
+                    </text>
+                    <text id="/data/G1/G3/T5:label">
+                        <value>T5</value>
+                    </text>
+                    <text id="/data/G1/G3/T6:label">
+                        <value>T6</value>
+                    </text>
+                    <text id="/data/G1/T7:label">
+                        <value>T7</value>
+                    </text>
+                </translation>
+            </itext>
+            <bind nodeset="/data/meta/instanceID" type="string" readonly="true()" calculate="concat('uuid:', uuid())"/>
+            <bind nodeset="/data/G1/T1" type="string"/>
+            <bind nodeset="/data/G1/G2/T2" type="string"/>
+            <bind nodeset="/data/G1/G2/T3" type="string"/>
+            <bind nodeset="/data/G1/T4" type="string"/>
+            <bind nodeset="/data/G1/G3/T5" type="string"/>
+            <bind nodeset="/data/G1/G3/T6" type="string"/>
+            <bind nodeset="/data/G1/T7" type="string"/>
+        </model>
+    </h:head>
+    <h:body>
+        <group appearance="field-list">
+            <label ref="jr:itext('/data/G1:label')"/>
+            <input ref="/data/G1/T1">
+                <label ref="jr:itext('/data/G1/T1:label')"/>
+            </input>
+            <group>
+                <label ref="jr:itext('/data/G1/G2:label')"/>
+                <input ref="/data/G1/G2/T2">
+                    <label ref="jr:itext('/data/G1/G2/T2:label')"/>
+                </input>
+                <input ref="/data/G1/G2/T3">
+                    <label ref="jr:itext('/data/G1/G2/T3:label')"/>
+                </input>
+            </group>
+            <input ref="/data/G1/T4">
+                <label ref="jr:itext('/data/G1/T4:label')"/>
+            </input>
+            <group>
+                <label ref="jr:itext('/data/G1/G3:label')"/>
+                <input ref="/data/G1/G3/T5">
+                    <label ref="jr:itext('/data/G1/G3/T5:label')"/>
+                </input>
+                <input ref="/data/G1/G3/T6">
+                    <label ref="jr:itext('/data/G1/G3/T6:label')"/>
+                </input>
+            </group>
+            <input ref="/data/G1/T7">
+                <label ref="jr:itext('/data/G1/T7:label')"/>
+            </input>
+        </group>
+    </h:body>
+</h:html>

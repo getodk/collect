@@ -40,6 +40,7 @@ import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
+import java.util.Locale;
 
 import timber.log.Timber;
 
@@ -120,7 +121,7 @@ public class FileUtils {
             return bytes;
 
         } catch (FileNotFoundException e) {
-            Timber.e(e, "Cannot find file %s", file.getName());
+            Timber.d(e, "Cannot find file %s", file.getName());
             return null;
 
         } finally {
@@ -140,7 +141,7 @@ public class FileUtils {
             is = new FileInputStream(file);
 
         } catch (FileNotFoundException e) {
-            Timber.e(e, "Cache file %s not found", file.getAbsolutePath());
+            Timber.d(e, "Cache file %s not found", file.getAbsolutePath());
             return null;
 
         }
@@ -299,7 +300,7 @@ public class FileUtils {
         try {
             is = new FileInputStream(xmlFile);
         } catch (FileNotFoundException e1) {
-            Timber.e(e1);
+            Timber.d(e1);
             throw new IllegalStateException(e1);
         }
 
@@ -467,20 +468,13 @@ public class FileUtils {
     }
 
     public static void saveBitmapToFile(Bitmap bitmap, String path) {
-        FileOutputStream out = null;
-        try {
-            out = new FileOutputStream(path);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+        final Bitmap.CompressFormat compressFormat = path.toLowerCase(Locale.getDefault()).endsWith(".png") ?
+                Bitmap.CompressFormat.PNG : Bitmap.CompressFormat.JPEG;
+
+        try (FileOutputStream out = new FileOutputStream(path)) {
+            bitmap.compress(compressFormat, 100, out);
         } catch (Exception e) {
             Timber.e(e);
-        } finally {
-            try {
-                if (out != null) {
-                    out.close();
-                }
-            } catch (IOException e) {
-                Timber.e(e);
-            }
         }
     }
 
@@ -504,5 +498,27 @@ public class FileUtils {
         }
 
         return bitmap;
+    }
+
+    public static byte[] read(File file) {
+        byte[] bytes = {};
+        try {
+            bytes = new byte[(int) file.length()];
+            InputStream is = new FileInputStream(file);
+            is.read(bytes);
+            is.close();
+        } catch (IOException e) {
+            Timber.e(e);
+        }
+        return bytes;
+    }
+
+    public static void write(File file, byte[] data) {
+        try (FileOutputStream fos = new FileOutputStream(file)) {
+            fos.write(data);
+            fos.close();
+        } catch (IOException e) {
+            Timber.e(e);
+        }
     }
 }

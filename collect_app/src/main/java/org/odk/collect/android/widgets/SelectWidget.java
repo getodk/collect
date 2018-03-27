@@ -46,15 +46,6 @@ public abstract class SelectWidget extends QuestionWidget {
         answerLayout = new LinearLayout(context);
         answerLayout.setOrientation(LinearLayout.VERTICAL);
         playList = new ArrayList<>();
-
-        // SurveyCTO-added support for dynamic select content (from .csv files)
-        XPathFuncExpr xpathFuncExpr = ExternalDataUtil.getSearchXPathExpression(
-                prompt.getAppearanceHint());
-        if (xpathFuncExpr != null) {
-            items = ExternalDataUtil.populateExternalChoices(prompt, xpathFuncExpr);
-        } else {
-            items = prompt.getSelectChoices();
-        }
     }
 
     @Override
@@ -101,6 +92,16 @@ public abstract class SelectWidget extends QuestionWidget {
         super.playAllPromptText();
     }
 
+    protected void readItems() {
+        // SurveyCTO-added support for dynamic select content (from .csv files)
+        XPathFuncExpr xpathFuncExpr = ExternalDataUtil.getSearchXPathExpression(getFormEntryPrompt().getAppearanceHint());
+        if (xpathFuncExpr != null) {
+            items = ExternalDataUtil.populateExternalChoices(getFormEntryPrompt(), xpathFuncExpr);
+        } else {
+            items = getFormEntryPrompt().getSelectChoices();
+        }
+    }
+
     private void playNextSelectItem() {
         if (isShown()) {
             // if there's more, set up to play the next item
@@ -145,7 +146,6 @@ public abstract class SelectWidget extends QuestionWidget {
 
         mediaLayout.setAudioListener(this);
         mediaLayout.setPlayTextColor(getPlayColor());
-        mediaLayout.setPlayTextBackgroundColor(getPlayBackgroundColor());
         playList.add(mediaLayout);
 
         if (index != items.size() - 1) {

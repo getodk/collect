@@ -92,8 +92,7 @@
   <string name="parse_legacy_formlist_failed">El servidor no ha servido un formulario compatible con Aggregate 0.9.x  : %s</string>
   <string name="parse_openrosa_formlist_failed">El servidor no ha dado un formulario compatible con el estandar de OpenRosa version 1.0: %s</string>
   <string name="password">Contraseña</string>
-  <string name="play_audio">Reproducir el Sonido</string>
-  <string name="play_video">Reproducir el Video</string>
+    <string name="play_video">Reproducir el Video</string>
   <string name="please_wait">Por favor, espere un momento.</string>
   <string name="please_wait_long">Por favor espere. Esto podria demorarse unos minutos.</string>
   <string name="quit_application">Salir %s</string>
@@ -269,8 +268,6 @@
   <string name="drive_get_file">Obteniendo %1$s y archivos multimedia.</string>
   <string name="no_google_account">!Cuenta Google no Seleccionada¡</string>
   <string name="google_set_account">Ha seleccionado Google Sheets como servidor, por favor, seleccionar la correspondiente cuenta Google en Características Generales antes de continuar</string>
-  <string name="invalid_oauth">OAuth 2 token Invalido.</string>
-  <string name="google_repeat_error">Repeticiones no admitidas por Google Sheets de momento.</string>
   <string name="media_upload_error">Fallo al cargar foto que no existe:%1$s</string>
   <string name="odk_auth_auth_fail">Falla de autenticación en envío automático. Favor verificar sus ajustes en servidor</string>
   <string name="odk_auto_note">Notificación de Envío Automático de servidor</string>
@@ -279,7 +276,6 @@
   <string name="delete_after_send_summary">Eliminar formularios finalizados y archivos multimedia después de enviar al servidor</string>
   <string name="change_server_url">URL del Servidor</string>
   <string name="google_search_browse">Busca en formularios. O selecciona  \'My Drive\' debajo para visualizar.</string>
-  <string name="no_blank_search">Campo de búsqueda no puede estar en blanco.</string>
   <string name="google_sheets_url">URL alterno para envío</string>
   <string name="send_in_progress">Envio funcionando, reintentar en breve</string>
   <string name="sheets_max_columns">Máximo de columnas = 255, su formulario tiene %s. No se puede subir la hoja.</string>
@@ -346,8 +342,6 @@
   <string name="zoom_to_where">Ampliar a…</string>
   <string name="zoom_to_location">Zoom a la localización actual</string>
   <string name="zoom_to_feature">Zoom a característica guardada</string>
-  <string name="google_sheets_invalid_column_form">\'n%1$s\' es un nombre de columna invalido en su formulario. Google Sheets solo permite caracteres alfanuméricos y guiones en nombres de columna</string>
-  <string name="google_sheets_invalid_column_instance">\'n%1$s\' es un nombre de columna invalido en su instancia guardada. Google Sheets solo permite caracteres alfanuméricos y guiones en nombres de columna</string>
   <string name="geoshape_view_change_location">Ver o cambiar FormaGeo</string>
   <string name="geotrace_view_change_location">Ver o cambiar RastroGeo</string>
   <string name="bearing">Orientación: %.3f</string>
@@ -388,7 +382,6 @@
   <string name="not_exactly_one_record_for_this_instance">No hay exactamente un registro para esta instancia!</string>
   <string name="not_exactly_one_blank_form_for_this_form_id">No hay exactamente un formulario en blanco que corresponda a este jr_form_id.</string>
   <string name="no_form_id_specified">No se especifo el FormID???</string>
-  <string name="phone_does_not_have_base64_class">El teléfono no tiene una clase Base64 pero el nivel de API es %s.</string>
   <string name="phone_does_not_support_rsa">El teléfono no es compatible con el cifrado RSA.</string>
   <string name="invalid_rsa_public_key">Clave publica RSA Invalida.</string>
   <string name="encryption_error_message">%s del Formulario no ha sido guardada como finalizado.</string>
@@ -567,5 +560,4 @@
   <string name="no">No</string>
   <string name="newer_version_of_a_form_info">Esta es una versión actualizada de un formularios que ya tiene!</string>
   <string name="svg_file_does_not_exist">Archivo SVG no existe</string>
-  <string name="svg_not_supported_device">Pregunta tipo ImageMap requiere mínimo Android 5 (Lollipop). Su dispositivo tiene una versión menor!</string>
 </resources>

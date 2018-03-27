@@ -88,8 +88,7 @@
   <string name="parse_legacy_formlist_failed">Formatet er ikke kompatibel med Aggregate 09.x: %s</string>
   <string name="parse_openrosa_formlist_failed">Formatet er ikke kompitabel med OpenRosa 1.0 standard: %s</string>
   <string name="password">Passord</string>
-  <string name="play_audio">Spill lyd</string>
-  <string name="play_video">Spill video</string>
+    <string name="play_video">Spill video</string>
   <string name="please_wait">Vennligst vent.</string>
   <string name="please_wait_long">Vennligst vent. Det kan ta litt tid.</string>
   <string name="quit_application">Avslutt %s</string>
@@ -253,14 +252,11 @@
   <string name="drive_get_file">Henter %1$s og mediafiler.</string>
   <string name="no_google_account">Ingen Goggle-konto er valgt!</string>
   <string name="google_set_account">Du har valgt Google Sheets som din server. Nå må du angi en Google-konto i Generelle innstillinger før du fortsetter.</string>
-  <string name="invalid_oauth">Ugyldig OAuth2 token.</string>
-  <string name="google_repeat_error">Google Sheets støtter ikke gjentagelser. </string>
   <string name="notification_error">Feil ved visning av kvitteringstekst</string>
   <string name="delete_after_send">Slett etter innsendt.</string>
   <string name="delete_after_send_summary">Sletter fullførte skjemaer og media etter at de er sendt til serveren</string>
   <string name="change_server_url">Server URL</string>
   <string name="google_search_browse">Søk etter skjemaer.  Eller velg \'Min disk\' nedenfor for å bla igjennom.</string>
-  <string name="no_blank_search">Søkefeltet kan ikke være tomt.</string>
   <string name="send_in_progress">Bakgrunnssending kjører, vennligst prøv igjen senere</string>
   <string name="sheets_max_columns">Maks antall kolonner er 255, ditt skjema har %s. Det er ikke mulig å laste opp dette regnearket.</string>
   <string name="invalid_sheet_id">Ugyldig ark id: %1$s</string>

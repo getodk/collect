@@ -90,8 +90,7 @@
   <string name="parse_legacy_formlist_failed">The server has not provided an available-forms document compatible with Aggregate 0.9.x. : %s</string>
   <string name="parse_openrosa_formlist_failed">The server has not provided an available-forms document compatible with the OpenRosa version 1.0 standard: %s</string>
   <string name="password">Wachtwoord</string>
-  <string name="play_audio">Bekijk audio</string>
-  <string name="play_video">Bekijk video</string>
+    <string name="play_video">Bekijk video</string>
   <string name="please_wait">Een moment geduld alstublieft.</string>
   <string name="please_wait_long">Geduld, dit kan enkele minuten duren.</string>
   <string name="quit_application">Sluit %s af</string>
@@ -258,11 +257,9 @@
   <string name="other_preferences">Andere platform instellingen</string>
   <string name="google_preferences">Google Sheets instellingen</string>
   <string name="no_google_account">Geen Google account geselecteerd!</string>
-  <string name="invalid_oauth">Ongeldig OAuth 2 token</string>
   <string name="delete_after_send">Verwijderen na versturen</string>
   <string name="delete_after_send_summary">Verwijderd afgeronde formulieren en media na verzending</string>
   <string name="change_server_url">Server URL</string>
-  <string name="no_blank_search">Zoekveld mag niet leeg zijn.</string>
   <!--Geo string added in feature-geofeatures branch-->
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->

@@ -92,8 +92,7 @@
   <string name="parse_legacy_formlist_failed">Сервер не предоставил список доступных форм в формате, совместимом с Aggregate v0.9.x. : %s</string>
   <string name="parse_openrosa_formlist_failed">Сервер не предоставил список доступных форм в формате, совместимом со стандартом OpenRosa v1.0: %s</string>
   <string name="password">Пароль</string>
-  <string name="play_audio">Проиграть аудио</string>
-  <string name="play_video">Проиграть видео</string>
+    <string name="play_video">Проиграть видео</string>
   <string name="please_wait">Подождите несколько секунд.</string>
   <string name="please_wait_long">Пожалуйста, подождите. Это может занять несколько минут.</string>
   <string name="quit_application">Выход %s</string>
@@ -267,8 +266,6 @@
   <string name="drive_get_file">Получение %1$s и медиа-файлов.</string>
   <string name="no_google_account">Учётная запись Google не выбрана!</string>
   <string name="google_set_account">Вы выбрали Google Таблицы в качестве сервера. Перед тем, как продолжить, пожалуйста, укажите соответствующую учётную запись Google в общих настройках.</string>
-  <string name="invalid_oauth">Неверный OAuth 2 токен</string>
-  <string name="google_repeat_error">Google Таблицы в данный момент не поддерживает повторы.</string>
   <string name="media_upload_error">Не удалось загрузить несуществующее фото: %1$s</string>
   <string name="odk_auth_auth_fail">Ошибка аутентификации при автоматической отправке ODK. Пожалуйста, проверьте настройки</string>
   <string name="odk_auto_note">Уведомление автоматической отправки ODK</string>
@@ -277,7 +274,6 @@
   <string name="delete_after_send_summary">Удаляет завершённые формы и их медиа после отправки данных на сервер</string>
   <string name="change_server_url">URL сервера</string>
   <string name="google_search_browse">Поиск форм. Или выберите \'Мой диск\' ниже для просмотра.</string>
-  <string name="no_blank_search">Поле поиска не может быть пустым.</string>
   <string name="google_sheets_url">Резервный URL отправки</string>
   <string name="send_in_progress">Выполняется отправка в фоне, попробуйте снова через некоторое время.</string>
   <string name="sheets_max_columns">Наибольшее допустимое количество колонок 255, на Вашей форме их %s. Не удалось загрузить в таблицу.</string>
@@ -344,8 +340,6 @@
   <string name="zoom_to_where">Приблизить к …</string>
   <string name="zoom_to_location">Приблизить к текущему местоположению</string>
   <string name="zoom_to_feature">Приблизить к сохранённой географической особенности</string>
-  <string name="google_sheets_invalid_column_form">\'n%1$s\' является неправильным названием столбца в сохранённом экземпляре.  Google Таблицы требуют, чтобы в названии столбцов использовались только буквы, цифры и дефисы.</string>
-  <string name="google_sheets_invalid_column_instance">\'n%1$s\' является неправильным названием столбца в сохранённом экземпляре.  Google Таблицы требуют, чтобы в названии столбцов использовались только буквы, цифры и дефисы.</string>
   <string name="geoshape_view_change_location">Показать или посмотреть геофигуру</string>
   <string name="geotrace_view_change_location">Показать или изменить геослед</string>
   <string name="bearing">Азимут: %.3f</string>
@@ -386,7 +380,6 @@
   <string name="not_exactly_one_record_for_this_instance">Для этого экземпляра должна быть ровно одна запись!</string>
   <string name="not_exactly_one_blank_form_for_this_form_id">Более одной пустой формы имеют совпадают с jr_form_id этой формы.</string>
   <string name="no_form_id_specified">Не указан FormId???</string>
-  <string name="phone_does_not_have_base64_class">У телефона нет класса Base64, хотя уровень API %s.</string>
   <string name="phone_does_not_support_rsa">Телефон не поддерживает шифрование RSA.</string>
   <string name="invalid_rsa_public_key">Неправильный публичный ключ RSA.</string>
   <string name="encryption_error_message">%s Форма не была сохранена как завёршенная.</string>
@@ -565,5 +558,4 @@
   <string name="no">Нет</string>
   <string name="newer_version_of_a_form_info">Это обновлённая версия формы, которая у вас уже есть!</string>
   <string name="svg_file_does_not_exist">SVG файл не найден!</string>
-  <string name="svg_not_supported_device">Поле ввода ImageMap доступно на Android 5 (Lollipop) и выше. Ваше устройство не поддерживается!</string>
 </resources>

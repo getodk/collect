@@ -92,8 +92,7 @@
   <string name="parse_legacy_formlist_failed">Le serveur n\'a pas répondu avec un document de formulaires compatible avec Aggregate 0.9.x. : %s</string>
   <string name="parse_openrosa_formlist_failed">Le serveur n\'a pas répondu avec un document de formulaires compatible avec OpenRosa 1.0 : %s</string>
   <string name="password">Mot de passe</string>
-  <string name="play_audio">Jouer le son</string>
-  <string name="play_video">Jouer la vidéo</string>
+    <string name="play_video">Jouer la vidéo</string>
   <string name="please_wait">Veuillez patienter.</string>
   <string name="please_wait_long">Veuillez patienter. Cette action peut prendre quelques minutes.</string>
   <string name="quit_application">Sortir %s</string>
@@ -267,8 +266,6 @@
   <string name="drive_get_file">Récupération des %1$s et fichiers médias. </string>
   <string name="no_google_account">Pas de compte Google choisi!</string>
   <string name="google_set_account">Vous avez choisi Google Sheets comme serveur. Merci de sélectionner un compte Google correspondant dans les paramètres généraux avant de continuer.</string>
-  <string name="invalid_oauth">OAuth 2 token non valable</string>
-  <string name="google_repeat_error">Les répétitions ne sont pas prises en charge par les Google Sheets en ce moment.</string>
   <string name="media_upload_error">Impossible de télécharger une photo qui n\'existe pas: %1$s</string>
   <string name="odk_auth_auth_fail">Erreur d\'authentification d\'envoi automatique ODK, assurez-vous que vos paramètres sont corrects</string>
   <string name="odk_auto_note">Notification d\'envoi automatique ODK</string>
@@ -277,7 +274,6 @@
   <string name="delete_after_send_summary">Suppression des médias et formulaire finalisés après l\'envoi au serveur</string>
   <string name="change_server_url">URL du serveur</string>
   <string name="google_search_browse">Rechercher des formulaires ou sélectionner \'Mon Drive\' ci-dessous pour parcourir des formulaires.</string>
-  <string name="no_blank_search">Le champ de recherche ne peut pas être vide.</string>
   <string name="google_sheets_url">URL de secours pour soumission de données</string>
   <string name="send_in_progress">L\'envoi s\'exécute en tâche de fond, essayer plus tard.</string>
   <string name="sheets_max_columns">Il est impossible de télécharger votre feuille de calcul. Le nombre maximum de colonnes est de 255. Votre formulaire en a %s. </string>
@@ -344,8 +340,6 @@
   <string name="zoom_to_where">Zoom sur…</string>
   <string name="zoom_to_location">Zoomer sur l\'emplacement courant</string>
   <string name="zoom_to_feature">Zoomer sur l\'objet enregistré</string>
-  <string name="google_sheets_invalid_column_form">\'n%1$s\' est une colonne non valide dans votre formulaire. Google Sheets n\'autorise que des caractères alphanumériques et des traits d\'union dans les noms de colonne </string>
-  <string name="google_sheets_invalid_column_instance">\'n%1$s\' est une colonne non valide de l\'instance sauvegardée. Google Sheets n\'autorise que des caractères alphanumériques et des traits d\'union dans les noms de colonne </string>
   <string name="geoshape_view_change_location">Voir ou Modifier la FormeGéo</string>
   <string name="geotrace_view_change_location">Voir ou Modifier le TracéGéo</string>
   <string name="bearing">Palier: %.3f</string>
@@ -386,7 +380,6 @@
   <string name="not_exactly_one_record_for_this_instance">Pas exactement un enregistrement pour cette instance !</string>
   <string name="not_exactly_one_blank_form_for_this_form_id">Aucun formulaire vierge ne correspond à ce jr_form_id.</string>
   <string name="no_form_id_specified">Pas de FormId spécifié ???</string>
-  <string name="phone_does_not_have_base64_class">Le téléphone ne dispose pas de la classe Base64 mais le niveau API est %s.</string>
   <string name="phone_does_not_support_rsa">Le téléphone ne supporte pas le chiffrement RSA.</string>
   <string name="invalid_rsa_public_key">Clé publique RSA invalide.</string>
   <string name="encryption_error_message">Le formulaire %s n\'a pas été enregistré comme finalisé.</string>
@@ -565,5 +558,4 @@
   <string name="no">Non</string>
   <string name="newer_version_of_a_form_info">Ceci est une version mise à jour d\'un formulaire que vous avez déjà !</string>
   <string name="svg_file_does_not_exist">Le fichier SVG n\'existe pas !</string>
-  <string name="svg_not_supported_device">Le widget ImageMap nécessite Android 5 (Lollipop) ou plus récent. Votre appareil n\'est pas compatible !</string>
 </resources>

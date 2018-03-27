@@ -14,13 +14,13 @@
 
 package org.odk.collect.android.utilities.gdrive;
 
-
 import android.support.annotation.NonNull;
 
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.services.sheets.v4.Sheets;
+import com.google.api.services.sheets.v4.model.AddSheetRequest;
 import com.google.api.services.sheets.v4.model.BatchUpdateSpreadsheetRequest;
 import com.google.api.services.sheets.v4.model.GridProperties;
 import com.google.api.services.sheets.v4.model.Request;
@@ -33,6 +33,7 @@ import com.google.api.services.sheets.v4.model.ValueRange;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class SheetsHelper {
@@ -108,6 +109,22 @@ public class SheetsHelper {
         sheetsService.insertRow(spreadsheetId, sheetName, row);
     }
 
+    public void updateRow(String spreadsheetId, String sheetName, ValueRange row) throws IOException {
+        if (row == null) {
+            throw new IllegalArgumentException("ValueRange cannot be null");
+        }
+
+        sheetsService.updateRow(spreadsheetId, sheetName, row);
+    }
+
+    public void addSheet(String spreadsheetId, String sheetName) throws IOException {
+        AddSheetRequest addSheetRequest = new AddSheetRequest();
+        addSheetRequest.setProperties(new SheetProperties().setTitle(sheetName));
+        Request request = new Request();
+        request.setAddSheet(addSheetRequest);
+        sheetsService.batchUpdate(spreadsheetId, Collections.singletonList(request));
+    }
+
     /**
      * Fetches the spreadsheet with the provided spreadsheetId
      * <p>
@@ -120,7 +137,7 @@ public class SheetsHelper {
      * <p>
      * For more info   :   https://developers.google.com/sheets/api/reference/rest/
      */
-    public List<List<Object>> getHeaderFeed(String spreadsheetId, String sheetName) throws IOException {
+    public List<List<Object>> getSheetCells(String spreadsheetId, String sheetName) throws IOException {
         ValueRange response = sheetsService.getSpreadsheet(spreadsheetId, sheetName);
         return response.getValues();
     }
@@ -194,6 +211,13 @@ public class SheetsHelper {
         public void insertRow(String spreadsheetId, String sheetName, ValueRange row) throws IOException {
             sheets.spreadsheets().values()
                     .append(spreadsheetId, sheetName, row)
+                    .setIncludeValuesInResponse(true)
+                    .setValueInputOption("USER_ENTERED").execute();
+        }
+
+        public void updateRow(String spreadsheetId, String sheetName, ValueRange row) throws IOException {
+            sheets.spreadsheets().values()
+                    .update(spreadsheetId, sheetName, row)
                     .setIncludeValuesInResponse(true)
                     .setValueInputOption("USER_ENTERED").execute();
         }

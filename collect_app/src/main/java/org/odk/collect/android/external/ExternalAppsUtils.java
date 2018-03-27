@@ -127,7 +127,7 @@ public class ExternalAppsUtils {
                         // instanceProviderID returns -1 if the current instance has not been
                         // saved to disk already
                         String path =
-                                Collect.getInstance().getFormController().getInstancePath()
+                                Collect.getInstance().getFormController().getInstanceFile()
                                         .getAbsolutePath();
 
                         String instanceProviderID = "-1";

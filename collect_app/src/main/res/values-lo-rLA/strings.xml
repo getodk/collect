@@ -86,8 +86,7 @@
   <string name="parse_legacy_formlist_failed">ເຊີເວີທີເຊື່ອມຕໍ່​ຢູ່ ບໍ່​ມີແບບຟອມ​ທີ່​ສາມາດໃຊ້ງານໄດ້ກັບ Aggregate 0.9.x. : %s</string>
   <string name="parse_openrosa_formlist_failed">ເຊີເວີທີເຊື່ອມຕໍ່​ຢູ່ ບໍ່​ມີແບບຟອມ​ທີ່​ສາມາດໃຊ້ງານໄດ້ກັບ OpenRosa version 1.0 standard: %s</string>
   <string name="password">ລະຫັດຜ່ານ</string>
-  <string name="play_audio">ເປີດສຽງ</string>
-  <string name="play_video">ເປີດວີດີໂອ</string>
+    <string name="play_video">ເປີດວີດີໂອ</string>
   <string name="please_wait">ກະລຸນາລໍຖ້າຈັກໜ້ອຍ</string>
   <string name="please_wait_long">ກະລຸນາລໍຖ້າ. ມັນອາດຕ້ອງໃຊ້ເວລາໜ້ອຍໜື່ງ</string>
   <string name="quit_application">ອອກຈາກລະບົບ%s</string>
@@ -249,12 +248,10 @@
   <string name="other_preferences">ການຕັ້ງຄ່າ platform ອື່ນໆ</string>
   <string name="drive_get_file">ໄດ້ %1$s ຂອງເອກະສານ.</string>
   <string name="no_google_account">ບໍ່ໄດ້ເລືອກບັນຊີຂອງ Google</string>
-  <string name="invalid_oauth">OAuth 2 token ບໍ່ຖືກຕ້ອງ</string>
   <string name="notification_error">ຂໍ້ຜິດພາດສະແດງຂໍ້ຄວາມແຈ້ງເຕືອນ</string>
   <string name="delete_after_send">ລຶບພາຍຫຼັງສົ່ງແລ້ວ</string>
   <string name="delete_after_send_summary">ລຶບຟອມທີ່ສຳເລັດແລ້ວ ແລະ ສື່ ຫຼັງຈາກສົ່ງຫາເສີບເວີ</string>
   <string name="change_server_url">URL ຂອງເສີບເວີ</string>
-  <string name="no_blank_search">ຫ້ອງຊອກຫາບໍ່ຄວນຫວ່າງເປົ່າ</string>
   <!--Geo string added in feature-geofeatures branch-->
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->

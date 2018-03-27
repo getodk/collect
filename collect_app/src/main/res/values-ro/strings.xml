@@ -88,8 +88,7 @@
   <string name="parse_legacy_formlist_failed">Serverul nu a furnizat un document-formular compatibil cu Aggregate 0.9.x. : %s</string>
   <string name="parse_openrosa_formlist_failed">Serverul nu a furnizat un document-formular compatibil cu OpenRosa versiunea 1.0 standard: %s</string>
   <string name="password">Parola</string>
-  <string name="play_audio">Redați sunet</string>
-  <string name="play_video">Redați video</string>
+    <string name="play_video">Redați video</string>
   <string name="please_wait">Vă rugăm să așteptați câteva momente.</string>
   <string name="please_wait_long">Vă rugăm să așteptați. Ar putea dura câteva minute.</string>
   <string name="quit_application">Ieșire %s</string>
@@ -255,14 +254,11 @@
   <string name="drive_get_file">Preluare %1$s și fișiere media.</string>
   <string name="no_google_account">Niciun cont Google nu a fost selectat!</string>
   <string name="google_set_account">Ați selectat Google Sheets ca server, vă rugăm să selectați un cont Google asociat în Setări generale înainte de a continua</string>
-  <string name="invalid_oauth">Token OAuth 2 invalid</string>
-  <string name="google_repeat_error">Repetările nu sunt suportate de Google Sheets în acest moment.</string>
   <string name="notification_error">Eroare la afișarea textului notificării</string>
   <string name="delete_after_send">Ștergeți după trimitere</string>
   <string name="delete_after_send_summary">Ștergeți formulare finalizate și fișierele media după trimiterea către server</string>
   <string name="change_server_url">URL server</string>
   <string name="google_search_browse">Căutați formulare. Sau selectați mai jos \'Discul meu\' pentru a naviga. </string>
-  <string name="no_blank_search">Câmpul căutare nu poate fi gol.</string>
   <string name="send_in_progress">Trimiterea în fundal rulează, vă rugăm să încercați din nou mai târziu.</string>
   <string name="sheets_max_columns">Numărul maxim de coloane este 255, formularul dumneavoastră are %s. Nu am putut încărca datele în tabel.</string>
   <string name="invalid_sheet_id">ID foaie invalid: %1$s</string>

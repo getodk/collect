@@ -92,7 +92,6 @@
   <string name="parse_legacy_formlist_failed">Palvelin ei ole toimittanut käytettävissä-olevat-lomakkeet -dokumenttia joka olisi yhteensopiva Aggregate 0.9.x:n kanssa. : %s</string>
   <string name="parse_openrosa_formlist_failed">Palvelin ei ole toimittanut käytettävissä-olevat-lomakkeet -dokumenttia joka olisi yhteensopiva OpenRosa versio 1.0 standardin kanssa: %s</string>
   <string name="password">Salasana</string>
-  <string name="play_audio">Soita ääni</string>
   <string name="play_video">Näytä video</string>
   <string name="please_wait">Odota hetki.</string>
   <string name="please_wait_long">Ole hyvä ja odota. Tämä voi kestää muutaman minuutin.</string>
@@ -267,8 +266,6 @@
   <string name="drive_get_file">Haetaan %1$s ja mediatiedoja.</string>
   <string name="no_google_account">Ei valittua Google-tiliä!</string>
   <string name="google_set_account">Palvelimesi on Google Sheets, valitse vastaava Google-tili yleisasetuksissa ennen jatkamista</string>
-  <string name="invalid_oauth">OAuth 2 token ei kelpaa</string>
-  <string name="google_repeat_error">Google Sheets ei tällä hetkellä tue toistoja.</string>
   <string name="media_upload_error">Olematonta valokuvaa ei voitu lähettää: %1$s</string>
   <string name="odk_auth_auth_fail">Automaattisen ODK-lähetyksen vahvistus epäonnistui, varmista että asetuksesi ovat oikein</string>
   <string name="odk_auto_note">Automaattisen ODK-lähetyksen ilmoitus</string>
@@ -277,7 +274,6 @@
   <string name="delete_after_send_summary">Poistaa valmiiksi merkityt lomakkeet ja mediatiedostot kun ne on lähetetty palvelimelle</string>
   <string name="change_server_url">Palvelimen URL</string>
   <string name="google_search_browse">Etsi lomakkeita. Tai valitse \'Oma Drive\' alla selataksesi.</string>
-  <string name="no_blank_search">Hakukenttä ei voi olla tyhjä.</string>
   <string name="google_sheets_url">Varalla oleva URL lähetystä varten</string>
   <string name="send_in_progress">Taustalähetys käynnissä, yritä hetken kuluttua uudestaan</string>
   <string name="sheets_max_columns">Maksimimäärä sarakkeita on 255, lomakkeessasi on %s, eikä sitä voida lähettää työkirjaan. </string>
@@ -344,8 +340,6 @@
   <string name="zoom_to_where">Zoomaa…</string>
   <string name="zoom_to_location">Zoomaa nykysijaintiin</string>
   <string name="zoom_to_feature">Zoomaa tallennettuun ominaisuuteen</string>
-  <string name="google_sheets_invalid_column_form">\'n%1$s\' ei ole sallittu sarakenimi lomakkeessasi. Google Sheets sallii ainoastaan alfanumeeriset merkit ja väliviivat sarakenimissä</string>
-  <string name="google_sheets_invalid_column_instance">\'n%1$s\' ei ole sallittu sarakenimi tallennetussa instanssissasi. Google Sheets sallii ainoastaan alfanumeeriset merkit ja väliviivat sarakenimissä</string>
   <string name="geoshape_view_change_location">Tarkastele tai Muuta GeoShape</string>
   <string name="geotrace_view_change_location">Tarkastele tai Muuta GeoTrace</string>
   <string name="bearing">Suuntima: %.3f</string>
@@ -386,7 +380,6 @@
   <string name="not_exactly_one_record_for_this_instance">Tällä instanssilla ei ole täsmälleen yhtä tietuetta!</string>
   <string name="not_exactly_one_blank_form_for_this_form_id">Tätä jr_form_id:tä ei vastaa täsmälleen yksi tyhjä lomake.</string>
   <string name="no_form_id_specified">FormId määrittämättä???</string>
-  <string name="phone_does_not_have_base64_class">Laitteella ei ole Base64 -luokkaa mutta API -taso on %s.</string>
   <string name="phone_does_not_support_rsa">Laite ei tue RSA-salausta.</string>
   <string name="invalid_rsa_public_key">Kelvoton julkinen RSA-avain.</string>
   <string name="encryption_error_message">%s Lomaketta ei ole tallennettu viimeisteltynä.</string>
@@ -565,5 +558,4 @@
   <string name="no">Ei</string>
   <string name="newer_version_of_a_form_info">Tämä on päivitetty versio lomakkeesta joka sinulla jo on!</string>
   <string name="svg_file_does_not_exist">SVG-tiedosto puuttuu!</string>
-  <string name="svg_not_supported_device">ImageMap-widget vaatii Android-versiota 5 (Lollipop) tai uudempaa. Laitteesi ei ole tuettu!</string>
 </resources>

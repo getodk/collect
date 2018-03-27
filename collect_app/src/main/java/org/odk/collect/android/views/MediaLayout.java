@@ -69,7 +69,6 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
     private MediaPlayer player;
     private AudioPlayListener audioPlayListener;
     private int playTextColor;
-    private int playBackgroundTextColor;
     
     private Context context;
 
@@ -96,17 +95,12 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
             // (it's a spanned thing...)
             viewText.setText(viewText.getText().toString());
             viewText.setTextColor(playTextColor);
-            viewText.setBackgroundColor(playBackgroundTextColor);
             audioButton.playAudio();
         }
     }
 
     public void setPlayTextColor(int textColor) {
         playTextColor = textColor;
-    }
-
-    public void setPlayTextBackgroundColor(int textColor) {
-        playBackgroundTextColor = textColor;
     }
 
     /*
@@ -145,7 +139,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
             if (i.resolveActivity(getContext().getPackageManager()) != null) {
                 getContext().startActivity(i);
             } else {
-                ToastUtils.showShortToast(getContext().getString(R.string.activity_not_found, "view video"));
+                ToastUtils.showShortToast(getContext().getString(R.string.activity_not_found, getContext().getString(R.string.view_video)));
             }
         }
     }
@@ -255,7 +249,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                                     } catch (ActivityNotFoundException e) {
                                         Timber.d(e, "No Activity found to handle due to %s", e.getMessage());
                                         ToastUtils.showShortToast(getContext().getString(R.string.activity_not_found,
-                                                "view image"));
+                                                getContext().getString(R.string.view_image)));
                                     }
                                 } else {
                                     if (viewText instanceof RadioButton) {

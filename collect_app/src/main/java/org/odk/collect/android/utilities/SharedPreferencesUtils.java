@@ -14,12 +14,9 @@
 
 package org.odk.collect.android.utilities;
 
-import android.content.Context;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.ActionListener;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
@@ -28,6 +25,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -39,20 +37,21 @@ import static org.odk.collect.android.preferences.PreferenceKeys.GENERAL_KEYS;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PASSWORD;
 
 
-public class SharedPreferencesUtils {
+public final class SharedPreferencesUtils {
 
-    private final Context context = Collect.getInstance();
+    private SharedPreferencesUtils() {
 
-    String getJSONFromPreferences(Collection<String> keys) throws JSONException {
+    }
+
+    public static String getJSONFromPreferences(Collection<String> passwordKeys) throws JSONException {
+        Collection<String> keys = new ArrayList<>(passwordKeys);
         keys.addAll(GENERAL_KEYS.keySet());
-
-        SharedPreferencesUtils obj = new SharedPreferencesUtils();
-        JSONObject sharedPrefJson = obj.getModifiedPrefs(keys);
+        JSONObject sharedPrefJson = getModifiedPrefs(keys);
         Timber.i(sharedPrefJson.toString());
         return sharedPrefJson.toString();
     }
 
-    private JSONObject getModifiedPrefs(Collection<String> keys) throws JSONException {
+    private static JSONObject getModifiedPrefs(Collection<String> keys) throws JSONException {
         JSONObject prefs = new JSONObject();
         JSONObject adminPrefs = new JSONObject();
         JSONObject generalPrefs = new JSONObject();
@@ -96,39 +95,46 @@ public class SharedPreferencesUtils {
         return prefs;
     }
 
-    public void savePreferencesFromJSON(JSONObject settingsJson) throws JSONException {
+    public static void savePreferencesFromString(String content, ActionListener listener) {
+        try {
+            JSONObject settingsJson = new JSONObject(content);
+            JSONObject generalPrefsJson = settingsJson.getJSONObject("general");
+            JSONObject adminPrefsJson = settingsJson.getJSONObject("admin");
 
-        JSONObject generalPrefsJson = settingsJson.getJSONObject("general");
-        JSONObject adminPrefsJson = settingsJson.getJSONObject("admin");
+            for (String key : getAllGeneralKeys()) {
 
-        for (String key : getAllGeneralKeys()) {
+                if (generalPrefsJson.has(key)) {
+                    Object value = generalPrefsJson.get(key);
+                    GeneralSharedPreferences.getInstance().save(key, value);
+                } else {
+                    GeneralSharedPreferences.getInstance().reset(key);
+                }
+            }
 
-            if (generalPrefsJson.has(key)) {
-                Object value = generalPrefsJson.get(key);
-                GeneralSharedPreferences.getInstance().save(key, value);
-            } else {
-                GeneralSharedPreferences.getInstance().reset(key);
+            for (String key : getAllAdminKeys()) {
+
+                if (adminPrefsJson.has(key)) {
+                    Object value = adminPrefsJson.get(key);
+                    AdminSharedPreferences.getInstance().save(key, value);
+                } else {
+                    AdminSharedPreferences.getInstance().reset(key);
+                }
+            }
+
+            AuthDialogUtility.setWebCredentialsFromPreferences();
+            AutoSendPreferenceMigrator.migrate(generalPrefsJson);
+
+            if (listener != null) {
+                listener.onSuccess();
+            }
+        } catch (JSONException exception) {
+            if (listener != null) {
+                listener.onFailure(exception);
             }
         }
-
-        for (String key : getAllAdminKeys()) {
-
-            if (adminPrefsJson.has(key)) {
-                Object value = adminPrefsJson.get(key);
-                AdminSharedPreferences.getInstance().save(key, value);
-            } else {
-                AdminSharedPreferences.getInstance().reset(key);
-            }
-        }
-
-        AuthDialogUtility.setWebCredentialsFromPreferences();
-        AutoSendPreferenceMigrator.migrate(generalPrefsJson);
-
-        //settings import confirmation toast
-        ToastUtils.showLongToast(context.getString(R.string.successfully_imported_settings));
     }
 
-    public boolean loadSharedPreferencesFromJSONFile(File src) {
+    public static boolean loadSharedPreferencesFromJSONFile(File src) {
         boolean res = false;
         BufferedReader br = null;
 
@@ -141,15 +147,11 @@ public class SharedPreferencesUtils {
                 builder.append(line);
             }
 
-            JSONObject jo = new JSONObject(builder.toString());
-
-            this.savePreferencesFromJSON(jo);
+            savePreferencesFromString(builder.toString(), null);
 
             res = true;
         } catch (IOException e) {
             Timber.e(e, "Exception while loading preferences from file due to : %s ", e.getMessage());
-        } catch (JSONException e) {
-            Timber.e(e, "Exception while converting file to JSON object due to : %s ", e.getMessage());
         } finally {
             try {
                 if (br != null) {

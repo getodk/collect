@@ -89,8 +89,7 @@
   <string name="parse_legacy_formlist_failed">O servidor não tinha formulários disponíveis compatíveis com Aggregate 0.9.x. : %s</string>
   <string name="parse_openrosa_formlist_failed">O servidor não tinha formulários disponíveis compatíveis com OpenRosa version 1.0 standard: %s</string>
   <string name="password">Senha</string>
-  <string name="play_audio">Tocar Áudio</string>
-  <string name="play_video">Assistir o Vídeo</string>
+    <string name="play_video">Assistir o Vídeo</string>
   <string name="please_wait">Por favor, aguarde um pouco.</string>
   <string name="please_wait_long">Por favor, aguarde. Isto levará alguns minutos.</string>
   <string name="quit_application">Saída %s</string>
@@ -258,14 +257,12 @@ Escolher Imagem</string>
   <string name="other_preferences">Configurações de outras plataformas.</string>
   <string name="drive_get_file">Obtendo %1$s e arquivos de mídia.</string>
   <string name="no_google_account">Nenhuma conta do Google foi selecionada!</string>
-  <string name="invalid_oauth">Modo OAuth 2 inválido</string>
   <string name="odk_auth_auth_fail">Falha na autenticação para envio automático, por favor verifique se as configurações estão corretas</string>
   <string name="odk_auto_note">Notificação de envio automático</string>
   <string name="notification_error">Erro ao exibir texto de notificação.</string>
   <string name="delete_after_send">Apagar depois de enviado</string>
   <string name="delete_after_send_summary">Apaga formulários completos e arquivos de mídia depois de enviados ao servidor.</string>
   <string name="change_server_url">Servidor URL</string>
-  <string name="no_blank_search">O campo de busca não pode estar em branco.</string>
   <string name="send_in_progress">Envio automático em segundo plano sendo executado, por favor tente novamente em alguns instantes</string>
   <string name="about_preferences">Sobre</string>
   <!--Geo string added in feature-geofeatures branch-->

@@ -79,7 +79,7 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
          */
         formFileName = formController.getMediaFolder().getName().split("-media")[0];
 
-        instanceDirectory = formController.getInstancePath().getParent();
+        instanceDirectory = formController.getInstanceFile().getParent();
         instanceId = formController.getSubmissionMetadata().instanceId;
         formId = formController.getFormDef().getID();
 

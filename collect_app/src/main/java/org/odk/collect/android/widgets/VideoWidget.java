@@ -380,7 +380,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
             Toast.makeText(
                     getContext(),
                     getContext().getString(R.string.activity_not_found,
-                            "capture video"), Toast.LENGTH_SHORT)
+                            getContext().getString(R.string.capture_video)), Toast.LENGTH_SHORT)
                     .show();
             cancelWaitingForData();
         }
@@ -404,7 +404,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
             Toast.makeText(
                     getContext(),
                     getContext().getString(R.string.activity_not_found,
-                            "choose video "), Toast.LENGTH_SHORT)
+                            getContext().getString(R.string.choose_video)), Toast.LENGTH_SHORT)
                     .show();
 
             cancelWaitingForData();
@@ -426,7 +426,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
             Toast.makeText(
                     getContext(),
                     getContext().getString(R.string.activity_not_found,
-                            "video video"), Toast.LENGTH_SHORT).show();
+                            getContext().getString(R.string.view_video)), Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -88,8 +88,7 @@
   <string name="parse_legacy_formlist_failed">Nuk gjenden formularë të përputhshëm me Aggregate 0.9.x. në server: 1%s</string>
   <string name="parse_openrosa_formlist_failed">Nuk gjenden formularë të përputhshëm me Open Rosa versioni 1.0 standard në server: 1%s</string>
   <string name="password">Fjalëkalimi</string>
-  <string name="play_audio">Dëgjo tingullin</string>
-  <string name="play_video">Shih videon</string>
+    <string name="play_video">Shih videon</string>
   <string name="please_wait">Lutemi, prisni pak sekonda.</string>
   <string name="please_wait_long">Lutemi, prisni. Mund të duhen disa minuta.</string>
   <string name="quit_application">Dil %s</string>
@@ -249,7 +248,6 @@
   <string name="drive_get_file">Duke ngarkuar %1$s dhe file-t media.</string>
   <string name="no_google_account">Nuk keni përzgjedhur një llogari në Google!</string>
   <string name="google_set_account">Keni përzgjedhur Google Sheets si server, lutemi, zjidhni një llogari në  Google në parametrat e përgjithshëm përpara se të vazhdoni.</string>
-  <string name="google_repeat_error">Google Sheets nuk suporton përsërtije në këtë moment.</string>
   <string name="media_upload_error">Foto nuk mund të dërgohet pasi nuk ekziston: %1$s</string>
   <string name="odk_auth_auth_fail">Autentikimi i dërgimit automatik të ODK dështoi, lutemi sigurohuni që parametrat janë të saktë.</string>
   <string name="odk_auto_note">Njoftim ODK për dërgimin automatik </string>
@@ -258,7 +256,6 @@
   <string name="delete_after_send_summary">Fshi formularët e finalizuar dhe mediat pasi të jenë ngarkuar në server</string>
   <string name="change_server_url">URL e serverit</string>
   <string name="google_search_browse">Kërko për formularë. Ose përzgjidh \'My Drive\' më poshtë dhe kërkoni manualisht.</string>
-  <string name="no_blank_search">Fusha e kërkimit nuk mund të jetë bosh.</string>
   <string name="send_in_progress">Një dërgim po ekzekutohet në background, lutemi provoni sërish pas pak.</string>
   <string name="sheets_max_columns">Numri maksimal i kolonave është 255, formulari juaj ka %s. Spreadsheet nuk mund të ngarkohet.</string>
   <string name="invalid_sheet_id">Numri i identifikimit të tabelës: %1$s i pavlefshëm.</string>
@@ -346,7 +343,6 @@
   <string name="not_exactly_one_record_for_this_instance">Nuk ka vetëm një të dhënë regjistruar për këtë kërkesë!</string>
   <string name="not_exactly_one_blank_form_for_this_form_id">Kjo jr_form_id nuk përputhet vetëm me një formular bosh.</string>
   <string name="no_form_id_specified">Nuk është specifikuar numër identifikimi për formën/at???</string>
-  <string name="phone_does_not_have_base64_class">Telefoni nuk ka Base64 class, por niveli API është %s</string>
   <string name="phone_does_not_support_rsa">Telefoni nuk mund të suportojë enkriptim RSA</string>
   <string name="invalid_rsa_public_key">Çelësi publik RSA i pavlefshëm.</string>
   <string name="encryption_error_message">Formulari %s nuk është ruajtur si i finalizuar</string>

@@ -90,8 +90,7 @@
   <string name="parse_legacy_formlist_failed">Serveril puudub informatsioon vormide kohta, mis ühilduks versiooniga: Aggregate 0.9.x. : %s</string>
   <string name="parse_openrosa_formlist_failed">Serveril puudub informatsioon vormide kohta, mis ühilduks versiooniga: OpenRosa version 1.0 standard: %s</string>
   <string name="password">Salasõna</string>
-  <string name="play_audio">Mängi heli</string>
-  <string name="play_video">Mängi videot</string>
+    <string name="play_video">Mängi videot</string>
   <string name="please_wait">Palun oodake.</string>
   <string name="please_wait_long">Palun oodake. See võib võtta mõne minuti.</string>
   <string name="quit_application">Välju %s</string>
@@ -260,14 +259,11 @@
   <string name="drive_get_file">Laen %1$s ja meediafailid.</string>
   <string name="no_google_account">Google kontot ei ole valitud!</string>
   <string name="google_set_account">Olete serveriks valinud Google Sheets-i. Enne jätkamist palun valige vastav Google konto üldsätetest</string>
-  <string name="invalid_oauth">Vale OAuth 2 token</string>
-  <string name="google_repeat_error">Google Sheets ei toata hetkel vormiosa korduseid.</string>
   <string name="notification_error">Viga teate näitamisel </string>
   <string name="delete_after_send">Kustuta peale saatmist</string>
   <string name="delete_after_send_summary">Peale serverisse saatmist kustutab lõpetatud vormid ja meedia</string>
   <string name="change_server_url">Serveri veebiaadress</string>
   <string name="google_search_browse">Otsi vorme. Või vali sirvimiseks \"Minu Drive\".</string>
-  <string name="no_blank_search">Otsinguväli ei tohi olla tühi</string>
   <string name="send_in_progress">Taustal jookseb andmete saatmine. Palun proovige varsti uuesti</string>
   <string name="sheets_max_columns">Maksimum tulpade arv on 255, teie vormis on %s. Arvutustabeli üleslaadimine keelatud.</string>
   <string name="invalid_sheet_id">Vale lehe id: %1$s</string>
@@ -327,8 +323,6 @@
   <string name="discard">Loobu</string>
   <string name="zoom_to_location">Liigu hetke asukohta</string>
   <string name="zoom_to_feature">Liigu salvestatud asukohta</string>
-  <string name="google_sheets_invalid_column_form">Teie vormi tulba nimi \'n%1$s\' ei ole korrektne. Google Sheets lubab tulbanimes ainult numbreid tähti ja sidekriipse</string>
-  <string name="google_sheets_invalid_column_instance">Teie salvestatud tulba nimi \'n%1$s\' ei ole korrektne. Google Sheets lubab tulbanimes ainult numbreid tähti ja sidekriipse</string>
   <string name="geoshape_view_change_location">Vaata või muuda polügooni</string>
   <string name="geotrace_view_change_location">Vaata või muuda rada</string>
   <string name="bearing">Suund: %.3f</string>
@@ -364,7 +358,6 @@
   <string name="not_exactly_one_record_for_this_instance">Ei leidu täpselt üks kirje!</string>
   <string name="not_exactly_one_blank_form_for_this_form_id">Ei leidu täpselt ühte tühja vormi, mis vastaks jr_form_id.</string>
   <string name="no_form_id_specified">Vormi ID määramata?</string>
-  <string name="phone_does_not_have_base64_class">Telefonil ei ole Base64 klassi, API aste on: %s</string>
   <string name="phone_does_not_support_rsa">Telefon ei toeta RSA krüpteerimist.</string>
   <string name="invalid_rsa_public_key">RSA avalik võti on sobimatu.</string>
   <string name="encryption_error_message">%s vorm ei ole salvestatud ja lõpetatud.</string>

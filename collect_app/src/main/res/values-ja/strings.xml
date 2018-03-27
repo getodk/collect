@@ -92,8 +92,7 @@
   <string name="parse_legacy_formlist_failed">サーバが Aggregate 0.9.x と互換性のある利用可能なフォームの文書を提供していません : %s</string>
   <string name="parse_openrosa_formlist_failed">サーバが OpenRosa バージョン 1.0 規格と互換性のある利用可能なフォームの文書を提供していません : %s</string>
   <string name="password">パスワード</string>
-  <string name="play_audio">サウンドを再生</string>
-  <string name="play_video">ビデオを再生</string>
+    <string name="play_video">ビデオを再生</string>
   <string name="please_wait">しばらくお待ちください。</string>
   <string name="please_wait_long">しばらくお待ちください。数分間かかることがあります。</string>
   <string name="quit_application">%s を終了</string>
@@ -267,8 +266,6 @@
   <string name="drive_get_file">%1$s とメディアファイルを取得中。</string>
   <string name="no_google_account">Google アカウントが選択されていません!</string>
   <string name="google_set_account">サーバーとして Google スプレッドシートを選択しています。続行する前に、全般設定で対応する Google アカウントを選択してください</string>
-  <string name="invalid_oauth">OAuth 2 トークンが正しくありません</string>
-  <string name="google_repeat_error">この時点では Google スプレッドシートで繰り返しはサポートされていません。</string>
   <string name="media_upload_error">写真が存在しないため、アップロードできませんでした: %1$s</string>
   <string name="odk_auth_auth_fail">ODK 自動送信の認証に失敗しました。設定が正しいことを確認してください</string>
   <string name="odk_auto_note">ODK 自動送信通知</string>
@@ -277,7 +274,6 @@
   <string name="delete_after_send_summary">サーバに送信した後、確定されたフォームやメディアを削除します</string>
   <string name="change_server_url">サーバー URL</string>
   <string name="google_search_browse">フォームを検索するか、次の \'マイ ドライブ\' を選択して表示します。</string>
-  <string name="no_blank_search">検索フィールドは空にできません。</string>
   <string name="google_sheets_url">フォールバック送信 URL</string>
   <string name="send_in_progress">バックグラウンド送信が実行中です。しばらくして再度お試しください</string>
   <string name="sheets_max_columns">列の最大数は 255 ですが、フォームは %s あります。スプレッドシートにアップロードできません。</string>
@@ -344,8 +340,6 @@
   <string name="zoom_to_where">ズーム…</string>
   <string name="zoom_to_location">現在の場所にズーム</string>
   <string name="zoom_to_feature">保存した機能にズーム</string>
-  <string name="google_sheets_invalid_column_form">\'n%1$s\' はフォームで無効な列名です。 Google スプレッドシートでは、列名に英数字とハイフンのみ利用可能です</string>
-  <string name="google_sheets_invalid_column_instance">\'n%1$s\' は保存したインスタンスで無効な列名です。 Google スプレッドシートでは、列名に英数字とハイフンのみ利用可能です</string>
   <string name="geoshape_view_change_location">GeoShape を表示または変更</string>
   <string name="geotrace_view_change_location">GeoTrace を表示または変更</string>
   <string name="bearing">方位: %.3f</string>
@@ -386,7 +380,6 @@
   <string name="not_exactly_one_record_for_this_instance">このインスタンスで正確なレコードではありません!</string>
   <string name="not_exactly_one_blank_form_for_this_form_id">ブランクフォームはこの jr_form_id に一致しません。</string>
   <string name="no_form_id_specified">フォームId が指定されていない???</string>
-  <string name="phone_does_not_have_base64_class">電話は Base64 クラスがありません。 API レベルは %s です。</string>
   <string name="phone_does_not_support_rsa">電話は RSA 暗号化をサポートしていません。</string>
   <string name="invalid_rsa_public_key">RSA 公開鍵が無効です。</string>
   <string name="encryption_error_message">%s フォームはファイナライズ済みとして保存されていません。</string>
@@ -565,5 +558,4 @@
   <string name="no">いいえ</string>
   <string name="newer_version_of_a_form_info">これはすでにお持ちのフォームの更新版です!</string>
   <string name="svg_file_does_not_exist">SVG ファイルが存在しません!</string>
-  <string name="svg_not_supported_device">ImageMap ウィジェットは Android 5 (Lollipop) 以降が必要です。お使いのデバイスはサポートされていません!</string>
 </resources>
