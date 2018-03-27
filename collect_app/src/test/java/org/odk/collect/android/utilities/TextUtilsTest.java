@@ -29,7 +29,7 @@ public class TextUtilsTest {
                 {"_A\\_B\\_C_", "<em>A_B_C</em>"},
                 {"A_B\\_C", "A_B_C"},
                 {"A\\_B_C", "A_B_C"},
-                {"\\__AB\\__", "_<em>AB_</em"},
+                {"\\__AB\\__", "_<em>AB_</em>"},
                 {"\\#\\# 2", "## 2"}
         };
         for (String[] testCase: tests) {
@@ -72,7 +72,7 @@ public class TextUtilsTest {
     @Test
     public void textToHtml_SupportsEscapedLt() {
         String[] tests = {
-                ":gm; 1",
+                "&gm; 1",
         };
 
         for (String testCase: tests) {
