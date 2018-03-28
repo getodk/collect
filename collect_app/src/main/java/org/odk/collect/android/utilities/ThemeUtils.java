@@ -14,8 +14,10 @@
 
 package org.odk.collect.android.utilities;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.view.Menu;
 import android.widget.ImageButton;
@@ -68,5 +70,23 @@ public final class ThemeUtils {
                 setIconTint(context, menuIcon);
             }
         }
+    }
+
+    public static boolean isHoloDialogTheme(int theme) {
+        return theme == android.R.style.Theme_Holo_Light_Dialog ||
+                theme == android.R.style.Theme_Holo_Dialog;
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public static int getMaterialDialogTheme() {
+        return ThemeUtils.isDarkTheme() ?
+                android.R.style.Theme_Material_Dialog :
+                android.R.style.Theme_Material_Light_Dialog;
+    }
+
+    public static int getHoloDialogTheme() {
+        return ThemeUtils.isDarkTheme() ?
+                android.R.style.Theme_Holo_Dialog :
+                android.R.style.Theme_Holo_Light_Dialog;
     }
 }

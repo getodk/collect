@@ -31,6 +31,7 @@ import android.widget.DatePicker;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
+import org.odk.collect.android.utilities.ThemeUtils;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -77,10 +78,10 @@ public class DateWidget extends AbstractDateWidget implements DatePickerDialog.O
         // https://github.com/opendatakit/collect/issues/1424
         // https://github.com/opendatakit/collect/issues/1367
         if (!isBrokenSamsungDevice() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            theme = android.R.style.Theme_Material_Light_Dialog;
+            theme = ThemeUtils.getMaterialDialogTheme();
         }
         if (!datePickerDetails.isCalendarMode() || (isBrokenSamsungDevice() && isTalkBackActive())) {
-            theme = android.R.style.Theme_Holo_Light_Dialog;
+            theme = ThemeUtils.getHoloDialogTheme();
         }
 
         return theme;
@@ -105,12 +106,10 @@ public class DateWidget extends AbstractDateWidget implements DatePickerDialog.O
 
     private class FixedDatePickerDialog extends DatePickerDialog {
         private String dialogTitle = getContext().getString(R.string.select_date);
-        private int theme;
 
         FixedDatePickerDialog(Context context, int theme, OnDateSetListener listener) {
             super(context, theme, listener, date.getYear(), date.getMonthOfYear() - 1, date.getDayOfMonth());
-            this.theme = theme;
-            if (theme == android.R.style.Theme_Holo_Light_Dialog) {
+            if (ThemeUtils.isHoloDialogTheme(theme)) {
                 setTitle(dialogTitle);
                 fixSpinner(context, date.getYear(), date.getMonthOfYear() - 1, date.getDayOfMonth());
                 hidePickersIfNeeded();
@@ -122,12 +121,6 @@ public class DateWidget extends AbstractDateWidget implements DatePickerDialog.O
 
                 //noinspection deprecation
                 getDatePicker().setCalendarViewShown(false);
-            }
-        }
-
-        public void setTitle(CharSequence title) {
-            if (theme == android.R.style.Theme_Holo_Light_Dialog) {
-                super.setTitle(dialogTitle);
             }
         }
 
