@@ -225,6 +225,9 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             if (child.isRepeatable() && child.getMultiplicity() != TreeReference.INDEX_TEMPLATE) {
                 insertRows(child, key, getKeyBasedOnParentKey(key, child.getName(), repeatIndex++), instanceFile, getElementTitle(child));
             }
+            if (child.getMultiplicity() == TreeReference.INDEX_TEMPLATE) {
+                repeatIndex = 0;
+            }
         }
     }
 
