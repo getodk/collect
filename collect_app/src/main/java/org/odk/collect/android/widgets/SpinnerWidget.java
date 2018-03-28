@@ -37,6 +37,7 @@ import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.ExternalDataUtil;
+import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.views.ScrolledToTopSpinner;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
@@ -224,7 +225,7 @@ public class SpinnerWidget extends QuestionWidget implements MultiChoiceWidget {
                 //noinspection deprecation
                 tv.setTextColor(getContext().getResources().getColor(R.color.tintColor));
             } else {
-                tv.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor));
+                tv.setTextColor(ContextCompat.getColor(context, ThemeUtils.getTextColor()));
             }
 
             return convertView;

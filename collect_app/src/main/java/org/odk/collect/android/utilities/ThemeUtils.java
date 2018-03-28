@@ -79,14 +79,18 @@ public final class ThemeUtils {
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public static int getMaterialDialogTheme() {
-        return ThemeUtils.isDarkTheme() ?
+        return isDarkTheme() ?
                 android.R.style.Theme_Material_Dialog :
                 android.R.style.Theme_Material_Light_Dialog;
     }
 
     public static int getHoloDialogTheme() {
-        return ThemeUtils.isDarkTheme() ?
+        return isDarkTheme() ?
                 android.R.style.Theme_Holo_Dialog :
                 android.R.style.Theme_Holo_Light_Dialog;
+    }
+
+    public static int getTextColor() {
+        return isDarkTheme() ? R.color.white : R.color.black;
     }
 }
