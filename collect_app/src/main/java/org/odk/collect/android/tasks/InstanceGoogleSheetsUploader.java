@@ -381,8 +381,6 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         }
         if (element.isRepeatable()) {
             answers.put(PARENT_KEY, parentKey);
-        }
-        if (hasRepeatableGroups(element)) {
             answers.put(KEY, key);
         }
         return answers;
@@ -395,8 +393,6 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         }
         if (element.isRepeatable()) {
             columnTitles.add(PARENT_KEY);
-        }
-        if (hasRepeatableGroups(element)) {
             columnTitles.add(KEY);
         }
         return columnTitles;
