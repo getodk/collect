@@ -95,7 +95,7 @@
             android:layout_height="wrap_content"
             android:padding="15dp"
             android:layout_margin="5dp"
-            android:src="@drawable/ic_layers_black_36dp" />
+            app:srcCompat="@drawable/ic_layers_black" />
 
 
         <ImageButton
