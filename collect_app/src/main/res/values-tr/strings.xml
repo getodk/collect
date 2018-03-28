@@ -67,7 +67,7 @@
   <string name="ok">Tamam</string>
   <string name="parse_error">Form ayrıştırılamadi.</string>
   <string name="password">Şifre</string>
-    <string name="play_video">Video Oynat</string>
+  <string name="play_video">Video Oynat</string>
   <string name="please_wait">Biraz Bekleyin..</string>
   <string name="please_wait_long">Biraz sürecek gibi.. Az kaldi</string>
   <string name="quit_application">Çıkış %s</string>

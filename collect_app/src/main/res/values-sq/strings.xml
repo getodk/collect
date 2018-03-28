@@ -88,7 +88,7 @@
   <string name="parse_legacy_formlist_failed">Nuk gjenden formularë të përputhshëm me Aggregate 0.9.x. në server: 1%s</string>
   <string name="parse_openrosa_formlist_failed">Nuk gjenden formularë të përputhshëm me Open Rosa versioni 1.0 standard në server: 1%s</string>
   <string name="password">Fjalëkalimi</string>
-    <string name="play_video">Shih videon</string>
+  <string name="play_video">Shih videon</string>
   <string name="please_wait">Lutemi, prisni pak sekonda.</string>
   <string name="please_wait_long">Lutemi, prisni. Mund të duhen disa minuta.</string>
   <string name="quit_application">Dil %s</string>
@@ -248,7 +248,6 @@
   <string name="drive_get_file">Duke ngarkuar %1$s dhe file-t media.</string>
   <string name="no_google_account">Nuk keni përzgjedhur një llogari në Google!</string>
   <string name="google_set_account">Keni përzgjedhur Google Sheets si server, lutemi, zjidhni një llogari në  Google në parametrat e përgjithshëm përpara se të vazhdoni.</string>
-  <string name="media_upload_error">Foto nuk mund të dërgohet pasi nuk ekziston: %1$s</string>
   <string name="odk_auth_auth_fail">Autentikimi i dërgimit automatik të ODK dështoi, lutemi sigurohuni që parametrat janë të saktë.</string>
   <string name="odk_auto_note">Njoftim ODK për dërgimin automatik </string>
   <string name="notification_error">Gabim në shfaqjen e tekstit të njoftimit</string>
@@ -261,9 +260,6 @@
   <string name="invalid_sheet_id">Numri i identifikimit të tabelës: %1$s i pavlefshëm.</string>
   <string name="google_play_services_error_occured">E pamundur të aksesohen Google Maps. A është i instaluar Google Play Services?</string>
   <string name="about_preferences">Rreth</string>
-  <string name="tell_your_friends">Ndaj ODK Collect me kolegët</string>
-  <string name="tell_your_friends_msg">Shkarko aplikacionin ODK Collect!</string>
-  <string name="leave_a_review">Ler një koment në Google Play Store</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="openmap_streets">Rrugë OSM</string>
   <string name="streets">Rrugë</string>
@@ -329,8 +325,6 @@
   <string name="odk_website">Vizitoni faqen e ODK në internet</string>
   <string name="odk_website_summary">Open Data Kit (ODK) përdoret për mbledhur të dhëna për të mirën shoqërore në mjedise sfiduese.</string>
   <string name="odk_forum">Bëhu pjesë e forumit ODK</string>
-  <string name="odk_forum_summary">Bëhu pjesë e forumit për të marrë mbështetje, kërkuar të shtohen elementë në aplikacion, kontribuosh me kod/përkthim!</string>
-  <string name="all_open_source_licenses">Libraritë dhe liçensat open source</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">P %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
