@@ -462,10 +462,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
 
         } else {
             playAudio();
-            Bitmap b =
-                    BitmapFactory.decodeResource(getContext().getResources(),
-                            android.R.drawable.ic_media_pause);
-            audioButton.setImageBitmap(b);
+            audioButton.setImageBitmap(bitmap_stop);
         }
         player.setOnCompletionListener(new OnCompletionListener() {
             @Override
