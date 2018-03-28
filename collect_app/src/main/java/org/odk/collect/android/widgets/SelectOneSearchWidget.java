@@ -18,6 +18,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.RadioButton;
 
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.listeners.AudioPlayListener;
@@ -42,7 +43,9 @@ public class SelectOneSearchWidget extends SelectOneWidget implements OnCheckedC
     protected void addButtonsToLayout(List<Integer> tagList) {
         for (int i = 0; i < buttons.size(); i++) {
             if (tagList == null || tagList.contains(i)) {
-                answerLayout.addView(buttons.get(i));
+                RadioButton radioButton = createRadioButton(i);
+//                answerLayout.addView(buttons.get(i));
+                answerLayout.addView(createMediaLayout(i, radioButton));
             }
         }
     }
