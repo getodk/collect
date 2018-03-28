@@ -225,6 +225,9 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             if (child.isRepeatable() && child.getMultiplicity() != TreeReference.INDEX_TEMPLATE) {
                 insertRows(child, key, getKeyBasedOnParentKey(key, child.getName(), repeatIndex++), instanceFile, getElementTitle(child));
             }
+            if (child.getMultiplicity() == TreeReference.INDEX_TEMPLATE) {
+                repeatIndex = 0;
+            }
         }
     }
 
@@ -382,6 +385,8 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         if (element.isRepeatable()) {
             answers.put(PARENT_KEY, parentKey);
             answers.put(KEY, key);
+        } else if (hasRepeatableGroups(element)) {
+            answers.put(KEY, key);
         }
         return answers;
     }
@@ -393,6 +398,8 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         }
         if (element.isRepeatable()) {
             columnTitles.add(PARENT_KEY);
+            columnTitles.add(KEY);
+        } else if (hasRepeatableGroups(element)) {
             columnTitles.add(KEY);
         }
         return columnTitles;
