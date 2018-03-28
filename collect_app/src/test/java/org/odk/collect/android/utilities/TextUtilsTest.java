@@ -25,12 +25,15 @@ public class TextUtilsTest {
     @Test
     public void markDownToHtmlEscapesBackslash() {
         String[][] tests = {
-                {"A\\_B\\_C", "A_B_C"},
                 {"_A\\_B\\_C_", "<em>A_B_C</em>"},
                 {"A_B\\_C", "A_B_C"},
                 {"A\\_B_C", "A_B_C"},
                 {"\\__AB\\__", "_<em>AB_</em>"},
-                {"\\#\\# 2", "## 2"}
+                {"\\#\\# 2", "## 2"},
+                // This test is used to check if the markdown for the escape character "\" in this code = .replaceAll("/\\\\/gm", "'&92;'") works perfectly
+                {"A\\\\_B\\\\_C", "A_B_C"},
+                // This test is used to check if the markdown for the escape character "\" in this code = .replaceAll(" /\\\\*/gm", "'&42;'") works perfectly
+                {"A\\\\*B\\\\*C, A*B*C" }
         };
         for (String[] testCase: tests) {
             Assert.assertEquals(testCase[0], TextUtils.markdownToHtml(testCase[0]));
