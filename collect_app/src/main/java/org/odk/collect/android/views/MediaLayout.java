@@ -73,8 +73,8 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
     private Context context;
 
     private CharSequence originalText;
-    private Bitmap bitmap_play;
-    private Bitmap bitmap_stop;
+    private Bitmap bitmapPlay;
+    private Bitmap bitmapStop;
 
     public MediaLayout(Context c, MediaPlayer player) {
         super(c);
@@ -88,9 +88,9 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
         this.player = player;
         audioPlayListener = null;
         playTextColor = Color.BLUE;
-        bitmap_play = BitmapFactory.decodeResource(getContext().getResources(),
+        bitmapPlay = BitmapFactory.decodeResource(getContext().getResources(),
                 android.R.drawable.ic_lock_silent_mode_off);
-        bitmap_stop = BitmapFactory.decodeResource(getContext().getResources(),
+        bitmapStop = BitmapFactory.decodeResource(getContext().getResources(),
                 android.R.drawable.ic_media_pause);
     }
 
@@ -101,7 +101,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
             viewText.setText(viewText.getText().toString());
             viewText.setTextColor(playTextColor);
             audioButton.playAudio();
-            audioButton.setImageBitmap(bitmap_stop);
+            audioButton.setImageBitmap(bitmapStop);
         }
     }
 
@@ -122,7 +122,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
 
     public void resetAudioButtonBitmap() {
         if (audioButton != null) {
-            audioButton.setImageBitmap(bitmap_play);
+            audioButton.setImageBitmap(bitmapPlay);
         }
     }
 
@@ -458,18 +458,18 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
         }
         if (player.isPlaying()) {
             player.stop();
-            audioButton.setImageBitmap(bitmap_play);
+            audioButton.setImageBitmap(bitmapPlay);
 
         } else {
             playAudio();
-            audioButton.setImageBitmap(bitmap_stop);
+            audioButton.setImageBitmap(bitmapStop);
         }
         player.setOnCompletionListener(new OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mediaPlayer) {
                 resetTextFormatting();
                 mediaPlayer.reset();
-                audioButton.setImageBitmap(bitmap_play);
+                audioButton.setImageBitmap(bitmapPlay);
             }
         });
     }
