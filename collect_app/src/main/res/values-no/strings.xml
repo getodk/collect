@@ -88,7 +88,7 @@
   <string name="parse_legacy_formlist_failed">Formatet er ikke kompatibel med Aggregate 09.x: %s</string>
   <string name="parse_openrosa_formlist_failed">Formatet er ikke kompitabel med OpenRosa 1.0 standard: %s</string>
   <string name="password">Passord</string>
-    <string name="play_video">Spill video</string>
+  <string name="play_video">Spill video</string>
   <string name="please_wait">Vennligst vent.</string>
   <string name="please_wait_long">Vennligst vent. Det kan ta litt tid.</string>
   <string name="quit_application">Avslutt %s</string>

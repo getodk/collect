@@ -88,7 +88,7 @@
   <string name="parse_legacy_formlist_failed">Die server het nie \'n beskikbare-vorms dokument verskaf wat versoenbaar is met Aggregate 0.9.x nie. : %s</string>
   <string name="parse_openrosa_formlist_failed">Die server het nie \'n beskikbare-vorms dokument verskaf wat versoenbaar is met die OpenRosa weergawe 1.0 standaard nie: %s</string>
   <string name="password">Wagwoord</string>
-    <string name="play_video">Speel Video</string>
+  <string name="play_video">Speel Video</string>
   <string name="please_wait">Wag asseblief \'n paar sekondes.</string>
   <string name="please_wait_long">Wag asseblief. Hierdie kan dalk \'n paar minute neem.</string>
   <string name="quit_application">Verlaat %s</string>

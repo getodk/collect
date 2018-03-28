@@ -87,7 +87,7 @@
   <string name="parse_legacy_formlist_failed">เซิร์ฟเวอร์ที่เชื่อมต่ออยู่ไม่มีแบบสำรวจที่ใช้งานได้กับ Aggregate 0.9.x. : %s</string>
   <string name="parse_openrosa_formlist_failed">เซิร์ฟเวอร์ที่เชื่อมต่ออยู่ไม่มีแบบสำรวจที่ใช้งานได้กับ OpenRosa version 1.0 standard: %s</string>
   <string name="password">รหัสผ่าน</string>
-    <string name="play_video">เปิดภาพเคลื่อนไหว</string>
+  <string name="play_video">เปิดภาพเคลื่อนไหว</string>
   <string name="please_wait">โปรดรอสักครู่</string>
   <string name="please_wait_long">โปรดรอ อาจต้องใช้เวลาสักครู่</string>
   <string name="quit_application">ออกจาก %s</string>
@@ -264,7 +264,6 @@
   <string name="google_play_services_error_occured">เปิด Google Maps ไม่ได้ ตรวจสอบว่ามี Google Play Services ติดตั้งหรือไม่
 </string>
   <string name="about_preferences">เกี่ยวกับ</string>
-  <string name="tell_your_friends_msg">ดาวน์โหลดแอพ ODK Collect</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">ทำแผนที่</string>
   <string name="map_sdk_selector_title">Mapping SDK</string>

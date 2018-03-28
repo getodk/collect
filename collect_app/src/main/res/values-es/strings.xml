@@ -2,6 +2,12 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
   <string name="show_password">Mostrar contraseña</string>
   <string name="activity_not_found">No se encontró actividad para manejar: %s</string>
+  <string name="view_image">Ver imagen</string>
+  <string name="annotate_image">Anotar en Imagen</string>
+  <string name="aligned_image_capture">Captura de Imagen alineada</string>
+  <string name="signature_capture">Firma</string>
+  <string name="view_video">Ver Video</string>
+  <string name="choose_audio">Seleccionar Audio</string>
   <string name="add_another">Agregar Grupo</string>
   <string name="add_another_repeat">¿Agregar otro grupo de \"%s\"?</string>
   <string name="add_repeat">¿Agregar un nuevo ciclo de \"%s\"?</string>
@@ -92,7 +98,7 @@
   <string name="parse_legacy_formlist_failed">El servidor no ha servido un formulario compatible con Aggregate 0.9.x  : %s</string>
   <string name="parse_openrosa_formlist_failed">El servidor no ha dado un formulario compatible con el estandar de OpenRosa version 1.0: %s</string>
   <string name="password">Contraseña</string>
-    <string name="play_video">Reproducir el Video</string>
+  <string name="play_video">Reproducir el Video</string>
   <string name="please_wait">Por favor, espere un momento.</string>
   <string name="please_wait_long">Por favor espere. Esto podria demorarse unos minutos.</string>
   <string name="quit_application">Salir %s</string>
@@ -219,6 +225,7 @@
   <string name="constraint_behavior_on_swipe">Validar al desplazar hacia delante.</string>
   <string name="constraint_behavior_on_finalize">Postponer validación hasta el final</string>
   <string name="view_change_location">Ver o cambiar de localización</string>
+  <string name="change_location">Cambiar Ubicación</string>
   <string name="open_url">Abrir URL</string>
   <string name="get_bearing">Registrar Orientación</string>
   <string name="replace_bearing">Cambiar Orientación</string>
@@ -268,7 +275,6 @@
   <string name="drive_get_file">Obteniendo %1$s y archivos multimedia.</string>
   <string name="no_google_account">!Cuenta Google no Seleccionada¡</string>
   <string name="google_set_account">Ha seleccionado Google Sheets como servidor, por favor, seleccionar la correspondiente cuenta Google en Características Generales antes de continuar</string>
-  <string name="media_upload_error">Fallo al cargar foto que no existe:%1$s</string>
   <string name="odk_auth_auth_fail">Falla de autenticación en envío automático. Favor verificar sus ajustes en servidor</string>
   <string name="odk_auto_note">Notificación de Envío Automático de servidor</string>
   <string name="notification_error">Error al mostrar texto de la notificación</string>
@@ -286,9 +292,10 @@
   <string name="username_error_whitespace">Espacios delante o detras no permitidos en nombre de usuario</string>
   <string name="google_play_services_error_occured">No se puede acceder a Google Maps. ¿Hay el servicio instalado?</string>
   <string name="about_preferences">Acerca de</string>
-  <string name="tell_your_friends">Comparta ODK con sus colegas</string>
-  <string name="tell_your_friends_msg">¡Descarga la app ODK Collect!</string>
-  <string name="leave_a_review">Actualizar Aplicación y/o Dejar comentarios en Google Play Store</string>
+  <string name="tell_your_friends">Compartir ODK Collect</string>
+  <string name="tell_your_friends_msg">Sus colegas aún recogen datos en papel? Comparte con ellos la aplicación</string>
+  <string name="leave_a_review">Dejar un comentario en Play Store</string>
+  <string name="leave_a_review_msg">Su comentario (ojalá positivo) incrementa la visibilidad de la App en Play Store</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">Cartografía</string>
   <string name="map_sdk_selector_title">Cartografía SDK</string>
@@ -368,8 +375,9 @@
   <string name="odk_website">Visitar el sitio web</string>
   <string name="odk_website_summary">Open Data Kit (ODK) es usado para toma de datos  y beneficiar la sociedad en ambientes desafiantes</string>
   <string name="odk_forum">Unirse al foro de ODK</string>
-  <string name="odk_forum_summary">Unase al foro para soporte, sugerir mejoras, contribuir con código, traducir, etc</string>
-  <string name="all_open_source_licenses">Librerías y licencias de código abierto</string>
+  <string name="odk_forum_summary">Únase al foro para obtener soporte, solicitar mejoras, contribuir con el código, traducir!</string>
+  <string name="all_open_source_licenses">Licencias/librerias de Código Abierto</string>
+  <string name="all_open_source_licenses_msg">Sostenidos a hombros de gigantes!</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">O %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->

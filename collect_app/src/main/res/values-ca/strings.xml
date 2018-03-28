@@ -91,7 +91,7 @@
   <string name="parse_legacy_formlist_failed">El servidor no ha proveït un formulari disponible compatible amb Aggregate 0.9.x. : %s</string>
   <string name="parse_openrosa_formlist_failed">El servidor no ha proveït un formulari disponible compatible amb OpenRosa versio 1.0 standard: %s</string>
   <string name="password">Clau d\'accés</string>
-    <string name="play_video">Reprodueix Vídeo</string>
+  <string name="play_video">Reprodueix Vídeo</string>
   <string name="please_wait">Un moment si us plau.</string>
   <string name="please_wait_long">Un moment si us plau. Això pot trigar uns minuts.</string>
   <string name="quit_application">Sortida %s</string>
@@ -273,7 +273,6 @@
   <string name="username_error_whitespace">No es permeten espais davant o darrera un nom d\'usuari</string>
   <string name="google_play_services_error_occured">No pot accedir a Google Maps. Teniu el servei instal·lat ?</string>
   <string name="about_preferences">Sobre</string>
-  <string name="tell_your_friends_msg">Baixa l\'app ODK Collect!</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">Mapejant</string>
   <string name="map_sdk_selector_title">Mapejant SDK</string>

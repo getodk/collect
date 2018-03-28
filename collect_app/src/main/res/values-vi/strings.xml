@@ -86,7 +86,7 @@
   <string name="parse_legacy_formlist_failed">Máy chủ không có các biểu mẫu tương thích với Aggregate 0.9.x. : %s</string>
   <string name="parse_openrosa_formlist_failed">Máy chủ không có các biểu mẫu tương thích với OpenRosa phiên bản chuẩn 1.0: %s</string>
   <string name="password">Mật khẩu</string>
-    <string name="play_video">Chạy Video</string>
+  <string name="play_video">Chạy Video</string>
   <string name="please_wait">Hãy đợi 1 lúc.</string>
   <string name="please_wait_long">Hãy đợi trong ít phút.</string>
   <string name="quit_application">Thoát %s</string>
