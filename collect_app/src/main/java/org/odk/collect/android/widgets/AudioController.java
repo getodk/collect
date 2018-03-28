@@ -32,6 +32,7 @@ import org.joda.time.DateTimeZone;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.utilities.ThemeUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -54,6 +55,10 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
     TextView totalDurationLabel;
     @BindView(R.id.playBtn)
     ImageButton playButton;
+    @BindView(R.id.fastForwardBtn)
+    ImageButton fastForwardBtn;
+    @BindView(R.id.fastRewindBtn)
+    ImageButton fastRewindBtn;
     @BindView(R.id.seekBar)
     SeekBar seekBar;
 
@@ -139,6 +144,7 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
         view = LayoutInflater.from(context).inflate(R.layout.media_player_layout, parent, false);
         ButterKnife.bind(this, view);
         seekBar.setOnSeekBarChangeListener(this);
+        ThemeUtils.setIconTint(context, playButton, fastForwardBtn, fastRewindBtn);
     }
 
     private void initMediaPlayer() {
@@ -199,6 +205,7 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
                         formEntryPrompt.getIndex());
 
         playButton.setImageResource(R.drawable.ic_pause_black_24dp);
+        ThemeUtils.setIconTint(context, playButton);
         mediaPlayer.start();
         updateProgressBar();
     }

@@ -18,6 +18,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.view.Menu;
+import android.widget.ImageButton;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -46,6 +47,12 @@ public final class ThemeUtils {
 
     public static int getBottomDialogTheme() {
         return isDarkTheme() ? R.style.DarkMaterialDialogSheet : R.style.LightMaterialDialogSheet;
+    }
+
+    public static void setIconTint(Context context, ImageButton... imageButtons) {
+        for (ImageButton imageButton : imageButtons) {
+            setIconTint(context, imageButton.getDrawable());
+        }
     }
 
     public static void setIconTint(Context context, Drawable... drawables) {
