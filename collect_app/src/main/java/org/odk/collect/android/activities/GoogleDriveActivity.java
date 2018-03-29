@@ -619,6 +619,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
             // file clicked, download the file, mark checkbox.
             CheckBox cb = view.findViewById(R.id.checkbox);
             cb.setChecked(!cb.isChecked());
+            item.setSelected(cb.isChecked());
 
             if (toDownload.contains(item) && !cb.isChecked()) {
                 toDownload.remove(item);

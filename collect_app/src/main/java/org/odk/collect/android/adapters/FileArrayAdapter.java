@@ -80,7 +80,6 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
             text1.setText(item.getName());
             text2.setText(dateModified);
             checkBox.setChecked(item.isSelected());
-            checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> item.setSelected(buttonView.isChecked()));
         }
     }
 
