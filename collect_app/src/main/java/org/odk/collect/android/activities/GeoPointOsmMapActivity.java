@@ -129,7 +129,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
         }
 
         marker = new Marker(map);
-        marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black_36dp));
+        marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black));
         myLocationOverlay = new MyLocationNewOverlay(map);
 
         handler.postDelayed(new Runnable() {
@@ -485,7 +485,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
         showLocationButton.setEnabled(true);
         map.invalidate();
         marker.setPosition(geoPoint);
-        marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black_36dp));
+        marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black));
         marker.setDraggable(true);
         latLng = geoPoint;
         isDragged = true;

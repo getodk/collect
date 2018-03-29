@@ -65,7 +65,6 @@ if (secretsFile.exists()) {
 
 android {
     compileSdkVersion(27)
-    buildToolsVersion('26.0.2')
 
     defaultConfig {
         applicationId('org.odk.collect.android')
@@ -157,6 +156,7 @@ android {
             returnDefaultValues = true
         }
     }
+    buildToolsVersion '27.0.3'
 }
 
 configurations.all {
