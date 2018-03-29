@@ -18,7 +18,6 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.Gravity;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -26,7 +25,7 @@ import org.odk.collect.android.logic.HierarchyElement;
 import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.utilities.ViewIds;
 
-public class HierarchyElementView extends LinearLayout {
+public class HierarchyElementView extends RelativeLayout {
 
     private TextView primaryTextView;
     private TextView secondaryTextView;
@@ -52,7 +51,7 @@ public class HierarchyElementView extends LinearLayout {
         primaryTextView.setId(ViewIds.generateViewId());
         primaryTextView.setGravity(Gravity.CENTER_VERTICAL);
         LayoutParams l =
-                new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
+                new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
                         LayoutParams.WRAP_CONTENT);
 //        l.addRule(RelativeLayout.RIGHT_OF, icon.getId());
         addView(primaryTextView, l);
@@ -63,7 +62,7 @@ public class HierarchyElementView extends LinearLayout {
         secondaryTextView.setGravity(Gravity.CENTER_VERTICAL);
 
         LayoutParams lp =
-                new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
+                new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
                         LayoutParams.WRAP_CONTENT);
 //        lp.addRule(RelativeLayout.BELOW, primaryTextView.getId());
 //        lp.addRule(RelativeLayout.RIGHT_OF, icon.getId());
