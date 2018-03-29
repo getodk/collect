@@ -56,10 +56,14 @@ public class HierarchyElementView extends RelativeLayout {
         LayoutParams l =
                 new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
                         LayoutParams.WRAP_CONTENT);
-        l.addRule(RelativeLayout.RIGHT_OF, icon.getId());
-        if (QuestionWidget.isRTL() && Build.VERSION.SDK_INT > 16) {
+        if (QuestionWidget.isRTL() && Build.VERSION.SDK_INT > 17) {
             l.addRule(RelativeLayout.END_OF, icon.getId());
             primaryTextView.setTextDirection(View.TEXT_DIRECTION_RTL);
+        }else if (QuestionWidget.isRTL() && Build.VERSION.SDK_INT == 17){
+            l.addRule(RelativeLayout.END_OF, icon.getId());
+            primaryTextView.setTextDirection(View.TEXT_DIRECTION_RTL);
+        }else {
+            l.addRule(RelativeLayout.RIGHT_OF, icon.getId());
         }
         addView(primaryTextView, l);
 
@@ -72,10 +76,15 @@ public class HierarchyElementView extends RelativeLayout {
                 new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
                         LayoutParams.WRAP_CONTENT);
         lp.addRule(RelativeLayout.BELOW, primaryTextView.getId());
-        lp.addRule(RelativeLayout.RIGHT_OF, icon.getId());
-        if (QuestionWidget.isRTL() && Build.VERSION.SDK_INT > 16) {
+        if (QuestionWidget.isRTL() && Build.VERSION.SDK_INT > 17) {
+            lp.addRule(RelativeLayout.RIGHT_OF, icon.getId());
             lp.addRule(RelativeLayout.END_OF, icon.getId());
             secondaryTextView.setTextDirection(View.TEXT_DIRECTION_RTL);
+        }else if (QuestionWidget.isRTL() && Build.VERSION.SDK_INT == 17){
+            lp.addRule(RelativeLayout.END_OF, icon.getId());
+            secondaryTextView.setTextDirection(View.TEXT_DIRECTION_RTL);
+        }else {
+            lp.addRule(RelativeLayout.RIGHT_OF, icon.getId());
         }
         addView(secondaryTextView, lp);
 
