@@ -59,10 +59,10 @@ public class HierarchyElementView extends RelativeLayout {
         if (QuestionWidget.isRTL() && Build.VERSION.SDK_INT > 17) {
             l.addRule(RelativeLayout.END_OF, icon.getId());
             primaryTextView.setTextDirection(View.TEXT_DIRECTION_RTL);
-        }else if (QuestionWidget.isRTL() && Build.VERSION.SDK_INT == 17){
+        } else if (QuestionWidget.isRTL() && Build.VERSION.SDK_INT == 17) {
             l.addRule(RelativeLayout.END_OF, icon.getId());
             primaryTextView.setTextDirection(View.TEXT_DIRECTION_RTL);
-        }else {
+        } else {
             l.addRule(RelativeLayout.RIGHT_OF, icon.getId());
         }
         addView(primaryTextView, l);
@@ -80,10 +80,10 @@ public class HierarchyElementView extends RelativeLayout {
             lp.addRule(RelativeLayout.RIGHT_OF, icon.getId());
             lp.addRule(RelativeLayout.END_OF, icon.getId());
             secondaryTextView.setTextDirection(View.TEXT_DIRECTION_RTL);
-        }else if (QuestionWidget.isRTL() && Build.VERSION.SDK_INT == 17){
+        } else if (QuestionWidget.isRTL() && Build.VERSION.SDK_INT == 17) {
             lp.addRule(RelativeLayout.END_OF, icon.getId());
             secondaryTextView.setTextDirection(View.TEXT_DIRECTION_RTL);
-        }else {
+        } else {
             lp.addRule(RelativeLayout.RIGHT_OF, icon.getId());
         }
         addView(secondaryTextView, lp);
