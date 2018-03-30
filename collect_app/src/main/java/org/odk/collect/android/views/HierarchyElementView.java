@@ -56,10 +56,7 @@ public class HierarchyElementView extends RelativeLayout {
         LayoutParams l =
                 new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
                         LayoutParams.WRAP_CONTENT);
-        if (QuestionWidget.isRTL() && Build.VERSION.SDK_INT > 17) {
-            l.addRule(RelativeLayout.END_OF, icon.getId());
-            primaryTextView.setTextDirection(View.TEXT_DIRECTION_RTL);
-        } else if (QuestionWidget.isRTL() && Build.VERSION.SDK_INT == 17) {
+        if (QuestionWidget.isRTL() && Build.VERSION.SDK_INT > 16) {
             l.addRule(RelativeLayout.END_OF, icon.getId());
             primaryTextView.setTextDirection(View.TEXT_DIRECTION_RTL);
         } else {
