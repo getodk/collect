@@ -384,10 +384,6 @@ public abstract class QuestionWidget
         getQuestionMediaLayout().resetTextFormatting();
     }
 
-    public void resetAudioButtonImage() {
-        getQuestionMediaLayout().resetAudioButtonBitmap();
-    }
-
     @Override
     protected void onWindowVisibilityChanged(int visibility) {
         if (visibility == INVISIBLE || visibility == GONE) {

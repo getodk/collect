@@ -76,14 +76,6 @@ public abstract class SelectWidget extends QuestionWidget {
     }
 
     @Override
-    public void resetAudioButtonImage() {
-        super.resetAudioButtonImage();
-        for (MediaLayout layout : playList) {
-            layout.resetAudioButtonBitmap();
-        }
-    }
-
-    @Override
     public void playAllPromptText() {
         // set up to play the items when the
         // question text is finished

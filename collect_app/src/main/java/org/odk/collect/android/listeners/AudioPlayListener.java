@@ -19,6 +19,4 @@ package org.odk.collect.android.listeners;
  */
 public interface AudioPlayListener {
     void resetQuestionTextColor();
-
-    void resetAudioButtonImage();
 }
