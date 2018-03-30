@@ -269,13 +269,9 @@ public class Collect extends Application implements HasActivityInjector {
 
         reloadSharedPreferences();
 
-        try {
-            JobManager
-                    .create(this)
-                    .addJobCreator(new ServerPollingJobCreator());
-        } catch (JobManagerCreateException e) {
-            Timber.e(e);
-        }
+        JobManager
+                .create(this)
+                .addJobCreator(new ServerPollingJobCreator());
 
         PRNGFixes.apply();
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);

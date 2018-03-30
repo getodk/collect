@@ -760,6 +760,6 @@ public class DownloadFormsTask extends
     }
 
     public static String getMd5Hash(String hash) {
-        return hash == null ? null : hash.substring(MD5_COLON_PREFIX.length());
+        return hash == null || hash.isEmpty() ? null : hash.substring(MD5_COLON_PREFIX.length());
     }
 }

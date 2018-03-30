@@ -16,18 +16,42 @@
 
 package org.odk.collect.android.tasks;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
+import android.support.v4.app.NotificationCompat;
 
 import com.evernote.android.job.Job;
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.FormDownloadList;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.logic.FormDetails;
+import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.DownloadFormListUtils;
+import org.odk.collect.android.utilities.FileUtils;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JR_FORM_ID;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.LAST_DETECTED_FORM_VERSION_HASH;
+import static org.odk.collect.android.utilities.DownloadFormListUtils.DL_AUTH_REQUIRED;
+import static org.odk.collect.android.utilities.DownloadFormListUtils.DL_ERROR_MSG;
 
 public class ServerPollingJob extends Job {
 
@@ -43,7 +67,34 @@ public class ServerPollingJob extends Job {
     protected Result onRunJob(@NonNull Params params) {
         HashMap<String, FormDetails> formList = DownloadFormListUtils.downloadFormList();
 
-        return Result.SUCCESS;
+        if (formList != null && !formList.containsKey(DL_ERROR_MSG)) {
+            if (formList.containsKey(DL_AUTH_REQUIRED)) {
+                AuthDialogUtility.setWebCredentialsFromPreferences();
+                formList = DownloadFormListUtils.downloadFormList();
+
+                if (formList == null || formList.containsKey(DL_AUTH_REQUIRED) || formList.containsKey(DL_ERROR_MSG)) {
+                    return Result.FAILURE;
+                }
+            }
+
+            List<FormDetails> newDetectedForms = new ArrayList<>();
+            for (FormDetails formDetails : formList.values()) {
+                if (formDetails.isNewerFormVersionAvailable() || formDetails.areNewerMediaFilesAvailable()) {
+                    String formVersionHash = formDetails.getHash() + getManifestFileAsMd5Hash(formDetails.getManifestUrl());
+                     if (!wasThisNewerFormVersionAlreadyDetected(formVersionHash)) {
+                         newDetectedForms.add(formDetails);
+                         updateLastDetectedFormVersionHash(formDetails.getFormID(), formVersionHash);
+                    }
+                }
+            }
+
+            if (!newDetectedForms.isEmpty()) {
+                newFormVersionDetected(newDetectedForms);
+            }
+            return Result.SUCCESS;
+        } else {
+            return Result.FAILURE;
+        }
     }
 
     public static void schedulePeriodicJob(String selectedOption) {
@@ -60,10 +111,68 @@ public class ServerPollingJob extends Job {
             }
 
             new JobRequest.Builder(TAG)
-                    .setPeriodic(period)
+                    .setPeriodic(period, 300000)
                     .setUpdateCurrent(true)
                     .build()
                     .schedule();
         }
+    }
+
+    private boolean wasThisNewerFormVersionAlreadyDetected(String formVersionHash) {
+        Cursor cursor = new FormsDao().getFormsCursor(LAST_DETECTED_FORM_VERSION_HASH + "=?", new String[]{formVersionHash});
+        return cursor == null || cursor.getCount() > 0;
+    }
+
+    private void newFormVersionDetected(List<FormDetails> newerForms) {
+        StringBuilder listOfForms = new StringBuilder();
+        for (FormDetails formDetails : newerForms) {
+            listOfForms.append(formDetails.getFormName());
+
+            if (newerForms.indexOf(formDetails) < newerForms.size() - 1) {
+                listOfForms.append(", ");
+            }
+        }
+        showNotification(listOfForms.toString());
+    }
+
+    private void showNotification(String message) {
+        Intent intent = new Intent(getContext(), FormDownloadList.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(getContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext())
+                .setSmallIcon(R.drawable.ic_info)
+                .setLargeIcon(BitmapFactory.decodeResource(getContext().getResources(), R.drawable.notes))
+                .setContentTitle(getContext().getString(R.string.form_updates_available))
+                .setContentText(message)
+                .setAutoCancel(true)
+                .setContentIntent(contentIntent);
+
+        NotificationManager manager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        if (manager != null) {
+            manager.notify(0, builder.build());
+        }
+    }
+
+    private void updateLastDetectedFormVersionHash(String formId, String formVersionHash) {
+        ContentValues values = new ContentValues();
+        values.put(LAST_DETECTED_FORM_VERSION_HASH, formVersionHash);
+        new FormsDao().updateForm(values, JR_FORM_ID + "=?", new String[] {formId});
+    }
+
+    private String getManifestFileAsMd5Hash(String url) {
+        String mdhHash = "";
+        HttpURLConnection urlConnection = null;
+        try {
+            urlConnection = (HttpURLConnection) new URL(url).openConnection();
+            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+            mdhHash = FileUtils.getMd5Hash(in);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+        }
+        return DownloadFormsTask.getMd5Hash(mdhHash);
     }
 }

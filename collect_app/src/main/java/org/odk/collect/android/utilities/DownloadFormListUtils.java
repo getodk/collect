@@ -224,7 +224,7 @@ public class DownloadFormListUtils {
                     }
                 }
                 formList.put(formId, new FormDetails(formName, downloadUrl, manifestUrl, formId,
-                        (version != null) ? version : majorMinorVersion, isNewerFormVersionAvailable, areNewerMediaFilesAvailable));
+                        (version != null) ? version : majorMinorVersion, hash, isNewerFormVersionAvailable, areNewerMediaFilesAvailable));
             }
         } else {
             // Aggregate 0.9.x mode...
@@ -268,7 +268,7 @@ public class DownloadFormListUtils {
                         return formList;
                     }
                     formList.put(formName,
-                            new FormDetails(formName, downloadUrl, null, formId, null, false, false));
+                            new FormDetails(formName, downloadUrl, null, formId, null, null, false, false));
 
                     formId = null;
                 }

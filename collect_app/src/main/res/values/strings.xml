@@ -591,4 +591,5 @@
     <string name="every_one_hour">Every one hour</string>
     <string name="every_six_hours">Every six hours</string>
     <string name="every_one_day">Every one day</string>
+    <string name="form_updates_available">Form update available:</string>
 </resources>
