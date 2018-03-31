@@ -36,12 +36,12 @@ public class SortDialogAdapter extends RecyclerView.Adapter<SortDialogAdapter.Vi
     private final RecyclerView recyclerView;
     private String[] sortList;
 
-    public SortDialogAdapter(Context context, RecyclerView recyclerView, String[] sortList, int selectedSortingOrder, RecyclerViewClickListener listener) {
+    public SortDialogAdapter(Context context, RecyclerView recyclerView, String[] sortList, int selectedSortingOrder, RecyclerViewClickListener recyclerViewClickListener) {
         this.context = context;
         this.recyclerView = recyclerView;
         this.sortList = sortList;
         this.selectedSortingOrder = selectedSortingOrder;
-        this.listener = listener;
+        listener = recyclerViewClickListener;
     }
 
     @NonNull
@@ -54,7 +54,18 @@ public class SortDialogAdapter extends RecyclerView.Adapter<SortDialogAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
-        viewHolder.bind(sortList[position]);
+        viewHolder.txtViewTitle.setText(sortList[position]);
+        viewHolder.imgViewIcon.setImageResource(ApplicationConstants.getSortLabelToIconMap().get(sortList[position]));
+        viewHolder.imgViewIcon.setImageDrawable(DrawableCompat.wrap(viewHolder.imgViewIcon.getDrawable()).mutate());
+
+        if (position == selectedSortingOrder) {
+            viewHolder.txtViewTitle.setTextColor(context.getResources().getColor(R.color.tintColor));
+            DrawableCompat.setTint(viewHolder.imgViewIcon.getDrawable(),
+                    context.getResources().getColor(R.color.tintColor));
+        } else {
+            viewHolder.txtViewTitle.setTextColor(context.getResources().getColor(R.color.black));
+            DrawableCompat.setTintList(viewHolder.imgViewIcon.getDrawable(), null);
+        }
     }
 
     // Return the size of your itemsData (invoked by the layout manager)
@@ -63,39 +74,32 @@ public class SortDialogAdapter extends RecyclerView.Adapter<SortDialogAdapter.Vi
         return sortList.length;
     }
 
+    // inner class to hold a reference to each item of RecyclerView
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView tvTitle;
-        private ImageView ivIcon;
+        TextView txtViewTitle;
+        ImageView imgViewIcon;
 
         ViewHolder(final View itemLayoutView) {
             super(itemLayoutView);
-            tvTitle = itemLayoutView.findViewById(R.id.title);
-            ivIcon = itemLayoutView.findViewById(R.id.icon);
-            itemLayoutView.setOnClickListener(v -> listener.onItemClicked(this, getLayoutPosition()));
+            txtViewTitle = itemLayoutView.findViewById(R.id.title);
+            imgViewIcon = itemLayoutView.findViewById(R.id.icon);
+
+            itemLayoutView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onItemClicked(ViewHolder.this, getLayoutPosition());
+                }
+            });
         }
 
-        public void updateItemColor(int position) {
-            ViewHolder previousHolder = (ViewHolder) recyclerView.findViewHolderForAdapterPosition(position);
-            previousHolder.setSelected(false);
-            setSelected(true);
-        }
+        public void updateItemColor(int selectedSortingOrder) {
+            ViewHolder previousHolder = (ViewHolder) recyclerView.findViewHolderForAdapterPosition(selectedSortingOrder);
+            previousHolder.txtViewTitle.setTextColor(context.getResources().getColor(ThemeUtils.getTextColor()));
+            DrawableCompat.setTintList(previousHolder.imgViewIcon.getDrawable(), null);
 
-        void setSelected(boolean isSelected) {
-            if (isSelected) {
-                tvTitle.setTextColor(context.getResources().getColor(R.color.tintColor));
-                DrawableCompat.setTint(ivIcon.getDrawable(), context.getResources().getColor(R.color.tintColor));
-            } else {
-                tvTitle.setTextColor(context.getResources().getColor(ThemeUtils.getTextColor()));
-                DrawableCompat.setTintList(ivIcon.getDrawable(), null);
-            }
-        }
-
-        void bind(String sortOrder) {
-            tvTitle.setText(sortOrder);
-            ivIcon.setImageResource(ApplicationConstants.getSortLabelToIconMap().get(sortOrder));
-            ivIcon.setImageDrawable(DrawableCompat.wrap(ivIcon.getDrawable()).mutate());
-            setSelected(getAdapterPosition() == selectedSortingOrder);
+            txtViewTitle.setTextColor(context.getResources().getColor(R.color.tintColor));
+            DrawableCompat.setTint(imgViewIcon.getDrawable(), context.getResources().getColor(R.color.tintColor));
         }
     }
 }
