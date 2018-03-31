@@ -20,7 +20,6 @@ import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
 
 import org.odk.collect.android.utilities.ThemeUtils;
 
@@ -33,13 +32,6 @@ public abstract class CollectAbstractActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         setTheme(ThemeUtils.getAppTheme());
         super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    @CallSuper
-    public boolean onCreateOptionsMenu(Menu menu) {
-        ThemeUtils.setMenuTint(this, menu);
-        return super.onCreateOptionsMenu(menu);
     }
 
     @Override

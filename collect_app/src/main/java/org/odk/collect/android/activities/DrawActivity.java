@@ -300,8 +300,8 @@ public class DrawActivity extends CollectAbstractActivity {
         ListView listView = DialogUtils.createActionListView(this);
 
         List<IconMenuItem> items;
-        items = ImmutableList.of(new IconMenuItem(R.drawable.ic_save_grey_32dp_wrapped, R.string.keep_changes),
-                new IconMenuItem(R.drawable.ic_delete_grey_32dp_wrapped, R.string.do_not_save));
+        items = ImmutableList.of(new IconMenuItem(R.drawable.ic_save_grey_32dp, R.string.keep_changes),
+                new IconMenuItem(R.drawable.ic_delete_grey_32dp, R.string.do_not_save));
 
         final IconMenuListAdapter adapter = new IconMenuListAdapter(this, items);
         listView.setAdapter(adapter);

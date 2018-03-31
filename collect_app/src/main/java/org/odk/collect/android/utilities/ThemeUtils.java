@@ -19,7 +19,6 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v4.graphics.drawable.DrawableCompat;
-import android.view.Menu;
 import android.widget.ImageButton;
 
 import org.odk.collect.android.R;
@@ -51,25 +50,18 @@ public final class ThemeUtils {
         return isDarkTheme() ? R.style.DarkMaterialDialogSheet : R.style.LightMaterialDialogSheet;
     }
 
+    /*
+     *   TODO : Remove this method once all drawables are converted to vectors and use ?colorControlNormal for android:fillColor attribute
+     */
     public static void setIconTint(Context context, ImageButton... imageButtons) {
         for (ImageButton imageButton : imageButtons) {
             setIconTint(context, imageButton.getDrawable());
         }
     }
 
-    public static void setIconTint(Context context, Drawable... drawables) {
-        for (Drawable drawable : drawables) {
-            DrawableCompat.setTint(drawable, context.getResources().getColor(isDarkTheme() ? R.color.white : R.color.black));
-        }
-    }
-
-    public static void setMenuTint(Context context, Menu menu) {
-        for (int i = 0; i < menu.size(); i++) {
-            Drawable menuIcon = menu.getItem(i).getIcon();
-            if (menuIcon != null) {
-                setIconTint(context, menuIcon);
-            }
-        }
+    public static void setIconTint(Context context, Drawable drawable) {
+        DrawableCompat.setTint(drawable, context.getResources()
+                .getColor(isDarkTheme() ? R.color.white : R.color.black));
     }
 
     public static boolean isHoloDialogTheme(int theme) {

@@ -86,13 +86,8 @@ public class SortDialogAdapter extends RecyclerView.Adapter<SortDialogAdapter.Vi
                 tvTitle.setTextColor(context.getResources().getColor(R.color.tintColor));
                 DrawableCompat.setTint(ivIcon.getDrawable(), context.getResources().getColor(R.color.tintColor));
             } else {
-                if (ThemeUtils.isDarkTheme()) {
-                    tvTitle.setTextColor(context.getResources().getColor(R.color.white));
-                    ThemeUtils.setIconTint(context, ivIcon.getDrawable());
-                } else {
-                    tvTitle.setTextColor(context.getResources().getColor(R.color.black));
-                    DrawableCompat.setTintList(ivIcon.getDrawable(), null);
-                }
+                tvTitle.setTextColor(context.getResources().getColor(ThemeUtils.getTextColor()));
+                DrawableCompat.setTintList(ivIcon.getDrawable(), null);
             }
         }
 

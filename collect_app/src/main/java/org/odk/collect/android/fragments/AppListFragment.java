@@ -103,7 +103,6 @@ abstract class AppListFragment extends ListFragment {
         super.onCreateOptionsMenu(menu, inflater);
 
         inflater.inflate(R.menu.list_menu, menu);
-        ThemeUtils.setMenuTint(getContext(), menu);
 
         final MenuItem sortItem = menu.findItem(R.id.menu_sort);
         final MenuItem searchItem = menu.findItem(R.id.menu_filter);

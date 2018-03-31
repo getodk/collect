@@ -49,7 +49,6 @@ import org.odk.collect.android.utilities.CompressionUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.QRCodeUtils;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
-import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
@@ -265,7 +264,6 @@ public class ShowQRCodeFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.settings_menu, menu);
-        ThemeUtils.setMenuTint(getActivity(), menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
