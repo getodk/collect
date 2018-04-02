@@ -1311,7 +1311,11 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
         } catch (JavaRosaException e) {
             Timber.d(e);
-            createErrorDialog(e.getMessage() + "\n\n" + e.getCause().getMessage(), DO_NOT_EXIT);
+            if (e.getMessage().equals(e.getCause().getMessage())) {
+                createErrorDialog(e.getMessage(), DO_NOT_EXIT);
+            } else {
+                createErrorDialog(e.getMessage() + "\n\n" + e.getCause().getMessage(), DO_NOT_EXIT);
+            }
         }
 
         return createView(event, advancingPage);
