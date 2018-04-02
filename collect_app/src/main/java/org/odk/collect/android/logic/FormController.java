@@ -521,7 +521,14 @@ public class FormController {
         List<FormIndex> indices = getIndicesForGroup(gd);
 
         // jump to the end of the group
-        formEntryController.jumpToIndex(indices.get(indices.size() - 1));
+        if (indices.size() == 0) {
+            // if field list is empty, there will be a infinity loop between stepOverGroup()
+            // and stepToNextEvent(boolean stepIntoGroup), so we use stepToNextEvent(STEP_INTO_GROUP)
+            // to break this loop and use another JavaRosaException to handle this.
+            return stepToNextEvent(STEP_INTO_GROUP);
+        } else {
+            formEntryController.jumpToIndex(indices.get(indices.size() - 1));
+        }
         return stepToNextEvent(STEP_OVER_GROUP);
     }
 
