@@ -2,6 +2,11 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
   <string name="show_password">पासवर्ड दिखायें </string>
   <string name="activity_not_found">%s:के नियंत्रण के लिए कोई क्रिया नहीं मिली</string>
+  <string name="view_image">इमेज देखें</string>
+  <string name="annotate_image">इमेज पर टिप्पणी करें</string>
+  <string name="aligned_image_capture">संरेखित छवि कैद</string>
+  <string name="view_video">वीडियो देखें</string>
+  <string name="choose_audio">ऑडियो चुनें</string>
   <string name="add_another"> समूह जोड़ें</string>
   <string name="add_another_repeat">एक और “%s” समूह जोड़ें</string>
   <string name="add_repeat">एक नया \"%s\" समूह जोड़ें?</string>
@@ -405,6 +410,7 @@
   <string name="sort_by_name_asc">नाम, A-Z</string>
   <string name="sort_by_name_desc">नाम, Z-A</string>
   <string name="sort_by_date_asc">दिनांक, नयी पहले </string>
+  <string name="sort_by_date_desc">दिनांक, सबसे पुराना पहले</string>
   <string name="sort_by_status_desc">अवस्था, बिना फाइनल हुए शब्द</string>
   <string name="sort_the_list">सूची को सॉर्ट करें</string>
   <string name="request_permissions_google_account">ODK कलेक्ट को रिक्त फॉर्म प्राप्त करने के लिए, और भरे गए फॉर्म सबमिट करने के लिए, आपके गूगल अकाउंट तक पहुंच की आवश्यकता है।</string>
@@ -475,5 +481,10 @@
   <string name="form_entry">फॉर्म एंट्री से छुपाने के लिए चेक हटायें</string>
   <string name="use_device_language">डिवाइस की भाषा प्रयोग करें </string>
   <string name="not_supported_offline_layer_format">चयनित ऑफलाइन लेयर फाइल PBF फॉर्मेट उपयोग करती है जो कि समर्थित नहीं है! </string>
+  <string name="search">खोज</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <string name="moving_backwards_title">पीछे की ओर बढ़ रहा है</string>
+  <string name="yes">हाँ</string>
+  <string name="no">नहीं</string>
+  <string name="start_video_capture_instruction">रिकॉर्डिंग प्रारंभ करने के लिए स्क्रीन को टैप करें</string>
 </resources>

@@ -567,4 +567,6 @@
   <string name="no">Ні</string>
   <string name="newer_version_of_a_form_info">Ви вже маєте найновішу версію анкети!</string>
   <string name="svg_file_does_not_exist">SVG файл не існує!</string>
+  <string name="start_video_capture_instruction">Щоб почати запис торкніться екрану</string>
+  <string name="stop_video_capture_instruction">Запис розпочато. Торкніться знову щоб зупинити</string>
 </resources>
