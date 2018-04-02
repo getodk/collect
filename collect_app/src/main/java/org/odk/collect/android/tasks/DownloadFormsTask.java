@@ -248,14 +248,16 @@ public class DownloadFormsTask extends
                 File orgMediaDir = new File(orgMediaPath);                      // smap
                 File orgTempMediaDir = new File(orgTempMediaPath);              // smap
                 File[] orgTempFiles = orgTempMediaDir.listFiles();              // smap
-                for (File mf : orgTempFiles) {                                  // smap Save a copy the media files in the org media directory
-                    try {
-                        if(mf.getName().endsWith(".json")) {
-                            org.apache.commons.io.FileUtils.moveFileToDirectory(mf, orgMediaDir, true);     // Move json files
-                        } else {
-                            org.apache.commons.io.FileUtils.copyFileToDirectory(mf, orgMediaDir, true);     // For other files only a copy is saved
+                if(orgTempFiles != null && orgTempFiles.length > 0) {           // smap Save a copy the media files in the org media directory
+                    for (File mf : orgTempFiles) {
+                        try {
+                            if (mf.getName().endsWith(".json")) {
+                                org.apache.commons.io.FileUtils.moveFileToDirectory(mf, orgMediaDir, true);     // Move json files
+                            } else {
+                                org.apache.commons.io.FileUtils.copyFileToDirectory(mf, orgMediaDir, true);     // For other files only a copy is saved
+                            }
+                        } catch (Exception e) {
                         }
-                    } catch (Exception e) {
                     }
                 }
 
