@@ -75,29 +75,38 @@ public class TextUtils {
         // https://github.com/enketo/enketo-transformer/blob/master/src/markdown.js
 
         // span - replaced &lt; and &gt; with <>
-        text = ReplaceCallback.replace("/&lt;\\s?span([^/\\n]*)&gt;((?:(?!&lt;\\/).)+)&lt;\\/\\s?span\\s?&gt;/gm _createSpan >",
+        text = ReplaceCallback.replace("(?s)<\\s?span([^\\/\n]*)>((?:(?!<\\/).)+)<\\/\\s?span\\s?>",
                 text, createSpan);
+
+        //Intermediate replacements keys for special characters, N/B: These symbols are not meant to be interpreted as markdown
+        text = text.replaceAll("(?s)\\\\#", "==");
+        text = text.replaceAll("(?s)\\\\\\\\", "!!");
+        text = text.replaceAll("(?s)\\\\_", "&&");
+        text = text.replaceAll("(?s)\\\\\\*", "@@");
+
         // strong
-        text = text.replaceAll("/__(.*?)__/gm", "<strong>$1</strong>");
-        text = text.replaceAll("/\\*\\*(.*?)\\*\\*/gm", "<strong>$1</strong>");
+        text = text.replaceAll("(?s)__(.*?)__", "<strong>$1</strong>");
+        text = text.replaceAll("(?s)\\*\\*(.*?)\\*\\*", "<strong>$1</strong>");
+
         // emphasis
-        text = text.replaceAll("/_([^\\s][^_\\n]*)_/gm", "<em>$1</em>");
-        text = text.replaceAll("/\\*([^\\s][^*\\n]*)\\*/gm", "<em>$1</em>");
+        text = text.replaceAll("(?s)_([^\\s][^_\n]*)_", "<em>$1</em>");
+        text = text.replaceAll("(?s)\\*([^\\s][^\\*\n]*)\\*", "<em>$1</em>");
+        text = text.replaceAll("(?s)!!_([^\\s][^_\n]*)!!_", "\\\\<em>$1\\\\</em>");
+        text = text.replaceAll("(?s)!!\\*([^\\s][^_\n]*)!!\\*", "\\\\<em>$1\\\\</em>");
+
         // links
-        text = text.replaceAll("/\\[([^\\]]*)\\]\\(([^)]+)\\)/gm",
+        text = text.replaceAll("(?s)\\[([^\\]]*)\\]\\(([^\\)]+)\\)",
                 "<a href=\"$2\" target=\"_blank\">$1</a>");
         // headers - requires ^ or breaks <font color="#f58a1f">color</font>
         text = ReplaceCallback.replace("(?s)^(#+)([^\n]*)$", text, createHeader);
         // paragraphs
         text = ReplaceCallback.replace("(?s)([^\n]+)\n", text, createParagraph);
 
-        // "\" will be used as escape character for *, _
-        text = text
-                .replaceAll(" /&/gm", "'&amp;'")
-                .replaceAll("/\\\\/gm", "'&92;'")
-                .replaceAll(" /\\\\*/gm", "'&42;'")
-                .replaceAll(" /\\_/gm", "'&95;'")
-                .replaceAll(" /\\#/gm", "'&35;'");
+        // replacing intermediate keys with the proper markdown symbols
+        text = text.replaceAll("(?s)==", "#");
+        text = text.replaceAll("(?s)@@", "*");
+        text = text.replaceAll("(?s)&&", "_");
+        text = text.replaceAll("(?s)!!", "\\\\");
         return text;
     }
 
@@ -109,4 +118,5 @@ public class TextUtils {
 
         return Html.fromHtml(markdownToHtml(text));
     }
-} 
+}
+
