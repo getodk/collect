@@ -78,7 +78,7 @@ public class TextUtils {
         text = ReplaceCallback.replace("(?s)<\\s?span([^\\/\n]*)>((?:(?!<\\/).)+)<\\/\\s?span\\s?>",
                 text, createSpan);
 
-        //Intermediate replacements keys for special characters, N/B: These symbols are not meant to be interpreted as markdown
+        //intermediary replacements keys for special characters, N/B: These symbols are not meant to be interpreted as markdown
         text = text.replaceAll("(?s)\\\\#", "==");
         text = text.replaceAll("(?s)\\\\\\\\", "!!");
         text = text.replaceAll("(?s)\\\\_", "&&");
@@ -102,7 +102,7 @@ public class TextUtils {
         // paragraphs
         text = ReplaceCallback.replace("(?s)([^\n]+)\n", text, createParagraph);
 
-        // replacing intermediate keys with the proper markdown symbols
+        // replacing intermediary keys with the proper markdown symbols
         text = text.replaceAll("(?s)==", "#");
         text = text.replaceAll("(?s)@@", "*");
         text = text.replaceAll("(?s)&&", "_");
