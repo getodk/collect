@@ -51,7 +51,7 @@ public class TextUtilsTest {
         }
     }
 
-        @Test
+    @Test
     public void markDownToHtml_EscapesLessThan() {
         String[][] tests = {
                 {"<1", "&lt;1"},
@@ -59,7 +59,7 @@ public class TextUtilsTest {
                 {"< span>", "&lt; span>"},
                 {"< 1", "&lt; 1"},
                 {"< 1/>", "&lt; 1/>"},
-                {"test < 1/>", "test &lt; 1/>"},
+                {"test< 1/>", "test&lt; 1/>"},
                 {"test < 1/>", "test &lt; 1/>"}
         };
         for (String[] testCase: tests) {

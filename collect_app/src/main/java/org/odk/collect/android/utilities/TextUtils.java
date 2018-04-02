@@ -69,7 +69,7 @@ public class TextUtils {
 
     }
 
-    public static String markdownToHtml(String text) {
+    protected static String markdownToHtml(String text) {
 
         text = text.replaceAll("<([^a-zA-Z/])", "&lt;$1");
         // https://github.com/enketo/enketo-transformer/blob/master/src/markdown.js
@@ -79,10 +79,10 @@ public class TextUtils {
                 text, createSpan);
 
         //intermediary replacements keys for special characters, N/B: These symbols are not meant to be interpreted as markdown
-        text = text.replaceAll("(?s)\\\\#", "&#61;");
-        text = text.replaceAll("(?s)\\\\\\\\", "&#33;");
-        text = text.replaceAll("(?s)\\\\_", "&#43;");
-        text = text.replaceAll("(?s)\\\\\\*", "&#37;");
+        text = text.replaceAll("(?s)\\\\#", "&#35;");
+        text = text.replaceAll("(?s)\\\\\\\\", "&#92;");
+        text = text.replaceAll("(?s)\\\\_", "&#95;");
+        text = text.replaceAll("(?s)\\\\\\*", "&#42;");
 
         // strong
         text = text.replaceAll("(?s)__(.*?)__", "<strong>$1</strong>");
@@ -91,8 +91,6 @@ public class TextUtils {
         // emphasis
         text = text.replaceAll("(?s)_([^\\s][^_\n]*)_", "<em>$1</em>");
         text = text.replaceAll("(?s)\\*([^\\s][^\\*\n]*)\\*", "<em>$1</em>");
-        text = text.replaceAll("(?s)&#33;_([^\\s][^_\n]*)&#33;_", "\\\\<em>$1\\\\</em>");
-        text = text.replaceAll("(?s)&#33;\\*([^\\s][^_\n]*)&#33;\\*", "\\\\<em>$1\\\\</em>");
 
         // links
         text = text.replaceAll("(?s)\\[([^\\]]*)\\]\\(([^\\)]+)\\)",
@@ -103,10 +101,10 @@ public class TextUtils {
         text = ReplaceCallback.replace("(?s)([^\n]+)\n", text, createParagraph);
 
         // replacing intermediary keys with the proper markdown symbols
-        text = text.replaceAll("(?s)&#61;", "#");
-        text = text.replaceAll("(?s)&#37;", "*");
-        text = text.replaceAll("(?s)&#43;", "_");
-        text = text.replaceAll("(?s)&#33;", "\\\\");
+        text = text.replaceAll("(?s)&#35;", "#");
+        text = text.replaceAll("(?s)&#42;", "*");
+        text = text.replaceAll("(?s)&#95;", "_");
+        text = text.replaceAll("(?s)&#92;", "\\\\");
         return text;
     }
 
