@@ -528,8 +528,8 @@ public class FormController {
             return stepToNextEvent(STEP_INTO_GROUP);
         } else {
             formEntryController.jumpToIndex(indices.get(indices.size() - 1));
+            return stepToNextEvent(STEP_OVER_GROUP);
         }
-        return stepToNextEvent(STEP_OVER_GROUP);
     }
 
     /**
