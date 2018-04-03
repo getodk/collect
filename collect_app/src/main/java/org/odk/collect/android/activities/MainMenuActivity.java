@@ -52,6 +52,7 @@ import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.tasks.ServerPollingJob;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.PlayServicesUtil;
@@ -67,6 +68,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
 
 /**
  * Responsible for displaying buttons to launch the major activities. Launches
@@ -652,6 +655,9 @@ public class MainMenuActivity extends AppCompatActivity {
                     prefEdit.putLong(key, (Long) v);
                 } else if (v instanceof String) {
                     prefEdit.putString(key, ((String) v));
+                    if (key.equals(KEY_PERIODIC_FORM_UPDATES_CHECK)) {
+                        ServerPollingJob.schedulePeriodicJob((String) v);
+                    }
                 }
             }
             prefEdit.apply();
