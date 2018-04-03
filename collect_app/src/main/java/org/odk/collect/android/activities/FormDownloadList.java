@@ -79,6 +79,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     private static final int AUTH_DIALOG = 2;
     private static final int CANCELLATION_DIALOG = 3;
 
+    public static final String DISPLAY_ONLY_UPDATED_FORMS = "displayOnlyUpdatedForms";
     private static final String BUNDLE_SELECTED_COUNT = "selectedcount";
     private static final String BUNDLE_FORM_MAP = "formmap";
     private static final String DIALOG_TITLE = "dialogtitle";
@@ -117,6 +118,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     private boolean shouldExit;
     private static final String SHOULD_EXIT = "shouldexit";
 
+    private boolean displayOnlyUpdatedForms;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -124,6 +126,10 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         setContentView(R.layout.remote_file_manage_list);
         super.onCreate(savedInstanceState);
         setTitle(getString(R.string.get_forms));
+
+        if (getIntent().getExtras() != null) {
+            displayOnlyUpdatedForms = (boolean) getIntent().getExtras().get(DISPLAY_ONLY_UPDATED_FORMS);
+        }
 
         alertMsg = getString(R.string.please_wait);
 
@@ -602,28 +608,31 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             for (int i = 0; i < result.size(); i++) {
                 String formDetailsKey = ids.get(i);
                 FormDetails details = formNamesAndURLs.get(formDetailsKey);
-                HashMap<String, String> item = new HashMap<String, String>();
-                item.put(FORMNAME, details.getFormName());
-                item.put(FORMID_DISPLAY,
-                        ((details.getFormVersion() == null) ? "" : (getString(R.string.version) + " "
-                                + details.getFormVersion() + " ")) + "ID: " + details.getFormID());
-                item.put(FORMDETAIL_KEY, formDetailsKey);
-                item.put(FORM_ID_KEY, details.getFormID());
-                item.put(FORM_VERSION_KEY, details.getFormVersion());
 
-                // Insert the new form in alphabetical order.
-                if (formList.size() == 0) {
-                    formList.add(item);
-                } else {
-                    int j;
-                    for (j = 0; j < formList.size(); j++) {
-                        HashMap<String, String> compareMe = formList.get(j);
-                        String name = compareMe.get(FORMNAME);
-                        if (name.compareTo(formNamesAndURLs.get(ids.get(i)).getFormName()) > 0) {
-                            break;
+                if (!displayOnlyUpdatedForms || (details.isNewerFormVersionAvailable() || details.areNewerMediaFilesAvailable())) {
+                    HashMap<String, String> item = new HashMap<String, String>();
+                    item.put(FORMNAME, details.getFormName());
+                    item.put(FORMID_DISPLAY,
+                            ((details.getFormVersion() == null) ? "" : (getString(R.string.version) + " "
+                                    + details.getFormVersion() + " ")) + "ID: " + details.getFormID());
+                    item.put(FORMDETAIL_KEY, formDetailsKey);
+                    item.put(FORM_ID_KEY, details.getFormID());
+                    item.put(FORM_VERSION_KEY, details.getFormVersion());
+
+                    // Insert the new form in alphabetical order.
+                    if (formList.size() == 0) {
+                        formList.add(item);
+                    } else {
+                        int j;
+                        for (j = 0; j < formList.size(); j++) {
+                            HashMap<String, String> compareMe = formList.get(j);
+                            String name = compareMe.get(FORMNAME);
+                            if (name.compareTo(formNamesAndURLs.get(ids.get(i)).getFormName()) > 0) {
+                                break;
+                            }
                         }
+                        formList.add(j, item);
                     }
-                    formList.add(j, item);
                 }
             }
             filteredFormList.addAll(formList);
