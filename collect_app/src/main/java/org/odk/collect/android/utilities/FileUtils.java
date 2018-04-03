@@ -463,9 +463,27 @@ public class FileUtils {
             deleteAndReport(tempMediaFolder);
         } else {
             for (File mediaFile : mediaFiles) {
+                deleteOldFile(mediaFile.getName(), formMediaPath);
                 org.apache.commons.io.FileUtils.moveFileToDirectory(mediaFile, formMediaPath, true);
+                //if(mediaFile.getName().endsWith(".csv")) {  // smap remove any imported files
+                //    File importedFile = new File(formMediaPath + "/" + mediaFile.getName() + ".imported");
+                //    if(importedFile.exists()) {
+                //        importedFile.delete();
+                //    }
+                //}
             }
             deleteAndReport(tempMediaFolder);
+        }
+    }
+
+    /*
+     * Smap
+     */
+    public static void deleteOldFile(String name, File d) {
+        String path = d.getAbsolutePath() + "/" + name;
+        File f = new File(path);
+        if(f.exists()) {
+            f.delete();
         }
     }
 

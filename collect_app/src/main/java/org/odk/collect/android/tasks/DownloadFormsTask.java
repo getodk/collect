@@ -168,6 +168,11 @@ public class DownloadFormsTask extends
             fileResult = downloadXform(fd.getFormName(), fd.getDownloadUrl() + "&deviceID=" + deviceId,
                     fd.isNewerFormVersionAvailable());  // smap add flag on newer form version available
 
+            if(fileResult.isNew()) {    // smap
+                message += Collect.getInstance().getString(R.string.success);
+            }
+            message += "\n";
+
             if (fd.getManifestUrl() != null) {
                 // use a temporary media path until everything is ok.
                 tempMediaPath = new File(Collect.CACHE_PATH,
@@ -214,7 +219,7 @@ public class DownloadFormsTask extends
 
         boolean installed = false;
 
-        if (!isCancelled() && message.isEmpty() && parsedFields != null) {
+        if (!isCancelled() && parsedFields != null) {       // smap remove check on empty message
             if (isSubmissionOk(parsedFields)) {
                 installEverything(tempMediaPath, fileResult, parsedFields, fd, orgTempMediaPath, orgMediaPath);     // Added organisation paths
                 installed = true;
@@ -251,6 +256,7 @@ public class DownloadFormsTask extends
                 if(orgTempFiles != null && orgTempFiles.length > 0) {           // smap Save a copy the media files in the org media directory
                     for (File mf : orgTempFiles) {
                         try {
+                            FileUtils.deleteOldFile(mf.getName(), orgMediaDir); // smap
                             if (mf.getName().endsWith(".json")) {
                                 org.apache.commons.io.FileUtils.moveFileToDirectory(mf, orgMediaDir, true);     // Move json files
                             } else {
@@ -655,8 +661,11 @@ public class DownloadFormsTask extends
             return null;
         }
 
+        StringBuffer downloadMsg = new StringBuffer("");        // smap
+
         publishProgress(Collect.getInstance().getString(R.string.fetching_manifest, fd.getFormName()),
                 String.valueOf(count), String.valueOf(total));
+
 
         List<MediaFile> files = new ArrayList<MediaFile>();
         // get shared HttpContext so that authentication and cookies are retained.
@@ -779,6 +788,7 @@ public class DownloadFormsTask extends
                 //try {
                 // start smap organisational media
                 File finalMediaFile = null;
+                File finalImportedMediaFile = null;
                 File tempMediaFile = null;
                 if(toDownload.getDownloadUrl().endsWith("organisation")) {
                     finalMediaFile = new File(orgMediaDir, toDownload.getFilename());
@@ -786,7 +796,11 @@ public class DownloadFormsTask extends
                 } else {
                     finalMediaFile = new File(finalMediaDir, toDownload.getFilename());
                     tempMediaFile = new File(tempMediaDir, toDownload.getFilename());
+                    if(finalMediaFile.getName().endsWith(".csv")) {
+                        finalImportedMediaFile = new File(finalMediaDir, toDownload.getFilename() + ".imported");
+                    }
                 }
+
                 // end smap
 
                 if(finalMediaFile.getName().endsWith(".json")) {      // smap
@@ -794,16 +808,21 @@ public class DownloadFormsTask extends
                     // 2. Ensure final form directory has an empty file of this name to record that it is in use
                     File jsonFile = new File(finalMediaDir.getPath() + "/" + finalMediaFile.getName());
                     jsonFile.createNewFile();
-                } else if (!finalMediaFile.exists()) {
+                } else if (!finalMediaFile.exists() && (finalImportedMediaFile == null || !finalImportedMediaFile.exists())) { // smap for csv files the final media file may have had imported added to its name
+                    downloadMsg.append(Collect.getInstance().getString(R.string.smap_get_media, tempMediaFile.getName())).append("\n");     // smap
                     downloadFile(tempMediaFile, toDownload.getDownloadUrl());
                 } else {
                     String currentFileHash = FileUtils.getMd5Hash(finalMediaFile);
+                    if(currentFileHash == null && finalImportedMediaFile != null && finalImportedMediaFile.exists()) { // smap get hash from imported if necessary
+                        currentFileHash = FileUtils.getMd5Hash(finalImportedMediaFile);
+                    }
                     String downloadFileHash = getMd5Hash(toDownload.getHash());
 
                     if (currentFileHash != null && downloadFileHash != null && !currentFileHash.contentEquals(downloadFileHash)) {
                         // if the hashes match, it's the same file
                         // otherwise delete our current one and replace it with the new one
                         FileUtils.deleteAndReport(finalMediaFile);
+                        downloadMsg.append(Collect.getInstance().getString(R.string.smap_get_media, tempMediaFile.getName())).append("\n");     // smap
                         downloadFile(tempMediaFile, toDownload.getDownloadUrl());
                     } else {
                         // exists, and the hash is the same
@@ -812,7 +831,11 @@ public class DownloadFormsTask extends
                                 finalMediaFile.getAbsolutePath());
 
                         if(toDownload.getDownloadUrl().endsWith("organisation")) {  // smap Lets get this file and copy it to the form
-                            org.apache.commons.io.FileUtils.copyFileToDirectory(finalMediaFile, finalMediaDir, true);
+                            try {
+                                org.apache.commons.io.FileUtils.copyFileToDirectory(finalMediaFile, finalMediaDir, true);
+                            } catch(Exception e) {
+                                // Ignore an error if the file already exists
+                            }
                         }
                     }
                 }
@@ -821,7 +844,11 @@ public class DownloadFormsTask extends
                 //}
             }
         }
-        return null;
+        if(downloadMsg.length() > 0) {      // smap
+            return downloadMsg.toString();
+        } else {
+            return null;
+        }
     }
 
     @Override

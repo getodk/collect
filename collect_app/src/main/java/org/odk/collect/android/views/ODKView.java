@@ -120,7 +120,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
             if (intentString != null && intentString.length() != 0) {
 
                 readOnlyOverride = true;
-`
+
                 final String buttonText;
                 final String errorString;
                 String v = c.getSpecialFormQuestionText("buttonText");
