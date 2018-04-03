@@ -18,12 +18,14 @@ package org.odk.collect.android.utilities;
 
 import android.content.Context;
 
+import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.database.ItemsetDbAdapter;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.tasks.ServerPollingJob;
 import org.osmdroid.config.Configuration;
 
 import java.io.File;
@@ -82,6 +84,8 @@ public class ResetUtility {
                 || (new File(Collect.ODK_ROOT + "/collect.settings").delete());
         
         new LocaleHelper().updateLocale(context);
+
+        ServerPollingJob.schedulePeriodicJob(context.getString(R.string.never_value));
 
         if (deletedSettingsFolderContest && deletedSettingsFile) {
             failedResetActions.remove(failedResetActions.indexOf(ResetAction.RESET_PREFERENCES));
