@@ -1088,6 +1088,16 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private View createView(int event, boolean advancingPage) {
         FormController formController = getFormController();
 
+        // check if the form has an empty field-list in group.
+        if (formController != null) {
+            formController.setEmptyFieldListListener(new FormController.EmptyFieldListListener() {
+                @Override
+                public void isFieldListEmpty() {
+                    createErrorDialog(getResources().getString(R.string.error_empty_field_list), EXIT);
+                }
+            });
+        }
+
         setTitle(formController.getFormTitle());
 
         formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FEC,
@@ -1247,7 +1257,12 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     // this is badness to avoid a crash.
                     try {
                         event = formController.stepToNextScreenEvent();
-                        createErrorDialog(e.getMessage(), DO_NOT_EXIT);
+                        if (getResources().getString(R.string.error_empty_field_list).equals(errorMessage)) {
+                            // We should exit activity if empty field-list exists.
+                            createErrorDialog(e.getMessage(), EXIT);
+                        } else {
+                            createErrorDialog(e.getMessage(), DO_NOT_EXIT);
+                        }
                     } catch (JavaRosaException e1) {
                         Timber.d(e1);
                         createErrorDialog(e.getMessage() + "\n\n" + e1.getCause().getMessage(),
@@ -1770,7 +1785,11 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         "show." + Boolean.toString(shouldExit));
 
         if (alertDialog != null && alertDialog.isShowing()) {
-            errorMsg = errorMessage + "\n\n" + errorMsg;
+            if (getResources().getString(R.string.error_empty_field_list).equals(errorMessage)) {
+                errorMsg = errorMessage;
+            } else {
+                errorMsg = errorMessage + "\n\n" + errorMsg;
+            }
             errorMessage = errorMsg;
         } else {
             alertDialog = new AlertDialog.Builder(this).create();

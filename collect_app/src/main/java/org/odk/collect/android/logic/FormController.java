@@ -87,6 +87,8 @@ public class FormController {
      */
     private TimerLogger timerLogger;
 
+    private EmptyFieldListListener emptyFieldListListener;
+
     /**
      * OpenRosa metadata of a form instance.
      *
@@ -520,10 +522,29 @@ public class FormController {
                         .getChild(getFormIndex());
         List<FormIndex> indices = getIndicesForGroup(gd);
 
-        // jump to the end of the group
-        formEntryController.jumpToIndex(indices.get(indices.size() - 1));
-        return stepToNextEvent(STEP_OVER_GROUP);
+        // jump to the end of the group, if field-list is empty, jump into the group.
+        if (indices.size() == 0) {
+            emptyFieldListListener.isFieldListEmpty();
+            return stepToNextEvent(STEP_INTO_GROUP);
+        } else {
+            formEntryController.jumpToIndex(indices.get(indices.size() - 1));
+            return stepToNextEvent(STEP_OVER_GROUP);
+        }
     }
+
+
+    /**
+     * If the field-list is empty, we use a listener to build a Error Dialog in FormEntryActivity.
+     * In method stepOverGroup(), we use a parameter `STEP_INTO_GROUP` to stop the infinity loop
+     * */
+    public interface EmptyFieldListListener {
+        void isFieldListEmpty();
+    }
+
+    public void setEmptyFieldListListener(EmptyFieldListListener emptyFieldListListener) {
+        this.emptyFieldListListener = emptyFieldListListener;
+    }
+
 
     /**
      * used to go up one level in the formIndex. That is, if you're at 5_0, 1 (the second question
