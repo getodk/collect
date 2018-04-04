@@ -31,6 +31,7 @@ import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.instance.AbstractTreeElement;
 import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.core.model.instance.TreeReference;
+import org.javarosa.core.util.PropertyUtils;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryModel;
 import org.javarosa.xform.util.XFormUtils;
@@ -76,6 +77,8 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     public static final int REQUEST_AUTHORIZATION = 1001;
     public static final String GOOGLE_DRIVE_ROOT_FOLDER = "Open Data Kit";
     public static final String GOOGLE_DRIVE_SUBFOLDER = "Submissions";
+    private static final String PARENT_KEY = "PARENT_KEY";
+    private static final String KEY = "KEY";
 
     private static final String UPLOADED_MEDIA_URL = "https://drive.google.com/open?id=";
 
@@ -202,29 +205,40 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     private void uploadOneInstance(File instanceFile, String formFilePath, String spreadsheetUrl) throws UploadException {
         TreeElement instanceElement = getInstanceElement(formFilePath, instanceFile);
         setUpSpreadsheet(spreadsheetUrl);
-        TreeElement instanceIDElement = getInstanceIDElement(getChildElements(instanceElement));
         if (hasRepeatableGroups(instanceElement)) {
-            if (instanceIDElement == null) {
-                throw new UploadException(Collect.getInstance().getString(R.string.lack_of_instance_id));
-            }
             createSheetsIfNeeded(instanceElement);
         }
-        insertRows(instanceElement, instanceIDElement, instanceFile, spreadsheet.getSheets().get(0).getProperties().getTitle());
+        String key = getInstanceID(getChildElements(instanceElement));
+        if (key == null) {
+            key = PropertyUtils.genUUID();
+        }
+        insertRows(instanceElement, null, key, instanceFile, spreadsheet.getSheets().get(0).getProperties().getTitle());
     }
 
-    private void insertRows(TreeElement element, TreeElement instanceIDElement, File instanceFile, String sheetTitle)
+    private void insertRows(TreeElement element, String parentKey, String key, File instanceFile, String sheetTitle)
             throws UploadException {
-        insertRow(element, instanceIDElement, instanceFile, sheetTitle);
+        insertRow(element, parentKey, key, instanceFile, sheetTitle);
 
+        int repeatIndex = 0;
         for (int i = 0 ; i < element.getNumChildren(); i++) {
             TreeElement child = element.getChildAt(i);
             if (child.isRepeatable() && child.getMultiplicity() != TreeReference.INDEX_TEMPLATE) {
-                insertRows(child, instanceIDElement, instanceFile, getElementTitle(child));
+                insertRows(child, key, getKeyBasedOnParentKey(key, child.getName(), repeatIndex++), instanceFile, getElementTitle(child));
+            }
+            if (child.getMultiplicity() == TreeReference.INDEX_TEMPLATE) {
+                repeatIndex = 0;
             }
         }
     }
 
-    private void insertRow(TreeElement element, TreeElement instanceIDElement, File instanceFile, String sheetTitle)
+    private String getKeyBasedOnParentKey(String parentKey, String groupName, int repeatIndex) {
+        return parentKey
+                + "/"
+                + groupName
+                + "[" + (repeatIndex + 1) + "]";
+    }
+
+    private void insertRow(TreeElement element, String parentKey, String key, File instanceFile, String sheetTitle)
             throws UploadException {
         List<Object> columnTitles = getColumnTitles(element);
         ensureNumberOfColumnsIsValid(columnTitles.size());
@@ -249,11 +263,8 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                 sheetCells = getSheetCells(sheetTitle); // read sheet cells again to update
             }
 
-            HashMap<String, String> answers = getAnswers(getChildElements(element), instanceFile);
+            HashMap<String, String> answers = getAnswers(element, instanceFile, parentKey, key);
             if (shouldRowBeInserted(answers)) {
-                if (element.isRepeatable()) {
-                    answers.put(INSTANCE_ID, instanceIDElement.getValue().getDisplayText());
-                }
                 sheetsHelper.insertRow(spreadsheet.getSpreadsheetId(), sheetTitle,
                         new ValueRange().setValues(Collections.singletonList(prepareListOfValues(sheetCells.get(0), columnTitles, answers))));
             }
@@ -354,15 +365,15 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         return sheetTitles;
     }
 
-    private HashMap<String, String> getAnswers(List<TreeElement> elements, File instanceFile)
+    private HashMap<String, String> getAnswers(TreeElement element, File instanceFile, String parentKey, String key)
             throws UploadException {
         HashMap<String, String> answers = new HashMap<>();
-        for (TreeElement element : elements) {
-            String elementTitle = getElementTitle(element);
-            if (element.isRepeatable()) {
+        for (TreeElement childElement : getChildElements(element)) {
+            String elementTitle = getElementTitle(childElement);
+            if (childElement.isRepeatable()) {
                 answers.put(elementTitle, getHyperlink(getSheetUrl(getSheetId(elementTitle)), elementTitle));
             } else {
-                String answer = element.getValue() != null ? element.getValue().getDisplayText() : "";
+                String answer = childElement.getValue() != null ? childElement.getValue().getDisplayText() : "";
                 if (new File(instanceFile.getParentFile() + "/" + answer).isFile()) {
                     String mediaHyperlink = uploadMediaFile(instanceFile, answer);
                     answers.put(elementTitle, mediaHyperlink);
@@ -371,24 +382,33 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                 }
             }
         }
+        if (element.isRepeatable()) {
+            answers.put(PARENT_KEY, parentKey);
+            answers.put(KEY, key);
+        } else if (hasRepeatableGroups(element)) {
+            answers.put(KEY, key);
+        }
         return answers;
     }
 
     private List<Object> getColumnTitles(TreeElement element) {
         List<Object> columnTitles = new ArrayList<>();
-        if (element.isRepeatable()) {
-            columnTitles.add(0, INSTANCE_ID);
-        }
         for (TreeElement child : getChildElements(element)) {
             columnTitles.add(getElementTitle(child));
+        }
+        if (element.isRepeatable()) {
+            columnTitles.add(PARENT_KEY);
+            columnTitles.add(KEY);
+        } else if (hasRepeatableGroups(element)) {
+            columnTitles.add(KEY);
         }
         return columnTitles;
     }
 
-    private TreeElement getInstanceIDElement(List<TreeElement> elements) {
+    private String getInstanceID(List<TreeElement> elements) {
         for (TreeElement element : elements) {
             if (element.getName().equals(INSTANCE_ID)) {
-                return element;
+                return element.getValue().getDisplayText();
             }
         }
         return null;

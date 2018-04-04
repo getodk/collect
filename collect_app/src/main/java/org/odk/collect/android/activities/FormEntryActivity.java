@@ -119,6 +119,7 @@ import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.TimerLogger;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.views.ODKView;
+import org.odk.collect.android.widgets.DateTimeWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.RangeWidget;
 import org.odk.collect.android.widgets.StringWidget;
@@ -235,6 +236,11 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private ImageButton backButton;
 
     private ODKView odkView;
+    private boolean doSwipe = true;
+
+    public void allowSwiping(boolean doSwipe) {
+        this.doSwipe = doSwipe;
+    }
 
     enum AnimationType {
         LEFT, RIGHT, FADE
@@ -987,7 +993,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
      * Clears the answer on the screen.
      */
     private void clearAnswer(QuestionWidget qw) {
-        if (qw.getAnswer() != null) {
+        if (qw.getAnswer() != null || qw instanceof DateTimeWidget) {
             qw.clearAnswer();
         }
     }
@@ -1306,7 +1312,11 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
         } catch (JavaRosaException e) {
             Timber.d(e);
-            createErrorDialog(e.getMessage() + "\n\n" + e.getCause().getMessage(), DO_NOT_EXIT);
+            if (e.getMessage().equals(e.getCause().getMessage())) {
+                createErrorDialog(e.getMessage(), DO_NOT_EXIT);
+            } else {
+                createErrorDialog(e.getMessage() + "\n\n" + e.getCause().getMessage(), DO_NOT_EXIT);
+            }
         }
 
         return createView(event, advancingPage);
@@ -2626,7 +2636,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         String navigation = (String) GeneralSharedPreferences.getInstance()
                 .get(PreferenceKeys.KEY_NAVIGATION);
 
-        if (navigation.contains(PreferenceKeys.NAVIGATION_SWIPE)) {
+        if (navigation.contains(PreferenceKeys.NAVIGATION_SWIPE) && doSwipe) {
             // Looks for user swipes. If the user has swiped, move to the
             // appropriate screen.
 

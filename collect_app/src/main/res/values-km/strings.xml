@@ -92,7 +92,6 @@
   <string name="parse_legacy_formlist_failed">ម៉ាស៊ីន​មេ​មិន​អាច​ផ្តល់​នូវឯកសារ​​សំណុំ​បែប​បទ​ដែលឆប​គ្នាជាមួយ Aggregate 0.9.x. : %s</string>
   <string name="parse_openrosa_formlist_failed">ម៉ាស៊ីន​មេ​មិន​អាច​ផ្តល់​នូវឯកសារ​​សំណុំ​បែប​បទ​ដែលឆប​គ្នាជាមួយនឹង​ស្តង់​ដា OpenRosa ជំនាន់ 1.0: %s</string>
   <string name="password">ពាក្យសម្ងាត់</string>
-  <string name="play_audio">ចាក់សម្លេង</string>
   <string name="play_video">ចាក់វីដេអូ</string>
   <string name="please_wait">សូមរង់ចាំមួយភ្លែត</string>
   <string name="please_wait_long">សូមរងចាំ. វាអាចចំណាយរយះពេលពីរបីនាទី.</string>
@@ -267,7 +266,6 @@
   <string name="drive_get_file">កំពុង​ទទួល​ %1$s និង ឯកសារមេឌៀ</string>
   <string name="no_google_account">គ្មាន​គណនី​ Google បាន​ជ្រើស​រើស</string>
   <string name="google_set_account">អ្នក​បាន​ជ្រើស​សន្លឹក​ Google ជា​ម៉ាស៊ីន​មេ​របស់​អ្នក​សូម​ជ្រើស​រើស​គណនី Google ត្រូវគ្នា ដែលឋិតក្នុងការកំណត់ទូទៅមុននឹងបន្ត</string>
-  <string name="media_upload_error">បរាជ័យក្នុងការផ្ទុកឡើងរូបថតដែលមិនមាន: %1$s</string>
   <string name="odk_auth_auth_fail">​ការផ្ទៀង​ផ្ទាត់​បរាជ័យដើម្បីឲ្យ ODK ផ្ញើរចេញដោយស្វ័យប្រវត្តិ សូមធ្វើឲ្យប្រាកដថា​ការកំណត់របស់​អ្នក​ត្រឹម​ត្រូវ</string>
   <string name="odk_auto_note">ការជូនដំណឹងពីការផ្ញើរចេញដោយ​ស្វ័យ​ប្រវត្តិរបស់​ ODK </string>
   <string name="notification_error">បង្ហាញសារជួនដំណឹងដែលមានបញ្ហា</string>
@@ -285,9 +283,6 @@
   <string name="username_error_whitespace">ការ​ដក​ឃ្លា​មិន​ត្រូវ​បាន​អនុញ្ញាតិ​នៅ​ក្នុង​ឈ្មោះ​អ្នក​ប្រើ​ប្រាស់​នៅ​ផ្នែក​​ខាង​​មុខ​ ឬ​​ខាង​​ក្រោយ</string>
   <string name="google_play_services_error_occured">មិនអាចចូលដំណើរការផែនទី Google ។ តើសេវា Google Play បានដំឡើងហើយឬនៅ?</string>
   <string name="about_preferences">អំពី</string>
-  <string name="tell_your_friends">ចែក​រំលែក​ ODK Collect ជាមួយសហការីរបស់អ្នក</string>
-  <string name="tell_your_friends_msg">ទាញយកកម្មវិធី ODK Collect</string>
-  <string name="leave_a_review">ផ្ញើរមតិនៅលើហាងកម្មវិធី Google</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">ដៅផែនទី</string>
   <string name="map_sdk_selector_title">ផែនទី SDK</string>
@@ -367,8 +362,6 @@
   <string name="odk_website">ចូលទៅកាន់គេហទំព័រ ODK</string>
   <string name="odk_website_summary">Open Data Kit (ODK) បាន​ប្រើ​ប្រាស់​ដើម្បី​ប្រមូល​ទិន្នន័យសម្រាប់ភាពប្រសើរ​របស់​សង្គមនៅក្នុងបរិយាកាស​ប្រកួត​ប្រជែង​។</string>
   <string name="odk_forum">ចូល​រួម​ជា​មួយ​វេទិកា ODK</string>
-  <string name="odk_forum_summary">ចូល​រួម​វេទិកា​ដើម្បី​ទទួល​បាន​ការ​គាំ​ទ្រ, សំណូមពរលក្ខណៈពិសេស, រួម​ចំណែក​អភិវឌ្ឍកូដ/បកប្រែភាសា!</string>
-  <string name="all_open_source_licenses">បណ្ណាល័យ​កូដ​ចំហ និងអាជ្ញាប័ណ្ណ</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">ខាងលិច %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -381,7 +374,6 @@
   <string name="not_exactly_one_record_for_this_instance">ពុំមានទិន្នន័យណាមួយដែលត្រូវនឹង instance នេះ!</string>
   <string name="not_exactly_one_blank_form_for_this_form_id">មិន​មាន​សំណុំ​បែប​បទ​ទទេរពិតប្រាកដមួយដែលត្រូវគ្នានឹង jr_form_id នេះ។</string>
   <string name="no_form_id_specified">មិនបញ្ជាក់ពី ID របស់ទម្រង់???</string>
-  <string name="phone_does_not_have_base64_class">ទូរស័ព្ទពុំ​មាន class Base64 ប៉ុន្តែកម្រិត API គឺ %s.</string>
   <string name="phone_does_not_support_rsa">ទូរស័ព្ទមិនបានគាំទ្រការអ៊ីនគ្រីបប្រភេទ RSA</string>
   <string name="invalid_rsa_public_key">កូនសោរសាធាណះ RSA មិនត្រឹមត្រូវ</string>
   <string name="encryption_error_message">%s ទម្រង់មិនត្រូវបានរក្សាជាទម្រង់បញ្ចប់។</string>

@@ -18,43 +18,46 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
+import android.view.View;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
+import android.widget.TextView;
 
+import com.google.common.base.Joiner;
+
+import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.TextUtils;
+import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
- * SelctMultiWidget handles multiple selection fields using checkboxes.
+ * SelectMultiWidget handles multiple selection fields using checkboxes.
  *
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 @SuppressLint("ViewConstructor")
 public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWidget {
-    protected ArrayList<CheckBox> checkBoxes;
+    protected final List<CheckBox> checkBoxes = new ArrayList<>();
     private boolean checkboxInit = true;
-    private List<Selection> ve;
+    private final List<Selection> ve;
+    private final Context context;
 
     public SelectMultiWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
-        checkBoxes = new ArrayList<>();
-        ve = new ArrayList<>();
-        if (getFormEntryPrompt().getAnswerValue() != null) {
-            //noinspection unchecked
-            ve = (List<Selection>) getFormEntryPrompt().getAnswerValue().getValue();
-        } else {
-            ve = new ArrayList<>();
-        }
-
+        this.context = context;
+        //noinspection unchecked
+        ve = getFormEntryPrompt().getAnswerValue() == null ? new ArrayList<>() :
+                (List<Selection>) getFormEntryPrompt().getAnswerValue().getValue();
         createLayout();
     }
 
@@ -96,13 +99,8 @@ public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWi
     }
 
     protected CheckBox createCheckBox(int index) {
-        String choiceName = getFormEntryPrompt().getSelectChoiceText(items.get(index));
-        CharSequence choiceDisplayName;
-        if (choiceName != null) {
-            choiceDisplayName = TextUtils.textToHtml(choiceName);
-        } else {
-            choiceDisplayName = "";
-        }
+        final String choiceName = getFormEntryPrompt().getSelectChoiceText(items.get(index));
+        final CharSequence choiceDisplayName = choiceName == null ? "" : TextUtils.textToHtml(choiceName);
         // no checkbox group so id by answer + offset
         CheckBox checkBox = new CheckBox(getContext());
         checkBox.setTag(index);
@@ -122,16 +120,15 @@ public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWi
         }
 
         // when clicked, check for readonly before toggling
-        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (!checkboxInit && getFormEntryPrompt().isReadOnly()) {
-                    if (buttonView.isChecked()) {
-                        buttonView.setChecked(false);
-                    } else {
-                        buttonView.setChecked(true);
-                    }
-                }
+        checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (!checkboxInit && getFormEntryPrompt().isReadOnly()) {
+                buttonView.setChecked(!buttonView.isChecked());
+            }
+
+            // show warning when selected choice value has spaces
+            String value = items.get((int) checkBox.getTag()).getValue();
+            if (isChecked && value != null && value.contains(" ")) {
+                ToastUtils.showLongToast(context.getString(R.string.invalid_space_in_answer_singular, value));
             }
         });
 
@@ -139,7 +136,15 @@ public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWi
     }
 
     protected void createLayout() {
+        readItems();
+
         if (items != null) {
+            // check if any values have spaces
+            String valuesWithSpaces = getValuesWithSpaces();
+            if (valuesWithSpaces != null) {
+                answerLayout.addView(createWarning(valuesWithSpaces));
+            }
+
             for (int i = 0; i < items.size(); i++) {
                 CheckBox checkBox = createCheckBox(i);
                 checkBoxes.add(checkBox);
@@ -148,6 +153,27 @@ public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWi
             addAnswerView(answerLayout);
         }
         checkboxInit = false;
+    }
+
+    private View createWarning(String valuesWithSpaces) {
+        TextView warning = new TextView(getContext());
+
+        warning.setText(getContext().getResources().getString((valuesWithSpaces.contains(",") ?
+                R.string.invalid_space_in_answer_plural : R.string.invalid_space_in_answer_singular), valuesWithSpaces));
+
+        warning.setPadding(10, 10, 10, 10);
+        return warning;
+    }
+
+    private String getValuesWithSpaces() {
+        final List<String> valuesWithSpaces = new ArrayList<>();
+        for (SelectChoice selectChoice : items) {
+            String value = selectChoice.getValue();
+            if (value.contains(" ")) {
+                valuesWithSpaces.add(value);
+            }
+        }
+        return valuesWithSpaces.isEmpty() ? null : Joiner.on(", ").join(valuesWithSpaces);
     }
 
     @Override

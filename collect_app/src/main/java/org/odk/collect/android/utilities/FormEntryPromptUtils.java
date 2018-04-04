@@ -24,6 +24,8 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.dao.ItemsetDao;
+import org.odk.collect.android.logic.FormController;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -31,12 +33,14 @@ import java.text.DecimalFormatSymbols;
 import java.util.Date;
 import java.util.List;
 
+import static org.javarosa.core.model.Constants.DATATYPE_TEXT;
+
 public class FormEntryPromptUtils {
 
     private FormEntryPromptUtils() {
     }
 
-    public static String getAnswerText(FormEntryPrompt fep, Context context) {
+    public static String getAnswerText(FormEntryPrompt fep, Context context, FormController formController) {
         IAnswerData data = fep.getAnswerValue();
         final String appearance = fep.getQuestion().getAppearanceAttr();
 
@@ -84,6 +88,11 @@ public class FormEntryPromptUtils {
             } catch (NumberFormatException e) {
                 return fep.getAnswerText();
             }
+        }
+
+        if (data != null && data.getValue() != null && fep.getDataType() == DATATYPE_TEXT
+                && fep.getQuestion().getAdditionalAttribute(null, "query") != null) { // ItemsetWidget
+            return new ItemsetDao().getItemLabel(fep.getAnswerValue().getDisplayText(), formController.getMediaFolder().getAbsolutePath(), formController.getLanguage());
         }
 
         return fep.getAnswerText();

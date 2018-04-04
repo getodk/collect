@@ -85,6 +85,8 @@
     <string name="get_location">Record Location</string>
     <string name="provider_disabled_error">Sorry, Location providers are disabled!</string>
     <string name="invalid_answer_error">Sorry, this response is invalid!</string>
+    <string name="invalid_space_in_answer_singular">Warning: underlying value %s has spaces</string>
+    <string name="invalid_space_in_answer_plural">Warning: underlying values %s have spaces</string>
     <string name="jump_to_beginning">Go To Start</string>
     <string name="jump_to_end">Go To End</string>
     <string name="jump_to_previous">Go Up</string>
@@ -110,7 +112,6 @@
     <string name="parse_legacy_formlist_failed">The server has not provided an available-forms document compatible with Aggregate 0.9.x. : %s</string>
     <string name="parse_openrosa_formlist_failed">The server has not provided an available-forms document compatible with the OpenRosa version 1.0 standard: %s</string>
     <string name="password">Password</string>
-    <string name="play_audio">Play Sound</string>
     <string name="play_video">Play Video</string>
     <string name="please_wait">Please wait a few moments.</string>
     <string name="please_wait_long">Please wait. This could take a few minutes.</string>
@@ -401,7 +402,6 @@
     <string name="not_exactly_one_record_for_this_instance">Not exactly one record for this instance!</string>
     <string name="not_exactly_one_blank_form_for_this_form_id">Not exactly one blank form matches this jr_form_id.</string>
     <string name="no_form_id_specified">No FormId specified???</string>
-    <string name="phone_does_not_have_base64_class">Phone does not have Base64 class but API level is %s.</string>
     <string name="phone_does_not_support_rsa">Phone does not support RSA encryption.</string>
     <string name="invalid_rsa_public_key">Invalid RSA public key.</string>
     <string name="encryption_error_message">%s Form has not been saved as finalized.</string>
@@ -581,6 +581,7 @@
     <string name="no">No</string>
     <string name="newer_version_of_a_form_info">This is an updated version of a form you already have!</string>
     <string name="svg_file_does_not_exist">SVG file does not exist!</string>
-    <string name="lack_of_instance_id">Forms with repeats must define an instanceID.</string>
+    <string name="start_video_capture_instruction">Tap the screen to start recording</string>
+    <string name="stop_video_capture_instruction">Recording started. Tap again to stop</string>
     <string name="no_columns_to_upload">No columns found in the form to upload.</string>
 </resources>

@@ -90,7 +90,6 @@
   <string name="parse_legacy_formlist_failed">Serveril puudub informatsioon vormide kohta, mis ühilduks versiooniga: Aggregate 0.9.x. : %s</string>
   <string name="parse_openrosa_formlist_failed">Serveril puudub informatsioon vormide kohta, mis ühilduks versiooniga: OpenRosa version 1.0 standard: %s</string>
   <string name="password">Salasõna</string>
-  <string name="play_audio">Mängi heli</string>
   <string name="play_video">Mängi videot</string>
   <string name="please_wait">Palun oodake.</string>
   <string name="please_wait_long">Palun oodake. See võib võtta mõne minuti.</string>
@@ -273,7 +272,6 @@
   <string name="username_error_whitespace">Kasutajanime alguses või lõpus ei ole lubatud kasutada tühikut</string>
   <string name="google_play_services_error_occured">Puudub ligipääs Google Maps-ile. Veenduge, et Google Play teenused on paigaldatud.</string>
   <string name="about_preferences">Teave</string>
-  <string name="tell_your_friends_msg">Laadige ODK Collect alla!</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">Kaardistus</string>
   <string name="map_sdk_selector_title">Kaardistus SDK</string>
@@ -359,7 +357,6 @@
   <string name="not_exactly_one_record_for_this_instance">Ei leidu täpselt üks kirje!</string>
   <string name="not_exactly_one_blank_form_for_this_form_id">Ei leidu täpselt ühte tühja vormi, mis vastaks jr_form_id.</string>
   <string name="no_form_id_specified">Vormi ID määramata?</string>
-  <string name="phone_does_not_have_base64_class">Telefonil ei ole Base64 klassi, API aste on: %s</string>
   <string name="phone_does_not_support_rsa">Telefon ei toeta RSA krüpteerimist.</string>
   <string name="invalid_rsa_public_key">RSA avalik võti on sobimatu.</string>
   <string name="encryption_error_message">%s vorm ei ole salvestatud ja lõpetatud.</string>

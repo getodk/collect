@@ -106,9 +106,7 @@ public class LabelWidget extends QuestionWidget {
                                 DisplayMetrics metrics = context.getResources().getDisplayMetrics();
                                 int screenWidth = metrics.widthPixels;
                                 int screenHeight = metrics.heightPixels;
-                                b =
-                                        FileUtils.getBitmapScaledToDisplay(imageFile, screenHeight,
-                                                screenWidth);
+                                b = FileUtils.getBitmapScaledToDisplay(imageFile, screenHeight, screenWidth);
                             } catch (OutOfMemoryError e) {
                                 Timber.e(e);
                                 errorMsg = "ERROR: " + e.getMessage();

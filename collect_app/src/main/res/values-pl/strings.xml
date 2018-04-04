@@ -90,7 +90,6 @@
   <string name="parse_legacy_formlist_failed">Serwer nie dostarczył dokumentu z dostępnymi formularzami zgodnego z Aggregate 0.9.x: %s</string>
   <string name="parse_openrosa_formlist_failed">Serwer nie dostarczył dokumentu z dostępnymi formularzami zgodnego ze standardem OpenRosa wersja 1.0: %s</string>
   <string name="password">Hasło</string>
-  <string name="play_audio">Odtwórz Dźwięk</string>
   <string name="play_video">Odtwórz Wideo</string>
   <string name="please_wait">Poczekaj kilka chwil.</string>
   <string name="please_wait_long">Poczekaj. To może zająć kilka minut.</string>
@@ -273,7 +272,6 @@
   <string name="username_error_whitespace">Spacje na początku lub na końcu nazwy użytkownika są niedozwolone</string>
   <string name="google_play_services_error_occured">Nie można uzyskać dostępu do Google Maps. Czy Google Play Services są zainstalowane?</string>
   <string name="about_preferences">O Aplikacji</string>
-  <string name="tell_your_friends_msg">Pobierz aplikację ODK Collect!</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">Mapowanie</string>
   <string name="map_sdk_selector_title">SDK Mapowania</string>
@@ -359,7 +357,6 @@
   <string name="not_exactly_one_record_for_this_instance">Więcej niż jeden zapis dla tego wystąpienia!</string>
   <string name="not_exactly_one_blank_form_for_this_form_id">Więcej niż jeden pusty formularz odpowiada temu jr_form_id.</string>
   <string name="no_form_id_specified">Nie wybrano FormID???</string>
-  <string name="phone_does_not_have_base64_class">Telefon nie ma klasy Base64 ale poziom API jest %s.</string>
   <string name="phone_does_not_support_rsa">Telefon nie wspiera szyfrowania RSA.</string>
   <string name="invalid_rsa_public_key">Niepoprawny klucz publiczny RSA.</string>
   <string name="encryption_error_message">Formularz %s nie został zapisany jako zakończony.</string>

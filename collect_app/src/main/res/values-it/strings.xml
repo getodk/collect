@@ -11,6 +11,7 @@
   <string name="cancel">Annulla</string>
   <string name="cancel_loading_form">Annulla</string>
   <string name="cancel_location">Annulla</string>
+  <string name="canceling">Annullando</string>
   <string name="cannot_edit_completed_form">Questo modulo non può essere modificato una volta che viene segnato come completato. Potrebbe venire cifrato.</string>
   <string name="capture_audio">Registra Suono</string>
   <string name="capture_image">Scatta Foto</string>
@@ -92,7 +93,6 @@
   <string name="parse_openrosa_formlist_failed">Il server non ha fornito un modulo compatibile con OpenRosa version 1.0 standard: %s
 </string>
   <string name="password">Password</string>
-  <string name="play_audio">Riproduci Suono</string>
   <string name="play_video">Riproduci Video</string>
   <string name="please_wait">Si prega di attendere qualche istante.</string>
   <string name="please_wait_long">Si prega di attendere. Questo potrebbe richiedere alcuni minuti.</string>
@@ -122,6 +122,7 @@
   <string name="username">Nome Utente</string>
   <string name="view_hierarchy">Apri visione gerarchica</string>
   <string name="general_preferences">Impostazioni Generali</string>
+  <string name="client">Interfaccia utente</string>
   <string name="show_splash_summary">Indica quando l\'applicazione si avvia</string>
   <string name="splash_path">Immagine di avvio selezionata</string>
   <string name="default_splash_path">ODK Default</string>
@@ -202,6 +203,7 @@
   <string name="admin_password_incorrect">Attenzione, la password è sbagliata!</string>
   <string name="enter_admin_password">Inserire Password Amministratore</string>
   <string name="change_admin_password">Cambia la password di amministratore</string>
+  <string name="autosend">Invio automatico</string>
   <string name="found_in_main">Deseleziona per nascondere dal Menu Principale</string>
   <string name="found_in_settings">Deseleziona per nascondere da Impostazioni Generali</string>
   <string name="save_preferences">Salvataggio Impostazioni su Disco</string>
@@ -265,7 +267,8 @@
   <string name="drive_get_file">Caricamento %1$s e media files.</string>
   <string name="no_google_account">Nessun Account Google selezionato!</string>
   <string name="google_set_account">Hai selezionato Google Sheets come tuo server. Perpiacere seleziona un corrispondente account Google nelle Impostazioni Generali prima di procedere.</string>
-  <string name="media_upload_error">Impossibile fare l\'upload di una foto inesistente: %1$s</string>
+  <string name="odk_auth_auth_fail">Autenticazione ODK per invio automatico fallita, per favore verificare che i parametri di configurazione siano corretti.</string>
+  <string name="odk_auto_note">Notifica invio automatico ODK</string>
   <string name="notification_error">Errore di visualizzazione nella notifica</string>
   <string name="delete_after_send">Elimina dopo invio</string>
   <string name="delete_after_send_summary">Elimina moduli finalizzati e media dopo l\'\'invio al server</string>
@@ -281,7 +284,6 @@
   <string name="username_error_whitespace">Spazi vuoti all\'inizio e alla fine delle username non sono ammessi</string>
   <string name="google_play_services_error_occured">Impossibile accedere a Google Maps. Il Servizio di Google Play è installato?</string>
   <string name="about_preferences">Informazioni</string>
-  <string name="tell_your_friends_msg">Scarica l\'app di ODK Collect!</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">Mappatura</string>
   <string name="map_sdk_selector_title">Mappatura SDK</string>
@@ -291,6 +293,8 @@
   <string name="show_map_sdk">Mostra Opzioni per mappa SDK</string>
   <string name="openmap_streets">Strade OSM</string>
   <string name="openmap_usgs_topo">Mappa Topologia Nazionale USGS</string>
+  <string name="openmap_usgs_sat">Mappa Ibrida Nazionale USGS</string>
+  <string name="openmap_usgs_img">Immagini di Mappe Nazionali USGS</string>
   <string name="openmap_stamen_terrain">Stamen Terrain</string>
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
@@ -357,6 +361,7 @@
   <string name="selected_answer">Selezionato: %s</string>
   <string name="version_number">Versione: %s</string>
   <string name="odk_website">Visitare il sito web ODK</string>
+  <string name="odk_website_summary">Open Data Kit (ODK) è usato per raccogliere dati per il bene sociale in ambienti difficili.</string>
   <string name="odk_forum">Collegati al forum di ODK</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">O %1$s%2$s%3$s</string>
@@ -370,7 +375,6 @@
   <string name="not_exactly_one_record_for_this_instance">Neanche un risultato per questa ricerca!</string>
   <string name="not_exactly_one_blank_form_for_this_form_id">Nessuno dei moduli vuoti corrisponde a questo jr_form_id.</string>
   <string name="no_form_id_specified">Nessun FormId specificato???</string>
-  <string name="phone_does_not_have_base64_class">Il telefono non supporta la classe Base64, ma la versione API è %s.</string>
   <string name="phone_does_not_support_rsa">Il telefono non supporta la crittografia RSA.</string>
   <string name="invalid_rsa_public_key">Chiave RSA pubblica non valida.</string>
   <string name="encryption_error_message">%s Il modulo non è stato ancora salvato come completato.</string>
@@ -404,6 +408,10 @@
   <string name="instance_scan_count">%1$d moduli aggiunti.</string>
   <string name="sort_by_name_asc">Nome, A-Z</string>
   <string name="sort_by_name_desc">Nome, Z-A</string>
+  <string name="sort_by_date_asc">Per data, prima i più recenti</string>
+  <string name="sort_by_date_desc">Per data, prima i meno recenti</string>
+  <string name="sort_by_status_asc">Per stato, prima quelli completati</string>
+  <string name="sort_by_status_desc">Per stato, prima quelli non completati</string>
   <string name="sort_the_list">Ordina la lista</string>
   <string name="request_permissions_google_account">ODK Collect richiede l\'accesso al tuo account Google per utilizzare i moduli vuoti ed inviare i moduli compilati.</string>
   <string name="filter_the_list">Filtra la lista</string>
@@ -423,7 +431,12 @@
   <string name="select_time">Seleziona un orario</string>
   <string name="no_date_selected">Nessuna data selezionata</string>
   <string name="no_time_selected">Nessun orario selezionato</string>
+  <string name="import_settings">Parametri di configurazione per Importare/Esportare</string>
   <string name="qr_code">Codice QR</string>
+  <string name="turn_on_flashlight">Accendere il flash</string>
+  <string name="turn_off_flashlight">Spegnere il flash</string>
+  <string name="user_settings">Impostazioni utente</string>
+  <string name="autosend_selector_title">Invio automatico</string>
   <string name="server_settings_title">Server</string>
   <string name="server">Server</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->

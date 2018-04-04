@@ -87,7 +87,7 @@ public abstract class SelectImageMapWidget extends SelectWidget {
             Timber.w(e);
         }
 
-        setUpLayout();
+        createLayout();
     }
 
     @Override
@@ -101,7 +101,9 @@ public abstract class SelectImageMapWidget extends SelectWidget {
         return webView.suppressFlingGesture();
     }
 
-    private void setUpLayout() {
+    private void createLayout() {
+        readItems();
+
         webView = new CustomWebView(getContext());
         selectedAreasLabel = getAnswerTextView();
         answerLayout.addView(webView);

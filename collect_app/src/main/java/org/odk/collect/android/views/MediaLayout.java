@@ -69,11 +69,12 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
     private MediaPlayer player;
     private AudioPlayListener audioPlayListener;
     private int playTextColor;
-    
+
     private Context context;
 
     private CharSequence originalText;
-
+    private Bitmap bitmapPlay;
+    private Bitmap bitmapStop;
 
     public MediaLayout(Context c, MediaPlayer player) {
         super(c);
@@ -87,6 +88,10 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
         this.player = player;
         audioPlayListener = null;
         playTextColor = Color.BLUE;
+        bitmapPlay = BitmapFactory.decodeResource(getContext().getResources(),
+                android.R.drawable.ic_lock_silent_mode_off);
+        bitmapStop = BitmapFactory.decodeResource(getContext().getResources(),
+                android.R.drawable.ic_media_pause);
     }
 
     public void playAudio() {
@@ -96,6 +101,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
             viewText.setText(viewText.getText().toString());
             viewText.setTextColor(playTextColor);
             audioButton.playAudio();
+            audioButton.setImageBitmap(bitmapStop);
         }
     }
 
@@ -112,6 +118,12 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
         viewText.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor));
         // then set the text to our original (brings back any html formatting)
         viewText.setText(originalText);
+    }
+
+    public void resetAudioButtonBitmap() {
+        if (audioButton != null) {
+            audioButton.setImageBitmap(bitmapPlay);
+        }
     }
 
     public void playVideo() {
@@ -218,8 +230,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                     DisplayMetrics metrics = context.getResources().getDisplayMetrics();
                     int screenWidth = metrics.widthPixels;
                     int screenHeight = metrics.heightPixels;
-                    Bitmap b = FileUtils.getBitmapScaledToDisplay(imageFile, screenHeight,
-                            screenWidth);
+                    Bitmap b = FileUtils.getBitmapScaledToDisplay(imageFile, screenHeight, screenWidth);
                     if (b != null) {
                         imageView = new ImageView(getContext());
                         imageView.setPadding(2, 2, 2, 2);
@@ -234,7 +245,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                                         this, "onClick",
                                         "showImagePromptBigImage" + MediaLayout.this.selectionDesignator,
                                         MediaLayout.this.index);
-                                    
+
                                     try {
                                         File bigImage = new File(ReferenceManager
                                                 .instance()
@@ -442,30 +453,22 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
     public void onClick(View v) {
         if (audioPlayListener != null) {
             audioPlayListener.resetQuestionTextColor();
+            audioPlayListener.resetAudioButtonImage();
         }
         if (player.isPlaying()) {
             player.stop();
-            Bitmap b =
-                    BitmapFactory.decodeResource(getContext().getResources(),
-                            android.R.drawable.ic_lock_silent_mode_off);
-            audioButton.setImageBitmap(b);
+            audioButton.setImageBitmap(bitmapPlay);
 
         } else {
             playAudio();
-            Bitmap b =
-                    BitmapFactory.decodeResource(getContext().getResources(),
-                            android.R.drawable.ic_media_pause);
-            audioButton.setImageBitmap(b);
+            audioButton.setImageBitmap(bitmapStop);
         }
         player.setOnCompletionListener(new OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mediaPlayer) {
                 resetTextFormatting();
                 mediaPlayer.reset();
-                Bitmap b =
-                        BitmapFactory.decodeResource(getContext().getResources(),
-                                android.R.drawable.ic_lock_silent_mode_off);
-                audioButton.setImageBitmap(b);
+                audioButton.setImageBitmap(bitmapPlay);
             }
         });
     }
