@@ -38,12 +38,8 @@ import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.DownloadFormListUtils;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.WebUtils;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -81,7 +77,9 @@ public class ServerPollingJob extends Job {
             List<FormDetails> newDetectedForms = new ArrayList<>();
             for (FormDetails formDetails : formList.values()) {
                 if (formDetails.isNewerFormVersionAvailable() || formDetails.areNewerMediaFilesAvailable()) {
-                    String formVersionHash = formDetails.getHash() + getManifestFileAsMd5Hash(formDetails.getManifestUrl());
+                    String manifestFileHash = formDetails.getManifestUrl() != null ? FileUtils.getMd5Hash(WebUtils.getFileInputStream(formDetails.getManifestUrl())) : "";
+
+                    String formVersionHash = DownloadFormsTask.getMd5Hash(formDetails.getHash()) + manifestFileHash;
                      if (!wasThisNewerFormVersionAlreadyDetected(formVersionHash)) {
                          newDetectedForms.add(formDetails);
                          updateLastDetectedFormVersionHash(formDetails.getFormID(), formVersionHash);
@@ -159,22 +157,5 @@ public class ServerPollingJob extends Job {
         ContentValues values = new ContentValues();
         values.put(LAST_DETECTED_FORM_VERSION_HASH, formVersionHash);
         new FormsDao().updateForm(values, JR_FORM_ID + "=?", new String[] {formId});
-    }
-
-    private String getManifestFileAsMd5Hash(String url) {
-        String mdhHash = "";
-        HttpURLConnection urlConnection = null;
-        try {
-            urlConnection = (HttpURLConnection) new URL(url).openConnection();
-            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-            mdhHash = FileUtils.getMd5Hash(in);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (urlConnection != null) {
-                urlConnection.disconnect();
-            }
-        }
-        return DownloadFormsTask.getMd5Hash(mdhHash);
     }
 }
