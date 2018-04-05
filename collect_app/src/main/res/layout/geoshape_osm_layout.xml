@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     <LinearLayout
+        android:id="@+id/linearlayout"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,20 +21,22 @@
             android:layout_width="wrap_content"
             android:paddingBottom="5dip"
             android:layout_height="wrap_content" />
-
-        <org.osmdroid.views.MapView
-            android:id="@+id/geoshape_mapview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
     </LinearLayout>
 
+    <org.osmdroid.views.MapView
+        android:id="@+id/geoshape_mapview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/linearlayout"/>
 
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="26dip"
+        android:paddingTop="10dip"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true">
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/linearlayout">
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"

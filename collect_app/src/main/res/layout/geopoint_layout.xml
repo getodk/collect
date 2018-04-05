@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <LinearLayout
+        android:id="@+id/linearlayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#BF000000"
@@ -25,19 +28,24 @@
             android:text="@string/please_wait_long"
             android:textColor="#FFFFFF" />
 
-        <fragment
-            android:id="@+id/map"
-            class="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
     </LinearLayout>
+
+    <fragment
+        android:id="@+id/map"
+        class="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/linearlayout" />
 
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/linearlayout"
         android:layout_gravity="end"
         android:paddingBottom="10dip"
-        android:paddingTop="50dip">
+        android:paddingTop="10dip">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -97,4 +105,4 @@
                 android:padding="15dp" />
         </LinearLayout>
     </ScrollView>
-</merge>
+</RelativeLayout>
