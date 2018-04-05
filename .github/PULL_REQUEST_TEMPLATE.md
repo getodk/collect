@@ -7,3 +7,5 @@ Closes #
 #### Are there any risks to merging this code? If so, what are they?
 
 #### Do we need any specific form for testing your changes? If so, please attach one.
+
+#### Does this change require updates to documentation? If so, please link to the filed issue in the docs repo.
