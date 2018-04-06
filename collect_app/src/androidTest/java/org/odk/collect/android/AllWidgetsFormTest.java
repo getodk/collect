@@ -951,10 +951,6 @@ public class AllWidgetsFormTest {
         return onView(withClassName(endsWith("EditText")));
     }
 
-    private ViewInteraction onVisibleCheckBox() {
-        return onView(withClassName(endsWith("CheckBox")));
-    }
-
     // private void openWidget(String name) {
     //     openWidgetList();
     //     onView(withText(name)).perform(click());
