@@ -14,8 +14,8 @@
         <item name="android:panelBackground">@android:color/white</item>
         <item name="alertDialogTheme">@style/AlertDialogTheme</item>
         <item name="searchViewStyle">@style/SearchViewTheme</item>
-        <item name="editTextStyle">@style/EditTextStyle.Alignment</item>
         <item name="android:textViewStyle">@style/TextViewStyle.TextDirection</item>
+        <item name="editTextStyle">@style/EditTextStyle.Alignment</item>
     </style>
 
     <style name="AlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
