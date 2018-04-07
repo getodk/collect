@@ -67,7 +67,7 @@ public final class PreferenceKeys {
     public static final String NAVIGATION_BUTTONS           = "buttons";
     private static final String GOOGLE_MAPS                 = "google_maps";
     private static final String AUTOSEND_OFF                = "off";
-    private static final String GUIDANCE_HINT_OFF           = "off";
+    private static final String GUIDANCE_HINT_OFF           = "no";
     static final String GOOGLE_MAPS_BASEMAP_DEFAULT         = "streets";
     static final String OSM_BASEMAP_KEY                     = "osmdroid";
     static final String OSM_MAPS_BASEMAP_DEFAULT            = "openmap_streets";
