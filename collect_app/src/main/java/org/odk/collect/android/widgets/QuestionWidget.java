@@ -30,6 +30,7 @@ import android.support.v4.content.ContextCompat;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,6 +74,8 @@ public abstract class QuestionWidget
     private final MediaLayout questionMediaLayout;
     private MediaPlayer player;
     private final TextView helpTextView;
+    private final TextView guidanceTextView;
+    private final View helpTextLayout;
 
     private Bundle state;
 
@@ -115,10 +118,19 @@ public abstract class QuestionWidget
         setPadding(0, 7, 0, 0);
 
         questionMediaLayout = createQuestionMediaLayout(prompt);
-        helpTextView = createHelpText(prompt);
+        helpTextLayout = createHelpTextLayout();
+        helpTextView = setupHelpText(helpTextLayout.findViewById(R.id.help_text_view),prompt);
+        guidanceTextView = setupGuidanceText(helpTextLayout.findViewById(R.id.guidance_text_view),prompt);
+
 
         addQuestionMediaLayout(getQuestionMediaLayout());
-        addHelpTextView(getHelpTextView());
+        addHelpTextLayout(getHelpTextLayout());
+    }
+
+    private TextView setupGuidanceText(TextView view, FormEntryPrompt prompt) {
+
+
+        return null;
     }
 
     /** Releases resources held by this widget */
@@ -294,7 +306,7 @@ public abstract class QuestionWidget
      * Add a TextView containing the help text to the default location.
      * Override to reposition.
      */
-    protected void addHelpTextView(View v) {
+    protected void addHelpTextLayout(View v) {
         if (v == null) {
             Timber.e("cannot add a null view as helpTextView");
             return;
@@ -309,12 +321,17 @@ public abstract class QuestionWidget
         addView(v, params);
     }
 
-    private TextView createHelpText(FormEntryPrompt prompt) {
-        TextView helpText = new TextView(getContext());
+    private View createHelpTextLayout()
+    {
+         return LayoutInflater.from(getContext()).inflate(R.layout.help_text_layout,null);
+
+
+    }
+
+    private TextView setupHelpText(TextView helpText,FormEntryPrompt prompt) {
         String s = prompt.getHelpText();
 
         if (s != null && !s.equals("")) {
-            helpText.setId(ViewIds.generateViewId());
             helpText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getQuestionFontSize() - 3);
             //noinspection ResourceType
             helpText.setPadding(0, -5, 0, 7);
@@ -350,8 +367,8 @@ public abstract class QuestionWidget
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
-        if (getHelpTextView().getVisibility() == View.VISIBLE) {
-            params.addRule(RelativeLayout.BELOW, getHelpTextView().getId());
+        if (getHelpTextLayout().getVisibility() == View.VISIBLE) {
+            params.addRule(RelativeLayout.BELOW, getHelpTextLayout().getId());
         } else {
             params.addRule(RelativeLayout.BELOW, getQuestionMediaLayout().getId());
         }
@@ -579,6 +596,14 @@ public abstract class QuestionWidget
 
     public int getAnswerFontSize() {
         return questionFontSize + 2;
+    }
+
+    public TextView getGuidanceTextView() {
+        return guidanceTextView;
+    }
+
+    public View getHelpTextLayout() {
+        return helpTextLayout;
     }
 
     public MediaLayout getQuestionMediaLayout() {

@@ -21,6 +21,7 @@ public final class PreferenceKeys {
     public static final String KEY_CONSTRAINT_BEHAVIOR      = "constraint_behavior";
     public static final String KEY_HIGH_RESOLUTION          = "high_resolution";
     public static final String KEY_IMAGE_SIZE               = "image_size";
+    public static final String KEY_GUIDANCE_HINT               = "guidance_hint";
     public static final String KEY_INSTANCE_SYNC            = "instance_sync";
 
     // form_metadata_preferences.xml
@@ -66,6 +67,7 @@ public final class PreferenceKeys {
     public static final String NAVIGATION_BUTTONS           = "buttons";
     private static final String GOOGLE_MAPS                 = "google_maps";
     private static final String AUTOSEND_OFF                = "off";
+    private static final String GUIDANCE_HINT_OFF           = "off";
     static final String GOOGLE_MAPS_BASEMAP_DEFAULT         = "streets";
     static final String OSM_BASEMAP_KEY                     = "osmdroid";
     static final String OSM_MAPS_BASEMAP_DEFAULT            = "openmap_streets";
@@ -77,6 +79,7 @@ public final class PreferenceKeys {
         hashMap.put(KEY_USERNAME,                   "");
         // form_management_preferences.xml
         hashMap.put(KEY_AUTOSEND,                   AUTOSEND_OFF);
+        hashMap.put(KEY_GUIDANCE_HINT,              GUIDANCE_HINT_OFF);
         hashMap.put(KEY_DELETE_AFTER_SEND,          false);
         hashMap.put(KEY_COMPLETED_DEFAULT,          true);
         hashMap.put(KEY_CONSTRAINT_BEHAVIOR,        CONSTRAINT_BEHAVIOR_ON_SWIPE);
