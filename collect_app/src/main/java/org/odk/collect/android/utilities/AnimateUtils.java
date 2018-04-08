@@ -8,6 +8,8 @@ import android.view.animation.Interpolator;
 import android.view.animation.ScaleAnimation;
 import android.view.animation.Transformation;
 
+import org.odk.collect.android.listeners.Result;
+
 /**
  * Created by Ing. Oscar G. Medina Cruz on 18/06/2016.
  */
@@ -47,7 +49,7 @@ public class AnimateUtils {
     }
 
 
-    public static Animation expand(final View view) {
+    public static Animation expand(final View view, Result<Boolean> result) {
         int matchParentMeasureSpec = View.MeasureSpec.makeMeasureSpec(((View) view.getParent()).getWidth(), View.MeasureSpec.EXACTLY);
         int wrapContentMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
         view.measure(matchParentMeasureSpec, wrapContentMeasureSpec);
@@ -76,12 +78,28 @@ public class AnimateUtils {
 
         animation.setInterpolator(easeInOutQuart);
         animation.setDuration(computeDurationFromHeight(view));
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                result.onComplete(true);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
         view.startAnimation(animation);
 
         return animation;
     }
 
-    public static Animation collapse(final View view) {
+    public static Animation collapse(final View view, Result<Boolean> result) {
         final int initialHeight = view.getMeasuredHeight();
 
         Animation a = new Animation() {
@@ -106,7 +124,26 @@ public class AnimateUtils {
         int durationMillis = computeDurationFromHeight(view);
         a.setDuration(durationMillis);
 
+        a.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+
+                result.onComplete(true);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
         view.startAnimation(a);
+
 
         return a;
     }

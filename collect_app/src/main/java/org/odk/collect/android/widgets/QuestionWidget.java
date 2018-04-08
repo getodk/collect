@@ -22,10 +22,10 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
@@ -47,12 +47,13 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.exception.JavaRosaException;
+import org.odk.collect.android.listeners.AudioPlayListener;
+import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GuidanceHint;
 import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.utilities.AnimateUtils;
 import org.odk.collect.android.utilities.DependencyProvider;
-import org.odk.collect.android.listeners.AudioPlayListener;
-import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.utilities.ViewIds;
@@ -63,10 +64,13 @@ import org.odk.collect.android.widgets.interfaces.Widget;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.utilities.UiUtils.convertDpToPixel;
 
 public abstract class QuestionWidget
         extends RelativeLayout
@@ -132,6 +136,7 @@ public abstract class QuestionWidget
 
     private TextView setupGuidanceText(TextView guidanceTextView, FormEntryPrompt prompt) {
 
+        AtomicBoolean expanded = new AtomicBoolean(false);
         GuidanceHint setting = GuidanceHint.get((String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_GUIDANCE_HINT));
 
         if(setting.equals(GuidanceHint.No))
@@ -152,8 +157,16 @@ public abstract class QuestionWidget
         else if(setting.equals(GuidanceHint.YesCollapsed))
         {
             getHelpTextView().setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.information_outline, 0);
-
+            getHelpTextView().setCompoundDrawablePadding((int) convertDpToPixel(5,getContext()));
             getHelpTextView().setOnClickListener(view -> {
+                if(!expanded.get())
+                {
+                    AnimateUtils.expand(guidanceTextView, result -> expanded.set(true));
+                }
+                else
+                {
+                    AnimateUtils.collapse(guidanceTextView, result -> expanded.set(false));
+                }
 
             });
 
