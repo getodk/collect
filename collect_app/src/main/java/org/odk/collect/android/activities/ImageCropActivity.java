@@ -53,10 +53,12 @@ public class ImageCropActivity extends AppCompatActivity implements View.OnClick
         Button btnCrop = findViewById(R.id.btn_crop);
         Button btnRedo = findViewById(R.id.btn_redo);
         Button btnSave = findViewById(R.id.btn_save);
+        Button btnNot = findViewById(R.id.btn_not);
 
         btnSave.setOnClickListener(this);
         btnRedo.setOnClickListener(this);
         btnCrop.setOnClickListener(this);
+        btnNot.setOnClickListener(this);
 
         Intent intent = getIntent();
         imageUrl = intent.getStringExtra("crop_path");
@@ -80,6 +82,9 @@ public class ImageCropActivity extends AppCompatActivity implements View.OnClick
             case R.id.btn_redo:
                 cropImageView.setDrawable(bitmapBefore, 200, 200);
                 cropImageView.setVisibility(View.VISIBLE);
+                break;
+            case R.id.btn_not:
+                finish();
                 break;
             case R.id.btn_save:
                 bitmapCroped = cropImageView.getCropImage();

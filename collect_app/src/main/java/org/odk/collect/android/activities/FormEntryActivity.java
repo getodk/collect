@@ -146,7 +146,7 @@ import static org.odk.collect.android.utilities.FormDefCache.writeCacheAsync;
  *
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Thomas Smyth, Sassafras Tech Collective (tom@sassafrastech.com; constraint behavior
- *         option)
+ * option)
  */
 public class FormEntryActivity extends AppCompatActivity implements AnimationListener,
         FormLoaderListener, FormSavedListener, AdvanceToNextListener,
@@ -688,10 +688,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     getCurrentViewIfODKView().setBinaryData(nf);
                 }
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-
-                Intent intent_crop = new Intent(getApplicationContext(), ImageCropActivity.class);
-                intent_crop.putExtra("crop_path", nf.getAbsolutePath());
-                startActivity(intent_crop);
+                startCropView(nf.getAbsolutePath());
                 break;
             case RequestCodes.ALIGNED_IMAGE:
                 /*
@@ -716,6 +713,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     getCurrentViewIfODKView().setBinaryData(nf);
                 }
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+                startCropView(nf.getAbsolutePath());
                 break;
             case RequestCodes.IMAGE_CHOOSER:
                 /*
@@ -788,6 +786,12 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         refreshCurrentView();
     }
 
+    private void startCropView(String imageUrl) {
+        Intent intent_crop = new Intent(getApplicationContext(), ImageCropActivity.class);
+        intent_crop.putExtra("crop_path", imageUrl);
+        startActivity(intent_crop);
+    }
+
     private void saveChosenImage(Uri selectedImage) {
         // Copy file to sdcard
         String instanceFolder1 = getFormController().getInstanceFile().getParent();
@@ -800,6 +804,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 final File newImage = new File(destImagePath);
                 FileUtils.copyFile(chosenImage, newImage);
                 ImageConverter.execute(newImage.getPath(), getWidgetWaitingForBinaryData(), this);
+                startCropView(destImagePath);
                 runOnUiThread(() -> {
                     dismissDialog(SAVING_IMAGE_DIALOG);
                     if (getCurrentViewIfODKView() != null) {
@@ -826,7 +831,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
     private QuestionWidget getWidgetWaitingForBinaryData() {
         QuestionWidget questionWidget = null;
-        for (QuestionWidget qw :  ((ODKView) currentView).getWidgets()) {
+        for (QuestionWidget qw : ((ODKView) currentView).getWidgets()) {
             if (qw.isWaitingForData()) {
                 questionWidget = qw;
             }
