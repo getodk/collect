@@ -13,7 +13,6 @@ import org.apache.commons.io.IOUtils;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,7 +32,6 @@ import java.io.OutputStream;
 
 import tools.fastlane.screengrab.Screengrab;
 import tools.fastlane.screengrab.UiAutomatorScreenshotStrategy;
-import tools.fastlane.screengrab.locale.LocaleTestRule;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -47,10 +45,6 @@ public class GuidanceHintFormTest {
 
     private static final String GUIDANCE_SAMPLE_FORM = "guidance_hint_form.xml";
     private static final String FORMS_DIRECTORY = "/odk/forms/";
-
-
-    @ClassRule
-    public static final LocaleTestRule localeTestRule = new LocaleTestRule();
 
     @Rule
     public FormEntryActivityTestRule activityTestRule = new FormEntryActivityTestRule();
@@ -99,7 +93,6 @@ public class GuidanceHintFormTest {
         onView(withId(R.id.help_text_view)).perform(click());
 
         Screengrab.screenshot("guidance_hint");
-
 
         onView(withId(R.id.guidance_text_view)).check(matches(withText(guidance)));
 
