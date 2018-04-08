@@ -47,6 +47,9 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.exception.JavaRosaException;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.preferences.GuidanceHint;
+import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.logic.FormController;
@@ -76,6 +79,7 @@ public abstract class QuestionWidget
     private final TextView helpTextView;
     private final TextView guidanceTextView;
     private final View helpTextLayout;
+
 
     private Bundle state;
 
@@ -122,14 +126,38 @@ public abstract class QuestionWidget
         helpTextView = setupHelpText(helpTextLayout.findViewById(R.id.help_text_view),prompt);
         guidanceTextView = setupGuidanceText(helpTextLayout.findViewById(R.id.guidance_text_view),prompt);
 
-
         addQuestionMediaLayout(getQuestionMediaLayout());
         addHelpTextLayout(getHelpTextLayout());
     }
 
-    private TextView setupGuidanceText(TextView view, FormEntryPrompt prompt) {
+    private TextView setupGuidanceText(TextView guidanceTextView, FormEntryPrompt prompt) {
 
+        GuidanceHint setting = GuidanceHint.get((String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_GUIDANCE_HINT));
 
+        if(setting.equals(GuidanceHint.No))
+            return null;
+
+        String guidanceHint = prompt.getSpecialFormQuestionText(prompt.getQuestion().getHelpTextID(),"guidance");
+
+        if(android.text.TextUtils.isEmpty(guidanceHint))
+            return null;
+
+        guidanceTextView.setText(guidanceHint);
+
+        if(setting.equals(GuidanceHint.Yes))
+        {
+            guidanceTextView.setVisibility(VISIBLE);
+            guidanceTextView.setText(guidanceHint);
+        }
+        else if(setting.equals(GuidanceHint.YesCollapsed))
+        {
+            getHelpTextView().setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.information_outline, 0);
+
+            getHelpTextView().setOnClickListener(view -> {
+
+            });
+
+        }
 
         return null;
     }
