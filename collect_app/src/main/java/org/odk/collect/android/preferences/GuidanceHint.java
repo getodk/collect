@@ -1,21 +1,19 @@
 package org.odk.collect.android.preferences;
 
 public enum GuidanceHint {
-    Yes ("yes"),
+    Yes("yes"),
     YesCollapsed("yes_collapsed"),
-    No ("no");
+    No("no");
 
     private final String name;
 
-    private GuidanceHint(String s) {
+    GuidanceHint(String s) {
         name = s;
     }
 
-    public static GuidanceHint get(String name)
-    {
-        for(GuidanceHint hint:GuidanceHint.values())
-        {
-            if(hint.name.equals(name)){
+    public static GuidanceHint get(String name) {
+        for (GuidanceHint hint : GuidanceHint.values()) {
+            if (hint.name.equals(name)) {
 
                 return hint;
             }

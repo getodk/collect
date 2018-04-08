@@ -82,13 +82,12 @@ public class GuidanceHintFormTest {
     }
 
     @Test
-    public void guidanceVisibilityContentTest()
-    {
+    public void guidanceVisibilityContentTest() {
         GeneralSharedPreferences.getInstance().save(PreferenceKeys.KEY_GUIDANCE_HINT, GuidanceHint.YesCollapsed.toString());
 
         FormEntryPrompt prompt = Collect.getInstance().getFormController().getQuestionPrompt();
 
-        String guidance = prompt.getSpecialFormQuestionText(prompt.getQuestion().getHelpTextID(),"guidance");
+        String guidance = prompt.getSpecialFormQuestionText(prompt.getQuestion().getHelpTextID(), "guidance");
 
         onView(withId(R.id.help_text_view)).perform(click());
 
