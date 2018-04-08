@@ -161,7 +161,6 @@ public class ImageWidget extends BaseImageWidget {
     }
 
     private void captureImage() {
-        Timber.e("===> ImageWidget captureImage");
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "captureButton",
                 "click", getFormEntryPrompt().getIndex());
         errorTextView.setVisibility(View.GONE);
@@ -200,7 +199,6 @@ public class ImageWidget extends BaseImageWidget {
     }
 
     private void chooseImage() {
-        Timber.e("===> ImageWidget chooseImage");
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "chooseButton",
                 "click", getFormEntryPrompt().getIndex());
         errorTextView.setVisibility(View.GONE);
