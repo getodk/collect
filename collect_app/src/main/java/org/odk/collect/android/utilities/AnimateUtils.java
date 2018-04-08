@@ -48,6 +48,14 @@ public class AnimateUtils {
         view.startAnimation(scaleInAnimation);
     }
 
+    /**
+     * Added animation related code and inspiration from this Stack Overflow Question
+     * https://stackoverflow.com/questions/4946295/android-expand-collapse-animation
+     * @param view
+     * @param result
+     * @return
+     */
+
 
     public static Animation expand(final View view, Result<Boolean> result) {
         int matchParentMeasureSpec = View.MeasureSpec.makeMeasureSpec(((View) view.getParent()).getWidth(), View.MeasureSpec.EXACTLY);
