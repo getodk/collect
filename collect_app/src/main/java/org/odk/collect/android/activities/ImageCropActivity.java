@@ -27,12 +27,18 @@ import android.widget.Button;
 import org.odk.collect.android.R;
 import org.odk.collect.android.views.CropImageView;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+
 import timber.log.Timber;
 
 public class ImageCropActivity extends AppCompatActivity implements View.OnClickListener {
 
     private CropImageView cropImageView;
     private Bitmap bitmapBefore, bitmapCroped;
+    private String imageUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +59,7 @@ public class ImageCropActivity extends AppCompatActivity implements View.OnClick
         btnCrop.setOnClickListener(this);
 
         Intent intent = getIntent();
-        String imageUrl = intent.getStringExtra("crop_path");
+        imageUrl = intent.getStringExtra("crop_path");
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
         bitmapBefore = BitmapFactory.decodeFile(imageUrl, options);
@@ -69,12 +75,24 @@ public class ImageCropActivity extends AppCompatActivity implements View.OnClick
             case R.id.btn_crop:
                 cropImageView.setDrawable(cropImageView.getCropImage(), 200, 200);
                 cropImageView.setVisibility(View.VISIBLE);
+                bitmapCroped = cropImageView.getCropImage();
                 break;
             case R.id.btn_redo:
                 cropImageView.setDrawable(bitmapBefore, 200, 200);
                 cropImageView.setVisibility(View.VISIBLE);
                 break;
             case R.id.btn_save:
+                bitmapCroped = cropImageView.getCropImage();
+                try {
+                    File file = new File(imageUrl);
+                    OutputStream fOut = new FileOutputStream(file);
+                    bitmapCroped.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+                    fOut.flush(); // Not really required
+                    fOut.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                finish();
                 break;
             default:
                 break;
