@@ -139,13 +139,16 @@ public abstract class QuestionWidget
         AtomicBoolean expanded = new AtomicBoolean(false);
         GuidanceHint setting = GuidanceHint.get((String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_GUIDANCE_HINT));
 
-        if (setting.equals(GuidanceHint.No))
+        if (setting.equals(GuidanceHint.No)){
             return null;
+        }
 
         String guidanceHint = prompt.getSpecialFormQuestionText(prompt.getQuestion().getHelpTextID(), "guidance");
 
-        if (android.text.TextUtils.isEmpty(guidanceHint))
+        if (android.text.TextUtils.isEmpty(guidanceHint)) {
             return null;
+
+        }
 
         configureGuidanceTextView(guidanceTextView, guidanceHint);
 

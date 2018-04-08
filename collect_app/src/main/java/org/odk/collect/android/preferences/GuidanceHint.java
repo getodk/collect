@@ -15,8 +15,10 @@ public enum GuidanceHint {
     {
         for(GuidanceHint hint:GuidanceHint.values())
         {
-            if(hint.name.equals(name))
+            if(hint.name.equals(name)){
+
                 return hint;
+            }
         }
 
         return null;
