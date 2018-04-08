@@ -211,6 +211,7 @@ public abstract class QuestionWidget
     }
 
     protected void injectDependencies(DependencyProvider dependencyProvider) {
+        //dependencies for the widget will be wired here.
     }
 
     private MediaLayout createQuestionMediaLayout(FormEntryPrompt prompt) {

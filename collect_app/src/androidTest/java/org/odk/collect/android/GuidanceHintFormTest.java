@@ -8,6 +8,7 @@ import android.os.Environment;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.text.TextUtils;
 
 import org.apache.commons.io.IOUtils;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -38,6 +39,7 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static junit.framework.Assert.assertTrue;
 import static org.odk.collect.android.activities.FormEntryActivity.EXTRA_TESTING_PATH;
 
 @RunWith(AndroidJUnit4.class)
@@ -88,6 +90,8 @@ public class GuidanceHintFormTest {
         FormEntryPrompt prompt = Collect.getInstance().getFormController().getQuestionPrompt();
 
         String guidance = prompt.getSpecialFormQuestionText(prompt.getQuestion().getHelpTextID(), "guidance");
+
+        assertTrue(!TextUtils.isEmpty(guidance));
 
         onView(withId(R.id.help_text_view)).perform(click());
 

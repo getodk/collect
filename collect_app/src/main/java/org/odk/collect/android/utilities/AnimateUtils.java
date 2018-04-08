@@ -85,6 +85,7 @@ public class AnimateUtils {
             @Override
             public void onAnimationStart(Animation animation) {
 
+                //triggered when animation starts.
             }
 
             @Override
@@ -94,7 +95,7 @@ public class AnimateUtils {
 
             @Override
             public void onAnimationRepeat(Animation animation) {
-
+                //triggered when animation repeats.
             }
         });
         view.startAnimation(animation);
@@ -130,6 +131,7 @@ public class AnimateUtils {
         a.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
+                //triggered when animation starts.
 
             }
 
@@ -141,6 +143,7 @@ public class AnimateUtils {
 
             @Override
             public void onAnimationRepeat(Animation animation) {
+                //triggered when animation repeats.
 
             }
         });
