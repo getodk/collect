@@ -423,11 +423,8 @@ public abstract class QuestionWidget
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
-        if (getHelpTextLayout().getVisibility() == View.VISIBLE) {
-            params.addRule(RelativeLayout.BELOW, getHelpTextLayout().getId());
-        } else {
-            params.addRule(RelativeLayout.BELOW, getQuestionMediaLayout().getId());
-        }
+        params.addRule(RelativeLayout.BELOW, getHelpTextLayout().getId());
+
         params.setMargins(10, 0, 10, 0);
         addView(v, params);
     }
