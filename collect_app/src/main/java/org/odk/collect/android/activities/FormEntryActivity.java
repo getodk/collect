@@ -662,6 +662,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             case RequestCodes.ANNOTATE_IMAGE:
             case RequestCodes.SIGNATURE_CAPTURE:
             case RequestCodes.IMAGE_CAPTURE:
+                Timber.w("===> RequestCodes.IMAGE_CAPTURE");
                 /*
                  * We saved the image to the tempfile_path, but we really want it to
                  * be in: /sdcard/odk/instances/[current instnace]/something.jpg so
@@ -690,6 +691,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
             case RequestCodes.ALIGNED_IMAGE:
+                Timber.w("===> RequestCodes.ALIGNED_IMAGE");
                 /*
                  * We saved the image to the tempfile_path; the app returns the full
                  * path to the saved file in the EXTRA_OUTPUT extra. Take that file
@@ -714,6 +716,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
             case RequestCodes.IMAGE_CHOOSER:
+                Timber.w("===> RequestCodes.IMAGE_CHOOSER");
                 /*
                  * We have a saved image somewhere, but we really want it to be in:
                  * /sdcard/odk/instances/[current instnace]/something.jpg so we move

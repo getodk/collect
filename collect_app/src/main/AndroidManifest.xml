@@ -309,6 +309,7 @@ the specific language governing permissions and limitations under the License.
         <activity android:name=".activities.WebViewActivity" />
         <activity android:name=".activities.CaptureSelfieVideoActivity" />
         <activity android:name=".activities.CaptureSelfieVideoActivityNewApi" />
+        <activity android:name=".activities.ImageCropActivity"/>
     </application>
 
 </manifest>
