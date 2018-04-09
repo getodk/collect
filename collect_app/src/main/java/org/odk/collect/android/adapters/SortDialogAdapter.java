@@ -63,7 +63,7 @@ public class SortDialogAdapter extends RecyclerView.Adapter<SortDialogAdapter.Vi
             DrawableCompat.setTint(viewHolder.imgViewIcon.getDrawable(),
                     context.getResources().getColor(R.color.tintColor));
         } else {
-            viewHolder.txtViewTitle.setTextColor(context.getResources().getColor(R.color.black));
+            viewHolder.txtViewTitle.setTextColor(context.getResources().getColor(ThemeUtils.getTextColor()));
             DrawableCompat.setTintList(viewHolder.imgViewIcon.getDrawable(), null);
         }
     }
