@@ -99,6 +99,7 @@ public abstract class QuestionWidget
             injectDependencies((DependencyProvider) context);
         }
 
+
         player = new MediaPlayer();
         getPlayer().setOnCompletionListener(new OnCompletionListener() {
             @Override
@@ -391,6 +392,8 @@ public abstract class QuestionWidget
     private TextView setupHelpText(TextView helpText, FormEntryPrompt prompt) {
         String s = prompt.getHelpText();
 
+
+
         if (s != null && !s.equals("")) {
             helpText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getQuestionFontSize() - 3);
             //noinspection ResourceType
@@ -674,4 +677,6 @@ public abstract class QuestionWidget
     public int getPlayColor() {
         return playColor;
     }
+
+
 }
