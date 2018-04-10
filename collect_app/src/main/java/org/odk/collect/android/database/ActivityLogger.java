@@ -34,9 +34,9 @@ import timber.log.Timber;
 
 /**
  * Log all user interface activity into a SQLite database. Logging is disabled by default.
- *
+ * <p>
  * The logging database will be "/sdcard/odk/log/activityLog.db"
- *
+ * <p>
  * Logging is enabled if the file "/sdcard/odk/log/enabled" exists.
  *
  * @author mitchellsundt@gmail.com
@@ -157,7 +157,7 @@ public final class ActivityLogger {
 
 
     private void log(String object, String context, String action, String instancePath,
-            FormIndex index, String param1, String param2) {
+                     FormIndex index, String param1, String param2) {
         if (!isOpen()) {
             return;
         }
