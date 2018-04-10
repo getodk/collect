@@ -34,10 +34,11 @@ import java.io.OutputStream;
 
 import timber.log.Timber;
 
+
 public class ImageCropActivity extends AppCompatActivity implements View.OnClickListener {
 
     private CropImageView cropImageView;
-    private Bitmap bitmapBefore, bitmapCroped;
+    private Bitmap bitmapBefore;
     private String imageUrl;
 
     @Override
@@ -50,15 +51,16 @@ public class ImageCropActivity extends AppCompatActivity implements View.OnClick
     private void initViews() {
         cropImageView = findViewById(R.id.cropview);
         cropImageView.setVisibility(View.GONE);
-        Button btnCrop = findViewById(R.id.btn_crop);
-        Button btnRedo = findViewById(R.id.btn_redo);
-        Button btnSave = findViewById(R.id.btn_save);
-        Button btnNot = findViewById(R.id.btn_not);
 
-        btnSave.setOnClickListener(this);
-        btnRedo.setOnClickListener(this);
+        Button btnCrop = findViewById(R.id.btn_crop);
         btnCrop.setOnClickListener(this);
+        Button btnRedo = findViewById(R.id.btn_redo);
+        btnRedo.setOnClickListener(this);
+        Button btnSave = findViewById(R.id.btn_save);
+        btnSave.setOnClickListener(this);
+        Button btnNot = findViewById(R.id.btn_not);
         btnNot.setOnClickListener(this);
+
 
         Intent intent = getIntent();
         imageUrl = intent.getStringExtra("crop_path");
@@ -72,12 +74,12 @@ public class ImageCropActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     public void onClick(View v) {
+        Bitmap bitmapCroped;
         cropImageView.setVisibility(View.GONE);
         switch (v.getId()) {
             case R.id.btn_crop:
                 cropImageView.setDrawable(cropImageView.getCropImage(), 200, 200);
                 cropImageView.setVisibility(View.VISIBLE);
-                bitmapCroped = cropImageView.getCropImage();
                 break;
             case R.id.btn_redo:
                 cropImageView.setDrawable(bitmapBefore, 200, 200);
@@ -90,12 +92,12 @@ public class ImageCropActivity extends AppCompatActivity implements View.OnClick
                 bitmapCroped = cropImageView.getCropImage();
                 try {
                     File file = new File(imageUrl);
-                    OutputStream fOut = new FileOutputStream(file);
-                    bitmapCroped.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
-                    fOut.flush(); // Not really required
-                    fOut.close();
+                    OutputStream out = new FileOutputStream(file);
+                    bitmapCroped.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                    out.flush(); // Not really required
+                    out.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Timber.e(e.toString());
                 }
                 finish();
                 break;

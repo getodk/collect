@@ -25,41 +25,40 @@ import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 public class FloatDrawable extends Drawable {
 
-    private Context mContext;
+    private Context context;
     private int offset = 50;
-    private Paint mLinePaint = new Paint();
-    private Paint mLinePaint2 = new Paint();
-
-    {
-        mLinePaint.setARGB(200, 50, 50, 50);
-        mLinePaint.setStrokeWidth(1F);
-        mLinePaint.setStyle(Paint.Style.STROKE);
-        mLinePaint.setAntiAlias(true);
-        mLinePaint.setColor(Color.WHITE);
-
-        mLinePaint2.setARGB(200, 50, 50, 50);
-        mLinePaint2.setStrokeWidth(7F);
-        mLinePaint2.setStyle(Paint.Style.STROKE);
-        mLinePaint2.setAntiAlias(true);
-        mLinePaint2.setColor(Color.WHITE);
-    }
+    private Paint linePaint = new Paint();
+    private Paint linePaint2 = new Paint();
 
     public FloatDrawable(Context context) {
         super();
-        this.mContext = context;
+        this.context = context;
+
+        linePaint.setARGB(200, 50, 50, 50);
+        linePaint.setStrokeWidth(1F);
+        linePaint.setStyle(Paint.Style.STROKE);
+        linePaint.setAntiAlias(true);
+        linePaint.setColor(Color.WHITE);
+
+        linePaint2.setARGB(200, 50, 50, 50);
+        linePaint2.setStrokeWidth(7F);
+        linePaint2.setStyle(Paint.Style.STROKE);
+        linePaint2.setAntiAlias(true);
+        linePaint2.setColor(Color.WHITE);
 
     }
 
     // adaption problem addressed here.
     public int getBorderWidth() {
-        return dipToPx(mContext, offset);
+        return dipToPx(context, offset);
     }
 
     public int getBorderHeight() {
-        return dipToPx(mContext, offset);
+        return dipToPx(context, offset);
     }
 
     @Override
@@ -70,63 +69,63 @@ public class FloatDrawable extends Drawable {
         int right = getBounds().right;
         int bottom = getBounds().bottom;
 
-        Rect mRect = new Rect(left + dipToPx(mContext, offset) / 2,
-                top + dipToPx(mContext, offset) / 2,
-                right - dipToPx(mContext, offset) / 2,
-                bottom - dipToPx(mContext, offset) / 2);
+        Rect rect = new Rect(left + dipToPx(context, offset) / 2,
+                top + dipToPx(context, offset) / 2,
+                right - dipToPx(context, offset) / 2,
+                bottom - dipToPx(context, offset) / 2);
         //Default Rect
-        canvas.drawRect(mRect, mLinePaint);
+        canvas.drawRect(rect, linePaint);
         //Lines in Rect
-        canvas.drawLine((left + dipToPx(mContext, offset) / 2 - 3.5f),
-                top + dipToPx(mContext, offset) / 2,
-                left + dipToPx(mContext, offset) - 8f,
-                top + dipToPx(mContext, offset) / 2, mLinePaint2);
-        canvas.drawLine(left + dipToPx(mContext, offset) / 2,
-                top + dipToPx(mContext, offset) / 2,
-                left + dipToPx(mContext, offset) / 2,
-                top + dipToPx(mContext, offset) / 2 + 30, mLinePaint2);
-        canvas.drawLine(right - dipToPx(mContext, offset) + 8f,
-                top + dipToPx(mContext, offset) / 2,
-                right - dipToPx(mContext, offset) / 2,
-                top + dipToPx(mContext, offset) / 2, mLinePaint2);
-        canvas.drawLine(right - dipToPx(mContext, offset) / 2,
-                top + dipToPx(mContext, offset) / 2 - 3.5f,
-                right - dipToPx(mContext, offset) / 2,
-                top + dipToPx(mContext, offset) / 2 + 30, mLinePaint2);
-        canvas.drawLine((left + dipToPx(mContext, offset) / 2 - 3.5f),
-                bottom - dipToPx(mContext, offset) / 2,
-                left + dipToPx(mContext, offset) - 8f,
-                bottom - dipToPx(mContext, offset) / 2, mLinePaint2);
-        canvas.drawLine((left + dipToPx(mContext, offset) / 2),
-                bottom - dipToPx(mContext, offset) / 2,
-                left + dipToPx(mContext, offset) / 2,
-                bottom - dipToPx(mContext, offset) / 2 - 30f, mLinePaint2);
-        canvas.drawLine((right - dipToPx(mContext, offset) + 8f),
-                bottom - dipToPx(mContext, offset) / 2,
-                right - dipToPx(mContext, offset) / 2,
-                bottom - dipToPx(mContext, offset) / 2, mLinePaint2);
-        canvas.drawLine((right - dipToPx(mContext, offset) / 2),
-                bottom - dipToPx(mContext, offset) / 2 - 30f,
-                right - dipToPx(mContext, offset) / 2,
-                bottom - dipToPx(mContext, offset) / 2 + 3.5f, mLinePaint2);
+        canvas.drawLine((left + dipToPx(context, offset) / 2 - 3.5f),
+                top + dipToPx(context, offset) / 2,
+                left + dipToPx(context, offset) - 8f,
+                top + dipToPx(context, offset) / 2, linePaint2);
+        canvas.drawLine(left + dipToPx(context, offset) / 2,
+                top + dipToPx(context, offset) / 2,
+                left + dipToPx(context, offset) / 2,
+                top + dipToPx(context, offset) / 2 + 30, linePaint2);
+        canvas.drawLine(right - dipToPx(context, offset) + 8f,
+                top + dipToPx(context, offset) / 2,
+                right - dipToPx(context, offset) / 2,
+                top + dipToPx(context, offset) / 2, linePaint2);
+        canvas.drawLine(right - dipToPx(context, offset) / 2,
+                top + dipToPx(context, offset) / 2 - 3.5f,
+                right - dipToPx(context, offset) / 2,
+                top + dipToPx(context, offset) / 2 + 30, linePaint2);
+        canvas.drawLine((left + dipToPx(context, offset) / 2 - 3.5f),
+                bottom - dipToPx(context, offset) / 2,
+                left + dipToPx(context, offset) - 8f,
+                bottom - dipToPx(context, offset) / 2, linePaint2);
+        canvas.drawLine((left + dipToPx(context, offset) / 2),
+                bottom - dipToPx(context, offset) / 2,
+                left + dipToPx(context, offset) / 2,
+                bottom - dipToPx(context, offset) / 2 - 30f, linePaint2);
+        canvas.drawLine((right - dipToPx(context, offset) + 8f),
+                bottom - dipToPx(context, offset) / 2,
+                right - dipToPx(context, offset) / 2,
+                bottom - dipToPx(context, offset) / 2, linePaint2);
+        canvas.drawLine((right - dipToPx(context, offset) / 2),
+                bottom - dipToPx(context, offset) / 2 - 30f,
+                right - dipToPx(context, offset) / 2,
+                bottom - dipToPx(context, offset) / 2 + 3.5f, linePaint2);
     }
 
     @Override
     public void setBounds(@NonNull Rect bounds) {
-        super.setBounds(new Rect(bounds.left - dipToPx(mContext, offset) / 2,
-                bounds.top - dipToPx(mContext, offset) / 2,
-                bounds.right + dipToPx(mContext, offset) / 2,
-                bounds.bottom + dipToPx(mContext, offset) / 2));
+        super.setBounds(new Rect(bounds.left - dipToPx(context, offset) / 2,
+                bounds.top - dipToPx(context, offset) / 2,
+                bounds.right + dipToPx(context, offset) / 2,
+                bounds.bottom + dipToPx(context, offset) / 2));
     }
 
     @Override
     public void setAlpha(int alpha) {
-
+        // setAlpha value
     }
 
     @Override
-    public void setColorFilter(ColorFilter cf) {
-
+    public void setColorFilter(@Nullable ColorFilter colorFilter) {
+        // set color filter
     }
 
     @Override

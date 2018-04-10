@@ -522,10 +522,10 @@
     <string name="form_delete_message">Deleting selected forms</string>
     <string name="deleting_form_dialog_update_message">Deleting form: %1$d out of %2$d </string>
     <string name="search">Search</string>
-    <string name="crop_image">Crop Image</string>
-    <string name="crop_save">Save Image</string>
-    <string name="crop_redo">Redo Crop</string>
-    <string name="crop_undo">Don\'t Crop</string>
+    <string name="crop_image">crop image</string>
+    <string name="crop_save">save image</string>
+    <string name="crop_redo">redo crop</string>
+    <string name="crop_undo">don\'t crop</string>
     <string name="null_intent_value">The external application did not provide expected information.</string>
     <string name="image_size_large">Large (3072px)</string>
     <string name="image_size_medium">Medium (2048px)</string>

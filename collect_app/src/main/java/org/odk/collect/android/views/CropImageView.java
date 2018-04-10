@@ -33,43 +33,45 @@ import android.view.View;
 
 import org.odk.collect.android.utilities.FloatDrawable;
 
+import timber.log.Timber;
+
 public class CropImageView extends View {
     // Touch point
-    private float mX_1 = 0;
-    private float mY_1 = 0;
+    private float pointX = 0;
+    private float pointY = 0;
     // Touch events
-    private final int STATUS_SINGLE = 1;
-    private final int STATUS_MULTI_START = 2;
-    private final int STATUS_MULTI_TOUCHING = 3;
+    private static final int STATUS_SINGLE = 1;
+    private static final int STATUS_MULTI_START = 2;
+    private static final int STATUS_MULTI_TOUCHING = 3;
     // Current status
-    private int mStatus = STATUS_SINGLE;
+    private int status = STATUS_SINGLE;
     // Default height & width
     private int cropWidth;
     private int cropHeight;
     // Four points of the float layer
-    private final int EDGE_LT = 1;
-    private final int EDGE_RT = 2;
-    private final int EDGE_LB = 3;
-    private final int EDGE_RB = 4;
-    private final int EDGE_MOVE_IN = 5;
-    private final int EDGE_MOVE_OUT = 6;
-    private final int EDGE_NONE = 7;
+    private static final int EDGE_LT = 1;
+    private static final int EDGE_RT = 2;
+    private static final int EDGE_LB = 3;
+    private static final int EDGE_RB = 4;
+    private static final int EDGE_MOVE_IN = 5;
+    private static final int EDGE_MOVE_OUT = 6;
+    private static final int EDGE_NONE = 7;
 
     public int currentEdge = EDGE_NONE;
 
     protected float oriRationWH = 0;
 
-    protected Drawable mDrawable;
-    protected FloatDrawable mFloatDrawable;
+    protected Drawable drawable;
+    protected FloatDrawable floatDrawable;
 
-    protected Rect mDrawableSrc = new Rect();
-    protected Rect mDrawableDst = new Rect();
-    protected Rect mDrawableFloat = new Rect();
+    protected Rect drawableSrc = new Rect();
+    protected Rect drawableDst = new Rect();
+    protected Rect drawableFloat = new Rect();
     protected boolean isFirst = true;
     private boolean isTouchInSquare = true;
 
-    protected Context mContext;
-    private Bitmap mBitmap;
+    protected Context context;
+    private Bitmap bitmap;
 
     public CropImageView(Context context) {
         super(context);
@@ -88,19 +90,19 @@ public class CropImageView extends View {
 
     @SuppressLint("NewApi")
     private void init(Context context) {
-        this.mContext = context;
+        this.context = context;
         try {
             // use a software way to draw views.
             this.setLayerType(LAYER_TYPE_SOFTWARE, null);
         } catch (Exception e) {
-            e.printStackTrace();
+            Timber.e(e.toString());
         }
-        mFloatDrawable = new FloatDrawable(context);
+        floatDrawable = new FloatDrawable(context);
     }
 
     public void setDrawable(Bitmap bitmap, int cropWidth, int cropHeight) {
-        mBitmap = bitmap;
-        this.mDrawable = new BitmapDrawable(bitmap);
+        this.bitmap = bitmap;
+        this.drawable = new BitmapDrawable(bitmap);
         this.cropWidth = cropWidth;
         this.cropHeight = cropHeight;
         this.isFirst = true;
@@ -114,14 +116,14 @@ public class CropImageView extends View {
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
         int heightSize = MeasureSpec.getSize(heightMeasureSpec);
 
-        if (mBitmap != null) {
-            if ((mBitmap.getHeight() > heightSize) && (mBitmap.getHeight() > mBitmap.getWidth())) {
-                widthSize = heightSize * mBitmap.getWidth() / mBitmap.getHeight();
-            } else if ((mBitmap.getWidth() > widthSize) && (mBitmap.getWidth() > mBitmap.getHeight())) {
-                heightSize = widthSize * mBitmap.getHeight() / mBitmap.getWidth();
+        if (bitmap != null) {
+            if ((bitmap.getHeight() > heightSize) && (bitmap.getHeight() > bitmap.getWidth())) {
+                widthSize = heightSize * bitmap.getWidth() / bitmap.getHeight();
+            } else if ((bitmap.getWidth() > widthSize) && (bitmap.getWidth() > bitmap.getHeight())) {
+                heightSize = widthSize * bitmap.getHeight() / bitmap.getWidth();
             } else {
-                heightSize = mBitmap.getHeight();
-                widthSize = mBitmap.getWidth();
+                heightSize = bitmap.getHeight();
+                widthSize = bitmap.getWidth();
             }
         }
         setMeasuredDimension(widthSize, heightSize);
@@ -130,100 +132,80 @@ public class CropImageView extends View {
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-
         if (event.getPointerCount() > 1) {
-            if (mStatus == STATUS_SINGLE) {
-                mStatus = STATUS_MULTI_START;
-            } else if (mStatus == STATUS_MULTI_START) {
-                mStatus = STATUS_MULTI_TOUCHING;
+            if (status == STATUS_SINGLE) {
+                status = STATUS_MULTI_START;
+            } else if (status == STATUS_MULTI_START) {
+                status = STATUS_MULTI_TOUCHING;
             }
         } else {
-            if (mStatus == STATUS_MULTI_START
-                    || mStatus == STATUS_MULTI_TOUCHING) {
-                mX_1 = event.getX();
-                mY_1 = event.getY();
+            if (status == STATUS_MULTI_START
+                    || status == STATUS_MULTI_TOUCHING) {
+                pointX = event.getX();
+                pointY = event.getY();
             }
-
-            mStatus = STATUS_SINGLE;
+            status = STATUS_SINGLE;
         }
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                mX_1 = event.getX();
-                mY_1 = event.getY();
-                currentEdge = getTouch((int) mX_1, (int) mY_1);
+                pointX = event.getX();
+                pointY = event.getY();
+                currentEdge = getTouch((int) pointX, (int) pointY);
                 break;
-
             case MotionEvent.ACTION_UP:
                 break;
-
             case MotionEvent.ACTION_POINTER_UP:
                 currentEdge = EDGE_NONE;
                 break;
-
             case MotionEvent.ACTION_MOVE:
-                if (mStatus == STATUS_MULTI_TOUCHING) {
+                if (status == STATUS_MULTI_TOUCHING) {
                     // TODO if it's a multi touch case.
                     break;
-                } else if (mStatus == STATUS_SINGLE) {
-                    int dx = (int) (event.getX() - mX_1);
-                    int dy = (int) (event.getY() - mY_1);
+                } else if (status == STATUS_SINGLE) {
+                    int dx = (int) (event.getX() - pointX);
+                    int dy = (int) (event.getY() - pointY);
 
-                    mX_1 = event.getX();
-                    mY_1 = event.getY();
+                    pointX = event.getX();
+                    pointY = event.getY();
 
-                    // TODO If touch point is out of a border, we should turn back。
-                    // We should add this improvement here. but may cause a bug when
-                    // touch point is moving to fast.
-//                    if (mX_1 > getWidth() || mX_1 < 0 || mY_1 > getHeight() || mY_1 < 0) {
-//                        break;
-//                    }
                     if (!(dx == 0 && dy == 0)) {
                         switch (currentEdge) {
                             case EDGE_LT:
-                                mDrawableFloat.set(mDrawableFloat.left + dx,
-                                        mDrawableFloat.top + dy,
-                                        mDrawableFloat.right,
-                                        mDrawableFloat.bottom);
+                                drawableFloat.set(drawableFloat.left + dx, drawableFloat.top + dy,
+                                        drawableFloat.right, drawableFloat.bottom);
                                 break;
-
                             case EDGE_RT:
-                                mDrawableFloat.set(mDrawableFloat.left,
-                                        mDrawableFloat.top + dy,
-                                        mDrawableFloat.right + dx,
-                                        mDrawableFloat.bottom);
+                                drawableFloat.set(drawableFloat.left, drawableFloat.top + dy,
+                                        drawableFloat.right + dx, drawableFloat.bottom);
                                 break;
-
                             case EDGE_LB:
-                                mDrawableFloat.set(mDrawableFloat.left + dx,
-                                        mDrawableFloat.top,
-                                        mDrawableFloat.right,
-                                        mDrawableFloat.bottom + dy);
+                                drawableFloat.set(drawableFloat.left + dx, drawableFloat.top,
+                                        drawableFloat.right, drawableFloat.bottom + dy);
                                 break;
-
                             case EDGE_RB:
-                                mDrawableFloat.set(mDrawableFloat.left,
-                                        mDrawableFloat.top,
-                                        mDrawableFloat.right + dx,
-                                        mDrawableFloat.bottom + dy);
+                                drawableFloat.set(drawableFloat.left, drawableFloat.top,
+                                        drawableFloat.right + dx, drawableFloat.bottom + dy);
                                 break;
-
                             case EDGE_MOVE_IN:
                                 // We should take a look at user's finger point, which moving every time.
-                                isTouchInSquare = mDrawableFloat.contains((int) event.getX(),
+                                isTouchInSquare = drawableFloat.contains((int) event.getX(),
                                         (int) event.getY());
                                 if (isTouchInSquare) {
-                                    mDrawableFloat.offset(dx, dy);
+                                    drawableFloat.offset(dx, dy);
                                 }
                                 break;
-
                             case EDGE_MOVE_OUT:
                                 break;
+                            default:
+                                break;
                         }
-                        mDrawableFloat.sort();
+                        drawableFloat.sort();
                         invalidate();
                     }
                 }
+                break;
+            default:
                 break;
         }
         return true;
@@ -231,30 +213,30 @@ public class CropImageView extends View {
 
     // according to the initial touch point, we can know which corner user has touched
     public int getTouch(int eventX, int eventY) {
-        Rect mFloatDrawableRect = mFloatDrawable.getBounds();
-        int mFloatDrawableWidth = mFloatDrawable.getBorderWidth();
-        int mFloatDrawableHeight = mFloatDrawable.getBorderHeight();
-        if (mFloatDrawableRect.left <= eventX
-                && eventX < (mFloatDrawableRect.left + mFloatDrawableWidth)
-                && mFloatDrawableRect.top <= eventY
-                && eventY < (mFloatDrawableRect.top + mFloatDrawableHeight)) {
+        Rect floatDrawableRect = floatDrawable.getBounds();
+        int floatDrawableWidth = floatDrawable.getBorderWidth();
+        int floatDrawableHeight = floatDrawable.getBorderHeight();
+        if (floatDrawableRect.left <= eventX
+                && eventX < (floatDrawableRect.left + floatDrawableWidth)
+                && floatDrawableRect.top <= eventY
+                && eventY < (floatDrawableRect.top + floatDrawableHeight)) {
             return EDGE_LT;
-        } else if ((mFloatDrawableRect.right - mFloatDrawableWidth) <= eventX
-                && eventX < mFloatDrawableRect.right
-                && mFloatDrawableRect.top <= eventY
-                && eventY < (mFloatDrawableRect.top + mFloatDrawableHeight)) {
+        } else if ((floatDrawableRect.right - floatDrawableWidth) <= eventX
+                && eventX < floatDrawableRect.right
+                && floatDrawableRect.top <= eventY
+                && eventY < (floatDrawableRect.top + floatDrawableHeight)) {
             return EDGE_RT;
-        } else if (mFloatDrawableRect.left <= eventX
-                && eventX < (mFloatDrawableRect.left + mFloatDrawableWidth)
-                && (mFloatDrawableRect.bottom - mFloatDrawableHeight) <= eventY
-                && eventY < mFloatDrawableRect.bottom) {
+        } else if (floatDrawableRect.left <= eventX
+                && eventX < (floatDrawableRect.left + floatDrawableWidth)
+                && (floatDrawableRect.bottom - floatDrawableHeight) <= eventY
+                && eventY < floatDrawableRect.bottom) {
             return EDGE_LB;
-        } else if ((mFloatDrawableRect.right - mFloatDrawableWidth) <= eventX
-                && eventX < mFloatDrawableRect.right
-                && (mFloatDrawableRect.bottom - mFloatDrawableHeight) <= eventY
-                && eventY < mFloatDrawableRect.bottom) {
+        } else if ((floatDrawableRect.right - floatDrawableWidth) <= eventX
+                && eventX < floatDrawableRect.right
+                && (floatDrawableRect.bottom - floatDrawableHeight) <= eventY
+                && eventY < floatDrawableRect.bottom) {
             return EDGE_RB;
-        } else if (mFloatDrawableRect.contains(eventX, eventY)) {
+        } else if (floatDrawableRect.contains(eventX, eventY)) {
             return EDGE_MOVE_IN;
         }
         return EDGE_MOVE_OUT;
@@ -263,36 +245,36 @@ public class CropImageView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
 
-        if (mDrawable == null) {
+        if (drawable == null) {
             return;
         }
 
-        if (mDrawable.getIntrinsicWidth() == 0 || mDrawable.getIntrinsicHeight() == 0) {
+        if (drawable.getIntrinsicWidth() == 0 || drawable.getIntrinsicHeight() == 0) {
             return;
         }
 
         configureBounds();
-        mDrawable.draw(canvas);
+        drawable.draw(canvas);
         canvas.save();
-        canvas.clipRect(mDrawableFloat, Region.Op.DIFFERENCE);
+        canvas.clipRect(drawableFloat, Region.Op.DIFFERENCE);
         canvas.drawColor(Color.parseColor("#a0000000"));
         canvas.restore();
-        mFloatDrawable.draw(canvas);
+        floatDrawable.draw(canvas);
     }
 
     protected void configureBounds() {
         // configureBounds called in onDraw()
         if (isFirst) {
-            oriRationWH = ((float) mDrawable.getIntrinsicWidth())
-                    / ((float) mDrawable.getIntrinsicHeight());
+            oriRationWH = ((float) drawable.getIntrinsicWidth())
+                    / ((float) drawable.getIntrinsicHeight());
 
-            final float scale = mContext.getResources().getDisplayMetrics().density;
-            int mDrawableW = (int) (mDrawable.getIntrinsicWidth() * scale + 0.5f);
-            if ((mDrawable.getIntrinsicHeight() * scale + 0.5f) > getHeight()) {
-                mDrawableW = (int) ((mDrawable.getIntrinsicWidth() * scale + 0.5f)
-                        * (getHeight() / (mDrawable.getIntrinsicHeight() * scale + 0.5f)));
+            final float scale = context.getResources().getDisplayMetrics().density;
+            int drawableW = (int) (drawable.getIntrinsicWidth() * scale + 0.5f);
+            if ((drawable.getIntrinsicHeight() * scale + 0.5f) > getHeight()) {
+                drawableW = (int) ((drawable.getIntrinsicWidth() * scale + 0.5f)
+                        * (getHeight() / (drawable.getIntrinsicHeight() * scale + 0.5f)));
             }
-            int w = Math.min(getWidth(), mDrawableW);
+            int w = Math.min(getWidth(), drawableW);
             int h = (int) (w / oriRationWH);
 
             int left = (getWidth() - w) / 2;
@@ -300,11 +282,11 @@ public class CropImageView extends View {
             int right = left + w;
             int bottom = top + h;
 
-            mDrawableSrc.set(left, top, right, bottom);
-            mDrawableDst.set(mDrawableSrc);
+            drawableSrc.set(left, top, right, bottom);
+            drawableDst.set(drawableSrc);
 
-            int floatWidth = dipToPx(mContext, cropWidth);
-            int floatHeight = dipToPx(mContext, cropHeight);
+            int floatWidth = dipToPx(context, cropWidth);
+            int floatHeight = dipToPx(context, cropHeight);
 
             if (floatWidth > getWidth()) {
                 floatWidth = getWidth();
@@ -318,64 +300,64 @@ public class CropImageView extends View {
 
             int floatLeft = (getWidth() - floatWidth) / 2;
             int floatTop = (getHeight() - floatHeight) / 2;
-            mDrawableFloat.set(floatLeft, floatTop, floatLeft + floatWidth, floatTop + floatHeight);
+            drawableFloat.set(floatLeft, floatTop, floatLeft + floatWidth, floatTop + floatHeight);
 
             isFirst = false;
-        } else if (getTouch((int) mX_1, (int) mY_1) == EDGE_MOVE_IN) {
-            if (mDrawableFloat.left < 0) {
-                mDrawableFloat.right = mDrawableFloat.width();
-                mDrawableFloat.left = 0;
+        } else if (getTouch((int) pointX, (int) pointY) == EDGE_MOVE_IN) {
+            if (drawableFloat.left < 0) {
+                drawableFloat.right = drawableFloat.width();
+                drawableFloat.left = 0;
             }
-            if (mDrawableFloat.top < 0) {
-                mDrawableFloat.bottom = mDrawableFloat.height();
-                mDrawableFloat.top = 0;
+            if (drawableFloat.top < 0) {
+                drawableFloat.bottom = drawableFloat.height();
+                drawableFloat.top = 0;
             }
-            if (mDrawableFloat.right > getWidth()) {
-                mDrawableFloat.left = getWidth() - mDrawableFloat.width();
-                mDrawableFloat.right = getWidth();
+            if (drawableFloat.right > getWidth()) {
+                drawableFloat.left = getWidth() - drawableFloat.width();
+                drawableFloat.right = getWidth();
             }
-            if (mDrawableFloat.bottom > getHeight()) {
-                mDrawableFloat.top = getHeight() - mDrawableFloat.height();
-                mDrawableFloat.bottom = getHeight();
+            if (drawableFloat.bottom > getHeight()) {
+                drawableFloat.top = getHeight() - drawableFloat.height();
+                drawableFloat.bottom = getHeight();
             }
-            mDrawableFloat.set(mDrawableFloat.left, mDrawableFloat.top, mDrawableFloat.right,
-                    mDrawableFloat.bottom);
+            drawableFloat.set(drawableFloat.left, drawableFloat.top, drawableFloat.right,
+                    drawableFloat.bottom);
         } else {
-            if (mDrawableFloat.left < 0) {
-                mDrawableFloat.left = 0;
+            if (drawableFloat.left < 0) {
+                drawableFloat.left = 0;
             }
-            if (mDrawableFloat.top < 0) {
-                mDrawableFloat.top = 0;
+            if (drawableFloat.top < 0) {
+                drawableFloat.top = 0;
             }
-            if (mDrawableFloat.right > getWidth()) {
-                mDrawableFloat.right = getWidth();
-                mDrawableFloat.left = getWidth() - mDrawableFloat.width();
+            if (drawableFloat.right > getWidth()) {
+                drawableFloat.right = getWidth();
+                drawableFloat.left = getWidth() - drawableFloat.width();
             }
-            if (mDrawableFloat.bottom > getHeight()) {
-                mDrawableFloat.bottom = getHeight();
-                mDrawableFloat.top = getHeight() - mDrawableFloat.height();
+            if (drawableFloat.bottom > getHeight()) {
+                drawableFloat.bottom = getHeight();
+                drawableFloat.top = getHeight() - drawableFloat.height();
             }
-            mDrawableFloat.set(mDrawableFloat.left, mDrawableFloat.top, mDrawableFloat.right,
-                    mDrawableFloat.bottom);
+            drawableFloat.set(drawableFloat.left, drawableFloat.top, drawableFloat.right,
+                    drawableFloat.bottom);
         }
 
-        mDrawable.setBounds(mDrawableDst);
-        mFloatDrawable.setBounds(mDrawableFloat);
+        drawable.setBounds(drawableDst);
+        floatDrawable.setBounds(drawableFloat);
     }
 
     public Bitmap getCropImage() {
         Bitmap tmpBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.RGB_565);
         Canvas canvas = new Canvas(tmpBitmap);
-        mDrawable.draw(canvas);
+        drawable.draw(canvas);
 
         Matrix matrix = new Matrix();
-        float scale = (float) (mDrawableSrc.width())
-                / (float) (mDrawableDst.width());
+        float scale = (float) (drawableSrc.width())
+                / (float) (drawableDst.width());
         matrix.postScale(scale, scale);
 
-        Bitmap ret = Bitmap.createBitmap(tmpBitmap, mDrawableFloat.left,
-                mDrawableFloat.top, mDrawableFloat.width(),
-                mDrawableFloat.height(), matrix, true);
+        Bitmap ret = Bitmap.createBitmap(tmpBitmap, drawableFloat.left,
+                drawableFloat.top, drawableFloat.width(),
+                drawableFloat.height(), matrix, true);
         tmpBitmap.recycle();
         return ret;
     }

@@ -146,7 +146,7 @@ import static org.odk.collect.android.utilities.FormDefCache.writeCacheAsync;
  *
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Thomas Smyth, Sassafras Tech Collective (tom@sassafrastech.com; constraint behavior
- * option)
+ *         option)
  */
 public class FormEntryActivity extends AppCompatActivity implements AnimationListener,
         FormLoaderListener, FormSavedListener, AdvanceToNextListener,
@@ -787,9 +787,9 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     }
 
     private void startCropView(String imageUrl) {
-        Intent intent_crop = new Intent(getApplicationContext(), ImageCropActivity.class);
-        intent_crop.putExtra("crop_path", imageUrl);
-        startActivity(intent_crop);
+        Intent intentCrop = new Intent(getApplicationContext(), ImageCropActivity.class);
+        intentCrop.putExtra("crop_path", imageUrl);
+        startActivity(intentCrop);
     }
 
     private void saveChosenImage(Uri selectedImage) {
@@ -831,7 +831,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
     private QuestionWidget getWidgetWaitingForBinaryData() {
         QuestionWidget questionWidget = null;
-        for (QuestionWidget qw : ((ODKView) currentView).getWidgets()) {
+        for (QuestionWidget qw :  ((ODKView) currentView).getWidgets()) {
             if (qw.isWaitingForData()) {
                 questionWidget = qw;
             }
