@@ -31,18 +31,22 @@ public enum MediaManager {
     Map<String, String> recentFiles = new HashMap<>();
 
     public void markOriginalFileOrDelete(String questionIndex, String fileName) {
-        if (originalFiles.containsKey(questionIndex)) {
-            MediaUtils.deleteImageFileFromMediaProvider(fileName);
-        } else {
-            originalFiles.put(questionIndex, fileName);
+        if (questionIndex != null && fileName != null) {
+            if (originalFiles.containsKey(questionIndex)) {
+                MediaUtils.deleteImageFileFromMediaProvider(fileName);
+            } else {
+                originalFiles.put(questionIndex, fileName);
+            }
         }
     }
 
     public void replaceRecentFileForQuestion(String questionIndex, String fileName) {
-        if (recentFiles.containsKey(questionIndex)) {
-            MediaUtils.deleteImageFileFromMediaProvider(recentFiles.get(questionIndex));
+        if (questionIndex != null && fileName != null) {
+            if (recentFiles.containsKey(questionIndex)) {
+                MediaUtils.deleteImageFileFromMediaProvider(recentFiles.get(questionIndex));
+            }
+            recentFiles.put(questionIndex, fileName);
         }
-        recentFiles.put(questionIndex, fileName);
     }
 
     public void revertChanges() {
