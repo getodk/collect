@@ -109,6 +109,8 @@ public class ExternalSQLiteOpenHelper extends SQLiteOpenHelper {
                     DELIMITING_CHAR, QUOTE_CHAR, ESCAPE_CHAR);
             String[] headerRow = reader.readNext();
 
+            headerRow[0] = replaceByteOrderMarker(headerRow[0]);
+
             if (!ExternalDataUtil.containsAnyData(headerRow)) {
                 throw new ExternalDataException(
                         Collect.getInstance().getString(R.string.ext_file_no_data_error));
@@ -261,6 +263,25 @@ public class ExternalSQLiteOpenHelper extends SQLiteOpenHelper {
     private void onProgress(String message) {
         if (formLoaderTask != null) {
             formLoaderTask.publishExternalDataLoadingProgress(message);
+        }
+    }
+
+    /**
+     * replaceByteOrderMarker
+     *
+     * Removes the presence of FEFF (BOM) from the initial UTF-8 String
+     *
+     * Fixes issue: https://github.com/opendatakit/collect/issues/1695
+     *
+     * @param firstLine
+     * @return String with any Byte Order Marker removed
+     */
+    private String replaceByteOrderMarker(String firstLine) {
+        final String BOM = "\uFEFF";
+        if (firstLine.startsWith(BOM)) {
+            return firstLine.substring(1);
+        } else {
+            return firstLine;
         }
     }
 }
