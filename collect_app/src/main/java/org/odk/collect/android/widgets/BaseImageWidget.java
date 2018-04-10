@@ -98,7 +98,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
 
             MediaManager
                     .getInstance()
-                    .markRecentFile(getFormEntryPrompt().getIndex().toString(), newImage.getAbsolutePath());
+                    .replaceRecentFileForQuestion(getFormEntryPrompt().getIndex().toString(), newImage.getAbsolutePath());
 
             Uri imageURI = getContext().getContentResolver().insert(
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);

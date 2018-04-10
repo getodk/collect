@@ -241,7 +241,7 @@ public class ImageWebViewWidget extends QuestionWidget implements FileWidget {
 
             MediaManager
                     .getInstance()
-                    .markRecentFile(getFormEntryPrompt().getIndex().toString(), newImage.getAbsolutePath());
+                    .replaceRecentFileForQuestion(getFormEntryPrompt().getIndex().toString(), newImage.getAbsolutePath());
 
             Uri imageURI = getContext().getContentResolver().insert(
                     Images.Media.EXTERNAL_CONTENT_URI, values);

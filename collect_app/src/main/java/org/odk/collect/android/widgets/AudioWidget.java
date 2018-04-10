@@ -162,7 +162,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
 
             MediaManager
                     .getInstance()
-                    .markRecentFile(getFormEntryPrompt().getIndex().toString(), newAudio.getAbsolutePath());
+                    .replaceRecentFileForQuestion(getFormEntryPrompt().getIndex().toString(), newAudio.getAbsolutePath());
 
             Uri audioURI = getContext().getContentResolver().insert(
                     Audio.Media.EXTERNAL_CONTENT_URI, values);

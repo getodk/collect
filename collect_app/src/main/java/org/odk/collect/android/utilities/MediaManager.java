@@ -19,6 +19,11 @@ package org.odk.collect.android.utilities;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This class is responsible for managing media files collected by users. The purpose here is to
+ * remember an original media file answer (no matter how many times this answer is replaced), in order
+ * to be able to restore the original answer in case of ignoring changes.
+ */
 public class MediaManager {
 
     private static MediaManager singleton;
@@ -38,19 +43,19 @@ public class MediaManager {
         return singleton;
     }
 
-    public void markOriginalFileOrDelete(String index, String fileName) {
-        if (originalFiles.containsKey(index)) {
+    public void markOriginalFileOrDelete(String questionIndex, String fileName) {
+        if (originalFiles.containsKey(questionIndex)) {
             MediaUtils.deleteImageFileFromMediaProvider(fileName);
         } else {
-            originalFiles.put(index, fileName);
+            originalFiles.put(questionIndex, fileName);
         }
     }
 
-    public void markRecentFile(String index, String fileName) {
-        if (recentFiles.containsKey(index)) {
-            MediaUtils.deleteImageFileFromMediaProvider(recentFiles.get(index));
+    public void replaceRecentFileForQuestion(String questionIndex, String fileName) {
+        if (recentFiles.containsKey(questionIndex)) {
+            MediaUtils.deleteImageFileFromMediaProvider(recentFiles.get(questionIndex));
         }
-        recentFiles.put(index, fileName);
+        recentFiles.put(questionIndex, fileName);
     }
 
     public void revertChanges() {

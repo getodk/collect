@@ -247,7 +247,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
 
             MediaManager
                     .getInstance()
-                    .markRecentFile(getFormEntryPrompt().getIndex().toString(), newVideo.getAbsolutePath());
+                    .replaceRecentFileForQuestion(getFormEntryPrompt().getIndex().toString(), newVideo.getAbsolutePath());
 
             Uri videoURI = getContext().getContentResolver().insert(
                     Video.Media.EXTERNAL_CONTENT_URI, values);
