@@ -71,7 +71,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
     @Override
     public void deleteFile() {
         MediaManager
-                .getInstance()
+                .INSTANCE
                 .markOriginalFileOrDelete(getFormEntryPrompt().getIndex().toString(),
                 getInstanceFolder() + File.separator + binaryName);
         binaryName = null;
@@ -97,7 +97,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
             values.put(MediaStore.Images.Media.DATA, newImage.getAbsolutePath());
 
             MediaManager
-                    .getInstance()
+                    .INSTANCE
                     .replaceRecentFileForQuestion(getFormEntryPrompt().getIndex().toString(), newImage.getAbsolutePath());
 
             Uri imageURI = getContext().getContentResolver().insert(

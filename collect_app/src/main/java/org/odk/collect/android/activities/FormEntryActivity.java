@@ -1941,7 +1941,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);
                     }
                     removeTempInstance();
-                    MediaManager.getInstance().revertChanges();
+                    MediaManager.INSTANCE.revertChanges();
                     finishReturnInstance();
                 }
                 alertDialog.dismiss();

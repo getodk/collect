@@ -195,7 +195,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
     @Override
     public void deleteFile() {
         MediaManager
-                .getInstance()
+                .INSTANCE
                 .markOriginalFileOrDelete(getFormEntryPrompt().getIndex().toString(),
                 getInstanceFolder() + File.separator + binaryName);
         binaryName = null;
@@ -246,7 +246,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
             values.put(Video.Media.DATA, newVideo.getAbsolutePath());
 
             MediaManager
-                    .getInstance()
+                    .INSTANCE
                     .replaceRecentFileForQuestion(getFormEntryPrompt().getIndex().toString(), newVideo.getAbsolutePath());
 
             Uri videoURI = getContext().getContentResolver().insert(

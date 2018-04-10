@@ -24,24 +24,11 @@ import java.util.Map;
  * remember an original media file answer (no matter how many times this answer is replaced), in order
  * to be able to restore the original answer in case of ignoring changes.
  */
-public class MediaManager {
+public enum MediaManager {
+    INSTANCE;
 
-    private static MediaManager singleton;
-    
-    private Map<String, String> originalFiles;
-    private Map<String, String> recentFiles;
-
-    private MediaManager() {
-        originalFiles = new HashMap<>();
-        recentFiles = new HashMap<>();
-    }
-
-    public static MediaManager getInstance() {
-        if (singleton == null) {
-            singleton = new MediaManager();
-        }
-        return singleton;
-    }
+    Map<String, String> originalFiles = new HashMap<>();
+    Map<String, String> recentFiles = new HashMap<>();
 
     public void markOriginalFileOrDelete(String questionIndex, String fileName) {
         if (originalFiles.containsKey(questionIndex)) {
@@ -73,8 +60,7 @@ public class MediaManager {
     }
 
     private void releaseMediaManager() {
-        if (singleton != null) {
-            singleton = null;
-        }
+        originalFiles.clear();
+        recentFiles.clear();
     }
 }

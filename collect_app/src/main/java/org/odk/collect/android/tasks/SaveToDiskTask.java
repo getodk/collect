@@ -267,7 +267,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
         // write out xml
         String instancePath = formController.getInstanceFile().getAbsolutePath();
 
-        MediaManager.getInstance().saveChanges();
+        MediaManager.INSTANCE.saveChanges();
 
         publishProgress(Collect.getInstance().getString(R.string.survey_saving_saving_message));
 

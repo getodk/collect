@@ -184,7 +184,7 @@ public class ImageWebViewWidget extends QuestionWidget implements FileWidget {
     @Override
     public void deleteFile() {
         MediaManager
-                .getInstance()
+                .INSTANCE
                 .markOriginalFileOrDelete(getFormEntryPrompt().getIndex().toString(),
                 getInstanceFolder() + File.separator + binaryName);
         binaryName = null;
@@ -240,7 +240,7 @@ public class ImageWebViewWidget extends QuestionWidget implements FileWidget {
             values.put(Images.Media.DATA, newImage.getAbsolutePath());
 
             MediaManager
-                    .getInstance()
+                    .INSTANCE
                     .replaceRecentFileForQuestion(getFormEntryPrompt().getIndex().toString(), newImage.getAbsolutePath());
 
             Uri imageURI = getContext().getContentResolver().insert(

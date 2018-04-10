@@ -110,7 +110,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
     @Override
     public void deleteFile() {
         MediaManager
-                .getInstance()
+                .INSTANCE
                 .markOriginalFileOrDelete(getFormEntryPrompt().getIndex().toString(),
                 getInstanceFolder() + File.separator + binaryName);
         binaryName = null;
@@ -161,7 +161,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
             values.put(Audio.Media.DATA, newAudio.getAbsolutePath());
 
             MediaManager
-                    .getInstance()
+                    .INSTANCE
                     .replaceRecentFileForQuestion(getFormEntryPrompt().getIndex().toString(), newAudio.getAbsolutePath());
 
             Uri audioURI = getContext().getContentResolver().insert(
