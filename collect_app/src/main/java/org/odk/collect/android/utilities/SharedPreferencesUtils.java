@@ -16,13 +16,10 @@ package org.odk.collect.android.utilities;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.ActionListener;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.tasks.ServerPollingJob;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -38,7 +35,6 @@ import static org.odk.collect.android.preferences.AdminKeys.ALL_KEYS;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
 import static org.odk.collect.android.preferences.PreferenceKeys.GENERAL_KEYS;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PASSWORD;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
 
 public final class SharedPreferencesUtils {
 
@@ -108,14 +104,8 @@ public final class SharedPreferencesUtils {
                 if (generalPrefsJson.has(key)) {
                     Object value = generalPrefsJson.get(key);
                     GeneralSharedPreferences.getInstance().save(key, value);
-                    if (key.equals(KEY_PERIODIC_FORM_UPDATES_CHECK)) {
-                        ServerPollingJob.schedulePeriodicJob((String) value);
-                    }
                 } else {
                     GeneralSharedPreferences.getInstance().reset(key);
-                    if (key.equals(KEY_PERIODIC_FORM_UPDATES_CHECK)) {
-                        ServerPollingJob.schedulePeriodicJob(Collect.getInstance().getResources().getString(R.string.never_value));
-                    }
                 }
             }
 

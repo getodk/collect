@@ -267,8 +267,6 @@ public class Collect extends Application implements HasActivityInjector {
                 .build()
                 .inject(this);
 
-        reloadSharedPreferences();
-
         try {
             JobManager
                     .create(this)
@@ -276,6 +274,8 @@ public class Collect extends Application implements HasActivityInjector {
         } catch (JobManagerCreateException e) {
             Timber.e(e);
         }
+
+        reloadSharedPreferences();
 
         PRNGFixes.apply();
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
