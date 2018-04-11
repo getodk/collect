@@ -20,6 +20,7 @@ import org.odk.collect.android.listeners.ActionListener;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.preferences.PreferenceKeys;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -27,7 +28,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 
 import timber.log.Timber;
 
@@ -95,8 +98,39 @@ public final class SharedPreferencesUtils {
         return prefs;
     }
 
+
+    /**
+     * Checks the type of first level members of Json object compared with a dictionary KEY->TYPE_CLASS
+     */
+    private static void checkTypesOnJson(JSONObject jsonObject, HashMap<String, Class> keysToVerify) throws JSONException {
+        Iterator<String> keysInJsonIterator = jsonObject.keys();
+        while(keysInJsonIterator.hasNext()){
+            String keyInJson = keysInJsonIterator.next();
+            if(keysToVerify.containsKey(keyInJson)){
+                Object value = jsonObject.get(keyInJson);
+                Class desiredClass = keysToVerify.get(keyInJson);
+                if(!desiredClass.isInstance(value)){
+                    throw new JSONException(String.format("Incorrect type on key : %s | Expected type: %s", keyInJson, desiredClass.getSimpleName()));
+                }
+            }
+        }
+    }
+
+    /**
+     * Checks correct types in some basic keys to mainly avoid saving unexpected values
+     */
+    public static void checkBasicTypesOnSettingsString(String content) throws JSONException {
+        JSONObject settingsJson = new JSONObject(content);
+        JSONObject generalPrefsJson = settingsJson.getJSONObject("general");
+        JSONObject adminPrefsJson = settingsJson.getJSONObject("admin");
+        checkTypesOnJson(generalPrefsJson, PreferenceKeys.getExpectedTypesForPreferencesValues());
+        checkTypesOnJson(adminPrefsJson, PreferenceKeys.getExpectedTypesForPreferencesValues());
+    }
+
     public static void savePreferencesFromString(String content, ActionListener listener) {
         try {
+            checkBasicTypesOnSettingsString(content);
+
             JSONObject settingsJson = new JSONObject(content);
             JSONObject generalPrefsJson = settingsJson.getJSONObject("general");
             JSONObject adminPrefsJson = settingsJson.getJSONObject("admin");

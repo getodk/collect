@@ -108,6 +108,49 @@ public final class PreferenceKeys {
         return hashMap;
     }
 
+    /**
+     * @return A Map with some expected types values used in sharedPreference
+     */
+    public static HashMap<String, Class> getExpectedTypesForPreferencesValues() {
+        HashMap<String, Class> hashMap = new HashMap<>();
+        // aggregate_preferences.xml
+        hashMap.put(KEY_SERVER_URL, String.class);
+        hashMap.put(KEY_USERNAME, String.class);
+        // form_management_preferences.xml
+        hashMap.put(KEY_AUTOSEND, String.class);
+        hashMap.put(KEY_DELETE_AFTER_SEND, Boolean.class);
+        hashMap.put(KEY_COMPLETED_DEFAULT, Boolean.class);
+        hashMap.put(KEY_CONSTRAINT_BEHAVIOR, String.class);
+        hashMap.put(KEY_HIGH_RESOLUTION, Boolean.class);
+        hashMap.put(KEY_IMAGE_SIZE, String.class);
+        hashMap.put(KEY_INSTANCE_SYNC, Boolean.class);
+        // form_metadata_preferences.xml
+        hashMap.put(KEY_METADATA_USERNAME, String.class);
+        hashMap.put(KEY_METADATA_PHONENUMBER, String.class);
+        hashMap.put(KEY_METADATA_EMAIL, String.class);
+        // google_preferences.xml
+        hashMap.put(KEY_SELECTED_GOOGLE_ACCOUNT, String.class);
+        hashMap.put(KEY_GOOGLE_SHEETS_URL, String.class);
+        // identity_preferences.xml
+        hashMap.put(KEY_ANALYTICS, Boolean.class);
+        // other_preferences.xml
+        hashMap.put(KEY_FORMLIST_URL, String.class);
+        hashMap.put(KEY_SUBMISSION_URL, String.class);
+        // server_preferences.xml
+        hashMap.put(KEY_PROTOCOL, String.class);
+        // user_interface_preferences.xml
+        hashMap.put(KEY_APP_LANGUAGE, String.class);
+        hashMap.put(KEY_FONT_SIZE, String.class);
+        hashMap.put(KEY_NAVIGATION, String.class);
+        hashMap.put(KEY_SHOW_SPLASH, Boolean.class);
+        hashMap.put(KEY_SPLASH_PATH, String.class);
+        hashMap.put(KEY_MAP_SDK, String.class);
+        hashMap.put(KEY_MAP_BASEMAP, String.class);
+
+        hashMap.put(KEY_PASSWORD, String.class);
+        return hashMap;
+    }
+
     static final Collection<String> KEYS_WE_SHOULD_NOT_RESET = Arrays.asList(
             KEY_LAST_VERSION,
             KEY_FIRST_RUN,

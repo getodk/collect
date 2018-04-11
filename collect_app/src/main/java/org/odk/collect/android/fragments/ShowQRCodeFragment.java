@@ -256,6 +256,7 @@ public class ShowQRCodeFragment extends Fragment {
 
             @Override
             public void onFailure(Exception exception) {
+                ToastUtils.showLongToast(Collect.getInstance().getString(R.string.ext_import_generic_error, Collect.getInstance().getString(R.string.qr_code), exception.getMessage()));
                 Timber.e(exception);
             }
         });
