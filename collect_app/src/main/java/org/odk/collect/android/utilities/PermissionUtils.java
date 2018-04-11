@@ -37,14 +37,6 @@ public class PermissionUtils {
      */
     public static void requestStoragePermissions(Activity activity, PermissionListener action) {
 
-        if (activity == null) {
-            throw new NullPointerException("Activity can't be null.");
-        }
-
-        if (action == null) {
-            throw new NullPointerException("Action listener can't be null. The calling activity needs to react to these operations.");
-        }
-
         MultiplePermissionsListener multiplePermissionsListener = new MultiplePermissionsListener() {
             @Override
             public void onPermissionsChecked(MultiplePermissionsReport report) {
