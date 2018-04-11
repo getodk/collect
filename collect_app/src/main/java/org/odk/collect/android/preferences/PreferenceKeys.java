@@ -111,7 +111,7 @@ public final class PreferenceKeys {
     /**
      * @return A Map with some expected types values used in sharedPreference
      */
-    public static HashMap<String, Class> getExpectedTypesForPreferencesValues() {
+    public static HashMap<String, Class> getExpectedTypesForGeneralPreferencesValues() {
         HashMap<String, Class> hashMap = new HashMap<>();
         // aggregate_preferences.xml
         hashMap.put(KEY_SERVER_URL, String.class);

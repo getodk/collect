@@ -18,6 +18,8 @@ package org.odk.collect.android;
 
 import android.support.test.runner.AndroidJUnit4;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
@@ -26,8 +28,10 @@ import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_EDIT_SAVED;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_COMPLETED_DEFAULT;
 
@@ -43,6 +47,54 @@ public class SharedPreferencesTest {
         for (String key : SharedPreferencesUtils.getAllGeneralKeys()) {
             assertEquals(generalSharedPreferences.get(key), defaultValues.get(key));
         }
+    }
+
+    @Test
+    public void generalDefaultsExpectedTypeTest(){
+        HashMap<String, Class> expectedTypesForGeneral = PreferenceKeys.getExpectedTypesForGeneralPreferencesValues();
+        for (Map.Entry<String, Object> generalPref : PreferenceKeys.GENERAL_KEYS.entrySet()) {
+
+            boolean foundKey = expectedTypesForGeneral.containsKey(generalPref.getKey());
+            //Check if all keys declared in GENERAL_KEYS has a declared type
+            assertTrue(String.format("Not found default key %s from PreferenceKeys.GENERAL_KEYS in PreferenceKeys.getExpectedTypesForGeneralPreferencesValues()", generalPref.getKey()), foundKey);
+
+            Object value = generalPref.getValue();
+            Class desiredClass = expectedTypesForGeneral.get(generalPref.getKey());
+
+            //Check if the key has a correct declared type
+            assertTrue(String.format("Incorrect type of default key %s from PreferenceKeys.GENERAL_KEYS", generalPref.getKey()), desiredClass.isInstance(value));
+        }
+    }
+
+    @Test
+    public void checkTypesOnAJsonObjectTest() throws JSONException {
+        //Create KEYs with desired type
+        String BOOLEAN_KEY = "BOOL";
+        String STRING_KEY = "STRING";
+
+        //Init some variables
+        JSONObject jsonObject = new JSONObject();
+        HashMap<String, Class> expectedTypes = new HashMap<>();
+        expectedTypes.put(BOOLEAN_KEY, Boolean.class);
+        expectedTypes.put(STRING_KEY, String.class);
+
+        //Expected boolean in value
+        jsonObject.put(BOOLEAN_KEY, true);
+        SharedPreferencesUtils.checkTypesOnJson(jsonObject, expectedTypes);
+
+        //Expected String in value
+        jsonObject.put(STRING_KEY, "value");
+        SharedPreferencesUtils.checkTypesOnJson(jsonObject, expectedTypes);
+
+        //Expected boolean in value and has a String
+        jsonObject.put(BOOLEAN_KEY, "true");
+        boolean hasThrown = false;
+        try{
+            SharedPreferencesUtils.checkTypesOnJson(jsonObject, expectedTypes);
+        }catch (JSONException e){
+            hasThrown = true;
+        }
+        assertTrue(hasThrown);
     }
 
     @Test

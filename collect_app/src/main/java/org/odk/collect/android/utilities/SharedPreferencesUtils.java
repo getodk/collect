@@ -102,7 +102,7 @@ public final class SharedPreferencesUtils {
     /**
      * Checks the type of first level members of Json object compared with a dictionary KEY->TYPE_CLASS
      */
-    private static void checkTypesOnJson(JSONObject jsonObject, HashMap<String, Class> keysToVerify) throws JSONException {
+    public static void checkTypesOnJson(JSONObject jsonObject, HashMap<String, Class> keysToVerify) throws JSONException {
         Iterator<String> keysInJsonIterator = jsonObject.keys();
         while(keysInJsonIterator.hasNext()){
             String keyInJson = keysInJsonIterator.next();
@@ -116,24 +116,15 @@ public final class SharedPreferencesUtils {
         }
     }
 
-    /**
-     * Checks correct types in some basic keys to mainly avoid saving unexpected values
-     */
-    public static void checkBasicTypesOnSettingsString(String content) throws JSONException {
-        JSONObject settingsJson = new JSONObject(content);
-        JSONObject generalPrefsJson = settingsJson.getJSONObject("general");
-        JSONObject adminPrefsJson = settingsJson.getJSONObject("admin");
-        checkTypesOnJson(generalPrefsJson, PreferenceKeys.getExpectedTypesForPreferencesValues());
-        checkTypesOnJson(adminPrefsJson, PreferenceKeys.getExpectedTypesForPreferencesValues());
-    }
-
     public static void savePreferencesFromString(String content, ActionListener listener) {
         try {
-            checkBasicTypesOnSettingsString(content);
 
             JSONObject settingsJson = new JSONObject(content);
             JSONObject generalPrefsJson = settingsJson.getJSONObject("general");
             JSONObject adminPrefsJson = settingsJson.getJSONObject("admin");
+
+            //Checks correct types in some basic keys to mainly avoid saving unexpected values
+            checkTypesOnJson(generalPrefsJson, PreferenceKeys.getExpectedTypesForGeneralPreferencesValues());
 
             for (String key : getAllGeneralKeys()) {
 
