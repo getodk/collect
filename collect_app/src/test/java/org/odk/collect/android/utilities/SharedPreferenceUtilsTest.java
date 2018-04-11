@@ -36,9 +36,9 @@ public class SharedPreferenceUtilsTest {
         //Expected boolean in value and has a String
         jsonObject.put(BOOLEAN_KEY, "true");
         boolean hasThrown = false;
-        try{
+        try {
             SharedPreferencesUtils.checkTypesOnJson(jsonObject, expectedTypes);
-        }catch (JSONException e){
+        } catch (JSONException e) {
             hasThrown = true;
         }
         assertTrue(hasThrown);

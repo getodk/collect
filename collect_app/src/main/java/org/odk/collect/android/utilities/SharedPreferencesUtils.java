@@ -104,12 +104,12 @@ public final class SharedPreferencesUtils {
      */
     public static void checkTypesOnJson(JSONObject jsonObject, HashMap<String, Class> keysToVerify) throws JSONException {
         Iterator<String> keysInJsonIterator = jsonObject.keys();
-        while(keysInJsonIterator.hasNext()){
+        while (keysInJsonIterator.hasNext()) {
             String keyInJson = keysInJsonIterator.next();
-            if(keysToVerify.containsKey(keyInJson)){
+            if (keysToVerify.containsKey(keyInJson)) {
                 Object value = jsonObject.get(keyInJson);
                 Class desiredClass = keysToVerify.get(keyInJson);
-                if(!desiredClass.isInstance(value)){
+                if (!desiredClass.isInstance(value)) {
                     throw new JSONException(String.format("Incorrect type on key : %s | Expected type: %s", keyInJson, desiredClass.getSimpleName()));
                 }
             }

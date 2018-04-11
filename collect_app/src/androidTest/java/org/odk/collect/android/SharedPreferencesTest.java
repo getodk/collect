@@ -48,7 +48,7 @@ public class SharedPreferencesTest {
     }
 
     @Test
-    public void generalDefaultsExpectedTypeTest(){
+    public void generalDefaultsExpectedTypeTest() {
         HashMap<String, Class> expectedTypesForGeneral = PreferenceKeys.getExpectedTypesForGeneralPreferencesValues();
         for (Map.Entry<String, Object> generalPref : PreferenceKeys.GENERAL_KEYS.entrySet()) {
 
