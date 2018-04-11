@@ -16,25 +16,25 @@ public class SharedPreferenceUtilsTest {
     @Test
     public void checkTypesOnAJsonObjectTest() throws JSONException {
         //Create KEYs with desired type
-        String BOOLEAN_KEY = "BOOL";
-        String STRING_KEY = "STRING";
+        String booleanKey = "BOOL";
+        String stringKey = "STRING";
 
         //Init some variables
         JSONObject jsonObject = new JSONObject();
         HashMap<String, Class> expectedTypes = new HashMap<>();
-        expectedTypes.put(BOOLEAN_KEY, Boolean.class);
-        expectedTypes.put(STRING_KEY, String.class);
+        expectedTypes.put(booleanKey, Boolean.class);
+        expectedTypes.put(stringKey, String.class);
 
         //Expected boolean in value
-        jsonObject.put(BOOLEAN_KEY, true);
+        jsonObject.put(booleanKey, true);
         SharedPreferencesUtils.checkTypesOnJson(jsonObject, expectedTypes);
 
         //Expected String in value
-        jsonObject.put(STRING_KEY, "value");
+        jsonObject.put(stringKey, "value");
         SharedPreferencesUtils.checkTypesOnJson(jsonObject, expectedTypes);
 
         //Expected boolean in value and has a String
-        jsonObject.put(BOOLEAN_KEY, "true");
+        jsonObject.put(booleanKey, "true");
         boolean hasThrown = false;
         try {
             SharedPreferencesUtils.checkTypesOnJson(jsonObject, expectedTypes);
