@@ -45,7 +45,7 @@ import java.io.IOException;
 import timber.log.Timber;
 
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SPLASH_PATH;
-import static org.odk.collect.android.utilities.PermissionUtils.grantStoragePermissions;
+import static org.odk.collect.android.utilities.PermissionUtils.requestStoragePermissions;
 
 public class SplashScreenActivity extends Activity {
 
@@ -59,7 +59,7 @@ public class SplashScreenActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        grantStoragePermissions(this, new PermissionListener() {
+        requestStoragePermissions(this, new PermissionListener() {
             @Override
             public void granted() {
                 // must be at the beginning of any activity that can be called from an external intent

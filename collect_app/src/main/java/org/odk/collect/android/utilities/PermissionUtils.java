@@ -34,7 +34,7 @@ public class PermissionUtils {
      * @param activity
      * @param action
      */
-    public static void grantStoragePermissions(Activity activity, PermissionListener action) {
+    public static void requestStoragePermissions(Activity activity, PermissionListener action) {
 
         if (activity == null) {
             throw new NullPointerException("Activity can't be null.");
