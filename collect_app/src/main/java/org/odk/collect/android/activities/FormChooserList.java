@@ -70,12 +70,11 @@ public class FormChooserList extends FormListActivity implements
                 try {
                     Collect.createODKDirs();
                     Collect.getInstance().getActivityLogger().open();
+                    init(savedInstanceState);
                 } catch (RuntimeException e) {
                     createErrorDialog(e.getMessage(), EXIT);
                     return;
                 }
-
-                init(savedInstanceState);
             }
 
             @Override

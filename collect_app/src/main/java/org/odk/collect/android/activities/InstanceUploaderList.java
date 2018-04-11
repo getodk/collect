@@ -108,7 +108,6 @@ public class InstanceUploaderList extends InstanceListActivity implements
 
     private void init() {
         instancesDao = new InstancesDao();
-
         uploadButton = findViewById(R.id.upload_button);
         uploadButton.setOnClickListener(new View.OnClickListener() {
 
