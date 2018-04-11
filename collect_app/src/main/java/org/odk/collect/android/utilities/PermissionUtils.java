@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 
@@ -35,7 +36,7 @@ public class PermissionUtils {
      * @param activity
      * @param action
      */
-    public static void requestStoragePermissions(Activity activity, PermissionListener action) {
+    public static void requestStoragePermissions(@NonNull Activity activity, @NonNull PermissionListener action) {
 
         MultiplePermissionsListener multiplePermissionsListener = new MultiplePermissionsListener() {
             @Override
