@@ -95,6 +95,7 @@ public class InstanceChooserList extends InstanceListActivity implements
                 // must be at the beginning of any activity that can be called from an external intent
                 try {
                     Collect.createODKDirs();
+                    Collect.getInstance().getActivityLogger().open();
                 } catch (RuntimeException e) {
                     createErrorDialog(e.getMessage(), EXIT);
                     return;
