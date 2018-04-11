@@ -61,7 +61,7 @@ public final class ThemeUtils {
 
     public static void setIconTint(Context context, Drawable drawable) {
         DrawableCompat.setTint(drawable, context.getResources()
-                .getColor(isDarkTheme() ? R.color.white : R.color.black));
+                .getColor(isDarkTheme() ? android.R.color.white : android.R.color.black));
     }
 
     public static boolean isHoloDialogTheme(int theme) {
@@ -83,6 +83,6 @@ public final class ThemeUtils {
     }
 
     public static int getTextColor() {
-        return isDarkTheme() ? R.color.white : R.color.black;
+        return isDarkTheme() ? android.R.color.white : android.R.color.black;
     }
 }
