@@ -148,17 +148,21 @@ public class FormChooserList extends FormListActivity implements
 
     @Override
     protected void onResume() {
-        diskSyncTask.setDiskSyncListener(this);
         super.onResume();
 
-        if (diskSyncTask.getStatus() == AsyncTask.Status.FINISHED) {
-            syncComplete(diskSyncTask.getStatusMessage());
+        if (diskSyncTask != null) {
+            diskSyncTask.setDiskSyncListener(this);
+            if (diskSyncTask.getStatus() == AsyncTask.Status.FINISHED) {
+                syncComplete(diskSyncTask.getStatusMessage());
+            }
         }
     }
 
     @Override
     protected void onPause() {
-        diskSyncTask.setDiskSyncListener(null);
+        if (diskSyncTask != null) {
+            diskSyncTask.setDiskSyncListener(null);
+        }
         super.onPause();
     }
 

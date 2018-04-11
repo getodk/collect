@@ -100,7 +100,6 @@ public class InstanceChooserList extends InstanceListActivity implements
                     createErrorDialog(e.getMessage(), EXIT);
                     return;
                 }
-
                 init();
             }
 
@@ -176,12 +175,11 @@ public class InstanceChooserList extends InstanceListActivity implements
     protected void onResume() {
         if (instanceSyncTask != null) {
             instanceSyncTask.setDiskSyncListener(this);
+            if (instanceSyncTask.getStatus() == AsyncTask.Status.FINISHED) {
+                syncComplete(instanceSyncTask.getStatusMessage());
+            }
         }
         super.onResume();
-
-        if (instanceSyncTask.getStatus() == AsyncTask.Status.FINISHED) {
-            syncComplete(instanceSyncTask.getStatusMessage());
-        }
     }
 
     @Override

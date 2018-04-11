@@ -16,12 +16,12 @@ package org.odk.collect.android.database;
 
 import android.app.Activity;
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import org.javarosa.core.model.FormIndex;
 import org.odk.collect.android.application.Collect;
@@ -33,13 +33,11 @@ import java.util.LinkedList;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.utilities.PermissionUtils.checkIfStoragePermissionsGranted;
-
 /**
  * Log all user interface activity into a SQLite database. Logging is disabled by default.
- * <p>
+ *
  * The logging database will be "/sdcard/odk/log/activityLog.db"
- * <p>
+ *
  * Logging is enabled if the file "/sdcard/odk/log/enabled" exists.
  *
  * @author mitchellsundt@gmail.com
@@ -105,9 +103,8 @@ public final class ActivityLogger {
                     + PARAM1 + " text, "
                     + PARAM2 + " text);";
 
-    private boolean loggingEnabled;
+    private final boolean loggingEnabled;
     private final String deviceId;
-    private Context context;
     private DatabaseHelper databaseHelper = null;
     private SQLiteDatabase database = null;
     private boolean isOpen = false;
@@ -116,9 +113,9 @@ public final class ActivityLogger {
     // action is logged.
     private LinkedList<ContentValues> scrollActions = new LinkedList<ContentValues>();
 
-    public ActivityLogger(String deviceId, Context context) {
+    public ActivityLogger(String deviceId) {
         this.deviceId = deviceId;
-        this.context = context;
+        loggingEnabled = new File(Collect.LOG_PATH, ENABLE_LOGGING).exists();
         open();
     }
 
@@ -127,19 +124,6 @@ public final class ActivityLogger {
     }
 
     public void open() throws SQLException {
-
-        if(context==null)
-        {
-            Timber.i("Operation can't continue if context is null.");
-            return;
-        }
-
-        if (!checkIfStoragePermissionsGranted(context)) {
-            return;
-        }
-
-        loggingEnabled = new File(Collect.LOG_PATH, ENABLE_LOGGING).exists();
-
         if (!loggingEnabled || isOpen) {
             return;
         }
@@ -174,7 +158,7 @@ public final class ActivityLogger {
 
 
     private void log(String object, String context, String action, String instancePath,
-                     FormIndex index, String param1, String param2) {
+            FormIndex index, String param1, String param2) {
         if (!isOpen()) {
             return;
         }
