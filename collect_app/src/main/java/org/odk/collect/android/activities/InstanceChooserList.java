@@ -35,12 +35,15 @@ import org.odk.collect.android.adapters.ViewSentListAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.DiskSyncListener;
+import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.utilities.PermissionUtils.grantStoragePermissions;
 
 /**
  * Responsible for displaying all the valid instances in the instance directory.
@@ -62,15 +65,6 @@ public class InstanceChooserList extends InstanceListActivity implements
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
-        // must be at the beginning of any activity that can be called from an external intent
-        try {
-            Collect.createODKDirs();
-        } catch (RuntimeException e) {
-            createErrorDialog(e.getMessage(), EXIT);
-            return;
-        }
-
         setContentView(R.layout.chooser_list_layout);
         super.onCreate(savedInstanceState);
 
@@ -93,6 +87,30 @@ public class InstanceChooserList extends InstanceListActivity implements
             };
             ((TextView) findViewById(android.R.id.empty)).setText(R.string.no_items_display_sent_forms);
         }
+
+        grantStoragePermissions(this, new PermissionListener() {
+            @Override
+            public void granted() {
+                // must be at the beginning of any activity that can be called from an external intent
+                try {
+                    Collect.createODKDirs();
+                } catch (RuntimeException e) {
+                    createErrorDialog(e.getMessage(), EXIT);
+                    return;
+                }
+
+                init();
+            }
+
+            @Override
+            public void denied() {
+                // The activity has to finish because ODK Collect cannot function without these permissions.
+                finish();
+            }
+        });
+    }
+
+    private void init() {
         setupAdapter();
 
         instanceSyncTask = new InstanceSyncTask();
