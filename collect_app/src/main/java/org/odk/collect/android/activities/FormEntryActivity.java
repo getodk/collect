@@ -146,7 +146,7 @@ import static org.odk.collect.android.utilities.PermissionUtils.requestStoragePe
  *
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Thomas Smyth, Sassafras Tech Collective (tom@sassafrastech.com; constraint behavior
- *         option)
+ * option)
  */
 public class FormEntryActivity extends AppCompatActivity implements AnimationListener,
         FormLoaderListener, FormSavedListener, AdvanceToNextListener,
@@ -358,8 +358,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         });
     }
 
-    private void init(String instancePath, String startingXPath, String waitingXPath, boolean newForm)
-    {
+    private void init(String instancePath, String startingXPath, String waitingXPath, boolean newForm) {
         // Check to see if this is a screen flip or a new form load.
         Object data = getLastCustomNonConfigurationInstance();
         if (data instanceof FormLoaderTask) {
@@ -842,7 +841,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
     private QuestionWidget getWidgetWaitingForBinaryData() {
         QuestionWidget questionWidget = null;
-        for (QuestionWidget qw :  ((ODKView) currentView).getWidgets()) {
+        for (QuestionWidget qw : ((ODKView) currentView).getWidgets()) {
             if (qw.isWaitingForData()) {
                 questionWidget = qw;
             }
@@ -1043,10 +1042,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             createDeleteRepeatConfirmDialog();
         } else {
             /*
-            * We don't have the right view here, so we store the View's ID as the
-            * item ID and loop through the possible views to find the one the user
-            * clicked on.
-            */
+             * We don't have the right view here, so we store the View's ID as the
+             * item ID and loop through the possible views to find the one the user
+             * clicked on.
+             */
             boolean shouldClearDialogBeShown;
             for (QuestionWidget qw : getCurrentViewIfODKView().getWidgets()) {
                 shouldClearDialogBeShown = false;
@@ -2510,7 +2509,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 Timber.i("FormDef %s is already in the cache", cachedFormDefFile.toString());
             } else {
                 Disposable formDefCacheDisposable =
-                        writeCacheAsync(formDef, cachedFormDefFile).subscribe(() -> { }, Timber::e);
+                        writeCacheAsync(formDef, cachedFormDefFile).subscribe(() -> {
+                        }, Timber::e);
                 formDefCacheCompositeDisposable.add(formDefCacheDisposable);
             }
         }
