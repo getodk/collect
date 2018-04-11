@@ -345,7 +345,7 @@ public class Collect extends Application implements HasActivityInjector {
         }
 
         FormController.initializeJavaRosa(mgr);
-        activityLogger = new ActivityLogger(mgr.getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID),this);
+        activityLogger = new ActivityLogger(mgr.getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID));
     }
 
     // This method reloads shared preferences in order to load default values for new preferences

@@ -25,6 +25,7 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.util.Log;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -43,6 +44,7 @@ import java.util.Locale;
 import timber.log.Timber;
 
 import static org.odk.collect.android.database.helpers.FormsDatabaseHelper.FORMS_TABLE_NAME;
+import static org.odk.collect.android.utilities.PermissionUtils.checkIfStoragePermissionsGranted;
 
 public class FormsProvider extends ContentProvider {
     private static HashMap<String, String> sFormsProjectionMap;
@@ -72,6 +74,11 @@ public class FormsProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
+
+        if (!checkIfStoragePermissionsGranted(getContext()))
+            return false;
+
+        Log.v("Tester", "shouldn't reach here.");
         // must be at the beginning of any activity that can be called from an external intent
         FormsDatabaseHelper h = getDbHelper();
         return h != null;
@@ -80,6 +87,10 @@ public class FormsProvider extends ContentProvider {
     @Override
     public Cursor query(@NonNull Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
+
+        if (!checkIfStoragePermissionsGranted(getContext()))
+            return null;
+
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         qb.setTables(FORMS_TABLE_NAME);
 
@@ -129,6 +140,9 @@ public class FormsProvider extends ContentProvider {
         if (sUriMatcher.match(uri) != FORMS) {
             throw new IllegalArgumentException("Unknown URI " + uri);
         }
+
+        if (!checkIfStoragePermissionsGranted(getContext()))
+            return null;
 
         ContentValues values;
         if (initialValues != null) {
@@ -262,6 +276,9 @@ public class FormsProvider extends ContentProvider {
      */
     @Override
     public int delete(@NonNull Uri uri, String where, String[] whereArgs) {
+        if (!checkIfStoragePermissionsGranted(getContext()))
+            return 0;
+
         SQLiteDatabase db = getDbHelper().getWritableDatabase();
         int count;
 
@@ -353,7 +370,11 @@ public class FormsProvider extends ContentProvider {
 
     @Override
     public int update(Uri uri, ContentValues values, String where,
-            String[] whereArgs) {
+                      String[] whereArgs) {
+
+        if (!checkIfStoragePermissionsGranted(getContext()))
+            return 0;
+
         SQLiteDatabase db = getDbHelper().getWritableDatabase();
         int count = 0;
         switch (sUriMatcher.match(uri)) {
