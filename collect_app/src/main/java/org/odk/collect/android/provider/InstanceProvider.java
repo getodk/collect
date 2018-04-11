@@ -72,6 +72,7 @@ public class InstanceProvider extends ContentProvider {
     @Override
     public boolean onCreate() {
         if (!checkIfStoragePermissionsGranted(getContext())) {
+            Timber.i("Read and write permissions are required for this content provider to function.");
             return false;
         }
 
