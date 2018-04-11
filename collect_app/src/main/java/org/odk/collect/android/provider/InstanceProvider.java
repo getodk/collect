@@ -71,8 +71,9 @@ public class InstanceProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        if (!checkIfStoragePermissionsGranted(getContext()))
+        if (!checkIfStoragePermissionsGranted(getContext())) {
             return false;
+        }
 
         // must be at the beginning of any activity that can be called from an external intent
         InstancesDatabaseHelper h = getDbHelper();
@@ -83,8 +84,9 @@ public class InstanceProvider extends ContentProvider {
     public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs,
                         String sortOrder) {
 
-        if (!checkIfStoragePermissionsGranted(getContext()))
+        if (!checkIfStoragePermissionsGranted(getContext())) {
             return null;
+        }
 
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         qb.setTables(INSTANCES_TABLE_NAME);
@@ -133,8 +135,9 @@ public class InstanceProvider extends ContentProvider {
             throw new IllegalArgumentException("Unknown URI " + uri);
         }
 
-        if (!checkIfStoragePermissionsGranted(getContext()))
+        if (!checkIfStoragePermissionsGranted(getContext())) {
             return null;
+        }
 
         ContentValues values;
         if (initialValues != null) {
@@ -235,8 +238,9 @@ public class InstanceProvider extends ContentProvider {
      */
     @Override
     public int delete(@NonNull Uri uri, String where, String[] whereArgs) {
-        if (!checkIfStoragePermissionsGranted(getContext()))
+        if (!checkIfStoragePermissionsGranted(getContext())) {
             return 0;
+        }
 
         SQLiteDatabase db = getDbHelper().getWritableDatabase();
         int count;
@@ -316,8 +320,9 @@ public class InstanceProvider extends ContentProvider {
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String where, String[] whereArgs) {
 
-        if (!checkIfStoragePermissionsGranted(getContext()))
+        if (!checkIfStoragePermissionsGranted(getContext())) {
             return 0;
+        }
 
         SQLiteDatabase db = getDbHelper().getWritableDatabase();
 

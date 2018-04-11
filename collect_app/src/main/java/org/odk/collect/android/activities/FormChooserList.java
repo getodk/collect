@@ -69,12 +69,11 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
                 try {
                     Collect.createODKDirs();
                     Collect.getInstance().getActivityLogger().open();
+                    init(savedInstanceState);
                 } catch (RuntimeException e) {
                     createErrorDialog(e.getMessage(), EXIT);
                     return;
                 }
-
-                init(savedInstanceState);
             }
 
             @Override
@@ -165,7 +164,6 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
         }
     }
 
-
     @Override
     protected void onPause() {
         if (diskSyncTask != null) {
@@ -173,7 +171,6 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
         }
         super.onPause();
     }
-
 
     @Override
     protected void onStart() {
@@ -186,7 +183,6 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
         Collect.getInstance().getActivityLogger().logOnStop(this);
         super.onStop();
     }
-
 
     /**
      * Called by DiskSyncTask when the task is finished

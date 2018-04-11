@@ -21,7 +21,6 @@ import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import org.javarosa.core.model.FormIndex;
 import org.odk.collect.android.application.Collect;

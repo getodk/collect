@@ -106,7 +106,6 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
 
     private void init() {
         setupAdapter();
-
         instanceSyncTask = new InstanceSyncTask();
         instanceSyncTask.setDiskSyncListener(this);
         instanceSyncTask.execute();
@@ -267,6 +266,4 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
         alertDialog.setButton(getString(R.string.ok), errorListener);
         alertDialog.show();
     }
-
-
 }
