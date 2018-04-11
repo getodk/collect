@@ -138,7 +138,7 @@ import static android.content.DialogInterface.BUTTON_POSITIVE;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_MOVING_BACKWARDS;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 import static org.odk.collect.android.utilities.FormDefCache.writeCacheAsync;
-import static org.odk.collect.android.utilities.PermissionUtils.grantStoragePermissions;
+import static org.odk.collect.android.utilities.PermissionUtils.requestStoragePermissions;
 
 /**
  * FormEntryActivity is responsible for displaying questions, animating
@@ -336,7 +336,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         String finalStartingXPath = startingXPath;
         String finalWaitingXPath = waitingXPath;
         boolean finalNewForm = newForm;
-        grantStoragePermissions(this, new PermissionListener() {
+        requestStoragePermissions(this, new PermissionListener() {
             @Override
             public void granted() {
                 // must be at the beginning of any activity that can be called from an external intent

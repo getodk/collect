@@ -40,7 +40,7 @@ import org.odk.collect.android.utilities.VersionHidingCursorAdapter;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.utilities.PermissionUtils.grantStoragePermissions;
+import static org.odk.collect.android.utilities.PermissionUtils.requestStoragePermissions;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores the path to
@@ -63,7 +63,7 @@ public class FormChooserList extends FormListActivity implements
 
         setTitle(getString(R.string.enter_data));
 
-        grantStoragePermissions(this, new PermissionListener() {
+        requestStoragePermissions(this, new PermissionListener() {
             @Override
             public void granted() {
                 // must be at the beginning of any activity that can be called from an external intent
