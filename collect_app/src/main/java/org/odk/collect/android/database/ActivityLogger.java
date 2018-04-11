@@ -131,6 +131,7 @@ public final class ActivityLogger {
         if(context==null)
         {
             Timber.i("Operation can't continue if context is null.");
+            return;
         }
 
         if (!checkIfStoragePermissionsGranted(context)) {

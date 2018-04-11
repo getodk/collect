@@ -1,5 +1,6 @@
 package org.odk.collect.android;
 
+import android.Manifest;
 import android.app.Instrumentation.ActivityResult;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.BoundedMatcher;
 import android.support.test.espresso.matcher.ViewMatchers;
+import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.View;
 import android.widget.SeekBar;
@@ -105,6 +107,9 @@ public class AllWidgetsFormTest {
 
     @Rule
     public MockitoRule rule = MockitoJUnit.rule();
+
+    @Rule
+    public GrantPermissionRule permissionRule = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
     @Mock
     private ActivityAvailability activityAvailability;
