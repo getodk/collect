@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2009 University of Washington
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2009 University of Washington
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not
 use this file except in compliance with the License. You may obtain a copy of
@@ -17,16 +16,16 @@ the License.
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:backgroundTint="#696969"
     android:background="@android:drawable/toast_frame">
 
-            <TextView
-                android:id="@+id/message"
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="21sp"
-                android:textColor="@color/white"
-                />
+    <TextView
+        android:id="@+id/message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="15dp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/black"
+        android:textSize="21sp" />
 
 </LinearLayout>
