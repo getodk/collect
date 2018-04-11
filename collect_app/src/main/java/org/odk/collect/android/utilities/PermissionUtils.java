@@ -29,12 +29,17 @@ import timber.log.Timber;
 
 public class PermissionUtils {
 
+    private PermissionUtils() {
+
+    }
+
     /**
      * Checks to see if the user granted Collect the permissions necessary for reading
      * and writing to storage and if not utilizes the permissions API to request them.
      *
-     * @param activity
-     * @param action
+     * @param activity required for context and spawning of Dexter's activity that handles
+     *                 permission checking.
+     * @param action   is a listener that provides the calling component with the permission result.
      */
     public static void requestStoragePermissions(@NonNull Activity activity, @NonNull PermissionListener action) {
 
@@ -76,10 +81,6 @@ public class PermissionUtils {
         int read = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE);
         int write = ContextCompat.checkSelfPermission(context, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
-        if (read == PackageManager.PERMISSION_GRANTED && write == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        } else {
-            return false;
-        }
+        return read == PackageManager.PERMISSION_GRANTED && write == PackageManager.PERMISSION_GRANTED;
     }
 }
