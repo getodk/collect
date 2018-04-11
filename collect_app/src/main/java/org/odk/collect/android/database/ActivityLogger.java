@@ -16,6 +16,7 @@ package org.odk.collect.android.database;
 
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
@@ -31,6 +32,8 @@ import java.util.Calendar;
 import java.util.LinkedList;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.utilities.PermissionUtils.checkIfStoragePermissionsGranted;
 
 /**
  * Log all user interface activity into a SQLite database. Logging is disabled by default.
@@ -102,8 +105,9 @@ public final class ActivityLogger {
                     + PARAM1 + " text, "
                     + PARAM2 + " text);";
 
-    private final boolean loggingEnabled;
+    private boolean loggingEnabled;
     private final String deviceId;
+    private Context context;
     private DatabaseHelper databaseHelper = null;
     private SQLiteDatabase database = null;
     private boolean isOpen = false;
@@ -112,9 +116,9 @@ public final class ActivityLogger {
     // action is logged.
     private LinkedList<ContentValues> scrollActions = new LinkedList<ContentValues>();
 
-    public ActivityLogger(String deviceId) {
+    public ActivityLogger(String deviceId, Context context) {
         this.deviceId = deviceId;
-        loggingEnabled = new File(Collect.LOG_PATH, ENABLE_LOGGING).exists();
+        this.context = context;
         open();
     }
 
@@ -123,6 +127,18 @@ public final class ActivityLogger {
     }
 
     public void open() throws SQLException {
+
+        if(context==null)
+        {
+            Timber.i("Operation can't continue if context is null.");
+        }
+
+        if (!checkIfStoragePermissionsGranted(context)) {
+            return;
+        }
+
+        loggingEnabled = new File(Collect.LOG_PATH, ENABLE_LOGGING).exists();
+
         if (!loggingEnabled || isOpen) {
             return;
         }

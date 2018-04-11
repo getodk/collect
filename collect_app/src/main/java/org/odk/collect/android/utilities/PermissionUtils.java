@@ -2,6 +2,7 @@ package org.odk.collect.android.utilities;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -78,9 +79,9 @@ public class PermissionUtils {
                 .check();
     }
 
-    public static boolean checkIfStoragePermissionsGranted(Activity activity) {
-        int read = ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE);
-        int write = ContextCompat.checkSelfPermission(activity, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+    public static boolean checkIfStoragePermissionsGranted(Context context) {
+        int read = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE);
+        int write = ContextCompat.checkSelfPermission(context, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
         if (read == PackageManager.PERMISSION_GRANTED && write == PackageManager.PERMISSION_GRANTED) {
             return true;
