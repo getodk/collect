@@ -16,10 +16,14 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.R;
 import org.odk.collect.android.listeners.AudioPlayListener;
 
 import java.util.List;
@@ -41,9 +45,14 @@ public class SelectOneSearchWidget extends AbstractSelectOneWidget implements On
 
     @Override
     protected void addButtonsToLayout(List<Integer> tagList) {
+        LayoutInflater inflater = LayoutInflater.from(getContext());
         for (int i = 0; i < buttons.size(); i++) {
             if (tagList == null || tagList.contains(i)) {
-                answerLayout.addView(buttons.get(i));
+                @SuppressLint("InflateParams")
+                RelativeLayout thisParentLayout = (RelativeLayout) inflater.inflate(R.layout.quick_select_layout, null);
+                LinearLayout questionLayout = (LinearLayout) thisParentLayout.getChildAt(0);
+                questionLayout.addView(createMediaLayout(i, buttons.get(i)));
+                answerLayout.addView(thisParentLayout);
             }
         }
     }
@@ -65,7 +74,6 @@ public class SelectOneSearchWidget extends AbstractSelectOneWidget implements On
                 buttons.add(createRadioButton(i));
             }
         }
-
         setUpSearchBox();
     }
 }
