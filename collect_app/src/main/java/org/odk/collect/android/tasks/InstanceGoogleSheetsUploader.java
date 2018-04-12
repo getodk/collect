@@ -65,6 +65,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import io.reactivex.annotations.NonNull;
 import timber.log.Timber;
 
 import static org.odk.collect.android.logic.FormController.INSTANCE_ID;
@@ -238,12 +239,24 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                 + "[" + (repeatIndex + 1) + "]";
     }
 
+    private List<Object>addExtraTitles(@NonNull List<Object>columnTitles, @NonNull Map<String, String>answers) {
+        for (String key : answers.keySet()) {
+            if (!columnTitles.contains(key)) {
+                columnTitles.add(key);
+            }
+        }
+        return columnTitles;
+    }
+
     private void insertRow(TreeElement element, String parentKey, String key, File instanceFile, String sheetTitle)
             throws UploadException {
-        List<Object> columnTitles = getColumnTitles(element);
-        ensureNumberOfColumnsIsValid(columnTitles.size());
 
         try {
+            List<Object> columnTitles = getColumnTitles(element);
+            HashMap<String, String> answers = getAnswers(element, instanceFile, parentKey, key);
+            columnTitles = addExtraTitles(columnTitles, answers);
+            ensureNumberOfColumnsIsValid(columnTitles.size());
+
             List<List<Object>> sheetCells = getSheetCells(sheetTitle);
             if (sheetCells != null && !sheetCells.isEmpty()) { // we are editing an existed sheet
                 if (isAnyColumnHeaderEmpty(sheetCells.get(0))) {
@@ -263,10 +276,11 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                 sheetCells = getSheetCells(sheetTitle); // read sheet cells again to update
             }
 
-            HashMap<String, String> answers = getAnswers(element, instanceFile, parentKey, key);
+            List<Object> valuesList = prepareListOfValues(sheetCells.get(0), columnTitles, answers);
+
             if (shouldRowBeInserted(answers)) {
                 sheetsHelper.insertRow(spreadsheet.getSpreadsheetId(), sheetTitle,
-                        new ValueRange().setValues(Collections.singletonList(prepareListOfValues(sheetCells.get(0), columnTitles, answers))));
+                        new ValueRange().setValues(Collections.singletonList(valuesList)));
             }
         } catch (IOException e) {
             throw new UploadException(e);
@@ -378,7 +392,31 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                     String mediaHyperlink = uploadMediaFile(instanceFile, answer);
                     answers.put(elementTitle, mediaHyperlink);
                 } else {
-                    answers.put(elementTitle, answer);
+
+                    if (isLocationValid(answer)) {
+
+                        String titleFirstPart = elementTitle.substring(0, elementTitle.indexOf("-")+1);
+
+                        // Accuracy
+                        int accuracyLocation = answer.lastIndexOf(" ");
+                        String accuracyStr = answer.substring(accuracyLocation).trim();
+                        answer = answer.substring(0, accuracyLocation).trim();
+                        String accuracyTitle = titleFirstPart+"Accuracy";
+
+                        // Altitude
+                        int altitudeLocation = answer.lastIndexOf(" ");
+                        String altitudeStr = answer.substring(altitudeLocation).trim();
+                        answer = answer.substring(0, altitudeLocation).trim();
+                        String altitudeTitle = titleFirstPart+"Altitude";
+
+                        answers.put(elementTitle, answer);
+                        answers.put(altitudeTitle, altitudeStr);
+                        answers.put(accuracyTitle, accuracyStr);
+
+                    } else {
+                        answers.put(elementTitle, answer);
+                    }
+
                 }
             }
         }
@@ -495,6 +533,18 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             if (!path.equals(" ") && columnTitles.contains(path.toString())) {
                 if (answers.containsKey(path.toString())) {
                     answer = answers.get(path.toString());
+                    // Check to see if answer is a location, if so, get rid of accuracy
+                    // and altitude, try to match a fairly specific pattern to determine
+                    // if it's a location [-]#.# [-]#.# #.# #.#
+
+                    if (isLocationValid(answer)) {
+                        // get rid of everything after the second space
+                        int firstSpace = answer.indexOf(' ');
+                        int secondSpace = answer.indexOf(" ", firstSpace + 1);
+                        answer = answer.substring(0, secondSpace);
+                        answer = answer.replace(' ', ',');
+                    }
+
                 }
             }
             // https://github.com/opendatakit/collect/issues/931
