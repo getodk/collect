@@ -199,7 +199,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private static final int SAVING_DIALOG = 2;
     private static final int SAVING_IMAGE_DIALOG = 3;
 
-    private boolean autoSaved;
+    private boolean autoSaved = false;
     private boolean allowMovingBackwards;
 
     // Random ID
@@ -236,6 +236,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
     private ODKView odkView;
     private boolean doSwipe = true;
+    private String instancePath;
+    private String startingXPath;
+    private String waitingXPath;
+    private boolean newForm = true;
 
     public void allowSwiping(boolean doSwipe) {
         this.doSwipe = doSwipe;
@@ -265,14 +269,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
         setContentView(R.layout.form_entry);
 
-
         errorMessage = null;
 
         beenSwiped = false;
-        alertDialog = null;
-        currentView = null;
-        inAnimation = null;
-        outAnimation = null;
+
         gestureDetector = new GestureDetector(this, this);
         questionHolder = findViewById(R.id.questionholder);
 
@@ -290,12 +290,31 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             showPreviousView();
         });
 
-        String startingXPath = null;
-        String waitingXPath = null;
-        String instancePath = null;
-        boolean newForm = true;
-        autoSaved = false;
-        allowMovingBackwards = (boolean) AdminSharedPreferences.getInstance().get(KEY_MOVING_BACKWARDS);
+        requestStoragePermissions(this, new PermissionListener() {
+            @Override
+            public void granted() {
+                // must be at the beginning of any activity that can be called from an external intent
+                try {
+                    Collect.createODKDirs();
+                    setupFields(savedInstanceState);
+                    loadForm();
+
+                } catch (RuntimeException e) {
+                    createErrorDialog(e.getMessage(), EXIT);
+                    return;
+                }
+
+            }
+
+            @Override
+            public void denied() {
+                // The activity has to finish because ODK Collect cannot function without these permissions.
+                finish();
+            }
+        });
+    }
+
+    private void setupFields(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
             state = savedInstanceState;
             if (savedInstanceState.containsKey(KEY_FORMPATH)) {
@@ -325,6 +344,11 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             }
         }
 
+    }
+
+    private void loadForm() {
+        allowMovingBackwards = (boolean) AdminSharedPreferences.getInstance().get(KEY_MOVING_BACKWARDS);
+
         // If a parse error message is showing then nothing else is loaded
         // Dialogs mid form just disappear on rotation.
         if (errorMessage != null) {
@@ -332,33 +356,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             return;
         }
 
-        String finalInstancePath = instancePath;
-        String finalStartingXPath = startingXPath;
-        String finalWaitingXPath = waitingXPath;
-        boolean finalNewForm = newForm;
-        requestStoragePermissions(this, new PermissionListener() {
-            @Override
-            public void granted() {
-                // must be at the beginning of any activity that can be called from an external intent
-                try {
-                    Collect.createODKDirs();
-                } catch (RuntimeException e) {
-                    createErrorDialog(e.getMessage(), EXIT);
-                    return;
-                }
-
-                init(finalInstancePath, finalStartingXPath, finalWaitingXPath, finalNewForm);
-            }
-
-            @Override
-            public void denied() {
-                // The activity has to finish because ODK Collect cannot function without these permissions.
-                finish();
-            }
-        });
-    }
-
-    private void init(String instancePath, String startingXPath, String waitingXPath, boolean newForm) {
         // Check to see if this is a screen flip or a new form load.
         Object data = getLastCustomNonConfigurationInstance();
         if (data instanceof FormLoaderTask) {
@@ -391,140 +388,141 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
             Intent intent = getIntent();
             if (intent != null) {
-                Uri uri = intent.getData();
-                String uriMimeType = null;
-
-                if (uri != null) {
-                    uriMimeType = getContentResolver().getType(uri);
-                }
-
-                if (uriMimeType == null && intent.hasExtra(EXTRA_TESTING_PATH)) {
-                    formPath = intent.getStringExtra(EXTRA_TESTING_PATH);
-
-                } else if (uriMimeType != null && uriMimeType.equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
-                    // get the formId and version for this instance...
-
-                    FormInfo formInfo = ContentResolverHelper.getFormDetails(uri);
-
-                    if (formInfo == null) {
-                        createErrorDialog(getString(R.string.bad_uri, uri), EXIT);
-                        return;
-                    }
-
-                    instancePath = formInfo.getInstancePath();
-                    Collect.getInstance()
-                            .getActivityLogger()
-                            .logAction(this, "instanceLoaded",
-                                    instancePath);
-
-                    String jrFormId = formInfo.getFormID();
-                    String jrVersion = formInfo.getFormVersion();
-
-                    String[] selectionArgs;
-                    String selection;
-                    if (jrVersion == null) {
-                        selectionArgs = new String[]{jrFormId};
-                        selection = FormsColumns.JR_FORM_ID + "=? AND "
-                                + FormsColumns.JR_VERSION + " IS NULL";
-                    } else {
-                        selectionArgs = new String[]{jrFormId, jrVersion};
-                        selection = FormsColumns.JR_FORM_ID + "=? AND "
-                                + FormsColumns.JR_VERSION + "=?";
-                    }
-
-                    int formCount = FormsDaoHelper.getFormsCount(selection, selectionArgs);
-                    if (formCount < 1) {
-                        createErrorDialog(getString(
-                                R.string.parent_form_not_present,
-                                jrFormId)
-                                        + ((jrVersion == null) ? ""
-                                        : "\n"
-                                        + getString(R.string.version)
-                                        + " "
-                                        + jrVersion),
-                                EXIT);
-                        return;
-                    } else {
-                        formPath = FormsDaoHelper.getFormPath(selection, selectionArgs);
-
-                        // still take the first entry, but warn that
-                        // there are multiple rows.
-                        // user will need to hand-edit the SQLite
-                        // database to fix it.
-                        if (formCount > 1) {
-                            createErrorDialog(getString(R.string.survey_multiple_forms_error), EXIT);
-                            return;
-                        }
-                    }
-                } else if (uriMimeType != null
-                        && uriMimeType.equals(FormsColumns.CONTENT_ITEM_TYPE)) {
-                    formPath = ContentResolverHelper.getFormPath(uri);
-                    if (formPath == null) {
-                        createErrorDialog(getString(R.string.bad_uri, uri), EXIT);
-                        return;
-                    } else {
-                        // This is the fill-blank-form code path.
-                        // See if there is a savepoint for this form that
-                        // has never been
-                        // explicitly saved
-                        // by the user. If there is, open this savepoint
-                        // (resume this filled-in
-                        // form).
-                        // Savepoints for forms that were explicitly saved
-                        // will be recovered
-                        // when that
-                        // explicitly saved instance is edited via
-                        // edit-saved-form.
-                        final String filePrefix = formPath.substring(
-                                formPath.lastIndexOf('/') + 1,
-                                formPath.lastIndexOf('.'))
-                                + "_";
-                        final String fileSuffix = ".xml.save";
-                        File cacheDir = new File(Collect.CACHE_PATH);
-                        File[] files = cacheDir.listFiles(pathname -> {
-                            String name = pathname.getName();
-                            return name.startsWith(filePrefix)
-                                    && name.endsWith(fileSuffix);
-                        });
-                        // see if any of these savepoints are for a
-                        // filled-in form that has never been
-                        // explicitly saved by the user...
-                        for (File candidate : files) {
-                            String instanceDirName = candidate.getName()
-                                    .substring(
-                                            0,
-                                            candidate.getName().length()
-                                                    - fileSuffix.length());
-                            File instanceDir = new File(
-                                    Collect.INSTANCES_PATH + File.separator
-                                            + instanceDirName);
-                            File instanceFile = new File(instanceDir,
-                                    instanceDirName + ".xml");
-                            if (instanceDir.exists()
-                                    && instanceDir.isDirectory()
-                                    && !instanceFile.exists()) {
-                                // yes! -- use this savepoint file
-                                instancePath = instanceFile
-                                        .getAbsolutePath();
-                                break;
-                            }
-                        }
-                    }
-                } else {
-                    Timber.e("Unrecognized URI: %s", uri);
-                    createErrorDialog(getString(R.string.unrecognized_uri, uri), EXIT);
-                    return;
-                }
-
-                formLoaderTask = new FormLoaderTask(instancePath, null, null);
-                Collect.getInstance().getActivityLogger()
-                        .logAction(this, "formLoaded", formPath);
-                showDialog(PROGRESS_DIALOG);
-                // show dialog before we execute...
-                formLoaderTask.execute(formPath);
+                loadFromIntent(intent);
             }
         }
     }
+
+    private void loadFromIntent(Intent intent) {
+        Uri uri = intent.getData();
+        String uriMimeType = null;
+
+        if (uri != null) {
+            uriMimeType = getContentResolver().getType(uri);
+        }
+
+        if (uriMimeType == null && intent.hasExtra(EXTRA_TESTING_PATH)) {
+            formPath = intent.getStringExtra(EXTRA_TESTING_PATH);
+
+        } else if (uriMimeType != null && uriMimeType.equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
+            // get the formId and version for this instance...
+
+            FormInfo formInfo = ContentResolverHelper.getFormDetails(uri);
+
+            if (formInfo == null) {
+                createErrorDialog(getString(R.string.bad_uri, uri), EXIT);
+                return;
+            }
+
+            instancePath = formInfo.getInstancePath();
+            Collect.getInstance()
+                    .getActivityLogger()
+                    .logAction(this, "instanceLoaded",
+                            instancePath);
+
+            String jrFormId = formInfo.getFormID();
+            String jrVersion = formInfo.getFormVersion();
+
+            String[] selectionArgs;
+            String selection;
+            if (jrVersion == null) {
+                selectionArgs = new String[]{jrFormId};
+                selection = FormsColumns.JR_FORM_ID + "=? AND "
+                        + FormsColumns.JR_VERSION + " IS NULL";
+            } else {
+                selectionArgs = new String[]{jrFormId, jrVersion};
+                selection = FormsColumns.JR_FORM_ID + "=? AND "
+                        + FormsColumns.JR_VERSION + "=?";
+            }
+
+            int formCount = FormsDaoHelper.getFormsCount(selection, selectionArgs);
+            if (formCount < 1) {
+                createErrorDialog(getString(
+                        R.string.parent_form_not_present,
+                        jrFormId)
+                                + ((jrVersion == null) ? ""
+                                : "\n"
+                                + getString(R.string.version)
+                                + " "
+                                + jrVersion),
+                        EXIT);
+                return;
+            } else {
+                formPath = FormsDaoHelper.getFormPath(selection, selectionArgs);
+
+                /**
+                 * Still take the first entry, but warn that there are multiple rows. User will
+                 * need to hand-edit the SQLite database to fix it.
+                 */
+                if (formCount > 1) {
+                    createErrorDialog(getString(R.string.survey_multiple_forms_error), EXIT);
+                    return;
+                }
+            }
+        } else if (uriMimeType != null
+                && uriMimeType.equals(FormsColumns.CONTENT_ITEM_TYPE)) {
+            formPath = ContentResolverHelper.getFormPath(uri);
+            if (formPath == null) {
+                createErrorDialog(getString(R.string.bad_uri, uri), EXIT);
+                return;
+            } else {
+                /**
+                 * This is the fill-blank-form code path.See if there is a savepoint for this form
+                 * that has never been explicitly saved by the user. If there is, open this savepoint(resume this filled-in form).
+                 * Savepoints for forms that were explicitly saved will be recovered when that
+                 * explicitly saved instance is edited via edit-saved-form.
+                 */
+                final String filePrefix = formPath.substring(
+                        formPath.lastIndexOf('/') + 1,
+                        formPath.lastIndexOf('.'))
+                        + "_";
+                final String fileSuffix = ".xml.save";
+                File cacheDir = new File(Collect.CACHE_PATH);
+                File[] files = cacheDir.listFiles(pathname -> {
+                    String name = pathname.getName();
+                    return name.startsWith(filePrefix)
+                            && name.endsWith(fileSuffix);
+                });
+
+                /**
+                 * See if any of these savepoints are for a filled-in form that has never
+                 * been explicitly saved by the user.
+                 */
+                for (File candidate : files) {
+                    String instanceDirName = candidate.getName()
+                            .substring(
+                                    0,
+                                    candidate.getName().length()
+                                            - fileSuffix.length());
+                    File instanceDir = new File(
+                            Collect.INSTANCES_PATH + File.separator
+                                    + instanceDirName);
+                    File instanceFile = new File(instanceDir,
+                            instanceDirName + ".xml");
+                    if (instanceDir.exists()
+                            && instanceDir.isDirectory()
+                            && !instanceFile.exists()) {
+                        // yes! -- use this savepoint file
+                        instancePath = instanceFile
+                                .getAbsolutePath();
+                        break;
+                    }
+                }
+            }
+        } else {
+            Timber.e("Unrecognized URI: %s", uri);
+            createErrorDialog(getString(R.string.unrecognized_uri, uri), EXIT);
+            return;
+        }
+
+        formLoaderTask = new FormLoaderTask(instancePath, null, null);
+        Collect.getInstance().getActivityLogger()
+                .logAction(this, "formLoaded", formPath);
+        showDialog(PROGRESS_DIALOG);
+        // show dialog before we execute...
+        formLoaderTask.execute(formPath);
+    }
+
 
     public Bundle getState() {
         return state;
