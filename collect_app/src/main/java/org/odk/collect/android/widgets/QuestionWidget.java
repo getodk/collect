@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -48,6 +49,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.listeners.AudioPlayListener;
+import org.odk.collect.android.listeners.RightDrawableOnTouchListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GuidanceHint;
@@ -135,8 +137,8 @@ public abstract class QuestionWidget
         addHelpTextLayout(getHelpTextLayout());
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private TextView setupGuidanceTextAndLayout(TextView guidanceTextView, FormEntryPrompt prompt) {
-
         AtomicBoolean expanded = new AtomicBoolean(false);
         GuidanceHint setting = GuidanceHint.get((String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_GUIDANCE_HINT));
 
@@ -159,17 +161,23 @@ public abstract class QuestionWidget
         } else if (setting.equals(GuidanceHint.YesCollapsed)) {
             getHelpTextView().setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.information_outline, 0);
             getHelpTextView().setCompoundDrawablePadding((int) convertDpToPixel(5, getContext()));
-            getHelpTextView().setOnClickListener(view -> {
-                if (!expanded.get()) {
-                    AnimateUtils.expand(guidanceTextView, result -> expanded.set(true));
-                } else {
-                    AnimateUtils.collapse(guidanceTextView, result -> expanded.set(false));
+
+            getHelpTextView().setOnTouchListener(new RightDrawableOnTouchListener(getHelpTextView()) {
+                @Override
+                public boolean onDrawableTouch(MotionEvent event) {
+                    if (!expanded.get()) {
+                        AnimateUtils.expand(guidanceTextView, result -> expanded.set(true));
+                    } else {
+                        AnimateUtils.collapse(guidanceTextView, result -> expanded.set(false));
+                    }
+
+                    // triggered for accessibility reasons.
+                    getHelpTextView().performClick();
+
+                    return true;
                 }
-
             });
-
         }
-
         return null;
     }
 
@@ -385,14 +393,10 @@ public abstract class QuestionWidget
 
     private View createHelpTextLayout() {
         return LayoutInflater.from(getContext()).inflate(R.layout.help_text_layout, null);
-
-
     }
 
     private TextView setupHelpText(TextView helpText, FormEntryPrompt prompt) {
         String s = prompt.getHelpText();
-
-
 
         if (s != null && !s.equals("")) {
             helpText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getQuestionFontSize() - 3);
@@ -677,6 +681,4 @@ public abstract class QuestionWidget
     public int getPlayColor() {
         return playColor;
     }
-
-
 }
