@@ -533,18 +533,6 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             if (!path.equals(" ") && columnTitles.contains(path.toString())) {
                 if (answers.containsKey(path.toString())) {
                     answer = answers.get(path.toString());
-                    // Check to see if answer is a location, if so, get rid of accuracy
-                    // and altitude, try to match a fairly specific pattern to determine
-                    // if it's a location [-]#.# [-]#.# #.# #.#
-
-                    if (isLocationValid(answer)) {
-                        // get rid of everything after the second space
-                        int firstSpace = answer.indexOf(' ');
-                        int secondSpace = answer.indexOf(" ", firstSpace + 1);
-                        answer = answer.substring(0, secondSpace);
-                        answer = answer.replace(' ', ',');
-                    }
-
                 }
             }
             // https://github.com/opendatakit/collect/issues/931
