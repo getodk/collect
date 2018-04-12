@@ -16,14 +16,15 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
+import android.widget.RadioButton;
 
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.R;
 import org.odk.collect.android.listeners.AudioPlayListener;
 
 import java.util.List;
@@ -38,6 +39,7 @@ import java.util.List;
  */
 @SuppressLint("ViewConstructor")
 public class SelectOneSearchWidget extends AbstractSelectOneWidget implements OnCheckedChangeListener, AudioPlayListener {
+
     public SelectOneSearchWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt, false);
         createLayout();
@@ -48,11 +50,13 @@ public class SelectOneSearchWidget extends AbstractSelectOneWidget implements On
         LayoutInflater inflater = LayoutInflater.from(getContext());
         for (int i = 0; i < buttons.size(); i++) {
             if (tagList == null || tagList.contains(i)) {
-                @SuppressLint("InflateParams")
-                RelativeLayout thisParentLayout = (RelativeLayout) inflater.inflate(R.layout.quick_select_layout, null);
-                LinearLayout questionLayout = (LinearLayout) thisParentLayout.getChildAt(0);
-                questionLayout.addView(createMediaLayout(i, buttons.get(i)));
-                answerLayout.addView(thisParentLayout);
+                answerLayout.addView(buttons.get(i));
+                //Get divider drawable and set to linearlayout
+                int[] attrs = { android.R.attr.listDivider };
+                TypedArray ta = getContext().obtainStyledAttributes(attrs);
+                Drawable divider = ta.getDrawable(0);
+                answerLayout.setDividerDrawable(divider);
+                answerLayout.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
             }
         }
     }
@@ -71,7 +75,8 @@ public class SelectOneSearchWidget extends AbstractSelectOneWidget implements On
 
         if (items != null) {
             for (int i = 0; i < items.size(); i++) {
-                buttons.add(createRadioButton(i));
+                RadioButton button = createRadioButton(i);
+                buttons.add(button);
             }
         }
         setUpSearchBox();
