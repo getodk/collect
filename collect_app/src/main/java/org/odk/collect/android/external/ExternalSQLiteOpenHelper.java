@@ -109,7 +109,7 @@ public class ExternalSQLiteOpenHelper extends SQLiteOpenHelper {
                     DELIMITING_CHAR, QUOTE_CHAR, ESCAPE_CHAR);
             String[] headerRow = reader.readNext();
 
-            headerRow[0] = replaceByteOrderMark(headerRow[0]);
+            headerRow[0] = removeByteOrderMark(headerRow[0]);
 
             if (!ExternalDataUtil.containsAnyData(headerRow)) {
                 throw new ExternalDataException(
@@ -267,14 +267,14 @@ public class ExternalSQLiteOpenHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * replaceByteOrderMark
+     * removeByteOrderMark
      *
      * Removes the presence of a Byte Order Mark from the initial UTF-8 String
      *
      * @param firstLine String to scan for a Byte Order Marker
      * @return String with any Byte Order Marker removed
      */
-    private String replaceByteOrderMark(String firstLine) {
+    private String removeByteOrderMark(String firstLine) {
         return firstLine.startsWith("\uFEFF") ? firstLine.substring(1) : firstLine;
     }
 }
