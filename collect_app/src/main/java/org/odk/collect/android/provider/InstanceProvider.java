@@ -128,32 +128,32 @@ public class InstanceProvider extends ContentProvider {
             throw new IllegalArgumentException("Unknown URI " + uri);
         }
 
-        ContentValues values;
-        if (initialValues != null) {
-            values = new ContentValues(initialValues);
-        } else {
-            values = new ContentValues();
-        }
-
-        Long now = System.currentTimeMillis();
-
-        // Make sure that the fields are all set
-        if (!values.containsKey(InstanceColumns.LAST_STATUS_CHANGE_DATE)) {
-            values.put(InstanceColumns.LAST_STATUS_CHANGE_DATE, now);
-        }
-
-        if (!values.containsKey(InstanceColumns.DISPLAY_SUBTEXT)) {
-            Date today = new Date();
-            String text = getDisplaySubtext(InstanceProviderAPI.STATUS_INCOMPLETE, today);
-            values.put(InstanceColumns.DISPLAY_SUBTEXT, text);
-        }
-
-        if (!values.containsKey(InstanceColumns.STATUS)) {
-            values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
-        }
-
         InstancesDatabaseHelper instancesDatabaseHelper = getDbHelper();
         if (instancesDatabaseHelper != null) {
+            ContentValues values;
+            if (initialValues != null) {
+                values = new ContentValues(initialValues);
+            } else {
+                values = new ContentValues();
+            }
+
+            Long now = System.currentTimeMillis();
+
+            // Make sure that the fields are all set
+            if (!values.containsKey(InstanceColumns.LAST_STATUS_CHANGE_DATE)) {
+                values.put(InstanceColumns.LAST_STATUS_CHANGE_DATE, now);
+            }
+
+            if (!values.containsKey(InstanceColumns.DISPLAY_SUBTEXT)) {
+                Date today = new Date();
+                String text = getDisplaySubtext(InstanceProviderAPI.STATUS_INCOMPLETE, today);
+                values.put(InstanceColumns.DISPLAY_SUBTEXT, text);
+            }
+
+            if (!values.containsKey(InstanceColumns.STATUS)) {
+                values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
+            }
+
             long rowId = instancesDatabaseHelper.getWritableDatabase().insert(INSTANCES_TABLE_NAME, null, values);
             if (rowId > 0) {
                 Uri instanceUri = ContentUris.withAppendedId(InstanceColumns.CONTENT_URI, rowId);
