@@ -16,7 +16,9 @@ package org.odk.collect.android.views;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -24,6 +26,7 @@ import android.widget.TextView;
 import org.odk.collect.android.logic.HierarchyElement;
 import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.utilities.ViewIds;
+import org.odk.collect.android.widgets.QuestionWidget;
 
 public class HierarchyElementView extends RelativeLayout {
 
@@ -53,7 +56,12 @@ public class HierarchyElementView extends RelativeLayout {
         LayoutParams l =
                 new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
                         LayoutParams.WRAP_CONTENT);
-        l.addRule(RelativeLayout.RIGHT_OF, icon.getId());
+        if (QuestionWidget.isRTL() && Build.VERSION.SDK_INT > 16) {
+            l.addRule(RelativeLayout.END_OF, icon.getId());
+            primaryTextView.setTextDirection(View.TEXT_DIRECTION_RTL);
+        } else {
+            l.addRule(RelativeLayout.RIGHT_OF, icon.getId());
+        }
         addView(primaryTextView, l);
 
         secondaryTextView = new TextView(context);
@@ -65,7 +73,16 @@ public class HierarchyElementView extends RelativeLayout {
                 new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
                         LayoutParams.WRAP_CONTENT);
         lp.addRule(RelativeLayout.BELOW, primaryTextView.getId());
-        lp.addRule(RelativeLayout.RIGHT_OF, icon.getId());
+        if (QuestionWidget.isRTL() && Build.VERSION.SDK_INT > 17) {
+            lp.addRule(RelativeLayout.RIGHT_OF, icon.getId());
+            lp.addRule(RelativeLayout.END_OF, icon.getId());
+            secondaryTextView.setTextDirection(View.TEXT_DIRECTION_RTL);
+        } else if (QuestionWidget.isRTL() && Build.VERSION.SDK_INT == 17) {
+            lp.addRule(RelativeLayout.END_OF, icon.getId());
+            secondaryTextView.setTextDirection(View.TEXT_DIRECTION_RTL);
+        } else {
+            lp.addRule(RelativeLayout.RIGHT_OF, icon.getId());
+        }
         addView(secondaryTextView, lp);
 
         setPadding(dipToPx(8), dipToPx(4), dipToPx(8), dipToPx(8));
