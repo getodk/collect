@@ -95,12 +95,15 @@ public class InstanceProvider extends ContentProvider {
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
 
-        // Get the database and run the query
-        SQLiteDatabase db = getDbHelper().getReadableDatabase();
-        Cursor c = qb.query(db, projection, selection, selectionArgs, null, null, sortOrder);
+        Cursor c = null;
+        InstancesDatabaseHelper instancesDatabaseHelper = getDbHelper();
+        if (instancesDatabaseHelper != null) {
+            c = qb.query(instancesDatabaseHelper.getReadableDatabase(), projection, selection, selectionArgs, null, null, sortOrder);
 
-        // Tell the cursor what uri to watch, so it knows when its source data changes
-        c.setNotificationUri(getContext().getContentResolver(), uri);
+            // Tell the cursor what uri to watch, so it knows when its source data changes
+            c.setNotificationUri(getContext().getContentResolver(), uri);
+        }
+
         return c;
     }
 
@@ -149,14 +152,16 @@ public class InstanceProvider extends ContentProvider {
             values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
         }
 
-        SQLiteDatabase db = getDbHelper().getWritableDatabase();
-        long rowId = db.insert(INSTANCES_TABLE_NAME, null, values);
-        if (rowId > 0) {
-            Uri instanceUri = ContentUris.withAppendedId(InstanceColumns.CONTENT_URI, rowId);
-            getContext().getContentResolver().notifyChange(instanceUri, null);
-            Collect.getInstance().getActivityLogger().logActionParam(this, "insert",
-                    instanceUri.toString(), values.getAsString(InstanceColumns.INSTANCE_FILE_PATH));
-            return instanceUri;
+        InstancesDatabaseHelper instancesDatabaseHelper = getDbHelper();
+        if (instancesDatabaseHelper != null) {
+            long rowId = instancesDatabaseHelper.getWritableDatabase().insert(INSTANCES_TABLE_NAME, null, values);
+            if (rowId > 0) {
+                Uri instanceUri = ContentUris.withAppendedId(InstanceColumns.CONTENT_URI, rowId);
+                getContext().getContentResolver().notifyChange(instanceUri, null);
+                Collect.getInstance().getActivityLogger().logActionParam(this, "insert",
+                        instanceUri.toString(), values.getAsString(InstanceColumns.INSTANCE_FILE_PATH));
+                return instanceUri;
+            }
         }
 
         throw new SQLException("Failed to insert row into " + uri);
@@ -224,134 +229,142 @@ public class InstanceProvider extends ContentProvider {
      */
     @Override
     public int delete(@NonNull Uri uri, String where, String[] whereArgs) {
-        SQLiteDatabase db = getDbHelper().getWritableDatabase();
-        int count;
+        int count = 0;
+        InstancesDatabaseHelper instancesDatabaseHelper = getDbHelper();
+        if (instancesDatabaseHelper != null) {
+            SQLiteDatabase db = instancesDatabaseHelper.getWritableDatabase();
 
-        switch (sUriMatcher.match(uri)) {
-            case INSTANCES:
-                Cursor del = null;
-                try {
-                    del = this.query(uri, null, where, whereArgs, null);
-                    if (del != null && del.getCount() > 0) {
-                        del.moveToFirst();
-                        do {
-                            String instanceFile = del.getString(
-                                    del.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
-                            Collect.getInstance().getActivityLogger().logAction(this, "delete",
-                                    instanceFile);
-                            File instanceDir = (new File(instanceFile)).getParentFile();
-                            deleteAllFilesInDirectory(instanceDir);
-                        } while (del.moveToNext());
+            switch (sUriMatcher.match(uri)) {
+                case INSTANCES:
+                    Cursor del = null;
+                    try {
+                        del = this.query(uri, null, where, whereArgs, null);
+                        if (del != null && del.getCount() > 0) {
+                            del.moveToFirst();
+                            do {
+                                String instanceFile = del.getString(
+                                        del.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
+                                Collect.getInstance().getActivityLogger().logAction(this, "delete",
+                                        instanceFile);
+                                File instanceDir = (new File(instanceFile)).getParentFile();
+                                deleteAllFilesInDirectory(instanceDir);
+                            } while (del.moveToNext());
+                        }
+                    } finally {
+                        if (del != null) {
+                            del.close();
+                        }
                     }
-                } finally {
-                    if (del != null) {
-                        del.close();
+                    count = db.delete(INSTANCES_TABLE_NAME, where, whereArgs);
+                    break;
+
+                case INSTANCE_ID:
+                    String instanceId = uri.getPathSegments().get(1);
+
+                    Cursor c = null;
+                    String status = null;
+                    try {
+                        c = this.query(uri, null, where, whereArgs, null);
+                        if (c != null && c.getCount() > 0) {
+                            c.moveToFirst();
+                            status = c.getString(c.getColumnIndex(InstanceColumns.STATUS));
+                            do {
+                                String instanceFile = c.getString(
+                                        c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
+                                Collect.getInstance().getActivityLogger().logAction(this, "delete",
+                                        instanceFile);
+                                File instanceDir = (new File(instanceFile)).getParentFile();
+                                deleteAllFilesInDirectory(instanceDir);
+                            } while (c.moveToNext());
+                        }
+                    } finally {
+                        if (c != null) {
+                            c.close();
+                        }
                     }
-                }
-                count = db.delete(INSTANCES_TABLE_NAME, where, whereArgs);
-                break;
 
-            case INSTANCE_ID:
-                String instanceId = uri.getPathSegments().get(1);
-
-                Cursor c = null;
-                String status = null;
-                try {
-                    c = this.query(uri, null, where, whereArgs, null);
-                    if (c != null && c.getCount() > 0) {
-                        c.moveToFirst();
-                        status = c.getString(c.getColumnIndex(InstanceColumns.STATUS));
-                        do {
-                            String instanceFile = c.getString(
-                                    c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
-                            Collect.getInstance().getActivityLogger().logAction(this, "delete",
-                                    instanceFile);
-                            File instanceDir = (new File(instanceFile)).getParentFile();
-                            deleteAllFilesInDirectory(instanceDir);
-                        } while (c.moveToNext());
+                    //We are going to update the status, if the form is submitted
+                    //We will not delete the record in table but we will delete the file
+                    if (status != null && status.equals(InstanceProviderAPI.STATUS_SUBMITTED)) {
+                        ContentValues cv = new ContentValues();
+                        cv.put(InstanceColumns.DELETED_DATE, System.currentTimeMillis());
+                        count = Collect.getInstance().getContentResolver().update(uri, cv, null, null);
+                    } else {
+                        count =
+                                db.delete(INSTANCES_TABLE_NAME,
+                                        InstanceColumns._ID + "=" + instanceId
+                                                + (!TextUtils.isEmpty(where) ? " AND (" + where + ')' : ""),
+                                        whereArgs);
                     }
-                } finally {
-                    if (c != null) {
-                        c.close();
-                    }
-                }
+                    break;
 
-                //We are going to update the status, if the form is submitted
-                //We will not delete the record in table but we will delete the file
-                if (status != null && status.equals(InstanceProviderAPI.STATUS_SUBMITTED)) {
-                    ContentValues cv = new ContentValues();
-                    cv.put(InstanceColumns.DELETED_DATE, System.currentTimeMillis());
-                    count = Collect.getInstance().getContentResolver().update(uri, cv, null, null);
-                } else {
-                    count =
-                            db.delete(INSTANCES_TABLE_NAME,
-                                    InstanceColumns._ID + "=" + instanceId
-                                            + (!TextUtils.isEmpty(where) ? " AND (" + where + ')' : ""),
-                                    whereArgs);
-                }
-                break;
+                default:
+                    throw new IllegalArgumentException("Unknown URI " + uri);
+            }
 
-            default:
-                throw new IllegalArgumentException("Unknown URI " + uri);
+            getContext().getContentResolver().notifyChange(uri, null);
         }
 
-        getContext().getContentResolver().notifyChange(uri, null);
         return count;
     }
 
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String where, String[] whereArgs) {
-        SQLiteDatabase db = getDbHelper().getWritableDatabase();
+        int count = 0;
+        InstancesDatabaseHelper instancesDatabaseHelper = getDbHelper();
+        if (instancesDatabaseHelper != null) {
+            SQLiteDatabase db = instancesDatabaseHelper.getWritableDatabase();
 
-        Long now = System.currentTimeMillis();
+            Long now = System.currentTimeMillis();
 
-        // Make sure that the fields are all set
-        if (!values.containsKey(InstanceColumns.LAST_STATUS_CHANGE_DATE)) {
-            values.put(InstanceColumns.LAST_STATUS_CHANGE_DATE, now);
+            // Make sure that the fields are all set
+            if (!values.containsKey(InstanceColumns.LAST_STATUS_CHANGE_DATE)) {
+                values.put(InstanceColumns.LAST_STATUS_CHANGE_DATE, now);
+            }
+
+            String status;
+            switch (sUriMatcher.match(uri)) {
+                case INSTANCES:
+                    if (values.containsKey(InstanceColumns.STATUS)) {
+                        status = values.getAsString(InstanceColumns.STATUS);
+
+                        if (!values.containsKey(InstanceColumns.DISPLAY_SUBTEXT)) {
+                            Date today = new Date();
+                            String text = getDisplaySubtext(status, today);
+                            values.put(InstanceColumns.DISPLAY_SUBTEXT, text);
+                        }
+                    }
+
+                    count = db.update(INSTANCES_TABLE_NAME, values, where, whereArgs);
+                    break;
+
+                case INSTANCE_ID:
+                    String instanceId = uri.getPathSegments().get(1);
+
+                    if (values.containsKey(InstanceColumns.STATUS)) {
+                        status = values.getAsString(InstanceColumns.STATUS);
+
+                        if (!values.containsKey(InstanceColumns.DISPLAY_SUBTEXT)) {
+                            Date today = new Date();
+                            String text = getDisplaySubtext(status, today);
+                            values.put(InstanceColumns.DISPLAY_SUBTEXT, text);
+                        }
+                    }
+
+                    count =
+                            db.update(INSTANCES_TABLE_NAME, values,
+                                    InstanceColumns._ID + "=" + instanceId
+                                            + (!TextUtils.isEmpty(where) ? " AND (" + where + ')' : ""),
+                                    whereArgs);
+                    break;
+
+                default:
+                    throw new IllegalArgumentException("Unknown URI " + uri);
+            }
+
+            getContext().getContentResolver().notifyChange(uri, null);
         }
 
-        int count;
-        String status;
-        switch (sUriMatcher.match(uri)) {
-            case INSTANCES:
-                if (values.containsKey(InstanceColumns.STATUS)) {
-                    status = values.getAsString(InstanceColumns.STATUS);
-
-                    if (!values.containsKey(InstanceColumns.DISPLAY_SUBTEXT)) {
-                        Date today = new Date();
-                        String text = getDisplaySubtext(status, today);
-                        values.put(InstanceColumns.DISPLAY_SUBTEXT, text);
-                    }
-                }
-
-                count = db.update(INSTANCES_TABLE_NAME, values, where, whereArgs);
-                break;
-
-            case INSTANCE_ID:
-                String instanceId = uri.getPathSegments().get(1);
-
-                if (values.containsKey(InstanceColumns.STATUS)) {
-                    status = values.getAsString(InstanceColumns.STATUS);
-
-                    if (!values.containsKey(InstanceColumns.DISPLAY_SUBTEXT)) {
-                        Date today = new Date();
-                        String text = getDisplaySubtext(status, today);
-                        values.put(InstanceColumns.DISPLAY_SUBTEXT, text);
-                    }
-                }
-
-                count =
-                        db.update(INSTANCES_TABLE_NAME, values,
-                                InstanceColumns._ID + "=" + instanceId
-                                        + (!TextUtils.isEmpty(where) ? " AND (" + where + ')' : ""),
-                                whereArgs);
-                break;
-
-            default:
-                throw new IllegalArgumentException("Unknown URI " + uri);
-        }
-
-        getContext().getContentResolver().notifyChange(uri, null);
         return count;
     }
 
