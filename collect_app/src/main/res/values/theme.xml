@@ -14,7 +14,7 @@
         <item name="android:panelBackground">@android:color/white</item>
         <item name="alertDialogTheme">@style/AlertDialogTheme</item>
         <item name="searchViewStyle">@style/SearchViewTheme</item>
-        <item name="android:textDirection" tools:targetApi="jelly_bean_mr1">locale</item>
+        <item name="android:textDirection" tools:targetApi="17">locale</item>
     </style>
 
     <style name="AlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
@@ -23,7 +23,7 @@
     </style>
 
     <style name="AppTheme.SettingsTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:textDirection" tools:targetApi="jelly_bean_mr1">locale</item>
+        <item name="android:textDirection" tools:targetApi="17">locale</item>
         <item name="colorAccent">@color/tintColor</item>
         <item name="android:textColor">@color/primaryTextColor</item>
         <item name="android:textSize">18sp</item>
