@@ -271,17 +271,10 @@ public class ExternalSQLiteOpenHelper extends SQLiteOpenHelper {
      *
      * Removes the presence of a Byte Order Mark from the initial UTF-8 String
      *
-     * Fixes issue: https://github.com/opendatakit/collect/issues/1695
-     *
      * @param firstLine String to scan for a Byte Order Marker
      * @return String with any Byte Order Marker removed
      */
     private String replaceByteOrderMark(String firstLine) {
-        final String BOM = "\uFEFF";
-        if (firstLine.startsWith(BOM)) {
-            return firstLine.substring(1);
-        } else {
-            return firstLine;
-        }
+        return (firstLine.startsWith("\uFEFF")) ? firstLine.substring(1) : firstLine;
     }
 }
