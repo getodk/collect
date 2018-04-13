@@ -275,6 +275,6 @@ public class ExternalSQLiteOpenHelper extends SQLiteOpenHelper {
      * @return String with any Byte Order Marker removed
      */
     private String replaceByteOrderMark(String firstLine) {
-        return (firstLine.startsWith("\uFEFF")) ? firstLine.substring(1) : firstLine;
+        return firstLine.startsWith("\uFEFF") ? firstLine.substring(1) : firstLine;
     }
 }
