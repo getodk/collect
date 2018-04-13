@@ -18,6 +18,7 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
@@ -65,7 +66,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import io.reactivex.annotations.NonNull;
 import timber.log.Timber;
 
 import static org.odk.collect.android.logic.FormController.INSTANCE_ID;
@@ -239,15 +239,6 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                 + "[" + (repeatIndex + 1) + "]";
     }
 
-    private List<Object>addExtraTitles(@NonNull List<Object>columnTitles, @NonNull Map<String, String>answers) {
-        for (String key : answers.keySet()) {
-            if (!columnTitles.contains(key)) {
-                columnTitles.add(key);
-            }
-        }
-        return columnTitles;
-    }
-
     private void insertRow(TreeElement element, String parentKey, String key, File instanceFile, String sheetTitle)
             throws UploadException {
 
@@ -285,6 +276,26 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         } catch (IOException e) {
             throw new UploadException(e);
         }
+    }
+
+    /**
+     * addExtraTitles
+     *
+     * Adds extra column titles that could have been added to the answers Map. This is primarily
+     * to add columns for Accuracy and Altitude.
+     *
+     *
+     * @param columnTitles List of current column titles
+     * @param answers Map of answers
+     * @return column titles
+     */
+    private List<Object> addExtraTitles(@NonNull List<Object> columnTitles, @NonNull Map<String, String> answers) {
+        for (String key : answers.keySet()) {
+            if (!columnTitles.contains(key)) {
+                columnTitles.add(key);
+            }
+        }
+        return columnTitles;
     }
 
     // Ignore rows with all empty answers added by a user and extra repeatable groups added
@@ -394,29 +405,10 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                 } else {
 
                     if (isLocationValid(answer)) {
-
-                        String titleFirstPart = elementTitle.substring(0, elementTitle.indexOf("-")+1);
-
-                        // Accuracy
-                        int accuracyLocation = answer.lastIndexOf(" ");
-                        String accuracyStr = answer.substring(accuracyLocation).trim();
-                        answer = answer.substring(0, accuracyLocation).trim();
-                        String accuracyTitle = titleFirstPart+"Accuracy";
-
-                        // Altitude
-                        int altitudeLocation = answer.lastIndexOf(" ");
-                        String altitudeStr = answer.substring(altitudeLocation).trim();
-                        answer = answer.substring(0, altitudeLocation).trim();
-                        String altitudeTitle = titleFirstPart+"Altitude";
-
-                        answers.put(elementTitle, answer);
-                        answers.put(altitudeTitle, altitudeStr);
-                        answers.put(accuracyTitle, accuracyStr);
-
+                        parseAltitudeAndAccuracy(answers, elementTitle, answer);
                     } else {
                         answers.put(elementTitle, answer);
                     }
-
                 }
             }
         }
@@ -427,6 +419,38 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             answers.put(KEY, key);
         }
         return answers;
+    }
+
+    /**
+     * parseAltitudeAndAccuracy
+     *
+     * Strip the Altitude and Accuracy from a location string, and add them as separate columns.
+     *
+     * @param answers - HashMap of current Answers
+     * @param elementTitle - Current header title
+     * @param answer - String that holds the Lat/Long/Altitude/Accuracy
+     */
+    private void parseAltitudeAndAccuracy(@NonNull Map<String, String> answers, @NonNull String elementTitle, @NonNull String answer) {
+
+        String titleFirstPart = elementTitle.substring(0, elementTitle.indexOf('-') + 1);
+
+        // Accuracy
+        int accuracyLocation = answer.lastIndexOf(' ');
+        String accuracyStr = answer.substring(accuracyLocation).trim();
+        answer = answer.substring(0, accuracyLocation).trim();
+        String accuracyTitle = titleFirstPart + "Accuracy";
+        answers.put(accuracyTitle, accuracyStr);
+
+        // Altitude
+        int altitudeLocation = answer.lastIndexOf(' ');
+        String altitudeStr = answer.substring(altitudeLocation).trim();
+        answer = answer.substring(0, altitudeLocation).trim();
+        String altitudeTitle = titleFirstPart + "Altitude";
+        answers.put(altitudeTitle, altitudeStr);
+
+        // Put the modified geo location into the answers Map
+        answers.put(elementTitle, answer);
+
     }
 
     private List<Object> getColumnTitles(TreeElement element) {
