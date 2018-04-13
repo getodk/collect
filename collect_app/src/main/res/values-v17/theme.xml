@@ -36,7 +36,6 @@
         <item name="searchHintIcon">@null</item>
     </style>
 
-    <!-- fix RTL problem #1981 (for API level >= 17)-->
     <style name="EditTextStyle.Alignment" parent="@android:style/Widget.EditText">
         <item name="android:textAlignment">viewStart</item>
         <item name="android:gravity">start</item>
