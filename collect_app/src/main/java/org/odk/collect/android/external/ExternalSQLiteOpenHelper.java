@@ -267,8 +267,6 @@ public class ExternalSQLiteOpenHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * removeByteOrderMark
-     *
      * Removes the presence of a Byte Order Mark from the initial UTF-8 String
      *
      * @param firstLine String to scan for a Byte Order Marker
