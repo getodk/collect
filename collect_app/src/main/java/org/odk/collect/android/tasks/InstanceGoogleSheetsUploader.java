@@ -87,6 +87,9 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     private final DriveHelper driveHelper;
     private final GoogleAccountsManager accountsManager;
 
+    private final String altitudeTitlePostfix = "-altitude";
+    private final String accuracyTitlePostfix = "-accuracy";
+
     private boolean authFailed;
 
     private String jrFormId;
@@ -243,13 +246,12 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             throws UploadException {
 
         try {
-            List<Object> columnTitles = getColumnTitles(element);
-            HashMap<String, String> answers = getAnswers(element, instanceFile, parentKey, key);
-            columnTitles = addExtraTitles(columnTitles, answers);
+            List<List<Object>> sheetCells = getSheetCells(sheetTitle);
+            boolean newSheet = sheetCells == null || sheetCells.isEmpty();
+            List<Object> columnTitles = getColumnTitles(element, newSheet);
             ensureNumberOfColumnsIsValid(columnTitles.size());
 
-            List<List<Object>> sheetCells = getSheetCells(sheetTitle);
-            if (sheetCells != null && !sheetCells.isEmpty()) { // we are editing an existed sheet
+            if (!newSheet) { // we are editing an existed sheet
                 if (isAnyColumnHeaderEmpty(sheetCells.get(0))) {
                     // Insert a header row again to fill empty headers
                     sheetsHelper.updateRow(spreadsheet.getSpreadsheetId(), sheetTitle + "!A1",
@@ -257,6 +259,9 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                     sheetCells = getSheetCells(sheetTitle); // read sheet cells again to update
                 }
                 disallowMissingColumns(sheetCells.get(0), columnTitles);
+                addAltitudeAndAccuracyTitles(sheetCells.get(0), columnTitles);
+                ensureNumberOfColumnsIsValid(columnTitles.size());  // Call again to ensure valid number of columns
+
             } else { // new sheet
                 Integer sheetId = getSheetId(sheetTitle);
                 if (sheetId != null) {
@@ -267,11 +272,11 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                 sheetCells = getSheetCells(sheetTitle); // read sheet cells again to update
             }
 
-            List<Object> valuesList = prepareListOfValues(sheetCells.get(0), columnTitles, answers);
+            HashMap<String, String> answers = getAnswers(element, columnTitles, instanceFile, parentKey, key);
 
             if (shouldRowBeInserted(answers)) {
                 sheetsHelper.insertRow(spreadsheet.getSpreadsheetId(), sheetTitle,
-                        new ValueRange().setValues(Collections.singletonList(valuesList)));
+                        new ValueRange().setValues(Collections.singletonList(prepareListOfValues(sheetCells.get(0), columnTitles, answers))));
             }
         } catch (IOException e) {
             throw new UploadException(e);
@@ -279,24 +284,25 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     }
 
     /**
-     * addExtraTitles
+     * Adds any titles ending with "-altitude" or "-accuracy" that may have been added to the
+     * Sheet. This is so that existing spreadsheets can start collecting altitude / accuracy from
+     * Geo location fields.
      *
-     * Adds extra column titles that could have been added to the answers Map. This is primarily
-     * to add columns for Accuracy and Altitude.
-     *
-     *
-     * @param columnTitles List of current column titles
-     * @param answers Map of answers
-     * @return column titles
+     * @param sheetHeaders - Headers from the spreadsheet
+     * @param columnTitles - Column titles list to be updated with altitude / accuracy titles
      */
-    private List<Object> addExtraTitles(@NonNull List<Object> columnTitles, @NonNull Map<String, String> answers) {
-        for (String key : answers.keySet()) {
-            if (!columnTitles.contains(key)) {
-                columnTitles.add(key);
+    private void addAltitudeAndAccuracyTitles(List<Object> sheetHeaders, List<Object> columnTitles) {
+        for (Object sheetTitle : sheetHeaders) {
+            String sheetTitleStr = (String)sheetTitle;
+            if (sheetTitleStr.endsWith(altitudeTitlePostfix) || sheetTitleStr.endsWith(accuracyTitlePostfix)) {
+                if (! columnTitles.contains(sheetTitleStr)) {
+                    columnTitles.add(sheetTitleStr);
+                }
             }
         }
-        return columnTitles;
     }
+
+
 
     // Ignore rows with all empty answers added by a user and extra repeatable groups added
     // by Javarosa https://github.com/opendatakit/javarosa/issues/266
@@ -366,6 +372,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
     private void createSheetsIfNeeded(TreeElement element) throws UploadException {
         Set<String> sheetTitles = getSheetTitles(element);
+
         try {
             for (String sheetTitle : sheetTitles) {
                 if (!doesSheetExist(sheetTitle)) {
@@ -390,7 +397,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         return sheetTitles;
     }
 
-    private HashMap<String, String> getAnswers(TreeElement element, File instanceFile, String parentKey, String key)
+    private HashMap<String, String> getAnswers(TreeElement element, List<Object> columnTitles, File instanceFile, String parentKey, String key)
             throws UploadException {
         HashMap<String, String> answers = new HashMap<>();
         for (TreeElement childElement : getChildElements(element)) {
@@ -405,7 +412,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                 } else {
 
                     if (isLocationValid(answer)) {
-                        parseAltitudeAndAccuracy(answers, elementTitle, answer);
+                        parseAltitudeAndAccuracy(answers, columnTitles, elementTitle, answer);
                     } else {
                         answers.put(elementTitle, answer);
                     }
@@ -422,41 +429,46 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     }
 
     /**
-     * parseAltitudeAndAccuracy
-     *
-     * Strip the Altitude and Accuracy from a location string, and add them as separate columns.
+     * Strip the Altitude and Accuracy from a location String and add them as separate column if
+     * the column titles exist.
      *
      * @param answers - HashMap of current Answers
      * @param elementTitle - Current header title
      * @param answer - String that holds the Lat/Long/Altitude/Accuracy
      */
-    private void parseAltitudeAndAccuracy(@NonNull Map<String, String> answers, @NonNull String elementTitle, @NonNull String answer) {
-
-        String titleFirstPart = elementTitle.substring(0, elementTitle.indexOf('-') + 1);
+    private void parseAltitudeAndAccuracy(@NonNull Map<String, String> answers, @NonNull List<Object>columnTitles, @NonNull String elementTitle, @NonNull String answer) {
 
         // Accuracy
         int accuracyLocation = answer.lastIndexOf(' ');
         String accuracyStr = answer.substring(accuracyLocation).trim();
         answer = answer.substring(0, accuracyLocation).trim();
-        String accuracyTitle = titleFirstPart + "Accuracy";
-        answers.put(accuracyTitle, accuracyStr);
+        final String accuracyTitle = elementTitle + accuracyTitlePostfix;
+        if (columnTitles.contains(accuracyTitle)) {
+            answers.put(accuracyTitle, accuracyStr);
+        }
 
         // Altitude
         int altitudeLocation = answer.lastIndexOf(' ');
         String altitudeStr = answer.substring(altitudeLocation).trim();
         answer = answer.substring(0, altitudeLocation).trim();
-        String altitudeTitle = titleFirstPart + "Altitude";
-        answers.put(altitudeTitle, altitudeStr);
+        final String altitudeTitle = elementTitle + altitudeTitlePostfix;
+        if (columnTitles.contains(altitudeTitle)) {
+            answers.put(altitudeTitle, altitudeStr);
+        }
 
-        // Put the modified geo location into the answers Map
+        // Put the modified geo location (Just lat/long) into the answers Map
         answers.put(elementTitle, answer);
-
     }
 
-    private List<Object> getColumnTitles(TreeElement element) {
+    private List<Object> getColumnTitles(TreeElement element, boolean newSheet) {
         List<Object> columnTitles = new ArrayList<>();
         for (TreeElement child : getChildElements(element)) {
-            columnTitles.add(getElementTitle(child));
+            final String elementTitle = getElementTitle(child);
+            columnTitles.add(elementTitle);
+            if (newSheet && child.getDataType() == org.javarosa.core.model.Constants.DATATYPE_GEOPOINT) {
+                columnTitles.add(elementTitle + altitudeTitlePostfix);
+                columnTitles.add(elementTitle + accuracyTitlePostfix);
+            }
         }
         if (element.isRepeatable()) {
             columnTitles.add(PARENT_KEY);
