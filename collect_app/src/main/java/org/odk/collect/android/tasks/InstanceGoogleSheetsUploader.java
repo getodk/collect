@@ -284,8 +284,8 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     }
 
     /**
-     * Adds any titles ending with "-altitude" or "-accuracy" that may have been added to the
-     * Sheet. This is so that existing spreadsheets can start collecting altitude / accuracy from
+     * Adds titles ending with "-altitude" or "-accuracy" that may have been added to the
+     * Sheet. Existing spreadsheets can start collecting altitude / accuracy from
      * Geo location fields.
      *
      * @param sheetHeaders - Headers from the spreadsheet
