@@ -87,8 +87,8 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     private final DriveHelper driveHelper;
     private final GoogleAccountsManager accountsManager;
 
-    private final String altitudeTitlePostfix = "-altitude";
-    private final String accuracyTitlePostfix = "-accuracy";
+    private static final String altitudeTitlePostfix = "-altitude";
+    private static final String accuracyTitlePostfix = "-accuracy";
 
     private boolean authFailed;
 
@@ -293,7 +293,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
      */
     private void addAltitudeAndAccuracyTitles(List<Object> sheetHeaders, List<Object> columnTitles) {
         for (Object sheetTitle : sheetHeaders) {
-            String sheetTitleStr = (String)sheetTitle;
+            String sheetTitleStr = (String) sheetTitle;
             if (sheetTitleStr.endsWith(altitudeTitlePostfix) || sheetTitleStr.endsWith(accuracyTitlePostfix)) {
                 if (! columnTitles.contains(sheetTitleStr)) {
                     columnTitles.add(sheetTitleStr);
@@ -436,7 +436,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
      * @param elementTitle - Current header title
      * @param answer - String that holds the Lat/Long/Altitude/Accuracy
      */
-    private void parseAltitudeAndAccuracy(@NonNull Map<String, String> answers, @NonNull List<Object>columnTitles, @NonNull String elementTitle, @NonNull String answer) {
+    private void parseAltitudeAndAccuracy(@NonNull Map<String, String> answers, @NonNull List<Object> columnTitles, @NonNull String elementTitle, @NonNull String answer) {
 
         // Accuracy
         int accuracyLocation = answer.lastIndexOf(' ');
