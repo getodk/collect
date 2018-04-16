@@ -17,6 +17,7 @@ package org.odk.collect.android.utilities;
 import android.net.Uri;
 import android.text.format.DateFormat;
 
+import org.apache.commons.io.IOUtils;
 import org.kxml2.io.KXmlParser;
 import org.kxml2.kdom.Document;
 import org.odk.collect.android.BuildConfig;
@@ -47,6 +48,7 @@ import org.opendatakit.httpclientandroidlib.impl.client.HttpClientBuilder;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 import org.xmlpull.v1.XmlPullParser;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -336,11 +338,14 @@ public final class WebUtils {
             }
             // parse response
             Document doc = null;
+            String hash;
             try {
                 InputStream is = null;
                 InputStreamReader isr = null;
                 try {
-                    is = entity.getContent();
+                    byte[] bytes = IOUtils.toByteArray(entity.getContent());
+                    is = new ByteArrayInputStream(bytes);
+                    hash = FileUtils.getMd5Hash(new ByteArrayInputStream(bytes));
                     Header contentEncoding = entity.getContentEncoding();
                     if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase(
                             WebUtils.GZIP_CONTENT_ENCODING)) {
@@ -413,7 +418,7 @@ public final class WebUtils {
                     Timber.w("%s unrecognized version(s): %s", WebUtils.OPEN_ROSA_VERSION_HEADER, b.toString());
                 }
             }
-            return new DocumentFetchResult(doc, isOR);
+            return new DocumentFetchResult(doc, isOR, hash);
         } catch (Exception e) {
             String cause;
             Throwable c = e;
@@ -426,74 +431,6 @@ public final class WebUtils {
 
             Timber.w(error);
             return new DocumentFetchResult(error, 0);
-        }
-    }
-
-    public static InputStream getFileInputStream(String urlString) {
-        URI u;
-        try {
-            URL url = new URL(urlString);
-            u = url.toURI();
-        } catch (URISyntaxException | MalformedURLException e) {
-            Timber.i(e, "Error converting URL %s to uri", urlString);
-            return null;
-        }
-
-        if (u.getHost() == null) {
-            return null;
-        }
-
-        // if https then enable preemptive basic auth...
-        if (u.getScheme().equals("https")) {
-            enablePreemptiveBasicAuth(Collect.getInstance().getHttpContext(), u.getHost());
-        }
-
-        // set up request...
-        HttpGet req = WebUtils.createOpenRosaHttpGet(u);
-        req.addHeader(WebUtils.ACCEPT_ENCODING_HEADER, WebUtils.GZIP_CONTENT_ENCODING);
-
-        HttpResponse response;
-        try {
-            response = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT).execute(req, Collect.getInstance().getHttpContext());
-            int statusCode = response.getStatusLine().getStatusCode();
-
-            HttpEntity entity = response.getEntity();
-
-            if (statusCode != HttpStatus.SC_OK) {
-                WebUtils.discardEntityBytes(response);
-                if (statusCode == HttpStatus.SC_UNAUTHORIZED) {
-                    // clear the cookies -- should not be necessary?
-                    Collect.getInstance().getCookieStore().clear();
-                }
-                return null;
-            }
-
-            if (entity == null) {
-                Timber.e("No entity body returned from: %s", u.toString());
-                return null;
-            }
-
-            if (!entity.getContentType().getValue().toLowerCase(Locale.ENGLISH)
-                    .contains(WebUtils.HTTP_CONTENT_TYPE_TEXT_XML)) {
-                WebUtils.discardEntityBytes(response);
-                Timber.e("ContentType: "
-                        + entity.getContentType().getValue()
-                        + " returned from: "
-                        + u.toString()
-                        + " is not text/xml.  This is often caused a network proxy.  Do you need "
-                        + "to login to your network?");
-                return null;
-            }
-
-            return entity.getContent();
-        } catch (Exception e) {
-            Throwable c = e;
-            while (c.getCause() != null) {
-                c = c.getCause();
-            }
-
-            Timber.w("Error: " + c.toString() + " while accessing " + u.toString());
-            return null;
         }
     }
 }

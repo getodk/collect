@@ -25,6 +25,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.logic.FormDetails;
+import org.odk.collect.android.logic.ManifestFile;
 import org.odk.collect.android.logic.MediaFile;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.tasks.DownloadFormsTask;
@@ -54,7 +55,7 @@ public class DownloadFormListUtils {
     private DownloadFormListUtils() {
     }
 
-    public static HashMap<String, FormDetails> downloadFormList() {
+    public static HashMap<String, FormDetails> downloadFormList(boolean alwaysCheckMediaFiles) {
         SharedPreferences settings =
                 PreferenceManager.getDefaultSharedPreferences(
                         Collect.getInstance().getBaseContext());
@@ -214,17 +215,23 @@ public class DownloadFormListUtils {
                 }
                 boolean isNewerFormVersionAvailable = false;
                 boolean areNewerMediaFilesAvailable = false;
+                ManifestFile manifestFile = null;
                 if (isThisFormAlreadyDownloaded(formId)) {
                     isNewerFormVersionAvailable = isNewerFormVersionAvailable(DownloadFormsTask.getMd5Hash(hash));
-                    if (!isNewerFormVersionAvailable && manifestUrl != null) {
-                        List<MediaFile> newMediaFiles = downloadMediaFileList(manifestUrl);
-                        if (newMediaFiles != null && newMediaFiles.size() > 0) {
-                            areNewerMediaFilesAvailable = areNewerMediaFilesAvailable(formId, version, newMediaFiles);
+                    if ((!isNewerFormVersionAvailable || alwaysCheckMediaFiles) && manifestUrl != null) {
+                        manifestFile = getManifestFile(manifestUrl);
+                        if (manifestFile != null) {
+                            List<MediaFile> newMediaFiles = manifestFile.getMediaFiles();
+                            if (newMediaFiles != null && newMediaFiles.size() > 0) {
+                                areNewerMediaFilesAvailable = areNewerMediaFilesAvailable(formId, version, newMediaFiles);
+                            }
                         }
                     }
                 }
                 formList.put(formId, new FormDetails(formName, downloadUrl, manifestUrl, formId,
-                        (version != null) ? version : majorMinorVersion, hash, isNewerFormVersionAvailable, areNewerMediaFilesAvailable));
+                        (version != null) ? version : majorMinorVersion, hash,
+                        manifestFile != null ? manifestFile.getHash() : null,
+                        isNewerFormVersionAvailable, areNewerMediaFilesAvailable));
             }
         } else {
             // Aggregate 0.9.x mode...
@@ -268,7 +275,7 @@ public class DownloadFormListUtils {
                         return formList;
                     }
                     formList.put(formName,
-                            new FormDetails(formName, downloadUrl, null, formId, null, null, false, false));
+                            new FormDetails(formName, downloadUrl, null, formId, null, null, null, false, false));
 
                     formId = null;
                 }
@@ -281,7 +288,7 @@ public class DownloadFormListUtils {
         return new FormsDao().getFormsCursorForFormId(formId).getCount() > 0;
     }
 
-    private static List<MediaFile> downloadMediaFileList(String manifestUrl) {
+    private static ManifestFile getManifestFile(String manifestUrl) {
         if (manifestUrl == null) {
             return null;
         }
@@ -382,7 +389,8 @@ public class DownloadFormListUtils {
                 files.add(new MediaFile(filename, hash, downloadUrl));
             }
         }
-        return files;
+
+        return new ManifestFile(result.getHash(), files);
     }
 
     private static boolean isNewerFormVersionAvailable(String md5Hash) {

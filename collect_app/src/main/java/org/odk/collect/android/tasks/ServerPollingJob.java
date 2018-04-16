@@ -72,12 +72,12 @@ public class ServerPollingJob extends Job {
             return Result.FAILURE;
         } else {
             GeneralSharedPreferences.getInstance().reset(POLL_SERVER_IMMEDIATELY_AFTER_RECEIVING_NETWORK);
-            HashMap<String, FormDetails> formList = DownloadFormListUtils.downloadFormList();
+            HashMap<String, FormDetails> formList = DownloadFormListUtils.downloadFormList(true);
 
             if (formList != null && !formList.containsKey(DL_ERROR_MSG)) {
                 if (formList.containsKey(DL_AUTH_REQUIRED)) {
                     AuthDialogUtility.setWebCredentialsFromPreferences();
-                    formList = DownloadFormListUtils.downloadFormList();
+                    formList = DownloadFormListUtils.downloadFormList(true);
 
                     if (formList == null || formList.containsKey(DL_AUTH_REQUIRED) || formList.containsKey(DL_ERROR_MSG)) {
                         return Result.FAILURE;
@@ -87,8 +87,7 @@ public class ServerPollingJob extends Job {
                 List<FormDetails> newDetectedForms = new ArrayList<>();
                 for (FormDetails formDetails : formList.values()) {
                     if (formDetails.isNewerFormVersionAvailable() || formDetails.areNewerMediaFilesAvailable()) {
-                        String manifestFileHash = formDetails.getManifestUrl() != null ? FileUtils.getMd5Hash(WebUtils.getFileInputStream(formDetails.getManifestUrl())) : "";
-
+                        String manifestFileHash = formDetails.getManifestFileHash() != null ? formDetails.getManifestFileHash() : "";
                         String formVersionHash = DownloadFormsTask.getMd5Hash(formDetails.getHash()) + manifestFileHash;
                         if (!wasThisNewerFormVersionAlreadyDetected(formVersionHash)) {
                             newDetectedForms.add(formDetails);
