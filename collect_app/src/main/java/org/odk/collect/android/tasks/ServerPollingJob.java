@@ -40,8 +40,6 @@ import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.DownloadFormListUtils;
-import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.WebUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;

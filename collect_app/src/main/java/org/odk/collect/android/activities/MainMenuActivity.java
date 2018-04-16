@@ -69,8 +69,6 @@ import java.util.Map.Entry;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
-
 /**
  * Responsible for displaying buttons to launch the major activities. Launches
  * some activities based on returns of others.
