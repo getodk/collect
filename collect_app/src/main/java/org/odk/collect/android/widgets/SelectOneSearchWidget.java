@@ -75,8 +75,7 @@ public class SelectOneSearchWidget extends AbstractSelectOneWidget implements On
 
         if (items != null) {
             for (int i = 0; i < items.size(); i++) {
-                RadioButton button = createRadioButton(i);
-                buttons.add(button);
+                buttons.add(createRadioButton(i));
             }
         }
         setUpSearchBox();
