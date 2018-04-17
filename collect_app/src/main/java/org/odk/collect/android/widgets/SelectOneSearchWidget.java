@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2009 University of Washington
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -18,11 +18,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
-import android.view.LayoutInflater;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.listeners.AudioPlayListener;
@@ -39,7 +37,6 @@ import java.util.List;
  */
 @SuppressLint("ViewConstructor")
 public class SelectOneSearchWidget extends AbstractSelectOneWidget implements OnCheckedChangeListener, AudioPlayListener {
-
     public SelectOneSearchWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt, false);
         createLayout();
@@ -47,7 +44,6 @@ public class SelectOneSearchWidget extends AbstractSelectOneWidget implements On
 
     @Override
     protected void addButtonsToLayout(List<Integer> tagList) {
-        LayoutInflater inflater = LayoutInflater.from(getContext());
         for (int i = 0; i < buttons.size(); i++) {
             if (tagList == null || tagList.contains(i)) {
                 answerLayout.addView(buttons.get(i));
@@ -78,6 +74,7 @@ public class SelectOneSearchWidget extends AbstractSelectOneWidget implements On
                 buttons.add(createRadioButton(i));
             }
         }
+
         setUpSearchBox();
     }
 }
