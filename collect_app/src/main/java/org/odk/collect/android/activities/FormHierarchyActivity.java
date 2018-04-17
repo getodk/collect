@@ -109,8 +109,11 @@ public abstract class FormHierarchyActivity extends AppCompatActivity implements
             public void onClick(View v) {
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "jumpToBeginning",
                         "click");
-                Collect.getInstance().getFormController().jumpToIndex(FormIndex
-                        .createBeginningOfFormIndex());
+                FormController fc = Collect.getInstance().getFormController();
+                if (fc != null) {
+                    fc.getTimerLogger().exitView();
+                    fc.jumpToIndex(FormIndex.createBeginningOfFormIndex());
+                }
                 setResult(RESULT_OK);
                 finish();
             }
@@ -122,8 +125,11 @@ public abstract class FormHierarchyActivity extends AppCompatActivity implements
             public void onClick(View v) {
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "jumpToEnd",
                         "click");
-                Collect.getInstance().getFormController().jumpToIndex(
-                        FormIndex.createEndOfFormIndex());
+                FormController fc = Collect.getInstance().getFormController();
+                if (fc != null) {
+                    fc.getTimerLogger().exitView();
+                    fc.jumpToIndex(FormIndex.createEndOfFormIndex());
+                }
                 setResult(RESULT_OK);
                 finish();
             }
@@ -405,7 +411,11 @@ public abstract class FormHierarchyActivity extends AppCompatActivity implements
             case KeyEvent.KEYCODE_BACK:
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "onKeyDown",
                         "KEYCODE_BACK.JUMP", startIndex);
-                Collect.getInstance().getFormController().jumpToIndex(startIndex);
+                FormController fc = Collect.getInstance().getFormController();
+                if (fc != null) {
+                    fc.getTimerLogger().exitView();
+                    fc.jumpToIndex(startIndex);
+                }
         }
         return super.onKeyDown(keyCode, event);
     }

@@ -934,6 +934,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 }
 
                 if (formController != null) {
+                    formController.getTimerLogger().exitView();
                     formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.HIERARCHY,
                             0, null, false, true);
                 }
