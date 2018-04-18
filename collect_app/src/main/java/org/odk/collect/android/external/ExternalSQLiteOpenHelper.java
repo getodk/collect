@@ -269,10 +269,10 @@ public class ExternalSQLiteOpenHelper extends SQLiteOpenHelper {
     /**
      * Removes a Byte Order Mark (BOM) from the start of a String.
      *
-     * @param BOMCheckString is checked to see if it starts with a Byte Order Mark.
-     * @return BOMCheckString without a Byte Order Mark.
+     * @param bomCheckString is checked to see if it starts with a Byte Order Mark.
+     * @return bomCheckString without a Byte Order Mark.
      */
-    private String removeByteOrderMark(String BOMCheckString) {
-        return BOMCheckString.startsWith("\uFEFF") ? BOMCheckString.substring(1) : BOMCheckString;
+    private String removeByteOrderMark(String bomCheckString) {
+        return bomCheckString.startsWith("\uFEFF") ? bomCheckString.substring(1) : bomCheckString;
     }
 }
