@@ -84,7 +84,8 @@ public class ImageWidget extends BaseImageWidget {
         super.setUpLayout();
 
         String appearance = getFormEntryPrompt().getAppearanceHint();
-        selfie = appearance != null && appearance.equalsIgnoreCase("selfie");
+        selfie = appearance != null && (appearance.equalsIgnoreCase("selfie")
+                || appearance.equalsIgnoreCase("new-front"));
 
         captureButton = getSimpleButton(getContext().getString(R.string.capture_image), R.id.capture_image);
         captureButton.setEnabled(!getFormEntryPrompt().isReadOnly());
