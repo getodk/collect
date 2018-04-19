@@ -60,9 +60,7 @@ import static android.support.test.espresso.intent.matcher.IntentMatchers.hasAct
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasData;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.ViewMatchers.Visibility.VISIBLE;
-import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -164,7 +162,7 @@ public class AllWidgetsFormTest {
 
         testRangeIntegerWidget();
         testRangeVerticalAppearance();
-        testRangeDecimalWidget();
+        testRangePickerAppearance();
         testRangeDecimalVertical();
 
 
@@ -229,10 +227,6 @@ public class AllWidgetsFormTest {
         testSpinnerSelectMultiple();
 
         testLabelWidget();
-
-        testTriggerWidget(false);
-
-        testTriggerWidget(true);
     }
     //endregion
 
@@ -554,19 +548,19 @@ public class AllWidgetsFormTest {
 
     }
 
-    public void testRangeDecimalWidget() {
+    public void testRangePickerAppearance() {
 
-        int randomValue = randomInt() % 8;
+        int randomValue = randomInt() % 9;
         onVisibleSeekBar().perform(setProgress(randomValue));
 
-        Screengrab.screenshot("range-decimal");
+        Screengrab.screenshot("range-integer-picker");
 
         openWidgetList();
-        onView(withText("Range decimal widget")).perform(click());
+        onView(withText("Range integer widget picker")).perform(click());
 
         onVisibleSeekBar().check(matches(withProgress(randomValue)));
 
-        onView(withText("Range decimal widget")).perform(swipeLeft());
+        onView(withText("Range integer widget picker")).perform(swipeLeft());
 
     }
 
@@ -591,6 +585,13 @@ public class AllWidgetsFormTest {
         Screengrab.screenshot("image-widget");
 
         onView(withText("Image widget")).perform(swipeLeft());
+    }
+
+    public void testImageNoChooseWidget() {
+
+        Screengrab.screenshot("image-no-choose-widget");
+
+        onView(withText("Image no choose widget")).perform(swipeLeft());
     }
 
     public void testSelfieWidget() {
@@ -871,6 +872,16 @@ public class AllWidgetsFormTest {
         onView(withText("Grid select multiple widget")).perform(swipeLeft());
     }
 
+    public void testOneImageMap() {
+
+        Screengrab.screenshot("one-image-map");
+    }
+
+    public void testMultiImageMap() {
+
+        Screengrab.screenshot("multi-image-map");
+    }
+
     public void testSpinnerSelectMultiple() {
 
         Screengrab.screenshot("spinner-select");
@@ -883,25 +894,6 @@ public class AllWidgetsFormTest {
         Screengrab.screenshot("label-widget");
 
         onView(withText("Label widget")).perform(swipeLeft());
-    }
-
-    public void testTriggerWidget(boolean check) {
-
-        if (check) {
-            onVisibleCheckBox().perform(click());
-        }
-
-        // captures screenshot of trigger widget
-        Screengrab.screenshot("trigger-widget");
-
-        openWidgetList();
-        onView(withText("Trigger widget")).perform(click());
-
-        onVisibleCheckBox().check(matches(check ? isChecked() : isNotChecked()));
-
-        if (check) {
-            onView(withText("Trigger widget")).perform(swipeLeft());
-        }
     }
 
     public void testSubmission() {
@@ -957,10 +949,6 @@ public class AllWidgetsFormTest {
 
     private ViewInteraction onVisibleEditText() {
         return onView(withClassName(endsWith("EditText")));
-    }
-
-    private ViewInteraction onVisibleCheckBox() {
-        return onView(withClassName(endsWith("CheckBox")));
     }
 
     // private void openWidget(String name) {

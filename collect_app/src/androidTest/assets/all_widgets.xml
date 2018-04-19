@@ -1,23 +1,70 @@
 <?xml version="1.0"?>
 <h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <h:head><!-- ODK Aggregate upload time: 2017-12-14T00:19:49.323+0000 on https://opendatakit.appspot.com -->
+  <h:head>
     <h:title>All widgets</h:title>
     <model>
       <itext>
         <translation default="true()" lang="default">
-          <text id="/all-widgets/select_one_widgets/grid_widget_quickcompact2/b:label">
-            <value form="image">jr://images/b.jpg</value>
-            <value>B</value>
+          <text id="/all-widgets/select_multi_widgets/select_multi_image_map/CA-SK:label">
+            <value>Saskatchewan</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/select_multi_image_map/CA-MB:label">
+            <value>Manitoba</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/grid_multi_widget_compact2/d:label">
+            <value form="image">jr://images/d.jpg</value>
+            <value>D</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/select_multi_image_map/CA-NB:label">
+            <value>New Brunswick</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/select_multi_image_map/CA-AB:label">
+            <value>Alberta</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/select_one_image_map/CA-SK:label">
+            <value>Saskatchewan</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget/c:label">
+            <value form="image">jr://images/c.jpg</value>
+            <value>C</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/select_one_image_map/CA-NB:label">
+            <value>New Brunswick</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/select_multi_image_map/CA-NU:label">
+            <value>Nunavut</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/select_one_image_map/CA-AB:label">
+            <value>Alberta</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/grid_multi_widget_compact2/c:label">
+            <value form="image">jr://images/c.jpg</value>
+            <value>C</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/select_one_image_map/CA-NT:label">
+            <value>Northwest Territories</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/select_one_image_map/CA-PE:label">
+            <value>Prince Edward Island</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/select_multi_image_map:label">
+            <value form="image">jr://images/Canada_blank_map.svg</value>
+            <value>Image select multiple widget</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/select_multi_image_map/CA-NT:label">
+            <value>Northwest Territories</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/select_one_image_map/CA-BC:label">
+            <value>British Columbia</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/select_one_image_map/CA-ON:label">
+            <value>Ontario</value>
           </text>
           <text id="/all-widgets/select_one_widgets/grid_widget_compact/d:label">
             <value form="image">jr://images/d.jpg</value>
             <value>D</value>
           </text>
-          <text id="/all-widgets/select_one_widgets/grid_widget/b:label">
-            <value form="image">jr://images/b.jpg</value>
-            <value>B</value>
-          </text>
-          <text id="/all-widgets/select_one_widgets/grid_widget_compact/a:label">
+          <text id="/all-widgets/select_multi_widgets/grid_multi_widget_compact2/a:label">
             <value form="image">jr://images/a.jpg</value>
             <value>A</value>
           </text>
@@ -25,9 +72,41 @@
             <value form="image">jr://images/c.jpg</value>
             <value>C</value>
           </text>
-          <text id="/all-widgets/select_one_widgets/grid_widget_quickcompact2/a:label">
+          <text id="/all-widgets/select_one_widgets/grid_widget_compact2/a:label">
             <value form="image">jr://images/a.jpg</value>
             <value>A</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_compact/b:label">
+            <value form="image">jr://images/b.jpg</value>
+            <value>B</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/select_one_image_map/CA-NL:label">
+            <value>Newfoundland and Labrador</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/select_multi_image_map/CA-ON:label">
+            <value>Ontario</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/select_one_image_map/CA-QC:label">
+            <value>Quebec</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_quickcompact2/c:label">
+            <value form="image">jr://images/c.jpg</value>
+            <value>C</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/grid_multi_widget_compact/a:label">
+            <value form="image">jr://images/a.jpg</value>
+            <value>A</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/grid_multi_widget_compact2/b:label">
+            <value form="image">jr://images/b.jpg</value>
+            <value>B</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_quickcompact2/b:label">
+            <value form="image">jr://images/b.jpg</value>
+            <value>B</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/select_one_image_map/CA-MB:label">
+            <value>Manitoba</value>
           </text>
           <text id="/all-widgets/select_one_widgets/grid_widget_compact2/b:label">
             <value form="image">jr://images/b.jpg</value>
@@ -37,31 +116,64 @@
             <value form="image">jr://images/c.jpg</value>
             <value>C</value>
           </text>
+          <text id="/all-widgets/select_multi_widgets/grid_multi_widget_compact/c:label">
+            <value form="image">jr://images/c.jpg</value>
+            <value>C</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_quickcompact/a:label">
+            <value form="image">jr://images/a.jpg</value>
+            <value>A</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget/b:label">
+            <value form="image">jr://images/b.jpg</value>
+            <value>B</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_compact2/d:label">
+            <value form="image">jr://images/d.jpg</value>
+            <value>D</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/select_one_image_map/CA-NU:label">
+            <value>Nunavut</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_compact/a:label">
+            <value form="image">jr://images/a.jpg</value>
+            <value>A</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget/d:label">
+            <value form="image">jr://images/d.jpg</value>
+            <value>D</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/select_one_image_map:label">
+            <value form="image">jr://images/Canada_blank_map.svg</value>
+            <value>Image select one widget</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget/a:label">
+            <value form="image">jr://images/a.jpg</value>
+            <value>A</value>
+          </text>
           <text id="/all-widgets/select_multi_widgets/grid_multi_widget_compact/d:label">
             <value form="image">jr://images/d.jpg</value>
             <value>D</value>
           </text>
-          <text id="/all-widgets/select_multi_widgets/grid_multi_widget_compact2/a:label">
+          <text id="/all-widgets/select_one_widgets/select_one_image_map/CA-YT:label">
+            <value>Yukon</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/select_multi_image_map/CA-BC:label">
+            <value>British Columbia</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_quickcompact/d:label">
+            <value form="image">jr://images/d.jpg</value>
+            <value>D</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_quickcompact2/a:label">
             <value form="image">jr://images/a.jpg</value>
             <value>A</value>
           </text>
-          <text id="/all-widgets/select_one_widgets/grid_widget_compact/b:label">
+          <text id="/all-widgets/select_multi_widgets/grid_multi_widget_compact/b:label">
             <value form="image">jr://images/b.jpg</value>
             <value>B</value>
           </text>
-          <text id="/all-widgets/select_one_widgets/grid_widget_quickcompact/b:label">
-            <value form="image">jr://images/b.jpg</value>
-            <value>B</value>
-          </text>
-          <text id="/all-widgets/select_one_widgets/grid_widget_quickcompact2/c:label">
-            <value form="image">jr://images/c.jpg</value>
-            <value>C</value>
-          </text>
-          <text id="/all-widgets/select_multi_widgets/grid_multi_widget_compact2/b:label">
-            <value form="image">jr://images/b.jpg</value>
-            <value>B</value>
-          </text>
-          <text id="/all-widgets/select_one_widgets/grid_widget_quickcompact/d:label">
+          <text id="/all-widgets/select_one_widgets/grid_widget_quickcompact2/d:label">
             <value form="image">jr://images/d.jpg</value>
             <value>D</value>
           </text>
@@ -69,58 +181,232 @@
             <value form="image">jr://images/c.jpg</value>
             <value>C</value>
           </text>
-          <text id="/all-widgets/select_one_widgets/grid_widget_compact2/a:label">
-            <value form="image">jr://images/a.jpg</value>
-            <value>A</value>
+          <text id="/all-widgets/select_multi_widgets/select_multi_image_map/CA-YT:label">
+            <value>Yukon</value>
           </text>
-          <text id="/all-widgets/select_one_widgets/grid_widget/c:label">
-            <value form="image">jr://images/c.jpg</value>
-            <value>C</value>
+          <text id="/all-widgets/select_one_widgets/select_one_image_map/CA-NS:label">
+            <value>Nova Scotia</value>
           </text>
-          <text id="/all-widgets/select_one_widgets/grid_widget/d:label">
-            <value form="image">jr://images/d.jpg</value>
-            <value>D</value>
+          <text id="/all-widgets/select_multi_widgets/select_multi_image_map/CA-PE:label">
+            <value>Prince Edward Island</value>
           </text>
-          <text id="/all-widgets/select_one_widgets/grid_widget_quickcompact2/d:label">
-            <value form="image">jr://images/d.jpg</value>
-            <value>D</value>
+          <text id="/all-widgets/select_multi_widgets/select_multi_image_map/CA-NS:label">
+            <value>Nova Scotia</value>
           </text>
-          <text id="/all-widgets/select_one_widgets/grid_widget_quickcompact/a:label">
-            <value form="image">jr://images/a.jpg</value>
-            <value>A</value>
+          <text id="/all-widgets/select_multi_widgets/select_multi_image_map/CA-QC:label">
+            <value>Quebec</value>
           </text>
-          <text id="/all-widgets/select_one_widgets/grid_widget_compact2/d:label">
-            <value form="image">jr://images/d.jpg</value>
-            <value>D</value>
+          <text id="/all-widgets/select_multi_widgets/select_multi_image_map/CA-NL:label">
+            <value>Newfoundland and Labrador</value>
           </text>
-          <text id="/all-widgets/select_multi_widgets/grid_multi_widget_compact2/d:label">
-            <value form="image">jr://images/d.jpg</value>
-            <value>D</value>
-          </text>
-          <text id="/all-widgets/select_multi_widgets/grid_multi_widget_compact/b:label">
+          <text id="/all-widgets/select_one_widgets/grid_widget_quickcompact/b:label">
             <value form="image">jr://images/b.jpg</value>
             <value>B</value>
           </text>
-          <text id="/all-widgets/select_multi_widgets/grid_multi_widget_compact/c:label">
-            <value form="image">jr://images/c.jpg</value>
-            <value>C</value>
+        </translation>
+        <translation lang="French (fr)">
+          <text id="/all-widgets/select_one_widgets/grid_widget_quickcompact/a:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
           </text>
-          <text id="/all-widgets/select_multi_widgets/grid_multi_widget_compact2/c:label">
-            <value form="image">jr://images/c.jpg</value>
-            <value>C</value>
+          <text id="/all-widgets/select_multi_widgets/grid_multi_widget_compact2/d:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/select_multi_image_map/CA-NB:label">
+            <value>Nouveau-Brunswick</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/select_multi_image_map/CA-AB:label">
+            <value>Alberta</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/select_one_image_map/CA-SK:label">
+            <value>Saskatchewan</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget/c:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/select_one_image_map/CA-NS:label">
+            <value>Nouvelle-Écosse</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/select_multi_image_map/CA-NU:label">
+            <value>Nunavut</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/select_one_image_map/CA-AB:label">
+            <value>Alberta</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/select_one_image_map/CA-BC:label">
+            <value>Colombie-Britannique</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/select_one_image_map/CA-NT:label">
+            <value>Territoires du Nord-Ouest</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/select_multi_image_map/CA-ON:label">
+            <value>Ontario</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/select_multi_image_map:label">
+            <value form="image">jr://images/Canada_blank_map.svg</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget/d:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/select_one_image_map/CA-ON:label">
+            <value>Ontario</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_compact/d:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/grid_multi_widget_compact2/a:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_compact2/c:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_compact2/a:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_compact/b:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/select_one_image_map/CA-NL:label">
+            <value>Terre-Neuve-et-Labrador</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/select_one_image_map/CA-QC:label">
+            <value>Québec</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_quickcompact2/c:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
           </text>
           <text id="/all-widgets/select_multi_widgets/grid_multi_widget_compact/a:label">
-            <value form="image">jr://images/a.jpg</value>
-            <value>A</value>
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/grid_multi_widget_compact2/b:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/select_multi_image_map/CA-YT:label">
+            <value>Yukon</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/select_one_image_map/CA-MB:label">
+            <value>Manitoba</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_compact2/b:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_quickcompact/c:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/grid_multi_widget_compact2/c:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/grid_multi_widget_compact/c:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/select_one_image_map/CA-PE:label">
+            <value>Île-du-Prince-Édouard</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget/b:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_compact2/d:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/select_one_image_map/CA-NU:label">
+            <value>Nunavut</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_compact/a:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/select_multi_image_map/CA-MB:label">
+            <value>Manitoba</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/select_one_image_map:label">
+            <value form="image">jr://images/Canada_blank_map.svg</value>
+            <value>-</value>
           </text>
           <text id="/all-widgets/select_one_widgets/grid_widget/a:label">
-            <value form="image">jr://images/a.jpg</value>
-            <value>A</value>
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/grid_multi_widget_compact/d:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/select_multi_image_map/CA-NT:label">
+            <value>Territoires du Nord-Ouest</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/select_one_image_map/CA-NB:label">
+            <value>Nouveau-Brunswick</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/select_multi_image_map/CA-BC:label">
+            <value>Colombie-Britannique</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_quickcompact2/b:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_quickcompact/d:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_quickcompact2/a:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/select_one_image_map/CA-YT:label">
+            <value>Yukon</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/grid_multi_widget_compact/b:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_quickcompact2/d:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_compact/c:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/select_multi_image_map/CA-SK:label">
+            <value>Saskatchewan</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/select_multi_image_map/CA-PE:label">
+            <value>Île-du-Prince-Édouard</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/select_multi_image_map/CA-NS:label">
+            <value>Nouvelle-Écosse</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/select_multi_image_map/CA-QC:label">
+            <value>Québec</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/select_multi_image_map/CA-NL:label">
+            <value>Terre-Neuve-et-Labrador</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_quickcompact/b:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
           </text>
         </translation>
       </itext>
       <instance>
-        <all-widgets id="all-widgets" version="2017121301">
+        <all-widgets id="all-widgets" version="2018022001">
           <intro/>
           <text_widgets>
             <string_widget/>
@@ -139,12 +425,13 @@
           </number_widgets>
           <range_widgets>
             <range_integer_widget/>
-            <range_integer_widget_vertical/>
             <range_decimal_widget/>
-            <range_decimal_widget_vertical/>
+            <range_integer_widget_vertical/>
+            <range_integer_widget_picker/>
           </range_widgets>
           <image_widgets>
             <image_widget/>
+            <image_widget_no_choose/>
             <selfie_image_widget/>
             <draw_image_widget/>
             <annotate_image_widget/>
@@ -189,12 +476,14 @@
             <grid_widget_compact2/>
             <grid_widget_quickcompact/>
             <grid_widget_quickcompact2/>
+            <select_one_image_map/>
           </select_one_widgets>
           <select_multi_widgets>
             <select_multi_widget/>
             <grid_multi_widget_compact/>
             <grid_multi_widget_compact2/>
             <spinner_multi_widget/>
+            <select_multi_image_map/>
           </select_multi_widgets>
           <table_list_test>
             <table_list_test_label/>
@@ -215,7 +504,7 @@
       <bind nodeset="/all-widgets/text_widgets/string_number_widget" type="string"/>
       <bind nodeset="/all-widgets/text_widgets/url_widget" type="string"/>
       <bind nodeset="/all-widgets/text_widgets/ex_string_widget" type="string"/>
-      <bind nodeset="/all-widgets/text_widgets/ex_printer_widget" type="string"/>
+      <bind calculate="concat('123456789','&lt;br&gt;','QRCODE','&lt;br&gt;','Text')" nodeset="/all-widgets/text_widgets/ex_printer_widget" type="string"/>
       <bind nodeset="/all-widgets/number_widgets/integer_widget" type="int"/>
       <bind nodeset="/all-widgets/number_widgets/integer_thousands_sep_widget" type="int"/>
       <bind nodeset="/all-widgets/number_widgets/ex_integer_widget" type="int"/>
@@ -223,10 +512,11 @@
       <bind nodeset="/all-widgets/number_widgets/ex_decimal_widget" type="decimal"/>
       <bind nodeset="/all-widgets/number_widgets/bearing_widget" type="decimal"/>
       <bind nodeset="/all-widgets/range_widgets/range_integer_widget" type="int"/>
-      <bind nodeset="/all-widgets/range_widgets/range_integer_widget_vertical" type="int"/>
       <bind nodeset="/all-widgets/range_widgets/range_decimal_widget" type="decimal"/>
-      <bind nodeset="/all-widgets/range_widgets/range_decimal_widget_vertical" type="decimal"/>
+      <bind nodeset="/all-widgets/range_widgets/range_integer_widget_vertical" type="int"/>
+      <bind nodeset="/all-widgets/range_widgets/range_integer_widget_picker" type="int"/>
       <bind nodeset="/all-widgets/image_widgets/image_widget" type="binary"/>
+      <bind nodeset="/all-widgets/image_widgets/image_widget_no_choose" type="binary"/>
       <bind nodeset="/all-widgets/image_widgets/selfie_image_widget" type="binary"/>
       <bind nodeset="/all-widgets/image_widgets/draw_image_widget" type="binary"/>
       <bind nodeset="/all-widgets/image_widgets/annotate_image_widget" type="binary"/>
@@ -263,24 +553,31 @@
       <bind nodeset="/all-widgets/select_one_widgets/grid_widget_compact2" type="select1"/>
       <bind nodeset="/all-widgets/select_one_widgets/grid_widget_quickcompact" type="select1"/>
       <bind nodeset="/all-widgets/select_one_widgets/grid_widget_quickcompact2" type="select1"/>
+      <bind nodeset="/all-widgets/select_one_widgets/select_one_image_map" type="select1"/>
       <bind nodeset="/all-widgets/select_multi_widgets/select_multi_widget" type="select"/>
       <bind nodeset="/all-widgets/select_multi_widgets/grid_multi_widget_compact" type="select"/>
       <bind nodeset="/all-widgets/select_multi_widgets/grid_multi_widget_compact2" type="select"/>
       <bind nodeset="/all-widgets/select_multi_widgets/spinner_multi_widget" type="select"/>
+      <bind nodeset="/all-widgets/select_multi_widgets/select_multi_image_map" type="select"/>
       <bind nodeset="/all-widgets/table_list_test/table_list_test_label" type="select1"/>
       <bind nodeset="/all-widgets/table_list_test/table_list_test_label_2" type="select"/>
       <bind nodeset="/all-widgets/table_list_test/table_list_1" type="select1"/>
       <bind nodeset="/all-widgets/table_list_test/table_list_2" type="select"/>
       <bind nodeset="/all-widgets/table_list_test/list_widget" type="select1"/>
       <bind nodeset="/all-widgets/table_list_test/list_multi_widget" type="select"/>
-      <bind nodeset="/all-widgets/my_trigger"/>
       <bind calculate="concat('uuid:', uuid())" nodeset="/all-widgets/meta/instanceID" readonly="true()" type="string"/>
     </model>
   </h:head>
   <h:body>
     <input ref="/all-widgets/intro">
-      <label> This form showcases the different available question types (_widgets_).</label>
-      <hint>This is a sample for introductory and debugging purposes. It is updated periodically so check "Get Blank Form" to get the latest! Version 2017121301 adds:
+      <label>Welcome to ODK Collect! This form showcases the different available question types (_widgets_).</label>
+      <hint>This is a sample for introductory and debugging purposes. It is updated periodically so check "Get Blank Form" to get the latest! 
+
+Version 2018022001 adds:
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;- Appearance image-map for select_one and select_multiple types
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;- Appearance new for image, audio, video types
+
+Version 2017121301 added:
 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;- Appearance thousands-sep for numeric types
 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;- Range questions
 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;- Ethiopian, coptic and islamic calendars</hint>
@@ -340,17 +637,17 @@
         <label>Range integer widget</label>
         <hint>range integer widget with no appearance</hint>
       </range>
-      <range appearance="vertical" end="10" ref="/all-widgets/range_widgets/range_integer_widget_vertical" start="1" step="1">
-        <label>Range vertical integer widget</label>
-        <hint>range integer widget with vertical appearance</hint>
-      </range>
       <range end="5.5" ref="/all-widgets/range_widgets/range_decimal_widget" start="1.5" step="0.5">
         <label>Range decimal widget</label>
         <hint>range decimal widget with no appearance</hint>
       </range>
-      <range appearance="vertical" end="5.5" ref="/all-widgets/range_widgets/range_decimal_widget_vertical" start="1.5" step="0.5">
-        <label>Range vertical decimal widget</label>
-        <hint>range decimal widget with vertical appearance</hint>
+      <range appearance="vertical" end="10" ref="/all-widgets/range_widgets/range_integer_widget_vertical" start="1" step="1">
+        <label>Range vertical integer widget</label>
+        <hint>range integer widget with vertical appearance. This appearance can also be applied to a decimal range.</hint>
+      </range>
+      <range appearance="picker" end="10" ref="/all-widgets/range_widgets/range_integer_widget_picker" start="1" step="1">
+        <label>Range picker integer widget</label>
+        <hint>range integer widget with picker appearance. This appearance can also be applied to a decimal range.</hint>
       </range>
     </group>
     <group ref="/all-widgets/image_widgets">
@@ -358,6 +655,10 @@
       <upload mediatype="image/*" ref="/all-widgets/image_widgets/image_widget">
         <label>Image widget</label>
         <hint>image type with no appearance</hint>
+      </upload>
+      <upload appearance="new" mediatype="image/*" ref="/all-widgets/image_widgets/image_widget_no_choose">
+        <label>Image widget without Choose button</label>
+        <hint>image type with new appearance (can also be added with annotate appearance and on audio and video types)</hint>
       </upload>
       <upload appearance="selfie" mediatype="image/*" ref="/all-widgets/image_widgets/selfie_image_widget">
         <label>Selfie widget</label>
@@ -407,7 +708,7 @@
       </input>
       <input appearance="no-calendar" ref="/all-widgets/date_time_widgets/date_widget_nocalendar">
         <label>Date Widget</label>
-        <hint>date type with no-calendar appearanec</hint>
+        <hint>date type with no-calendar appearance</hint>
       </input>
       <input appearance="month-year" ref="/all-widgets/date_time_widgets/date_widget_month_year">
         <label>Date widget</label>
@@ -696,6 +997,62 @@
           <value>d</value>
         </item>
       </select1>
+      <select1 appearance="image-map" ref="/all-widgets/select_one_widgets/select_one_image_map">
+        <label ref="jr:itext('/all-widgets/select_one_widgets/select_one_image_map:label')"/>
+        <hint>select_one with type image-map appearance and image Canada_blank_map.svg</hint>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_one_widgets/select_one_image_map/CA-AB:label')"/>
+          <value>CA-AB</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_one_widgets/select_one_image_map/CA-BC:label')"/>
+          <value>CA-BC</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_one_widgets/select_one_image_map/CA-MB:label')"/>
+          <value>CA-MB</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_one_widgets/select_one_image_map/CA-NB:label')"/>
+          <value>CA-NB</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_one_widgets/select_one_image_map/CA-NL:label')"/>
+          <value>CA-NL</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_one_widgets/select_one_image_map/CA-NS:label')"/>
+          <value>CA-NS</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_one_widgets/select_one_image_map/CA-NT:label')"/>
+          <value>CA-NT</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_one_widgets/select_one_image_map/CA-NU:label')"/>
+          <value>CA-NU</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_one_widgets/select_one_image_map/CA-ON:label')"/>
+          <value>CA-ON</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_one_widgets/select_one_image_map/CA-QC:label')"/>
+          <value>CA-QC</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_one_widgets/select_one_image_map/CA-SK:label')"/>
+          <value>CA-SK</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_one_widgets/select_one_image_map/CA-YT:label')"/>
+          <value>CA-YT</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_one_widgets/select_one_image_map/CA-PE:label')"/>
+          <value>CA-PE</value>
+        </item>
+      </select1>
     </group>
     <group ref="/all-widgets/select_multi_widgets">
       <label>This section contains "Select Multi Widgets"</label>
@@ -777,6 +1134,62 @@
         <item>
           <label>D</label>
           <value>d</value>
+        </item>
+      </select>
+      <select appearance="image-map" ref="/all-widgets/select_multi_widgets/select_multi_image_map">
+        <label ref="jr:itext('/all-widgets/select_multi_widgets/select_multi_image_map:label')"/>
+        <hint>select_multiple type with image-map appearance and image Canada_blank_map.svg</hint>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_multi_widgets/select_multi_image_map/CA-AB:label')"/>
+          <value>CA-AB</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_multi_widgets/select_multi_image_map/CA-BC:label')"/>
+          <value>CA-BC</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_multi_widgets/select_multi_image_map/CA-MB:label')"/>
+          <value>CA-MB</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_multi_widgets/select_multi_image_map/CA-NB:label')"/>
+          <value>CA-NB</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_multi_widgets/select_multi_image_map/CA-NL:label')"/>
+          <value>CA-NL</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_multi_widgets/select_multi_image_map/CA-NS:label')"/>
+          <value>CA-NS</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_multi_widgets/select_multi_image_map/CA-NT:label')"/>
+          <value>CA-NT</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_multi_widgets/select_multi_image_map/CA-NU:label')"/>
+          <value>CA-NU</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_multi_widgets/select_multi_image_map/CA-ON:label')"/>
+          <value>CA-ON</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_multi_widgets/select_multi_image_map/CA-QC:label')"/>
+          <value>CA-QC</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_multi_widgets/select_multi_image_map/CA-SK:label')"/>
+          <value>CA-SK</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_multi_widgets/select_multi_image_map/CA-YT:label')"/>
+          <value>CA-YT</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_multi_widgets/select_multi_image_map/CA-PE:label')"/>
+          <value>CA-PE</value>
         </item>
       </select>
     </group>
