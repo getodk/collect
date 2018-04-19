@@ -444,12 +444,17 @@ public abstract class QuestionWidget
     }
 
     protected TextView getAnswerTextView() {
+        return getAnswerTextView("");
+    }
+
+    protected TextView getAnswerTextView(String text) {
         TextView textView = new TextView(getContext());
 
         textView.setId(R.id.answer_text);
         textView.setTextColor(ContextCompat.getColor(getContext(), R.color.primaryTextColor));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         textView.setPadding(20, 20, 20, 20);
+        textView.setText(text);
 
         return textView;
     }

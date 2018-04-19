@@ -169,6 +169,7 @@
     <string name="no_forms_uploaded">Sorry, no form was uploaded.</string>
     <string name="upload_results">Upload Results</string>
     <string name="xform_parse_error">XForm parse error for %1$s: %2$s is missing or invalid.</string>
+    <string name="choose_file">Choose File</string>
     <string name="choose_sound">Choose Sound</string>
     <string name="choose_video">Choose Video</string>
     <string name="choose_image">Choose Image</string>

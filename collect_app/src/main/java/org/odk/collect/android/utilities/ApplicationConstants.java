@@ -90,5 +90,6 @@ public class ApplicationConstants {
         public static final int OSM_CAPTURE = 19;
         public static final int GEOSHAPE_CAPTURE = 20;
         public static final int GEOTRACE_CAPTURE = 21;
+        public static final int ARBITRARY_FILE_CHOOSER = 22;
     }
 }
