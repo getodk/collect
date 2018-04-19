@@ -50,6 +50,8 @@ import org.odk.collect.android.utilities.ToastUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores
  * the path to selected form for use by {@link MainMenuActivity}.
