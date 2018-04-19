@@ -172,3 +172,24 @@ If you build the app on your own using Android Studio `(Build -> Build APK)` and
 
 This problem occurs building other apps as well.
 
+#### gradlew Failure: `FAILURE: Build failed with an exception.`
+
+If you encounter an error similar to this when running `gradlew`:
+
+```
+FAILURE: Build failed with an exception
+
+What went wrong:
+A problem occurred configuring project ':collect_app'.
+> Failed to notify project evaluation listener.
+   > Could not initialize class com.android.sdklib.repository.AndroidSdkHandler
+```
+   
+Ensure that you have set your **JAVA_HOME** environment variable.
+
+For example, on macOS:
+
+`export JAVA_HOME="/Applications/Android Studio.app/Contents/jre/jdk/Contents/Home"`
+
+`
+
