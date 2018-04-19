@@ -100,13 +100,13 @@
             android:layout_margin="5dp"
             app:srcCompat="@drawable/ic_delete_black" />
 
-        <ImageButton
+        <android.support.v7.widget.AppCompatImageButton
             android:id="@+id/geotrace_save"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:padding="15dp"
             android:layout_margin="5dp"
-            android:src="@drawable/ic_save_black_36dp" />
+            app:srcCompat="@drawable/ic_save_black" />
     </LinearLayout>
     </ScrollView>
 </RelativeLayout>
