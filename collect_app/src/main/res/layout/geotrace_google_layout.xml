@@ -79,7 +79,6 @@
             android:visibility="gone"
             android:src="@drawable/ic_pause_black_36dp" />
 
-
         <ImageButton
             android:id="@+id/show_location"
             app:srcCompat="@drawable/ic_my_location_black"
@@ -94,8 +93,7 @@
             android:layout_height="wrap_content"
             android:padding="15dp"
             android:layout_margin="5dp"
-            android:src="@drawable/ic_layers_black_36dp" />
-
+            app:srcCompat="@drawable/ic_layers_black" />
 
         <ImageButton
             android:id="@+id/clear"

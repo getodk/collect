@@ -71,7 +71,7 @@
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:src="@drawable/ic_layers_black_36dp"
+                app:srcCompat="@drawable/ic_layers_black"
                 android:padding="15dp" />
 
             <ImageButton
