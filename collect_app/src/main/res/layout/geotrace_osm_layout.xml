@@ -59,7 +59,7 @@
         android:paddingTop="0dip"
         android:paddingBottom="60dip">
 
-        <ImageButton
+        <android.support.v7.widget.AppCompatImageButton
             android:id="@+id/play"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -76,7 +76,7 @@
             android:visibility="gone"
             android:src="@drawable/ic_pause_black_36dp" />
 
-        <ImageButton
+        <android.support.v7.widget.AppCompatImageButton
             android:id="@+id/show_location"
             app:srcCompat="@drawable/ic_my_location_black"
             android:padding="15dp"
@@ -84,7 +84,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent" />
 
-        <ImageButton
+        <android.support.v7.widget.AppCompatImageButton
             android:id="@+id/layers"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -92,7 +92,7 @@
             android:layout_margin="5dp"
             app:srcCompat="@drawable/ic_layers_black" />
 
-        <ImageButton
+        <android.support.v7.widget.AppCompatImageButton
             android:id="@+id/clear"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
