@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+                xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
     <LinearLayout
@@ -34,6 +34,7 @@
         android:paddingTop="26dip"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true">
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -46,8 +47,9 @@
             android:layout_margin="5dp"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:src="@drawable/ic_my_location_black_36dp"
+            app:srcCompat="@drawable/ic_my_location_black"
             android:layout_weight="1" />
+
         <ImageButton
             android:id="@+id/layers"
             android:layout_width="wrap_content"
@@ -56,6 +58,7 @@
             android:layout_margin="5dp"
             android:src="@drawable/ic_layers_black_36dp"
             android:layout_weight="1" />
+
         <ImageButton
             android:id="@+id/clear"
             android:layout_width="wrap_content"
@@ -64,6 +67,7 @@
             android:layout_margin="5dp"
             android:src="@drawable/ic_delete_black_36dp"
             android:layout_weight="1" />
+
         <ImageButton
             android:id="@+id/save"
             android:layout_width="wrap_content"
