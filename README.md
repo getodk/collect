@@ -190,4 +190,4 @@ You may have a mismatch between the embedded Android SDK Java and the JDK instal
 `export JAVA_HOME="/Applications/Android Studio.app/Contents/jre/jdk/Contents/Home"
 `
 
-Note that this change might cause problems with other Java based applications (e.g., if you uninstall Android Studio).
+Note that this change might cause problems with other Java-based applications (e.g., if you uninstall Android Studio).
