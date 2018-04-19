@@ -79,7 +79,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
-                android:src="@drawable/ic_delete_black_36dp"
+                app:srcCompat="@drawable/ic_delete_black"
                 android:padding="15dp" />
 
             <ImageButton
