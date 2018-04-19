@@ -3,6 +3,7 @@
                 xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -33,14 +34,13 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true">
 
-
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="4dip">
 
-        <ImageButton
+        <android.support.v7.widget.AppCompatImageButton
             android:id="@+id/gps"
             android:padding="15dp"
             android:layout_margin="5dp"
@@ -49,7 +49,7 @@
             app:srcCompat="@drawable/ic_my_location_black"
             android:layout_weight="1" />
 
-        <ImageButton
+        <android.support.v7.widget.AppCompatImageButton
             android:id="@+id/layers"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -58,7 +58,7 @@
             app:srcCompat="@drawable/ic_layers_black"
             android:layout_weight="1" />
 
-        <ImageButton
+        <android.support.v7.widget.AppCompatImageButton
             android:id="@+id/clear"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"

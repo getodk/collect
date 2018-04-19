@@ -41,7 +41,7 @@
         android:layout_height="wrap_content"
         android:paddingTop="6dip">
 
-        <ImageButton
+        <android.support.v7.widget.AppCompatImageButton
             android:id="@+id/gps"
             android:padding="15dp"
             android:layout_margin="5dp"
@@ -50,7 +50,7 @@
             app:srcCompat="@drawable/ic_my_location_black"
             android:layout_weight="1" />
 
-        <ImageButton
+        <android.support.v7.widget.AppCompatImageButton
             android:id="@+id/layers"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -59,7 +59,7 @@
             app:srcCompat="@drawable/ic_layers_black"
             android:layout_weight="1" />
 
-        <ImageButton
+        <android.support.v7.widget.AppCompatImageButton
             android:id="@+id/clear"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
