@@ -51,14 +51,14 @@ public class BasePreferenceFragment extends PreferenceFragment {
 
             } else {
                 root = (LinearLayout) view.findViewById(android.R.id.list).getParent().getParent();
-                toolbar = (Toolbar) LayoutInflater.from(getActivity()).inflate(R.layout.toolbar, root, false);
+                toolbar = (Toolbar) LayoutInflater.from(getActivity()).inflate(R.layout.toolbar_without_progressbar, root, false);
 
                 inflateToolbar(preferenceScreen.getTitle());
             }
 
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             root = (LinearLayout) view.findViewById(android.R.id.list).getParent();
-            toolbar = (Toolbar) LayoutInflater.from(getActivity()).inflate(R.layout.toolbar, root, false);
+            toolbar = (Toolbar) LayoutInflater.from(getActivity()).inflate(R.layout.toolbar_without_progressbar, root, false);
 
             inflateToolbar(preferenceScreen.getTitle());
         }

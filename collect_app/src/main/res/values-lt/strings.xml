@@ -121,7 +121,6 @@
   <string name="submission_url">Pateikimo kelias</string>
   <string name="font_size">Teksto šrifto dydis</string>
   <string name="change_font_size">Teksto šrifto dydis</string>
-  <string name="form_scan_starting">Ieškoma formų…</string>
   <string name="access_error">Klaida bandant pasiekti %s: </string>
   <string name="manifest_server_error">Manifesto atsakymas nepraneša OpenRosa versijos — blogas serveris?</string>
   <string name="root_element_error">Šakninis elementas nėra &amp;lt;manifest\&gt; — buvo %s</string>
