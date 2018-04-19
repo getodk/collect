@@ -184,12 +184,10 @@ A problem occurred configuring project ':collect_app'.
 > Failed to notify project evaluation listener.
    > Could not initialize class com.android.sdklib.repository.AndroidSdkHandler
 ```
-   
-Ensure that you have set your **JAVA_HOME** environment variable.
 
-For example, on macOS:
+You may have a mismatch between the embedded Android SDK Java and the JDK installed on your machine. You may wish to set your **JAVA_HOME** environment variable to that SDK. For example, on macOS:
 
-`export JAVA_HOME="/Applications/Android Studio.app/Contents/jre/jdk/Contents/Home"`
-
+`export JAVA_HOME="/Applications/Android Studio.app/Contents/jre/jdk/Contents/Home"
 `
 
+Note that this change might cause problems with other Java based applications (e.g., if you uninstall Android Studio).
