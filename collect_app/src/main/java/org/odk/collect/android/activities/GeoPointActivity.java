@@ -318,7 +318,7 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
         return df.format(number);
     }
 
-    public ProgressDialog getLocationDialog() {
-        return locationDialog;
+    public String getDialogMessage() {
+        return dialogMessage;
     }
 }
