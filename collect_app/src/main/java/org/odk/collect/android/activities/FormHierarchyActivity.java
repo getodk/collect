@@ -142,7 +142,7 @@ public abstract class FormHierarchyActivity extends AppCompatActivity implements
                     int position = 0;
                     for (int i = 0; i < getListAdapter().getCount(); i++) {
                         HierarchyElement he = (HierarchyElement) getListAdapter().getItem(i);
-                        if (startIndex.equals(he.getFormIndex())) {
+                        if (shouldScrollToTheGivenIndex(he.getFormIndex(), formController)) {
                             position = i;
                             break;
                         }
@@ -151,6 +151,11 @@ public abstract class FormHierarchyActivity extends AppCompatActivity implements
                 }
             });
         }
+    }
+
+    private boolean shouldScrollToTheGivenIndex(FormIndex formIndex, FormController formController) {
+        return startIndex.equals(formIndex)
+                || (formController.indexIsInFieldList(startIndex) && formIndex.toString().startsWith(startIndex.toString()));
     }
 
     private ListAdapter getListAdapter() {
