@@ -66,7 +66,7 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
 
     private long startTime = System.currentTimeMillis();
 
-    private String message;
+    private String dialogMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,7 +121,7 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
                 public void run() {
                     String timeElapsed = DateUtils.formatElapsedTime((System.currentTimeMillis() - startTime) / 1000);
                     String locationMetadata = getString(R.string.location_metadata, numberOfAvailableSatellites, timeElapsed);
-                    runOnUiThread(() -> locationDialog.setMessage(message + "\n\n" + locationMetadata));
+                    runOnUiThread(() -> locationDialog.setMessage(dialogMessage + "\n\n" + locationMetadata));
                 }
             }, 0, 1000);
         }
@@ -197,7 +197,7 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
         locationDialog.setIndeterminate(true);
         locationDialog.setIcon(android.R.drawable.ic_dialog_info);
         locationDialog.setTitle(getString(R.string.getting_location));
-        message = getString(R.string.please_wait_long);
+        dialogMessage = getString(R.string.please_wait_long);
 
         DialogInterface.OnClickListener geoPointButtonListener =
                 new DialogInterface.OnClickListener() {
@@ -267,14 +267,14 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
             Timber.i("onLocationChanged(%d) location: %s", locationCount, location);
 
             if (locationCount > 1) {
-                message = getProviderAccuracyMessage(location);
+                dialogMessage = getProviderAccuracyMessage(location);
 
                 if (location.getAccuracy() <= locationAccuracy) {
                     returnLocation();
                 }
 
             } else {
-                message = getAccuracyMessage(location);
+                dialogMessage = getAccuracyMessage(location);
             }
 
         } else {
