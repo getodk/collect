@@ -191,6 +191,14 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
                 "show");
         // dialog displayed while fetching gps location
         locationDialog = new ProgressDialog(this);
+
+        // back button doesn't cancel
+        locationDialog.setCancelable(false);
+        locationDialog.setIndeterminate(true);
+        locationDialog.setIcon(android.R.drawable.ic_dialog_info);
+        locationDialog.setTitle(getString(R.string.getting_location));
+        message = getString(R.string.please_wait_long);
+
         DialogInterface.OnClickListener geoPointButtonListener =
                 new DialogInterface.OnClickListener() {
                     @Override
@@ -210,13 +218,6 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
                         }
                     }
                 };
-
-        // back button doesn't cancel
-        locationDialog.setCancelable(false);
-        locationDialog.setIndeterminate(true);
-        locationDialog.setIcon(android.R.drawable.ic_dialog_info);
-        locationDialog.setTitle(getString(R.string.getting_location));
-        message = getString(R.string.please_wait_long);
         locationDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.save_point),
                 geoPointButtonListener);
         locationDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
