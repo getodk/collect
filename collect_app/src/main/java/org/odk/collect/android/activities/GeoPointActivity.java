@@ -17,11 +17,15 @@ package org.odk.collect.android.activities;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.GpsSatellite;
+import android.location.GpsStatus;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.text.format.DateUtils;
 import android.view.Window;
 
 import com.google.android.gms.location.LocationListener;
@@ -34,17 +38,21 @@ import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoPointWidget;
 
 import java.text.DecimalFormat;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import timber.log.Timber;
 
 public class GeoPointActivity extends AppCompatActivity implements LocationListener,
-        LocationClient.LocationClientListener {
+        LocationClient.LocationClientListener, GpsStatus.Listener {
 
     // Default values for requesting Location updates.
     private static final long LOCATION_UPDATE_INTERVAL = 100;
     private static final long LOCATION_FASTEST_UPDATE_INTERVAL = 50;
 
     private static final String LOCATION_COUNT = "locationCount";
+    private static final String START_TIME = "startTime";
+    private static final String NUMBER_OF_AVAILABLE_SATELLITES = "numberOfAvailableSatellites";
 
     private ProgressDialog locationDialog;
 
@@ -52,7 +60,13 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
     private Location location;
 
     private double locationAccuracy;
+
     private int locationCount = 0;
+    private int numberOfAvailableSatellites;
+
+    private long startTime = System.currentTimeMillis();
+
+    private String message;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +75,8 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
 
         if (savedInstanceState != null) {
             locationCount = savedInstanceState.getInt(LOCATION_COUNT);
+            startTime = savedInstanceState.getLong(START_TIME);
+            numberOfAvailableSatellites = savedInstanceState.getInt(NUMBER_OF_AVAILABLE_SATELLITES);
         }
 
         Intent intent = getIntent();
@@ -100,6 +116,14 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
 
         if (locationDialog != null) {
             locationDialog.show();
+            new Timer().schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    String timeElapsed = DateUtils.formatElapsedTime((System.currentTimeMillis() - startTime) / 1000);
+                    String locationMetadata = getString(R.string.location_metadata, numberOfAvailableSatellites, timeElapsed);
+                    runOnUiThread(() -> locationDialog.setMessage(message + "\n\n" + locationMetadata));
+                }
+            }, 0, 1000);
         }
     }
 
@@ -126,6 +150,7 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(LOCATION_COUNT, locationCount);
+        outState.putLong(START_TIME, startTime);
     }
 
     // LocationClientListener:
@@ -133,6 +158,11 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
     @Override
     public void onClientStart() {
         locationClient.requestLocationUpdates(this);
+
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        if (locationManager != null) {
+            locationManager.addGpsStatusListener(this);
+        }
 
         if (locationClient.isLocationAvailable()) {
             logLastLocation();
@@ -186,7 +216,7 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
         locationDialog.setIndeterminate(true);
         locationDialog.setIcon(android.R.drawable.ic_dialog_info);
         locationDialog.setTitle(getString(R.string.getting_location));
-        locationDialog.setMessage(getString(R.string.please_wait_long));
+        message = getString(R.string.please_wait_long);
         locationDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.save_point),
                 geoPointButtonListener);
         locationDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
@@ -236,18 +266,37 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
             Timber.i("onLocationChanged(%d) location: %s", locationCount, location);
 
             if (locationCount > 1) {
-                locationDialog.setMessage(getProviderAccuracyMessage(location));
+                message = getProviderAccuracyMessage(location);
 
                 if (location.getAccuracy() <= locationAccuracy) {
                     returnLocation();
                 }
 
             } else {
-                locationDialog.setMessage(getAccuracyMessage(location));
+                message = getAccuracyMessage(location);
             }
 
         } else {
             Timber.i("onLocationChanged(%d)", locationCount);
+        }
+    }
+
+    @Override
+    public void onGpsStatusChanged(int event) {
+        if (event == GpsStatus.GPS_EVENT_SATELLITE_STATUS) {
+            LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+            if (locationManager != null) {
+                GpsStatus status = locationManager.getGpsStatus(null);
+                Iterable<GpsSatellite> satellites = status.getSatellites();
+                int satellitesNumber = 0;
+                for (GpsSatellite satellite : satellites) {
+                    if (satellite.usedInFix()) {
+                        satellitesNumber++;
+                    }
+                }
+
+                numberOfAvailableSatellites = satellitesNumber;
+            }
         }
     }
 

@@ -586,4 +586,5 @@
     <string name="no_columns_to_upload">No columns found in the form to upload.</string>
     <string name="cannot_create_directory">Cannot create directory: %s</string>
     <string name="not_a_directory">%s exists, but is not a directory</string>
+    <string name="location_metadata">Available satellites: %1$d/24\nTime elapsed: %2$s</string>
 </resources>
