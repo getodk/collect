@@ -255,6 +255,9 @@ dependencies {
     implementation 'com.trello.rxlifecycle2:rxlifecycle-android:2.2.1'
     implementation 'com.trello.rxlifecycle2:rxlifecycle-android-lifecycle:2.2.1'
 
+    // Job queues
+    implementation 'com.github.jd-alexander:android-priority-jobqueue:2.0.8'
+
     // Makes binding to Views easy:
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
