@@ -1,16 +1,8 @@
 <!-- 
-Before sending this PR, we recommend you to name this PR like: 
-
-1. If you have fixed a bug/bugs in this PR, name the PR like: "Fix: [a brief discription]".
-2. If you have added a new feature, name this PR like: "Feat: [a brief discription]".
-3. If you have refactored some code, name the PR like: "Refactor: [a brief discription]".
-4. If you have added some tests, name the PR like: "Test: [a brief discription]".
-5. If you did some changes that improved performance or fixed lints, name the PR like: "Perf: [a brief discription]".
-6. If you did some changes that changed the CI or configuration files, name the PR like: "Config: [a brief discription]".
-
-Remember, every pull request needs a corresponding issue, so please open an issue first, then sending the PRs. Besides, if you don't know how to (or you don't have to) answer the questions below, just type: "N/A".
-
 Thank you for contributing to ODK Collect !
+
+Before sending this PR, I hope you have read the CONTRIBUTING.md first.
+https://github.com/opendatakit/collect/blob/master/CONTRIBUTING.md
 -->
 
 Closes #
@@ -26,6 +18,5 @@ Closes #
 #### Does this change require updates to documentation? If so, please file an issue at [Here]( https://github.com/opendatakit/docs/issues/new) and include the link below.
 
 #### Before submitting this PR, please make sure you have tried:
-- [ ] Run the tests with `./gradlew pmd checkstyle lint findbugs` to make sure you didn't break anything.
+- [ ] Run the tests with `./gradlew pmd checkstyle lint findbugs` to make sure all checks still pass.
 
-- [ ] If you have multiple commits with the same kind of changes, please combine them into one commit by squashing them.
