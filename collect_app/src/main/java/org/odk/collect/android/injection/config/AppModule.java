@@ -1,8 +1,11 @@
 package org.odk.collect.android.injection.config;
 
+import android.app.Application;
+
 import org.odk.collect.android.injection.ViewModelBuilder;
 import org.odk.collect.android.injection.config.architecture.ViewModelFactoryModule;
 import org.odk.collect.android.injection.config.scopes.PerApplication;
+import org.odk.collect.android.tasks.sms.SmsService;
 import org.odk.collect.android.utilities.AgingCredentialsProvider;
 import org.opendatakit.httpclientandroidlib.client.CookieStore;
 import org.opendatakit.httpclientandroidlib.client.CredentialsProvider;
@@ -17,6 +20,17 @@ import dagger.Provides;
  */
 @Module(includes = {ViewModelFactoryModule.class, ViewModelBuilder.class})
 class AppModule {
+    Application application;
+
+    AppModule(Application application) {
+        this.application = application;
+    }
+
+    @PerApplication
+    @Provides
+    SmsService provideSmsService() {
+        return new SmsService(application);
+    }
 
     @PerApplication
     @Provides

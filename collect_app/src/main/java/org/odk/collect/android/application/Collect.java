@@ -42,6 +42,7 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.external.ExternalDataManager;
+import org.odk.collect.android.injection.config.AppComponent;
 import org.odk.collect.android.injection.config.DaggerAppComponent;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
@@ -110,6 +111,7 @@ public class Collect extends Application implements HasActivityInjector {
     private FormController formController = null;
     private ExternalDataManager externalDataManager;
     private Tracker tracker;
+    private AppComponent applicationComponent;
 
     @Inject
     DispatchingAndroidInjector<Activity> androidInjector;
@@ -259,10 +261,11 @@ public class Collect extends Application implements HasActivityInjector {
         super.onCreate();
         singleton = this;
 
-        DaggerAppComponent.builder()
+        applicationComponent = DaggerAppComponent.builder()
                 .application(this)
-                .build()
-                .inject(this);
+                .build();
+
+        applicationComponent.inject(this);
 
         reloadSharedPreferences();
 
@@ -364,6 +367,11 @@ public class Collect extends Application implements HasActivityInjector {
         }
         return allowClick;
     }
+
+    public AppComponent getComponent() {
+        return applicationComponent;
+    }
+
 
     @Override
     public DispatchingAndroidInjector<Activity> activityInjector() {

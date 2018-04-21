@@ -5,6 +5,7 @@ import android.app.Application;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.injection.ActivityBuilder;
 import org.odk.collect.android.injection.config.scopes.PerApplication;
+import org.odk.collect.android.tasks.sms.SmsService;
 
 import dagger.BindsInstance;
 import dagger.Component;
@@ -34,4 +35,5 @@ public interface AppComponent {
     }
 
     void inject(Collect collect);
+    void inject(SmsService smsService);
 }
