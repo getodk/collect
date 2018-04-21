@@ -137,7 +137,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         });
 
         toggleButton = findViewById(R.id.toggle_button);
-        toggleButton.setEnabled(listView.getCheckedItemCount() > 0);
+        toggleButton.setEnabled(false);
         toggleButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
