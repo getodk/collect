@@ -3,7 +3,6 @@ package org.odk.collect.android.tasks.sms;
 import java.util.Date;
 import java.util.List;
 
-import io.reactivex.Maybe;
 import io.reactivex.Observable;
 
 public class SmsSubmissionModel {
@@ -35,10 +34,16 @@ public class SmsSubmissionModel {
         this.messages = messages;
     }
 
-    public Maybe<Message> getNextUnsentMessage() {
+    /**
+     * Returns the next message to be processed. If there's no other message
+     * that simply means all messages have been sent.
+     * @return next message to be sent.
+     */
+    public Message getNextUnsentMessage() {
         return Observable.fromIterable(messages)
                 .filter(message -> !message.isSent())
                 .sorted((message, otherMessage) -> message.getPart() - otherMessage.getPart())
-                .firstElement();
+                .firstElement()
+                .blockingGet();
     }
 }

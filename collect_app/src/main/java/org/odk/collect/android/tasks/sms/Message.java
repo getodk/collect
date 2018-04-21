@@ -15,6 +15,7 @@ public class Message {
 
     public Message() {
         generateRandomMessageID();
+        sent = false;
     }
 
     public int getId() {

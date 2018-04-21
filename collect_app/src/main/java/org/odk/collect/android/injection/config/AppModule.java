@@ -29,7 +29,7 @@ class AppModule {
     @PerApplication
     @Provides
     SmsService provideSmsService() {
-        return new SmsService(application);
+        return new SmsService();
     }
 
     @PerApplication
