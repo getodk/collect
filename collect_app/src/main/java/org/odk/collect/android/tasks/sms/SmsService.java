@@ -5,11 +5,11 @@ import android.preference.PreferenceManager;
 import android.telephony.SmsManager;
 
 import com.birbit.android.jobqueue.JobManager;
+import com.birbit.android.jobqueue.TagConstraint;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
-import org.odk.collect.android.utilities.GeneralUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,8 +17,15 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
 import timber.log.Timber;
 
+import static org.odk.collect.android.utilities.GeneralUtils.makeCollection;
+
+/**
+ * Core class that contains all the business logic and services that are utilized to send,track
+ * and store Form SMS data.
+ */
 public class SmsService {
 
     @Inject
@@ -32,10 +39,15 @@ public class SmsService {
         Collect.getInstance().getComponent().inject(this);
     }
 
-    public void sendForm(String instanceId) {
+    /**
+     * Responsible for fetching the saved form that adheres to the SMS spec and
+     * persisting the form as a group of messages so that they can be sent via a
+     * background job.
+     *
+     * @param instanceId
+     */
+    public void submitForm(String instanceId) {
         String text = "";
-
-        text = GeneralUtils.randomTextMessage(480);
 
         List<String> parts = smsManager.divideMessage(text);
 
@@ -58,19 +70,52 @@ public class SmsService {
 
         model.setMessages(messages);
 
-        smsSubmissionManager.saveSubmissionListModel(model);
+        smsSubmissionManager.saveSubmission(model);
 
         addMessageJobToQueue(model.getNextUnsentMessage(), instanceId);
-
     }
 
+    /**
+     * Cancels any ongoing job operations and removes the instance's model
+     * from storage.
+     *
+     * @param instanceId
+     */
+    public void cancelFormSubmission(String instanceId) {
+
+        SmsSubmissionModel model = smsSubmissionManager.getSubmissionModel(instanceId);
+
+        if (model == null) {
+            return;
+        }
+
+        List<String> jobTags = makeCollection(Observable.fromIterable(model.getMessages())
+                .flatMap(message -> Observable.just(String.valueOf(message.getId())))
+                .blockingIterable());
+
+        jobManager.cancelJobs(TagConstraint.ANY, jobTags.toArray(new String[0]));
+
+        smsSubmissionManager.deleteSubmission(instanceId);
+    }
+
+    /***
+     * Receives a model that contains the information received by the intent of the
+     * SentBroadcastReceiver that's triggered when a message was sent.
+     * This function then determines the next action to perform based on the result
+     * it receives.
+     * @param sentMessageResult
+     */
     void processMessageSentResult(SentMessageResult sentMessageResult) {
 
         Timber.i(String.format("Received result from broadcast receiver of instance id %s with message id of %d", sentMessageResult.getInstanceId(), sentMessageResult.getMessageId()));
 
-        smsSubmissionManager.markMessageAsSent(sentMessageResult.getInstanceId(), sentMessageResult.getMessageId());
+        boolean result = smsSubmissionManager.markMessageAsSent(sentMessageResult.getInstanceId(), sentMessageResult.getMessageId());
 
-        SmsSubmissionModel model = smsSubmissionManager.getSubmissionModelById(sentMessageResult.getInstanceId());
+        if (!result) {
+            return;
+        }
+
+        SmsSubmissionModel model = smsSubmissionManager.getSubmissionModel(sentMessageResult.getInstanceId());
 
         if (sentMessageResult.getMessageStatus().equals(MessageStatus.Sent)) {
 
@@ -82,12 +127,19 @@ public class SmsService {
         }
     }
 
-
+    /***
+     * Adds a message as a background job so that it can be sent when necessary.
+     * A single message is sent at a time so that progress can be easily tracked and the
+     * persisting of form submission's state is more congruent with the amount of message parts.
+     *
+     * @param message
+     * @param instanceId
+     */
     private void addMessageJobToQueue(Message message, String instanceId) {
 
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
 
-        String gateway = settings.getString(PreferenceKeys.KEY_SMS_GATEWAY,null);
+        String gateway = settings.getString(PreferenceKeys.KEY_SMS_GATEWAY, null);
 
         SmsJobMessage jobMessage = new SmsJobMessage();
         jobMessage.setGateway(gateway);

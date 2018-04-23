@@ -4,11 +4,13 @@ import org.odk.collect.android.tasks.sms.SmsSubmissionModel;
 
 public interface SmsSubmissionManagerContract {
 
-    SmsSubmissionModel getSubmissionModelById(String instanceId);
+    SmsSubmissionModel getSubmissionModel(String instanceId);
 
     boolean markMessageAsSent(String instanceId,int messageId);
 
-    void saveSubmissionListModel(SmsSubmissionModel model);
+    void deleteSubmission(String instanceId);
+
+    void saveSubmission(SmsSubmissionModel model);
 }
 
 

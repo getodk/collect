@@ -10,6 +10,11 @@ import org.odk.collect.android.application.Collect;
 
 import javax.inject.Inject;
 
+/***
+ * Receives events from the SMSManager when a SMS has been sent.
+ * This intent is triggered by the SMSSenderJob that's sending different
+ * parts of a form each time it's triggered.
+ */
 public class SentBroadcastReceiver extends BroadcastReceiver {
 
     @Inject

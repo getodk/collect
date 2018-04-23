@@ -16,6 +16,11 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
+/***
+ * Background job that adheres to the fire and forget architecture pattern
+ * where it's sole purpose is to send an SMS message to a destination without
+ * caring about it's response.
+ */
 public class SmsSenderJob extends Job {
 
     private static final int PRIORITY = 1;

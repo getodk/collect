@@ -30,7 +30,7 @@ public class SmsSubmissionManagerImpl implements SmsSubmissionManagerContract {
         preferences.edit().clear().apply();
     }
 
-    public SmsSubmissionModel getSubmissionModelById(String instanceId) {
+    public SmsSubmissionModel getSubmissionModel(String instanceId) {
         List<SmsSubmissionModel> models = getSubmissionListFromPrefs();
 
         for (SmsSubmissionModel model : models) {
@@ -44,7 +44,7 @@ public class SmsSubmissionManagerImpl implements SmsSubmissionManagerContract {
     @Override
     public boolean markMessageAsSent(String instanceId, int messageId) {
 
-        SmsSubmissionModel model = getSubmissionModelById(instanceId);
+        SmsSubmissionModel model = getSubmissionModel(instanceId);
 
         if (model == null) {
             return false;
@@ -63,12 +63,30 @@ public class SmsSubmissionManagerImpl implements SmsSubmissionManagerContract {
         }
 
         model.setMessages(list);
-        saveSubmissionListModel(model);
+        saveSubmission(model);
 
         return updated;
     }
 
-    public void saveSubmissionListModel(SmsSubmissionModel model) {
+    @Override
+    public void deleteSubmission(String instanceId) {
+        List<SmsSubmissionModel> models = getSubmissionListFromPrefs();
+
+        SmsSubmissionModel model = null;
+
+        for (SmsSubmissionModel submissionModel : models) {
+            if (submissionModel.getInstanceId().equals(instanceId)) {
+                model = submissionModel;
+            }
+        }
+
+        if (model != null) {
+            models.remove(model);
+            saveSubmissionListToPrefs(models);
+        }
+    }
+
+    public void saveSubmission(SmsSubmissionModel model) {
 
         Type submissionModelListTpe = new TypeToken<List<SmsSubmissionModel>>() {
         }.getType();
@@ -94,6 +112,17 @@ public class SmsSubmissionManagerImpl implements SmsSubmissionManagerContract {
         editor.putString(KEY_SUBMISSION_LIST, list);
         editor.commit();
     }
+
+    private void saveSubmissionListToPrefs(List<SmsSubmissionModel> models) {
+
+        Type submissionModelListTpe = new TypeToken<List<SmsSubmissionModel>>() {
+        }.getType();
+
+        String list = new Gson().toJson(models, submissionModelListTpe);
+        editor.putString(KEY_SUBMISSION_LIST, list);
+        editor.commit();
+    }
+
 
     private List<SmsSubmissionModel> getSubmissionListFromPrefs() {
         Type submissionModelListTpe = new TypeToken<List<SmsSubmissionModel>>() {
