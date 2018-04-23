@@ -295,7 +295,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         for (Object sheetTitle : sheetHeaders) {
             String sheetTitleStr = (String) sheetTitle;
             if (sheetTitleStr.endsWith(altitudeTitlePostfix) || sheetTitleStr.endsWith(accuracyTitlePostfix)) {
-                if (! columnTitles.contains(sheetTitleStr)) {
+                if (!columnTitles.contains(sheetTitleStr)) {
                     columnTitles.add(sheetTitleStr);
                 }
             }
