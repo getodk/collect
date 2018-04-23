@@ -65,7 +65,7 @@ public class SmsService {
     public void processMessageSentResult(SentMessageResult sentMessageResult) {
 
         Timber.i(String.format("Received result from broadcast receiver of %s with message id of %d",sentMessageResult.getMessageStatus(),sentMessageResult.getMessageId()));
-        Timber.i(sentMessageResult.getMessageId(),sentMessageResult.getInstanceId());
+        Timber.i(String.valueOf(sentMessageResult.getMessageId()),sentMessageResult.getInstanceId());
 
         smsSubmissionManager.markMessageAsSent(sentMessageResult.getInstanceId(),sentMessageResult.getMessageId());
 

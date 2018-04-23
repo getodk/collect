@@ -48,7 +48,7 @@ public class SmsSenderJob extends Job {
         sendIntent.putExtra(SMS_INSTANCE_ID, jobMessage.getInstanceId());
         sendIntent.putExtra(SMS_MESSAGE_ID, jobMessage.getMessageId());
 
-        PendingIntent sendPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), jobMessage.getMessageId(), sendIntent, PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent sendPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), jobMessage.getMessageId(), sendIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         smsManager.sendTextMessage(jobMessage.getGateway(), null, jobMessage.getText(), sendPendingIntent,null);
 

@@ -2,7 +2,7 @@ package org.odk.collect.android.tasks.sms;
 
 public class SentMessageResult {
     private MessageStatus messageStatus;
-    private String messageId;
+    private int messageId;
     private String instanceId;
 
     public MessageStatus getMessageStatus() {
@@ -13,11 +13,11 @@ public class SentMessageResult {
         this.messageStatus = messageStatus;
     }
 
-    public String getMessageId() {
+    public int getMessageId() {
         return messageId;
     }
 
-    public void setMessageId(String messageId) {
+    public void setMessageId(int messageId) {
         this.messageId = messageId;
     }
 

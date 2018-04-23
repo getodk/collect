@@ -22,7 +22,7 @@ public class SentBroadcastReceiver extends BroadcastReceiver {
 
         SentMessageResult result = new SentMessageResult();
 
-        result.setMessageId(intent.getExtras().getString(SmsSenderJob.SMS_MESSAGE_ID));
+        result.setMessageId(intent.getExtras().getInt(SmsSenderJob.SMS_MESSAGE_ID));
         result.setInstanceId(intent.getExtras().getString(SmsSenderJob.SMS_INSTANCE_ID));
 
         switch (getResultCode())
