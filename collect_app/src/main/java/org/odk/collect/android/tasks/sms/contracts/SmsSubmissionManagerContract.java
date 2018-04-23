@@ -6,6 +6,8 @@ public interface SmsSubmissionManagerContract {
 
     SmsSubmissionModel getSubmissionModelById(String instanceId);
 
+    boolean markMessageAsSent(String instanceId,String messageId);
+
     void saveSubmissionListModel(SmsSubmissionModel model);
 }
 

@@ -21,8 +21,9 @@ public class SentBroadcastReceiver extends BroadcastReceiver {
         Collect.getInstance().getComponent().inject(this);
 
         SentMessageResult result = new SentMessageResult();
-        result.setMessageId(intent.getStringExtra(SmsSenderJob.SMS_MESSAGE_ID));
-        result.setInstanceId(intent.getStringExtra(SmsSenderJob.SMS_INSTANCE_ID));
+
+        result.setMessageId(intent.getExtras().getString(SmsSenderJob.SMS_MESSAGE_ID));
+        result.setInstanceId(intent.getExtras().getString(SmsSenderJob.SMS_INSTANCE_ID));
 
         switch (getResultCode())
         {

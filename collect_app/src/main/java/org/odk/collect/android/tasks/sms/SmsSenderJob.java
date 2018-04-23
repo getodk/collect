@@ -14,6 +14,8 @@ import org.odk.collect.android.application.Collect;
 
 import javax.inject.Inject;
 
+import timber.log.Timber;
+
 public class SmsSenderJob extends Job {
 
     private static final int PRIORITY = 1;
@@ -22,7 +24,7 @@ public class SmsSenderJob extends Job {
     public static final String SMS_MESSAGE_ID = "COLLECT_SMS_MESSAGE_ID";
 
     @Inject
-    SmsManager smsManager;
+    transient SmsManager smsManager;
     private SmsJobMessage jobMessage;
 
     public SmsSenderJob(SmsJobMessage jobMessage) {
@@ -46,10 +48,11 @@ public class SmsSenderJob extends Job {
         sendIntent.putExtra(SMS_INSTANCE_ID, jobMessage.getInstanceId());
         sendIntent.putExtra(SMS_MESSAGE_ID, jobMessage.getMessageId());
 
-        PendingIntent sendPendingIntent = PendingIntent.getBroadcast(Collect.getInstance().getApplicationContext(), jobMessage.getMessageId(), sendIntent, 0);
-        PendingIntent deliveryPendingIntent = PendingIntent.getBroadcast(Collect.getInstance().getApplicationContext(), jobMessage.getMessageId(), null, 0);
+        PendingIntent sendPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), jobMessage.getMessageId(), sendIntent, PendingIntent.FLAG_ONE_SHOT);
 
-        smsManager.sendTextMessage(jobMessage.getGateway(), null, jobMessage.getText(), sendPendingIntent, deliveryPendingIntent);
+        smsManager.sendTextMessage(jobMessage.getGateway(), null, jobMessage.getText(), sendPendingIntent,null);
+
+        Timber.i(String.format("Sending a SMS of instance id %s & message id of %d",jobMessage.getInstanceId(),jobMessage.getMessageId()));
     }
 
     @Override
