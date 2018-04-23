@@ -19,6 +19,7 @@ package org.odk.collect.android.dao;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
+import android.support.v4.content.CursorLoader;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dto.Form;
@@ -37,28 +38,32 @@ public class FormsDao {
         return getFormsCursor(null, null, null, null);
     }
 
-    public Cursor getFormsCursor(CharSequence charSequence, String sortOrder) {
-        Cursor cursor;
-        if (charSequence.length() == 0) {
-            cursor = getFormsCursor(sortOrder);
-        } else {
-            String selection = FormsProviderAPI.FormsColumns.DISPLAY_NAME + " LIKE ?";
-            String[] selectionArgs = new String[]{"%" + charSequence + "%"};
-            cursor = getFormsCursor(null, selection, selectionArgs, sortOrder);
-        }
-        return cursor;
-    }
-
-    public Cursor getFormsCursor(String sortOrder) {
-        return getFormsCursor(null, null, null, sortOrder);
-    }
-
     public Cursor getFormsCursor(String selection, String[] selectionArgs) {
         return getFormsCursor(null, selection, selectionArgs, null);
     }
 
     public Cursor getFormsCursor(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         return Collect.getInstance().getContentResolver().query(FormsProviderAPI.FormsColumns.CONTENT_URI, projection, selection, selectionArgs, sortOrder);
+    }
+
+    public CursorLoader getFormsCursorLoader(String sortOrder) {
+        return getFormsCursorLoader(null, null, null, sortOrder);
+    }
+
+    public CursorLoader getFormsCursorLoader(CharSequence charSequence, String sortOrder) {
+        CursorLoader cursorLoader;
+        if (charSequence.length() == 0) {
+            cursorLoader = getFormsCursorLoader(sortOrder);
+        } else {
+            String selection = FormsProviderAPI.FormsColumns.DISPLAY_NAME + " LIKE ?";
+            String[] selectionArgs = new String[]{"%" + charSequence + "%"};
+            cursorLoader = getFormsCursorLoader(null, selection, selectionArgs, sortOrder);
+        }
+        return cursorLoader;
+    }
+
+    public CursorLoader getFormsCursorLoader(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+        return new CursorLoader(Collect.getInstance(), FormsProviderAPI.FormsColumns.CONTENT_URI, projection, selection, selectionArgs, sortOrder);
     }
 
     public Cursor getFormsCursorForFormId(String formId) {

@@ -128,7 +128,6 @@
   <string name="submission_url">Calea către transmitere</string>
   <string name="font_size">Mărimea fontului textului</string>
   <string name="change_font_size">Mărimea fontului textului</string>
-  <string name="form_scan_starting">Caut formulare…</string>
   <string name="access_error">Eroare la accesarea %s: </string>
   <string name="manifest_server_error">Răspunsul Manifest nu raportează o versiune OpenRosa — server greșit?</string>
   <string name="root_element_error">Root nu este &amp;lt;manifest\&gt; — era %s</string>
