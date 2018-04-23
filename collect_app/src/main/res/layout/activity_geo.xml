@@ -3,7 +3,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:id="@+id/linearlayout"
@@ -61,14 +62,14 @@
                 app:srcCompat="@drawable/ic_add_location_black"
                 tools:visibility="visible" />
 
-            <ImageButton
+            <android.support.v7.widget.AppCompatImageButton
                 android:id="@+id/pause_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="15dp"
                 android:layout_margin="5dp"
                 android:visibility="gone"
-                android:src="@drawable/ic_pause_black_36dp" />
+                app:srcCompat="@drawable/ic_pause_black_36" />
 
             <android.support.v7.widget.AppCompatImageButton
                 android:id="@+id/show_button"
