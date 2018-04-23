@@ -35,7 +35,7 @@ public class SmsService {
     public void sendForm(String instanceId) {
         String text = "";
 
-        text= GeneralUtils.randomTextMessage(320);
+        text = GeneralUtils.randomTextMessage(480);
 
         List<String> parts = smsManager.divideMessage(text);
 
@@ -50,6 +50,8 @@ public class SmsService {
             Message message = new Message();
             message.setPart(parts.indexOf(part) + 1);
             message.setText(part);
+            message.setSent(false);
+            message.generateRandomMessageID();
 
             messages.add(message);
         }
@@ -58,16 +60,15 @@ public class SmsService {
 
         smsSubmissionManager.saveSubmissionListModel(model);
 
-        addMessageJobToQueue(messages.get(0), instanceId);
+        addMessageJobToQueue(model.getNextUnsentMessage(), instanceId);
 
     }
 
-    public void processMessageSentResult(SentMessageResult sentMessageResult) {
+    void processMessageSentResult(SentMessageResult sentMessageResult) {
 
-        Timber.i(String.format("Received result from broadcast receiver of %s with message id of %d",sentMessageResult.getMessageStatus(),sentMessageResult.getMessageId()));
-        Timber.i(String.valueOf(sentMessageResult.getMessageId()),sentMessageResult.getInstanceId());
+        Timber.i(String.format("Received result from broadcast receiver of instance id %s with message id of %d", sentMessageResult.getInstanceId(), sentMessageResult.getMessageId()));
 
-        smsSubmissionManager.markMessageAsSent(sentMessageResult.getInstanceId(),sentMessageResult.getMessageId());
+        smsSubmissionManager.markMessageAsSent(sentMessageResult.getInstanceId(), sentMessageResult.getMessageId());
 
         SmsSubmissionModel model = smsSubmissionManager.getSubmissionModelById(sentMessageResult.getInstanceId());
 
@@ -88,15 +89,13 @@ public class SmsService {
 
         String gateway = settings.getString(PreferenceKeys.KEY_SMS_GATEWAY,null);
 
-        gateway="5554";
-
         SmsJobMessage jobMessage = new SmsJobMessage();
         jobMessage.setGateway(gateway);
         jobMessage.setInstanceId(instanceId);
         jobMessage.setMessageId(message.getId());
         jobMessage.setText(message.getText());
 
-        Timber.i(String.format("Adding message with instance id %s & message id of %d to job queue.",jobMessage.getInstanceId(),jobMessage.getMessageId()));
+        Timber.i(String.format("Adding message with instance id %s & message id of %d to job queue.", jobMessage.getInstanceId(), jobMessage.getMessageId()));
 
         jobManager.addJobInBackground(new SmsSenderJob(jobMessage));
 

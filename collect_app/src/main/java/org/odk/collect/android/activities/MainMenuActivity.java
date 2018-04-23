@@ -52,7 +52,6 @@ import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.tasks.sms.SmsService;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.PlayServicesUtil;
@@ -108,9 +107,6 @@ public class MainMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_menu);
         initToolbar();
-
-        new SmsService().sendForm("testing 3424");
-
 
         // enter data button. expects a result.
         enterDataButton = findViewById(R.id.enter_data);

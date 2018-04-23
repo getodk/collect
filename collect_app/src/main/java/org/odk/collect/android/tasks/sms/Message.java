@@ -13,15 +13,10 @@ public class Message {
         return part;
     }
 
-    public Message() {
-        generateRandomMessageID();
-        sent = false;
-    }
 
     public int getId() {
         return id;
     }
-
 
     public void setPart(int part) {
         this.part = part;
@@ -51,7 +46,7 @@ public class Message {
         this.lastErrorMessage = lastErrorMessage;
     }
 
-    private void generateRandomMessageID() {
+    public void generateRandomMessageID() {
         id = new Random().nextInt(10000);
     }
 }
