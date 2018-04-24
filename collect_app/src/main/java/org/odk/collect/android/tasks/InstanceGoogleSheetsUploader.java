@@ -87,8 +87,8 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     private final DriveHelper driveHelper;
     private final GoogleAccountsManager accountsManager;
 
-    private static final String altitudeTitlePostfix = "-altitude";
-    private static final String accuracyTitlePostfix = "-accuracy";
+    private static final String ALTITUDE_TITLE_POSTFIX = "-altitude";
+    private static final String ACCURACY_TITLE_POSTFIX = "-accuracy";
 
     private boolean authFailed;
 
@@ -294,7 +294,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     private void addAltitudeAndAccuracyTitles(List<Object> sheetHeaders, List<Object> columnTitles) {
         for (Object sheetTitle : sheetHeaders) {
             String sheetTitleStr = (String) sheetTitle;
-            if (sheetTitleStr.endsWith(altitudeTitlePostfix) || sheetTitleStr.endsWith(accuracyTitlePostfix)) {
+            if (sheetTitleStr.endsWith(ALTITUDE_TITLE_POSTFIX) || sheetTitleStr.endsWith(ACCURACY_TITLE_POSTFIX)) {
                 if (!columnTitles.contains(sheetTitleStr)) {
                     columnTitles.add(sheetTitleStr);
                 }
@@ -442,7 +442,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         int accuracyLocation = answer.lastIndexOf(' ');
         String accuracyStr = answer.substring(accuracyLocation).trim();
         answer = answer.substring(0, accuracyLocation).trim();
-        final String accuracyTitle = elementTitle + accuracyTitlePostfix;
+        final String accuracyTitle = elementTitle + ACCURACY_TITLE_POSTFIX;
         if (columnTitles.contains(accuracyTitle)) {
             answers.put(accuracyTitle, accuracyStr);
         }
@@ -451,7 +451,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         int altitudeLocation = answer.lastIndexOf(' ');
         String altitudeStr = answer.substring(altitudeLocation).trim();
         answer = answer.substring(0, altitudeLocation).trim();
-        final String altitudeTitle = elementTitle + altitudeTitlePostfix;
+        final String altitudeTitle = elementTitle + ALTITUDE_TITLE_POSTFIX;
         if (columnTitles.contains(altitudeTitle)) {
             answers.put(altitudeTitle, altitudeStr);
         }
@@ -466,8 +466,8 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             final String elementTitle = getElementTitle(child);
             columnTitles.add(elementTitle);
             if (newSheet && child.getDataType() == org.javarosa.core.model.Constants.DATATYPE_GEOPOINT) {
-                columnTitles.add(elementTitle + altitudeTitlePostfix);
-                columnTitles.add(elementTitle + accuracyTitlePostfix);
+                columnTitles.add(elementTitle + ALTITUDE_TITLE_POSTFIX);
+                columnTitles.add(elementTitle + ACCURACY_TITLE_POSTFIX);
             }
         }
         if (element.isRepeatable()) {
