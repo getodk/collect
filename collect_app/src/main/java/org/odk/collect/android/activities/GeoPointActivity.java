@@ -119,9 +119,7 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
             new Timer().schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    String timeElapsed = DateUtils.formatElapsedTime((System.currentTimeMillis() - startTime) / 1000);
-                    String locationMetadata = getString(R.string.location_metadata, numberOfAvailableSatellites, timeElapsed);
-                    runOnUiThread(() -> locationDialog.setMessage(dialogMessage + "\n\n" + locationMetadata));
+                    updateDialogMessage();
                 }
             }, 0, 1000);
         }
@@ -192,8 +190,7 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
         // dialog displayed while fetching gps location
         locationDialog = new ProgressDialog(this);
 
-        // back button doesn't cancel
-        locationDialog.setCancelable(false);
+        locationDialog.setCancelable(false); // taping outside the dialog doesn't cancel
         locationDialog.setIndeterminate(true);
         locationDialog.setIcon(android.R.drawable.ic_dialog_info);
         locationDialog.setTitle(getString(R.string.getting_location));
@@ -277,6 +274,7 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
                 dialogMessage = getAccuracyMessage(location);
             }
 
+            updateDialogMessage();
         } else {
             Timber.i("onLocationChanged(%d)", locationCount);
         }
@@ -297,6 +295,7 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
                 }
 
                 numberOfAvailableSatellites = satellitesNumber;
+                updateDialogMessage();
             }
         }
     }
@@ -320,5 +319,11 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
 
     public String getDialogMessage() {
         return dialogMessage;
+    }
+
+    private void updateDialogMessage() {
+        String timeElapsed = DateUtils.formatElapsedTime((System.currentTimeMillis() - startTime) / 1000);
+        String locationMetadata = getString(R.string.location_metadata, numberOfAvailableSatellites, timeElapsed);
+        runOnUiThread(() -> locationDialog.setMessage(dialogMessage + "\n\n" + locationMetadata));
     }
 }
