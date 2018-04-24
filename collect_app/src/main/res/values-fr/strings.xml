@@ -198,7 +198,6 @@
   <string name="draw_image">Dessiner une image</string>
   <string name="reset_image">Remise à zéro</string>
   <string name="set_color">Sélectionner la couleur</string>
-  <string name="select_drawing_color">Sélectionner la couleur d\'écriture</string>
   <string name="admin_preferences">Paramètres administrateur</string>
   <string name="admin_access_settings">Touchez pour obtenir l\'accès administrateur aux paramètres</string>
   <string name="save_mid">Sauvegarder le formulaire</string>
