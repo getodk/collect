@@ -49,7 +49,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.listeners.AudioPlayListener;
-import org.odk.collect.android.listeners.RightDrawableOnTouchListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GuidanceHint;
@@ -85,6 +84,7 @@ public abstract class QuestionWidget
     private final TextView helpTextView;
     private final TextView guidanceTextView;
     private final View helpTextLayout;
+    private final View guidanceTextLayout;
 
 
     private Bundle state;
@@ -130,6 +130,7 @@ public abstract class QuestionWidget
 
         questionMediaLayout = createQuestionMediaLayout(prompt);
         helpTextLayout = createHelpTextLayout();
+        guidanceTextLayout = helpTextLayout.findViewById(R.id.guidance_text_layout);
         helpTextView = setupHelpText(helpTextLayout.findViewById(R.id.help_text_view), prompt);
         guidanceTextView = setupGuidanceTextAndLayout(helpTextLayout.findViewById(R.id.guidance_text_view), prompt);
 
@@ -156,25 +157,21 @@ public abstract class QuestionWidget
         configureGuidanceTextView(guidanceTextView, guidanceHint);
 
         if (setting.equals(GuidanceHint.Yes)) {
-            guidanceTextView.setVisibility(VISIBLE);
+            guidanceTextLayout.setVisibility(VISIBLE);
             guidanceTextView.setText(guidanceHint);
         } else if (setting.equals(GuidanceHint.YesCollapsed)) {
-            getHelpTextView().setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.information_outline, 0);
+            int padding = (int) convertDpToPixel(4,getContext());
+
+            guidanceTextLayout.setPadding(padding,padding,padding,padding);
+            guidanceTextLayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.guidance_hint_box));
+            getHelpTextView().setCompoundDrawablesWithIntrinsicBounds(R.drawable.information_outline, 0, 0, 0);
             getHelpTextView().setCompoundDrawablePadding((int) convertDpToPixel(5, getContext()));
 
-            getHelpTextView().setOnTouchListener(new RightDrawableOnTouchListener(getHelpTextView()) {
-                @Override
-                public boolean onDrawableTouch(MotionEvent event) {
-                    if (!expanded.get()) {
-                        AnimateUtils.expand(guidanceTextView, result -> expanded.set(true));
-                    } else {
-                        AnimateUtils.collapse(guidanceTextView, result -> expanded.set(false));
-                    }
-
-                    // triggered for accessibility reasons.
-                    getHelpTextView().performClick();
-
-                    return true;
+            getHelpTextView().setOnClickListener(v -> {
+                if (!expanded.get()) {
+                    AnimateUtils.expand(guidanceTextLayout, result -> expanded.set(true));
+                } else {
+                    AnimateUtils.collapse(guidanceTextLayout, result -> expanded.set(false));
                 }
             });
         }
