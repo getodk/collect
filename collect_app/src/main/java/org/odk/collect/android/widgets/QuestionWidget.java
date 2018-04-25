@@ -76,10 +76,15 @@ public abstract class QuestionWidget
 
     private Bundle state;
 
-    private int playColor = ThemeUtils.getAttributeValue(getContext(), R.attr.colorAccent);
+    protected ThemeUtils themeUtils;
+    private int playColor;
 
     public QuestionWidget(Context context, FormEntryPrompt prompt) {
         super(context);
+
+        themeUtils = new ThemeUtils(context);
+        playColor =  themeUtils.getAttributeValue(R.attr.colorAccent);
+
         if (context instanceof FormEntryActivity) {
             state = ((FormEntryActivity) context).getState();
         }
@@ -148,7 +153,7 @@ public abstract class QuestionWidget
         questionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getQuestionFontSize());
         questionText.setTypeface(null, Typeface.BOLD);
         questionText.setPadding(0, 0, 0, 7);
-        questionText.setTextColor(ThemeUtils.getAttributeValue(getContext(), R.attr.primaryTextColor));
+        questionText.setTextColor(themeUtils.getAttributeValue(R.attr.primaryTextColor));
         questionText.setText(TextUtils.textToHtml(FormEntryPromptUtils.markQuestionIfIsRequired(promptText, prompt.isRequired())));
         questionText.setMovementMethod(LinkMovementMethod.getInstance());
 
@@ -326,7 +331,7 @@ public abstract class QuestionWidget
             } else {
                 helpText.setText(TextUtils.textToHtml(s));
             }
-            helpText.setTextColor(ThemeUtils.getAttributeValue(getContext(), R.attr.primaryTextColor));
+            helpText.setTextColor(themeUtils.getAttributeValue(R.attr.primaryTextColor));
             helpText.setMovementMethod(LinkMovementMethod.getInstance());
             return helpText;
         } else {
@@ -447,7 +452,7 @@ public abstract class QuestionWidget
         TextView textView = new TextView(getContext());
 
         textView.setId(R.id.answer_text);
-        textView.setTextColor(ThemeUtils.getAttributeValue(getContext(), R.attr.primaryTextColor));
+        textView.setTextColor(themeUtils.getAttributeValue(R.attr.primaryTextColor));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         textView.setPadding(20, 20, 20, 20);
 

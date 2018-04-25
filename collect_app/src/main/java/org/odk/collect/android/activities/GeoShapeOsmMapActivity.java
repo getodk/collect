@@ -32,7 +32,6 @@ import android.widget.ImageButton;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.spatial.MapHelper;
-import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.widgets.GeoShapeWidget;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.events.MapListener;
@@ -189,7 +188,7 @@ public class GeoShapeOsmMapActivity extends CollectAbstractActivity implements I
             }
         });
 
-        ThemeUtils.setIconTint(this, locationButton, layersButton, clearButton, saveButton);
+        themeUtils.setIconTint(this, locationButton, layersButton, clearButton, saveButton);
     }
 
     @Override

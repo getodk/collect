@@ -72,6 +72,7 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
     private SheetsHelper sheetsHelper;
     private GoogleAccountCredential credential;
     private GeneralSharedPreferences preferences;
+    private ThemeUtils themeUtils;
     private boolean autoChooseAccount = true;
 
     public GoogleAccountsManager(@NonNull Activity activity) {
@@ -93,10 +94,12 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
      */
     public GoogleAccountsManager(@NonNull GoogleAccountCredential credential,
                                  @NonNull GeneralSharedPreferences preferences,
-                                 @NonNull Intent intentChooseAccount) {
+                                 @NonNull Intent intentChooseAccount,
+                                 @NonNull ThemeUtils themeUtils) {
         this.credential = credential;
         this.preferences = preferences;
         this.intentChooseAccount = intentChooseAccount;
+        this.themeUtils = themeUtils;
     }
 
     private void initCredential(@NonNull Context context) {
@@ -111,7 +114,7 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
                 .setBackOff(new ExponentialBackOff());
 
         intentChooseAccount = credential.newChooseAccountIntent();
-
+        themeUtils = new ThemeUtils(context);
     }
 
     public void setSelectedAccountName(String accountName) {
@@ -174,7 +177,7 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
     public void showAccountPickerDialog() {
         Account selectedAccount = getAccountPickerCurrentAccount();
         intentChooseAccount.putExtra("selectedAccount", selectedAccount);
-        intentChooseAccount.putExtra("overrideTheme", ThemeUtils.getAccountPickerTheme());
+        intentChooseAccount.putExtra("overrideTheme", themeUtils.getAccountPickerTheme());
         intentChooseAccount.putExtra("overrideCustomTheme", 0);
 
         if (fragment != null) {

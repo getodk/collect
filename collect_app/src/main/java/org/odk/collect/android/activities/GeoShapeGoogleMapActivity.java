@@ -47,7 +47,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.location.client.LocationClient;
 import org.odk.collect.android.location.client.LocationClients;
 import org.odk.collect.android.spatial.MapHelper;
-import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoShapeWidget;
 
@@ -217,7 +216,7 @@ public class GeoShapeGoogleMapActivity extends CollectAbstractActivity implement
             showZoomDialog();
         }
 
-        ThemeUtils.setIconTint(this, gpsButton, clearButton, layersButton, returnButton);
+        themeUtils.setIconTint(this, gpsButton, clearButton, layersButton, returnButton);
         helper.setBasemap();
     }
 

@@ -36,7 +36,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.location.client.LocationClient;
 import org.odk.collect.android.location.client.LocationClients;
 import org.odk.collect.android.spatial.MapHelper;
-import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoPointWidget;
 import org.osmdroid.events.MapEventsReceiver;
@@ -246,7 +245,7 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
             }
         });
 
-        ThemeUtils.setIconTint(this, reloadLocationButton, showLocationButton, layersButton,
+        themeUtils.setIconTint(this, reloadLocationButton, showLocationButton, layersButton,
                 clearPointButton, saveLocationButton);
 
         Intent intent = getIntent();

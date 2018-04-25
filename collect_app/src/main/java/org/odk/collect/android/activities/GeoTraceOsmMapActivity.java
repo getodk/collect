@@ -42,7 +42,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.location.client.LocationClient;
 import org.odk.collect.android.location.client.LocationClients;
 import org.odk.collect.android.spatial.MapHelper;
-import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.widgets.GeoTraceWidget;
 import org.osmdroid.tileprovider.IRegisterReceiver;
 import org.osmdroid.util.BoundingBox;
@@ -323,7 +322,7 @@ public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements I
         locationClient = LocationClients.clientForContext(this);
         locationClient.setListener(this);
 
-        ThemeUtils.setIconTint(this, playButton, pauseButton, locationButton, layersButton,
+        themeUtils.setIconTint(this, playButton, pauseButton, locationButton, layersButton,
                 clearButton, saveButton);
     }
 

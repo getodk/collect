@@ -36,7 +36,6 @@ import org.javarosa.core.model.data.TimeData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.DateTime;
 import org.odk.collect.android.R;
-import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 
 import java.lang.reflect.Constructor;
@@ -201,7 +200,7 @@ public class TimeWidget extends QuestionWidget implements ButtonWidget, TimePick
         private String dialogTitle = getContext().getString(R.string.select_time);
 
         CustomTimePickerDialog(Context context, OnTimeSetListener callBack, int hour, int minute) {
-            super(context, ThemeUtils.getHoloDialogTheme(), callBack, hour, minute, DateFormat.is24HourFormat(context));
+            super(context, themeUtils.getHoloDialogTheme(), callBack, hour, minute, DateFormat.is24HourFormat(context));
             setTitle(dialogTitle);
             fixSpinner(context, hour, minute, DateFormat.is24HourFormat(context));
 

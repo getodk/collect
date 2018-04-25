@@ -34,7 +34,6 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ViewIds;
 
 import timber.log.Timber;
@@ -110,7 +109,7 @@ public class StringWidget extends QuestionWidget {
         if (readOnly) {
             answerText.setBackground(null);
             answerText.setEnabled(false);
-            answerText.setTextColor(ThemeUtils.getAttributeValue(context, R.attr.primaryTextColor));
+            answerText.setTextColor(themeUtils.getAttributeValue(R.attr.primaryTextColor));
             answerText.setFocusable(false);
         }
 

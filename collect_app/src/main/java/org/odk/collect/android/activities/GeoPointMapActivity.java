@@ -44,7 +44,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.location.client.LocationClient;
 import org.odk.collect.android.location.client.LocationClients;
 import org.odk.collect.android.spatial.MapHelper;
-import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoPointWidget;
 
@@ -345,7 +344,7 @@ public class GeoPointMapActivity extends CollectAbstractActivity implements OnMa
             zoomToPoint();
         }
 
-        ThemeUtils.setIconTint(this, reloadLocation, showLocation, layers,
+        themeUtils.setIconTint(this, reloadLocation, showLocation, layers,
                 clearPointButton, acceptLocation);
 
         helper.setBasemap();

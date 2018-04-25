@@ -77,7 +77,7 @@ public class AdminPreferencesActivity extends CollectAbstractActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(ThemeUtils.getSettingsTheme());
+        setTheme(new ThemeUtils(this).getSettingsTheme());
 
         setTitle(R.string.admin_preferences);
         if (savedInstanceState == null) {

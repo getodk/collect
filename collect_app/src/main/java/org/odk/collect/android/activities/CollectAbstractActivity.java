@@ -25,10 +25,12 @@ import org.odk.collect.android.utilities.ThemeUtils;
 public abstract class CollectAbstractActivity extends AppCompatActivity {
 
     private boolean isInstanceStateSaved;
+    protected ThemeUtils themeUtils;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        setTheme(ThemeUtils.getAppTheme());
+        themeUtils = new ThemeUtils(this);
+        setTheme(themeUtils.getAppTheme());
         super.onCreate(savedInstanceState);
     }
 

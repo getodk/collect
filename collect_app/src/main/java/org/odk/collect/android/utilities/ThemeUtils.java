@@ -23,73 +23,74 @@ import android.util.TypedValue;
 import android.widget.ImageButton;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 
 
 public final class ThemeUtils {
 
-    private ThemeUtils() {
+    private final Context context;
 
+    public ThemeUtils(Context context) {
+        this.context = context;
     }
 
-    private static boolean isDarkTheme() {
-        String theme = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_APP_THEME);
-        return theme.equals(Collect.getInstance().getString(R.string.app_theme_dark));
-    }
-
-    public static int getAppTheme() {
+    public int getAppTheme() {
         return isDarkTheme() ? R.style.DarkAppTheme : R.style.LightAppTheme;
     }
 
-    public static int getSettingsTheme() {
+    public int getSettingsTheme() {
         return isDarkTheme() ? R.style.AppTheme_SettingsTheme_Dark : R.style.AppTheme_SettingsTheme_Light;
     }
 
-    public static int getBottomDialogTheme() {
+    public int getBottomDialogTheme() {
         return isDarkTheme() ? R.style.DarkMaterialDialogSheet : R.style.LightMaterialDialogSheet;
     }
 
     /*
      *   TODO : Remove this method once all drawables are converted to vectors and use ?colorControlNormal for android:fillColor attribute
      */
-    public static void setIconTint(Context context, ImageButton... imageButtons) {
+    public void setIconTint(Context context, ImageButton... imageButtons) {
         for (ImageButton imageButton : imageButtons) {
             setIconTint(context, imageButton.getDrawable());
         }
     }
 
-    private static void setIconTint(Context context, Drawable drawable) {
+    private void setIconTint(Context context, Drawable drawable) {
         DrawableCompat.setTint(drawable, context.getResources()
                 .getColor(isDarkTheme() ? android.R.color.white : android.R.color.black));
     }
 
-    public static boolean isHoloDialogTheme(int theme) {
+    public boolean isHoloDialogTheme(int theme) {
         return theme == android.R.style.Theme_Holo_Light_Dialog ||
                 theme == android.R.style.Theme_Holo_Dialog;
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public static int getMaterialDialogTheme() {
+    public int getMaterialDialogTheme() {
         return isDarkTheme() ?
                 android.R.style.Theme_Material_Dialog :
                 android.R.style.Theme_Material_Light_Dialog;
     }
 
-    public static int getHoloDialogTheme() {
+    public int getHoloDialogTheme() {
         return isDarkTheme() ?
                 android.R.style.Theme_Holo_Dialog :
                 android.R.style.Theme_Holo_Light_Dialog;
     }
 
-    public static int getAttributeValue(Context context, int resId) {
+    public int getAttributeValue(int resId) {
         TypedValue outValue = new TypedValue();
         context.getTheme().resolveAttribute(resId, outValue, true);
         return outValue.data;
     }
 
-    public static int getAccountPickerTheme() {
+    public int getAccountPickerTheme() {
         return isDarkTheme() ? 0 : 1;
+    }
+
+    private boolean isDarkTheme() {
+        String theme = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_APP_THEME);
+        return theme.equals(context.getString(R.string.app_theme_dark));
     }
 }

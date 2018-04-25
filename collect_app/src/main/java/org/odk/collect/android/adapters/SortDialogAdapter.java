@@ -33,12 +33,12 @@ import org.odk.collect.android.utilities.ThemeUtils;
 public class SortDialogAdapter extends RecyclerView.Adapter<SortDialogAdapter.ViewHolder> {
     private final RecyclerViewClickListener listener;
     private final int selectedSortingOrder;
-    private final Context context;
     private final RecyclerView recyclerView;
+    private final ThemeUtils themeUtils;
     private String[] sortList;
 
     public SortDialogAdapter(Context context, RecyclerView recyclerView, String[] sortList, int selectedSortingOrder, RecyclerViewClickListener recyclerViewClickListener) {
-        this.context = context;
+        themeUtils = new ThemeUtils(context);
         this.recyclerView = recyclerView;
         this.sortList = sortList;
         this.selectedSortingOrder = selectedSortingOrder;
@@ -59,7 +59,7 @@ public class SortDialogAdapter extends RecyclerView.Adapter<SortDialogAdapter.Vi
         viewHolder.imgViewIcon.setImageResource(ApplicationConstants.getSortLabelToIconMap().get(sortList[position]));
         viewHolder.imgViewIcon.setImageDrawable(DrawableCompat.wrap(viewHolder.imgViewIcon.getDrawable()).mutate());
 
-        int color = ThemeUtils.getAttributeValue(context, position == selectedSortingOrder ? R.attr.colorAccent : R.attr.primaryTextColor);
+        int color = themeUtils.getAttributeValue(position == selectedSortingOrder ? R.attr.colorAccent : R.attr.primaryTextColor);
         viewHolder.txtViewTitle.setTextColor(color);
         DrawableCompat.setTintList(viewHolder.imgViewIcon.getDrawable(), position == selectedSortingOrder ? ColorStateList.valueOf(color) : null);
     }
@@ -91,11 +91,11 @@ public class SortDialogAdapter extends RecyclerView.Adapter<SortDialogAdapter.Vi
 
         public void updateItemColor(int selectedSortingOrder) {
             ViewHolder previousHolder = (ViewHolder) recyclerView.findViewHolderForAdapterPosition(selectedSortingOrder);
-            previousHolder.txtViewTitle.setTextColor(ThemeUtils.getAttributeValue(context, R.attr.primaryTextColor));
+            previousHolder.txtViewTitle.setTextColor(themeUtils.getAttributeValue(R.attr.primaryTextColor));
             DrawableCompat.setTintList(previousHolder.imgViewIcon.getDrawable(), null);
 
-            txtViewTitle.setTextColor(ThemeUtils.getAttributeValue(context, R.attr.colorAccent));
-            DrawableCompat.setTint(imgViewIcon.getDrawable(), ThemeUtils.getAttributeValue(context, R.attr.colorAccent));
+            txtViewTitle.setTextColor(themeUtils.getAttributeValue(R.attr.colorAccent));
+            DrawableCompat.setTint(imgViewIcon.getDrawable(), themeUtils.getAttributeValue(R.attr.colorAccent));
         }
     }
 }

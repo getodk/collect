@@ -51,7 +51,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.location.client.LocationClient;
 import org.odk.collect.android.location.client.LocationClients;
 import org.odk.collect.android.spatial.MapHelper;
-import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoTraceWidget;
 
@@ -320,7 +319,7 @@ public class GeoTraceGoogleMapActivity extends CollectAbstractActivity implement
 
         helper.setBasemap();
 
-        ThemeUtils.setIconTint(this, playButton, pauseButton, locationButton, layersButton,
+        themeUtils.setIconTint(this, playButton, pauseButton, locationButton, layersButton,
                 clearButton, saveButton);
     }
 

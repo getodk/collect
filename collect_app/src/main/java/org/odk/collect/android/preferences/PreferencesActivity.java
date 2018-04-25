@@ -96,7 +96,7 @@ public class PreferencesActivity extends PreferenceActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(ThemeUtils.getSettingsTheme());
+        setTheme(new ThemeUtils(this).getSettingsTheme());
         super.onCreate(savedInstanceState);
 
         ViewGroup root = getRootView();

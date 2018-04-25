@@ -26,6 +26,7 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_APP_THEME;
 @RunWith(RobolectricTestRunner.class)
 public class ThemeUtilsTests {
 
+    private ThemeUtils themeUtils;
     private MainMenuActivity mainMenuActivity;
     private final int[] attrs;
 
@@ -41,6 +42,7 @@ public class ThemeUtilsTests {
     @Before
     public void setup() {
         mainMenuActivity = Robolectric.setupActivity(MainMenuActivity.class);
+        themeUtils = new ThemeUtils(mainMenuActivity);
     }
 
     @Test
@@ -64,21 +66,21 @@ public class ThemeUtilsTests {
     @Test
     public void correctStylesShouldBeAppliedForLightTheme() {
         applyLightTheme();
-        assertEquals(ThemeUtils.getAppTheme(), R.style.LightAppTheme);
-        assertEquals(ThemeUtils.getSettingsTheme(), R.style.AppTheme_SettingsTheme_Light);
-        assertEquals(ThemeUtils.getBottomDialogTheme(), R.style.LightMaterialDialogSheet);
-        assertEquals(ThemeUtils.getMaterialDialogTheme(), android.R.style.Theme_Material_Light_Dialog);
-        assertEquals(ThemeUtils.getHoloDialogTheme(), android.R.style.Theme_Holo_Light_Dialog);
+        assertEquals(themeUtils.getAppTheme(), R.style.LightAppTheme);
+        assertEquals(themeUtils.getSettingsTheme(), R.style.AppTheme_SettingsTheme_Light);
+        assertEquals(themeUtils.getBottomDialogTheme(), R.style.LightMaterialDialogSheet);
+        assertEquals(themeUtils.getMaterialDialogTheme(), android.R.style.Theme_Material_Light_Dialog);
+        assertEquals(themeUtils.getHoloDialogTheme(), android.R.style.Theme_Holo_Light_Dialog);
     }
 
     @Test
     public void correctStylesShouldBeAppliedForDarkTheme() {
         applyDarkTheme();
-        assertEquals(ThemeUtils.getAppTheme(), R.style.DarkAppTheme);
-        assertEquals(ThemeUtils.getSettingsTheme(), R.style.AppTheme_SettingsTheme_Dark);
-        assertEquals(ThemeUtils.getBottomDialogTheme(), R.style.DarkMaterialDialogSheet);
-        assertEquals(ThemeUtils.getMaterialDialogTheme(), android.R.style.Theme_Material_Dialog);
-        assertEquals(ThemeUtils.getHoloDialogTheme(), android.R.style.Theme_Holo_Dialog);
+        assertEquals(themeUtils.getAppTheme(), R.style.DarkAppTheme);
+        assertEquals(themeUtils.getSettingsTheme(), R.style.AppTheme_SettingsTheme_Dark);
+        assertEquals(themeUtils.getBottomDialogTheme(), R.style.DarkMaterialDialogSheet);
+        assertEquals(themeUtils.getMaterialDialogTheme(), android.R.style.Theme_Material_Dialog);
+        assertEquals(themeUtils.getHoloDialogTheme(), android.R.style.Theme_Holo_Dialog);
     }
 
     private void assertCurrentTheme(Resources.Theme expectedTheme, Resources.Theme actualTheme, boolean assertTrue) {

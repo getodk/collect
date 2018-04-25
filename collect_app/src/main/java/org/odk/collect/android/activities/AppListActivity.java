@@ -19,8 +19,8 @@ package org.odk.collect.android.activities;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -43,7 +43,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.listeners.RecyclerViewClickListener;
 import org.odk.collect.android.provider.InstanceProviderAPI;
-import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.SnackbarUtils;
 
 import java.util.ArrayList;
@@ -291,7 +290,7 @@ abstract class AppListActivity extends CollectAbstractActivity {
     }
 
     private void setupBottomSheet() {
-        bottomSheetDialog = new BottomSheetDialog(this, ThemeUtils.getBottomDialogTheme());
+        bottomSheetDialog = new BottomSheetDialog(this, themeUtils.getBottomDialogTheme());
         final View sheetView = getLayoutInflater().inflate(R.layout.bottom_sheet, null);
         final RecyclerView recyclerView = sheetView.findViewById(R.id.recyclerView);
 
