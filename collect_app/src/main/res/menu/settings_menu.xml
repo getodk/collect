@@ -17,7 +17,7 @@
         app:showAsAction="always" />
     <item
         android:id="@+id/menu_save_preferences"
-        android:icon="@drawable/ic_save_black_36dp"
+        android:icon="@drawable/ic_save_black_32dp"
         android:title="@string/save_preferences"
         app:showAsAction="always" />
 </menu>
