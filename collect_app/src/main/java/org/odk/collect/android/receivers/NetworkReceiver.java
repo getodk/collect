@@ -136,7 +136,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                 instanceGoogleSheetsUploader = new InstanceGoogleSheetsUploader(accountsManager);
                 instanceGoogleSheetsUploader.setUploaderListener(this);
                 instanceGoogleSheetsUploader.execute(toSendArray);
-            } else {
+            } else if(protocol.equals(context.getString(R.string.protocol_odk_default))) {
                 // get the username, password, and server from preferences
 
                 String storedUsername = (String) settings.get(PreferenceKeys.KEY_USERNAME);

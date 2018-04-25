@@ -2,6 +2,7 @@ package org.odk.collect.android.tasks.sms;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.telephony.PhoneNumberUtils;
 import android.telephony.SmsManager;
 
 import com.birbit.android.jobqueue.JobManager;
@@ -38,6 +39,7 @@ public class SmsService {
     public SmsService() {
         Collect.getInstance().getComponent().inject(this);
     }
+
 
     /**
      * Responsible for fetching the saved form that adheres to the SMS spec and
@@ -140,6 +142,10 @@ public class SmsService {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
 
         String gateway = settings.getString(PreferenceKeys.KEY_SMS_GATEWAY, null);
+
+        if(!PhoneNumberUtils.isGlobalPhoneNumber(gateway)){
+            return;
+        }
 
         SmsJobMessage jobMessage = new SmsJobMessage();
         jobMessage.setGateway(gateway);
