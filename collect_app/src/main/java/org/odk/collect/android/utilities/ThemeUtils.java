@@ -19,6 +19,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v4.graphics.drawable.DrawableCompat;
+import android.util.TypedValue;
 import android.widget.ImageButton;
 
 import org.odk.collect.android.R;
@@ -33,7 +34,7 @@ public final class ThemeUtils {
 
     }
 
-    public static boolean isDarkTheme() {
+    private static boolean isDarkTheme() {
         String theme = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_APP_THEME);
         return theme.equals(Collect.getInstance().getString(R.string.app_theme_dark));
     }
@@ -59,7 +60,7 @@ public final class ThemeUtils {
         }
     }
 
-    public static void setIconTint(Context context, Drawable drawable) {
+    private static void setIconTint(Context context, Drawable drawable) {
         DrawableCompat.setTint(drawable, context.getResources()
                 .getColor(isDarkTheme() ? android.R.color.white : android.R.color.black));
     }
@@ -82,7 +83,9 @@ public final class ThemeUtils {
                 android.R.style.Theme_Holo_Light_Dialog;
     }
 
-    public static int getTextColor() {
-        return isDarkTheme() ? android.R.color.white : android.R.color.black;
+    public static int getAttributeValue(Context context, int resId) {
+        TypedValue outValue = new TypedValue();
+        context.getTheme().resolveAttribute(resId, outValue, true);
+        return outValue.data;
     }
 }

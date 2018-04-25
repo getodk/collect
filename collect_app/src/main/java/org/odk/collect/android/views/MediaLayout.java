@@ -23,7 +23,6 @@ import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatImageButton;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -42,6 +41,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.ViewIds;
 
@@ -115,7 +115,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
      */
     public void resetTextFormatting() {
         // first set it to defaults
-        viewText.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor));
+        viewText.setTextColor(ThemeUtils.getAttributeValue(context, R.attr.primaryTextColor));
         // then set the text to our original (brings back any html formatting)
         viewText.setText(originalText);
     }

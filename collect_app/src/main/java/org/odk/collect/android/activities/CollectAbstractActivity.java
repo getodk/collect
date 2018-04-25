@@ -17,7 +17,6 @@
 package org.odk.collect.android.activities;
 
 import android.os.Bundle;
-import android.support.annotation.CallSuper;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
@@ -28,7 +27,6 @@ public abstract class CollectAbstractActivity extends AppCompatActivity {
     private boolean isInstanceStateSaved;
 
     @Override
-    @CallSuper
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         setTheme(ThemeUtils.getAppTheme());
         super.onCreate(savedInstanceState);

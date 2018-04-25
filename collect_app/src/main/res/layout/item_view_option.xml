@@ -10,6 +10,7 @@
     android:paddingLeft="@dimen/padding_extra_large"
     android:paddingRight="@dimen/padding_extra_large"
     android:paddingStart="@dimen/padding_extra_large"
+    android:textColor="?primaryTextColor"
     android:textSize="@dimen/text_size_small"
     tools:drawableLeft="@drawable/ic_save_grey_32dp"
     tools:drawableStart="@drawable/ic_save_grey_32dp"

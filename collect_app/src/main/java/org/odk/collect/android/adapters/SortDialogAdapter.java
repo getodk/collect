@@ -15,6 +15,7 @@
 package org.odk.collect.android.adapters;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.support.annotation.NonNull;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.RecyclerView;
@@ -58,14 +59,9 @@ public class SortDialogAdapter extends RecyclerView.Adapter<SortDialogAdapter.Vi
         viewHolder.imgViewIcon.setImageResource(ApplicationConstants.getSortLabelToIconMap().get(sortList[position]));
         viewHolder.imgViewIcon.setImageDrawable(DrawableCompat.wrap(viewHolder.imgViewIcon.getDrawable()).mutate());
 
-        if (position == selectedSortingOrder) {
-            viewHolder.txtViewTitle.setTextColor(context.getResources().getColor(R.color.tintColor));
-            DrawableCompat.setTint(viewHolder.imgViewIcon.getDrawable(),
-                    context.getResources().getColor(R.color.tintColor));
-        } else {
-            viewHolder.txtViewTitle.setTextColor(context.getResources().getColor(ThemeUtils.getTextColor()));
-            DrawableCompat.setTintList(viewHolder.imgViewIcon.getDrawable(), null);
-        }
+        int color = ThemeUtils.getAttributeValue(context, position == selectedSortingOrder ? R.attr.colorAccent : R.attr.primaryTextColor);
+        viewHolder.txtViewTitle.setTextColor(color);
+        DrawableCompat.setTintList(viewHolder.imgViewIcon.getDrawable(), position == selectedSortingOrder ? ColorStateList.valueOf(color) : null);
     }
 
     // Return the size of your itemsData (invoked by the layout manager)
@@ -95,11 +91,11 @@ public class SortDialogAdapter extends RecyclerView.Adapter<SortDialogAdapter.Vi
 
         public void updateItemColor(int selectedSortingOrder) {
             ViewHolder previousHolder = (ViewHolder) recyclerView.findViewHolderForAdapterPosition(selectedSortingOrder);
-            previousHolder.txtViewTitle.setTextColor(context.getResources().getColor(ThemeUtils.getTextColor()));
+            previousHolder.txtViewTitle.setTextColor(ThemeUtils.getAttributeValue(context, R.attr.primaryTextColor));
             DrawableCompat.setTintList(previousHolder.imgViewIcon.getDrawable(), null);
 
-            txtViewTitle.setTextColor(context.getResources().getColor(R.color.tintColor));
-            DrawableCompat.setTint(imgViewIcon.getDrawable(), context.getResources().getColor(R.color.tintColor));
+            txtViewTitle.setTextColor(ThemeUtils.getAttributeValue(context, R.attr.colorAccent));
+            DrawableCompat.setTint(imgViewIcon.getDrawable(), ThemeUtils.getAttributeValue(context, R.attr.colorAccent));
         }
     }
 }

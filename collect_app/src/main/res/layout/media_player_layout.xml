@@ -72,6 +72,7 @@ limitations under the License.
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/playBtn"
+            android:textColor="?primaryTextColor"
             android:textSize="@dimen/text_size_small"
             android:textStyle="bold"
             tools:text="00:00" />
@@ -83,6 +84,7 @@ limitations under the License.
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/playBtn"
+            android:textColor="?primaryTextColor"
             android:textSize="@dimen/text_size_small"
             android:textStyle="bold"
             tools:text="00:00" />
