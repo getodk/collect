@@ -22,6 +22,9 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.SimpleCursorAdapter;
@@ -37,13 +40,16 @@ import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 
+import timber.log.Timber;
+
 /**
  * Responsible for displaying all the valid instances in the instance directory.
  *
  * @author Yaw Anokwa (yanokwa@gmail.com)
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class InstanceChooserList extends InstanceListActivity implements DiskSyncListener, AdapterView.OnItemClickListener {
+public class InstanceChooserList extends InstanceListActivity implements
+        DiskSyncListener, AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
     private static final String INSTANCE_LIST_ACTIVITY_SORTING_ORDER = "instanceListActivitySortingOrder";
     private static final String VIEW_SENT_FORM_SORTING_ORDER = "ViewSentFormSortingOrder";
 
@@ -92,11 +98,7 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
         instanceSyncTask = new InstanceSyncTask();
         instanceSyncTask.setDiskSyncListener(this);
         instanceSyncTask.execute();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
+        getSupportLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
     /**
@@ -171,9 +173,10 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
     }
 
     @Override
-    public void syncComplete(String result) {
-        TextView textView = findViewById(R.id.status_text);
-        textView.setText(result);
+    public void syncComplete(@NonNull String result) {
+        Timber.i("Disk scan complete");
+        hideProgressBarAndAllow();
+        showSnackbar(result);
     }
 
     @Override
@@ -197,9 +200,9 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
         };
 
         if (editMode) {
-            listAdapter = new SimpleCursorAdapter(this, R.layout.two_item, getCursor(), data, view);
+            listAdapter = new SimpleCursorAdapter(this, R.layout.two_item, null, data, view);
         } else {
-            listAdapter = new ViewSentListAdapter(this, R.layout.two_item, getCursor(), data, view);
+            listAdapter = new ViewSentListAdapter(this, R.layout.two_item, null, data, view);
         }
         listView.setAdapter(listAdapter);
     }
@@ -211,18 +214,29 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
 
     @Override
     protected void updateAdapter() {
-        listAdapter.changeCursor(getCursor());
+        getSupportLoaderManager().restartLoader(LOADER_ID, null, this);
     }
 
-    private Cursor getCursor() {
-        Cursor cursor;
+    @NonNull
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        showProgressBar();
         if (editMode) {
-            cursor = new InstancesDao().getUnsentInstancesCursor(getFilterText(), getSortingOrder());
+            return new InstancesDao().getUnsentInstancesCursorLoader(getFilterText(), getSortingOrder());
         } else {
-            cursor = new InstancesDao().getSentInstancesCursor(getFilterText(), getSortingOrder());
+            return new InstancesDao().getSentInstancesCursorLoader(getFilterText(), getSortingOrder());
         }
+    }
 
-        return cursor;
+    @Override
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
+        hideProgressBarIfAllowed();
+        listAdapter.changeCursor(cursor);
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader loader) {
+        listAdapter.swapCursor(null);
     }
 
     private void createErrorDialog(String errorMsg, final boolean shouldExit) {
@@ -250,6 +264,4 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
         alertDialog.setButton(getString(R.string.ok), errorListener);
         alertDialog.show();
     }
-
-
 }

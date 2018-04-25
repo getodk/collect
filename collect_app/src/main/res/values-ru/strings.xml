@@ -142,7 +142,6 @@
   <string name="submission_url">Путь для отправки форм</string>
   <string name="font_size">Размер шрифта</string>
   <string name="change_font_size">Размер шрифта</string>
-  <string name="form_scan_starting">Поиск форм…</string>
   <string name="access_error">Ошибка доступа %s:</string>
   <string name="manifest_server_error">Манифест не соответствует версии OpenRosa — не тот сервер?</string>
   <string name="root_element_error">Корневой элемент не &lt;манифест\&gt; — был %s</string>

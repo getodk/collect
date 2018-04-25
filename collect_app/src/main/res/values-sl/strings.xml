@@ -144,7 +144,6 @@
   <string name="submission_url">Pot prispevkov</string>
   <string name="font_size">Velikost črk</string>
   <string name="change_font_size">Velikost črk</string>
-  <string name="form_scan_starting">Pregledujem in iščem obrazce</string>
   <string name="access_error">Napaka pri dostopu do %s:</string>
   <string name="manifest_server_error">Manifest ne poroča o OpenRosa verziji - napačen strežnik?</string>
   <string name="root_element_error">Korenski elment ni  &lt;manifest\&gt; — ampak %s</string>

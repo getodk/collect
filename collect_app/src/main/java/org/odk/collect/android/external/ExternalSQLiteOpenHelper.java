@@ -109,6 +109,8 @@ public class ExternalSQLiteOpenHelper extends SQLiteOpenHelper {
                     DELIMITING_CHAR, QUOTE_CHAR, ESCAPE_CHAR);
             String[] headerRow = reader.readNext();
 
+            headerRow[0] = removeByteOrderMark(headerRow[0]);
+
             if (!ExternalDataUtil.containsAnyData(headerRow)) {
                 throw new ExternalDataException(
                         Collect.getInstance().getString(R.string.ext_file_no_data_error));
@@ -262,5 +264,15 @@ public class ExternalSQLiteOpenHelper extends SQLiteOpenHelper {
         if (formLoaderTask != null) {
             formLoaderTask.publishExternalDataLoadingProgress(message);
         }
+    }
+
+    /**
+     * Removes a Byte Order Mark (BOM) from the start of a String.
+     *
+     * @param bomCheckString is checked to see if it starts with a Byte Order Mark.
+     * @return bomCheckString without a Byte Order Mark.
+     */
+    private String removeByteOrderMark(String bomCheckString) {
+        return bomCheckString.startsWith("\uFEFF") ? bomCheckString.substring(1) : bomCheckString;
     }
 }

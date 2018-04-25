@@ -124,7 +124,6 @@
   <string name="submission_url">سبمشن کا پاتھ</string>
   <string name="font_size">ہجوں کے فانٹ کا ناپ</string>
   <string name="change_font_size">فانٹ کا سائز</string>
-  <string name="form_scan_starting">فارم (ز) کی سکیننگ ہو رہی ہے</string>
   <string name="access_error">‎%s‏ تک رسائی غلطی آ رہی ہے</string>
   <string name="manifest_server_error">دکھایا گیا جواب ‎OpenRosa‏ ورژن کو رپورت نہیں کرتا ۔ خراب سرور</string>
   <string name="manifest_tag_error">دکھایا گیا ‎%s‏  کے اندراج سے ایک یا ذیادہ  tagsغائب ہیں ۔ فائل کا نام، ہیش، یا ڈاون لوڈ </string>

@@ -19,6 +19,7 @@ package org.odk.collect.android.activities;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.view.MenuItemCompat;
@@ -34,7 +35,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
@@ -44,6 +47,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.listeners.RecyclerViewClickListener;
 import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.utilities.SnackbarUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -54,6 +58,7 @@ import timber.log.Timber;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
 
 abstract class AppListActivity extends AppCompatActivity {
+    protected static final int LOADER_ID = 0x01;
     private static final String SELECTED_INSTANCES = "selectedInstances";
     private static final String IS_SEARCH_BOX_SHOWN = "isSearchBoxShown";
     private static final String IS_BOTTOM_DIALOG_SHOWN = "isBottomDialogShown";
@@ -66,6 +71,8 @@ abstract class AppListActivity extends AppCompatActivity {
     protected Integer selectedSortingOrder;
     protected Toolbar toolbar;
     protected ListView listView;
+    protected LinearLayout llParent;
+    protected ProgressBar progressBar;
     private BottomSheetDialog bottomSheetDialog;
     private boolean isBottomDialogShown;
 
@@ -74,6 +81,9 @@ abstract class AppListActivity extends AppCompatActivity {
     private boolean isSearchBoxShown;
 
     private SearchView searchView;
+
+    private boolean canHideProgressBar;
+    private boolean progressBarVisible;
 
     // toggles to all checked or all unchecked
     // returns:
@@ -122,6 +132,8 @@ abstract class AppListActivity extends AppCompatActivity {
 
         TextView emptyView = findViewById(android.R.id.empty);
         listView.setEmptyView(emptyView);
+        progressBar = findViewById(R.id.progressBar);
+        llParent = findViewById(R.id.llParent);
 
         initToolbar();
     }
@@ -317,5 +329,30 @@ abstract class AppListActivity extends AppCompatActivity {
         if (isBottomDialogShown) {
             bottomSheetDialog.show();
         }
+    }
+
+    protected void showSnackbar(@NonNull String result) {
+        SnackbarUtils.showSnackbar(llParent, result);
+    }
+
+    protected void hideProgressBarIfAllowed() {
+        if (canHideProgressBar && progressBarVisible) {
+            hideProgressBar();
+        }
+    }
+
+    protected void hideProgressBarAndAllow() {
+        this.canHideProgressBar = true;
+        hideProgressBar();
+    }
+
+    private void hideProgressBar() {
+        progressBar.setVisibility(View.GONE);
+        progressBarVisible = false;
+    }
+
+    protected void showProgressBar() {
+        progressBar.setVisibility(View.VISIBLE);
+        progressBarVisible = true;
     }
 }

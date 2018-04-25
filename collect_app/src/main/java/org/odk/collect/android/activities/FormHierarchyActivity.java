@@ -21,7 +21,6 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -109,8 +108,11 @@ public abstract class FormHierarchyActivity extends AppCompatActivity implements
             public void onClick(View v) {
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "jumpToBeginning",
                         "click");
-                Collect.getInstance().getFormController().jumpToIndex(FormIndex
-                        .createBeginningOfFormIndex());
+                FormController fc = Collect.getInstance().getFormController();
+                if (fc != null) {
+                    fc.getTimerLogger().exitView();
+                    fc.jumpToIndex(FormIndex.createBeginningOfFormIndex());
+                }
                 setResult(RESULT_OK);
                 finish();
             }
@@ -122,8 +124,11 @@ public abstract class FormHierarchyActivity extends AppCompatActivity implements
             public void onClick(View v) {
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "jumpToEnd",
                         "click");
-                Collect.getInstance().getFormController().jumpToIndex(
-                        FormIndex.createEndOfFormIndex());
+                FormController fc = Collect.getInstance().getFormController();
+                if (fc != null) {
+                    fc.getTimerLogger().exitView();
+                    fc.jumpToIndex(FormIndex.createEndOfFormIndex());
+                }
                 setResult(RESULT_OK);
                 finish();
             }
@@ -395,18 +400,5 @@ public abstract class FormHierarchyActivity extends AppCompatActivity implements
         alertDialog.setCancelable(false);
         alertDialog.setButton(getString(R.string.ok), errorListener);
         alertDialog.show();
-    }
-
-
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        switch (keyCode) {
-            case KeyEvent.KEYCODE_BACK:
-                Collect.getInstance().getActivityLogger().logInstanceAction(this, "onKeyDown",
-                        "KEYCODE_BACK.JUMP", startIndex);
-                Collect.getInstance().getFormController().jumpToIndex(startIndex);
-        }
-        return super.onKeyDown(keyCode, event);
     }
 }

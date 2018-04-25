@@ -16,13 +16,15 @@ package org.odk.collect.android.activities;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,7 +34,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.dao.InstancesDao;
@@ -59,8 +60,8 @@ import timber.log.Timber;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 
-public class InstanceUploaderList extends InstanceListActivity
-        implements OnLongClickListener, DiskSyncListener, AdapterView.OnItemClickListener {
+public class InstanceUploaderList extends InstanceListActivity implements
+        OnLongClickListener, DiskSyncListener, AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
     private static final String SHOW_ALL_MODE = "showAllMode";
     private static final String INSTANCE_UPLOADER_LIST_SORTING_ORDER = "instanceUploaderListSortingOrder";
 
@@ -79,7 +80,6 @@ public class InstanceUploaderList extends InstanceListActivity
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Timber.i("onCreate");
         setContentView(R.layout.instance_uploader_list);
         super.onCreate(savedInstanceState);
 
@@ -160,6 +160,7 @@ public class InstanceUploaderList extends InstanceListActivity
                 getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc),
                 getString(R.string.sort_by_date_asc), getString(R.string.sort_by_date_desc)
         };
+        getSupportLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
     @Override
@@ -183,9 +184,10 @@ public class InstanceUploaderList extends InstanceListActivity
     }
 
     @Override
-    public void syncComplete(String result) {
-        TextView textView = findViewById(R.id.status_text);
-        textView.setText(result);
+    public void syncComplete(@NonNull String result) {
+        Timber.i("Disk scan complete");
+        hideProgressBarAndAllow();
+        showSnackbar(result);
     }
 
     @Override
@@ -307,7 +309,7 @@ public class InstanceUploaderList extends InstanceListActivity
         String[] data = new String[]{InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT};
         int[] view = new int[]{R.id.text1, R.id.text2};
 
-        listAdapter = new SimpleCursorAdapter(this, R.layout.two_item_multiple_choice, getCursor(), data, view);
+        listAdapter = new SimpleCursorAdapter(this, R.layout.two_item_multiple_choice, null, data, view);
         listView.setAdapter(listAdapter);
         checkPreviouslyCheckedItems();
     }
@@ -319,48 +321,31 @@ public class InstanceUploaderList extends InstanceListActivity
 
     @Override
     protected void updateAdapter() {
-        listAdapter.changeCursor(getCursor());
-        checkPreviouslyCheckedItems();
+        getSupportLoaderManager().restartLoader(LOADER_ID, null, this);
         toggleButtonLabel(findViewById(R.id.toggle_button), listView);
     }
 
-    private Cursor getCursor() {
-        Cursor cursor;
+    @NonNull
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        showProgressBar();
         if (showAllMode) {
-            cursor = instancesDao.getCompletedUndeletedInstancesCursor(getFilterText(), getSortingOrder());
+            return instancesDao.getCompletedUndeletedInstancesCursorLoader(getFilterText(), getSortingOrder());
         } else {
-            cursor = instancesDao.getFinalizedInstancesCursor(getFilterText(), getSortingOrder());
+            return instancesDao.getFinalizedInstancesCursorLoader(getFilterText(), getSortingOrder());
         }
-
-        return cursor;
     }
 
-    private void showUnsent() {
-        showAllMode = false;
-        Cursor old = listAdapter.getCursor();
-        try {
-            listAdapter.changeCursor(getCursor());
-        } finally {
-            if (old != null) {
-                old.close();
-                this.stopManagingCursor(old);
-            }
-        }
-        listView.invalidate();
+    @Override
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
+        hideProgressBarIfAllowed();
+        listAdapter.changeCursor(cursor);
+        checkPreviouslyCheckedItems();
     }
 
-    private void showAll() {
-        showAllMode = true;
-        Cursor old = listAdapter.getCursor();
-        try {
-            listAdapter.changeCursor(getCursor());
-        } finally {
-            if (old != null) {
-                old.close();
-                this.stopManagingCursor(old);
-            }
-        }
-        listView.invalidate();
+    @Override
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
+        listAdapter.swapCursor(null);
     }
 
     @Override
@@ -369,11 +354,11 @@ public class InstanceUploaderList extends InstanceListActivity
         return showSentAndUnsentChoices();
     }
 
+    /*
+     * Create a dialog with options to save and exit, save, or quit without
+     * saving
+     */
     private boolean showSentAndUnsentChoices() {
-        /**
-         * Create a dialog with options to save and exit, save, or quit without
-         * saving
-         */
         String[] items = {getString(R.string.show_unsent_forms),
                 getString(R.string.show_sent_and_unsent_forms)};
 
@@ -382,32 +367,26 @@ public class InstanceUploaderList extends InstanceListActivity
         AlertDialog alertDialog = new AlertDialog.Builder(this)
                 .setIcon(android.R.drawable.ic_dialog_info)
                 .setTitle(getString(R.string.change_view))
-                .setNeutralButton(getString(R.string.cancel),
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int id) {
-                                logger.logAction(this, "changeView", "cancel");
-                                dialog.cancel();
-                            }
-                        })
-                .setItems(items, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
+                .setNeutralButton(getString(R.string.cancel), (dialog, id) -> {
+                    logger.logAction(this, "changeView", "cancel");
+                    dialog.cancel();
+                })
+                .setItems(items, (dialog, which) -> {
+                    switch (which) {
+                        case 0: // show unsent
+                            logger.logAction(this, "changeView", "showUnsent");
+                            showAllMode = false;
+                            updateAdapter();
+                            break;
 
-                            case 0: // show unsent
-                                logger.logAction(this, "changeView", "showUnsent");
-                                InstanceUploaderList.this.showUnsent();
-                                break;
+                        case 1: // show all
+                            logger.logAction(this, "changeView", "showAll");
+                            showAllMode = true;
+                            updateAdapter();
+                            break;
 
-                            case 1: // show all
-                                logger.logAction(this, "changeView", "showAll");
-                                InstanceUploaderList.this.showAll();
-                                break;
-
-                            case 2:// do nothing
-                                break;
-                        }
+                        case 2:// do nothing
+                            break;
                     }
                 }).create();
         alertDialog.show();

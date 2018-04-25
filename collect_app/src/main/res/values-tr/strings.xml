@@ -103,7 +103,6 @@
   <string name="submission_url">Gönderim yolu</string>
   <string name="font_size">Text font büyüklüğü</string>
   <string name="change_font_size">Text font büyüklüğü</string>
-  <string name="form_scan_starting">Formlar Taraniyor..</string>
   <string name="access_error">Hata:%s ulaşırken</string>
   <string name="root_element_error">kök element  &lt;manifest\&gt; — was %s degil</string>
   <string name="root_namespace_error">Kök elementin alanadi doğru değil: %s</string>
