@@ -160,9 +160,9 @@ public abstract class QuestionWidget
             guidanceTextLayout.setVisibility(VISIBLE);
             guidanceTextView.setText(guidanceHint);
         } else if (setting.equals(GuidanceHint.YesCollapsed)) {
-            int padding = (int) convertDpToPixel(4,getContext());
+            int padding = (int) convertDpToPixel(4, getContext());
 
-            guidanceTextLayout.setPadding(padding,padding,padding,padding);
+            guidanceTextLayout.setPadding(padding, padding, padding, padding);
             guidanceTextLayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.guidance_hint_box));
             getHelpTextView().setCompoundDrawablesWithIntrinsicBounds(R.drawable.information_outline, 0, 0, 0);
             getHelpTextView().setCompoundDrawablePadding((int) convertDpToPixel(5, getContext()));

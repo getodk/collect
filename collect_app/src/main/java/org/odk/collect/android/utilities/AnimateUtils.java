@@ -150,7 +150,6 @@ public class AnimateUtils {
 
         view.startAnimation(a);
 
-
         return a;
     }
 
@@ -158,6 +157,4 @@ public class AnimateUtils {
         // 1dp/ms * multiplier
         return (int) (view.getMeasuredHeight() / view.getContext().getResources().getDisplayMetrics().density);
     }
-
-
 }
