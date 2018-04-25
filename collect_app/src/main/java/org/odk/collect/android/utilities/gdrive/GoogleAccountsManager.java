@@ -39,6 +39,7 @@ import com.google.api.services.drive.DriveScopes;
 import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.util.Collections;
@@ -53,8 +54,6 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
     public static final int REQUEST_ACCOUNT_PICKER = 1000;
     private static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1002;
     private static final int RESOLVE_CONNECTION_REQUEST_CODE = 5555;
-
-    private static final int THEME_LIGHT_ACCOUNT_PICKER = 1;
 
     @Nullable
     private Fragment fragment;
@@ -175,7 +174,7 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
     public void showAccountPickerDialog() {
         Account selectedAccount = getAccountPickerCurrentAccount();
         intentChooseAccount.putExtra("selectedAccount", selectedAccount);
-        intentChooseAccount.putExtra("overrideTheme", THEME_LIGHT_ACCOUNT_PICKER);
+        intentChooseAccount.putExtra("overrideTheme", ThemeUtils.getAccountPickerTheme());
         intentChooseAccount.putExtra("overrideCustomTheme", 0);
 
         if (fragment != null) {

@@ -88,4 +88,8 @@ public final class ThemeUtils {
         context.getTheme().resolveAttribute(resId, outValue, true);
         return outValue.data;
     }
+
+    public static int getAccountPickerTheme() {
+        return isDarkTheme() ? 0 : 1;
+    }
 }
