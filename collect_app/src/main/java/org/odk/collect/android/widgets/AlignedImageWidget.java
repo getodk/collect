@@ -68,30 +68,10 @@ public class AlignedImageWidget extends BaseImageWidget {
 
     public AlignedImageWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
+        imageClickHandler = new ViewImageClickHandler();
         setUpLayout();
         setUpBinary();
         addAnswerView(answerLayout);
-    }
-
-    @Override
-    public void onImageClick() {
-        getActivityLogger().logInstanceAction(this, "viewButton",
-                "click", getFormEntryPrompt().getIndex());
-        Intent i = new Intent("android.intent.action.VIEW");
-        Uri uri = MediaUtils.getImageUriFromMediaProvider(
-                instanceFolder + File.separator + binaryName);
-        if (uri != null) {
-            Timber.i("setting view path to: %s", uri.toString());
-            i.setDataAndType(uri, "image/*");
-            try {
-                getContext().startActivity(i);
-            } catch (ActivityNotFoundException e) {
-                Toast.makeText(getContext(),
-                        getContext().getString(R.string.activity_not_found,
-                                getContext().getString(R.string.view_image)),
-                        Toast.LENGTH_SHORT).show();
-            }
-        }
     }
 
     @Override

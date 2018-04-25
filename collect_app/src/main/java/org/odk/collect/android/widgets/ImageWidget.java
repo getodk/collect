@@ -28,6 +28,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CaptureSelfieActivity;
 import org.odk.collect.android.activities.CaptureSelfieActivityNewApi;
+import org.odk.collect.android.activities.DrawActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.MediaUtils;
 
@@ -53,30 +54,10 @@ public class ImageWidget extends BaseImageWidget {
 
     public ImageWidget(Context context, final FormEntryPrompt prompt) {
         super(context, prompt);
+        imageClickHandler = new ViewImageClickHandler();
         setUpLayout();
         setUpBinary();
         addAnswerView(answerLayout);
-    }
-
-    @Override
-    public void onImageClick() {
-        Collect.getInstance().getActivityLogger().logInstanceAction(this, "viewButton",
-                "click", getFormEntryPrompt().getIndex());
-        Intent i = new Intent("android.intent.action.VIEW");
-        Uri uri = MediaUtils.getImageUriFromMediaProvider(
-                getInstanceFolder() + File.separator + binaryName);
-        if (uri != null) {
-            Timber.i("setting view path to: %s", uri.toString());
-            i.setDataAndType(uri, "image/*");
-            try {
-                getContext().startActivity(i);
-            } catch (ActivityNotFoundException e) {
-                Toast.makeText(getContext(),
-                        getContext().getString(R.string.activity_not_found,
-                                getContext().getString(R.string.view_image)),
-                        Toast.LENGTH_SHORT).show();
-            }
-        }
     }
 
     @Override

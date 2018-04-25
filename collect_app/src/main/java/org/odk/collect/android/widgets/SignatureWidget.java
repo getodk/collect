@@ -43,16 +43,10 @@ public class SignatureWidget extends BaseImageWidget {
 
     public SignatureWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
+        imageClickHandler = new DrawImageClickHandler(DrawActivity.OPTION_SIGNATURE, RequestCodes.SIGNATURE_CAPTURE);
         setUpLayout();
         setUpBinary();
         addAnswerView(answerLayout);
-    }
-
-    @Override
-    public void onImageClick() {
-        Collect.getInstance().getActivityLogger().logInstanceAction(this, "viewImage",
-                "click", getFormEntryPrompt().getIndex());
-        launchSignatureActivity();
     }
 
     @Override
@@ -69,30 +63,6 @@ public class SignatureWidget extends BaseImageWidget {
             signButton.setVisibility(View.GONE);
         }
         errorTextView.setVisibility(View.GONE);
-    }
-
-    private void launchSignatureActivity() {
-        errorTextView.setVisibility(View.GONE);
-        Intent i = new Intent(getContext(), DrawActivity.class);
-        i.putExtra(DrawActivity.OPTION, DrawActivity.OPTION_SIGNATURE);
-        // copy...
-        if (binaryName != null) {
-            File f = new File(getInstanceFolder() + File.separator + binaryName);
-            i.putExtra(DrawActivity.REF_IMAGE, Uri.fromFile(f));
-        }
-        i.putExtra(DrawActivity.EXTRA_OUTPUT,
-                Uri.fromFile(new File(Collect.TMPFILE_PATH)));
-
-        try {
-            waitForData();
-            ((Activity) getContext()).startActivityForResult(i,
-                    RequestCodes.SIGNATURE_CAPTURE);
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(getContext(),
-                    getContext().getString(R.string.activity_not_found, getContext().getString(R.string.signature_capture)),
-                    Toast.LENGTH_SHORT).show();
-            cancelWaitingForData();
-        }
     }
 
     @Override
@@ -114,12 +84,9 @@ public class SignatureWidget extends BaseImageWidget {
         signButton.cancelLongPress();
     }
 
+
     @Override
     public void onButtonClick(int buttonId) {
-        Collect.getInstance()
-                .getActivityLogger()
-                .logInstanceAction(this, "signButton", "click",
-                        getFormEntryPrompt().getIndex());
-        launchSignatureActivity();
+        imageClickHandler.clickImage("signButton");
     }
 }

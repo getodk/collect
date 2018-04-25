@@ -16,8 +16,12 @@
 
 package org.odk.collect.android.widgets;
 
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -28,13 +32,18 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.DrawActivity;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaManager;
+import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 
@@ -48,6 +57,9 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
     protected String binaryName;
     protected TextView errorTextView;
     protected LinearLayout answerLayout;
+
+    protected ImageClickHandler imageClickHandler;
+    protected ButtonClickHandler buttonClickHandler;
 
     public BaseImageWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -73,7 +85,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
         MediaManager
                 .INSTANCE
                 .markOriginalFileOrDelete(getFormEntryPrompt().getIndex().toString(),
-                getInstanceFolder() + File.separator + binaryName);
+                        getInstanceFolder() + File.separator + binaryName);
         binaryName = null;
     }
 
@@ -154,11 +166,19 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
             }
 
             imageView = getAnswerImageView(bmp);
-            answerLayout.addView(imageView);
+            imageView.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    if (imageClickHandler != null) {
+                        imageClickHandler.clickImage("viewImage");
+                    }
+                }
+            });
+
+        answerLayout.addView(imageView);
         }
     }
-
-    protected abstract void onImageClick();
 
     protected void setUpLayout() {
         errorTextView = new TextView(getContext());
@@ -169,5 +189,108 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
         answerLayout.setOrientation(LinearLayout.VERTICAL);
 
         binaryName = getFormEntryPrompt().getAnswerText();
+    }
+
+
+    /**
+     *
+     */
+    protected interface ImageClickHandler {
+        void clickImage(String context);
+    }
+
+    /**
+     *
+     */
+    protected class ViewImageClickHandler implements ImageClickHandler {
+
+        @Override
+        public void clickImage(String context) {
+            Collect.getInstance().getActivityLogger().logInstanceAction(this, context,
+                    "click", getFormEntryPrompt().getIndex());
+            Intent i = new Intent("android.intent.action.VIEW");
+            Uri uri = MediaUtils.getImageUriFromMediaProvider(
+                    getInstanceFolder() + File.separator + binaryName);
+            if (uri != null) {
+                Timber.i("setting view path to: %s", uri.toString());
+                i.setDataAndType(uri, "image/*");
+                try {
+                    getContext().startActivity(i);
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(getContext(),
+                            getContext().getString(R.string.activity_not_found,
+                                    getContext().getString(R.string.view_image)),
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
+    /**
+     *
+     */
+    protected class DrawImageClickHandler implements ImageClickHandler {
+
+        private final String drawOption;
+        private final int requestCode;
+
+        public DrawImageClickHandler(String option, final int code) {
+            drawOption = option;
+            requestCode = code;
+        }
+
+        @Override
+        public void clickImage(String context) {
+            if (Collect.allowClick()) {
+                Collect.getInstance()
+                        .getActivityLogger()
+                        .logInstanceAction(this, context, "click",
+                                getFormEntryPrompt().getIndex());
+                launchActivity();
+            }
+        }
+
+        /**
+         *
+         */
+        private void launchActivity() {
+            errorTextView.setVisibility(View.GONE);
+            Intent i = new Intent(getContext(), DrawActivity.class);
+            i.putExtra(DrawActivity.OPTION, drawOption);
+            // copy...
+            if (binaryName != null) {
+                File f = new File(getInstanceFolder() + File.separator + binaryName);
+                i.putExtra(DrawActivity.REF_IMAGE, Uri.fromFile(f));
+            }
+            i.putExtra(DrawActivity.EXTRA_OUTPUT, Uri.fromFile(new File(Collect.TMPFILE_PATH)));
+
+            try {
+                waitForData();
+                ((Activity) getContext()).startActivityForResult(i, requestCode);
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(
+                        getContext(),
+                        getContext().getString(R.string.activity_not_found,
+                                getContext().getString(R.string.draw_image)), Toast.LENGTH_SHORT).show();
+                cancelWaitingForData();
+            }
+        }
+
+    }
+
+    protected interface ButtonClickHandler {
+        void captureImage();
+        void chooseImage();
+    }
+
+    protected class ImageButtonClickHandler implements ButtonClickHandler {
+
+        @Override
+        public void captureImage() {
+        }
+
+        @Override
+        public void chooseImage() {
+        }
     }
 }

@@ -59,7 +59,6 @@ public class AnnotateWidget extends BaseImageWidget {
         addAnswerView(answerLayout);
     }
 
-    @Override
     public void onImageClick() {
         Collect.getInstance()
                 .getActivityLogger()
