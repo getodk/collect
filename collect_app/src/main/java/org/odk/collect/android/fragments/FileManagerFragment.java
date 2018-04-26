@@ -95,9 +95,6 @@ public abstract class FileManagerFragment extends AppListFragment implements Loa
     @Override
     protected void updateAdapter() {
         getLoaderManager().restartLoader(LOADER_ID, null, this);
-        checkPreviouslyCheckedItems();
-        toggleButtonLabel(toggleButton, getListView());
-        deleteButton.setEnabled(areCheckedItems());
     }
 
     @NonNull
@@ -111,6 +108,10 @@ public abstract class FileManagerFragment extends AppListFragment implements Loa
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
         hideProgressBarIfAllowed();
         listAdapter.swapCursor(cursor);
+
+        checkPreviouslyCheckedItems();
+        toggleButtonLabel(toggleButton, getListView());
+        deleteButton.setEnabled(areCheckedItems());
 
         if (getListView().getCount() == 0) {
             toggleButton.setEnabled(false);
