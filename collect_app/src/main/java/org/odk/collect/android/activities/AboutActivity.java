@@ -62,7 +62,8 @@ public class AboutActivity extends AppCompatActivity implements
                 {R.drawable.ic_forum, R.string.odk_forum, R.string.odk_forum_summary},
                 {R.drawable.ic_share, R.string.tell_your_friends, R.string.tell_your_friends_msg},
                 {R.drawable.ic_review_rate, R.string.leave_a_review, R.string.leave_a_review_msg},
-                {R.drawable.ic_stars, R.string.all_open_source_licenses, R.string.all_open_source_licenses_msg}
+                {R.drawable.ic_stars, R.string.all_open_source_licenses, R.string.all_open_source_licenses_msg},
+                {R.drawable.ic_person, R.string.contributors, R.string.contributors_msg}
         };
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
@@ -137,6 +138,9 @@ public class AboutActivity extends AppCompatActivity implements
                     Intent intent = new Intent(this, WebViewActivity.class);
                     intent.putExtra(CustomTabHelper.OPEN_URL, LICENSES_HTML_PATH);
                     startActivity(intent);
+                    break;
+                case 5:
+                    startActivity(new Intent(this, ContributorsActivity.class));
                     break;
             }
         }
