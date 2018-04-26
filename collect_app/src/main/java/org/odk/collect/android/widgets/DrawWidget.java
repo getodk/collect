@@ -67,6 +67,11 @@ public class DrawWidget extends BaseImageWidget {
     }
 
     @Override
+    public Intent addExtrasToIntent(Intent intent) {
+        return intent;
+    }
+
+    @Override
     public void clearAnswer() {
         super.clearAnswer();
         // reset buttons

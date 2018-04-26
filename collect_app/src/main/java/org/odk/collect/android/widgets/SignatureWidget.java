@@ -66,6 +66,11 @@ public class SignatureWidget extends BaseImageWidget {
     }
 
     @Override
+    public Intent addExtrasToIntent(Intent intent) {
+        return intent;
+    }
+
+    @Override
     public void clearAnswer() {
         super.clearAnswer();
         // reset buttons
@@ -83,7 +88,6 @@ public class SignatureWidget extends BaseImageWidget {
         super.cancelLongPress();
         signButton.cancelLongPress();
     }
-
 
     @Override
     public void onButtonClick(int buttonId) {

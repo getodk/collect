@@ -59,7 +59,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
     protected LinearLayout answerLayout;
 
     protected ImageClickHandler imageClickHandler;
-    protected ButtonClickHandler buttonClickHandler;
+    protected ExternalImageCaptureHandler imageCaptureHandler;
 
     public BaseImageWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -192,6 +192,8 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
     }
 
 
+    public abstract Intent addExtrasToIntent(Intent intent);
+
     /**
      *
      */
@@ -263,7 +265,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
                 i.putExtra(DrawActivity.REF_IMAGE, Uri.fromFile(f));
             }
             i.putExtra(DrawActivity.EXTRA_OUTPUT, Uri.fromFile(new File(Collect.TMPFILE_PATH)));
-
+            i = addExtrasToIntent(i);
             try {
                 waitForData();
                 ((Activity) getContext()).startActivityForResult(i, requestCode);
@@ -275,22 +277,44 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
                 cancelWaitingForData();
             }
         }
-
     }
 
-    protected interface ButtonClickHandler {
-        void captureImage();
+    protected interface ExternalImageCaptureHandler {
+        void captureImage(Intent intent, final int requestCode, final String context);
         void chooseImage();
     }
 
-    protected class ImageButtonClickHandler implements ButtonClickHandler {
+    protected class ImageCaptureHandler implements ExternalImageCaptureHandler {
 
         @Override
-        public void captureImage() {
+        public void captureImage(Intent intent, final int requestCode, final String errorText) {
+            try {
+                waitForData();
+                ((Activity) getContext()).startActivityForResult(intent, requestCode);
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(getContext(), errorText, Toast.LENGTH_SHORT).show();
+                cancelWaitingForData();
+            }
         }
 
         @Override
         public void chooseImage() {
+            Collect.getInstance().getActivityLogger().logInstanceAction(this, "chooseButton",
+                    "click", getFormEntryPrompt().getIndex());
+            errorTextView.setVisibility(View.GONE);
+            Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+            i.setType("image/*");
+
+            try {
+                waitForData();
+                ((Activity) getContext()).startActivityForResult(i,
+                        ApplicationConstants.RequestCodes.IMAGE_CHOOSER);
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(getContext(),
+                        getContext().getString(R.string.activity_not_found, getContext().getString(R.string.choose_image)),
+                        Toast.LENGTH_SHORT).show();
+                cancelWaitingForData();
+            }
         }
     }
 }
