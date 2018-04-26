@@ -80,7 +80,10 @@ public class ContributorsActivity extends AppCompatActivity {
                 commits = contributor.substring(0, contributor.indexOf('\t')).trim();
                 name = contributor.substring(contributor.indexOf(commits) + commits.length() + 1, contributor.indexOf(" <"));
                 email = contributor.substring(contributor.indexOf(name) + name.length() + 2, contributor.length() - 1);
-                contributors.add(new Contributor(commits, name, email));
+
+                if (!name.equals("README Bot")) { // don't show bot's contributions
+                    contributors.add(new Contributor(commits, name, email));
+                }
             }
         }
 
