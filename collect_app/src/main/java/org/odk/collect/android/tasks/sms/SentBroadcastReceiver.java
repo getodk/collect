@@ -27,11 +27,10 @@ public class SentBroadcastReceiver extends BroadcastReceiver {
 
         SentMessageResult result = new SentMessageResult();
 
-        result.setMessageId(intent.getExtras().getInt(SmsSenderJob.SMS_MESSAGE_ID));
-        result.setInstanceId(intent.getExtras().getString(SmsSenderJob.SMS_INSTANCE_ID));
+        result.setMessageId(intent.getExtras().getInt(SmsPendingIntents.SMS_MESSAGE_ID));
+        result.setInstanceId(intent.getExtras().getString(SmsPendingIntents.SMS_INSTANCE_ID));
 
-        switch (getResultCode())
-        {
+        switch (getResultCode()) {
             case Activity.RESULT_OK:
                 result.setMessageStatus(MessageStatus.Sent);
                 break;

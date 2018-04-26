@@ -1,5 +1,6 @@
 package org.odk.collect.android.tasks.sms;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.telephony.PhoneNumberUtils;
@@ -23,6 +24,7 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import timber.log.Timber;
 
+import static org.odk.collect.android.tasks.sms.SmsPendingIntents.checkIfSentIntentExists;
 import static org.odk.collect.android.utilities.FileUtil.getFileContents;
 import static org.odk.collect.android.utilities.GeneralUtils.makeCollection;
 
@@ -39,7 +41,11 @@ public class SmsService {
     @Inject
     SmsSubmissionManagerContract smsSubmissionManager;
 
-    public SmsService() {
+    private Context context;
+
+    public SmsService(Context context) {
+        this.context = context;
+
         Collect.getInstance().getComponent().inject(this);
     }
 
@@ -51,40 +57,54 @@ public class SmsService {
      *
      * @param instanceId
      */
-    public void submitForm(String instanceId,String instanceFilePath) {
+    public boolean submitForm(String instanceId, String instanceFilePath) {
         String text;
         try {
             text = getFileContents(new File(instanceFilePath));
         } catch (IOException e) {
 
             Timber.e(e);
-            return;
+            return false;
         }
 
-        List<String> parts = smsManager.divideMessage(text);
+        SmsSubmissionModel model = smsSubmissionManager.getSubmissionModel(instanceId);
 
-        SmsSubmissionModel model = new SmsSubmissionModel();
-        model.setInstanceId(instanceId);
-        model.setDateAdded(new Date());
+        if (model != null) {
 
-        List<Message> messages = new ArrayList<>();
+            Message message = model.getNextUnsentMessage();
 
-        for (String part : parts) {
+            if (message.isSending() && checkIfSentIntentExists(context, instanceId, message.getId())) {
+                return false;
+            }
+        } else {
 
-            Message message = new Message();
-            message.setPart(parts.indexOf(part) + 1);
-            message.setText(part);
-            message.setSent(false);
-            message.generateRandomMessageID();
+            List<String> parts = smsManager.divideMessage(text);
 
-            messages.add(message);
+            model = new SmsSubmissionModel();
+            model.setInstanceId(instanceId);
+            model.setDateAdded(new Date());
+
+            List<Message> messages = new ArrayList<>();
+
+            for (String part : parts) {
+
+                Message message = new Message();
+                message.setPart(parts.indexOf(part) + 1);
+                message.setText(part);
+                message.setSent(false);
+                message.generateRandomMessageID();
+
+                messages.add(message);
+            }
+
+            model.setMessages(messages);
+
+            smsSubmissionManager.saveSubmission(model);
         }
-
-        model.setMessages(messages);
-
-        smsSubmissionManager.saveSubmission(model);
 
         addMessageJobToQueue(model.getNextUnsentMessage(), instanceId);
+
+        return true;
     }
 
     /**
@@ -153,7 +173,7 @@ public class SmsService {
 
         String gateway = settings.getString(PreferenceKeys.KEY_SMS_GATEWAY, null);
 
-        if(!PhoneNumberUtils.isGlobalPhoneNumber(gateway)){
+        if (!PhoneNumberUtils.isGlobalPhoneNumber(gateway)) {
             return;
         }
 
