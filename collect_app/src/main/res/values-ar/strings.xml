@@ -135,7 +135,6 @@
   <string name="submission_url">مسار الارسال</string>
   <string name="font_size">حجم الخط</string>
   <string name="change_font_size">حجم الخط</string>
-  <string name="form_scan_starting">البحث عن الاستمارات…</string>
   <string name="access_error">خطأ اثناء الوصول %s:</string>
   <string name="manifest_server_error">المانيفست لايعلم نسخة OpenRosa - الخادم لايستجيب؟</string>
   <string name="root_element_error">العنصرالأساسي &lt;manifest\&gt; كان %s</string>

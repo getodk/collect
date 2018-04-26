@@ -144,7 +144,6 @@
   <string name="submission_url">Submissionspfad</string>
   <string name="font_size">Schriftgröße</string>
   <string name="change_font_size">Schriftgröße</string>
-  <string name="form_scan_starting">Formulare werden gesucht…</string>
   <string name="access_error">Fehler beim Zugriff auf %s: </string>
   <string name="manifest_server_error">Manifestantwort meldet keine OpenRosa Version — Serverfehler?</string>
   <string name="root_element_error">Root element ist nicht &lt;manifest\&gt; — war %s</string>

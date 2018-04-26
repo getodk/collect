@@ -39,9 +39,7 @@ import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
-import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -61,7 +59,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.common.collect.ImmutableList;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -114,6 +111,7 @@ import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormDefCache;
 import org.odk.collect.android.utilities.ImageConverter;
+import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.TimerLogger;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -808,14 +806,14 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 runOnUiThread(() -> {
                     dismissDialog(SAVING_IMAGE_DIALOG);
                     Timber.e("Could not receive chosen image");
-                    showCustomToast(getString(R.string.error_occured), Toast.LENGTH_SHORT);
+                    ToastUtils.showShortToastInMiddle(R.string.error_occured);
                 });
             }
         } catch (GDriveConnectionException e) {
             runOnUiThread(() -> {
                 dismissDialog(SAVING_IMAGE_DIALOG);
                 Timber.e("Could not receive chosen image due to connection problem");
-                showCustomToast(getString(R.string.gdrive_connection_exception), Toast.LENGTH_LONG);
+                ToastUtils.showLongToastInMiddle(R.string.gdrive_connection_exception);
             });
         }
     }
@@ -937,6 +935,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 }
 
                 if (formController != null) {
+                    formController.getTimerLogger().exitView();
                     formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.HIERARCHY,
                             0, null, false, true);
                 }
@@ -1627,27 +1626,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 return;
         }
 
-        showCustomToast(constraintText, Toast.LENGTH_SHORT);
-    }
-
-    /**
-     * Creates a toast with the specified message.
-     */
-    private void showCustomToast(String message, int duration) {
-        LayoutInflater inflater = (LayoutInflater) getSystemService(
-                Context.LAYOUT_INFLATER_SERVICE);
-
-        View view = inflater.inflate(R.layout.toast_view, null);
-
-        // set the text in the view
-        TextView tv = view.findViewById(R.id.message);
-        tv.setText(message);
-
-        Toast t = new Toast(this);
-        t.setView(view);
-        t.setDuration(duration);
-        t.setGravity(Gravity.CENTER, 0, 0);
-        t.show();
+        ToastUtils.showShortToastInMiddle(constraintText);
     }
 
     /**
@@ -1940,6 +1919,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);
                     }
                     removeTempInstance();
+                    MediaManager.INSTANCE.revertChanges();
                     finishReturnInstance();
                 }
                 alertDialog.dismiss();
@@ -2470,8 +2450,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             Intent reqIntent = getIntent();
             boolean showFirst = reqIntent.getBooleanExtra("start", false);
 
-            formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_RESUME, 0, null, false, true);
-
             if (!showFirst) {
                 // we've just loaded a saved form, so start in the hierarchy view
 
@@ -2486,6 +2464,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
                 String formMode = reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
                 if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
+                    formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_RESUME, 0, null, false, true);
+                    formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.HIERARCHY, 0, null, false, true);
                     startActivity(new Intent(this, EditFormHierarchyActivity.class));
                     return; // so we don't show the intro screen before jumping to the hierarchy
                 } else {
@@ -2494,6 +2474,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     }
                     finish();
                 }
+            } else {
+                formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_RESUME, 0, null, false, true);
             }
         }
 
@@ -2571,6 +2553,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 break;
             case FormEntryController.ANSWER_CONSTRAINT_VIOLATED:
             case FormEntryController.ANSWER_REQUIRED_BUT_EMPTY:
+                formController.getTimerLogger().exitView();
                 formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.CONSTRAINT_ERROR, 0, null, false, true);
                 refreshCurrentView();
 
