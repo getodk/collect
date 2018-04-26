@@ -35,13 +35,13 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.common.collect.ImmutableList;
+import com.rarepebble.colorpicker.ColorPickerView;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.IconMenuListAdapter;
 import org.odk.collect.android.adapters.model.IconMenuItem;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.AnimateUtils;
-import org.odk.collect.android.utilities.ColorPickerDialog;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.views.DrawView;
@@ -361,14 +361,17 @@ public class DrawActivity extends AppCompatActivity {
     public void setColor(View view) {
         if (view.getVisibility() == View.VISIBLE) {
             fabActions.performClick();
-            ColorPickerDialog cpd = new ColorPickerDialog(this,
-                    new ColorPickerDialog.OnColorChangedListener() {
-                        public void colorChanged(String key, int color) {
-                            drawView.setColor(color);
-                        }
-                    }, "key", drawView.getColor(), drawView.getColor(),
-                    getString(R.string.select_drawing_color));
-            cpd.show();
+
+            final ColorPickerView picker = new ColorPickerView(this);
+            picker.setColor(drawView.getColor());
+            picker.showAlpha(false);
+            picker.showHex(false);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder
+                    .setView(picker)
+                    .setPositiveButton(R.string.ok, (dialog, which) -> drawView.setColor(picker.getColor()))
+                    .show();
         }
     }
 }
