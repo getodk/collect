@@ -18,17 +18,14 @@ public class SmsSubmissionManagerImpl implements SmsSubmissionManagerContract {
     private static SharedPreferences preferences;
     private SharedPreferences.Editor editor;
 
-    private static final String PREF_FILE_NAME = "submissions_preferences";
-    private static final String KEY_SUBMISSION_LIST = "submissions_list";
+    public static final String PREF_FILE_NAME = "submissions_preferences";
+    public static final String KEY_SUBMISSION_LIST = "submissions_list";
 
     public SmsSubmissionManagerImpl(Context context) {
         preferences = context.getSharedPreferences(PREF_FILE_NAME, Context.MODE_PRIVATE);
         editor = this.preferences.edit();
     }
 
-    public void clear() {
-        preferences.edit().clear().apply();
-    }
 
     public SmsSubmissionModel getSubmissionModel(String instanceId) {
         List<SmsSubmissionModel> models = getSubmissionListFromPrefs();
@@ -137,6 +134,11 @@ public class SmsSubmissionManagerImpl implements SmsSubmissionManagerContract {
         String list = new Gson().toJson(models, submissionModelListTpe);
         editor.putString(KEY_SUBMISSION_LIST, list);
         editor.commit();
+    }
+
+    @Override
+    public void clearSubmissions() {
+        preferences.edit().clear().apply();
     }
 
     private void saveSubmissionListToPrefs(List<SmsSubmissionModel> models) {

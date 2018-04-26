@@ -13,6 +13,8 @@ public interface SmsSubmissionManagerContract {
     void deleteSubmission(String instanceId);
 
     void saveSubmission(SmsSubmissionModel model);
+
+    void clearSubmissions();
 }
 
 
