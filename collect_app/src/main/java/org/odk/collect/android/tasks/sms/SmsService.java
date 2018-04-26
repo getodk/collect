@@ -12,6 +12,8 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,6 +23,7 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import timber.log.Timber;
 
+import static org.odk.collect.android.utilities.FileUtil.getFileContents;
 import static org.odk.collect.android.utilities.GeneralUtils.makeCollection;
 
 /**
@@ -48,8 +51,15 @@ public class SmsService {
      *
      * @param instanceId
      */
-    public void submitForm(String instanceId) {
-        String text = "";
+    public void submitForm(String instanceId,String instanceFilePath) {
+        String text;
+        try {
+            text = getFileContents(new File(instanceFilePath));
+        } catch (IOException e) {
+
+            Timber.e(e);
+            return;
+        }
 
         List<String> parts = smsManager.divideMessage(text);
 

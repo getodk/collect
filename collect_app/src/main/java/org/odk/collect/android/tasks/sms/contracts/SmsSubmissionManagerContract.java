@@ -8,6 +8,8 @@ public interface SmsSubmissionManagerContract {
 
     boolean markMessageAsSent(String instanceId,int messageId);
 
+    boolean markMessageAsSending(String instanceId, int messageId);
+
     void deleteSubmission(String instanceId);
 
     void saveSubmission(SmsSubmissionModel model);

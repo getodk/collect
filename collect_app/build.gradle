@@ -293,7 +293,6 @@ dependencies {
     androidTestImplementation group: 'com.squareup.okhttp3', name: 'mockwebserver', version: '3.9.0'
 }
 
-
 // Must be at bottom to prevent dependency collisions
 // https://developers.google.com/android/guides/google-services-plugin
 apply plugin: 'com.google.gms.google-services'

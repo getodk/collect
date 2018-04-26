@@ -69,6 +69,32 @@ public class SmsSubmissionManagerImpl implements SmsSubmissionManagerContract {
     }
 
     @Override
+    public boolean markMessageAsSending(String instanceId, int messageId) {
+        SmsSubmissionModel model = getSubmissionModel(instanceId);
+
+        if (model == null) {
+            return false;
+        }
+
+        List<Message> list = model.getMessages();
+
+        boolean updated = false;
+        for (Message message : list) {
+            if (message.getId() == messageId) {
+                message.setSending(true);
+                list.set(list.indexOf(message), message);
+
+                updated = true;
+            }
+        }
+
+        model.setMessages(list);
+        saveSubmission(model);
+
+        return updated;
+    }
+
+    @Override
     public void deleteSubmission(String instanceId) {
         List<SmsSubmissionModel> models = getSubmissionListFromPrefs();
 

@@ -25,7 +25,7 @@ public class FileUtil {
         return new File(mediaFolderPath + "/itemsets.csv");
     }
 
-    private static String getFileContents(final File file) throws IOException {
+    public static String getFileContents(final File file) throws IOException {
         final InputStream inputStream = new FileInputStream(file);
         final BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 

@@ -7,6 +7,7 @@ public class Message {
     private int id;
     private String text;
     private boolean sent;
+    private boolean sending;
     private String lastErrorMessage;
 
     public int getPart() {
@@ -44,6 +45,14 @@ public class Message {
 
     public void setLastErrorMessage(String lastErrorMessage) {
         this.lastErrorMessage = lastErrorMessage;
+    }
+
+    public boolean isSending() {
+        return sending;
+    }
+
+    public void setSending(boolean sending) {
+        this.sending = sending;
     }
 
     public void generateRandomMessageID() {

@@ -11,6 +11,7 @@ import com.birbit.android.jobqueue.Params;
 import com.birbit.android.jobqueue.RetryConstraint;
 
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 
 import javax.inject.Inject;
 
@@ -30,6 +31,8 @@ public class SmsSenderJob extends Job {
 
     @Inject
     transient SmsManager smsManager;
+    @Inject
+    transient SmsSubmissionManagerContract submissionManager;
     private SmsJobMessage jobMessage;
 
     public SmsSenderJob(SmsJobMessage jobMessage) {
@@ -48,6 +51,8 @@ public class SmsSenderJob extends Job {
     @Override
     public void onRun() {
         Collect.getInstance().getComponent().inject(this);
+
+        submissionManager.markMessageAsSending(jobMessage.getInstanceId(),jobMessage.getMessageId());
 
         Intent sendIntent = new Intent(SMS_SEND_ACTION);
         sendIntent.putExtra(SMS_INSTANCE_ID, jobMessage.getInstanceId());
