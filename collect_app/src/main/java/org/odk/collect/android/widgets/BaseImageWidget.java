@@ -25,6 +25,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -191,18 +193,23 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
         binaryName = getFormEntryPrompt().getAnswerText();
     }
 
-
-    public abstract Intent addExtrasToIntent(Intent intent);
+    /**
+     * Enables a subclass to add extras to the intent before launching the draw activity.
+     *
+     * @param intent to add extras
+     * @return intent with added extras
+     */
+    public abstract Intent addExtrasToIntent(@NonNull Intent intent);
 
     /**
-     *
+     * Interface for Clicking on Images
      */
     protected interface ImageClickHandler {
         void clickImage(String context);
     }
 
     /**
-     *
+     * Class to implement launching of viewing an image Activity
      */
     protected class ViewImageClickHandler implements ImageClickHandler {
 
@@ -216,6 +223,8 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
             if (uri != null) {
                 Timber.i("setting view path to: %s", uri.toString());
                 i.setDataAndType(uri, "image/*");
+
+
                 try {
                     getContext().startActivity(i);
                 } catch (ActivityNotFoundException e) {
@@ -229,7 +238,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
     }
 
     /**
-     *
+     * Class to implement launching of drawing image Activity when clicked
      */
     protected class DrawImageClickHandler implements ImageClickHandler {
 
@@ -248,14 +257,11 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
                         .getActivityLogger()
                         .logInstanceAction(this, context, "click",
                                 getFormEntryPrompt().getIndex());
-                launchActivity();
+                launchDrawActivity();
             }
         }
 
-        /**
-         *
-         */
-        private void launchActivity() {
+        private void launchDrawActivity() {
             errorTextView.setVisibility(View.GONE);
             Intent i = new Intent(getContext(), DrawActivity.class);
             i.putExtra(DrawActivity.OPTION, drawOption);
@@ -266,35 +272,26 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
             }
             i.putExtra(DrawActivity.EXTRA_OUTPUT, Uri.fromFile(new File(Collect.TMPFILE_PATH)));
             i = addExtrasToIntent(i);
-            try {
-                waitForData();
-                ((Activity) getContext()).startActivityForResult(i, requestCode);
-            } catch (ActivityNotFoundException e) {
-                Toast.makeText(
-                        getContext(),
-                        getContext().getString(R.string.activity_not_found,
-                                getContext().getString(R.string.draw_image)), Toast.LENGTH_SHORT).show();
-                cancelWaitingForData();
-            }
+            launchActivityForResult(i,requestCode,R.string.draw_image);
         }
     }
 
+    /**
+     * Interface for choosing or capturing a new image
+     */
     protected interface ExternalImageCaptureHandler {
-        void captureImage(Intent intent, final int requestCode, final String context);
+        void captureImage(Intent intent, final int requestCode, final int stringResource);
         void chooseImage();
     }
 
+    /**
+     * Class for launching the image capture or choose image activities
+     */
     protected class ImageCaptureHandler implements ExternalImageCaptureHandler {
 
         @Override
-        public void captureImage(Intent intent, final int requestCode, final String errorText) {
-            try {
-                waitForData();
-                ((Activity) getContext()).startActivityForResult(intent, requestCode);
-            } catch (ActivityNotFoundException e) {
-                Toast.makeText(getContext(), errorText, Toast.LENGTH_SHORT).show();
-                cancelWaitingForData();
-            }
+        public void captureImage(Intent intent, final int requestCode, final int stringResource) {
+            launchActivityForResult(intent,requestCode,stringResource);
         }
 
         @Override
@@ -304,17 +301,26 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
             errorTextView.setVisibility(View.GONE);
             Intent i = new Intent(Intent.ACTION_GET_CONTENT);
             i.setType("image/*");
+            launchActivityForResult(i,ApplicationConstants.RequestCodes.IMAGE_CHOOSER, R.string.choose_image);
+        }
+    }
 
-            try {
-                waitForData();
-                ((Activity) getContext()).startActivityForResult(i,
-                        ApplicationConstants.RequestCodes.IMAGE_CHOOSER);
-            } catch (ActivityNotFoundException e) {
-                Toast.makeText(getContext(),
-                        getContext().getString(R.string.activity_not_found, getContext().getString(R.string.choose_image)),
-                        Toast.LENGTH_SHORT).show();
-                cancelWaitingForData();
-            }
+    /**
+     * Standard method for launching an Activity.
+     *
+     * @param intent - The Intent to start
+     * @param resourceCode - Code to return when Activity exits
+     * @param errorStringResource - String resource for error toast
+     */
+    protected void launchActivityForResult(Intent intent, final int resourceCode, final int errorStringResource) {
+        try {
+            waitForData();
+            ((Activity) getContext()).startActivityForResult(intent, resourceCode);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(getContext(),
+                    getContext().getString(R.string.activity_not_found, getContext().getString(errorStringResource)),
+                    Toast.LENGTH_SHORT).show();
+            cancelWaitingForData();
         }
     }
 }

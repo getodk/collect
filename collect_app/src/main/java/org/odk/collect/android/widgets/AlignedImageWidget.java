@@ -171,11 +171,7 @@ public class AlignedImageWidget extends BaseImageWidget {
         // if this gets modified, the onActivityResult in
         // FormEntyActivity will also need to be updated.
 
-        imageCaptureHandler.captureImage(
-                i,
-                RequestCodes.ALIGNED_IMAGE,
-                getContext().getString(R.string.activity_not_found,
-                getContext().getString(R.string.aligned_image_capture)));
+        imageCaptureHandler.captureImage(i, RequestCodes.ALIGNED_IMAGE, R.string.aligned_image_capture);
     }
 
 }

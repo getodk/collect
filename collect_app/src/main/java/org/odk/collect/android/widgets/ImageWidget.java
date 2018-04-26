@@ -175,10 +175,7 @@ public class ImageWidget extends BaseImageWidget {
                     Uri.fromFile(new File(Collect.TMPFILE_PATH)));
         }
 
-        imageCaptureHandler.captureImage(
-                i,
-                RequestCodes.IMAGE_CAPTURE,
-                getContext().getString(R.string.activity_not_found, getContext().getString(R.string.capture_image)));
+        imageCaptureHandler.captureImage(i, RequestCodes.IMAGE_CAPTURE, R.string.capture_image);
     }
 
 }
