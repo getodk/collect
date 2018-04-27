@@ -54,7 +54,6 @@ public class SmsService {
         Collect.getInstance().getComponent().inject(this);
     }
 
-
     /**
      * Responsible for fetching the saved form that adheres to the SMS spec and
      * persisting the form as a group of messages so that they can be sent via a
@@ -118,12 +117,12 @@ public class SmsService {
      *
      * @param instanceId
      */
-    public void cancelFormSubmission(String instanceId) {
+    public boolean cancelFormSubmission(String instanceId) {
 
         SmsSubmissionModel model = smsSubmissionManager.getSubmissionModel(instanceId);
 
         if (model == null) {
-            return;
+            return false;
         }
 
         List<String> jobTags = makeCollection(Observable.fromIterable(model.getMessages())
@@ -133,6 +132,9 @@ public class SmsService {
         jobManager.cancelJobs(TagConstraint.ANY, jobTags.toArray(new String[0]));
 
         smsSubmissionManager.deleteSubmission(instanceId);
+
+        return true;
+
     }
 
     /***

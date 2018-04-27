@@ -5,6 +5,7 @@ import android.app.Application;
 import org.odk.collect.android.injection.config.AppComponent;
 import org.odk.collect.android.injection.config.scopes.PerApplication;
 import org.odk.collect.android.sms.SmsSenderJobTest;
+import org.odk.collect.android.sms.SmsServiceTest;
 
 import dagger.BindsInstance;
 import dagger.Component;
@@ -15,7 +16,8 @@ import dagger.android.support.AndroidSupportInjectionModule;
         AndroidSupportInjectionModule.class,
         TestModule.class,
         ActivityBuilder.class
-})public interface TestComponent extends AppComponent {
+})
+public interface TestComponent extends AppComponent {
     @Component.Builder
     interface Builder {
 
@@ -26,4 +28,5 @@ import dagger.android.support.AndroidSupportInjectionModule;
     }
 
     void inject(SmsSenderJobTest smsSenderJobTest);
+    void inject(SmsServiceTest smsServiceTest);
 }
