@@ -16,6 +16,7 @@ package org.odk.collect.android.preferences;
 
 import android.os.Bundle;
 import android.preference.ListPreference;
+import android.preference.Preference;
 import android.support.annotation.Nullable;
 import android.view.View;
 
@@ -23,6 +24,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.tasks.ServerPollingJob;
 
 import static org.odk.collect.android.preferences.AdminKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOMATIC_UPDATE;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOSEND;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_CONSTRAINT_BEHAVIOR;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_IMAGE_SIZE;
@@ -39,6 +41,7 @@ public class FormManagementPreferences extends BasePreferenceFragment {
         initListPref(KEY_AUTOSEND);
         initListPref(KEY_IMAGE_SIZE);
         initListPref(KEY_PERIODIC_FORM_UPDATES_CHECK);
+        initPref(KEY_AUTOMATIC_UPDATE);
     }
 
     @Override
@@ -66,11 +69,25 @@ public class FormManagementPreferences extends BasePreferenceFragment {
                 preference.setSummary(entry);
                 if (key.equals(KEY_PERIODIC_FORM_UPDATES_CHECK)) {
                     ServerPollingJob.schedulePeriodicJob((String) newValue);
+                    if (newValue.equals(getString(R.string.never_value))) {
+                        findPreference(KEY_AUTOMATIC_UPDATE).setEnabled(false);
+                    }
+                    getActivity().recreate();
                 }
                 return true;
             });
             if (key.equals(KEY_CONSTRAINT_BEHAVIOR)) {
                 pref.setEnabled((Boolean) AdminSharedPreferences.getInstance().get(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
+            }
+        }
+    }
+
+    private void initPref(String key) {
+        final Preference pref = findPreference(key);
+
+        if (pref != null) {
+            if (key.equals(KEY_AUTOMATIC_UPDATE)) {
+                pref.setEnabled(!GeneralSharedPreferences.getInstance().get(KEY_PERIODIC_FORM_UPDATES_CHECK).equals(getString(R.string.never_value)));
             }
         }
     }

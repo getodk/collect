@@ -198,7 +198,7 @@ public class ServerPollingJob extends Job {
 
     public static void pollServerIfNeeded() {
         if (GeneralSharedPreferences.getInstance().getBoolean(POLL_SERVER_IMMEDIATELY_AFTER_RECEIVING_NETWORK, false)
-                && !GeneralSharedPreferences.getInstance().get(KEY_PERIODIC_FORM_UPDATES_CHECK).equals(R.string.never_value)) {
+                && !GeneralSharedPreferences.getInstance().get(KEY_PERIODIC_FORM_UPDATES_CHECK).equals(Collect.getInstance().getString(R.string.never_value))) {
             new JobRequest.Builder(ServerPollingJob.TAG)
                     .startNow()
                     .build()
