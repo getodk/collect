@@ -1,7 +1,10 @@
-package org.odk.collect.android.tasks.sms;
+package org.odk.collect.android.tasks.sms.models;
 
 import java.util.Random;
 
+/**
+ * Represents a single message that's been sent.
+ */
 public class Message {
     private int part;
     private int id;

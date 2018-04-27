@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.telephony.SmsManager;
 
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.tasks.sms.models.MessageStatus;
+import org.odk.collect.android.tasks.sms.models.SentMessageResult;
 
 import javax.inject.Inject;
 

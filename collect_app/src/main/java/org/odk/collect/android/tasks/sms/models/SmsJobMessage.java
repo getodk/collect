@@ -1,7 +1,11 @@
-package org.odk.collect.android.tasks.sms;
+package org.odk.collect.android.tasks.sms.models;
 
 import java.io.Serializable;
 
+/**
+ * A model that represents the data that a SMSSenderJob
+ * needs to perform it's task.
+ */
 public class SmsJobMessage implements Serializable {
     private int messageId;
     private String text;

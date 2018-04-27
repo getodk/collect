@@ -9,6 +9,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
+import org.odk.collect.android.tasks.sms.models.Message;
+import org.odk.collect.android.tasks.sms.models.SmsSubmissionModel;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;

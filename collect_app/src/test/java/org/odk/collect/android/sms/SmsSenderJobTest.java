@@ -13,10 +13,10 @@ import org.odk.collect.android.injection.TestComponent;
 import org.odk.collect.android.sms.base.BaseSmsTest;
 import org.odk.collect.android.sms.base.Event;
 import org.odk.collect.android.sms.base.SampleData;
-import org.odk.collect.android.tasks.sms.Message;
-import org.odk.collect.android.tasks.sms.SmsJobMessage;
+import org.odk.collect.android.tasks.sms.models.Message;
+import org.odk.collect.android.tasks.sms.models.SmsJobMessage;
 import org.odk.collect.android.tasks.sms.SmsSenderJob;
-import org.odk.collect.android.tasks.sms.SmsSubmissionModel;
+import org.odk.collect.android.tasks.sms.models.SmsSubmissionModel;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
@@ -33,7 +33,7 @@ import static org.junit.Assert.assertTrue;
 import static org.robolectric.Shadows.shadowOf;
 
 /**
- * This job verifies that when a SMS Sender Job is added to the Job Manager Queue
+ * This test verifies that when a SMS Sender Job is added to the Job Manager Queue
  * it executes successfully by sending the message.
  * A Shadow instance of the SMSManager with the results of SMSManager from within the
  * job is then compared with the params passed to it to verify it's behaviour.

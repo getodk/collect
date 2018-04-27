@@ -1,10 +1,13 @@
-package org.odk.collect.android.tasks.sms;
+package org.odk.collect.android.tasks.sms.models;
 
 import java.util.Date;
 import java.util.List;
 
 import io.reactivex.Observable;
 
+/**
+ * Tracks an instance's sms submission.
+ */
 public class SmsSubmissionModel {
     private String instanceId;
     private List<Message> messages;

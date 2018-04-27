@@ -11,6 +11,7 @@ import com.birbit.android.jobqueue.RetryConstraint;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
+import org.odk.collect.android.tasks.sms.models.SmsJobMessage;
 
 import javax.inject.Inject;
 

@@ -1,7 +1,10 @@
 package org.odk.collect.android.tasks.sms.contracts;
 
-import org.odk.collect.android.tasks.sms.SmsSubmissionModel;
+import org.odk.collect.android.tasks.sms.models.SmsSubmissionModel;
 
+/**
+ * Contract for a component that's utilized to track sms submissions.
+ */
 public interface SmsSubmissionManagerContract {
 
     SmsSubmissionModel getSubmissionModel(String instanceId);

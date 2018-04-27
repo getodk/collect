@@ -1,5 +1,9 @@
-package org.odk.collect.android.tasks.sms;
+package org.odk.collect.android.tasks.sms.models;
 
+/**
+ * Encapsulates all the data that's received when the SentBroadcastReceiver
+ * is triggered. This is then passed to the SMSService for processing.
+ */
 public class SentMessageResult {
     private MessageStatus messageStatus;
     private int messageId;

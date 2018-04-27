@@ -1,7 +1,7 @@
 package org.odk.collect.android.sms.base;
 
-import org.odk.collect.android.tasks.sms.Message;
-import org.odk.collect.android.tasks.sms.SmsSubmissionModel;
+import org.odk.collect.android.tasks.sms.models.Message;
+import org.odk.collect.android.tasks.sms.models.SmsSubmissionModel;
 
 import java.util.ArrayList;
 import java.util.Date;

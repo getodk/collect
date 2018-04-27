@@ -12,6 +12,11 @@ import com.birbit.android.jobqueue.TagConstraint;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
+import org.odk.collect.android.tasks.sms.models.Message;
+import org.odk.collect.android.tasks.sms.models.MessageStatus;
+import org.odk.collect.android.tasks.sms.models.SentMessageResult;
+import org.odk.collect.android.tasks.sms.models.SmsJobMessage;
+import org.odk.collect.android.tasks.sms.models.SmsSubmissionModel;
 
 import java.io.File;
 import java.io.IOException;

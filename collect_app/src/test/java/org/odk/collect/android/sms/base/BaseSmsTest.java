@@ -7,7 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import org.odk.collect.android.tasks.sms.SmsSubmissionManagerImpl;
-import org.odk.collect.android.tasks.sms.SmsSubmissionModel;
+import org.odk.collect.android.tasks.sms.models.SmsSubmissionModel;
 import org.robolectric.RuntimeEnvironment;
 
 import java.lang.reflect.Type;
