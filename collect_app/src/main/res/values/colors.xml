@@ -19,5 +19,5 @@ the License.
     <color name="tintColor">#2196F3</color>
     <color name="black">#000000</color>
     <color name="grey">#757575</color>
-
+    <color name="white_smoke">#F5F5F5</color>
 </resources>

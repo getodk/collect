@@ -58,6 +58,26 @@ def getVersionName = { ->
     }
 }
 
+def getContributorList = { ->
+    try {
+        def stdout = new ByteArrayOutputStream()
+        exec {
+            switch (ant.properties.os) {
+                case 'windows':
+                    commandLine 'cmd', '/c', 'git', 'shortlog', '-nse', 'master'
+                    break
+                case 'unix':
+                    commandLine 'git', 'shortlog', '-nse', 'master'
+                    break
+            }
+            standardOutput = stdout
+        }
+        return stdout.toString().trim().split("\\n")
+    } catch (ignored) {
+        return null
+    }
+}
+
 def secretsFile = file('secrets.properties')
 def secrets = new Properties()
 if (secretsFile.exists()) {
@@ -78,6 +98,7 @@ android {
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
         archivesBaseName = 'collect'
+        buildConfigField "String", "CONTRIBUTOR_LIST", "\"${getContributorList}\""
     }
 
     signingConfigs {
