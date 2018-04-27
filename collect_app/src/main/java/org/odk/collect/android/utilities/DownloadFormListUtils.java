@@ -28,7 +28,6 @@ import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.logic.ManifestFile;
 import org.odk.collect.android.logic.MediaFile;
 import org.odk.collect.android.preferences.PreferenceKeys;
-import org.odk.collect.android.tasks.DownloadFormsTask;
 import org.opendatakit.httpclientandroidlib.client.HttpClient;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 
@@ -217,7 +216,7 @@ public class DownloadFormListUtils {
                 boolean areNewerMediaFilesAvailable = false;
                 ManifestFile manifestFile = null;
                 if (isThisFormAlreadyDownloaded(formId)) {
-                    isNewerFormVersionAvailable = isNewerFormVersionAvailable(DownloadFormsTask.getMd5Hash(hash));
+                    isNewerFormVersionAvailable = isNewerFormVersionAvailable(FormDownloader.getMd5Hash(hash));
                     if ((!isNewerFormVersionAvailable || alwaysCheckMediaFiles) && manifestUrl != null) {
                         manifestFile = getManifestFile(manifestUrl);
                         if (manifestFile != null) {
@@ -323,7 +322,7 @@ public class DownloadFormListUtils {
             return null;
         }
         String namespace = manifestElement.getNamespace();
-        if (!DownloadFormsTask.isXformsManifestNamespacedElement(manifestElement)) {
+        if (!FormDownloader.isXformsManifestNamespacedElement(manifestElement)) {
             errMessage += Collect.getInstance().getString(R.string.root_namespace_error, namespace);
             Timber.e(errMessage);
             return null;
@@ -336,7 +335,7 @@ public class DownloadFormListUtils {
                 continue;
             }
             Element mediaFileElement = manifestElement.getElement(i);
-            if (!DownloadFormsTask.isXformsManifestNamespacedElement(mediaFileElement)) {
+            if (!FormDownloader.isXformsManifestNamespacedElement(mediaFileElement)) {
                 // someone else's extension?
                 continue;
             }
@@ -353,7 +352,7 @@ public class DownloadFormListUtils {
                         continue;
                     }
                     Element child = mediaFileElement.getElement(j);
-                    if (!DownloadFormsTask.isXformsManifestNamespacedElement(child)) {
+                    if (!FormDownloader.isXformsManifestNamespacedElement(child)) {
                         // someone else's extension?
                         continue;
                     }

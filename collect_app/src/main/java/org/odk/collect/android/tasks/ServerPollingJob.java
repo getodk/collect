@@ -40,12 +40,14 @@ import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.DownloadFormListUtils;
+import org.odk.collect.android.utilities.FormDownloader;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import static org.odk.collect.android.activities.FormDownloadList.DISPLAY_ONLY_UPDATED_FORMS;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOMATIC_UPDATE;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JR_FORM_ID;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.LAST_DETECTED_FORM_VERSION_HASH;
@@ -83,19 +85,36 @@ public class ServerPollingJob extends Job {
                 }
 
                 List<FormDetails> newDetectedForms = new ArrayList<>();
-                for (FormDetails formDetails : formList.values()) {
-                    if (formDetails.isNewerFormVersionAvailable() || formDetails.areNewerMediaFilesAvailable()) {
-                        String manifestFileHash = formDetails.getManifestFileHash() != null ? formDetails.getManifestFileHash() : "";
-                        String formVersionHash = DownloadFormsTask.getMd5Hash(formDetails.getHash()) + manifestFileHash;
-                        if (!wasThisNewerFormVersionAlreadyDetected(formVersionHash)) {
-                            newDetectedForms.add(formDetails);
-                            updateLastDetectedFormVersionHash(formDetails.getFormID(), formVersionHash);
+                newDetectedForms.addAll(formList.values());
+
+                if (GeneralSharedPreferences.getInstance().getBoolean(KEY_AUTOMATIC_UPDATE, false)) {
+                    final HashMap<FormDetails, String> result = new FormDownloader().downloadForms(newDetectedForms);
+                    informAboutNewDownloadedForms(FormDownloadList.getDownloadResultMessage(result));
+                } else {
+                    for (FormDetails formDetails : newDetectedForms) {
+                        if (formDetails.isNewerFormVersionAvailable() || formDetails.areNewerMediaFilesAvailable()) {
+                            String manifestFileHash = formDetails.getManifestFileHash() != null ? formDetails.getManifestFileHash() : "";
+                            String formVersionHash = FormDownloader.getMd5Hash(formDetails.getHash()) + manifestFileHash;
+                            if (wasThisNewerFormVersionAlreadyDetected(formVersionHash)) {
+                                newDetectedForms.remove(formDetails);
+                            } else {
+                                updateLastDetectedFormVersionHash(formDetails.getFormID(), formVersionHash);
+                            }
                         }
                     }
-                }
 
-                if (!newDetectedForms.isEmpty()) {
-                    newFormVersionDetected(newDetectedForms);
+                    if (!newDetectedForms.isEmpty()) {
+                        StringBuilder listOfForms = new StringBuilder();
+                        for (FormDetails formDetails : newDetectedForms) {
+                            listOfForms.append(formDetails.getFormName());
+
+                            if (newDetectedForms.indexOf(formDetails) < newDetectedForms.size() - 1) {
+                                listOfForms.append(", ");
+                            }
+                        }
+
+                        informAboutNewAvailableForms(listOfForms.toString());
+                    }
                 }
                 return Result.SUCCESS;
             } else {
@@ -131,19 +150,7 @@ public class ServerPollingJob extends Job {
         return cursor == null || cursor.getCount() > 0;
     }
 
-    private void newFormVersionDetected(List<FormDetails> newerForms) {
-        StringBuilder listOfForms = new StringBuilder();
-        for (FormDetails formDetails : newerForms) {
-            listOfForms.append(formDetails.getFormName());
-
-            if (newerForms.indexOf(formDetails) < newerForms.size() - 1) {
-                listOfForms.append(", ");
-            }
-        }
-        showNotification(listOfForms.toString());
-    }
-
-    private void showNotification(String message) {
+    private void informAboutNewAvailableForms(String message) {
         Intent intent = new Intent(getContext(), FormDownloadList.class);
         intent.putExtra(DISPLAY_ONLY_UPDATED_FORMS, true);
         PendingIntent contentIntent = PendingIntent.getActivity(getContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -155,6 +162,20 @@ public class ServerPollingJob extends Job {
                 .setContentText(message)
                 .setAutoCancel(true)
                 .setContentIntent(contentIntent);
+
+        NotificationManager manager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        if (manager != null) {
+            manager.notify(0, builder.build());
+        }
+    }
+
+    private void informAboutNewDownloadedForms(String message) {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext())
+                .setSmallIcon(R.drawable.ic_info)
+                .setLargeIcon(BitmapFactory.decodeResource(getContext().getResources(), R.drawable.notes))
+                .setContentTitle(getContext().getString(R.string.new_form_version_downloaded))
+                .setContentText(message)
+                .setAutoCancel(true);
 
         NotificationManager manager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
         if (manager != null) {

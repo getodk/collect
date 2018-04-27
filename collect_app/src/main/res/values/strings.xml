@@ -592,4 +592,7 @@
     <string name="every_six_hours">Every six hours</string>
     <string name="every_one_day">Every one day</string>
     <string name="form_updates_available">Form update available:</string>
+    <string name="new_form_version_downloaded">New form version downloaded:</string>
+    <string name="automatic_update">Automatic update</string>
+    <string name="automatic_update_summary">Automatically download new versions of forms when they become available</string>
 </resources>

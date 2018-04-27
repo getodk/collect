@@ -47,6 +47,7 @@ public final class AdminKeys {
     private static final String KEY_DELETE_AFTER_SEND           = "delete_after_send";
     private static final String KEY_INSTANCE_FORM_SYNC          = "instance_form_sync";
     private static final String KEY_PERIODIC_FORM_UPDATES_CHECK = "periodic_form_updates_check";
+    private static final String KEY_AUTOMATIC_UPDATE            = "automatic_update";
     private static final String KEY_APP_LANGUAGE                = "change_app_language";
 
     private static final String KEY_AUTOSEND                    = "change_autosend";
@@ -81,6 +82,7 @@ public final class AdminKeys {
             ag(KEY_DELETE_AFTER_SEND,          PreferenceKeys.KEY_DELETE_AFTER_SEND),
             ag(KEY_INSTANCE_FORM_SYNC,         PreferenceKeys.KEY_INSTANCE_SYNC),
             ag(KEY_PERIODIC_FORM_UPDATES_CHECK, PreferenceKeys.KEY_PERIODIC_FORM_UPDATES_CHECK),
+            ag(KEY_AUTOMATIC_UPDATE,           PreferenceKeys.KEY_AUTOMATIC_UPDATE),
 
             ag(KEY_AUTOSEND,                   PreferenceKeys.KEY_AUTOSEND),
 
@@ -128,7 +130,8 @@ public final class AdminKeys {
             KEY_HIGH_RESOLUTION,
             KEY_IMAGE_SIZE,
             KEY_INSTANCE_FORM_SYNC,
-            KEY_PERIODIC_FORM_UPDATES_CHECK
+            KEY_PERIODIC_FORM_UPDATES_CHECK,
+            KEY_AUTOMATIC_UPDATE
     );
 
     static Collection<String> userInterfaceKeys = Arrays.asList(
