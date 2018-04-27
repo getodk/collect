@@ -115,6 +115,8 @@ public abstract class FileManagerFragment extends AppListFragment implements Loa
 
         if (getListView().getCount() == 0) {
             toggleButton.setEnabled(false);
+        } else {
+            toggleButton.setEnabled(true);
         }
     }
 
