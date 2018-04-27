@@ -24,7 +24,7 @@
         android:layout_height="match_parent"
         android:layout_marginTop="28dip"/>
 
-    <Button
+    <android.support.v7.widget.AppCompatButton
         android:text="@string/record_geopoint"
         android:id="@+id/manual_button"
         android:layout_width="match_parent"
@@ -36,8 +36,8 @@
         android:layout_marginLeft="5dp"
         android:layout_marginStart="5dp"
         android:paddingBottom="20dp"
-        android:drawableRight="@drawable/ic_distance"
-        android:drawableEnd="@drawable/ic_distance"
+        android:drawableRight="@drawable/ic_distance_wrapped"
+        android:drawableEnd="@drawable/ic_distance_wrapped"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_toLeftOf="@+id/scroller"
