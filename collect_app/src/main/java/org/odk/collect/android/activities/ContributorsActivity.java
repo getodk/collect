@@ -64,6 +64,10 @@ public class ContributorsActivity extends AppCompatActivity {
         name.setText(R.string.name_of_contributor);
         email.setText(R.string.email_of_contributor);
 
+        commits.setTextColor(ContextCompat.getColor(this, android.R.color.white));
+        name.setTextColor(ContextCompat.getColor(this, android.R.color.white));
+        email.setTextColor(ContextCompat.getColor(this, android.R.color.white));
+
         commits.setTypeface(null, Typeface.BOLD);
         name.setTypeface(null, Typeface.BOLD);
         email.setTypeface(null, Typeface.BOLD);
