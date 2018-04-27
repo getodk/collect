@@ -35,7 +35,7 @@ public class SmsSenderJob extends Job {
 
     public SmsSenderJob(SmsJobMessage jobMessage) {
         super(new Params(PRIORITY)
-                .addTags(String.valueOf(jobMessage.getMessageId()),jobMessage.getInstanceId())
+                .addTags(String.valueOf(jobMessage.getMessageId()), jobMessage.getInstanceId())
                 .persist());
 
         this.jobMessage = jobMessage;
@@ -50,13 +50,13 @@ public class SmsSenderJob extends Job {
     public void onRun() {
         Collect.getInstance().getComponent().inject(this);
 
-        submissionManager.markMessageAsSending(jobMessage.getInstanceId(),jobMessage.getMessageId());
+        submissionManager.markMessageAsSending(jobMessage.getInstanceId(), jobMessage.getMessageId());
 
-        PendingIntent sentPendingIntent = getSentPendingIntent(getApplicationContext(),jobMessage.getInstanceId(),jobMessage.getMessageId());
+        PendingIntent sentPendingIntent = getSentPendingIntent(getApplicationContext(), jobMessage.getInstanceId(), jobMessage.getMessageId());
 
-        smsManager.sendTextMessage(jobMessage.getGateway(), null, jobMessage.getText(), sentPendingIntent,null);
+        smsManager.sendTextMessage(jobMessage.getGateway(), null, jobMessage.getText(), sentPendingIntent, null);
 
-        Timber.i(String.format("Sending a SMS of instance id %s & message id of %d",jobMessage.getInstanceId(),jobMessage.getMessageId()));
+        Timber.i(String.format("Sending a SMS of instance id %s & message id of %d", jobMessage.getInstanceId(), jobMessage.getMessageId()));
     }
 
     @Override

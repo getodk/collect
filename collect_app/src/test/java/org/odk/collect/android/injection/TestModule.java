@@ -1,14 +1,13 @@
-package org.odk.collect.android.injection.config;
+package org.odk.collect.android.injection;
 
 import android.app.Application;
-import android.content.Context;
 import android.telephony.SmsManager;
 
 import com.birbit.android.jobqueue.JobManager;
+import com.birbit.android.jobqueue.config.Configuration;
 
-import org.odk.collect.android.injection.ViewModelBuilder;
-import org.odk.collect.android.injection.config.architecture.ViewModelFactoryModule;
 import org.odk.collect.android.injection.config.scopes.PerApplication;
+import org.odk.collect.android.jobs.test.timer.MockTimer;
 import org.odk.collect.android.tasks.sms.SmsService;
 import org.odk.collect.android.tasks.sms.SmsSubmissionManagerImpl;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
@@ -20,14 +19,13 @@ import org.opendatakit.httpclientandroidlib.impl.client.BasicCookieStore;
 import dagger.Module;
 import dagger.Provides;
 
-import static org.odk.collect.android.utilities.GeneralUtils.provideJobManagerConfiguration;
-
 /**
- * Add Application level providers here, i.e. if you want to
- * inject something into the Collect instance.
+ * Test Module used for unit testing.
+ * Providing seemingly production dependencies because they are all
+ * running on the Shadows of Robolectric.
  */
-@Module(includes = {ViewModelFactoryModule.class, ViewModelBuilder.class})
-public class AppModule {
+@Module
+public class TestModule {
 
     @Provides
     SmsManager provideSmsManager() {
@@ -40,18 +38,15 @@ public class AppModule {
     }
 
     @Provides
-    JobManager provideJobManager(Application application) {
-        return new JobManager(provideJobManagerConfiguration(application));
+    public JobManager provideJobManager(Application application) {
+        return new JobManager(new Configuration.Builder(application)
+                .timer(new MockTimer())
+                .inTestMode().build());
     }
 
     @Provides
-    SmsService provideSmsService(Application application){
+    public SmsService provideSmsService(Application application) {
         return new SmsService(application);
-    }
-
-    @Provides
-    Context context(Application application) {
-        return application;
     }
 
     @PerApplication
@@ -67,4 +62,5 @@ public class AppModule {
         // share all session cookies across all sessions.
         return new BasicCookieStore();
     }
+
 }

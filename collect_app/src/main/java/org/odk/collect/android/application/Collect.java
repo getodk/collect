@@ -372,6 +372,9 @@ public class Collect extends Application implements HasActivityInjector {
         return applicationComponent;
     }
 
+    public void setComponent(AppComponent applicationComponent){
+        this.applicationComponent = applicationComponent;
+    }
 
     @Override
     public DispatchingAndroidInjector<Activity> activityInjector() {

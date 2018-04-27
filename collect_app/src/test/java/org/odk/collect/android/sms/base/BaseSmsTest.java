@@ -1,4 +1,4 @@
-package org.odk.collect.android.sms;
+package org.odk.collect.android.sms.base;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -17,6 +17,10 @@ import static org.odk.collect.android.tasks.sms.SmsSubmissionManagerImpl.KEY_SUB
 
 public abstract class BaseSmsTest {
 
+    /**
+     * Adds model to the Shared Preferences so that
+     * Submission Manager has data to play with.
+     */
     public void setupSmsSubmissionManagerData() {
         Context context;
         SharedPreferences.Editor editor;

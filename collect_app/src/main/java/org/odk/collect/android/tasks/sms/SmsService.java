@@ -43,7 +43,7 @@ public class SmsService {
 
     private Context context;
 
-    public SmsService(Context context) {
+     public SmsService(Context context) {
         this.context = context;
 
         Collect.getInstance().getComponent().inject(this);

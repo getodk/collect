@@ -1,4 +1,4 @@
-package org.odk.collect.android.sms;
+package org.odk.collect.android.sms.base;
 
 import org.odk.collect.android.tasks.sms.Message;
 import org.odk.collect.android.tasks.sms.SmsSubmissionModel;

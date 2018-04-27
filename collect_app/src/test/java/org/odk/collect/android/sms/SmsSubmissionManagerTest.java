@@ -5,6 +5,8 @@ import android.content.Context;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.sms.base.BaseSmsTest;
+import org.odk.collect.android.sms.base.SampleData;
 import org.odk.collect.android.tasks.sms.Message;
 import org.odk.collect.android.tasks.sms.SmsSubmissionManagerImpl;
 import org.odk.collect.android.tasks.sms.SmsSubmissionModel;
@@ -17,7 +19,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.odk.collect.android.sms.SampleData.TEST_INSTANCE_ID;
+import static org.odk.collect.android.sms.base.SampleData.TEST_INSTANCE_ID;
 
 @RunWith(RobolectricTestRunner.class)
 public class SmsSubmissionManagerTest extends BaseSmsTest {
