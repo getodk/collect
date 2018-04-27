@@ -85,35 +85,39 @@ public class ServerPollingJob extends Job {
                 }
 
                 List<FormDetails> newDetectedForms = new ArrayList<>();
-                newDetectedForms.addAll(formList.values());
+                for (FormDetails formDetails : formList.values()) {
+                    if (formDetails.isNewerFormVersionAvailable() || formDetails.areNewerMediaFilesAvailable()) {
+                        newDetectedForms.add(formDetails);
+                    }
+                }
 
-                if (GeneralSharedPreferences.getInstance().getBoolean(KEY_AUTOMATIC_UPDATE, false)) {
-                    final HashMap<FormDetails, String> result = new FormDownloader().downloadForms(newDetectedForms);
-                    informAboutNewDownloadedForms(FormDownloadList.getDownloadResultMessage(result));
-                } else {
-                    for (FormDetails formDetails : newDetectedForms) {
-                        if (formDetails.isNewerFormVersionAvailable() || formDetails.areNewerMediaFilesAvailable()) {
+                if (!newDetectedForms.isEmpty()) {
+                    if (GeneralSharedPreferences.getInstance().getBoolean(KEY_AUTOMATIC_UPDATE, false)) {
+                        final HashMap<FormDetails, String> result = new FormDownloader().downloadForms(newDetectedForms);
+                        informAboutNewDownloadedForms(FormDownloadList.getDownloadResultMessage(result));
+                    } else {
+                        for (FormDetails formDetails : newDetectedForms) {
                             String manifestFileHash = formDetails.getManifestFileHash() != null ? formDetails.getManifestFileHash() : "";
                             String formVersionHash = FormDownloader.getMd5Hash(formDetails.getHash()) + manifestFileHash;
-                            if (wasThisNewerFormVersionAlreadyDetected(formVersionHash)) {
-                                newDetectedForms.remove(formDetails);
-                            } else {
+                            if (!wasThisNewerFormVersionAlreadyDetected(formVersionHash)) {
                                 updateLastDetectedFormVersionHash(formDetails.getFormID(), formVersionHash);
-                            }
-                        }
-                    }
-
-                    if (!newDetectedForms.isEmpty()) {
-                        StringBuilder listOfForms = new StringBuilder();
-                        for (FormDetails formDetails : newDetectedForms) {
-                            listOfForms.append(formDetails.getFormName());
-
-                            if (newDetectedForms.indexOf(formDetails) < newDetectedForms.size() - 1) {
-                                listOfForms.append(", ");
+                            } else {
+                                newDetectedForms.remove(formDetails);
                             }
                         }
 
-                        informAboutNewAvailableForms(listOfForms.toString());
+                        if (!newDetectedForms.isEmpty()) {
+                            StringBuilder listOfForms = new StringBuilder();
+                            for (FormDetails formDetails : newDetectedForms) {
+                                listOfForms.append(formDetails.getFormName());
+
+                                if (newDetectedForms.indexOf(formDetails) < newDetectedForms.size() - 1) {
+                                    listOfForms.append(", ");
+                                }
+                            }
+
+                            informAboutNewAvailableForms(listOfForms.toString());
+                        }
                     }
                 }
                 return Result.SUCCESS;
@@ -199,12 +203,10 @@ public class ServerPollingJob extends Job {
     public static void pollServerIfNeeded() {
         if (GeneralSharedPreferences.getInstance().getBoolean(POLL_SERVER_IMMEDIATELY_AFTER_RECEIVING_NETWORK, false)
                 && !GeneralSharedPreferences.getInstance().get(KEY_PERIODIC_FORM_UPDATES_CHECK).equals(Collect.getInstance().getString(R.string.never_value))) {
-            new JobRequest.Builder(ServerPollingJob.TAG)
+            new JobRequest.Builder(TAG)
                     .startNow()
                     .build()
                     .schedule();
-
-            schedulePeriodicJob((String) GeneralSharedPreferences.getInstance().get(KEY_PERIODIC_FORM_UPDATES_CHECK));
         }
     }
 }
