@@ -34,6 +34,7 @@ import com.evernote.android.job.JobRequest;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormDownloadList;
+import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.logic.FormDetails;
@@ -107,16 +108,7 @@ public class ServerPollingJob extends Job {
                         }
 
                         if (!newDetectedForms.isEmpty()) {
-                            StringBuilder listOfForms = new StringBuilder();
-                            for (FormDetails formDetails : newDetectedForms) {
-                                listOfForms.append(formDetails.getFormName());
-
-                                if (newDetectedForms.indexOf(formDetails) < newDetectedForms.size() - 1) {
-                                    listOfForms.append(", ");
-                                }
-                            }
-
-                            informAboutNewAvailableForms(listOfForms.toString());
+                            informAboutNewAvailableForms();
                         }
                     }
                 }
@@ -154,7 +146,7 @@ public class ServerPollingJob extends Job {
         return cursor == null || cursor.getCount() > 0;
     }
 
-    private void informAboutNewAvailableForms(String message) {
+    private void informAboutNewAvailableForms() {
         Intent intent = new Intent(getContext(), FormDownloadList.class);
         intent.putExtra(DISPLAY_ONLY_UPDATED_FORMS, true);
         PendingIntent contentIntent = PendingIntent.getActivity(getContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -163,7 +155,6 @@ public class ServerPollingJob extends Job {
                 .setSmallIcon(R.drawable.ic_info)
                 .setLargeIcon(BitmapFactory.decodeResource(getContext().getResources(), R.drawable.notes))
                 .setContentTitle(getContext().getString(R.string.form_updates_available))
-                .setContentText(message)
                 .setAutoCancel(true)
                 .setContentIntent(contentIntent);
 
@@ -174,12 +165,16 @@ public class ServerPollingJob extends Job {
     }
 
     private void informAboutNewDownloadedForms(String message) {
+        Intent intent = new Intent(Collect.getInstance(), NotificationActivity.class);
+        intent.putExtra(NotificationActivity.NOTIFICATION_KEY, message);
+        PendingIntent contentIntent = PendingIntent.getActivity(getContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext())
                 .setSmallIcon(R.drawable.ic_info)
                 .setLargeIcon(BitmapFactory.decodeResource(getContext().getResources(), R.drawable.notes))
                 .setContentTitle(getContext().getString(R.string.new_form_version_downloaded))
-                .setContentText(message)
-                .setAutoCancel(true);
+                .setAutoCancel(true)
+                .setContentIntent(contentIntent);
 
         NotificationManager manager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
         if (manager != null) {
