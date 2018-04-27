@@ -18,7 +18,6 @@ package org.odk.collect.android.widgets;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
-import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -244,10 +243,12 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
 
         private final String drawOption;
         private final int requestCode;
+        private final int stringResourceId;
 
-        public DrawImageClickHandler(String option, final int code) {
+        public DrawImageClickHandler(String option, final int code, final int resourceId) {
             drawOption = option;
             requestCode = code;
+            stringResourceId = resourceId;
         }
 
         @Override
@@ -272,7 +273,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
             }
             i.putExtra(DrawActivity.EXTRA_OUTPUT, Uri.fromFile(new File(Collect.TMPFILE_PATH)));
             i = addExtrasToIntent(i);
-            launchActivityForResult(i,requestCode,R.string.draw_image);
+            launchActivityForResult(i, requestCode, stringResourceId);
         }
     }
 
@@ -280,8 +281,9 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
      * Interface for choosing or capturing a new image
      */
     protected interface ExternalImageCaptureHandler {
-        void captureImage(Intent intent, final int requestCode, final int stringResource);
-        void chooseImage();
+        void captureImage(Intent intent, int requestCode, int stringResource);
+
+        void chooseImage(int stringResource);
     }
 
     /**
@@ -290,18 +292,18 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
     protected class ImageCaptureHandler implements ExternalImageCaptureHandler {
 
         @Override
-        public void captureImage(Intent intent, final int requestCode, final int stringResource) {
-            launchActivityForResult(intent,requestCode,stringResource);
+        public void captureImage(Intent intent, final int requestCode, int stringResource) {
+            launchActivityForResult(intent, requestCode, stringResource);
         }
 
         @Override
-        public void chooseImage() {
+        public void chooseImage(@IdRes final int stringResource) {
             Collect.getInstance().getActivityLogger().logInstanceAction(this, "chooseButton",
                     "click", getFormEntryPrompt().getIndex());
             errorTextView.setVisibility(View.GONE);
             Intent i = new Intent(Intent.ACTION_GET_CONTENT);
             i.setType("image/*");
-            launchActivityForResult(i,ApplicationConstants.RequestCodes.IMAGE_CHOOSER, R.string.choose_image);
+            launchActivityForResult(i, ApplicationConstants.RequestCodes.IMAGE_CHOOSER, stringResource);
         }
     }
 

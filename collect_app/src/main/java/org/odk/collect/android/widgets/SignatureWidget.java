@@ -14,21 +14,13 @@
 
 package org.odk.collect.android.widgets;
 
-import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
-
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.DrawActivity;
-import org.odk.collect.android.application.Collect;
-
-import java.io.File;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
@@ -43,7 +35,7 @@ public class SignatureWidget extends BaseImageWidget {
 
     public SignatureWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
-        imageClickHandler = new DrawImageClickHandler(DrawActivity.OPTION_SIGNATURE, RequestCodes.SIGNATURE_CAPTURE);
+        imageClickHandler = new DrawImageClickHandler(DrawActivity.OPTION_SIGNATURE, RequestCodes.SIGNATURE_CAPTURE, R.string.signature_capture);
         setUpLayout();
         setUpBinary();
         addAnswerView(answerLayout);

@@ -15,21 +15,13 @@
 package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
-
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.DrawActivity;
-import org.odk.collect.android.application.Collect;
-
-import java.io.File;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
@@ -45,7 +37,7 @@ public class DrawWidget extends BaseImageWidget {
 
     public DrawWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
-        imageClickHandler = new DrawImageClickHandler(DrawActivity.OPTION_DRAW, RequestCodes.DRAW_IMAGE);
+        imageClickHandler = new DrawImageClickHandler(DrawActivity.OPTION_DRAW, RequestCodes.DRAW_IMAGE, R.string.draw_image);
         setUpLayout();
         setUpBinary();
         addAnswerView(answerLayout);

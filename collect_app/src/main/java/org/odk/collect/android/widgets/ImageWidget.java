@@ -14,28 +14,19 @@
 
 package org.odk.collect.android.widgets;
 
-import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
-
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CaptureSelfieActivity;
 import org.odk.collect.android.activities.CaptureSelfieActivityNewApi;
-import org.odk.collect.android.activities.DrawActivity;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.utilities.MediaUtils;
-
 import java.io.File;
 import java.util.Locale;
-
-import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
@@ -133,7 +124,7 @@ public class ImageWidget extends BaseImageWidget {
                 captureImage();
                 break;
             case R.id.choose_image:
-                imageCaptureHandler.chooseImage();
+                imageCaptureHandler.chooseImage(R.string.choose_image);
                 break;
         }
     }

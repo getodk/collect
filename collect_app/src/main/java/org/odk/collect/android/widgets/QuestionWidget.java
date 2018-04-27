@@ -455,7 +455,6 @@ public abstract class QuestionWidget
     }
 
     protected ImageView getAnswerImageView(Bitmap bitmap) {
-        final QuestionWidget questionWidget = this;
         final ImageView imageView = new ImageView(getContext());
         imageView.setId(ViewIds.generateViewId());
         imageView.setPadding(10, 10, 10, 10);

@@ -15,22 +15,15 @@
 package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.utilities.MediaUtils;
-
-import java.io.File;
 
 import timber.log.Timber;
 
@@ -61,8 +54,6 @@ public class AlignedImageWidget extends BaseImageWidget {
 
     private Button captureButton;
     private Button chooseButton;
-
-    private String instanceFolder;
     
     private final int[] iarray = new int[6];
 
@@ -87,8 +78,6 @@ public class AlignedImageWidget extends BaseImageWidget {
         for (int i = 0; i < splits.length; i++) {
             iarray[i] = Integer.parseInt(splits[i]);
         }
-
-        instanceFolder = getInstanceFolder();
 
         captureButton = getSimpleButton(getContext().getString(R.string.capture_image), R.id.capture_image);
         captureButton.setEnabled(!getFormEntryPrompt().isReadOnly());
@@ -141,7 +130,7 @@ public class AlignedImageWidget extends BaseImageWidget {
                 captureImage();
                 break;
             case R.id.choose_image:
-                imageCaptureHandler.chooseImage();
+                imageCaptureHandler.chooseImage(R.string.choose_image);
                 break;
         }
     }

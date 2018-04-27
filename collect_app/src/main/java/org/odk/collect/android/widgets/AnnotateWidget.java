@@ -15,8 +15,6 @@
 package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -24,7 +22,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
@@ -54,7 +51,7 @@ public class AnnotateWidget extends BaseImageWidget {
 
     public AnnotateWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
-        imageClickHandler = new DrawImageClickHandler(DrawActivity.OPTION_ANNOTATE, RequestCodes.ANNOTATE_IMAGE);
+        imageClickHandler = new DrawImageClickHandler(DrawActivity.OPTION_ANNOTATE, RequestCodes.ANNOTATE_IMAGE, R.string.annotate_image);
         imageCaptureHandler = new ImageCaptureHandler();
         setUpLayout();
         setUpBinary();
@@ -128,7 +125,7 @@ public class AnnotateWidget extends BaseImageWidget {
                 captureImage();
                 break;
             case R.id.choose_image:
-                imageCaptureHandler.chooseImage();
+                imageCaptureHandler.chooseImage(R.string.annotate_image);
                 break;
         }
     }
@@ -175,6 +172,6 @@ public class AnnotateWidget extends BaseImageWidget {
         i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
                 Uri.fromFile(new File(Collect.TMPFILE_PATH)));
 
-        imageCaptureHandler.captureImage(i,RequestCodes.IMAGE_CAPTURE,R.string.capture_image);
+        imageCaptureHandler.captureImage(i, RequestCodes.IMAGE_CAPTURE, R.string.annotate_image);
         }
 }
