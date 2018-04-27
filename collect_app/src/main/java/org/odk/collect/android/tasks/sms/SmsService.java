@@ -191,6 +191,5 @@ public class SmsService {
         Timber.i(String.format("Adding message with instance id %s & message id of %d to job queue.", jobMessage.getInstanceId(), jobMessage.getMessageId()));
 
         jobManager.addJobInBackground(new SmsSenderJob(jobMessage));
-
     }
 }

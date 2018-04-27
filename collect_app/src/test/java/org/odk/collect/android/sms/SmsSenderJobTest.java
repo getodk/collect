@@ -64,7 +64,7 @@ public class SmsSenderJobTest extends BaseSmsTest {
     }
 
     @Test
-    public void addSmsJobTest() throws InterruptedException {
+    public void smsSenderJobTest() throws InterruptedException {
         SmsSubmissionModel model = submissionManager.getSubmissionModel(SampleData.TEST_INSTANCE_ID);
 
         Message message = model.getNextUnsentMessage();
@@ -78,6 +78,7 @@ public class SmsSenderJobTest extends BaseSmsTest {
         //suspends test execution until job is complete.
         CountDownLatch latch = new CountDownLatch(1);
 
+        //This callback is triggered once the job has been run.
         jobManager.addCallback(new Event(job -> {
             ShadowSmsManager.TextSmsParams params = shadowOf(smsManager).getLastSentTextMessageParams();
 
@@ -98,6 +99,7 @@ public class SmsSenderJobTest extends BaseSmsTest {
             latch.countDown();
         }));
 
+        //executes the Sms Sender as a background job.
         jobManager.addJobInBackground(new SmsSenderJob(jobMessage));
         jobManager.start();
 
