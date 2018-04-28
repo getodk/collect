@@ -28,5 +28,6 @@ public interface TestComponent extends AppComponent {
     }
 
     void inject(SmsSenderJobTest smsSenderJobTest);
+
     void inject(SmsServiceTest smsServiceTest);
 }

@@ -9,7 +9,7 @@ public interface SmsSubmissionManagerContract {
 
     SmsSubmissionModel getSubmissionModel(String instanceId);
 
-    boolean markMessageAsSent(String instanceId,int messageId);
+    boolean markMessageAsSent(String instanceId, int messageId);
 
     boolean markMessageAsSending(String instanceId, int messageId);
 

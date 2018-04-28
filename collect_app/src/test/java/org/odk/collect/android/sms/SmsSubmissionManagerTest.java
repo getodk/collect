@@ -112,14 +112,14 @@ public class SmsSubmissionManagerTest extends BaseSmsTest {
     }
 
     @Test
-    public void markMessageAsSendingTest(){
+    public void markMessageAsSendingTest() {
         SmsSubmissionModel model = manager.getSubmissionModel(TEST_INSTANCE_ID);
 
         Message message = model.getNextUnsentMessage();
 
         assertFalse(message.isSending());
 
-        manager.markMessageAsSending(TEST_INSTANCE_ID,message.getId());
+        manager.markMessageAsSending(TEST_INSTANCE_ID, message.getId());
 
         model = manager.getSubmissionModel(TEST_INSTANCE_ID);
 

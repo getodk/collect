@@ -10,16 +10,16 @@ import com.birbit.android.jobqueue.callback.JobManagerCallback;
  * Simplifies the Job Callback to a single action.
  */
 public class Event implements JobManagerCallback {
-    public interface Result{
+    public interface Result {
         void onComplete(Job job);
     }
 
     private Result result;
 
-    public Event(Result result)
-    {
+    public Event(Result result) {
         this.result = result;
     }
+
     @Override
     public void onJobAdded(@NonNull Job job) {
 

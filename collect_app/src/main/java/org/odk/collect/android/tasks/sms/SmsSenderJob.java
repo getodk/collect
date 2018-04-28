@@ -13,6 +13,8 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.tasks.sms.models.SmsJobMessage;
 
+import java.util.Locale;
+
 import javax.inject.Inject;
 
 import timber.log.Timber;
@@ -55,9 +57,10 @@ public class SmsSenderJob extends Job {
 
         PendingIntent sentPendingIntent = getSentPendingIntent(getApplicationContext(), jobMessage.getInstanceId(), jobMessage.getMessageId());
 
-        smsManager.sendTextMessage(jobMessage.getGateway(), null, jobMessage.getText(), sentPendingIntent, null);
+        smsManager.sendTextMessage(String.format(Locale.getDefault(), jobMessage.getGateway()), null, jobMessage.getText(), sentPendingIntent, null);
 
-        Timber.i(String.format("Sending a SMS of instance id %s & message id of %d", jobMessage.getInstanceId(), jobMessage.getMessageId()));
+        String log = String.format(Locale.getDefault(), "Sending a SMS of instance id %s & message id of %d", jobMessage.getInstanceId(), jobMessage.getMessageId());
+        Timber.i(log);
     }
 
     @Override

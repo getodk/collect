@@ -19,7 +19,7 @@ public class GeneralUtils {
                 .minConsumerCount(1)//always keep at least one consumer alive
                 .maxConsumerCount(3)//up to 3 consumers at a time
                 .loadFactor(3)//3 jobs per consumer
-                .consumerKeepAlive(120);//wait 2 minute
+                .consumerKeepAlive(120); //wait 2 minute
 
         return builder.build();
     }
@@ -29,8 +29,9 @@ public class GeneralUtils {
         SecureRandom rnd = new SecureRandom();
 
         StringBuilder sb = new StringBuilder(length);
-        for (int i = 0; i < length; i++)
+        for (int i = 0; i < length; i++) {
             sb.append(AB.charAt(rnd.nextInt(AB.length())));
+        }
         return sb.toString();
     }
 

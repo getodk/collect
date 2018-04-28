@@ -12,7 +12,11 @@ import java.util.List;
  */
 public class SampleData {
 
-    public static String TEST_INSTANCE_ID = "test_instance";
+    private SampleData() {
+    }
+
+    public static final String TEST_INSTANCE_ID = "test_instance";
+
     public static SmsSubmissionModel generateSampleModel() {
 
         SmsSubmissionModel model = new SmsSubmissionModel();
@@ -24,7 +28,7 @@ public class SampleData {
         return model;
     }
 
-    public static List<SmsSubmissionModel> generateModels(){
+    public static List<SmsSubmissionModel> generateModels() {
         List<SmsSubmissionModel> models = new ArrayList<>();
         models.add(generateSampleModel());
 

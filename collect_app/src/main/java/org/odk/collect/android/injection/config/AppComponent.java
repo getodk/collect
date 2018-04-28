@@ -37,7 +37,10 @@ public interface AppComponent {
     }
 
     void inject(Collect collect);
+
     void inject(SmsService smsService);
+
     void inject(SmsSenderJob smsJob);
+
     void inject(SentBroadcastReceiver sentBroadcastReceiver);
 }

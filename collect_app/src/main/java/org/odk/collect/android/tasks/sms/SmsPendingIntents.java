@@ -10,6 +10,10 @@ public class SmsPendingIntents {
     public static final String SMS_INSTANCE_ID = "COLLECT_SMS_INSTANCE_ID";
     public static final String SMS_MESSAGE_ID = "COLLECT_SMS_MESSAGE_ID";
 
+    private SmsPendingIntents() {
+
+    }
+
     /***
      * Create the intent that's passed to SMS Manager so that the Sent SMS
      * BroadcastReceiver can be triggered.

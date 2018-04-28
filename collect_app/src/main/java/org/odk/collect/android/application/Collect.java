@@ -372,7 +372,7 @@ public class Collect extends Application implements HasActivityInjector {
         return applicationComponent;
     }
 
-    public void setComponent(AppComponent applicationComponent){
+    public void setComponent(AppComponent applicationComponent) {
         this.applicationComponent = applicationComponent;
     }
 

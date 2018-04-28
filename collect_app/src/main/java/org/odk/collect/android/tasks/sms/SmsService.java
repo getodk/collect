@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -48,7 +49,7 @@ public class SmsService {
 
     private Context context;
 
-     public SmsService(Context context) {
+    public SmsService(Context context) {
         this.context = context;
 
         Collect.getInstance().getComponent().inject(this);
@@ -59,7 +60,7 @@ public class SmsService {
      * persisting the form as a group of messages so that they can be sent via a
      * background job.
      *
-     * @param instanceId
+     * @param instanceId id from instanceDao
      */
     public boolean submitForm(String instanceId, String instanceFilePath) {
         String text;
@@ -82,7 +83,7 @@ public class SmsService {
             }
         } else {
 
-            List<String> parts = smsManager.divideMessage(text);
+            final List<String> parts = smsManager.divideMessage(text);
 
             model = new SmsSubmissionModel();
             model.setInstanceId(instanceId);
@@ -115,7 +116,7 @@ public class SmsService {
      * Cancels any ongoing job operations and removes the instance's model
      * from storage.
      *
-     * @param instanceId
+     * @param instanceId id from instanceDao
      */
     public boolean cancelFormSubmission(String instanceId) {
 
@@ -140,13 +141,13 @@ public class SmsService {
     /***
      * Receives a model that contains the information received by the intent of the
      * SentBroadcastReceiver that's triggered when a message was sent.
-     * This function then determines the next action to perform based on the result
-     * it receives.
-     * @param sentMessageResult
+     * This function then determines the next action to perform based on the result it receives.
+     * @param sentMessageResult from BroadcastReceiver
      */
     void processMessageSentResult(SentMessageResult sentMessageResult) {
 
-        Timber.i(String.format("Received result from broadcast receiver of instance id %s with message id of %d", sentMessageResult.getInstanceId(), sentMessageResult.getMessageId()));
+        String log = String.format(Locale.getDefault(), "Received result from broadcast receiver of instance id %s with message id of %d", sentMessageResult.getInstanceId(), sentMessageResult.getMessageId());
+        Timber.i(log);
 
         boolean result = smsSubmissionManager.markMessageAsSent(sentMessageResult.getInstanceId(), sentMessageResult.getMessageId());
 
@@ -171,8 +172,8 @@ public class SmsService {
      * A single message is sent at a time so that progress can be easily tracked and the
      * persisting of form submission's state is more congruent with the amount of message parts.
      *
-     * @param message
-     * @param instanceId
+     * @param message from the submission model
+     * @param instanceId from instanceDao
      */
     private void addMessageJobToQueue(Message message, String instanceId) {
 
@@ -190,7 +191,8 @@ public class SmsService {
         jobMessage.setMessageId(message.getId());
         jobMessage.setText(message.getText());
 
-        Timber.i(String.format("Adding message with instance id %s & message id of %d to job queue.", jobMessage.getInstanceId(), jobMessage.getMessageId()));
+        String log = String.format(Locale.getDefault(), "Adding message with instance id %s & message id of %d to job queue.", jobMessage.getInstanceId(), jobMessage.getMessageId());
+        Timber.i(log);
 
         jobManager.addJobInBackground(new SmsSenderJob(jobMessage));
     }

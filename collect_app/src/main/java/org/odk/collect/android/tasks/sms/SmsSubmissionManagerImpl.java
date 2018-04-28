@@ -33,8 +33,9 @@ public class SmsSubmissionManagerImpl implements SmsSubmissionManagerContract {
         List<SmsSubmissionModel> models = getSubmissionListFromPrefs();
 
         for (SmsSubmissionModel model : models) {
-            if (model.getInstanceId().equals(instanceId))
+            if (model.getInstanceId().equals(instanceId)) {
                 return model;
+            }
         }
 
         return null;
@@ -161,8 +162,9 @@ public class SmsSubmissionManagerImpl implements SmsSubmissionManagerContract {
 
         List<SmsSubmissionModel> models = new ArrayList<>();
 
-        if (TextUtils.isEmpty(list))
+        if (TextUtils.isEmpty(list)) {
             return models;
+        }
 
         try {
             models = new Gson().fromJson(list, submissionModelListTpe);

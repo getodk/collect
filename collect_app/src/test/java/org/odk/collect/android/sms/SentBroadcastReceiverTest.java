@@ -24,9 +24,10 @@ public class SentBroadcastReceiverTest {
 
         boolean receiverFound = false;
         for (ShadowApplication.Wrapper wrapper : registeredReceivers) {
-            if (!receiverFound)
+            if (!receiverFound) {
                 receiverFound = SentBroadcastReceiver.class.getSimpleName().equals(
                         wrapper.broadcastReceiver.getClass().getSimpleName());
+            }
         }
 
         Assert.assertTrue(receiverFound); //will be false if not found

@@ -45,7 +45,7 @@ public class AppModule {
     }
 
     @Provides
-    SmsService provideSmsService(Application application){
+    SmsService provideSmsService(Application application) {
         return new SmsService(application);
     }
 

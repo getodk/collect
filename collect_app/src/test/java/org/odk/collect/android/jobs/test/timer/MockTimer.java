@@ -39,7 +39,7 @@ public class MockTimer implements Timer {
     private synchronized void notifyObjectWaits(long now) {
         JqLog.d("notify object waits by time %s", now);
         for (ObjectWait objectWait : waitingList) {
-            JqLog.d("checking %s : %s for time %s",objectWait, objectWait.target,
+            JqLog.d("checking %s : %s for time %s", objectWait, objectWait.target,
                     objectWait.timeUntil);
             if (objectWait.timeUntil <= now) {
                 final ObjectWait toWait = objectWait;
@@ -67,7 +67,7 @@ public class MockTimer implements Timer {
             if (stopped) {
                 return;
             }
-            if(untilNs < now) {
+            if (untilNs < now) {
                 return;
             }
             anyObjectToNotify.put(object, true);
@@ -102,7 +102,8 @@ public class MockTimer implements Timer {
         static final long FOREVER = Long.MAX_VALUE;
         final long timeUntil;
         final Object target;
-        public ObjectWait(Object target, long time) {
+
+        ObjectWait(Object target, long time) {
             timeUntil = time;
             this.target = target;
         }
