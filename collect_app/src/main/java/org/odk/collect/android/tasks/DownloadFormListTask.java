@@ -30,8 +30,6 @@ import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.DocumentFetchResult;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.WebUtils;
-import org.opendatakit.httpclientandroidlib.client.HttpClient;
-import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -86,12 +84,8 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
         // <formname, details>
         HashMap<String, FormDetails> formList = new HashMap<String, FormDetails>();
 
-        // get shared HttpContext so that authentication and cookies are retained.
-        HttpContext localContext = Collect.getInstance().getHttpContext();
-        HttpClient httpclient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
-
         DocumentFetchResult result =
-                WebUtils.getXmlDocument(downloadListUrl, localContext, httpclient);
+                WebUtils.getXmlDocument(downloadListUrl);
 
         // If we can't get the document, return the error, cancel the task
         if (result.errorMessage != null) {
@@ -302,12 +296,7 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
         }
 
         // get shared HttpContext so that authentication and cookies are retained.
-        HttpContext localContext = Collect.getInstance().getHttpContext();
-
-        HttpClient httpclient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
-
-        DocumentFetchResult result =
-                WebUtils.getXmlDocument(manifestUrl, localContext, httpclient);
+        DocumentFetchResult result = WebUtils.getXmlDocument(manifestUrl);
 
         if (result.errorMessage != null) {
             return null;

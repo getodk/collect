@@ -39,7 +39,7 @@ public class WebUtilsTest extends MockedServerTest {
     @Test
     public void getXmlDocument_request_shouldSupplyHeader_UserAgent() throws Exception {
         // when
-        WebUtils.getXmlDocument(url("/list-forms"), httpContext(), httpClient());
+        WebUtils.getXmlDocument(url("/list-forms"));
 
         // then
         assertMatches("Dalvik/.* org.odk.collect.android/.*",
@@ -49,7 +49,7 @@ public class WebUtilsTest extends MockedServerTest {
     @Test
     public void getXmlDocument_request_shouldSupplyHeader_X_OpenRosa_Version() throws Exception {
         // when
-        WebUtils.getXmlDocument(url("/list-forms"), httpContext(), httpClient());
+        WebUtils.getXmlDocument(url("/list-forms"));
 
         // then
         assertEquals("1.0",
@@ -59,7 +59,7 @@ public class WebUtilsTest extends MockedServerTest {
     @Test
     public void getXmlDocument_request_shouldSupplyHeader_AcceptEncoding_gzip() throws Exception {
         // when
-        WebUtils.getXmlDocument(url("/list-forms"), httpContext(), httpClient());
+        WebUtils.getXmlDocument(url("/list-forms"));
 
         // then
         assertEquals("gzip",
@@ -69,7 +69,7 @@ public class WebUtilsTest extends MockedServerTest {
     @Test
     public void getXmlDocument_request_shouldNotSupplyHeader_Authorization_forHttpRequest() throws Exception {
         // when
-        WebUtils.getXmlDocument(url("/list-forms"), httpContext(), httpClient());
+        WebUtils.getXmlDocument(url("/list-forms"));
 
         // then
         assertNull(nextRequest().getHeader("Authorization"));
@@ -78,7 +78,7 @@ public class WebUtilsTest extends MockedServerTest {
     @Test
     public void getXmlDocument_request_shouldReportInvalidUrl() throws Exception {
         // when
-        DocumentFetchResult res = WebUtils.getXmlDocument("NOT_A_URL", httpContext(), httpClient());
+        DocumentFetchResult res = WebUtils.getXmlDocument("NOT_A_URL");
 
         // then
         assertEquals(0, res.responseCode);
@@ -88,7 +88,7 @@ public class WebUtilsTest extends MockedServerTest {
     @Test
     public void getXmlDocument_request_shouldReportInvalidHost() throws Exception {
         // when
-        DocumentFetchResult res = WebUtils.getXmlDocument("file:/some/path", httpContext(), httpClient());
+        DocumentFetchResult res = WebUtils.getXmlDocument("file:/some/path");
 
         // then
         assertEquals(0, res.responseCode);

@@ -20,6 +20,7 @@ import android.text.format.DateFormat;
 import org.kxml2.io.KXmlParser;
 import org.kxml2.kdom.Document;
 import org.odk.collect.android.BuildConfig;
+import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.opendatakit.httpclientandroidlib.Header;
 import org.opendatakit.httpclientandroidlib.HttpEntity;
@@ -47,9 +48,11 @@ import org.opendatakit.httpclientandroidlib.impl.client.HttpClientBuilder;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 import org.xmlpull.v1.XmlPullParser;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -270,8 +273,11 @@ public final class WebUtils {
      * Common method for returning a parsed xml document given a url and the
      * http context and client objects involved in the web connection.
      */
-    public static DocumentFetchResult getXmlDocument(String urlString,
-                                                     HttpContext localContext, HttpClient httpclient) {
+    public static DocumentFetchResult getXmlDocument(String urlString) {
+
+        HttpContext localContext = Collect.getInstance().getHttpContext();
+        HttpClient httpclient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
+
         URI u;
         try {
             URL url = new URL(urlString);
@@ -428,4 +434,53 @@ public final class WebUtils {
             return new DocumentFetchResult(error, 0);
         }
     }
+
+
+    /**
+     *
+     * @param uri
+     * @param downloadUrl
+     * @return
+     * @throws Exception
+     */
+    public static InputStream getDownloadInputStream(URI uri, String downloadUrl) throws Exception {
+
+        InputStream downloadStream = null;
+
+        HttpContext localContext = Collect.getInstance().getHttpContext();
+        HttpClient httpclient = createHttpClient(WebUtils.CONNECTION_TIMEOUT);
+
+        // set up request...
+        HttpGet req = createOpenRosaHttpGet(uri);
+        req.addHeader(WebUtils.ACCEPT_ENCODING_HEADER, WebUtils.GZIP_CONTENT_ENCODING);
+
+        HttpResponse response;
+
+        response = httpclient.execute(req, localContext);
+        int statusCode = response.getStatusLine().getStatusCode();
+
+        if (statusCode != HttpStatus.SC_OK) {
+            WebUtils.discardEntityBytes(response);
+            if (statusCode == HttpStatus.SC_UNAUTHORIZED) {
+                // clear the cookies -- should not be necessary?
+                Collect.getInstance().getCookieStore().clear();
+            }
+            String errMsg =
+                    Collect.getInstance().getString(R.string.file_fetch_failed, downloadUrl,
+                            response.getStatusLine().getReasonPhrase(), String.valueOf(statusCode));
+            Timber.e(errMsg);
+            throw new Exception(errMsg);
+        }
+
+        HttpEntity entity = response.getEntity();
+        downloadStream = entity.getContent();
+        Header contentEncoding = entity.getContentEncoding();
+        if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase(
+                WebUtils.GZIP_CONTENT_ENCODING)) {
+            downloadStream = new GZIPInputStream(downloadStream);
+        }
+
+        return downloadStream;
+    }
+
 }

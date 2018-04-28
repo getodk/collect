@@ -16,6 +16,7 @@ package org.odk.collect.android.tasks;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.icu.util.Output;
 import android.net.Uri;
 import android.os.AsyncTask;
 
@@ -32,13 +33,6 @@ import org.odk.collect.android.utilities.DocumentFetchResult;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.Validator;
 import org.odk.collect.android.utilities.WebUtils;
-import org.opendatakit.httpclientandroidlib.Header;
-import org.opendatakit.httpclientandroidlib.HttpEntity;
-import org.opendatakit.httpclientandroidlib.HttpResponse;
-import org.opendatakit.httpclientandroidlib.HttpStatus;
-import org.opendatakit.httpclientandroidlib.client.HttpClient;
-import org.opendatakit.httpclientandroidlib.client.methods.HttpGet;
-import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -426,78 +420,22 @@ public class DownloadFormsTask extends
             }
             Timber.i("Started downloading to %s from %s", tempFile.getAbsolutePath(), downloadUrl);
 
-            // get shared HttpContext so that authentication and cookies are retained.
-            HttpContext localContext = Collect.getInstance().getHttpContext();
+            InputStream is = null;
+            OutputStream os = null;
 
-            HttpClient httpclient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
-
-            // set up request...
-            HttpGet req = WebUtils.createOpenRosaHttpGet(uri);
-            req.addHeader(WebUtils.ACCEPT_ENCODING_HEADER, WebUtils.GZIP_CONTENT_ENCODING);
-
-            HttpResponse response;
             try {
-                response = httpclient.execute(req, localContext);
-                int statusCode = response.getStatusLine().getStatusCode();
+                is = WebUtils.getDownloadInputStream(uri, downloadUrl);
+                os = new FileOutputStream(tempFile);
 
-                if (statusCode != HttpStatus.SC_OK) {
-                    WebUtils.discardEntityBytes(response);
-                    if (statusCode == HttpStatus.SC_UNAUTHORIZED) {
-                        // clear the cookies -- should not be necessary?
-                        Collect.getInstance().getCookieStore().clear();
-                    }
-                    String errMsg =
-                            Collect.getInstance().getString(R.string.file_fetch_failed, downloadUrl,
-                                    response.getStatusLine().getReasonPhrase(), String.valueOf(statusCode));
-                    Timber.e(errMsg);
-                    throw new Exception(errMsg);
+                byte[] buf = new byte[4096];
+                int len;
+                while ((len = is.read(buf)) > 0 && !isCancelled()) {
+                    os.write(buf, 0, len);
                 }
+                os.flush();
+                success = true;
 
-                // write connection to file
-                InputStream is = null;
-                OutputStream os = null;
-                try {
-                    HttpEntity entity = response.getEntity();
-                    is = entity.getContent();
-                    Header contentEncoding = entity.getContentEncoding();
-                    if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase(
-                            WebUtils.GZIP_CONTENT_ENCODING)) {
-                        is = new GZIPInputStream(is);
-                    }
-                    os = new FileOutputStream(tempFile);
-                    byte[] buf = new byte[4096];
-                    int len;
-                    while ((len = is.read(buf)) > 0 && !isCancelled()) {
-                        os.write(buf, 0, len);
-                    }
-                    os.flush();
-                    success = true;
-                } finally {
-                    if (os != null) {
-                        try {
-                            os.close();
-                        } catch (Exception e) {
-                            Timber.e(e);
-                        }
-                    }
-                    if (is != null) {
-                        try {
-                            // ensure stream is consumed...
-                            final long count = 1024L;
-                            while (is.skip(count) == count) {
-                                // skipping to the end of the http entity
-                            }
-                        } catch (Exception e) {
-                            // no-op
-                        }
-                        try {
-                            is.close();
-                        } catch (Exception e) {
-                            Timber.e(e);
-                        }
-                    }
-                }
-            } catch (Exception e) {
+            } catch(Exception e){
                 Timber.e(e.toString());
                 // silently retry unless this is the last attempt,
                 // in which case we rethrow the exception.
@@ -506,6 +444,30 @@ public class DownloadFormsTask extends
 
                 if (attemptCount == MAX_ATTEMPT_COUNT) {
                     throw e;
+                }
+            } finally {
+                if (os != null) {
+                    try {
+                        os.close();
+                    } catch (Exception e) {
+                        Timber.e(e);
+                    }
+                }
+                if (is != null) {
+                    try {
+                        // ensure stream is consumed...
+                        final long count = 1024L;
+                        while (is.skip(count) == count) {
+                            // skipping to the end of the http entity
+                        }
+                    } catch (Exception e) {
+                        // no-op
+                    }
+                    try {
+                        is.close();
+                    } catch (Exception e) {
+                        Timber.e(e);
+                    }
                 }
             }
 
@@ -588,13 +550,8 @@ public class DownloadFormsTask extends
                 String.valueOf(count), String.valueOf(total));
 
         List<MediaFile> files = new ArrayList<MediaFile>();
-        // get shared HttpContext so that authentication and cookies are retained.
-        HttpContext localContext = Collect.getInstance().getHttpContext();
 
-        HttpClient httpclient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
-
-        DocumentFetchResult result =
-                WebUtils.getXmlDocument(fd.getManifestUrl(), localContext, httpclient);
+        DocumentFetchResult result = WebUtils.getXmlDocument(fd.getManifestUrl());
 
         if (result.errorMessage != null) {
             return result.errorMessage;
