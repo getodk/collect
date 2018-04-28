@@ -175,14 +175,14 @@ allprojects {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: '*.jar')
-    implementation group: 'com.android.support', name: 'support-v13', version: '27.1.0'
-    implementation group: 'com.android.support', name: 'customtabs', version: '27.1.0'
-    implementation group: 'com.android.support', name: 'design', version: '27.1.0'
-    implementation group: 'com.android.support', name: 'appcompat-v7', version: '27.1.0'
-    implementation group: 'com.android.support', name: 'design', version: '27.1.0'
-    implementation group: 'com.android.support', name: 'cardview-v7', version: '27.1.0'
+    implementation group: 'com.android.support', name: 'support-v13', version: '27.1.1'
+    implementation group: 'com.android.support', name: 'customtabs', version: '27.1.1'
+    implementation group: 'com.android.support', name: 'design', version: '27.1.1'
+    implementation group: 'com.android.support', name: 'appcompat-v7', version: '27.1.1'
+    implementation group: 'com.android.support', name: 'design', version: '27.1.1'
+    implementation group: 'com.android.support', name: 'cardview-v7', version: '27.1.1'
     implementation group: 'com.android.support', name: 'multidex', version: '1.0.3'
-    implementation group: 'com.android.support', name: 'exifinterface', version: '27.1.0'
+    implementation group: 'com.android.support', name: 'exifinterface', version: '27.1.1'
     implementation group: 'com.google.android.gms', name: 'play-services-analytics', version: '10.0.1'
     implementation group: 'com.google.android.gms', name: 'play-services-auth', version: '10.0.1'
     implementation group: 'com.google.android.gms', name: 'play-services-maps', version: '10.0.1'
