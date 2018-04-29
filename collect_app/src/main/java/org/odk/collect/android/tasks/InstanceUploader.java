@@ -29,6 +29,7 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.WebUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,12 +41,12 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_DELETE;
 
-public abstract class InstanceUploader extends AsyncTask<Long, Integer, InstanceUploader.Outcome> {
+public abstract class InstanceUploader extends AsyncTask<Long, Integer, WebUtils.Outcome> {
 
     private InstanceUploaderListener stateListener;
 
     @Override
-    protected void onPostExecute(Outcome outcome) {
+    protected void onPostExecute(WebUtils.Outcome outcome) {
         synchronized (this) {
             if (outcome != null && stateListener != null) {
                 if (outcome.authRequestingServer != null) {
@@ -153,9 +154,4 @@ public abstract class InstanceUploader extends AsyncTask<Long, Integer, Instance
         }
     }
 
-    static class Outcome {
-        Uri authRequestingServer = null;
-        boolean invalidOAuth;
-        HashMap<String, String> messagesByInstanceId = new HashMap<>();
-    }
 }

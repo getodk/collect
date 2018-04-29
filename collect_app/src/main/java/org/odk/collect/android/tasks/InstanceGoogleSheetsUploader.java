@@ -42,6 +42,7 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.exception.BadUrlException;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
 import org.odk.collect.android.utilities.UrlUtils;
+import org.odk.collect.android.utilities.WebUtils;
 import org.odk.collect.android.utilities.gdrive.DriveHelper;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.utilities.gdrive.SheetsHelper;
@@ -99,8 +100,8 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     }
 
     @Override
-    protected Outcome doInBackground(Long... values) {
-        final Outcome outcome = new Outcome();
+    protected WebUtils.Outcome doInBackground(Long... values) {
+        final WebUtils.Outcome outcome = new WebUtils.Outcome();
         int counter = 0;
 
         try {
