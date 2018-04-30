@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="AppThemeBase.Collect" >
+
+    <style name="BaseDarkAppTheme.Collect">
         <item name="android:buttonStyle">@style/CustomButtonStyle</item>
     </style>
 
-    <style name="CustomButtonStyle" parent="Widget.AppCompat.Button">
-        <item name="android:textAllCaps">false</item>
-        <item name="android:fontFamily">@string/font_family_regular</item>
-        <item name="android:textAppearance">@style/TextAppearance.AppCompat</item>
+    <style name="BaseLightAppTheme.Collect">
+        <item name="android:buttonStyle">@style/CustomButtonStyle</item>
     </style>
 </resources>

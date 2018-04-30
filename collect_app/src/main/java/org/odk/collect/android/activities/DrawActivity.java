@@ -24,7 +24,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.view.KeyEvent;
 import android.view.View;
@@ -59,7 +58,7 @@ import timber.log.Timber;
  *
  * @author BehrAtherton@gmail.com
  */
-public class DrawActivity extends AppCompatActivity {
+public class DrawActivity extends CollectAbstractActivity {
     public static final String OPTION = "option";
     public static final String OPTION_SIGNATURE = "signature";
     public static final String OPTION_ANNOTATE = "annotate";
@@ -301,8 +300,8 @@ public class DrawActivity extends AppCompatActivity {
         ListView listView = DialogUtils.createActionListView(this);
 
         List<IconMenuItem> items;
-        items = ImmutableList.of(new IconMenuItem(R.drawable.ic_save_grey_32dp_wrapped, R.string.keep_changes),
-                new IconMenuItem(R.drawable.ic_delete_grey_32dp_wrapped, R.string.do_not_save));
+        items = ImmutableList.of(new IconMenuItem(R.drawable.ic_save_grey_32dp, R.string.keep_changes),
+                new IconMenuItem(R.drawable.ic_delete_grey_32dp, R.string.do_not_save));
 
         final IconMenuListAdapter adapter = new IconMenuListAdapter(this, items);
         listView.setAdapter(adapter);

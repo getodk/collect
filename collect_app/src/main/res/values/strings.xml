@@ -582,6 +582,9 @@
     <string name="start_video_capture_instruction">Tap the screen to start recording</string>
     <string name="stop_video_capture_instruction">Recording started. Tap again to stop</string>
     <string name="no_columns_to_upload">No columns found in the form to upload.</string>
+    <string name="app_theme">Theme</string>
+    <string name="theme_light">Light theme</string>
+    <string name="theme_dark">Dark theme</string>
     <string name="cannot_create_directory">Cannot create directory: %s</string>
     <string name="not_a_directory">%s exists, but is not a directory</string>
     <string name="instance_upload_cancelled">Instance upload cancelled</string>
