@@ -265,8 +265,12 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
     @Override
     protected void onDestroy() {
         if (instanceGoogleSheetsUploader != null) {
+            if (!instanceGoogleSheetsUploader.isCancelled()) {
+                instanceGoogleSheetsUploader.cancel(true);
+            }
             instanceGoogleSheetsUploader.setUploaderListener(null);
         }
+        finish();
         super.onDestroy();
     }
 
