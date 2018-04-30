@@ -43,7 +43,6 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.utilities.PermissionUtils.grantStoragePermissions;
 import static org.odk.collect.android.utilities.PermissionUtils.requestStoragePermissions;
 
 /**

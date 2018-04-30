@@ -70,7 +70,7 @@ public class FormChooserList extends FormListActivity implements
                 try {
                     Collect.createODKDirs();
                     Collect.getInstance().getActivityLogger().open();
-                    init(savedInstanceState);
+                    init();
                 } catch (RuntimeException e) {
                     createErrorDialog(e.getMessage(), EXIT);
                     return;
@@ -85,13 +85,8 @@ public class FormChooserList extends FormListActivity implements
         });
     }
 
-    private void init(Bundle savedInstanceState) {
+    private void init() {
         setupAdapter();
-
-        if (savedInstanceState != null && savedInstanceState.containsKey(syncMsgKey)) {
-            TextView tv = findViewById(R.id.status_text);
-            tv.setText((savedInstanceState.getString(syncMsgKey)).trim());
-        }
 
         // DiskSyncTask checks the disk for any forms not already in the content provider
         // that is, put here by dragging and dropping onto the SDCard
