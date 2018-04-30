@@ -56,7 +56,9 @@ import org.opendatakit.httpclientandroidlib.entity.mime.content.StringBody;
 import org.opendatakit.httpclientandroidlib.impl.auth.BasicScheme;
 import org.opendatakit.httpclientandroidlib.impl.client.BasicAuthCache;
 import org.opendatakit.httpclientandroidlib.impl.client.HttpClientBuilder;
+import org.opendatakit.httpclientandroidlib.protocol.BasicHttpContext;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
+import org.opendatakit.httpclientandroidlib.util.EntityUtils;
 import org.xmlpull.v1.XmlPullParser;
 
 import java.io.File;
@@ -139,6 +141,23 @@ public final class WebUtils {
             credsProvider.setCredentials(a, null);
         }
     }
+
+    /**
+     * Construct and return a session context with shared cookieStore and credsProvider so a user
+     * does not have to re-enter login information.
+     */
+    public static synchronized HttpContext getHttpContext() {
+
+        // context holds authentication state machine, so it cannot be
+        // shared across independent activities.
+        HttpContext localContext = new BasicHttpContext();
+
+        localContext.setAttribute(HttpClientContext.COOKIE_STORE, Collect.getInstance().getCookieStore());
+        localContext.setAttribute(HttpClientContext.CREDS_PROVIDER, Collect.getInstance().getCredentialsProvider());
+
+        return localContext;
+    }
+
 
     /**
      * Remove all credentials for accessing the specified host and, if the
@@ -294,7 +313,7 @@ public final class WebUtils {
      */
     public static DocumentFetchResult getXmlDocument(String urlString) {
 
-        HttpContext localContext = Collect.getInstance().getHttpContext();
+        HttpContext localContext = getHttpContext();
         HttpClient httpclient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
 
         URI u;
@@ -467,7 +486,7 @@ public final class WebUtils {
 
         InputStream downloadStream = null;
 
-        HttpContext localContext = Collect.getInstance().getHttpContext();
+        HttpContext localContext = getHttpContext();
         HttpClient httpclient = createHttpClient(WebUtils.CONNECTION_TIMEOUT);
 
         // set up request...
@@ -565,7 +584,7 @@ public final class WebUtils {
         Uri submissionUri = Uri.parse(urlString);
 
         // get shared HttpContext so that authentication and cookies are retained.
-        HttpContext localContext = Collect.getInstance().getHttpContext();
+        HttpContext localContext = getHttpContext();
         HttpClient httpclient = WebUtils.createHttpClient(CONNECTION_TIMEOUT);
 
         ResponseMessageParser messageParser = null;
@@ -867,7 +886,8 @@ public final class WebUtils {
                 response = httpclient.execute(httppost, localContext);
                 int responseCode = response.getStatusLine().getStatusCode();
                 HttpEntity httpEntity = response.getEntity();
-                messageParser = new ResponseMessageParser(httpEntity);
+
+                messageParser = new ResponseMessageParser(EntityUtils.toString(httpEntity));
                 WebUtils.discardEntityBytes(response);
                 Timber.i("Response code:%d", responseCode);
                 // verify that the response was a 201 or 202.
@@ -927,6 +947,10 @@ public final class WebUtils {
         cv.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMITTED);
         Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
         return true;
+    }
+
+    public static String getPlainTextMimeType() {
+        return ContentType.TEXT_PLAIN.getMimeType();
     }
 
     public static class Outcome {

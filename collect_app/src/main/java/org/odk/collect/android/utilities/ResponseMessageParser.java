@@ -1,7 +1,5 @@
 package org.odk.collect.android.utilities;
 
-import org.opendatakit.httpclientandroidlib.HttpEntity;
-import org.opendatakit.httpclientandroidlib.util.EntityUtils;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -21,13 +19,14 @@ import timber.log.Timber;
  */
 
 public class ResponseMessageParser {
-    private HttpEntity httpEntity;
+
     private static final String MESSAGE_XML_TAG = "message";
+    private String httpResponse;
     public boolean isValid;
     public String messageResponse;
 
-    public ResponseMessageParser(HttpEntity httpEntity) {
-        this.httpEntity = httpEntity;
+    public ResponseMessageParser(String httpResponse) {
+        this.httpResponse = httpResponse;
         this.messageResponse = parseXMLMessage();
         if (messageResponse != null) {
             this.isValid = true;
@@ -50,10 +49,8 @@ public class ResponseMessageParser {
             builder = dbFactory.newDocumentBuilder();
             Document doc = null;
 
-            String httpEntityString = EntityUtils.toString(httpEntity);
-
-            if (httpEntityString.contains("OpenRosaResponse")) {
-                doc = builder.parse(new ByteArrayInputStream(httpEntityString.getBytes()));
+            if (httpResponse.contains("OpenRosaResponse")) {
+                doc = builder.parse(new ByteArrayInputStream(httpResponse.getBytes()));
                 doc.getDocumentElement().normalize();
 
                 if (doc.getElementsByTagName(MESSAGE_XML_TAG).item(0) != null) {

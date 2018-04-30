@@ -109,6 +109,6 @@ public class WebUtilsTest extends MockedServerTest {
     }
 
     private static HttpContext httpContext() {
-        return Collect.getInstance().getHttpContext();
+        return WebUtils.getHttpContext();
     }
 }
