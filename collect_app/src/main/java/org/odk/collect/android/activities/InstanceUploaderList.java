@@ -177,8 +177,8 @@ public class InstanceUploaderList extends InstanceListActivity implements
                 getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc),
                 getString(R.string.sort_by_date_asc), getString(R.string.sort_by_date_desc)
         };
-        getSupportLoaderManager().initLoader(LOADER_ID, null, this);
 
+        getSupportLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
     @Override

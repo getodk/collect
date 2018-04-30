@@ -84,7 +84,7 @@ public class FormChooserList extends FormListActivity implements
             }
         });
     }
-
+    
     private void init() {
         setupAdapter();
 
