@@ -1,11 +1,11 @@
-<!-- 
-Thank you for contributing to ODK Collect !
+Closes #
 
-Before sending this PR, I hope you have read the CONTRIBUTING.md first.
+<!-- 
+Thank you for contributing to ODK Collect!
+
+Before sending this PR, please read
 https://github.com/opendatakit/collect/blob/master/CONTRIBUTING.md
 -->
-
-Closes #
 
 #### What has been done to verify that this works as intended?
 
@@ -17,6 +17,6 @@ Closes #
 
 #### Does this change require updates to documentation? If so, please file an issue at [Here]( https://github.com/opendatakit/docs/issues/new) and include the link below.
 
-#### Before submitting this PR, please make sure you have tried:
-- [ ] Run the tests with `./gradlew pmd checkstyle lint findbugs` to make sure all checks still pass.
-
+#### Before submitting this PR, please make sure you have:
+- [ ] run `./gradlew pmd checkstyle lint findbugs` and confirmed all checks still pass.
+- [ ] verified that any new UI elements use theme colors so that they work with both light and dark themes.
