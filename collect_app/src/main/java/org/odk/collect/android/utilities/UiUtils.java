@@ -38,9 +38,8 @@ public class UiUtils {
         return Collect.getInstance().getResources().getDimensionPixelSize(dimenResId);
     }
 
-
     /**
-     * This method converts dp unit to equivalent pixels, depending on device density.
+     * Converts dp unit to equivalent pixels, depending on device density.
      *
      * @param dp      A value in dp (density independent pixels) unit. Which we need to convert into pixels
      * @param context Context to get resources and device specific display metrics
@@ -50,11 +49,10 @@ public class UiUtils {
         Resources resources = context.getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
         return dp * ((float) metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
-
     }
 
     /**
-     * This method converts device specific pixels to density independent pixels.
+     * Converts device specific pixels to density independent pixels.
      *
      * @param px      A value in px (pixels) unit. Which we need to convert into db
      * @param context Context to get resources and device specific display metrics
@@ -64,6 +62,5 @@ public class UiUtils {
         Resources resources = context.getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
         return px / ((float) metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
-
     }
 }

@@ -21,7 +21,7 @@ public final class PreferenceKeys {
     public static final String KEY_CONSTRAINT_BEHAVIOR      = "constraint_behavior";
     public static final String KEY_HIGH_RESOLUTION          = "high_resolution";
     public static final String KEY_IMAGE_SIZE               = "image_size";
-    public static final String KEY_GUIDANCE_HINT               = "guidance_hint";
+    public static final String KEY_GUIDANCE_HINT            = "guidance_hint";
     public static final String KEY_INSTANCE_SYNC            = "instance_sync";
 
     // form_metadata_preferences.xml

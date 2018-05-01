@@ -15,7 +15,6 @@ import org.odk.collect.android.listeners.Result;
  */
 public class AnimateUtils {
 
-
     private static final Interpolator easeInOutQuart = PathInterpolatorCompat.create(0.77f, 0f, 0.175f, 1f);
 
     private AnimateUtils() {
@@ -47,7 +46,6 @@ public class AnimateUtils {
         });
         view.startAnimation(scaleInAnimation);
     }
-
 
     // Added animation related code and inspiration from this Stack Overflow Question
     // https://stackoverflow.com/questions/4946295/android-expand-collapse-animation
@@ -84,7 +82,6 @@ public class AnimateUtils {
         animation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-
                 //triggered when animation starts.
             }
 
@@ -137,14 +134,12 @@ public class AnimateUtils {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-
                 result.onComplete(true);
             }
 
             @Override
             public void onAnimationRepeat(Animation animation) {
                 //triggered when animation repeats.
-
             }
         });
 

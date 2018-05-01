@@ -85,10 +85,9 @@ public abstract class QuestionWidget
     private final TextView guidanceTextView;
     private final View helpTextLayout;
     private final View guidanceTextLayout;
-
-
+    private static final String GUIDANCE_COLLAPSED_STATE = "collapsed_state";
+    private AtomicBoolean expanded;
     private Bundle state;
-
     private int playColor = ContextCompat.getColor(getContext(), R.color.tintColor);
 
     public QuestionWidget(Context context, FormEntryPrompt prompt) {
@@ -100,7 +99,6 @@ public abstract class QuestionWidget
         if (context instanceof DependencyProvider) {
             injectDependencies((DependencyProvider) context);
         }
-
 
         player = new MediaPlayer();
         getPlayer().setOnCompletionListener(new OnCompletionListener() {
@@ -140,7 +138,7 @@ public abstract class QuestionWidget
 
     @SuppressLint("ClickableViewAccessibility")
     private TextView setupGuidanceTextAndLayout(TextView guidanceTextView, FormEntryPrompt prompt) {
-        AtomicBoolean expanded = new AtomicBoolean(false);
+
         GuidanceHint setting = GuidanceHint.get((String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_GUIDANCE_HINT));
 
         if (setting.equals(GuidanceHint.No)) {
@@ -151,21 +149,26 @@ public abstract class QuestionWidget
 
         if (android.text.TextUtils.isEmpty(guidanceHint)) {
             return null;
-
         }
 
         configureGuidanceTextView(guidanceTextView, guidanceHint);
+
+        if (getState() != null) {
+            if (getState().containsKey(GUIDANCE_COLLAPSED_STATE + getFormEntryPrompt().getIndex())) {
+                Boolean result = getState().getBoolean(GUIDANCE_COLLAPSED_STATE + getFormEntryPrompt().getIndex());
+                expanded = new AtomicBoolean(result);
+            }
+        } else {
+            expanded = new AtomicBoolean(false);
+        }
 
         if (setting.equals(GuidanceHint.Yes)) {
             guidanceTextLayout.setVisibility(VISIBLE);
             guidanceTextView.setText(guidanceHint);
         } else if (setting.equals(GuidanceHint.YesCollapsed)) {
-            int padding = (int) convertDpToPixel(4, getContext());
-
-            guidanceTextLayout.setPadding(padding, padding, padding, padding);
-            guidanceTextLayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.guidance_hint_box));
             getHelpTextView().setCompoundDrawablesWithIntrinsicBounds(R.drawable.information_outline, 0, 0, 0);
             getHelpTextView().setCompoundDrawablePadding((int) convertDpToPixel(5, getContext()));
+            guidanceTextLayout.setVisibility(expanded.get() ? VISIBLE : GONE);
 
             getHelpTextView().setOnClickListener(v -> {
                 if (!expanded.get()) {
@@ -178,10 +181,8 @@ public abstract class QuestionWidget
         return null;
     }
 
-
     private TextView configureGuidanceTextView(TextView guidanceTextView, String guidance) {
-
-        guidanceTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getQuestionFontSize() - 5);
+        guidanceTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getQuestionFontSize() - 3);
         //noinspection ResourceType
         guidanceTextView.setPadding(0, -5, 0, 7);
         // wrap to the widget of view
@@ -193,7 +194,6 @@ public abstract class QuestionWidget
         guidanceTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.primaryTextColor));
         guidanceTextView.setMovementMethod(LinkMovementMethod.getInstance());
         return guidanceTextView;
-
     }
 
     /**
@@ -367,6 +367,10 @@ public abstract class QuestionWidget
     @OverridingMethodsMustInvokeSuper
     protected void saveState() {
         state = new Bundle();
+
+        if (expanded != null) {
+            state.putBoolean(GUIDANCE_COLLAPSED_STATE + getFormEntryPrompt().getIndex(), expanded.get());
+        }
     }
 
     /**
