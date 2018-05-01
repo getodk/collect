@@ -175,14 +175,14 @@ allprojects {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: '*.jar')
-    implementation group: 'com.android.support', name: 'support-v13', version: '27.1.0'
-    implementation group: 'com.android.support', name: 'customtabs', version: '27.1.0'
-    implementation group: 'com.android.support', name: 'design', version: '27.1.0'
-    implementation group: 'com.android.support', name: 'appcompat-v7', version: '27.1.0'
-    implementation group: 'com.android.support', name: 'design', version: '27.1.0'
-    implementation group: 'com.android.support', name: 'cardview-v7', version: '27.1.0'
+    implementation group: 'com.android.support', name: 'support-v13', version: '27.1.1'
+    implementation group: 'com.android.support', name: 'customtabs', version: '27.1.1'
+    implementation group: 'com.android.support', name: 'design', version: '27.1.1'
+    implementation group: 'com.android.support', name: 'appcompat-v7', version: '27.1.1'
+    implementation group: 'com.android.support', name: 'design', version: '27.1.1'
+    implementation group: 'com.android.support', name: 'cardview-v7', version: '27.1.1'
     implementation group: 'com.android.support', name: 'multidex', version: '1.0.3'
-    implementation group: 'com.android.support', name: 'exifinterface', version: '27.1.0'
+    implementation group: 'com.android.support', name: 'exifinterface', version: '27.1.1'
     implementation group: 'com.google.android.gms', name: 'play-services-analytics', version: '10.0.1'
     implementation group: 'com.google.android.gms', name: 'play-services-auth', version: '10.0.1'
     implementation group: 'com.google.android.gms', name: 'play-services-maps', version: '10.0.1'
@@ -191,7 +191,7 @@ dependencies {
         exclude group: 'org.apache.httpcomponents'
     }
     implementation group: 'com.google.firebase', name: 'firebase-core', version: '10.0.1'
-    implementation group: 'com.crashlytics.sdk.android', name: 'crashlytics', version: '2.9.1'
+    implementation group: 'com.crashlytics.sdk.android', name: 'crashlytics', version: '2.9.2'
     implementation(group: 'com.google.http-client', name: 'google-http-client', version: '1.22.0') {
         exclude group: 'org.apache.httpcomponents'
     }
@@ -200,7 +200,7 @@ dependencies {
     }
 
     implementation group: 'com.rarepebble', name: 'colorpicker', version: '2.3.1'
-    implementation group: 'commons-io', name: 'commons-io', version: '2.5'
+    implementation group: 'commons-io', name: 'commons-io', version: '2.6'
     implementation group: 'net.sf.kxml', name: 'kxml2', version: '2.3.0'
     implementation group: 'net.sf.opencsv', name: 'opencsv', version: '2.3'
     implementation(group: 'org.opendatakit', name: 'opendatakit-javarosa', version: '2.9.0') {
@@ -233,13 +233,13 @@ dependencies {
     odkCollectReleaseImplementation group: 'com.squareup.leakcanary', name: 'leakcanary-android-no-op', version: '1.5.4'
 
     // Android Architecture Components:
-    implementation "android.arch.lifecycle:extensions:1.1.0"
+    implementation "android.arch.lifecycle:extensions:1.1.1"
 
     // Dagger:
-    implementation 'com.google.dagger:dagger-android:2.11'
-    implementation 'com.google.dagger:dagger-android-support:2.11'
-    annotationProcessor 'com.google.dagger:dagger-android-processor:2.11'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
+    implementation 'com.google.dagger:dagger-android:2.14'
+    implementation 'com.google.dagger:dagger-android-support:2.14'
+    annotationProcessor 'com.google.dagger:dagger-android-processor:2.14'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.14'
 
     // RxJava 2:
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
