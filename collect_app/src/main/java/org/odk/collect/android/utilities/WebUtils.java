@@ -147,7 +147,7 @@ public final class WebUtils {
      * Construct and return a session context with shared cookieStore and credsProvider so a user
      * does not have to re-enter login information.
      */
-    public static synchronized HttpContext getHttpContext() {
+    private static synchronized HttpContext getHttpContext() {
 
         // context holds authentication state machine, so it cannot be
         // shared across independent activities.
@@ -186,7 +186,7 @@ public final class WebUtils {
         }
     }
 
-    public static void enablePreemptiveBasicAuth(
+    private static void enablePreemptiveBasicAuth(
             HttpContext localContext, String host) {
         AuthCache ac = (AuthCache) localContext
                 .getAttribute(HttpClientContext.AUTH_CACHE);
@@ -219,14 +219,14 @@ public final class WebUtils {
                 DateFormat.format("E, dd MMM yyyy hh:mm:ss zz", g).toString());
     }
 
-    public static HttpHead createOpenRosaHttpHead(URI uri) {
+    private static HttpHead createOpenRosaHttpHead(URI uri) {
         HttpHead req = new HttpHead(uri);
         setCollectHeaders(req);
         setOpenRosaHeaders(req);
         return req;
     }
 
-    public static HttpGet createOpenRosaHttpGet(URI uri) {
+    private static HttpGet createOpenRosaHttpGet(URI uri) {
         HttpGet req = new HttpGet();
         setCollectHeaders(req);
         setOpenRosaHeaders(req);
@@ -234,7 +234,7 @@ public final class WebUtils {
         return req;
     }
 
-    public static HttpPost createOpenRosaHttpPost(Uri u) {
+    private static HttpPost createOpenRosaHttpPost(Uri u) {
         HttpPost req = new HttpPost(URI.create(u.toString()));
         setCollectHeaders(req);
         setOpenRosaHeaders(req);
@@ -285,7 +285,7 @@ public final class WebUtils {
      * stream to allow its re-use.  Please add more details or bug ID here if
      * you know them.
      */
-    public static void discardEntityBytes(HttpResponse response) {
+    private static void discardEntityBytes(HttpResponse response) {
         HttpEntity entity = response.getEntity();
         if (entity != null) {
             InputStream is = null;
@@ -526,7 +526,7 @@ public final class WebUtils {
     /**
      *
      */
-    public enum ContentTypeMapping {
+    private enum ContentTypeMapping {
         XML("xml",  ContentType.TEXT_XML),
         _3GPP("3gpp", ContentType.create("audio/3gpp")),
         _3GP("3gp",  ContentType.create("video/3gpp")),
