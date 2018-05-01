@@ -328,7 +328,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                 .getInstance().get(PreferenceKeys.KEY_SERVER_URL);
         Uri u = Uri.parse(server);
         WebUtils.clearHostCredentials(u.getHost());
-        Collect.getInstance().getCookieStore().clear();
+        WebUtils.clearCookieStore();
     }
 
     protected void setDefaultAggregatePaths() {

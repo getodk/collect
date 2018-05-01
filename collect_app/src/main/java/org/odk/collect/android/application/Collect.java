@@ -52,8 +52,6 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.PRNGFixes;
-import org.opendatakit.httpclientandroidlib.client.CookieStore;
-import org.opendatakit.httpclientandroidlib.client.CredentialsProvider;
 
 import java.io.File;
 import java.util.Locale;
@@ -95,11 +93,6 @@ public class Collect extends Application implements HasActivityInjector {
     public static String defaultSysLanguage;
     private static Collect singleton = null;
     private static long lastClickTime;
-
-    @Inject
-    protected CookieStore cookieStore;
-    @Inject
-    protected CredentialsProvider credsProvider;
 
     private ActivityLogger activityLogger;
 
@@ -224,13 +217,6 @@ public class Collect extends Application implements HasActivityInjector {
         MultiDex.install(this);
     }
 
-    public CredentialsProvider getCredentialsProvider() {
-        return credsProvider;
-    }
-
-    public CookieStore getCookieStore() {
-        return cookieStore;
-    }
 
     public void hideKeyboard(View view) {
         InputMethodManager imm = (InputMethodManager) getInstance().getSystemService(Context.INPUT_METHOD_SERVICE);

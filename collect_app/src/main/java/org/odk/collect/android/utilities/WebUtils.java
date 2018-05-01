@@ -55,7 +55,9 @@ import org.opendatakit.httpclientandroidlib.entity.mime.content.FileBody;
 import org.opendatakit.httpclientandroidlib.entity.mime.content.StringBody;
 import org.opendatakit.httpclientandroidlib.impl.auth.BasicScheme;
 import org.opendatakit.httpclientandroidlib.impl.client.BasicAuthCache;
+import org.opendatakit.httpclientandroidlib.impl.client.BasicCookieStore;
 import org.opendatakit.httpclientandroidlib.impl.client.HttpClientBuilder;
+import org.opendatakit.httpclientandroidlib.client.CookieStore;
 import org.opendatakit.httpclientandroidlib.protocol.BasicHttpContext;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 import org.opendatakit.httpclientandroidlib.util.EntityUtils;
@@ -110,8 +112,21 @@ public final class WebUtils {
 
     private static final String fail = "Error: ";
 
-    private WebUtils() {
+    private static WebUtils instance;
 
+    private CredentialsProvider credentialsProvider;
+    private CookieStore cookieStore;
+
+    private WebUtils() {
+        credentialsProvider = new WebUtils.AgingCredentialsProvider(7 * 60 * 1000);
+        cookieStore = new BasicCookieStore();
+    }
+
+    private static synchronized WebUtils getInstance() {
+        if (instance == null) {
+            instance = new WebUtils();
+        }
+        return instance;
     }
 
     private static List<AuthScope> buildAuthScopes(String host) {
@@ -134,13 +149,17 @@ public final class WebUtils {
      * Remove all credentials for accessing the specified host.
      */
     public static void clearHostCredentials(String host) {
-        CredentialsProvider credsProvider = Collect.getInstance()
+        CredentialsProvider credsProvider = WebUtils.getInstance()
                 .getCredentialsProvider();
         Timber.i("clearHostCredentials: %s", host);
         List<AuthScope> asList = buildAuthScopes(host);
         for (AuthScope a : asList) {
             credsProvider.setCredentials(a, null);
         }
+    }
+
+    public static void clearCookieStore() {
+        WebUtils.getInstance().getCookieStore().clear();
     }
 
     /**
@@ -153,8 +172,8 @@ public final class WebUtils {
         // shared across independent activities.
         HttpContext localContext = new BasicHttpContext();
 
-        localContext.setAttribute(HttpClientContext.COOKIE_STORE, Collect.getInstance().getCookieStore());
-        localContext.setAttribute(HttpClientContext.CREDS_PROVIDER, Collect.getInstance().getCredentialsProvider());
+        localContext.setAttribute(HttpClientContext.COOKIE_STORE, WebUtils.getInstance().getCookieStore());
+        localContext.setAttribute(HttpClientContext.CREDS_PROVIDER, WebUtils.getInstance().getCredentialsProvider());
 
         return localContext;
     }
@@ -178,7 +197,7 @@ public final class WebUtils {
     }
 
     private static void addCredentials(Credentials c, String host) {
-        CredentialsProvider credsProvider = Collect.getInstance()
+        CredentialsProvider credsProvider = WebUtils.getInstance()
                 .getCredentialsProvider();
         List<AuthScope> asList = buildAuthScopes(host);
         for (AuthScope a : asList) {
@@ -352,7 +371,7 @@ public final class WebUtils {
                 WebUtils.discardEntityBytes(response);
                 if (statusCode == HttpStatus.SC_UNAUTHORIZED) {
                     // clear the cookies -- should not be necessary?
-                    Collect.getInstance().getCookieStore().clear();
+                    WebUtils.getInstance().getCookieStore().clear();
                 }
                 String webError = response.getStatusLine().getReasonPhrase()
                         + " (" + statusCode + ")";
@@ -503,7 +522,7 @@ public final class WebUtils {
             WebUtils.discardEntityBytes(response);
             if (statusCode == HttpStatus.SC_UNAUTHORIZED) {
                 // clear the cookies -- should not be necessary?
-                Collect.getInstance().getCookieStore().clear();
+                WebUtils.getInstance().getCookieStore().clear();
             }
             String errMsg =
                     Collect.getInstance().getString(R.string.file_fetch_failed, downloadUrl,
@@ -521,6 +540,14 @@ public final class WebUtils {
         }
 
         return downloadStream;
+    }
+
+    public CredentialsProvider getCredentialsProvider() {
+        return credentialsProvider;
+    }
+
+    public CookieStore getCookieStore() {
+        return cookieStore;
     }
 
     /**
@@ -641,7 +668,7 @@ public final class WebUtils {
                 int statusCode = response.getStatusLine().getStatusCode();
                 if (statusCode == HttpStatus.SC_UNAUTHORIZED) {
                     // clear the cookies -- should not be necessary?
-                    Collect.getInstance().getCookieStore().clear();
+                    WebUtils.getInstance().getCookieStore().clear();
 
                     WebUtils.discardEntityBytes(response);
                     // we need authentication, so stop and return what we've
@@ -899,7 +926,7 @@ public final class WebUtils {
                         outcome.messagesByInstanceId.put(id, fail + "Network login failure? Again?");
                     } else if (responseCode == HttpStatus.SC_UNAUTHORIZED) {
                         // clear the cookies -- should not be necessary?
-                        Collect.getInstance().getCookieStore().clear();
+                        WebUtils.getInstance().getCookieStore().clear();
                         outcome.messagesByInstanceId.put(id, fail + response.getStatusLine().getReasonPhrase()
                                 + " (" + responseCode + ") at " + urlString);
                     } else {
