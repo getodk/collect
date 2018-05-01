@@ -66,7 +66,6 @@ if (secretsFile.exists()) {
 
 android {
     compileSdkVersion(27)
-    buildToolsVersion('26.0.2')
 
     defaultConfig {
         applicationId('org.odk.collect.android')
@@ -262,7 +261,7 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
     // Used to generate documentation screenshots.
-    androidTestCompile 'tools.fastlane:screengrab:1.1.0'
+    androidTestImplementation 'tools.fastlane:screengrab:1.1.0'
 
     // Testing-only dependencies
     testImplementation group: 'junit', name: 'junit', version: '4.12'
