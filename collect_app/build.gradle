@@ -219,7 +219,7 @@ dependencies {
     implementation(group: 'com.google.apis', name: 'google-api-services-sheets', version: 'v4-rev463-1.22.0') {
         exclude group: 'org.apache.httpcomponents'
     }
-    implementation group: 'com.jakewharton.timber', name: 'timber', version: '4.6.0'
+    implementation group: 'com.jakewharton.timber', name: 'timber', version: '4.7.0'
     implementation group: 'com.google.zxing', name: 'core', version: '3.3.0'
     implementation group: 'com.journeyapps', name: 'zxing-android-embedded', version: '3.5.0'
     implementation group: 'net.danlew', name: 'android.joda', version: '2.9.9'
