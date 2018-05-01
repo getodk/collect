@@ -3,7 +3,7 @@ package org.odk.collect.android.injection.config;
 import org.odk.collect.android.injection.ViewModelBuilder;
 import org.odk.collect.android.injection.config.architecture.ViewModelFactoryModule;
 import org.odk.collect.android.injection.config.scopes.PerApplication;
-import org.odk.collect.android.utilities.AgingCredentialsProvider;
+import org.odk.collect.android.utilities.WebUtils;
 import org.opendatakit.httpclientandroidlib.client.CookieStore;
 import org.opendatakit.httpclientandroidlib.client.CredentialsProvider;
 import org.opendatakit.httpclientandroidlib.impl.client.BasicCookieStore;
@@ -22,7 +22,7 @@ class AppModule {
     @Provides
     CredentialsProvider provideCredentialsProvider() {
         // retain credentials for 7 minutes...
-        return new AgingCredentialsProvider(7 * 60 * 1000);
+        return new WebUtils.AgingCredentialsProvider(7 * 60 * 1000);
     }
 
     @PerApplication

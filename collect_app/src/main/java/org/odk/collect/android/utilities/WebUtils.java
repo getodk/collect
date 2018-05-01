@@ -82,6 +82,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.zip.GZIPInputStream;
 
 import timber.log.Timber;
@@ -959,5 +960,92 @@ public final class WebUtils {
         public HashMap<String, String> messagesByInstanceId = new HashMap<>();
     }
 
+
+    public static class AgingCredentialsProvider implements CredentialsProvider {
+
+        private final ConcurrentHashMap<AuthScope, Credentials> credMap;
+        private final long expiryInterval;
+
+        private long nextClearTimestamp;
+
+        /**
+         * Default constructor.
+         */
+        public AgingCredentialsProvider(int expiryInterval) {
+            super();
+            this.credMap = new ConcurrentHashMap<AuthScope, Credentials>();
+            this.expiryInterval = expiryInterval;
+            nextClearTimestamp = System.currentTimeMillis() + expiryInterval;
+        }
+
+        public void setCredentials(
+                final AuthScope authscope,
+                final Credentials credentials) {
+            if (authscope == null) {
+                throw new IllegalArgumentException("Authentication scope may not be null");
+            }
+            if (nextClearTimestamp < System.currentTimeMillis()) {
+                clear();
+            }
+            nextClearTimestamp = System.currentTimeMillis() + expiryInterval;
+            if (credentials == null) {
+                credMap.remove(authscope);
+            } else {
+                credMap.put(authscope, credentials);
+            }
+        }
+
+        /**
+         * Find matching {@link Credentials credentials} for the given authentication scope.
+         *
+         * @param map       the credentials hash map
+         * @param authscope the {@link AuthScope authentication scope}
+         * @return the credentials
+         */
+        private Credentials matchCredentials(
+                final Map<AuthScope, Credentials> map,
+                final AuthScope authscope) {
+            // see if we get a direct hit
+            Credentials creds = map.get(authscope);
+            if (creds == null) {
+                // Nope.
+                // Do a full scan
+                int bestMatchFactor = -1;
+                AuthScope bestMatch = null;
+                for (AuthScope current : map.keySet()) {
+                    int factor = authscope.match(current);
+                    if (factor > bestMatchFactor) {
+                        bestMatchFactor = factor;
+                        bestMatch = current;
+                    }
+                }
+                if (bestMatch != null) {
+                    creds = map.get(bestMatch);
+                }
+            }
+            return creds;
+        }
+
+        public Credentials getCredentials(final AuthScope authscope) {
+            if (authscope == null) {
+                throw new IllegalArgumentException("Authentication scope may not be null");
+            }
+            if (nextClearTimestamp < System.currentTimeMillis()) {
+                clear();
+            }
+            nextClearTimestamp = System.currentTimeMillis() + expiryInterval;
+            return matchCredentials(this.credMap, authscope);
+        }
+
+        public void clear() {
+            this.credMap.clear();
+        }
+
+        @Override
+        public String toString() {
+            return credMap.toString();
+        }
+
+    }
 
 }
