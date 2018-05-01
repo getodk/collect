@@ -45,6 +45,7 @@ public final class PreferenceKeys {
     public static final String KEY_PROTOCOL                 = "protocol";
 
     // user_interface_preferences.xml
+    public static final String KEY_APP_THEME                = "appTheme";
     public static final String KEY_APP_LANGUAGE             = "app_language";
     public static final String KEY_FONT_SIZE                = "font_size";
     public static final String KEY_NAVIGATION               = "navigation";
@@ -101,6 +102,7 @@ public final class PreferenceKeys {
         // server_preferences.xml
         hashMap.put(KEY_PROTOCOL,                   Collect.getInstance().getString(R.string.protocol_odk_default));
         // user_interface_preferences.xml
+        hashMap.put(KEY_APP_THEME,                  Collect.getInstance().getString(R.string.app_theme_light));
         hashMap.put(KEY_APP_LANGUAGE,               "");
         hashMap.put(KEY_FONT_SIZE,                  Collect.DEFAULT_FONTSIZE);
         hashMap.put(KEY_NAVIGATION,                 NAVIGATION_SWIPE);

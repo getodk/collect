@@ -190,7 +190,6 @@
   <string name="draw_image">Skissa i bild</string>
   <string name="reset_image">Återställ</string>
   <string name="set_color">Välj färg</string>
-  <string name="select_drawing_color">Välj pennfärg</string>
   <string name="admin_preferences">Administratörsinställningar</string>
   <string name="admin_access_settings">Knacka för administratörstillgång till inställningarna</string>
   <string name="save_mid">Spara formulär</string>

@@ -32,10 +32,10 @@ the specific language governing permissions and limitations under the License.
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:textColor="@color/primaryTextColor"
             android:lineSpacingMultiplier="1.2"
             android:paddingBottom="20dp"
             android:paddingTop="10dp"
+            android:textColor="?primaryTextColor"
             android:textSize="21sp"
             android:textStyle="bold" />
 
@@ -44,7 +44,7 @@ the specific language governing permissions and limitations under the License.
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="start"
-            android:textColor="@color/primaryTextColor"
+            android:textColor="?primaryTextColor"
             android:lineSpacingMultiplier="1.2"
             android:text="@string/save_form_as"
             android:textSize="21sp" />

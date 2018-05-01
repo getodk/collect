@@ -57,6 +57,7 @@ import org.odk.collect.android.utilities.AnimateUtils;
 import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.TextUtils;
+import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.views.MediaLayout;
 import org.odk.collect.android.widgets.interfaces.ButtonWidget;
@@ -85,13 +86,18 @@ public abstract class QuestionWidget
     private final TextView guidanceTextView;
     private final View helpTextLayout;
     private final View guidanceTextLayout;
-    private static final String GUIDANCE_COLLAPSED_STATE = "collapsed_state";
+    private static final String GUIDANCE_EXPANDED_STATE = "expanded_state";
     private AtomicBoolean expanded;
     private Bundle state;
-    private int playColor = ContextCompat.getColor(getContext(), R.color.tintColor);
+    protected ThemeUtils themeUtils;
+    private int playColor;
 
     public QuestionWidget(Context context, FormEntryPrompt prompt) {
         super(context);
+
+        themeUtils = new ThemeUtils(context);
+        playColor =  themeUtils.getAttributeValue(R.attr.colorAccent);
+
         if (context instanceof FormEntryActivity) {
             state = ((FormEntryActivity) context).getState();
         }
@@ -154,8 +160,8 @@ public abstract class QuestionWidget
         configureGuidanceTextView(guidanceTextView, guidanceHint);
 
         if (getState() != null) {
-            if (getState().containsKey(GUIDANCE_COLLAPSED_STATE + getFormEntryPrompt().getIndex())) {
-                Boolean result = getState().getBoolean(GUIDANCE_COLLAPSED_STATE + getFormEntryPrompt().getIndex());
+            if (getState().containsKey(GUIDANCE_EXPANDED_STATE + getFormEntryPrompt().getIndex())) {
+                Boolean result = getState().getBoolean(GUIDANCE_EXPANDED_STATE + getFormEntryPrompt().getIndex());
                 expanded = new AtomicBoolean(result);
             }
         } else {
@@ -226,8 +232,8 @@ public abstract class QuestionWidget
         TextView questionText = new TextView(getContext());
         questionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getQuestionFontSize());
         questionText.setTypeface(null, Typeface.BOLD);
-        questionText.setTextColor(ContextCompat.getColor(getContext(), R.color.primaryTextColor));
         questionText.setPadding(0, 0, 0, 7);
+        questionText.setTextColor(themeUtils.getAttributeValue(R.attr.primaryTextColor));
         questionText.setText(TextUtils.textToHtml(FormEntryPromptUtils.markQuestionIfIsRequired(promptText, prompt.isRequired())));
         questionText.setMovementMethod(LinkMovementMethod.getInstance());
 
@@ -369,7 +375,7 @@ public abstract class QuestionWidget
         state = new Bundle();
 
         if (expanded != null) {
-            state.putBoolean(GUIDANCE_COLLAPSED_STATE + getFormEntryPrompt().getIndex(), expanded.get());
+            state.putBoolean(GUIDANCE_EXPANDED_STATE + getFormEntryPrompt().getIndex(), expanded.get());
         }
     }
 
@@ -411,7 +417,7 @@ public abstract class QuestionWidget
             } else {
                 helpText.setText(TextUtils.textToHtml(s));
             }
-            helpText.setTextColor(ContextCompat.getColor(getContext(), R.color.primaryTextColor));
+            helpText.setTextColor(themeUtils.getAttributeValue(R.attr.primaryTextColor));
             helpText.setMovementMethod(LinkMovementMethod.getInstance());
             return helpText;
         } else {
@@ -529,7 +535,7 @@ public abstract class QuestionWidget
         TextView textView = new TextView(getContext());
 
         textView.setId(R.id.answer_text);
-        textView.setTextColor(ContextCompat.getColor(getContext(), R.color.primaryTextColor));
+        textView.setTextColor(themeUtils.getAttributeValue(R.attr.primaryTextColor));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         textView.setPadding(20, 20, 20, 20);
 

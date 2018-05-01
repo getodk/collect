@@ -185,7 +185,6 @@
   <string name="draw_image">Joonista pilt</string>
   <string name="reset_image">Lähtesta</string>
   <string name="set_color">Värvi määramine</string>
-  <string name="select_drawing_color">Vali värv joonistamiseks </string>
   <string name="admin_preferences">Administraatori seaded</string>
   <string name="admin_access_settings">Administraatori seadetele ligipääsuks puudutage</string>
   <string name="save_mid">Salvesta vorm</string>

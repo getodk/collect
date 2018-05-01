@@ -7,6 +7,15 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES
 OR CONDITIONS OF ANY KIND, either express or implied. See the License for
 the specific language governing permissions and limitations under the License. -->
 <resources>
+    <string-array name="theme_entries">
+        <item>@string/theme_light</item>
+        <item>@string/theme_dark</item>
+    </string-array>
+    <!-- DO NOT translate theme_entry_values - only used internally -->
+    <string-array name="theme_entry_values" translatable="false">
+        <item>@string/app_theme_light</item>
+        <item>@string/app_theme_dark</item>
+    </string-array>
     <!-- DO NOT translate protocol_entry_values - only used internally -->
     <string-array name="protocol_entry_values">
         <item>@string/protocol_odk_default</item>

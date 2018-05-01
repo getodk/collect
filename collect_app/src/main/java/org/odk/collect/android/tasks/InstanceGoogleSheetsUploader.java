@@ -243,6 +243,10 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         List<Object> columnTitles = getColumnTitles(element);
         ensureNumberOfColumnsIsValid(columnTitles.size());
 
+        if (isCancelled()) {
+            throw new UploadException(Collect.getInstance().getString(R.string.instance_upload_cancelled));
+        }
+
         try {
             List<List<Object>> sheetCells = getSheetCells(sheetTitle);
             if (sheetCells != null && !sheetCells.isEmpty()) { // we are editing an existed sheet
@@ -264,6 +268,11 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             }
 
             HashMap<String, String> answers = getAnswers(element, instanceFile, parentKey, key);
+
+            if (isCancelled()) {
+                throw new UploadException(Collect.getInstance().getString(R.string.instance_upload_cancelled));
+            }
+
             if (shouldRowBeInserted(answers)) {
                 sheetsHelper.insertRow(spreadsheet.getSpreadsheetId(), sheetTitle,
                         new ValueRange().setValues(Collections.singletonList(prepareListOfValues(sheetCells.get(0), columnTitles, answers))));

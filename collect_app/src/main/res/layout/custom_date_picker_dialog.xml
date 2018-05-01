@@ -14,10 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_horizontal">
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -28,26 +28,23 @@ limitations under the License.
             android:id="@+id/day_picker"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:descendantFocusability="blocksDescendants">
-        </NumberPicker>
+            android:descendantFocusability="blocksDescendants" />
 
         <NumberPicker
             android:id="@+id/month_picker"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
             android:layout_marginEnd="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:descendantFocusability="blocksDescendants">
-        </NumberPicker>
+            android:layout_marginStart="10dp"
+            android:descendantFocusability="blocksDescendants" />
 
         <NumberPicker
             android:id="@+id/year_picker"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:descendantFocusability="blocksDescendants">
-        </NumberPicker>
+            android:descendantFocusability="blocksDescendants" />
     </LinearLayout>
 
     <TextView
@@ -55,5 +52,5 @@ limitations under the License.
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:textColor="@color/black" />
+        android:textColor="?primaryTextColor" />
 </LinearLayout>

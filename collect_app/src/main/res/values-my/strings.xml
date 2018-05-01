@@ -172,7 +172,6 @@
   <string name="draw_image">ပံုၾကမ္းဆြဲရန္</string>
   <string name="reset_image">မူလအတုိင္းျပန္ထားရန္</string>
   <string name="set_color">အေရာင္ေရြးရန္</string>
-  <string name="select_drawing_color">ေရးဆြဲမည့္ အေရာင္ေရြးရန္</string>
   <string name="admin_preferences">စီမံခန့္ခြဲမွု ပံုစံမ်ား</string>
   <string name="admin_access_settings">စီမံခန့္ခြဲမွုပံုစံအား ေဆာင္ရြက္ႏိုင္ရန္ ႏွိပ္ပါ</string>
   <string name="save_mid">ပံုစံသိမ္းဆည္းျခင္း</string>
