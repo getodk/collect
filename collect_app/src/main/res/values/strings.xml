@@ -584,6 +584,10 @@
     <string name="no_columns_to_upload">No columns found in the form to upload.</string>
     <string name="storage_runtime_permission_denied_title">Storage permissions</string>
     <string name="storage_runtime_permission_denied_desc">Without these permissions Collect can\'t access your forms or save answers. Reopen the app when you are ready to grant them.</string>
+    <string name="app_theme">Theme</string>
+    <string name="theme_light">Light theme</string>
+    <string name="theme_dark">Dark theme</string>
     <string name="cannot_create_directory">Cannot create directory: %s</string>
     <string name="not_a_directory">%s exists, but is not a directory</string>
+    <string name="instance_upload_cancelled">Instance upload cancelled</string>
 </resources>

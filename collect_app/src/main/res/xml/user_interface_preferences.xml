@@ -2,6 +2,12 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ListPreference
+        android:dialogTitle="@string/app_theme"
+        android:entries="@array/theme_entries"
+        android:entryValues="@array/theme_entry_values"
+        android:key="appTheme"
+        android:title="@string/app_theme" />
+    <ListPreference
         android:dialogTitle="@string/language"
         android:key="app_language"
         android:title="@string/language" />

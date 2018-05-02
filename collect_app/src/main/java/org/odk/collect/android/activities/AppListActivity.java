@@ -19,18 +19,15 @@ package org.odk.collect.android.activities;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -39,7 +36,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.SortDialogAdapter;
@@ -57,7 +53,7 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
 
-abstract class AppListActivity extends AppCompatActivity {
+abstract class AppListActivity extends CollectAbstractActivity {
     protected static final int LOADER_ID = 0x01;
     private static final String SELECTED_INSTANCES = "selectedInstances";
     private static final String IS_SEARCH_BOX_SHOWN = "isSearchBoxShown";
@@ -69,7 +65,6 @@ abstract class AppListActivity extends AppCompatActivity {
     protected LinkedHashSet<Long> selectedInstances = new LinkedHashSet<>();
     protected String[] sortingOptions;
     protected Integer selectedSortingOrder;
-    protected Toolbar toolbar;
     protected ListView listView;
     protected LinearLayout llParent;
     protected ProgressBar progressBar;
@@ -125,23 +120,16 @@ abstract class AppListActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void setContentView(@LayoutRes int layoutResID) {
+        super.setContentView(layoutResID);
+
         listView = findViewById(android.R.id.list);
         listView.setOnItemClickListener((AdapterView.OnItemClickListener) this);
-
-        TextView emptyView = findViewById(android.R.id.empty);
-        listView.setEmptyView(emptyView);
+        listView.setEmptyView(findViewById(android.R.id.empty));
         progressBar = findViewById(R.id.progressBar);
         llParent = findViewById(R.id.llParent);
 
-        initToolbar();
-    }
-
-    private void initToolbar() {
-        toolbar = findViewById(R.id.toolbar);
-
-        setSupportActionBar(toolbar);
+        setSupportActionBar(findViewById(R.id.toolbar));
     }
 
     @Override
@@ -176,20 +164,16 @@ abstract class AppListActivity extends AppCompatActivity {
         isSearchBoxShown = state.getBoolean(IS_SEARCH_BOX_SHOWN);
         isBottomDialogShown = state.getBoolean(IS_BOTTOM_DIALOG_SHOWN);
         savedFilterText = state.getString(SEARCH_TEXT);
-
     }
 
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.list_menu, menu);
-
+        getMenuInflater().inflate(R.menu.list_menu, menu);
         final MenuItem sortItem = menu.findItem(R.id.menu_sort);
         final MenuItem searchItem = menu.findItem(R.id.menu_filter);
         searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setQueryHint(getResources().getString(R.string.search));
         searchView.setMaxWidth(Integer.MAX_VALUE);
-
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -306,8 +290,8 @@ abstract class AppListActivity extends AppCompatActivity {
     }
 
     private void setupBottomSheet() {
-        bottomSheetDialog = new BottomSheetDialog(this, R.style.MaterialDialogSheet);
-        View sheetView = getLayoutInflater().inflate(R.layout.bottom_sheet, null);
+        bottomSheetDialog = new BottomSheetDialog(this, themeUtils.getBottomDialogTheme());
+        final View sheetView = getLayoutInflater().inflate(R.layout.bottom_sheet, null);
         final RecyclerView recyclerView = sheetView.findViewById(R.id.recyclerView);
 
         final SortDialogAdapter adapter = new SortDialogAdapter(this, recyclerView, sortingOptions, getSelectedSortingOrder(), new RecyclerViewClickListener() {

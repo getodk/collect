@@ -37,6 +37,7 @@ limitations under the License.
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/imageView"
         android:layout_toRightOf="@id/imageView"
+        android:textColor="?primaryTextColor"
         android:textSize="@dimen/text_size_medium"
         tools:text="@string/odk_website" />
 
@@ -48,7 +49,6 @@ limitations under the License.
         android:layout_marginTop="@dimen/margin_medium"
         android:layout_toEndOf="@id/imageView"
         android:layout_toRightOf="@id/imageView"
-        android:textColor="@color/grey"
         android:textSize="@dimen/text_size_small"
         tools:text="@string/odk_website_summary" />
 </RelativeLayout>

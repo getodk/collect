@@ -31,11 +31,12 @@ public class HierarchyElementView extends RelativeLayout {
     private TextView secondaryTextView;
     private ImageView icon;
 
+    public HierarchyElementView(Context context) {
+        super(context);
+    }
 
     public HierarchyElementView(Context context, HierarchyElement it) {
         super(context);
-
-        setColor(it.getColor());
 
         icon = new ImageView(context);
         icon.setImageDrawable(it.getIcon());
@@ -87,12 +88,6 @@ public class HierarchyElementView extends RelativeLayout {
         this.icon.setImageDrawable(icon);
     }
 
-
-    public void setColor(int color) {
-        setBackgroundColor(color);
-    }
-
-
     public void showSecondary(boolean bool) {
         if (bool) {
             secondaryTextView.setVisibility(VISIBLE);
@@ -108,5 +103,4 @@ public class HierarchyElementView extends RelativeLayout {
     public int dipToPx(int dip) {
         return (int) (dip * getResources().getDisplayMetrics().density + 0.5f);
     }
-
 }
