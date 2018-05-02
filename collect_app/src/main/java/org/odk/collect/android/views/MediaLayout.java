@@ -410,7 +410,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
     }
 
     /**
-     * used for inject layout rules by locales
+     * used for injecting layout rules by locales
      */
     private void injectRulesByLocale(RelativeLayout.LayoutParams mediaParams,
                                      RelativeLayout.LayoutParams imageParams,
