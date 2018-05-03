@@ -16,12 +16,9 @@ package org.odk.collect.android.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -48,7 +45,7 @@ import java.util.List;
 
 import timber.log.Timber;
 
-public abstract class FormHierarchyActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public abstract class FormHierarchyActivity extends CollectAbstractActivity implements AdapterView.OnItemClickListener {
 
     protected static final int CHILD = 1;
     protected static final int EXPANDED = 2;
@@ -109,8 +106,11 @@ public abstract class FormHierarchyActivity extends AppCompatActivity implements
             public void onClick(View v) {
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "jumpToBeginning",
                         "click");
-                Collect.getInstance().getFormController().jumpToIndex(FormIndex
-                        .createBeginningOfFormIndex());
+                FormController fc = Collect.getInstance().getFormController();
+                if (fc != null) {
+                    fc.getTimerLogger().exitView();
+                    fc.jumpToIndex(FormIndex.createBeginningOfFormIndex());
+                }
                 setResult(RESULT_OK);
                 finish();
             }
@@ -122,8 +122,11 @@ public abstract class FormHierarchyActivity extends AppCompatActivity implements
             public void onClick(View v) {
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "jumpToEnd",
                         "click");
-                Collect.getInstance().getFormController().jumpToIndex(
-                        FormIndex.createEndOfFormIndex());
+                FormController fc = Collect.getInstance().getFormController();
+                if (fc != null) {
+                    fc.getTimerLogger().exitView();
+                    fc.jumpToIndex(FormIndex.createEndOfFormIndex());
+                }
                 setResult(RESULT_OK);
                 finish();
             }
@@ -304,7 +307,7 @@ public abstract class FormHierarchyActivity extends AppCompatActivity implements
                             String answerDisplay = FormEntryPromptUtils.getAnswerText(fp, this, formController);
                             formList.add(
                                     new HierarchyElement(FormEntryPromptUtils.markQuestionIfIsRequired(label, fp.isRequired()), answerDisplay, null,
-                                            Color.WHITE, QUESTION, fp.getIndex()));
+                                            QUESTION, fp.getIndex()));
                         }
                         break;
                     case FormEntryController.EVENT_GROUP:
@@ -332,7 +335,6 @@ public abstract class FormHierarchyActivity extends AppCompatActivity implements
                             HierarchyElement group =
                                     new HierarchyElement(fc.getLongText(), null, ContextCompat
                                             .getDrawable(getApplicationContext(), R.drawable.expander_ic_minimized),
-                                            Color.WHITE,
                                             COLLAPSED, fc.getIndex());
                             formList.add(group);
                         }
@@ -347,7 +349,7 @@ public abstract class FormHierarchyActivity extends AppCompatActivity implements
                         repeatLabel += " (" + (fc.getMultiplicity() + 1) + ")";
                         // Add this group name to the drop down list for this repeating group.
                         HierarchyElement h = formList.get(formList.size() - 1);
-                        h.addChild(new HierarchyElement(repeatLabel, null, null, Color.WHITE, CHILD, fc.getIndex()));
+                        h.addChild(new HierarchyElement(repeatLabel, null, null, CHILD, fc.getIndex()));
                         break;
                 }
                 event =
@@ -395,18 +397,5 @@ public abstract class FormHierarchyActivity extends AppCompatActivity implements
         alertDialog.setCancelable(false);
         alertDialog.setButton(getString(R.string.ok), errorListener);
         alertDialog.show();
-    }
-
-
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        switch (keyCode) {
-            case KeyEvent.KEYCODE_BACK:
-                Collect.getInstance().getActivityLogger().logInstanceAction(this, "onKeyDown",
-                        "KEYCODE_BACK.JUMP", startIndex);
-                Collect.getInstance().getFormController().jumpToIndex(startIndex);
-        }
-        return super.onKeyDown(keyCode, event);
     }
 }

@@ -140,7 +140,6 @@
   <string name="submission_url">Submission Path</string>
   <string name="font_size">Tekstgrootte</string>
   <string name="change_font_size">Tekstgrootte</string>
-  <string name="form_scan_starting">Formulieren zoeken…</string>
   <string name="access_error">Error while accessing %s: </string>
   <string name="manifest_server_error">Manifest reply does not report an OpenRosa version — bad server?</string>
   <string name="root_element_error">Root element is not &amp;lt;manifest\&gt; — was %s</string>
@@ -195,7 +194,6 @@
   <string name="draw_image">Sketch Image</string>
   <string name="reset_image">Reset</string>
   <string name="set_color">Set Color</string>
-  <string name="select_drawing_color">Select Drawing Color</string>
   <string name="admin_preferences">Admin Settings</string>
   <string name="admin_access_settings">Tap for admin access to settings</string>
   <string name="save_mid">Formulier opslaan</string>

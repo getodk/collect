@@ -144,7 +144,6 @@
   <string name="submission_url">Chemin d\'enregistrement</string>
   <string name="font_size">Taille de la Police</string>
   <string name="change_font_size">Taille de la Police</string>
-  <string name="form_scan_starting">Recherche de formulaires…</string>
   <string name="access_error">Erreur lors de l\'accès à %s: </string>
   <string name="manifest_server_error">Réponse Manifest ne fourni pas une version OpenRosa — Serveur défaillant?</string>
   <string name="root_element_error">L\'élément à la racine n\'est pas &amp;lt;manifest\&gt; — c\'était %s</string>
@@ -199,7 +198,6 @@
   <string name="draw_image">Dessiner une image</string>
   <string name="reset_image">Remise à zéro</string>
   <string name="set_color">Sélectionner la couleur</string>
-  <string name="select_drawing_color">Sélectionner la couleur d\'écriture</string>
   <string name="admin_preferences">Paramètres administrateur</string>
   <string name="admin_access_settings">Touchez pour obtenir l\'accès administrateur aux paramètres</string>
   <string name="save_mid">Sauvegarder le formulaire</string>

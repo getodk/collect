@@ -140,7 +140,6 @@
   <string name="submission_url">सबमिशन पथ</string>
   <string name="font_size">अक्षर फॉन्ट आकार</string>
   <string name="change_font_size">अक्षर फॉन्ट आकार</string>
-  <string name="form_scan_starting">फॉर्म के लिए स्कैन कर रहा है…</string>
   <string name="access_error">%s:प्राप्ति के समय गलती</string>
   <string name="manifest_server_error">मैन्फेस्ट उत्तर किसी OpenRosa version को रिपोर्ट नहीं करता - खराब सर्वर?</string>
   <string name="root_element_error">रूट एलिमेंट &amp; नहीं है यह;\&amp;gt को दिखाता है; — जोकि %sथा</string>
@@ -195,7 +194,6 @@
   <string name="draw_image">स्केच इमेज</string>
   <string name="reset_image">रीसेट</string>
   <string name="set_color">रंग सेट करें</string>
-  <string name="select_drawing_color">ड्राइंग रंग चुनें</string>
   <string name="admin_preferences">एडमिन सेटिंग</string>
   <string name="admin_access_settings">सेटिंग तक एडमिन पहुंच के लिए टैप करें</string>
   <string name="save_mid">फॉर्म संरक्षित करें</string>

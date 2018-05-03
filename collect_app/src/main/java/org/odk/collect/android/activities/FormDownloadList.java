@@ -118,8 +118,8 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     @SuppressWarnings("unchecked")
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        setContentView(R.layout.remote_file_manage_list);
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.remote_file_manage_list);
         setTitle(getString(R.string.get_forms));
 
         alertMsg = getString(R.string.please_wait);
@@ -137,7 +137,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         });
 
         toggleButton = findViewById(R.id.toggle_button);
-        toggleButton.setEnabled(listView.getCheckedItemCount() > 0);
+        toggleButton.setEnabled(false);
         toggleButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -627,7 +627,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             updateAdapter();
             selectSupersededForms();
             downloadButton.setEnabled(listView.getCheckedItemCount() > 0);
-            toggleButton.setEnabled(listView.getCheckedItemCount() > 0);
+            toggleButton.setEnabled(listView.getCount() > 0); 
             toggleButtonLabel(toggleButton, listView);
         }
     }

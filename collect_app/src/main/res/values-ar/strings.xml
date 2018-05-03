@@ -135,7 +135,6 @@
   <string name="submission_url">مسار الارسال</string>
   <string name="font_size">حجم الخط</string>
   <string name="change_font_size">حجم الخط</string>
-  <string name="form_scan_starting">البحث عن الاستمارات…</string>
   <string name="access_error">خطأ اثناء الوصول %s:</string>
   <string name="manifest_server_error">المانيفست لايعلم نسخة OpenRosa - الخادم لايستجيب؟</string>
   <string name="root_element_error">العنصرالأساسي &lt;manifest\&gt; كان %s</string>
@@ -190,7 +189,6 @@
   <string name="draw_image">تخطيط الصورة</string>
   <string name="reset_image">اعادة تعيين</string>
   <string name="set_color">تحديد اللون</string>
-  <string name="select_drawing_color">اختر لون الرسم</string>
   <string name="admin_preferences">إعدادات المدير</string>
   <string name="admin_access_settings">انقر للوصول الى اعدادات المدير</string>
   <string name="save_mid">حفظ الاستمارة</string>

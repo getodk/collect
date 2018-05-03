@@ -45,13 +45,14 @@ public final class PreferenceKeys {
     public static final String KEY_SMS_GATEWAY = "sms_gateway";
 
     // user_interface_preferences.xml
-    public static final String KEY_APP_LANGUAGE = "app_language";
-    public static final String KEY_FONT_SIZE = "font_size";
-    public static final String KEY_NAVIGATION = "navigation";
-    public static final String KEY_SHOW_SPLASH = "showSplash";
-    public static final String KEY_SPLASH_PATH = "splashPath";
-    public static final String KEY_MAP_SDK = "map_sdk_behavior";
-    public static final String KEY_MAP_BASEMAP = "map_basemap_behavior";
+    public static final String KEY_APP_THEME                = "appTheme";
+    public static final String KEY_APP_LANGUAGE             = "app_language";
+    public static final String KEY_FONT_SIZE                = "font_size";
+    public static final String KEY_NAVIGATION               = "navigation";
+    public static final String KEY_SHOW_SPLASH              = "showSplash";
+    public static final String KEY_SPLASH_PATH              = "splashPath";
+    public static final String KEY_MAP_SDK                  = "map_sdk_behavior";
+    public static final String KEY_MAP_BASEMAP              = "map_basemap_behavior";
 
     // other keys
     public static final String KEY_LAST_VERSION = "lastVersion";
@@ -102,13 +103,15 @@ public final class PreferenceKeys {
         hashMap.put(KEY_PROTOCOL, Collect.getInstance().getString(R.string.protocol_odk_default));
         hashMap.put(KEY_SMS_GATEWAY, "");
         // user_interface_preferences.xml
-        hashMap.put(KEY_APP_LANGUAGE, "");
-        hashMap.put(KEY_FONT_SIZE, Collect.DEFAULT_FONTSIZE);
-        hashMap.put(KEY_NAVIGATION, NAVIGATION_SWIPE);
-        hashMap.put(KEY_SHOW_SPLASH, false);
-        hashMap.put(KEY_SPLASH_PATH, Collect.getInstance().getString(R.string.default_splash_path));
-        hashMap.put(KEY_MAP_SDK, GOOGLE_MAPS);
-        hashMap.put(KEY_MAP_BASEMAP, GOOGLE_MAPS_BASEMAP_DEFAULT);
+        hashMap.put(KEY_APP_THEME,                  Collect.getInstance().getString(R.string.app_theme_light));
+        hashMap.put(KEY_APP_LANGUAGE,               "");
+        hashMap.put(KEY_FONT_SIZE,                  Collect.DEFAULT_FONTSIZE);
+        hashMap.put(KEY_NAVIGATION,                 NAVIGATION_SWIPE);
+        hashMap.put(KEY_SHOW_SPLASH,                false);
+        hashMap.put(KEY_SPLASH_PATH,                Collect.getInstance().getString(R.string.default_splash_path));
+        hashMap.put(KEY_MAP_SDK,                    GOOGLE_MAPS);
+        hashMap.put(KEY_MAP_BASEMAP,                GOOGLE_MAPS_BASEMAP_DEFAULT);
+
         return hashMap;
     }
 

@@ -128,7 +128,6 @@
   <string name="submission_url">Bane for innsending</string>
   <string name="font_size">Fontstørrelse</string>
   <string name="change_font_size">Fontstørrelse</string>
-  <string name="form_scan_starting">Søker…</string>
   <string name="access_error">Det er oppstått en feil ved %s.</string>
   <string name="manifest_server_error">Feil OpenRosa versjon?</string>
   <string name="root_element_error">Root element er ikke &amp;lt;manifest\&gt; — var %s</string>
@@ -181,7 +180,6 @@
   <string name="draw_image">Sketch Image</string>
   <string name="reset_image">Reset</string>
   <string name="set_color">Set Color</string>
-  <string name="select_drawing_color">Select Drawing Color</string>
   <string name="admin_preferences">Admin Settings</string>
   <string name="admin_access_settings">Tap for admin access to settings</string>
   <string name="save_mid">Mid-form saving</string>

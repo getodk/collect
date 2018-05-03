@@ -144,7 +144,6 @@
   <string name="submission_url">Lähetettävien lomakkeiden polku</string>
   <string name="font_size">Tekstin koko</string>
   <string name="change_font_size">Tekstin koko</string>
-  <string name="form_scan_starting">Etsitään lomakkeita…</string>
   <string name="access_error">Virhe käyttäessä %s:</string>
   <string name="manifest_server_error">Manifestivastaus ei raportoi OpenRosa-versiota - palvelinvika?</string>
   <string name="root_element_error">Juurielementti ei ole &lt;manifest\&gt; — oli %s</string>
@@ -199,7 +198,6 @@
   <string name="draw_image">Luonnostele kuva</string>
   <string name="reset_image">Nollaus (Reset)</string>
   <string name="set_color">Aseta väri</string>
-  <string name="select_drawing_color">Aseta piirrustusväri</string>
   <string name="admin_preferences">Pääkäyttäjän asetukset</string>
   <string name="admin_access_settings">Napsauta saadaksesi pääkäyttäjäoikeudet asetuksiin</string>
   <string name="save_mid">Tallenna lomake</string>
