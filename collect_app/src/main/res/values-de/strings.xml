@@ -198,7 +198,6 @@
   <string name="draw_image">Zeichnung erstellen</string>
   <string name="reset_image">Zurücksetzen</string>
   <string name="set_color">Farbe wählen</string>
-  <string name="select_drawing_color">Zeichenfarbe wählen</string>
   <string name="admin_preferences">Admineinstellungen</string>
   <string name="admin_access_settings">Adminzugriff auf die Einstellungen</string>
   <string name="save_mid">Formular speichern</string>

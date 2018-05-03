@@ -179,7 +179,6 @@
   <string name="draw_image">ແຕ້ມຮູບພາບແບບຄ້າວໆ</string>
   <string name="reset_image">ຕັ້ງຄ່າຄືນໃໝ່</string>
   <string name="set_color">ເລືອກສີ</string>
-  <string name="select_drawing_color">ເລືອກສີເພື່ອແຕ້ມຮູບ</string>
   <string name="admin_preferences">​ການຕັ້ງຄ່າສຳລັບຜູ້​ບໍ​ລິ​ຫານລະບົບ</string>
   <string name="admin_access_settings">​​ແຕະ​ເພື່ອ​ໃຫ້​ຜູ້​ບໍ​ລິ​ຫານລະ​ບົບເຂົ້າ​ຫາ​ການ​ຕັ້ງ​ຄ່າ</string>
   <string name="save_mid">ບັນທຶກແບບຟອມ</string>

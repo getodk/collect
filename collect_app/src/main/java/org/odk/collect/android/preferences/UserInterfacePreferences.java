@@ -38,6 +38,7 @@ import timber.log.Timber;
 import static android.app.Activity.RESULT_CANCELED;
 import static org.odk.collect.android.preferences.PreferenceKeys.GOOGLE_MAPS_BASEMAP_DEFAULT;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_APP_LANGUAGE;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_APP_THEME;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FONT_SIZE;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_MAP_BASEMAP;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_MAP_SDK;
@@ -55,6 +56,7 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.user_interface_preferences);
 
+        initThemePrefs();
         initNavigationPrefs();
         initFontSizePref();
         initLanguagePrefs();
@@ -73,6 +75,26 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
         super.onDetach();
         if (toolbar != null) {
             toolbar.setTitle(R.string.general_preferences);
+        }
+    }
+
+    private void initThemePrefs() {
+        final ListPreference pref = (ListPreference) findPreference(KEY_APP_THEME);
+
+        if (pref != null) {
+            pref.setSummary(pref.getEntry());
+            pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
+                    String entry = (String) ((ListPreference) preference).getEntries()[index];
+                    if (!pref.getEntry().equals(entry)) {
+                        preference.setSummary(entry);
+                        MainMenuActivity.startActivityAndCloseAllOthers(UserInterfacePreferences.this.getActivity());
+                    }
+                    return true;
+                }
+            });
         }
     }
 
@@ -147,11 +169,7 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
                     edit.apply();
 
                     localeHelper.updateLocale(getActivity());
-
-                    Intent intent = new Intent(getActivity().getBaseContext(), MainMenuActivity.class);
-                    getActivity().startActivity(intent);
-                    getActivity().overridePendingTransition(0, 0);
-                    getActivity().finishAffinity();
+                    MainMenuActivity.startActivityAndCloseAllOthers(UserInterfacePreferences.this.getActivity());
                     return true;
                 }
             });

@@ -196,7 +196,6 @@
   <string name="draw_image">Ескіз зображення</string>
   <string name="reset_image">Скинути</string>
   <string name="set_color">Колір</string>
-  <string name="select_drawing_color">Обрати колір для малювання</string>
   <string name="admin_preferences">Адміністрування</string>
   <string name="admin_access_settings">Клікніть для адміністративного доступу до налаштувань</string>
   <string name="save_mid">Зберегти анкету</string>

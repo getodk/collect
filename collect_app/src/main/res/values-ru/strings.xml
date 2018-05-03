@@ -196,7 +196,6 @@
   <string name="draw_image">Нарисовать изображение</string>
   <string name="reset_image">Сброс</string>
   <string name="set_color">Выбрать цвет</string>
-  <string name="select_drawing_color">Выбрать цвет</string>
   <string name="admin_preferences">Администрирование</string>
   <string name="admin_access_settings">Нажмите для админского доступа к настройкам</string>
   <string name="save_mid">Сохранить форму</string>
