@@ -133,7 +133,6 @@
   <string name="submission_url">Caminho para submeter</string>
   <string name="font_size">Tamanho da Fonte do Texto</string>
   <string name="change_font_size">Tamanho da Fonte do Texto</string>
-  <string name="form_scan_starting">Procurando por formulários…</string>
   <string name="access_error">Erro enquanto acessa %s:</string>
   <string name="manifest_server_error">Resposta não retorna uma versão OpenRosa — servidor ruim?</string>
   <string name="root_element_error">Elemento raiz não é &amp;lt;manifest\&gt; — foi %s</string>

@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2009 University of Washington
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -47,7 +47,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
 
     private static int counter = 0;
     private DiskSyncListener listener;
-    private String statusMessage;
+    private String statusMessage = "";
     private FormsDao formsDao;
 
     @Override
@@ -215,7 +215,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
             if (errors.length() != 0) {
                 statusMessage = errors.toString();
             } else {
-                statusMessage = Collect.getInstance().getString(R.string.finished_disk_scan);
+                Timber.d(Collect.getInstance().getString(R.string.finished_disk_scan));
             }
             return statusMessage;
         } finally {
@@ -300,7 +300,6 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
         }
         updateValues.put(FormsColumns.AUTO_DELETE, fields.get(FileUtils.AUTO_DELETE));
         updateValues.put(FormsColumns.AUTO_SEND, fields.get(FileUtils.AUTO_SEND));
-        
         // Note, the path doesn't change here, but it needs to be included so the
         // update will automatically update the .md5 and the cache path.
         updateValues.put(FormsColumns.FORM_FILE_PATH, formDefFile.getAbsolutePath());
@@ -308,8 +307,8 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
         return updateValues;
     }
 
-    public void setDiskSyncListener(DiskSyncListener l) {
-        listener = l;
+    public void setDiskSyncListener(DiskSyncListener listener) {
+        this.listener = listener;
     }
 
     @Override

@@ -121,7 +121,6 @@
   <string name="submission_url">ထည့္သြင္းရမည့္ေနရာ</string>
   <string name="font_size">စာလံုးအရြယ္အစား</string>
   <string name="change_font_size">စာလံုးအရြယ္အစား</string>
-  <string name="form_scan_starting">ပံုစံမ်ားကို ပံုရိပ္ဖမ္းရန္</string>
   <string name="access_error">လုပ္ဆာင္မွုမွားယြင္းေနသည္ %s:</string>
   <string name="manifest_server_error">ဆာဗာမေကာင္းပါ</string>
   <string name="root_element_error">အေျခခံလုပ္ေဆာင္ခ်က္ &lt; မရွင္းလင္းပါ - %s</string>

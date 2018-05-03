@@ -488,7 +488,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     private String getInstanceID(List<TreeElement> elements) {
         for (TreeElement element : elements) {
             if (element.getName().equals(INSTANCE_ID)) {
-                return element.getValue().getDisplayText();
+                return element.getValue() != null ? element.getValue().getDisplayText() : null;
             }
         }
         return null;
