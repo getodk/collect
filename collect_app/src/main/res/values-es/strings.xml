@@ -197,7 +197,6 @@
   <string name="draw_image">Boceto</string>
   <string name="reset_image">Restablecer</string>
   <string name="set_color">Seleccionar Color</string>
-  <string name="select_drawing_color">Seleccionar Color</string>
   <string name="admin_preferences">Opciones de administrador</string>
   <string name="admin_access_settings">Pulsa para entrar en Configuración</string>
   <string name="save_mid">Guardar sin completar el formulario</string>

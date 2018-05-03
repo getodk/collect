@@ -41,7 +41,7 @@
             android:paddingBottom="1dp"
             android:paddingTop="6dp"
             android:text="@string/app_name"
-            android:textColor="@color/primaryTextColor"
+            android:textColor="?primaryTextColor"
             android:textSize="21sp"
             android:textStyle="bold"/>
 
@@ -52,7 +52,7 @@
             android:paddingBottom="10dp"
             android:paddingTop="1dp"
             android:text="@string/main_menu_details"
-            android:textColor="@color/primaryTextColor"
+            android:textColor="?primaryTextColor"
             android:textSize="17sp"/>
 
         <ScrollView

@@ -245,6 +245,10 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     private void insertRow(TreeElement element, String parentKey, String key, File instanceFile, String sheetTitle)
             throws UploadException {
 
+        if (isCancelled()) {
+            throw new UploadException(Collect.getInstance().getString(R.string.instance_upload_cancelled));
+        }
+
         try {
             List<List<Object>> sheetCells = getSheetCells(sheetTitle);
             boolean newSheet = sheetCells == null || sheetCells.isEmpty();
@@ -273,6 +277,10 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             }
 
             HashMap<String, String> answers = getAnswers(element, columnTitles, instanceFile, parentKey, key);
+
+            if (isCancelled()) {
+                throw new UploadException(Collect.getInstance().getString(R.string.instance_upload_cancelled));
+            }
 
             if (shouldRowBeInserted(answers)) {
                 sheetsHelper.insertRow(spreadsheet.getSpreadsheetId(), sheetTitle,

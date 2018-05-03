@@ -71,8 +71,8 @@ public class InstanceChooserList extends InstanceListActivity implements
             return;
         }
 
-        setContentView(R.layout.chooser_list_layout);
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.chooser_list_layout);
 
         String formMode = getIntent().getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
         if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {

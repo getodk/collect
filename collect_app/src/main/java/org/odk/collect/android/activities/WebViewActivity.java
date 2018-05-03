@@ -16,7 +16,6 @@ package org.odk.collect.android.activities;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.webkit.WebResourceError;
@@ -28,7 +27,7 @@ import android.widget.ProgressBar;
 import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.CustomTabHelper;
 
-public class WebViewActivity extends AppCompatActivity {
+public class WebViewActivity extends CollectAbstractActivity {
 
     private WebView webView;
     private ProgressBar progressBar;

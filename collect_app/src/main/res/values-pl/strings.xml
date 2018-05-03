@@ -185,7 +185,6 @@
   <string name="draw_image">Naszkicuj Obraz</string>
   <string name="reset_image">Resetuj</string>
   <string name="set_color">Ustaw Kolor</string>
-  <string name="select_drawing_color">Wybierz Kolor do Rysowania</string>
   <string name="admin_preferences">Ustawienia Administratora</string>
   <string name="admin_access_settings">Naciśnij aby mieć dostęp do ustawień administratora</string>
   <string name="save_mid">Zapisz Formularz</string>

@@ -198,7 +198,6 @@
   <string name="draw_image">Luonnostele kuva</string>
   <string name="reset_image">Nollaus (Reset)</string>
   <string name="set_color">Aseta väri</string>
-  <string name="select_drawing_color">Aseta piirrustusväri</string>
   <string name="admin_preferences">Pääkäyttäjän asetukset</string>
   <string name="admin_access_settings">Napsauta saadaksesi pääkäyttäjäoikeudet asetuksiin</string>
   <string name="save_mid">Tallenna lomake</string>

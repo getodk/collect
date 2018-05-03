@@ -20,7 +20,6 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
 import android.text.method.TextKeyListener;
 import android.text.method.TextKeyListener.Capitalize;
 import android.util.TypedValue;
@@ -40,8 +39,8 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.external.ExternalAppsUtils;
-import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.utilities.ActivityAvailability;
+import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.utilities.ObjectUtils;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
@@ -116,7 +115,7 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
         answer.setLayoutParams(params);
         textBackground = answer.getBackground();
         answer.setBackground(null);
-        answer.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor));
+        answer.setTextColor(themeUtils.getAttributeValue(R.attr.primaryTextColor));
 
         // capitalize nothing
         answer.setKeyListener(new TextKeyListener(Capitalize.NONE, false));

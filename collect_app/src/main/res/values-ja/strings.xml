@@ -198,7 +198,6 @@
   <string name="draw_image">スケッチ画像</string>
   <string name="reset_image">リセット</string>
   <string name="set_color">色を設定</string>
-  <string name="select_drawing_color">描画色を選択します</string>
   <string name="admin_preferences">管理者設定</string>
   <string name="admin_access_settings">タップして設定に管理者アクセスします</string>
   <string name="save_mid">フォームを保存する</string>

@@ -198,7 +198,6 @@
   <string name="draw_image">Skiciraj sliko</string>
   <string name="reset_image">Resetiraj</string>
   <string name="set_color">Nastavi barvo</string>
-  <string name="select_drawing_color">Izberi barvo</string>
   <string name="admin_preferences">Admin nastavitve</string>
   <string name="admin_access_settings">Klikni za admiin dostop do nastavitev</string>
   <string name="save_mid">Shrani obrazec</string>
