@@ -284,12 +284,13 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     }
 
     /**
-     * Adds titles ending with "-altitude" or "-accuracy" that may have been added to the
+     * Adds titles ending with "-altitude" or "-accuracy" if they have been manually added to the
      * Sheet. Existing spreadsheets can start collecting altitude / accuracy from
      * Geo location fields.
      *
      * @param sheetHeaders - Headers from the spreadsheet
-     * @param columnTitles - Column titles list to be updated with altitude / accuracy titles
+     * @param columnTitles - Column titles list to be updated with altitude / accuracy titles from
+     *                       the sheetHeaders
      */
     private void addAltitudeAndAccuracyTitles(List<Object> sheetHeaders, List<Object> columnTitles) {
         for (Object sheetTitle : sheetHeaders) {
@@ -412,7 +413,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                 } else {
 
                     if (isLocationValid(answer)) {
-                        parseAltitudeAndAccuracy(answers, columnTitles, elementTitle, answer);
+                        answers.putAll(parseGeopoint(columnTitles, elementTitle, answer));
                     } else {
                         answers.put(elementTitle, answer);
                     }
@@ -429,35 +430,40 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     }
 
     /**
-     * Strip the Altitude and Accuracy from a location String and add them as separate column if
+     * Strips the Altitude and Accuracy from a location String and adds them as separate columns if
      * the column titles exist.
      *
-     * @param answers - HashMap of current Answers
-     * @param elementTitle - Current header title
-     * @param answer - String that holds the Lat/Long/Altitude/Accuracy
+     * @param columnTitles - A List of column titles on the sheet
+     * @param elementTitle - The title of the geo data to parse. e.g. "data-Point"
+     * @param geoData - A space (" ") separated string that contains "Lat Long Altitude Accuracy"
+     * @return a Map of fields containing Lat/Long and Accuracy, Altitude (if the respective column
+     *         titles exist in the columnTitles parameter).
      */
-    private void parseAltitudeAndAccuracy(@NonNull Map<String, String> answers, @NonNull List<Object> columnTitles, @NonNull String elementTitle, @NonNull String answer) {
+    private @NonNull Map<String, String> parseGeopoint(@NonNull List<Object> columnTitles, @NonNull String elementTitle, @NonNull String geoData) {
+        Map<String, String> geoFieldsMap = new HashMap<String, String>();
 
         // Accuracy
-        int accuracyLocation = answer.lastIndexOf(' ');
-        String accuracyStr = answer.substring(accuracyLocation).trim();
-        answer = answer.substring(0, accuracyLocation).trim();
+        int accuracyLocation = geoData.lastIndexOf(' ');
+        String accuracyStr = geoData.substring(accuracyLocation).trim();
+        geoData = geoData.substring(0, accuracyLocation).trim();
         final String accuracyTitle = elementTitle + ACCURACY_TITLE_POSTFIX;
         if (columnTitles.contains(accuracyTitle)) {
-            answers.put(accuracyTitle, accuracyStr);
+            geoFieldsMap.put(accuracyTitle, accuracyStr);
         }
 
         // Altitude
-        int altitudeLocation = answer.lastIndexOf(' ');
-        String altitudeStr = answer.substring(altitudeLocation).trim();
-        answer = answer.substring(0, altitudeLocation).trim();
+        int altitudeLocation = geoData.lastIndexOf(' ');
+        String altitudeStr = geoData.substring(altitudeLocation).trim();
+        geoData = geoData.substring(0, altitudeLocation).trim();
         final String altitudeTitle = elementTitle + ALTITUDE_TITLE_POSTFIX;
         if (columnTitles.contains(altitudeTitle)) {
-            answers.put(altitudeTitle, altitudeStr);
+            geoFieldsMap.put(altitudeTitle, altitudeStr);
         }
 
-        // Put the modified geo location (Just lat/long) into the answers Map
-        answers.put(elementTitle, answer);
+        // Put the modified geo location (Just lat/long) into the geo fields Map
+        geoFieldsMap.put(elementTitle, geoData);
+
+        return geoFieldsMap;
     }
 
     private List<Object> getColumnTitles(TreeElement element, boolean newSheet) {
