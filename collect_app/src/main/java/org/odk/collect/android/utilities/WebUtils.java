@@ -16,6 +16,7 @@ package org.odk.collect.android.utilities;
 
 import android.content.ContentValues;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.text.format.DateFormat;
 import android.webkit.MimeTypeMap;
 
@@ -107,8 +108,8 @@ public final class WebUtils {
     private static final String HTTP_CONTENT_TYPE_TEXT_XML = "text/xml";
     public static final int CONNECTION_TIMEOUT = 30000;
 
-    public static final String ACCEPT_ENCODING_HEADER = "Accept-Encoding";
-    public static final String GZIP_CONTENT_ENCODING = "gzip";
+    private static final String ACCEPT_ENCODING_HEADER = "Accept-Encoding";
+    private static final String GZIP_CONTENT_ENCODING = "gzip";
 
     private static final String fail = "Error: ";
 
@@ -166,7 +167,7 @@ public final class WebUtils {
      * Construct and return a session context with shared cookieStore and credsProvider so a user
      * does not have to re-enter login information.
      */
-    private static synchronized HttpContext getHttpContext() {
+    public static synchronized HttpContext getHttpContext() {
 
         // context holds authentication state machine, so it cannot be
         // shared across independent activities.
@@ -245,7 +246,7 @@ public final class WebUtils {
         return req;
     }
 
-    private static HttpGet createOpenRosaHttpGet(URI uri) {
+    public static HttpGet createOpenRosaHttpGet(URI uri) {
         HttpGet req = new HttpGet();
         setCollectHeaders(req);
         setOpenRosaHeaders(req);
@@ -333,176 +334,100 @@ public final class WebUtils {
      */
     public static DocumentFetchResult getXmlDocument(String urlString) {
 
-        HttpContext localContext = getHttpContext();
-        HttpClient httpclient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
+        // parse response
+        Document doc = null;
 
-        URI u;
+        DownloadResult downloadResult = null;
+
         try {
-            URL url = new URL(urlString);
-            u = url.toURI();
-        } catch (URISyntaxException | MalformedURLException e) {
-            Timber.i(e, "Error converting URL %s to uri", urlString);
-            return new DocumentFetchResult(e.getLocalizedMessage()
-                    // + app.getString(R.string.while_accessing) + urlString);
-                    + ("while accessing") + urlString, 0);
-        }
-
-        if (u.getHost() == null) {
-            return new DocumentFetchResult("Invalid server URL (no hostname): " + urlString, 0);
-        }
-
-        // if https then enable preemptive basic auth...
-        if (u.getScheme().equals("https")) {
-            enablePreemptiveBasicAuth(localContext, u.getHost());
-        }
-
-        // set up request...
-        HttpGet req = WebUtils.createOpenRosaHttpGet(u);
-        req.addHeader(WebUtils.ACCEPT_ENCODING_HEADER, WebUtils.GZIP_CONTENT_ENCODING);
-
-        HttpResponse response;
-        try {
-            response = httpclient.execute(req, localContext);
-            int statusCode = response.getStatusLine().getStatusCode();
-
-            HttpEntity entity = response.getEntity();
-
-            if (statusCode != HttpStatus.SC_OK) {
-                WebUtils.discardEntityBytes(response);
-                if (statusCode == HttpStatus.SC_UNAUTHORIZED) {
-                    // clear the cookies -- should not be necessary?
-                    WebUtils.getInstance().getCookieStore().clear();
-                }
-                String webError = response.getStatusLine().getReasonPhrase()
-                        + " (" + statusCode + ")";
-
-                return new DocumentFetchResult(u.toString()
-                        + " responded with: " + webError, statusCode);
-            }
-
-            if (entity == null) {
-                String error = "No entity body returned from: " + u.toString();
-                Timber.e(error);
-                return new DocumentFetchResult(error, 0);
-            }
-
-            if (!entity.getContentType().getValue().toLowerCase(Locale.ENGLISH)
-                    .contains(WebUtils.HTTP_CONTENT_TYPE_TEXT_XML)) {
-                WebUtils.discardEntityBytes(response);
-                String error = "ContentType: "
-                        + entity.getContentType().getValue()
-                        + " returned from: "
-                        + u.toString()
-                        + " is not text/xml.  This is often caused a network proxy.  Do you need "
-                        + "to login to your network?";
-                Timber.e(error);
-                return new DocumentFetchResult(error, 0);
-            }
-            // parse response
-            Document doc = null;
+            downloadResult = getDownloadInputStream(urlString, WebUtils.HTTP_CONTENT_TYPE_TEXT_XML);
+            InputStream is = downloadResult.getInputStream();
+            InputStreamReader isr = null;
             try {
-                InputStream is = null;
-                InputStreamReader isr = null;
-                try {
-                    is = entity.getContent();
-                    Header contentEncoding = entity.getContentEncoding();
-                    if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase(
-                            WebUtils.GZIP_CONTENT_ENCODING)) {
-                        is = new GZIPInputStream(is);
-                    }
-                    isr = new InputStreamReader(is, "UTF-8");
-                    doc = new Document();
-                    KXmlParser parser = new KXmlParser();
-                    parser.setInput(isr);
-                    parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES,
-                            true);
-                    doc.parse(parser);
-                    isr.close();
-                    isr = null;
-                } finally {
-                    if (isr != null) {
-                        try {
-                            // ensure stream is consumed...
-                            final long count = 1024L;
-                            while (isr.skip(count) == count) {
-                                // skipping to the end of the http entity
-                            }
-                        } catch (Exception e) {
-                            // no-op
-                            Timber.e(e);
+                isr = new InputStreamReader(is, "UTF-8");
+                doc = new Document();
+                KXmlParser parser = new KXmlParser();
+                parser.setInput(isr);
+                parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
+                doc.parse(parser);
+                isr.close();
+                isr = null;
+            } finally {
+                if (isr != null) {
+                    try {
+                        // ensure stream is consumed...
+                        final long count = 1024L;
+                        while (isr.skip(count) == count) {
+                            // skipping to the end of the http entity
                         }
-                        try {
-                            isr.close();
-                        } catch (IOException e) {
-                            // no-op
-                            Timber.e(e, "Error closing input stream reader");
-                        }
-                    }
-                    if (is != null) {
-                        try {
-                            is.close();
-                        } catch (IOException e) {
-                            Timber.e(e, "Error closing inputstream");
-                            // no-op
-                        }
-                    }
-                }
-            } catch (Exception e) {
-                String error = "Parsing failed with " + e.getMessage()
-                        + "while accessing " + u.toString();
-                Timber.e(error);
-                return new DocumentFetchResult(error, 0);
-            }
 
-            boolean isOR = false;
-            Header[] fields = response
-                    .getHeaders(WebUtils.OPEN_ROSA_VERSION_HEADER);
-            if (fields != null && fields.length >= 1) {
-                isOR = true;
-                boolean versionMatch = false;
-                boolean first = true;
-                StringBuilder b = new StringBuilder();
-                for (Header h : fields) {
-                    if (WebUtils.OPEN_ROSA_VERSION.equals(h.getValue())) {
-                        versionMatch = true;
-                        break;
+                        isr.close();
+
+                    } catch (IOException e) {
+                        // no-op
+                        Timber.e(e, "Error closing input stream reader");
                     }
-                    if (!first) {
-                        b.append("; ");
-                    }
-                    first = false;
-                    b.append(h.getValue());
                 }
-                if (!versionMatch) {
-                    Timber.w("%s unrecognized version(s): %s", WebUtils.OPEN_ROSA_VERSION_HEADER, b.toString());
+
+                if (is != null) {
+                    try {
+                        is.close();
+                    } catch (IOException e) {
+                        Timber.e(e, "Error closing inputstream");
+                        // no-op
+                    }
                 }
             }
-            return new DocumentFetchResult(doc, isOR);
         } catch (Exception e) {
-            String cause;
-            Throwable c = e;
-            while (c.getCause() != null) {
-                c = c.getCause();
-            }
-            cause = c.toString();
-            String error = "Error: " + cause + " while accessing "
-                    + u.toString();
-
-            Timber.w(error);
+            String error = "Parsing failed with " + e.getMessage()
+                    + "while accessing " + urlString;
+            Timber.e(error);
             return new DocumentFetchResult(error, 0);
         }
+
+        return new DocumentFetchResult(doc, downloadResult.isOpenRosaResponse());
     }
 
+
+    public static final class DownloadResult {
+        private InputStream inputStream;
+        private boolean openRosaResponse;
+
+        DownloadResult(InputStream is, boolean isOpenRosa) {
+            inputStream = is;
+            openRosaResponse = isOpenRosa;
+        }
+
+        public InputStream getInputStream() {
+            return inputStream;
+        }
+
+        public boolean isOpenRosaResponse() {
+            return openRosaResponse;
+        }
+    }
 
     /**
      * Instantiates a file InputStream from a URI
      *
-     * @param uri
      * @param downloadUrl
-     * @return
+     * @return InputStream
      * @throws Exception
      */
-    public static InputStream getDownloadInputStream(URI uri, String downloadUrl) throws Exception {
+    public static DownloadResult getDownloadInputStream(@NonNull String downloadUrl, final String contentType) throws Exception {
+        URI uri;
+        try {
+            // assume the downloadUrl is escaped properly
+            URL url = new URL(downloadUrl);
+            uri = url.toURI();
+        } catch (MalformedURLException | URISyntaxException e) {
+            Timber.e(e, "Unable to get a URI for download URL : %s  due to %s : ", downloadUrl, e.getMessage());
+            throw e;
+        }
+
+        if (uri.getHost() == null) {
+            throw new Exception("Invalid server URL (no hostname): " + downloadUrl);
+        }
 
         InputStream downloadStream = null;
 
@@ -532,14 +457,56 @@ public final class WebUtils {
         }
 
         HttpEntity entity = response.getEntity();
+
+        if (entity == null) {
+            throw new Exception("No entity body returned from: " + downloadUrl);
+        }
+
+        if (contentType != null && contentType.length()>0) {
+            if (!entity.getContentType().getValue().toLowerCase(Locale.ENGLISH).contains(contentType)) {
+                WebUtils.discardEntityBytes(response);
+                String error = "ContentType: "
+                        + entity.getContentType().getValue()
+                        + " returned from: "
+                        + downloadUrl
+                        + " is not " + contentType + ".  This is often caused a network proxy.  Do you need "
+                        + "to login to your network?";
+
+                throw new Exception(error);
+            }
+        }
+
         downloadStream = entity.getContent();
         Header contentEncoding = entity.getContentEncoding();
-        if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase(
-                WebUtils.GZIP_CONTENT_ENCODING)) {
+        if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase(WebUtils.GZIP_CONTENT_ENCODING)) {
             downloadStream = new GZIPInputStream(downloadStream);
         }
 
-        return downloadStream;
+        boolean openRosaResponse = false;
+        Header[] fields = response.getHeaders(WebUtils.OPEN_ROSA_VERSION_HEADER);
+
+        if (fields != null && fields.length >= 1) {
+            openRosaResponse = true;
+            boolean versionMatch = false;
+            boolean first = true;
+            StringBuilder b = new StringBuilder();
+            for (Header h : fields) {
+                if (WebUtils.OPEN_ROSA_VERSION.equals(h.getValue())) {
+                    versionMatch = true;
+                    break;
+                }
+                if (!first) {
+                    b.append("; ");
+                }
+                first = false;
+                b.append(h.getValue());
+            }
+            if (!versionMatch) {
+                Timber.w("%s unrecognized version(s): %s", WebUtils.OPEN_ROSA_VERSION_HEADER, b.toString());
+            }
+        }
+
+        return new DownloadResult(downloadStream,openRosaResponse);
     }
 
     public CredentialsProvider getCredentialsProvider() {

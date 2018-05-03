@@ -398,15 +398,6 @@ public class DownloadFormsTask extends
         File tempFile = File.createTempFile(file.getName(), TEMP_DOWNLOAD_EXTENSION,
                 new File(Collect.CACHE_PATH));
 
-        URI uri;
-        try {
-            // assume the downloadUrl is escaped properly
-            URL url = new URL(downloadUrl);
-            uri = url.toURI();
-        } catch (MalformedURLException | URISyntaxException e) {
-            Timber.e(e, "Unable to get a URI for download URL : %s  due to %s : ", downloadUrl, e.getMessage());
-            throw e;
-        }
 
         // WiFi network connections can be renegotiated during a large form download sequence.
         // This will cause intermittent download failures.  Silently retry once after each
@@ -424,7 +415,7 @@ public class DownloadFormsTask extends
             OutputStream os = null;
 
             try {
-                is = WebUtils.getDownloadInputStream(uri, downloadUrl);
+                is = WebUtils.getDownloadInputStream(downloadUrl,null).getInputStream();
                 os = new FileOutputStream(tempFile);
 
                 byte[] buf = new byte[4096];
