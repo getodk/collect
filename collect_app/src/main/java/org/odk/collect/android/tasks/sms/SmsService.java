@@ -2,6 +2,7 @@ package org.odk.collect.android.tasks.sms;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.SmsManager;
@@ -11,6 +12,7 @@ import com.birbit.android.jobqueue.TagConstraint;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.tasks.sms.models.Message;
 import org.odk.collect.android.tasks.sms.models.MessageStatus;
@@ -195,5 +197,11 @@ public class SmsService {
         Timber.i(log);
 
         jobManager.addJobInBackground(new SmsSenderJob(jobMessage));
+    }
+
+    private void updateInstanceStatus(String instanceId){
+
+        Uri toUpdate = Uri.withAppendedPath(InstanceProviderAPI.InstanceColumns.CONTENT_URI,instanceId);
+
     }
 }

@@ -478,6 +478,7 @@ public class InstanceServerUploader extends InstanceUploader {
                 }
                 outcome.messagesByInstanceId.put(id, fail + "Generic Exception: " + msg);
                 cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
+                cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                 Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
                 return true;
             }
