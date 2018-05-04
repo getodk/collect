@@ -163,6 +163,8 @@ configurations.all {
     resolutionStrategy {
         cacheDynamicVersionsFor(0, 'seconds')
         cacheChangingModulesFor(0, 'seconds')
+
+        force('com.google.code.findbugs:jsr305:1.3.9')
     }
     transitive = true
 }
