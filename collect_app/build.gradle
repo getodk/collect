@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
 apply from: '../config/quality.gradle'
 apply from: '../config/jacoco.gradle'
 
@@ -98,7 +99,7 @@ android {
             }
             minifyEnabled(true)
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
-            resValue("bool", "FIREBASE_CRASH_ENABLED", "false")
+            resValue("bool", "FIREBASE_CRASHLYTICS_ENABLED", "false")
         }
         // Release build for the original ODK Collect app
         odkCollectRelease {
@@ -107,12 +108,12 @@ android {
             }
             minifyEnabled(true)
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
-            resValue("bool", "FIREBASE_CRASH_ENABLED", "true")
+            resValue("bool", "FIREBASE_CRASHLYTICS_ENABLED", "true")
         }
         debug {
             debuggable(true)
             testCoverageEnabled(true)
-            resValue("bool", "FIREBASE_CRASH_ENABLED", "false")
+            resValue("bool", "FIREBASE_CRASHLYTICS_ENABLED", "false")
         }
     }
 
@@ -191,7 +192,7 @@ dependencies {
         exclude group: 'org.apache.httpcomponents'
     }
     implementation group: 'com.google.firebase', name: 'firebase-core', version: '10.0.1'
-    implementation group: 'com.google.firebase', name: 'firebase-crash', version: '10.0.1'
+    implementation group: 'com.crashlytics.sdk.android', name: 'crashlytics', version: '2.9.1'
     implementation(group: 'com.google.http-client', name: 'google-http-client', version: '1.22.0') {
         exclude group: 'org.apache.httpcomponents'
     }
@@ -199,6 +200,7 @@ dependencies {
         exclude group: 'org.apache.httpcomponents'
     }
 
+    implementation group: 'com.rarepebble', name: 'colorpicker', version: '2.3.1'
     implementation group: 'commons-io', name: 'commons-io', version: '2.5'
     implementation group: 'net.sf.kxml', name: 'kxml2', version: '2.3.0'
     implementation group: 'net.sf.opencsv', name: 'opencsv', version: '2.3'

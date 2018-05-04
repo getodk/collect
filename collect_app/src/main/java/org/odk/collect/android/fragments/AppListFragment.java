@@ -32,15 +32,19 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.adapters.SortDialogAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.listeners.RecyclerViewClickListener;
 import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.utilities.ThemeUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
+
+import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
 
@@ -48,11 +52,9 @@ abstract class AppListFragment extends ListFragment {
 
     protected final ActivityLogger logger = Collect.getInstance().getActivityLogger();
     protected String[] sortingOptions;
-    View rootView;
-
     protected SimpleCursorAdapter listAdapter;
     protected LinkedHashSet<Long> selectedInstances = new LinkedHashSet<>();
-
+    protected View rootView;
     private Integer selectedSortingOrder;
     private BottomSheetDialog bottomSheetDialog;
     private String filterText;
@@ -107,7 +109,7 @@ abstract class AppListFragment extends ListFragment {
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setQueryHint(getResources().getString(R.string.search));
         searchView.setMaxWidth(Integer.MAX_VALUE);
-        
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -164,7 +166,13 @@ abstract class AppListFragment extends ListFragment {
     }
 
     private void setupBottomSheet() {
-        bottomSheetDialog = new BottomSheetDialog(getActivity(), R.style.MaterialDialogSheet);
+        CollectAbstractActivity activity = (CollectAbstractActivity) getActivity();
+        if (activity == null) {
+            Timber.e("Activity is null");
+            return;
+        }
+
+        bottomSheetDialog = new BottomSheetDialog(activity, new ThemeUtils(getContext()).getBottomDialogTheme());
         View sheetView = getActivity().getLayoutInflater().inflate(R.layout.bottom_sheet, null);
         final RecyclerView recyclerView = sheetView.findViewById(R.id.recyclerView);
 

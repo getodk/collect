@@ -16,13 +16,23 @@
 
 package org.odk.collect.android.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+
+import org.odk.collect.android.utilities.ThemeUtils;
 
 public abstract class CollectAbstractActivity extends AppCompatActivity {
 
     private boolean isInstanceStateSaved;
+    protected ThemeUtils themeUtils;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        themeUtils = new ThemeUtils(this);
+        setTheme(themeUtils.getAppTheme());
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     protected void onPostResume() {
@@ -38,11 +48,5 @@ public abstract class CollectAbstractActivity extends AppCompatActivity {
 
     public boolean isInstanceStateSaved() {
         return isInstanceStateSaved;
-    }
-
-    public void goToTheMainActivityAndCloseAllOthers() {
-        startActivity(new Intent(this, MainMenuActivity.class));
-        overridePendingTransition(0, 0);
-        finishAffinity();
     }
 }

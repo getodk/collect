@@ -128,7 +128,6 @@
   <string name="submission_url">ბმული დადასტურებულ ფორმებზე</string>
   <string name="font_size">ტექსტის ზომა</string>
   <string name="change_font_size">ტექსტის ზომა</string>
-  <string name="form_scan_starting">ფორმების მოძიება…</string>
   <string name="access_error">შეცდომა %s-თან დაკავშირებისას </string>
   <string name="manifest_server_error">მანიფესტის პასუხში არ იგულისხმება OpenRosa — ვერსია; bad server?</string>
   <string name="root_element_error">ძირის ელემენტეი არ არის &lt;manifest\&gt; — იყო %s</string>
@@ -181,7 +180,6 @@
   <string name="draw_image">მონახაზის სურათი</string>
   <string name="reset_image">გადატვირთვა</string>
   <string name="set_color">ფერის დაყენება</string>
-  <string name="select_drawing_color">სახატავი ფერის არჩევა</string>
   <string name="admin_preferences">ადმინისტრატორის პაროლი</string>
   <string name="admin_access_settings">დააჭირეთ პარამეტრებისადმი ადმინისტრატორის სახელით შესვლისთვის</string>
   <string name="save_mid">ნაწილობრივ შენახვა</string>
