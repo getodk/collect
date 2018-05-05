@@ -10,7 +10,7 @@
         android:layout_height="1dp"/>
     <View
         android:id="@+id/progress_view"
-        android:background="@color/progress_bar_color"
+        android:background="?colorAccent"
         android:layout_width="0dp"
         tools:layout_width="match_parent"
         android:layout_height="1dp"/>
