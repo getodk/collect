@@ -492,17 +492,6 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     }
 
     @Override
-    protected void onPause() {
-        if (retrieveDriveFileContentsAsyncTask != null) {
-            retrieveDriveFileContentsAsyncTask.setTaskListener(null);
-        }
-        if (getFileTask != null) {
-            getFileTask.setGoogleDriveFormDownloadListener(null);
-        }
-        super.onPause();
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         if (retrieveDriveFileContentsAsyncTask != null) {
