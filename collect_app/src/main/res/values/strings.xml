@@ -578,7 +578,7 @@
     <string name="moving_backwards_enabled_message">You may wish to review the following settings:\n\n\u2022 Edit Saved Form\n\u2022 Save Form\n\u2022 Go To Prompt\n\u2022 Constraint processing</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="newer_version_of_a_form_info">This is an updated version of a form you already have!</string>
+    <string name="newer_version_of_a_form_info">This is an update to a form you have</string>
     <string name="svg_file_does_not_exist">SVG file does not exist!</string>
     <string name="start_video_capture_instruction">Tap the screen to start recording</string>
     <string name="stop_video_capture_instruction">Recording started. Tap again to stop</string>
