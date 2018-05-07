@@ -1,23 +1,17 @@
 package org.odk.collect.android.tasks.sms;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.net.Uri;
-import android.preference.PreferenceManager;
-import android.telephony.PhoneNumberUtils;
 import android.telephony.SmsManager;
 
-import com.birbit.android.jobqueue.JobManager;
-import com.birbit.android.jobqueue.TagConstraint;
+import com.evernote.android.job.JobRequest;
+import com.evernote.android.job.util.support.PersistableBundleCompat;
 
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.PreferenceKeys;
-import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.jobs.SmsSenderJob;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.tasks.sms.models.Message;
 import org.odk.collect.android.tasks.sms.models.MessageStatus;
 import org.odk.collect.android.tasks.sms.models.SentMessageResult;
-import org.odk.collect.android.tasks.sms.models.SmsJobMessage;
 import org.odk.collect.android.tasks.sms.models.SmsSubmissionModel;
 
 import java.io.File;
@@ -29,12 +23,10 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
-import io.reactivex.Observable;
 import timber.log.Timber;
 
 import static org.odk.collect.android.tasks.sms.SmsPendingIntents.checkIfSentIntentExists;
 import static org.odk.collect.android.utilities.FileUtil.getFileContents;
-import static org.odk.collect.android.utilities.GeneralUtils.makeCollection;
 
 /**
  * Core class that contains all the business logic and services that are utilized to send,track
@@ -42,19 +34,17 @@ import static org.odk.collect.android.utilities.GeneralUtils.makeCollection;
  */
 public class SmsService {
 
-    @Inject
-    SmsManager smsManager;
-    @Inject
-    JobManager jobManager;
-    @Inject
-    SmsSubmissionManagerContract smsSubmissionManager;
-
+    private SmsManager smsManager;
+    private SmsSubmissionManagerContract smsSubmissionManager;
+    private InstancesDao instancesDao;
     private Context context;
 
-    public SmsService(Context context) {
+    @Inject
+    public SmsService(SmsManager smsManager, SmsSubmissionManagerContract smsSubmissionManager, InstancesDao instancesDao, Context context) {
+        this.smsManager = smsManager;
+        this.smsSubmissionManager = smsSubmissionManager;
+        this.instancesDao = instancesDao;
         this.context = context;
-
-        Collect.getInstance().getComponent().inject(this);
     }
 
     /**
@@ -109,7 +99,7 @@ public class SmsService {
             smsSubmissionManager.saveSubmission(model);
         }
 
-        addMessageJobToQueue(model.getNextUnsentMessage(), instanceId);
+        addMessageJobToQueue(instanceId);
 
         return true;
     }
@@ -128,13 +118,9 @@ public class SmsService {
             return false;
         }
 
-        List<String> jobTags = makeCollection(Observable.fromIterable(model.getMessages())
-                .flatMap(message -> Observable.just(String.valueOf(message.getId())))
-                .blockingIterable());
-
-        jobManager.cancelJobs(TagConstraint.ANY, jobTags.toArray(new String[0]));
-
         smsSubmissionManager.deleteSubmission(instanceId);
+
+        updateInstanceStatus(instanceId);
 
         return true;
 
@@ -157,15 +143,9 @@ public class SmsService {
             return;
         }
 
-        SmsSubmissionModel model = smsSubmissionManager.getSubmissionModel(sentMessageResult.getInstanceId());
 
         if (sentMessageResult.getMessageStatus().equals(MessageStatus.Sent)) {
-
-            Message message = model.getNextUnsentMessage();
-
-            if (message != null) {
-                addMessageJobToQueue(message, sentMessageResult.getInstanceId());
-            }
+            addMessageJobToQueue(sentMessageResult.getInstanceId());
         }
     }
 
@@ -174,34 +154,24 @@ public class SmsService {
      * A single message is sent at a time so that progress can be easily tracked and the
      * persisting of form submission's state is more congruent with the amount of message parts.
      *
-     * @param message from the submission model
      * @param instanceId from instanceDao
      */
-    private void addMessageJobToQueue(Message message, String instanceId) {
+    protected void addMessageJobToQueue(String instanceId) {
 
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
+        PersistableBundleCompat extras = new PersistableBundleCompat();
+        extras.putString(SmsSenderJob.INSTANCE_ID, instanceId);
 
-        String gateway = settings.getString(PreferenceKeys.KEY_SMS_GATEWAY, null);
+        JobRequest request = new JobRequest.Builder(SmsSenderJob.TAG)
+                .addExtras(extras)
+                .startNow()
+                .build();
 
-        if (!PhoneNumberUtils.isGlobalPhoneNumber(gateway)) {
-            return;
-        }
-
-        SmsJobMessage jobMessage = new SmsJobMessage();
-        jobMessage.setGateway(gateway);
-        jobMessage.setInstanceId(instanceId);
-        jobMessage.setMessageId(message.getId());
-        jobMessage.setText(message.getText());
-
-        String log = String.format(Locale.getDefault(), "Adding message with instance id %s & message id of %d to job queue.", jobMessage.getInstanceId(), jobMessage.getMessageId());
-        Timber.i(log);
-
-        jobManager.addJobInBackground(new SmsSenderJob(jobMessage));
+        request.schedule();
     }
 
-    private void updateInstanceStatus(String instanceId){
+    private void updateInstanceStatus(String instanceId) {
 
-        Uri toUpdate = Uri.withAppendedPath(InstanceProviderAPI.InstanceColumns.CONTENT_URI,instanceId);
-
+        instancesDao.updateInstance(null, null, null);
+        //Uri toUpdate = Uri.withAppendedPath(InstanceProviderAPI.InstanceColumns.CONTENT_URI, instanceId);
     }
 }

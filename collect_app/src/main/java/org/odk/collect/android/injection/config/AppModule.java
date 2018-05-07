@@ -4,12 +4,10 @@ import android.app.Application;
 import android.content.Context;
 import android.telephony.SmsManager;
 
-import com.birbit.android.jobqueue.JobManager;
-
+import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.injection.ViewModelBuilder;
 import org.odk.collect.android.injection.config.architecture.ViewModelFactoryModule;
 import org.odk.collect.android.injection.config.scopes.PerApplication;
-import org.odk.collect.android.tasks.sms.SmsService;
 import org.odk.collect.android.tasks.sms.SmsSubmissionManagerImpl;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.utilities.AgingCredentialsProvider;
@@ -19,8 +17,6 @@ import org.opendatakit.httpclientandroidlib.impl.client.BasicCookieStore;
 
 import dagger.Module;
 import dagger.Provides;
-
-import static org.odk.collect.android.utilities.GeneralUtils.provideJobManagerConfiguration;
 
 /**
  * Add Application level providers here, i.e. if you want to
@@ -40,18 +36,13 @@ public class AppModule {
     }
 
     @Provides
-    JobManager provideJobManager(Application application) {
-        return new JobManager(provideJobManagerConfiguration(application));
-    }
-
-    @Provides
-    SmsService provideSmsService(Application application) {
-        return new SmsService(application);
-    }
-
-    @Provides
     Context context(Application application) {
         return application;
+    }
+
+    @Provides
+    InstancesDao provideInstancesDao() {
+        return new InstancesDao();
     }
 
     @PerApplication

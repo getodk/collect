@@ -1,14 +1,11 @@
 package org.odk.collect.android.injection;
 
 import android.app.Application;
+import android.content.Context;
 import android.telephony.SmsManager;
 
-import com.birbit.android.jobqueue.JobManager;
-import com.birbit.android.jobqueue.config.Configuration;
-
+import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.injection.config.scopes.PerApplication;
-import org.odk.collect.android.jobs.test.timer.MockTimer;
-import org.odk.collect.android.tasks.sms.SmsService;
 import org.odk.collect.android.tasks.sms.SmsSubmissionManagerImpl;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.utilities.AgingCredentialsProvider;
@@ -18,6 +15,8 @@ import org.opendatakit.httpclientandroidlib.impl.client.BasicCookieStore;
 
 import dagger.Module;
 import dagger.Provides;
+
+import static org.mockito.Mockito.mock;
 
 /**
  * Test Module used for unit testing.
@@ -38,15 +37,13 @@ public class TestModule {
     }
 
     @Provides
-    public JobManager provideJobManager(Application application) {
-        return new JobManager(new Configuration.Builder(application)
-                .timer(new MockTimer())
-                .inTestMode().build());
+    InstancesDao provideInstancesDao() {
+        return mock(InstancesDao.class);
     }
 
     @Provides
-    public SmsService provideSmsService(Application application) {
-        return new SmsService(application);
+    Context context(Application application) {
+        return application;
     }
 
     @PerApplication

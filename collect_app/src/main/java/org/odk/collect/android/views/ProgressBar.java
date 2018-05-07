@@ -33,8 +33,9 @@ public class ProgressBar extends FrameLayout {
     public ProgressBar(@NonNull Context context, @NonNull AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        if (!isInEditMode())
+        if (!isInEditMode()) {
             init(context, attrs, defStyleAttr);
+        }
     }
 
     private void init(Context context, AttributeSet attrs, int defStyleAttr) {
