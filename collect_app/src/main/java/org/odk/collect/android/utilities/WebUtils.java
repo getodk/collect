@@ -337,11 +337,11 @@ public final class WebUtils {
         // parse response
         Document doc = null;
 
-        DownloadResult downloadResult = null;
+        InputStreamResult inputStreamResult = null;
 
         try {
-            downloadResult = getDownloadInputStream(urlString, WebUtils.HTTP_CONTENT_TYPE_TEXT_XML);
-            InputStream is = downloadResult.getInputStream();
+            inputStreamResult = getDownloadInputStream(urlString, WebUtils.HTTP_CONTENT_TYPE_TEXT_XML);
+            InputStream is = inputStreamResult.getInputStream();
             InputStreamReader isr = null;
             try {
                 isr = new InputStreamReader(is, "UTF-8");
@@ -385,27 +385,9 @@ public final class WebUtils {
             return new DocumentFetchResult(error, 0);
         }
 
-        return new DocumentFetchResult(doc, downloadResult.isOpenRosaResponse());
+        return new DocumentFetchResult(doc, inputStreamResult.isOpenRosaResponse());
     }
 
-
-    public static final class DownloadResult {
-        private InputStream inputStream;
-        private boolean openRosaResponse;
-
-        DownloadResult(InputStream is, boolean isOpenRosa) {
-            inputStream = is;
-            openRosaResponse = isOpenRosa;
-        }
-
-        public InputStream getInputStream() {
-            return inputStream;
-        }
-
-        public boolean isOpenRosaResponse() {
-            return openRosaResponse;
-        }
-    }
 
     /**
      * Instantiates a file InputStream from a URI
@@ -414,7 +396,7 @@ public final class WebUtils {
      * @return InputStream
      * @throws Exception
      */
-    public static DownloadResult getDownloadInputStream(@NonNull String downloadUrl, final String contentType) throws Exception {
+    public static InputStreamResult getDownloadInputStream(@NonNull String downloadUrl, final String contentType) throws Exception {
         URI uri;
         try {
             // assume the downloadUrl is escaped properly
@@ -506,7 +488,7 @@ public final class WebUtils {
             }
         }
 
-        return new DownloadResult(downloadStream,openRosaResponse);
+        return new InputStreamResult(downloadStream,openRosaResponse);
     }
 
     public CredentialsProvider getCredentialsProvider() {
@@ -558,6 +540,48 @@ public final class WebUtils {
         }
     }
 
+
+    private static List<File> getFilesInParentDirectory(File instanceFile, File submissionFile, Boolean openRosaServer) {
+        List<File> files = new ArrayList<File>();
+
+        // find all files in parent directory
+        File[] allFiles = instanceFile.getParentFile().listFiles();
+        if (allFiles == null) { return null; }
+
+        for (File f : allFiles) {
+            String fileName = f.getName();
+
+            if (fileName.startsWith(".")) {
+                continue; // ignore invisible files
+            } else if (fileName.equals(instanceFile.getName())) {
+                continue; // the xml file has already been added
+            } else if (fileName.equals(submissionFile.getName())) {
+                continue; // the xml file has already been added
+            }
+
+            String extension = FileUtils.getFileExtension(fileName);
+
+            if (openRosaServer) {
+                files.add(f);
+            } else if (extension.equals("jpg")) { // legacy 0.9x
+                files.add(f);
+            } else if (extension.equals("3gpp")) { // legacy 0.9x
+                files.add(f);
+            } else if (extension.equals("3gp")) { // legacy 0.9x
+                files.add(f);
+            } else if (extension.equals("mp4")) { // legacy 0.9x
+                files.add(f);
+            } else if (extension.equals("osm")) { // legacy 0.9x
+                files.add(f);
+            } else {
+                Timber.w("unrecognized file type %s", f.getName());
+            }
+        }
+
+        return files;
+    }
+
+
     /**
      * Uploads a file to a url
      *
@@ -574,8 +598,7 @@ public final class WebUtils {
                               Map<Uri, Uri> uriRemap,
                               Outcome outcome) {
 
-        File instanceFile = new File(instanceFilePath);
-        ContentValues cv = new ContentValues();
+        ContentValues contentValues = new ContentValues();
         Uri submissionUri = Uri.parse(urlString);
 
         // get shared HttpContext so that authentication and cookies are retained.
@@ -602,8 +625,8 @@ public final class WebUtils {
             if (submissionUri.getHost() == null) {
                 Timber.i("Host name may not be null");
                 outcome.messagesByInstanceId.put(id, fail + "Host name may not be null");
-                cv.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
-                Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
+                contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
+                Collect.getInstance().getContentResolver().update(toUpdate, contentValues, null, null);
                 return true;
             }
 
@@ -670,19 +693,19 @@ public final class WebUtils {
                                                 + "Unexpected redirection attempt to a different "
                                                 + "host: "
                                                 + newURI.toString());
-                                cv.put(InstanceProviderAPI.InstanceColumns.STATUS,
+                                contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS,
                                         InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                                 Collect.getInstance().getContentResolver()
-                                        .update(toUpdate, cv, null, null);
+                                        .update(toUpdate, contentValues, null, null);
                                 return true;
                             }
                         } catch (Exception e) {
                             Timber.e(e, "Exception thrown parsing URI for url %s", urlString);
                             outcome.messagesByInstanceId.put(id, fail + urlString + " " + e.toString());
-                            cv.put(InstanceProviderAPI.InstanceColumns.STATUS,
+                            contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS,
                                     InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                             Collect.getInstance().getContentResolver()
-                                    .update(toUpdate, cv, null, null);
+                                    .update(toUpdate, contentValues, null, null);
                             return true;
                         }
                     }
@@ -698,10 +721,10 @@ public final class WebUtils {
                                 fail
                                         + "Invalid status code on Head request.  If you have a "
                                         + "web proxy, you may need to login to your network. ");
-                        cv.put(InstanceProviderAPI.InstanceColumns.STATUS,
+                        contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS,
                                 InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                         Collect.getInstance().getContentResolver()
-                                .update(toUpdate, cv, null, null);
+                                .update(toUpdate, contentValues, null, null);
                         return true;
                     }
                 }
@@ -722,8 +745,8 @@ public final class WebUtils {
                     outcome.messagesByInstanceId.put(id, fail + "Network Connection Refused");
                     Timber.i(e, "Network Connection Refused");
                 }
-                cv.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
-                Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
+                contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
+                Collect.getInstance().getContentResolver().update(toUpdate, contentValues, null, null);
                 return true;
             } catch (Exception e) {
                 String msg = e.getMessage();
@@ -732,8 +755,8 @@ public final class WebUtils {
                 }
                 outcome.messagesByInstanceId.put(id, fail + "Generic Exception: " + msg);
                 Timber.e(e);
-                cv.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
-                Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
+                contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
+                Collect.getInstance().getContentResolver().update(toUpdate, contentValues, null, null);
                 return true;
             }
         }
@@ -758,6 +781,9 @@ public final class WebUtils {
         // This means the plaintext files and the encrypted files
         // will be sent to the server and the server will have to
         // figure out what to do with them.
+
+        File instanceFile = new File(instanceFilePath);
+
         File submissionFile = new File(instanceFile.getParentFile(), "submission.xml");
         if (submissionFile.exists()) {
             Timber.w("submission.xml will be uploaded instead of %s", instanceFile.getAbsolutePath());
@@ -767,58 +793,25 @@ public final class WebUtils {
 
         if (!instanceFile.exists() && !submissionFile.exists()) {
             outcome.messagesByInstanceId.put(id, fail + "instance XML file does not exist!");
-            cv.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
-            Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
+            contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
+            Collect.getInstance().getContentResolver().update(toUpdate, contentValues, null, null);
             return true;
         }
 
-        // find all files in parent directory
-        File[] allFiles = instanceFile.getParentFile().listFiles();
+        List<File> files = getFilesInParentDirectory(instanceFile, submissionFile, openRosaServer);
 
-        // add media files
-        List<File> files = new ArrayList<File>();
-        if (allFiles != null) {
-            for (File f : allFiles) {
-                String fileName = f.getName();
-
-                if (fileName.startsWith(".")) {
-                    continue; // ignore invisible files
-                } else if (fileName.equals(instanceFile.getName())) {
-                    continue; // the xml file has already been added
-                } else if (fileName.equals(submissionFile.getName())) {
-                    continue; // the xml file has already been added
-                }
-
-                String extension = FileUtils.getFileExtension(fileName);
-
-                if (openRosaServer) {
-                    files.add(f);
-                } else if (extension.equals("jpg")) { // legacy 0.9x
-                    files.add(f);
-                } else if (extension.equals("3gpp")) { // legacy 0.9x
-                    files.add(f);
-                } else if (extension.equals("3gp")) { // legacy 0.9x
-                    files.add(f);
-                } else if (extension.equals("mp4")) { // legacy 0.9x
-                    files.add(f);
-                } else if (extension.equals("osm")) { // legacy 0.9x
-                    files.add(f);
-                } else {
-                    Timber.w("unrecognized file type %s", f.getName());
-                }
-            }
-        } else {
+        if (files == null) {
             return false;
         }
 
         boolean first = true;
-        int j = 0;
-        int lastJ;
-        while (j < files.size() || first) {
-            lastJ = j;
+        int fileIndex = 0;
+        int lastFileIndex;
+        while (fileIndex < files.size() || first) {
+            lastFileIndex = fileIndex;
             first = false;
 
-            MimeTypeMap m = MimeTypeMap.getSingleton();
+            MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
 
             long byteCount = 0L;
 
@@ -831,29 +824,29 @@ public final class WebUtils {
             Timber.i("added xml_submission_file: %s", submissionFile.getName());
             byteCount += submissionFile.length();
 
-            for (; j < files.size(); j++) {
-                File f = files.get(j);
+            for (; fileIndex < files.size(); fileIndex++) {
+                File file = files.get(fileIndex);
 
                 // we will be processing every one of these, so
                 // we only need to deal with the content type determination...
-                ContentType contentType = ContentTypeMapping.of(f.getName());
+                ContentType contentType = ContentTypeMapping.of(file.getName());
                 if (contentType == null) {
-                    String mime = m.getMimeTypeFromExtension(FileUtils.getFileExtension(f.getName()));
+                    String mime = mimeTypeMap.getMimeTypeFromExtension(FileUtils.getFileExtension(file.getName()));
                     if (mime != null) {
                         contentType = ContentType.create(mime);
                     } else {
-                        Timber.w("No specific MIME type found for file: %s", f.getName());
+                        Timber.w("No specific MIME type found for file: %s", file.getName());
                         contentType = ContentType.APPLICATION_OCTET_STREAM;
                     }
                 }
-                fb = new FileBody(f, contentType);
-                builder.addPart(f.getName(), fb);
-                byteCount += f.length();
-                Timber.i("added file of type '%s' %s", contentType, f.getName());
+                fb = new FileBody(file, contentType);
+                builder.addPart(file.getName(), fb);
+                byteCount += file.length();
+                Timber.i("added file of type '%s' %s", contentType, file.getName());
 
                 // we've added at least one attachment to the request...
-                if (j + 1 < files.size()) {
-                    if ((j - lastJ + 1 > 100) || (byteCount + files.get(j + 1).length()
+                if (fileIndex + 1 < files.size()) {
+                    if ((fileIndex - lastFileIndex + 1 > 100) || (byteCount + files.get(fileIndex + 1).length()
                             > 10000000L)) {
                         // the next file would exceed the 10MB threshold...
                         Timber.i("Extremely long post is being split into multiple posts");
@@ -864,7 +857,7 @@ public final class WebUtils {
                         } catch (Exception e) {
                             Timber.e(e);
                         }
-                        ++j; // advance over the last attachment added...
+                        ++fileIndex; // advance over the last attachment added...
                         break;
                     }
                 }
@@ -906,10 +899,10 @@ public final class WebUtils {
                         }
 
                     }
-                    cv.put(InstanceProviderAPI.InstanceColumns.STATUS,
+                    contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS,
                             InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                     Collect.getInstance().getContentResolver()
-                            .update(toUpdate, cv, null, null);
+                            .update(toUpdate, contentValues, null, null);
                     return true;
                 }
             } catch (IOException e) {
@@ -925,8 +918,8 @@ public final class WebUtils {
                     msg = e.toString();
                 }
                 outcome.messagesByInstanceId.put(id, fail + "Generic Exception: " + msg);
-                cv.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
-                Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
+                contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
+                Collect.getInstance().getContentResolver().update(toUpdate, contentValues, null, null);
                 return true;
             }
         }
@@ -939,8 +932,8 @@ public final class WebUtils {
             outcome.messagesByInstanceId.put(id, Collect.getInstance().getString(R.string.success));
         }
 
-        cv.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMITTED);
-        Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
+        contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMITTED);
+        Collect.getInstance().getContentResolver().update(toUpdate, contentValues, null, null);
         return true;
     }
 
@@ -1040,6 +1033,24 @@ public final class WebUtils {
             return credMap.toString();
         }
 
+    }
+
+    public static final class InputStreamResult {
+        private InputStream inputStream;
+        private boolean openRosaResponse;
+
+        InputStreamResult(InputStream is, boolean isOpenRosa) {
+            inputStream = is;
+            openRosaResponse = isOpenRosa;
+        }
+
+        public InputStream getInputStream() {
+            return inputStream;
+        }
+
+        public boolean isOpenRosaResponse() {
+            return openRosaResponse;
+        }
     }
 
 }
