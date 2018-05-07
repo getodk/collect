@@ -411,10 +411,19 @@ public final class WebUtils {
             throw new Exception("Invalid server URL (no hostname): " + downloadUrl);
         }
 
-        InputStream downloadStream = null;
+        CollectHttpConnection httpConnection = createHttpConnection();
+
+
+        InputStream downloadStream = httpConnection.getInputStream(uri, contentType, WebUtils.CONNECTION_TIMEOUT);
+
 
         HttpContext localContext = getHttpContext();
         HttpClient httpclient = createHttpClient(WebUtils.CONNECTION_TIMEOUT);
+
+        // if https then enable preemptive basic auth...
+        if (uri.getScheme().equals("https")) {
+            enablePreemptiveBasicAuth(localContext, uri.getHost());
+        }
 
         // set up request...
         HttpGet req = createOpenRosaHttpGet(uri);
@@ -1051,6 +1060,10 @@ public final class WebUtils {
         public boolean isOpenRosaResponse() {
             return openRosaResponse;
         }
+    }
+
+    public static CollectHttpConnection createHttpConnection() {
+        return new ClientHttpConnection();
     }
 
 }
