@@ -22,7 +22,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.Window;
@@ -56,7 +55,7 @@ import timber.log.Timber;
  *
  * @author jonnordling@gmail.com
  */
-public class GeoPointOsmMapActivity extends FragmentActivity implements LocationListener,
+public class GeoPointOsmMapActivity extends CollectAbstractActivity implements LocationListener,
         Marker.OnMarkerDragListener, MapEventsReceiver, IRegisterReceiver,
         LocationClient.LocationClientListener {
 
@@ -245,6 +244,9 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
                 map.invalidate();
             }
         });
+
+        themeUtils.setIconTint(this, reloadLocationButton, showLocationButton, layersButton,
+                clearPointButton, saveLocationButton);
 
         Intent intent = getIntent();
         if (intent != null && intent.getExtras() != null) {

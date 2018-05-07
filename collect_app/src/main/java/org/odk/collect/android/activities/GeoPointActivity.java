@@ -21,7 +21,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 
 import com.google.android.gms.location.LocationListener;
@@ -37,7 +36,7 @@ import java.text.DecimalFormat;
 
 import timber.log.Timber;
 
-public class GeoPointActivity extends AppCompatActivity implements LocationListener,
+public class GeoPointActivity extends CollectAbstractActivity implements LocationListener,
         LocationClient.LocationClientListener {
 
     // Default values for requesting Location updates.
