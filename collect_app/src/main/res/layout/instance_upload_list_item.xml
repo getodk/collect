@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<org.odk.collect.android.views.TwoItemMultipleChoiceView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:orientation="vertical"
     android:layout_height="match_parent">
-    <org.odk.collect.android.views.TwoItemMultipleChoiceView
+    <RelativeLayout
+        android:id="@+id/list_item_holder"
+        android:layout_alignParentTop="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="?android:attr/listPreferredItemHeight"
@@ -19,7 +20,6 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/checkbox"
             android:layout_centerHorizontal="true">
 
             <TextView
@@ -72,9 +72,10 @@
                 android:clickable="false"
                 android:focusable="false" />
         </RelativeLayout>
-    </org.odk.collect.android.views.TwoItemMultipleChoiceView>
+    </RelativeLayout>
     <org.odk.collect.android.views.ProgressBar
         android:layout_width="match_parent"
         android:id="@+id/progress_bar"
+        android:layout_below="@id/list_item_holder"
         android:layout_height="wrap_content"/>
-</LinearLayout>
+</org.odk.collect.android.views.TwoItemMultipleChoiceView>
