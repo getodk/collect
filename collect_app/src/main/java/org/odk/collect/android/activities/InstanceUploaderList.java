@@ -128,7 +128,11 @@ public class InstanceUploaderList extends InstanceListActivity implements
                 boolean allChecked = toggleChecked(lv);
                 toggleButtonLabel(toggleSelsButton, lv);
                 uploadButton.setEnabled(allChecked);
-                if (!allChecked) {
+                if (allChecked) {
+                    for (int i = 0; i < lv.getCount(); i++) {
+                        selectedInstances.add(lv.getItemIdAtPosition(i));
+                    }
+                } else {
                     selectedInstances.clear();
                 }
             }
