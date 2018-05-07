@@ -248,7 +248,7 @@
     <string name="ext_search_return_error">The search handler returned a object of type \'%s\'.</string>
     <string name="ext_import_generic_error">Could not import data from %1$s. Reason: %2$s</string>
     <string name="ext_import_progress_message">Pre-loading data from \'%1$s\', please wait… %2$s</string>
-    <string name="ext_import_cancelled_message">Reading data cancelled!</string>
+    <string name="ext_import_cancelled_message">Reading data canceled!</string>
     <string name="ext_import_finalizing_message">Finalizing pre-loaded data…</string>
     <string name="ext_import_completed_message">Reading data completed!</string>
     <string name="ext_not_initialized_error">The ExternalDataManager has not been initialized.</string>
@@ -588,5 +588,5 @@
     <string name="theme_dark">Dark theme</string>
     <string name="cannot_create_directory">Cannot create directory: %s</string>
     <string name="not_a_directory">%s exists, but is not a directory</string>
-    <string name="instance_upload_cancelled">Instance upload cancelled</string>
+    <string name="instance_upload_cancelled">Instance upload canceled</string>
 </resources>
