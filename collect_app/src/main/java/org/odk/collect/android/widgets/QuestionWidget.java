@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.widgets;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -71,8 +70,6 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.utilities.UiUtils.convertDpToPixel;
-
 public abstract class QuestionWidget
         extends RelativeLayout
         implements Widget, AudioPlayListener {
@@ -85,6 +82,7 @@ public abstract class QuestionWidget
     private final TextView guidanceTextView;
     private final View helpTextLayout;
     private final View guidanceTextLayout;
+    private final View textLayout;
     private static final String GUIDANCE_EXPANDED_STATE = "expanded_state";
     private AtomicBoolean expanded;
     private Bundle state;
@@ -95,7 +93,7 @@ public abstract class QuestionWidget
         super(context);
 
         themeUtils = new ThemeUtils(context);
-        playColor =  themeUtils.getAttributeValue(R.attr.colorAccent);
+        playColor = themeUtils.getAttributeValue(R.attr.colorAccent);
 
         if (context instanceof FormEntryActivity) {
             state = ((FormEntryActivity) context).getState();
@@ -134,6 +132,7 @@ public abstract class QuestionWidget
         questionMediaLayout = createQuestionMediaLayout(prompt);
         helpTextLayout = createHelpTextLayout();
         guidanceTextLayout = helpTextLayout.findViewById(R.id.guidance_text_layout);
+        textLayout = helpTextLayout.findViewById(R.id.text_layout);
         helpTextView = setupHelpText(helpTextLayout.findViewById(R.id.help_text_view), prompt);
         guidanceTextView = setupGuidanceTextAndLayout(helpTextLayout.findViewById(R.id.guidance_text_view), prompt);
 
@@ -141,9 +140,9 @@ public abstract class QuestionWidget
         addHelpTextLayout(getHelpTextLayout());
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     private TextView setupGuidanceTextAndLayout(TextView guidanceTextView, FormEntryPrompt prompt) {
 
+        TextView guidance = null;
         GuidanceHint setting = GuidanceHint.get((String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_GUIDANCE_HINT));
 
         if (setting.equals(GuidanceHint.No)) {
@@ -156,24 +155,37 @@ public abstract class QuestionWidget
             return null;
         }
 
-        configureGuidanceTextView(guidanceTextView, guidanceHint);
+        guidance = configureGuidanceTextView(guidanceTextView, guidanceHint);
+
+        expanded = new AtomicBoolean(false);
 
         if (getState() != null) {
             if (getState().containsKey(GUIDANCE_EXPANDED_STATE + getFormEntryPrompt().getIndex())) {
                 Boolean result = getState().getBoolean(GUIDANCE_EXPANDED_STATE + getFormEntryPrompt().getIndex());
                 expanded = new AtomicBoolean(result);
             }
-        } else {
-            expanded = new AtomicBoolean(false);
         }
 
         if (setting.equals(GuidanceHint.Yes)) {
             guidanceTextLayout.setVisibility(VISIBLE);
             guidanceTextView.setText(guidanceHint);
         } else if (setting.equals(GuidanceHint.YesCollapsed)) {
-            getHelpTextView().setCompoundDrawablesWithIntrinsicBounds(R.drawable.information_outline, 0, 0, 0);
-            getHelpTextView().setCompoundDrawablePadding((int) convertDpToPixel(5, getContext()));
             guidanceTextLayout.setVisibility(expanded.get() ? VISIBLE : GONE);
+
+            View icon = textLayout.findViewById(R.id.help_icon);
+            icon.setVisibility(VISIBLE);
+
+            /**
+             * Added click listeners to the individual views because the TextView
+             * intercepts click events when they are being passed to the parent layout.
+             */
+            icon.setOnClickListener(v -> {
+                if (!expanded.get()) {
+                    AnimateUtils.expand(guidanceTextLayout, result -> expanded.set(true));
+                } else {
+                    AnimateUtils.collapse(guidanceTextLayout, result -> expanded.set(false));
+                }
+            });
 
             getHelpTextView().setOnClickListener(v -> {
                 if (!expanded.get()) {
@@ -183,7 +195,8 @@ public abstract class QuestionWidget
                 }
             });
         }
-        return null;
+
+        return guidance;
     }
 
     private TextView configureGuidanceTextView(TextView guidanceTextView, String guidance) {
@@ -406,8 +419,6 @@ public abstract class QuestionWidget
 
         if (s != null && !s.equals("")) {
             helpText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getQuestionFontSize() - 3);
-            //noinspection ResourceType
-            helpText.setPadding(0, -5, 0, 7);
             // wrap to the widget of view
             helpText.setHorizontallyScrolling(false);
             helpText.setTypeface(null, Typeface.ITALIC);
