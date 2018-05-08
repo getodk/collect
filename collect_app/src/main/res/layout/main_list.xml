@@ -43,7 +43,7 @@ the License.
 		android:paddingLeft="20dp"
 		android:paddingRight="20dp"
 		android:gravity="center"
-		android:background="@color/white"
+		android:background="@android:color/white"
 		android:textColor="@color/primaryTextColor" />
    
   </LinearLayout>

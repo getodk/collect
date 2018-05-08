@@ -12,7 +12,7 @@ import android.support.annotation.Nullable;
 import android.view.View;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.OpenSourceLicensesActivity;
+//import org.odk.collect.android.activities.OpenSourceLicensesActivity;     // smap
 import org.odk.collect.android.utilities.CustomTabHelper;
 
 import java.util.List;
@@ -89,10 +89,10 @@ public class AboutPreferencesFragment extends BasePreferenceFragment implements 
                 forumTabHelper.openUri(getActivity(), forumUri);
                 break;
 
-            case KEY_OPEN_SOURCE_LICENSES:
-                startActivity(new Intent(getActivity().getApplicationContext(),
-                        OpenSourceLicensesActivity.class));
-                break;
+            //case KEY_OPEN_SOURCE_LICENSES:        // smap
+            //    startActivity(new Intent(getActivity().getApplicationContext(),
+            //            OpenSourceLicensesActivity.class));
+            //    break;
 
             case KEY_TELL_YOUR_FRIENDS:
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);

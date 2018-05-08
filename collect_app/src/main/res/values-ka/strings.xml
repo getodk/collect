@@ -88,7 +88,6 @@
   <string name="parse_legacy_formlist_failed">შეუძლებელია სერვერიდან Aggregate 0.9.x. : %s-ის თანხვედრი ფორმის მოპოვება</string>
   <string name="parse_openrosa_formlist_failed">სერვერზე არ მოიპოვება ფორმა, რომელიც OpenRosa version 1.0 სტანდარტის თანხვედრია: %s</string>
   <string name="password">პაროლი</string>
-  <string name="play_audio">ხმის დაკვრა</string>
   <string name="play_video">ვიდეოჩანაწერის ჩვენება</string>
   <string name="please_wait">გთხოვთ, დაიცადოთ.</string>
   <string name="please_wait_long">გთხოვთ, დაიცადოთ; ოპერაციის შესრულებას შეიძლება რამდენიმე წუთი დაჭირდეს</string>
@@ -223,7 +222,6 @@
   <string name="notification_error">შეცდომა შეტყობინების ტექსტის ჩვენებისას</string>
   <string name="delete_after_send">გაგზავნის შემდგომ წაშლა</string>
   <string name="change_server_url">სერვერის ვებ-მისამართი</string>
-  <string name="no_blank_search">საძიებო ველი არ უნდა იყოს ცარიელი!</string>
   <!--Geo string added in feature-geofeatures branch-->
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->

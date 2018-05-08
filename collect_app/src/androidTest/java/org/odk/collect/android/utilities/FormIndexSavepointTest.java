@@ -45,7 +45,7 @@ public class FormIndexSavepointTest {
 
         // for loadFormIndexFromFile
         File instancePath = new File(Collect.INSTANCES_PATH + File.separator + instanceName);
-        when(formController.getInstancePath()).thenReturn(instancePath);
+        when(formController.getInstanceFile()).thenReturn(instancePath);
         Collect.getInstance().setFormController(formController);
 
         FormIndex originalFormIndex = FormIndex.createBeginningOfFormIndex();

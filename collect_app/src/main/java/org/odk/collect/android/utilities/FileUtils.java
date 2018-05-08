@@ -40,6 +40,7 @@ import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
+import java.util.Locale;
 
 import timber.log.Timber;
 
@@ -71,19 +72,12 @@ public class FileUtils {
     }
 
     public static boolean createFolder(String path) {
-        boolean made = true;
         File dir = new File(path);
-        if (!dir.exists()) {
-            made = dir.mkdirs();
-        }
-        return made;
+        return dir.exists() || dir.mkdirs();
     }
 
     public static byte[] getFileAsBytes(File file) {
-        byte[] bytes = null;
-        InputStream is = null;
-        try {
-            is = new FileInputStream(file);
+        try (InputStream is = new FileInputStream(file)) {
 
             // Get the size of the file
             long length = file.length();
@@ -93,7 +87,7 @@ public class FileUtils {
             }
 
             // Create the byte array to hold the data
-            bytes = new byte[(int) length];
+            byte[] bytes = new byte[(int) length];
 
             // Read in the bytes
             int offset = 0;
@@ -121,17 +115,11 @@ public class FileUtils {
             return bytes;
 
         } catch (FileNotFoundException e) {
-            Timber.e(e, "Cannot find file %s", file.getName());
+            Timber.d(e, "Cannot find file %s", file.getName());
             return null;
-
-        } finally {
-            // Close the input stream
-            try {
-                is.close();
-            } catch (IOException e) {
-                Timber.e(e, "Cannot close input stream for file %s", file.getName());
-                return null;
-            }
+        } catch (IOException e) {
+            Timber.e(e, "Cannot close input stream for file %s", file.getName());
+            return null;
         }
     }
 
@@ -141,7 +129,7 @@ public class FileUtils {
             is = new FileInputStream(file);
 
         } catch (FileNotFoundException e) {
-            Timber.e(e, "Cache file %s not found", file.getAbsolutePath());
+            Timber.d(e, "Cache file %s not found", file.getAbsolutePath());
             return null;
 
         }
@@ -149,7 +137,7 @@ public class FileUtils {
         return getMd5Hash(is);
     }
 
-    public static String getMd5Hash(InputStream is) {
+    private static String getMd5Hash(InputStream is) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
             final byte[] buffer = new byte[bufSize];
@@ -162,13 +150,13 @@ public class FileUtils {
                 md.update(buffer, 0, result);
             }
 
-            String md5 = new BigInteger(1, md.digest()).toString(16);
+            StringBuilder md5 = new StringBuilder(new BigInteger(1, md.digest()).toString(16));
             while (md5.length() < 32) {
-                md5 = "0" + md5;
+                md5.insert(0, "0");
             }
 
             is.close();
-            return md5;
+            return md5.toString();
 
         } catch (NoSuchAlgorithmException e) {
             Timber.e(e);
@@ -180,68 +168,65 @@ public class FileUtils {
         }
     }
 
-
-    public static Bitmap getBitmapScaledToDisplay(File f, int screenHeight, int screenWidth) {
-        // Determine image size of f
-        BitmapFactory.Options o = new BitmapFactory.Options();
-        o.inJustDecodeBounds = true;
-        getBitmap(f.getAbsolutePath(), o);
-
-        int heightScale = o.outHeight / screenHeight;
-        int widthScale = o.outWidth / screenWidth;
-
-        // Powers of 2 work faster, sometimes, according to the doc.
-        // We're just doing closest size that still fills the screen.
-        int scale = Math.max(widthScale, heightScale);
-
-        // get bitmap with scale ( < 1 is the same as 1)
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inInputShareable = true;
-        options.inPurgeable = true;
-        options.inSampleSize = scale;
-        Bitmap b = getBitmap(f.getAbsolutePath(), options);
-        if (b != null) {
-            Timber.i("Screen is %dx%d.  Image has been scaled down by %d to %dx%d",
-                    screenHeight, screenWidth, scale, b.getHeight(), b.getWidth());
-        }
-        return b;
+    public static Bitmap getBitmapScaledToDisplay(File file, int screenHeight, int screenWidth) {
+        return getBitmapScaledToDisplay(file, screenHeight, screenWidth, false);
     }
 
     /**
-     * With this method we do not care about efficient decoding and focus
-     * more on a precise scaling to maximize use of space on the screen
+     * Scales image according to the given display
+     *
+     * @param file           containing the image
+     * @param screenHeight   height of the display
+     * @param screenWidth    width of the display
+     * @param upscaleEnabled determines whether the image should be up-scaled or not
+     *                       if the window size is greater than the image size
+     * @return scaled bitmap
      */
-    public static Bitmap getBitmapAccuratelyScaledToDisplay(File f, int screenHeight,
-                                                            int screenWidth) {
-        // Determine image size of f
-        BitmapFactory.Options o = new BitmapFactory.Options();
-        o.inJustDecodeBounds = true;
-        getBitmap(f.getAbsolutePath(), o);
-
-        // Load full size bitmap image
+    public static Bitmap getBitmapScaledToDisplay(File file, int screenHeight, int screenWidth, boolean upscaleEnabled) {
+        // Determine image size of file
         BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inInputShareable = true;
-        options.inPurgeable = true;
-        Bitmap bitmap = getBitmap(f.getAbsolutePath(), options);
+        options.inJustDecodeBounds = true;
+        getBitmap(file.getAbsolutePath(), options);
 
-        // Figure out scale
-        double heightScale = ((double) (o.outHeight)) / screenHeight;
-        double widthScale = ((double) o.outWidth) / screenWidth;
-        double scale = Math.max(widthScale, heightScale);
+        Bitmap bitmap;
+        double scale;
+        if (upscaleEnabled) {
+            // Load full size bitmap image
+            options = new BitmapFactory.Options();
+            options.inInputShareable = true;
+            options.inPurgeable = true;
+            bitmap = getBitmap(file.getAbsolutePath(), options);
 
-        double newHeight = Math.ceil(o.outHeight / scale);
-        double newWidth = Math.ceil(o.outWidth / scale);
+            double heightScale = ((double) (options.outHeight)) / screenHeight;
+            double widthScale = ((double) options.outWidth) / screenWidth;
+            scale = Math.max(widthScale, heightScale);
 
-        bitmap = Bitmap.createScaledBitmap(bitmap, (int) newWidth, (int) newHeight, false);
+            double newHeight = Math.ceil(options.outHeight / scale);
+            double newWidth = Math.ceil(options.outWidth / scale);
+
+            bitmap = Bitmap.createScaledBitmap(bitmap, (int) newWidth, (int) newHeight, false);
+        } else {
+            int heightScale = options.outHeight / screenHeight;
+            int widthScale = options.outWidth / screenWidth;
+
+            // Powers of 2 work faster, sometimes, according to the doc.
+            // We're just doing closest size that still fills the screen.
+            scale = Math.max(widthScale, heightScale);
+
+            // get bitmap with scale ( < 1 is the same as 1)
+            options = new BitmapFactory.Options();
+            options.inInputShareable = true;
+            options.inPurgeable = true;
+            options.inSampleSize = (int) scale;
+            bitmap = getBitmap(file.getAbsolutePath(), options);
+        }
 
         if (bitmap != null) {
             Timber.i("Screen is %dx%d.  Image has been scaled down by %f to %dx%d",
                     screenHeight, screenWidth, scale, bitmap.getHeight(), bitmap.getWidth());
         }
-
         return bitmap;
     }
-
 
     public static String copyFile(File sourceFile, File destFile) {
         if (sourceFile.exists()) {
@@ -300,7 +285,7 @@ public class FileUtils {
         try {
             is = new FileInputStream(xmlFile);
         } catch (FileNotFoundException e1) {
-            Timber.e(e1);
+            Timber.d(e1);
             throw new IllegalStateException(e1);
         }
 
@@ -488,20 +473,13 @@ public class FileUtils {
     }
 
     public static void saveBitmapToFile(Bitmap bitmap, String path) {
-        FileOutputStream out = null;
-        try {
-            out = new FileOutputStream(path);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+        final Bitmap.CompressFormat compressFormat = path.toLowerCase(Locale.getDefault()).endsWith(".png") ?
+                Bitmap.CompressFormat.PNG : Bitmap.CompressFormat.JPEG;
+
+        try (FileOutputStream out = new FileOutputStream(path)) {
+            bitmap.compress(compressFormat, 100, out);
         } catch (Exception e) {
             Timber.e(e);
-        } finally {
-            try {
-                if (out != null) {
-                    out.close();
-                }
-            } catch (IOException e) {
-                Timber.e(e);
-            }
         }
     }
 
@@ -525,5 +503,27 @@ public class FileUtils {
         }
 
         return bitmap;
+    }
+
+    public static byte[] read(File file) {
+        byte[] bytes = {};
+        try {
+            bytes = new byte[(int) file.length()];
+            InputStream is = new FileInputStream(file);
+            is.read(bytes);
+            is.close();
+        } catch (IOException e) {
+            Timber.e(e);
+        }
+        return bytes;
+    }
+
+    public static void write(File file, byte[] data) {
+        try (FileOutputStream fos = new FileOutputStream(file)) {
+            fos.write(data);
+            fos.close();
+        } catch (IOException e) {
+            Timber.e(e);
+        }
     }
 }

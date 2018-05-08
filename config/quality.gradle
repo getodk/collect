@@ -1,8 +1,3 @@
-apply plugin: 'checkstyle'
-apply plugin: 'findbugs'
-apply plugin: 'pmd'
-apply plugin: 'jacoco'
-
 /*
  * Copyright 2015 Vincent Brison.
  *
@@ -19,33 +14,40 @@ apply plugin: 'jacoco'
  * limitations under the License.
  */
 
-jacoco {
-    toolVersion '0.7.4+'
-}
-
-// Add checkstyle, findbugs, pmd and lint to the check task.
-check.dependsOn 'checkstyle', 'findbugs', 'pmd', 'lint'
-
-def configDir = "${project.rootDir}/config/quality"
+def configDir = "${project.rootDir}/config"
 def reportsDir = "${project.buildDir}/reports"
 
-// Required to use fileExtensions property in checkstyle file
+//------------------------Checkstyle------------------------//
+
+apply plugin: 'checkstyle'
+
 checkstyle.toolVersion = '7.6.1'
 
 task checkstyle(type: Checkstyle) {
-    configFile file("$configDir/checkstyle/checkstyle.xml")
-    configProperties.checkstyleSuppressionsPath = file("$configDir/checkstyle/suppressions.xml").absolutePath
+    configFile file("$configDir/checkstyle.xml")
+
+    ignoreFailures false // Fail early
+    showViolations true
+
     source 'src'
     include '**/*.java'
     exclude '**/gen/**'
     classpath = files()
 }
 
+//------------------------Findbugs------------------------//
+
+apply plugin: 'findbugs'
+
 task findbugs(type: FindBugs, dependsOn: "assembleDebug") {
-    ignoreFailures = false
-    effort = "max"
-    reportLevel = "high"
-    excludeFilter = new File("$configDir/findbugs/findbugs-filter.xml")
+
+    ignoreFailures false // Fail early
+    effort = 'max'
+
+    // Reporting only high priority problems {Possible reportLevels: 'high', 'medium', 'low'}
+    reportLevel = 'high'
+
+    excludeFilter = new File("$configDir/findbugs-filter.xml")
     classes = files("${project.rootDir}/collect_app/build/intermediates/classes")
 
     source 'src'
@@ -66,9 +68,13 @@ task findbugs(type: FindBugs, dependsOn: "assembleDebug") {
     classpath = files()
 }
 
+//------------------------Pmd------------------------//
+
+apply plugin: 'pmd'
+
 task pmd(type: Pmd) {
-    ignoreFailures = false
-    ruleSetFiles = files("$configDir/pmd/pmd-ruleset.xml")
+    ignoreFailures = false // Fail early
+    ruleSetFiles = files("$configDir/pmd-ruleset.xml")
     ruleSets = []
 
     source 'src'
@@ -87,52 +93,15 @@ task pmd(type: Pmd) {
     }
 }
 
+//------------------------Lint------------------------//
+
 android {
     lintOptions {
         abortOnError true
         xmlReport true
         htmlReport true
-        lintConfig file("$configDir/lint/lint.xml")
+        lintConfig file("$configDir/lint.xml")
         htmlOutput file("$reportsDir/lint/lint-result.html")
         xmlOutput file("$reportsDir/lint/lint-result.xml")
-    }
-}
-
-def coverageSourceDirs = [
-        "${project.projectDir}/src/main/java",
-        "${project.projectDir}/src/debug/java"
-]
-
-
-task jacocoTestReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
-    description = 'Generate JaCoCo coverage reports'
-
-    reports {
-        xml.enabled = true
-        html.enabled = true
-    }
-
-    sourceDirectories = files(coverageSourceDirs)
-    classDirectories = fileTree(
-            dir: "${buildDir}/intermediates/classes/debug",
-            excludes: ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*',
-                       '**/*Test*.*', 'android/**/*.*',
-                       '**/*_MembersInjector.class',
-                       '**/Dagger*Component.class',
-                       '**/Dagger*Component$Builder.class',
-                       '**/*_*Factory.class',
-                       '**/*ComponentImpl.class',
-                       '**/*SubComponentBuilder.class'])
-    executionData = fileTree(
-            dir: "$buildDir",
-            include: ["jacoco/testDebugUnitTest.exec", "outputs/code-coverage/connected/*coverage.ec"]
-    )
-
-    doFirst {
-        files('build/intermediates/classes/debug').getFiles().each { file ->
-            if (file.name.contains('$$')) {
-                file.renameTo(file.path.replace('$$', '$'))
-            }
-        }
     }
 }

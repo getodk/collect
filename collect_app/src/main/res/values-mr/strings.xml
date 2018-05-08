@@ -91,7 +91,6 @@
   <string name="parse_legacy_formlist_failed">सर्व्हरने एकूण 0.9.x. सह सुसंगत एक उपलब्ध-फॉर्म दस्तऐवज प्रदान केलेला नाही. : %s</string>
   <string name="parse_openrosa_formlist_failed">सर्व्हरने ओपेनरोसा आवृत्ती 1.0 मानक सह सुसंगत एक उपलब्ध-फॉर्म दस्तऐवज प्रदान केलेले नाही : %s</string>
   <string name="password">संकेतशब्द</string>
-  <string name="play_audio">ध्वनी प्ले करा</string>
   <string name="play_video">व्हिडिओ प्ले करा</string>
   <string name="please_wait">कृपया काही क्षण प्रतीक्षा करा</string>
   <string name="please_wait_long">कृपया थांबा. यास काही मिनिटे लागू शकेल.</string>
@@ -266,9 +265,6 @@
   <string name="drive_get_file"> %1$s आणि मीडिया फायली मिळवत आहे</string>
   <string name="no_google_account">कोणतेही गूगल खाते निवडलेले नाही!</string>
   <string name="google_set_account">आपण गूगल पत्रक आपल्या सर्व्हर म्हणून निवडले आहे, कृपया सुरू ठेवण्यापूर्वी सामान्य सेटिंग्जमध्ये संबंधित गूगल खाते निवडा</string>
-  <string name="invalid_oauth">अवैध OAuth 2 टोकन</string>
-  <string name="google_repeat_error">पुनरावृत्ती गूगल पत्रके द्वारे यावेळी समर्थित नाहीत.</string>
-  <string name="media_upload_error">अस्तित्वात नाही असा फोटो अपलोड करण्यात अयशस्वी:  %1$s</string>
   <string name="odk_auth_auth_fail">ओडीके ऑटोसॅन्ड प्रमाणीकरण अयशस्वी, कृपया आपली सेटिंग्ज योग्य असल्याची खात्री करा.</string>
   <string name="odk_auto_note">ओडीके ऑटोसॅन्ड सूचना.</string>
   <string name="notification_error">सूचना मजकूर प्रदर्शित करताना त्रुटी</string>
@@ -276,7 +272,6 @@
   <string name="delete_after_send_summary">सर्व्हरवर पाठविल्यानंतर अंतिम स्वरूप आणि मीडिया हटविते</string>
   <string name="change_server_url">सर्व्हर युरएल</string>
   <string name="google_search_browse">फॉर्म शोधा किंवा ब्राउझ करण्यासाठी खालील \'माझे ड्राइव्ह\' निवडा.</string>
-  <string name="no_blank_search">शोध फील्ड रिक्त असू शकत नाही.</string>
   <string name="google_sheets_url">फॉलबॅक सबमिशन युरएल</string>
   <string name="send_in_progress">पार्श्वभूमी पाठविणे चालू आहे, कृपया लवकरच पुन्हा प्रयत्न करा</string>
   <string name="sheets_max_columns">स्तंभांची कमाल संख्या 255 आहे, आपल्या फॉर्ममध्ये  %s आहे. स्प्रेडशीटवर अपलोड करण्यास अक्षम</string>
@@ -287,9 +282,6 @@
   <string name="username_error_whitespace">वापरकर्तानावांमध्ये अग्रगण्य किंवा अनुसरणी व्हायरसपेस अनुमत नाहीत</string>
   <string name="google_play_services_error_occured">गूगल नकाशे मध्ये प्रवेश करण्यात अक्षम. गूगल प्ले सेवा स्थापित केली आहे का?</string>
   <string name="about_preferences">विषयी</string>
-  <string name="tell_your_friends">ओडीक आपल्या मित्रांसह सामायिक करा</string>
-  <string name="tell_your_friends_msg">ओडीक गोळा अनुप्रयोग डाउनलोड करा!</string>
-  <string name="leave_a_review">गूगल प्ले स्टोर वर एक पुनरावलोकन सोडा</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">मॅपिंग</string>
   <string name="map_sdk_selector_title">मॅपिंग एसडीके</string>
@@ -341,8 +333,6 @@
   <string name="zoom_to_where">झूम टु …</string>
   <string name="zoom_to_location">वर्तमान स्थानावर झूम</string>
   <string name="zoom_to_feature">जतन केलेल्या वैशिष्ट्य पर्यंत झूम करा</string>
-  <string name="google_sheets_invalid_column_form">आपल्या फॉर्ममध्ये  \'n%1$s\'  एक अवैध स्तंभ नाव आहे. गूगल पत्रक केवळ स्तंभ नावांमध्ये अल्फान्यूमेरिक वर्ण आणि हायफनला अनुमती देतात.</string>
-  <string name="google_sheets_invalid_column_instance">आपल्या जतन केलेल्या घटनेमध्ये \'n%1$s\'  एक अवैध स्तंभ नाव आहे. गूगल पत्रक केवळ स्तंभ नावांमध्ये अल्फान्यूमेरिक वर्ण आणि हायफनला अनुमती देतात</string>
   <string name="geoshape_view_change_location">जिओ शेप पहा किंवा बदला</string>
   <string name="geotrace_view_change_location">जिओ ट्रेस पहा किंवा बदला</string>
   <string name="bearing">असणारा:%.3f</string>
@@ -369,8 +359,6 @@
   <string name="odk_website">ओडीके वेबसाइट ला भेट द्या</string>
   <string name="odk_website_summary">ओपन डाटा किट (ओडीकेे) चा उपयोग आव्हानात्मक पर्यावरणात सामाजिक चांगल्यासाठी डेटा गोळा करण्यासाठी केला जातो.</string>
   <string name="odk_forum">ओडीके मंचात सहभागी व्हा</string>
-  <string name="odk_forum_summary">समर्थन, विनंती गुणधर्म, कोड / अनुवादाचे योगदान देण्यासाठी मंचमध्ये सामील व्हा!</string>
-  <string name="all_open_source_licenses">मुक्त स्त्रोत परवाने</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">पश्चिम %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -383,7 +371,6 @@
   <string name="not_exactly_one_record_for_this_instance">या घटनेसाठी नक्की एक रेकॉर्ड नाही!</string>
   <string name="not_exactly_one_blank_form_for_this_form_id">या jr_form_id शी न जुळणारे एक रिक्त स्वरूप</string>
   <string name="no_form_id_specified">फॉर्मID निर्दिष्ट नाही ???</string>
-  <string name="phone_does_not_have_base64_class">फोनजवळ Base64 वर्ग नाही परंतु API स्तर%s. आहे</string>
   <string name="phone_does_not_support_rsa">फोन RSA एन्क्रिप्शनचे समर्थन करत नाही.</string>
   <string name="invalid_rsa_public_key">Invalid RSA public key.</string>
   <string name="encryption_error_message">%s फॉर्म अंतिम रूपाने जतन केले गेले नाही.</string>

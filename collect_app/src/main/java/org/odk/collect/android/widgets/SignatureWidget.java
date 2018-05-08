@@ -89,7 +89,7 @@ public class SignatureWidget extends BaseImageWidget {
                     RequestCodes.SIGNATURE_CAPTURE);
         } catch (ActivityNotFoundException e) {
             Toast.makeText(getContext(),
-                    getContext().getString(R.string.activity_not_found, "signature capture"),
+                    getContext().getString(R.string.activity_not_found, getContext().getString(R.string.signature_capture)),
                     Toast.LENGTH_SHORT).show();
             cancelWaitingForData();
         }

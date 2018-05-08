@@ -68,9 +68,6 @@ public abstract class QuestionWidget
         extends RelativeLayout
         implements Widget, AudioPlayListener {
 
-    private static final int DEFAULT_PLAY_COLOR = Color.BLUE;
-    private static final int DEFAULT_PLAY_BACKGROUND_COLOR = Color.WHITE;
-
     private final int questionFontSize;
     private final FormEntryPrompt formEntryPrompt;
     private final MediaLayout questionMediaLayout;
@@ -79,8 +76,7 @@ public abstract class QuestionWidget
 
     private Bundle state;
 
-    private int playColor = DEFAULT_PLAY_COLOR;
-    private int playBackgroundColor = DEFAULT_PLAY_BACKGROUND_COLOR;
+    private int playColor = ContextCompat.getColor(getContext() , R.color.tintColor);
 
     public QuestionWidget(Context context, FormEntryPrompt prompt) {
         super(context);
@@ -187,17 +183,6 @@ public abstract class QuestionWidget
             }
         }
         questionMediaLayout.setPlayTextColor(getPlayColor());
-
-        String playBackgroundColorString = prompt.getFormElement().getAdditionalAttribute(null,
-                "playBackgroundColor");
-        if (playBackgroundColorString != null) {
-            try {
-                playBackgroundColor = Color.parseColor(playBackgroundColorString);
-            } catch (IllegalArgumentException e) {
-                Timber.e(e, "Argument %s is incorrect", playBackgroundColorString);
-            }
-        }
-        questionMediaLayout.setPlayTextBackgroundColor(getPlayBackgroundColor());
 
         return questionMediaLayout;
     }
@@ -399,6 +384,10 @@ public abstract class QuestionWidget
         getQuestionMediaLayout().resetTextFormatting();
     }
 
+    public void resetAudioButtonImage() {
+        getQuestionMediaLayout().resetAudioButtonBitmap();
+    }
+
     @Override
     protected void onWindowVisibilityChanged(int visibility) {
         if (visibility == INVISIBLE || visibility == GONE) {
@@ -504,7 +493,7 @@ public abstract class QuestionWidget
                 }
                 formController.jumpToIndex(startFormIndex);
             } catch (JavaRosaException e) {
-                Timber.e(e);
+                Timber.d(e);
             }
         }
     }
@@ -580,7 +569,7 @@ public abstract class QuestionWidget
             return null;
         }
 
-        return formController.getInstancePath().getParent();
+        return formController.getInstanceFile().getParent();
     }
 
     @NonNull
@@ -611,9 +600,5 @@ public abstract class QuestionWidget
 
     public int getPlayColor() {
         return playColor;
-    }
-
-    public int getPlayBackgroundColor() {
-        return playBackgroundColor;
     }
 }

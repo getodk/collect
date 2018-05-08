@@ -49,6 +49,8 @@ public class SelectMultipleAutocompleteWidget extends SelectMultiWidget implemen
 
     @Override
     protected void createLayout(boolean readOnlyOverride) {
+        readItems();
+
         if (items != null) {
             for (int i = 0; i < items.size(); i++) {
                 checkBoxes.add(createCheckBox(i, readOnlyOverride));

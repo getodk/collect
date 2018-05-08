@@ -149,8 +149,8 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
         try {
     	    exportData(markCompleted, canUpdate);     // smap
 
-            if (formController.getInstancePath() != null) {
-                removeSavepointFiles(formController.getInstancePath().getName());
+            if (formController.getInstanceFile() != null) {
+                removeSavepointFiles(formController.getInstanceFile().getName());
             }
 
             saveResult.setSaveResult(save ? SAVED_AND_EXIT : SAVED, markCompleted);
@@ -244,7 +244,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
             // However, it could be a not-first time saving if the user has been using the manual
             // 'save data' option from the menu. So try to update first, then make a new one if that
             // fails.
-            String instancePath = formController.getInstancePath().getAbsolutePath();
+            String instancePath = formController.getInstanceFile().getAbsolutePath();
             String where = InstanceColumns.INSTANCE_FILE_PATH + "=?";
             String[] whereArgs = {
                     instancePath
@@ -346,7 +346,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
 
         ByteArrayPayload payload = formController.getFilledInFormXml();
         // write out xml
-        String instancePath = formController.getInstancePath().getAbsolutePath();
+        String instancePath = formController.getInstanceFile().getAbsolutePath();
 
         publishProgress(Collect.getInstance().getString(R.string.survey_saving_saving_message));
         if(canUpdate) {      // smap
@@ -370,7 +370,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
             // and (if appropriate) encrypt the files on the side
 
             // pay attention to the ref attribute of the submission profile...
-            File instanceXml = formController.getInstancePath();
+            File instanceXml = formController.getInstanceFile();
             File submissionXml = new File(instanceXml.getParentFile(), "submission.xml");
 
             payload = formController.getSubmissionXml();

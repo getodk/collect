@@ -84,7 +84,6 @@
   <string name="parse_error">ይቅርታ፣ ቅፁን ለመተንተን አልተቻለም</string>
   <string name="parse_legacy_formlist_failed">ሰርቨሩ ከ Aggregate 0.9.x ጋር የሚጣጣምና የሚገኝ ቅፅ ሰነድ አላቀረበም፡፡ 1 %s</string>
   <string name="password">የይለፍ ቃል</string>
-  <string name="play_audio">ድምጽን አጫውት</string>
   <string name="play_video">ቪድዮ አጫውት</string>
   <string name="please_wait">እባክዎ ጥቂት ጊዜ ይጠብቁ</string>
   <string name="please_wait_long">እባክዎ ትንሽ ይጠብቁ፡፡ ይሄ ጥቂት ደቂቃዎችን ሊወስድ ይችላል፡፡</string>
@@ -208,13 +207,10 @@
   <string name="other_preferences">ሌሎች ስርዓተ ቅንብሮች</string>
   <string name="no_google_account">ምንም የ Google መለያ አልተመረጠም!</string>
   <string name="google_set_account">Google ሉሆችን እንደ አገልጋይዎ መርጠዋል, እባክዎ ከመቀጠልዎ በፊት በአጠቃላይ ቅንብሮች ውስጥ ተዛማጅ የ Google መለያ ይምረጡ</string>
-  <string name="google_repeat_error">ድጋሚዎች በዚህ ጊዜ በ Google ሉሆች አይደገፉም.</string>
-  <string name="media_upload_error">የሌለውን ፎቶ መስቀል አልተሳካም፣ 1 %1$s</string>
   <string name="notification_error">የማሳወቂያ ጽሁፍ በማሳየት ላይ ስህተት</string>
   <string name="delete_after_send">ከላክ በኋላ ይሰርዙ</string>
   <string name="delete_after_send_summary">ወደ ሰርቨር ከተላኩ በኋላ የተጠናቀቁ ቅጾችን እና ሚዲያዎችን ይሰርዛል</string>
   <string name="google_search_browse">ቅጾችን ይፈልጉ፡፡ ወይም ለማሰስ ከታች \"የእኔ Drive\" ን ይምረጡ.</string>
-  <string name="no_blank_search">ፍለጋ ባዶ ሊሆን አይችልም</string>
   <string name="about_preferences">ስለ</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">ካርታ</string>

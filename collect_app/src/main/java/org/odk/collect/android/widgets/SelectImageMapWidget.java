@@ -87,11 +87,12 @@ public abstract class SelectImageMapWidget extends SelectWidget {
             Timber.w(e);
         }
 
-        setUpLayout();
+        createLayout();
     }
 
     @Override
     public void clearAnswer() {
+        selections.clear();
         webView.loadUrl("javascript:clearAreas()");
     }
 
@@ -100,7 +101,9 @@ public abstract class SelectImageMapWidget extends SelectWidget {
         return webView.suppressFlingGesture();
     }
 
-    private void setUpLayout() {
+    private void createLayout() {
+        readItems();
+
         webView = new CustomWebView(getContext());
         selectedAreasLabel = getAnswerTextView();
         answerLayout.addView(webView);

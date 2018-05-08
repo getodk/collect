@@ -58,9 +58,8 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FORMLIST_UR
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_URL;
 import static org.odk.collect.android.utilities.gdrive.GoogleAccountsManager.REQUEST_ACCOUNT_PICKER;
 
-
 public class ServerPreferencesFragment extends BasePreferenceFragment implements View.OnTouchListener,
-        Preference.OnPreferenceChangeListener, GoogleAccountsManager.GoogleAccountSelectionListener {
+        GoogleAccountsManager.GoogleAccountSelectionListener {
     private static final String KNOWN_URL_LIST = "knownUrlList";
     protected EditTextPreference serverUrlPreference;
     protected EditTextPreference usernamePreference;
@@ -99,17 +98,17 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
 
         serverUrlPreference.getEditText().setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_drop_down, 0);
         serverUrlPreference.getEditText().setOnTouchListener(this);
-        serverUrlPreference.setOnPreferenceChangeListener(this);
+        serverUrlPreference.setOnPreferenceChangeListener(createChangeListener());
         serverUrlPreference.setSummary(serverUrlPreference.getText());
         serverUrlPreference.getEditText().setFilters(
                 new InputFilter[]{new ControlCharacterFilter(), new WhitespaceFilter()});
 
-        usernamePreference.setOnPreferenceChangeListener(this);
+        usernamePreference.setOnPreferenceChangeListener(createChangeListener());
         usernamePreference.setSummary(usernamePreference.getText());
         usernamePreference.getEditText().setFilters(
                 new InputFilter[]{new ControlCharacterFilter()});
 
-        passwordPreference.setOnPreferenceChangeListener(this);
+        passwordPreference.setOnPreferenceChangeListener(createChangeListener());
         maskPasswordSummary(passwordPreference.getText());
         passwordPreference.getEditText().setFilters(
                 new InputFilter[]{new ControlCharacterFilter()});
@@ -121,7 +120,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
 
         EditTextPreference googleSheetsUrlPreference = (EditTextPreference) findPreference(
                 PreferenceKeys.KEY_GOOGLE_SHEETS_URL);
-        googleSheetsUrlPreference.setOnPreferenceChangeListener(this);
+        googleSheetsUrlPreference.setOnPreferenceChangeListener(createChangeListener());
 
         String currentGoogleSheetsURL = googleSheetsUrlPreference.getText();
         if (currentGoogleSheetsURL != null && currentGoogleSheetsURL.length() > 0) {
@@ -146,11 +145,11 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
 
         serverUrlPreference.getEditText().setFilters(filters);
 
-        formListUrlPreference.setOnPreferenceChangeListener(this);
+        formListUrlPreference.setOnPreferenceChangeListener(createChangeListener());
         formListUrlPreference.setSummary(formListUrlPreference.getText());
         formListUrlPreference.getEditText().setFilters(filters);
 
-        submissionUrlPreference.setOnPreferenceChangeListener(this);
+        submissionUrlPreference.setOnPreferenceChangeListener(createChangeListener());
         submissionUrlPreference.setSummary(submissionUrlPreference.getText());
         submissionUrlPreference.getEditText().setFilters(filters);
     }
@@ -229,106 +228,103 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         return false;
     }
 
-    @Override
-    public boolean onPreferenceChange(Preference preference, Object newValue) {
+    private Preference.OnPreferenceChangeListener createChangeListener() {
+        return (preference, newValue) -> {
+            switch (preference.getKey()) {
+                case PreferenceKeys.KEY_SERVER_URL:
 
-        Timber.i("############ Preference Change");
-        switch (preference.getKey()) {
+                    String url = newValue.toString();
 
-            case PreferenceKeys.KEY_SERVER_URL:
-
-                String url = newValue.toString();
-
-                // remove all trailing "/"s
-                while (url.endsWith("/")) {
-                    url = url.substring(0, url.length() - 1);
-                }
-
-                if (Validator.isUrlValid(url)) {
-                    preference.setSummary(newValue.toString());
-                    SharedPreferences prefs = PreferenceManager
-                            .getDefaultSharedPreferences(getActivity().getApplicationContext());
-                    String urlListString = prefs.getString(KNOWN_URL_LIST, "");
-
-                    urlList =
-                            new Gson().fromJson(urlListString,
-                                    new TypeToken<List<String>>() {
-                                    }.getType());
-
-                    if (!urlList.contains(url)) {
-                        // We store a list with at most 5 elements
-                        if (urlList.size() == 5) {
-                            urlList.remove(4);
-                        }
-                        addUrlToPreferencesList(url, prefs);
-                        setupUrlDropdownAdapter();
+                    // remove all trailing "/"s
+                    while (url.endsWith("/")) {
+                        url = url.substring(0, url.length() - 1);
                     }
 
-                    // Re-register with the server
-                    Intent intent = new Intent(getActivity(), NotificationRegistrationService.class);
-                    getActivity().startService(intent);
-                } else {
-                    ToastUtils.showShortToast(R.string.url_error);
-                    return false;
-                }
-                break;
+                    if (Validator.isUrlValid(url)) {
+                        preference.setSummary(newValue.toString());
+                        SharedPreferences prefs = PreferenceManager
+                                .getDefaultSharedPreferences(getActivity().getApplicationContext());
+                        String urlListString = prefs.getString(KNOWN_URL_LIST, "");
 
-            case PreferenceKeys.KEY_USERNAME:
-                String username = newValue.toString();
+                        urlList =
+                                new Gson().fromJson(urlListString,
+                                        new TypeToken<List<String>>() {
+                                        }.getType());
 
-                // do not allow leading and trailing whitespace
-                if (!username.equals(username.trim())) {
-                    ToastUtils.showShortToast(R.string.username_error_whitespace);
-                    return false;
-                }
+                        if (!urlList.contains(url)) {
+                            // We store a list with at most 5 elements
+                            if (urlList.size() == 5) {
+                                urlList.remove(4);
+                            }
+                            addUrlToPreferencesList(url, prefs);
+                            setupUrlDropdownAdapter();
+                        }
+                    	// Re-register with the server - smap
+                    	Intent intent = new Intent(getActivity(), NotificationRegistrationService.class);   // smap
+                    	getActivity().startService(intent);   // smap
+                    } else {
+                        ToastUtils.showShortToast(R.string.url_error);
+                        return false;
+                    }
+                    break;
 
-                // Re-register with the server
-                Intent intent = new Intent(getActivity(), NotificationRegistrationService.class);
-                getActivity().startService(intent);
+                case PreferenceKeys.KEY_USERNAME:
+                    String username = newValue.toString();
 
-                preference.setSummary(username);
-                clearCachedCrendentials();
+                    // do not allow leading and trailing whitespace
+                    if (!username.equals(username.trim())) {
+                        ToastUtils.showShortToast(R.string.username_error_whitespace);
+                        return false;
+                    }
 
-                // To ensure we update current credentials in CredentialsProvider
-                credentialsHaveChanged = true;
+                    // Re-register with the server - smap
+                    Intent intent = new Intent(getActivity(), NotificationRegistrationService.class);  // smap
+                    getActivity().startService(intent);    // smap
 
-                return true;
+                    preference.setSummary(username);
+                    clearCachedCrendentials();
 
-            case PreferenceKeys.KEY_PASSWORD:
-                String pw = newValue.toString();
+                    // To ensure we update current credentials in CredentialsProvider
+                    credentialsHaveChanged = true;
 
-                // do not allow leading and trailing whitespace
-                if (!pw.equals(pw.trim())) {
-                    ToastUtils.showShortToast(R.string.password_error_whitespace);
-                    return false;
-                }
+                    return true;
 
-                maskPasswordSummary(pw);
-                clearCachedCrendentials();
+                case PreferenceKeys.KEY_PASSWORD:
+                    String pw = newValue.toString();
 
-                // To ensure we update current credentials in CredentialsProvider
-                credentialsHaveChanged = true;
-                break;
+                    // do not allow leading and trailing whitespace
+                    if (!pw.equals(pw.trim())) {
+                        ToastUtils.showShortToast(R.string.password_error_whitespace);
+                        return false;
+                    }
 
-            case PreferenceKeys.KEY_GOOGLE_SHEETS_URL:
-                url = newValue.toString();
+                    maskPasswordSummary(pw);
+                    clearCachedCrendentials();
 
-                // remove all trailing "/"s
-                while (url.endsWith("/")) {
-                    url = url.substring(0, url.length() - 1);
-                }
+                    // To ensure we update current credentials in CredentialsProvider
+                    credentialsHaveChanged = true;
+                    break;
 
-                if (Validator.isUrlValid(url)) {
-                    preference.setSummary(url + "\n\n" + getString(R.string.google_sheets_url_hint));
-                } else if (url.length() == 0) {
-                    preference.setSummary(getString(R.string.google_sheets_url_hint));
-                } else {
-                    ToastUtils.showShortToast(R.string.url_error);
-                    return false;
-                }
-                break;
-        }
-        return true;
+                case PreferenceKeys.KEY_GOOGLE_SHEETS_URL:
+                    url = newValue.toString();
+
+                    // remove all trailing "/"s
+                    while (url.endsWith("/")) {
+                        url = url.substring(0, url.length() - 1);
+                    }
+
+                    if (Validator.isUrlValid(url)) {
+                        preference.setSummary(url + "\n\n" + getString(R.string.google_sheets_url_hint));
+                    } else if (url.length() == 0) {
+                        preference.setSummary(getString(R.string.google_sheets_url_hint));
+                    } else {
+                        ToastUtils.showShortToast(R.string.url_error);
+                        return false;
+                    }
+                    break;
+            }
+            return true;
+        };
     }
 
     private void maskPasswordSummary(String password) {

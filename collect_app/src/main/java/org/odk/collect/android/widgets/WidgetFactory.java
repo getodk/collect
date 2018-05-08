@@ -18,8 +18,6 @@ import android.content.Context;
 
 import org.javarosa.core.model.Constants;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.R;
-import org.odk.collect.android.utilities.ToastUtils;
 
 import java.util.Locale;
 
@@ -120,14 +118,8 @@ public class WidgetFactory {
                     case Constants.DATATYPE_TEXT:
                         String query = fep.getQuestion().getAdditionalAttribute(null, "query");
                         if (query != null) {
-                            if (appearance.contains("quick")) {       // smap change to contains rather than equals
-                                questionWidget = new ItemsetWidget(context, fep, readOnlyOverride,
-                                        true);
-                            } else {
-                                questionWidget = new ItemsetWidget(context, fep, readOnlyOverride,
-                                        false);
-                            }
-                        } else if (appearance.contains("printer")) {      // smap change to contains rather than equals
+                            questionWidget = new ItemsetWidget(context, fep, appearance.contains("quick"), readOnlyOverride);	// smap change to contains rather than equals
+                        } else if (appearance.contains("printer")) {	// smap change to contains rather than equals
                             questionWidget = new ExPrinterWidget(context, fep);
                         } else if (appearance.contains("ex:")) {          // smap change to contains rather than equals
                             questionWidget = new ExStringWidget(context, fep);
@@ -214,7 +206,7 @@ public class WidgetFactory {
                 } else if (appearance.startsWith("minimal")) {
                     questionWidget = new SpinnerWidget(context, fep);
                 } else if (appearance.startsWith("quick")) {
-                    questionWidget = new SelectOneAutoAdvanceWidget(context, fep, readOnlyOverride);   // smap
+                    questionWidget = new SelectOneWidget(context, fep, true, readOnlyOverride);		// smap
                 } else if (appearance.equals("list-nolabel")) {
                     questionWidget = new ListWidget(context, fep, false);
                 } else if (appearance.equals("list")) {
@@ -224,14 +216,9 @@ public class WidgetFactory {
                 } else if (appearance.contains("search") || appearance.contains("autocomplete")) {
                     questionWidget = new SelectOneSearchWidget(context, fep, readOnlyOverride);     // smap
                 } else if (appearance.startsWith("image-map")) {
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                        questionWidget = new SelectOneImageMapWidget(context, fep);
-                    } else {
-                        questionWidget = new SelectOneWidget(context, fep, readOnlyOverride);   // smap
-                        ToastUtils.showLongToast(R.string.svg_not_supported_device);
-                    }
+                    questionWidget = new SelectOneImageMapWidget(context, fep);
                 } else {
-                    questionWidget = new SelectOneWidget(context, fep, readOnlyOverride);   // smap - add readOnlyOverride
+                    questionWidget = new SelectOneWidget(context, fep, false, readOnlyOverride);  // smap - add readOnlyOverride
                 }
                 break;
             case Constants.CONTROL_SELECT_MULTI:
@@ -263,12 +250,7 @@ public class WidgetFactory {
                 } else if (appearance.contains("autocomplete")) {
                     questionWidget = new SelectMultipleAutocompleteWidget(context, fep, readOnlyOverride);  // smap
                 } else if (appearance.startsWith("image-map")) {
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                        questionWidget = new SelectMultiImageMapWidget(context, fep);
-                    } else {
-                        questionWidget = new SelectMultiWidget(context, fep, readOnlyOverride); // smap
-                        ToastUtils.showLongToast(R.string.svg_not_supported_device);
-                    }
+                    questionWidget = new SelectMultiImageMapWidget(context, fep);
                 } else {
                     questionWidget = new SelectMultiWidget(context, fep,  readOnlyOverride);
                 }

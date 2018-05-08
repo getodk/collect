@@ -91,7 +91,6 @@
   <string name="parse_legacy_formlist_failed">الخادم لو يوفر النماذج المتطابقة مع Aggregate الأصدار 0.9: %s</string>
   <string name="parse_openrosa_formlist_failed">الخادم لو يوفر النماذج المتطابقة مع مقاييس OpenRosa الأصدار الأول: %s</string>
   <string name="password">كلمة المرور</string>
-  <string name="play_audio">تشغيل التسجيل الصوتي</string>
   <string name="play_video">تشغيل تسجيل الفيديو</string>
   <string name="please_wait">الرجاء الانتظار للحظات قليلة.</string>
   <string name="please_wait_long">الرجاء الانتظار. قد يتطلّب ذلك بضع دقائق.</string>
@@ -266,9 +265,6 @@
   <string name="drive_get_file">الحصول على %1$s وملفات الوسائط.</string>
   <string name="no_google_account">لم يتم اختيار حساب جوجل!</string>
   <string name="google_set_account">لقد قمت باختيار صفحات الجوجل كخادم لك، أرجو اختيار حساب الجوجل  المتوافق عن طريق الاعدادت العامة قبل الاستمرار</string>
-  <string name="invalid_oauth">الرمز غير صالح</string>
-  <string name="google_repeat_error">التكرارات غير مدعومة من قبل صفحات الجوجل بهذا الوقت</string>
-  <string name="media_upload_error">حدث خطاء اثناء رفع الوسائط الى خادم البيانات الصورة التالية غير موجودة : %1$s</string>
   <string name="odk_auth_auth_fail">فشل في عملية التحقق من بيانات المصادقة</string>
   <string name="odk_auto_note">ملاحظات تلقائية</string>
   <string name="notification_error">خطأ في عرض اشعار النص</string>
@@ -276,7 +272,6 @@
   <string name="delete_after_send_summary">حذف الاستمارة النهائية والوسائط المتعددة بعد ارسالها الى الخادم</string>
   <string name="change_server_url">رابط الخادم</string>
   <string name="google_search_browse">ابحث عن الاستمارات. أو اختار  \'My Drive\' من الاسفل لكي تتصفح</string>
-  <string name="no_blank_search">حقل البحث لا يمكن ان يكون فارغا.</string>
   <string name="google_sheets_url">رابط اوراق جوجل</string>
   <string name="send_in_progress">خلفية الارسال تعمل. يرجى المحاولة مرة أخرى في وقت قريب</string>
   <string name="sheets_max_columns">الحد الأقصى لعدد الأعمدة هو 255، استماراتك تحتوي على %s. غير قادر على تحميل الجدول.</string>
@@ -287,9 +282,6 @@
   <string name="username_error_whitespace">الزيادات في البداية أو الفراغات غير مسموح بها في اسم المستخدم</string>
   <string name="google_play_services_error_occured">غير قادرعلى الوصول الى خرائط الجوجل. هل خدمات تشغيل الجوجل مثبتة؟</string>
   <string name="about_preferences">حول التطبيق</string>
-  <string name="tell_your_friends">أخبر اصدقائك</string>
-  <string name="tell_your_friends_msg">رسالة أخبر اصدقائك</string>
-  <string name="leave_a_review">إترك ملاحظة</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">رسم الخريطة</string>
   <string name="map_sdk_selector_title">خدمة الخريطة</string>
@@ -341,8 +333,6 @@
   <string name="zoom_to_where">التقريب الى…</string>
   <string name="zoom_to_location">التقريب الى موقع الحالي</string>
   <string name="zoom_to_feature">التقريب الى الميزة المحفوظة</string>
-  <string name="google_sheets_invalid_column_form">اسم الحقل غير صحيح في الاستمارة. اوراق جوجل تعتمد فقد الحروف و الارقام في عملية تسمية الاعمدة\'n%1$s\'</string>
-  <string name="google_sheets_invalid_column_instance">اسم الحقل غير صحيح في الاستمارة المحفوظة. اوراق جوجل تعتمد فقد الحروف و الارقام في عملية تسمية الاعمدة\'n%1$s\'</string>
   <string name="geoshape_view_change_location">عرض التغييرات في الموقع لـ GeoShape</string>
   <string name="geotrace_view_change_location">عرض التغييرات في الموقع لـ GeoTrace</string>
   <string name="bearing">تحمل %.3f</string>
@@ -369,8 +359,6 @@
   <string name="odk_website">موقع ODK</string>
   <string name="odk_website_summary">ملخص موقع ODK</string>
   <string name="odk_forum">نقاشات ODK</string>
-  <string name="odk_forum_summary">ملخص نقاشات ODK</string>
-  <string name="all_open_source_licenses">الترخيص مفتوح المصدر</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">غرب %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -383,7 +371,6 @@
   <string name="not_exactly_one_record_for_this_instance">لايوجد تطابق لهذا السجل في الاستمارة</string>
   <string name="not_exactly_one_blank_form_for_this_form_id">معرف الاستمارة لا يتطابق مع الاستمارة الفارغة</string>
   <string name="no_form_id_specified">لم يتم تحديد عنوان الاستمارة</string>
-  <string name="phone_does_not_have_base64_class">الهاتف لايحتوي على مكون Base64 لكن API : %s</string>
   <string name="phone_does_not_support_rsa">الهاتف لايدعم خاصية RSA</string>
   <string name="invalid_rsa_public_key">مفتاح الـ RSA العام غير صالح</string>
   <string name="encryption_error_message">الاستمارة لم يتم حفظها كنهائية %s </string>

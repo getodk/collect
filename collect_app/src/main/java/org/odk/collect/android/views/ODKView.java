@@ -177,7 +177,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
 
                             ToastUtils.showShortToast(e.getMessage());
                         } catch (ActivityNotFoundException e) {
-                            Timber.e(e, "ActivityNotFoundExcept");
+                            Timber.d(e, "ActivityNotFoundExcept");
 
                             ToastUtils.showShortToast(errorString);
                         }

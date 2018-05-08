@@ -30,6 +30,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import java.net.URI;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
@@ -311,9 +312,9 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                  * Submit any completed forms
                  */
                 Outcome submitOutcome = submitCompletedForms();
-                if(submitOutcome != null && submitOutcome.results != null) {
-                    for (String key : submitOutcome.results.keySet()) {
-                        results.put(key, submitOutcome.results.get(key));
+                if(submitOutcome != null && submitOutcome.messagesByInstanceId != null) {
+                    for (String key : submitOutcome.messagesByInstanceId.keySet()) {
+                        results.put(key, submitOutcome.messagesByInstanceId.get(key));
                     }
                 }
 
@@ -656,7 +657,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
             // Call the service
             HttpContext localContext = Collect.getInstance().getHttpContext();
             HttpClient client = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
-            Uri u = Uri.parse(taskURL);
+            URI u = URI.create(taskURL);
             if (username != null && password != null) {
                 WebUtils.addCredentials(username, password, u.getHost());
             }

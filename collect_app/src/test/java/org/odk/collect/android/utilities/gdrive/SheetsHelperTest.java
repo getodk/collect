@@ -71,6 +71,18 @@ public class SheetsHelperTest {
         verify(sheetsService).insertRow("spreadsheet_id", "sheet_name", valueRange);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void updateRowShouldThrowErrorWhenValueRangeIsNull() throws IOException {
+        sheetsHelper.updateRow("spreadsheet_id", "sheet_name", null);
+    }
+
+    @Test
+    public void updateRowTest() throws IOException {
+        ValueRange valueRange = new ValueRange();
+        sheetsHelper.updateRow("spreadsheet_id", "sheet_name!A1", valueRange);
+        verify(sheetsService).updateRow("spreadsheet_id", "sheet_name!A1", valueRange);
+    }
+
     @Test
     public void getSpreadsheetTest() throws IOException {
         Spreadsheet mockedSpreadsheet = mock(Spreadsheet.class);

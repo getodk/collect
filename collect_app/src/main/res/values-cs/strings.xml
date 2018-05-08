@@ -86,7 +86,6 @@
   <string name="parse_legacy_formlist_failed">Server neposkytnul seznam dostupných dotazníků kompatibilní s Aggregate 0.9.x. : %s</string>
   <string name="parse_openrosa_formlist_failed">Server neposkytnul seznam dostupných dotazníků kompatibilní se standartem OpenRosa 1.0: %s</string>
   <string name="password">Heslo</string>
-  <string name="play_audio">Přehrát zvuk</string>
   <string name="play_video">Přehrát video</string>
   <string name="please_wait">Prosím chvilku počkejte.</string>
   <string name="please_wait_long">Prosím čekejte. Může to trvat několik minut.</string>
@@ -248,12 +247,10 @@
   <string name="other_preferences">Ostatní nastavení platformy</string>
   <string name="drive_get_file">Získávám %1$s a mediální soubory</string>
   <string name="no_google_account">Není vybrán žádný účet Google!</string>
-  <string name="invalid_oauth">Neplatný kód OAuth 2</string>
   <string name="notification_error">Chyba při zobrazení oznámení</string>
   <string name="delete_after_send">Vymazat po odeslání</string>
   <string name="delete_after_send_summary">Vymaže dokončené dotazníky a média po odeslání na server</string>
   <string name="change_server_url">URL Serveru</string>
-  <string name="no_blank_search">Vyhledávací pole nemůže být prázdné</string>
   <!--Geo string added in feature-geofeatures branch-->
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
