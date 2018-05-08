@@ -11,9 +11,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import io.reactivex.Completable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 /** Methods for reading from and writing to the FormDef cache */
@@ -24,62 +21,54 @@ public class FormDefCache {
     }
 
     /**
-     * Returns a RxJava Completable for serializing a FormDef and saving it in cache.
+     * Serializes a FormDef and saves it in the cache. To avoid problems from two callers
+     * trying to cache the same file at the same time, we serialize into a temporary file,
+     * and rename it when done.
      *
-     * @param formDef           - The FormDef to be cached.
-     * @param cachedFormDefFile - The File object used for saving the cached FormDef
-     * @return RxJava Completable.
+     * @param formDef  - The FormDef to be cached
+     * @param formPath - The form XML file
      */
-    public static Completable writeCacheAsync(FormDef formDef, File cachedFormDefFile) {
-        return Completable.create(emitter -> {
-            final long formSaveStart = System.currentTimeMillis();
-            final File tempCacheFile = File.createTempFile("cache", null,
-                    new File(Collect.CACHE_PATH));
-            Timber.i("Started saving %s to the cache via temp file %s",
-                    formDef.getTitle(), tempCacheFile.getName());
+    public static void writeCache(FormDef formDef, String formPath) throws IOException {
+        final long formSaveStart = System.currentTimeMillis();
+        File cachedFormDefFile = FormDefCache.getCacheFile(new File(formPath));
+        final File tempCacheFile = File.createTempFile("cache", null,
+                new File(Collect.CACHE_PATH));
+        Timber.i("Started saving %s to the cache via temp file %s",
+                formDef.getTitle(), tempCacheFile.getName());
 
-            Exception caughtException = null;
-            try {
-                DataOutputStream dos = new DataOutputStream(new FileOutputStream(tempCacheFile));
-                formDef.writeExternal(dos);
-                dos.close();
-            } catch (IOException exception) {
-                caughtException = exception;
+        Exception caughtException = null;
+        try {
+            DataOutputStream dos = new DataOutputStream(new FileOutputStream(tempCacheFile));
+            formDef.writeExternal(dos);
+            dos.close();
+        } catch (IOException exception) {
+            caughtException = exception;
+        }
+
+        final boolean tempFileNeedsDeleting = caughtException != null; // There was an error creating it
+
+        // Delete or rename the temp file
+        if (tempFileNeedsDeleting) {
+            Timber.i("Deleting no-longer-wanted temp cache file %s for form %s",
+                    tempCacheFile.getName(), formDef.getTitle());
+            if (!tempCacheFile.delete()) {
+                Timber.e("Unable to delete " + tempCacheFile.getName());
             }
-
-            final boolean tempFileNeedsDeleting =
-                    emitter.isDisposed()        // It is no longer wanted
-                    || caughtException != null; // or there was an error creating it
-
-            // Delete or rename the temp file
-            if (tempFileNeedsDeleting) {
-                Timber.i("Deleting no-longer-wanted temp cache file %s for form %s",
-                        tempCacheFile.getName(), formDef.getTitle());
-                if (!tempCacheFile.delete()) {
-                    Timber.e("Unable to delete " + tempCacheFile.getName());
-                }
+        } else {
+            if (tempCacheFile.renameTo(cachedFormDefFile)) {
+                Timber.i("Renamed %s to %s",
+                        tempCacheFile.getName(), cachedFormDefFile.getName());
+                Timber.i("Caching %s took %.3f seconds.", formDef.getTitle(),
+                        (System.currentTimeMillis() - formSaveStart) / 1000F);
             } else {
-                if (tempCacheFile.renameTo(cachedFormDefFile)) {
-                    Timber.i("Renamed %s to %s",
-                            tempCacheFile.getName(), cachedFormDefFile.getName());
-                    Timber.i("Caching %s took %.3f seconds.", formDef.getTitle(),
-                            (System.currentTimeMillis() - formSaveStart) / 1000F);
-                } else {
-                    Timber.e("Unable to rename temporary file %s to cache file %s",
-                            tempCacheFile.toString(), cachedFormDefFile.toString());
-                }
+                Timber.e("Unable to rename temporary file %s to cache file %s",
+                        tempCacheFile.toString(), cachedFormDefFile.toString());
             }
+        }
 
-            if (!emitter.isDisposed()) {
-                if (caughtException == null) {
-                    emitter.onComplete();
-                } else {
-                    emitter.onError(caughtException);
-                }
-            } else if (caughtException != null) { // The client is no longer there, so log the exception
-                Timber.e(caughtException);
-            }
-        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+        if (caughtException != null) { // The client is no longer there, so log the exception
+            Timber.e(caughtException);
+        }
     }
 
     /**
@@ -113,7 +102,7 @@ public class FormDefCache {
      * @param formXml the File containing the XML form
      * @return a File object
      */
-    public static File getCacheFile(File formXml) {
+    private static File getCacheFile(File formXml) {
         return new File(Collect.CACHE_PATH + File.separator +
                 FileUtils.getMd5Hash(formXml) + ".formdef");
     }
