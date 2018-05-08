@@ -1,10 +1,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    >
+    android:layout_height="wrap_content">
 
-    <Button
+    <android.support.v7.widget.AppCompatButton
         android:text="@string/polygon_save"
         android:id="@+id/polygon_save"
         android:layout_width="match_parent"
@@ -13,13 +12,14 @@
         android:visibility="visible"
         android:textColor="#ff333333"
         android:background="#50cccccc"
-        android:drawableLeft="@drawable/polygon"
-        android:drawableStart="@drawable/polygon"
+        android:drawableLeft="@drawable/polygon_wrapped"
+        android:drawableStart="@drawable/polygon_wrapped"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp" />
-    <Button
+    
+    <android.support.v7.widget.AppCompatButton
         android:text="@string/polyline_save"
         android:id="@+id/polyline_save"
         android:layout_width="match_parent"
@@ -28,8 +28,8 @@
         android:background="#50cccccc"
         android:visibility="visible"
         android:textColor="#ff333333"
-        android:drawableLeft="@drawable/polyline"
-        android:drawableStart="@drawable/polyline"
+        android:drawableLeft="@drawable/polyline_wrapped"
+        android:drawableStart="@drawable/polyline_wrapped"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:layout_marginBottom="20dp" />
