@@ -190,8 +190,8 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
 
         StringBuilder message = new StringBuilder();
         message
-                .append(Collect.getInstance().getString(R.string.odk_auto_note))
-                .append(" :: \n\n");
+                .append(Collect.getInstance().getString(R.string.forms_sent))
+                .append("\n\n");
 
         if (result == null) {
             message.append(Collect.getInstance().getString(R.string.odk_auth_auth_fail));

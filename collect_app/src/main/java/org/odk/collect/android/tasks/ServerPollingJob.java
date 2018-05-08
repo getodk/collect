@@ -22,7 +22,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
@@ -95,7 +94,7 @@ public class ServerPollingJob extends Job {
                 if (!newDetectedForms.isEmpty()) {
                     if (GeneralSharedPreferences.getInstance().getBoolean(KEY_AUTOMATIC_UPDATE, false)) {
                         final HashMap<FormDetails, String> result = new FormDownloader().downloadForms(newDetectedForms);
-                        informAboutNewDownloadedForms(FormDownloadList.getDownloadResultMessage(result));
+                        informAboutNewDownloadedForms(Collect.getInstance().getString(R.string.forms_downloaded) + "\n\n" + FormDownloadList.getDownloadResultMessage(result));
                     } else {
                         for (FormDetails formDetails : newDetectedForms) {
                             String manifestFileHash = formDetails.getManifestFileHash() != null ? formDetails.getManifestFileHash() : "";
@@ -129,7 +128,7 @@ public class ServerPollingJob extends Job {
                 period = ONE_HOUR_PERIOD;
             } else if (selectedOption.equals(Collect.getInstance().getString(R.string.every_six_hours_value))) {
                 period = SIX_HOURS_PERIOD;
-            } else if (selectedOption.equals(Collect.getInstance().getString(R.string.every_one_day_value))) {
+            } else if (selectedOption.equals(Collect.getInstance().getString(R.string.every_24_hours_value))) {
                 period = ONE_DAY_PERIOD;
             }
 
@@ -152,8 +151,7 @@ public class ServerPollingJob extends Job {
         PendingIntent contentIntent = PendingIntent.getActivity(getContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext())
-                .setSmallIcon(R.drawable.ic_info)
-                .setLargeIcon(BitmapFactory.decodeResource(getContext().getResources(), R.drawable.notes))
+                .setSmallIcon(R.drawable.notes)
                 .setContentTitle(getContext().getString(R.string.form_updates_available))
                 .setAutoCancel(true)
                 .setContentIntent(contentIntent);
@@ -170,9 +168,8 @@ public class ServerPollingJob extends Job {
         PendingIntent contentIntent = PendingIntent.getActivity(getContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext())
-                .setSmallIcon(R.drawable.ic_info)
-                .setLargeIcon(BitmapFactory.decodeResource(getContext().getResources(), R.drawable.notes))
-                .setContentTitle(getContext().getString(R.string.new_form_version_downloaded))
+                .setSmallIcon(R.drawable.notes)
+                .setContentTitle(getContext().getString(R.string.new_form_versions_downloaded))
                 .setAutoCancel(true)
                 .setContentIntent(contentIntent);
 

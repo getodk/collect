@@ -20,5 +20,5 @@ the specific language governing permissions and limitations under the License. -
     <string name="every_fifteen_minutes_value" translatable="false">every_fifteen_minutes</string>
     <string name="every_one_hour_value" translatable="false">every_one_hour</string>
     <string name="every_six_hours_value" translatable="false">every_six_hours</string>
-    <string name="every_one_day_value" translatable="false">every_one_day</string>
+    <string name="every_24_hours_value" translatable="false">every_24_hours</string>
 </resources>
