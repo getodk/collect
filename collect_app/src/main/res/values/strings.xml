@@ -248,7 +248,7 @@
     <string name="ext_search_return_error">The search handler returned a object of type \'%s\'.</string>
     <string name="ext_import_generic_error">Could not import data from %1$s. Reason: %2$s</string>
     <string name="ext_import_progress_message">Pre-loading data from \'%1$s\', please wait… %2$s</string>
-    <string name="ext_import_cancelled_message">Reading data cancelled!</string>
+    <string name="ext_import_cancelled_message">Reading data canceled!</string>
     <string name="ext_import_finalizing_message">Finalizing pre-loaded data…</string>
     <string name="ext_import_completed_message">Reading data completed!</string>
     <string name="ext_not_initialized_error">The ExternalDataManager has not been initialized.</string>
@@ -578,7 +578,7 @@
     <string name="moving_backwards_enabled_message">You may wish to review the following settings:\n\n\u2022 Edit Saved Form\n\u2022 Save Form\n\u2022 Go To Prompt\n\u2022 Constraint processing</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="newer_version_of_a_form_info">This is an updated version of a form you already have!</string>
+    <string name="newer_version_of_a_form_info">This is an update to a form you have</string>
     <string name="svg_file_does_not_exist">SVG file does not exist!</string>
     <string name="start_video_capture_instruction">Tap the screen to start recording</string>
     <string name="stop_video_capture_instruction">Recording started. Tap again to stop</string>
@@ -588,5 +588,5 @@
     <string name="theme_dark">Dark theme</string>
     <string name="cannot_create_directory">Cannot create directory: %s</string>
     <string name="not_a_directory">%s exists, but is not a directory</string>
-    <string name="instance_upload_cancelled">Instance upload cancelled</string>
+    <string name="instance_upload_cancelled">Instance upload canceled</string>
 </resources>
