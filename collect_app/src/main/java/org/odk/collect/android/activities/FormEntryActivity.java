@@ -109,7 +109,6 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.FormDefCache;
 import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.TimerLogger;
@@ -127,15 +126,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
 
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
 import static android.content.DialogInterface.BUTTON_POSITIVE;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_MOVING_BACKWARDS;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
-import static org.odk.collect.android.utilities.FormDefCache.writeCacheAsync;
 
 /**
  * FormEntryActivity is responsible for displaying questions, animating
@@ -250,8 +246,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private ActivityAvailability activityAvailability = new ActivityAvailability(this);
 
     private boolean shouldOverrideAnimations = false;
-
-    private final CompositeDisposable formDefCacheCompositeDisposable = new CompositeDisposable();
 
     /**
      * Called when the activity is first created.
@@ -2313,7 +2307,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             }
         }
         releaseOdkView();
-        formDefCacheCompositeDisposable.dispose();
         super.onDestroy();
 
     }
@@ -2475,18 +2468,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         }
 
         refreshCurrentView();
-
-        if (formDef != null) {
-            final File cachedFormDefFile = FormDefCache.getCacheFile(new File(formPath));
-
-            if (cachedFormDefFile.exists()) {
-                Timber.i("FormDef %s is already in the cache", cachedFormDefFile.toString());
-            } else {
-                Disposable formDefCacheDisposable =
-                        writeCacheAsync(formDef, cachedFormDefFile).subscribe(() -> { }, Timber::e);
-                formDefCacheCompositeDisposable.add(formDefCacheDisposable);
-            }
-        }
     }
 
     /**

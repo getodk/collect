@@ -123,7 +123,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         final String formPath = path[0];
         final File formXml = new File(formPath);
 
-        final FormDef formDef = createFormDefFromCacheOrXml(formXml);
+        final FormDef formDef = createFormDefFromCacheOrXml(formPath, formXml);
 
         if (errorMsg != null || formDef == null) {
             return null;
@@ -218,7 +218,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         return data;
     }
 
-    private FormDef createFormDefFromCacheOrXml(File formXml) {
+    private FormDef createFormDefFromCacheOrXml(String formPath, File formXml) {
         publishProgress(
                 Collect.getInstance().getString(R.string.survey_loading_reading_form_message));
 
@@ -240,6 +240,9 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                 Timber.i("Loaded in %.3f seconds.",
                         (System.currentTimeMillis() - start) / 1000F);
                 formDef = formDefFromXml;
+
+                FormDefCache.writeCache(formDef, formPath);
+
                 return formDefFromXml;
             }
         } catch (Exception e) {
