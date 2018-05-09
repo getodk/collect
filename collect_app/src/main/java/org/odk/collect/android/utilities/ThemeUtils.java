@@ -17,6 +17,9 @@ package org.odk.collect.android.utilities;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
+import android.support.annotation.AttrRes;
+import android.support.annotation.ColorInt;
+import android.support.annotation.StyleRes;
 import android.util.TypedValue;
 
 import org.odk.collect.android.R;
@@ -32,14 +35,17 @@ public final class ThemeUtils {
         this.context = context;
     }
 
+    @StyleRes
     public int getAppTheme() {
         return isDarkTheme() ? R.style.DarkAppTheme : R.style.LightAppTheme;
     }
 
+    @StyleRes
     public int getSettingsTheme() {
         return isDarkTheme() ? R.style.AppTheme_SettingsTheme_Dark : R.style.AppTheme_SettingsTheme_Light;
     }
 
+    @StyleRes
     public int getBottomDialogTheme() {
         return isDarkTheme() ? R.style.DarkMaterialDialogSheet : R.style.LightMaterialDialogSheet;
     }
@@ -50,19 +56,21 @@ public final class ThemeUtils {
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @StyleRes
     public int getMaterialDialogTheme() {
         return isDarkTheme() ?
                 android.R.style.Theme_Material_Dialog :
                 android.R.style.Theme_Material_Light_Dialog;
     }
 
+    @StyleRes
     public int getHoloDialogTheme() {
         return isDarkTheme() ?
                 android.R.style.Theme_Holo_Dialog :
                 android.R.style.Theme_Holo_Light_Dialog;
     }
 
-    public int getAttributeValue(int resId) {
+    private int getAttributeValue(@AttrRes int resId) {
         TypedValue outValue = new TypedValue();
         context.getTheme().resolveAttribute(resId, outValue, true);
         return outValue.data;
@@ -75,5 +83,29 @@ public final class ThemeUtils {
     private boolean isDarkTheme() {
         String theme = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_APP_THEME);
         return theme.equals(context.getString(R.string.app_theme_dark));
+    }
+
+    /**
+     * @return Text color for the current {@link android.content.res.Resources.Theme}
+     */
+    @ColorInt
+    public int getPrimaryTextColor() {
+        return getAttributeValue(R.attr.primaryTextColor);
+    }
+
+    /**
+     * @return Accent color for the current {@link android.content.res.Resources.Theme}
+     */
+    @ColorInt
+    public int getAccentColor() {
+        return getAttributeValue(R.attr.colorAccent);
+    }
+
+    /**
+     * @return Icon color for the current {@link android.content.res.Resources.Theme}
+     */
+    @ColorInt
+    public int getIconColor() {
+        return getAttributeValue(R.attr.iconColor);
     }
 }
