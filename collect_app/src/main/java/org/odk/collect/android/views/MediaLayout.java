@@ -302,8 +302,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
         boolean isNotAMultipleChoiceField = !RadioButton.class.isAssignableFrom(text.getClass())
                 && !CheckBox.class.isAssignableFrom(text.getClass());
 
-        // Determine the layout constraints...
-        // Assumes LTR, TTB reading bias!
+        // Determine the layout constraints. Right-to-left support works for API > 16.
         int startOf = isNeedPatchRTL() ? RelativeLayout.ALIGN_PARENT_START : RelativeLayout.ALIGN_PARENT_LEFT;
         int endOf = isNeedPatchRTL() ? RelativeLayout.ALIGN_PARENT_END : RelativeLayout.ALIGN_PARENT_RIGHT;
         if (viewText.getText().length() == 0 && (imageView != null || missingImage != null)) {
