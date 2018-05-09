@@ -16,11 +16,8 @@ package org.odk.collect.android.utilities;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.util.TypedValue;
-import android.widget.ImageButton;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
@@ -45,20 +42,6 @@ public final class ThemeUtils {
 
     public int getBottomDialogTheme() {
         return isDarkTheme() ? R.style.DarkMaterialDialogSheet : R.style.LightMaterialDialogSheet;
-    }
-
-    /*
-     *   TODO : Remove this method once all drawables are converted to vectors and use ?colorControlNormal for android:fillColor attribute
-     */
-    public void setIconTint(Context context, ImageButton... imageButtons) {
-        for (ImageButton imageButton : imageButtons) {
-            setIconTint(context, imageButton.getDrawable());
-        }
-    }
-
-    private void setIconTint(Context context, Drawable drawable) {
-        DrawableCompat.setTint(drawable, context.getResources()
-                .getColor(isDarkTheme() ? android.R.color.white : android.R.color.black));
     }
 
     public boolean isHoloDialogTheme(int theme) {

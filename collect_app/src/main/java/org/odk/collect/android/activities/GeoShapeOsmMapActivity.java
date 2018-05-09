@@ -187,8 +187,6 @@ public class GeoShapeOsmMapActivity extends CollectAbstractActivity implements I
                 zoomDialog.dismiss();
             }
         });
-
-        themeUtils.setIconTint(this, locationButton, layersButton, clearButton, saveButton);
     }
 
     @Override

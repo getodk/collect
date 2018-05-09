@@ -345,9 +345,6 @@ public class GeoPointMapActivity extends CollectAbstractActivity implements OnMa
             zoomToPoint();
         }
 
-        themeUtils.setIconTint(this, reloadLocation, showLocation, layers,
-                clearPointButton, acceptLocation);
-
         helper.setBasemap();
 
         isMapReady = true;

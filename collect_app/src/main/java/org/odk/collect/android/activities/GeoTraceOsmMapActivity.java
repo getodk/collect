@@ -321,9 +321,6 @@ public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements I
 
         locationClient = LocationClients.clientForContext(this);
         locationClient.setListener(this);
-
-        themeUtils.setIconTint(this, playButton, pauseButton, locationButton, layersButton,
-                clearButton, saveButton);
     }
 
     @Override

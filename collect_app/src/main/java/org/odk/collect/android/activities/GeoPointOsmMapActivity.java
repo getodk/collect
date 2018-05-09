@@ -246,9 +246,6 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
             }
         });
 
-        themeUtils.setIconTint(this, reloadLocationButton, showLocationButton, layersButton,
-                clearPointButton, saveLocationButton);
-
         Intent intent = getIntent();
         if (intent != null && intent.getExtras() != null) {
 
