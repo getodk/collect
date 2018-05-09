@@ -396,7 +396,7 @@ public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements I
             marker.setOnMarkerClickListener(nullMarkerListener);
             marker.setDraggable(true);
             marker.setOnMarkerDragListener(dragListener);
-            marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black_36dp));
+            marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black));
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
             mapMarkers.add(marker);
             List<GeoPoint> points = polyline.getPoints();
@@ -642,7 +642,7 @@ public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements I
             Float lastKnownAccuracy =
                     myLocationOverlay.getMyLocationProvider().getLastKnownLocation().getAccuracy();
             myLocationOverlay.getMyLocationProvider().getLastKnownLocation().getAccuracy();
-            marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black_36dp));
+            marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black));
             marker.setSubDescription(Float.toString(lastKnownAccuracy));
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
             marker.setDraggable(true);

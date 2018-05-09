@@ -12,12 +12,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/menu_item_share"
-        android:icon="@drawable/ic_menu_share"
         android:title="@string/share"
-        app:showAsAction="always" />
+        android:icon="@drawable/ic_menu_share"
+        app:showAsAction="always"
+        app:actionProviderClass="android.widget.ShareActionProvider"/>
     <item
         android:id="@+id/menu_save_preferences"
-        android:icon="@drawable/ic_save_black_32dp"
         android:title="@string/save_preferences"
-        app:showAsAction="always" />
+        android:icon="@drawable/ic_save_black"
+        app:showAsAction="always"
+        app:actionProviderClass="android.widget.ShareActionProvider"/>
 </menu>
