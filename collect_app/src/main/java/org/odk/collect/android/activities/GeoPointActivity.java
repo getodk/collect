@@ -43,7 +43,7 @@ import java.util.TimerTask;
 import timber.log.Timber;
 
 public class GeoPointActivity extends CollectAbstractActivity implements LocationListener,
-        LocationClient.LocationClientListener {
+        LocationClient.LocationClientListener, GpsStatus.Listener {
 
     // Default values for requesting Location updates.
     private static final long LOCATION_UPDATE_INTERVAL = 100;
