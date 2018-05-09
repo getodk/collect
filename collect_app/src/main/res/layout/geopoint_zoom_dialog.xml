@@ -1,10 +1,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    >
+    android:layout_height="wrap_content">
 
-    <Button
+    <android.support.v7.widget.AppCompatButton
         android:text="@string/zoom_to_location"
         android:id="@+id/zoom_location"
         android:layout_width="match_parent"
@@ -13,21 +12,22 @@
         android:visibility="visible"
         android:textColor="#ff333333"
         android:background="#50cccccc"
-        android:drawableLeft="@drawable/ic_person_pin_circle_black_36dp"
-        android:drawableStart="@drawable/ic_person_pin_circle_black_36dp"
+        android:drawableLeft="@drawable/ic_person_pin_black_wrapped"
+        android:drawableStart="@drawable/ic_person_pin_black_wrapped"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp" />
-    <Button
+
+    <android.support.v7.widget.AppCompatButton
         android:text="@string/zoom_to_feature"
         android:id="@+id/zoom_point"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="18dp"
         android:background="#50cccccc"
-        android:drawableLeft="@drawable/ic_place_black_36dp"
-        android:drawableStart="@drawable/ic_place_black_36dp"
+        android:drawableLeft="@drawable/ic_place_black_wrapped"
+        android:drawableStart="@drawable/ic_place_black_wrapped"
         android:visibility="visible"
         android:textColor="#ff333333"
         android:layout_marginLeft="20dp"

@@ -137,7 +137,6 @@
   <string name="submission_url">Luogo di consegna</string>
   <string name="font_size">Dimensione dei caratteri del testo</string>
   <string name="change_font_size">Dimensione dei caratteri del testo</string>
-  <string name="form_scan_starting">Ricerca moduli….</string>
   <string name="access_error">Errore durante l\'accesso %s: </string>
   <string name="manifest_server_error">La risposta del \'Manifest\' non si riferisce a una versione OpenRosa — server sbagliato?</string>
   <string name="root_element_error">Elemento principale non è &amp;lt;manifest\&gt; — era %s</string>
@@ -192,7 +191,6 @@
   <string name="draw_image">Bozza Immagine</string>
   <string name="reset_image">Reset</string>
   <string name="set_color">Imposta Colore</string>
-  <string name="select_drawing_color">Seleziona Colore per disegnare</string>
   <string name="admin_preferences">Impostazioni Amministratore</string>
   <string name="admin_access_settings">Regola parametri accesso dell\'Amministratore</string>
   <string name="save_mid">Salva Modulo</string>

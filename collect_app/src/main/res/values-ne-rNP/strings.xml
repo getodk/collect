@@ -136,7 +136,6 @@
   <string name="submission_url">बुझाईएको वस्तुको मार्ग</string>
   <string name="font_size">अक्षरको आकार</string>
   <string name="change_font_size">अक्षरको आकार</string>
-  <string name="form_scan_starting">फारमहरु छन् कि भनेर अवलोकन गरिदैछ…</string>
   <string name="access_error">%s मा प्रवेश गर्न खोज्दा गल्ति भयो:</string>
   <string name="manifest_server_error">म्यनिफेष्ट को प्रतिक्रियाले कुनै पनि ओपनरोजा संस्करण को जनाउ दिदैन - सर्भर बिग्रियो कि ?</string>
   <string name="root_element_error"> जड तत्वमा &lt;म्यनिफेष्ट\&gt; छैन — %s थियो </string>
@@ -191,7 +190,6 @@
   <string name="draw_image">तस्बिर कोर्नुहोस् </string>
   <string name="reset_image">पहिलाकै ठाउँमा ल्याउनुहोस् </string>
   <string name="set_color">रंग छान्नुहोस् </string>
-  <string name="select_drawing_color">चित्र बनाउनको लागि रंग छान्नुहोस् </string>
   <string name="admin_preferences">एडमिन सेटिङ्स</string>
   <string name="admin_access_settings">सेटिंग मा प्रशासक प्रवेशको लागि थिच्नुहोस्</string>
   <string name="save_mid">फारम संचित गर्नुहोस् </string>

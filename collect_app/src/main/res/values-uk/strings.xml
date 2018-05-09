@@ -142,7 +142,6 @@
   <string name="submission_url">Шлях надсилання</string>
   <string name="font_size">Розмір шрифту</string>
   <string name="change_font_size">Розмір шрифту</string>
-  <string name="form_scan_starting">Шукаю анкети…</string>
   <string name="access_error">Помилка підчас доступу до %s:</string>
   <string name="manifest_server_error">Маніфест відповідь не повідомляє версію OpenRosa — помилковий серевер?</string>
   <string name="root_element_error">Кореневий елемент не є &lt;маніфест\&gt; — був %s</string>
@@ -197,7 +196,6 @@
   <string name="draw_image">Ескіз зображення</string>
   <string name="reset_image">Скинути</string>
   <string name="set_color">Колір</string>
-  <string name="select_drawing_color">Обрати колір для малювання</string>
   <string name="admin_preferences">Адміністрування</string>
   <string name="admin_access_settings">Клікніть для адміністративного доступу до налаштувань</string>
   <string name="save_mid">Зберегти анкету</string>

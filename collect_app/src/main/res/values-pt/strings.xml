@@ -133,7 +133,6 @@
   <string name="submission_url">Caminho para submeter</string>
   <string name="font_size">Tamanho da Fonte do Texto</string>
   <string name="change_font_size">Tamanho da Fonte do Texto</string>
-  <string name="form_scan_starting">Procurando por formulários…</string>
   <string name="access_error">Erro enquanto acessa %s:</string>
   <string name="manifest_server_error">Resposta não retorna uma versão OpenRosa — servidor ruim?</string>
   <string name="root_element_error">Elemento raiz não é &amp;lt;manifest\&gt; — foi %s</string>
@@ -187,7 +186,6 @@ Escolher Imagem</string>
   <string name="draw_image">Desenhar Imagem</string>
   <string name="reset_image">Reset</string>
   <string name="set_color">Definir Cor</string>
-  <string name="select_drawing_color">Definir cor para desenhar</string>
   <string name="admin_preferences">Configurações Administrativas</string>
   <string name="admin_access_settings">Toque para acesso administrativo às configurações</string>
   <string name="save_mid">Mid-form saving</string>

@@ -24,7 +24,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateUtils;
 import android.view.Window;
 
@@ -43,8 +42,8 @@ import java.util.TimerTask;
 
 import timber.log.Timber;
 
-public class GeoPointActivity extends AppCompatActivity implements LocationListener,
-        LocationClient.LocationClientListener, GpsStatus.Listener {
+public class GeoPointActivity extends CollectAbstractActivity implements LocationListener,
+        LocationClient.LocationClientListener {
 
     // Default values for requesting Location updates.
     private static final long LOCATION_UPDATE_INTERVAL = 100;

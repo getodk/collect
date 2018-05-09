@@ -136,7 +136,6 @@
   <string name="submission_url">提交路径</string>
   <string name="font_size">字体大小</string>
   <string name="change_font_size">字体大小</string>
-  <string name="form_scan_starting">扫描表格中…</string>
   <string name="access_error">读取 %s 中发生错误:</string>
   <string name="manifest_server_error">Manifest回复中不包括OpenRosa版本 — 服务器错误?</string>
   <string name="root_element_error">根元素不是 &lt;manifest\&gt; — 而是 %s</string>
@@ -188,7 +187,6 @@
   <string name="draw_image">生成图像</string>
   <string name="reset_image">重置</string>
   <string name="set_color">选择颜色</string>
-  <string name="select_drawing_color">选择绘画颜色</string>
   <string name="admin_preferences">管理员设置</string>
   <string name="admin_access_settings">点击进入管理员设置</string>
   <string name="save_mid">保存表格</string>

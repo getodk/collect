@@ -28,7 +28,6 @@ import android.provider.MediaStore.Images;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -109,7 +108,6 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.FormDefCache;
 import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtils;
@@ -128,15 +126,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
 
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
 import static android.content.DialogInterface.BUTTON_POSITIVE;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_MOVING_BACKWARDS;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
-import static org.odk.collect.android.utilities.FormDefCache.writeCacheAsync;
 
 /**
  * FormEntryActivity is responsible for displaying questions, animating
@@ -146,7 +141,7 @@ import static org.odk.collect.android.utilities.FormDefCache.writeCacheAsync;
  * @author Thomas Smyth, Sassafras Tech Collective (tom@sassafrastech.com; constraint behavior
  *         option)
  */
-public class FormEntryActivity extends AppCompatActivity implements AnimationListener,
+public class FormEntryActivity extends CollectAbstractActivity implements AnimationListener,
         FormLoaderListener, FormSavedListener, AdvanceToNextListener,
         OnGestureListener, SavePointListener, NumberPickerDialog.NumberPickerListener,
         DependencyProvider<ActivityAvailability>,
@@ -251,8 +246,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private ActivityAvailability activityAvailability = new ActivityAvailability(this);
 
     private boolean shouldOverrideAnimations = false;
-
-    private final CompositeDisposable formDefCacheCompositeDisposable = new CompositeDisposable();
 
     /**
      * Called when the activity is first created.
@@ -728,7 +721,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             case RequestCodes.AUDIO_CAPTURE:
             case RequestCodes.VIDEO_CAPTURE:
                 Uri mediaUri = intent.getData();
-                saveAudioVideoAnswer(mediaUri);
+                saveFileAnswer(mediaUri);
                 String filePath = MediaUtils.getDataColumn(this, mediaUri, null, null);
                 if (filePath != null) {
                     new File(filePath).delete();
@@ -740,10 +733,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 }
                 break;
 
-
+            case RequestCodes.ARBITRARY_FILE_CHOOSER:
             case RequestCodes.AUDIO_CHOOSER:
             case RequestCodes.VIDEO_CHOOSER:
-                saveAudioVideoAnswer(intent.getData());
+                saveFileAnswer(intent.getData());
                 break;
             case RequestCodes.LOCATION_CAPTURE:
                 String sl = intent.getStringExtra(LOCATION_RESULT);
@@ -820,7 +813,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
     private QuestionWidget getWidgetWaitingForBinaryData() {
         QuestionWidget questionWidget = null;
-        for (QuestionWidget qw :  ((ODKView) currentView).getWidgets()) {
+        for (QuestionWidget qw : ((ODKView) currentView).getWidgets()) {
             if (qw.isWaitingForData()) {
                 questionWidget = qw;
             }
@@ -829,7 +822,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         return questionWidget;
     }
 
-    private void saveAudioVideoAnswer(Uri media) {
+    private void saveFileAnswer(Uri media) {
         // For audio/video capture/chooser, we get the URI from the content
         // provider
         // then the widget copies the file and makes a new entry in the
@@ -867,10 +860,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     public boolean onCreateOptionsMenu(Menu menu) {
         Collect.getInstance().getActivityLogger()
                 .logInstanceAction(this, "onCreateOptionsMenu", "show");
-        super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.form_menu, menu);
-
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -935,6 +926,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 }
 
                 if (formController != null) {
+                    formController.getTimerLogger().exitView();
                     formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.HIERARCHY,
                             0, null, false, true);
                 }
@@ -1881,10 +1873,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
         List<IconMenuItem> items;
         if ((boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_SAVE_MID)) {
-            items = ImmutableList.of(new IconMenuItem(R.drawable.ic_save_grey_32dp_wrapped, R.string.keep_changes),
-                    new IconMenuItem(R.drawable.ic_delete_grey_32dp_wrapped, R.string.do_not_save));
+            items = ImmutableList.of(new IconMenuItem(R.drawable.ic_save_grey_32dp, R.string.keep_changes),
+                    new IconMenuItem(R.drawable.ic_delete_grey_32dp, R.string.do_not_save));
         } else {
-            items = ImmutableList.of(new IconMenuItem(R.drawable.ic_delete_grey_32dp_wrapped, R.string.do_not_save));
+            items = ImmutableList.of(new IconMenuItem(R.drawable.ic_delete_grey_32dp, R.string.do_not_save));
         }
 
         Collect.getInstance().getActivityLogger()
@@ -2315,7 +2307,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             }
         }
         releaseOdkView();
-        formDefCacheCompositeDisposable.dispose();
         super.onDestroy();
 
     }
@@ -2449,8 +2440,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             Intent reqIntent = getIntent();
             boolean showFirst = reqIntent.getBooleanExtra("start", false);
 
-            formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_RESUME, 0, null, false, true);
-
             if (!showFirst) {
                 // we've just loaded a saved form, so start in the hierarchy view
 
@@ -2465,6 +2454,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
                 String formMode = reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
                 if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
+                    formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_RESUME, 0, null, false, true);
+                    formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.HIERARCHY, 0, null, false, true);
                     startActivity(new Intent(this, EditFormHierarchyActivity.class));
                     return; // so we don't show the intro screen before jumping to the hierarchy
                 } else {
@@ -2473,22 +2464,12 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     }
                     finish();
                 }
+            } else {
+                formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_RESUME, 0, null, false, true);
             }
         }
 
         refreshCurrentView();
-
-        if (formDef != null) {
-            final File cachedFormDefFile = FormDefCache.getCacheFile(new File(formPath));
-
-            if (cachedFormDefFile.exists()) {
-                Timber.i("FormDef %s is already in the cache", cachedFormDefFile.toString());
-            } else {
-                Disposable formDefCacheDisposable =
-                        writeCacheAsync(formDef, cachedFormDefFile).subscribe(() -> { }, Timber::e);
-                formDefCacheCompositeDisposable.add(formDefCacheDisposable);
-            }
-        }
     }
 
     /**
@@ -2550,6 +2531,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 break;
             case FormEntryController.ANSWER_CONSTRAINT_VIOLATED:
             case FormEntryController.ANSWER_REQUIRED_BUT_EMPTY:
+                formController.getTimerLogger().exitView();
                 formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.CONSTRAINT_ERROR, 0, null, false, true);
                 refreshCurrentView();
 
