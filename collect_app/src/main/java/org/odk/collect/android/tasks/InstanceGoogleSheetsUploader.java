@@ -312,7 +312,6 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     }
 
 
-
     // Ignore rows with all empty answers added by a user and extra repeatable groups added
     // by Javarosa https://github.com/opendatakit/javarosa/issues/266
     private boolean shouldRowBeInserted(HashMap<String, String> answers) {
@@ -467,6 +466,8 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         if (columnTitles.contains(altitudeTitle)) {
             geoFieldsMap.put(altitudeTitle, altitudeStr);
         }
+
+        geoData = geoData.replace(' ', ',');
 
         // Put the modified geo location (Just lat/long) into the geo fields Map
         geoFieldsMap.put(elementTitle, geoData);
