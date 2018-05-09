@@ -115,12 +115,15 @@ public final class WebUtils {
 
     private static WebUtils instance;
 
+    private CollectHttpConnection httpConnection;
+
     private CredentialsProvider credentialsProvider;
     private CookieStore cookieStore;
 
     private WebUtils() {
         credentialsProvider = new WebUtils.AgingCredentialsProvider(7 * 60 * 1000);
         cookieStore = new BasicCookieStore();
+        httpConnection = new ClientHttpConnection();
     }
 
     private static synchronized WebUtils getInstance() {
@@ -411,89 +414,35 @@ public final class WebUtils {
             throw new Exception("Invalid server URL (no hostname): " + downloadUrl);
         }
 
-        CollectHttpConnection httpConnection = createHttpConnection();
-
-
-        InputStream downloadStream = httpConnection.getInputStream(uri, contentType, WebUtils.CONNECTION_TIMEOUT);
-
-
-        HttpContext localContext = getHttpContext();
-        HttpClient httpclient = createHttpClient(WebUtils.CONNECTION_TIMEOUT);
-
-        // if https then enable preemptive basic auth...
-        if (uri.getScheme().equals("https")) {
-            enablePreemptiveBasicAuth(localContext, uri.getHost());
-        }
-
-        // set up request...
-        HttpGet req = createOpenRosaHttpGet(uri);
-        req.addHeader(WebUtils.ACCEPT_ENCODING_HEADER, WebUtils.GZIP_CONTENT_ENCODING);
-
-        HttpResponse response;
-
-        response = httpclient.execute(req, localContext);
-        int statusCode = response.getStatusLine().getStatusCode();
-
-        if (statusCode != HttpStatus.SC_OK) {
-            WebUtils.discardEntityBytes(response);
-            if (statusCode == HttpStatus.SC_UNAUTHORIZED) {
-                // clear the cookies -- should not be necessary?
-                WebUtils.getInstance().getCookieStore().clear();
-            }
-            String errMsg =
-                    Collect.getInstance().getString(R.string.file_fetch_failed, downloadUrl,
-                            response.getStatusLine().getReasonPhrase(), String.valueOf(statusCode));
-            Timber.e(errMsg);
-            throw new Exception(errMsg);
-        }
-
-        HttpEntity entity = response.getEntity();
-
-        if (entity == null) {
-            throw new Exception("No entity body returned from: " + downloadUrl);
-        }
-
-        if (contentType != null && contentType.length()>0) {
-            if (!entity.getContentType().getValue().toLowerCase(Locale.ENGLISH).contains(contentType)) {
-                WebUtils.discardEntityBytes(response);
-                String error = "ContentType: "
-                        + entity.getContentType().getValue()
-                        + " returned from: "
-                        + downloadUrl
-                        + " is not " + contentType + ".  This is often caused a network proxy.  Do you need "
-                        + "to login to your network?";
-
-                throw new Exception(error);
-            }
-        }
-
-        downloadStream = entity.getContent();
-        Header contentEncoding = entity.getContentEncoding();
-        if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase(WebUtils.GZIP_CONTENT_ENCODING)) {
-            downloadStream = new GZIPInputStream(downloadStream);
-        }
+        Map<String, String> responseHeaders = new HashMap<String, String>();
+        CollectHttpConnection httpConnection = WebUtils.getInstance().getHttpConnection();
+        InputStream downloadStream = httpConnection.getInputStream(uri, contentType, WebUtils.CONNECTION_TIMEOUT, responseHeaders);
 
         boolean openRosaResponse = false;
-        Header[] fields = response.getHeaders(WebUtils.OPEN_ROSA_VERSION_HEADER);
 
-        if (fields != null && fields.length >= 1) {
-            openRosaResponse = true;
+        if (!responseHeaders.isEmpty()) {
+
             boolean versionMatch = false;
             boolean first = true;
-            StringBuilder b = new StringBuilder();
-            for (Header h : fields) {
-                if (WebUtils.OPEN_ROSA_VERSION.equals(h.getValue())) {
-                    versionMatch = true;
-                    break;
+
+            StringBuilder appendedVersions = new StringBuilder();
+
+            for (String key : responseHeaders.keySet()) {
+                if (key.equals(WebUtils.OPEN_ROSA_VERSION_HEADER)) {
+                    openRosaResponse = true;
+                    if (WebUtils.OPEN_ROSA_VERSION.equals(responseHeaders.get(key))) {
+                        versionMatch = true;
+                        break;
+                    }
+                    if (!first) {
+                        appendedVersions.append("; ");
+                    }
+                    first = false;
+                    appendedVersions.append(responseHeaders.get(key));
                 }
-                if (!first) {
-                    b.append("; ");
-                }
-                first = false;
-                b.append(h.getValue());
             }
             if (!versionMatch) {
-                Timber.w("%s unrecognized version(s): %s", WebUtils.OPEN_ROSA_VERSION_HEADER, b.toString());
+                Timber.w("%s unrecognized version(s): %s", WebUtils.OPEN_ROSA_VERSION_HEADER, appendedVersions.toString());
             }
         }
 
@@ -506,6 +455,10 @@ public final class WebUtils {
 
     public CookieStore getCookieStore() {
         return cookieStore;
+    }
+
+    public CollectHttpConnection getHttpConnection() {
+        return httpConnection;
     }
 
     /**
@@ -1060,10 +1013,6 @@ public final class WebUtils {
         public boolean isOpenRosaResponse() {
             return openRosaResponse;
         }
-    }
-
-    public static CollectHttpConnection createHttpConnection() {
-        return new ClientHttpConnection();
     }
 
 }

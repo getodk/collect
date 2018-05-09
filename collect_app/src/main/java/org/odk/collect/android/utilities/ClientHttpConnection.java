@@ -65,7 +65,7 @@ public class ClientHttpConnection implements CollectHttpConnection {
     }
 
     @Override
-    public InputStream getInputStream(@NonNull URI uri, String contentType, final int connectionTimeout, Map<String,String> responseHeadsers) throws Exception {
+    public InputStream getInputStream(@NonNull URI uri, String contentType, final int connectionTimeout, Map<String,String> responseHeaders) throws Exception {
         HttpContext localContext = getHttpContext();
         HttpClient httpclient = createHttpClient(connectionTimeout);
 
@@ -109,7 +109,7 @@ public class ClientHttpConnection implements CollectHttpConnection {
                         + entity.getContentType().getValue()
                         + " returned from: "
                         + uri.toString()
-                        + " is not " + contentType + ".  This is often caused a network proxy.  Do you need "
+                        + " is not " + contentType + ".  This is often caused by a network proxy.  Do you need "
                         + "to login to your network?";
 
                 throw new Exception(error);
@@ -122,14 +122,17 @@ public class ClientHttpConnection implements CollectHttpConnection {
             downloadStream = new GZIPInputStream(downloadStream);
         }
 
-        // TODO: response headers
+        if (responseHeaders != null) {
+            Header[] fields = response.getAllHeaders();
+
+            if (fields != null && fields.length >= 1) {
+                for (Header h : fields) {
+                    responseHeaders.put(h.getName(), h.getValue());
+                }
+            }
+        }
 
         return downloadStream;
-    }
-
-    @Override
-    public Map<String, String> getHeaders() {
-        return null;
     }
 
     @Override

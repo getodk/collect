@@ -9,8 +9,6 @@ public interface CollectHttpConnection {
 
     InputStream getInputStream(@NonNull URI uri, final String contentType, final int connectionTimeout, Map<String, String> responseHeaders) throws Exception;
 
-    Map<String, String> getHeaders();
-
     void clearCookieStore();
 
     void clearHostCredentials(String host);
