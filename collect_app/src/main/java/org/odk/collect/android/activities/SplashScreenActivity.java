@@ -57,6 +57,8 @@ public class SplashScreenActivity extends Activity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        // this splash screen should be a blank slate
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
 
         requestStoragePermissions(this, new PermissionListener() {
@@ -85,8 +87,7 @@ public class SplashScreenActivity extends Activity {
     private void init() {
         DisplayMetrics displayMetrics = getApplicationContext().getResources().getDisplayMetrics();
         imageMaxWidth = displayMetrics.widthPixels;
-        // this splash screen should be a blank slate
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         setContentView(R.layout.splash_screen);
 
         // get the shared preferences object
