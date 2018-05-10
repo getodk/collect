@@ -1,21 +1,25 @@
 package org.odk.collect.android.utilities;
 
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.text.format.DateFormat;
 
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.opendatakit.httpclientandroidlib.Header;
 import org.opendatakit.httpclientandroidlib.HttpEntity;
 import org.opendatakit.httpclientandroidlib.HttpHost;
 import org.opendatakit.httpclientandroidlib.HttpRequest;
 import org.opendatakit.httpclientandroidlib.HttpResponse;
 import org.opendatakit.httpclientandroidlib.HttpStatus;
+import org.opendatakit.httpclientandroidlib.NoHttpResponseException;
 import org.opendatakit.httpclientandroidlib.auth.AuthScope;
 import org.opendatakit.httpclientandroidlib.auth.Credentials;
 import org.opendatakit.httpclientandroidlib.auth.UsernamePasswordCredentials;
 import org.opendatakit.httpclientandroidlib.client.AuthCache;
+import org.opendatakit.httpclientandroidlib.client.ClientProtocolException;
 import org.opendatakit.httpclientandroidlib.client.CookieStore;
 import org.opendatakit.httpclientandroidlib.client.CredentialsProvider;
 import org.opendatakit.httpclientandroidlib.client.HttpClient;
@@ -23,8 +27,10 @@ import org.opendatakit.httpclientandroidlib.client.config.AuthSchemes;
 import org.opendatakit.httpclientandroidlib.client.config.CookieSpecs;
 import org.opendatakit.httpclientandroidlib.client.config.RequestConfig;
 import org.opendatakit.httpclientandroidlib.client.methods.HttpGet;
+import org.opendatakit.httpclientandroidlib.client.methods.HttpHead;
 import org.opendatakit.httpclientandroidlib.client.protocol.HttpClientContext;
 import org.opendatakit.httpclientandroidlib.config.SocketConfig;
+import org.opendatakit.httpclientandroidlib.conn.ConnectTimeoutException;
 import org.opendatakit.httpclientandroidlib.impl.auth.BasicScheme;
 import org.opendatakit.httpclientandroidlib.impl.client.BasicAuthCache;
 import org.opendatakit.httpclientandroidlib.impl.client.BasicCookieStore;
@@ -34,7 +40,11 @@ import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.net.URI;
+import java.net.URLDecoder;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -54,6 +64,7 @@ public class ClientHttpConnection implements CollectHttpConnection {
     private static final String DATE_HEADER = "Date";
     private static final String ACCEPT_ENCODING_HEADER = "Accept-Encoding";
     private static final String GZIP_CONTENT_ENCODING = "gzip";
+    public static final int CONNECTION_TIMEOUT = 30000;
 
 
     private CredentialsProvider credentialsProvider;
@@ -133,6 +144,64 @@ public class ClientHttpConnection implements CollectHttpConnection {
         }
 
         return downloadStream;
+    }
+
+    @Override
+    public int httpHeadRequest(@NonNull URI uri, Map<String, String> responseHeaders) throws Exception {
+        HttpContext localContext = getHttpContext();
+        HttpClient httpclient = createHttpClient(CONNECTION_TIMEOUT);
+        HttpHead httpHead = createOpenRosaHttpHead(uri);
+
+        // if https then enable preemptive basic auth...
+        if (uri.getScheme() != null && uri.getScheme().equals("https")) {
+            enablePreemptiveBasicAuth(localContext, uri.getHost());
+        }
+
+        final HttpResponse response;
+
+        int statusCode = 0;
+
+        try {
+            response = httpclient.execute(httpHead, localContext);
+            statusCode = response.getStatusLine().getStatusCode();
+            if (statusCode == HttpStatus.SC_UNAUTHORIZED) {
+                getCookieStore().clear();
+
+            } else if (statusCode == HttpStatus.SC_NO_CONTENT) {
+                for (Header head : response.getAllHeaders()) {
+                    responseHeaders.put(head.getName(), head.getValue());
+                }
+            }
+
+            discardEntityBytes(response);
+
+        } catch (ClientProtocolException | ConnectTimeoutException | UnknownHostException | SocketTimeoutException | NoHttpResponseException | SocketException e) {
+            String errorMessage;
+
+            if (e instanceof ClientProtocolException) {
+                errorMessage = "Client Protocol Exception";
+            } else if (e instanceof ConnectTimeoutException) {
+                errorMessage = "Connection Timeout";
+            } else if (e instanceof UnknownHostException) {
+                errorMessage = e.toString() + " :: Network Connection Failed";
+            } else if (e instanceof SocketTimeoutException) {
+                errorMessage = "Connection Timeout";
+            } else {
+                errorMessage = "Network Connection Refused";
+            }
+
+            throw new Exception(errorMessage);
+
+        } catch (Exception e) {
+            String msg = e.getMessage();
+            if (msg == null) {
+                msg = e.toString();
+            }
+
+            throw new Exception("Generic Exception: " + msg);
+        }
+
+        return statusCode;
     }
 
     @Override
@@ -318,4 +387,12 @@ public class ClientHttpConnection implements CollectHttpConnection {
             }
         }
     }
+
+    private static HttpHead createOpenRosaHttpHead(URI uri) {
+        HttpHead req = new HttpHead(uri);
+        setCollectHeaders(req);
+        setOpenRosaHeaders(req);
+        return req;
+    }
+
 }

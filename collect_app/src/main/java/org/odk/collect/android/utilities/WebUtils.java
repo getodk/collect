@@ -26,7 +26,6 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.provider.InstanceProviderAPI;
-import org.opendatakit.httpclientandroidlib.Header;
 import org.opendatakit.httpclientandroidlib.HttpEntity;
 import org.opendatakit.httpclientandroidlib.HttpHost;
 import org.opendatakit.httpclientandroidlib.HttpRequest;
@@ -37,7 +36,6 @@ import org.opendatakit.httpclientandroidlib.auth.AuthScope;
 import org.opendatakit.httpclientandroidlib.auth.Credentials;
 import org.opendatakit.httpclientandroidlib.auth.UsernamePasswordCredentials;
 import org.opendatakit.httpclientandroidlib.client.AuthCache;
-import org.opendatakit.httpclientandroidlib.client.ClientProtocolException;
 import org.opendatakit.httpclientandroidlib.client.CredentialsProvider;
 import org.opendatakit.httpclientandroidlib.client.HttpClient;
 import org.opendatakit.httpclientandroidlib.client.config.AuthSchemes;
@@ -503,7 +501,7 @@ public final class WebUtils {
     }
 
 
-    private static List<File> getFilesInParentDirectory(File instanceFile, File submissionFile, Boolean openRosaServer) {
+    private static List<File> getFilesInParentDirectory(File instanceFile, File submissionFile, boolean openRosaServer) {
         List<File> files = new ArrayList<File>();
 
         // find all files in parent directory
@@ -592,11 +590,6 @@ public final class WebUtils {
                 return true;
             }
 
-            // if https then enable preemptive basic auth...
-            if (submissionUri.getScheme() != null && submissionUri.getScheme().equals("https")) {
-                WebUtils.enablePreemptiveBasicAuth(localContext, submissionUri.getHost());
-            }
-
             URI uri;
             try {
                 uri = URI.create(submissionUri.toString());
@@ -606,34 +599,19 @@ public final class WebUtils {
                 return false;
             }
 
-            // Issue a head request to confirm the server is an OpenRosa server and see if auth
-            // is required
-            // http://docs.opendatakit.org/openrosa-form-submission/#extended-transmission-considerations
-            HttpHead httpHead = WebUtils.createOpenRosaHttpHead(uri);
 
-            // prepare response
-            final HttpResponse response;
             try {
-                Timber.i("Issuing HEAD request for %s to: %s", id, submissionUri.toString());
+                CollectHttpConnection connection = getInstance().getHttpConnection();
+                Map<String, String> responseHeaders = new HashMap<String, String>();
+                int statusCode = connection.httpHeadRequest(uri, responseHeaders);
 
-                response = httpclient.execute(httpHead, localContext);
-                int statusCode = response.getStatusLine().getStatusCode();
                 if (statusCode == HttpStatus.SC_UNAUTHORIZED) {
-                    // clear the cookies -- should not be necessary?
-                    WebUtils.getInstance().getCookieStore().clear();
-
-                    WebUtils.discardEntityBytes(response);
-                    // we need authentication, so stop and return what we've
-                    // done so far.
                     outcome.authRequestingServer = submissionUri;
                     return false;
-                } else if (statusCode == 204) {
-                    Header[] locations = response.getHeaders("Location");
-                    WebUtils.discardEntityBytes(response);
-                    if (locations != null && locations.length == 1) {
+                } else if (statusCode == HttpStatus.SC_NO_CONTENT) {
+                    if (responseHeaders.containsKey("Location")) {
                         try {
-                            Uri newURI = Uri.parse(
-                                    URLDecoder.decode(locations[0].getValue(), "utf-8"));
+                            Uri newURI = Uri.parse(URLDecoder.decode(responseHeaders.get("Location"), "utf-8"));
                             if (submissionUri.getHost().equalsIgnoreCase(newURI.getHost())) {
                                 openRosaServer = true;
                                 // trust the server to tell us a new location
@@ -671,10 +649,8 @@ public final class WebUtils {
                             return true;
                         }
                     }
-                } else {
-                    // may be a server that does not handle
-                    WebUtils.discardEntityBytes(response);
 
+                } else {
                     Timber.w("Status code on Head request: %d", statusCode);
                     if (statusCode >= HttpStatus.SC_OK
                             && statusCode < HttpStatus.SC_MULTIPLE_CHOICES) {
@@ -690,32 +666,14 @@ public final class WebUtils {
                         return true;
                     }
                 }
-            } catch (ClientProtocolException | ConnectTimeoutException | UnknownHostException | SocketTimeoutException | NoHttpResponseException | SocketException e) {
-                if (e instanceof ClientProtocolException) {
-                    outcome.messagesByInstanceId.put(id, fail + "Client Protocol Exception");
-                    Timber.i(e, "Client Protocol Exception");
-                } else if (e instanceof ConnectTimeoutException) {
-                    outcome.messagesByInstanceId.put(id, fail + "Connection Timeout");
-                    Timber.i(e, "Connection Timeout");
-                } else if (e instanceof UnknownHostException) {
-                    outcome.messagesByInstanceId.put(id, fail + e.toString() + " :: Network Connection Failed");
-                    Timber.i(e, "Network Connection Failed");
-                } else if (e instanceof SocketTimeoutException) {
-                    outcome.messagesByInstanceId.put(id, fail + "Connection Timeout");
-                    Timber.i(e, "Connection timeout");
-                } else {
-                    outcome.messagesByInstanceId.put(id, fail + "Network Connection Refused");
-                    Timber.i(e, "Network Connection Refused");
-                }
-                contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
-                Collect.getInstance().getContentResolver().update(toUpdate, contentValues, null, null);
-                return true;
+
             } catch (Exception e) {
                 String msg = e.getMessage();
                 if (msg == null) {
                     msg = e.toString();
                 }
-                outcome.messagesByInstanceId.put(id, fail + "Generic Exception: " + msg);
+
+                outcome.messagesByInstanceId.put(id, fail + msg);
                 Timber.e(e);
                 contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                 Collect.getInstance().getContentResolver().update(toUpdate, contentValues, null, null);
