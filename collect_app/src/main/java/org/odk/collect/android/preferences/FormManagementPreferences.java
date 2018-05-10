@@ -25,6 +25,7 @@ import org.odk.collect.android.R;
 import static org.odk.collect.android.preferences.AdminKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOSEND;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_CONSTRAINT_BEHAVIOR;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_GUIDANCE_HINT;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_IMAGE_SIZE;
 
 public class FormManagementPreferences extends BasePreferenceFragment {
@@ -37,6 +38,7 @@ public class FormManagementPreferences extends BasePreferenceFragment {
         initConstraintBehaviorPref();
         initAutoSendPrefs();
         initImageSizePrefs();
+        initGuidancePrefs();
     }
 
     @Override
@@ -112,4 +114,25 @@ public class FormManagementPreferences extends BasePreferenceFragment {
             }
         });
     }
+
+
+    private void initGuidancePrefs() {
+        final ListPreference guidance = (ListPreference) findPreference(KEY_GUIDANCE_HINT);
+
+        if (guidance == null) {
+            return;
+        }
+
+        guidance.setSummary(guidance.getEntry());
+        guidance.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
+                String entry = (String) ((ListPreference) preference).getEntries()[index];
+                preference.setSummary(entry);
+                return true;
+            }
+        });
+    }
+
 }
