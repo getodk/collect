@@ -7,6 +7,8 @@ import com.evernote.android.job.JobRequest;
 import com.evernote.android.job.util.support.PersistableBundleCompat;
 
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.events.Event;
+import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.jobs.SmsSenderJob;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.tasks.sms.models.Message;
@@ -27,6 +29,7 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.tasks.sms.SmsPendingIntents.checkIfSentIntentExists;
 import static org.odk.collect.android.utilities.FileUtil.getFileContents;
+import static org.odk.collect.android.utilities.FileUtil.getSmsInstancePath;
 
 /**
  * Core class that contains all the business logic and services that are utilized to send,track
@@ -38,13 +41,15 @@ public class SmsService {
     private SmsSubmissionManagerContract smsSubmissionManager;
     private InstancesDao instancesDao;
     private Context context;
+    private RxEventBus rxEventBus;
 
     @Inject
-    public SmsService(SmsManager smsManager, SmsSubmissionManagerContract smsSubmissionManager, InstancesDao instancesDao, Context context) {
+    public SmsService(SmsManager smsManager, SmsSubmissionManagerContract smsSubmissionManager, InstancesDao instancesDao, Context context, RxEventBus rxEventBus) {
         this.smsManager = smsManager;
         this.smsSubmissionManager = smsSubmissionManager;
         this.instancesDao = instancesDao;
         this.context = context;
+        this.rxEventBus = rxEventBus;
     }
 
     /**
@@ -57,7 +62,7 @@ public class SmsService {
     public boolean submitForm(String instanceId, String instanceFilePath) {
         String text;
         try {
-            text = getFileContents(new File(instanceFilePath));
+            text = getFileContents(new File(getSmsInstancePath(instanceFilePath)));
         } catch (IOException e) {
 
             Timber.e(e);
@@ -143,8 +148,8 @@ public class SmsService {
             return;
         }
 
-
         if (sentMessageResult.getMessageStatus().equals(MessageStatus.Sent)) {
+            rxEventBus.post(new Event());
             addMessageJobToQueue(sentMessageResult.getInstanceId());
         }
     }

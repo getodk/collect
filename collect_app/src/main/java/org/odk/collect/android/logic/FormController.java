@@ -38,6 +38,7 @@ import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryModel;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.javarosa.model.xform.SMSSerializingVisitor;
 import org.javarosa.model.xform.XFormSerializingVisitor;
 import org.javarosa.model.xform.XFormsModule;
 import org.javarosa.model.xform.XPathReference;
@@ -89,7 +90,7 @@ public class FormController {
 
     /**
      * OpenRosa metadata of a form instance.
-     *
+     * <p>
      * Contains the values for the required metadata
      * fields and nothing else.
      *
@@ -439,7 +440,7 @@ public class FormController {
         boolean isFirstQuestion = true;
         FormIndex originalFormIndex = getFormIndex();
         try {
-            isFirstQuestion =  stepToPreviousScreenEvent() == FormEntryController.EVENT_BEGINNING_OF_FORM
+            isFirstQuestion = stepToPreviousScreenEvent() == FormEntryController.EVENT_BEGINNING_OF_FORM
                     && stepToNextScreenEvent() != FormEntryController.EVENT_PROMPT_NEW_REPEAT;
         } catch (JavaRosaException e) {
             Timber.d(e);
@@ -555,8 +556,8 @@ public class FormController {
                         || event == FormEntryController.EVENT_PROMPT_NEW_REPEAT
                         || (event == FormEntryController.EVENT_QUESTION && indexIsInFieldList())
                         || ((event == FormEntryController.EVENT_GROUP
-                                || event == FormEntryController.EVENT_REPEAT)
-                                && !indexIsInFieldList())) {
+                        || event == FormEntryController.EVENT_REPEAT)
+                        && !indexIsInFieldList())) {
                     event = stepToPreviousEvent();
                 }
 
@@ -619,7 +620,7 @@ public class FormController {
                             break;
                         default:
                             Timber.w("JavaRosa added a new EVENT type and didn't tell us... shame "
-                                            + "on them.");
+                                    + "on them.");
                             break;
                     }
                 } while (event != FormEntryController.EVENT_END_OF_FORM);
@@ -842,7 +843,9 @@ public class FormController {
         return questions;
     }
 
-    /** Recursively gets all indices contained in this group and its children */
+    /**
+     * Recursively gets all indices contained in this group and its children
+     */
     private List<FormIndex> getIndicesForGroup(GroupDef gd) {
         return getIndicesForGroup(gd,
                 formEntryController.getModel().incrementIndex(getFormIndex(), true));
@@ -1167,6 +1170,19 @@ public class FormController {
         }
 
         return new InstanceMetadata(instanceId, instanceName, audit);
+    }
+
+    /**
+     * Constructs the SMS payload for a filled-in form instance. This payload
+     * does not enable a filled-in form to be re-opened and edited.
+     *
+     * @return ByteArrayPayload this can be converted back to a string when necessary.
+     * @throws IOException for some reason any error took place during serialization.
+     */
+    public ByteArrayPayload getFilledInFormSMS() throws IOException {
+        FormInstance dataModel = getInstance();
+        SMSSerializingVisitor serializer = new SMSSerializingVisitor();
+        return (ByteArrayPayload) serializer.createSerializedPayload(dataModel);
     }
 
 }

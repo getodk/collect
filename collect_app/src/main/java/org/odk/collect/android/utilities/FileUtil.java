@@ -47,4 +47,12 @@ public class FileUtil {
 
         return stringBuilder.toString();
     }
+
+    public static String getSmsInstancePath(String instancePath) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(instancePath)
+                .append("_sms.txt");
+
+        return builder.toString();
+    }
 }

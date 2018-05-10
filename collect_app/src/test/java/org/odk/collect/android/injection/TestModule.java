@@ -5,6 +5,7 @@ import android.content.Context;
 import android.telephony.SmsManager;
 
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.injection.config.scopes.PerApplication;
 import org.odk.collect.android.tasks.sms.SmsSubmissionManagerImpl;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
@@ -44,6 +45,12 @@ public class TestModule {
     @Provides
     Context context(Application application) {
         return application;
+    }
+
+    @PerApplication
+    @Provides
+    RxEventBus provideRxEventBus() {
+        return new RxEventBus();
     }
 
     @PerApplication

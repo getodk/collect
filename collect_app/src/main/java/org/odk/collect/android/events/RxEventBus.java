@@ -1,5 +1,7 @@
 package org.odk.collect.android.events;
 
+import android.support.annotation.NonNull;
+
 import com.jakewharton.rxrelay2.PublishRelay;
 import com.jakewharton.rxrelay2.Relay;
 
@@ -17,11 +19,12 @@ public class RxEventBus {
 
     /**
      * Registers for a particular event and returns an observable for subscription.
+     *
      * @param eventClass the event
-     * @param <T> the class type of the event
+     * @param <T>        the class type of the event
      * @return observable that can be subscribed to.
      */
-    public <T> Observable<T> register(Class<T> eventClass) {
+    public <T> Observable<T> register(@NonNull Class<T> eventClass) {
         return busSubject
                 .filter(event -> event.getClass().equals(eventClass))
                 .map(obj -> (T) obj);
@@ -29,9 +32,10 @@ public class RxEventBus {
 
     /**
      * Sends an event to all the observers who have registered to receive the event type.
+     *
      * @param event an Event of any type.
      */
-    public void post(Object event) {
+    public void post(@NonNull Object event) {
         busSubject.accept(event);
     }
 
