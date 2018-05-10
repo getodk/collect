@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.injection.DaggerTestComponent;
 import org.odk.collect.android.injection.TestComponent;
 import org.odk.collect.android.sms.base.BaseSmsTest;
@@ -33,6 +34,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.odk.collect.android.utilities.FileUtil.getSmsInstancePath;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
@@ -44,6 +46,8 @@ public class SmsServiceTest extends BaseSmsTest {
     StubSmsService smsService;
     @Mock
     InstancesDao instancesDao;
+    @Inject
+    RxEventBus eventBus;
 
     @Before
     public void setUp() {
@@ -57,7 +61,7 @@ public class SmsServiceTest extends BaseSmsTest {
 
         setDefaultGateway();
 
-        smsService = new StubSmsService(smsManager, submissionManager, instancesDao, RuntimeEnvironment.application);
+        smsService = new StubSmsService(smsManager, submissionManager, instancesDao, RuntimeEnvironment.application, eventBus);
     }
 
     @Test
@@ -65,13 +69,14 @@ public class SmsServiceTest extends BaseSmsTest {
 
         File dir = RuntimeEnvironment.application.getFilesDir();
 
-        File file = new File(dir + "/test_instance.txt");
+        String instancePath = dir + "/test_instance";
+        File file = new File(getSmsInstancePath(instancePath));
 
         String form = "+FN John +LN Doe +CTY London +G Male +ROLE Contractor +PIC image_243.png";
 
         writeFormToFile(form, file);
 
-        assertTrue(smsService.submitForm(SampleData.TEST_INSTANCE_ID, file.getAbsolutePath()));
+        assertTrue(smsService.submitForm(SampleData.TEST_INSTANCE_ID, instancePath));
 
         ShadowSmsManager.TextSmsParams params = shadowOf(smsManager).getLastSentTextMessageParams();
 
@@ -99,8 +104,8 @@ public class SmsServiceTest extends BaseSmsTest {
 
     class StubSmsService extends SmsService {
 
-        StubSmsService(SmsManager smsManager, SmsSubmissionManagerContract smsSubmissionManager, InstancesDao instancesDao, Context context) {
-            super(smsManager, smsSubmissionManager, instancesDao, context);
+        StubSmsService(SmsManager smsManager, SmsSubmissionManagerContract smsSubmissionManager, InstancesDao instancesDao, Context context, RxEventBus rxEventBus) {
+            super(smsManager, smsSubmissionManager, instancesDao, context, rxEventBus);
         }
 
         /**
