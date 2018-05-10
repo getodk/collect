@@ -300,7 +300,7 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity impl
                     case FormEntryController.EVENT_QUESTION:
 
                         FormEntryPrompt fp = formController.getQuestionPrompt();
-                        String label = fp.getLongText();
+                        String label = getLabel(fp);
                         if (!fp.isReadOnly() || (label != null && label.length() > 0)) {
                             // show the question if it is an editable field.
                             // or if it is read-only and the label is not blank.
@@ -333,17 +333,17 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity impl
                         if (fc.getMultiplicity() == 0) {
                             // Display the repeat header for the group.
                             HierarchyElement group =
-                                    new HierarchyElement(fc.getLongText(), null, ContextCompat
+                                    new HierarchyElement(getLabel(fc), null, ContextCompat
                                             .getDrawable(getApplicationContext(), R.drawable.expander_ic_minimized),
                                             COLLAPSED, fc.getIndex());
                             formList.add(group);
                         }
-                        String repeatLabel = mIndent + fc.getLongText();
+                        String repeatLabel = mIndent + getLabel(fc);
                         if (fc.getFormElement().getChildren().size() == 1 && fc.getFormElement().getChild(0) instanceof GroupDef) {
                             formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
                             FormEntryCaption fc2 = formController.getCaptionPrompt();
-                            if (fc2.getLongText() != null) {
-                                repeatLabel = fc2.getLongText();
+                            if (getLabel(fc2) != null) {
+                                repeatLabel = getLabel(fc2);
                             }
                         }
                         repeatLabel += " (" + (fc.getMultiplicity() + 1) + ")";
@@ -397,5 +397,10 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity impl
         alertDialog.setCancelable(false);
         alertDialog.setButton(getString(R.string.ok), errorListener);
         alertDialog.show();
+    }
+
+    private String getLabel(FormEntryCaption formEntryCaption) {
+        return formEntryCaption.getShortText() != null && !formEntryCaption.getShortText().isEmpty()
+                ? formEntryCaption.getShortText() : formEntryCaption.getLongText();
     }
 }
