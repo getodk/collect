@@ -57,9 +57,9 @@ public class SplashScreenActivity extends Activity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         // this splash screen should be a blank slate
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        super.onCreate(savedInstanceState);
 
         requestStoragePermissions(this, new PermissionListener() {
             @Override
