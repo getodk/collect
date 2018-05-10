@@ -329,7 +329,6 @@ public class InstanceUploaderList extends InstanceListActivity implements
     @Override
     protected void updateAdapter() {
         getSupportLoaderManager().restartLoader(LOADER_ID, null, this);
-        toggleButtonLabel(findViewById(R.id.toggle_button), listView);
     }
 
     @NonNull
@@ -348,6 +347,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
         hideProgressBarIfAllowed();
         listAdapter.changeCursor(cursor);
         checkPreviouslyCheckedItems();
+        toggleButtonLabel(findViewById(R.id.toggle_button), listView);
     }
 
     @Override
