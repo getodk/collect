@@ -404,7 +404,7 @@ public class GeoShapeOsmMapActivity extends CollectAbstractActivity implements I
         // make sure the shape has at least three nodes.
         String[] gshrs = finalReturnString.split(";");
         if (gshrs.length < 4) {
-            ToastUtils.showShortToastInMiddle("You have to set at least 3 points!");
+            ToastUtils.showShortToastInMiddle(getString(R.string.polygon_validator));
         } else {
             finish();
         }

@@ -52,8 +52,6 @@ import org.odk.collect.android.widgets.GeoShapeWidget;
 
 import java.util.ArrayList;
 
-import timber.log.Timber;
-
 /**
  * Version of the GeoShapeGoogleMapActivity that uses the new Maps v2 API and Fragments to enable
  * specifying a location via placing a tracker on a map.
@@ -232,7 +230,7 @@ public class GeoShapeGoogleMapActivity extends CollectAbstractActivity implement
         // make sure the shape has at least three nodes.
         String[] gshrs = finalReturnString.split(";");
         if (gshrs.length < 4) {
-            ToastUtils.showShortToastInMiddle("You have to set at least 3 points!");
+            ToastUtils.showShortToastInMiddle(getString(R.string.polygon_validator));
         } else {
             finish();
         }
