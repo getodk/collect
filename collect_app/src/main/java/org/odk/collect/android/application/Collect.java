@@ -359,6 +359,8 @@ public class Collect extends Application implements HasActivityInjector {
     // Preventing multiple clicks, using threshold of 1000 ms
     public static boolean allowClick() {
         long elapsedRealtime = SystemClock.elapsedRealtime();
+
+        //some problem here!
         boolean allowClick = (lastClickTime == 0 || lastClickTime == elapsedRealtime) // just for tests
                 || elapsedRealtime - lastClickTime > 1000;
         if (allowClick) {

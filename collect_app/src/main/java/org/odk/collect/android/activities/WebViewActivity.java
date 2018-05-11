@@ -27,7 +27,7 @@ import android.widget.ProgressBar;
 import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.CustomTabHelper;
 
-public class WebViewActivity extends CollectAbstractActivity {
+public class    WebViewActivity extends CollectAbstractActivity {
 
     private WebView webView;
     private ProgressBar progressBar;
@@ -52,6 +52,7 @@ public class WebViewActivity extends CollectAbstractActivity {
                 super.onPageStarted(view, url, favicon);
                 getSupportActionBar().setTitle(url);
                 progressBar.setVisibility(View.VISIBLE);
+                //to redraw the option menu
                 invalidateOptionsMenu();
             }
 
@@ -81,11 +82,15 @@ public class WebViewActivity extends CollectAbstractActivity {
         webView.loadUrl(url);
     }
 
+    //runs when up button in action bar is pressed
+
     @Override
     public boolean onSupportNavigateUp() {
         finish();
         return false;
     }
+
+    //runs when back button of mobile phone is pressed
 
     @Override
     public void onBackPressed() {
