@@ -92,7 +92,6 @@
   <string name="parse_legacy_formlist_failed">Tidak terdapat berkas formulir di server yang cocok dengan Aggregate 0.9.x. : %s </string>
   <string name="parse_openrosa_formlist_failed">Tidak terdapat berkas formulir di server yang cocok dengan OpenRosa version 1.0 standard: %s</string>
   <string name="password">Kata sandi</string>
-  <string name="play_audio">Mainkan suara</string>
   <string name="play_video">Mainkan video</string>
   <string name="please_wait">Silahkan tunggu.</string>
   <string name="please_wait_long">Silahkan tunggu. Proses ini membutuhkan beberapa menit.</string>
@@ -137,7 +136,6 @@
   <string name="submission_url">Tautan pengumpulan</string>
   <string name="font_size">Ukuran teks font</string>
   <string name="change_font_size">Ukuran teks font</string>
-  <string name="form_scan_starting">Sedang memindai formulir…</string>
   <string name="access_error">Terjadi kesalahan ketika mengakses %s: </string>
   <string name="manifest_server_error">Versi OpenRosa tidak terdeteksi — terjadi kesalahan pada server?</string>
   <string name="root_element_error">Penamaan elemen root bukan &amp;lt;manifest\&gt; — tapi %s</string>
@@ -192,7 +190,6 @@
   <string name="draw_image">Sketsa Gambar</string>
   <string name="reset_image">Set Ulang</string>
   <string name="set_color">Atur Warna</string>
-  <string name="select_drawing_color">Pilih Warna</string>
   <string name="admin_preferences">Pengaturan Admin</string>
   <string name="admin_access_settings">Tekan untuk akses admin ke pengaturan</string>
   <string name="save_mid">Menyimpan di tengah formulir</string>
@@ -267,7 +264,6 @@
   <string name="drive_get_file">Mendapatkan %1$s dan berkas media.</string>
   <string name="no_google_account">Tidak ada Akun Google yang dipilih!</string>
   <string name="google_set_account">Google Sheet telah dipilih sebagai server kamu, silahkan tentukan akun Google pada Pengaturan Umum sebelum melanjutkan</string>
-  <string name="media_upload_error">Gagal mengunggah foto: %1$s</string>
   <string name="odk_auth_auth_fail">ODK pengiriman otomatis gagal berotentikasi, pastikan pengaturannya benar</string>
   <string name="odk_auto_note">Notifikasi ODK Kirim otomatis</string>
   <string name="notification_error">Gagal menampilkan teks notifikasi</string>
@@ -285,9 +281,6 @@
   <string name="username_error_whitespace">Tidak diperkenankan menggunakan spasi pada nama pengguna</string>
   <string name="google_play_services_error_occured">Tidak dapat mengakses Google Maps. Apakah Google Play Services telah terpasang?</string>
   <string name="about_preferences">Tentang</string>
-  <string name="tell_your_friends">Bagikan ODK Collect kepada kolegamu</string>
-  <string name="tell_your_friends_msg">Unduh aplikasi ODK Collect!</string>
-  <string name="leave_a_review">Tulis review di Google Play Store</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">Pemetaan</string>
   <string name="map_sdk_selector_title">SDK Pemetaan</string>
@@ -367,8 +360,6 @@
   <string name="odk_website">Kunjungi situs ODK </string>
   <string name="odk_website_summary">Open Data Kit (ODK) digunakan untuk mengumpulkan data untuk kepentingan sosial di lingkungan yang menantang.</string>
   <string name="odk_forum">Gabung forum ODK</string>
-  <string name="odk_forum_summary">Bergabunglah dengan forum untuk mendapat dukungan, fitur permintaan, kontribusikan kode/terjemahan!</string>
-  <string name="all_open_source_licenses">Pustaka dan lisensi open source</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">B %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -512,7 +503,7 @@
   <string name="ethiopian_month_2">Tikimt</string>
   <string name="ethiopian_month_3">Hidar</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
-  <string name="custom_date">1%1$s ( 2 %2$s )</string>
+  <string name="custom_date">%1$s (%2$s)</string>
   <string name="multiple_media_folders_detected_notification">Lebih dari satu folder media terdeteksi, hapus salah satu dan coba lagi</string>
   <string name="islamic_month_1">Muharram</string>
   <string name="islamic_month_2">Shafar</string>

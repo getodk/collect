@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 University of Washington
+ * Copyright (C) 2018 Shobhit Agarwal
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -35,6 +35,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.FileUtil;
+import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtil;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 
@@ -62,21 +63,22 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
     @NonNull
     private MediaUtil mediaUtil;
 
+    private AudioController audioController;
     private Button captureButton;
-    private Button playButton;
     private Button chooseButton;
 
     private String binaryName;
 
     public AudioWidget(Context context, FormEntryPrompt prompt) {
-        this(context, prompt, new FileUtil(), new MediaUtil());
+        this(context, prompt, new FileUtil(), new MediaUtil(), new AudioController());
     }
 
-    AudioWidget(Context context, FormEntryPrompt prompt, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil) {
+    AudioWidget(Context context, FormEntryPrompt prompt, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil, @NonNull AudioController audioController) {
         super(context, prompt);
 
         this.fileUtil = fileUtil;
         this.mediaUtil = mediaUtil;
+        this.audioController = audioController;
 
         captureButton = getSimpleButton(getContext().getString(R.string.capture_audio), R.id.capture_audio);
         captureButton.setEnabled(!prompt.isReadOnly());
@@ -84,37 +86,34 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
         chooseButton = getSimpleButton(getContext().getString(R.string.choose_sound), R.id.choose_sound);
         chooseButton.setEnabled(!prompt.isReadOnly());
 
-        playButton = getSimpleButton(getContext().getString(R.string.play_audio), R.id.play_audio);
-
-        // retrieve answer from data model and update ui
-        binaryName = prompt.getAnswerText();
-        if (binaryName != null) {
-            playButton.setEnabled(true);
-        } else {
-            playButton.setEnabled(false);
-        }
+        audioController.init(context, getPlayer(), getFormEntryPrompt());
 
         // finish complex layout
         LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);
         answerLayout.addView(captureButton);
         answerLayout.addView(chooseButton);
-        answerLayout.addView(playButton);
+        answerLayout.addView(audioController.getPlayerLayout(answerLayout));
         addAnswerView(answerLayout);
 
         hideButtonsIfNeeded();
+
+        // retrieve answer from data model and update ui
+        binaryName = prompt.getAnswerText();
+        if (binaryName != null) {
+            audioController.setMedia(getAudioFile());
+        } else {
+            audioController.hidePlayer();
+        }
     }
 
     @Override
     public void deleteFile() {
-        // get the file path and delete the file
-        String name = binaryName;
-        // clean up variables
+        MediaManager
+                .INSTANCE
+                .markOriginalFileOrDelete(getFormEntryPrompt().getIndex().toString(),
+                getInstanceFolder() + File.separator + binaryName);
         binaryName = null;
-        // delete from media provider
-        int del = mediaUtil.deleteAudioFileFromMediaProvider(
-                getInstanceFolder() + File.separator + name);
-        Timber.i("Deleted %d rows from media content provider", del);
     }
 
     @Override
@@ -122,9 +121,8 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
         // remove the file
         deleteFile();
 
-
-        // reset buttons
-        playButton.setEnabled(false);
+        // hide audio player
+        audioController.hidePlayer();
     }
 
     @Override
@@ -161,6 +159,10 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
             values.put(Audio.Media.DISPLAY_NAME, newAudio.getName());
             values.put(Audio.Media.DATE_ADDED, System.currentTimeMillis());
             values.put(Audio.Media.DATA, newAudio.getAbsolutePath());
+
+            MediaManager
+                    .INSTANCE
+                    .replaceRecentFileForQuestion(getFormEntryPrompt().getIndex().toString(), newAudio.getAbsolutePath());
 
             Uri audioURI = getContext().getContentResolver().insert(
                     Audio.Media.EXTERNAL_CONTENT_URI, values);
@@ -213,7 +215,6 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
     public void setOnLongClickListener(OnLongClickListener l) {
         captureButton.setOnLongClickListener(l);
         chooseButton.setOnLongClickListener(l);
-        playButton.setOnLongClickListener(l);
     }
 
     @Override
@@ -221,7 +222,6 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
         super.cancelLongPress();
         captureButton.cancelLongPress();
         chooseButton.cancelLongPress();
-        playButton.cancelLongPress();
     }
 
     @Override
@@ -232,9 +232,6 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
                 break;
             case R.id.choose_sound:
                 chooseSound();
-                break;
-            case R.id.play_audio:
-                playAudioFile();
                 break;
         }
     }
@@ -284,22 +281,10 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
         }
     }
 
-    private void playAudioFile() {
-        Collect.getInstance()
-                .getActivityLogger()
-                .logInstanceAction(this, "playButton", "click",
-                        getFormEntryPrompt().getIndex());
-        Intent i = new Intent("android.intent.action.VIEW");
-        File f = new File(getInstanceFolder() + File.separator
-                + binaryName);
-        i.setDataAndType(Uri.fromFile(f), "audio/*");
-        try {
-            getContext().startActivity(i);
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(
-                    getContext(),
-                    getContext().getString(R.string.activity_not_found,
-                            getContext().getString(R.string.play_audio)), Toast.LENGTH_SHORT).show();
-        }
+    /**
+     * Returns the audio file added to the widget for the current instance
+     */
+    private File getAudioFile() {
+        return new File(getInstanceFolder() + File.separator + binaryName);
     }
 }

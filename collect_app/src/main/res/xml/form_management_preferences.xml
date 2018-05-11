@@ -52,6 +52,14 @@
             android:entryValues="@array/image_size_entry_values"
             android:key="image_size"
             android:title="@string/image_size_title" />
+
+        <ListPreference
+            android:dialogTitle="@string/guidance_hint_title"
+            android:entries="@array/guidance_hint_selector_entries"
+            android:entryValues="@array/guidance_hint_selector_entries_values"
+            android:key="guidance_hint"
+            android:title="@string/guidance_hint_title" />
+
     </PreferenceCategory>
 
     <PreferenceCategory

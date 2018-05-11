@@ -83,7 +83,6 @@
   <string name="parse_legacy_formlist_failed">server haijatoa aina ya fomu sambamba na Aggregate 0.9.x.:%s</string>
   <string name="parse_openrosa_formlist_failed">server haijatoa aina ya fomu sambamba na OpenRosa toleo la 1.0 ya kawaida: %s</string>
   <string name="password">Thibitisho</string>
-  <string name="play_audio">Cheza sauti</string>
   <string name="play_video">Cheza video</string>
   <string name="please_wait">Tafadhali subiri dakika chache.</string>
   <string name="please_wait_long">Tafadhali subiri. Hii inaweza kuchukua dakika chache.</string>
@@ -124,7 +123,6 @@
   <string name="submission_url">Njia ya kuwasilisha</string>
   <string name="font_size">Ukubwa wa fonti za nakala</string>
   <string name="change_font_size">Ukubwa wa fonti za nakala</string>
-  <string name="form_scan_starting">Inatafuta fomu…..</string>
   <string name="access_error">Hitilafu wakati wa kupata %s:</string>
   <string name="manifest_server_error">Jibu la Manifest halina taarifa ya toleo la OpenRosa - server mbaya?</string>
   <string name="root_element_error">Msingi wa kipengele sio &lt;manifest\&gt; - ilikuwa %s</string>
@@ -176,7 +174,6 @@
   <string name="draw_image">chora picha</string>
   <string name="reset_image">fanya upya</string>
   <string name="set_color">weka rangi</string>
-  <string name="select_drawing_color">Chagua rangi ya kuchora</string>
   <string name="admin_preferences">Settings za admin</string>
   <string name="admin_access_settings">bonyeza ili upenye kama admin</string>
   <string name="save_mid">Hifadhi Fomu</string>

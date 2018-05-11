@@ -27,6 +27,7 @@ import static org.odk.collect.android.preferences.AdminKeys.ALLOW_OTHER_WAYS_OF_
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOMATIC_UPDATE;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOSEND;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_CONSTRAINT_BEHAVIOR;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_GUIDANCE_HINT;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_IMAGE_SIZE;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
 
@@ -37,11 +38,12 @@ public class FormManagementPreferences extends BasePreferenceFragment {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.form_management_preferences);
 
+        initListPref(KEY_PERIODIC_FORM_UPDATES_CHECK);
+        initPref(KEY_AUTOMATIC_UPDATE);  
         initListPref(KEY_CONSTRAINT_BEHAVIOR);
         initListPref(KEY_AUTOSEND);
         initListPref(KEY_IMAGE_SIZE);
-        initListPref(KEY_PERIODIC_FORM_UPDATES_CHECK);
-        initPref(KEY_AUTOMATIC_UPDATE);
+        initGuidancePrefs();
     }
 
     @Override
@@ -91,4 +93,25 @@ public class FormManagementPreferences extends BasePreferenceFragment {
             }
         }
     }
+
+
+    private void initGuidancePrefs() {
+        final ListPreference guidance = (ListPreference) findPreference(KEY_GUIDANCE_HINT);
+
+        if (guidance == null) {
+            return;
+        }
+
+        guidance.setSummary(guidance.getEntry());
+        guidance.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
+                String entry = (String) ((ListPreference) preference).getEntries()[index];
+                preference.setSummary(entry);
+                return true;
+            }
+        });
+    }
+
 }

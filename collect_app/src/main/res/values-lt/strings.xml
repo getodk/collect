@@ -81,7 +81,6 @@
   <string name="parse_legacy_formlist_failed">Serveris nepateikė galimų formų dokumentų, suderinamų su Aggregate 0.9.x. : %s</string>
   <string name="parse_openrosa_formlist_failed">Serveris nepateikė galimų formų dokumentų, suderinamų su OpenRosa 1.0 standartu : %s</string>
   <string name="password">Slaptažodis</string>
-  <string name="play_audio">Groti garsą</string>
   <string name="play_video">Groti video</string>
   <string name="please_wait">Prašome šiek tiek palaukti.</string>
   <string name="please_wait_long">Prašome palaukti. Tai gali užtrukti kelias minutes.</string>
@@ -122,7 +121,6 @@
   <string name="submission_url">Pateikimo kelias</string>
   <string name="font_size">Teksto šrifto dydis</string>
   <string name="change_font_size">Teksto šrifto dydis</string>
-  <string name="form_scan_starting">Ieškoma formų…</string>
   <string name="access_error">Klaida bandant pasiekti %s: </string>
   <string name="manifest_server_error">Manifesto atsakymas nepraneša OpenRosa versijos — blogas serveris?</string>
   <string name="root_element_error">Šakninis elementas nėra &amp;lt;manifest\&gt; — buvo %s</string>
@@ -174,7 +172,6 @@
   <string name="draw_image">Braižyti</string>
   <string name="reset_image">Atstatyti</string>
   <string name="set_color">Nustatyti spalvą</string>
-  <string name="select_drawing_color">Parinkite braižymo spalvą</string>
   <string name="admin_preferences">Administratoriaus nuostatos</string>
   <string name="admin_access_settings">Spustelėkite norėdami keisti administratoriaus nuostatas</string>
   <string name="save_mid">Nebaigtos formos išsaugojimas</string>

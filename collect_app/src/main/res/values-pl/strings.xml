@@ -90,7 +90,6 @@
   <string name="parse_legacy_formlist_failed">Serwer nie dostarczył dokumentu z dostępnymi formularzami zgodnego z Aggregate 0.9.x: %s</string>
   <string name="parse_openrosa_formlist_failed">Serwer nie dostarczył dokumentu z dostępnymi formularzami zgodnego ze standardem OpenRosa wersja 1.0: %s</string>
   <string name="password">Hasło</string>
-  <string name="play_audio">Odtwórz Dźwięk</string>
   <string name="play_video">Odtwórz Wideo</string>
   <string name="please_wait">Poczekaj kilka chwil.</string>
   <string name="please_wait_long">Poczekaj. To może zająć kilka minut.</string>
@@ -133,7 +132,6 @@
   <string name="submission_url">Ścieżka zgłoszeń</string>
   <string name="font_size">Wielkość czcionki</string>
   <string name="change_font_size">Wielkość czcionki</string>
-  <string name="form_scan_starting">Szukam formularzy…</string>
   <string name="access_error">Błąd przy próbie dostępu %s:</string>
   <string name="manifest_server_error">Odpowiedź w manifeście nie raportuje wersji OpenRosa — niewłaściwy serwer?</string>
   <string name="root_element_error">Główny element nie jest &lt;manifest\&gt; — był %s</string>
@@ -187,7 +185,6 @@
   <string name="draw_image">Naszkicuj Obraz</string>
   <string name="reset_image">Resetuj</string>
   <string name="set_color">Ustaw Kolor</string>
-  <string name="select_drawing_color">Wybierz Kolor do Rysowania</string>
   <string name="admin_preferences">Ustawienia Administratora</string>
   <string name="admin_access_settings">Naciśnij aby mieć dostęp do ustawień administratora</string>
   <string name="save_mid">Zapisz Formularz</string>
@@ -273,7 +270,6 @@
   <string name="username_error_whitespace">Spacje na początku lub na końcu nazwy użytkownika są niedozwolone</string>
   <string name="google_play_services_error_occured">Nie można uzyskać dostępu do Google Maps. Czy Google Play Services są zainstalowane?</string>
   <string name="about_preferences">O Aplikacji</string>
-  <string name="tell_your_friends_msg">Pobierz aplikację ODK Collect!</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">Mapowanie</string>
   <string name="map_sdk_selector_title">SDK Mapowania</string>

@@ -2,6 +2,12 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
   <string name="show_password">Näytä salasana</string>
   <string name="activity_not_found">Ei toimintoa tunnuksella: %s</string>
+  <string name="view_image">Katso kuva</string>
+  <string name="annotate_image">Lisää merkinnät kuvaan</string>
+  <string name="aligned_image_capture">Kohdistettu kuvankaappaus</string>
+  <string name="signature_capture">Allekirjoituksen kuvankaappaus</string>
+  <string name="view_video">Katso video</string>
+  <string name="choose_audio">Valitse ääni</string>
   <string name="add_another">Lisää ryhmä</string>
   <string name="add_another_repeat">Lisätäänkö toinen ryhmä \"%s\"?</string>
   <string name="add_repeat">Lisätäänkö uusi ryhmä \"%s\"?</string>
@@ -67,6 +73,8 @@
   <string name="get_location">Tallenna sijainti</string>
   <string name="provider_disabled_error">Pahoittelut, sijaintitiedot eivät ole käytössä!</string>
   <string name="invalid_answer_error">Pahoittelut, vastaus ei kelpaa!</string>
+  <string name="invalid_space_in_answer_singular">Varoitus: taustalla olevassa arvossa %s on välilyöntejä</string>
+  <string name="invalid_space_in_answer_plural">Varoitus: taustalla olevissa arvoissa %s on välilyöntejä</string>
   <string name="jump_to_beginning">Alkuun</string>
   <string name="jump_to_end">Loppuun</string>
   <string name="jump_to_previous">Ylös</string>
@@ -92,7 +100,6 @@
   <string name="parse_legacy_formlist_failed">Palvelin ei ole toimittanut käytettävissä-olevat-lomakkeet -dokumenttia joka olisi yhteensopiva Aggregate 0.9.x:n kanssa. : %s</string>
   <string name="parse_openrosa_formlist_failed">Palvelin ei ole toimittanut käytettävissä-olevat-lomakkeet -dokumenttia joka olisi yhteensopiva OpenRosa versio 1.0 standardin kanssa: %s</string>
   <string name="password">Salasana</string>
-  <string name="play_audio">Soita ääni</string>
   <string name="play_video">Näytä video</string>
   <string name="please_wait">Odota hetki.</string>
   <string name="please_wait_long">Ole hyvä ja odota. Tämä voi kestää muutaman minuutin.</string>
@@ -137,7 +144,6 @@
   <string name="submission_url">Lähetettävien lomakkeiden polku</string>
   <string name="font_size">Tekstin koko</string>
   <string name="change_font_size">Tekstin koko</string>
-  <string name="form_scan_starting">Etsitään lomakkeita…</string>
   <string name="access_error">Virhe käyttäessä %s:</string>
   <string name="manifest_server_error">Manifestivastaus ei raportoi OpenRosa-versiota - palvelinvika?</string>
   <string name="root_element_error">Juurielementti ei ole &lt;manifest\&gt; — oli %s</string>
@@ -157,7 +163,7 @@
   <string name="select_answer">Valitse vastaus</string>
   <string name="save_form_as">Nimeä tämä lomake</string>
   <string name="save_as_error">Tallennettu nimi ei saa olla tyhjä!</string>
-  <string name="edit_prompt">Muokkaa kysymystekstiä</string>
+  <string name="edit_prompt">Vastauksen muokkaus</string>
   <string name="selected_google_account_text">Google-tili</string>
   <string name="server_platform_odk_aggregate">ODK Aggregate</string>
   <string name="server_platform_other">Muu</string>
@@ -192,7 +198,6 @@
   <string name="draw_image">Luonnostele kuva</string>
   <string name="reset_image">Nollaus (Reset)</string>
   <string name="set_color">Aseta väri</string>
-  <string name="select_drawing_color">Aseta piirrustusväri</string>
   <string name="admin_preferences">Pääkäyttäjän asetukset</string>
   <string name="admin_access_settings">Napsauta saadaksesi pääkäyttäjäoikeudet asetuksiin</string>
   <string name="save_mid">Tallenna lomake</string>
@@ -219,6 +224,7 @@
   <string name="constraint_behavior_on_swipe">Validointi pyyhkäistäessä eteepäin</string>
   <string name="constraint_behavior_on_finalize">Validoi vasta kun lomake on valmis</string>
   <string name="view_change_location">Tarkastele tai vaihda sijaintia</string>
+  <string name="change_location">Vaihda sijaintia</string>
   <string name="open_url">Avaa URL</string>
   <string name="get_bearing">Tallenna suuntima</string>
   <string name="replace_bearing">Korvaa suuntima</string>
@@ -267,7 +273,7 @@
   <string name="drive_get_file">Haetaan %1$s ja mediatiedoja.</string>
   <string name="no_google_account">Ei valittua Google-tiliä!</string>
   <string name="google_set_account">Palvelimesi on Google Sheets, valitse vastaava Google-tili yleisasetuksissa ennen jatkamista</string>
-  <string name="media_upload_error">Olematonta valokuvaa ei voitu lähettää: %1$s</string>
+  <string name="media_upload_error">Palvelimelle ei voida siirtää tiedostoa, jota ei ole olemassa: %1$s</string>
   <string name="odk_auth_auth_fail">Automaattisen ODK-lähetyksen vahvistus epäonnistui, varmista että asetuksesi ovat oikein</string>
   <string name="odk_auto_note">Automaattisen ODK-lähetyksen ilmoitus</string>
   <string name="notification_error">Virhe näyttäessä ilmoitustekstiä</string>
@@ -285,9 +291,10 @@
   <string name="username_error_whitespace">Käyttäjänimen alussa tai lopussa ei saa olla välilyöntimerkkejä</string>
   <string name="google_play_services_error_occured">Google Maps -palveluun ei saada yhteyttä. Onko Google Play Services asennettu?</string>
   <string name="about_preferences">Lisätietoja</string>
-  <string name="tell_your_friends">Jaa ODK Collect kollegoidesi kanssa</string>
-  <string name="tell_your_friends_msg">Lataa ODK Collect -sovellus!</string>
-  <string name="leave_a_review">Arvioi Google Play Store:ssa</string>
+  <string name="tell_your_friends">Jaa ODK Collect</string>
+  <string name="tell_your_friends_msg">Keräävätkö kollegasi vielä dataa paperilla? Jaa ODK Collect heidän kanssaan.</string>
+  <string name="leave_a_review">Kirjoita Play Store -arvio</string>
+  <string name="leave_a_review_msg">Sinun (toivottavasti myönteinen) arviosi lisää sovelluksen näkyvyyttä Play Store -kaupassa.</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">Kartoitus</string>
   <string name="map_sdk_selector_title">Mapping SDK</string>
@@ -367,8 +374,9 @@
   <string name="odk_website">Käy ODK:n verkkosivulla</string>
   <string name="odk_website_summary">Open Data Kit (ODK) -sovellusta käytetään vaativissa olosuhteissa keräämään dataa yhteisen hyvän edistämiseksi.</string>
   <string name="odk_forum">Liity ODK-foorumiin</string>
-  <string name="odk_forum_summary">Liity foorumiin saadaksesi tukea, pyytääksesi toimintoja ja osallistuaksesi koodaamiseen/kääntämiseen!</string>
-  <string name="all_open_source_licenses">Avoimen lähdekoodin kirjastoja ja lisenssejä</string>
+  <string name="odk_forum_summary">Liity foorumiin saadaksesi tukea, pyytääksesi toimintoja, ja auttaaksesi koodaamisessa tai kääntämisessä!</string>
+  <string name="all_open_source_licenses">Avoimen lähdekoodin kirjastot/lisenssit</string>
+  <string name="all_open_source_licenses_msg">Seisomme jättiläisten harteilla!</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">W %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -559,4 +567,7 @@
   <string name="no">Ei</string>
   <string name="newer_version_of_a_form_info">Tämä on päivitetty versio lomakkeesta joka sinulla jo on!</string>
   <string name="svg_file_does_not_exist">SVG-tiedosto puuttuu!</string>
+  <string name="start_video_capture_instruction">Napsauta näyttöä käynnistääksesi tallennuksen.</string>
+  <string name="stop_video_capture_instruction">Tallennus aloitettu. Napsauta uudelleen lopettaaksesi.</string>
+  <string name="no_columns_to_upload">Palvelimelle siirrettävässä lomakkeessa ei ollut sarakkeita.</string>
 </resources>

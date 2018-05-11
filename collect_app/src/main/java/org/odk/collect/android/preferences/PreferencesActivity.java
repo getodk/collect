@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.utilities.ThemeUtils;
 
 import java.util.Collection;
 import java.util.List;
@@ -95,11 +96,11 @@ public class PreferencesActivity extends PreferenceActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        setTheme(new ThemeUtils(this).getSettingsTheme());
         super.onCreate(savedInstanceState);
 
         ViewGroup root = getRootView();
-        Toolbar toolbar = (Toolbar) View.inflate(this, R.layout.toolbar, null);
+        Toolbar toolbar = (Toolbar) View.inflate(this, R.layout.toolbar_without_progressbar, null);
         toolbar.setTitle(R.string.general_preferences);
         View shadow = View.inflate(this, R.layout.toolbar_action_bar_shadow, null);
 

@@ -21,4 +21,6 @@ the specific language governing permissions and limitations under the License. -
     <string name="every_one_hour_value" translatable="false">every_one_hour</string>
     <string name="every_six_hours_value" translatable="false">every_six_hours</string>
     <string name="every_24_hours_value" translatable="false">every_24_hours</string>
+    <string name="app_theme_light" translatable="false">light_theme</string>
+    <string name="app_theme_dark" translatable="false">dark_theme</string>
 </resources>

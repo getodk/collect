@@ -17,6 +17,9 @@
             android:key="change_constraint_behavior"
             android:title="@string/constraint_behavior_title" />
         <CheckBoxPreference
+            android:key="change_app_theme"
+            android:title="@string/app_theme" />
+        <CheckBoxPreference
             android:key="change_font_size"
             android:title="@string/font_size" />
         <CheckBoxPreference

@@ -114,8 +114,8 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     @Override
     public void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-        setContentView(R.layout.drive_layout);
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.drive_layout);
 
         setProgressBarVisibility(true);
         initToolbar();
@@ -619,6 +619,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
             // file clicked, download the file, mark checkbox.
             CheckBox cb = view.findViewById(R.id.checkbox);
             cb.setChecked(!cb.isChecked());
+            item.setSelected(cb.isChecked());
 
             if (toDownload.contains(item) && !cb.isChecked()) {
                 toDownload.remove(item);

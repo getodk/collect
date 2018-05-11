@@ -84,7 +84,6 @@
   <string name="parse_error">ይቅርታ፣ ቅፁን ለመተንተን አልተቻለም</string>
   <string name="parse_legacy_formlist_failed">ሰርቨሩ ከ Aggregate 0.9.x ጋር የሚጣጣምና የሚገኝ ቅፅ ሰነድ አላቀረበም፡፡ 1 %s</string>
   <string name="password">የይለፍ ቃል</string>
-  <string name="play_audio">ድምጽን አጫውት</string>
   <string name="play_video">ቪድዮ አጫውት</string>
   <string name="please_wait">እባክዎ ጥቂት ጊዜ ይጠብቁ</string>
   <string name="please_wait_long">እባክዎ ትንሽ ይጠብቁ፡፡ ይሄ ጥቂት ደቂቃዎችን ሊወስድ ይችላል፡፡</string>
@@ -120,7 +119,6 @@
   <string name="keep_changes">ለውጦችን አስቀምጥ</string>
   <string name="font_size">የጽሑፍ ቅርጸ ቁምፊ መጠን</string>
   <string name="change_font_size">የጽሑፍ ቅርጸ ቁምፊ መጠን</string>
-  <string name="form_scan_starting">ቅጾችን በመቃኘት ላይ …</string>
   <string name="file_fetch_failed">ስህተት፣ %2$s ( %3$s ) በ %1$s ላይ</string>
   <string name="success">ስኬት</string>
   <string name="no_forms_uploaded">ይቅርታ፣ ምንም ቅጽ አልተጫነም፡፡</string>
@@ -163,7 +161,6 @@
   <string name="draw_image">ንድፍ ምስል</string>
   <string name="reset_image">ዳግም አስጀምር</string>
   <string name="set_color">ቀለም አዘጋጅ</string>
-  <string name="select_drawing_color">ንድፍ ቀለም ይምረጡ</string>
   <string name="admin_preferences">የአስተዳዳሪ ቅንጅቶች</string>
   <string name="save_mid">ቅጽ አስቀምጥ</string>
   <string name="enter_new_password">አዲስ የይለፍ ቃል ያስገቡ</string>
@@ -208,7 +205,6 @@
   <string name="other_preferences">ሌሎች ስርዓተ ቅንብሮች</string>
   <string name="no_google_account">ምንም የ Google መለያ አልተመረጠም!</string>
   <string name="google_set_account">Google ሉሆችን እንደ አገልጋይዎ መርጠዋል, እባክዎ ከመቀጠልዎ በፊት በአጠቃላይ ቅንብሮች ውስጥ ተዛማጅ የ Google መለያ ይምረጡ</string>
-  <string name="media_upload_error">የሌለውን ፎቶ መስቀል አልተሳካም፣ 1 %1$s</string>
   <string name="notification_error">የማሳወቂያ ጽሁፍ በማሳየት ላይ ስህተት</string>
   <string name="delete_after_send">ከላክ በኋላ ይሰርዙ</string>
   <string name="delete_after_send_summary">ወደ ሰርቨር ከተላኩ በኋላ የተጠናቀቁ ቅጾችን እና ሚዲያዎችን ይሰርዛል</string>

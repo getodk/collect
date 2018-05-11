@@ -87,7 +87,6 @@
   <string name="parse_legacy_formlist_failed">เซิร์ฟเวอร์ที่เชื่อมต่ออยู่ไม่มีแบบสำรวจที่ใช้งานได้กับ Aggregate 0.9.x. : %s</string>
   <string name="parse_openrosa_formlist_failed">เซิร์ฟเวอร์ที่เชื่อมต่ออยู่ไม่มีแบบสำรวจที่ใช้งานได้กับ OpenRosa version 1.0 standard: %s</string>
   <string name="password">รหัสผ่าน</string>
-  <string name="play_audio">เปิดเสียง</string>
   <string name="play_video">เปิดภาพเคลื่อนไหว</string>
   <string name="please_wait">โปรดรอสักครู่</string>
   <string name="please_wait_long">โปรดรอ อาจต้องใช้เวลาสักครู่</string>
@@ -131,7 +130,6 @@
   <string name="submission_url">Submission path</string>
   <string name="font_size">ขนาดตัวอักษร</string>
   <string name="change_font_size">ขนาดอักษร</string>
-  <string name="form_scan_starting">กำลังค้นหาแบบสำรวจ</string>
   <string name="access_error">มีข้อผิดพลาดขณะเปิด %s:</string>
   <string name="manifest_server_error">Manifest reply does not report an OpenRosa version — bad server?</string>
   <string name="root_element_error">Root element is not &lt;manifest\&gt; — was %s</string>
@@ -185,7 +183,6 @@
   <string name="draw_image">ภาพวาด</string>
   <string name="reset_image">ตั้งค่าใหม่</string>
   <string name="set_color">เลือกสี</string>
-  <string name="select_drawing_color">เลือกสีสำหรับวาด</string>
   <string name="admin_preferences">ตั้งค่าสำหรับผู้ควบคุมระบบ</string>
   <string name="admin_access_settings">Tap for admin access to settings</string>
   <string name="save_mid">บันทึกแบบสำรวจ</string>
@@ -265,7 +262,6 @@
   <string name="google_play_services_error_occured">เปิด Google Maps ไม่ได้ ตรวจสอบว่ามี Google Play Services ติดตั้งหรือไม่
 </string>
   <string name="about_preferences">เกี่ยวกับ</string>
-  <string name="tell_your_friends_msg">ดาวน์โหลดแอพ ODK Collect</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">ทำแผนที่</string>
   <string name="map_sdk_selector_title">Mapping SDK</string>

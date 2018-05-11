@@ -153,7 +153,7 @@ public class FormDownloader {
                 Timber.i("No Manifest for: %s", fd.getFormName());
             }
         } catch (TaskCancelledException e) {
-            Timber.i(e.getMessage());
+            Timber.i(e);
             cleanUp(fileResult, e.file, tempMediaPath);
 
             // do not download additional forms.

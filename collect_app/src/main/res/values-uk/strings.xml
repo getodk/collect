@@ -2,6 +2,12 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
   <string name="show_password">Показати пароль</string>
   <string name="activity_not_found">Не знайдено жодного процесу для: %s</string>
+  <string name="view_image">Переглянути Зображення</string>
+  <string name="annotate_image">Додати Анотацію</string>
+  <string name="aligned_image_capture">Сфотографувати Вирівняне Зображення</string>
+  <string name="signature_capture">Сфотографувати Підпис</string>
+  <string name="view_video">Переглянути Відео</string>
+  <string name="choose_audio">Обрати Аудіо</string>
   <string name="add_another">Додати групу</string>
   <string name="add_another_repeat">Додати ще \"%s\" групу?</string>
   <string name="add_repeat">Додати нову \"%s\" групу?</string>
@@ -92,7 +98,6 @@
   <string name="parse_legacy_formlist_failed">На сервері відсутні анкети сумісні з Aggregate 0.9.x. : %s</string>
   <string name="parse_openrosa_formlist_failed">На сервері відсутні анкети сумісні з стандартом OpenRosa версії 1.0: %s</string>
   <string name="password">Пароль</string>
-  <string name="play_audio">Відтворити звук</string>
   <string name="play_video">Відтворити відео</string>
   <string name="please_wait">Будь ласка, зачекайте.</string>
   <string name="please_wait_long">Будь ласка, зачекайте. Це може зайняти кілька хвилин.</string>
@@ -137,7 +142,6 @@
   <string name="submission_url">Шлях надсилання</string>
   <string name="font_size">Розмір шрифту</string>
   <string name="change_font_size">Розмір шрифту</string>
-  <string name="form_scan_starting">Шукаю анкети…</string>
   <string name="access_error">Помилка підчас доступу до %s:</string>
   <string name="manifest_server_error">Маніфест відповідь не повідомляє версію OpenRosa — помилковий серевер?</string>
   <string name="root_element_error">Кореневий елемент не є &lt;маніфест\&gt; — був %s</string>
@@ -192,7 +196,6 @@
   <string name="draw_image">Ескіз зображення</string>
   <string name="reset_image">Скинути</string>
   <string name="set_color">Колір</string>
-  <string name="select_drawing_color">Обрати колір для малювання</string>
   <string name="admin_preferences">Адміністрування</string>
   <string name="admin_access_settings">Клікніть для адміністративного доступу до налаштувань</string>
   <string name="save_mid">Зберегти анкету</string>
@@ -219,6 +222,7 @@
   <string name="constraint_behavior_on_swipe">Перевіряти підчас переходу вперед</string>
   <string name="constraint_behavior_on_finalize">Відкласти перевірку до завершення</string>
   <string name="view_change_location">Подивитись або змінити місцезнаходження</string>
+  <string name="change_location">Змінити Місцезнаходження</string>
   <string name="open_url">Відкрити посилання</string>
   <string name="get_bearing">Записати пеленг</string>
   <string name="replace_bearing">Змінити пеленг</string>
@@ -267,7 +271,7 @@
   <string name="drive_get_file">Отримання %1$s та медіа файлів.</string>
   <string name="no_google_account">Не вибраний жоден обліковий запис Google!</string>
   <string name="google_set_account">Ви обрали своїм сервером Google Сторінки, для продовження, будь ласка, вкажіть відповідний обліковий запис Google в Загальних налаштуваннях</string>
-  <string name="media_upload_error">Невдалося завантажити неіснуюче фото: %1$s</string>
+  <string name="media_upload_error">Помилка завантаження неіснуючого медіа файлу: %1$s</string>
   <string name="odk_auth_auth_fail">Помилка авторизації під час автоматичного надсилання, будь ласка, перевірте налаштування</string>
   <string name="odk_auto_note">Сповіщення автоматичного надсилання ODK</string>
   <string name="notification_error">Помилка відображення тексту оповіщення</string>
@@ -285,9 +289,10 @@
   <string name="username_error_whitespace">в імені користувача заборонені початкові та кінцеві пробіли</string>
   <string name="google_play_services_error_occured">Нема доступу до Google Карт. Чи встановлено Google Play Services?</string>
   <string name="about_preferences">Про нас</string>
-  <string name="tell_your_friends">Поділитися ODK Collect з колегами</string>
-  <string name="tell_your_friends_msg">Завантажити ODK Collect!</string>
-  <string name="leave_a_review">Залишити відгук на Google Play</string>
+  <string name="tell_your_friends">Поширити ODK Collect</string>
+  <string name="tell_your_friends_msg">Ваші колеги досі збирають дані через паперові акети? Поділіться з ними ODK Collect.</string>
+  <string name="leave_a_review">Залишити відгук в Play Store</string>
+  <string name="leave_a_review_msg">Ваш (сподіваємось позитивний) відгук покращить помітність програми в Play Store.</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">Мапування</string>
   <string name="map_sdk_selector_title">SDK для мапування</string>
@@ -367,8 +372,9 @@
   <string name="odk_website">Перейти на сайт ODK</string>
   <string name="odk_website_summary">Open Data Kit (ODK) використовується для збору даних для суспільних потреб.</string>
   <string name="odk_forum">Долучитись до форуму ODK</string>
-  <string name="odk_forum_summary">Долучайтесь до форуму аби отримати допомогу, запросити нові функції, допомогти в створенні коду/перекладу!</string>
-  <string name="all_open_source_licenses">Ліцензії та бібліотеки відкритого доступу</string>
+  <string name="odk_forum_summary">Долучайтесь до форуму аби отримати допомогу, запросити нові функції, допомогти в створенні коду чи перекладу!</string>
+  <string name="all_open_source_licenses">Відкриті бібліотеки/ліцензії</string>
+  <string name="all_open_source_licenses_msg">Ми стоїмо на плечах гігантів!</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">Захід %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -559,4 +565,6 @@
   <string name="no">Ні</string>
   <string name="newer_version_of_a_form_info">Ви вже маєте найновішу версію анкети!</string>
   <string name="svg_file_does_not_exist">SVG файл не існує!</string>
+  <string name="start_video_capture_instruction">Щоб почати запис торкніться екрану</string>
+  <string name="stop_video_capture_instruction">Запис розпочато. Торкніться знову щоб зупинити</string>
 </resources>

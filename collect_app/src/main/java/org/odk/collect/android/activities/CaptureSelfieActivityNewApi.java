@@ -17,7 +17,6 @@
 package org.odk.collect.android.activities;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCharacteristics;
@@ -35,7 +34,7 @@ import org.odk.collect.android.utilities.ToastUtils;
 import timber.log.Timber;
 
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-public class CaptureSelfieActivityNewApi extends Activity {
+public class CaptureSelfieActivityNewApi extends CollectAbstractActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

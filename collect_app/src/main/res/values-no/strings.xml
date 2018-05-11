@@ -88,7 +88,6 @@
   <string name="parse_legacy_formlist_failed">Formatet er ikke kompatibel med Aggregate 09.x: %s</string>
   <string name="parse_openrosa_formlist_failed">Formatet er ikke kompitabel med OpenRosa 1.0 standard: %s</string>
   <string name="password">Passord</string>
-  <string name="play_audio">Spill lyd</string>
   <string name="play_video">Spill video</string>
   <string name="please_wait">Vennligst vent.</string>
   <string name="please_wait_long">Vennligst vent. Det kan ta litt tid.</string>
@@ -129,7 +128,6 @@
   <string name="submission_url">Bane for innsending</string>
   <string name="font_size">Fontstørrelse</string>
   <string name="change_font_size">Fontstørrelse</string>
-  <string name="form_scan_starting">Søker…</string>
   <string name="access_error">Det er oppstått en feil ved %s.</string>
   <string name="manifest_server_error">Feil OpenRosa versjon?</string>
   <string name="root_element_error">Root element er ikke &amp;lt;manifest\&gt; — var %s</string>
@@ -182,7 +180,6 @@
   <string name="draw_image">Sketch Image</string>
   <string name="reset_image">Reset</string>
   <string name="set_color">Set Color</string>
-  <string name="select_drawing_color">Select Drawing Color</string>
   <string name="admin_preferences">Admin Settings</string>
   <string name="admin_access_settings">Tap for admin access to settings</string>
   <string name="save_mid">Mid-form saving</string>

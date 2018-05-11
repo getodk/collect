@@ -2,6 +2,12 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
   <string name="show_password">パスワードを表示</string>
   <string name="activity_not_found">取り扱うアクティビティがありません: %s</string>
+  <string name="view_image">画像を表示</string>
+  <string name="annotate_image">画像に注釈をつける</string>
+  <string name="aligned_image_capture">整列した画像キャプチャ</string>
+  <string name="signature_capture">署名キャプチャ</string>
+  <string name="view_video">ビデオを表示</string>
+  <string name="choose_audio">音声を選択</string>
   <string name="add_another">グループを追加</string>
   <string name="add_another_repeat">別の \"%s\" グループを追加しますか?</string>
   <string name="add_repeat">新しい \"%s\" グループを追加しますか?</string>
@@ -67,6 +73,8 @@
   <string name="get_location">記録場所</string>
   <string name="provider_disabled_error">申し訳ありません、ロケーション プロバイダーが無効です!</string>
   <string name="invalid_answer_error">申し訳ありません、回答が正しくありません!</string>
+  <string name="invalid_space_in_answer_singular">警告: 基本値 %s に空白があります</string>
+  <string name="invalid_space_in_answer_plural">警告: 基本値 %s に空白があります</string>
   <string name="jump_to_beginning">最初に移動</string>
   <string name="jump_to_end">最後に移動</string>
   <string name="jump_to_previous">上に移動</string>
@@ -92,7 +100,6 @@
   <string name="parse_legacy_formlist_failed">サーバが Aggregate 0.9.x と互換性のある利用可能なフォームの文書を提供していません : %s</string>
   <string name="parse_openrosa_formlist_failed">サーバが OpenRosa バージョン 1.0 規格と互換性のある利用可能なフォームの文書を提供していません : %s</string>
   <string name="password">パスワード</string>
-  <string name="play_audio">サウンドを再生</string>
   <string name="play_video">ビデオを再生</string>
   <string name="please_wait">しばらくお待ちください。</string>
   <string name="please_wait_long">しばらくお待ちください。数分間かかることがあります。</string>
@@ -137,7 +144,6 @@
   <string name="submission_url">提出パス</string>
   <string name="font_size">文字フォントサイズ</string>
   <string name="change_font_size">文字フォントサイズ</string>
-  <string name="form_scan_starting">フォームのスキャン中…</string>
   <string name="access_error">%s のアクセス中にエラー:</string>
   <string name="manifest_server_error">マニフェストの応答が OpenRosa バージョンを報告しません — サーバーが異常?</string>
   <string name="root_element_error">ルートエレメントが &lt;manifest\&gt; ではありません — %s でした</string>
@@ -192,7 +198,6 @@
   <string name="draw_image">スケッチ画像</string>
   <string name="reset_image">リセット</string>
   <string name="set_color">色を設定</string>
-  <string name="select_drawing_color">描画色を選択します</string>
   <string name="admin_preferences">管理者設定</string>
   <string name="admin_access_settings">タップして設定に管理者アクセスします</string>
   <string name="save_mid">フォームを保存する</string>
@@ -219,6 +224,7 @@
   <string name="constraint_behavior_on_swipe">次へスワイプ時に検証</string>
   <string name="constraint_behavior_on_finalize">確定済になるまで検証を延期</string>
   <string name="view_change_location">場所の表示または変更</string>
+  <string name="change_location">場所の変更</string>
   <string name="open_url">URL を開く</string>
   <string name="get_bearing">方位を記録</string>
   <string name="replace_bearing">方位を置き換え</string>
@@ -267,7 +273,7 @@
   <string name="drive_get_file">%1$s とメディアファイルを取得中。</string>
   <string name="no_google_account">Google アカウントが選択されていません!</string>
   <string name="google_set_account">サーバーとして Google スプレッドシートを選択しています。続行する前に、全般設定で対応する Google アカウントを選択してください</string>
-  <string name="media_upload_error">写真が存在しないため、アップロードできませんでした: %1$s</string>
+  <string name="media_upload_error">メディアファイルが存在しないため、アップロードできませんでした: %1$s</string>
   <string name="odk_auth_auth_fail">ODK 自動送信の認証に失敗しました。設定が正しいことを確認してください</string>
   <string name="odk_auto_note">ODK 自動送信通知</string>
   <string name="notification_error">通知テキストの表示中にエラー</string>
@@ -285,9 +291,10 @@
   <string name="username_error_whitespace">ユーザー名の先頭または末尾に空白は使用できません</string>
   <string name="google_play_services_error_occured">Google マップにアクセスできません。 Google Play サービスはインストールされていますか?</string>
   <string name="about_preferences">アプリについて</string>
-  <string name="tell_your_friends">ODK Collect を同僚と共有</string>
-  <string name="tell_your_friends_msg">ODK Collect アプリをダウンロードしてください!</string>
-  <string name="leave_a_review">Google Play ストアでレビューを残してください</string>
+  <string name="tell_your_friends">ODK Collect を共有</string>
+  <string name="tell_your_friends_msg">あなたの同僚はまだ紙でデータを収集しているのですか? ODK Collect を彼らと共有しましょう。</string>
+  <string name="leave_a_review">Play ストアにレビューを残す</string>
+  <string name="leave_a_review_msg">あなたの (肯定的な) レビューが Play ストアでアプリの認知度を向上させてくれます</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">マッピング</string>
   <string name="map_sdk_selector_title">マッピング SDK</string>
@@ -368,7 +375,8 @@
   <string name="odk_website_summary">オープンデータキット (ODK) は、課題のある環境での社会的利益のためのデータを収集するために使用されます。</string>
   <string name="odk_forum">ODK フォーラムに参加</string>
   <string name="odk_forum_summary">フォーラムに参加して、サポートを受けたり、機能をリクエストしたり、コード/翻訳に貢献してください!</string>
-  <string name="all_open_source_licenses">オープンソースライブラリーおよびライセンス</string>
+  <string name="all_open_source_licenses">オープンソースライブラリー/ライセンス</string>
+  <string name="all_open_source_licenses_msg">私たちは巨人の肩の上に立っています!</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">W %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -559,4 +567,5 @@
   <string name="no">いいえ</string>
   <string name="newer_version_of_a_form_info">これはすでにお持ちのフォームの更新版です!</string>
   <string name="svg_file_does_not_exist">SVG ファイルが存在しません!</string>
+  <string name="no_columns_to_upload">アップロードするフォームにカラムが見つかりません。</string>
 </resources>

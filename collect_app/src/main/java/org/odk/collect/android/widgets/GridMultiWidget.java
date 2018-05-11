@@ -179,8 +179,7 @@ public class GridMultiWidget extends QuestionWidget implements MultiChoiceWidget
                     imageFilename = ReferenceManager.instance().DeriveReference(imageURI).getLocalURI();
                     final File imageFile = new File(imageFilename);
                     if (imageFile.exists()) {
-                        Bitmap b = FileUtils.getBitmapScaledToDisplay(imageFile,
-                                screenHeight, screenWidth);
+                        Bitmap b = FileUtils.getBitmapScaledToDisplay(imageFile, screenHeight, screenWidth);
                         if (b != null) {
 
                             if (b.getWidth() > maxColumnWidth) {

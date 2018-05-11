@@ -86,7 +86,6 @@
   <string name="parse_legacy_formlist_failed">ເຊີເວີທີເຊື່ອມຕໍ່​ຢູ່ ບໍ່​ມີແບບຟອມ​ທີ່​ສາມາດໃຊ້ງານໄດ້ກັບ Aggregate 0.9.x. : %s</string>
   <string name="parse_openrosa_formlist_failed">ເຊີເວີທີເຊື່ອມຕໍ່​ຢູ່ ບໍ່​ມີແບບຟອມ​ທີ່​ສາມາດໃຊ້ງານໄດ້ກັບ OpenRosa version 1.0 standard: %s</string>
   <string name="password">ລະຫັດຜ່ານ</string>
-  <string name="play_audio">ເປີດສຽງ</string>
   <string name="play_video">ເປີດວີດີໂອ</string>
   <string name="please_wait">ກະລຸນາລໍຖ້າຈັກໜ້ອຍ</string>
   <string name="please_wait_long">ກະລຸນາລໍຖ້າ. ມັນອາດຕ້ອງໃຊ້ເວລາໜ້ອຍໜື່ງ</string>
@@ -127,7 +126,6 @@
   <string name="submission_url">ບ່ອນ​ສົ່ງ​ຂໍ້​ມູນ </string>
   <string name="font_size">ຂະໜາດຕົວອັກສອນ</string>
   <string name="change_font_size">ຂະໜາດຕົວອັກສອນ</string>
-  <string name="form_scan_starting">ກຳລັງຄົ້ນຫາແບບຟອມ</string>
   <string name="access_error">ມີ​ຄວາມຜິດພາດໃນຂະນະທີ່ເປີດ %s:</string>
   <string name="manifest_server_error">Manifest reply does not report an OpenRosa version — bad server?</string>
   <string name="root_element_error">Root element is not &lt;manifest\&gt; — was %s</string>
@@ -181,7 +179,6 @@
   <string name="draw_image">ແຕ້ມຮູບພາບແບບຄ້າວໆ</string>
   <string name="reset_image">ຕັ້ງຄ່າຄືນໃໝ່</string>
   <string name="set_color">ເລືອກສີ</string>
-  <string name="select_drawing_color">ເລືອກສີເພື່ອແຕ້ມຮູບ</string>
   <string name="admin_preferences">​ການຕັ້ງຄ່າສຳລັບຜູ້​ບໍ​ລິ​ຫານລະບົບ</string>
   <string name="admin_access_settings">​​ແຕະ​ເພື່ອ​ໃຫ້​ຜູ້​ບໍ​ລິ​ຫານລະ​ບົບເຂົ້າ​ຫາ​ການ​ຕັ້ງ​ຄ່າ</string>
   <string name="save_mid">ບັນທຶກແບບຟອມ</string>

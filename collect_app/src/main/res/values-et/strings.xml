@@ -90,7 +90,6 @@
   <string name="parse_legacy_formlist_failed">Serveril puudub informatsioon vormide kohta, mis ühilduks versiooniga: Aggregate 0.9.x. : %s</string>
   <string name="parse_openrosa_formlist_failed">Serveril puudub informatsioon vormide kohta, mis ühilduks versiooniga: OpenRosa version 1.0 standard: %s</string>
   <string name="password">Salasõna</string>
-  <string name="play_audio">Mängi heli</string>
   <string name="play_video">Mängi videot</string>
   <string name="please_wait">Palun oodake.</string>
   <string name="please_wait_long">Palun oodake. See võib võtta mõne minuti.</string>
@@ -133,7 +132,6 @@
   <string name="submission_url">Vormi sisestuse asukoht</string>
   <string name="font_size">Teksti suurus</string>
   <string name="change_font_size">Teksti suurus</string>
-  <string name="form_scan_starting">Otsin vorme…</string>
   <string name="access_error">%s avamisel esines viga</string>
   <string name="manifest_server_error">Serveri vastuses puudub OpenRosa versioon</string>
   <string name="root_element_error">Ei leia juurelementi &lt;manifest\&gt; — oli %s</string>
@@ -187,7 +185,6 @@
   <string name="draw_image">Joonista pilt</string>
   <string name="reset_image">Lähtesta</string>
   <string name="set_color">Värvi määramine</string>
-  <string name="select_drawing_color">Vali värv joonistamiseks </string>
   <string name="admin_preferences">Administraatori seaded</string>
   <string name="admin_access_settings">Administraatori seadetele ligipääsuks puudutage</string>
   <string name="save_mid">Salvesta vorm</string>
@@ -273,7 +270,6 @@
   <string name="username_error_whitespace">Kasutajanime alguses või lõpus ei ole lubatud kasutada tühikut</string>
   <string name="google_play_services_error_occured">Puudub ligipääs Google Maps-ile. Veenduge, et Google Play teenused on paigaldatud.</string>
   <string name="about_preferences">Teave</string>
-  <string name="tell_your_friends_msg">Laadige ODK Collect alla!</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">Kaardistus</string>
   <string name="map_sdk_selector_title">Kaardistus SDK</string>

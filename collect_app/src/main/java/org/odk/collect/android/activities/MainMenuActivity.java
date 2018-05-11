@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.activities;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -25,7 +26,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -76,7 +76,7 @@ import timber.log.Timber;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class MainMenuActivity extends AppCompatActivity {
+public class MainMenuActivity extends CollectAbstractActivity {
 
     private static final int PASSWORD_DIALOG = 1;
 
@@ -102,6 +102,12 @@ public class MainMenuActivity extends AppCompatActivity {
     private MyContentObserver contentObserver = new MyContentObserver();
 
     // private static boolean DO_NOT_EXIT = false;
+
+    public static void startActivityAndCloseAllOthers(Activity activity) {
+        activity.startActivity(new Intent(activity, MainMenuActivity.class));
+        activity.overridePendingTransition(0, 0);
+        activity.finishAffinity();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -430,10 +436,8 @@ public class MainMenuActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         Collect.getInstance().getActivityLogger()
                 .logAction(this, "onCreateOptionsMenu", "show");
-        super.onCreateOptionsMenu(menu);
-
         getMenuInflater().inflate(R.menu.main_menu, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -444,16 +448,14 @@ public class MainMenuActivity extends AppCompatActivity {
                         .getActivityLogger()
                         .logAction(this, "onOptionsItemSelected",
                                 "MENU_ABOUT");
-                Intent aboutIntent = new Intent(this, AboutActivity.class);
-                startActivity(aboutIntent);
+                startActivity(new Intent(this, AboutActivity.class));
                 return true;
             case R.id.menu_general_preferences:
                 Collect.getInstance()
                         .getActivityLogger()
                         .logAction(this, "onOptionsItemSelected",
                                 "MENU_PREFERENCES");
-                Intent ig = new Intent(this, PreferencesActivity.class);
-                startActivity(ig);
+                startActivity(new Intent(this, PreferencesActivity.class));
                 return true;
             case R.id.menu_admin_preferences:
                 Collect.getInstance().getActivityLogger()
@@ -461,9 +463,7 @@ public class MainMenuActivity extends AppCompatActivity {
                 String pw = adminPreferences.getString(
                         AdminKeys.KEY_ADMIN_PW, "");
                 if ("".equalsIgnoreCase(pw)) {
-                    Intent i = new Intent(getApplicationContext(),
-                            AdminPreferencesActivity.class);
-                    startActivity(i);
+                    startActivity(new Intent(this, AdminPreferencesActivity.class));
                 } else {
                     showDialog(PASSWORD_DIALOG);
                     Collect.getInstance().getActivityLogger()

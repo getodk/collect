@@ -389,7 +389,7 @@ public class FormController {
      *
      * @return true if index is in a "field-list". False otherwise.
      */
-    private boolean indexIsInFieldList(FormIndex index) {
+    public boolean indexIsInFieldList(FormIndex index) {
         int event = getEvent(index);
         if (event == FormEntryController.EVENT_QUESTION) {
             // caption[0..len-1]

@@ -92,7 +92,6 @@
   <string name="parse_legacy_formlist_failed">सर्भरले एग्रिगेट संस्करण 0.9.x संग मिल्ने उपलब्ध-फारम पठाएन: %s</string>
   <string name="parse_openrosa_formlist_failed">सर्भरले ओपनरोजा संस्करण 1.0 संग मिल्ने उपलब्ध-फारम पठाएन: %s</string>
   <string name="password">पासवर्ड </string>
-  <string name="play_audio">आवाज सुन्नुहोस्</string>
   <string name="play_video">भिडियो हेर्नुहोस्</string>
   <string name="please_wait">कृपया केही समय पर्खनुहोस् </string>
   <string name="please_wait_long">कृपया पर्खनुहोस् । केही समय लाग्न सक्छ । </string>
@@ -137,7 +136,6 @@
   <string name="submission_url">बुझाईएको वस्तुको मार्ग</string>
   <string name="font_size">अक्षरको आकार</string>
   <string name="change_font_size">अक्षरको आकार</string>
-  <string name="form_scan_starting">फारमहरु छन् कि भनेर अवलोकन गरिदैछ…</string>
   <string name="access_error">%s मा प्रवेश गर्न खोज्दा गल्ति भयो:</string>
   <string name="manifest_server_error">म्यनिफेष्ट को प्रतिक्रियाले कुनै पनि ओपनरोजा संस्करण को जनाउ दिदैन - सर्भर बिग्रियो कि ?</string>
   <string name="root_element_error"> जड तत्वमा &lt;म्यनिफेष्ट\&gt; छैन — %s थियो </string>
@@ -192,7 +190,6 @@
   <string name="draw_image">तस्बिर कोर्नुहोस् </string>
   <string name="reset_image">पहिलाकै ठाउँमा ल्याउनुहोस् </string>
   <string name="set_color">रंग छान्नुहोस् </string>
-  <string name="select_drawing_color">चित्र बनाउनको लागि रंग छान्नुहोस् </string>
   <string name="admin_preferences">एडमिन सेटिङ्स</string>
   <string name="admin_access_settings">सेटिंग मा प्रशासक प्रवेशको लागि थिच्नुहोस्</string>
   <string name="save_mid">फारम संचित गर्नुहोस् </string>
@@ -267,7 +264,6 @@
   <string name="drive_get_file">%1$s र मिडिया फाइलहरु प्राप्त गरिदैछ |</string>
   <string name="no_google_account">एउटा गुगल खाता छान्नुहोस् ! </string>
   <string name="google_set_account">तपाईंले गुगल गुगल सिट्सलाई आफ्नो सर्भरको रूपमा छान्नुभयो , अघि बढ्नु पूर्व कृपया जनरल सेटिङ्समा त्यहि अनुरूपको गुगल खाता छान्नुहोस्</string>
-  <string name="media_upload_error">उपलब्ध नभएको तस्विर अपलोड गर्न असफल: %1$s</string>
   <string name="odk_auth_auth_fail">ODK स्वत: प्रेषण प्रमाणीकरण असफल , कृपया आफ्नो सेटिङ्स सही छ छैन चेक गर्नुहोस्</string>
   <string name="odk_auto_note">ODK स्वत: प्रेषण सूचना</string>
   <string name="notification_error">सूचना देखाउन गल्ती भयो </string>
@@ -284,9 +280,6 @@
   <string name="username_error_whitespace">प्रयोगकर्ता नाममा खाली स्पेस हुनु हुँदैन ।</string>
   <string name="google_play_services_error_occured">गुगल  म्याप्स् मा जान सकिएन । के गुगल प्ले सर्भिसेस इन्स्टल गरिएको छ ?</string>
   <string name="about_preferences">जानकारी</string>
-  <string name="tell_your_friends">साथीभाइ माझ ODK कलेक्ट शेयर गरौं ।</string>
-  <string name="tell_your_friends_msg">ODK कलेक्ट एप डाउनलोड गर्नुहोस् ।</string>
-  <string name="leave_a_review">गुगल प्ले स्टोरमा आफ्नो समिक्षा राख्नुहोस् ।</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">नक्शाकंन</string>
   <string name="map_sdk_selector_title">SDK नक्शाकंन गर्न</string>
@@ -326,8 +319,6 @@
   <string name="download_selected">चुनिएका डाउनलोड गर्नुहोस्</string>
   <string name="record_geopoint">जियो पोइन्ट रेकर्ड गर्नुहोस्</string>
   <string name="odk_forum">ODK मंचमा आवद्ध हुनुहोस्</string>
-  <string name="odk_forum_summary">सहयोग पाउन , नयाँ फिचर अनुरोध गर्न , कोड / अनुवाद गरी मद्दत गर्न ODK मंचमा आवद्ध हुनु होस् !</string>
-  <string name="all_open_source_licenses">ओपन सोर्स लाइब्रेरी तथा लाइसेन्सहरु</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">पश्चिम%1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->

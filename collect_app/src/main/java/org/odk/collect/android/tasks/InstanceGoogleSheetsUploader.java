@@ -18,6 +18,7 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
@@ -31,6 +32,7 @@ import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.instance.AbstractTreeElement;
 import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.core.model.instance.TreeReference;
+import org.javarosa.core.util.PropertyUtils;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryModel;
 import org.javarosa.xform.util.XFormUtils;
@@ -76,12 +78,17 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     public static final int REQUEST_AUTHORIZATION = 1001;
     public static final String GOOGLE_DRIVE_ROOT_FOLDER = "Open Data Kit";
     public static final String GOOGLE_DRIVE_SUBFOLDER = "Submissions";
+    private static final String PARENT_KEY = "PARENT_KEY";
+    private static final String KEY = "KEY";
 
     private static final String UPLOADED_MEDIA_URL = "https://drive.google.com/open?id=";
 
     private final SheetsHelper sheetsHelper;
     private final DriveHelper driveHelper;
     private final GoogleAccountsManager accountsManager;
+
+    private static final String ALTITUDE_TITLE_POSTFIX = "-altitude";
+    private static final String ACCURACY_TITLE_POSTFIX = "-accuracy";
 
     private boolean authFailed;
 
@@ -202,36 +209,53 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     private void uploadOneInstance(File instanceFile, String formFilePath, String spreadsheetUrl) throws UploadException {
         TreeElement instanceElement = getInstanceElement(formFilePath, instanceFile);
         setUpSpreadsheet(spreadsheetUrl);
-        TreeElement instanceIDElement = getInstanceIDElement(getChildElements(instanceElement));
         if (hasRepeatableGroups(instanceElement)) {
-            if (instanceIDElement == null) {
-                throw new UploadException(Collect.getInstance().getString(R.string.lack_of_instance_id));
-            }
             createSheetsIfNeeded(instanceElement);
         }
-        insertRows(instanceElement, instanceIDElement, instanceFile, spreadsheet.getSheets().get(0).getProperties().getTitle());
+        String key = getInstanceID(getChildElements(instanceElement));
+        if (key == null) {
+            key = PropertyUtils.genUUID();
+        }
+        insertRows(instanceElement, null, key, instanceFile, spreadsheet.getSheets().get(0).getProperties().getTitle());
     }
 
-    private void insertRows(TreeElement element, TreeElement instanceIDElement, File instanceFile, String sheetTitle)
+    private void insertRows(TreeElement element, String parentKey, String key, File instanceFile, String sheetTitle)
             throws UploadException {
-        insertRow(element, instanceIDElement, instanceFile, sheetTitle);
+        insertRow(element, parentKey, key, instanceFile, sheetTitle);
 
+        int repeatIndex = 0;
         for (int i = 0 ; i < element.getNumChildren(); i++) {
             TreeElement child = element.getChildAt(i);
             if (child.isRepeatable() && child.getMultiplicity() != TreeReference.INDEX_TEMPLATE) {
-                insertRows(child, instanceIDElement, instanceFile, getElementTitle(child));
+                insertRows(child, key, getKeyBasedOnParentKey(key, child.getName(), repeatIndex++), instanceFile, getElementTitle(child));
+            }
+            if (child.getMultiplicity() == TreeReference.INDEX_TEMPLATE) {
+                repeatIndex = 0;
             }
         }
     }
 
-    private void insertRow(TreeElement element, TreeElement instanceIDElement, File instanceFile, String sheetTitle)
+    private String getKeyBasedOnParentKey(String parentKey, String groupName, int repeatIndex) {
+        return parentKey
+                + "/"
+                + groupName
+                + "[" + (repeatIndex + 1) + "]";
+    }
+
+    private void insertRow(TreeElement element, String parentKey, String key, File instanceFile, String sheetTitle)
             throws UploadException {
-        List<Object> columnTitles = getColumnTitles(element);
-        ensureNumberOfColumnsIsValid(columnTitles.size());
+
+        if (isCancelled()) {
+            throw new UploadException(Collect.getInstance().getString(R.string.instance_upload_cancelled));
+        }
 
         try {
             List<List<Object>> sheetCells = getSheetCells(sheetTitle);
-            if (sheetCells != null && !sheetCells.isEmpty()) { // we are editing an existed sheet
+            boolean newSheet = sheetCells == null || sheetCells.isEmpty();
+            List<Object> columnTitles = getColumnTitles(element, newSheet);
+            ensureNumberOfColumnsIsValid(columnTitles.size());
+
+            if (!newSheet) { // we are editing an existed sheet
                 if (isAnyColumnHeaderEmpty(sheetCells.get(0))) {
                     // Insert a header row again to fill empty headers
                     sheetsHelper.updateRow(spreadsheet.getSpreadsheetId(), sheetTitle + "!A1",
@@ -239,6 +263,9 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                     sheetCells = getSheetCells(sheetTitle); // read sheet cells again to update
                 }
                 disallowMissingColumns(sheetCells.get(0), columnTitles);
+                addAltitudeAndAccuracyTitles(sheetCells.get(0), columnTitles);
+                ensureNumberOfColumnsIsValid(columnTitles.size());  // Call again to ensure valid number of columns
+
             } else { // new sheet
                 Integer sheetId = getSheetId(sheetTitle);
                 if (sheetId != null) {
@@ -249,11 +276,13 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                 sheetCells = getSheetCells(sheetTitle); // read sheet cells again to update
             }
 
-            HashMap<String, String> answers = getAnswers(getChildElements(element), instanceFile);
+            HashMap<String, String> answers = getAnswers(element, columnTitles, instanceFile, parentKey, key);
+
+            if (isCancelled()) {
+                throw new UploadException(Collect.getInstance().getString(R.string.instance_upload_cancelled));
+            }
+
             if (shouldRowBeInserted(answers)) {
-                if (element.isRepeatable()) {
-                    answers.put(INSTANCE_ID, instanceIDElement.getValue().getDisplayText());
-                }
                 sheetsHelper.insertRow(spreadsheet.getSpreadsheetId(), sheetTitle,
                         new ValueRange().setValues(Collections.singletonList(prepareListOfValues(sheetCells.get(0), columnTitles, answers))));
             }
@@ -261,6 +290,27 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             throw new UploadException(e);
         }
     }
+
+    /**
+     * Adds titles ending with "-altitude" or "-accuracy" if they have been manually added to the
+     * Sheet. Existing spreadsheets can start collecting altitude / accuracy from
+     * Geo location fields.
+     *
+     * @param sheetHeaders - Headers from the spreadsheet
+     * @param columnTitles - Column titles list to be updated with altitude / accuracy titles from
+     *                       the sheetHeaders
+     */
+    private void addAltitudeAndAccuracyTitles(List<Object> sheetHeaders, List<Object> columnTitles) {
+        for (Object sheetTitle : sheetHeaders) {
+            String sheetTitleStr = (String) sheetTitle;
+            if (sheetTitleStr.endsWith(ALTITUDE_TITLE_POSTFIX) || sheetTitleStr.endsWith(ACCURACY_TITLE_POSTFIX)) {
+                if (!columnTitles.contains(sheetTitleStr)) {
+                    columnTitles.add(sheetTitleStr);
+                }
+            }
+        }
+    }
+
 
     // Ignore rows with all empty answers added by a user and extra repeatable groups added
     // by Javarosa https://github.com/opendatakit/javarosa/issues/266
@@ -330,6 +380,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
     private void createSheetsIfNeeded(TreeElement element) throws UploadException {
         Set<String> sheetTitles = getSheetTitles(element);
+
         try {
             for (String sheetTitle : sheetTitles) {
                 if (!doesSheetExist(sheetTitle)) {
@@ -354,41 +405,99 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         return sheetTitles;
     }
 
-    private HashMap<String, String> getAnswers(List<TreeElement> elements, File instanceFile)
+    private HashMap<String, String> getAnswers(TreeElement element, List<Object> columnTitles, File instanceFile, String parentKey, String key)
             throws UploadException {
         HashMap<String, String> answers = new HashMap<>();
-        for (TreeElement element : elements) {
-            String elementTitle = getElementTitle(element);
-            if (element.isRepeatable()) {
+        for (TreeElement childElement : getChildElements(element)) {
+            String elementTitle = getElementTitle(childElement);
+            if (childElement.isRepeatable()) {
                 answers.put(elementTitle, getHyperlink(getSheetUrl(getSheetId(elementTitle)), elementTitle));
             } else {
-                String answer = element.getValue() != null ? element.getValue().getDisplayText() : "";
+                String answer = childElement.getValue() != null ? childElement.getValue().getDisplayText() : "";
                 if (new File(instanceFile.getParentFile() + "/" + answer).isFile()) {
                     String mediaHyperlink = uploadMediaFile(instanceFile, answer);
                     answers.put(elementTitle, mediaHyperlink);
                 } else {
-                    answers.put(elementTitle, answer);
+
+                    if (isLocationValid(answer)) {
+                        answers.putAll(parseGeopoint(columnTitles, elementTitle, answer));
+                    } else {
+                        answers.put(elementTitle, answer);
+                    }
                 }
             }
+        }
+        if (element.isRepeatable()) {
+            answers.put(PARENT_KEY, parentKey);
+            answers.put(KEY, key);
+        } else if (hasRepeatableGroups(element)) {
+            answers.put(KEY, key);
         }
         return answers;
     }
 
-    private List<Object> getColumnTitles(TreeElement element) {
-        List<Object> columnTitles = new ArrayList<>();
-        if (element.isRepeatable()) {
-            columnTitles.add(0, INSTANCE_ID);
+    /**
+     * Strips the Altitude and Accuracy from a location String and adds them as separate columns if
+     * the column titles exist.
+     *
+     * @param columnTitles - A List of column titles on the sheet
+     * @param elementTitle - The title of the geo data to parse. e.g. "data-Point"
+     * @param geoData - A space (" ") separated string that contains "Lat Long Altitude Accuracy"
+     * @return a Map of fields containing Lat/Long and Accuracy, Altitude (if the respective column
+     *         titles exist in the columnTitles parameter).
+     */
+    private @NonNull Map<String, String> parseGeopoint(@NonNull List<Object> columnTitles, @NonNull String elementTitle, @NonNull String geoData) {
+        Map<String, String> geoFieldsMap = new HashMap<String, String>();
+
+        // Accuracy
+        int accuracyLocation = geoData.lastIndexOf(' ');
+        String accuracyStr = geoData.substring(accuracyLocation).trim();
+        geoData = geoData.substring(0, accuracyLocation).trim();
+        final String accuracyTitle = elementTitle + ACCURACY_TITLE_POSTFIX;
+        if (columnTitles.contains(accuracyTitle)) {
+            geoFieldsMap.put(accuracyTitle, accuracyStr);
         }
+
+        // Altitude
+        int altitudeLocation = geoData.lastIndexOf(' ');
+        String altitudeStr = geoData.substring(altitudeLocation).trim();
+        geoData = geoData.substring(0, altitudeLocation).trim();
+        final String altitudeTitle = elementTitle + ALTITUDE_TITLE_POSTFIX;
+        if (columnTitles.contains(altitudeTitle)) {
+            geoFieldsMap.put(altitudeTitle, altitudeStr);
+        }
+
+        geoData = geoData.replace(' ', ',');
+
+        // Put the modified geo location (Just lat/long) into the geo fields Map
+        geoFieldsMap.put(elementTitle, geoData);
+
+        return geoFieldsMap;
+    }
+
+    private List<Object> getColumnTitles(TreeElement element, boolean newSheet) {
+        List<Object> columnTitles = new ArrayList<>();
         for (TreeElement child : getChildElements(element)) {
-            columnTitles.add(getElementTitle(child));
+            final String elementTitle = getElementTitle(child);
+            columnTitles.add(elementTitle);
+            if (newSheet && child.getDataType() == org.javarosa.core.model.Constants.DATATYPE_GEOPOINT) {
+                columnTitles.add(elementTitle + ALTITUDE_TITLE_POSTFIX);
+                columnTitles.add(elementTitle + ACCURACY_TITLE_POSTFIX);
+            }
+        }
+        if (element.isRepeatable()) {
+            columnTitles.add(PARENT_KEY);
+            columnTitles.add(KEY);
+        } else if (hasRepeatableGroups(element)) {
+            columnTitles.add(KEY);
         }
         return columnTitles;
     }
 
-    private TreeElement getInstanceIDElement(List<TreeElement> elements) {
+    private String getInstanceID(List<TreeElement> elements) {
         for (TreeElement element : elements) {
             if (element.getName().equals(INSTANCE_ID)) {
-                return element;
+                return element.getValue() != null ? element.getValue().getDisplayText() : null;
             }
         }
         return null;
@@ -475,17 +584,6 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             if (!path.equals(" ") && columnTitles.contains(path.toString())) {
                 if (answers.containsKey(path.toString())) {
                     answer = answers.get(path.toString());
-                    // Check to see if answer is a location, if so, get rid of accuracy
-                    // and altitude, try to match a fairly specific pattern to determine
-                    // if it's a location [-]#.# [-]#.# #.# #.#
-
-                    if (isLocationValid(answer)) {
-                        // get rid of everything after the second space
-                        int firstSpace = answer.indexOf(' ');
-                        int secondSpace = answer.indexOf(" ", firstSpace + 1);
-                        answer = answer.substring(0, secondSpace);
-                        answer = answer.replace(' ', ',');
-                    }
                 }
             }
             // https://github.com/opendatakit/collect/issues/931

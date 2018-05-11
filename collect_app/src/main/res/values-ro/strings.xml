@@ -88,7 +88,6 @@
   <string name="parse_legacy_formlist_failed">Serverul nu a furnizat un document-formular compatibil cu Aggregate 0.9.x. : %s</string>
   <string name="parse_openrosa_formlist_failed">Serverul nu a furnizat un document-formular compatibil cu OpenRosa versiunea 1.0 standard: %s</string>
   <string name="password">Parola</string>
-  <string name="play_audio">Redați sunet</string>
   <string name="play_video">Redați video</string>
   <string name="please_wait">Vă rugăm să așteptați câteva momente.</string>
   <string name="please_wait_long">Vă rugăm să așteptați. Ar putea dura câteva minute.</string>
@@ -129,7 +128,6 @@
   <string name="submission_url">Calea către transmitere</string>
   <string name="font_size">Mărimea fontului textului</string>
   <string name="change_font_size">Mărimea fontului textului</string>
-  <string name="form_scan_starting">Caut formulare…</string>
   <string name="access_error">Eroare la accesarea %s: </string>
   <string name="manifest_server_error">Răspunsul Manifest nu raportează o versiune OpenRosa — server greșit?</string>
   <string name="root_element_error">Root nu este &amp;lt;manifest\&gt; — era %s</string>
@@ -182,7 +180,6 @@
   <string name="draw_image">Desenați imaginea</string>
   <string name="reset_image">Resetați</string>
   <string name="set_color">Setați culoarea</string>
-  <string name="select_drawing_color">Selectați culoarea pentru desen</string>
   <string name="admin_preferences">Setări administrator</string>
   <string name="admin_access_settings">Atingeți pentru accesul ca administrator la setări</string>
   <string name="save_mid">Salvați formularul</string>

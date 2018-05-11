@@ -123,8 +123,8 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     @SuppressWarnings("unchecked")
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        setContentView(R.layout.remote_file_manage_list);
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.remote_file_manage_list);
         setTitle(getString(R.string.get_forms));
 
         if (getIntent().getExtras() != null) {
@@ -146,7 +146,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         });
 
         toggleButton = findViewById(R.id.toggle_button);
-        toggleButton.setEnabled(listView.getCheckedItemCount() > 0);
+        toggleButton.setEnabled(false);
         toggleButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -216,8 +216,8 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
         filteredFormList.addAll(formList);
 
-        if (getLastNonConfigurationInstance() instanceof DownloadFormListTask) {
-            downloadFormListTask = (DownloadFormListTask) getLastNonConfigurationInstance();
+        if (getLastCustomNonConfigurationInstance() instanceof DownloadFormListTask) {
+            downloadFormListTask = (DownloadFormListTask) getLastCustomNonConfigurationInstance();
             if (downloadFormListTask.getStatus() == AsyncTask.Status.FINISHED) {
                 try {
                     dismissDialog(PROGRESS_DIALOG);
@@ -226,8 +226,8 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 }
                 downloadFormsTask = null;
             }
-        } else if (getLastNonConfigurationInstance() instanceof DownloadFormsTask) {
-            downloadFormsTask = (DownloadFormsTask) getLastNonConfigurationInstance();
+        } else if (getLastCustomNonConfigurationInstance() instanceof DownloadFormsTask) {
+            downloadFormsTask = (DownloadFormsTask) getLastCustomNonConfigurationInstance();
             if (downloadFormsTask.getStatus() == AsyncTask.Status.FINISHED) {
                 try {
                     dismissDialog(PROGRESS_DIALOG);
@@ -236,7 +236,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 }
                 downloadFormsTask = null;
             }
-        } else if (formNamesAndURLs.isEmpty() && getLastNonConfigurationInstance() == null) {
+        } else if (formNamesAndURLs.isEmpty() && getLastCustomNonConfigurationInstance() == null) {
             // first time, so get the formlist
             downloadFormList();
         }
@@ -427,8 +427,8 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             ((FormDownloadListAdapter) listView.getAdapter()).notifyDataSetChanged();
         }
         toggleButton.setEnabled(filteredFormList.size() > 0);
-        toggleButtonLabel(toggleButton, listView);
         checkPreviouslyCheckedItems();
+        toggleButtonLabel(toggleButton, listView);
     }
 
     @Override
@@ -639,7 +639,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             updateAdapter();
             selectSupersededForms();
             downloadButton.setEnabled(listView.getCheckedItemCount() > 0);
-            toggleButton.setEnabled(listView.getCheckedItemCount() > 0);
+            toggleButton.setEnabled(listView.getCount() > 0); 
             toggleButtonLabel(toggleButton, listView);
         }
     }

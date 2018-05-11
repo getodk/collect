@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright 2017 Nafundi
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright 2017 Nafundi
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
@@ -12,8 +11,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginBottom="0dp"
@@ -22,14 +20,6 @@ limitations under the License.
     android:layout_marginTop="0dp"
     android:orientation="vertical"
     android:padding="0dp">
-    <!-- Toolbar -->
-    <include layout="@layout/toolbar"/>
-
-    <include
-        layout="@layout/toolbar_action_bar_shadow"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -41,12 +31,22 @@ limitations under the License.
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:textSize="14sp"/>
+            android:textSize="14sp" />
 
         <android.support.v4.view.ViewPager
             android:id="@+id/pager"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
     </LinearLayout>
+
+    <!-- Toolbar -->
+    <include layout="@layout/toolbar" />
+
+    <include
+        layout="@layout/toolbar_action_bar_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar" />
+
 </RelativeLayout>
