@@ -32,6 +32,7 @@ import android.widget.ImageButton;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.spatial.MapHelper;
+import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoShapeWidget;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.events.MapListener;
@@ -400,7 +401,13 @@ public class GeoShapeOsmMapActivity extends CollectAbstractActivity implements I
                 FormEntryActivity.GEOSHAPE_RESULTS,
                 finalReturnString);
         setResult(RESULT_OK, i);
-        finish();
+        // make sure the shape has at least three nodes.
+        String[] gshrs = finalReturnString.split(";");
+        if (gshrs.length < 4) {
+            ToastUtils.showShortToastInMiddle("You have to set at least 3 points!");
+        } else {
+            finish();
+        }
     }
 
     private void update_polygon() {
