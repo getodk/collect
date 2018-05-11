@@ -535,6 +535,24 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
         super.onStop();
     }
 
+    @Override
+    protected void onDestroy() {
+        if (retrieveDriveFileContentsAsyncTask != null) {
+            if (!retrieveDriveFileContentsAsyncTask.isCancelled()) {
+                retrieveDriveFileContentsAsyncTask.cancel(true);
+            }
+            retrieveDriveFileContentsAsyncTask.setTaskListener(null);
+        }
+        if (getFileTask != null) {
+            if (!getFileTask.isCancelled()) {
+                getFileTask.cancel(true);
+            }
+            getFileTask.setGoogleDriveFormDownloadListener(null);
+        }
+        finish();
+        super.onDestroy();
+    }
+
     public void listFiles(String dir, String query) {
         setProgressBarIndeterminateVisibility(true);
         adapter = null;
