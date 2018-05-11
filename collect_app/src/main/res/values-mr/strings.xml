@@ -318,7 +318,6 @@
   <string name="geo_clear_warning">वैशिष्ट्य आधीच तयार केले आपण वैशिष्ट्य साफ करू इच्छिता?</string>
   <string name="geo_exit_warning">बदल टाकून ओडीके कडे परत जा?</string>
   <string name="polygon_validator">बहुभुज तयार करण्यासाठी किमान 3 गुण असणे आवश्यक आहे</string>
-  <string name="dialog_continue">चालू ठेवा</string>
   <string name="clear">साफ करा</string>
   <string name="polyline_polygon_text">जिओ ट्रेस जतन हे प्रमाणे करा</string>
   <string name="manual_mode">मॅन्युअल माध्यम</string>

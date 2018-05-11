@@ -346,7 +346,6 @@
     <string name="geo_exit_warning">Discard changes and return to ODK?</string>
     <string name="polygon_validator">Must have at least 3 points to create Polygon</string>
     <string name="polyline_validator">Must have at least 2 points to create Polyline</string>
-    <string name="dialog_continue">Continue</string>
     <string name="clear">Clear</string>
     <string name="polyline_polygon_text">Save GeoTrace As</string>
     <string name="manual_mode">Manual Mode</string>

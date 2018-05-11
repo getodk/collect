@@ -321,7 +321,6 @@
   <string name="geo_clear_warning">លក្ខណះ​ពិសេស​ត្រូវ​បាន​បង្កើត។ តើ​អ្នក​ចង់​លុប​លក្ខណះ​នេះ​ដែរ​ឬ​ទេ?</string>
   <string name="geo_exit_warning">បោះបង់​ការផ្លាស់​ប្តូរ និងត្រឡប់ទៅកាន់ ODK វិញ?</string>
   <string name="polygon_validator">ត្រូវការចំនុចយ៉ាងតិច 3 ដើម្បី​បង្កើតពហុកោណ</string>
-  <string name="dialog_continue">បន្តរ</string>
   <string name="clear">លុ​បចេញ</string>
   <string name="polyline_polygon_text">រក្សាទុក GeoTrace ជា</string>
   <string name="manual_mode">របៀបធ្វើដោយដៃ</string>

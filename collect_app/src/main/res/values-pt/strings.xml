@@ -270,7 +270,6 @@ Escolher Imagem</string>
   <string name="enable_gps_message">O GPS está desabilitado em seu aparelho. Gostaria de habilitá-lo?</string>
   <string name="gps_enable_message">O GPS está desabilitado em seu aparelho. Gostaria de habilitá-lo?</string>
   <string name="minutes">Minutos</string>
-  <string name="dialog_continue">Continuar</string>
   <string name="clear">Limpar</string>
   <string name="manual_mode">Modo manual</string>
   <string name="automatic_mode">Modo automático</string>

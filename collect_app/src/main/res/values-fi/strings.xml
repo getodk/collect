@@ -335,7 +335,6 @@
   <string name="geo_clear_warning">Ominaisuus on jo luotu. Haluatko tyhjentää ominaisuuden?</string>
   <string name="geo_exit_warning">Hylätäänkö muutokset ja palataan ODK:hon?</string>
   <string name="polygon_validator">Monikulmion luomiseen tarvitaan vähintään 3 pistettä</string>
-  <string name="dialog_continue">Jatka</string>
   <string name="clear">Tyhjennä</string>
   <string name="polyline_polygon_text">Tallenna GeoTrace nimellä</string>
   <string name="manual_mode">Manuaalinen tila</string>

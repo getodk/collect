@@ -304,7 +304,6 @@
   <string name="geo_clear_warning">Característica ja creada. Vols netejar-la?</string>
   <string name="geo_exit_warning">Descartar canvis i tornar a ODK?</string>
   <string name="polygon_validator">Per crear un polígon calen mínim 3 punts </string>
-  <string name="dialog_continue">Continua</string>
   <string name="clear">Neteja</string>
   <string name="polyline_polygon_text">Desa GeoTraça com</string>
   <string name="manual_mode">Mòdus Manual</string>

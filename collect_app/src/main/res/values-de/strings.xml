@@ -335,7 +335,6 @@
   <string name="geo_clear_warning">Feature already created. Would you like to clear the feature?</string>
   <string name="geo_exit_warning">Änderungen verwerfen und zu ODK zurückkehren?</string>
   <string name="polygon_validator">Min. 3 Punkte notwendig um ein Polygon zu erzeugen</string>
-  <string name="dialog_continue">Weiter</string>
   <string name="clear">Löschen</string>
   <string name="polyline_polygon_text">GeoTrace speichern als</string>
   <string name="manual_mode">Manueller Modus</string>

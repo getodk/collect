@@ -321,7 +321,6 @@
   <string name="geo_clear_warning">Objekt redan skapat. Vill du rensa objektet?</string>
   <string name="geo_exit_warning">Ignorera ändringar och återgå till ODK?</string>
   <string name="polygon_validator">Minst tre punkter krävs för att skapa en polygon</string>
-  <string name="dialog_continue">Fortsätt</string>
   <string name="clear">Rensa</string>
   <string name="polyline_polygon_text">Spara GeoTrace som</string>
   <string name="manual_mode">Manuellt läge</string>
