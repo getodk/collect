@@ -798,6 +798,24 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
 
             case RequestCodes.AUDIO_CHOOSER:
+                /*
+                 * We have a saved image somewhere, but we really want it to be in:
+                 * /sdcard/odk/instances/[current instnace]/something.jpg so we move
+                 * it there before inserting it into the content provider. Once the
+                 * android image capture bug gets fixed, (read, we move on from
+                 * Android 1.6) we want to handle images the audio and video
+                 */
+
+                showDialog(SAVING_IMAGE_DIALOG);
+                Runnable saveAudioRunnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        saveChosenAudio(intent.getData());
+                    }
+                };
+                new Thread(saveAudioRunnable).start();
+
+                break;
             case RequestCodes.VIDEO_CHOOSER:
                 saveAudioVideoAnswer(intent.getData());
                 break;
@@ -836,6 +854,46 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
         }
         refreshCurrentView();
+    }
+
+    private void saveChosenAudio(Uri selectedAudio) {
+        String extension = sourcePath.substring(sourcePath.lastIndexOf('.'));
+        String destPath =  getInstanceFolder() + File.separator
+                + fileUtil.getRandomFilename() + extension;
+        File chosenAudio;
+        try{
+            chosenAudio = MediaUtils.getFileFromUri(this,selectedAudio,Images.Media.DATA);
+            if (chosenAudio != null) {
+                final File newAudio = new File(destPath);
+                FileUtils.copyFile(chosenAudio,newAudio);
+                runOnUiThread(()->{
+                    dismissDialog(SAVING_DIALOG);
+                    if(getCurrentViewIfODKView()!=null){
+                        getCurrentViewIfODKView().setBinaryData(newAudio);
+                    }
+                    saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+                    refreshCurrentView();
+                });
+            }else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        dismissDialog(SAVING_DIALOG);
+                        Timber.e("Could not receive chosen audio");
+                        showCustomToast(getString(R.string.error_occured), Toast.LENGTH_SHORT);
+                    }
+                });
+            }
+        } catch (GDriveConnectionException e) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    dismissDialog(SAVING_DIALOG);
+                    Timber.e("Could not receive chosen audio due to connection problem");
+                    showCustomToast(getString(R.string.gdrive_connection_exception), Toast.LENGTH_LONG);
+                }
+            });
+        }
     }
 
     private void saveChosenImage(Uri selectedImage) {
