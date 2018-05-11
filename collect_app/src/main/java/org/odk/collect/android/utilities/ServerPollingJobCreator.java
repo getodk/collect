@@ -29,11 +29,6 @@ public class ServerPollingJobCreator implements JobCreator {
     @Override
     @Nullable
     public Job create(@NonNull String tag) {
-        switch (tag) {
-            case ServerPollingJob.TAG:
-                return new ServerPollingJob();
-            default:
-                return null;
-        }
+        return tag.equals(ServerPollingJob.TAG) ? new ServerPollingJob() : null;
     }
 }
