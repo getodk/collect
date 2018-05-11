@@ -1,6 +1,5 @@
 package org.odk.collect.android;
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
@@ -35,7 +34,6 @@ import tools.fastlane.screengrab.Screengrab;
 import tools.fastlane.screengrab.UiAutomatorScreenshotStrategy;
 
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -85,7 +83,7 @@ public class GuidanceHintFormTest {
 
     @Test
     public void guidanceVisibilityContentTest() {
-        GeneralSharedPreferences.getInstance().save(PreferenceKeys.KEY_GUIDANCE_HINT, GuidanceHint.YesCollapsed.toString());
+        GeneralSharedPreferences.getInstance().save(PreferenceKeys.KEY_GUIDANCE_HINT, GuidanceHint.Yes.toString());
 
         FormEntryPrompt prompt = Collect.getInstance().getFormController().getQuestionPrompt();
 
@@ -93,12 +91,9 @@ public class GuidanceHintFormTest {
 
         assertFalse(TextUtils.isEmpty(guidance));
 
-        onView(withId(R.id.help_text_view)).perform(click());
-
         Screengrab.screenshot("guidance_hint");
 
         onView(withId(R.id.guidance_text_view)).check(matches(withText(guidance)));
-
     }
 
     //region Helper methods.
@@ -107,8 +102,6 @@ public class GuidanceHintFormTest {
                 + FORMS_DIRECTORY
                 + GUIDANCE_SAMPLE_FORM;
     }
-
-
 
     //region Custom TestRule.
     private class FormEntryActivityTestRule extends IntentsTestRule<FormEntryActivity> {
@@ -128,6 +121,4 @@ public class GuidanceHintFormTest {
         }
     }
     //endregion
-
-
 }
