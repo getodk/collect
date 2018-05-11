@@ -68,6 +68,8 @@ public class AboutActivity extends CollectAbstractActivity implements
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(new AboutListAdapter(items, this, this));
+
+        //for basic animations on adding, modifying items in recyclerView
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         websiteTabHelper = new CustomTabHelper();
@@ -99,6 +101,9 @@ public class AboutActivity extends CollectAbstractActivity implements
                     shareIntent.putExtra(Intent.EXTRA_TEXT,
                             getString(R.string.tell_your_friends_msg) + " " + GOOGLE_PLAY_URL
                                     + getPackageName());
+
+                    //createChooser doc : https://stackoverflow.com/questions/3804233/what-is-the-purpose-of-using-intent-createchooser-in-startactivity-while-sen?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+
                     startActivity(Intent.createChooser(shareIntent,
                             getString(R.string.tell_your_friends)));
                     break;
@@ -124,6 +129,8 @@ public class AboutActivity extends CollectAbstractActivity implements
                         Toast.makeText(Collect.getInstance(),
                                 getString(R.string.activity_not_found, "market view"),
                                 Toast.LENGTH_SHORT).show();
+
+                        //? DOUBT
                         Timber.d(anfe);
                     }
                     if (!intentStarted) {
@@ -144,12 +151,16 @@ public class AboutActivity extends CollectAbstractActivity implements
     @Override
     public void onStart() {
         super.onStart();
+
+        //binding the website service
         websiteTabHelper.bindCustomTabsService(this, websiteUri);
         forumTabHelper.bindCustomTabsService(this, forumUri);
     }
 
     @Override
     public void onDestroy() {
+
+        //unbinding the custom tab service
         unbindService(websiteTabHelper.getServiceConnection());
         unbindService(forumTabHelper.getServiceConnection());
         super.onDestroy();
