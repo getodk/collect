@@ -14,7 +14,6 @@ License for the specific language governing permissions and limitations under
 the License.
 -->
 <resources>
-
     <!-- Dark Theme Palette -->
     <color name="darkPrimaryTextColor">@android:color/white</color>
     <color name="darkTintColor">#2196F3</color>
@@ -22,5 +21,4 @@ the License.
     <!-- Light Theme Palette -->
     <color name="lightPrimaryTextColor">@android:color/black</color>
     <color name="lightTintColor">#2196F3</color>
-
 </resources>
