@@ -29,16 +29,19 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.concurrent.TimeUnit;
 
 import tools.fastlane.screengrab.Screengrab;
 import tools.fastlane.screengrab.UiAutomatorScreenshotStrategy;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.Assert.assertFalse;
 import static org.odk.collect.android.activities.FormEntryActivity.EXTRA_TESTING_PATH;
+import static org.odk.collect.android.test.TestUtils.waitId;
 
 @RunWith(AndroidJUnit4.class)
 public class GuidanceHintFormTest {
@@ -93,6 +96,7 @@ public class GuidanceHintFormTest {
 
         Screengrab.screenshot("guidance_hint");
 
+        onView(isRoot()).perform(waitId(R.id.guidance_text_view, TimeUnit.SECONDS.toMillis(15)));
         onView(withId(R.id.guidance_text_view)).check(matches(withText(guidance)));
     }
 
