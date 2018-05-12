@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.activities;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
@@ -25,6 +26,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore.Images;
+import android.provider.OpenableColumns;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -799,14 +801,11 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
             case RequestCodes.AUDIO_CHOOSER:
                 /*
-                 * We have a saved image somewhere, but we really want it to be in:
-                 * /sdcard/odk/instances/[current instnace]/something.jpg so we move
-                 * it there before inserting it into the content provider. Once the
-                 * android image capture bug gets fixed, (read, we move on from
-                 * Android 1.6) we want to handle images the audio and video
-                 */
+                * Start a task to save the chosen audio with a new Thread,
+                * This could support retrieving file from Google Drive.
+                * */
 
-                showDialog(SAVING_IMAGE_DIALOG);
+                showDialog(SAVING_DIALOG);
                 Runnable saveAudioRunnable = new Runnable() {
                     @Override
                     public void run() {
@@ -817,7 +816,19 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
                 break;
             case RequestCodes.VIDEO_CHOOSER:
-                saveAudioVideoAnswer(intent.getData());
+                /*
+                * Start a task to save the chosen video with a new Thread,
+                * This could support retrieving file from Google Drive.
+                * */
+                showDialog(SAVING_DIALOG);
+                Runnable saveVideoRunnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        saveChosenVideo(intent.getData());
+                    }
+                };
+                new Thread(saveVideoRunnable).start();
+
                 break;
             case RequestCodes.LOCATION_CAPTURE:
                 String sl = intent.getStringExtra(LOCATION_RESULT);
@@ -856,10 +867,74 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         refreshCurrentView();
     }
 
+    /**
+     * Save a copy of the chosen video in Collect's own path such as
+     * "/storage/emulated/0/odk/instances/{form name}/filename",
+     * and if it's from Google Drive and not cached yet, we'll retrieve it using network.
+     * This may take a long time.
+     * @see #getFileExtensionFromUri(Uri)
+     * @param selectedVideo uri of the selected video
+     */
+    private void saveChosenVideo(Uri selectedVideo) {
+        String extension = getFileExtensionFromUri(selectedVideo);
+
+        String instanceFolder1 = Collect.getInstance().getFormController().getInstancePath()
+                .getParent();
+        String destPath = instanceFolder1 + File.separator
+                + System.currentTimeMillis() + extension;
+
+        File chosenVideo;
+        try{
+            chosenVideo = MediaUtils.getFileFromUri(this,selectedVideo,Images.Media.DATA);
+            if (chosenVideo != null) {
+                final File newVideo = new File(destPath);
+                FileUtils.copyFile(chosenVideo,newVideo);
+                runOnUiThread(()->{
+                    dismissDialog(SAVING_DIALOG);
+                    if(getCurrentViewIfODKView()!=null){
+                        getCurrentViewIfODKView().setBinaryData(newVideo);
+                    }
+                    saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+                    refreshCurrentView();
+                });
+            }else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        dismissDialog(SAVING_DIALOG);
+                        Timber.e("Could not receive chosen video");
+                        showCustomToast(getString(R.string.error_occured), Toast.LENGTH_SHORT);
+                    }
+                });
+            }
+        } catch (GDriveConnectionException e) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    dismissDialog(SAVING_DIALOG);
+                    Timber.e("Could not receive chosen video due to connection problem");
+                    showCustomToast(getString(R.string.gdrive_connection_exception), Toast.LENGTH_LONG);
+                }
+            });
+        }
+    }
+
+    /**
+     * Save a copy of the chosen audio in Collect's own path such as
+     * "/storage/emulated/0/odk/instances/{form name}/filename",
+     * and if it's from Google Drive and not cached yet, we'll retrieve it using network.
+     * This may take a long time.
+     * @see #getFileExtensionFromUri(Uri)
+     * @param selectedAudio uri of the selected audio
+     */
     private void saveChosenAudio(Uri selectedAudio) {
-        String extension = sourcePath.substring(sourcePath.lastIndexOf('.'));
-        String destPath =  getInstanceFolder() + File.separator
-                + fileUtil.getRandomFilename() + extension;
+        String extension = getFileExtensionFromUri(selectedAudio);
+
+        String instanceFolder1 = Collect.getInstance().getFormController().getInstancePath()
+                .getParent();
+        String destPath = instanceFolder1 + File.separator
+                + System.currentTimeMillis() + extension;
+
         File chosenAudio;
         try{
             chosenAudio = MediaUtils.getFileFromUri(this,selectedAudio,Images.Media.DATA);
@@ -894,6 +969,29 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 }
             });
         }
+    }
+
+    /**
+     * Using contentResolver to get a file's extension by the uri returned from OnActivityResult.
+     * @param fileUri Whose name we want to get
+     * @see #onActivityResult(int, int, Intent)
+     * @see #saveChosenAudio(Uri)
+     * @see android.content.ContentResolver
+     * @return The file's extension
+     */
+    private String getFileExtensionFromUri(Uri fileUri) {
+        Cursor returnCursor =
+                getContentResolver().query(fileUri, null, null, null, null);
+        int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+        returnCursor.moveToFirst();
+        String filename = returnCursor.getString(nameIndex);
+        returnCursor.close();
+        if(filename.lastIndexOf('.')!=-1){
+            return filename.substring(filename.lastIndexOf('.'));
+        }else{
+            return "";
+        }
+
     }
 
     private void saveChosenImage(Uri selectedImage) {

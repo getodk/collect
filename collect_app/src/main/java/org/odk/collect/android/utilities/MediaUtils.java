@@ -619,6 +619,7 @@ public class MediaUtils {
      */
     public static boolean isGoogleDriveDocument(Uri uri) {
         return "com.google.android.apps.docs.storage".equals(uri.getAuthority())
+                || "com.google.android.apps.docs.storage.legacy".equals(uri.getAuthority())
                 || uri.getAuthority().startsWith("com.google.android.apps.photos.content");
     }
 
