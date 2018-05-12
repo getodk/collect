@@ -871,8 +871,9 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
      * "/storage/emulated/0/odk/instances/{form name}/filename",
      * and if it's from Google Drive and not cached yet, we'll retrieve it using network.
      * This may take a long time.
-     * @see #getFileExtensionFromUri(Uri)
+     *
      * @param selectedVideo uri of the selected video
+     * @see #getFileExtensionFromUri(Uri)
      */
     private void saveChosenVideo(Uri selectedVideo) {
         String extension = getFileExtensionFromUri(selectedVideo);
@@ -883,20 +884,20 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 + System.currentTimeMillis() + extension;
 
         File chosenVideo;
-        try{
-            chosenVideo = MediaUtils.getFileFromUri(this,selectedVideo,Images.Media.DATA);
+        try {
+            chosenVideo = MediaUtils.getFileFromUri(this, selectedVideo, Images.Media.DATA);
             if (chosenVideo != null) {
                 final File newVideo = new File(destPath);
-                FileUtils.copyFile(chosenVideo,newVideo);
-                runOnUiThread(()->{
+                FileUtils.copyFile(chosenVideo, newVideo);
+                runOnUiThread(() -> {
                     dismissDialog(SAVING_DIALOG);
-                    if(getCurrentViewIfODKView()!=null){
+                    if (getCurrentViewIfODKView() != null) {
                         getCurrentViewIfODKView().setBinaryData(newVideo);
                     }
                     saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                     refreshCurrentView();
                 });
-            }else {
+            } else {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -923,8 +924,9 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
      * "/storage/emulated/0/odk/instances/{form name}/filename",
      * and if it's from Google Drive and not cached yet, we'll retrieve it using network.
      * This may take a long time.
-     * @see #getFileExtensionFromUri(Uri)
+     *
      * @param selectedAudio uri of the selected audio
+     * @see #getFileExtensionFromUri(Uri)
      */
     private void saveChosenAudio(Uri selectedAudio) {
         String extension = getFileExtensionFromUri(selectedAudio);
@@ -935,20 +937,20 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 + System.currentTimeMillis() + extension;
 
         File chosenAudio;
-        try{
-            chosenAudio = MediaUtils.getFileFromUri(this,selectedAudio,Images.Media.DATA);
+        try {
+            chosenAudio = MediaUtils.getFileFromUri(this, selectedAudio, Images.Media.DATA);
             if (chosenAudio != null) {
                 final File newAudio = new File(destPath);
-                FileUtils.copyFile(chosenAudio,newAudio);
-                runOnUiThread(()->{
+                FileUtils.copyFile(chosenAudio, newAudio);
+                runOnUiThread(() -> {
                     dismissDialog(SAVING_DIALOG);
-                    if(getCurrentViewIfODKView()!=null){
+                    if (getCurrentViewIfODKView() != null) {
                         getCurrentViewIfODKView().setBinaryData(newAudio);
                     }
                     saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                     refreshCurrentView();
                 });
-            }else {
+            } else {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -972,11 +974,12 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
     /**
      * Using contentResolver to get a file's extension by the uri returned from OnActivityResult.
+     *
      * @param fileUri Whose name we want to get
+     * @return The file's extension
      * @see #onActivityResult(int, int, Intent)
      * @see #saveChosenAudio(Uri)
      * @see android.content.ContentResolver
-     * @return The file's extension
      */
     private String getFileExtensionFromUri(Uri fileUri) {
         Cursor returnCursor =
@@ -985,9 +988,9 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         returnCursor.moveToFirst();
         String filename = returnCursor.getString(nameIndex);
         returnCursor.close();
-        if(filename.lastIndexOf('.')!=-1){
+        if (filename.lastIndexOf('.') != -1) {
             return filename.substring(filename.lastIndexOf('.'));
-        }else{
+        } else {
             return "";
         }
 
@@ -1042,7 +1045,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
     private QuestionWidget getWidgetWaitingForBinaryData() {
         QuestionWidget questionWidget = null;
-        for (QuestionWidget qw :  ((ODKView) currentView).getWidgets()) {
+        for (QuestionWidget qw : ((ODKView) currentView).getWidgets()) {
             if (qw.isWaitingForData()) {
                 questionWidget = qw;
             }
