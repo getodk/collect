@@ -20,10 +20,8 @@ import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore.Audio;
-import android.provider.OpenableColumns;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -41,7 +39,6 @@ import org.odk.collect.android.utilities.MediaUtil;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 
 import java.io.File;
-import java.net.URI;
 import java.util.Locale;
 
 import timber.log.Timber;
