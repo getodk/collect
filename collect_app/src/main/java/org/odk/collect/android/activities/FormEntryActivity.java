@@ -109,7 +109,6 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.FormDefCache;
 import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtils;
@@ -128,8 +127,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
 
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
@@ -259,8 +256,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private ActivityAvailability activityAvailability = new ActivityAvailability(this);
 
     private boolean shouldOverrideAnimations = false;
-
-    private final CompositeDisposable formDefCacheCompositeDisposable = new CompositeDisposable();
 
     /**
      * Called when the activity is first created.
@@ -757,7 +752,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             case RequestCodes.AUDIO_CAPTURE:
             case RequestCodes.VIDEO_CAPTURE:
                 Uri mediaUri = intent.getData();
-                saveAudioVideoAnswer(mediaUri);
+                saveFileAnswer(mediaUri);
                 String filePath = MediaUtils.getDataColumn(this, mediaUri, null, null);
                 if (filePath != null) {
                     new File(filePath).delete();
@@ -769,10 +764,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 }
                 break;
 
-
+            case RequestCodes.ARBITRARY_FILE_CHOOSER:
             case RequestCodes.AUDIO_CHOOSER:
             case RequestCodes.VIDEO_CHOOSER:
-                saveAudioVideoAnswer(intent.getData());
+                saveFileAnswer(intent.getData());
                 break;
             case RequestCodes.LOCATION_CAPTURE:
                 String sl = intent.getStringExtra(LOCATION_RESULT);
@@ -858,7 +853,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         return questionWidget;
     }
 
-    private void saveAudioVideoAnswer(Uri media) {
+    private void saveFileAnswer(Uri media) {
         // For audio/video capture/chooser, we get the URI from the content
         // provider
         // then the widget copies the file and makes a new entry in the
@@ -2273,7 +2268,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     t.destroy();
                     // there is no formController -- fire MainMenu activity?
                     startActivity(new Intent(this, MainMenuActivity.class));
-                    finish();
                 }
             }
         } else {
@@ -2350,7 +2344,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         }
         releaseOdkView();
-        formDefCacheCompositeDisposable.dispose();
         super.onDestroy();
 
     }
@@ -2514,19 +2507,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
 
         refreshCurrentView();
-
-        if (formDef != null) {
-            final File cachedFormDefFile = FormDefCache.getCacheFile(new File(formPath));
-
-            if (cachedFormDefFile.exists()) {
-                Timber.i("FormDef %s is already in the cache", cachedFormDefFile.toString());
-            } else {
-                Disposable formDefCacheDisposable =
-                        writeCacheAsync(formDef, cachedFormDefFile).subscribe(() -> {
-                        }, Timber::e);
-                formDefCacheCompositeDisposable.add(formDefCacheDisposable);
-            }
-        }
     }
 
     /**

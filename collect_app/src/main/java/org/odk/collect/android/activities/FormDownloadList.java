@@ -207,8 +207,8 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
         filteredFormList.addAll(formList);
 
-        if (getLastNonConfigurationInstance() instanceof DownloadFormListTask) {
-            downloadFormListTask = (DownloadFormListTask) getLastNonConfigurationInstance();
+        if (getLastCustomNonConfigurationInstance() instanceof DownloadFormListTask) {
+            downloadFormListTask = (DownloadFormListTask) getLastCustomNonConfigurationInstance();
             if (downloadFormListTask.getStatus() == AsyncTask.Status.FINISHED) {
                 try {
                     dismissDialog(PROGRESS_DIALOG);
@@ -217,8 +217,8 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 }
                 downloadFormsTask = null;
             }
-        } else if (getLastNonConfigurationInstance() instanceof DownloadFormsTask) {
-            downloadFormsTask = (DownloadFormsTask) getLastNonConfigurationInstance();
+        } else if (getLastCustomNonConfigurationInstance() instanceof DownloadFormsTask) {
+            downloadFormsTask = (DownloadFormsTask) getLastCustomNonConfigurationInstance();
             if (downloadFormsTask.getStatus() == AsyncTask.Status.FINISHED) {
                 try {
                     dismissDialog(PROGRESS_DIALOG);
@@ -227,7 +227,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 }
                 downloadFormsTask = null;
             }
-        } else if (formNamesAndURLs.isEmpty() && getLastNonConfigurationInstance() == null) {
+        } else if (formNamesAndURLs.isEmpty() && getLastCustomNonConfigurationInstance() == null) {
             // first time, so get the formlist
             downloadFormList();
         }
