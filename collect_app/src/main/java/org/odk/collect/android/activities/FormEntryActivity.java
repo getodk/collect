@@ -808,7 +808,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 Runnable saveAudioRunnable = new Runnable() {
                     @Override
                     public void run() {
-                        saveChosenAudio(intent.getData());
+                        saveChosenAudioVideo(intent.getData());
                     }
                 };
                 new Thread(saveAudioRunnable).start();
@@ -823,7 +823,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 Runnable saveVideoRunnable = new Runnable() {
                     @Override
                     public void run() {
-                        saveChosenVideo(intent.getData());
+                        saveChosenAudioVideo(intent.getData());
                     }
                 };
                 new Thread(saveVideoRunnable).start();
@@ -866,33 +866,34 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         refreshCurrentView();
     }
 
+
     /**
-     * Save a copy of the chosen video in Collect's own path such as
+     * Save a copy of the chosen audio/video in Collect's own path such as
      * "/storage/emulated/0/odk/instances/{form name}/filename",
      * and if it's from Google Drive and not cached yet, we'll retrieve it using network.
      * This may take a long time.
      *
-     * @param selectedVideo uri of the selected video
+     * @param selectedFile uri of the selected audio
      * @see #getFileExtensionFromUri(Uri)
      */
-    private void saveChosenVideo(Uri selectedVideo) {
-        String extension = getFileExtensionFromUri(selectedVideo);
+    private void saveChosenAudioVideo(Uri selectedFile) {
+        String extension = getFileExtensionFromUri(selectedFile);
 
         String instanceFolder1 = Collect.getInstance().getFormController().getInstancePath()
                 .getParent();
         String destPath = instanceFolder1 + File.separator
                 + System.currentTimeMillis() + extension;
 
-        File chosenVideo;
+        File chosenFile;
         try {
-            chosenVideo = MediaUtils.getFileFromUri(this, selectedVideo, Images.Media.DATA);
-            if (chosenVideo != null) {
-                final File newVideo = new File(destPath);
-                FileUtils.copyFile(chosenVideo, newVideo);
+            chosenFile = MediaUtils.getFileFromUri(this, selectedFile, Images.Media.DATA);
+            if (chosenFile != null) {
+                final File newFile = new File(destPath);
+                FileUtils.copyFile(chosenFile, newFile);
                 runOnUiThread(() -> {
                     dismissDialog(SAVING_DIALOG);
                     if (getCurrentViewIfODKView() != null) {
-                        getCurrentViewIfODKView().setBinaryData(newVideo);
+                        getCurrentViewIfODKView().setBinaryData(newFile);
                     }
                     saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                     refreshCurrentView();
@@ -902,7 +903,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     @Override
                     public void run() {
                         dismissDialog(SAVING_DIALOG);
-                        Timber.e("Could not receive chosen video");
+                        Timber.e("Could not receive chosen file");
                         showCustomToast(getString(R.string.error_occured), Toast.LENGTH_SHORT);
                     }
                 });
@@ -912,60 +913,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 @Override
                 public void run() {
                     dismissDialog(SAVING_DIALOG);
-                    Timber.e("Could not receive chosen video due to connection problem");
-                    showCustomToast(getString(R.string.gdrive_connection_exception), Toast.LENGTH_LONG);
-                }
-            });
-        }
-    }
-
-    /**
-     * Save a copy of the chosen audio in Collect's own path such as
-     * "/storage/emulated/0/odk/instances/{form name}/filename",
-     * and if it's from Google Drive and not cached yet, we'll retrieve it using network.
-     * This may take a long time.
-     *
-     * @param selectedAudio uri of the selected audio
-     * @see #getFileExtensionFromUri(Uri)
-     */
-    private void saveChosenAudio(Uri selectedAudio) {
-        String extension = getFileExtensionFromUri(selectedAudio);
-
-        String instanceFolder1 = Collect.getInstance().getFormController().getInstancePath()
-                .getParent();
-        String destPath = instanceFolder1 + File.separator
-                + System.currentTimeMillis() + extension;
-
-        File chosenAudio;
-        try {
-            chosenAudio = MediaUtils.getFileFromUri(this, selectedAudio, Images.Media.DATA);
-            if (chosenAudio != null) {
-                final File newAudio = new File(destPath);
-                FileUtils.copyFile(chosenAudio, newAudio);
-                runOnUiThread(() -> {
-                    dismissDialog(SAVING_DIALOG);
-                    if (getCurrentViewIfODKView() != null) {
-                        getCurrentViewIfODKView().setBinaryData(newAudio);
-                    }
-                    saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                    refreshCurrentView();
-                });
-            } else {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        dismissDialog(SAVING_DIALOG);
-                        Timber.e("Could not receive chosen audio");
-                        showCustomToast(getString(R.string.error_occured), Toast.LENGTH_SHORT);
-                    }
-                });
-            }
-        } catch (GDriveConnectionException e) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    dismissDialog(SAVING_DIALOG);
-                    Timber.e("Could not receive chosen audio due to connection problem");
+                    Timber.e("Could not receive chosen file due to connection problem");
                     showCustomToast(getString(R.string.gdrive_connection_exception), Toast.LENGTH_LONG);
                 }
             });
@@ -978,7 +926,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
      * @param fileUri Whose name we want to get
      * @return The file's extension
      * @see #onActivityResult(int, int, Intent)
-     * @see #saveChosenAudio(Uri)
+     * @see #saveChosenAudioVideo(Uri)
      * @see android.content.ContentResolver
      */
     private String getFileExtensionFromUri(Uri fileUri) {
