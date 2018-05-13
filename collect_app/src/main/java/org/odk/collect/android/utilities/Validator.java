@@ -37,4 +37,11 @@ public class Validator {
                 .matcher(emailAddress)
                 .matches();
     }
+
+    public static boolean isUrlValid(String url) {
+        return Pattern
+                .compile("^https?://.+$", Pattern.CASE_INSENSITIVE)
+                .matcher(url)
+                .matches();
+    }
 }

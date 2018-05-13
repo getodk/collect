@@ -30,9 +30,9 @@ import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
-import com.google.firebase.crash.FirebaseCrash;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
@@ -148,13 +148,15 @@ public class Collect extends Application implements HasActivityInjector {
             File dir = new File(dirName);
             if (!dir.exists()) {
                 if (!dir.mkdirs()) {
-                    throw new RuntimeException("ODK reports :: Cannot create directory: "
-                            + dirName);
+                    String message = getInstance().getString(R.string.cannot_create_directory, dirName);
+                    Timber.w(message);
+                    throw new RuntimeException(message);
                 }
             } else {
                 if (!dir.isDirectory()) {
-                    throw new RuntimeException("ODK reports :: " + dirName
-                            + " exists, but is not a directory");
+                    String message = getInstance().getString(R.string.not_a_directory, dirName);
+                    Timber.w(message);
+                    throw new RuntimeException(message);
                 }
             }
         }
@@ -328,10 +330,10 @@ public class Collect extends Application implements HasActivityInjector {
                 return;
             }
 
-            FirebaseCrash.logcat(priority, tag, message);
+            Crashlytics.log(priority, tag, message);
 
             if (t != null && priority == Log.ERROR) {
-                FirebaseCrash.report(t);
+                Crashlytics.logException(t);
             }
         }
     }
@@ -354,11 +356,11 @@ public class Collect extends Application implements HasActivityInjector {
         AdminSharedPreferences.getInstance().reloadPreferences();
     }
 
-    // Preventing multiple clicks, using threshold of 500 ms
+    // Preventing multiple clicks, using threshold of 1000 ms
     public static boolean allowClick() {
         long elapsedRealtime = SystemClock.elapsedRealtime();
         boolean allowClick = (lastClickTime == 0 || lastClickTime == elapsedRealtime) // just for tests
-                || elapsedRealtime - lastClickTime > 500;
+                || elapsedRealtime - lastClickTime > 1000;
         if (allowClick) {
             lastClickTime = elapsedRealtime;
         }

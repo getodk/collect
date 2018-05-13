@@ -88,7 +88,6 @@
   <string name="parse_legacy_formlist_failed">Serverul nu a furnizat un document-formular compatibil cu Aggregate 0.9.x. : %s</string>
   <string name="parse_openrosa_formlist_failed">Serverul nu a furnizat un document-formular compatibil cu OpenRosa versiunea 1.0 standard: %s</string>
   <string name="password">Parola</string>
-  <string name="play_audio">Redați sunet</string>
   <string name="play_video">Redați video</string>
   <string name="please_wait">Vă rugăm să așteptați câteva momente.</string>
   <string name="please_wait_long">Vă rugăm să așteptați. Ar putea dura câteva minute.</string>
@@ -129,7 +128,6 @@
   <string name="submission_url">Calea către transmitere</string>
   <string name="font_size">Mărimea fontului textului</string>
   <string name="change_font_size">Mărimea fontului textului</string>
-  <string name="form_scan_starting">Caut formulare…</string>
   <string name="access_error">Eroare la accesarea %s: </string>
   <string name="manifest_server_error">Răspunsul Manifest nu raportează o versiune OpenRosa — server greșit?</string>
   <string name="root_element_error">Root nu este &amp;lt;manifest\&gt; — era %s</string>
@@ -182,7 +180,6 @@
   <string name="draw_image">Desenați imaginea</string>
   <string name="reset_image">Resetați</string>
   <string name="set_color">Setați culoarea</string>
-  <string name="select_drawing_color">Selectați culoarea pentru desen</string>
   <string name="admin_preferences">Setări administrator</string>
   <string name="admin_access_settings">Atingeți pentru accesul ca administrator la setări</string>
   <string name="save_mid">Salvați formularul</string>
@@ -255,14 +252,11 @@
   <string name="drive_get_file">Preluare %1$s și fișiere media.</string>
   <string name="no_google_account">Niciun cont Google nu a fost selectat!</string>
   <string name="google_set_account">Ați selectat Google Sheets ca server, vă rugăm să selectați un cont Google asociat în Setări generale înainte de a continua</string>
-  <string name="invalid_oauth">Token OAuth 2 invalid</string>
-  <string name="google_repeat_error">Repetările nu sunt suportate de Google Sheets în acest moment.</string>
   <string name="notification_error">Eroare la afișarea textului notificării</string>
   <string name="delete_after_send">Ștergeți după trimitere</string>
   <string name="delete_after_send_summary">Ștergeți formulare finalizate și fișierele media după trimiterea către server</string>
   <string name="change_server_url">URL server</string>
   <string name="google_search_browse">Căutați formulare. Sau selectați mai jos \'Discul meu\' pentru a naviga. </string>
-  <string name="no_blank_search">Câmpul căutare nu poate fi gol.</string>
   <string name="send_in_progress">Trimiterea în fundal rulează, vă rugăm să încercați din nou mai târziu.</string>
   <string name="sheets_max_columns">Numărul maxim de coloane este 255, formularul dumneavoastră are %s. Nu am putut încărca datele în tabel.</string>
   <string name="invalid_sheet_id">ID foaie invalid: %1$s</string>
@@ -300,9 +294,21 @@
   <string name="gps_enable_message">GPS-ul este dezactivat în dispozitivul dumneavoastră. Doriți să-l activați?</string>
   <string name="minutes">Minute</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <string name="alert">Alertă</string>
+  <string name="install_openmapkit">Vă rugăm instalați OpenMapKit!</string>
+  <string name="go_back">Înapoi</string>
+  <string name="selected_answer">Selectat: %s</string>
+  <string name="version_number">Versiunea %s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <string name="west">Vest %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <string name="east">Est %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <string name="south">Sud %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <string name="north">Nord%1$s%2$s%3$s</string>
+  <string name="search">Căutare</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <string name="yes">Da</string>
+  <string name="no">Nu</string>
 </resources>

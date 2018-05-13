@@ -90,7 +90,6 @@
   <string name="parse_legacy_formlist_failed">Serwer nie dostarczył dokumentu z dostępnymi formularzami zgodnego z Aggregate 0.9.x: %s</string>
   <string name="parse_openrosa_formlist_failed">Serwer nie dostarczył dokumentu z dostępnymi formularzami zgodnego ze standardem OpenRosa wersja 1.0: %s</string>
   <string name="password">Hasło</string>
-  <string name="play_audio">Odtwórz Dźwięk</string>
   <string name="play_video">Odtwórz Wideo</string>
   <string name="please_wait">Poczekaj kilka chwil.</string>
   <string name="please_wait_long">Poczekaj. To może zająć kilka minut.</string>
@@ -133,7 +132,6 @@
   <string name="submission_url">Ścieżka zgłoszeń</string>
   <string name="font_size">Wielkość czcionki</string>
   <string name="change_font_size">Wielkość czcionki</string>
-  <string name="form_scan_starting">Szukam formularzy…</string>
   <string name="access_error">Błąd przy próbie dostępu %s:</string>
   <string name="manifest_server_error">Odpowiedź w manifeście nie raportuje wersji OpenRosa — niewłaściwy serwer?</string>
   <string name="root_element_error">Główny element nie jest &lt;manifest\&gt; — był %s</string>
@@ -187,7 +185,6 @@
   <string name="draw_image">Naszkicuj Obraz</string>
   <string name="reset_image">Resetuj</string>
   <string name="set_color">Ustaw Kolor</string>
-  <string name="select_drawing_color">Wybierz Kolor do Rysowania</string>
   <string name="admin_preferences">Ustawienia Administratora</string>
   <string name="admin_access_settings">Naciśnij aby mieć dostęp do ustawień administratora</string>
   <string name="save_mid">Zapisz Formularz</string>
@@ -260,14 +257,11 @@
   <string name="drive_get_file">Pobieram %1$s i pliki medialne.</string>
   <string name="no_google_account">Nie wybrałeś konta Google!</string>
   <string name="google_set_account">Wybrałeś Google Sheets jako twój serwer, wybierz odpowiadające mu konto Google w Ustawieniach Ogólnych zanim będziesz kontynuowć.</string>
-  <string name="invalid_oauth">Niewłaściwy token OAuth 2</string>
-  <string name="google_repeat_error">Powtórzenia obecnie nie są wspierane przez Google Sheets.</string>
   <string name="notification_error">Błąd przy wyświetlaniu tekstu powiadomienia</string>
   <string name="delete_after_send">Skasuj po wysłaniu</string>
   <string name="delete_after_send_summary">Usuń zakończone formularze i pliki medialne po wysłaniu na serwer.</string>
   <string name="change_server_url">Serwer URL</string>
   <string name="google_search_browse">Wyszukaj formularze. Lub wybierz poniżej \'Mój Dysk\' by przejrzeć</string>
-  <string name="no_blank_search">Pole wyszukiwania nie może być puste.</string>
   <string name="send_in_progress">Trwa wysyłka w tle, spróbuj wkrótce ponownie</string>
   <string name="sheets_max_columns">Maksymalna liczba kolumn wynosi 255, twój formularz posiada %s. Nie można załadować do arkusza kalkulacyjnego.</string>
   <string name="invalid_sheet_id">niepoprawne id arkusza: %1$s</string>
@@ -276,7 +270,6 @@
   <string name="username_error_whitespace">Spacje na początku lub na końcu nazwy użytkownika są niedozwolone</string>
   <string name="google_play_services_error_occured">Nie można uzyskać dostępu do Google Maps. Czy Google Play Services są zainstalowane?</string>
   <string name="about_preferences">O Aplikacji</string>
-  <string name="tell_your_friends_msg">Pobierz aplikację ODK Collect!</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">Mapowanie</string>
   <string name="map_sdk_selector_title">SDK Mapowania</string>
@@ -327,8 +320,6 @@
   <string name="discard">Usuń</string>
   <string name="zoom_to_location">Zbliżenie na bieżącą lokalizację</string>
   <string name="zoom_to_feature">Zbliżenie na zapisaną właściwość</string>
-  <string name="google_sheets_invalid_column_form">\'n%1$s\' jest niepoprawną nazwą kolumny w twoim formularzu. Google Sheets umożliwia używanie jedynie znaków alfanumerycznych i myślników w nazwach kolumn</string>
-  <string name="google_sheets_invalid_column_instance">\'n%1$s\' jest niepoprawną nazwą kolumny w twojej zapisane instancji. Google Sheets umożliwia używanie wyłącznie znaków alfanumerycznych i myślników w nazwach kolumn</string>
   <string name="geoshape_view_change_location">Pokaż lub Zmień GeoShape</string>
   <string name="geotrace_view_change_location">Pokaż lub Zmień GeoTrace</string>
   <string name="bearing">Namiar: %.3f</string>
@@ -364,7 +355,6 @@
   <string name="not_exactly_one_record_for_this_instance">Więcej niż jeden zapis dla tego wystąpienia!</string>
   <string name="not_exactly_one_blank_form_for_this_form_id">Więcej niż jeden pusty formularz odpowiada temu jr_form_id.</string>
   <string name="no_form_id_specified">Nie wybrano FormID???</string>
-  <string name="phone_does_not_have_base64_class">Telefon nie ma klasy Base64 ale poziom API jest %s.</string>
   <string name="phone_does_not_support_rsa">Telefon nie wspiera szyfrowania RSA.</string>
   <string name="invalid_rsa_public_key">Niepoprawny klucz publiczny RSA.</string>
   <string name="encryption_error_message">Formularz %s nie został zapisany jako zakończony.</string>

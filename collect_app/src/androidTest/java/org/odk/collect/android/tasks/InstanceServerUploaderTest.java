@@ -48,8 +48,8 @@ public class InstanceServerUploaderTest extends MockedServerTest {
 
         // then
         assertNull(o.authRequestingServer);
-        assertEquals(1, o.results.size());
-        assertEquals("success", o.results.get(id.toString()));
+        assertEquals(1, o.messagesByInstanceId.size());
+        assertEquals("success", o.messagesByInstanceId.get(id.toString()));
 
         // and
         HEAD: {
@@ -65,7 +65,7 @@ public class InstanceServerUploaderTest extends MockedServerTest {
         POST: {
             RecordedRequest r = nextRequest();
             assertEquals("POST", r.getMethod());
-            assertEquals("/submission", r.getPath());
+            assertMatches("/submission\\?deviceID=\\w+%3A\\w+", r.getPath());
             assertMatches("Dalvik/.* org.odk.collect.android/.*", r.getHeader("User-Agent"));
             assertEquals("1.0", r.getHeader("X-OpenRosa-Version"));
             assertEquals("gzip,deflate", r.getHeader("Accept-Encoding"));

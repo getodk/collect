@@ -85,7 +85,6 @@
   <string name="parse_legacy_formlist_failed">Iseva ayinikezanga imiqulu yamafomu akhona angasebenziswa Aggregate 0.9.x.:%s</string>
   <string name="parse_openrosa_formlist_failed">Iseva ayinikezanga imiqulu yamafomu akhona angasebenziswa OpenRosa version 1.0 standard: %s</string>
   <string name="password">Inombolomfihlo</string>
-  <string name="play_audio">Dlala Umsindo</string>
   <string name="play_video">Dlala Umbukiso</string>
   <string name="please_wait">Sicela ulinde imizuzu emibalwa.</string>
   <string name="please_wait_long">Uyacelwa ulinde. Lokhu kungathatha imizuzu embalwa.</string>
@@ -125,7 +124,6 @@
   <string name="submission_url">Indlela yokuthumela</string>
   <string name="font_size">Usayizi wombhalo (Font)</string>
   <string name="change_font_size">Usayizi wombhalo (Font)</string>
-  <string name="form_scan_starting">Ukuskena yamafomu…</string>
   <string name="access_error">Iphutha ngenkathi kufinyelelwa %s :</string>
   <string name="manifest_server_error">Impendulo Manifest akusho ubike version OpenRosa - iseva bad ?</string>
   <string name="root_element_error">Okuwumsuka akuyona &lt;abonakaliswe\&gt; - Kwaba %s</string>
@@ -176,7 +174,6 @@
   <string name="draw_image">Isithombe somdwebo</string>
   <string name="reset_image">Hlela kabusha</string>
   <string name="set_color">Hlela ummbala</string>
-  <string name="select_drawing_color">Khetha ummbala wokudweba</string>
   <string name="admin_preferences">Izinhlelo zokusingathwa komsebenzi</string>
   <string name="admin_access_settings">Thinta ukufinyelela ezinhlelweni zokusingathwa komsebenzi</string>
   <string name="save_mid">Gcina iFomu</string>

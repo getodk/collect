@@ -18,8 +18,6 @@ import android.content.Context;
 
 import org.javarosa.core.model.Constants;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.R;
-import org.odk.collect.android.utilities.ToastUtils;
 
 import java.util.Locale;
 
@@ -116,13 +114,7 @@ public class WidgetFactory {
                     case Constants.DATATYPE_TEXT:
                         String query = fep.getQuestion().getAdditionalAttribute(null, "query");
                         if (query != null) {
-                            if (appearance.startsWith("quick")) {
-                                questionWidget = new ItemsetWidget(context, fep, readOnlyOverride,
-                                        true);
-                            } else {
-                                questionWidget = new ItemsetWidget(context, fep, readOnlyOverride,
-                                        false);
-                            }
+                            questionWidget = new ItemsetWidget(context, fep, appearance.startsWith("quick"));
                         } else if (appearance.startsWith("printer")) {
                             questionWidget = new ExPrinterWidget(context, fep);
                         } else if (appearance.startsWith("ex:")) {
@@ -147,6 +139,9 @@ public class WidgetFactory {
                         questionWidget = new StringWidget(context, fep, readOnlyOverride);
                         break;
                 }
+                break;
+            case Constants.CONTROL_FILE_CAPTURE:
+                questionWidget = new ArbitraryFileWidget(context, fep);
                 break;
             case Constants.CONTROL_IMAGE_CHOOSE:
                 if (appearance.equals("web")) {
@@ -197,7 +192,7 @@ public class WidgetFactory {
                 } else if (appearance.startsWith("minimal")) {
                     questionWidget = new SpinnerWidget(context, fep);
                 } else if (appearance.startsWith("quick")) {
-                    questionWidget = new SelectOneAutoAdvanceWidget(context, fep);
+                    questionWidget = new SelectOneWidget(context, fep, true);
                 } else if (appearance.equals("list-nolabel")) {
                     questionWidget = new ListWidget(context, fep, false);
                 } else if (appearance.equals("list")) {
@@ -207,14 +202,9 @@ public class WidgetFactory {
                 } else if (appearance.contains("search") || appearance.contains("autocomplete")) {
                     questionWidget = new SelectOneSearchWidget(context, fep);
                 } else if (appearance.startsWith("image-map")) {
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                        questionWidget = new SelectOneImageMapWidget(context, fep);
-                    } else {
-                        questionWidget = new SelectOneWidget(context, fep);
-                        ToastUtils.showLongToast(R.string.svg_not_supported_device);
-                    }
+                    questionWidget = new SelectOneImageMapWidget(context, fep);
                 } else {
-                    questionWidget = new SelectOneWidget(context, fep);
+                    questionWidget = new SelectOneWidget(context, fep, false);
                 }
                 break;
             case Constants.CONTROL_SELECT_MULTI:
@@ -246,12 +236,7 @@ public class WidgetFactory {
                 } else if (appearance.contains("autocomplete")) {
                     questionWidget = new SelectMultipleAutocompleteWidget(context, fep);
                 } else if (appearance.startsWith("image-map")) {
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                        questionWidget = new SelectMultiImageMapWidget(context, fep);
-                    } else {
-                        questionWidget = new SelectMultiWidget(context, fep);
-                        ToastUtils.showLongToast(R.string.svg_not_supported_device);
-                    }
+                    questionWidget = new SelectMultiImageMapWidget(context, fep);
                 } else {
                     questionWidget = new SelectMultiWidget(context, fep);
                 }

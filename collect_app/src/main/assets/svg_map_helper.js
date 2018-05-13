@@ -17,8 +17,8 @@
 /**
 * JavaScript class which contains methods used for managing svg maps
 */
-var selectedAreas = new Set();
-var originalColors = new Map();
+var selectedAreas = [];
+var originalColors = {};
 var lastSelectedAreaId;
 var isSingleSelect;
 
@@ -34,8 +34,18 @@ function notifyChanges() {
     imageMapInterface.notifyChanges();
 }
 
+function clearAreas() {
+    selectedAreas.forEach(function(areaId) {
+        if (selectedAreas.indexOf(areaId) !== -1) {
+            document.getElementById(areaId).setAttribute('style', 'fill: ' + originalColors[areaId]);
+        }
+    });
+    selectedAreas = [];
+    notifyChanges();
+}
+
 function addSelectedArea(selectedAreaId) {
-    selectedAreas.add(selectedAreaId);
+    selectedAreas.push(selectedAreaId);
     document.getElementById(selectedAreaId).setAttribute('style', 'fill: #E65100');
     if (Boolean(isSingleSelect)) {
         lastSelectedAreaId = selectedAreaId;
@@ -43,7 +53,7 @@ function addSelectedArea(selectedAreaId) {
 }
 
 function addArea(areaId) {
-    originalColors.set(areaId, document.getElementById(areaId).style.color);
+    originalColors[areaId] = document.getElementById(areaId).style.color;
 }
 
 function setSelectMode(isSingleSelect) {
@@ -51,20 +61,28 @@ function setSelectMode(isSingleSelect) {
 }
 
 function clickOnArea(areaId) {
-    if (selectedAreas.has(areaId)) {
-        document.getElementById(areaId).setAttribute('style', 'fill: ' + originalColors.get(areaId));
-        selectedAreas.delete(areaId);
-        unselectArea(areaId);
-    } else {
+    if (Boolean(isSingleSelect)) {
+        // single select mode
         if (Boolean(isSingleSelect) && !!lastSelectedAreaId) {
-            document.getElementById(lastSelectedAreaId).setAttribute('style', 'fill: ' + originalColors.get(lastSelectedAreaId));
-            selectedAreas.delete(lastSelectedAreaId);
+            document.getElementById(lastSelectedAreaId).setAttribute('style', 'fill: ' + originalColors[lastSelectedAreaId]);
+            selectedAreas.splice(selectedAreas.indexOf(lastSelectedAreaId), 1);
             unselectArea(lastSelectedAreaId);
         }
         document.getElementById(areaId).setAttribute('style', 'fill: #E65100');
-        selectedAreas.add(areaId);
+        selectedAreas.push(areaId);
         selectArea(areaId);
         lastSelectedAreaId = areaId;
+    } else {
+        // multiple select mode
+        if (selectedAreas.indexOf(areaId) !== -1) {
+            document.getElementById(areaId).setAttribute('style', 'fill: ' + originalColors[areaId]);
+            selectedAreas.splice(selectedAreas.indexOf(areaId), 1);
+            unselectArea(areaId);
+        } else {
+            document.getElementById(areaId).setAttribute('style', 'fill: #E65100');
+            selectedAreas.push(areaId);
+            selectArea(areaId);
+        }
     }
     notifyChanges();
 }

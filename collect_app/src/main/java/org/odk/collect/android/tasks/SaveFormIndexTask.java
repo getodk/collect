@@ -51,7 +51,7 @@ public class SaveFormIndexTask extends AsyncTask<Void, Void, String> {
         FormController formController = Collect.getInstance().getFormController();
 
         try {
-            File tempFormIndexFile = SaveToDiskTask.getFormIndexFile(formController.getInstancePath().getName());
+            File tempFormIndexFile = SaveToDiskTask.getFormIndexFile(formController.getInstanceFile().getName());
             exportFormIndexToFile(formIndex, tempFormIndexFile);
 
             long end = System.currentTimeMillis();
@@ -89,7 +89,7 @@ public class SaveFormIndexTask extends AsyncTask<Void, Void, String> {
         try {
             String instanceName = Collect.getInstance()
                     .getFormController()
-                    .getInstancePath()
+                    .getInstanceFile()
                     .getName();
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream(SaveToDiskTask.getFormIndexFile(instanceName)));
             return (FormIndex) ois.readObject();

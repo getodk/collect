@@ -81,7 +81,6 @@
   <string name="parse_legacy_formlist_failed">ဆာဗာမွ အသံုးျပဳေသာ ေဆာ့၀ဲ ႏွင့္ ကိုက္ညီေသာ ပံုစံအားလံုးကို မလုပ္ေဆာင္ႏိုင္ပါ ၊ %s</string>
   <string name="parse_openrosa_formlist_failed">Tဆာဗာမွ အသံုးျပဳေသာ ေဆာ့၀ဲ ႏွင့္ ကိုက္ညီေသာ ပံုစံအားလံုးကို မလုပ္ေဆာင္ႏိုင္ပါ ၊ %s</string>
   <string name="password">လ်ိဳ႔၀ွက္နံပါတ္</string>
-  <string name="play_audio">အသံဖြင့္ရန္</string>
   <string name="play_video">ဗြီဒီယိုဖြင့္ရန္</string>
   <string name="please_wait">ေခတၱေစာင့္ပါ</string>
   <string name="please_wait_long">ေခတၱေစာင့္ပါ၊ အခ်ိန္အနည္းငယ္ယူပါသည္</string>
@@ -122,7 +121,6 @@
   <string name="submission_url">ထည့္သြင္းရမည့္ေနရာ</string>
   <string name="font_size">စာလံုးအရြယ္အစား</string>
   <string name="change_font_size">စာလံုးအရြယ္အစား</string>
-  <string name="form_scan_starting">ပံုစံမ်ားကို ပံုရိပ္ဖမ္းရန္</string>
   <string name="access_error">လုပ္ဆာင္မွုမွားယြင္းေနသည္ %s:</string>
   <string name="manifest_server_error">ဆာဗာမေကာင္းပါ</string>
   <string name="root_element_error">အေျခခံလုပ္ေဆာင္ခ်က္ &lt; မရွင္းလင္းပါ - %s</string>
@@ -174,7 +172,6 @@
   <string name="draw_image">ပံုၾကမ္းဆြဲရန္</string>
   <string name="reset_image">မူလအတုိင္းျပန္ထားရန္</string>
   <string name="set_color">အေရာင္ေရြးရန္</string>
-  <string name="select_drawing_color">ေရးဆြဲမည့္ အေရာင္ေရြးရန္</string>
   <string name="admin_preferences">စီမံခန့္ခြဲမွု ပံုစံမ်ား</string>
   <string name="admin_access_settings">စီမံခန့္ခြဲမွုပံုစံအား ေဆာင္ရြက္ႏိုင္ရန္ ႏွိပ္ပါ</string>
   <string name="save_mid">ပံုစံသိမ္းဆည္းျခင္း</string>

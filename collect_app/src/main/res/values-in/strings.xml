@@ -11,6 +11,7 @@
   <string name="cancel">Batal</string>
   <string name="cancel_loading_form">Batal</string>
   <string name="cancel_location">Batal</string>
+  <string name="canceling">Membatalkan</string>
   <string name="cannot_edit_completed_form">Formulir yang sudah final tidak bisa disunting karena sudah terenkripsi.</string>
   <string name="capture_audio">Simpan suara</string>
   <string name="capture_image">Ambil foto</string>
@@ -91,7 +92,6 @@
   <string name="parse_legacy_formlist_failed">Tidak terdapat berkas formulir di server yang cocok dengan Aggregate 0.9.x. : %s </string>
   <string name="parse_openrosa_formlist_failed">Tidak terdapat berkas formulir di server yang cocok dengan OpenRosa version 1.0 standard: %s</string>
   <string name="password">Kata sandi</string>
-  <string name="play_audio">Mainkan suara</string>
   <string name="play_video">Mainkan video</string>
   <string name="please_wait">Silahkan tunggu.</string>
   <string name="please_wait_long">Silahkan tunggu. Proses ini membutuhkan beberapa menit.</string>
@@ -136,7 +136,6 @@
   <string name="submission_url">Tautan pengumpulan</string>
   <string name="font_size">Ukuran teks font</string>
   <string name="change_font_size">Ukuran teks font</string>
-  <string name="form_scan_starting">Sedang memindai formulir…</string>
   <string name="access_error">Terjadi kesalahan ketika mengakses %s: </string>
   <string name="manifest_server_error">Versi OpenRosa tidak terdeteksi — terjadi kesalahan pada server?</string>
   <string name="root_element_error">Penamaan elemen root bukan &amp;lt;manifest\&gt; — tapi %s</string>
@@ -191,7 +190,6 @@
   <string name="draw_image">Sketsa Gambar</string>
   <string name="reset_image">Set Ulang</string>
   <string name="set_color">Atur Warna</string>
-  <string name="select_drawing_color">Pilih Warna</string>
   <string name="admin_preferences">Pengaturan Admin</string>
   <string name="admin_access_settings">Tekan untuk akses admin ke pengaturan</string>
   <string name="save_mid">Menyimpan di tengah formulir</string>
@@ -266,9 +264,6 @@
   <string name="drive_get_file">Mendapatkan %1$s dan berkas media.</string>
   <string name="no_google_account">Tidak ada Akun Google yang dipilih!</string>
   <string name="google_set_account">Google Sheet telah dipilih sebagai server kamu, silahkan tentukan akun Google pada Pengaturan Umum sebelum melanjutkan</string>
-  <string name="invalid_oauth">Token OAuth 2 tidak sesuai</string>
-  <string name="google_repeat_error">Pengulangan belum didukung oleh Google Sheet.</string>
-  <string name="media_upload_error">Gagal mengunggah foto: %1$s</string>
   <string name="odk_auth_auth_fail">ODK pengiriman otomatis gagal berotentikasi, pastikan pengaturannya benar</string>
   <string name="odk_auto_note">Notifikasi ODK Kirim otomatis</string>
   <string name="notification_error">Gagal menampilkan teks notifikasi</string>
@@ -276,7 +271,6 @@
   <string name="delete_after_send_summary">Menghapus media dan formulir yang sempurna setelah mengirim ke server  </string>
   <string name="change_server_url">Tautan server (URL)</string>
   <string name="google_search_browse">Mencari formulir. Atau memilih \'My Drive\' di bawah ini untuk browse.</string>
-  <string name="no_blank_search">Kolom pencarian tidak boleh kosong.</string>
   <string name="google_sheets_url">URL kembali setelah pengiriman</string>
   <string name="send_in_progress">Pengiriman sedang berlangsung, cobalah beberapa saat lagi</string>
   <string name="sheets_max_columns">Jumlah kolom maksimum adalah 255, formulir anda memiliki %s. Tidak dapat mengunggah pada spreadsheet.</string>
@@ -287,9 +281,6 @@
   <string name="username_error_whitespace">Tidak diperkenankan menggunakan spasi pada nama pengguna</string>
   <string name="google_play_services_error_occured">Tidak dapat mengakses Google Maps. Apakah Google Play Services telah terpasang?</string>
   <string name="about_preferences">Tentang</string>
-  <string name="tell_your_friends">Bagikan ODK Collect kepada kolegamu</string>
-  <string name="tell_your_friends_msg">Unduh aplikasi ODK Collect!</string>
-  <string name="leave_a_review">Tulis review di Google Play Store</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">Pemetaan</string>
   <string name="map_sdk_selector_title">SDK Pemetaan</string>
@@ -299,6 +290,8 @@
   <string name="show_map_sdk">Tampilkan opsi SDK Peta </string>
   <string name="openmap_streets">OSM dengan layer jalan</string>
   <string name="openmap_usgs_topo">USGS National Map Topo</string>
+  <string name="openmap_usgs_sat">Peta Nasional Gabungan USGS</string>
+  <string name="openmap_usgs_img">Citra Peta Nasional USGS</string>
   <string name="openmap_stamen_terrain">Stamen Terrain</string>
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
@@ -341,8 +334,6 @@
   <string name="zoom_to_where">Zoom ke…</string>
   <string name="zoom_to_location">Zoom ke lokasi saat ini</string>
   <string name="zoom_to_feature">Zoom ke fitur yang tersimpan</string>
-  <string name="google_sheets_invalid_column_form">\'n%1$s\' merupakan nama kolom yang tidak valid dalam formulir Anda. Google Sheets hanya memungkinkan karakter alfanumerik dan tanda hubung pada nama kolom</string>
-  <string name="google_sheets_invalid_column_instance">\'n%1$s\' merupakan nama kolom yang tidak valid dalam permintaan tersimpan Anda. Google Sheets hanya memungkinkan karakter alfanumerik dan tanda hubung pada nama kolom</string>
   <string name="geoshape_view_change_location">Tampilkan atau Ubah GeoShape</string>
   <string name="geotrace_view_change_location">Tampilkan atau Ubah GeoTrace</string>
   <string name="bearing">Bantalan: %.3f</string>
@@ -369,8 +360,6 @@
   <string name="odk_website">Kunjungi situs ODK </string>
   <string name="odk_website_summary">Open Data Kit (ODK) digunakan untuk mengumpulkan data untuk kepentingan sosial di lingkungan yang menantang.</string>
   <string name="odk_forum">Gabung forum ODK</string>
-  <string name="odk_forum_summary">Bergabunglah dengan forum untuk mendapat dukungan, fitur permintaan, kontribusikan kode/terjemahan!</string>
-  <string name="all_open_source_licenses">Pustaka dan lisensi open source</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">B %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -383,7 +372,6 @@
   <string name="not_exactly_one_record_for_this_instance">Tidak sesuai dengan recor dimaksud dalam permintaan!</string>
   <string name="not_exactly_one_blank_form_for_this_form_id">Tidak ada satu pun formulir kosong yang sesuai dengan jr_form_id ini.</string>
   <string name="no_form_id_specified">FormId tidak disebutkan.</string>
-  <string name="phone_does_not_have_base64_class">Telepon tidak memiliki Base64 class namun tingkat API adalah %s.</string>
   <string name="phone_does_not_support_rsa">Ponsel tidak mendukung enkripsi RSA.</string>
   <string name="invalid_rsa_public_key">RSA public key tidak valid.</string>
   <string name="encryption_error_message">%s tersimpan sebagai formulir belum selesai.</string>
@@ -415,10 +403,14 @@
   <string name="exit">Keluar</string>
   <string name="instance_scan_completed">Pemindaian selesai.</string>
   <string name="instance_scan_count">%1$d formulir ditambahkan.</string>
+  <string name="instance_sync">Selesaikan formulir saat impor</string>
+  <string name="instance_sync_summary">Formulir yg rusak langsing ditambahkan ke berkas instances</string>
   <string name="sort_by_name_asc">Nama, A-Z</string>
   <string name="sort_by_name_desc">Nama, Z-A</string>
   <string name="sort_by_date_asc">Tanggal, terbaru dahulu</string>
   <string name="sort_by_date_desc">Tanggal, terlama dahulu</string>
+  <string name="sort_by_status_asc">Statusnya finalisasi terlebih dahulu</string>
+  <string name="sort_by_status_desc">Statusnya tidak difinalisasi terlebih dahulu</string>
   <string name="sort_the_list">Urutkan daftar</string>
   <string name="request_permissions_google_account">ODK Collect membutuhkan akses akun Google anda untuk mendapatkan formulir kosong dan mengirimkan isi formulir.</string>
   <string name="filter_the_list">Pilah daftar</string>
@@ -500,8 +492,18 @@
   <string name="form_delete_message">Menghapus form terpilih</string>
   <string name="deleting_form_dialog_update_message">Menghapus form: %1$d dari %2$d</string>
   <string name="search">Cari</string>
+  <string name="null_intent_value">Aplikasi luar tidak memiliki informasi yg dibutuhkan</string>
+  <string name="image_size_large">Besar (3072px)</string>
+  <string name="image_size_medium">Menengah (2048px)</string>
+  <string name="image_size_small">Kecil (1024px)</string>
+  <string name="image_size_very_small">Sangat kecil (640px)</string>
   <string name="image_size_original">Ukuran asli dari kamera (default)</string>
+  <string name="image_size_dialog_title">Piksel maksimal pada gambar dengan ujung yg panjang</string>
+  <string name="bearing_lack_of_sensors">bantalan poros tdk dapat diambil: perangkat kehilangan akselerometer dan sensor medan magnet atau keduanya.</string>
+  <string name="ethiopian_month_2">Tikimt</string>
+  <string name="ethiopian_month_3">Hidar</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <string name="custom_date">%1$s (%2$s)</string>
   <string name="multiple_media_folders_detected_notification">Lebih dari satu folder media terdeteksi, hapus salah satu dan coba lagi</string>
   <string name="islamic_month_1">Muharram</string>
   <string name="islamic_month_2">Shafar</string>
@@ -516,8 +518,12 @@
   <string name="islamic_month_11">Dzulqa’dah</string>
   <string name="islamic_month_12">Dzulhijjah</string>
   <string name="moving_backwards_title">Bergerak mundur</string>
-  <string name="moving_backwards_disabled_title">Bergerak mundur </string>
+  <string name="moving_backwards_disabled_title">Bergerak mundur dinonaktifkan</string>
+  <string name="moving_backwards_disabled_message">Konfigurasi untuk mencegah pengguna mengabaikan pengaturan?\n\nPerubahannya yaitu:\n\u2022 Matikan sunting formulir tersimpan\n\u2022 Matikan pilihan Pergi Ke\n\u2022 Pemrosesan Atur Pembatasan menjadi Validasi saat geser maju</string>
+  <string name="moving_backwards_enabled_title">Bergerak mundur diaktifkan</string>
+  <string name="moving_backwards_enabled_message">Anda mungkin ingin meninjau pengaturan berikut:\n\n\u2022 Form Ubah Disimpan\n\u2022 Simpan Form\n\u2022 Pindah ke Prompt\n\u2022 pemrosesan Constraint</string>
   <string name="yes">Ya</string>
   <string name="no">Tidak</string>
   <string name="newer_version_of_a_form_info">Ini adalah form versi baru dari form yang ada</string>
+  <string name="svg_file_does_not_exist">Berkas SVG tidak ada!</string>
 </resources>

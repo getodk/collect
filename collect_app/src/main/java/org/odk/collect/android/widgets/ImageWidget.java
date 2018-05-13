@@ -73,7 +73,7 @@ public class ImageWidget extends BaseImageWidget {
             } catch (ActivityNotFoundException e) {
                 Toast.makeText(getContext(),
                         getContext().getString(R.string.activity_not_found,
-                                "view image"),
+                                getContext().getString(R.string.view_image)),
                         Toast.LENGTH_SHORT).show();
             }
         }
@@ -84,7 +84,8 @@ public class ImageWidget extends BaseImageWidget {
         super.setUpLayout();
 
         String appearance = getFormEntryPrompt().getAppearanceHint();
-        selfie = appearance != null && appearance.equalsIgnoreCase("selfie");
+        selfie = appearance != null && (appearance.equalsIgnoreCase("selfie")
+                || appearance.equalsIgnoreCase("new-front"));
 
         captureButton = getSimpleButton(getContext().getString(R.string.capture_image), R.id.capture_image);
         captureButton.setEnabled(!getFormEntryPrompt().isReadOnly());
@@ -192,7 +193,7 @@ public class ImageWidget extends BaseImageWidget {
                     RequestCodes.IMAGE_CAPTURE);
         } catch (ActivityNotFoundException e) {
             Toast.makeText(getContext(),
-                    getContext().getString(R.string.activity_not_found, "image capture"),
+                    getContext().getString(R.string.activity_not_found, getContext().getString(R.string.capture_image)),
                     Toast.LENGTH_SHORT).show();
             cancelWaitingForData();
         }
@@ -211,7 +212,7 @@ public class ImageWidget extends BaseImageWidget {
                     RequestCodes.IMAGE_CHOOSER);
         } catch (ActivityNotFoundException e) {
             Toast.makeText(getContext(),
-                    getContext().getString(R.string.activity_not_found, "choose image"),
+                    getContext().getString(R.string.activity_not_found, getContext().getString(R.string.choose_image)),
                     Toast.LENGTH_SHORT).show();
             cancelWaitingForData();
         }

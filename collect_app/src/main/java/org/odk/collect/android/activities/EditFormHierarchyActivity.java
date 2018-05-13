@@ -17,6 +17,7 @@ package org.odk.collect.android.activities;
 
 
 import android.support.v4.content.ContextCompat;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 
@@ -25,6 +26,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.HierarchyListAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.JavaRosaException;
+import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.HierarchyElement;
 
 import java.util.ArrayList;
@@ -73,7 +75,7 @@ public class EditFormHierarchyActivity extends FormHierarchyActivity {
                     try {
                         Collect.getInstance().getFormController().stepToPreviousScreenEvent();
                     } catch (JavaRosaException e) {
-                        Timber.e(e);
+                        Timber.d(e);
                         createErrorDialog(e.getCause().getMessage());
                         return;
                     }
@@ -95,5 +97,20 @@ public class EditFormHierarchyActivity extends FormHierarchyActivity {
         itla.setListItems(formList);
         listView.setAdapter(itla);
         listView.setSelection(position);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_BACK:
+                Collect.getInstance().getActivityLogger().logInstanceAction(this, "onKeyDown",
+                        "KEYCODE_BACK.JUMP", startIndex);
+                FormController fc = Collect.getInstance().getFormController();
+                if (fc != null) {
+                    fc.getTimerLogger().exitView();
+                    fc.jumpToIndex(startIndex);
+                }
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

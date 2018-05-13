@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2009 University of Washington
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -17,7 +17,6 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +25,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.javarosa.core.model.SelectChoice;
@@ -38,6 +36,7 @@ import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.ExternalDataUtil;
+import org.odk.collect.android.views.ScrolledToTopSpinner;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
 import java.util.List;
@@ -52,7 +51,7 @@ import java.util.List;
 @SuppressLint("ViewConstructor")
 public class SpinnerWidget extends QuestionWidget implements MultiChoiceWidget {
     List<SelectChoice> items;
-    Spinner spinner;
+    ScrolledToTopSpinner spinner;
     String[] choices;
 
     public SpinnerWidget(Context context, FormEntryPrompt prompt) {
@@ -220,11 +219,8 @@ public class SpinnerWidget extends QuestionWidget implements MultiChoiceWidget {
 
             if (position == (items.length - 1) && spinner.getSelectedItemPosition() == position) {
                 tv.setEnabled(false);
-            } else if (spinner.getSelectedItemPosition() == position) {
-                //noinspection deprecation
-                tv.setTextColor(getContext().getResources().getColor(R.color.tintColor));
             } else {
-                tv.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor));
+                tv.setTextColor(themeUtils.getAttributeValue(spinner.getSelectedItemPosition() == position ? R.attr.colorAccent : R.attr.primaryTextColor));
             }
 
             return convertView;

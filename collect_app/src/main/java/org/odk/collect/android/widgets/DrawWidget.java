@@ -94,7 +94,7 @@ public class DrawWidget extends BaseImageWidget {
             Toast.makeText(
                     getContext(),
                     getContext().getString(R.string.activity_not_found,
-                            "draw image"), Toast.LENGTH_SHORT).show();
+                            getContext().getString(R.string.draw_image)), Toast.LENGTH_SHORT).show();
             cancelWaitingForData();
         }
     }

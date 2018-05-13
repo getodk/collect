@@ -11,6 +11,7 @@
   <string name="cancel">Avbryt</string>
   <string name="cancel_loading_form">Avbryt</string>
   <string name="cancel_location">Avbryt</string>
+  <string name="canceling">Avbryter</string>
   <string name="cannot_edit_completed_form">Det här formuläret kan inte redigeras efter det har avslutats. Det kan vara krypterat.</string>
   <string name="capture_audio">Spela in ljud</string>
   <string name="capture_image">Ta bild</string>
@@ -91,7 +92,6 @@
   <string name="parse_legacy_formlist_failed">Servern tillhandahåller inte ett dokument över tillgängliga formulär som är kompatibelt med Aggregate 0.9.x: %s</string>
   <string name="parse_openrosa_formlist_failed">Servern tillhandahåller inte ett dokument över tillgängliga formulär som är kompatibelt med OpenRosa version 1.0 standarden: %s</string>
   <string name="password">Lösenord</string>
-  <string name="play_audio">Spela upp ljud</string>
   <string name="play_video">Spela upp film</string>
   <string name="please_wait">Var vänlig och vänta ett tag.</string>
   <string name="please_wait_long">Var vänlig och vänta. Detta kan ta en stund.</string>
@@ -136,7 +136,6 @@
   <string name="submission_url">Sökväg till skickade formulär</string>
   <string name="font_size">Textstorlek</string>
   <string name="change_font_size">Textstorlek</string>
-  <string name="form_scan_starting">Söker formulär…</string>
   <string name="access_error">Fel vid inläsning av %s:</string>
   <string name="manifest_server_error">Manifestets svar rapporterar inte en OpenRosa-version - felaktig server?</string>
   <string name="root_element_error">Rotelementet är inte &lt;manifest\&gt; - var tidigare %s</string>
@@ -191,7 +190,6 @@
   <string name="draw_image">Skissa i bild</string>
   <string name="reset_image">Återställ</string>
   <string name="set_color">Välj färg</string>
-  <string name="select_drawing_color">Välj pennfärg</string>
   <string name="admin_preferences">Administratörsinställningar</string>
   <string name="admin_access_settings">Knacka för administratörstillgång till inställningarna</string>
   <string name="save_mid">Spara formulär</string>
@@ -266,9 +264,6 @@
   <string name="drive_get_file">Hämtar %1$s och mediafiler.</string>
   <string name="no_google_account">Inget Google-konto valt!</string>
   <string name="google_set_account">Du har valt Google Sheets som din server, vänligen välj motsvarande Google-konto under allmänna inställningar innan du fortsätter</string>
-  <string name="invalid_oauth">Ogiltigt OAuth 2 token</string>
-  <string name="google_repeat_error">Repeterande grupper stöds inte av Google Sheets för närvarande.</string>
-  <string name="media_upload_error">Misslyckades med att ladda upp bild som inte finns: %1$s</string>
   <string name="odk_auth_auth_fail">ODK autentiseringsfel vid automatisk sändning. Kontrollera att inställningarna är korrekta.</string>
   <string name="odk_auto_note">ODK notifiering vid automatisk sändning</string>
   <string name="notification_error">Fel vid visning av notifikationstext</string>
@@ -276,7 +271,6 @@
   <string name="delete_after_send_summary">Raderar avslutade formulär och media efter dessa sänts till servern</string>
   <string name="change_server_url">Server-URL</string>
   <string name="google_search_browse">Sök efter formulär eller välj \'My Drive\' nedan för att bläddra.</string>
-  <string name="no_blank_search">Sökfältet kan inte vara tomt.</string>
   <string name="google_sheets_url">Reserv-URL för uppladdning</string>
   <string name="send_in_progress">Sändning pågår i bakgrunden, vänligen försök igen senare</string>
   <string name="sheets_max_columns">Max tillåtet antal kolumner är 255, ditt formulär har %s. Uppladdning till kalkylark är inte möjligt.</string>
@@ -287,9 +281,6 @@
   <string name="username_error_whitespace">Inledande eller avslutande blanksteg är inte tillåtet i användarnamn</string>
   <string name="google_play_services_error_occured">Åtkomst till Google Maps ej möjlig. Är Google Play Services installerad?</string>
   <string name="about_preferences">Om</string>
-  <string name="tell_your_friends">Dela ODK Collect med dina kollegor</string>
-  <string name="tell_your_friends_msg">Ladda ner ODK Collect appen!</string>
-  <string name="leave_a_review">Lämna ett omdöme på Google Play Store</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">Kartor</string>
   <string name="map_sdk_selector_title">SDK för kartor</string>
@@ -299,6 +290,8 @@
   <string name="show_map_sdk">Visa Map SDK alternativ</string>
   <string name="openmap_streets">OSM Streets</string>
   <string name="openmap_usgs_topo">USGS National Map Topo</string>
+  <string name="openmap_usgs_sat">USGS nationell hybridkarta</string>
+  <string name="openmap_usgs_img">USGS nationell satellitkarta</string>
   <string name="openmap_stamen_terrain">Stamen Terrain</string>
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
@@ -341,8 +334,6 @@
   <string name="zoom_to_where">Zooma till…</string>
   <string name="zoom_to_location">Zooma till nuvarande position</string>
   <string name="zoom_to_feature">Zooma till sparat objekt</string>
-  <string name="google_sheets_invalid_column_form">\'n%1$s\' är ett ogiltigt kolumnnamn i ditt formulär. Google Sheets tillåter endast alfanumeriska tecken och bindestreck i kolumnnamnet.</string>
-  <string name="google_sheets_invalid_column_instance">\'n%1$s\' är ett ogiltigt kolumnnamn i din sparade instans. Google Sheets tillåter endast alfanumeriska tecken och bindestreck i kolumnnamnet.</string>
   <string name="geoshape_view_change_location">Visa eller redigera GeoShape</string>
   <string name="geotrace_view_change_location">Visa eller redigera GeoTrace</string>
   <string name="bearing">Riktning: %.3f</string>
@@ -369,8 +360,6 @@
   <string name="odk_website">Besök ODKs hemsida</string>
   <string name="odk_website_summary">Open Data Kit (ODK) används för att samla in data för socialt arbete i utmanande miljöer</string>
   <string name="odk_forum">Gå med i ODK forumet</string>
-  <string name="odk_forum_summary">Gå med i forumet för att få hjälp, föreslå funktioner eller bidra med kod/översättningar!</string>
-  <string name="all_open_source_licenses">Bibliotek och licenser för öppen källkod</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">V %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -383,7 +372,6 @@
   <string name="not_exactly_one_record_for_this_instance">Inte exakt en post för denna instans!</string>
   <string name="not_exactly_one_blank_form_for_this_form_id">Inte exakt ett tomt formulär överensstämmer med detta jr_form_id.</string>
   <string name="no_form_id_specified">Har formulär-ID angivits???</string>
-  <string name="phone_does_not_have_base64_class">Telefonen saknar Base64 klass men API nivån är %s.</string>
   <string name="phone_does_not_support_rsa">Telefonen stöder inte RSA-kryptering.</string>
   <string name="invalid_rsa_public_key">Ogiltig publik RSA-nyckel.</string>
   <string name="encryption_error_message">%s formulär har inte sparats som avslutat.</string>
@@ -415,8 +403,14 @@
   <string name="exit">Avsluta</string>
   <string name="instance_scan_completed">Avslutat sökning</string>
   <string name="instance_scan_count">%1$d formulär tillagda.</string>
+  <string name="instance_sync">Avsluta formulär vid import</string>
+  <string name="instance_sync_summary">Påverkar formulär som lagts till direkt i mappen \'instances\'.</string>
   <string name="sort_by_name_asc">Namn, A-Ö</string>
   <string name="sort_by_name_desc">Namn, Ö-A</string>
+  <string name="sort_by_date_asc">Datum, nyaste först</string>
+  <string name="sort_by_date_desc">Datum, äldsta först</string>
+  <string name="sort_by_status_asc">Status, avslutade först</string>
+  <string name="sort_by_status_desc">Status, oavslutade first</string>
   <string name="sort_the_list">Sortera listan</string>
   <string name="request_permissions_google_account">ODK Collect behöver få tillgång till ditt Google-konto för att hämta tomma formulär och ladda upp ifyllda formulär.</string>
   <string name="filter_the_list">Filtrera listan</string>
@@ -458,6 +452,7 @@
   <string name="invalid_qrcode">QR-koden innehåller inga giltiga inställningar</string>
   <string name="share_qrcode">Dela QR-koden</string>
   <string name="take_picture_instruction">Knacka på skärmen för att ta ett kort</string>
+  <string name="error_front_camera_unavailable">Frontkamera inte tillgänglig på denna enhet</string>
   <string name="request_permission">Programmet behöver behörighet till kameran.</string>
   <string name="camera_error">Denna enhet stöder inte Camera2 API:et.</string>
   <string name="invalid_range_widget">Ogiltiga parametrar för widget!</string>
@@ -491,10 +486,68 @@
   <string name="invalid_email_address">Ogiltig e-postadress!</string>
   <string name="sort_by">Sorteringsordning</string>
   <string name="server">Server</string>
+  <string name="select_value">Välj ett värde</string>
+  <string name="edit_value">Redigera värde</string>
+  <string name="no_value_selected">Inget värde valt</string>
+  <string name="form_delete_message">Raderar valda formulär</string>
+  <string name="deleting_form_dialog_update_message">Raderar formulär %1$d av %2$d</string>
+  <string name="search">Sök</string>
+  <string name="null_intent_value">Den externa applikationen gav inte förväntad information.</string>
   <string name="image_size_large">Stor (3 072 px)</string>
   <string name="image_size_medium">Medium (2 048 px)</string>
   <string name="image_size_small">Liten (1 024 px)</string>
   <string name="image_size_very_small">Mycket liten (640 px)</string>
   <string name="image_size_original">Ursprunglig storlek i kamera (standard)</string>
+  <string name="image_size_dialog_title">Maximalt antal pixlar på långsidan av bilden</string>
+  <string name="bearing_lack_of_sensors">Bäring kan inte fastställas: enheten saknar accelerometer och/eller magnetisk sensor.</string>
+  <string name="ethiopian_month_1">Meskerem</string>
+  <string name="ethiopian_month_2">Tikimit</string>
+  <string name="ethiopian_month_3">Hidar</string>
+  <string name="ethiopian_month_4">Tahsas</string>
+  <string name="ethiopian_month_5">Tir</string>
+  <string name="ethiopian_month_6">Yekatit</string>
+  <string name="ethiopian_month_7">Megabit</string>
+  <string name="ethiopian_month_8">Miazia</string>
+  <string name="ethiopian_month_9">Ginbot</string>
+  <string name="ethiopian_month_10">Senie</string>
+  <string name="ethiopian_month_11">Hamlie</string>
+  <string name="ethiopian_month_12">Nehasie</string>
+  <string name="ethiopian_month_13">Pagumien</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <string name="custom_date">%1$s (%2$s)</string>
+  <string name="coptic_month_1">Thout</string>
+  <string name="coptic_month_2">Paopi</string>
+  <string name="coptic_month_3">Hathor</string>
+  <string name="coptic_month_4">Koiak</string>
+  <string name="coptic_month_5">Tobi</string>
+  <string name="coptic_month_6">Meshir</string>
+  <string name="coptic_month_7">Paremhat</string>
+  <string name="coptic_month_8">Parmouti</string>
+  <string name="coptic_month_9">Pashons</string>
+  <string name="coptic_month_10">Paoni</string>
+  <string name="coptic_month_11">Epip</string>
+  <string name="coptic_month_12">Mesori</string>
+  <string name="coptic_month_13">Pi Kogi Enavot</string>
+  <string name="multiple_media_folders_detected_notification">Mer än en media-mapp upptäcktes. Ta bort en och försök igen.</string>
+  <string name="islamic_month_1">Muharram</string>
+  <string name="islamic_month_2">Safar</string>
+  <string name="islamic_month_3">Rabi\' al-awwal</string>
+  <string name="islamic_month_4">Rabi\' al-thani</string>
+  <string name="islamic_month_5">Jumada al-awwal</string>
+  <string name="islamic_month_6">Jumada al-thani</string>
+  <string name="islamic_month_7">Rajab</string>
+  <string name="islamic_month_8">Sha\'ban</string>
+  <string name="islamic_month_9">Ramadan</string>
+  <string name="islamic_month_10">Shawwal</string>
+  <string name="islamic_month_11">Dhu al-Qidah</string>
+  <string name="islamic_month_12">Dhu al-Hijjah</string>
+  <string name="moving_backwards_title">Navigera bakåt</string>
+  <string name="moving_backwards_disabled_title">Bakåtnavigering inaktiverad</string>
+  <string name="moving_backwards_disabled_message">Vill du konfigurera enheten så att användare förhindras att åsidosätta dessa inställningar?\n\nÄndringarna är:\n\u2022 Avaktivera ändra sparat formulär\n\u2022 Avaktivera spara formulär\n\u2022 Avaktivera gå till post\n\u2022 Aktivera hantering av restriktioner till validering vid navigering framåt</string>
+  <string name="moving_backwards_enabled_title">Bakåtnavigering aktiverad</string>
+  <string name="moving_backwards_enabled_message">Du vill kanske se över dessa inställningar:\n\n\u2022 Redigera sparat formulär\n\u2022 Spara formulär\n\u2022 Gå till post\n\u2022 Hantering av restriktioner</string>
+  <string name="yes">Ja</string>
+  <string name="no">Nej</string>
+  <string name="newer_version_of_a_form_info">Detta är en uppdaterad version av ett formulär som du redan har!</string>
+  <string name="svg_file_does_not_exist">SVG-fil finns inte!</string>
 </resources>

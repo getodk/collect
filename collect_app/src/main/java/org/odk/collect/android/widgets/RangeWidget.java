@@ -179,6 +179,18 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonWidget
         seekBar.setMax(elementCount);
         seekBar.setProgress(progress);
         seekBar.setOnSeekBarChangeListener(this);
+        if (isRTL()) {
+            float rotate = seekBar.getRotation();
+            if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT ||
+                    Build.VERSION.SDK_INT == Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                seekBar.setRotation(180 - rotate);
+            } else if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT ||
+                    Build.VERSION.SDK_INT == Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                seekBar.setRotation(360 - rotate);
+            } else {
+                seekBar.setRotation(rotate);
+            }
+        }
 
         seekBar.setOnTouchListener(new SeekBar.OnTouchListener() {
             @Override
@@ -191,6 +203,10 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonWidget
                         break;
                     case MotionEvent.ACTION_UP:
                         v.getParent().requestDisallowInterceptTouchEvent(false);
+                        if (actualValue == null) {
+                            actualValue = rangeStart;
+                            setUpActualValueLabel();
+                        }
                         break;
                 }
                 v.onTouchEvent(event);

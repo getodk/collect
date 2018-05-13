@@ -3,6 +3,8 @@ package org.odk.collect.android.widgets;
 import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.view.View;
+import android.view.ViewGroup;
 
 import net.bytebuddy.utility.RandomString;
 
@@ -33,12 +35,16 @@ public class AudioWidgetTest extends FileWidgetTest<AudioWidget> {
     @Mock
     FileUtil fileUtil;
 
+    @Mock
+    AudioController audioController;
+
     private String destinationName = null;
 
     @NonNull
     @Override
     public AudioWidget createWidget() {
-        return new AudioWidget(RuntimeEnvironment.application, formEntryPrompt, fileUtil, mediaUtil);
+        when(audioController.getPlayerLayout(any(ViewGroup.class))).thenReturn(mock(View.class));
+        return new AudioWidget(RuntimeEnvironment.application, formEntryPrompt, fileUtil, mediaUtil, audioController);
     }
 
     @NonNull
