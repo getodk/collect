@@ -799,21 +799,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
 
             case RequestCodes.AUDIO_CHOOSER:
-                /*
-                * Start a task to save the chosen audio with a new Thread,
-                * This could support retrieving file from Google Drive.
-                * */
-
-                showDialog(SAVING_DIALOG);
-                Runnable saveAudioRunnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        saveChosenAudioVideo(intent.getData());
-                    }
-                };
-                new Thread(saveAudioRunnable).start();
-
-                break;
+                // Same with VIDEO_CHOOSER.
             case RequestCodes.VIDEO_CHOOSER:
                 /*
                 * Start a task to save the chosen video with a new Thread,
