@@ -25,7 +25,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
 import android.provider.MediaStore.Video;
 import android.support.annotation.NonNull;
 import android.view.View;

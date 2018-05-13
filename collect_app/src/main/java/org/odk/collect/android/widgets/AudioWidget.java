@@ -21,7 +21,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.provider.MediaStore;
 import android.provider.MediaStore.Audio;
 import android.support.annotation.NonNull;
 import android.view.View;
@@ -148,7 +147,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
      */
     @Override
     public void setBinaryData(Object object) {
-        File newAudio = null;
+        File newAudio;
         // get the file path and create a copy in the instance folder
         if (object instanceof Uri) {
             // Get the source path of the file
