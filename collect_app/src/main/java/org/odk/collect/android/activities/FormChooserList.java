@@ -40,6 +40,7 @@ import org.odk.collect.android.utilities.VersionHidingCursorAdapter;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
 import static org.odk.collect.android.utilities.PermissionUtils.requestStoragePermissions;
 
 /**
@@ -80,11 +81,11 @@ public class FormChooserList extends FormListActivity implements
             @Override
             public void denied() {
                 // The activity has to finish because ODK Collect cannot function without these permissions.
-                finish();
+                finishAllActivities(FormChooserList.this);
             }
         });
     }
-    
+
     private void init() {
         setupAdapter();
 
@@ -135,8 +136,6 @@ public class FormChooserList extends FormListActivity implements
                 intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
                 startActivity(intent);
             }
-
-            finish();
         }
     }
 

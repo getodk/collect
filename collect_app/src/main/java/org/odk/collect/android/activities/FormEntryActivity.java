@@ -137,6 +137,8 @@ import static android.content.DialogInterface.BUTTON_POSITIVE;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_MOVING_BACKWARDS;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 import static org.odk.collect.android.utilities.FormDefCache.writeCacheAsync;
+import static org.odk.collect.android.utilities.PermissionUtils.checkIfStoragePermissionsGranted;
+import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
 import static org.odk.collect.android.utilities.PermissionUtils.requestStoragePermissions;
 
 /**
@@ -239,6 +241,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private String startingXPath;
     private String waitingXPath;
     private boolean newForm = true;
+    private boolean onResumeWasCalledWithoutPermissions;
 
     public void allowSwiping(boolean doSwipe) {
         this.doSwipe = doSwipe;
@@ -298,17 +301,25 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     setupFields(savedInstanceState);
                     loadForm();
 
+                    /**
+                     * Since onResume is called after onCreate we check to see if
+                     * it was called without the permissions that are required. If so then
+                     * we call it.This is especially useful for cases where a user might revoke
+                     * permissions to storage and not know the implications it has on the form entry.
+                     */
+                    if (onResumeWasCalledWithoutPermissions) {
+                        onResume();
+                    }
                 } catch (RuntimeException e) {
                     createErrorDialog(e.getMessage(), EXIT);
                     return;
                 }
-
             }
 
             @Override
             public void denied() {
                 // The activity has to finish because ODK Collect cannot function without these permissions.
-                finish();
+                finishAllActivities(FormEntryActivity.this);
             }
         });
     }
@@ -2226,6 +2237,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     protected void onResume() {
         super.onResume();
 
+        if (!checkIfStoragePermissionsGranted(this)) {
+            onResumeWasCalledWithoutPermissions = true;
+            return;
+        }
+
         String navigation = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_NAVIGATION);
         showNavigationButtons = navigation.contains(PreferenceKeys.NAVIGATION_BUTTONS);
         backButton.setVisibility(showNavigationButtons ? View.VISIBLE : View.GONE);
@@ -2257,12 +2273,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     t.destroy();
                     // there is no formController -- fire MainMenu activity?
                     startActivity(new Intent(this, MainMenuActivity.class));
+                    finish();
                 }
             }
         } else {
             if (formController == null) {
                 // there is no formController -- fire MainMenu activity?
                 startActivity(new Intent(this, MainMenuActivity.class));
+                finish();
                 return;
             } else {
                 refreshCurrentView();

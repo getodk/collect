@@ -42,6 +42,7 @@ import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import timber.log.Timber;
 
+import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
 import static org.odk.collect.android.utilities.PermissionUtils.requestStoragePermissions;
 
 /**
@@ -104,7 +105,7 @@ public class InstanceChooserList extends InstanceListActivity implements
             @Override
             public void denied() {
                 // The activity has to finish because ODK Collect cannot function without these permissions.
-                finish();
+                finishAllActivities(InstanceChooserList.this);
             }
         });
     }

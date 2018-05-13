@@ -52,6 +52,7 @@ import java.util.List;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
 import static org.odk.collect.android.utilities.PermissionUtils.requestStoragePermissions;
 
 /**
@@ -98,7 +99,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
             @Override
             public void denied() {
                 // The activity has to finish because ODK Collect cannot function without these permissions.
-                finish();
+                finishAllActivities(InstanceUploaderList.this);
             }
         });
     }

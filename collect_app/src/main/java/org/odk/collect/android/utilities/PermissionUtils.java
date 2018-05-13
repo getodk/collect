@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -15,8 +16,15 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.CollectAbstractActivity;
+import org.odk.collect.android.activities.FormChooserList;
+import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.activities.InstanceChooserList;
+import org.odk.collect.android.activities.InstanceUploaderList;
+import org.odk.collect.android.activities.SplashScreenActivity;
 import org.odk.collect.android.listeners.PermissionListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import timber.log.Timber;
@@ -57,6 +65,7 @@ public class PermissionUtils {
                             .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
                                 action.denied();
                             })
+                            .setCancelable(false)
                             .setIcon(R.drawable.sd)
                             .show();
                 }
@@ -73,7 +82,9 @@ public class PermissionUtils {
                         Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE
                 ).withListener(multiplePermissionsListener)
-                .withErrorListener(error -> Timber.i(error.name()))
+                .withErrorListener(error -> {
+                    Timber.i(error.name());
+                })
                 .check();
     }
 
@@ -82,5 +93,38 @@ public class PermissionUtils {
         int write = ContextCompat.checkSelfPermission(context, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
         return read == PackageManager.PERMISSION_GRANTED && write == PackageManager.PERMISSION_GRANTED;
+    }
+
+    /**
+     * Checks to see if an activity is one of the entry points to the app i.e
+     * an activity that has a view action that can launch the app.
+     *
+     * @param activity that has permission requesting code.
+     * @return true if the activity is an entry point to the app.
+     */
+    public static boolean isEntryPointActivity(CollectAbstractActivity activity) {
+
+        List<Class<?>> activities = new ArrayList<>();
+        activities.add(FormEntryActivity.class);
+        activities.add(InstanceChooserList.class);
+        activities.add(FormChooserList.class);
+        activities.add(InstanceUploaderList.class);
+        activities.add(SplashScreenActivity.class);
+
+        for (Class<?> act : activities) {
+            if (activity.getClass().equals(act)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static void finishAllActivities(Activity activity) {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            activity.finishAndRemoveTask();
+        } else {
+            activity.finishAffinity();
+        }
     }
 }
