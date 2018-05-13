@@ -721,72 +721,68 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
         	for(TaskAssignment ta : tr.taskAssignments) {
 
                 if(isCancelled()) { throw new CancelException("cancelled"); };		// Return if the user cancels
-	            
-        		if(ta.task.type.equals("xform")) {
-        			Assignment assignment = ta.assignment;
-        			
-    				Timber.i("Task: " + assignment.assignment_id + " Status:" +
-    						assignment.assignment_status + " Mode:" + ta.task.assignment_mode +
-    						" Address: " + ta.task.address +
-                            " NFC: " + ta.task.location_trigger +
-    						" Form: " + ta.task.form_id + " version: " + ta.task.form_version + 
-    						" Type: " + ta.task.type + "Assignee: " + assignment.assignee + "Username: " + username);
-            		
 
-            		// Find out if this task is already on the phone
-	          	  	TaskStatus ts = taskMap.get(Long.valueOf((long) assignment.assignment_id));
-	          	  	if(ts == null) {
-	          	  		Timber.i("New task: " + assignment.assignment_id);
-	          	  		// New task
-	          	  		if(assignment.assignment_status.equals(Utilities.STATUS_T_ACCEPTED)) {
+                Assignment assignment = ta.assignment;
 
-                            // Ensure the instance data is available on the phone
-                            // Use update_id in preference to initial_data url
-                            if(ta.task.update_id != null) {
-                                if(tr.version < 1) {
-                                    ta.task.initial_data = serverUrl + "/instanceXML/" +
-                                            ta.task.form_id + "/0?key=instanceid&keyval=" + ta.task.update_id;
-                                } else {
-                                    ta.task.initial_data = serverUrl + "/webForm/instance/" +
-                                            ta.task.form_id + "/" + ta.task.update_id;
-                                }
-                                Timber.i("Instance url: " + ta.task.initial_data);
+                Timber.i("Task: " + assignment.assignment_id + " Status:" +
+                        assignment.assignment_status + " Mode:" + ta.task.assignment_mode +
+                        " Address: " + ta.task.address +
+                        " NFC: " + ta.task.location_trigger +
+                        " Form: " + ta.task.form_id + " version: " + ta.task.form_version +
+                        "Assignee: " + assignment.assignee + "Username: " + username);
+
+
+                // Find out if this task is already on the phone
+                TaskStatus ts = taskMap.get(Long.valueOf((long) assignment.assignment_id));
+                if(ts == null) {
+                    Timber.i("New task: " + assignment.assignment_id);
+                    // New task
+                    if(assignment.assignment_status.equals(Utilities.STATUS_T_ACCEPTED)) {
+
+                        // Ensure the instance data is available on the phone
+                        // Use update_id in preference to initial_data url
+                        if(ta.task.update_id != null) {
+                            if(tr.version < 1) {
+                                ta.task.initial_data = serverUrl + "/instanceXML/" +
+                                        ta.task.form_id + "/0?key=instanceid&keyval=" + ta.task.update_id;
                             } else {
-                                // Make sure the initial_data url is sensible (ie null or a URL
-                                if (ta.task.initial_data != null && !ta.task.initial_data.startsWith("http")) {
-                                    ta.task.initial_data = null;
-                                }
+                                ta.task.initial_data = serverUrl + "/webForm/instance/" +
+                                        ta.task.form_id + "/" + ta.task.update_id;
                             }
-	                		
-	          	  			// Add instance data
-	          	  			ManageForm mf = new ManageForm();
-	          	  			ManageFormResponse mfr = mf.insertInstance(ta, assignment.assignment_id, source, serverUrl, tr.version);
-	          	  			if(!mfr.isError) {
-	          	  				results.put(ta.task.title, Collect.getInstance().getString(R.string.smap_created));
-                                publishProgress(ta.task.title, Integer.valueOf(count).toString(), Integer.valueOf(tr.taskAssignments.size())
-                                        .toString());
-	          	  			} else {
-                                publishProgress(ta.task.title + " : Failed", Integer.valueOf(count).toString(), Integer.valueOf(tr.taskAssignments.size())
-                                        .toString());
-	          	  				results.put(ta.task.title, "Creation failed: " + mfr.statusMsg );
-	          	  			}
+                            Timber.i("Instance url: " + ta.task.initial_data);
+                        } else {
+                            // Make sure the initial_data url is sensible (ie null or a URL
+                            if (ta.task.initial_data != null && !ta.task.initial_data.startsWith("http")) {
+                                ta.task.initial_data = null;
+                            }
+                        }
 
-	          	  		}
-	          	  	} else {        	// Existing task
-	          	  		Timber.i("Existing Task: " + assignment.assignment_id + " : " + assignment.assignment_status);
+                        // Add instance data
+                        ManageForm mf = new ManageForm();
+                        ManageFormResponse mfr = mf.insertInstance(ta, assignment.assignment_id, source, serverUrl, tr.version);
+                        if(!mfr.isError) {
+                            results.put(ta.task.title, Collect.getInstance().getString(R.string.smap_created));
+                            publishProgress(ta.task.title, Integer.valueOf(count).toString(), Integer.valueOf(tr.taskAssignments.size())
+                                    .toString());
+                        } else {
+                            publishProgress(ta.task.title + " : Failed", Integer.valueOf(count).toString(), Integer.valueOf(tr.taskAssignments.size())
+                                    .toString());
+                            results.put(ta.task.title, "Creation failed: " + mfr.statusMsg );
+                        }
 
-	          	  		if(assignment.assignment_status.equals(Utilities.STATUS_T_CANCELLED) && !ts.status.equals(Utilities.STATUS_T_CANCELLED)) {
-                            Utilities.setStatusForAssignment(assignment.assignment_id, assignment.assignment_status);
-                            results.put(ta.task.title, assignment.assignment_status);
-	          	  		}
+                    }
+                } else {        	// Existing task
+                    Timber.i("Existing Task: " + assignment.assignment_id + " : " + assignment.assignment_status);
 
-	          	  		// Update the task if its status is not incomplete
-                        Utilities.updateParametersForAssignment(assignment.assignment_id, ta);
-	          	  	}
+                    if(assignment.assignment_status.equals(Utilities.STATUS_T_CANCELLED) && !ts.status.equals(Utilities.STATUS_T_CANCELLED)) {
+                        Utilities.setStatusForAssignment(assignment.assignment_id, assignment.assignment_status);
+                        results.put(ta.task.title, assignment.assignment_status);
+                    }
 
-        			
-        		}// end process for xform task
-        	}// end tasks loop
+                    // Update the task if its status is not incomplete
+                    Utilities.updateParametersForAssignment(assignment.assignment_id, ta);
+                }
+            }// end tasks loop
     	}
 
         // Remove any tasks that have been deleted from the server

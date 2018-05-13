@@ -4,7 +4,6 @@ import java.util.Date;
 
 public class Task {
 	public int id;
-	public String type;
 	public String title;
     public String name;
 	public String url;
