@@ -25,6 +25,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.provider.MediaStore.Video;
 import android.support.annotation.NonNull;
 import android.view.View;
@@ -233,7 +234,6 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
     @Override
     public void setBinaryData(Object object) {
         File newVideo = null;
-        Uri uri = null;
         // get the file path and create a copy in the instance folder
         if (object instanceof Uri) {
             // Get the source path of the file
@@ -251,7 +251,14 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
         } else if (object instanceof File) {
             newVideo = (File) object;
         } else {
-            Timber.w("AudioWidget's setBinaryData must receive a File or Uri object.");
+            Timber.w("VideoWidget's setBinaryData must receive a File or Uri object.");
+            return;
+        }
+
+
+        if (newVideo == null) {
+            Timber.e("setBinaryData FAILED");
+            return;
         }
 
 
@@ -291,7 +298,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
             if (object instanceof File) {
                 File fileToDelete = (File) object;
                 int delCount = fileToDelete.delete() ? 1 : 0;
-                Timber.i("Deleting original capture of file: %s count: %d", uri.toString(), delCount);
+                Timber.i("Deleting original capture of file: %s count: %d", binaryName, delCount);
             }
         }
     }

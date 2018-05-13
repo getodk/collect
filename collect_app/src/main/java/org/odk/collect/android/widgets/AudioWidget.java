@@ -21,6 +21,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.provider.MediaStore.Audio;
 import android.support.annotation.NonNull;
 import android.view.View;
@@ -112,7 +113,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
         MediaManager
                 .INSTANCE
                 .markOriginalFileOrDelete(getFormEntryPrompt().getIndex().toString(),
-                getInstanceFolder() + File.separator + binaryName);
+                        getInstanceFolder() + File.separator + binaryName);
         binaryName = null;
     }
 
@@ -166,6 +167,12 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
             newAudio = (File) object;
         } else {
             Timber.w("AudioWidget's setBinaryData must receive a File or Uri object.");
+            return;
+        }
+
+        if (newAudio == null) {
+            Timber.e("setBinaryData FAILED");
+            return;
         }
 
         if (newAudio.exists()) {
