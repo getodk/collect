@@ -133,6 +133,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
             return null;
         }
     }
+
     /**
      * Set this widget with the actual file returned by OnActivityResult.
      * Both of Uri and File are supported.
@@ -147,7 +148,6 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
     @Override
     public void setBinaryData(Object object) {
         File newAudio = null;
-        Uri uri = null;
         // get the file path and create a copy in the instance folder
         if (object instanceof Uri) {
             // Get the source path of the file

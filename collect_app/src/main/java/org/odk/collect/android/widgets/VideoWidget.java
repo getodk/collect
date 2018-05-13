@@ -197,7 +197,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
         MediaManager
                 .INSTANCE
                 .markOriginalFileOrDelete(getFormEntryPrompt().getIndex().toString(),
-                getInstanceFolder() + File.separator + binaryName);
+                        getInstanceFolder() + File.separator + binaryName);
         binaryName = null;
     }
 
@@ -288,8 +288,8 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
         // a bug in the Nexus 7 on 4.3 not returning the mediaUri in the data
         // of the intent - uri in this case is a file
         if (NEXUS7.equals(MODEL) && Build.VERSION.SDK_INT == 18) {
-            if(object instanceof File){
-                File fileToDelete = (File)object;
+            if (object instanceof File) {
+                File fileToDelete = (File) object;
                 int delCount = fileToDelete.delete() ? 1 : 0;
                 Timber.i("Deleting original capture of file: %s count: %d", uri.toString(), delCount);
             }
