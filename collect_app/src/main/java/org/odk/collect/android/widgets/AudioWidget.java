@@ -133,24 +133,40 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
             return null;
         }
     }
-
+    /**
+     * Set this widget with the actual file returned by OnActivityResult.
+     * Both of Uri and File are supported.
+     * If the file is local, a Uri is enough for the copy task below.
+     * If the chose file is from cloud(such as Google Drive),
+     * The retrieve and copy task is already executed in the previous step,
+     * so a File object would be presented.
+     *
+     * @param object Uri or File of the chosen file.
+     * @see org.odk.collect.android.activities.FormEntryActivity#onActivityResult(int, int, Intent)
+     */
     @Override
-    public void setBinaryData(Object binaryuri) {
-        if (binaryuri == null || !(binaryuri instanceof Uri)) {
-            Timber.w("AudioWidget's setBinaryData must receive a Uri object.");
-            return;
-        }
-
-        Uri uri = (Uri) binaryuri;
-
+    public void setBinaryData(Object object) {
+        File newAudio = null;
+        Uri uri = null;
         // get the file path and create a copy in the instance folder
-        String sourcePath = getSourcePathFromUri(uri);
-        String destinationPath = getDestinationPathFromSourcePath(sourcePath);
+        if (object instanceof Uri) {
+            // Get the source path of the file
+            String sourcePath = getSourcePathFromUri((Uri) object);
+            // Get the destinationPath of the new File
+            String destinationPath = getDestinationPathFromSourcePath(sourcePath);
 
-        File source = fileUtil.getFileAtPath(sourcePath);
-        File newAudio = fileUtil.getFileAtPath(destinationPath);
+            // Get the source file
+            File source = fileUtil.getFileAtPath(sourcePath);
+            // Get the destination file
+            newAudio = fileUtil.getFileAtPath(destinationPath);
 
-        fileUtil.copyFile(source, newAudio);
+            // Do the copy
+            fileUtil.copyFile(source, newAudio);
+        } else if (object instanceof File) {
+            newAudio = (File) object;
+        } else {
+            Timber.w("AudioWidget's setBinaryData must receive a File or Uri object.");
+        }
 
         if (newAudio.exists()) {
             // Add the copy to the content provier

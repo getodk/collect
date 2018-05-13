@@ -219,23 +219,41 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
         }
     }
 
+    /**
+     * Set this widget with the actual file returned by OnActivityResult.
+     * Both of Uri and File are supported.
+     * If the file is local, a Uri is enough for the copy task below.
+     * If the chose file is from cloud(such as Google Drive),
+     * The retrieve and copy task is already executed in the previous step,
+     * so a File object would be presented.
+     *
+     * @param object Uri or File of the chosen file.
+     * @see org.odk.collect.android.activities.FormEntryActivity#onActivityResult(int, int, Intent)
+     */
     @Override
-    public void setBinaryData(Object binaryuri) {
-        if (binaryuri == null || !(binaryuri instanceof Uri)) {
-            Timber.w("AudioWidget's setBinaryData must receive a Uri object.");
-            return;
+    public void setBinaryData(Object object) {
+        File newVideo = null;
+        Uri uri = null;
+        // get the file path and create a copy in the instance folder
+        if (object instanceof Uri) {
+            // Get the source path of the file
+            String sourcePath = getSourcePathFromUri((Uri) object);
+            // Get the destinationPath of the new File
+            String destinationPath = getDestinationPathFromSourcePath(sourcePath);
+
+            // Get the source file
+            File source = fileUtil.getFileAtPath(sourcePath);
+            // Get the destination file
+            newVideo = fileUtil.getFileAtPath(destinationPath);
+
+            // Do the copy
+            fileUtil.copyFile(source, newVideo);
+        } else if (object instanceof File) {
+            newVideo = (File) object;
+        } else {
+            Timber.w("AudioWidget's setBinaryData must receive a File or Uri object.");
         }
 
-        // get the file path and create a copy in the instance folder
-        Uri uri = (Uri) binaryuri;
-
-        String sourcePath = getSourcePathFromUri(uri);
-        String destinationPath = getDestinationPathFromSourcePath(sourcePath);
-
-        File source = fileUtil.getFileAtPath(sourcePath);
-        File newVideo = fileUtil.getFileAtPath(destinationPath);
-
-        fileUtil.copyFile(source, newVideo);
 
         if (newVideo.exists()) {
             // Add the copy to the content provier
@@ -270,10 +288,11 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
         // a bug in the Nexus 7 on 4.3 not returning the mediaUri in the data
         // of the intent - uri in this case is a file
         if (NEXUS7.equals(MODEL) && Build.VERSION.SDK_INT == 18) {
-            File fileToDelete = new File(uri.getPath());
-            int delCount = fileToDelete.delete() ? 1 : 0;
-
-            Timber.i("Deleting original capture of file: %s count: %d", uri.toString(), delCount);
+            if(object instanceof File){
+                File fileToDelete = (File)object;
+                int delCount = fileToDelete.delete() ? 1 : 0;
+                Timber.i("Deleting original capture of file: %s count: %d", uri.toString(), delCount);
+            }
         }
     }
 
