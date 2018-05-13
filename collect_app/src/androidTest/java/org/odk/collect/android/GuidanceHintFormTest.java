@@ -99,7 +99,6 @@ public class GuidanceHintFormTest {
         Screengrab.screenshot("guidance_hint");
 
         onView(isRoot()).perform(waitId(R.id.guidance_text_view, TimeUnit.SECONDS.toMillis(15)));
-
         onView(withId(R.id.guidance_text_view)).check(matches(withText(guidance)));
     }
 
