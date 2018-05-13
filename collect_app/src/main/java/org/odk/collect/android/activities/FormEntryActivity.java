@@ -133,7 +133,6 @@ import static android.content.DialogInterface.BUTTON_NEGATIVE;
 import static android.content.DialogInterface.BUTTON_POSITIVE;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_MOVING_BACKWARDS;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
-import static org.odk.collect.android.utilities.FormDefCache.writeCacheAsync;
 import static org.odk.collect.android.utilities.PermissionUtils.checkIfStoragePermissionsGranted;
 import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
 import static org.odk.collect.android.utilities.PermissionUtils.requestStoragePermissions;
