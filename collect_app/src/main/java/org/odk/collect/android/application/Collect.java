@@ -31,9 +31,9 @@ import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
-// import com.google.android.gms.analytics.GoogleAnalytics;    // smap
-//import com.google.android.gms.analytics.Tracker;    // smap
-//import com.google.firebase.crash.FirebaseCrash;    // smap
+//import com.google.android.gms.analytics.GoogleAnalytics; Smap
+//import com.google.android.gms.analytics.Tracker;  Smap
+import com.google.firebase.crash.FirebaseCrash;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
@@ -357,7 +357,7 @@ public class Collect extends Application implements HasActivityInjector {
      *
      * @return tracker
      *
-     * smap commented out trcker and error reporting functions
+     * smap commented out tracker and error reporting functions
     public synchronized Tracker getDefaultTracker() {
         /* smap disable tracker
         if (tracker == null) {
@@ -367,7 +367,7 @@ public class Collect extends Application implements HasActivityInjector {
 
         return tracker;
     }
-
+    */
 
     private static class CrashReportingTree extends Timber.Tree {
         @Override
@@ -383,7 +383,6 @@ public class Collect extends Application implements HasActivityInjector {
             }
         }
     }
-    */
 
     public void initProperties() {
         PropertyManager mgr = new PropertyManager(this);
