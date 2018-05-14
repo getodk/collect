@@ -586,11 +586,13 @@
     <string name="start_video_capture_instruction">Tap the screen to start recording</string>
     <string name="stop_video_capture_instruction">Recording started. Tap again to stop</string>
     <string name="no_columns_to_upload">No columns found in the form to upload.</string>
+    <string name="storage_runtime_permission_denied_title">Storage permissions</string>
+    <string name="storage_runtime_permission_denied_desc">Without these permissions Collect can\'t access your forms or save answers. Reopen the app when you are ready to grant them.</string>
     <string name="form_update_category">Form update</string>
     <string name="periodic_form_updates_check_title">Periodic form updates check</string>
     <string name="never">Never</string>
     <string name="every_fifteen_minutes">Every fifteen minutes</string>
-    <string name="every_one_hour">Every one hour</string>
+    <string name="every_one_hour">Every hour</string>
     <string name="every_six_hours">Every six hours</string>
     <string name="every_24_hours">Every 24 hours</string>
     <string name="form_updates_available">Form updates available</string>

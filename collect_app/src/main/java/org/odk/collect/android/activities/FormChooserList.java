@@ -32,12 +32,16 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.listeners.DiskSyncListener;
+import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.tasks.DiskSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.VersionHidingCursorAdapter;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
+import static org.odk.collect.android.utilities.PermissionUtils.requestStoragePermissions;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores the path to
@@ -55,19 +59,35 @@ public class FormChooserList extends FormListActivity implements
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
-        // must be at the beginning of any activity that can be called from an external intent
-        try {
-            Collect.createODKDirs();
-        } catch (RuntimeException e) {
-            createErrorDialog(e.getMessage(), EXIT);
-            return;
-        }
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chooser_list_layout);
 
         setTitle(getString(R.string.enter_data));
+
+        requestStoragePermissions(this, new PermissionListener() {
+            @Override
+            public void granted() {
+                // must be at the beginning of any activity that can be called from an external intent
+                try {
+                    Collect.createODKDirs();
+                    Collect.getInstance().getActivityLogger().open();
+                    init();
+                } catch (RuntimeException e) {
+                    createErrorDialog(e.getMessage(), EXIT);
+                    return;
+                }
+            }
+
+            @Override
+            public void denied() {
+                // The activity has to finish because ODK Collect cannot function without these permissions.
+                finishAllActivities(FormChooserList.this);
+            }
+        });
+    }
+
+    private void init() {
+        setupAdapter();
 
         // DiskSyncTask checks the disk for any forms not already in the content provider
         // that is, put here by dragging and dropping onto the SDCard
@@ -116,24 +136,26 @@ public class FormChooserList extends FormListActivity implements
                 intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
                 startActivity(intent);
             }
-
-            finish();
         }
     }
 
     @Override
     protected void onResume() {
-        diskSyncTask.setDiskSyncListener(this);
         super.onResume();
 
-        if (diskSyncTask.getStatus() == AsyncTask.Status.FINISHED) {
-            syncComplete(diskSyncTask.getStatusMessage());
+        if (diskSyncTask != null) {
+            diskSyncTask.setDiskSyncListener(this);
+            if (diskSyncTask.getStatus() == AsyncTask.Status.FINISHED) {
+                syncComplete(diskSyncTask.getStatusMessage());
+            }
         }
     }
 
     @Override
     protected void onPause() {
-        diskSyncTask.setDiskSyncListener(null);
+        if (diskSyncTask != null) {
+            diskSyncTask.setDiskSyncListener(null);
+        }
         super.onPause();
     }
 

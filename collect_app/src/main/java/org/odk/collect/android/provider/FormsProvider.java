@@ -43,6 +43,7 @@ import java.util.Locale;
 import timber.log.Timber;
 
 import static org.odk.collect.android.database.helpers.FormsDatabaseHelper.FORMS_TABLE_NAME;
+import static org.odk.collect.android.utilities.PermissionUtils.checkIfStoragePermissionsGranted;
 
 public class FormsProvider extends ContentProvider {
     private static HashMap<String, String> sFormsProjectionMap;
@@ -72,6 +73,12 @@ public class FormsProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
+
+        if (!checkIfStoragePermissionsGranted(getContext())) {
+            Timber.i("Read and write permissions are required for this content provider to function.");
+            return false;
+        }
+
         // must be at the beginning of any activity that can be called from an external intent
         FormsDatabaseHelper h = getDbHelper();
         return h != null;
@@ -80,6 +87,11 @@ public class FormsProvider extends ContentProvider {
     @Override
     public Cursor query(@NonNull Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
+
+        if (!checkIfStoragePermissionsGranted(getContext())) {
+            return null;
+        }
+
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         qb.setTables(FORMS_TABLE_NAME);
 
@@ -129,6 +141,11 @@ public class FormsProvider extends ContentProvider {
         // Validate the requested uri
         if (sUriMatcher.match(uri) != FORMS) {
             throw new IllegalArgumentException("Unknown URI " + uri);
+        }
+
+
+        if (!checkIfStoragePermissionsGranted(getContext())) {
+            return null;
         }
 
         FormsDatabaseHelper formsDatabaseHelper = getDbHelper();
@@ -266,6 +283,9 @@ public class FormsProvider extends ContentProvider {
      */
     @Override
     public int delete(@NonNull Uri uri, String where, String[] whereArgs) {
+        if (!checkIfStoragePermissionsGranted(getContext())) {
+            return 0;
+        }
         int count = 0;
         FormsDatabaseHelper formsDatabaseHelper = getDbHelper();
         if (formsDatabaseHelper != null) {
@@ -360,7 +380,13 @@ public class FormsProvider extends ContentProvider {
     }
 
     @Override
-    public int update(Uri uri, ContentValues values, String where, String[] whereArgs) {
+    public int update(Uri uri, ContentValues values, String where,
+                      String[] whereArgs) {
+
+        if (!checkIfStoragePermissionsGranted(getContext())) {
+            return 0;
+        }
+
         int count = 0;
         FormsDatabaseHelper formsDatabaseHelper = getDbHelper();
         if (formsDatabaseHelper != null) {

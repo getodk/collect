@@ -41,6 +41,7 @@ import java.util.Locale;
 import timber.log.Timber;
 
 import static org.odk.collect.android.database.helpers.InstancesDatabaseHelper.INSTANCES_TABLE_NAME;
+import static org.odk.collect.android.utilities.PermissionUtils.checkIfStoragePermissionsGranted;
 
 public class InstanceProvider extends ContentProvider {
     private static HashMap<String, String> sInstancesProjectionMap;
@@ -70,6 +71,11 @@ public class InstanceProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
+        if (!checkIfStoragePermissionsGranted(getContext())) {
+            Timber.i("Read and write permissions are required for this content provider to function.");
+            return false;
+        }
+
         // must be at the beginning of any activity that can be called from an external intent
         InstancesDatabaseHelper h = getDbHelper();
         return h != null;
@@ -78,6 +84,11 @@ public class InstanceProvider extends ContentProvider {
     @Override
     public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs,
                         String sortOrder) {
+
+        if (!checkIfStoragePermissionsGranted(getContext())) {
+            return null;
+        }
+
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         qb.setTables(INSTANCES_TABLE_NAME);
 
@@ -126,6 +137,10 @@ public class InstanceProvider extends ContentProvider {
         // Validate the requested uri
         if (sUriMatcher.match(uri) != INSTANCES) {
             throw new IllegalArgumentException("Unknown URI " + uri);
+        }
+
+        if (!checkIfStoragePermissionsGranted(getContext())) {
+            return null;
         }
 
         InstancesDatabaseHelper instancesDatabaseHelper = getDbHelper();
@@ -229,6 +244,9 @@ public class InstanceProvider extends ContentProvider {
      */
     @Override
     public int delete(@NonNull Uri uri, String where, String[] whereArgs) {
+        if (!checkIfStoragePermissionsGranted(getContext())) {
+            return 0;
+        }
         int count = 0;
         InstancesDatabaseHelper instancesDatabaseHelper = getDbHelper();
         if (instancesDatabaseHelper != null) {
@@ -310,6 +328,9 @@ public class InstanceProvider extends ContentProvider {
 
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String where, String[] whereArgs) {
+        if (!checkIfStoragePermissionsGranted(getContext())) {
+            return 0;
+        }
         int count = 0;
         InstancesDatabaseHelper instancesDatabaseHelper = getDbHelper();
         if (instancesDatabaseHelper != null) {
