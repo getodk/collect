@@ -205,7 +205,7 @@ dependencies {
         exclude group: 'org.apache.httpcomponents'
     }
 
-    implementation group: 'com.evernote', name: 'android-job', version: '1.2.5'
+    implementation "com.evernote:android-job:1.2.5"
     implementation "com.rarepebble:colorpicker:2.3.1"
     implementation "commons-io:commons-io:2.6"
     implementation "net.sf.kxml:kxml2:2.3.0"
@@ -213,11 +213,11 @@ dependencies {
     implementation("org.opendatakit:opendatakit-javarosa:2.9.0") {
         exclude module: 'joda-time'
     }
-    implementation group: 'com.karumi', name: 'dexter', version: '4.2.0'
-    implementation group: 'org.osmdroid', name: 'osmdroid-android', version: '5.6.4'
-    implementation group: 'org.slf4j', name: 'slf4j-android', version: '1.6.1-RC1'
-    implementation group: 'pub.devrel', name: 'easypermissions', version: '0.2.1'
-    implementation(group: 'com.google.api-client', name: 'google-api-client-android', version: '1.22.0') {
+    implementation "com.karumi:dexter:4.2.0"
+    implementation "org.osmdroid:osmdroid-android:5.6.4"
+    implementation "org.slf4j:slf4j-android:1.6.1-RC1"
+    implementation "pub.devrel:easypermissions:0.2.1"
+    implementation("com.google.api-client:google-api-client-android:1.22.0") {
         exclude group: 'org.apache.httpcomponents'
     }
     implementation("com.google.apis:google-api-services-drive:v3-rev64-1.22.0") {
