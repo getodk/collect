@@ -14,11 +14,24 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.listeners;
+package org.odk.collect.android.logic;
 
-public interface FormDownloaderListener {
+import java.util.List;
 
-    void progressUpdate(String currentFile, String progress, String total);
+public class ManifestFile {
+    private final String hash;
+    private final List<MediaFile> mediaFiles;
 
-    boolean isTaskCanceled();
+    public ManifestFile(String hash, List<MediaFile> mediaFiles) {
+        this.hash = hash;
+        this.mediaFiles = mediaFiles;
+    }
+
+    public String getHash() {
+        return hash;
+    }
+
+    public List<MediaFile> getMediaFiles() {
+        return mediaFiles;
+    }
 }

@@ -14,11 +14,21 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.listeners;
+package org.odk.collect.android.utilities;
 
-public interface FormDownloaderListener {
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
-    void progressUpdate(String currentFile, String progress, String total);
+import com.evernote.android.job.Job;
+import com.evernote.android.job.JobCreator;
 
-    boolean isTaskCanceled();
+import org.odk.collect.android.tasks.ServerPollingJob;
+
+public class ServerPollingJobCreator implements JobCreator {
+
+    @Override
+    @Nullable
+    public Job create(@NonNull String tag) {
+        return tag.equals(ServerPollingJob.TAG) ? new ServerPollingJob() : null;
+    }
 }
