@@ -218,7 +218,6 @@
   <string name="ext_search_return_error">Søket returnerte et objekt av typen  \'%s\'.</string>
   <string name="ext_import_generic_error">Kan ikke importere data data fra %1$s. Årsak: %2$s</string>
   <string name="ext_import_progress_message">Forhåndslater data fra \'%1$s\', vennligst vent… %2$s</string>
-  <string name="ext_import_cancelled_message">Innlesing av data avbrutt!</string>
   <string name="ext_import_finalizing_message">Fullfører forhåndslastede data</string>
   <string name="ext_import_completed_message">Innlesing av data fullført!</string>
   <string name="ext_not_initialized_error">ExternalDataManager er ikke startet opp.</string>

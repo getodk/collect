@@ -230,7 +230,6 @@
   <string name="ext_search_return_error">शोध हँडलरने \'1%s\' प्रकारचे ऑब्जेक्ट परत केले.</string>
   <string name="ext_import_generic_error"> %1$sवरून डेटा आयात करू शकले नाही . कारण: %2$s</string>
   <string name="ext_import_progress_message"> \'%1$s\' वरून डेटा पूर्व लोड होत आहे, कृपया प्रतीक्षा करा, %2$s</string>
-  <string name="ext_import_cancelled_message">डेटा वाचन रद्द!</string>
   <string name="ext_import_finalizing_message">पूर्व लोड केलेल्या डेटाला अंतिम रूप देत आहे …</string>
   <string name="ext_import_completed_message">डेटा वाचन पूर्ण!</string>
   <string name="ext_not_initialized_error">बाह्यडेटा व्यवस्थापक प्रारंभ झाला नाही.</string>

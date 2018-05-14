@@ -220,7 +220,6 @@
   <string name="ext_search_return_error">Search handler a returnat un obiect de tip \'%s\'.</string>
   <string name="ext_import_generic_error">Nu am putut importa date din %1$s. Motiv: %2$s</string>
   <string name="ext_import_progress_message">Preîncarc date din \'%1$s\', vă rugăm să așteptați… %2$s</string>
-  <string name="ext_import_cancelled_message">Citirea datelor a fost anulată</string>
   <string name="ext_import_finalizing_message">Finalizez preîncărcarea datelor…</string>
   <string name="ext_import_completed_message">Citirea datelor a fost finalizată!</string>
   <string name="ext_not_initialized_error">ExternalDataManager nu a fost inițializat.</string>
@@ -307,6 +306,7 @@
   <string name="south">Sud %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
   <string name="north">Nord%1$s%2$s%3$s</string>
+  <string name="guidance_no">Nu</string>
   <string name="search">Căutare</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
   <string name="yes">Da</string>

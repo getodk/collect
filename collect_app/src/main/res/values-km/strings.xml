@@ -231,7 +231,6 @@
   <string name="ext_search_return_error">ការដោះស្រាយស្វែងរកបានត្រឡប់នូវវត្ថុមួយ​ប្រភេទ \'%s\'.</string>
   <string name="ext_import_generic_error">មិន​អាច​នាំ​ចូល​ទិន្នន័យពី %1$s។ មូលហេតុ: %2$s</string>
   <string name="ext_import_progress_message">កំពុងផ្ទុកទិន្នន័យជាមុនពី \'%1$s\' សូមរងចាំ… %2$s</string>
-  <string name="ext_import_cancelled_message">ការអានទិន្នន័យ​បានបោះបង់</string>
   <string name="ext_import_finalizing_message">កំពុងបញ្ចប់ការផ្ទុកទិន្នន័យមុន</string>
   <string name="ext_import_completed_message">ការអានទិន្នន័យ​បានបញ្ចប់!</string>
   <string name="ext_not_initialized_error">ExternalDataManager មិនត្រូវបានចាប់ផ្តើមទេ។</string>
@@ -465,6 +464,7 @@
   <string name="user_access_control">ការត្រួតពិនិត្យការចូលប្រើរបស់អ្នកប្រើ</string>
   <string name="autosend_selector_title">ផ្ញើរ​ចេញ​ដោយ​ស្វ័យ​ប្រវត្តិ</string>
   <string name="off">បិទ</string>
+  <string name="guidance_no">ទេ</string>
   <string name="wifi_autosend">តែ Wifi ប៉ុណ្ណោះ</string>
   <string name="cellular_autosend">តែ Cellular ប៉ុណ្ណោះ</string>
   <string name="wifi_cellular_autosend">Wifi ឬ Cellular</string>
@@ -548,6 +548,5 @@
   <string name="moving_backwards_enabled_message">អ្នកប្រហែលជាចង់មើលម្តងទៀតអំពីការកំណត់៖ \n\n\u2022 កែប្រែទម្រង់ដែលបានរក្សាទុក\n\u2022 រក្សាទុកទម្រង់\n\u2022 ទៅកាន់កន្លែងបញ្ចូល\n\u2022 កំពុងដំណើរការកំហិត</string>
   <string name="yes">បាទ/ចាស</string>
   <string name="no">ទេ</string>
-  <string name="newer_version_of_a_form_info">នេះគឺជាកំណែថ្មីនៃទម្រង់ដែលអ្នកមានរួចហើយ!</string>
   <string name="svg_file_does_not_exist">ឯកសារ SVG មិនត្រូវបានរកឃើញ</string>
 </resources>

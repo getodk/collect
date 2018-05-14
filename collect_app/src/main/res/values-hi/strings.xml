@@ -235,7 +235,6 @@
   <string name="ext_search_return_error">खोज हैंडलर ने \'%s\' प्रकार का ऑब्जेक्ट वापस कर दिया .</string>
   <string name="ext_import_generic_error"> %1$sसे डेटा आयात नहीं किया जा सका . कारण: %2$s</string>
   <string name="ext_import_progress_message">\'%1$s\' से पूर्व लोडेड डेटा, कृपया प्रतीक्षा करें… %2$s</string>
-  <string name="ext_import_cancelled_message">पढ़ा हुआ डेटा रद्द कर दिया!</string>
   <string name="ext_import_finalizing_message">पूर्व लोड किए डेटा को फाइनल कर रहा …</string>
   <string name="ext_import_completed_message">पूर्व लोड किए गए डेटा को फाइनल कर रहा …</string>
   <string name="ext_not_initialized_error">एक्सटर्नल डाटा मैनेजर को प्रारंभ नहीं किया गया है।</string>
@@ -462,6 +461,7 @@
   <string name="user_access_control">प्रयोगकर्ता एक्सेस नियंत्रण</string>
   <string name="autosend_selector_title">स्वतः भेजें</string>
   <string name="off">बंद </string>
+  <string name="guidance_no">नहीं</string>
   <string name="wifi_autosend">केवल वाई-फाई </string>
   <string name="cellular_autosend"> केवल सेलुलर</string>
   <string name="wifi_cellular_autosend">वाई-फाई या सेलुलर</string>
