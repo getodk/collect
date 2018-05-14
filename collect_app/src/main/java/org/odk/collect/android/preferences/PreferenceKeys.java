@@ -23,6 +23,8 @@ public final class PreferenceKeys {
     public static final String KEY_IMAGE_SIZE               = "image_size";
     public static final String KEY_GUIDANCE_HINT            = "guidance_hint";
     public static final String KEY_INSTANCE_SYNC            = "instance_sync";
+    public static final String KEY_PERIODIC_FORM_UPDATES_CHECK = "periodic_form_updates_check";
+    public static final String KEY_AUTOMATIC_UPDATE         = "automatic_update";
 
     // form_metadata_preferences.xml
     public static final String KEY_METADATA_USERNAME        = "metadata_username";
@@ -87,6 +89,8 @@ public final class PreferenceKeys {
         hashMap.put(KEY_HIGH_RESOLUTION,            true);
         hashMap.put(KEY_IMAGE_SIZE,                 "original_image_size");
         hashMap.put(KEY_INSTANCE_SYNC,              true);
+        hashMap.put(KEY_PERIODIC_FORM_UPDATES_CHECK, "never");
+        hashMap.put(KEY_AUTOMATIC_UPDATE,           false);
         // form_metadata_preferences.xml
         hashMap.put(KEY_METADATA_USERNAME,          "");
         hashMap.put(KEY_METADATA_PHONENUMBER,       "");

@@ -18,6 +18,7 @@ import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.tasks.ServerPollingJob;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
@@ -59,6 +60,8 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                     && currentNetworkInfo.getState() == NetworkInfo.State.CONNECTED) {
                 uploadForms(context, isFormAutoSendOptionEnabled(currentNetworkInfo));
             }
+
+            ServerPollingJob.pollServerIfNeeded();
         } else if (action.equals("org.odk.collect.android.FormSaved")) {
             ConnectivityManager connectivityManager = (ConnectivityManager) context
                     .getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -187,8 +190,8 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
 
         StringBuilder message = new StringBuilder();
         message
-                .append(Collect.getInstance().getString(R.string.odk_auto_note))
-                .append(" :: \n\n");
+                .append(Collect.getInstance().getString(R.string.forms_sent))
+                .append("\n\n");
 
         if (result == null) {
             message.append(Collect.getInstance().getString(R.string.odk_auth_auth_fail));

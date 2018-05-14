@@ -75,7 +75,7 @@ public class AdminSharedPreferences {
         editor.apply();
     }
 
-    private void clear() {
+    public void clear() {
         sharedPreferences
                 .edit()
                 .clear()

@@ -17,6 +17,7 @@ package org.odk.collect.android.utilities;
 import android.net.Uri;
 import android.text.format.DateFormat;
 
+import org.apache.commons.io.IOUtils;
 import org.kxml2.io.KXmlParser;
 import org.kxml2.kdom.Document;
 import org.odk.collect.android.BuildConfig;
@@ -47,6 +48,7 @@ import org.opendatakit.httpclientandroidlib.impl.client.HttpClientBuilder;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 import org.xmlpull.v1.XmlPullParser;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -336,11 +338,14 @@ public final class WebUtils {
             }
             // parse response
             Document doc = null;
+            String hash;
             try {
                 InputStream is = null;
                 InputStreamReader isr = null;
                 try {
-                    is = entity.getContent();
+                    byte[] bytes = IOUtils.toByteArray(entity.getContent());
+                    is = new ByteArrayInputStream(bytes);
+                    hash = FileUtils.getMd5Hash(new ByteArrayInputStream(bytes));
                     Header contentEncoding = entity.getContentEncoding();
                     if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase(
                             WebUtils.GZIP_CONTENT_ENCODING)) {
@@ -413,7 +418,7 @@ public final class WebUtils {
                     Timber.w("%s unrecognized version(s): %s", WebUtils.OPEN_ROSA_VERSION_HEADER, b.toString());
                 }
             }
-            return new DocumentFetchResult(doc, isOR);
+            return new DocumentFetchResult(doc, isOR, hash);
         } catch (Exception e) {
             String cause;
             Throwable c = e;
