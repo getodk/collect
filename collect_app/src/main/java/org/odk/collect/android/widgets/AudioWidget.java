@@ -134,52 +134,76 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
         }
     }
 
+    /**
+     * Set this widget with the actual file returned by OnActivityResult.
+     * Both of Uri and File are supported.
+     * If the file is local, a Uri is enough for the copy task below.
+     * If the chose file is from cloud(such as Google Drive),
+     * The retrieve and copy task is already executed in the previous step,
+     * so a File object would be presented.
+     *
+     * @param object Uri or File of the chosen file.
+     * @see org.odk.collect.android.activities.FormEntryActivity#onActivityResult(int, int, Intent)
+     */
     @Override
-    public void setBinaryData(Object binaryuri) {
-        if (binaryuri == null || !(binaryuri instanceof Uri)) {
-            Timber.w("AudioWidget's setBinaryData must receive a Uri object.");
-            return;
+    public void setBinaryData(Object object) {
+        File newAudio = null;
+        // get the file path and create a copy in the instance folder
+        if (object instanceof Uri) {
+            // Get the source path of the file
+            String sourcePath = getSourcePathFromUri((Uri) object);
+            // Get the destinationPath of the new File
+            String destinationPath = getDestinationPathFromSourcePath(sourcePath);
+
+            // Get the source file
+            File source = fileUtil.getFileAtPath(sourcePath);
+            // Get the destination file
+            newAudio = fileUtil.getFileAtPath(destinationPath);
+
+            // Do the copy
+            fileUtil.copyFile(source, newAudio);
+        } else if (object instanceof File) {
+            newAudio = (File) object;
+        } else {
+            Timber.w("AudioWidget's setBinaryData must receive a File or Uri object.");
         }
 
-        Uri uri = (Uri) binaryuri;
 
-        // get the file path and create a copy in the instance folder
-        String sourcePath = getSourcePathFromUri(uri);
-        String destinationPath = getDestinationPathFromSourcePath(sourcePath);
+        if (newAudio != null) {
+            if (newAudio.exists()) {
+                // Add the copy to the content provier
+                ContentValues values = new ContentValues(6);
+                values.put(Audio.Media.TITLE, newAudio.getName());
+                values.put(Audio.Media.DISPLAY_NAME, newAudio.getName());
+                values.put(Audio.Media.DATE_ADDED, System.currentTimeMillis());
+                values.put(Audio.Media.DATA, newAudio.getAbsolutePath());
 
-        File source = fileUtil.getFileAtPath(sourcePath);
-        File newAudio = fileUtil.getFileAtPath(destinationPath);
+                Uri audioURI = getContext().getContentResolver().insert(
+                        Audio.Media.EXTERNAL_CONTENT_URI, values);
 
-        fileUtil.copyFile(source, newAudio);
 
-        if (newAudio.exists()) {
-            // Add the copy to the content provier
-            ContentValues values = new ContentValues(6);
-            values.put(Audio.Media.TITLE, newAudio.getName());
-            values.put(Audio.Media.DISPLAY_NAME, newAudio.getName());
-            values.put(Audio.Media.DATE_ADDED, System.currentTimeMillis());
-            values.put(Audio.Media.DATA, newAudio.getAbsolutePath());
+                if (audioURI != null) {
+                    Timber.i("Inserting AUDIO returned uri = %s", audioURI.toString());
+                }
 
-            MediaManager
-                    .INSTANCE
-                    .replaceRecentFileForQuestion(getFormEntryPrompt().getIndex().toString(), newAudio.getAbsolutePath());
+                MediaManager
+                        .INSTANCE
+                        .replaceRecentFileForQuestion(getFormEntryPrompt().getIndex().toString(), newAudio.getAbsolutePath());
 
-            Uri audioURI = getContext().getContentResolver().insert(
-                    Audio.Media.EXTERNAL_CONTENT_URI, values);
 
-            if (audioURI != null) {
-                Timber.i("Inserting AUDIO returned uri = %s", audioURI.toString());
+
+                // when replacing an answer. remove the current media.
+                if (binaryName != null && !binaryName.equals(newAudio.getName())) {
+                    deleteFile();
+                }
+
+                binaryName = newAudio.getName();
+                Timber.i("Setting current answer to %s", newAudio.getName());
+            } else {
+                Timber.e("Inserting Audio file FAILED");
             }
-
-            // when replacing an answer. remove the current media.
-            if (binaryName != null && !binaryName.equals(newAudio.getName())) {
-                deleteFile();
-            }
-
-            binaryName = newAudio.getName();
-            Timber.i("Setting current answer to %s", newAudio.getName());
         } else {
-            Timber.e("Inserting Audio file FAILED");
+            Timber.e("SetBinaryData FAILED");
         }
     }
 

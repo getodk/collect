@@ -25,6 +25,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore.Images;
+import android.provider.OpenableColumns;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -110,7 +111,9 @@ import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ImageConverter;
+
 import org.odk.collect.android.utilities.MediaManager;
+
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.TimerLogger;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -765,8 +768,20 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
             case RequestCodes.ARBITRARY_FILE_CHOOSER:
             case RequestCodes.AUDIO_CHOOSER:
+                // Same with VIDEO_CHOOSER.
             case RequestCodes.VIDEO_CHOOSER:
-                saveFileAnswer(intent.getData());
+                /*
+                * Start a task to save the chosen video with a new Thread,
+                * This could support retrieving file from Google Drive.
+                * */
+                showDialog(SAVING_DIALOG);
+                Runnable saveVideoRunnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        saveChosenAudioVideo(intent.getData());
+                    }
+                };
+                new Thread(saveVideoRunnable).start();
                 break;
             case RequestCodes.LOCATION_CAPTURE:
                 String sl = intent.getStringExtra(LOCATION_RESULT);
@@ -803,6 +818,84 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         }
         refreshCurrentView();
+    }
+
+
+    /**
+     * Save a copy of the chosen audio/video in Collect's own path such as
+     * "/storage/emulated/0/odk/instances/{form name}/filename",
+     * and if it's from Google Drive and not cached yet, we'll retrieve it using network.
+     * This may take a long time.
+     *
+     * @param selectedFile uri of the selected audio
+     * @see #getFileExtensionFromUri(Uri)
+     */
+    private void saveChosenAudioVideo(Uri selectedFile) {
+        String extension = getFileExtensionFromUri(selectedFile);
+
+        String instanceFolder1 = Collect.getInstance().getFormController().getInstancePath()
+                .getParent();
+        String destPath = instanceFolder1 + File.separator
+                + System.currentTimeMillis() + extension;
+
+        File chosenFile;
+        try {
+            chosenFile = MediaUtils.getFileFromUri(this, selectedFile, Images.Media.DATA);
+            if (chosenFile != null) {
+                final File newFile = new File(destPath);
+                FileUtils.copyFile(chosenFile, newFile);
+                runOnUiThread(() -> {
+                    dismissDialog(SAVING_DIALOG);
+                    if (getCurrentViewIfODKView() != null) {
+                        getCurrentViewIfODKView().setBinaryData(newFile);
+                    }
+                    saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+                    refreshCurrentView();
+                });
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        dismissDialog(SAVING_DIALOG);
+                        Timber.e("Could not receive chosen file");
+                        showCustomToast(getString(R.string.error_occured), Toast.LENGTH_SHORT);
+                    }
+                });
+            }
+        } catch (GDriveConnectionException e) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    dismissDialog(SAVING_DIALOG);
+                    Timber.e("Could not receive chosen file due to connection problem");
+                    showCustomToast(getString(R.string.gdrive_connection_exception), Toast.LENGTH_LONG);
+                }
+            });
+        }
+    }
+
+    /**
+     * Using contentResolver to get a file's extension by the uri returned from OnActivityResult.
+     *
+     * @param fileUri Whose name we want to get
+     * @return The file's extension
+     * @see #onActivityResult(int, int, Intent)
+     * @see #saveChosenAudioVideo(Uri)
+     * @see android.content.ContentResolver
+     */
+    private String getFileExtensionFromUri(Uri fileUri) {
+        Cursor returnCursor =
+                getContentResolver().query(fileUri, null, null, null, null);
+        int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+        returnCursor.moveToFirst();
+        String filename = returnCursor.getString(nameIndex);
+        returnCursor.close();
+        if (filename.lastIndexOf('.') != -1) {
+            return filename.substring(filename.lastIndexOf('.'));
+        } else {
+            return "";
+        }
+
     }
 
     private void saveChosenImage(Uri selectedImage) {
