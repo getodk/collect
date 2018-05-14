@@ -210,7 +210,7 @@ dependencies {
     implementation "commons-io:commons-io:2.6"
     implementation "net.sf.kxml:kxml2:2.3.0"
     implementation "net.sf.opencsv:opencsv:2.3"
-    implementation("org.opendatakit:opendatakit-javarosa:2.9.0") {
+    implementation("org.opendatakit:opendatakit-javarosa:2.10.0-SNAPSHOT") {
         exclude module: 'joda-time'
     }
     implementation "com.karumi:dexter:4.2.0"
