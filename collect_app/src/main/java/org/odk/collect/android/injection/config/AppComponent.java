@@ -2,6 +2,7 @@ package org.odk.collect.android.injection.config;
 
 import android.app.Application;
 
+import org.odk.collect.android.activities.InstanceUploaderList;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.injection.ActivityBuilder;
 import org.odk.collect.android.injection.config.scopes.PerApplication;
@@ -43,4 +44,6 @@ public interface AppComponent {
     void inject(SmsSender smsSender);
 
     void inject(SentBroadcastReceiver sentBroadcastReceiver);
+
+    void inject(InstanceUploaderList instanceUploaderList);
 }

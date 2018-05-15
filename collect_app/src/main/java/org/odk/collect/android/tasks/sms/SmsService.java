@@ -162,6 +162,7 @@ public class SmsService {
         }
 
         SmsProgressEvent event = new SmsProgressEvent();
+        event.setInstanceId(sentMessageResult.getInstanceId());
         event.setStatus(sentMessageResult.getMessageStatus());
         event.setProgress(model.getCompletion());
 

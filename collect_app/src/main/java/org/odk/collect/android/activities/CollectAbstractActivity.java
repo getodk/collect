@@ -20,6 +20,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.injection.config.AppComponent;
 import org.odk.collect.android.utilities.ThemeUtils;
 
 public abstract class CollectAbstractActivity extends AppCompatActivity {
@@ -32,6 +34,10 @@ public abstract class CollectAbstractActivity extends AppCompatActivity {
         themeUtils = new ThemeUtils(this);
         setTheme(themeUtils.getAppTheme());
         super.onCreate(savedInstanceState);
+    }
+
+    public AppComponent getComponent() {
+        return Collect.getInstance().getComponent();
     }
 
     @Override

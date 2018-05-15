@@ -10,16 +10,29 @@ import android.widget.CursorAdapter;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.events.RxEventBus;
+import org.odk.collect.android.events.SmsProgressEvent;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.views.ProgressBar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.disposables.CompositeDisposable;
 
 public class InstanceUploaderAdapter extends CursorAdapter {
+    private RxEventBus eventBus;
+    private CompositeDisposable compositeDisposable;
 
-    public InstanceUploaderAdapter(Context context, Cursor cursor) {
+    public InstanceUploaderAdapter(Context context, Cursor cursor, RxEventBus eventBus) {
         super(context, cursor);
+        this.eventBus = eventBus;
+        compositeDisposable = new CompositeDisposable();
+    }
+
+    public void onDestroy() {
+        if (compositeDisposable != null) {
+            compositeDisposable.dispose();
+        }
     }
 
     @Override
@@ -35,6 +48,14 @@ public class InstanceUploaderAdapter extends CursorAdapter {
 
         viewHolder.displayName.setText(cursor.getString(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME)));
         viewHolder.displaySubtext.setText(cursor.getString(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.DISPLAY_SUBTEXT)));
+
+        long instanceId = cursor.getLong(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID));
+
+        compositeDisposable.add(eventBus.register(SmsProgressEvent.class)
+                .filter(event -> event.getInstanceId().equals(String.valueOf(instanceId)))
+                .subscribe(smsProgressEvent -> {
+                    smsProgressEvent.getProgress();
+                }));
     }
 
     static class ViewHolder {

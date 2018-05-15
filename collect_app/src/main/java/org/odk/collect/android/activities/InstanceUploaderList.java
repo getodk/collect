@@ -37,6 +37,7 @@ import android.widget.ListView;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
@@ -48,6 +49,8 @@ import org.odk.collect.android.utilities.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import timber.log.Timber;
 
@@ -74,10 +77,14 @@ public class InstanceUploaderList extends InstanceListActivity implements
 
     private boolean showAllMode;
 
+    @Inject
+    RxEventBus eventBus;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.instance_uploader_list);
+        getComponent().inject(this);
 
         if (savedInstanceState != null) {
             showAllMode = savedInstanceState.getBoolean(SHOW_ALL_MODE);
@@ -295,7 +302,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
             checkedInstances.add(a);
         }
 
-        listAdapter = new InstanceUploaderAdapter(this, null);
+        listAdapter = new InstanceUploaderAdapter(this, null, eventBus);
         listView.setAdapter(listAdapter);
         checkPreviouslyCheckedItems();
     }
