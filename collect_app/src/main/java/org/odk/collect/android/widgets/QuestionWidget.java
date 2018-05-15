@@ -558,20 +558,11 @@ public abstract class QuestionWidget
     }
 
     protected ImageView getAnswerImageView(Bitmap bitmap) {
-        final QuestionWidget questionWidget = this;
         final ImageView imageView = new ImageView(getContext());
         imageView.setId(ViewIds.generateViewId());
         imageView.setPadding(10, 10, 10, 10);
         imageView.setAdjustViewBounds(true);
         imageView.setImageBitmap(bitmap);
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (questionWidget instanceof BaseImageWidget && Collect.allowClick()) {
-                    ((BaseImageWidget) questionWidget).onImageClick();
-                }
-            }
-        });
         return imageView;
     }
 
