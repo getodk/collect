@@ -53,7 +53,7 @@ references:
     environment:
         # Least invasive change to resolve out-of-memory error
         # https://discuss.circleci.com/t/11207/9
-        _JAVA_OPTIONS: "-Xmx1024m"
+        _JAVA_OPTIONS: "-Xmx1536m"
   gcloud_config: &gcloud_config
     working_directory: *workspace
     docker:
