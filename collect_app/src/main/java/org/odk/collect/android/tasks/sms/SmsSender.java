@@ -11,7 +11,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.tasks.sms.models.Message;
-import org.odk.collect.android.tasks.sms.models.SmsSubmissionModel;
+import org.odk.collect.android.tasks.sms.models.SmsSubmission;
 
 import java.util.Locale;
 
@@ -47,7 +47,7 @@ public class SmsSender {
             return false;
         }
 
-        SmsSubmissionModel model = submissionManager.getSubmissionModel(instanceId);
+        SmsSubmission model = submissionManager.getSubmissionModel(instanceId);
 
         Message message = model.getNextUnsentMessage();
 

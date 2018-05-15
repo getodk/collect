@@ -8,7 +8,7 @@ import io.reactivex.Observable;
 /**
  * Tracks an instance's sms submission.
  */
-public class SmsSubmissionModel {
+public class SmsSubmission {
     private String instanceId;
     private List<Message> messages;
     private Date dateAdded;
@@ -40,6 +40,7 @@ public class SmsSubmissionModel {
     /**
      * Returns the next message to be processed. If there's no other message
      * that simply means all messages have been sent.
+     *
      * @return next message to be sent.
      */
     public Message getNextUnsentMessage() {
@@ -48,5 +49,20 @@ public class SmsSubmissionModel {
                 .sorted((message, otherMessage) -> message.getPart() - otherMessage.getPart())
                 .firstElement()
                 .blockingGet();
+    }
+
+    public SmsSubmissionProgress getCompletion() {
+        SmsSubmissionProgress progress = new SmsSubmissionProgress();
+
+        long complete = Observable.fromIterable(messages)
+                .filter(message -> message.isSent())
+                .count().blockingGet();
+
+        int total = messages.size();
+
+        progress.setCompletedCount((int) complete);
+        progress.setTotalCount(total);
+
+        return progress;
     }
 }

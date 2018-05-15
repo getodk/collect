@@ -1,7 +1,7 @@
 package org.odk.collect.android.sms.base;
 
 import org.odk.collect.android.tasks.sms.models.Message;
-import org.odk.collect.android.tasks.sms.models.SmsSubmissionModel;
+import org.odk.collect.android.tasks.sms.models.SmsSubmission;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,9 +17,9 @@ public class SampleData {
 
     public static final String TEST_INSTANCE_ID = "test_instance";
 
-    public static SmsSubmissionModel generateSampleModel() {
+    public static SmsSubmission generateSampleModel() {
 
-        SmsSubmissionModel model = new SmsSubmissionModel();
+        SmsSubmission model = new SmsSubmission();
 
         model.setMessages(generateSampleMessages());
         model.setInstanceId(TEST_INSTANCE_ID);
@@ -28,8 +28,8 @@ public class SampleData {
         return model;
     }
 
-    public static List<SmsSubmissionModel> generateModels() {
-        List<SmsSubmissionModel> models = new ArrayList<>();
+    public static List<SmsSubmission> generateModels() {
+        List<SmsSubmission> models = new ArrayList<>();
         models.add(generateSampleModel());
 
         return models;

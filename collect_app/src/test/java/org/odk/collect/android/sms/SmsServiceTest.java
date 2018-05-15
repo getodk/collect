@@ -18,7 +18,7 @@ import org.odk.collect.android.tasks.sms.SmsSender;
 import org.odk.collect.android.tasks.sms.SmsService;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.tasks.sms.models.Message;
-import org.odk.collect.android.tasks.sms.models.SmsSubmissionModel;
+import org.odk.collect.android.tasks.sms.models.SmsSubmission;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.shadows.ShadowSmsManager;
@@ -86,7 +86,7 @@ public class SmsServiceTest extends BaseSmsTest {
         //should be null, no delivery intent was supplied.
         assertNull(params.getDeliveryIntent());
 
-        SmsSubmissionModel result = submissionManager.getSubmissionModel(SampleData.TEST_INSTANCE_ID);
+        SmsSubmission result = submissionManager.getSubmissionModel(SampleData.TEST_INSTANCE_ID);
         Message next = result.getNextUnsentMessage();
 
         //The message is being sent so it should match the message of the SmsManager.

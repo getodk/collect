@@ -7,14 +7,13 @@ import com.evernote.android.job.JobRequest;
 import com.evernote.android.job.util.support.PersistableBundleCompat;
 
 import org.odk.collect.android.dao.InstancesDao;
-import org.odk.collect.android.events.Event;
 import org.odk.collect.android.events.RxEventBus;
+import org.odk.collect.android.events.SmsProgressEvent;
 import org.odk.collect.android.jobs.SmsSenderJob;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.tasks.sms.models.Message;
-import org.odk.collect.android.tasks.sms.models.MessageStatus;
 import org.odk.collect.android.tasks.sms.models.SentMessageResult;
-import org.odk.collect.android.tasks.sms.models.SmsSubmissionModel;
+import org.odk.collect.android.tasks.sms.models.SmsSubmission;
 
 import java.io.File;
 import java.io.IOException;
@@ -69,7 +68,7 @@ public class SmsService {
             return false;
         }
 
-        SmsSubmissionModel model = smsSubmissionManager.getSubmissionModel(instanceId);
+        SmsSubmission model = smsSubmissionManager.getSubmissionModel(instanceId);
 
         if (model != null) {
 
@@ -82,7 +81,7 @@ public class SmsService {
 
             final List<String> parts = smsManager.divideMessage(text);
 
-            model = new SmsSubmissionModel();
+            model = new SmsSubmission();
             model.setInstanceId(instanceId);
             model.setDateAdded(new Date());
 
@@ -117,7 +116,7 @@ public class SmsService {
      */
     public boolean cancelFormSubmission(String instanceId) {
 
-        SmsSubmissionModel model = smsSubmissionManager.getSubmissionModel(instanceId);
+        SmsSubmission model = smsSubmissionManager.getSubmissionModel(instanceId);
 
         if (model == null) {
             return false;
@@ -148,10 +147,25 @@ public class SmsService {
             return;
         }
 
-        if (sentMessageResult.getMessageStatus().equals(MessageStatus.Sent)) {
-            rxEventBus.post(new Event());
-            addMessageJobToQueue(sentMessageResult.getInstanceId());
+        SmsSubmission model = smsSubmissionManager.getSubmissionModel(sentMessageResult.getInstanceId());
+
+        switch (sentMessageResult.getMessageStatus()) {
+            case Sent:
+
+                Message message = model.getNextUnsentMessage();
+
+                if (message != null) {
+                    addMessageJobToQueue(sentMessageResult.getInstanceId());
+                }
+
+                break;
         }
+
+        SmsProgressEvent event = new SmsProgressEvent();
+        event.setStatus(sentMessageResult.getMessageStatus());
+        event.setProgress(model.getCompletion());
+
+        rxEventBus.post(event);
     }
 
     /***

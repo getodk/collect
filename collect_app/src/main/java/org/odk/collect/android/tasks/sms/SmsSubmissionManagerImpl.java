@@ -10,7 +10,7 @@ import com.google.gson.reflect.TypeToken;
 
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.tasks.sms.models.Message;
-import org.odk.collect.android.tasks.sms.models.SmsSubmissionModel;
+import org.odk.collect.android.tasks.sms.models.SmsSubmission;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -29,10 +29,10 @@ public class SmsSubmissionManagerImpl implements SmsSubmissionManagerContract {
     }
 
 
-    public SmsSubmissionModel getSubmissionModel(String instanceId) {
-        List<SmsSubmissionModel> models = getSubmissionListFromPrefs();
+    public SmsSubmission getSubmissionModel(String instanceId) {
+        List<SmsSubmission> models = getSubmissionListFromPrefs();
 
-        for (SmsSubmissionModel model : models) {
+        for (SmsSubmission model : models) {
             if (model.getInstanceId().equals(instanceId)) {
                 return model;
             }
@@ -44,7 +44,7 @@ public class SmsSubmissionManagerImpl implements SmsSubmissionManagerContract {
     @Override
     public boolean markMessageAsSent(String instanceId, int messageId) {
 
-        SmsSubmissionModel model = getSubmissionModel(instanceId);
+        SmsSubmission model = getSubmissionModel(instanceId);
 
         if (model == null) {
             return false;
@@ -70,7 +70,7 @@ public class SmsSubmissionManagerImpl implements SmsSubmissionManagerContract {
 
     @Override
     public boolean markMessageAsSending(String instanceId, int messageId) {
-        SmsSubmissionModel model = getSubmissionModel(instanceId);
+        SmsSubmission model = getSubmissionModel(instanceId);
 
         if (model == null) {
             return false;
@@ -96,11 +96,11 @@ public class SmsSubmissionManagerImpl implements SmsSubmissionManagerContract {
 
     @Override
     public void deleteSubmission(String instanceId) {
-        List<SmsSubmissionModel> models = getSubmissionListFromPrefs();
+        List<SmsSubmission> models = getSubmissionListFromPrefs();
 
-        SmsSubmissionModel model = null;
+        SmsSubmission model = null;
 
-        for (SmsSubmissionModel submissionModel : models) {
+        for (SmsSubmission submissionModel : models) {
             if (submissionModel.getInstanceId().equals(instanceId)) {
                 model = submissionModel;
             }
@@ -112,19 +112,19 @@ public class SmsSubmissionManagerImpl implements SmsSubmissionManagerContract {
         }
     }
 
-    public void saveSubmission(SmsSubmissionModel model) {
+    public void saveSubmission(SmsSubmission model) {
 
-        Type submissionModelListTpe = new TypeToken<List<SmsSubmissionModel>>() {
+        Type submissionModelListTpe = new TypeToken<List<SmsSubmission>>() {
         }.getType();
 
-        List<SmsSubmissionModel> models = getSubmissionListFromPrefs();
+        List<SmsSubmission> models = getSubmissionListFromPrefs();
 
         boolean previousModelFound = false;
 
-        for (SmsSubmissionModel smsSubmissionModel : models) {
-            if (smsSubmissionModel.getInstanceId().equals(model.getInstanceId())) {
+        for (SmsSubmission smsSubmission : models) {
+            if (smsSubmission.getInstanceId().equals(model.getInstanceId())) {
 
-                models.set(models.indexOf(smsSubmissionModel), model);
+                models.set(models.indexOf(smsSubmission), model);
 
                 previousModelFound = true;
             }
@@ -144,9 +144,9 @@ public class SmsSubmissionManagerImpl implements SmsSubmissionManagerContract {
         preferences.edit().clear().apply();
     }
 
-    private void saveSubmissionListToPrefs(List<SmsSubmissionModel> models) {
+    private void saveSubmissionListToPrefs(List<SmsSubmission> models) {
 
-        Type submissionModelListTpe = new TypeToken<List<SmsSubmissionModel>>() {
+        Type submissionModelListTpe = new TypeToken<List<SmsSubmission>>() {
         }.getType();
 
         String list = new Gson().toJson(models, submissionModelListTpe);
@@ -155,12 +155,12 @@ public class SmsSubmissionManagerImpl implements SmsSubmissionManagerContract {
     }
 
 
-    private List<SmsSubmissionModel> getSubmissionListFromPrefs() {
-        Type submissionModelListTpe = new TypeToken<List<SmsSubmissionModel>>() {
+    private List<SmsSubmission> getSubmissionListFromPrefs() {
+        Type submissionModelListTpe = new TypeToken<List<SmsSubmission>>() {
         }.getType();
         String list = preferences.getString(KEY_SUBMISSION_LIST, "");
 
-        List<SmsSubmissionModel> models = new ArrayList<>();
+        List<SmsSubmission> models = new ArrayList<>();
 
         if (TextUtils.isEmpty(list)) {
             return models;

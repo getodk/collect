@@ -9,7 +9,7 @@ import com.google.gson.reflect.TypeToken;
 
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.tasks.sms.SmsSubmissionManagerImpl;
-import org.odk.collect.android.tasks.sms.models.SmsSubmissionModel;
+import org.odk.collect.android.tasks.sms.models.SmsSubmission;
 import org.robolectric.RuntimeEnvironment;
 
 import java.lang.reflect.Type;
@@ -33,7 +33,7 @@ public abstract class BaseSmsTest {
 
         sharedPreferences = context.getSharedPreferences(SmsSubmissionManagerImpl.PREF_FILE_NAME, Context.MODE_PRIVATE);
 
-        Type submissionModelListTpe = new TypeToken<List<SmsSubmissionModel>>() {
+        Type submissionModelListTpe = new TypeToken<List<SmsSubmission>>() {
         }.getType();
 
         String list = new Gson().toJson(SampleData.generateModels(), submissionModelListTpe);

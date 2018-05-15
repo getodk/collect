@@ -9,7 +9,7 @@ import org.odk.collect.android.sms.base.BaseSmsTest;
 import org.odk.collect.android.sms.base.SampleData;
 import org.odk.collect.android.tasks.sms.models.Message;
 import org.odk.collect.android.tasks.sms.SmsSubmissionManagerImpl;
-import org.odk.collect.android.tasks.sms.models.SmsSubmissionModel;
+import org.odk.collect.android.tasks.sms.models.SmsSubmission;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
@@ -40,7 +40,7 @@ public class SmsSubmissionManagerTest extends BaseSmsTest {
      */
     @Test
     public void getSubmissionTest() {
-        SmsSubmissionModel model = manager.getSubmissionModel(TEST_INSTANCE_ID);
+        SmsSubmission model = manager.getSubmissionModel(TEST_INSTANCE_ID);
 
         assertNotNull(model);
         assertEquals(model.getInstanceId(), TEST_INSTANCE_ID);
@@ -57,7 +57,7 @@ public class SmsSubmissionManagerTest extends BaseSmsTest {
          */
         manager.clearSubmissions();
 
-        SmsSubmissionModel result = manager.getSubmissionModel(TEST_INSTANCE_ID);
+        SmsSubmission result = manager.getSubmissionModel(TEST_INSTANCE_ID);
         assertNull(result);
 
         manager.saveSubmission(SampleData.generateSampleModel());
@@ -73,7 +73,7 @@ public class SmsSubmissionManagerTest extends BaseSmsTest {
     @Test
     public void deleteSubmissionTest() {
 
-        SmsSubmissionModel model = manager.getSubmissionModel(TEST_INSTANCE_ID);
+        SmsSubmission model = manager.getSubmissionModel(TEST_INSTANCE_ID);
 
         assertNotNull(model);
 
@@ -92,7 +92,7 @@ public class SmsSubmissionManagerTest extends BaseSmsTest {
     @Test
     public void testMarkMessageAsSent() {
 
-        SmsSubmissionModel model = manager.getSubmissionModel(TEST_INSTANCE_ID);
+        SmsSubmission model = manager.getSubmissionModel(TEST_INSTANCE_ID);
         /**
          * Gets the next unsent message which should be the second message since it's marked as unsent.
          */
@@ -113,7 +113,7 @@ public class SmsSubmissionManagerTest extends BaseSmsTest {
 
     @Test
     public void markMessageAsSendingTest() {
-        SmsSubmissionModel model = manager.getSubmissionModel(TEST_INSTANCE_ID);
+        SmsSubmission model = manager.getSubmissionModel(TEST_INSTANCE_ID);
 
         Message message = model.getNextUnsentMessage();
 

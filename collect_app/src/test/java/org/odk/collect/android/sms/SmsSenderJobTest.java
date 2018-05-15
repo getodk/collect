@@ -13,7 +13,7 @@ import org.odk.collect.android.sms.base.SampleData;
 import org.odk.collect.android.tasks.sms.SmsSender;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.tasks.sms.models.Message;
-import org.odk.collect.android.tasks.sms.models.SmsSubmissionModel;
+import org.odk.collect.android.tasks.sms.models.SmsSubmission;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.shadows.ShadowSmsManager;
@@ -57,7 +57,7 @@ public class SmsSenderJobTest extends BaseSmsTest {
     @Test
     public void smsSenderJobTest() {
 
-        SmsSubmissionModel model = submissionManager.getSubmissionModel(SampleData.TEST_INSTANCE_ID);
+        SmsSubmission model = submissionManager.getSubmissionModel(SampleData.TEST_INSTANCE_ID);
 
         final Message message = model.getNextUnsentMessage();
 
@@ -73,7 +73,7 @@ public class SmsSenderJobTest extends BaseSmsTest {
         //should be null, no delivery intent was supplied.
         assertNull(params.getDeliveryIntent());
 
-        SmsSubmissionModel result = submissionManager.getSubmissionModel(SampleData.TEST_INSTANCE_ID);
+        SmsSubmission result = submissionManager.getSubmissionModel(SampleData.TEST_INSTANCE_ID);
         Message next = result.getNextUnsentMessage();
 
         //Check to see if the message was marked as sending by the job.
