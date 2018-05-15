@@ -50,10 +50,7 @@ references:
     working_directory: *workspace
     docker:
       - image: circleci/android:api-26-alpha
-    environment:
-        # Least invasive change to resolve out-of-memory error
-        # https://discuss.circleci.com/t/11207/9
-        _JAVA_OPTIONS: "-Xmx1024m"
+    resource_class: large
   gcloud_config: &gcloud_config
     working_directory: *workspace
     docker:
