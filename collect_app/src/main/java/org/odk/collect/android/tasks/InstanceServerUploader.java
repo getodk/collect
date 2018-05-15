@@ -69,7 +69,7 @@ public class InstanceServerUploader extends InstanceUploader {
                 .getSingularProperty(PropertyManager.withUri(PropertyManager.PROPMGR_DEVICE_ID));
 
 
-        Map<Uri, Uri> uriRemap = new HashMap<Uri, Uri>();
+        Map<Uri, Uri> uriRemap = new HashMap<>();
 
         Cursor c = null;
         try {
@@ -103,8 +103,7 @@ public class InstanceServerUploader extends InstanceUploader {
 
                     Collect.getInstance().getActivityLogger().logAction(this, urlString, instance);
 
-                    if (!WebUtils.uploadFile(urlString, id, instance, toUpdate,
-                            uriRemap, outcome)) {
+                    if (!WebUtils.uploadFile(urlString, id, instance, toUpdate, uriRemap, outcome)) {
                         return false; // get credentials...
                     }
                 }

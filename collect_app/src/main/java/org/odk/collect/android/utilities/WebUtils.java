@@ -66,6 +66,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
@@ -85,6 +86,8 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.zip.GZIPInputStream;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import timber.log.Timber;
 
@@ -561,11 +564,6 @@ public final class WebUtils {
         ContentValues contentValues = new ContentValues();
         Uri submissionUri = Uri.parse(urlString);
 
-        // get shared HttpContext so that authentication and cookies are retained.
-        HttpContext localContext = getHttpContext();
-        HttpClient httpclient = WebUtils.createHttpClient(CONNECTION_TIMEOUT);
-
-        ResponseMessageParser messageParser = null;
         boolean openRosaServer = false;
         if (uriRemap.containsKey(submissionUri)) {
             // we already issued a head request and got a response,
@@ -574,12 +572,6 @@ public final class WebUtils {
             // OpenRosa compliant server.
             openRosaServer = true;
             submissionUri = uriRemap.get(submissionUri);
-
-            // if https then enable preemptive basic auth...
-            if (submissionUri.getScheme().equals("https")) {
-                WebUtils.enablePreemptiveBasicAuth(localContext, submissionUri.getHost());
-            }
-
             Timber.i("Using Uri remap for submission %s. Now: %s", id, submissionUri.toString());
         } else {
             if (submissionUri.getHost() == null) {
@@ -599,16 +591,15 @@ public final class WebUtils {
                 return false;
             }
 
-
             try {
                 CollectHttpConnection connection = getInstance().getHttpConnection();
-                Map<String, String> responseHeaders = new HashMap<String, String>();
+                Map<String, String> responseHeaders = new HashMap<>();
                 int statusCode = connection.httpHeadRequest(uri, responseHeaders);
 
-                if (statusCode == HttpStatus.SC_UNAUTHORIZED) {
+                if (statusCode == HttpsURLConnection.HTTP_UNAUTHORIZED) {
                     outcome.authRequestingServer = submissionUri;
                     return false;
-                } else if (statusCode == HttpStatus.SC_NO_CONTENT) {
+                } else if (statusCode == HttpsURLConnection.HTTP_NO_CONTENT) {
                     if (responseHeaders.containsKey("Location")) {
                         try {
                             Uri newURI = Uri.parse(URLDecoder.decode(responseHeaders.get("Location"), "utf-8"));
@@ -724,6 +715,19 @@ public final class WebUtils {
             return false;
         }
 
+        // get shared HttpContext so that authentication and cookies are retained.
+        HttpContext localContext = getHttpContext();
+        HttpClient httpclient = WebUtils.createHttpClient(CONNECTION_TIMEOUT);
+
+        // if https then enable preemptive basic auth...
+        if (submissionUri.getScheme().equals("https")) {
+            WebUtils.enablePreemptiveBasicAuth(localContext, submissionUri.getHost());
+        }
+
+        // prepare response and return uploaded
+        HttpResponse response;
+        ResponseMessageParser messageParser = null;
+
         boolean first = true;
         int fileIndex = 0;
         int lastFileIndex;
@@ -785,9 +789,6 @@ public final class WebUtils {
 
             HttpPost httppost = WebUtils.createOpenRosaHttpPost(submissionUri);
             httppost.setEntity(builder.build());
-
-            // prepare response and return uploaded
-            HttpResponse response;
 
             try {
                 Timber.i("Issuing POST request for %s to: %s", id, submissionUri.toString());
