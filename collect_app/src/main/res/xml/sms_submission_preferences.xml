@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:key="@string/sms_submission_preferences"
+        android:title="@string/sms_submission_preferences">
+        <EditTextPreference
+            android:dialogTitle="@string/sms_pref_dialog_title"
+            android:inputType="phone"
+            android:key="sms_gateway"
+            android:title="@string/sms_pref_title" />
+    </PreferenceCategory>
+</PreferenceScreen>

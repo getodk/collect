@@ -178,6 +178,7 @@
     <string name="edit_prompt">Edit Prompt</string>
     <string name="selected_google_account_text">Google account</string>
     <string name="server_platform_odk_aggregate">ODK Aggregate</string>
+    <string name="server_platform_sms_submission">Sms Submission</string>
     <string name="server_platform_other">Other</string>
     <string name="font_size_extra_large">Extra Large</string>
     <string name="font_size_large">Large</string>
@@ -274,6 +275,7 @@
     <string name="go_shared">Shared with Me</string>
     <string name="modified_on_date_at_time">\'Modified on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
     <string name="aggregate_preferences">ODK Aggregate settings</string>
+    <string name="sms_submission_preferences">Sms Submission settings</string>
     <string name="other_preferences">Other platform settings</string>
     <string name="google_preferences">Google Sheets settings</string>
     <string name="google_sheets_url_hint">Forms must set a submission URL. If they don\'t, this URL will be used.</string>
@@ -588,4 +590,7 @@
     <string name="cannot_create_directory">Cannot create directory: %s</string>
     <string name="not_a_directory">%s exists, but is not a directory</string>
     <string name="instance_upload_cancelled">Instance upload cancelled</string>
+    <string name="sms_pref_dialog_title">Destination Phone Number</string>
+    <string name="sms_pref_title">Phone Number</string>
+    <string name="sms_invalid_phone_number">Invalid phone number!</string>
 </resources>

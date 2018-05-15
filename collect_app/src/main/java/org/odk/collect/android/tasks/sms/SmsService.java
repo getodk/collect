@@ -190,7 +190,6 @@ public class SmsService {
     }
 
     private void updateInstanceStatus(String instanceId) {
-
         instancesDao.updateInstance(null, null, null);
         //Uri toUpdate = Uri.withAppendedPath(InstanceProviderAPI.InstanceColumns.CONTENT_URI, instanceId);
     }

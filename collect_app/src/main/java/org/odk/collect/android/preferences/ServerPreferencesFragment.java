@@ -25,11 +25,11 @@ import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.telephony.PhoneNumberUtils;
 import android.text.InputFilter;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListPopupWindow;
@@ -52,6 +52,7 @@ import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FORMLIST_URL;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SMS_GATEWAY;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_URL;
 import static org.odk.collect.android.utilities.gdrive.GoogleAccountsManager.REQUEST_ACCOUNT_PICKER;
 
@@ -61,6 +62,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     protected EditTextPreference serverUrlPreference;
     protected EditTextPreference usernamePreference;
     protected EditTextPreference passwordPreference;
+    protected EditTextPreference smsGatewayPreference;
     protected boolean credentialsHaveChanged = false;
     protected EditTextPreference submissionUrlPreference;
     protected EditTextPreference formListUrlPreference;
@@ -108,6 +110,17 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         passwordPreference.setOnPreferenceChangeListener(createChangeListener());
         maskPasswordSummary(passwordPreference.getText());
         passwordPreference.getEditText().setFilters(
+                new InputFilter[]{new ControlCharacterFilter()});
+    }
+
+    public void addSmsPreferences() {
+        addPreferencesFromResource(R.xml.sms_submission_preferences);
+
+        smsGatewayPreference = (EditTextPreference) findPreference(KEY_SMS_GATEWAY);
+
+        smsGatewayPreference.setOnPreferenceChangeListener(createChangeListener());
+        smsGatewayPreference.setSummary(smsGatewayPreference.getText());
+        smsGatewayPreference.getEditText().setFilters(
                 new InputFilter[]{new ControlCharacterFilter()});
     }
 
@@ -187,11 +200,9 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         setupUrlDropdownAdapter();
         listPopupWindow.setAnchorView(serverUrlPreference.getEditText());
         listPopupWindow.setModal(true);
-        listPopupWindow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                serverUrlPreference.getEditText().setText(urlList.get(position));
-                listPopupWindow.dismiss();
-            }
+        listPopupWindow.setOnItemClickListener((parent, view, position, id) -> {
+            serverUrlPreference.getEditText().setText(urlList.get(position));
+            listPopupWindow.dismiss();
         });
     }
 
@@ -311,6 +322,17 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                         ToastUtils.showShortToast(R.string.url_error);
                         return false;
                     }
+                    break;
+
+                case KEY_SMS_GATEWAY:
+                    String phoneNumber = newValue.toString();
+
+                    if (!PhoneNumberUtils.isGlobalPhoneNumber(phoneNumber)) {
+                        ToastUtils.showShortToast(getString(R.string.sms_invalid_phone_number));
+                        return false;
+                    }
+
+                    preference.setSummary(phoneNumber);
                     break;
             }
             return true;
