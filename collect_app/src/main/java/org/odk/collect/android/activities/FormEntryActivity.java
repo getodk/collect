@@ -802,9 +802,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private void saveChosenAudioVideo(Uri selectedFile) {
         String extension = getFileExtensionFromUri(selectedFile);
 
-        String instanceFolder1 = Collect.getInstance().getFormController()
+        String instanceFolder = Collect.getInstance().getFormController()
                 .getInstanceFile().getParent();
-        String destPath = instanceFolder1 + File.separator
+        String destPath = instanceFolder + File.separator
                 + System.currentTimeMillis() + extension;
 
         File chosenFile;
@@ -891,18 +891,20 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * @see android.content.ContentResolver
      */
     private String getFileExtensionFromUri(Uri fileUri) {
-        Cursor returnCursor =
-                getContentResolver().query(fileUri, null, null, null, null);
-        int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-        returnCursor.moveToFirst();
-        String filename = returnCursor.getString(nameIndex);
-        returnCursor.close();
-        if (filename.lastIndexOf('.') != -1) {
-            return filename.substring(filename.lastIndexOf('.'));
-        } else {
-            return "";
+        try (Cursor returnCursor =
+                     getContentResolver().query(fileUri, null, null, null, null)) {
+            int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+            returnCursor.moveToFirst();
+            String filename = returnCursor.getString(nameIndex);
+            // If the file's name contains extension , we cut it down for latter use (copy a new file).
+            if (filename.lastIndexOf('.') != -1) {
+                return filename.substring(filename.lastIndexOf('.'));
+            } else {
+                // I found some mp3 files' name don't contain extension, but can be played as Audio
+                // So I write so, but I still there are some way to get its extension
+                return "";
+            }
         }
-
     }
 
     private QuestionWidget getWidgetWaitingForBinaryData() {
