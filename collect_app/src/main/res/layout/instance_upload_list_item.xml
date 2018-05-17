@@ -1,81 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
 <org.odk.collect.android.views.TwoItemMultipleChoiceView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <RelativeLayout
-        android:id="@+id/list_item_holder"
-        android:layout_alignParentTop="true"
+
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="?android:attr/listPreferredItemHeight"
-        android:orientation="horizontal"
-        android:paddingBottom="8dip"
-        android:paddingEnd="8dip"
-        android:paddingLeft="8dip"
-        android:paddingRight="8dip"
-        android:paddingStart="8dip"
-        android:paddingTop="4dip">
+        android:layout_margin="10dp"
+        card_view:cardBackgroundColor="@android:color/white"
+        card_view:cardPreventCornerOverlap="true"
+        card_view:cardUseCompatPadding="true"
+        card_view:contentPadding="10dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true">
+            android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/display_name"
+            <LinearLayout
+                android:id="@+id/list_item_holder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_toLeftOf="@+id/checkbox"
-                android:layout_toStartOf="@+id/checkbox"
-                android:gravity="center_vertical"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                tools:text="text1" />
+                android:orientation="horizontal"
+                android:weightSum="10">
 
-            <TextView
-                android:id="@+id/display_subtext"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/display_name"
-                android:layout_toLeftOf="@+id/checkbox"
-                android:layout_toStartOf="@+id/checkbox"
-                android:gravity="center_vertical"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                tools:text="text2" />
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="2">
 
-            <TextView
-                android:id="@+id/update_info"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/display_subtext"
-                android:layout_toLeftOf="@+id/checkbox"
-                android:layout_toStartOf="@+id/checkbox"
-                android:text="@string/newer_version_of_a_form_info"
-                android:textColor="#4CAF50"
-                android:visibility="gone" />
+                    <LinearLayout
+                        android:background="@drawable/instance_list_icon_background"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true">
 
-            <CheckBox
-                android:id="@+id/checkbox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_gravity="center_vertical"
-                android:clickable="false"
-                android:focusable="false" />
+                        <ImageView
+                            android:layout_margin="5dp"
+                            android:id="@+id/status_icon"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp" />
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_weight="8"
+                    android:minHeight="?android:attr/listPreferredItemHeight"
+                    android:orientation="horizontal"
+                    android:paddingBottom="8dip"
+                    android:paddingEnd="8dip"
+                    android:paddingLeft="8dip"
+                    android:paddingRight="8dip"
+                    android:paddingStart="8dip"
+                    android:paddingTop="4dip">
+
+                    <RelativeLayout
+                        android:id="@+id/text_holder"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true">
+
+                        <TextView
+                            android:id="@+id/display_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_toLeftOf="@+id/checkbox"
+                            android:layout_toStartOf="@+id/checkbox"
+                            android:gravity="center_vertical"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            tools:text="text1" />
+
+                        <TextView
+                            android:id="@+id/display_subtext"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_below="@+id/display_name"
+                            android:layout_toLeftOf="@+id/checkbox"
+                            android:layout_toStartOf="@+id/checkbox"
+                            android:gravity="center_vertical"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            tools:text="text2" />
+
+                        <TextView
+                            android:id="@+id/update_info"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_below="@+id/display_subtext"
+                            android:layout_toLeftOf="@+id/checkbox"
+                            android:layout_toStartOf="@+id/checkbox"
+                            android:text="@string/newer_version_of_a_form_info"
+                            android:textColor="#4CAF50"
+                            android:visibility="gone" />
+
+                        <CheckBox
+                            android:id="@+id/checkbox"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_gravity="center_vertical"
+                            android:clickable="false"
+                            android:focusable="false" />
+                    </RelativeLayout>
+                    <org.odk.collect.android.views.ProgressBar
+                        android:id="@+id/progress_bar"
+                        android:layout_marginTop="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/text_holder" />
+                </RelativeLayout>
+            </LinearLayout>
         </RelativeLayout>
-    </RelativeLayout>
-    <org.odk.collect.android.views.ProgressBar
-        android:layout_width="match_parent"
-        android:id="@+id/progress_bar"
-        android:layout_below="@id/list_item_holder"
-        android:layout_height="wrap_content"/>
+    </android.support.v7.widget.CardView>
 </org.odk.collect.android.views.TwoItemMultipleChoiceView>
