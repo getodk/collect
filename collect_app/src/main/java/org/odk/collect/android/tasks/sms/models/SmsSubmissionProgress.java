@@ -16,6 +16,10 @@ public class SmsSubmissionProgress {
         return completedCount;
     }
 
+    public int getPercentage() {
+        return (completedCount / totalCount) * 100;
+    }
+
     public void setCompletedCount(int completedCount) {
         this.completedCount = completedCount;
     }
