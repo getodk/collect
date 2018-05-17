@@ -40,10 +40,10 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.receivers.NetworkReceiver;
 import org.odk.collect.android.tasks.InstanceSyncTask;
+import org.odk.collect.android.tasks.sms.SmsService;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.ToastUtils;
 
@@ -53,6 +53,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PROTOCOL;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores
@@ -79,6 +81,8 @@ public class InstanceUploaderList extends InstanceListActivity implements
 
     @Inject
     RxEventBus eventBus;
+    @Inject
+    SmsService smsService;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -97,6 +101,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
 
             @Override
             public void onClick(View v) {
+
                 ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(
                         Context.CONNECTIVITY_SERVICE);
                 NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
@@ -206,7 +211,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
     }
 
     private void uploadSelectedFiles() {
-        String server = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_PROTOCOL);
+        String server = (String) GeneralSharedPreferences.getInstance().get(KEY_PROTOCOL);
         long[] instanceIds = listView.getCheckedItemIds();
         if (server.equalsIgnoreCase(getString(R.string.protocol_google_sheets))) {
             // if it's Sheets, start the Sheets uploader
@@ -219,6 +224,8 @@ public class InstanceUploaderList extends InstanceListActivity implements
             } else {
                 PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(this);
             }
+        } else if (server.equalsIgnoreCase(getString(R.string.protocol_sms))) {
+            smsService.submitForms(instanceIds);
         } else {
             // otherwise, do the normal aggregate/other thing.
             Intent i = new Intent(this, InstanceUploaderActivity.class);
