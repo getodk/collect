@@ -32,7 +32,6 @@ import android.widget.TableLayout;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.ViewIds;
 
@@ -109,7 +108,7 @@ public class StringWidget extends QuestionWidget {
         if (readOnly) {
             answerText.setBackground(null);
             answerText.setEnabled(false);
-            answerText.setTextColor(themeUtils.getAttributeValue(R.attr.primaryTextColor));
+            answerText.setTextColor(themeUtils.getPrimaryTextColor());
             answerText.setFocusable(false);
         }
 

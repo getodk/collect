@@ -129,7 +129,7 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
         }
 
         marker = new Marker(map);
-        marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black));
+        marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place));
         myLocationOverlay = new MyLocationNewOverlay(map);
 
         handler.postDelayed(new Runnable() {
@@ -245,9 +245,6 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
                 map.invalidate();
             }
         });
-
-        themeUtils.setIconTint(this, reloadLocationButton, showLocationButton, layersButton,
-                clearPointButton, saveLocationButton);
 
         Intent intent = getIntent();
         if (intent != null && intent.getExtras() != null) {
@@ -488,7 +485,7 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
         showLocationButton.setEnabled(true);
         map.invalidate();
         marker.setPosition(geoPoint);
-        marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black));
+        marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place));
         marker.setDraggable(true);
         latLng = geoPoint;
         isDragged = true;

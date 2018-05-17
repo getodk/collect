@@ -318,9 +318,6 @@ public class GeoTraceGoogleMapActivity extends CollectAbstractActivity implement
         }
 
         helper.setBasemap();
-
-        themeUtils.setIconTint(this, playButton, pauseButton, locationButton, layersButton,
-                clearButton, saveButton);
     }
 
     private void overlayIntentTrace(String str) {

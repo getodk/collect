@@ -216,7 +216,6 @@ public class GeoShapeGoogleMapActivity extends CollectAbstractActivity implement
             showZoomDialog();
         }
 
-        themeUtils.setIconTint(this, gpsButton, clearButton, layersButton, returnButton);
         helper.setBasemap();
     }
 
