@@ -39,9 +39,7 @@ import java.util.List;
 import timber.log.Timber;
 
 /**
- * Author: Meletis Margaritis
- * Date: 25/04/13
- * Time: 13:50
+ * Author:
  */
 public class SmapRemoteDataHandlerLookup implements IFunctionHandler {
 
@@ -86,7 +84,8 @@ public class SmapRemoteDataHandlerLookup implements IFunctionHandler {
             HttpContext localContext = Collect.getInstance().getHttpContext();
             HttpClient httpclient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
             //WebUtils.getXmlDocument(fd.getManifestUrl(), localContext, httpclient); TODO
-            return ExternalDataUtil.nullSafe("lookup value");
+            return ExternalDataUtil.nullSafe("lookup value" + " : " + dataSetName + " : "
+                    + queriedColumn + " : " + referenceColumn + " : " + referenceValue);
 
         } catch (Exception e) {
             Timber.i(e);
