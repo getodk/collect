@@ -1,26 +1,33 @@
 package org.odk.collect.android.tasks.sms;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.telephony.SmsManager;
 
 import com.evernote.android.job.JobRequest;
 import com.evernote.android.job.util.support.PersistableBundleCompat;
 
+import org.odk.collect.android.R;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.events.SmsProgressEvent;
 import org.odk.collect.android.jobs.SmsSenderJob;
+import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.tasks.sms.models.Message;
 import org.odk.collect.android.tasks.sms.models.SentMessageResult;
 import org.odk.collect.android.tasks.sms.models.SmsSubmission;
+import org.odk.collect.android.utilities.ArrayUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -49,6 +56,40 @@ public class SmsService {
         this.instancesDao = instancesDao;
         this.context = context;
         this.rxEventBus = rxEventBus;
+    }
+
+    public void submitForms(long[] instanceIds) {
+
+        Long[] instanceIdObjects = ArrayUtils.toObject(instanceIds);
+        List<Long> list = java.util.Arrays.asList(instanceIdObjects);
+
+        StringBuilder selection = new StringBuilder();
+
+        Iterator<Long> it = list.iterator();
+
+        String[] selectionArgs = new String[list.size()];
+        int i = 0;
+        while (it.hasNext()) {
+            String id = it.next().toString();
+            selection.append(InstanceProviderAPI.InstanceColumns._ID + "=?");
+            selectionArgs[i++] = id;
+            if (i != list.size()) {
+                selection.append(" or ");
+            }
+        }
+
+        try (Cursor results = new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs)) {
+            if (results.getCount() > 0) {
+                results.moveToPosition(-1);
+                while (results.moveToNext()) {
+                    String filePath = results.getString(results
+                            .getColumnIndex(InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH));
+                    String id = results.getString(results.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID));
+
+                    submitForm(id, filePath);
+                }
+            }
+        }
     }
 
     /**
@@ -124,10 +165,7 @@ public class SmsService {
 
         smsSubmissionManager.deleteSubmission(instanceId);
 
-        updateInstanceStatus(instanceId);
-
         return true;
-
     }
 
     /***
@@ -187,10 +225,5 @@ public class SmsService {
                 .build();
 
         request.schedule();
-    }
-
-    private void updateInstanceStatus(String instanceId) {
-        instancesDao.updateInstance(null, null, null);
-        //Uri toUpdate = Uri.withAppendedPath(InstanceProviderAPI.InstanceColumns.CONTENT_URI, instanceId);
     }
 }
