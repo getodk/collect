@@ -43,7 +43,7 @@ public class SmsSender {
 
         String gateway = settings.getString(PreferenceKeys.KEY_SMS_GATEWAY, null);
 
-        if (!PhoneNumberUtils.isGlobalPhoneNumber(gateway)) {
+        if(gateway==null){
             return false;
         }
 
