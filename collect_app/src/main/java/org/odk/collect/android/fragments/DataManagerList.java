@@ -262,9 +262,6 @@ public class DataManagerList extends InstanceListFragment
                 }
                 toggleButtonLabel(toggleButton, getListView());
                 deleteButton.setEnabled(allChecked);
-                if (!allChecked) {
-                    selectedInstances.clear();
-                }
                 break;
         }
     }
