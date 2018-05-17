@@ -7,7 +7,6 @@ import android.telephony.SmsManager;
 import com.evernote.android.job.JobRequest;
 import com.evernote.android.job.util.support.PersistableBundleCompat;
 
-import org.odk.collect.android.R;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.events.SmsProgressEvent;
@@ -22,12 +21,10 @@ import org.odk.collect.android.utilities.ArrayUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -45,7 +42,6 @@ public class SmsService {
 
     private SmsManager smsManager;
     private SmsSubmissionManagerContract smsSubmissionManager;
-    private InstancesDao instancesDao;
     private Context context;
     private RxEventBus rxEventBus;
 
@@ -53,7 +49,6 @@ public class SmsService {
     public SmsService(SmsManager smsManager, SmsSubmissionManagerContract smsSubmissionManager, InstancesDao instancesDao, Context context, RxEventBus rxEventBus) {
         this.smsManager = smsManager;
         this.smsSubmissionManager = smsSubmissionManager;
-        this.instancesDao = instancesDao;
         this.context = context;
         this.rxEventBus = rxEventBus;
     }

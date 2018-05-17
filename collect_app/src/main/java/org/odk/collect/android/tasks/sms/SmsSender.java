@@ -4,7 +4,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.telephony.PhoneNumberUtils;
 import android.telephony.SmsManager;
 
 import org.odk.collect.android.application.Collect;
@@ -43,7 +42,7 @@ public class SmsSender {
 
         String gateway = settings.getString(PreferenceKeys.KEY_SMS_GATEWAY, null);
 
-        if(gateway==null){
+        if (gateway == null) {
             return false;
         }
 
