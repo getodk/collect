@@ -155,6 +155,11 @@ android {
         unitTests {
             includeAndroidResources = true
             returnDefaultValues = true
+            all {
+                // https://discuss.circleci.com/t/11207/24
+                // it seems any number works, but 1024 - 2048 seem reasonable 
+                maxHeapSize = "2048M"
+            }
         }
     }
 }

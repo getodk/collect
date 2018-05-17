@@ -50,7 +50,6 @@ references:
     working_directory: *workspace
     docker:
       - image: circleci/android:api-26-alpha
-    resource_class: large
   gcloud_config: &gcloud_config
     working_directory: *workspace
     docker:
