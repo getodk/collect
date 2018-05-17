@@ -51,10 +51,11 @@ public class InstanceUploaderAdapter extends CursorAdapter {
 
         long instanceId = cursor.getLong(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID));
 
+        viewHolder.progressBar.setProgressPercent(100, false);
         compositeDisposable.add(eventBus.register(SmsProgressEvent.class)
                 .filter(event -> event.getInstanceId().equals(String.valueOf(instanceId)))
                 .subscribe(smsProgressEvent -> {
-                    smsProgressEvent.getProgress();
+                    viewHolder.progressBar.setProgressPercent(smsProgressEvent.getProgress().getPercentage(), true);
                 }));
     }
 
