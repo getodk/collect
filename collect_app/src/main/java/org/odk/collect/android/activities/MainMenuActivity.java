@@ -47,9 +47,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
-import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -66,6 +64,8 @@ import java.io.ObjectInputStream;
 import java.lang.ref.WeakReference;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import javax.inject.Inject;
 
 import timber.log.Timber;
 
@@ -99,6 +99,11 @@ public class MainMenuActivity extends CollectAbstractActivity {
     private Cursor viewSentCursor;
     private final IncomingHandler handler = new IncomingHandler(this);
     private final MyContentObserver contentObserver = new MyContentObserver();
+
+    @Inject
+    protected SharedPreferencesUtils sharedPreferencesUtils;
+    @Inject
+    protected AuthDialogUtility authDialogUtility;
 
     // private static boolean DO_NOT_EXIT = false;
 
@@ -247,7 +252,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
         File j = new File(Collect.ODK_ROOT + "/collect.settings.json");
         // Give JSON file preference
         if (j.exists()) {
-            boolean success = SharedPreferencesUtils.loadSharedPreferencesFromJSONFile(j);
+            boolean success = sharedPreferencesUtils.loadSharedPreferencesFromJSONFile(j);
             if (success) {
                 ToastUtils.showLongToast(R.string.settings_successfully_loaded_file_notification);
                 j.delete();
@@ -632,25 +637,25 @@ public class MainMenuActivity extends CollectAbstractActivity {
         ObjectInputStream input = null;
         try {
             input = new ObjectInputStream(new FileInputStream(src));
-            GeneralSharedPreferences.getInstance().clear();
+            generalSharedPreferences.clear();
 
             // first object is preferences
             Map<String, ?> entries = (Map<String, ?>) input.readObject();
 
-            AutoSendPreferenceMigrator.migrate(entries);
+            AutoSendPreferenceMigrator.migrate(generalSharedPreferences, entries);
 
             for (Entry<String, ?> entry : entries.entrySet()) {
-                GeneralSharedPreferences.getInstance().save(entry.getKey(), entry.getValue());
+                generalSharedPreferences.save(entry.getKey(), entry.getValue());
             }
 
-            AuthDialogUtility.setWebCredentialsFromPreferences();
+            authDialogUtility.setWebCredentialsFromPreferences();
 
-            AdminSharedPreferences.getInstance().clear();
+            adminSharedPreferences.clear();
 
             // second object is admin options
             Map<String, ?> adminEntries = (Map<String, ?>) input.readObject();
             for (Entry<String, ?> entry : adminEntries.entrySet()) {
-                AdminSharedPreferences.getInstance().save(entry.getKey(), entry.getValue());
+                adminSharedPreferences.save(entry.getKey(), entry.getValue());
             }
             Collect.getInstance().initProperties();
             res = true;

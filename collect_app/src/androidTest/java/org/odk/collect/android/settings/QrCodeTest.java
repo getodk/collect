@@ -22,11 +22,11 @@ import android.support.test.runner.AndroidJUnit4;
 import com.google.zxing.ChecksumException;
 import com.google.zxing.FormatException;
 import com.google.zxing.NotFoundException;
-import com.google.zxing.WriterException;
 
-import org.json.JSONException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.QRCodeUtils;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
@@ -51,10 +51,13 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
 @RunWith(AndroidJUnit4.class)
 public class QrCodeTest {
 
-    private final GeneralSharedPreferences preferences = GeneralSharedPreferences.getInstance();
+    private final GeneralSharedPreferences preferences = new GeneralSharedPreferences(Collect.getInstance());
+    private final AdminSharedPreferences adminPrefs = new AdminSharedPreferences(Collect.getInstance());
+    private final SharedPreferencesUtils sharedPreferencesUtils = new SharedPreferencesUtils(adminPrefs, preferences);
+    private final QRCodeUtils qrCodeUtils = new QRCodeUtils(sharedPreferencesUtils);
 
     @Test
-    public void importSettingsFromQrCode() throws JSONException, IOException, WriterException, DataFormatException, ChecksumException, NotFoundException, FormatException {
+    public void importSettingsFromQrCode() throws IOException, DataFormatException, ChecksumException, NotFoundException, FormatException {
         // reset preferences
         preferences.loadDefaultPreferences();
 
@@ -73,7 +76,7 @@ public class QrCodeTest {
 
         // generate QrCode
         final AtomicReference<Bitmap> generatedBitmap = new AtomicReference<>();
-        QRCodeUtils.getQRCodeGeneratorObservable(new ArrayList<>())
+        qrCodeUtils.getQRCodeGeneratorObservable(new ArrayList<>())
                 .subscribe(generatedBitmap::set, Timber::e);
 
         assertNotNull(generatedBitmap.get());
@@ -92,7 +95,7 @@ public class QrCodeTest {
         assertNotEquals(resultIfAllSharedPreferencesAreDefault, result);
 
         // update shared preferences using the QrCode
-        SharedPreferencesUtils.savePreferencesFromString(result, null);
+        sharedPreferencesUtils.savePreferencesFromString(result, null);
 
         // assert that values have updated properly
         assertPreferenceHaveDefaultValue(keys, false);

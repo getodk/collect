@@ -39,6 +39,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
+import javax.inject.Inject;
+
 import timber.log.Timber;
 
 /**
@@ -67,6 +69,8 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
     // maintain a list of what we've sent, in case we're interrupted by auth requests
     private HashMap<String, String> uploadedInstances;
     private String url;
+    @Inject
+    protected AuthDialogUtility authDialogUtility;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -259,7 +263,7 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
                 Collect.getInstance().getActivityLogger().logAction(this,
                         "onCreateDialog.AUTH_DIALOG", "show");
 
-                return new AuthDialogUtility().createDialog(this, this, this.url);
+                return authDialogUtility.createDialog(this, this, this.url);
         }
 
         return null;

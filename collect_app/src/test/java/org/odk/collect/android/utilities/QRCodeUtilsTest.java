@@ -11,8 +11,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.RuntimeEnvironment;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,10 +40,11 @@ public class QRCodeUtilsTest {
 
     private final File savedQrCodeImage = new File(QR_CODE_FILEPATH);
     private final File md5File = new File(MD5_CACHE_PATH);
+    private GeneralSharedPreferences generalSharedPreferences = new GeneralSharedPreferences(RuntimeEnvironment.application);
 
     @Before
     public void setup() {
-        GeneralSharedPreferences.getInstance().loadDefaultPreferences();
+        generalSharedPreferences.loadDefaultPreferences();
         savedQrCodeImage.delete();
         md5File.delete();
     }
@@ -100,7 +103,11 @@ public class QRCodeUtilsTest {
 
     public void generateQrCode(GenerationResults generationResults) {
         // subscribe to the QRCode generator in the same thread
-        QRCodeUtils.getQRCodeGeneratorObservable(new ArrayList<>())
+
+        AdminSharedPreferences adminSharedPreferences = new AdminSharedPreferences(RuntimeEnvironment.application);
+        SharedPreferencesUtils sharedPreferencesUtils = new SharedPreferencesUtils(adminSharedPreferences, generalSharedPreferences);
+        new QRCodeUtils(sharedPreferencesUtils)
+                .getQRCodeGeneratorObservable(new ArrayList<>())
                 .subscribe(generationResults.generatedBitmap::set, generationResults.errorThrown::set, () -> generationResults.isFinished.set(true));
 
         generationResults.assertGeneratedOk();

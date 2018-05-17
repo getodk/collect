@@ -11,6 +11,10 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.utilities.AuthDialogUtility;
+
+import javax.inject.Inject;
 
 import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
@@ -18,6 +22,19 @@ public class BasePreferenceFragment extends PreferenceFragment {
 
     protected Toolbar toolbar;
     private LinearLayout root;
+
+    @Inject
+    protected GeneralSharedPreferences generalSharedPreferences;
+    @Inject
+    protected AdminSharedPreferences adminSharedPreferences;
+    @Inject
+    protected AuthDialogUtility authDialogUtility;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ((Collect) getActivity().getApplicationContext()).getAppComponent().inject(this);
+    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -67,7 +84,7 @@ public class BasePreferenceFragment extends PreferenceFragment {
     }
 
     private void removeAllDisabledPrefs() {
-        DisabledPreferencesRemover preferencesRemover = new DisabledPreferencesRemover((PreferencesActivity) getActivity(), this);
+        DisabledPreferencesRemover preferencesRemover = new DisabledPreferencesRemover((PreferencesActivity) getActivity(), this, adminSharedPreferences);
         preferencesRemover.remove(AdminKeys.adminToGeneral);
         preferencesRemover.removeEmptyCategories();
     }

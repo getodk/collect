@@ -40,7 +40,6 @@ import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.receivers.NetworkReceiver;
 import org.odk.collect.android.tasks.InstanceSyncTask;
@@ -137,7 +136,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
             @Override
             public void onClick(View v) {
 
-                String transport = (String) GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE);
+                String transport = (String) generalSharedPreferences.get(KEY_SUBMISSION_TRANSPORT_TYPE);
                 if (!transport.equalsIgnoreCase(getString(R.string.transport_type_value_sms))) {
 
                     ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(
@@ -257,13 +256,13 @@ public class InstanceUploaderList extends InstanceListActivity implements
 
     private void uploadSelectedFiles() {
         long[] instanceIds = listView.getCheckedItemIds();
-        String transport = (String) GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE);
+        String transport = (String) generalSharedPreferences.get(KEY_SUBMISSION_TRANSPORT_TYPE);
 
         if (transport.equalsIgnoreCase(getString(R.string.transport_type_value_sms))) {
             smsService.submitForms(instanceIds);
         } else {
 
-            String server = (String) GeneralSharedPreferences.getInstance().get(KEY_PROTOCOL);
+            String server = (String) generalSharedPreferences.get(KEY_PROTOCOL);
 
             if (server.equalsIgnoreCase(getString(R.string.protocol_google_sheets))) {
                 // if it's Sheets, start the Sheets uploader

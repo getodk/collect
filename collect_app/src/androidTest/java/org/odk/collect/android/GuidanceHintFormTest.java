@@ -56,6 +56,8 @@ public class GuidanceHintFormTest {
     @Mock
     private ActivityAvailability activityAvailability;
 
+    private GeneralSharedPreferences generalSharedPreferences = new GeneralSharedPreferences(Collect.getInstance());
+
     //region Test prep.
     @BeforeClass
     public static void copyFormToSdCard() throws IOException {
@@ -88,7 +90,7 @@ public class GuidanceHintFormTest {
     @Ignore
     @Test
     public void guidanceVisibilityContentTest() {
-        GeneralSharedPreferences.getInstance().save(PreferenceKeys.KEY_GUIDANCE_HINT, GuidanceHint.Yes.toString());
+        generalSharedPreferences.save(PreferenceKeys.KEY_GUIDANCE_HINT, GuidanceHint.Yes.toString());
 
         FormEntryPrompt prompt = Collect.getInstance().getFormController().getQuestionPrompt();
 

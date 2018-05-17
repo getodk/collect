@@ -30,6 +30,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
+import javax.inject.Inject;
+
 import timber.log.Timber;
 
 import static org.odk.collect.android.preferences.AdminKeys.ALL_KEYS;
@@ -39,11 +41,32 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PASSWORD;
 
 public final class SharedPreferencesUtils {
 
-    private SharedPreferencesUtils() {
+    private final AdminSharedPreferences adminSharedPreferences;
+    private final GeneralSharedPreferences generalSharedPreferences;
+
+    @Inject
+    AuthDialogUtility authDialogUtility;
+
+    @Inject
+    public SharedPreferencesUtils(AdminSharedPreferences adminSharedPreferences, GeneralSharedPreferences generalSharedPreferences) {
+        this.adminSharedPreferences = adminSharedPreferences;
+        this.generalSharedPreferences = generalSharedPreferences;
 
     }
 
-    public static String getJSONFromPreferences(Collection<String> passwordKeys) throws JSONException {
+    public static Collection<String> getAllGeneralKeys() {
+        Collection<String> keys = new HashSet<>(GENERAL_KEYS.keySet());
+        keys.add(KEY_PASSWORD);
+        return keys;
+    }
+
+    public static Collection<String> getAllAdminKeys() {
+        Collection<String> keys = new HashSet<>(ALL_KEYS);
+        keys.add(KEY_ADMIN_PW);
+        return keys;
+    }
+
+    public String getJSONFromPreferences(Collection<String> passwordKeys) throws JSONException {
         Collection<String> keys = new ArrayList<>(passwordKeys);
         keys.addAll(GENERAL_KEYS.keySet());
         JSONObject sharedPrefJson = getModifiedPrefs(keys);
@@ -51,14 +74,14 @@ public final class SharedPreferencesUtils {
         return sharedPrefJson.toString();
     }
 
-    private static JSONObject getModifiedPrefs(Collection<String> keys) throws JSONException {
+    private JSONObject getModifiedPrefs(Collection<String> keys) throws JSONException {
         JSONObject prefs = new JSONObject();
         JSONObject adminPrefs = new JSONObject();
         JSONObject generalPrefs = new JSONObject();
 
         //checking for admin password
         if (keys.contains(KEY_ADMIN_PW)) {
-            String password = (String) AdminSharedPreferences.getInstance().get(KEY_ADMIN_PW);
+            String password = (String) adminSharedPreferences.get(KEY_ADMIN_PW);
             if (!password.equals("")) {
                 adminPrefs.put(KEY_ADMIN_PW, password);
             }
@@ -67,7 +90,7 @@ public final class SharedPreferencesUtils {
 
         for (String key : keys) {
             Object defaultValue = GENERAL_KEYS.get(key);
-            Object value = GeneralSharedPreferences.getInstance().get(key);
+            Object value = generalSharedPreferences.get(key);
 
             if (value == null) {
                 value = "";
@@ -84,8 +107,8 @@ public final class SharedPreferencesUtils {
 
         for (String key : ALL_KEYS) {
 
-            Object defaultValue = AdminSharedPreferences.getInstance().getDefault(key);
-            Object value = AdminSharedPreferences.getInstance().get(key);
+            Object defaultValue = adminSharedPreferences.getDefault(key);
+            Object value = adminSharedPreferences.get(key);
             if (defaultValue != value) {
                 adminPrefs.put(key, value);
             }
@@ -95,7 +118,7 @@ public final class SharedPreferencesUtils {
         return prefs;
     }
 
-    public static void savePreferencesFromString(String content, ActionListener listener) {
+    public void savePreferencesFromString(String content, ActionListener listener) {
         try {
             JSONObject settingsJson = new JSONObject(content);
             JSONObject generalPrefsJson = settingsJson.getJSONObject("general");
@@ -104,9 +127,9 @@ public final class SharedPreferencesUtils {
             for (String key : getAllGeneralKeys()) {
                 if (generalPrefsJson.has(key)) {
                     Object value = generalPrefsJson.get(key);
-                    GeneralSharedPreferences.getInstance().save(key, value);
+                    generalSharedPreferences.save(key, value);
                 } else {
-                    GeneralSharedPreferences.getInstance().reset(key);
+                    generalSharedPreferences.reset(key);
                 }
             }
 
@@ -114,14 +137,14 @@ public final class SharedPreferencesUtils {
 
                 if (adminPrefsJson.has(key)) {
                     Object value = adminPrefsJson.get(key);
-                    AdminSharedPreferences.getInstance().save(key, value);
+                    adminSharedPreferences.save(key, value);
                 } else {
-                    AdminSharedPreferences.getInstance().reset(key);
+                    adminSharedPreferences.reset(key);
                 }
             }
 
-            AuthDialogUtility.setWebCredentialsFromPreferences();
-            AutoSendPreferenceMigrator.migrate(generalPrefsJson);
+            authDialogUtility.setWebCredentialsFromPreferences();
+            AutoSendPreferenceMigrator.migrate(generalSharedPreferences, generalPrefsJson);
 
             if (listener != null) {
                 listener.onSuccess();
@@ -133,15 +156,11 @@ public final class SharedPreferencesUtils {
         }
     }
 
-    public static boolean loadSharedPreferencesFromJSONFile(File src) {
-        boolean res = false;
-        BufferedReader br = null;
-
-        try {
-            String line = null;
+    public boolean loadSharedPreferencesFromJSONFile(File src) {
+        try (BufferedReader br = new BufferedReader(new FileReader(src))) {
             StringBuilder builder = new StringBuilder();
-            br = new BufferedReader(new FileReader(src));
 
+            String line;
             while ((line = br.readLine()) != null) {
                 builder.append(line);
             }
@@ -149,32 +168,11 @@ public final class SharedPreferencesUtils {
             savePreferencesFromString(builder.toString(), null);
 
             Collect.getInstance().initProperties();
-            res = true;
+            return true;
         } catch (IOException e) {
             Timber.e(e, "Exception while loading preferences from file due to : %s ", e.getMessage());
-        } finally {
-            try {
-                if (br != null) {
-                    br.close();
-                }
-            } catch (IOException ex) {
-                Timber.e(ex, "Exception thrown while closing an input stream due to: %s ", ex.getMessage());
-            }
         }
-
-        return res;
-    }
-
-    public static Collection<String> getAllGeneralKeys() {
-        Collection<String> keys = new HashSet<>(GENERAL_KEYS.keySet());
-        keys.add(KEY_PASSWORD);
-        return keys;
-    }
-
-    public static Collection<String> getAllAdminKeys() {
-        Collection<String> keys = new HashSet<>(ALL_KEYS);
-        keys.add(KEY_ADMIN_PW);
-        return keys;
+        return false;
     }
 }
 

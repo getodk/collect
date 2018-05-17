@@ -17,7 +17,6 @@ import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
-import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
@@ -26,6 +25,7 @@ import org.odk.collect.android.tasks.InstanceGoogleSheetsUploader;
 import org.odk.collect.android.tasks.InstanceServerUploader;
 import org.odk.collect.android.tasks.ServerPollingJob;
 import org.odk.collect.android.utilities.IconUtils;
+import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.utilities.WebUtils;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
@@ -34,6 +34,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+
+import javax.inject.Inject;
 
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_SEND;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORMS_UPLOADED_NOTIFICATION;
@@ -45,6 +47,14 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
     InstanceServerUploader instanceServerUploader;
 
     InstanceGoogleSheetsUploader instanceGoogleSheetsUploader;
+
+    @Inject
+    protected GeneralSharedPreferences generalSharedPreferences;
+
+    public NetworkReceiver() {
+        super();
+        Collect.getInstance().getAppComponent().inject(this);
+    }
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -64,7 +74,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                 uploadForms(context, isFormAutoSendOptionEnabled(currentNetworkInfo));
             }
 
-            ServerPollingJob.pollServerIfNeeded();
+            ServerPollingJob.pollServerIfNeeded(generalSharedPreferences);
         } else if (action.equals("org.odk.collect.android.FormSaved")) {
             ConnectivityManager connectivityManager = (ConnectivityManager) context
                     .getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -78,7 +88,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
 
     private boolean isFormAutoSendOptionEnabled(NetworkInfo currentNetworkInfo) {
         // make sure autosend is enabled on the given connected interface
-        String autosend = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_AUTOSEND);
+        String autosend = (String) generalSharedPreferences.get(PreferenceKeys.KEY_AUTOSEND);
         boolean sendwifi = autosend.equals("wifi_only");
         boolean sendnetwork = autosend.equals("cellular_only");
         if (autosend.equals("wifi_and_cellular")) {
@@ -127,11 +137,11 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
             Long[] toSendArray = new Long[toUpload.size()];
             toUpload.toArray(toSendArray);
 
-            GeneralSharedPreferences settings = GeneralSharedPreferences.getInstance();
-            String protocol = (String) settings.get(PreferenceKeys.KEY_PROTOCOL);
+            String googleSheetsUrl = (String) generalSharedPreferences.get(PreferenceKeys.KEY_GOOGLE_SHEETS_URL);
+            String protocol = (String) generalSharedPreferences.get(PreferenceKeys.KEY_PROTOCOL);
 
             if (protocol.equals(context.getString(R.string.protocol_google_sheets))) {
-                String googleUsername = (String) settings.get(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
+                String googleUsername = (String) generalSharedPreferences.get(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
                 if (googleUsername == null || googleUsername.isEmpty()) {
                     // just quit if there's no username
                     running = false;
@@ -139,16 +149,17 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                 }
                 GoogleAccountsManager accountsManager = new GoogleAccountsManager(Collect.getInstance());
                 accountsManager.getCredential().setSelectedAccountName(googleUsername);
-                instanceGoogleSheetsUploader = new InstanceGoogleSheetsUploader(accountsManager);
+
+                instanceGoogleSheetsUploader = new InstanceGoogleSheetsUploader(accountsManager, googleSheetsUrl);
                 instanceGoogleSheetsUploader.setUploaderListener(this);
                 instanceGoogleSheetsUploader.execute(toSendArray);
             } else if (protocol.equals(context.getString(R.string.protocol_odk_default))) {
                 // get the username, password, and server from preferences
 
-                String storedUsername = (String) settings.get(PreferenceKeys.KEY_USERNAME);
-                String storedPassword = (String) settings.get(PreferenceKeys.KEY_PASSWORD);
-                String server = (String) settings.get(PreferenceKeys.KEY_SERVER_URL);
-                String url = server + settings.get(PreferenceKeys.KEY_FORMLIST_URL);
+                String storedUsername = (String) generalSharedPreferences.get(PreferenceKeys.KEY_USERNAME);
+                String storedPassword = (String) generalSharedPreferences.get(PreferenceKeys.KEY_PASSWORD);
+                String server = (String) generalSharedPreferences.get(PreferenceKeys.KEY_SERVER_URL);
+                String url = server + generalSharedPreferences.get(PreferenceKeys.KEY_FORMLIST_URL);
 
                 Uri u = Uri.parse(url);
                 WebUtils.addCredentials(storedUsername, storedPassword, u.getHost());

@@ -20,6 +20,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
@@ -35,12 +36,14 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_COMPLETED_D
 @RunWith(AndroidJUnit4.class)
 public class SharedPreferencesTest {
 
+    private GeneralSharedPreferences generalSharedPreferences = new GeneralSharedPreferences(Collect.getInstance());
+    private AdminSharedPreferences adminSharedPreferences = new AdminSharedPreferences(Collect.getInstance());
+
     @Test
     public void generalDefaultSharedPreferencesTest() {
-        GeneralSharedPreferences.getInstance().loadDefaultPreferences();
+        generalSharedPreferences.loadDefaultPreferences();
         HashMap<String, Object> defaultValues = PreferenceKeys.GENERAL_KEYS;
 
-        GeneralSharedPreferences generalSharedPreferences = GeneralSharedPreferences.getInstance();
         for (String key : SharedPreferencesUtils.getAllGeneralKeys()) {
             assertEquals(generalSharedPreferences.get(key), defaultValues.get(key));
         }
@@ -48,9 +51,8 @@ public class SharedPreferencesTest {
 
     @Test
     public void adminDefaultSharedPreferencesTest() {
-        AdminSharedPreferences.getInstance().loadDefaultPreferences();
+        adminSharedPreferences.loadDefaultPreferences();
 
-        AdminSharedPreferences adminSharedPreferences = AdminSharedPreferences.getInstance();
         for (String key : SharedPreferencesUtils.getAllAdminKeys()) {
             assertEquals(adminSharedPreferences.get(key), adminSharedPreferences.getDefault(key));
         }
@@ -58,12 +60,11 @@ public class SharedPreferencesTest {
 
     @Test
     public void generalSharedPreferencesUpgradeTest() {
-        GeneralSharedPreferences.getInstance().save(KEY_COMPLETED_DEFAULT, false);
+        generalSharedPreferences.save(KEY_COMPLETED_DEFAULT, false);
 
-        GeneralSharedPreferences.getInstance().reloadPreferences();
+        generalSharedPreferences.reloadPreferences();
         HashMap<String, Object> defaultValues = PreferenceKeys.GENERAL_KEYS;
 
-        GeneralSharedPreferences generalSharedPreferences = GeneralSharedPreferences.getInstance();
         for (String key : SharedPreferencesUtils.getAllGeneralKeys()) {
             if (key.equals(KEY_COMPLETED_DEFAULT)) {
                 assertFalse((boolean) generalSharedPreferences.get(key));
@@ -75,10 +76,9 @@ public class SharedPreferencesTest {
 
     @Test
     public void adminSharedPreferencesUpgradeTest() {
-        AdminSharedPreferences.getInstance().save(KEY_EDIT_SAVED, false);
-        AdminSharedPreferences.getInstance().reloadPreferences();
+        adminSharedPreferences.save(KEY_EDIT_SAVED, false);
+        adminSharedPreferences.reloadPreferences();
 
-        AdminSharedPreferences adminSharedPreferences = AdminSharedPreferences.getInstance();
         for (String key : SharedPreferencesUtils.getAllAdminKeys()) {
             if (key.equals(KEY_EDIT_SAVED)) {
                 assertFalse((boolean) adminSharedPreferences.get(key));

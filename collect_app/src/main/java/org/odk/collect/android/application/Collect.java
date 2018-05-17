@@ -21,7 +21,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
 import android.os.SystemClock;
-import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.multidex.MultiDex;
 import android.support.v7.app.AppCompatDelegate;
@@ -92,7 +91,6 @@ public class Collect extends DaggerApplication {
     public static final String TMPDRAWFILE_PATH = CACHE_PATH + File.separator + "tmpDraw.jpg";
     public static final String LOG_PATH = ODK_ROOT + File.separator + "log";
     public static final String DEFAULT_FONTSIZE = "21";
-    public static final int DEFAULT_FONTSIZE_INT = 21;
     public static final String OFFLINE_LAYERS = ODK_ROOT + File.separator + "layers";
     public static final String SETTINGS = ODK_ROOT + File.separator + "settings";
 
@@ -104,6 +102,12 @@ public class Collect extends DaggerApplication {
     protected CookieStore cookieStore;
     @Inject
     protected CredentialsProvider credsProvider;
+    @Inject
+    protected GeneralSharedPreferences generalSharedPreferences;
+    @Inject
+    protected AdminSharedPreferences adminSharedPreferences;
+    @Inject
+    protected AuthDialogUtility authDialogUtility;
 
     private ActivityLogger activityLogger;
 
@@ -117,14 +121,10 @@ public class Collect extends DaggerApplication {
         return singleton;
     }
 
-    public static int getQuestionFontsize() {
-        // For testing:
-        Collect instance = Collect.getInstance();
-        if (instance == null) {
-            return Collect.DEFAULT_FONTSIZE_INT;
-        }
+    private AppComponent appComponent;
 
-        return Integer.parseInt(String.valueOf(GeneralSharedPreferences.getInstance().get(KEY_FONT_SIZE)));
+    public int getQuestionFontsize() {
+        return Integer.parseInt(String.valueOf(generalSharedPreferences.get(KEY_FONT_SIZE)));
     }
 
     /**
@@ -283,12 +283,12 @@ public class Collect extends DaggerApplication {
         defaultSysLanguage = Locale.getDefault().getLanguage();
         new LocaleHelper().updateLocale(this);
 
-        FormMetadataMigrator.migrate(PreferenceManager.getDefaultSharedPreferences(this));
-        AutoSendPreferenceMigrator.migrate();
+        FormMetadataMigrator.migrate(generalSharedPreferences);
+        AutoSendPreferenceMigrator.migrate(generalSharedPreferences);
 
         initProperties();
 
-        AuthDialogUtility.setWebCredentialsFromPreferences();
+        authDialogUtility.setWebCredentialsFromPreferences();
         if (BuildConfig.BUILD_TYPE.equals("odkCollectRelease")) {
             Timber.plant(new CrashReportingTree());
         } else {
@@ -300,7 +300,12 @@ public class Collect extends DaggerApplication {
 
     @Override
     protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
-        return DaggerAppComponent.builder().application(this).build();
+        appComponent =  DaggerAppComponent.builder().application(this).build();
+        return appComponent;
+    }
+
+    public AppComponent getAppComponent() {
+         return appComponent;
     }
 
     protected RefWatcher setupLeakCanary() {
@@ -316,7 +321,7 @@ public class Collect extends DaggerApplication {
 
         //noinspection deprecation
         defaultSysLanguage = newConfig.locale.getLanguage();
-        boolean isUsingSysLanguage = GeneralSharedPreferences.getInstance().get(KEY_APP_LANGUAGE).equals("");
+        boolean isUsingSysLanguage = generalSharedPreferences.get(KEY_APP_LANGUAGE).equals("");
         if (!isUsingSysLanguage) {
             new LocaleHelper().updateLocale(this);
         }
@@ -340,7 +345,7 @@ public class Collect extends DaggerApplication {
 
         // Use the server username by default if the metadata username is not defined
         if ((mgr.getSingularProperty(PROPMGR_USERNAME) == null || mgr.getSingularProperty(PROPMGR_USERNAME).isEmpty())) {
-            mgr.putProperty(PROPMGR_USERNAME, SCHEME_USERNAME, (String) GeneralSharedPreferences.getInstance().get(KEY_USERNAME));
+            mgr.putProperty(PROPMGR_USERNAME, SCHEME_USERNAME, (String) generalSharedPreferences.get(KEY_USERNAME));
         }
 
         FormController.initializeJavaRosa(mgr);
@@ -349,8 +354,8 @@ public class Collect extends DaggerApplication {
 
     // This method reloads shared preferences in order to load default values for new preferences
     private void reloadSharedPreferences() {
-        GeneralSharedPreferences.getInstance().reloadPreferences();
-        AdminSharedPreferences.getInstance().reloadPreferences();
+        generalSharedPreferences.reloadPreferences();
+        adminSharedPreferences.reloadPreferences();
     }
 
     public AppComponent getComponent() {

@@ -29,6 +29,8 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 
+import javax.inject.Inject;
+
 /**
  * Used to present auth dialog and update credentials in the system as needed.
  */
@@ -37,6 +39,12 @@ public class AuthDialogUtility {
 
     private EditText username;
     private EditText password;
+    private GeneralSharedPreferences generalSharedPreferences;
+
+    @Inject
+    AuthDialogUtility(GeneralSharedPreferences generalSharedPreferences) {
+        this.generalSharedPreferences = generalSharedPreferences;
+    }
 
     public AlertDialog createDialog(final Context context,
                                     final AuthDialogUtilityResultListener resultListener, String url) {
@@ -98,7 +106,7 @@ public class AuthDialogUtility {
         return builder.create();
     }
 
-    public static void setWebCredentialsFromPreferences() {
+    public void setWebCredentialsFromPreferences() {
         String username = getUserNameFromPreferences();
         String password = getPasswordFromPreferences();
 
@@ -119,21 +127,21 @@ public class AuthDialogUtility {
         WebUtils.addCredentials(username.getText().toString(), password.getText().toString(), host);
     }
 
-    private static String getServerFromPreferences() {
-        return (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_SERVER_URL);
+    private String getServerFromPreferences() {
+        return (String) generalSharedPreferences.get(PreferenceKeys.KEY_SERVER_URL);
     }
 
-    private static String getPasswordFromPreferences() {
-        return (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_PASSWORD);
+    private String getPasswordFromPreferences() {
+        return (String) generalSharedPreferences.get(PreferenceKeys.KEY_PASSWORD);
     }
 
-    private static String getUserNameFromPreferences() {
-        return (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_USERNAME);
+    private String getUserNameFromPreferences() {
+        return (String) generalSharedPreferences.get(PreferenceKeys.KEY_USERNAME);
     }
 
     private void saveCredentials(String userName, String password) {
-        GeneralSharedPreferences.getInstance().save(PreferenceKeys.KEY_USERNAME, userName);
-        GeneralSharedPreferences.getInstance().save(PreferenceKeys.KEY_PASSWORD, password);
+        generalSharedPreferences.save(PreferenceKeys.KEY_USERNAME, userName);
+        generalSharedPreferences.save(PreferenceKeys.KEY_PASSWORD, password);
     }
 
     public interface AuthDialogUtilityResultListener {

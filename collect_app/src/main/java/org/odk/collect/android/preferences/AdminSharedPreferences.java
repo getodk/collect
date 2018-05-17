@@ -17,7 +17,6 @@ package org.odk.collect.android.preferences;
 import android.content.Context;
 import android.content.SharedPreferences.Editor;
 
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.injection.config.scopes.PerApplication;
 
 import javax.inject.Inject;
@@ -26,26 +25,14 @@ import static org.odk.collect.android.preferences.AdminKeys.ALL_KEYS;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
 import static org.odk.collect.android.preferences.AdminPreferencesFragment.ADMIN_PREFERENCES;
 
+@PerApplication
 public class AdminSharedPreferences {
 
-    private static AdminSharedPreferences instance;
     private final android.content.SharedPreferences sharedPreferences;
 
-    public AdminSharedPreferences() {
-        sharedPreferences = Collect.getInstance().getSharedPreferences(ADMIN_PREFERENCES, 0);
-    }
-
     @Inject
-    @PerApplication
     public AdminSharedPreferences(Context context) {
         sharedPreferences = context.getSharedPreferences(ADMIN_PREFERENCES, 0);
-    }
-
-    public static synchronized AdminSharedPreferences getInstance() {
-        if (instance == null) {
-            instance = new AdminSharedPreferences();
-        }
-        return instance;
     }
 
     public Object get(String key) {
@@ -69,7 +56,7 @@ public class AdminSharedPreferences {
         save(key, defaultValue);
     }
 
-    public void save(String key, Object value) {
+    public AdminSharedPreferences save(String key, Object value) {
         Editor editor = sharedPreferences.edit();
         if (value == null || value instanceof String) {
             editor.putString(key, (String) value);
@@ -83,6 +70,7 @@ public class AdminSharedPreferences {
             editor.putFloat(key, (Float) value);
         }
         editor.apply();
+        return this;
     }
 
     public void clear() {

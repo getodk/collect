@@ -48,6 +48,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import static org.odk.collect.android.activities.FormDownloadList.DISPLAY_ONLY_UPDATED_FORMS;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOMATIC_UPDATE;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
@@ -68,19 +70,29 @@ public class ServerPollingJob extends Job {
     private static final String POLL_SERVER_IMMEDIATELY_AFTER_RECEIVING_NETWORK = "pollServerImmediatelyAfterReceivingNetwork";
     public static final String TAG = "serverPollingJob";
 
+    public ServerPollingJob() {
+        Collect.getInstance().getAppComponent().inject(this);
+    }
+
+    @Inject
+    GeneralSharedPreferences generalSharedPreferences;
+
+    @Inject
+    AuthDialogUtility authDialogUtility;
+
     @Override
     @NonNull
     protected Result onRunJob(@NonNull Params params) {
         if (!isDeviceOnline()) {
-            GeneralSharedPreferences.getInstance().save(POLL_SERVER_IMMEDIATELY_AFTER_RECEIVING_NETWORK, true);
+            generalSharedPreferences.save(POLL_SERVER_IMMEDIATELY_AFTER_RECEIVING_NETWORK, true);
             return Result.FAILURE;
         } else {
-            GeneralSharedPreferences.getInstance().reset(POLL_SERVER_IMMEDIATELY_AFTER_RECEIVING_NETWORK);
+            generalSharedPreferences.reset(POLL_SERVER_IMMEDIATELY_AFTER_RECEIVING_NETWORK);
             HashMap<String, FormDetails> formList = DownloadFormListUtils.downloadFormList(true);
 
             if (formList != null && !formList.containsKey(DL_ERROR_MSG)) {
                 if (formList.containsKey(DL_AUTH_REQUIRED)) {
-                    AuthDialogUtility.setWebCredentialsFromPreferences();
+                    authDialogUtility.setWebCredentialsFromPreferences();
                     formList = DownloadFormListUtils.downloadFormList(true);
 
                     if (formList == null || formList.containsKey(DL_AUTH_REQUIRED) || formList.containsKey(DL_ERROR_MSG)) {
@@ -96,7 +108,7 @@ public class ServerPollingJob extends Job {
                 }
 
                 if (!newDetectedForms.isEmpty()) {
-                    if (GeneralSharedPreferences.getInstance().getBoolean(KEY_AUTOMATIC_UPDATE, false)) {
+                    if (generalSharedPreferences.getBoolean(KEY_AUTOMATIC_UPDATE, false)) {
                         final HashMap<FormDetails, String> result = new FormDownloader().downloadForms(newDetectedForms);
                         informAboutNewDownloadedForms(Collect.getInstance().getString(R.string.download_forms_result), result);
                     } else {
@@ -122,10 +134,10 @@ public class ServerPollingJob extends Job {
         }
     }
 
-    public static void schedulePeriodicJob(String selectedOption) {
+    public static void schedulePeriodicJob(String selectedOption, GeneralSharedPreferences generalSharedPreferences) {
         if (selectedOption.equals(Collect.getInstance().getString(R.string.never_value))) {
             JobManager.instance().cancelAllForTag(TAG);
-            GeneralSharedPreferences.getInstance().reset(POLL_SERVER_IMMEDIATELY_AFTER_RECEIVING_NETWORK);
+            generalSharedPreferences.reset(POLL_SERVER_IMMEDIATELY_AFTER_RECEIVING_NETWORK);
         } else {
             long period = FIFTEEN_MINUTES_PERIOD;
             if (selectedOption.equals(Collect.getInstance().getString(R.string.every_one_hour_value))) {
@@ -198,9 +210,9 @@ public class ServerPollingJob extends Job {
         return (networkInfo != null && networkInfo.isConnected());
     }
 
-    public static void pollServerIfNeeded() {
-        if (GeneralSharedPreferences.getInstance().getBoolean(POLL_SERVER_IMMEDIATELY_AFTER_RECEIVING_NETWORK, false)
-                && !GeneralSharedPreferences.getInstance().get(KEY_PERIODIC_FORM_UPDATES_CHECK).equals(Collect.getInstance().getString(R.string.never_value))) {
+    public static void pollServerIfNeeded(GeneralSharedPreferences generalSharedPreferences) {
+        if (generalSharedPreferences.getBoolean(POLL_SERVER_IMMEDIATELY_AFTER_RECEIVING_NETWORK, false)
+                && !generalSharedPreferences.get(KEY_PERIODIC_FORM_UPDATES_CHECK).equals(Collect.getInstance().getString(R.string.never_value))) {
             new JobRequest.Builder(TAG)
                     .startNow()
                     .build()

@@ -68,6 +68,7 @@ import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
+import javax.inject.Inject;
 
 import timber.log.Timber;
 
@@ -91,8 +92,13 @@ public abstract class QuestionWidget
     protected ThemeUtils themeUtils;
     private int playColor;
 
+    @Inject
+    protected GeneralSharedPreferences generalSharedPreferences;
+
     public QuestionWidget(Context context, FormEntryPrompt prompt) {
         super(context);
+
+        ((Collect) context.getApplicationContext()).getAppComponent().inject(this);
 
         themeUtils = new ThemeUtils(context);
         playColor = themeUtils.getAccentColor();
@@ -124,7 +130,7 @@ public abstract class QuestionWidget
             }
         });
 
-        questionFontSize = Collect.getQuestionFontsize();
+        questionFontSize = ((Collect) getContext().getApplicationContext()).getQuestionFontsize();
 
         formEntryPrompt = prompt;
 
@@ -147,7 +153,7 @@ public abstract class QuestionWidget
     private TextView setupGuidanceTextAndLayout(TextView guidanceTextView, FormEntryPrompt prompt) {
 
         TextView guidance = null;
-        GuidanceHint setting = GuidanceHint.get((String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_GUIDANCE_HINT));
+        GuidanceHint setting = GuidanceHint.get((String) generalSharedPreferences.get(PreferenceKeys.KEY_GUIDANCE_HINT));
 
         if (setting.equals(GuidanceHint.No)) {
             return null;

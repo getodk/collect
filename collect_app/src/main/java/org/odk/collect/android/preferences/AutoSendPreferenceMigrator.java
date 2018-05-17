@@ -1,6 +1,5 @@
 package org.odk.collect.android.preferences;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Map;
@@ -18,15 +17,15 @@ public class AutoSendPreferenceMigrator {
 
     }
 
-    public static void migrate() {
+    public static void migrate(GeneralSharedPreferences generalSharedPreferences) {
 
-        boolean autoSendWifi = GeneralSharedPreferences.getInstance().getBoolean(KEY_AUTOSEND_WIFI, false);
-        boolean autoSendNetwork = GeneralSharedPreferences.getInstance().getBoolean(KEY_AUTOSEND_NETWORK, false);
+        boolean autoSendWifi = generalSharedPreferences.getBoolean(KEY_AUTOSEND_WIFI, false);
+        boolean autoSendNetwork = generalSharedPreferences.getBoolean(KEY_AUTOSEND_NETWORK, false);
 
-        migrate(autoSendWifi, autoSendNetwork);
+        migrate(generalSharedPreferences, autoSendWifi, autoSendNetwork);
     }
 
-    public static void migrate(JSONObject generalPrefsJson) throws JSONException {
+    public static void migrate(GeneralSharedPreferences generalSharedPreferences, JSONObject generalPrefsJson) {
 
         boolean autoSendWifi = false;
         if (generalPrefsJson.has(KEY_AUTOSEND_WIFI)) {
@@ -38,10 +37,10 @@ public class AutoSendPreferenceMigrator {
             autoSendNetwork = true;
         }
 
-        migrate(autoSendWifi, autoSendNetwork);
+        migrate(generalSharedPreferences, autoSendWifi, autoSendNetwork);
     }
 
-    public static void migrate(Map<String, ?> entries) {
+    public static void migrate(GeneralSharedPreferences generalSharedPreferences, Map<String, ?> entries) {
 
         boolean autoSendWifi = false;
         if (entries.containsKey(KEY_AUTOSEND_WIFI)) {
@@ -61,11 +60,11 @@ public class AutoSendPreferenceMigrator {
             }
         }
 
-        migrate(autoSendWifi, autoSendNetwork);
+        migrate(generalSharedPreferences, autoSendWifi, autoSendNetwork);
     }
 
-    private static void migrate(boolean autoSendWifi, boolean autoSendNetwork) {
-        String autoSend = (String) GeneralSharedPreferences.getInstance().get(KEY_AUTOSEND);
+    private static void migrate(GeneralSharedPreferences generalSharedPreferences, boolean autoSendWifi, boolean autoSendNetwork) {
+        String autoSend = (String) generalSharedPreferences.get(KEY_AUTOSEND);
 
         if (autoSendNetwork && autoSendWifi) {
             autoSend = "wifi_and_cellular";
@@ -76,6 +75,6 @@ public class AutoSendPreferenceMigrator {
         }
 
         //save to shared preferences
-        GeneralSharedPreferences.getInstance().save(KEY_AUTOSEND, autoSend);
+        generalSharedPreferences.save(KEY_AUTOSEND, autoSend);
     }
 }

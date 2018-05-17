@@ -41,6 +41,7 @@ import org.odk.collect.android.utilities.ToastUtils;
 import static android.content.Context.MODE_PRIVATE;
 import static android.content.Context.MODE_WORLD_READABLE;
 import static org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog.MOVING_BACKWARDS_DIALOG_TAG;
+import static org.odk.collect.android.preferences.AdminKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_CHANGE_ADMIN_PASSWORD;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_EDIT_SAVED;
@@ -48,7 +49,6 @@ import static org.odk.collect.android.preferences.AdminKeys.KEY_IMPORT_SETTINGS;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_JUMP_TO;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_MOVING_BACKWARDS;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_SAVE_MID;
-import static org.odk.collect.android.preferences.AdminKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM;
 import static org.odk.collect.android.preferences.PreferenceKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE;
 
 public class AdminPreferencesFragment extends BasePreferenceFragment implements Preference.OnPreferenceClickListener {
@@ -178,7 +178,7 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
             prefMgr.setSharedPreferencesMode(MODE_WORLD_READABLE);
 
             addPreferencesFromResource(R.xml.main_menu_access_preferences);
-            findPreference(KEY_EDIT_SAVED).setEnabled((Boolean) AdminSharedPreferences.getInstance().get(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
+            findPreference(KEY_EDIT_SAVED).setEnabled((Boolean) adminSharedPreferences.get(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
         }
 
         @Override
@@ -246,8 +246,8 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
                     return true;
                 }
             });
-            findPreference(KEY_JUMP_TO).setEnabled((Boolean) AdminSharedPreferences.getInstance().get(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
-            findPreference(KEY_SAVE_MID).setEnabled((Boolean) AdminSharedPreferences.getInstance().get(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
+            findPreference(KEY_JUMP_TO).setEnabled((Boolean) adminSharedPreferences.get(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
+            findPreference(KEY_SAVE_MID).setEnabled((Boolean) adminSharedPreferences.get(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
         }
 
         @Override
@@ -265,11 +265,12 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
         }
 
         private void preventOtherWaysOfEditingForm() {
-            AdminSharedPreferences.getInstance().save(ALLOW_OTHER_WAYS_OF_EDITING_FORM, false);
-            AdminSharedPreferences.getInstance().save(KEY_EDIT_SAVED, false);
-            AdminSharedPreferences.getInstance().save(KEY_SAVE_MID, false);
-            AdminSharedPreferences.getInstance().save(KEY_JUMP_TO, false);
-            GeneralSharedPreferences.getInstance().save(PreferenceKeys.KEY_CONSTRAINT_BEHAVIOR, CONSTRAINT_BEHAVIOR_ON_SWIPE);
+            adminSharedPreferences
+                    .save(ALLOW_OTHER_WAYS_OF_EDITING_FORM, false)
+                    .save(KEY_EDIT_SAVED, false)
+                    .save(KEY_SAVE_MID, false)
+                    .save(KEY_JUMP_TO, false)
+                    .save(PreferenceKeys.KEY_CONSTRAINT_BEHAVIOR, CONSTRAINT_BEHAVIOR_ON_SWIPE);
 
             findPreference(KEY_JUMP_TO).setEnabled(false);
             findPreference(KEY_SAVE_MID).setEnabled(false);
@@ -279,7 +280,7 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
         }
 
         private void onMovingBackwardsEnabled() {
-            AdminSharedPreferences.getInstance().save(ALLOW_OTHER_WAYS_OF_EDITING_FORM, true);
+            adminSharedPreferences.save(ALLOW_OTHER_WAYS_OF_EDITING_FORM, true);
             findPreference(KEY_JUMP_TO).setEnabled(true);
             findPreference(KEY_SAVE_MID).setEnabled(true);
         }

@@ -38,7 +38,6 @@ import java.util.List;
 import timber.log.Timber;
 
 import static org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog.RESET_SETTINGS_RESULT_DIALOG_TAG;
-import static org.odk.collect.android.utilities.ResetUtility.ResetAction.RESET_PREFERENCES;
 
 public class ResetDialogPreference extends DialogPreference implements CompoundButton.OnCheckedChangeListener {
     private CheckBox preferences;
@@ -91,7 +90,7 @@ public class ResetDialogPreference extends DialogPreference implements CompoundB
         final List<Integer> resetActions = new ArrayList<>();
 
         if (preferences.isChecked()) {
-            resetActions.add(RESET_PREFERENCES);
+            resetActions.add(ResetUtility.ResetAction.RESET_PREFERENCES);
         }
         if (instances.isChecked()) {
             resetActions.add(ResetUtility.ResetAction.RESET_INSTANCES);
@@ -199,7 +198,7 @@ public class ResetDialogPreference extends DialogPreference implements CompoundB
         if (!((AdminPreferencesActivity) getContext()).isInstanceStateSaved()) {
             ((AdminPreferencesActivity) getContext()).runOnUiThread(new Thread(new Runnable() {
                 public void run() {
-                    if (resetActions.contains(RESET_PREFERENCES)) {
+                    if (resetActions.contains(ResetUtility.ResetAction.RESET_PREFERENCES)) {
                         ((AdminPreferencesActivity) getContext()).recreate();
                     }
                     ResetSettingsResultDialog resetSettingsResultDialog = ResetSettingsResultDialog.newInstance(String.valueOf(resultMessage));

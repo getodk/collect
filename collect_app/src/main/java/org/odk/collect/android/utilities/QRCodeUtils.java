@@ -50,6 +50,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.DataFormatException;
 
+import javax.inject.Inject;
+
 import io.reactivex.Observable;
 import timber.log.Timber;
 
@@ -59,8 +61,11 @@ public class QRCodeUtils {
     private static final int QR_CODE_SIDE_LENGTH = 400; // in pixels
     private static final String SETTINGS_MD5_FILE = ".collect-settings-hash";
     static final String MD5_CACHE_PATH = Collect.SETTINGS + File.separator + SETTINGS_MD5_FILE;
+    private final SharedPreferencesUtils sharedPreferencesUtils;
 
-    private QRCodeUtils() {
+    @Inject
+    public QRCodeUtils(SharedPreferencesUtils sharedPreferencesUtils) {
+        this.sharedPreferencesUtils = sharedPreferencesUtils;
     }
 
     public static String decodeFromBitmap(Bitmap bitmap) throws DataFormatException, IOException, FormatException, ChecksumException, NotFoundException {
@@ -109,9 +114,9 @@ public class QRCodeUtils {
         return bmp;
     }
 
-    public static Observable<Bitmap> getQRCodeGeneratorObservable(Collection<String> selectedPasswordKeys) {
+    public Observable<Bitmap> getQRCodeGeneratorObservable(Collection<String> selectedPasswordKeys) {
         return Observable.create(emitter -> {
-            String preferencesString = SharedPreferencesUtils.getJSONFromPreferences(selectedPasswordKeys);
+            String preferencesString = sharedPreferencesUtils.getJSONFromPreferences(selectedPasswordKeys);
 
             MessageDigest md = MessageDigest.getInstance("MD5");
             md.update(preferencesString.getBytes());

@@ -84,6 +84,7 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
     private String bigImageURI;
     private MediaPlayer player;
     private ReferenceManager referenceManager = ReferenceManager.instance();
+    private ThemeUtils themeUtils;
 
     public MediaLayout(Context context) {
         super(context);

@@ -41,7 +41,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.filters.ControlCharacterFilter;
 import org.odk.collect.android.preferences.filters.WhitespaceFilter;
-import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.Validator;
@@ -265,7 +264,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         super.onPause();
 
         if (credentialsHaveChanged) {
-            AuthDialogUtility.setWebCredentialsFromPreferences();
+            authDialogUtility.setWebCredentialsFromPreferences();
         }
     }
 
@@ -391,23 +390,19 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     }
 
     private void maskPasswordSummary(String password) {
-        passwordPreference.setSummary(password != null && password.length() > 0
-                ? "********"
-                : "");
+        passwordPreference.setSummary(password != null && password.length() > 0 ? "********" : "");
     }
 
     private void clearCachedCrendentials() {
-        String server = (String) GeneralSharedPreferences
-                .getInstance().get(PreferenceKeys.KEY_SERVER_URL);
+        String server = (String) generalSharedPreferences.get(PreferenceKeys.KEY_SERVER_URL);
         Uri u = Uri.parse(server);
         WebUtils.clearHostCredentials(u.getHost());
         Collect.getInstance().getCookieStore().clear();
     }
 
     protected void setDefaultAggregatePaths() {
-        GeneralSharedPreferences sharedPreferences = GeneralSharedPreferences.getInstance();
-        sharedPreferences.reset(KEY_FORMLIST_URL);
-        sharedPreferences.reset(KEY_SUBMISSION_URL);
+        generalSharedPreferences.reset(KEY_FORMLIST_URL);
+        generalSharedPreferences.reset(KEY_SUBMISSION_URL);
     }
 
     @Override

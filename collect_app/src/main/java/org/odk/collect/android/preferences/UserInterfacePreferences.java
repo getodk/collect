@@ -169,7 +169,7 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
 
         if (pref != null) {
             pref.setOnPreferenceClickListener(new SplashClickListener(this, pref));
-            pref.setSummary((String) GeneralSharedPreferences.getInstance().get(KEY_SPLASH_PATH));
+            pref.setSummary((String) generalSharedPreferences.get(KEY_SPLASH_PATH));
         }
     }
 
@@ -256,7 +256,7 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
     }
 
     void setSplashPath(String path) {
-        GeneralSharedPreferences.getInstance().save(KEY_SPLASH_PATH, path);
+        generalSharedPreferences.save(KEY_SPLASH_PATH, path);
         Preference splashPathPreference = findPreference(KEY_SPLASH_PATH);
         splashPathPreference.setSummary(path);
     }

@@ -43,8 +43,6 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.exception.BadUrlException;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -84,24 +82,32 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     private static final String KEY = "KEY";
 
     private static final String UPLOADED_MEDIA_URL = "https://drive.google.com/open?id=";
+    private static final String ALTITUDE_TITLE_POSTFIX = "-altitude";
+    private static final String ACCURACY_TITLE_POSTFIX = "-accuracy";
 
     private final SheetsHelper sheetsHelper;
     private final DriveHelper driveHelper;
     private final GoogleAccountsManager accountsManager;
-
-    private static final String ALTITUDE_TITLE_POSTFIX = "-altitude";
-    private static final String ACCURACY_TITLE_POSTFIX = "-accuracy";
-
+    private final String fallbackGoogleSheetsUrl;
     private boolean authFailed;
 
     private String jrFormId;
 
     private Spreadsheet spreadsheet;
 
-    public InstanceGoogleSheetsUploader(GoogleAccountsManager accountsManager) {
+    public InstanceGoogleSheetsUploader(GoogleAccountsManager accountsManager, String fallbackGoogleSheetsUrl) {
+        super();
         this.accountsManager = accountsManager;
+        this.fallbackGoogleSheetsUrl = fallbackGoogleSheetsUrl;
         sheetsHelper = accountsManager.getSheetsHelper();
         driveHelper = accountsManager.getDriveHelper();
+    }
+
+    public static boolean isLocationValid(String answer) {
+        return Pattern
+                .compile("^-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\.[0-9]+\\s[0-9]+\\.[0-9]+$")
+                .matcher(answer)
+                .matches();
     }
 
     @Override
@@ -233,7 +239,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         insertRow(element, parentKey, key, instanceFile, sheetTitle);
 
         int repeatIndex = 0;
-        for (int i = 0 ; i < element.getNumChildren(); i++) {
+        for (int i = 0; i < element.getNumChildren(); i++) {
             TreeElement child = element.getChildAt(i);
             if (child.isRepeatable() && child.getMultiplicity() != TreeReference.INDEX_TEMPLATE) {
                 insertRows(child, key, getKeyBasedOnParentKey(key, child.getName(), repeatIndex++), instanceFile, getElementTitle(child));
@@ -307,7 +313,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
      *
      * @param sheetHeaders - Headers from the spreadsheet
      * @param columnTitles - Column titles list to be updated with altitude / accuracy titles from
-     *                       the sheetHeaders
+     *                     the sheetHeaders
      */
     private void addAltitudeAndAccuracyTitles(List<Object> sheetHeaders, List<Object> columnTitles) {
         for (Object sheetTitle : sheetHeaders) {
@@ -319,7 +325,6 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             }
         }
     }
-
 
     // Ignore rows with all empty answers added by a user and extra repeatable groups added
     // by Javarosa https://github.com/opendatakit/javarosa/issues/266
@@ -378,7 +383,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     }
 
     private boolean hasRepeatableGroups(TreeElement element) {
-        for (int i = 0 ; i < element.getNumChildren(); i++) {
+        for (int i = 0; i < element.getNumChildren(); i++) {
             TreeElement childElement = element.getChildAt(i);
             if (childElement.isRepeatable()) {
                 return true;
@@ -404,7 +409,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
     private Set<String> getSheetTitles(TreeElement element) {
         Set<String> sheetTitles = new HashSet<>();
-        for (int i = 0 ; i < element.getNumChildren(); i++) {
+        for (int i = 0; i < element.getNumChildren(); i++) {
             TreeElement childElement = element.getChildAt(i);
             if (childElement.isRepeatable()) {
                 sheetTitles.add(getElementTitle(childElement));
@@ -450,11 +455,12 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
      *
      * @param columnTitles - A List of column titles on the sheet
      * @param elementTitle - The title of the geo data to parse. e.g. "data-Point"
-     * @param geoData - A space (" ") separated string that contains "Lat Long Altitude Accuracy"
+     * @param geoData      - A space (" ") separated string that contains "Lat Long Altitude Accuracy"
      * @return a Map of fields containing Lat/Long and Accuracy, Altitude (if the respective column
-     *         titles exist in the columnTitles parameter).
+     * titles exist in the columnTitles parameter).
      */
-    private @NonNull Map<String, String> parseGeopoint(@NonNull List<Object> columnTitles, @NonNull String elementTitle, @NonNull String geoData) {
+    private @NonNull
+    Map<String, String> parseGeopoint(@NonNull List<Object> columnTitles, @NonNull String elementTitle, @NonNull String geoData) {
         Map<String, String> geoFieldsMap = new HashMap<String, String>();
 
         // Accuracy
@@ -528,7 +534,9 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         }
     }
 
-    /** This method builds a column name by joining all of the containing group names using "-" as a separator */
+    /**
+     * This method builds a column name by joining all of the containing group names using "-" as a separator
+     */
     private String getElementTitle(AbstractTreeElement element) {
         StringBuilder elementTitle = new StringBuilder();
         while (element != null && element.getName() != null) {
@@ -667,16 +675,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         int subIdx = cursor.getColumnIndex(InstanceColumns.SUBMISSION_URI);
         String urlString = cursor.isNull(subIdx) ? null : cursor.getString(subIdx);
         // if we didn't find one in the content provider, try to get from settings
-        return urlString == null
-                ? (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_GOOGLE_SHEETS_URL)
-                : urlString;
-    }
-
-    public static boolean isLocationValid(String answer) {
-        return Pattern
-                .compile("^-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\.[0-9]+\\s[0-9]+\\.[0-9]+$")
-                .matcher(answer)
-                .matches();
+        return urlString == null ? fallbackGoogleSheetsUrl : urlString;
     }
 
     public boolean isAuthFailed() {
@@ -687,7 +686,9 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         authFailed = false;
     }
 
-    /** An exception that results in the cancellation of an instance upload, and the presentation of an error to the user */
+    /**
+     * An exception that results in the cancellation of an instance upload, and the presentation of an error to the user
+     */
     static class UploadException extends Exception {
         UploadException(String message) {
             super(message);

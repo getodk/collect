@@ -30,9 +30,11 @@ import org.odk.collect.android.preferences.PreferenceKeys;
 public final class ThemeUtils {
 
     private final Context context;
+    private final GeneralSharedPreferences generalSharedPreferences;
 
     public ThemeUtils(Context context) {
         this.context = context;
+        generalSharedPreferences = new GeneralSharedPreferences(context);
     }
 
     @StyleRes
@@ -86,7 +88,7 @@ public final class ThemeUtils {
     }
 
     public boolean isDarkTheme() {
-        String theme = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_APP_THEME);
+        String theme = (String) generalSharedPreferences.get(PreferenceKeys.KEY_APP_THEME);
         return theme.equals(context.getString(R.string.app_theme_dark));
     }
 

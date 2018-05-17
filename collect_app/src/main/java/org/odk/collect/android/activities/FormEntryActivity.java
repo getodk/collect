@@ -96,8 +96,6 @@ import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.FormController.FailedConstraint;
 import org.odk.collect.android.logic.FormInfo;
 import org.odk.collect.android.preferences.AdminKeys;
-import org.odk.collect.android.preferences.AdminSharedPreferences;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
@@ -254,6 +252,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     private boolean showNavigationButtons;
+    private boolean isDefaultPreferenceComplete;
 
     private Bundle state;
 
@@ -322,6 +321,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 finishAllActivities(FormEntryActivity.this);
             }
         });
+
+        isDefaultPreferenceComplete = (boolean) generalSharedPreferences.get(PreferenceKeys.KEY_COMPLETED_DEFAULT);
     }
 
     private void setupFields(Bundle savedInstanceState) {
@@ -357,7 +358,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     private void loadForm() {
-        allowMovingBackwards = (boolean) AdminSharedPreferences.getInstance().get(KEY_MOVING_BACKWARDS);
+        allowMovingBackwards = (boolean) adminSharedPreferences.get(KEY_MOVING_BACKWARDS);
 
         // If a parse error message is showing then nothing else is loaded
         // Dialogs mid form just disappear on rotation.
@@ -1021,18 +1022,18 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         boolean useability;
 
-        useability = (boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_SAVE_MID);
+        useability = (boolean) adminSharedPreferences.get(AdminKeys.KEY_SAVE_MID);
 
         menu.findItem(R.id.menu_save).setVisible(useability).setEnabled(useability);
 
-        useability = (boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_JUMP_TO);
+        useability = (boolean) adminSharedPreferences.get(AdminKeys.KEY_JUMP_TO);
 
         menu.findItem(R.id.menu_goto).setVisible(useability)
                 .setEnabled(useability);
 
         FormController formController = getFormController();
 
-        useability = (boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_CHANGE_LANGUAGE)
+        useability = (boolean) adminSharedPreferences.get(AdminKeys.KEY_CHANGE_LANGUAGE)
                 && (formController != null)
                 && formController.getLanguages() != null
                 && formController.getLanguages().length > 1;
@@ -1040,7 +1041,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         menu.findItem(R.id.menu_languages).setVisible(useability)
                 .setEnabled(useability);
 
-        useability = (boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_ACCESS_SETTINGS);
+        useability = (boolean) adminSharedPreferences.get(AdminKeys.KEY_ACCESS_SETTINGS);
 
         menu.findItem(R.id.menu_preferences).setVisible(useability)
                 .setEnabled(useability);
@@ -1064,7 +1065,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         .logInstanceAction(this, "onOptionsItemSelected",
                                 "MENU_SAVE");
                 // don't exit
-                saveDataToDisk(DO_NOT_EXIT, InstancesDaoHelper.isInstanceComplete(false), null);
+                saveDataToDisk(DO_NOT_EXIT, InstancesDaoHelper.isInstanceComplete(false, isDefaultPreferenceComplete), null);
                 return true;
             case R.id.menu_goto:
                 state = null;
@@ -1250,9 +1251,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 // checkbox for if finished or ready to send
                 final CheckBox instanceComplete = endView
                         .findViewById(R.id.mark_finished);
-                instanceComplete.setChecked(InstancesDaoHelper.isInstanceComplete(true));
+                instanceComplete.setChecked(InstancesDaoHelper.isInstanceComplete(true, isDefaultPreferenceComplete));
 
-                if (!(boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_MARK_AS_FINALIZED)) {
+                if (!(boolean) adminSharedPreferences.get(AdminKeys.KEY_MARK_AS_FINALIZED)) {
                     instanceComplete.setVisibility(View.GONE);
                 }
 
@@ -1337,7 +1338,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 }
 
                 // override the visibility settings based upon admin preferences
-                if (!(boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_SAVE_AS)) {
+                if (!(boolean) adminSharedPreferences.get(AdminKeys.KEY_SAVE_AS)) {
                     saveAs.setVisibility(View.GONE);
                     TextView sa = endView
                             .findViewById(R.id.save_form_as);
@@ -1486,8 +1487,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             FormController formController = getFormController();
 
             // get constraint behavior preference value with appropriate default
-            String constraintBehavior = (String) GeneralSharedPreferences.getInstance()
-                    .get(PreferenceKeys.KEY_CONSTRAINT_BEHAVIOR);
+            String constraintBehavior = (String) generalSharedPreferences.get(PreferenceKeys.KEY_CONSTRAINT_BEHAVIOR);
 
             if (formController != null && formController.currentPromptIsQuestion()) {
                 // if constraint behavior says we should validate on swipe, do so
@@ -2023,7 +2023,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
 
         List<IconMenuItem> items;
-        if ((boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_SAVE_MID)) {
+        if ((boolean) adminSharedPreferences.get(AdminKeys.KEY_SAVE_MID)) {
             items = ImmutableList.of(new IconMenuItem(R.drawable.ic_save, R.string.keep_changes),
                     new IconMenuItem(R.drawable.ic_delete, R.string.do_not_save));
         } else {
@@ -2044,7 +2044,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 if (item.getTextResId() == R.string.keep_changes) {
                     Collect.getInstance().getActivityLogger()
                             .logInstanceAction(this, "createQuitDialog", "saveAndExit");
-                    saveDataToDisk(EXIT, InstancesDaoHelper.isInstanceComplete(false),
+                    saveDataToDisk(EXIT, InstancesDaoHelper.isInstanceComplete(false, isDefaultPreferenceComplete),
                             null);
                 } else {
                     Collect.getInstance().getActivityLogger()
@@ -2359,7 +2359,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             return;
         }
 
-        String navigation = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_NAVIGATION);
+        String navigation = (String) generalSharedPreferences.get(PreferenceKeys.KEY_NAVIGATION);
         showNavigationButtons = navigation.contains(PreferenceKeys.NAVIGATION_BUTTONS);
         backButton.setVisibility(showNavigationButtons ? View.VISIBLE : View.GONE);
         nextButton.setVisibility(showNavigationButtons ? View.VISIBLE : View.GONE);
@@ -2695,8 +2695,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 refreshCurrentView();
 
                 // get constraint behavior preference value with appropriate default
-                String constraintBehavior = (String) GeneralSharedPreferences.getInstance()
-                        .get(PreferenceKeys.KEY_CONSTRAINT_BEHAVIOR);
+                String constraintBehavior = (String) generalSharedPreferences.get(PreferenceKeys.KEY_CONSTRAINT_BEHAVIOR);
 
                 // an answer constraint was violated, so we need to display the proper toast(s)
                 // if constraint behavior is on_swipe, this will happen if we do a 'swipe' to the
@@ -2751,8 +2750,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
                            float velocityY) {
         // only check the swipe if it's enabled in preferences
-        String navigation = (String) GeneralSharedPreferences.getInstance()
-                .get(PreferenceKeys.KEY_NAVIGATION);
+        String navigation = (String) generalSharedPreferences.get(PreferenceKeys.KEY_NAVIGATION);
 
         if (navigation.contains(PreferenceKeys.NAVIGATION_SWIPE) && doSwipe) {
             // Looks for user swipes. If the user has swiped, move to the

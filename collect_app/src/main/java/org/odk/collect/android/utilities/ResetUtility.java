@@ -72,15 +72,15 @@ public class ResetUtility {
     }
 
     private void resetPreferences(Context context) {
-        GeneralSharedPreferences.getInstance().loadDefaultPreferences();
-        AdminSharedPreferences.getInstance().loadDefaultPreferences();
+        new GeneralSharedPreferences(context).loadDefaultPreferences();
+        new AdminSharedPreferences(context).loadDefaultPreferences();
 
         boolean deletedSettingsFolderContest = !new File(Collect.SETTINGS).exists()
                 || deleteFolderContents(Collect.SETTINGS);
 
         boolean deletedSettingsFile = !new File(Collect.ODK_ROOT + "/collect.settings").exists()
                 || (new File(Collect.ODK_ROOT + "/collect.settings").delete());
-        
+
         new LocaleHelper().updateLocale(context);
 
         if (deletedSettingsFolderContest && deletedSettingsFile) {

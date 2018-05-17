@@ -20,22 +20,31 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 
+import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.injection.config.AppComponent;
-import org.odk.collect.android.R;
+import org.odk.collect.android.preferences.AdminSharedPreferences;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.ThemeUtils;
+
+import javax.inject.Inject;
+
+import dagger.android.support.DaggerAppCompatActivity;
 
 import static org.odk.collect.android.utilities.PermissionUtils.checkIfStoragePermissionsGranted;
 import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
 import static org.odk.collect.android.utilities.PermissionUtils.isEntryPointActivity;
 
-public abstract class CollectAbstractActivity extends AppCompatActivity {
+public abstract class CollectAbstractActivity extends DaggerAppCompatActivity {
 
-    private boolean isInstanceStateSaved;
+    @Inject
+    protected GeneralSharedPreferences generalSharedPreferences;
+    @Inject
+    protected AdminSharedPreferences adminSharedPreferences;
     protected ThemeUtils themeUtils;
+    private boolean isInstanceStateSaved;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,7 +52,7 @@ public abstract class CollectAbstractActivity extends AppCompatActivity {
         setTheme(themeUtils.getAppTheme());
         super.onCreate(savedInstanceState);
 
-        /**
+        /*
          * If a user has revoked the storage permission then this check ensures the app doesn't quit unexpectedly and
          * informs the user of the implications of their decision before exiting. The app can't function with these permissions
          * so if a user wishes to grant them they just restart.
@@ -56,9 +65,7 @@ public abstract class CollectAbstractActivity extends AppCompatActivity {
 
             builder.setTitle(R.string.storage_runtime_permission_denied_title)
                     .setMessage(R.string.storage_runtime_permission_denied_desc)
-                    .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
-                        finishAllActivities(this);
-                    })
+                    .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> finishAllActivities(this))
                     .setIcon(R.drawable.sd)
                     .setCancelable(false)
                     .show();

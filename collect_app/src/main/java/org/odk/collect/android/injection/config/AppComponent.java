@@ -6,12 +6,19 @@ import org.odk.collect.android.activities.InstanceUploaderList;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.fragments.DataManagerList;
+import org.odk.collect.android.fragments.ShowQRCodeFragment;
 import org.odk.collect.android.injection.ActivityBuilder;
 import org.odk.collect.android.injection.config.scopes.PerApplication;
-import org.odk.collect.android.tasks.sms.SmsSentBroadcastReceiver;
+import org.odk.collect.android.preferences.BasePreferenceFragment;
+import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.receivers.NetworkReceiver;
+import org.odk.collect.android.tasks.ServerPollingJob;
 import org.odk.collect.android.tasks.sms.SmsNotificationReceiver;
 import org.odk.collect.android.tasks.sms.SmsSender;
+import org.odk.collect.android.tasks.sms.SmsSentBroadcastReceiver;
 import org.odk.collect.android.tasks.sms.SmsService;
+import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
+import org.odk.collect.android.widgets.QuestionWidget;
 
 import dagger.BindsInstance;
 import dagger.Component;
@@ -32,14 +39,19 @@ import dagger.android.support.AndroidSupportInjectionModule;
 })
 public interface AppComponent extends AndroidInjector<Collect> {
 
-    @Component.Builder
-    interface Builder {
+    void inject(QuestionWidget questionWidget);
 
-        @BindsInstance
-        Builder application(Application application);
+    void inject(NetworkReceiver networkReceiver);
 
-        AppComponent build();
-    }
+    void inject(PreferencesActivity preferencesActivity);
+
+    void inject(ShowQRCodeFragment showQRCodeFragment);
+
+    void inject(GoogleAccountsManager googleAccountsManager);
+
+    void inject(ServerPollingJob serverPollingJob);
+
+    void inject(BasePreferenceFragment basePreferenceFragment);
 
     void inject(SmsService smsService);
 
@@ -54,4 +66,13 @@ public interface AppComponent extends AndroidInjector<Collect> {
     void inject(InstanceUploaderAdapter instanceUploaderAdapter);
 
     void inject(DataManagerList dataManagerList);
+
+    @Component.Builder
+    interface Builder {
+
+        @BindsInstance
+        Builder application(Application application);
+
+        AppComponent build();
+    }
 }

@@ -76,7 +76,7 @@ public class ImageConverter {
 
     private static Integer getMaxPixelsFromSettings(Context context) {
         Integer maxPixels = null;
-        String imageSizeMode = (String) GeneralSharedPreferences.getInstance().get(KEY_IMAGE_SIZE);
+        String imageSizeMode = (String) new GeneralSharedPreferences(context).get(KEY_IMAGE_SIZE);
         String[] imageEntryValues = context.getResources().getStringArray(R.array.image_size_entry_values);
         if (!imageSizeMode.equals(imageEntryValues[0])) {
             if (imageSizeMode.equals(imageEntryValues[1])) {

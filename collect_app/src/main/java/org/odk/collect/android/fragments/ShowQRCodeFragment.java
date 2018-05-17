@@ -59,6 +59,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.zip.DataFormatException;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -93,6 +95,11 @@ public class ShowQRCodeFragment extends Fragment {
     private Intent shareIntent;
     private AlertDialog dialog;
 
+    @Inject
+    protected QRCodeUtils qrCodeUtils;
+    @Inject
+    protected SharedPreferencesUtils sharedPreferencesUtils;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -103,6 +110,7 @@ public class ShowQRCodeFragment extends Fragment {
         ((AdminPreferencesActivity) getActivity()).setSupportActionBar(toolbar);
         setHasOptionsMenu(true);
         setRetainInstance(true);
+        ((Collect) getActivity().getApplication()).getAppComponent().inject(this);
         generateCode();
         return view;
     }
@@ -113,7 +121,7 @@ public class ShowQRCodeFragment extends Fragment {
         ivQRCode.setVisibility(GONE);
         addPasswordStatusString();
 
-        Disposable disposable = QRCodeUtils.getQRCodeGeneratorObservable(getSelectedPasswordKeys())
+        Disposable disposable = qrCodeUtils.getQRCodeGeneratorObservable(getSelectedPasswordKeys())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(bitmap -> {
@@ -252,7 +260,7 @@ public class ShowQRCodeFragment extends Fragment {
 
 
     private void applySettings(String content) {
-        SharedPreferencesUtils.savePreferencesFromString(content, new ActionListener() {
+        sharedPreferencesUtils.savePreferencesFromString(content, new ActionListener() {
             @Override
             public void onSuccess() {
                 Collect.getInstance().initProperties();

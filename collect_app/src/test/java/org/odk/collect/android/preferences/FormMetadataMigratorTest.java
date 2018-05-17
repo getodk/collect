@@ -1,8 +1,6 @@
 package org.odk.collect.android.preferences;
 
 import android.annotation.SuppressLint;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -35,7 +33,7 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
 @RunWith(RobolectricTestRunner.class)
 public class FormMetadataMigratorTest {
 
-    private SharedPreferences sharedPreferences;
+    private GeneralSharedPreferences sharedPreferences;
     private final PrintStream printStream = System.out;
 
     /** The keys of preferences affected by the migration */
@@ -62,7 +60,7 @@ public class FormMetadataMigratorTest {
 
     @Before
     public void setUp() throws Exception {
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
+        sharedPreferences = new GeneralSharedPreferences(Collect.getInstance());
     }
 
     @Test
@@ -93,20 +91,15 @@ public class FormMetadataMigratorTest {
 
     @SuppressLint("ApplySharedPref")
     private void setPreferencesToPreMigrationValues() {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(KEY_METADATA_MIGRATED, false);
-        editor.commit();
-
+        sharedPreferences.save(KEY_METADATA_MIGRATED, false);
         setPreferencesToValues(sourceKeyValuePairs);
     }
 
     @SuppressLint("ApplySharedPref")
     private void setPreferencesToValues(String[][] valuePairs) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
         for (String[] pair : valuePairs) {
-            editor.putString(pair[0], pair[1]);
+            sharedPreferences.save(pair[0], pair[1]);
         }
-        editor.commit();
     }
 
     private void checkPostMigrationValues() {
@@ -114,8 +107,7 @@ public class FormMetadataMigratorTest {
         assertPrefsMatchValues(sourceKeyValuePairs);
 
         for (String[] pair : SOURCE_TARGET_VALUE_PAIRS) {
-            assertEquals(sharedPreferences.getString(pair[0], ""),
-                    sharedPreferences.getString(pair[1], ""));
+            assertEquals(sharedPreferences.get(pair[0]), sharedPreferences.get(pair[1]));
         }
     }
 
@@ -125,7 +117,7 @@ public class FormMetadataMigratorTest {
 
     private void assertPrefsMatchValues(String[][] valuePairs) {
         for (String[] pair : valuePairs) {
-            String prefValue = sharedPreferences.getString(pair[0], "");
+            String prefValue = (String) sharedPreferences.get(pair[0]);
             assertEquals(prefValue, pair[1]);
         }
     }

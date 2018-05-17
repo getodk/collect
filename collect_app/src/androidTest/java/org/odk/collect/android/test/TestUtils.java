@@ -28,16 +28,18 @@ public final class TestUtils {
     private TestUtils() {
     }
 
-    public static Map<String, ?> backupPreferences() {
-        return Collections.unmodifiableMap(GeneralSharedPreferences.getInstance().getAll());
+    static Map<String, ?> backupPreferences() {
+        GeneralSharedPreferences generalSharedPreferences = new GeneralSharedPreferences(Collect.getInstance());
+        return Collections.unmodifiableMap(generalSharedPreferences.getAll());
     }
 
-    public static void restorePreferences(Map<String, ?> backup) {
-        GeneralSharedPreferences.getInstance().clear();
+    static void restorePreferences(Map<String, ?> backup) {
+        GeneralSharedPreferences generalSharedPreferences = new GeneralSharedPreferences(Collect.getInstance());
+        generalSharedPreferences.clear();
 
         for (Map.Entry<String, ?> e : backup.entrySet()) {
             Object v = e.getValue();
-            GeneralSharedPreferences.getInstance().save(e.getKey(), v);
+            generalSharedPreferences.save(e.getKey(), v);
         }
     }
 
@@ -78,7 +80,7 @@ public final class TestUtils {
         return new File(Environment.getExternalStorageDirectory(), "test-tmp");
     }
 
-    public static void closeSafely(Closeable c) {
+    private static void closeSafely(Closeable c) {
         if (c != null) {
             try {
                 c.close();

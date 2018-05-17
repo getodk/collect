@@ -70,7 +70,7 @@ public class FormManagementPreferences extends BasePreferenceFragment {
                 CharSequence entry = ((ListPreference) preference).getEntries()[index];
                 preference.setSummary(entry);
                 if (key.equals(KEY_PERIODIC_FORM_UPDATES_CHECK)) {
-                    ServerPollingJob.schedulePeriodicJob((String) newValue);
+                    ServerPollingJob.schedulePeriodicJob((String) newValue, generalSharedPreferences);
                     if (newValue.equals(getString(R.string.never_value))) {
                         Preference automaticUpdatePreference = findPreference(KEY_AUTOMATIC_UPDATE);
                         if (automaticUpdatePreference != null) {
@@ -82,7 +82,7 @@ public class FormManagementPreferences extends BasePreferenceFragment {
                 return true;
             });
             if (key.equals(KEY_CONSTRAINT_BEHAVIOR)) {
-                pref.setEnabled((Boolean) AdminSharedPreferences.getInstance().get(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
+                pref.setEnabled((Boolean) adminSharedPreferences.get(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
             }
         }
     }
@@ -92,7 +92,7 @@ public class FormManagementPreferences extends BasePreferenceFragment {
 
         if (pref != null) {
             if (key.equals(KEY_AUTOMATIC_UPDATE)) {
-                pref.setEnabled(!GeneralSharedPreferences.getInstance().get(KEY_PERIODIC_FORM_UPDATES_CHECK).equals(getString(R.string.never_value)));
+                pref.setEnabled(!generalSharedPreferences.get(KEY_PERIODIC_FORM_UPDATES_CHECK).equals(getString(R.string.never_value)));
             }
         }
     }

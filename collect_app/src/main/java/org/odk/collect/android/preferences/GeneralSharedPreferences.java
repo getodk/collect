@@ -18,7 +18,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.injection.config.scopes.PerApplication;
 import org.odk.collect.android.tasks.ServerPollingJob;
 
@@ -32,22 +31,14 @@ import timber.log.Timber;
 import static org.odk.collect.android.preferences.PreferenceKeys.GENERAL_KEYS;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
 
+@PerApplication
 public class GeneralSharedPreferences {
 
-    private static GeneralSharedPreferences instance;
     private final SharedPreferences sharedPreferences;
 
     @Inject
-    @PerApplication
     public GeneralSharedPreferences(Context context) {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-    }
-
-    public static synchronized GeneralSharedPreferences getInstance() {
-        if (instance == null) {
-            instance = new GeneralSharedPreferences(Collect.getInstance());
-        }
-        return instance;
     }
 
     public Object get(String key) {
@@ -83,7 +74,7 @@ public class GeneralSharedPreferences {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         if (value == null || value instanceof String) {
             if (key.equals(KEY_PERIODIC_FORM_UPDATES_CHECK) && get(KEY_PERIODIC_FORM_UPDATES_CHECK) != value) {
-                ServerPollingJob.schedulePeriodicJob((String) value);
+                ServerPollingJob.schedulePeriodicJob((String) value, this);
             }
             editor.putString(key, (String) value);
         } else if (value instanceof Boolean) {

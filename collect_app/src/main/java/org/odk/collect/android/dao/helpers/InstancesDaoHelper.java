@@ -20,8 +20,6 @@ import android.net.Uri;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.logic.FormController;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 
 import timber.log.Timber;
@@ -39,15 +37,14 @@ public final class InstancesDaoHelper {
      *
      * @return true if form has been marked completed, false otherwise.
      */
-    public static boolean isInstanceComplete(boolean end) {
+    public static boolean isInstanceComplete(boolean end, boolean isDefaultPreferenceComplete) {
         // default to false if we're mid form
         boolean complete = false;
 
         FormController formController = Collect.getInstance().getFormController();
         if (formController != null && formController.getInstanceFile() != null) {
             // First check if we're at the end of the form, then check the preferences
-            complete = end && (boolean) GeneralSharedPreferences.getInstance()
-                    .get(PreferenceKeys.KEY_COMPLETED_DEFAULT);
+            complete = end && isDefaultPreferenceComplete;
 
             // Then see if we've already marked this form as complete before
             String path = formController.getInstanceFile().getAbsolutePath();

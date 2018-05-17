@@ -37,6 +37,7 @@ import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.drive.DriveScopes;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.ThemeUtils;
@@ -44,6 +45,8 @@ import org.odk.collect.android.utilities.ToastUtils;
 
 import java.util.Collections;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import pub.devrel.easypermissions.EasyPermissions;
 import timber.log.Timber;
@@ -71,8 +74,11 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
     private DriveHelper driveHelper;
     private SheetsHelper sheetsHelper;
     private GoogleAccountCredential credential;
-    private GeneralSharedPreferences preferences;
-    private ThemeUtils themeUtils;
+
+    @Inject
+    protected GeneralSharedPreferences preferences;
+
+    protected ThemeUtils themeUtils;
     private boolean autoChooseAccount = true;
 
     public GoogleAccountsManager(@NonNull Activity activity) {
@@ -86,6 +92,7 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
     }
 
     public GoogleAccountsManager(@NonNull Context context) {
+        ((Collect) context.getApplicationContext()).getAppComponent().inject(this);
         initCredential(context);
     }
 
@@ -107,7 +114,6 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
 
         transport = AndroidHttp.newCompatibleTransport();
         jsonFactory = JacksonFactory.getDefaultInstance();
-        preferences = GeneralSharedPreferences.getInstance();
 
         credential = GoogleAccountCredential
                 .usingOAuth2(context, Collections.singletonList(DriveScopes.DRIVE))

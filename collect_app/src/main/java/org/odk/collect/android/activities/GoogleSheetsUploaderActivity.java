@@ -123,7 +123,9 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
     private void runTask() {
         instanceGoogleSheetsUploader = (InstanceGoogleSheetsUploader) getLastCustomNonConfigurationInstance();
         if (instanceGoogleSheetsUploader == null) {
-            instanceGoogleSheetsUploader = new InstanceGoogleSheetsUploader(accountsManager);
+            String googleSheetsUrl = (String) generalSharedPreferences.get(PreferenceKeys.KEY_GOOGLE_SHEETS_URL);
+
+            instanceGoogleSheetsUploader = new InstanceGoogleSheetsUploader(accountsManager, googleSheetsUrl);
 
             // ensure we have a google account selected
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);

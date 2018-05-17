@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -42,17 +41,23 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import javax.inject.Inject;
+
+import dagger.android.DaggerActivity;
 import timber.log.Timber;
 
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SPLASH_PATH;
 import static org.odk.collect.android.utilities.PermissionUtils.requestStoragePermissions;
 
-public class SplashScreenActivity extends Activity {
+public class SplashScreenActivity extends DaggerActivity {
 
     private static final int SPLASH_TIMEOUT = 2000; // milliseconds
     private static final boolean EXIT = true;
 
     private int imageMaxWidth;
+
+    @Inject
+    protected GeneralSharedPreferences generalSharedPreferences;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -106,7 +111,7 @@ public class SplashScreenActivity extends Activity {
         boolean firstRun = sharedPreferences.getBoolean(PreferenceKeys.KEY_FIRST_RUN, true);
         boolean showSplash =
                 sharedPreferences.getBoolean(PreferenceKeys.KEY_SHOW_SPLASH, false);
-        String splashPath = (String) GeneralSharedPreferences.getInstance().get(KEY_SPLASH_PATH);
+        String splashPath = (String) generalSharedPreferences.get(KEY_SPLASH_PATH);
 
         // if you've increased version code, then update the version number and set firstRun to true
         if (sharedPreferences.getLong(PreferenceKeys.KEY_LAST_VERSION, 0)

@@ -26,12 +26,14 @@ import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY
 
 class DisabledPreferencesRemover {
 
+    private AdminSharedPreferences adminSharedPreferences;
     private final PreferencesActivity pa;
     private final PreferenceFragment pf;
 
-    DisabledPreferencesRemover(PreferencesActivity pa, PreferenceFragment pf) {
+    DisabledPreferencesRemover(PreferencesActivity pa, PreferenceFragment pf, AdminSharedPreferences adminSharedPreferences) {
         this.pa = pa;
         this.pf = pf;
+        this.adminSharedPreferences = adminSharedPreferences;
     }
 
     /**
@@ -41,7 +43,7 @@ class DisabledPreferencesRemover {
      */
     void remove(AdminAndGeneralKeys... keyPairs) {
         for (AdminAndGeneralKeys agKeys : keyPairs) {
-            boolean prefAllowed = (boolean) AdminSharedPreferences.getInstance().get(agKeys.adminKey);
+            boolean prefAllowed = (boolean) adminSharedPreferences.get(agKeys.adminKey);
 
             if (!prefAllowed) {
                 Preference preference = pf.findPreference(agKeys.generalKey);

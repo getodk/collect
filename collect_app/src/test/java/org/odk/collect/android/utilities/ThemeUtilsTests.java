@@ -12,6 +12,7 @@ import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
 import static junit.framework.Assert.assertEquals;
@@ -29,6 +30,7 @@ public class ThemeUtilsTests {
     private final int[] attrs;
     private ThemeUtils themeUtils;
     private MainMenuActivity mainMenuActivity;
+    private GeneralSharedPreferences generalSharedPreferences;
 
     public ThemeUtilsTests() {
         attrs = new int[]{
@@ -43,6 +45,7 @@ public class ThemeUtilsTests {
     @Before
     public void setup() {
         mainMenuActivity = Robolectric.setupActivity(MainMenuActivity.class);
+        generalSharedPreferences = new GeneralSharedPreferences(RuntimeEnvironment.application);
         themeUtils = new ThemeUtils(mainMenuActivity);
     }
 
@@ -114,10 +117,10 @@ public class ThemeUtilsTests {
     }
 
     private void applyDarkTheme() {
-        GeneralSharedPreferences.getInstance().save(KEY_APP_THEME, mainMenuActivity.getString(R.string.app_theme_dark));
+        generalSharedPreferences.save(KEY_APP_THEME, mainMenuActivity.getString(R.string.app_theme_dark));
     }
 
     private void applyLightTheme() {
-        GeneralSharedPreferences.getInstance().save(KEY_APP_THEME, mainMenuActivity.getString(R.string.app_theme_light));
+        generalSharedPreferences.save(KEY_APP_THEME, mainMenuActivity.getString(R.string.app_theme_light));
     }
 }

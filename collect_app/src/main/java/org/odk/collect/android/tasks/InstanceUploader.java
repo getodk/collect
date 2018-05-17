@@ -42,7 +42,33 @@ import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUT
 
 public abstract class InstanceUploader extends AsyncTask<Long, Integer, InstanceUploader.Outcome> {
 
+    private final boolean isFormAutoDeleteOptionEnabled;
+
     private InstanceUploaderListener stateListener;
+
+    InstanceUploader() {
+        GeneralSharedPreferences generalSharedPreferences = new GeneralSharedPreferences(Collect.getInstance());
+        isFormAutoDeleteOptionEnabled = (boolean) generalSharedPreferences.get(PreferenceKeys.KEY_DELETE_AFTER_SEND);
+    }
+
+    /**
+     * @param isFormAutoDeleteOptionEnabled represents whether the auto-delete option is enabled at the app level
+     *                                      <p>
+     *                                      If the form explicitly sets the auto-delete property, then it overrides the preferences.
+     */
+    public static boolean isFormAutoDeleteEnabled(String jrFormId) {
+        Cursor cursor = new FormsDao().getFormsCursorForFormId(jrFormId);
+        String autoDelete = null;
+        if (cursor != null && cursor.moveToFirst()) {
+            try {
+                int autoDeleteColumnIndex = cursor.getColumnIndex(AUTO_DELETE);
+                autoDelete = cursor.getString(autoDeleteColumnIndex);
+            } finally {
+                cursor.close();
+            }
+        }
+        return autoDelete == null ? isFormAutoDeleteOptionEnabled : Boolean.valueOf(autoDelete);
+    }
 
     @Override
     protected void onPostExecute(Outcome outcome) {
@@ -93,11 +119,9 @@ public abstract class InstanceUploader extends AsyncTask<Long, Integer, Instance
                                 List<Long> toDelete = new ArrayList<>();
                                 results.moveToPosition(-1);
 
-                                boolean isFormAutoDeleteOptionEnabled = (boolean) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_DELETE_AFTER_SEND);
-                                String formId;
                                 while (results.moveToNext()) {
-                                    formId = results.getString(results.getColumnIndex(InstanceProviderAPI.InstanceColumns.JR_FORM_ID));
-                                    if (isFormAutoDeleteEnabled(formId, isFormAutoDeleteOptionEnabled)) {
+                                    String formId = results.getString(results.getColumnIndex(InstanceProviderAPI.InstanceColumns.JR_FORM_ID));
+                                    if (isFormAutoDeleteEnabled(formId)) {
                                         toDelete.add(results.getLong(results.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID)));
                                     }
                                 }
@@ -117,25 +141,6 @@ public abstract class InstanceUploader extends AsyncTask<Long, Integer, Instance
                 }
             }
         }
-    }
-
-    /**
-     * @param isFormAutoDeleteOptionEnabled represents whether the auto-delete option is enabled at the app level
-     *                                      <p>
-     *                                      If the form explicitly sets the auto-delete property, then it overrides the preferences.
-     */
-    public static boolean isFormAutoDeleteEnabled(String jrFormId, boolean isFormAutoDeleteOptionEnabled) {
-        Cursor cursor = new FormsDao().getFormsCursorForFormId(jrFormId);
-        String autoDelete = null;
-        if (cursor != null && cursor.moveToFirst()) {
-            try {
-                int autoDeleteColumnIndex = cursor.getColumnIndex(AUTO_DELETE);
-                autoDelete = cursor.getString(autoDeleteColumnIndex);
-            } finally {
-                cursor.close();
-            }
-        }
-        return autoDelete == null ? isFormAutoDeleteOptionEnabled : Boolean.valueOf(autoDelete);
     }
 
     @Override

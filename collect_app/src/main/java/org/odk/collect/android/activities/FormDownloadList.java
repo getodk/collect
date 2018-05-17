@@ -51,6 +51,8 @@ import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Set;
 
+import javax.inject.Inject;
+
 import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.DownloadFormListUtils.DL_AUTH_REQUIRED;
@@ -119,6 +121,8 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     private static final String SHOULD_EXIT = "shouldexit";
 
     private boolean displayOnlyUpdatedForms;
+    @Inject
+    protected AuthDialogUtility authDialogUtility;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -390,7 +394,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
                 alertShowing = false;
 
-                return new AuthDialogUtility().createDialog(this, this, null);
+                return authDialogUtility.createDialog(this, this, null);
             case CANCELLATION_DIALOG:
                 cancelDialog = new ProgressDialog(this);
                 cancelDialog.setTitle(getString(R.string.canceling));
