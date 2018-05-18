@@ -176,6 +176,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     public static final String KEY_SURVEY_NOTES = "surveyNotes";        // smap
     public static final String KEY_CAN_UPDATE = "canUpdate";            // smap
     private long mTaskId;                                               // smap
+    private String mFormId;                                               // smap
     private FormDetail mFormDetail;                                     // smap
     private String mSurveyNotes = null;                                 // smap
     private boolean mCanUpdate = true;                                  // smap
@@ -267,6 +268,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        FormInfo formInfo = null;        // smap
 
         // must be at the beginning of any activity that can be called from an
         // external intent
@@ -396,7 +399,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
                 } else if (uriMimeType != null && uriMimeType.equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
                     // get the formId and version for this instance...
-                    FormInfo formInfo = ContentResolverHelper.getFormDetails(uri);
+                    formInfo = ContentResolverHelper.getFormDetails(uri);   // Smap increase scope of FormInfo
 
                     if (formInfo == null) {
                         createErrorDialog(getString(R.string.bad_uri, uri), EXIT);
@@ -555,11 +558,15 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 mTaskId = intent.getLongExtra(KEY_TASK, -1);                   // smap
                 mSurveyNotes = intent.getStringExtra(KEY_SURVEY_NOTES);        // smap
                 mCanUpdate = intent.getBooleanExtra(KEY_CAN_UPDATE, true);     // smap
+                mFormId = mFormDetail.formId;                                               // smap
+                if(mFormId == null) {
+                    mFormId = formInfo.getFormID();
+                }
                 Collect.getInstance().getActivityLogger()
                         .logAction(this, "formLoaded", formPath);
                 showDialog(PROGRESS_DIALOG);
                 // show dialog before we execute...
-                formLoaderTask.execute(formPath);
+                formLoaderTask.execute(formPath, mFormId);      // smap add formId
             }
         }
     }

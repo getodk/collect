@@ -18,6 +18,8 @@
 
 package org.odk.collect.android.external.handler;
 
+import android.app.Activity;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
@@ -25,10 +27,13 @@ import android.database.sqlite.SQLiteException;
 import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.core.model.condition.IFunctionHandler;
 import org.javarosa.xpath.expr.XPathFuncExpr;
+import org.odk.collect.android.R;
+import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.external.ExternalSQLiteOpenHelper;
+import org.odk.collect.android.tasks.DownloadTasksTask;
 import org.odk.collect.android.utilities.WebUtils;
 import org.opendatakit.httpclientandroidlib.client.HttpClient;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
@@ -44,8 +49,10 @@ import timber.log.Timber;
 public class SmapRemoteDataHandlerLookup implements IFunctionHandler {
 
     public static final String HANDLER_NAME = "lookup";
+    public String mIdent = null;
 
-    public SmapRemoteDataHandlerLookup() {
+    public SmapRemoteDataHandlerLookup(String ident) {
+        this.mIdent = ident;
     }
 
     @Override
@@ -83,8 +90,18 @@ public class SmapRemoteDataHandlerLookup implements IFunctionHandler {
         try {
             HttpContext localContext = Collect.getInstance().getHttpContext();
             HttpClient httpclient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
-            //WebUtils.getXmlDocument(fd.getManifestUrl(), localContext, httpclient); TODO
-            return ExternalDataUtil.nullSafe("lookup value" + " : " + dataSetName + " : "
+
+
+            String mProgressMsg = Collect.getInstance().getString(R.string.smap_lookup);
+
+            /*
+                Context currentActivity = (Collect.getInstance().getApplicationContext());
+                currentActivity.showDialog(PROGRESS_DIALOG);
+                mDownloadTasks = new DownloadTasksTask();
+                mDownloadTasks.setDownloaderListener(this, this);
+                mDownloadTasks.execute();
+            */
+            return ExternalDataUtil.nullSafe("lookup value" + " : " + mIdent + " : " + dataSetName + " : "
                     + queriedColumn + " : " + referenceColumn + " : " + referenceValue);
 
         } catch (Exception e) {

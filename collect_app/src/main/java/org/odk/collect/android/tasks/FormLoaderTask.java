@@ -122,6 +122,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         errorMsg = null;
 
         final String formPath = path[0];
+        final String formId = path[1];          // smap
         final File formXml = new File(formPath);
 
         final FormDef formDef = createFormDefFromCacheOrXml(formPath, formXml);
@@ -144,7 +145,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         /*
          * smap start add lookup data function handler
          */
-        SmapRemoteDataHandlerLookup remoteDataHandlerLookup = new SmapRemoteDataHandlerLookup();
+        SmapRemoteDataHandlerLookup remoteDataHandlerLookup = new SmapRemoteDataHandlerLookup(formId);
         formDef.getEvaluationContext().addFunctionHandler(remoteDataHandlerLookup);
         // smap end
 
