@@ -14,11 +14,10 @@
 
 package org.odk.collect.android.activities;
 
-
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 
 import org.javarosa.core.model.FormIndex;
@@ -32,9 +31,7 @@ import java.util.ArrayList;
 
 import timber.log.Timber;
 
-
 public class ViewFormHierarchyActivity extends FormHierarchyActivity {
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,7 +39,7 @@ public class ViewFormHierarchyActivity extends FormHierarchyActivity {
 
         Collect.getInstance().getFormController().stepToOuterScreenEvent();
 
-        Button exitButton = (Button) findViewById(R.id.exitButton);
+        Button exitButton = findViewById(R.id.exitButton);
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,36 +58,36 @@ public class ViewFormHierarchyActivity extends FormHierarchyActivity {
 
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-        HierarchyElement h = (HierarchyElement) listView.getItemAtPosition(position);
-        FormIndex index = h.getFormIndex();
+    public void onElementClick(HierarchyElement element) {
+        int position = formList.indexOf(element);
+        FormIndex index = element.getFormIndex();
         if (index == null) {
             goUpLevel();
             return;
         }
 
-        switch (h.getType()) {
+        switch (element.getType()) {
             case EXPANDED:
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "onListItemClick",
-                        "COLLAPSED", h.getFormIndex());
-                h.setType(COLLAPSED);
-                ArrayList<HierarchyElement> children = h.getChildren();
+                        "COLLAPSED", element.getFormIndex());
+                element.setType(COLLAPSED);
+                ArrayList<HierarchyElement> children = element.getChildren();
                 for (int i = 0; i < children.size(); i++) {
                     formList.remove(position + 1);
                 }
-                h.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.expander_ic_minimized));
+                element.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.expander_ic_minimized));
                 break;
             case COLLAPSED:
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "onListItemClick",
-                        "EXPANDED", h.getFormIndex());
-                h.setType(EXPANDED);
-                ArrayList<HierarchyElement> children1 = h.getChildren();
+                        "EXPANDED", element.getFormIndex());
+                element.setType(EXPANDED);
+                ArrayList<HierarchyElement> children1 = element.getChildren();
                 for (int i = 0; i < children1.size(); i++) {
                     Timber.i("adding child: %s", children1.get(i).getFormIndex());
                     formList.add(position + 1 + i, children1.get(i));
 
                 }
-                h.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.expander_ic_maximized));
+                element.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.expander_ic_maximized));
                 break;
             case QUESTION:
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "onListItemClick",
@@ -109,17 +106,14 @@ public class ViewFormHierarchyActivity extends FormHierarchyActivity {
                 return;
             case CHILD:
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "onListItemClick",
-                        "REPEAT-JUMP", h.getFormIndex());
-                Collect.getInstance().getFormController().jumpToIndex(h.getFormIndex());
+                        "REPEAT-JUMP", element.getFormIndex());
+                Collect.getInstance().getFormController().jumpToIndex(element.getFormIndex());
                 setResult(RESULT_OK);
                 refreshView();
                 return;
         }
 
-        // Should only get here if we've expanded or collapsed a group
-        HierarchyListAdapter itla = new HierarchyListAdapter(this);
-        itla.setListItems(formList);
-        listView.setAdapter(itla);
-        listView.setSelection(position);
+        recyclerView.setAdapter(new HierarchyListAdapter(formList, this::onElementClick));
+        ((LinearLayoutManager) recyclerView.getLayoutManager()).scrollToPositionWithOffset(position, 0);
     }
 }
