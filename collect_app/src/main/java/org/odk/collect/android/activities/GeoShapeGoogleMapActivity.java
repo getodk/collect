@@ -262,8 +262,9 @@ public class GeoShapeGoogleMapActivity extends CollectAbstractActivity implement
         String tempString = "";
         //Add the first marker to the end of the array, so the first and the last are the same
         if (markerArray.size() > 1) {
-            if (Collections.frequency(markerArray, markerArray.get(0)) < 2)
+            if (Collections.frequency(markerArray, markerArray.get(0)) < 2) {
                 markerArray.add(markerArray.get(0));
+            }
             for (int i = 0; i < markerArray.size(); i++) {
                 String lat = Double.toString(markerArray.get(i).getPosition().latitude);
                 String lng = Double.toString(markerArray.get(i).getPosition().longitude);

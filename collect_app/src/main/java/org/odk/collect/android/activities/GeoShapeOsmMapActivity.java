@@ -383,8 +383,9 @@ public class GeoShapeOsmMapActivity extends CollectAbstractActivity implements I
     private String generateReturnString() {
         String tempString = "";
         if (mapMarkers.size() > 1) {
-            if (Collections.frequency(mapMarkers, mapMarkers.get(0)) < 2)
+            if (Collections.frequency(mapMarkers, mapMarkers.get(0)) < 2) {
                 mapMarkers.add(mapMarkers.get(0));
+            }
             for (int i = 0; i < mapMarkers.size(); i++) {
                 String lat = Double.toString(mapMarkers.get(i).getPosition().getLatitude());
                 String lng = Double.toString(mapMarkers.get(i).getPosition().getLongitude());
