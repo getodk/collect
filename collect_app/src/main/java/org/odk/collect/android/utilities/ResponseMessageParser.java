@@ -24,9 +24,13 @@ public class ResponseMessageParser {
     private String httpResponse;
     public boolean isValid;
     public String messageResponse;
+    private int responseCode;
+    private String reasonPhrase;
 
-    public ResponseMessageParser(String httpResponse) {
+    public ResponseMessageParser(String httpResponse, int responseCode, String reasonPhrase) {
         this.httpResponse = httpResponse;
+        this.responseCode = responseCode;
+        this.reasonPhrase = reasonPhrase;
         this.messageResponse = parseXMLMessage();
         if (messageResponse != null) {
             this.isValid = true;
@@ -74,4 +78,11 @@ public class ResponseMessageParser {
     }
 
 
+    public int getResponseCode() {
+        return responseCode;
+    }
+
+    public String getReasonPhrase() {
+        return reasonPhrase;
+    }
 }

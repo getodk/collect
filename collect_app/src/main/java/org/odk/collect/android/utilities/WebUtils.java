@@ -26,66 +26,44 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.provider.InstanceProviderAPI;
-import org.opendatakit.httpclientandroidlib.HttpEntity;
-import org.opendatakit.httpclientandroidlib.HttpHost;
 import org.opendatakit.httpclientandroidlib.HttpRequest;
-import org.opendatakit.httpclientandroidlib.HttpResponse;
 import org.opendatakit.httpclientandroidlib.HttpStatus;
-import org.opendatakit.httpclientandroidlib.NoHttpResponseException;
 import org.opendatakit.httpclientandroidlib.auth.AuthScope;
 import org.opendatakit.httpclientandroidlib.auth.Credentials;
 import org.opendatakit.httpclientandroidlib.auth.UsernamePasswordCredentials;
-import org.opendatakit.httpclientandroidlib.client.AuthCache;
 import org.opendatakit.httpclientandroidlib.client.CredentialsProvider;
 import org.opendatakit.httpclientandroidlib.client.HttpClient;
 import org.opendatakit.httpclientandroidlib.client.config.AuthSchemes;
 import org.opendatakit.httpclientandroidlib.client.config.CookieSpecs;
 import org.opendatakit.httpclientandroidlib.client.config.RequestConfig;
 import org.opendatakit.httpclientandroidlib.client.methods.HttpGet;
-import org.opendatakit.httpclientandroidlib.client.methods.HttpHead;
-import org.opendatakit.httpclientandroidlib.client.methods.HttpPost;
 import org.opendatakit.httpclientandroidlib.client.protocol.HttpClientContext;
 import org.opendatakit.httpclientandroidlib.config.SocketConfig;
-import org.opendatakit.httpclientandroidlib.conn.ConnectTimeoutException;
-import org.opendatakit.httpclientandroidlib.conn.HttpHostConnectException;
 import org.opendatakit.httpclientandroidlib.entity.ContentType;
-import org.opendatakit.httpclientandroidlib.entity.mime.MultipartEntityBuilder;
-import org.opendatakit.httpclientandroidlib.entity.mime.content.FileBody;
-import org.opendatakit.httpclientandroidlib.entity.mime.content.StringBody;
-import org.opendatakit.httpclientandroidlib.impl.auth.BasicScheme;
-import org.opendatakit.httpclientandroidlib.impl.client.BasicAuthCache;
 import org.opendatakit.httpclientandroidlib.impl.client.BasicCookieStore;
 import org.opendatakit.httpclientandroidlib.impl.client.HttpClientBuilder;
 import org.opendatakit.httpclientandroidlib.client.CookieStore;
 import org.opendatakit.httpclientandroidlib.protocol.BasicHttpContext;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
-import org.opendatakit.httpclientandroidlib.util.EntityUtils;
 import org.xmlpull.v1.XmlPullParser;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.SocketException;
-import java.net.SocketTimeoutException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.net.UnknownHostException;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.zip.GZIPInputStream;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -108,9 +86,6 @@ public final class WebUtils {
 
     private static final String HTTP_CONTENT_TYPE_TEXT_XML = "text/xml";
     public static final int CONNECTION_TIMEOUT = 30000;
-
-    private static final String ACCEPT_ENCODING_HEADER = "Accept-Encoding";
-    private static final String GZIP_CONTENT_ENCODING = "gzip";
 
     private static final String fail = "Error: ";
 
@@ -210,23 +185,6 @@ public final class WebUtils {
         }
     }
 
-    private static void enablePreemptiveBasicAuth(
-            HttpContext localContext, String host) {
-        AuthCache ac = (AuthCache) localContext
-                .getAttribute(HttpClientContext.AUTH_CACHE);
-        HttpHost h = new HttpHost(host);
-        if (ac == null) {
-            ac = new BasicAuthCache();
-            localContext.setAttribute(HttpClientContext.AUTH_CACHE, ac);
-        }
-        List<AuthScope> asList = buildAuthScopes(host);
-        for (AuthScope a : asList) {
-            if (a.getScheme().equalsIgnoreCase(AuthSchemes.BASIC)) {
-                ac.put(h, new BasicScheme());
-            }
-        }
-    }
-
     private static void setCollectHeaders(HttpRequest req) {
         String userAgent = String.format("%s %s/%s",
                 System.getProperty("http.agent"),
@@ -243,25 +201,12 @@ public final class WebUtils {
                 DateFormat.format("E, dd MMM yyyy hh:mm:ss zz", g).toString());
     }
 
-    private static HttpHead createOpenRosaHttpHead(URI uri) {
-        HttpHead req = new HttpHead(uri);
-        setCollectHeaders(req);
-        setOpenRosaHeaders(req);
-        return req;
-    }
 
     public static HttpGet createOpenRosaHttpGet(URI uri) {
         HttpGet req = new HttpGet();
         setCollectHeaders(req);
         setOpenRosaHeaders(req);
         req.setURI(uri);
-        return req;
-    }
-
-    private static HttpPost createOpenRosaHttpPost(Uri u) {
-        HttpPost req = new HttpPost(URI.create(u.toString()));
-        setCollectHeaders(req);
-        setOpenRosaHeaders(req);
         return req;
     }
 
@@ -302,35 +247,6 @@ public final class WebUtils {
 
     }
 
-    /**
-     * Utility to ensure that the entity stream of a response is drained of
-     * bytes.
-     * Apparently some servers require that we manually read all data from the
-     * stream to allow its re-use.  Please add more details or bug ID here if
-     * you know them.
-     */
-    private static void discardEntityBytes(HttpResponse response) {
-        HttpEntity entity = response.getEntity();
-        if (entity != null) {
-            InputStream is = null;
-            try {
-                is = response.getEntity().getContent();
-                while (is.read() != -1) {
-                    // loop until all bytes read
-                }
-            } catch (Exception e) {
-                Timber.i(e);
-            } finally {
-                if (is != null) {
-                    try {
-                        is.close();
-                    } catch (IOException e) {
-                        Timber.d(e);
-                    }
-                }
-            }
-        }
-    }
 
     /**
      * Common method for returning a parsed xml document given a url and the
@@ -460,47 +376,6 @@ public final class WebUtils {
 
     public CollectHttpConnection getHttpConnection() {
         return httpConnection;
-    }
-
-    /**
-     *
-     */
-    private enum ContentTypeMapping {
-        XML("xml",  ContentType.TEXT_XML),
-        _3GPP("3gpp", ContentType.create("audio/3gpp")),
-        _3GP("3gp",  ContentType.create("video/3gpp")),
-        AVI("avi",  ContentType.create("video/avi")),
-        AMR("amr",  ContentType.create("audio/amr")),
-        CSV("csv",  ContentType.create("text/csv")),
-        JPG("jpg",  ContentType.create("image/jpeg")),
-        MP3("mp3",  ContentType.create("audio/mp3")),
-        MP4("mp4",  ContentType.create("video/mp4")),
-        OGA("oga",  ContentType.create("audio/ogg")),
-        OGG("ogg",  ContentType.create("audio/ogg")),
-        OGV("ogv",  ContentType.create("video/ogg")),
-        WAV("wav",  ContentType.create("audio/wav")),
-        WEBM("webm", ContentType.create("video/webm")),
-        XLS("xls",  ContentType.create("application/vnd.ms-excel"));
-
-        private String extension;
-        private ContentType contentType;
-
-        ContentTypeMapping(String extension, ContentType contentType) {
-            this.extension = extension;
-            this.contentType = contentType;
-        }
-
-        public static ContentType of(String fileName) {
-            String extension = FileUtils.getFileExtension(fileName);
-
-            for (ContentTypeMapping m : values()) {
-                if (m.extension.equals(extension)) {
-                    return m.contentType;
-                }
-            }
-
-            return null;
-        }
     }
 
 
@@ -694,7 +569,6 @@ public final class WebUtils {
         // figure out what to do with them.
 
         File instanceFile = new File(instanceFilePath);
-
         File submissionFile = new File(instanceFile.getParentFile(), "submission.xml");
         if (submissionFile.exists()) {
             Timber.w("submission.xml will be uploaded instead of %s", instanceFile.getAbsolutePath());
@@ -715,135 +589,42 @@ public final class WebUtils {
             return false;
         }
 
-        // get shared HttpContext so that authentication and cookies are retained.
-        HttpContext localContext = getHttpContext();
-        HttpClient httpclient = WebUtils.createHttpClient(CONNECTION_TIMEOUT);
-
-        // if https then enable preemptive basic auth...
-        if (submissionUri.getScheme().equals("https")) {
-            WebUtils.enablePreemptiveBasicAuth(localContext, submissionUri.getHost());
-        }
-
-        // prepare response and return uploaded
-        HttpResponse response;
         ResponseMessageParser messageParser = null;
 
-        boolean first = true;
-        int fileIndex = 0;
-        int lastFileIndex;
-        while (fileIndex < files.size() || first) {
-            lastFileIndex = fileIndex;
-            first = false;
+        try {
+            messageParser = getInstance().getHttpConnection().uploadFiles(files, submissionFile, URI.create(submissionUri.toString()));
+            int responseCode = messageParser.getResponseCode();
 
-            MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
-
-            long byteCount = 0L;
-
-            // mime post
-            MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-
-            // add the submission file first...
-            FileBody fb = new FileBody(submissionFile, ContentType.TEXT_XML);
-            builder.addPart("xml_submission_file", fb);
-            Timber.i("added xml_submission_file: %s", submissionFile.getName());
-            byteCount += submissionFile.length();
-
-            for (; fileIndex < files.size(); fileIndex++) {
-                File file = files.get(fileIndex);
-
-                // we will be processing every one of these, so
-                // we only need to deal with the content type determination...
-                ContentType contentType = ContentTypeMapping.of(file.getName());
-                if (contentType == null) {
-                    String mime = mimeTypeMap.getMimeTypeFromExtension(FileUtils.getFileExtension(file.getName()));
-                    if (mime != null) {
-                        contentType = ContentType.create(mime);
-                    } else {
-                        Timber.w("No specific MIME type found for file: %s", file.getName());
-                        contentType = ContentType.APPLICATION_OCTET_STREAM;
-                    }
-                }
-                fb = new FileBody(file, contentType);
-                builder.addPart(file.getName(), fb);
-                byteCount += file.length();
-                Timber.i("added file of type '%s' %s", contentType, file.getName());
-
-                // we've added at least one attachment to the request...
-                if (fileIndex + 1 < files.size()) {
-                    if ((fileIndex - lastFileIndex + 1 > 100) || (byteCount + files.get(fileIndex + 1).length()
-                            > 10000000L)) {
-                        // the next file would exceed the 10MB threshold...
-                        Timber.i("Extremely long post is being split into multiple posts");
-                        try {
-                            StringBody sb = new StringBody("yes",
-                                    ContentType.TEXT_PLAIN.withCharset(Charset.forName("UTF-8")));
-                            builder.addPart("*isIncomplete*", sb);
-                        } catch (Exception e) {
-                            Timber.e(e);
-                        }
-                        ++fileIndex; // advance over the last attachment added...
-                        break;
-                    }
-                }
-            }
-
-            HttpPost httppost = WebUtils.createOpenRosaHttpPost(submissionUri);
-            httppost.setEntity(builder.build());
-
-            try {
-                Timber.i("Issuing POST request for %s to: %s", id, submissionUri.toString());
-                response = httpclient.execute(httppost, localContext);
-                int responseCode = response.getStatusLine().getStatusCode();
-                HttpEntity httpEntity = response.getEntity();
-
-                messageParser = new ResponseMessageParser(EntityUtils.toString(httpEntity));
-                WebUtils.discardEntityBytes(response);
-                Timber.i("Response code:%d", responseCode);
-                // verify that the response was a 201 or 202.
-                // If it wasn't, the submission has failed.
-                if (responseCode != HttpStatus.SC_CREATED
-                        && responseCode != HttpStatus.SC_ACCEPTED) {
-                    if (responseCode == HttpStatus.SC_OK) {
-                        outcome.messagesByInstanceId.put(id, fail + "Network login failure? Again?");
-                    } else if (responseCode == HttpStatus.SC_UNAUTHORIZED) {
-                        // clear the cookies -- should not be necessary?
-                        WebUtils.getInstance().getCookieStore().clear();
-                        outcome.messagesByInstanceId.put(id, fail + response.getStatusLine().getReasonPhrase()
-                                + " (" + responseCode + ") at " + urlString);
-                    } else {
-                        // If response from server is valid use that else use default messaging
-                        if (messageParser.isValid()) {
-                            outcome.messagesByInstanceId.put(id, fail + messageParser.getMessageResponse());
-                        } else {
-                            outcome.messagesByInstanceId.put(id, fail + response.getStatusLine().getReasonPhrase()
-                                    + " (" + responseCode + ") at " + urlString);
-                        }
-
-                    }
-                    contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS,
-                            InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
-                    Collect.getInstance().getContentResolver()
-                            .update(toUpdate, contentValues, null, null);
-                    return true;
-                }
-            } catch (IOException e) {
-                if (e instanceof UnknownHostException || e instanceof HttpHostConnectException
-                        || e instanceof SocketException || e instanceof NoHttpResponseException
-                        || e instanceof SocketTimeoutException || e instanceof ConnectTimeoutException) {
-                    Timber.i(e);
+            if (responseCode != HttpStatus.SC_CREATED && responseCode != HttpStatus.SC_ACCEPTED) {
+                if (responseCode == HttpStatus.SC_OK) {
+                    outcome.messagesByInstanceId.put(id, fail + "Network login failure? Again?");
+                } else if (responseCode == HttpStatus.SC_UNAUTHORIZED) {
+                    outcome.messagesByInstanceId.put(id, fail + messageParser.getReasonPhrase() + " (" + responseCode + ") at " + urlString);
                 } else {
-                    Timber.e(e);
+                    // If response from server is valid use that else use default messaging
+                    if (messageParser.isValid()) {
+                        outcome.messagesByInstanceId.put(id, fail + messageParser.getMessageResponse());
+                    } else {
+                        outcome.messagesByInstanceId.put(id, fail + messageParser.getReasonPhrase() + " (" + responseCode + ") at " + urlString);
+                    }
+
                 }
-                String msg = e.getMessage();
-                if (msg == null) {
-                    msg = e.toString();
-                }
-                outcome.messagesByInstanceId.put(id, fail + "Generic Exception: " + msg);
                 contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                 Collect.getInstance().getContentResolver().update(toUpdate, contentValues, null, null);
                 return true;
             }
+
+        } catch (IOException e) {
+            String msg = e.getMessage();
+            if (msg == null) {
+                msg = e.toString();
+            }
+            outcome.messagesByInstanceId.put(id, fail + "Generic Exception: " + msg);
+            contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
+            Collect.getInstance().getContentResolver().update(toUpdate, contentValues, null, null);
+            return true;
         }
+
 
         // If response from server is valid use that else use default messaging
         if (messageParser.isValid()) {

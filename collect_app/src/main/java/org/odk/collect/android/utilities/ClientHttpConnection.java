@@ -1,13 +1,12 @@
 package org.odk.collect.android.utilities;
 
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.text.format.DateFormat;
+import android.webkit.MimeTypeMap;
 
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.opendatakit.httpclientandroidlib.Header;
 import org.opendatakit.httpclientandroidlib.HttpEntity;
 import org.opendatakit.httpclientandroidlib.HttpHost;
@@ -28,23 +27,31 @@ import org.opendatakit.httpclientandroidlib.client.config.CookieSpecs;
 import org.opendatakit.httpclientandroidlib.client.config.RequestConfig;
 import org.opendatakit.httpclientandroidlib.client.methods.HttpGet;
 import org.opendatakit.httpclientandroidlib.client.methods.HttpHead;
+import org.opendatakit.httpclientandroidlib.client.methods.HttpPost;
 import org.opendatakit.httpclientandroidlib.client.protocol.HttpClientContext;
 import org.opendatakit.httpclientandroidlib.config.SocketConfig;
 import org.opendatakit.httpclientandroidlib.conn.ConnectTimeoutException;
+import org.opendatakit.httpclientandroidlib.conn.HttpHostConnectException;
+import org.opendatakit.httpclientandroidlib.entity.ContentType;
+import org.opendatakit.httpclientandroidlib.entity.mime.MultipartEntityBuilder;
+import org.opendatakit.httpclientandroidlib.entity.mime.content.FileBody;
+import org.opendatakit.httpclientandroidlib.entity.mime.content.StringBody;
 import org.opendatakit.httpclientandroidlib.impl.auth.BasicScheme;
 import org.opendatakit.httpclientandroidlib.impl.client.BasicAuthCache;
 import org.opendatakit.httpclientandroidlib.impl.client.BasicCookieStore;
 import org.opendatakit.httpclientandroidlib.impl.client.HttpClientBuilder;
 import org.opendatakit.httpclientandroidlib.protocol.BasicHttpContext;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
+import org.opendatakit.httpclientandroidlib.util.EntityUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.URI;
-import java.net.URLDecoder;
 import java.net.UnknownHostException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -74,6 +81,45 @@ public class ClientHttpConnection implements CollectHttpConnection {
         credentialsProvider = new WebUtils.AgingCredentialsProvider(7 * 60 * 1000);
         cookieStore = new BasicCookieStore();
     }
+
+    private enum ContentTypeMapping {
+        XML("xml",  ContentType.TEXT_XML),
+        _3GPP("3gpp", ContentType.create("audio/3gpp")),
+        _3GP("3gp",  ContentType.create("video/3gpp")),
+        AVI("avi",  ContentType.create("video/avi")),
+        AMR("amr",  ContentType.create("audio/amr")),
+        CSV("csv",  ContentType.create("text/csv")),
+        JPG("jpg",  ContentType.create("image/jpeg")),
+        MP3("mp3",  ContentType.create("audio/mp3")),
+        MP4("mp4",  ContentType.create("video/mp4")),
+        OGA("oga",  ContentType.create("audio/ogg")),
+        OGG("ogg",  ContentType.create("audio/ogg")),
+        OGV("ogv",  ContentType.create("video/ogg")),
+        WAV("wav",  ContentType.create("audio/wav")),
+        WEBM("webm", ContentType.create("video/webm")),
+        XLS("xls",  ContentType.create("application/vnd.ms-excel"));
+
+        private String extension;
+        private ContentType contentType;
+
+        ContentTypeMapping(String extension, ContentType contentType) {
+            this.extension = extension;
+            this.contentType = contentType;
+        }
+
+        public static ContentType of(String fileName) {
+            String extension = FileUtils.getFileExtension(fileName);
+
+            for (ContentTypeMapping m : values()) {
+                if (m.extension.equals(extension)) {
+                    return m.contentType;
+                }
+            }
+
+            return null;
+        }
+    }
+
 
     @Override
     public InputStream getInputStream(@NonNull URI uri, String contentType, final int connectionTimeout, Map<String,String> responseHeaders) throws Exception {
@@ -202,6 +248,128 @@ public class ClientHttpConnection implements CollectHttpConnection {
         }
 
         return statusCode;
+    }
+
+    @Override
+    public ResponseMessageParser uploadFiles(@NonNull List<File> fileList,@NonNull File submissionFile, @NonNull URI uri) throws IOException {
+        // get shared HttpContext so that authentication and cookies are retained.
+
+        HttpContext localContext = getHttpContext();
+        HttpClient httpclient = createHttpClient(CONNECTION_TIMEOUT);
+
+        // if https then enable preemptive basic auth...
+        if (uri.getScheme().equals("https")) {
+            enablePreemptiveBasicAuth(localContext, uri.getHost());
+        }
+
+        ResponseMessageParser messageParser = null;
+
+
+        boolean first = true;
+        int fileIndex = 0;
+        int lastFileIndex;
+        while (fileIndex < fileList.size() || first) {
+            lastFileIndex = fileIndex;
+            first = false;
+
+            MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+
+            long byteCount = 0L;
+
+            // mime post
+            MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+
+            // add the submission file first...
+            FileBody fb = new FileBody(submissionFile, ContentType.TEXT_XML);
+            builder.addPart("xml_submission_file", fb);
+            Timber.i("added xml_submission_file: %s", submissionFile.getName());
+            byteCount += submissionFile.length();
+
+            for (; fileIndex < fileList.size(); fileIndex++) {
+                File file = fileList.get(fileIndex);
+
+                // we will be processing every one of these, so
+                // we only need to deal with the content type determination...
+                ContentType contentType = ContentTypeMapping.of(file.getName());
+                if (contentType == null) {
+                    String mime = mimeTypeMap.getMimeTypeFromExtension(FileUtils.getFileExtension(file.getName()));
+                    if (mime != null) {
+                        contentType = ContentType.create(mime);
+                    } else {
+                        Timber.w("No specific MIME type found for file: %s", file.getName());
+                        contentType = ContentType.APPLICATION_OCTET_STREAM;
+                    }
+                }
+                fb = new FileBody(file, contentType);
+                builder.addPart(file.getName(), fb);
+                byteCount += file.length();
+                Timber.i("added file of type '%s' %s", contentType, file.getName());
+
+                // we've added at least one attachment to the request...
+                if (fileIndex + 1 < fileList.size()) {
+                    if ((fileIndex - lastFileIndex + 1 > 100) || (byteCount + fileList.get(fileIndex + 1).length()
+                            > 10000000L)) {
+                        // the next file would exceed the 10MB threshold...
+                        Timber.i("Extremely long post is being split into multiple posts");
+                        try {
+                            StringBody sb = new StringBody("yes",
+                                    ContentType.TEXT_PLAIN.withCharset(Charset.forName("UTF-8")));
+                            builder.addPart("*isIncomplete*", sb);
+                        } catch (Exception e) {
+                            Timber.e(e);
+                        }
+                        ++fileIndex; // advance over the last attachment added...
+                        break;
+                    }
+                }
+            }
+
+            HttpPost httppost = createOpenRosaHttpPost(uri);
+            httppost.setEntity(builder.build());
+
+            // prepare response and return uploaded
+            HttpResponse response;
+
+            try {
+                Timber.i("Issuing POST request to: %s", uri.toString());
+                response = httpclient.execute(httppost, localContext);
+                int responseCode = response.getStatusLine().getStatusCode();
+                HttpEntity httpEntity = response.getEntity();
+                Timber.i("Response code:%d", responseCode);
+
+                messageParser = new ResponseMessageParser(
+                        EntityUtils.toString(httpEntity),
+                        responseCode,
+                        response.getStatusLine().getReasonPhrase());
+
+                discardEntityBytes(response);
+
+                if (responseCode == HttpStatus.SC_UNAUTHORIZED) {
+                    getCookieStore().clear();
+                }
+
+                if (responseCode != HttpStatus.SC_CREATED && responseCode != HttpStatus.SC_ACCEPTED) {
+                    return messageParser;
+                }
+
+            } catch (IOException e) {
+                if (e instanceof UnknownHostException || e instanceof HttpHostConnectException
+                        || e instanceof SocketException || e instanceof NoHttpResponseException
+                        || e instanceof SocketTimeoutException || e instanceof ConnectTimeoutException) {
+                    Timber.i(e);
+                } else {
+                    Timber.e(e);
+                }
+                String msg = e.getMessage();
+                if (msg == null) {
+                    msg = e.toString();
+                }
+
+                throw new IOException(msg);
+            }
+        }
+
+        return messageParser;
     }
 
     @Override
@@ -388,11 +556,19 @@ public class ClientHttpConnection implements CollectHttpConnection {
         }
     }
 
-    private static HttpHead createOpenRosaHttpHead(URI uri) {
+    private HttpHead createOpenRosaHttpHead(URI uri) {
         HttpHead req = new HttpHead(uri);
         setCollectHeaders(req);
         setOpenRosaHeaders(req);
         return req;
     }
+
+    private HttpPost createOpenRosaHttpPost(URI uri) {
+        HttpPost req = new HttpPost(uri);
+        setCollectHeaders(req);
+        setOpenRosaHeaders(req);
+        return req;
+    }
+
 
 }
