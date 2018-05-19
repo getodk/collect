@@ -17,34 +17,12 @@ package org.odk.collect.android.utilities;
 import android.content.ContentValues;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.text.format.DateFormat;
-import android.webkit.MimeTypeMap;
 
 import org.kxml2.io.KXmlParser;
 import org.kxml2.kdom.Document;
-import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.provider.InstanceProviderAPI;
-import org.opendatakit.httpclientandroidlib.HttpRequest;
-import org.opendatakit.httpclientandroidlib.HttpStatus;
-import org.opendatakit.httpclientandroidlib.auth.AuthScope;
-import org.opendatakit.httpclientandroidlib.auth.Credentials;
-import org.opendatakit.httpclientandroidlib.auth.UsernamePasswordCredentials;
-import org.opendatakit.httpclientandroidlib.client.CredentialsProvider;
-import org.opendatakit.httpclientandroidlib.client.HttpClient;
-import org.opendatakit.httpclientandroidlib.client.config.AuthSchemes;
-import org.opendatakit.httpclientandroidlib.client.config.CookieSpecs;
-import org.opendatakit.httpclientandroidlib.client.config.RequestConfig;
-import org.opendatakit.httpclientandroidlib.client.methods.HttpGet;
-import org.opendatakit.httpclientandroidlib.client.protocol.HttpClientContext;
-import org.opendatakit.httpclientandroidlib.config.SocketConfig;
-import org.opendatakit.httpclientandroidlib.entity.ContentType;
-import org.opendatakit.httpclientandroidlib.impl.client.BasicCookieStore;
-import org.opendatakit.httpclientandroidlib.impl.client.HttpClientBuilder;
-import org.opendatakit.httpclientandroidlib.client.CookieStore;
-import org.opendatakit.httpclientandroidlib.protocol.BasicHttpContext;
-import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 import org.xmlpull.v1.XmlPullParser;
 
 import java.io.File;
@@ -57,13 +35,9 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
-import java.util.concurrent.ConcurrentHashMap;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -93,12 +67,8 @@ public final class WebUtils {
 
     private CollectHttpConnection httpConnection;
 
-    private CredentialsProvider credentialsProvider;
-    private CookieStore cookieStore;
 
     private WebUtils() {
-        credentialsProvider = new WebUtils.AgingCredentialsProvider(7 * 60 * 1000);
-        cookieStore = new BasicCookieStore();
         httpConnection = new ClientHttpConnection();
     }
 
@@ -109,144 +79,21 @@ public final class WebUtils {
         return instance;
     }
 
-    private static List<AuthScope> buildAuthScopes(String host) {
-        List<AuthScope> asList = new ArrayList<>();
-
-        AuthScope a;
-        // allow digest auth on any port...
-        a = new AuthScope(host, -1, null, AuthSchemes.DIGEST);
-        asList.add(a);
-        // and allow basic auth on the standard TLS/SSL ports...
-        a = new AuthScope(host, 443, null, AuthSchemes.BASIC);
-        asList.add(a);
-        a = new AuthScope(host, 8443, null, AuthSchemes.BASIC);
-        asList.add(a);
-
-        return asList;
-    }
-
     /**
      * Remove all credentials for accessing the specified host.
      */
     public static void clearHostCredentials(String host) {
-        CredentialsProvider credsProvider = WebUtils.getInstance()
-                .getCredentialsProvider();
-        Timber.i("clearHostCredentials: %s", host);
-        List<AuthScope> asList = buildAuthScopes(host);
-        for (AuthScope a : asList) {
-            credsProvider.setCredentials(a, null);
-        }
+        WebUtils.getInstance().getHttpConnection().clearHostCredentials(host);
     }
 
     public static void clearCookieStore() {
-        WebUtils.getInstance().getCookieStore().clear();
+        WebUtils.getInstance().getHttpConnection().clearCookieStore();
     }
 
-    /**
-     * Construct and return a session context with shared cookieStore and credsProvider so a user
-     * does not have to re-enter login information.
-     */
-    public static synchronized HttpContext getHttpContext() {
-
-        // context holds authentication state machine, so it cannot be
-        // shared across independent activities.
-        HttpContext localContext = new BasicHttpContext();
-
-        localContext.setAttribute(HttpClientContext.COOKIE_STORE, WebUtils.getInstance().getCookieStore());
-        localContext.setAttribute(HttpClientContext.CREDS_PROVIDER, WebUtils.getInstance().getCredentialsProvider());
-
-        return localContext;
-    }
-
-
-    /**
-     * Remove all credentials for accessing the specified host and, if the
-     * username is not null or blank then add a (username, password) credential
-     * for accessing this host.
-     */
     public static void addCredentials(String username, String password,
                                       String host) {
-        // to ensure that this is the only authentication available for this
-        // host...
-        clearHostCredentials(host);
-        if (username != null && username.trim().length() != 0) {
-            Timber.i("adding credential for host: %s username:%s", host, username);
-            Credentials c = new UsernamePasswordCredentials(username, password);
-            addCredentials(c, host);
-        }
+        WebUtils.getInstance().getHttpConnection().addCredentials(username, password, host);
     }
-
-    private static void addCredentials(Credentials c, String host) {
-        CredentialsProvider credsProvider = WebUtils.getInstance()
-                .getCredentialsProvider();
-        List<AuthScope> asList = buildAuthScopes(host);
-        for (AuthScope a : asList) {
-            credsProvider.setCredentials(a, c);
-        }
-    }
-
-    private static void setCollectHeaders(HttpRequest req) {
-        String userAgent = String.format("%s %s/%s",
-                System.getProperty("http.agent"),
-                BuildConfig.APPLICATION_ID,
-                BuildConfig.VERSION_NAME);
-        req.setHeader(USER_AGENT_HEADER, userAgent);
-    }
-
-    private static void setOpenRosaHeaders(HttpRequest req) {
-        req.setHeader(OPEN_ROSA_VERSION_HEADER, OPEN_ROSA_VERSION);
-        GregorianCalendar g = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
-        g.setTime(new Date());
-        req.setHeader(DATE_HEADER,
-                DateFormat.format("E, dd MMM yyyy hh:mm:ss zz", g).toString());
-    }
-
-
-    public static HttpGet createOpenRosaHttpGet(URI uri) {
-        HttpGet req = new HttpGet();
-        setCollectHeaders(req);
-        setOpenRosaHeaders(req);
-        req.setURI(uri);
-        return req;
-    }
-
-    /**
-     * Create an httpClient with connection timeouts and other parameters set.
-     * Save and reuse the connection manager across invocations (this is what
-     * requires synchronized access).
-     *
-     * @return HttpClient properly configured.
-     */
-    public static synchronized HttpClient createHttpClient(int timeout) {
-        // configure connection
-        SocketConfig socketConfig = SocketConfig.copy(SocketConfig.DEFAULT).setSoTimeout(
-                2 * timeout)
-                .build();
-
-        // if possible, bias toward digest auth (may not be in 4.0 beta 2)
-        List<String> targetPreferredAuthSchemes = new ArrayList<String>();
-        targetPreferredAuthSchemes.add(AuthSchemes.DIGEST);
-        targetPreferredAuthSchemes.add(AuthSchemes.BASIC);
-
-        RequestConfig requestConfig = RequestConfig.copy(RequestConfig.DEFAULT)
-                .setConnectTimeout(timeout)
-                // support authenticating
-                .setAuthenticationEnabled(true)
-                // support redirecting to handle http: => https: transition
-                .setRedirectsEnabled(true)
-                .setMaxRedirects(1)
-                .setCircularRedirectsAllowed(true)
-                .setTargetPreferredAuthSchemes(targetPreferredAuthSchemes)
-                .setCookieSpec(CookieSpecs.DEFAULT)
-                .build();
-
-        return HttpClientBuilder.create()
-                .setDefaultSocketConfig(socketConfig)
-                .setDefaultRequestConfig(requestConfig)
-                .build();
-
-    }
-
 
     /**
      * Common method for returning a parsed xml document given a url and the
@@ -366,18 +213,9 @@ public final class WebUtils {
         return new InputStreamResult(downloadStream,openRosaResponse);
     }
 
-    public CredentialsProvider getCredentialsProvider() {
-        return credentialsProvider;
-    }
-
-    public CookieStore getCookieStore() {
-        return cookieStore;
-    }
-
     public CollectHttpConnection getHttpConnection() {
         return httpConnection;
     }
-
 
     private static List<File> getFilesInParentDirectory(File instanceFile, File submissionFile, boolean openRosaServer) {
         List<File> files = new ArrayList<File>();
@@ -518,8 +356,7 @@ public final class WebUtils {
 
                 } else {
                     Timber.w("Status code on Head request: %d", statusCode);
-                    if (statusCode >= HttpStatus.SC_OK
-                            && statusCode < HttpStatus.SC_MULTIPLE_CHOICES) {
+                    if (statusCode >= HttpsURLConnection.HTTP_OK && statusCode < HttpsURLConnection.HTTP_MULT_CHOICE) {
                         outcome.messagesByInstanceId.put(
                                 id,
                                 fail
@@ -595,10 +432,10 @@ public final class WebUtils {
             messageParser = getInstance().getHttpConnection().uploadFiles(files, submissionFile, URI.create(submissionUri.toString()));
             int responseCode = messageParser.getResponseCode();
 
-            if (responseCode != HttpStatus.SC_CREATED && responseCode != HttpStatus.SC_ACCEPTED) {
-                if (responseCode == HttpStatus.SC_OK) {
+            if (responseCode != HttpsURLConnection.HTTP_CREATED && responseCode != HttpsURLConnection.HTTP_ACCEPTED) {
+                if (responseCode == HttpsURLConnection.HTTP_OK) {
                     outcome.messagesByInstanceId.put(id, fail + "Network login failure? Again?");
-                } else if (responseCode == HttpStatus.SC_UNAUTHORIZED) {
+                } else if (responseCode == HttpsURLConnection.HTTP_UNAUTHORIZED) {
                     outcome.messagesByInstanceId.put(id, fail + messageParser.getReasonPhrase() + " (" + responseCode + ") at " + urlString);
                 } else {
                     // If response from server is valid use that else use default messaging
@@ -640,101 +477,13 @@ public final class WebUtils {
     }
 
     public static String getPlainTextMimeType() {
-        return ContentType.TEXT_PLAIN.getMimeType();
+        return "text/plain";
     }
 
     public static class Outcome {
         public Uri authRequestingServer = null;
         public boolean invalidOAuth;
         public HashMap<String, String> messagesByInstanceId = new HashMap<>();
-    }
-
-
-    public static class AgingCredentialsProvider implements CredentialsProvider {
-
-        private final ConcurrentHashMap<AuthScope, Credentials> credMap;
-        private final long expiryInterval;
-
-        private long nextClearTimestamp;
-
-        /**
-         * Default constructor.
-         */
-        public AgingCredentialsProvider(int expiryInterval) {
-            super();
-            this.credMap = new ConcurrentHashMap<AuthScope, Credentials>();
-            this.expiryInterval = expiryInterval;
-            nextClearTimestamp = System.currentTimeMillis() + expiryInterval;
-        }
-
-        public void setCredentials(
-                final AuthScope authscope,
-                final Credentials credentials) {
-            if (authscope == null) {
-                throw new IllegalArgumentException("Authentication scope may not be null");
-            }
-            if (nextClearTimestamp < System.currentTimeMillis()) {
-                clear();
-            }
-            nextClearTimestamp = System.currentTimeMillis() + expiryInterval;
-            if (credentials == null) {
-                credMap.remove(authscope);
-            } else {
-                credMap.put(authscope, credentials);
-            }
-        }
-
-        /**
-         * Find matching {@link Credentials credentials} for the given authentication scope.
-         *
-         * @param map       the credentials hash map
-         * @param authscope the {@link AuthScope authentication scope}
-         * @return the credentials
-         */
-        private Credentials matchCredentials(
-                final Map<AuthScope, Credentials> map,
-                final AuthScope authscope) {
-            // see if we get a direct hit
-            Credentials creds = map.get(authscope);
-            if (creds == null) {
-                // Nope.
-                // Do a full scan
-                int bestMatchFactor = -1;
-                AuthScope bestMatch = null;
-                for (AuthScope current : map.keySet()) {
-                    int factor = authscope.match(current);
-                    if (factor > bestMatchFactor) {
-                        bestMatchFactor = factor;
-                        bestMatch = current;
-                    }
-                }
-                if (bestMatch != null) {
-                    creds = map.get(bestMatch);
-                }
-            }
-            return creds;
-        }
-
-        public Credentials getCredentials(final AuthScope authscope) {
-            if (authscope == null) {
-                throw new IllegalArgumentException("Authentication scope may not be null");
-            }
-            if (nextClearTimestamp < System.currentTimeMillis()) {
-                clear();
-            }
-            nextClearTimestamp = System.currentTimeMillis() + expiryInterval;
-            return matchCredentials(this.credMap, authscope);
-        }
-
-        public void clear() {
-            this.credMap.clear();
-        }
-
-        @Override
-        public String toString() {
-            return credMap.toString();
-        }
-
     }
 
     public static final class InputStreamResult {
