@@ -77,10 +77,13 @@ public class SmapRemoteDataHandlerLookup implements IFunctionHandler {
 
     @Override
     public Object eval(Object[] args, EvaluationContext ec) {
+
         if (args.length != 5) {
             Timber.e("5 arguments are needed to evaluate the %s function", HANDLER_NAME);
             return "";
         }
+
+        Collect app = Collect.getInstance();
 
         String dataSetName = XPathFuncExpr.toString(args[0]);
         String queriedColumn = XPathFuncExpr.toString(args[1]);
@@ -98,7 +101,7 @@ public class SmapRemoteDataHandlerLookup implements IFunctionHandler {
             String url = mServerUrlBase + dataSetName + "/" + referenceColumn + "/" + referenceValue;
 
             // Get the cache results if they exist
-            String data = Collect.getInstance().getRemoteData(url);
+            String data = app.getRemoteData(url);
             HashMap<String, String> record = null;
             try {
                 record =
@@ -109,8 +112,9 @@ public class SmapRemoteDataHandlerLookup implements IFunctionHandler {
             }
             if (record == null) {
                 // Call a webservice to get the remote record
+                app.startRemoteCall(url);
                 SmapRemoteWebServiceTask task = new SmapRemoteWebServiceTask();
-                task.setSmapRemoteListener(Collect.getInstance().getFormEntryActivity());
+                task.setSmapRemoteListener(app.getFormEntryActivity());
                 task.execute(url, timeoutValue);
                 return "";
             } else {

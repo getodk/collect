@@ -65,6 +65,7 @@ import org.opendatakit.httpclientandroidlib.protocol.BasicHttpContext;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -124,7 +125,8 @@ public class Collect extends Application implements HasActivityInjector {
     private boolean tasksDownloading = false;           // smap
     // Keep a reference to form entry activity to allow cancel dialogs to be shown during remote calls
     private FormEntryActivity formEntryActivity = null; // smap
-    private HashMap<String, SmapRemoteDataItem> remoteCache = new HashMap<> ();       // smap
+    private HashMap<String, SmapRemoteDataItem> remoteCache = null;       // smap
+    private HashMap<String, String> remoteCalls = null;       // smap
 
     @Inject
     DispatchingAndroidInjector<Activity> androidInjector;
@@ -366,13 +368,21 @@ public class Collect extends Application implements HasActivityInjector {
         if(remoteCache == null) {
             remoteCache = new HashMap<String, SmapRemoteDataItem>();
         } else {
+            ArrayList<String> expired = new ArrayList<String>();
             for(String key : remoteCache.keySet()) {
                 SmapRemoteDataItem item = remoteCache.get(key);
                 if(item.perSubmission) {
+                    expired.add(key);
+
+                }
+            }
+            if(expired.size() > 0) {
+                for(String key : expired) {
                     remoteCache.remove(key);
                 }
             }
         }
+        remoteCalls = new HashMap<String, String>();
     }
     public String getRemoteData(String key) {
         SmapRemoteDataItem item = remoteCache.get(key);
@@ -383,7 +393,24 @@ public class Collect extends Application implements HasActivityInjector {
         }
     }
     public void setRemoteItem(SmapRemoteDataItem item) {
-        remoteCache.put(item.key, item);
+        if(item.data == null) {
+            // There was a network error
+            remoteCache.remove(item.key);
+        } else {
+            remoteCache.put(item.key, item);
+        }
+    }
+    public void startRemoteCall(String key) {
+        remoteCalls.put(key, "started");
+    }
+    public void endRemoteCall(String key) {
+        remoteCalls.remove(key);
+    }
+    public String getRemoteCall(String key) {
+        return remoteCalls.get(key);
+    }
+    public boolean inRemoteCall() {
+        return remoteCalls.size() > 0;
     }
     // End Smap
 

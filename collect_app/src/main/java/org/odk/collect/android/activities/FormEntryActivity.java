@@ -1066,6 +1066,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     createConstraintToast(constraint.index, constraint.status);
                     return false;
                 }
+                if(Collect.getInstance().inRemoteCall()) {
+                    ToastUtils.showShortToastInMiddle(getString(R.string.smap_lookup));
+                    return false;
+                }
             } catch (JavaRosaException e) {
                 Timber.e(e);
                 createErrorDialog(e.getCause().getMessage(), DO_NOT_EXIT);
@@ -2899,7 +2903,9 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
      */
     @Override
     public void remoteComplete(SmapRemoteDataItem item) {
-        Collect.getInstance().setRemoteItem(item);
+        Collect app = Collect.getInstance();
+        app.setRemoteItem(item);
+        app.endRemoteCall(item.key);
     }
 
 }

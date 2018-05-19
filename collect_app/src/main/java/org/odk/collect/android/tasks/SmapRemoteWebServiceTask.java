@@ -28,6 +28,8 @@ import java.net.URL;
 
 import timber.log.Timber;
 
+import static java.lang.Thread.sleep;
+
 /**
  * Background task for appending a timer event to the timer log
  */
@@ -55,7 +57,7 @@ public class SmapRemoteWebServiceTask extends AsyncTask<String, Void, SmapRemote
 
         SmapRemoteDataItem item = new SmapRemoteDataItem();
         item.key = params[0];
-        item.data = "{}";
+        item.data = null;
         if(timeout == 0) {
             item.perSubmission = true;
         }
@@ -111,10 +113,8 @@ public class SmapRemoteWebServiceTask extends AsyncTask<String, Void, SmapRemote
                 throw new Exception(errMsg);
             }
 
-            // write connection to file
             HttpEntity entity = response.getEntity();
             is = entity.getContent();
-
 
             os = new ByteArrayOutputStream();
             byte[] buf = new byte[4096];
@@ -123,7 +123,6 @@ public class SmapRemoteWebServiceTask extends AsyncTask<String, Void, SmapRemote
                 os.write(buf, 0, len);
             }
             os.flush();
-            success = true;
             item.data = os.toString();
 
         } catch (Exception e) {
@@ -132,8 +131,7 @@ public class SmapRemoteWebServiceTask extends AsyncTask<String, Void, SmapRemote
 
         } finally {
 
-            if (os != null) {
-                try {
+            if (os != null) { try {
                     os.close();
                 } catch (Exception ex) {
                     // no-op
