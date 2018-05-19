@@ -84,12 +84,14 @@ import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
 import org.odk.collect.android.exception.GDriveConnectionException;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataManager;
+import org.odk.collect.android.external.handler.SmapRemoteDataItem;
 import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.FormSavedListener;
 import org.odk.collect.android.listeners.SavePointListener;
+import org.odk.collect.android.listeners.SmapRemoteListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.FormController.FailedConstraint;
 import org.odk.collect.android.taskModel.FormDetail; // smap
@@ -148,7 +150,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         FormLoaderListener, FormSavedListener, AdvanceToNextListener,
         OnGestureListener, SavePointListener, NumberPickerDialog.NumberPickerListener,
         DependencyProvider<ActivityAvailability>,
-        CustomDatePickerDialog.CustomDatePickerDialogListener, SaveFormIndexTask.SaveFormIndexListener {
+        CustomDatePickerDialog.CustomDatePickerDialogListener, SaveFormIndexTask.SaveFormIndexListener,
+        SmapRemoteListener {        // smap add SmapRemoteListener
 
     // save with every swipe forward or back. Timings indicate this takes .25
     // seconds.
@@ -269,7 +272,9 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        FormInfo formInfo = null;        // smap
+        FormInfo formInfo = null;                           // smap
+        Collect.getInstance().setFormEntryActivity(this);   // smap
+        Collect.getInstance().initRemoteServiceCaches();   // smap
 
         // must be at the beginning of any activity that can be called from an
         // external intent
@@ -2887,4 +2892,14 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             super(context);
         }
     }
+
+    /*
+     * smap start
+     * Handle remote service calls
+     */
+    @Override
+    public void remoteComplete(SmapRemoteDataItem item) {
+        Collect.getInstance().setRemoteItem(item);
+    }
+
 }

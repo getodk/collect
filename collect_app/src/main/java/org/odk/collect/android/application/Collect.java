@@ -41,9 +41,11 @@ import net.danlew.android.joda.JodaTimeAndroid;
 
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.amazonaws.mobile.AWSMobileClient;
 import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.external.ExternalDataManager;
+import org.odk.collect.android.external.handler.SmapRemoteDataItem;
 import org.odk.collect.android.injection.config.DaggerAppComponent;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
@@ -63,6 +65,7 @@ import org.opendatakit.httpclientandroidlib.protocol.BasicHttpContext;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.Locale;
 
 import javax.inject.Inject;
@@ -115,10 +118,13 @@ public class Collect extends Application implements HasActivityInjector {
     private ExternalDataManager externalDataManager;
     //private Tracker tracker;    // smap
 
-    private Location location = null;       // smap
-    private boolean recordLocation = false; // smap
-    private FormDetail formDetail = null;   // smap
-    private boolean tasksDownloading = false;
+    private Location location = null;                   // smap
+    private boolean recordLocation = false;             // smap
+    private FormDetail formDetail = null;               // smap
+    private boolean tasksDownloading = false;           // smap
+    // Keep a reference to form entry activity to allow cancel dialogs to be shown during remote calls
+    private FormEntryActivity formEntryActivity = null; // smap
+    private HashMap<String, SmapRemoteDataItem> remoteCache = new HashMap<> ();       // smap
 
     @Inject
     DispatchingAndroidInjector<Activity> androidInjector;
@@ -348,6 +354,36 @@ public class Collect extends Application implements HasActivityInjector {
         AWSMobileClient.initializeMobileClientIfNecessary(getApplicationContext());
 
         // ...Put any application-specific initialization logic here...
+    }
+    // Set form entry activity
+    public void setFormEntryActivity(FormEntryActivity activity) {
+        formEntryActivity = activity;
+    }
+    public FormEntryActivity getFormEntryActivity() {
+        return formEntryActivity;
+    }
+    public void initRemoteServiceCaches() {
+        if(remoteCache == null) {
+            remoteCache = new HashMap<String, SmapRemoteDataItem>();
+        } else {
+            for(String key : remoteCache.keySet()) {
+                SmapRemoteDataItem item = remoteCache.get(key);
+                if(item.perSubmission) {
+                    remoteCache.remove(key);
+                }
+            }
+        }
+    }
+    public String getRemoteData(String key) {
+        SmapRemoteDataItem item = remoteCache.get(key);
+        if(item != null) {
+            return item.data;
+        } else {
+            return null;
+        }
+    }
+    public void setRemoteItem(SmapRemoteDataItem item) {
+        remoteCache.put(item.key, item);
     }
     // End Smap
 

@@ -18,27 +18,21 @@
 
 package org.odk.collect.android.external.handler;
 
-import android.app.Activity;
-import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.core.model.condition.IFunctionHandler;
 import org.javarosa.xpath.expr.XPathFuncExpr;
-import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.external.ExternalDataUtil;
-import org.odk.collect.android.external.ExternalSQLiteOpenHelper;
-import org.odk.collect.android.tasks.DownloadTasksTask;
-import org.odk.collect.android.utilities.WebUtils;
-import org.opendatakit.httpclientandroidlib.client.HttpClient;
-import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
-
+import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.tasks.SmapRemoteWebServiceTask;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import timber.log.Timber;
@@ -50,9 +44,15 @@ public class SmapRemoteDataHandlerLookup implements IFunctionHandler {
 
     public static final String HANDLER_NAME = "lookup";
     public String mIdent = null;
+    public String mServerUrlBase = null;
 
     public SmapRemoteDataHandlerLookup(String ident) {
         this.mIdent = ident;
+
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(Collect.getInstance().getBaseContext());
+        mServerUrlBase = sharedPreferences.getString(PreferenceKeys.KEY_SERVER_URL, null) +
+                "/lookup/" + ident + "/";
     }
 
     @Override
@@ -77,8 +77,8 @@ public class SmapRemoteDataHandlerLookup implements IFunctionHandler {
 
     @Override
     public Object eval(Object[] args, EvaluationContext ec) {
-        if (args.length != 4) {
-            Timber.e("4 arguments are needed to evaluate the %s function", HANDLER_NAME);
+        if (args.length != 5) {
+            Timber.e("5 arguments are needed to evaluate the %s function", HANDLER_NAME);
             return "";
         }
 
@@ -86,29 +86,40 @@ public class SmapRemoteDataHandlerLookup implements IFunctionHandler {
         String queriedColumn = XPathFuncExpr.toString(args[1]);
         String referenceColumn = XPathFuncExpr.toString(args[2]);
         String referenceValue = XPathFuncExpr.toString(args[3]);
-
+        String timeoutValue = XPathFuncExpr.toString(args[4]);
+        int timeout = 0;
         try {
-            HttpContext localContext = Collect.getInstance().getHttpContext();
-            HttpClient httpclient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
-
-
-            String mProgressMsg = Collect.getInstance().getString(R.string.smap_lookup);
-
-            /*
-                Context currentActivity = (Collect.getInstance().getApplicationContext());
-                currentActivity.showDialog(PROGRESS_DIALOG);
-                mDownloadTasks = new DownloadTasksTask();
-                mDownloadTasks.setDownloaderListener(this, this);
-                mDownloadTasks.execute();
-            */
-            return ExternalDataUtil.nullSafe("lookup value" + " : " + mIdent + " : " + dataSetName + " : "
-                    + queriedColumn + " : " + referenceColumn + " : " + referenceValue);
-
+            timeout = Integer.valueOf(timeoutValue);
         } catch (Exception e) {
-            Timber.i(e);
-            return "";
-        } finally {
 
         }
+        if(referenceValue.length() > 0) {
+            // Get the url which doubles as the cache key
+            String url = mServerUrlBase + dataSetName + "/" + referenceColumn + "/" + referenceValue;
+
+            // Get the cache results if they exist
+            String data = Collect.getInstance().getRemoteData(url);
+            HashMap<String, String> record = null;
+            try {
+                record =
+                        new Gson().fromJson(data, new TypeToken<HashMap<String, String>>() {
+                        }.getType());
+            } catch (Exception e) {
+                // no op
+            }
+            if (record == null) {
+                // Call a webservice to get the remote record
+                SmapRemoteWebServiceTask task = new SmapRemoteWebServiceTask();
+                task.setSmapRemoteListener(Collect.getInstance().getFormEntryActivity());
+                task.execute(url, timeoutValue);
+                return "";
+            } else {
+                return ExternalDataUtil.nullSafe(record.get(queriedColumn));
+            }
+        } else {
+            // No data to lookup
+            return "";
+        }
+
     }
 }
