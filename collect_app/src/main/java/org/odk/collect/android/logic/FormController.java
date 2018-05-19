@@ -523,7 +523,7 @@ public class FormController {
         List<FormIndex> indices = getIndicesForGroup(gd);
 
         // jump to the end of the group, if field-list is empty, jump into the group.
-        if (indices.size() == 0) {
+        if (indices.isEmpty()) {
             emptyFieldListListener.isFieldListEmpty();
             return stepToNextEvent(STEP_INTO_GROUP);
         } else {
