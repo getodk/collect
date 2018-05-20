@@ -78,8 +78,8 @@ public class SmapRemoteDataHandlerLookup implements IFunctionHandler {
     @Override
     public Object eval(Object[] args, EvaluationContext ec) {
 
-        if (args.length != 5) {
-            Timber.e("5 arguments are needed to evaluate the %s function", HANDLER_NAME);
+        if (args.length != 5 && args.length != 4) {
+            Timber.e("4 or 5 arguments are needed to evaluate the %s function", HANDLER_NAME);
             return "";
         }
 
@@ -89,13 +89,12 @@ public class SmapRemoteDataHandlerLookup implements IFunctionHandler {
         String queriedColumn = XPathFuncExpr.toString(args[1]);
         String referenceColumn = XPathFuncExpr.toString(args[2]);
         String referenceValue = XPathFuncExpr.toString(args[3]);
-        String timeoutValue = XPathFuncExpr.toString(args[4]);
-        int timeout = 0;
-        try {
-            timeout = Integer.valueOf(timeoutValue);
-        } catch (Exception e) {
 
+        String timeoutValue = "0";
+        if(args.length == 5) {
+            timeoutValue = XPathFuncExpr.toString(args[4]);
         }
+
         if(referenceValue.length() > 0) {
             // Get the url which doubles as the cache key
             String url = mServerUrlBase + dataSetName + "/" + referenceColumn + "/" + referenceValue;

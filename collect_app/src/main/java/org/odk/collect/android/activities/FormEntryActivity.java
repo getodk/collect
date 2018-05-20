@@ -24,6 +24,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore.Images;
 import android.support.annotation.NonNull;
@@ -184,6 +185,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private String mSurveyNotes = null;                                 // smap
     private boolean mCanUpdate = true;                                  // smap
     private int mUpdated = 0;                                           // smap, greater than 0 if the user has already edited this instance
+    ProgressDialog progressBar = null;                                  // smap
+    String swipeDirection;                                              // smap
     private static final String KEY_SAVE_NAME = "saveName";
 
     // Identifies the gp of the form used to launch form entry
@@ -1066,9 +1069,11 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     createConstraintToast(constraint.index, constraint.status);
                     return false;
                 }
-                if(Collect.getInstance().inRemoteCall()) {
-                    ToastUtils.showShortToastInMiddle(getString(R.string.smap_lookup));
+                if(Collect.getInstance().inRemoteCall()) {  // smap
+                    startProgressBar();
                     return false;
+                } else {
+                    swipeDirection = null;  // smap
                 }
             } catch (JavaRosaException e) {
                 Timber.e(e);
@@ -1441,6 +1446,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         state = null;
         try {
             FormController formController = getFormController();
+            swipeDirection = "forward";
 
             // get constraint behavior preference value with appropriate default
             String constraintBehavior = (String) GeneralSharedPreferences.getInstance()
@@ -1516,6 +1522,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             state = null;
             try {
                 FormController formController = getFormController();
+                swipeDirection = "back";
                 if (formController != null) {
                     // The answer is saved on a back swipe, but question constraints are
                     // ignored.
@@ -2906,6 +2913,26 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         Collect app = Collect.getInstance();
         app.setRemoteItem(item);
         app.endRemoteCall(item.key);
+        if(!app.inRemoteCall() && progressBar != null) {
+            progressBar.dismiss();
+            progressBar = null;
+            if(swipeDirection != null) {
+                if(swipeDirection.equals("forward")) {
+                    showNextView();
+                }
+            }
+        }
     }
 
+    public void startProgressBar() {
+        if(progressBar == null) {
+            progressBar = new ProgressDialog(this);
+            progressBar.setCancelable(true);
+            progressBar.setMessage(getString(R.string.smap_lookup));
+            progressBar.setCancelable(true);
+            progressBar.show();
+        }
+    }
+
+    // End smap
 }
