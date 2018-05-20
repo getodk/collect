@@ -133,6 +133,9 @@ public class Collect extends Application implements HasActivityInjector {
      *
      * @throws RuntimeException if there is no SDCard or the directory exists as a non directory
      */
+
+    //shouldn't there be a method to create directories on the phone storage or
+    //ask the user for the location of directories
     public static void createODKDirs() throws RuntimeException {
         String cardstatus = Environment.getExternalStorageState();
         if (!cardstatus.equals(Environment.MEDIA_MOUNTED)) {
