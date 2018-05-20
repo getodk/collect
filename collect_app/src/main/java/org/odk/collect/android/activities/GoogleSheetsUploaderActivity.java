@@ -125,7 +125,8 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
         if (instanceGoogleSheetsUploader == null) {
             String googleSheetsUrl = (String) generalSharedPreferences.get(PreferenceKeys.KEY_GOOGLE_SHEETS_URL);
 
-            instanceGoogleSheetsUploader = new InstanceGoogleSheetsUploader(accountsManager, googleSheetsUrl);
+            boolean isFormAutoDeleteOptionEnabled = (boolean) generalSharedPreferences.get(PreferenceKeys.KEY_DELETE_AFTER_SEND);
+            instanceGoogleSheetsUploader = new InstanceGoogleSheetsUploader(accountsManager, googleSheetsUrl, isFormAutoDeleteOptionEnabled);
 
             // ensure we have a google account selected
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);

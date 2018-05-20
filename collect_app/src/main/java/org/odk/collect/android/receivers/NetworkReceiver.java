@@ -139,6 +139,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
 
             String googleSheetsUrl = (String) generalSharedPreferences.get(PreferenceKeys.KEY_GOOGLE_SHEETS_URL);
             String protocol = (String) generalSharedPreferences.get(PreferenceKeys.KEY_PROTOCOL);
+            boolean isFormAutoDeleteOptionEnabled = (boolean) generalSharedPreferences.get(PreferenceKeys.KEY_DELETE_AFTER_SEND);
 
             if (protocol.equals(context.getString(R.string.protocol_google_sheets))) {
                 String googleUsername = (String) generalSharedPreferences.get(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
@@ -150,7 +151,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                 GoogleAccountsManager accountsManager = new GoogleAccountsManager(Collect.getInstance());
                 accountsManager.getCredential().setSelectedAccountName(googleUsername);
 
-                instanceGoogleSheetsUploader = new InstanceGoogleSheetsUploader(accountsManager, googleSheetsUrl);
+                instanceGoogleSheetsUploader = new InstanceGoogleSheetsUploader(accountsManager, googleSheetsUrl, isFormAutoDeleteOptionEnabled);
                 instanceGoogleSheetsUploader.setUploaderListener(this);
                 instanceGoogleSheetsUploader.execute(toSendArray);
             } else if (protocol.equals(context.getString(R.string.protocol_odk_default))) {
@@ -164,9 +165,8 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                 Uri u = Uri.parse(url);
                 WebUtils.addCredentials(storedUsername, storedPassword, u.getHost());
 
-                instanceServerUploader = new InstanceServerUploader();
+                instanceServerUploader = new InstanceServerUploader(isFormAutoDeleteOptionEnabled);
                 instanceServerUploader.setUploaderListener(this);
-
                 instanceServerUploader.execute(toSendArray);
             }
         }

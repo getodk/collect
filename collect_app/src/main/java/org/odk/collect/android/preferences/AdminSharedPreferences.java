@@ -15,6 +15,7 @@
 package org.odk.collect.android.preferences;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
 import org.odk.collect.android.injection.config.scopes.PerApplication;
@@ -28,7 +29,7 @@ import static org.odk.collect.android.preferences.AdminPreferencesFragment.ADMIN
 @PerApplication
 public class AdminSharedPreferences {
 
-    private final android.content.SharedPreferences sharedPreferences;
+    private final SharedPreferences sharedPreferences;
 
     @Inject
     public AdminSharedPreferences(Context context) {

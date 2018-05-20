@@ -75,6 +75,10 @@ import timber.log.Timber;
  */
 public class InstanceServerUploader extends InstanceUploader {
 
+    public InstanceServerUploader(boolean isFormAutoDeleteOptionEnabled) {
+        super(isFormAutoDeleteOptionEnabled);
+    }
+
     private enum ContentTypeMapping {
         XML("xml",  ContentType.TEXT_XML),
       _3GPP("3gpp", ContentType.create("audio/3gpp")),

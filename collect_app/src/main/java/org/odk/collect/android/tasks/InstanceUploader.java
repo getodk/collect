@@ -25,8 +25,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.utilities.ApplicationConstants;
 
@@ -46,9 +44,8 @@ public abstract class InstanceUploader extends AsyncTask<Long, Integer, Instance
 
     private InstanceUploaderListener stateListener;
 
-    InstanceUploader() {
-        GeneralSharedPreferences generalSharedPreferences = new GeneralSharedPreferences(Collect.getInstance());
-        isFormAutoDeleteOptionEnabled = (boolean) generalSharedPreferences.get(PreferenceKeys.KEY_DELETE_AFTER_SEND);
+    InstanceUploader(boolean isFormAutoDeleteOptionEnabled) {
+        this.isFormAutoDeleteOptionEnabled = isFormAutoDeleteOptionEnabled;
     }
 
     /**

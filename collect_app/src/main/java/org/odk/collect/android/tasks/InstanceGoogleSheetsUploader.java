@@ -95,8 +95,8 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
     private Spreadsheet spreadsheet;
 
-    public InstanceGoogleSheetsUploader(GoogleAccountsManager accountsManager, String fallbackGoogleSheetsUrl) {
-        super();
+    public InstanceGoogleSheetsUploader(GoogleAccountsManager accountsManager, String fallbackGoogleSheetsUrl, boolean isFormAutoDeleteOptionEnabled) {
+        super(isFormAutoDeleteOptionEnabled);
         this.accountsManager = accountsManager;
         this.fallbackGoogleSheetsUrl = fallbackGoogleSheetsUrl;
         sheetsHelper = accountsManager.getSheetsHelper();

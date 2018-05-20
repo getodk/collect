@@ -26,6 +26,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.fragments.dialogs.SimpleDialog;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
+import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceServerUploader;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -118,7 +119,8 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
         if (instanceServerUploader == null) {
             // setup dialog and upload task
             showDialog(PROGRESS_DIALOG);
-            instanceServerUploader = new InstanceServerUploader();
+            boolean isFormAutoDeleteOptionEnabled = (boolean) generalSharedPreferences.get(PreferenceKeys.KEY_DELETE_AFTER_SEND);
+            instanceServerUploader = new InstanceServerUploader(isFormAutoDeleteOptionEnabled);
 
             // register this activity with the new uploader task
             instanceServerUploader.setUploaderListener(this);
@@ -318,7 +320,8 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
     @Override
     public void updatedCredentials() {
         showDialog(PROGRESS_DIALOG);
-        instanceServerUploader = new InstanceServerUploader();
+        boolean isFormAutoDeleteOptionEnabled = (boolean) generalSharedPreferences.get(PreferenceKeys.KEY_DELETE_AFTER_SEND);
+        instanceServerUploader = new InstanceServerUploader(isFormAutoDeleteOptionEnabled);
 
         // register this activity with the new uploader task
         instanceServerUploader.setUploaderListener(this);
