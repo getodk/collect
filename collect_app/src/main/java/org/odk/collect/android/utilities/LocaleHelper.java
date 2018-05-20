@@ -5,13 +5,15 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
-import android.preference.PreferenceManager;
 
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 
 import java.util.Locale;
 import java.util.TreeMap;
+
+import javax.inject.Inject;
 
 /**
  * Changes the locale of the app and keeps the changes persistent
@@ -20,6 +22,15 @@ import java.util.TreeMap;
  */
 
 public class LocaleHelper {
+
+    @Inject
+    Context context;
+    @Inject
+    GeneralSharedPreferences sharedPreferences;
+
+    @Inject
+    LocaleHelper() {
+    }
 
     // Created based on https://gunhansancar.com/change-language-programmatically-in-android/
     public Context updateLocale(Context context) {
@@ -37,10 +48,9 @@ public class LocaleHelper {
         return updateResourcesLegacy(context, language);
     }
 
-    private String getLocaleCode(Context context) {
-        String localeCode = PreferenceManager.getDefaultSharedPreferences(context)
-                .getString(PreferenceKeys.KEY_APP_LANGUAGE, "");
-        boolean isUsingSysLanguage = localeCode.equals("");
+    private String getLocaleCode() {
+        String localeCode = (String) sharedPreferences.get(PreferenceKeys.KEY_APP_LANGUAGE);
+        boolean isUsingSysLanguage = localeCode.isEmpty();
         if (isUsingSysLanguage) {
             localeCode = Collect.defaultSysLanguage;
         }

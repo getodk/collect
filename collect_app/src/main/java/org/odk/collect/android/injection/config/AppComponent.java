@@ -11,6 +11,7 @@ import org.odk.collect.android.injection.ActivityBuilder;
 import org.odk.collect.android.injection.config.scopes.PerApplication;
 import org.odk.collect.android.preferences.BasePreferenceFragment;
 import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.preferences.ResetDialogPreference;
 import org.odk.collect.android.receivers.NetworkReceiver;
 import org.odk.collect.android.tasks.ServerPollingJob;
 import org.odk.collect.android.tasks.sms.SmsNotificationReceiver;
@@ -52,6 +53,8 @@ public interface AppComponent extends AndroidInjector<Collect> {
     void inject(ServerPollingJob serverPollingJob);
 
     void inject(BasePreferenceFragment basePreferenceFragment);
+
+    void inject(ResetDialogPreference resetDialogPreference);
 
     void inject(SmsService smsService);
 

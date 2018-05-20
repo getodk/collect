@@ -99,15 +99,17 @@ public class Collect extends DaggerApplication {
     private static long lastClickTime;
 
     @Inject
-    protected CookieStore cookieStore;
+    CookieStore cookieStore;
     @Inject
-    protected CredentialsProvider credsProvider;
+    CredentialsProvider credsProvider;
     @Inject
-    protected GeneralSharedPreferences generalSharedPreferences;
+    GeneralSharedPreferences generalSharedPreferences;
     @Inject
-    protected AdminSharedPreferences adminSharedPreferences;
+    AdminSharedPreferences adminSharedPreferences;
     @Inject
-    protected AuthDialogUtility authDialogUtility;
+    AuthDialogUtility authDialogUtility;
+    @Inject
+    LocaleHelper localeHelper;
 
     private ActivityLogger activityLogger;
 
@@ -281,7 +283,7 @@ public class Collect extends DaggerApplication {
         JodaTimeAndroid.init(this);
 
         defaultSysLanguage = Locale.getDefault().getLanguage();
-        new LocaleHelper().updateLocale(this);
+        localeHelper.updateLocale();
 
         FormMetadataMigrator.migrate(generalSharedPreferences);
         AutoSendPreferenceMigrator.migrate(generalSharedPreferences);
@@ -323,7 +325,7 @@ public class Collect extends DaggerApplication {
         defaultSysLanguage = newConfig.locale.getLanguage();
         boolean isUsingSysLanguage = generalSharedPreferences.get(KEY_APP_LANGUAGE).equals("");
         if (!isUsingSysLanguage) {
-            new LocaleHelper().updateLocale(this);
+            localeHelper.updateLocale();
         }
     }
 

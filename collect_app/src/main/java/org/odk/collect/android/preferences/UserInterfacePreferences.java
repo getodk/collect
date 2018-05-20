@@ -30,7 +30,6 @@ import com.google.common.collect.ObjectArrays;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.spatial.MapHelper;
-import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.MediaUtils;
 
 import java.util.ArrayList;
@@ -130,7 +129,6 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
         final ListPreference pref = (ListPreference) findPreference(KEY_APP_LANGUAGE);
 
         if (pref != null) {
-            final LocaleHelper localeHelper = new LocaleHelper();
             TreeMap<String, String> languageList = localeHelper.getEntryListValues();
             int length = languageList.size() + 1;
             ArrayList<String> entryValues = new ArrayList<>();
@@ -157,7 +155,7 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
                 edit.putString(KEY_APP_LANGUAGE, newValue.toString());
                 edit.apply();
 
-                localeHelper.updateLocale(getActivity());
+                localeHelper.updateLocale();
                 MainMenuActivity.startActivityAndCloseAllOthers(getActivity());
                 return true;
             });

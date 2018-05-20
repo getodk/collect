@@ -16,8 +16,6 @@
 
 package org.odk.collect.android.utilities;
 
-import android.content.Context;
-
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
@@ -30,19 +28,31 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class ResetUtility {
+
+    @Inject
+    GeneralSharedPreferences generalSharedPreferences;
+    @Inject
+    AdminSharedPreferences adminSharedPreferences;
+    @Inject
+    LocaleHelper localeHelper;
 
     private List<Integer> failedResetActions;
 
-    public List<Integer> reset(Context context, List<Integer> resetActions) {
+    @Inject
+    public ResetUtility() {
+    }
 
+    public List<Integer> reset(List<Integer> resetActions) {
         failedResetActions = new ArrayList<>();
         failedResetActions.addAll(resetActions);
 
         for (int action : resetActions) {
             switch (action) {
                 case ResetAction.RESET_PREFERENCES:
-                    resetPreferences(context);
+                    resetPreferences();
                     break;
                 case ResetAction.RESET_INSTANCES:
                     resetInstances();
@@ -71,9 +81,9 @@ public class ResetUtility {
         return failedResetActions;
     }
 
-    private void resetPreferences(Context context) {
-        new GeneralSharedPreferences(context).loadDefaultPreferences();
-        new AdminSharedPreferences(context).loadDefaultPreferences();
+    private void resetPreferences() {
+        adminSharedPreferences.loadDefaultPreferences();
+        generalSharedPreferences.loadDefaultPreferences();
 
         boolean deletedSettingsFolderContest = !new File(Collect.SETTINGS).exists()
                 || deleteFolderContents(Collect.SETTINGS);
@@ -81,7 +91,7 @@ public class ResetUtility {
         boolean deletedSettingsFile = !new File(Collect.ODK_ROOT + "/collect.settings").exists()
                 || (new File(Collect.ODK_ROOT + "/collect.settings").delete());
 
-        new LocaleHelper().updateLocale(context);
+        localeHelper.updateLocale();
 
         if (deletedSettingsFolderContest && deletedSettingsFile) {
             failedResetActions.remove(failedResetActions.indexOf(ResetAction.RESET_PREFERENCES));

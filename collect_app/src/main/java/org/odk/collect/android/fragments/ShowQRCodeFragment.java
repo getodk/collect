@@ -96,9 +96,11 @@ public class ShowQRCodeFragment extends Fragment {
     private AlertDialog dialog;
 
     @Inject
-    protected QRCodeUtils qrCodeUtils;
+    QRCodeUtils qrCodeUtils;
     @Inject
-    protected SharedPreferencesUtils sharedPreferencesUtils;
+    SharedPreferencesUtils sharedPreferencesUtils;
+    @Inject
+    LocaleHelper localeHelper;
 
     @Nullable
     @Override
@@ -266,8 +268,7 @@ public class ShowQRCodeFragment extends Fragment {
                 Collect.getInstance().initProperties();
                 ToastUtils.showLongToast(Collect.getInstance().getString(R.string.successfully_imported_settings));
                 getActivity().finish();
-                final LocaleHelper localeHelper = new LocaleHelper();
-                localeHelper.updateLocale(getActivity());
+                localeHelper.updateLocale();
                 MainMenuActivity.startActivityAndCloseAllOthers(getActivity());
             }
 

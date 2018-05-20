@@ -29,11 +29,14 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog;
 import org.odk.collect.android.utilities.ResetUtility;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import timber.log.Timber;
 
@@ -49,10 +52,15 @@ public class ResetDialogPreference extends DialogPreference implements CompoundB
     private final Context context;
     private ProgressDialog progressDialog;
 
+    @Inject
+    ResetUtility resetUtility;
+
     public ResetDialogPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
         setDialogLayoutResource(R.layout.reset_dialog_layout);
         this.context = context;
+
+        ((Collect) context.getApplicationContext()).getAppComponent().inject(this);
     }
 
     @Override
@@ -109,13 +117,10 @@ public class ResetDialogPreference extends DialogPreference implements CompoundB
         }
         if (!resetActions.isEmpty()) {
             showProgressDialog();
-            Runnable runnable = new Runnable() {
-                @Override
-                public void run() {
-                    List<Integer> failedResetActions = new ResetUtility().reset(getContext(), resetActions);
-                    hideProgressDialog();
-                    handleResult(resetActions, failedResetActions);
-                }
+            Runnable runnable = () -> {
+                List<Integer> failedResetActions = resetUtility.reset(resetActions);
+                hideProgressDialog();
+                handleResult(resetActions, failedResetActions);
             };
             new Thread(runnable).start();
         }
@@ -136,7 +141,7 @@ public class ResetDialogPreference extends DialogPreference implements CompoundB
         final StringBuilder resultMessage = new StringBuilder();
         for (int action : resetActions) {
             switch (action) {
-                case RESET_PREFERENCES:
+                case ResetUtility.ResetAction.RESET_PREFERENCES:
                     if (failedResetActions.contains(action)) {
                         resultMessage.append(String.format(getContext().getString(R.string.reset_settings_result),
                                 getContext().getString(R.string.error_occured)));

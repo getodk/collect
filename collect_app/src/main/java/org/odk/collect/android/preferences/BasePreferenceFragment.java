@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.AuthDialogUtility;
+import org.odk.collect.android.utilities.LocaleHelper;
 
 import javax.inject.Inject;
 
@@ -29,6 +30,8 @@ public class BasePreferenceFragment extends PreferenceFragment {
     protected AdminSharedPreferences adminSharedPreferences;
     @Inject
     protected AuthDialogUtility authDialogUtility;
+    @Inject
+    LocaleHelper localeHelper;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
