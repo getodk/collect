@@ -26,6 +26,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.v7.widget.AppCompatImageButton;
 import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CheckBox;
@@ -77,6 +78,12 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
     private CharSequence originalText;
     private Bitmap bitmapPlay;
     private Bitmap bitmapStop;
+
+    // Determine the layout constraints. Right-to-left support works for API > 16.
+    private int alignStart = isNeedPatchRTL() ? RelativeLayout.ALIGN_PARENT_START : RelativeLayout.ALIGN_PARENT_LEFT;
+    private int alginEnd = isNeedPatchRTL() ? RelativeLayout.ALIGN_PARENT_END : RelativeLayout.ALIGN_PARENT_RIGHT;
+    private int startOf = isNeedPatchRTL() ? RelativeLayout.START_OF : RelativeLayout.LEFT_OF;
+    private int endOf = isNeedPatchRTL() ? RelativeLayout.END_OF : RelativeLayout.RIGHT_OF;
 
     public MediaLayout(Context c, MediaPlayer player) {
         super(c);
@@ -302,9 +309,6 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
         boolean isNotAMultipleChoiceField = !RadioButton.class.isAssignableFrom(text.getClass())
                 && !CheckBox.class.isAssignableFrom(text.getClass());
 
-        // Determine the layout constraints. Right-to-left support works for API > 16.
-        int startOf = isNeedPatchRTL() ? RelativeLayout.ALIGN_PARENT_START : RelativeLayout.ALIGN_PARENT_LEFT;
-        int endOf = isNeedPatchRTL() ? RelativeLayout.ALIGN_PARENT_END : RelativeLayout.ALIGN_PARENT_RIGHT;
         if (viewText.getText().length() == 0 && (imageView != null || missingImage != null)) {
             // No text; has image. The image is treated as question/choice icon.
             // The Text view may just have a radio button or checkbox. It
@@ -322,7 +326,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
             // Text upper left; image upper, left edge aligned with text right edge;
             // audio upper right; video below audio on right.
             textParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-            textParams.addRule(startOf);
+            textParams.addRule(alignStart);
             if (isNotAMultipleChoiceField) {
                 imageParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
             } else {
@@ -344,7 +348,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                 // the image will implicitly scale down to fit within parent...
                 // no need to bound it by the width of the parent...
                 if (!isNotAMultipleChoiceField) {
-                    imageParams.addRule(endOf);
+                    imageParams.addRule(alginEnd);
                 }
             }
             imageParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
@@ -357,11 +361,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
             //
             // Text upper left; audio upper right; video below audio on right.
             // image below text, audio and video buttons; left-aligned with text.
-            if (isNeedPatchRTL()) {
-                textParams.addRule(RelativeLayout.ALIGN_PARENT_START);
-            } else {
-                textParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-            }
+            textParams.addRule(alignStart);
             textParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
             if (audioButton != null && videoButton == null) {
                 textParams.addRule(RelativeLayout.LEFT_OF, audioButton.getId());
@@ -375,12 +375,13 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                 injectRulesByLocale(audioParams);
                 injectRulesByLocale(videoParams);
             } else {
-                textParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                textParams.addRule(alginEnd);
+                viewText.setGravity(Gravity.START);
             }
 
             if (imageView != null || missingImage != null) {
                 imageParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-                imageParams.addRule(startOf);
+                imageParams.addRule(alignStart);
                 imageParams.addRule(RelativeLayout.BELOW, viewText.getId());
             } else {
                 textParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
@@ -415,11 +416,10 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                                      RelativeLayout.LayoutParams imageParams,
                                      int imagePadding) {
         mediaParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+        mediaParams.setMargins(5, 0, 5, 0);
         if (isNeedPatchRTL()) {
-            mediaParams.setMargins(11, 0, 5, 0);
             mediaParams.addRule(RelativeLayout.ALIGN_PARENT_END);
         } else {
-            mediaParams.setMargins(5, 0, 11, 0);
             mediaParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
             imageParams.addRule(RelativeLayout.LEFT_OF, imagePadding);
         }
@@ -427,16 +427,9 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
 
     // used for items without image
     private void injectRulesByLocale(RelativeLayout.LayoutParams mediaParams) {
-        if (isNeedPatchRTL()) {
-
-            mediaParams.setMargins(11, 0, 5, 0);
-            mediaParams.addRule(RelativeLayout.ALIGN_PARENT_END);
-        } else {
-            mediaParams.setMargins(5, 0, 11, 0);
-            mediaParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        }
+        mediaParams.setMargins(5, 0, 5, 0);
+            mediaParams.addRule(alginEnd);
     }
-
 
     /**
      * This adds a divider at the bottom of this layout. Used to separate fields in lists.
