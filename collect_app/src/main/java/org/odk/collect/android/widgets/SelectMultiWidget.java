@@ -19,13 +19,7 @@ import android.content.Context;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
-import android.view.View;
 import android.widget.CheckBox;
-import android.widget.TextView;
-
-import com.google.common.base.Joiner;
-
-import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
@@ -35,6 +29,7 @@ import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
+import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -140,10 +135,7 @@ public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWi
 
         if (items != null) {
             // check if any values have spaces
-            String valuesWithSpaces = getValuesWithSpaces();
-            if (valuesWithSpaces != null) {
-                answerLayout.addView(createWarning(valuesWithSpaces));
-            }
+            new SpacesInUnderlyingValuesWarning().renderWarningIfNecessary(items, answerLayout);
 
             for (int i = 0; i < items.size(); i++) {
                 CheckBox checkBox = createCheckBox(i);
@@ -153,27 +145,6 @@ public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWi
             addAnswerView(answerLayout);
         }
         checkboxInit = false;
-    }
-
-    private View createWarning(String valuesWithSpaces) {
-        TextView warning = new TextView(getContext());
-
-        warning.setText(getContext().getResources().getString((valuesWithSpaces.contains(",") ?
-                R.string.invalid_space_in_answer_plural : R.string.invalid_space_in_answer_singular), valuesWithSpaces));
-
-        warning.setPadding(10, 10, 10, 10);
-        return warning;
-    }
-
-    private String getValuesWithSpaces() {
-        final List<String> valuesWithSpaces = new ArrayList<>();
-        for (SelectChoice selectChoice : items) {
-            String value = selectChoice.getValue();
-            if (value.contains(" ")) {
-                valuesWithSpaces.add(value);
-            }
-        }
-        return valuesWithSpaces.isEmpty() ? null : Joiner.on(", ").join(valuesWithSpaces);
     }
 
     @Override
