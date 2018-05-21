@@ -20,7 +20,6 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -48,7 +47,9 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
+import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -630,57 +631,26 @@ public class MainMenuActivity extends CollectAbstractActivity {
         ObjectInputStream input = null;
         try {
             input = new ObjectInputStream(new FileInputStream(src));
-            Editor prefEdit = PreferenceManager.getDefaultSharedPreferences(
-                    this).edit();
-            prefEdit.clear();
+            GeneralSharedPreferences.getInstance().clear();
+
             // first object is preferences
             Map<String, ?> entries = (Map<String, ?>) input.readObject();
 
             AutoSendPreferenceMigrator.migrate(entries);
 
             for (Entry<String, ?> entry : entries.entrySet()) {
-                Object v = entry.getValue();
-                String key = entry.getKey();
-
-                if (v instanceof Boolean) {
-                    prefEdit.putBoolean(key, (Boolean) v);
-                } else if (v instanceof Float) {
-                    prefEdit.putFloat(key, (Float) v);
-                } else if (v instanceof Integer) {
-                    prefEdit.putInt(key, (Integer) v);
-                } else if (v instanceof Long) {
-                    prefEdit.putLong(key, (Long) v);
-                } else if (v instanceof String) {
-                    prefEdit.putString(key, ((String) v));
-                }
+                GeneralSharedPreferences.getInstance().save(entry.getKey(), entry.getValue());
             }
-            prefEdit.apply();
+
             AuthDialogUtility.setWebCredentialsFromPreferences();
 
+            AdminSharedPreferences.getInstance().clear();
+
             // second object is admin options
-            Editor adminEdit = getSharedPreferences(AdminPreferencesActivity.ADMIN_PREFERENCES,
-                    0).edit();
-            adminEdit.clear();
-            // first object is preferences
             Map<String, ?> adminEntries = (Map<String, ?>) input.readObject();
             for (Entry<String, ?> entry : adminEntries.entrySet()) {
-                Object v = entry.getValue();
-                String key = entry.getKey();
-
-                if (v instanceof Boolean) {
-                    adminEdit.putBoolean(key, (Boolean) v);
-                } else if (v instanceof Float) {
-                    adminEdit.putFloat(key, (Float) v);
-                } else if (v instanceof Integer) {
-                    adminEdit.putInt(key, (Integer) v);
-                } else if (v instanceof Long) {
-                    adminEdit.putLong(key, (Long) v);
-                } else if (v instanceof String) {
-                    adminEdit.putString(key, ((String) v));
-                }
+                AdminSharedPreferences.getInstance().save(entry.getKey(), entry.getValue());
             }
-            adminEdit.apply();
-
             res = true;
         } catch (IOException | ClassNotFoundException e) {
             Timber.e(e, "Exception while loading preferences from file due to : %s ", e.getMessage());

@@ -156,6 +156,7 @@
   <string name="no_forms_uploaded">Pahoittelut, lomaketta ei siirretty.</string>
   <string name="upload_results">Siirrä tulokset.</string>
   <string name="xform_parse_error">XForm jäsennysvirhe %1$s: %2$s puuttuu tai ei kelpaa.</string>
+  <string name="choose_file">Valitse tiedosto</string>
   <string name="choose_sound">Valitse ääni</string>
   <string name="choose_video">Valitse video</string>
   <string name="choose_image">Valitse kuva</string>
@@ -482,6 +483,9 @@
   <string name="user_access_control">Käyttäjän pääsynvalvonta</string>
   <string name="autosend_selector_title">Automaattinen lähetys</string>
   <string name="off">Pois</string>
+  <string name="guidance_no">Ei</string>
+  <string name="guidance_yes">Kyllä - näytetään aina</string>
+  <string name="guidance_yes_collapsed">Kyllä - tiivistettynä</string>
   <string name="wifi_autosend">Vain Wifi</string>
   <string name="cellular_autosend">Vain puhelinverkko</string>
   <string name="wifi_cellular_autosend">Wifi tai puhelinverkko</string>
@@ -565,9 +569,17 @@
   <string name="moving_backwards_enabled_message">Haluat ehkä tarkastella seuraavia asetuksia:\n\n\u2022 Muokkaa tallennettua lomaketta\n\u2022 Tallenna lomake\n\u2022 Siirry kehotteeseen\n\u2022 Rajoiteprosessointi</string>
   <string name="yes">Kyllä</string>
   <string name="no">Ei</string>
-  <string name="newer_version_of_a_form_info">Tämä on päivitetty versio lomakkeesta joka sinulla jo on!</string>
+  <string name="newer_version_of_a_form_info">Tämä on päivitys lomakkeeseen, joka sinulla on</string>
   <string name="svg_file_does_not_exist">SVG-tiedosto puuttuu!</string>
   <string name="start_video_capture_instruction">Napsauta näyttöä käynnistääksesi tallennuksen.</string>
   <string name="stop_video_capture_instruction">Tallennus aloitettu. Napsauta uudelleen lopettaaksesi.</string>
   <string name="no_columns_to_upload">Palvelimelle siirrettävässä lomakkeessa ei ollut sarakkeita.</string>
+  <string name="guidance_hint_title">Näytä kysymysopastus</string>
+  <string name="app_theme">Teema</string>
+  <string name="theme_light">Vaalea teema</string>
+  <string name="theme_dark">Tumma teema</string>
+  <string name="cannot_create_directory">Hakemistoa ei voi luoda: %s</string>
+  <string name="not_a_directory">%s on olemassa, mutta ei ole hakemisto</string>
+  <string name="location_metadata">Käytettävissä sateliitteja: %1$d/24\n\nKulunut aika: %2$s</string>
+  <string name="instance_upload_cancelled">Instanssin siirtäminen peruttu</string>
 </resources>

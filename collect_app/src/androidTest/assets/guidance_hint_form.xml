@@ -1,0 +1,34 @@
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jr="http://openrosa.org/javarosa">
+  <h:head>
+    <h:title>Guidance Form Sample</h:title>
+    <model>
+      <instance>
+        <data id="build_Untitled-Form_1523119398">
+          <meta>
+            <instanceID/>
+          </meta>
+          <Age/>
+        </data>
+      </instance>
+      <itext>
+        <translation lang="English">
+          <text id="/data/Age:label">
+            <value>Tell us your age.</value>
+          </text>
+          <text id="/data/Age:hint">
+            <value>Age</value>
+                <value form="guidance">If the age is less than 18, the remainder of the survey will be hidden.</value>
+          </text>
+        </translation>
+      </itext>
+      <bind nodeset="/data/meta/instanceID" type="string" readonly="true()" calculate="concat('uuid:', uuid())"/>
+      <bind nodeset="/data/Age" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <input ref="/data/Age">
+      <label ref="jr:itext('/data/Age:label')"/>
+      <hint ref="jr:itext('/data/Age:hint')"/>
+    </input>
+  </h:body>
+</h:html>

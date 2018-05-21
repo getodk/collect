@@ -73,6 +73,8 @@
   <string name="get_location">Записати місцезнаходження</string>
   <string name="provider_disabled_error">Вибачте! Джерела місцезнаходження не доступні!</string>
   <string name="invalid_answer_error">Вибачте, ця відповідь некоректна!</string>
+  <string name="invalid_space_in_answer_singular">Попередження: основне значення %s містить пробіли</string>
+  <string name="invalid_space_in_answer_plural">Попередження: основні значення %s містять пробіли</string>
   <string name="jump_to_beginning">Перейти на початок</string>
   <string name="jump_to_end">Перейти в кінець</string>
   <string name="jump_to_previous">Перейти назад</string>
@@ -154,6 +156,7 @@
   <string name="no_forms_uploaded">Вибачте, жодна анкета не була вивантажена.</string>
   <string name="upload_results">Вивантаження результатів</string>
   <string name="xform_parse_error">Помилка XForm парсингу в %1$s: %2$s пропущений або некоректний. </string>
+  <string name="choose_file">Обрати файл</string>
   <string name="choose_sound">Оберіть аудіо</string>
   <string name="choose_video">Оберіть відео</string>
   <string name="choose_image">Оберіть зображення</string>
@@ -238,7 +241,7 @@
   <string name="ext_search_return_error">Пошук повернув об’єкт типу \'%s\'.</string>
   <string name="ext_import_generic_error">Не можливо імпортувати дані з %1$s. Причина: %2$s</string>
   <string name="ext_import_progress_message">Передзавантаження даних з \'%1$s\', будь ласка, зачекайте… %2$s</string>
-  <string name="ext_import_cancelled_message">Читання даних відмінене!</string>
+  <string name="ext_import_cancelled_message">Читання даних скасовано!</string>
   <string name="ext_import_finalizing_message">Завершення передзавантажених даних…</string>
   <string name="ext_import_completed_message">Читання даних завершене!</string>
   <string name="ext_not_initialized_error">ExternalDataManager не ініціалізований.</string>
@@ -480,6 +483,9 @@
   <string name="user_access_control">Контроль Доступу Користувачів</string>
   <string name="autosend_selector_title">Автоматичне надсилання</string>
   <string name="off">Вимкнена</string>
+  <string name="guidance_no">Ні</string>
+  <string name="guidance_yes">Так - завжди відображуються</string>
+  <string name="guidance_yes_collapsed">Так - згорнуті</string>
   <string name="wifi_autosend">Тільки Wi-Fi</string>
   <string name="cellular_autosend">Тільки мобільна мережа</string>
   <string name="wifi_cellular_autosend">Wi-Fi або мобільна мережа</string>
@@ -563,8 +569,17 @@
   <string name="moving_backwards_enabled_message">Можливи Ви захочете переглянути наступні налаштування:\n\n\u2022 Виправити Збережену Анкету\n\u2022 Зберегти Анкету\n\u2022 Швидкий Перехід\n\u2022 Обробка обмежень</string>
   <string name="yes">Так</string>
   <string name="no">Ні</string>
-  <string name="newer_version_of_a_form_info">Ви вже маєте найновішу версію анкети!</string>
+  <string name="newer_version_of_a_form_info">Це оновлення анкети яку ви вже маєте</string>
   <string name="svg_file_does_not_exist">SVG файл не існує!</string>
   <string name="start_video_capture_instruction">Щоб почати запис торкніться екрану</string>
   <string name="stop_video_capture_instruction">Запис розпочато. Торкніться знову щоб зупинити</string>
+  <string name="no_columns_to_upload">Стовбців для завантаження в анкеті не знайдено.</string>
+  <string name="guidance_hint_title">Відображати пояснення до питань</string>
+  <string name="app_theme">Тема</string>
+  <string name="theme_light">Світла тема</string>
+  <string name="theme_dark">Темна тема</string>
+  <string name="cannot_create_directory">Неможливо створити директорію: %s</string>
+  <string name="not_a_directory">%s існує, але це не директорія</string>
+  <string name="location_metadata">Доступні супутники: %1$d/24\n\nПриблизний час: %2$s</string>
+  <string name="instance_upload_cancelled">Завантаження екземпляру скасовано</string>
 </resources>
