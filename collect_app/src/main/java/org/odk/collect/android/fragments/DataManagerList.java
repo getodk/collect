@@ -32,10 +32,12 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.DeleteInstancesListener;
 import org.odk.collect.android.listeners.DiskSyncListener;
+import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.DeleteInstancesTask;
 import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.android.utilities.VersionHidingCursorAdapter;
 
 import timber.log.Timber;
 
@@ -119,12 +121,14 @@ public class DataManagerList extends InstanceListFragment
     }
 
     private void setupAdapter() {
+
         String[] data = new String[]{InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT};
         int[] view = new int[]{R.id.text1, R.id.text2};
 
         listAdapter = new SimpleCursorAdapter(getActivity(),
                 R.layout.two_item_multiple_choice, null, data, view);
         setListAdapter(listAdapter);
+
         checkPreviouslyCheckedItems();
     }
 
