@@ -59,7 +59,7 @@ public final class WebUtils {
     private static final String DATE_HEADER = "Date";
 
     private static final String HTTP_CONTENT_TYPE_TEXT_XML = "text/xml";
-    public static final int CONNECTION_TIMEOUT = 30000;
+    private static final int CONNECTION_TIMEOUT = 30000;
 
     private static final String fail = "Error: ";
 
@@ -213,7 +213,7 @@ public final class WebUtils {
         return new InputStreamResult(downloadStream,openRosaResponse);
     }
 
-    public CollectHttpConnection getHttpConnection() {
+    private CollectHttpConnection getHttpConnection() {
         return httpConnection;
     }
 
