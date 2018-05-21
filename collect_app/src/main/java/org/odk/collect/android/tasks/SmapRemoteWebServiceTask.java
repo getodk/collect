@@ -35,13 +35,12 @@ import static java.lang.Thread.sleep;
  */
 public class SmapRemoteWebServiceTask extends AsyncTask<String, Void, SmapRemoteDataItem> {
 
-    private String downloadUrl;
     private SmapRemoteListener remoteListener;
 
     @Override
     protected SmapRemoteDataItem doInBackground(String... params) {
 
-        String downloadUrl = params[0];
+        String lookupUrl = params[0];
         String timeoutValue = params[1];
 
         int timeout = 0;
@@ -63,20 +62,10 @@ public class SmapRemoteWebServiceTask extends AsyncTask<String, Void, SmapRemote
         }
 
         try {
-            URI uri;
-            boolean isCancelled = false;
-            boolean success = false;
-            try {
-                // assume the downloadUrl is escaped properly
-                URL url = new URL(downloadUrl);
-                uri = url.toURI();
-            } catch (MalformedURLException | URISyntaxException e) {
-                Timber.e(e, "Unable to get a URI for download URL : %s  due to %s : ", downloadUrl, e.getMessage());
-                throw e;
-            }
+            URL url = new URL(lookupUrl);
+            URI uri = url.toURI();
 
             HttpContext localContext = Collect.getInstance().getHttpContext();
-
             HttpClient httpclient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
 
             // Add credentials
@@ -86,12 +75,8 @@ public class SmapRemoteWebServiceTask extends AsyncTask<String, Void, SmapRemote
             String username = sharedPreferences.getString(PreferenceKeys.KEY_USERNAME, null);
             String password = sharedPreferences.getString(PreferenceKeys.KEY_PASSWORD, null);
 
-            String server =
-                    sharedPreferences.getString(PreferenceKeys.KEY_SERVER_URL, null);
-
             if (username != null && password != null) {
-                Uri u = Uri.parse(downloadUrl);
-                WebUtils.addCredentials(username, password, u.getHost());
+                WebUtils.addCredentials(username, password, uri.getHost());
             }
 
             // set up request...
@@ -102,12 +87,8 @@ public class SmapRemoteWebServiceTask extends AsyncTask<String, Void, SmapRemote
 
             if (statusCode != HttpStatus.SC_OK) {
                 WebUtils.discardEntityBytes(response);
-                if (statusCode == HttpStatus.SC_UNAUTHORIZED) {
-                    // clear the cookies -- should not be necessary?
-                    Collect.getInstance().getCookieStore().clear();
-                }
                 String errMsg =
-                        Collect.getInstance().getString(R.string.file_fetch_failed, downloadUrl,
+                        Collect.getInstance().getString(R.string.file_fetch_failed, lookupUrl,
                                 response.getStatusLine().getReasonPhrase(), String.valueOf(statusCode));
                 Timber.e(errMsg);
                 throw new Exception(errMsg);
