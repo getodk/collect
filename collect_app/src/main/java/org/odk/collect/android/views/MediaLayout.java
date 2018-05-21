@@ -414,7 +414,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                                      RelativeLayout.LayoutParams imageParams,
                                      int imagePadding) {
         mediaParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-        mediaParams.setMargins(5, 0, 5, 0);
+        mediaParams.setMargins(6, 0, 6, 0);
         if (isNeedPatchRTL()) {
             mediaParams.addRule(RelativeLayout.ALIGN_PARENT_END);
         } else {
@@ -425,7 +425,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
 
     // used for items without image
     private void injectRulesByLocale(RelativeLayout.LayoutParams mediaParams) {
-        mediaParams.setMargins(5, 0, 5, 0);
+        mediaParams.setMargins(6, 0, 6, 0);
         if (isNeedPatchRTL()) {
             mediaParams.addRule(RelativeLayout.ALIGN_PARENT_END);
         } else {

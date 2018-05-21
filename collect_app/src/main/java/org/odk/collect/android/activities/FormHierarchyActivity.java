@@ -346,7 +346,7 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity impl
                                 repeatLabel = fc2.getLongText();
                             }
                         }
-                        repeatLabel += " (" + (fc.getMultiplicity() + 1) + ")";
+                        repeatLabel += " (" + (fc.getMultiplicity() + 1) + ")\u200E";
                         // Add this group name to the drop down list for this repeating group.
                         HierarchyElement h = formList.get(formList.size() - 1);
                         h.addChild(new HierarchyElement(repeatLabel, null, null, CHILD, fc.getIndex()));

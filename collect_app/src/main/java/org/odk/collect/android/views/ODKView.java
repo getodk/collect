@@ -301,7 +301,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                         path
                                 .append(" (")
                                 .append(multiplicity)
-                                .append(")");
+                                .append(")\u200E");
                     }
                     if (index < groups.length) {
                         path.append(" > ");
