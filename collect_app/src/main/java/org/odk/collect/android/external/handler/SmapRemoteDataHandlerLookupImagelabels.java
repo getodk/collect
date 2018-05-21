@@ -30,7 +30,9 @@ import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.tasks.SmapRemoteWebServicePostTask;
 import org.odk.collect.android.tasks.SmapRemoteWebServiceTask;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,19 +42,19 @@ import timber.log.Timber;
 /**
  * Author:
  */
-public class SmapRemoteDataHandlerLookup implements IFunctionHandler {
+public class SmapRemoteDataHandlerLookupImagelabels implements IFunctionHandler {
 
-    public static final String HANDLER_NAME = "lookup";
+    public static final String HANDLER_NAME = "lookupimagelabels";
     public String mIdent = null;
     public String mServerUrlBase = null;
 
-    public SmapRemoteDataHandlerLookup(String ident) {
+    public SmapRemoteDataHandlerLookupImagelabels(String ident) {
         this.mIdent = ident;
 
         SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(Collect.getInstance().getBaseContext());
         mServerUrlBase = sharedPreferences.getString(PreferenceKeys.KEY_SERVER_URL, null) +
-                "/lookup/" + ident + "/";
+                "/lookup/imagelabels/" + ident;
     }
 
     @Override
@@ -78,46 +80,34 @@ public class SmapRemoteDataHandlerLookup implements IFunctionHandler {
     @Override
     public Object eval(Object[] args, EvaluationContext ec) {
 
-        if (args.length != 5 && args.length != 4) {
-            Timber.e("4 or 5 arguments are needed to evaluate the %s function", HANDLER_NAME);
+        if (args.length != 1 && args.length != 2) {
+            Timber.e("1 or 2 arguments are needed to evaluate the %s function", HANDLER_NAME);
             return "";
         }
 
         Collect app = Collect.getInstance();
+        String url = mServerUrlBase;
 
-        String dataSetName = XPathFuncExpr.toString(args[0]);
-        String queriedColumn = XPathFuncExpr.toString(args[1]);
-        String referenceColumn = XPathFuncExpr.toString(args[2]);
-        String referenceValue = XPathFuncExpr.toString(args[3]);
-
+        String imageName = XPathFuncExpr.toString(args[0]);
         String timeoutValue = "0";
-        if(args.length == 5) {
-            timeoutValue = XPathFuncExpr.toString(args[4]);
+        if(args.length == 2) {
+            timeoutValue = XPathFuncExpr.toString(args[1]);
         }
 
-        if(referenceValue.length() > 0) {
-            // Get the url which doubles as the cache key
-            String url = mServerUrlBase + dataSetName + "/" + referenceColumn + "/" + referenceValue;
+        if(imageName.length() > 0) {
 
             // Get the cache results if they exist
             String data = app.getRemoteData(url);
-            HashMap<String, String> record = null;
-            try {
-                record =
-                        new Gson().fromJson(data, new TypeToken<HashMap<String, String>>() {
-                        }.getType());
-            } catch (Exception e) {
-                return data;            // Assume the data contains the error message
-            }
-            if (record == null) {
+
+            if (data == null) {
                 // Call a webservice to get the remote record
                 app.startRemoteCall(url);
-                SmapRemoteWebServiceTask task = new SmapRemoteWebServiceTask();
+                SmapRemoteWebServicePostTask task = new SmapRemoteWebServicePostTask();
                 task.setSmapRemoteListener(app.getFormEntryActivity());
                 task.execute(url, timeoutValue);
                 return "";
             } else {
-                return ExternalDataUtil.nullSafe(record.get(queriedColumn));
+                return ExternalDataUtil.nullSafe(data);
             }
         } else {
             // No data to lookup

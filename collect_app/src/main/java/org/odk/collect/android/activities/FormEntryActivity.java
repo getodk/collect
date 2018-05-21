@@ -1042,6 +1042,13 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 Intent comment = new Intent(this, SurveyNotesActivity.class);
                 startActivity(comment);
                 return true;
+            case R.id.menu_clear_remote_cache:              // smap
+                Collect.getInstance()
+                        .getActivityLogger()
+                        .logInstanceAction(this, "onOptionsItemSelected",
+                                "MENU_CLEAR_REMOTE_CACHE");
+               Collect.getInstance().clearRemoteServiceCaches();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }

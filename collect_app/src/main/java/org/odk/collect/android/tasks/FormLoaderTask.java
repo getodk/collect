@@ -43,6 +43,7 @@ import org.odk.collect.android.external.ExternalDataReader;
 import org.odk.collect.android.external.ExternalDataReaderImpl;
 import org.odk.collect.android.external.handler.ExternalDataHandlerPull;
 import org.odk.collect.android.external.handler.SmapRemoteDataHandlerLookup;
+import org.odk.collect.android.external.handler.SmapRemoteDataHandlerLookupImagelabels;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.logic.FileReferenceFactory;
 import org.odk.collect.android.logic.FormController;
@@ -143,10 +144,14 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         formDef.getEvaluationContext().addFunctionHandler(externalDataHandlerPull);
 
         /*
-         * smap start add lookup data function handler
+         * smap start add lookup data function handlers
          */
         SmapRemoteDataHandlerLookup remoteDataHandlerLookup = new SmapRemoteDataHandlerLookup(formId);
         formDef.getEvaluationContext().addFunctionHandler(remoteDataHandlerLookup);
+
+        SmapRemoteDataHandlerLookupImagelabels remoteDataHandlerLookupimagelabels
+                = new SmapRemoteDataHandlerLookupImagelabels(formId);
+        formDef.getEvaluationContext().addFunctionHandler(remoteDataHandlerLookupimagelabels);
         // smap end
 
         try {

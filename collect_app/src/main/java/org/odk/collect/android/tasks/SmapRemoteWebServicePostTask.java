@@ -28,12 +28,10 @@ import java.net.URL;
 
 import timber.log.Timber;
 
-import static java.lang.Thread.sleep;
-
 /**
  * Background task for appending a timer event to the timer log
  */
-public class SmapRemoteWebServiceTask extends AsyncTask<String, Void, SmapRemoteDataItem> {
+public class SmapRemoteWebServicePostTask extends AsyncTask<String, Void, SmapRemoteDataItem> {
 
     private String downloadUrl;
     private SmapRemoteListener remoteListener;

@@ -364,6 +364,9 @@ public class Collect extends Application implements HasActivityInjector {
     public FormEntryActivity getFormEntryActivity() {
         return formEntryActivity;
     }
+    public void clearRemoteServiceCaches() {
+        remoteCache = new HashMap<String, SmapRemoteDataItem>();
+    }
     public void initRemoteServiceCaches() {
         if(remoteCache == null) {
             remoteCache = new HashMap<String, SmapRemoteDataItem>();

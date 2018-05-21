@@ -37,10 +37,15 @@
         android:title="@string/general_preferences"
         app:showAsAction="never"/>
 
-    <!-- smap add a menu for comments -->
+    <!-- smap add a menu for comments and to clear remote cache -->
     <item
         android:id="@+id/menu_comment"
         android:title="@string/smap_add_comment"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/menu_clear_remote_cache"
+        android:title="@string/smap_clear_remote_cache"
         app:showAsAction="ifRoom"/>
 
 </menu>
