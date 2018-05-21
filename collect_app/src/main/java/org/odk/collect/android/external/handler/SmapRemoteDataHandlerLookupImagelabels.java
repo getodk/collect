@@ -31,10 +31,8 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.tasks.SmapRemoteWebServicePostTask;
-import org.odk.collect.android.tasks.SmapRemoteWebServiceTask;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import timber.log.Timber;
@@ -104,7 +102,7 @@ public class SmapRemoteDataHandlerLookupImagelabels implements IFunctionHandler 
                 app.startRemoteCall(url);
                 SmapRemoteWebServicePostTask task = new SmapRemoteWebServicePostTask();
                 task.setSmapRemoteListener(app.getFormEntryActivity());
-                task.execute(url, timeoutValue);
+                task.execute(url, imageName, timeoutValue);
                 return "";
             } else {
                 return ExternalDataUtil.nullSafe(data);

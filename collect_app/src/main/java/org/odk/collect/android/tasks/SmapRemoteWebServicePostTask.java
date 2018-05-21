@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
+import android.webkit.MimeTypeMap;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -16,10 +17,14 @@ import org.opendatakit.httpclientandroidlib.HttpEntity;
 import org.opendatakit.httpclientandroidlib.HttpResponse;
 import org.opendatakit.httpclientandroidlib.HttpStatus;
 import org.opendatakit.httpclientandroidlib.client.HttpClient;
-import org.opendatakit.httpclientandroidlib.client.methods.HttpGet;
+import org.opendatakit.httpclientandroidlib.client.methods.HttpPost;
+import org.opendatakit.httpclientandroidlib.entity.ContentType;
+import org.opendatakit.httpclientandroidlib.entity.mime.MultipartEntityBuilder;
+import org.opendatakit.httpclientandroidlib.entity.mime.content.FileBody;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -28,19 +33,21 @@ import java.net.URL;
 
 import timber.log.Timber;
 
+import static com.google.common.io.Files.getFileExtension;
+
 /**
  * Background task for appending a timer event to the timer log
  */
 public class SmapRemoteWebServicePostTask extends AsyncTask<String, Void, SmapRemoteDataItem> {
 
-    private String downloadUrl;
     private SmapRemoteListener remoteListener;
 
     @Override
     protected SmapRemoteDataItem doInBackground(String... params) {
 
-        String downloadUrl = params[0];
-        String timeoutValue = params[1];
+        String lookupUrl = params[0];
+        String fileName = params[1];
+        String timeoutValue = params[2];
 
         int timeout = 0;
         try {
@@ -61,67 +68,77 @@ public class SmapRemoteWebServicePostTask extends AsyncTask<String, Void, SmapRe
         }
 
         try {
-            URI uri;
-            boolean isCancelled = false;
-            boolean success = false;
-            try {
-                // assume the downloadUrl is escaped properly
-                URL url = new URL(downloadUrl);
-                uri = url.toURI();
-            } catch (MalformedURLException | URISyntaxException e) {
-                Timber.e(e, "Unable to get a URI for download URL : %s  due to %s : ", downloadUrl, e.getMessage());
-                throw e;
-            }
+            String filePath = Collect.getInstance().getFormController().getInstanceFile().getParent() +
+                    File.separator + fileName;
+            File file = new File(filePath);
+            String extension = getFileExtension(fileName);
+            if(file.exists() && extension.equals("jpg")) {
 
-            HttpContext localContext = Collect.getInstance().getHttpContext();
 
-            HttpClient httpclient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
+                URL url = new URL(lookupUrl);
+                URI uri = url.toURI();
 
-            // Add credentials
-            SharedPreferences sharedPreferences =
-                    PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
+                HttpContext localContext = Collect.getInstance().getHttpContext();
+                HttpClient httpclient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
 
-            String username = sharedPreferences.getString(PreferenceKeys.KEY_USERNAME, null);
-            String password = sharedPreferences.getString(PreferenceKeys.KEY_PASSWORD, null);
+                // Add credentials
+                SharedPreferences sharedPreferences =
+                        PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
 
-            String server =
-                    sharedPreferences.getString(PreferenceKeys.KEY_SERVER_URL, null);
+                String username = sharedPreferences.getString(PreferenceKeys.KEY_USERNAME, null);
+                String password = sharedPreferences.getString(PreferenceKeys.KEY_PASSWORD, null);
 
-            if (username != null && password != null) {
-                Uri u = Uri.parse(downloadUrl);
-                WebUtils.addCredentials(username, password, u.getHost());
-            }
-
-            // set up request...
-            HttpGet req = WebUtils.createOpenRosaHttpGet(uri);
-
-            response = httpclient.execute(req, localContext);
-            int statusCode = response.getStatusLine().getStatusCode();
-
-            if (statusCode != HttpStatus.SC_OK) {
-                WebUtils.discardEntityBytes(response);
-                if (statusCode == HttpStatus.SC_UNAUTHORIZED) {
-                    // clear the cookies -- should not be necessary?
-                    Collect.getInstance().getCookieStore().clear();
+                if (username != null && password != null) {
+                    WebUtils.addCredentials(username, password, uri.getHost());
                 }
-                String errMsg =
-                        Collect.getInstance().getString(R.string.file_fetch_failed, downloadUrl,
-                                response.getStatusLine().getReasonPhrase(), String.valueOf(statusCode));
-                Timber.e(errMsg);
-                throw new Exception(errMsg);
-            }
 
-            HttpEntity entity = response.getEntity();
-            is = entity.getContent();
+                MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+                MimeTypeMap m = MimeTypeMap.getSingleton();
+                String mime = m.getMimeTypeFromExtension(getFileExtension(fileName));
+                ContentType contentType = null;
+                if (mime != null) {
+                    contentType = ContentType.create(mime);
+                } else {
+                    Timber.w("No specific MIME type found for file: %s", fileName);
+                    contentType = ContentType.APPLICATION_OCTET_STREAM;
+                }
+                FileBody fb = new FileBody(file, contentType);
+                builder.addPart(file.getName(), fb);
 
-            os = new ByteArrayOutputStream();
-            byte[] buf = new byte[4096];
-            int len;
-            while ((len = is.read(buf)) > 0) {
-                os.write(buf, 0, len);
+                // set up request...
+                HttpPost httppost = WebUtils.createOpenRosaHttpPost(Uri.parse(uri.toString()));
+                httppost.setEntity(builder.build());
+
+                response = httpclient.execute(httppost, localContext);
+                int statusCode = response.getStatusLine().getStatusCode();
+
+                if (statusCode != HttpStatus.SC_OK) {
+                    WebUtils.discardEntityBytes(response);
+                    if (statusCode == HttpStatus.SC_UNAUTHORIZED) {
+                        // clear the cookies -- should not be necessary?
+                        Collect.getInstance().getCookieStore().clear();
+                    }
+                    String errMsg =
+                            Collect.getInstance().getString(R.string.file_fetch_failed, lookupUrl,
+                                    response.getStatusLine().getReasonPhrase(), String.valueOf(statusCode));
+                    Timber.e(errMsg);
+                    throw new Exception(errMsg);
+                }
+
+                HttpEntity entity = response.getEntity();
+                is = entity.getContent();
+
+                os = new ByteArrayOutputStream();
+                byte[] buf = new byte[4096];
+                int len;
+                while ((len = is.read(buf)) > 0) {
+                    os.write(buf, 0, len);
+                }
+                os.flush();
+                item.data = os.toString();
+            } else {
+                item.data = "";
             }
-            os.flush();
-            item.data = os.toString();
 
         } catch (Exception e) {
             item.data = e.getLocalizedMessage();

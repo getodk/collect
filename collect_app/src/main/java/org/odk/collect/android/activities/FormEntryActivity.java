@@ -1076,7 +1076,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     createConstraintToast(constraint.index, constraint.status);
                     return false;
                 }
-                if(Collect.getInstance().inRemoteCall()) {  // smap
+                if(Collect.getInstance().inRemoteCall() && Looper.getMainLooper().getThread() == Thread.currentThread()) {  // smap
                     startProgressBar();
                     return false;
                 } else {
@@ -2326,6 +2326,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             getCurrentViewIfODKView().stopAudio();
         }
 
+        if(progressBar != null) {    // smap
+            progressBar.dismiss();
+        }
+
         super.onPause();
     }
 
@@ -2442,6 +2446,9 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             }
         }
         releaseOdkView();
+        if(progressBar != null) {    // smap
+            progressBar.dismiss();
+        }
         super.onDestroy();
 
     }
