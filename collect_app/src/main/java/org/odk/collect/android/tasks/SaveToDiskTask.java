@@ -26,9 +26,11 @@ import org.javarosa.form.api.FormEntryController;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.dao.helpers.ContentResolverHelper;
 import org.odk.collect.android.exception.EncryptionException;
 import org.odk.collect.android.listeners.FormSavedListener;
 import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.logic.FormInfo;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -36,6 +38,7 @@ import org.odk.collect.android.taskModel.FormDetail;
 import org.odk.collect.android.utilities.EncryptionUtils;
 import org.odk.collect.android.utilities.EncryptionUtils.EncryptedFormInformation;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.MediaManager;
 
 import android.content.Intent;
 import android.location.Location;
@@ -67,7 +70,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
     private String mFormPath;	    // ---------- smap
     private String mSurveyNotes;	// ---------- smap
     private boolean canUpdate = true;  // smap
-    private FormDetail mFormDetail;  // smap
+    private FormInfo formInfo;  // smap
 
     public static final int SAVED = 500;
     public static final int SAVE_ERROR = 501;
@@ -77,10 +80,10 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
     public static final int ENCRYPTION_ERROR = 505;
 
     public SaveToDiskTask(Uri uri, boolean saveAndExit, boolean markCompleted, String updatedName,
-        long taskId, String formPath, String surveyNotes, boolean canUpdate, FormDetail formDetail) {		// smap added assignment_id, formPath, formDetail
+        long taskId, String formPath, String surveyNotes, boolean canUpdate, FormInfo formInfo) {		// smap added assignment_id, formPath, formDetail
 
         this.uri = uri;
-        mFormDetail = formDetail;  // smap
+        this.formInfo = formInfo;  // smap
         save = saveAndExit;
         this.markCompleted = markCompleted;
         instanceName = updatedName;
@@ -261,41 +264,30 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
                 Cursor c = null;
                 try {
                     // smap cannot rely on retrieving the form definition as the URI may have changed - however just in case formDetail is null
-                    if(mFormDetail == null) {
-                        mFormDetail = new FormDetail();
-
-                        // retrieve the form definition...
-                        c = Collect.getInstance().getContentResolver().query(uri, null, null, null, null);
-                        c.moveToFirst();
-                        mFormDetail.source = c.getString(c.getColumnIndex(FormsColumns.SOURCE));
-                        mFormDetail.name = c.getString(c.getColumnIndex(FormsColumns.DISPLAY_NAME));
-                        if ( !c.isNull(c.getColumnIndex(FormsColumns.SUBMISSION_URI)) ) {
-                            mFormDetail.submissionUri = c.getString(c.getColumnIndex(FormsColumns.SUBMISSION_URI));
-                        }
-                        mFormDetail.formId = c.getString(c.getColumnIndex(FormsColumns.JR_FORM_ID));
-                        mFormDetail.version = c.getString(c.getColumnIndex(FormsColumns.JR_VERSION));
+                    if(formInfo == null) {
+                        formInfo = ContentResolverHelper.getFormDetails(uri);
                     }
 
 	                // add missing fields into values
 	                values.put(InstanceColumns.INSTANCE_FILE_PATH, instancePath);
-	                values.put(InstanceColumns.SUBMISSION_URI, mFormDetail.submissionUri); // smap get submission uri from form details
+	                values.put(InstanceColumns.SUBMISSION_URI, formInfo.submissionUri); // smap get submission uri from form details
 	                if (instanceName != null) {
 	                    values.put(InstanceColumns.DISPLAY_NAME, instanceName);
 	                } else {
-	                    values.put(InstanceColumns.DISPLAY_NAME, mFormDetail.name);  // smap get form name from form details
+	                    values.put(InstanceColumns.DISPLAY_NAME, formInfo.name);  // smap get form name from form details
 	                }
 
                     // Smap Start
-                    values.put(InstanceColumns.SOURCE, mFormDetail.source);     // smap get source from form detail
+                    values.put(InstanceColumns.SOURCE, formInfo.source);     // smap get source from form detail
                     if (instanceName != null) {
                         values.put(InstanceColumns.T_TITLE, instanceName);
                     } else {
-                        values.put(InstanceColumns.T_TITLE, mFormDetail.name);  // smap get from name from form details
+                        values.put(InstanceColumns.T_TITLE, formInfo.name);  // smap get from name from form details
                     }
                     //String jrformid = c.getString(c.getColumnIndex(FormsColumns.JR_FORM_ID));    smap
                     //String jrversion = c.getString(c.getColumnIndex(FormsColumns.JR_VERSION));   smap
-                    values.put(InstanceColumns.JR_FORM_ID, mFormDetail.formId);    // smap get formId from form detail
-                    values.put(InstanceColumns.JR_VERSION, mFormDetail.version);    // smap get version from form detail
+                    values.put(InstanceColumns.JR_FORM_ID, formInfo.getFormID());           // smap get formId from form detail
+                    values.put(InstanceColumns.JR_VERSION, formInfo.getFormVersion());      // smap will be null
 
                     // Smap End
 
@@ -347,6 +339,8 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
         ByteArrayPayload payload = formController.getFilledInFormXml();
         // write out xml
         String instancePath = formController.getInstanceFile().getAbsolutePath();
+
+        MediaManager.INSTANCE.saveChanges();
 
         publishProgress(Collect.getInstance().getString(R.string.survey_saving_saving_message));
         if(canUpdate) {      // smap

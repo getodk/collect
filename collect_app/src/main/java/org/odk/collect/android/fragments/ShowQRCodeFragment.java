@@ -40,7 +40,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.CollectAbstractActivity;
+import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
 import org.odk.collect.android.activities.SmapMain;
 import org.odk.collect.android.application.Collect;
@@ -252,9 +252,10 @@ public class ShowQRCodeFragment extends Fragment {
                 getActivity().finish();
                 final LocaleHelper localeHelper = new LocaleHelper();
                 localeHelper.updateLocale(getActivity());
-                //((CollectAbstractActivity) getActivity()).goToTheMainActivityAndCloseAllOthers();    // smap
+
         	Intent intent = new Intent(getActivity().getBaseContext(), SmapMain.class);     // smap
         	getActivity().startActivity(intent);
+        	// MainMenuActivity.startActivityAndCloseAllOthers(getActivity());
             }
 
             @Override

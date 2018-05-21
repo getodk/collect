@@ -31,9 +31,11 @@ import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
-//import com.google.android.gms.analytics.GoogleAnalytics; Smap
-//import com.google.android.gms.analytics.Tracker;  Smap
-import com.google.firebase.crash.FirebaseCrash;
+import com.evernote.android.job.JobManager;
+import com.evernote.android.job.JobManagerCreateException;
+import com.crashlytics.android.Crashlytics;
+//import com.google.android.gms.analytics.GoogleAnalytics;
+//import com.google.android.gms.analytics.Tracker;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
@@ -48,6 +50,7 @@ import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.external.handler.SmapRemoteDataItem;
 import org.odk.collect.android.injection.config.DaggerAppComponent;
 import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.logic.FormInfo;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
@@ -58,6 +61,7 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.PRNGFixes;
+import org.odk.collect.android.utilities.ServerPollingJobCreator;
 import org.opendatakit.httpclientandroidlib.client.CookieStore;
 import org.opendatakit.httpclientandroidlib.client.CredentialsProvider;
 import org.opendatakit.httpclientandroidlib.client.protocol.HttpClientContext;
@@ -121,7 +125,7 @@ public class Collect extends Application implements HasActivityInjector {
 
     private Location location = null;                   // smap
     private boolean recordLocation = false;             // smap
-    private FormDetail formDetail = null;               // smap
+    private FormInfo formInfo = null;                   // smap
     private boolean tasksDownloading = false;           // smap
     // Keep a reference to form entry activity to allow cancel dialogs to be shown during remote calls
     private FormEntryActivity formEntryActivity = null; // smap
@@ -165,13 +169,15 @@ public class Collect extends Application implements HasActivityInjector {
             File dir = new File(dirName);
             if (!dir.exists()) {
                 if (!dir.mkdirs()) {
-                    throw new RuntimeException("ODK reports :: Cannot create directory: "
-                            + dirName);
+                    String message = getInstance().getString(R.string.cannot_create_directory, dirName);
+                    Timber.w(message);
+                    throw new RuntimeException(message);
                 }
             } else {
                 if (!dir.isDirectory()) {
-                    throw new RuntimeException("ODK reports :: " + dirName
-                            + " exists, but is not a directory");
+                    String message = getInstance().getString(R.string.not_a_directory, dirName);
+                    Timber.w(message);
+                    throw new RuntimeException(message);
                 }
             }
         }
@@ -281,6 +287,14 @@ public class Collect extends Application implements HasActivityInjector {
                 .build()
                 .inject(this);
 
+        try {
+            JobManager
+                    .create(this)
+                    .addJobCreator(new ServerPollingJobCreator());
+        } catch (JobManagerCreateException e) {
+            Timber.e(e);
+        }
+
         reloadSharedPreferences();
 
         PRNGFixes.apply();
@@ -331,11 +345,11 @@ public class Collect extends Application implements HasActivityInjector {
 
     // Begin Smap
     // start, set and get location
-    public void setFormDetail(FormDetail v) {
-        formDetail = v;
+    public void setFormInfo(FormInfo v) {
+        formInfo = v;
     }
-    public FormDetail getFormDetail() {
-        return formDetail;
+    public FormInfo getFormInfo() {
+        return formInfo;
     }
 
     public void setLocation(Location l) {
@@ -442,10 +456,10 @@ public class Collect extends Application implements HasActivityInjector {
                 return;
             }
 
-            FirebaseCrash.logcat(priority, tag, message);
+            Crashlytics.log(priority, tag, message);
 
             if (t != null && priority == Log.ERROR) {
-                FirebaseCrash.report(t);
+                Crashlytics.logException(t);
             }
         }
     }

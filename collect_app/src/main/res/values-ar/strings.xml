@@ -135,7 +135,6 @@
   <string name="submission_url">مسار الارسال</string>
   <string name="font_size">حجم الخط</string>
   <string name="change_font_size">حجم الخط</string>
-  <string name="form_scan_starting">البحث عن الاستمارات…</string>
   <string name="access_error">خطأ اثناء الوصول %s:</string>
   <string name="manifest_server_error">المانيفست لايعلم نسخة OpenRosa - الخادم لايستجيب؟</string>
   <string name="root_element_error">العنصرالأساسي &lt;manifest\&gt; كان %s</string>
@@ -190,7 +189,6 @@
   <string name="draw_image">تخطيط الصورة</string>
   <string name="reset_image">اعادة تعيين</string>
   <string name="set_color">تحديد اللون</string>
-  <string name="select_drawing_color">اختر لون الرسم</string>
   <string name="admin_preferences">إعدادات المدير</string>
   <string name="admin_access_settings">انقر للوصول الى اعدادات المدير</string>
   <string name="save_mid">حفظ الاستمارة</string>
@@ -232,7 +230,6 @@
   <string name="ext_search_return_error">معالج البحث استعاد نوع الموضوع  \'%s\'.</string>
   <string name="ext_import_generic_error">لم يمكن استيراد البيانات من  %1$s السبب: %2$s</string>
   <string name="ext_import_progress_message">التحميل المسبق للبيانات من \'%1$s\'،  يرجى الانتظار…  %2$s</string>
-  <string name="ext_import_cancelled_message">الغاء قراءة البيانات!</string>
   <string name="ext_import_finalizing_message">جاري انهاء التحميل المسبق للبيانات.</string>
   <string name="ext_import_completed_message">اكتملت قراءة البيانات!</string>
   <string name="ext_not_initialized_error">مدير البيانات الخارجية لم يتم تفعيله.</string>

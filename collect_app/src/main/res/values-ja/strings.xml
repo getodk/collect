@@ -144,7 +144,6 @@
   <string name="submission_url">提出パス</string>
   <string name="font_size">文字フォントサイズ</string>
   <string name="change_font_size">文字フォントサイズ</string>
-  <string name="form_scan_starting">フォームのスキャン中…</string>
   <string name="access_error">%s のアクセス中にエラー:</string>
   <string name="manifest_server_error">マニフェストの応答が OpenRosa バージョンを報告しません — サーバーが異常?</string>
   <string name="root_element_error">ルートエレメントが &lt;manifest\&gt; ではありません — %s でした</string>
@@ -199,7 +198,6 @@
   <string name="draw_image">スケッチ画像</string>
   <string name="reset_image">リセット</string>
   <string name="set_color">色を設定</string>
-  <string name="select_drawing_color">描画色を選択します</string>
   <string name="admin_preferences">管理者設定</string>
   <string name="admin_access_settings">タップして設定に管理者アクセスします</string>
   <string name="save_mid">フォームを保存する</string>
@@ -242,7 +240,6 @@
   <string name="ext_search_return_error">検索ハンドラーはタイプ \'%s\' のオブジェクトを返しました。</string>
   <string name="ext_import_generic_error">%1$s からデータをインポートできませんでした。理由: %2$s</string>
   <string name="ext_import_progress_message">\'%1$s\' からデータをプリロード中。しばらくお待ちください… %2$s</string>
-  <string name="ext_import_cancelled_message">データの読み込みがキャンセルされました!</string>
   <string name="ext_import_finalizing_message">プリロードされたデータの確定中…</string>
   <string name="ext_import_completed_message">データの読み込みが完了しました!</string>
   <string name="ext_not_initialized_error">外部データマネージャーが初期化されていません。</string>
@@ -484,6 +481,7 @@
   <string name="user_access_control">ユーザーアクセスコントロール</string>
   <string name="autosend_selector_title">自動送信</string>
   <string name="off">オフ</string>
+  <string name="guidance_no">いいえ</string>
   <string name="wifi_autosend">Wifi のみ</string>
   <string name="cellular_autosend">データ通信のみ</string>
   <string name="wifi_cellular_autosend">Wifi またはデータ通信</string>
@@ -567,7 +565,8 @@
   <string name="moving_backwards_enabled_message">次の設定を確認することができます:\n\n\u2022 保存したフォームの編集\n\u2022 フォームの保存\n\u2022 プロンプトに移動\n\u2022 制約処理</string>
   <string name="yes">はい</string>
   <string name="no">いいえ</string>
-  <string name="newer_version_of_a_form_info">これはすでにお持ちのフォームの更新版です!</string>
   <string name="svg_file_does_not_exist">SVG ファイルが存在しません!</string>
+  <string name="start_video_capture_instruction">画面をタップすると記録を開始します</string>
+  <string name="stop_video_capture_instruction">記録を開始しました。もう一度タップすると停止します</string>
   <string name="no_columns_to_upload">アップロードするフォームにカラムが見つかりません。</string>
 </resources>

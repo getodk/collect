@@ -114,8 +114,8 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     @Override
     public void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-        setContentView(R.layout.drive_layout);
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.drive_layout);
 
         setProgressBarVisibility(true);
         initToolbar();
@@ -492,17 +492,6 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     }
 
     @Override
-    protected void onPause() {
-        if (retrieveDriveFileContentsAsyncTask != null) {
-            retrieveDriveFileContentsAsyncTask.setTaskListener(null);
-        }
-        if (getFileTask != null) {
-            getFileTask.setGoogleDriveFormDownloadListener(null);
-        }
-        super.onPause();
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         if (retrieveDriveFileContentsAsyncTask != null) {
@@ -544,6 +533,24 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     protected void onStop() {
         Collect.getInstance().getActivityLogger().logOnStop(this);
         super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (retrieveDriveFileContentsAsyncTask != null) {
+            if (!retrieveDriveFileContentsAsyncTask.isCancelled()) {
+                retrieveDriveFileContentsAsyncTask.cancel(true);
+            }
+            retrieveDriveFileContentsAsyncTask.setTaskListener(null);
+        }
+        if (getFileTask != null) {
+            if (!getFileTask.isCancelled()) {
+                getFileTask.cancel(true);
+            }
+            getFileTask.setGoogleDriveFormDownloadListener(null);
+        }
+        finish();
+        super.onDestroy();
     }
 
     public void listFiles(String dir, String query) {

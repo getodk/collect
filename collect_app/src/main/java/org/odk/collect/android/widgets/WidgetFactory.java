@@ -157,6 +157,9 @@ public class WidgetFactory {
                         break;
                 }
                 break;
+            case Constants.CONTROL_FILE_CAPTURE:
+                questionWidget = new ArbitraryFileWidget(context, fep);
+                break;
             case Constants.CONTROL_IMAGE_CHOOSE:
                 if (appearance.equals("web")) {
                     questionWidget = new ImageWebViewWidget(context, fep);

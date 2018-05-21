@@ -133,7 +133,6 @@
   <string name="submission_url">Carpeta de presentacions</string>
   <string name="font_size">Mida del text</string>
   <string name="change_font_size">Mida del text</string>
-  <string name="form_scan_starting">explorant formularis…</string>
   <string name="access_error">Error mentre accedeix %s: </string>
   <string name="manifest_server_error">No s\'identifica una versió d\'OpenRosa — servidor incorrecte?</string>
   <string name="root_element_error">L\'element principal no és &amp;lt;manifest\&gt; — era %s</string>
@@ -187,7 +186,6 @@
   <string name="draw_image">Esbós</string>
   <string name="reset_image">Reset</string>
   <string name="set_color">Definir Color</string>
-  <string name="select_drawing_color">Selecciona color</string>
   <string name="admin_preferences">Opcions d\'Administrador</string>
   <string name="admin_access_settings">Polsa per entrar a Configuració</string>
   <string name="save_mid">Desar mig formulari</string>
@@ -228,7 +226,6 @@
   <string name="ext_search_return_error">El cercador ha retornat un objecte de tipus \'%s\'.</string>
   <string name="ext_import_generic_error">No pot importar dades des de %1$s. Raó: %2$s</string>
   <string name="ext_import_progress_message">Precàrregant dades des de \'%1$s\', espereu si us plau… %2$s</string>
-  <string name="ext_import_cancelled_message">Lectura de dades calcel·lada</string>
   <string name="ext_import_finalizing_message">Acabant dades precarregades…</string>
   <string name="ext_import_completed_message">Lectura de dades completada!</string>
   <string name="ext_not_initialized_error">GestorDadesExternes no s\'ha inicialitzat</string>

@@ -77,7 +77,7 @@ public class TimerLogger {
          *  Prompt for repeat
          */
         private boolean isIntervalViewEvent() {
-            return eventType == EventTypes.FEC
+            return eventType == EventTypes.HIERARCHY || eventType == EventTypes.FEC
                     && (fecType == FormEntryController.EVENT_QUESTION
                     || fecType == FormEntryController.EVENT_GROUP
                     || fecType == FormEntryController.EVENT_END_OF_FORM
@@ -241,8 +241,7 @@ public class TimerLogger {
             /*
              * Close any existing interval events if the view is being exited
              */
-            if (newEvent.eventType == EventTypes.FORM_EXIT
-                    || newEvent.eventType == EventTypes.HIERARCHY) {
+            if (newEvent.eventType == EventTypes.FORM_EXIT) {
                 for (Event ev : events) {
                     ev.setEnd(start);
                 }

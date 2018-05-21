@@ -180,13 +180,13 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     public static final String KEY_SURVEY_NOTES = "surveyNotes";        // smap
     public static final String KEY_CAN_UPDATE = "canUpdate";            // smap
     private long mTaskId;                                               // smap
-    private String mFormId;                                               // smap
-    private FormDetail mFormDetail;                                     // smap
+    private String mFormId;                                             // smap
     private String mSurveyNotes = null;                                 // smap
     private boolean mCanUpdate = true;                                  // smap
     private int mUpdated = 0;                                           // smap, greater than 0 if the user has already edited this instance
     ProgressDialog progressBar = null;                                  // smap
     String swipeDirection;                                              // smap
+    FormInfo formInfo = null;                                           // smap
     private static final String KEY_SAVE_NAME = "saveName";
 
     // Identifies the gp of the form used to launch form entry
@@ -275,7 +275,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        FormInfo formInfo = null;                           // smap
         Collect.getInstance().setFormEntryActivity(this);   // smap
         Collect.getInstance().initRemoteServiceCaches();   // smap
 
@@ -408,6 +407,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 } else if (uriMimeType != null && uriMimeType.equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
                     // get the formId and version for this instance...
                     formInfo = ContentResolverHelper.getFormDetails(uri);   // Smap increase scope of FormInfo
+                    Collect.getInstance().setFormInfo(formInfo);            // smap
 
                     if (formInfo == null) {
                         createErrorDialog(getString(R.string.bad_uri, uri), EXIT);
@@ -492,14 +492,9 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                             this.createErrorDialog(getString(R.string.bad_uri, uri), EXIT);
                             return;
                         } else {
-                            mFormDetail = new FormDetail();           // smap
                             c.moveToFirst();
-                            mFormDetail.source = c.getString(c.getColumnIndex(FormsColumns.SOURCE));                    // smap
-                            mFormDetail.name = c.getString(c.getColumnIndex(FormsColumns.DISPLAY_NAME));                // smap
-                            mFormDetail.submissionUri = c.getString(c.getColumnIndex(FormsColumns.SUBMISSION_URI));     // smap
-                            mFormDetail.formId = c.getString(c.getColumnIndex(FormsColumns.JR_FORM_ID));     // smap
-                            mFormDetail.version = c.getString(c.getColumnIndex(FormsColumns.JR_VERSION));     // smap
-                            Collect.getInstance().setFormDetail(mFormDetail);    // smap
+
+
                             formPath = c.getString(c.getColumnIndex(FormsColumns.FORM_FILE_PATH));
                             // This is the fill-blank-form code path.
                             // See if there is a savepoint for this form that
@@ -564,9 +559,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
                 formLoaderTask = new FormLoaderTask(instancePath, null, null);
                 mTaskId = intent.getLongExtra(KEY_TASK, -1);                   // smap
-                mSurveyNotes = intent.getStringExtra(KEY_SURVEY_NOTES);        // smap
+                mSurveyNotes = intent.getStringExtra(KEY_SURVEY_NOTES);                   // smap
                 mCanUpdate = intent.getBooleanExtra(KEY_CAN_UPDATE, true);     // smap
-                mFormId = mFormDetail.formId;                                               // smap
                 if(mFormId == null) {
                     mFormId = formInfo.getFormID();
                 }
@@ -1979,7 +1973,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
         synchronized (saveDialogLock) {
             saveToDiskTask = new SaveToDiskTask(getIntent().getData(), exit, complete,
-                    updatedSaveName, mTaskId, formPath, surveyNotes, mCanUpdate, mFormDetail);    // smap added mTaskId, mFormPath, surveyNotes
+                    updatedSaveName, mTaskId, formPath, surveyNotes, mCanUpdate, formInfo);    // smap added mTaskId, mFormPath, surveyNotes
             saveToDiskTask.setFormSavedListener(this);
             autoSaved = true;
             showDialog(SAVING_DIALOG);
@@ -2352,7 +2346,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
         FormController formController = getFormController();
         Collect.getInstance().getActivityLogger().open();
-        mFormDetail = Collect.getInstance().getFormDetail();    // smap
+        formInfo = Collect.getInstance().getFormInfo();    // smap
 
         if (formLoaderTask != null) {
             formLoaderTask.setFormLoaderListener(this);

@@ -15,8 +15,6 @@
 package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -24,7 +22,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
@@ -54,18 +51,11 @@ public class AnnotateWidget extends BaseImageWidget {
 
     public AnnotateWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
+        imageClickHandler = new DrawImageClickHandler(DrawActivity.OPTION_ANNOTATE, RequestCodes.ANNOTATE_IMAGE, R.string.annotate_image);
+        imageCaptureHandler = new ImageCaptureHandler();
         setUpLayout();
         setUpBinary();
         addAnswerView(answerLayout);
-    }
-
-    @Override
-    public void onImageClick() {
-        Collect.getInstance()
-                .getActivityLogger()
-                .logInstanceAction(this, "viewImage", "click",
-                        getFormEntryPrompt().getIndex());
-        launchAnnotateActivity();
     }
 
     @Override
@@ -82,11 +72,7 @@ public class AnnotateWidget extends BaseImageWidget {
         annotateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(this, "annotateButton", "click",
-                                getFormEntryPrompt().getIndex());
-                launchAnnotateActivity();
+                imageClickHandler.clickImage("annotateButton");
             }
         });
 
@@ -99,29 +85,10 @@ public class AnnotateWidget extends BaseImageWidget {
         errorTextView.setVisibility(View.GONE);
     }
 
-    private void launchAnnotateActivity() {
-        errorTextView.setVisibility(View.GONE);
-        Intent i = new Intent(getContext(), DrawActivity.class);
-        i.putExtra(DrawActivity.OPTION, DrawActivity.OPTION_ANNOTATE);
-        // copy...
-        if (binaryName != null) {
-            File f = new File(getInstanceFolder() + File.separator + binaryName);
-            i.putExtra(DrawActivity.REF_IMAGE, Uri.fromFile(f));
-        }
-        i.putExtra(DrawActivity.EXTRA_OUTPUT, Uri.fromFile(new File(Collect.TMPFILE_PATH)));
-        i.putExtra(DrawActivity.SCREEN_ORIENTATION, calculateScreenOrientation());
-
-        try {
-            waitForData();
-            ((Activity) getContext()).startActivityForResult(i,
-                    RequestCodes.ANNOTATE_IMAGE);
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(
-                    getContext(),
-                    getContext().getString(R.string.activity_not_found,
-                            getContext().getString(R.string.annotate_image)), Toast.LENGTH_SHORT).show();
-            cancelWaitingForData();
-        }
+    @Override
+    public Intent addExtrasToIntent(Intent intent) {
+        intent.putExtra(DrawActivity.SCREEN_ORIENTATION, calculateScreenOrientation());
+        return intent;
     }
 
     @Override
@@ -158,7 +125,7 @@ public class AnnotateWidget extends BaseImageWidget {
                 captureImage();
                 break;
             case R.id.choose_image:
-                chooseImage();
+                imageCaptureHandler.chooseImage(R.string.annotate_image);
                 break;
         }
     }
@@ -203,39 +170,7 @@ public class AnnotateWidget extends BaseImageWidget {
         // FormEntyActivity will also need to be updated.
         i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
                 Uri.fromFile(new File(Collect.TMPFILE_PATH)));
-        try {
-            waitForData();
-            ((Activity) getContext()).startActivityForResult(i,
-                    RequestCodes.IMAGE_CAPTURE);
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(
-                    getContext(),
-                    getContext().getString(R.string.activity_not_found,
-                            getContext().getString(R.string.capture_image)), Toast.LENGTH_SHORT)
-                    .show();
-            cancelWaitingForData();
-        }
-    }
 
-    private void chooseImage() {
-        Collect.getInstance()
-                .getActivityLogger()
-                .logInstanceAction(this, "chooseButton", "click",
-                        getFormEntryPrompt().getIndex());
-        errorTextView.setVisibility(View.GONE);
-        Intent i = new Intent(Intent.ACTION_GET_CONTENT);
-        i.setType("image/*");
-
-        try {
-            waitForData();
-            ((Activity) getContext()).startActivityForResult(i,
-                    RequestCodes.IMAGE_CHOOSER);
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(
-                    getContext(),
-                    getContext().getString(R.string.activity_not_found,
-                            getContext().getString(R.string.choose_image)), Toast.LENGTH_SHORT).show();
-            cancelWaitingForData();
+        imageCaptureHandler.captureImage(i, RequestCodes.IMAGE_CAPTURE, R.string.annotate_image);
         }
-    }
 }

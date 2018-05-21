@@ -52,6 +52,10 @@ public final class ContentResolverHelper {
                 //        : instanceCursor                                          // smap
                 //        .getString(idxJrVersion);                                 // smap
                 formInfo = new FormInfo(instancePath, jrFormId, null);  // smap set jrVersion null - always use latest version
+
+                formInfo.source = instanceCursor.getString(instanceCursor.getColumnIndex(FormsProviderAPI.FormsColumns.SOURCE));                // smap
+                formInfo.name = instanceCursor.getString(instanceCursor.getColumnIndex(FormsProviderAPI.FormsColumns.DISPLAY_NAME));            // smap
+                formInfo.submissionUri = instanceCursor.getString(instanceCursor.getColumnIndex(FormsProviderAPI.FormsColumns.SUBMISSION_URI)); // smap
             }
         }
         return formInfo;

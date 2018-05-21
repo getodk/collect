@@ -132,7 +132,6 @@
   <string name="submission_url">Ścieżka zgłoszeń</string>
   <string name="font_size">Wielkość czcionki</string>
   <string name="change_font_size">Wielkość czcionki</string>
-  <string name="form_scan_starting">Szukam formularzy…</string>
   <string name="access_error">Błąd przy próbie dostępu %s:</string>
   <string name="manifest_server_error">Odpowiedź w manifeście nie raportuje wersji OpenRosa — niewłaściwy serwer?</string>
   <string name="root_element_error">Główny element nie jest &lt;manifest\&gt; — był %s</string>
@@ -186,7 +185,6 @@
   <string name="draw_image">Naszkicuj Obraz</string>
   <string name="reset_image">Resetuj</string>
   <string name="set_color">Ustaw Kolor</string>
-  <string name="select_drawing_color">Wybierz Kolor do Rysowania</string>
   <string name="admin_preferences">Ustawienia Administratora</string>
   <string name="admin_access_settings">Naciśnij aby mieć dostęp do ustawień administratora</string>
   <string name="save_mid">Zapisz Formularz</string>
@@ -227,7 +225,6 @@
   <string name="ext_search_return_error">Obsługa wyszukiwania zwróciła obiekt typu \'%s\'.</string>
   <string name="ext_import_generic_error">Nie mogę zaimportować danych z %1$s. Powód: %2$s</string>
   <string name="ext_import_progress_message">Wstępne ładowanie danych z \'%1$s\'. Proszę czekać… %2$s</string>
-  <string name="ext_import_cancelled_message">Anulowano wczytywanie danych!</string>
   <string name="ext_import_finalizing_message">Kończę wstępne ładowanie danych…</string>
   <string name="ext_import_completed_message">Zakońyłem wczytywanie danych!</string>
   <string name="ext_not_initialized_error">Manager Danych Zewnętrznych nie został inicjalizowany.</string>

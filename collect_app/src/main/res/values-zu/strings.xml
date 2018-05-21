@@ -124,7 +124,6 @@
   <string name="submission_url">Indlela yokuthumela</string>
   <string name="font_size">Usayizi wombhalo (Font)</string>
   <string name="change_font_size">Usayizi wombhalo (Font)</string>
-  <string name="form_scan_starting">Ukuskena yamafomu…</string>
   <string name="access_error">Iphutha ngenkathi kufinyelelwa %s :</string>
   <string name="manifest_server_error">Impendulo Manifest akusho ubike version OpenRosa - iseva bad ?</string>
   <string name="root_element_error">Okuwumsuka akuyona &lt;abonakaliswe\&gt; - Kwaba %s</string>
@@ -175,7 +174,6 @@
   <string name="draw_image">Isithombe somdwebo</string>
   <string name="reset_image">Hlela kabusha</string>
   <string name="set_color">Hlela ummbala</string>
-  <string name="select_drawing_color">Khetha ummbala wokudweba</string>
   <string name="admin_preferences">Izinhlelo zokusingathwa komsebenzi</string>
   <string name="admin_access_settings">Thinta ukufinyelela ezinhlelweni zokusingathwa komsebenzi</string>
   <string name="save_mid">Gcina iFomu</string>
@@ -197,7 +195,6 @@
   <string name="no_printer">Umshini wokukhiqisa oceliwe awuxhunyiwe. Sicela uxhume umshini</string>
   <string name="view_change_location">Bheka noma ushintshe isizinda/indawo</string>
   <string name="ext_file_no_data_error">Lomqulu awunalwazi</string>
-  <string name="ext_import_cancelled_message">Ukufunda ulwazi kukhanseliwe</string>
   <string name="ext_import_finalizing_message">Kuqedelwa ulwazi obeluvele lukhona…</string>
   <string name="ext_import_completed_message">Ukufunda ulwazi kuqediwe</string>
   <string name="ext_not_initialized_error">ExternalDataManager wolwazi uqalisiwe</string>

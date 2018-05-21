@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
@@ -60,7 +59,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 
-public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceiver,
+public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements IRegisterReceiver,
         LocationListener, LocationClient.LocationClientListener {
 
     private ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
@@ -124,7 +123,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
         mapView.setMultiTouchControls(true);
         mapView.setBuiltInZoomControls(true);
-        mapView.setTilesScaledToDpi(true);    
+        mapView.setTilesScaledToDpi(true);
         mapView.getController().setZoom(zoomLevel);
 
         inflater = this.getLayoutInflater();
@@ -394,7 +393,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
             marker.setOnMarkerClickListener(nullMarkerListener);
             marker.setDraggable(true);
             marker.setOnMarkerDragListener(dragListener);
-            marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black_36dp));
+            marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place));
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
             mapMarkers.add(marker);
             List<GeoPoint> points = polyline.getPoints();
@@ -640,7 +639,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
             Float lastKnownAccuracy =
                     myLocationOverlay.getMyLocationProvider().getLastKnownLocation().getAccuracy();
             myLocationOverlay.getMyLocationProvider().getLastKnownLocation().getAccuracy();
-            marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black_36dp));
+            marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place));
             marker.setSubDescription(Float.toString(lastKnownAccuracy));
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
             marker.setDraggable(true);

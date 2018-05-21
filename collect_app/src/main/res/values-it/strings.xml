@@ -137,7 +137,6 @@
   <string name="submission_url">Luogo di consegna</string>
   <string name="font_size">Dimensione dei caratteri del testo</string>
   <string name="change_font_size">Dimensione dei caratteri del testo</string>
-  <string name="form_scan_starting">Ricerca moduli….</string>
   <string name="access_error">Errore durante l\'accesso %s: </string>
   <string name="manifest_server_error">La risposta del \'Manifest\' non si riferisce a una versione OpenRosa — server sbagliato?</string>
   <string name="root_element_error">Elemento principale non è &amp;lt;manifest\&gt; — era %s</string>
@@ -192,7 +191,6 @@
   <string name="draw_image">Bozza Immagine</string>
   <string name="reset_image">Reset</string>
   <string name="set_color">Imposta Colore</string>
-  <string name="select_drawing_color">Seleziona Colore per disegnare</string>
   <string name="admin_preferences">Impostazioni Amministratore</string>
   <string name="admin_access_settings">Regola parametri accesso dell\'Amministratore</string>
   <string name="save_mid">Salva Modulo</string>
@@ -234,7 +232,6 @@
   <string name="ext_search_return_error">Il tool di ricerca ha restituito un oggetto di tipo \'%s\'.</string>
   <string name="ext_import_generic_error">Non posso importare dati da %1$s. Motivo: %2$s</string>
   <string name="ext_import_progress_message">Pre-caricamento dati da \'%1$s\', attendere prego… %2$s</string>
-  <string name="ext_import_cancelled_message">Lettura dati annullata!</string>
   <string name="ext_import_finalizing_message">Pre-caricamento dei dati in corso…</string>
   <string name="ext_import_completed_message">Lettura dati completata!</string>
   <string name="ext_not_initialized_error">ExternalDataManager non è stato inizializzato.</string>

@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2017 Nyoman Ribeka
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -51,7 +51,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
 
     private static int counter = 0;
 
-    private String currentStatus;
+    private String currentStatus = "";
     private DiskSyncListener diskSyncListener;
 
     public String getStatusMessage() {
@@ -67,7 +67,6 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
         int instance = ++counter;
         Timber.i("[%d] doInBackground begins!", instance);
 
-        currentStatus = Collect.getInstance().getString(R.string.instance_scan_completed);
         try {
             List<String> candidateInstances = new LinkedList<String>();
             File instancesPath = new File(Collect.INSTANCES_PATH);
@@ -75,6 +74,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                 File[] instanceFolders = instancesPath.listFiles();
                 if (instanceFolders.length == 0) {
                     Timber.i("[%d] Empty instance folder. Stopping scan process.", instance);
+                    Timber.d(Collect.getInstance().getString(R.string.instance_scan_completed));
                     return currentStatus;
                 }
 
