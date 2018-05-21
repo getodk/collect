@@ -209,6 +209,8 @@ public class ClientHttpConnection implements CollectHttpConnection {
         int statusCode = 0;
 
         try {
+            Timber.i("Issuing HEAD request to: %s", uri.toString());
+
             response = httpclient.execute(httpHead, localContext);
             statusCode = response.getStatusLine().getStatusCode();
             if (statusCode == HttpStatus.SC_UNAUTHORIZED) {
