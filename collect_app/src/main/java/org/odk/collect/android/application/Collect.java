@@ -309,17 +309,12 @@ public class Collect extends Application implements HasActivityInjector {
 
         initProperties();
 
-        /* smap
-        if (BuildConfig.DEBUG) {
-            Timber.plant(new Timber.DebugTree());
-        } else {
         AuthDialogUtility.setWebCredentialsFromPreferences();
-        if (BuildConfig.BUILD_TYPE.equals("odkCollectRelease")) {
+        if (BuildConfig.BUILD_TYPE.equals("release")) {     // smap change from odkCollectRelease
             Timber.plant(new CrashReportingTree());
         } else {
             Timber.plant(new Timber.DebugTree());
         }
-        */
 
         setupLeakCanary();
     }

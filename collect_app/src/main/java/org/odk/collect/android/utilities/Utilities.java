@@ -22,7 +22,6 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.google.firebase.crash.FirebaseCrash;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -61,6 +60,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.TimeZone;
 import java.util.zip.GZIPInputStream;
+
+import timber.log.Timber;
 
 public class Utilities {
 
@@ -154,8 +155,8 @@ public class Utilities {
             entry.uuid = c.getString(c.getColumnIndex(InstanceColumns.UUID));
 
         } catch (Exception e) {
-            FirebaseCrash.log("Get task with ID or path: ID: " + id + " Path: " + instancePath);
-            FirebaseCrash.report(e);
+            Timber.i("Get task with ID or path: ID: " + id + " Path: " + instancePath);
+            Timber.e(e);
         } finally {
             if (c != null) {
                 try {

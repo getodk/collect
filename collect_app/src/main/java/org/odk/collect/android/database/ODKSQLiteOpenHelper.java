@@ -19,8 +19,6 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteException;
 import android.os.Environment;
 
-import com.google.firebase.crash.FirebaseCrash;
-
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 
@@ -211,7 +209,7 @@ public abstract class ODKSQLiteOpenHelper {
 
 
             if (db.getVersion() != newVersion) {
-                FirebaseCrash.report(new SQLiteException("Can't upgrade read-only database from version "
+                Timber.e(new SQLiteException("Can't upgrade read-only database from version "
                         + db.getVersion() + " to " + newVersion + ": " + path));        // Smap Report Crashes
             }
 

@@ -45,8 +45,6 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.firebase.crash.FirebaseCrash;
-
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.ViewPagerAdapter;
 import org.odk.collect.android.application.Collect;
@@ -699,7 +697,7 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
                     instancePath
             };
 
-            FirebaseCrash.log("Complete Task: " + entry.id + " : " + entry.name + " : "
+            Timber.i("Complete Task: " + entry.id + " : " + entry.name + " : "
                     + entry.taskStatus + " : " + instancePath);
 
             Cursor cInstanceProvider = Collect.getInstance().getContentResolver().query(InstanceProviderAPI.InstanceColumns.CONTENT_URI,
@@ -736,7 +734,7 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
                     // If More than one instance is found pointing towards a single file path then report the error and delete the extrat
                     int instanceCount = cInstanceProvider.getCount();
                     if (instanceCount > 1) {
-                        FirebaseCrash.report(new Exception("Unique instance not found: deleting extra, count is:" +
+                        Timber.e(new Exception("Unique instance not found: deleting extra, count is:" +
                                 cInstanceProvider.getCount()));
                         /*
                         cInstanceProvider.moveToNext();
@@ -752,7 +750,7 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
                     }
                 }
             } else {
-                FirebaseCrash.report(new Exception("Task not found for instance path:" + instancePath));
+                Timber.e(new Exception("Task not found for instance path:" + instancePath));
             }
 
             cInstanceProvider.close();
