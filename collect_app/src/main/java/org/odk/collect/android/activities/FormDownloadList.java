@@ -414,6 +414,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         sortList();
         if (listView.getAdapter() == null) {
             listView.setAdapter(new FormDownloadListAdapter(this, filteredFormList, formNamesAndURLs));
+
         } else {
             ((FormDownloadListAdapter) listView.getAdapter()).notifyDataSetChanged();
         }
@@ -603,7 +604,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 item.put(FORMNAME, details.getFormName());
                 item.put(FORMID_DISPLAY,
                         ((details.getFormVersion() == null) ? "" : (getString(R.string.version) + " "
-                                + details.getFormVersion() + " ")) + "ID: " + details.getFormID());
+                                + details.getFormVersion() + " ")) + (getString(R.string.id)) + " " + details.getFormID());
                 item.put(FORMDETAIL_KEY, formDetailsKey);
                 item.put(FORM_ID_KEY, details.getFormID());
                 item.put(FORM_VERSION_KEY, details.getFormVersion());
@@ -620,7 +621,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                             break;
                         }
                     }
-                    formList.add(j, item);
+                        formList.add(j, item);
                 }
             }
             filteredFormList.addAll(formList);
