@@ -31,6 +31,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import com.crashlytics.android.Crashlytics;
+import com.evernote.android.job.JobManager;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.squareup.leakcanary.LeakCanary;
@@ -44,6 +45,7 @@ import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.injection.config.AppComponent;
 import org.odk.collect.android.injection.config.DaggerAppComponent;
+import org.odk.collect.android.jobs.SmsSenderJobCreator;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
@@ -291,6 +293,7 @@ public class Collect extends Application implements HasActivityInjector {
         }
 
         setupLeakCanary();
+        JobManager.create(this).addJobCreator(new SmsSenderJobCreator());
     }
 
     protected RefWatcher setupLeakCanary() {
