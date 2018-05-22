@@ -5,16 +5,16 @@ package org.odk.collect.android.tasks.sms.models;
  * is triggered. This is then passed to the SMSService for processing.
  */
 public class SentMessageResult {
-    private MessageStatus messageStatus;
+    private MessageResultStatus messageResultStatus;
     private int messageId;
     private String instanceId;
 
-    public MessageStatus getMessageStatus() {
-        return messageStatus;
+    public MessageResultStatus getMessageResultStatus() {
+        return messageResultStatus;
     }
 
-    public void setMessageStatus(MessageStatus messageStatus) {
-        this.messageStatus = messageStatus;
+    public void setMessageResultStatus(MessageResultStatus messageResultStatus) {
+        this.messageResultStatus = messageResultStatus;
     }
 
     public int getMessageId() {
