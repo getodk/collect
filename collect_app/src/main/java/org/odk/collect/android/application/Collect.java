@@ -296,7 +296,11 @@ public class Collect extends Application implements HasActivityInjector {
         setupLeakCanary();
 
         if (!isDisableJobManager()) {
-            JobManager.create(this).addJobCreator(new SmsSenderJobCreator());
+            try {
+                JobManager.create(this).addJobCreator(new SmsSenderJobCreator());
+            } catch (Exception e) {
+                Timber.e(e);
+            }
         }
     }
 
