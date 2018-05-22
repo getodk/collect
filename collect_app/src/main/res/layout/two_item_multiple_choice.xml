@@ -38,7 +38,6 @@ the specific language governing permissions and limitations under the License. -
             android:textAppearance="?android:attr/textAppearanceLarge"
             tools:text="text1" />
 
-
         <TextView
             android:id="@+id/text3"
             android:layout_width="match_parent"
@@ -72,8 +71,8 @@ the specific language governing permissions and limitations under the License. -
             android:layout_toLeftOf="@+id/checkbox"
             android:layout_toStartOf="@+id/checkbox"
             android:text="@string/newer_version_of_a_form_info"
-            android:textColor="#4CAF50"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:textColor="#4CAF50" />
 
         <CheckBox
             android:id="@+id/checkbox"

@@ -119,14 +119,12 @@ public class DataManagerList extends InstanceListFragment
     }
 
     private void setupAdapter() {
-
         String[] data = new String[]{InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT};
         int[] view = new int[]{R.id.text1, R.id.text2};
 
         listAdapter = new SimpleCursorAdapter(getActivity(),
                 R.layout.two_item_multiple_choice, null, data, view);
         setListAdapter(listAdapter);
-
         checkPreviouslyCheckedItems();
     }
 

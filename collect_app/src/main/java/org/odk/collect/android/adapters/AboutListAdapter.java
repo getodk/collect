@@ -79,8 +79,6 @@ public class AboutListAdapter extends RecyclerView.Adapter<AboutListAdapter.View
             listener.onClick(getAdapterPosition());
         }
 
-        //checking if some description is attached to each title or not
-
         void setSummary(int resId) {
             if (resId == -1) {
                 summary.setVisibility(View.GONE);
