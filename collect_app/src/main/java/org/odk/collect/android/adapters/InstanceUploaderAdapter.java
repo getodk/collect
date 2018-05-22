@@ -208,7 +208,7 @@ public class InstanceUploaderAdapter extends CursorAdapter {
             case Queued:
                 return context.getString(R.string.sms_submission_queued);
             case Sent:
-                return new SimpleDateFormat(context.getString(R.string.sent_on_date_at_time),
+                return new SimpleDateFormat(context.getString(R.string.sms_sent_on_date_at_time),
                         Locale.getDefault()).format(date);
             case NoMessage:
                 return context.getString(R.string.sms_no_message);
