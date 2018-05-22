@@ -574,6 +574,8 @@
   <string name="start_video_capture_instruction">Щоб почати запис торкніться екрану</string>
   <string name="stop_video_capture_instruction">Запис розпочато. Торкніться знову щоб зупинити</string>
   <string name="no_columns_to_upload">Стовбців для завантаження в анкеті не знайдено.</string>
+  <string name="storage_runtime_permission_denied_title">Дозволи сховища</string>
+  <string name="storage_runtime_permission_denied_desc">Без цих дозволів Collect не матиме дотупу до ваших анкет (читання, запис відповідей). Відкрийте програму знову, ящо ви вже їх надали.</string>
   <string name="guidance_hint_title">Відображати пояснення до питань</string>
   <string name="app_theme">Тема</string>
   <string name="theme_light">Світла тема</string>
