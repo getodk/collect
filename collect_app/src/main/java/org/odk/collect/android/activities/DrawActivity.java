@@ -17,7 +17,6 @@ package org.odk.collect.android.activities;
 
 import android.app.Activity;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -151,6 +150,9 @@ public class DrawActivity extends CollectAbstractActivity {
             savepointImage.delete();
             output = new File(Collect.TMPFILE_PATH);
         } else {
+            if (extras.getInt(SCREEN_ORIENTATION) == 1) {
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            }
             loadOption = extras.getString(OPTION);
             if (loadOption == null) {
                 loadOption = OPTION_DRAW;
