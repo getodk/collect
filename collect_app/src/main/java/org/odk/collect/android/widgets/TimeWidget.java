@@ -25,7 +25,6 @@ import android.text.format.DateFormat;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.Window;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -36,6 +35,7 @@ import org.javarosa.core.model.data.TimeData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.DateTime;
 import org.odk.collect.android.R;
+import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 
 import java.lang.reflect.Constructor;
@@ -92,10 +92,7 @@ public class TimeWidget extends QuestionWidget implements ButtonWidget, TimePick
 
     @Override
     public void setFocus(Context context) {
-        // Hide the soft keyboard if it's showing.
-        InputMethodManager inputManager =
-                (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
+        SoftKeyboardUtils.hideSoftKeyboard(this);
     }
 
     @Override

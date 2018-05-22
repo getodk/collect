@@ -25,7 +25,6 @@ import android.text.method.TextKeyListener.Capitalize;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TableLayout;
 
@@ -33,6 +32,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ViewIds;
 
 import timber.log.Timber;
@@ -166,12 +166,9 @@ public class StringWidget extends QuestionWidget {
 
     @Override
     public void setFocus(Context context) {
-        // Put focus on text input field and display soft keyboard if appropriate.
-        answerText.requestFocus();
-        InputMethodManager inputManager =
-                (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        // SHOW_IMPLICIT and display soft keyboard if appropriate.
         if (!readOnly) {
-            inputManager.showSoftInput(answerText, 0);
+            SoftKeyboardUtils.showSoftKeyboard(answerText);
             /*
              * If you do a multi-question screen after a "add another group" dialog, this won't
              * automatically pop up. It's an Android issue.
@@ -182,7 +179,7 @@ public class StringWidget extends QuestionWidget {
              * is focused before the dialog pops up, everything works fine. great.
              */
         } else {
-            inputManager.hideSoftInputFromWindow(answerText.getWindowToken(), 0);
+            SoftKeyboardUtils.hideSoftKeyboard(answerText);
         }
     }
 

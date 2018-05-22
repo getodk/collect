@@ -17,7 +17,6 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Context;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -29,6 +28,7 @@ import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
 import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.DateTimeUtils;
+import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import java.util.Date;
@@ -68,8 +68,7 @@ public abstract class AbstractDateWidget extends QuestionWidget implements Binar
 
     @Override
     public void setFocus(Context context) {
-        InputMethodManager inputManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
+        SoftKeyboardUtils.hideSoftKeyboard(this);
     }
 
     @Override

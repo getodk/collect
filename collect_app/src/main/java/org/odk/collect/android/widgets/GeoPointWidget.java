@@ -23,7 +23,6 @@ import android.content.SharedPreferences;
 import android.content.pm.ConfigurationInfo;
 import android.preference.PreferenceManager;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -38,6 +37,7 @@ import org.odk.collect.android.activities.GeoPointOsmMapActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.PlayServicesUtil;
+import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import java.text.DecimalFormat;
@@ -241,10 +241,7 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
 
     @Override
     public void setFocus(Context context) {
-        // Hide the soft keyboard if it's showing.
-        InputMethodManager inputManager = (InputMethodManager) context
-                .getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
+        SoftKeyboardUtils.hideSoftKeyboard(this);
     }
 
     @Override
