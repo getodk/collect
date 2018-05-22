@@ -610,5 +610,5 @@
     <string name="location_metadata">Satellites available: %1$d/24\n\nTime elapsed: %2$s</string>
     <string name="instance_upload_cancelled">Instance upload canceled</string>
     <string name="hide_old_form_versions_setting_title">Hide old form versions</string>
-    <string name="hide_old_form_versions_setting_summary">Only the newest form versions will be available in form list</string>
+    <string name="hide_old_form_versions_setting_summary">Only the newest version will appear in Fill Blank Form</string>
 </resources>
