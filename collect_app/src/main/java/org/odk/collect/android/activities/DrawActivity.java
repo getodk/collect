@@ -17,6 +17,7 @@ package org.odk.collect.android.activities;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -52,6 +53,8 @@ import java.util.List;
 
 import timber.log.Timber;
 
+import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
+
 /**
  * Modified from the FingerPaint example found in The Android Open Source
  * Project.
@@ -67,6 +70,7 @@ public class DrawActivity extends CollectAbstractActivity {
     public static final String SCREEN_ORIENTATION = "screenOrientation";
     public static final String EXTRA_OUTPUT = android.provider.MediaStore.EXTRA_OUTPUT;
     public static final String SAVEPOINT_IMAGE = "savepointImage"; // during
+    public static final String PRECIOUS_SCREEN_ORIENTATION = "preciousOrientation";
     // restore
 
     private FloatingActionButton fabActions;
@@ -150,6 +154,9 @@ public class DrawActivity extends CollectAbstractActivity {
             savepointImage.delete();
             output = new File(Collect.TMPFILE_PATH);
         } else {
+            if (isPreviousPortrait(false) && !(extras.getInt(SCREEN_ORIENTATION) == 1)) {
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            }
             if (extras.getInt(SCREEN_ORIENTATION) == 1) {
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             }
@@ -372,5 +379,52 @@ public class DrawActivity extends CollectAbstractActivity {
                     .setPositiveButton(R.string.ok, (dialog, which) -> drawView.setColor(picker.getColor()))
                     .show();
         }
+    }
+
+    public boolean isPreviousPortrait(boolean isPrevious) {
+        if (isPrevious) {
+            Intent i = getIntent();
+            int previousOrientation = i.getIntExtra(PRECIOUS_SCREEN_ORIENTATION, ORIENTATION_PORTRAIT);
+            return previousOrientation == ORIENTATION_PORTRAIT;
+        } else {
+            return this.getResources().getConfiguration().orientation == ORIENTATION_PORTRAIT;
+        }
+    }
+
+    public boolean isApiBiggerThanO() {
+        return android.os.Build.VERSION.SDK_INT >= 27;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (isApiBiggerThanO() && isPreviousPortrait(true)
+                && !(getIntent().getIntExtra(SCREEN_ORIENTATION, 0) == 1)) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
+
+        if (isApiBiggerThanO() && getIntent().getIntExtra(SCREEN_ORIENTATION, 0) == 1) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (isApiBiggerThanO() && isPreviousPortrait(true)
+                && !(getIntent().getIntExtra(SCREEN_ORIENTATION, 0) == 1)) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
+        }
+
+        if (isApiBiggerThanO() && getIntent().getIntExtra(SCREEN_ORIENTATION, 0) == 1
+                && !isPreviousPortrait(true)) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
     }
 }
