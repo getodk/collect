@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.application.RoboCollect;
 import org.odk.collect.android.injection.DaggerTestComponent;
 import org.odk.collect.android.injection.TestComponent;
 import org.odk.collect.android.sms.base.BaseSmsTest;
@@ -16,6 +17,7 @@ import org.odk.collect.android.tasks.sms.models.Message;
 import org.odk.collect.android.tasks.sms.models.SmsSubmission;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
+import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowSmsManager;
 
 import javax.inject.Inject;
@@ -33,6 +35,7 @@ import static org.robolectric.Shadows.shadowOf;
  * job is then compared with the params passed to it to verify it's behaviour.
  */
 @RunWith(RobolectricTestRunner.class)
+@Config(application = RoboCollect.class)
 public class SmsSenderJobTest extends BaseSmsTest {
 
     @Inject
