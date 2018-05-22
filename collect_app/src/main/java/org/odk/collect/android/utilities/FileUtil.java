@@ -25,8 +25,9 @@ public class FileUtil {
         return new File(mediaFolderPath + "/itemsets.csv");
     }
 
-    public static String getFileContents(final File file) throws IOException {
-        final InputStream inputStream = new FileInputStream(file);
+    public static String getFileContents(final File smsFile) throws IOException {
+
+        final InputStream inputStream = new FileInputStream(smsFile);
         final BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
         final StringBuilder stringBuilder = new StringBuilder();
@@ -51,7 +52,7 @@ public class FileUtil {
     public static String getSmsInstancePath(String instancePath) {
         StringBuilder builder = new StringBuilder();
         builder.append(instancePath)
-                .append("_sms.txt");
+                .append(".txt");
 
         return builder.toString();
     }
