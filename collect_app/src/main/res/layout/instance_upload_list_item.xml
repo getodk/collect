@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <org.odk.collect.android.views.TwoItemMultipleChoiceView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -9,10 +9,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        card_view:cardBackgroundColor="@android:color/white"
-        card_view:cardPreventCornerOverlap="true"
-        card_view:cardUseCompatPadding="true"
-        card_view:contentPadding="10dp">
+        app:cardBackgroundColor="@android:color/white"
+        app:cardPreventCornerOverlap="true"
+        app:cardUseCompatPadding="true"
+        app:contentPadding="10dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -38,10 +38,10 @@
                         android:layout_centerInParent="true">
 
                         <ImageView
-                            android:layout_margin="5dp"
+                            android:layout_margin="10dp"
                             android:id="@+id/status_icon"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp" />
+                            android:layout_width="30dp"
+                            android:layout_height="30dp" />
                     </LinearLayout>
                 </RelativeLayout>
 
@@ -114,6 +114,17 @@
                             android:layout_gravity="center_vertical"
                             android:clickable="false"
                             android:focusable="false" />
+                        <ImageView
+                            android:visibility="gone"
+                            android:id="@+id/close_box"
+                            app:srcCompat="@drawable/close_box_outline"
+                            android:layout_width="30dp"
+                            android:layout_height="25dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_gravity="center_vertical"
+                             />
                     </RelativeLayout>
                     <org.odk.collect.android.views.ProgressBar
                         android:id="@+id/progress_bar"

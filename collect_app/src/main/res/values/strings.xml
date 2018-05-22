@@ -1,5 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<!--
+<?xml version='1.0' encoding='UTF-8'?><!--
     Copyright (C) 2009 University of Washington Licensed under the Apache
     License, Version 2.0 (the "License"); you may not use this file except
     in compliance with the License. You may obtain a copy of the License
@@ -10,8 +9,7 @@
     the specific language governing permissions and limitations under the
     License.
 -->
-<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation"
-           tools:locale="en">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation" tools:locale="en">
     <string name="show_password">Show password</string>
     <string name="activity_not_found">No activity found to handle: %s</string>
     <string name="view_image">View Image</string>
@@ -593,4 +591,17 @@
     <string name="sms_pref_dialog_title">Destination Phone Number</string>
     <string name="sms_pref_title">Phone Number</string>
     <string name="sms_invalid_phone_number">Invalid phone number!</string>
+
+    <!-- Sms submission -->
+    <string name="sms_no_reception">\'Failed on\' EEE, MMM dd, yyyy \'at\' HH:mm \'due to no reception\'</string>
+    <string name="sms_fatal_error">\'Failed on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
+    <string name="sms_airplane_mode">\'Failed on\' EEE, MMM dd, yyyy \'at\' HH:mm \'due to Airplane Mode being on.\'</string>
+    <string name="sms_no_message">This form has no questions with sms tags.</string>
+    <string name="sms_last_submission_on_date_at_time">\'Last submission attempt at\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
+    <plurals name="sms_sending">
+        <item quantity="one">Submitting form as a single message.</item>
+        <item quantity="other">Submitting form, Sending message %1$d! of %2$d</item>
+    </plurals>
+    <string name="sms_sent_on_date_at_time">\'Sent as Sms on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
+    <string name="sms_submission_queued">Queued for submission.</string>
 </resources>
