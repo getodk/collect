@@ -28,7 +28,6 @@ import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
 import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.DateTimeUtils;
-import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import java.util.Date;
@@ -64,11 +63,6 @@ public abstract class AbstractDateWidget extends QuestionWidget implements Binar
             date = new LocalDateTime(getFormEntryPrompt().getAnswerValue().getValue());
             setDateLabel();
         }
-    }
-
-    @Override
-    public void setFocus(Context context) {
-        SoftKeyboardUtils.hideSoftKeyboard(this);
     }
 
     @Override

@@ -36,7 +36,6 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.BearingActivity;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
@@ -101,11 +100,6 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
         } else {
             return new StringData(s);
         }
-    }
-
-    @Override
-    public void setFocus(Context context) {
-        SoftKeyboardUtils.hideSoftKeyboard(this);
     }
 
     @Override

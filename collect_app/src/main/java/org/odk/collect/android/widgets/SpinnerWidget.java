@@ -35,7 +35,6 @@ import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.ExternalDataUtil;
-import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.views.ScrolledToTopSpinner;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
@@ -144,11 +143,6 @@ public class SpinnerWidget extends QuestionWidget implements MultiChoiceWidget {
         // It seems that spinners cannot return a null answer. This resets the answer
         // to its original value, but it is not null.
         spinner.setSelection(items.size());
-    }
-
-    @Override
-    public void setFocus(Context context) {
-        SoftKeyboardUtils.hideSoftKeyboard(this);
     }
 
     @Override

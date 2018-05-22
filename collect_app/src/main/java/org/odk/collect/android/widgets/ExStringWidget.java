@@ -180,9 +180,7 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
 
     @Override
     public void setFocus(Context context) {
-        // Put focus on text input field and display soft keyboard if appropriate.
         if (hasExApp) {
-            // hide keyboard
             SoftKeyboardUtils.hideSoftKeyboard(answer);
             // focus on launch button
             launchIntentButton.requestFocus();

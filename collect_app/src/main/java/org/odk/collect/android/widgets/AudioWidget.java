@@ -36,7 +36,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtil;
-import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 
 import java.io.File;
@@ -201,11 +200,6 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
         String extension = sourcePath.substring(sourcePath.lastIndexOf('.'));
         return getInstanceFolder() + File.separator
                 + fileUtil.getRandomFilename() + extension;
-    }
-
-    @Override
-    public void setFocus(Context context) {
-        SoftKeyboardUtils.hideSoftKeyboard(this);
     }
 
     @Override

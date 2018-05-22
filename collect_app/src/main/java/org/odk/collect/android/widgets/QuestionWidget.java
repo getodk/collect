@@ -54,6 +54,7 @@ import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.AnimateUtils;
 import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
+import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ViewIds;
@@ -334,9 +335,9 @@ public abstract class QuestionWidget
         }
     }
 
-    // Abstract methods
-
-    public abstract void setFocus(Context context);
+    public void setFocus(Context context) {
+        SoftKeyboardUtils.hideSoftKeyboard(this);
+    }
 
     public abstract void setOnLongClickListener(OnLongClickListener l);
 

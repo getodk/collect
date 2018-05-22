@@ -29,7 +29,6 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.external.ExternalSelectChoice;
-import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.views.MediaLayout;
 
 import java.util.ArrayList;
@@ -55,11 +54,6 @@ public abstract class SelectWidget extends QuestionWidget {
 
     @Override
     public void clearAnswer() {
-    }
-
-    @Override
-    public void setFocus(Context context) {
-        SoftKeyboardUtils.hideSoftKeyboard(this);
     }
 
     @Override

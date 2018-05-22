@@ -45,7 +45,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
@@ -260,13 +259,6 @@ public class ListWidget extends QuestionWidget implements MultiChoiceWidget, OnC
             return new SelectOneData(new Selection(sc));
         }
     }
-
-
-    @Override
-    public void setFocus(Context context) {
-        SoftKeyboardUtils.hideSoftKeyboard(this);
-    }
-
 
     public int getCheckedId() {
         for (int i = 0; i < buttons.size(); ++i) {

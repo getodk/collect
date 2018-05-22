@@ -32,7 +32,6 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.R;
 import org.odk.collect.android.external.ExternalDataUtil;
-import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
@@ -154,11 +153,6 @@ public class SpinnerMultiWidget extends QuestionWidget implements ButtonWidget, 
         for (int i = 0; i < selections.length; i++) {
             selections[i] = false;
         }
-    }
-
-    @Override
-    public void setFocus(Context context) {
-        SoftKeyboardUtils.hideSoftKeyboard(this);
     }
 
     @Override

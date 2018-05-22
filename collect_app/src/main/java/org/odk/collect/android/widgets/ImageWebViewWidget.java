@@ -41,7 +41,6 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.MediaManager;
-import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 
@@ -255,11 +254,6 @@ public class ImageWebViewWidget extends QuestionWidget implements FileWidget {
         } else {
             Timber.e("NO IMAGE EXISTS at: %s", newImage.getAbsolutePath());
         }
-    }
-
-    @Override
-    public void setFocus(Context context) {
-        SoftKeyboardUtils.hideSoftKeyboard(this);
     }
 
     @Override

@@ -48,7 +48,6 @@ import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.views.AudioButton.AudioHandler;
 import org.odk.collect.android.views.ExpandedHeightGridView;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
@@ -363,12 +362,6 @@ public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
             imageViews[i].setBackgroundColor(0);
         }
 
-    }
-
-
-    @Override
-    public void setFocus(Context context) {
-        SoftKeyboardUtils.hideSoftKeyboard(this);
     }
 
     @Override

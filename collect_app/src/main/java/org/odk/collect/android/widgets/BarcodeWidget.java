@@ -29,7 +29,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 /**
@@ -89,11 +88,6 @@ public class BarcodeWidget extends QuestionWidget implements BinaryWidget {
             response = response.replaceAll("\\p{C}", "");
         }
         stringAnswer.setText(response);
-    }
-
-    @Override
-    public void setFocus(Context context) {
-        SoftKeyboardUtils.hideSoftKeyboard(this);
     }
 
     @Override

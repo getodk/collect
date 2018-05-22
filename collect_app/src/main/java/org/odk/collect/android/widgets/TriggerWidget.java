@@ -27,7 +27,6 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ViewIds;
 
 /**
@@ -111,13 +110,6 @@ public class TriggerWidget extends QuestionWidget {
                 ? new StringData(s)
                 : null;
     }
-
-
-    @Override
-    public void setFocus(Context context) {
-        SoftKeyboardUtils.hideSoftKeyboard(this);
-    }
-
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {

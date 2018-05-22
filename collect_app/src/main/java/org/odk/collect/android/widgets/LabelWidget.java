@@ -39,7 +39,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ViewIds;
 
 import java.io.File;
@@ -209,13 +208,6 @@ public class LabelWidget extends QuestionWidget {
     public IAnswerData getAnswer() {
         return null;
     }
-
-
-    @Override
-    public void setFocus(Context context) {
-        SoftKeyboardUtils.hideSoftKeyboard(this);
-    }
-
 
     @Override
     protected void addQuestionMediaLayout(View v) {

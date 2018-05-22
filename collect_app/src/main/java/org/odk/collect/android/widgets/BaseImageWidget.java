@@ -44,7 +44,6 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtils;
-import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 
@@ -125,11 +124,6 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
         } else {
             Timber.e("NO IMAGE EXISTS at: %s", newImage.getAbsolutePath());
         }
-    }
-
-    @Override
-    public void setFocus(Context context) {
-        SoftKeyboardUtils.hideSoftKeyboard(this);
     }
 
     @Override

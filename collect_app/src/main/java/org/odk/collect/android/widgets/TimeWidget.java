@@ -35,7 +35,6 @@ import org.javarosa.core.model.data.TimeData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.DateTime;
 import org.odk.collect.android.R;
-import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 
 import java.lang.reflect.Constructor;
@@ -88,11 +87,6 @@ public class TimeWidget extends QuestionWidget implements ButtonWidget, TimePick
         return !nullAnswer
                 ? new TimeData(localDateTime.toDate())
                 : null;
-    }
-
-    @Override
-    public void setFocus(Context context) {
-        SoftKeyboardUtils.hideSoftKeyboard(this);
     }
 
     @Override

@@ -28,7 +28,6 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.CustomTabHelper;
-import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 
 /**
@@ -84,11 +83,6 @@ public class UrlWidget extends QuestionWidget implements ButtonWidget {
         return !s.isEmpty()
                 ? new StringData(s)
                 : null;
-    }
-
-    @Override
-    public void setFocus(Context context) {
-        SoftKeyboardUtils.hideSoftKeyboard(this);
     }
 
     @Override

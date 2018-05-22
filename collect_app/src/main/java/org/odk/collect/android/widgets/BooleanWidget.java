@@ -24,7 +24,6 @@ import org.javarosa.core.model.data.BooleanData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ViewIds;
 
 public class BooleanWidget extends QuestionWidget {
@@ -48,11 +47,6 @@ public class BooleanWidget extends QuestionWidget {
     @Override
     public IAnswerData getAnswer() {
         return new BooleanData(booleanButton.isChecked());
-    }
-
-    @Override
-    public void setFocus(Context context) {
-        SoftKeyboardUtils.hideSoftKeyboard(this);
     }
 
     @Override

@@ -32,7 +32,6 @@ import org.odk.collect.android.activities.GeoTraceGoogleMapActivity;
 import org.odk.collect.android.activities.GeoTraceOsmMapActivity;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.PlayServicesUtil;
-import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
@@ -135,11 +134,6 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
     public void clearAnswer() {
         answerDisplay.setText(null);
         updateButtonLabelsAndVisibility(false);
-    }
-
-    @Override
-    public void setFocus(Context context) {
-        SoftKeyboardUtils.hideSoftKeyboard(this);
     }
 
     @Override

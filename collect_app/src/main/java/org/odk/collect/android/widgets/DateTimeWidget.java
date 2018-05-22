@@ -23,7 +23,6 @@ import org.javarosa.core.model.data.DateTimeData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.LocalDateTime;
-import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 /**
@@ -110,11 +109,6 @@ public class DateTimeWidget extends QuestionWidget implements BinaryWidget {
     public void clearAnswer() {
         dateWidget.clearAnswer();
         timeWidget.clearAnswer();
-    }
-
-    @Override
-    public void setFocus(Context context) {
-        SoftKeyboardUtils.hideSoftKeyboard(this);
     }
 
     @Override

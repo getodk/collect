@@ -24,7 +24,6 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.FormController;
-import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 import org.opendatakit.httpclientandroidlib.entity.ContentType;
@@ -227,11 +226,6 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
     @Override
     public void clearAnswer() {
         osmFileNameTextView.setText(null);
-    }
-
-    @Override
-    public void setFocus(Context context) {
-        SoftKeyboardUtils.hideSoftKeyboard(this);
     }
 
     @Override

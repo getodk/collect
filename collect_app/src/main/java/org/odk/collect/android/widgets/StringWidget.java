@@ -166,7 +166,6 @@ public class StringWidget extends QuestionWidget {
 
     @Override
     public void setFocus(Context context) {
-        // SHOW_IMPLICIT and display soft keyboard if appropriate.
         if (!readOnly) {
             SoftKeyboardUtils.showSoftKeyboard(answerText);
             /*
