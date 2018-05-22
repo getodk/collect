@@ -997,7 +997,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         evaluateConstraints);
                 if (constraint != null) {
                     createConstraintToast(constraint.index, constraint.status);
-                    if (formController.indexIsInFieldList(constraint.index)) {
+                    if (formController.indexIsInFieldList() && formController.getQuestionPrompts().length > 1) {
                         getCurrentViewIfODKView().highlightWidget(constraint.index);
                     }
                     return false;
