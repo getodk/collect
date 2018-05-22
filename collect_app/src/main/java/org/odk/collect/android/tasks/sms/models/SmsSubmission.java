@@ -11,14 +11,15 @@ import io.reactivex.Observable;
 public class SmsSubmission {
     private String instanceId;
     private List<Message> messages;
-    private Date dateAdded;
+    private Date lastUpdated;
+    private int jobId;
 
-    public Date getDateAdded() {
-        return dateAdded;
+    public Date getLastUpdated() {
+        return lastUpdated;
     }
 
-    public void setDateAdded(Date dateAdded) {
-        this.dateAdded = dateAdded;
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 
     public String getInstanceId() {
@@ -51,8 +52,8 @@ public class SmsSubmission {
                 .blockingGet();
     }
 
-    public SmsSubmissionProgress getCompletion() {
-        SmsSubmissionProgress progress = new SmsSubmissionProgress();
+    public SmsProgress getCompletion() {
+        SmsProgress progress = new SmsProgress();
 
         long complete = Observable.fromIterable(messages)
                 .filter(message -> message.isSent())
@@ -64,5 +65,28 @@ public class SmsSubmission {
         progress.setTotalCount(total);
 
         return progress;
+    }
+
+    public void saveMessage(Message message) {
+        int index = getMessages().indexOf(message);
+        getMessages().set(index, message);
+    }
+
+    public int getJobId() {
+        return jobId;
+    }
+
+    public boolean isSubmissionComplete() {
+        for (Message message : messages) {
+            if (!message.isSent()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public void setJobId(int jobId) {
+        this.jobId = jobId;
     }
 }

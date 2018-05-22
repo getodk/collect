@@ -10,10 +10,12 @@ import com.google.gson.reflect.TypeToken;
 
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.tasks.sms.models.Message;
+import org.odk.collect.android.tasks.sms.models.MessageStatus;
 import org.odk.collect.android.tasks.sms.models.SmsSubmission;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class SmsSubmissionManagerImpl implements SmsSubmissionManagerContract {
@@ -55,7 +57,7 @@ public class SmsSubmissionManagerImpl implements SmsSubmissionManagerContract {
         boolean updated = false;
         for (Message message : list) {
             if (message.getId() == messageId) {
-                message.setSent(true);
+                message.setMessageStatus(MessageStatus.Sent);
                 list.set(list.indexOf(message), message);
 
                 updated = true;
@@ -81,7 +83,7 @@ public class SmsSubmissionManagerImpl implements SmsSubmissionManagerContract {
         boolean updated = false;
         for (Message message : list) {
             if (message.getId() == messageId) {
-                message.setSending(true);
+                message.setMessageStatus(MessageStatus.Sending);
                 list.set(list.indexOf(message), message);
 
                 updated = true;
@@ -89,6 +91,33 @@ public class SmsSubmissionManagerImpl implements SmsSubmissionManagerContract {
         }
 
         model.setMessages(list);
+        saveSubmission(model);
+
+        return updated;
+    }
+
+    @Override
+    public boolean updateMessageStatus(MessageStatus messageStatus, String instanceId, int messageId) {
+        SmsSubmission model = getSubmissionModel(instanceId);
+
+        if (model == null) {
+            return false;
+        }
+
+        List<Message> list = model.getMessages();
+
+        boolean updated = false;
+        for (Message message : list) {
+            if (message.getId() == messageId) {
+                message.setMessageStatus(messageStatus);
+                list.set(list.indexOf(message), message);
+
+                updated = true;
+            }
+        }
+
+        model.setMessages(list);
+        model.setLastUpdated(new Date());
         saveSubmission(model);
 
         return updated;
@@ -173,5 +202,17 @@ public class SmsSubmissionManagerImpl implements SmsSubmissionManagerContract {
         }
 
         return models;
+    }
+
+    public MessageStatus checkNextMessageStatus(String instanceId) {
+        SmsSubmission model = getSubmissionModel(instanceId);
+
+        Message message = model.getNextUnsentMessage();
+
+        if (message == null) {
+            return null;
+        }
+
+        return message.getMessageStatus();
     }
 }
