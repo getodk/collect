@@ -273,7 +273,6 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
             }
             i.putExtra(DrawActivity.EXTRA_OUTPUT, Uri.fromFile(new File(Collect.TMPFILE_PATH)));
             i = addExtrasToIntent(i);
-            i.putExtra(DrawActivity.PRECIOUS_SCREEN_ORIENTATION, getContext().getResources().getConfiguration().orientation);
             launchActivityForResult(i, requestCode, stringResourceId);
         }
     }
