@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import org.odk.collect.android.R;
 
+
 /**
  * Implementation of cursor adapter that displays the version of a form if a form has a version.
  *
@@ -50,13 +51,30 @@ public class VersionHidingCursorAdapter extends SimpleCursorAdapter {
                 } else {
                     String version = cursor.getString(columnIndex);
                     TextView v = (TextView) view;
+                    v.setText("");
+
                     if (version != null) {
-                        v.setText(String.format(ctxt.getString(R.string.version_number), version));
+                        v.append(String.format(ctxt.getString(R.string.version_number), version));
                         v.setVisibility(View.VISIBLE);
+                        v.append(" ");
+
                     } else {
-                        v.setText(null);
+                        v.append("");
                         v.setVisibility(View.GONE);
                     }
+
+                    if(from.length > 3) {
+                        int idColumnIndex = cursor.getColumnIndex(from[3]);
+                        String id = cursor.getString(idColumnIndex);
+                        if (id != null) {
+                            v.append(String.format(ctxt.getString(R.string.id_number), id));
+                            v.setVisibility(View.VISIBLE);
+
+                        } else {
+                            v.append("");
+                        }
+                    }
+
                 }
                 return true;
             }
