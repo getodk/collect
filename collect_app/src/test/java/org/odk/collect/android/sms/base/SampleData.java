@@ -46,11 +46,13 @@ public class SampleData {
 
         Message second = new Message();
         second.setPart(2);
+        second.setMessageStatus(MessageStatus.Ready);
         second.generateRandomMessageID();
         second.setText("+C America");
 
         Message third = new Message();
         third.setPart(2);
+        third.setMessageStatus(MessageStatus.Ready);
         third.generateRandomMessageID();
         third.setText("+G Male");
 

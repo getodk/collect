@@ -78,22 +78,19 @@ public class SmsServiceTest extends BaseSmsTest {
 
         assertTrue(smsService.submitForm(SampleData.TEST_INSTANCE_ID, instancePath));
 
-        ShadowSmsManager.TextSmsParams params = shadowOf(smsManager).getLastSentTextMessageParams();
+        ShadowSmsManager.TextMultipartParams params = shadowOf(smsManager).getLastSentMultipartTextMessageParams();
 
         assertEquals(params.getDestinationAddress(), GATEWAY);
-        assertNotNull(params.getSentIntent());
+        assertNotNull(params.getSentIntents());
 
         //should be null, no delivery intent was supplied.
-        assertNull(params.getDeliveryIntent());
+        assertNull(params.getDeliveryIntents());
 
         SmsSubmission result = submissionManager.getSubmissionModel(SampleData.TEST_INSTANCE_ID);
-        Message next = result.getNextUnsentMessage();
 
-        //The message is being sent so it should match the message of the SmsManager.
-        assertEquals(params.getText(), next.getText());
+        //Check if all messages are currently being sent.
+        assertEquals(params.getParts().size(), result.getMessages().size());
 
-        //Check to see if the message was marked as sending by the job.
-        assertTrue(next.isSending());
     }
 
     private void writeFormToFile(String form, File file) throws IOException {
@@ -116,7 +113,7 @@ public class SmsServiceTest extends BaseSmsTest {
          * @param instanceId from instanceDao
          */
         @Override
-        protected void addMessageJobToQueue(String instanceId) {
+        protected void addMessagesJobToQueue(String instanceId) {
             new SmsSender(RuntimeEnvironment.application, instanceId).send();
         }
     }

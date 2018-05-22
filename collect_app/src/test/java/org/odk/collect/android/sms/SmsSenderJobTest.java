@@ -59,19 +59,16 @@ public class SmsSenderJobTest extends BaseSmsTest {
 
         SmsSubmission model = submissionManager.getSubmissionModel(SampleData.TEST_INSTANCE_ID);
 
-        final Message message = model.getNextUnsentMessage();
-
         SmsSender sender = new SmsSender(RuntimeEnvironment.application, model.getInstanceId());
         assertTrue(sender.send());
 
-        ShadowSmsManager.TextSmsParams params = shadowOf(smsManager).getLastSentTextMessageParams();
+        ShadowSmsManager.TextMultipartParams params = shadowOf(smsManager).getLastSentMultipartTextMessageParams();
 
         assertEquals(params.getDestinationAddress(), GATEWAY);
-        assertNotNull(params.getSentIntent());
-        assertEquals(params.getText(), message.getText());
+        assertNotNull(params.getSentIntents());
 
         //should be null, no delivery intent was supplied.
-        assertNull(params.getDeliveryIntent());
+        assertNull(params.getDeliveryIntents());
 
         SmsSubmission result = submissionManager.getSubmissionModel(SampleData.TEST_INSTANCE_ID);
         Message next = result.getNextUnsentMessage();

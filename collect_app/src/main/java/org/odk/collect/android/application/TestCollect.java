@@ -12,4 +12,9 @@ public class TestCollect extends Collect {
         // No leakcanary in unit tests.
         return RefWatcher.DISABLED;
     }
+
+    @Override
+    public boolean isDisableJobManager() {
+        return true;
+    }
 }
