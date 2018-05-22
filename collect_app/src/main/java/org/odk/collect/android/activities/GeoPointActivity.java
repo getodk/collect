@@ -42,7 +42,7 @@ import java.util.TimerTask;
 
 import timber.log.Timber;
 
-public class    GeoPointActivity extends CollectAbstractActivity implements LocationListener,
+public class GeoPointActivity extends CollectAbstractActivity implements LocationListener,
         LocationClient.LocationClientListener, GpsStatus.Listener {
 
     // Default values for requesting Location updates.

@@ -22,7 +22,7 @@ import java.util.List;
  * Created by sanjeev on 17/3/17.
  */
 
-public class    CustomTabHelper {
+public class CustomTabHelper {
     public static final String OPEN_URL = "url";
     private static final String CUSTOM_TAB_PACKAGE_NAME = "com.android.chrome";
     private CustomTabsClient customTabsClient;
@@ -34,8 +34,6 @@ public class    CustomTabHelper {
      */
     private CustomTabsServiceConnection serviceConnection;
 
-    //see documentation here https://www.captechconsulting.com/blogs/an-introduction-to-chrome-custom-tabs-for-android
-
     public void bindCustomTabsService(final Context context, final Uri url) {
         if (customTabsClient != null) {
             return;
@@ -44,8 +42,6 @@ public class    CustomTabHelper {
             @Override
             public void onCustomTabsServiceConnected(ComponentName componentName, CustomTabsClient customTabsClient) {
                 CustomTabHelper.this.customTabsClient = customTabsClient;
-
-                //in order to launch chrome faster
                 CustomTabHelper.this.customTabsClient.warmup(0L);
                 customTabsSession = CustomTabHelper.this.customTabsClient.newSession(null);
                 customTabsSession.mayLaunchUrl(getNonNullUri(url), null, null);
@@ -65,9 +61,6 @@ public class    CustomTabHelper {
      * http://stackoverflow.com/a/33281092/137744
      * https://medium.com/google-developers/best-practices-for-custom-tabs-5700e55143ee
      */
-
-    //getPackageName returns the info of the available packages for handling the action
-    //DOUBT in code
 
     private List<String> getPackageName(Context context) {
         // Get default VIEW intent handler that can view a web url.
@@ -98,20 +91,12 @@ public class    CustomTabHelper {
     }
 
     public void openUri(Context context, Uri uri) {
-
         if (getPackageName(context).size() != 0) {
-
-            //we can add code to customize chrome tab here!
-
             //open in chrome custom tab
             new CustomTabsIntent.Builder()
                     .build()
                     .launchUrl(context, uri);
         } else {
-
-            //shouldn't we open in webView first than use external browser as
-            //external browser involves heavy transitions
-
             try {
                 //open in external browser
                 context.startActivity(new Intent(Intent.ACTION_VIEW, uri));

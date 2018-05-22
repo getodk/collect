@@ -414,7 +414,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         sortList();
         if (listView.getAdapter() == null) {
             listView.setAdapter(new FormDownloadListAdapter(this, filteredFormList, formNamesAndURLs));
-
         } else {
             ((FormDownloadListAdapter) listView.getAdapter()).notifyDataSetChanged();
         }
@@ -621,7 +620,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                             break;
                         }
                     }
-                        formList.add(j, item);
+                    formList.add(j, item);
                 }
             }
             filteredFormList.addAll(formList);
