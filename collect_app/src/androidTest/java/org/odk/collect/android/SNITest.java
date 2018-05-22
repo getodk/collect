@@ -16,7 +16,6 @@ import javax.net.ssl.HttpsURLConnection;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.fail;
-import static org.odk.collect.android.utilities.WebUtils.CONNECTION_TIMEOUT;
 
 /**
  * An on-device test for TLS server name indication support.

@@ -2,20 +2,10 @@ package org.odk.collect.android.utilities;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.test.MockedServerTest;
-//import org.opendatakit.httpclientandroidlib.client.HttpClient;
-//import org.opendatakit.httpclientandroidlib.client.methods.HttpGet;
-//import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
-
-import java.net.URI;
-
 import okhttp3.mockwebserver.MockResponse;
-import okhttp3.mockwebserver.RecordedRequest;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 import static org.odk.collect.android.test.TestUtils.assertMatches;
 
 public class WebUtilsTest extends MockedServerTest {
@@ -42,8 +32,9 @@ public class WebUtilsTest extends MockedServerTest {
         WebUtils.getXmlDocument(url("/list-forms"));
 
         // then
-        assertMatches("Dalvik/.* org.odk.collect.android/.*",
-                nextRequest().getHeader("User-Agent"));
+        String header = nextRequest().getHeader("User-Agent");
+
+        assertMatches("Dalvik/.* org.odk.collect.android/.*", header);
     }
 
     @Test
@@ -82,7 +73,7 @@ public class WebUtilsTest extends MockedServerTest {
 
         // then
         assertEquals(0, res.responseCode);
-        assertMatches(".*while accessingNOT_A_URL", res.errorMessage);
+        assertMatches(".*while accessing NOT_A_URL", res.errorMessage);
     }
 
     @Test
@@ -92,7 +83,7 @@ public class WebUtilsTest extends MockedServerTest {
 
         // then
         assertEquals(0, res.responseCode);
-        assertEquals("Invalid server URL (no hostname): file:/some/path", res.errorMessage);
+        assertEquals("Parsing failed with Invalid server URL (no hostname): file:/some/path while accessing file:/some/path", res.errorMessage);
     }
 
     private String url(String path) {

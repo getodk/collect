@@ -147,7 +147,7 @@ public final class WebUtils {
             }
         } catch (Exception e) {
             String error = "Parsing failed with " + e.getMessage()
-                    + "while accessing " + urlString;
+                    + " while accessing " + urlString;
             Timber.e(error);
             return new DocumentFetchResult(error, 0);
         }
