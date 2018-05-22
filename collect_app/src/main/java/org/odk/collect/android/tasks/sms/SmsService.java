@@ -1,19 +1,26 @@
 package org.odk.collect.android.tasks.sms;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.telephony.SmsManager;
 
+import com.evernote.android.job.Job;
+import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
 import com.evernote.android.job.util.support.PersistableBundleCompat;
 
+import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.events.RxEventBus;
-import org.odk.collect.android.events.SmsProgressEvent;
+import org.odk.collect.android.events.SmsEvent;
 import org.odk.collect.android.jobs.SmsSenderJob;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.tasks.sms.models.Message;
+import org.odk.collect.android.tasks.sms.models.MessageStatus;
 import org.odk.collect.android.tasks.sms.models.SentMessageResult;
 import org.odk.collect.android.tasks.sms.models.SmsSubmission;
 import org.odk.collect.android.utilities.ArrayUtils;
@@ -30,6 +37,8 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_DELETE;
+import static org.odk.collect.android.tasks.sms.Mapper.toMessageStatus;
 import static org.odk.collect.android.tasks.sms.SmsPendingIntents.checkIfSentIntentExists;
 import static org.odk.collect.android.utilities.FileUtil.getFileContents;
 import static org.odk.collect.android.utilities.FileUtil.getSmsInstancePath;
@@ -44,12 +53,14 @@ public class SmsService {
     private SmsSubmissionManagerContract smsSubmissionManager;
     private Context context;
     private RxEventBus rxEventBus;
+    private InstancesDao instancesDao;
 
     @Inject
     public SmsService(SmsManager smsManager, SmsSubmissionManagerContract smsSubmissionManager, InstancesDao instancesDao, Context context, RxEventBus rxEventBus) {
         this.smsManager = smsManager;
         this.smsSubmissionManager = smsSubmissionManager;
         this.context = context;
+        this.instancesDao = instancesDao;
         this.rxEventBus = rxEventBus;
     }
 
@@ -95,31 +106,72 @@ public class SmsService {
      * @param instanceId id from instanceDao
      */
     public boolean submitForm(String instanceId, String instanceFilePath) {
+
         String text;
+
+        File smsFile = new File(getSmsInstancePath(instanceFilePath));
+
+        /**
+         * No instance.txt file is generated if a form doesn't have sms tags.
+         */
+        if (!smsFile.exists()) {
+            rxEventBus.post(new SmsEvent(instanceId, MessageStatus.NoMessage));
+            return false;
+        }
+
         try {
-            text = getFileContents(new File(getSmsInstancePath(instanceFilePath)));
+            text = getFileContents(smsFile);
         } catch (IOException e) {
 
+            rxEventBus.post(new SmsEvent(instanceId, MessageStatus.FatalError));
             Timber.e(e);
             return false;
         }
 
         SmsSubmission model = smsSubmissionManager.getSubmissionModel(instanceId);
 
+
+        boolean allMessagesAreNotSending = false;
+
+        /**
+         * If the model exists that means this instance was probably sent in the pasty.
+         */
         if (model != null) {
 
-            Message message = model.getNextUnsentMessage();
+            /**
+             * If the background job for this instance is running then the messages won't be sent again.
+             */
+            if (model.getJobId() != 0) {
+                Job job = JobManager.instance().getJob(model.getJobId());
+                if (job != null) {
+                    if (!job.isFinished()) {
+                        return false;
+                    }
+                }
+            }
 
-            if (message.isSending() && checkIfSentIntentExists(context, instanceId, message.getId())) {
-                return false;
+            for (Message message : model.getMessages()) {
+
+                /**
+                 * If there's a message that hasn't sent then a job should be added to continue the process.
+                 */
+                if (!(message.isSending() && checkIfSentIntentExists(context, instanceId, message.getId())) || !message.isSent()) {
+                    allMessagesAreNotSending = true;
+                    break;
+                }
+            }
+
+            if (!allMessagesAreNotSending) {
+                addMessagesJobToQueue(instanceId);
             }
         } else {
 
             final List<String> parts = smsManager.divideMessage(text);
 
             model = new SmsSubmission();
+            model.setJobId(0);
             model.setInstanceId(instanceId);
-            model.setDateAdded(new Date());
+            model.setLastUpdated(new Date());
 
             List<Message> messages = new ArrayList<>();
 
@@ -128,7 +180,7 @@ public class SmsService {
                 Message message = new Message();
                 message.setPart(parts.indexOf(part) + 1);
                 message.setText(part);
-                message.setSent(false);
+                message.setMessageStatus(MessageStatus.Ready);
                 message.generateRandomMessageID();
 
                 messages.add(message);
@@ -137,9 +189,9 @@ public class SmsService {
             model.setMessages(messages);
 
             smsSubmissionManager.saveSubmission(model);
-        }
 
-        addMessageJobToQueue(instanceId);
+            addMessagesJobToQueue(instanceId);
+        }
 
         return true;
     }
@@ -160,6 +212,15 @@ public class SmsService {
 
         smsSubmissionManager.deleteSubmission(instanceId);
 
+        JobManager.instance().cancel(model.getJobId());
+
+        SmsEvent event = new SmsEvent();
+        event.setInstanceId(instanceId);
+        event.setLastUpdated(model.getLastUpdated());
+        event.setStatus(MessageStatus.Canceled);
+
+        rxEventBus.post(event);
+
         return true;
     }
 
@@ -174,32 +235,21 @@ public class SmsService {
         String log = String.format(Locale.getDefault(), "Received result from broadcast receiver of instance id %s with message id of %d", sentMessageResult.getInstanceId(), sentMessageResult.getMessageId());
         Timber.i(log);
 
-        boolean result = smsSubmissionManager.markMessageAsSent(sentMessageResult.getInstanceId(), sentMessageResult.getMessageId());
-
-        if (!result) {
-            return;
-        }
+        smsSubmissionManager.updateMessageStatus(toMessageStatus(sentMessageResult.getMessageResultStatus()), sentMessageResult.getInstanceId(), sentMessageResult.getMessageId());
 
         SmsSubmission model = smsSubmissionManager.getSubmissionModel(sentMessageResult.getInstanceId());
 
-        switch (sentMessageResult.getMessageStatus()) {
-            case Sent:
-
-                Message message = model.getNextUnsentMessage();
-
-                if (message != null) {
-                    addMessageJobToQueue(sentMessageResult.getInstanceId());
-                }
-
-                break;
-        }
-
-        SmsProgressEvent event = new SmsProgressEvent();
+        SmsEvent event = new SmsEvent();
         event.setInstanceId(sentMessageResult.getInstanceId());
-        event.setStatus(sentMessageResult.getMessageStatus());
+        event.setLastUpdated(model.getLastUpdated());
+        event.setStatus(toMessageStatus(sentMessageResult.getMessageResultStatus()));
         event.setProgress(model.getCompletion());
 
         rxEventBus.post(event);
+
+        if (model.isSubmissionComplete()) {
+            markInstanceAsSubmittedOrDelete(sentMessageResult.getInstanceId());
+        }
     }
 
     /***
@@ -209,7 +259,7 @@ public class SmsService {
      *
      * @param instanceId from instanceDao
      */
-    protected void addMessageJobToQueue(String instanceId) {
+    protected void addMessagesJobToQueue(String instanceId) {
 
         PersistableBundleCompat extras = new PersistableBundleCompat();
         extras.putString(SmsSenderJob.INSTANCE_ID, instanceId);
@@ -219,6 +269,58 @@ public class SmsService {
                 .startNow()
                 .build();
 
-        request.schedule();
+        SmsSubmission model = smsSubmissionManager.getSubmissionModel(instanceId);
+
+        int jobId = request.schedule();
+        model.setJobId(jobId);
+
+        smsSubmissionManager.saveSubmission(model);
+        rxEventBus.post(new SmsEvent(instanceId, MessageStatus.Queued));
+    }
+
+    private void markInstanceAsSubmittedOrDelete(String instanceId) {
+        String where = InstanceProviderAPI.InstanceColumns._ID + "=?";
+        String[] whereArgs = {instanceId};
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMITTED);
+
+        try (Cursor cursor = instancesDao.getInstancesCursorForId(instanceId)) {
+            cursor.moveToPosition(-1);
+
+            boolean isFormAutoDeleteOptionEnabled = (boolean) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_DELETE_AFTER_SEND);
+            String formId;
+            while (cursor.moveToNext()) {
+                formId = cursor.getString(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.JR_FORM_ID));
+                if (isFormAutoDeleteEnabled(formId, isFormAutoDeleteOptionEnabled)) {
+
+                    List<String> instancesToDelete = new ArrayList<>();
+                    instancesToDelete.add(instanceId);
+
+                    instancesDao.deleteInstancesFromIDs(instancesToDelete);
+                } else {
+                    instancesDao.updateInstance(contentValues, where, whereArgs);
+                }
+            }
+        }
+    }
+
+    /**
+     * @param isFormAutoDeleteOptionEnabled represents whether the auto-delete option is enabled at the app level
+     *                                      <p>
+     *                                      If the form explicitly sets the auto-delete property, then it overrides the preferences.
+     */
+    private boolean isFormAutoDeleteEnabled(String jrFormId, boolean isFormAutoDeleteOptionEnabled) {
+        Cursor cursor = new FormsDao().getFormsCursorForFormId(jrFormId);
+        String autoDelete = null;
+        if (cursor != null && cursor.moveToFirst()) {
+            try {
+                int autoDeleteColumnIndex = cursor.getColumnIndex(AUTO_DELETE);
+                autoDelete = cursor.getString(autoDeleteColumnIndex);
+            } finally {
+                cursor.close();
+            }
+        }
+        return autoDelete == null ? isFormAutoDeleteOptionEnabled : Boolean.valueOf(autoDelete);
     }
 }
