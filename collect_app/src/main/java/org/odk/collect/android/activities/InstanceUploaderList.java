@@ -37,7 +37,6 @@ import android.widget.ListView;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.dao.InstancesDao;
-import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesActivity;
@@ -79,8 +78,6 @@ public class InstanceUploaderList extends InstanceListActivity implements
 
     private boolean showAllMode;
 
-    @Inject
-    RxEventBus eventBus;
     @Inject
     SmsService smsService;
 
@@ -309,7 +306,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
             checkedInstances.add(a);
         }
 
-        listAdapter = new InstanceUploaderAdapter(this, null, eventBus);
+        listAdapter = new InstanceUploaderAdapter(this, null);
         listView.setAdapter(listAdapter);
         checkPreviouslyCheckedItems();
     }
