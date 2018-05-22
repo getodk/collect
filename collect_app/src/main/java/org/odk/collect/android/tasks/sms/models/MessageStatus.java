@@ -1,11 +1,14 @@
 package org.odk.collect.android.tasks.sms.models;
 
-/**
- * Enum that represents the result from the SentBroadcastReceiver
- */
 public enum MessageStatus {
+    Sending,
     Sent,
     AirplaneMode,
     NoReception,
-    FatalError
+    FatalError,
+    Ready,
+    NoMessage,
+    Canceled,
+    InvalidGateway,
+    Queued
 }

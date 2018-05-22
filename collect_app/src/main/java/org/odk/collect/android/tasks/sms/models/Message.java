@@ -9,9 +9,7 @@ public class Message {
     private int part;
     private int id;
     private String text;
-    private boolean sent;
-    private boolean sending;
-    private String lastErrorMessage;
+    private MessageStatus messageStatus;
 
     public int getPart() {
         return part;
@@ -35,30 +33,22 @@ public class Message {
     }
 
     public boolean isSent() {
-        return sent;
-    }
-
-    public void setSent(boolean sent) {
-        this.sent = sent;
-    }
-
-    public String getLastErrorMessage() {
-        return lastErrorMessage;
-    }
-
-    public void setLastErrorMessage(String lastErrorMessage) {
-        this.lastErrorMessage = lastErrorMessage;
+        return messageStatus.equals(MessageStatus.Sent);
     }
 
     public boolean isSending() {
-        return sending;
-    }
-
-    public void setSending(boolean sending) {
-        this.sending = sending;
+        return messageStatus.equals(MessageStatus.Sending);
     }
 
     public void generateRandomMessageID() {
         id = new Random().nextInt(10000);
+    }
+
+    public MessageStatus getMessageStatus() {
+        return messageStatus;
+    }
+
+    public void setMessageStatus(MessageStatus messageStatus) {
+        this.messageStatus = messageStatus;
     }
 }
