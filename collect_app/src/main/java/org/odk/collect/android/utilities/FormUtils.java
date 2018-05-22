@@ -34,7 +34,7 @@ public class FormUtils {
 
     /**
      * Keep only newest form versions, that means if you have more than one form with given formId
-     * and version number, only the newest one should be displayed.
+     * only the newest one should be displayed.
      */
     public static Cursor removeOldForms(Cursor cursor) {
         List<Form> forms = new FormsDao().getFormsFromCursor(cursor);
