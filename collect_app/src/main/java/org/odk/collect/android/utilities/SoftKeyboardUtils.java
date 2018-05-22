@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.logic.FormController;
 
 public class SoftKeyboardUtils {
 
@@ -29,8 +30,11 @@ public class SoftKeyboardUtils {
     }
 
     public static void showSoftKeyboard(@NonNull View view) {
-        if (view.requestFocus()) {
-            getInputMethodManager().showSoftInput(view, 0);
+        FormController formController = Collect.getInstance().getFormController();
+        if (formController != null && !formController.indexIsInFieldList()) {
+            if (view.requestFocus()) {
+                getInputMethodManager().showSoftInput(view, 0);
+            }
         }
     }
 
