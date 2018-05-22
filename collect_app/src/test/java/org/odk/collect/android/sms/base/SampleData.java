@@ -1,6 +1,7 @@
 package org.odk.collect.android.sms.base;
 
 import org.odk.collect.android.tasks.sms.models.Message;
+import org.odk.collect.android.tasks.sms.models.MessageStatus;
 import org.odk.collect.android.tasks.sms.models.SmsSubmission;
 
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public class SampleData {
 
         model.setMessages(generateSampleMessages());
         model.setInstanceId(TEST_INSTANCE_ID);
-        model.setDateAdded(new Date());
+        model.setLastUpdated(new Date());
 
         return model;
     }
@@ -38,25 +39,20 @@ public class SampleData {
     public static List<Message> generateSampleMessages() {
 
         Message first = new Message();
-        first.setSent(true);
+        first.setMessageStatus(MessageStatus.Sent);
         first.setPart(1);
         first.generateRandomMessageID();
         first.setText("+N Joel Dean");
-        first.setSending(false);
 
         Message second = new Message();
-        second.setSent(false);
         second.setPart(2);
         second.generateRandomMessageID();
         second.setText("+C America");
-        second.setSending(false);
 
         Message third = new Message();
-        third.setSent(false);
         third.setPart(2);
         third.generateRandomMessageID();
         third.setText("+G Male");
-        third.setSending(false);
 
         List<Message> list = new ArrayList<>();
         list.add(first);

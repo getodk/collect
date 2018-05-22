@@ -204,9 +204,6 @@ dependencies {
     implementation group: 'commons-io', name: 'commons-io', version: '2.5'
     implementation group: 'net.sf.kxml', name: 'kxml2', version: '2.3.0'
     implementation group: 'net.sf.opencsv', name: 'opencsv', version: '2.3'
-    implementation(group: 'org.opendatakit', name: 'opendatakit-javarosa', version: '2.9.0') {
-        exclude module: 'joda-time'
-    }
 
     implementation group: 'org.osmdroid', name: 'osmdroid-android', version: '5.6.4'
     implementation group: 'org.slf4j', name: 'slf4j-android', version: '1.6.1-RC1'
