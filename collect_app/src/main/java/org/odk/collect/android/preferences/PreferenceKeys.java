@@ -25,6 +25,7 @@ public final class PreferenceKeys {
     public static final String KEY_INSTANCE_SYNC            = "instance_sync";
     public static final String KEY_PERIODIC_FORM_UPDATES_CHECK = "periodic_form_updates_check";
     public static final String KEY_AUTOMATIC_UPDATE         = "automatic_update";
+    static final String KEY_HIDE_OLD_FORM_VERSIONS          = "hide_old_form_versions";
 
     // form_metadata_preferences.xml
     public static final String KEY_METADATA_USERNAME        = "metadata_username";
@@ -91,6 +92,7 @@ public final class PreferenceKeys {
         hashMap.put(KEY_INSTANCE_SYNC,              true);
         hashMap.put(KEY_PERIODIC_FORM_UPDATES_CHECK, "never");
         hashMap.put(KEY_AUTOMATIC_UPDATE,           false);
+        hashMap.put(KEY_HIDE_OLD_FORM_VERSIONS,     true);
         // form_metadata_preferences.xml
         hashMap.put(KEY_METADATA_USERNAME,          "");
         hashMap.put(KEY_METADATA_PHONENUMBER,       "");
