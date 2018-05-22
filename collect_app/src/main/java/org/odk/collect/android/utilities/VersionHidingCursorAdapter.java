@@ -59,7 +59,7 @@ public class VersionHidingCursorAdapter extends SimpleCursorAdapter {
                         v.append("");
                         v.setVisibility(View.GONE);
                     }
-                    if(from.length > 3) {
+                    if(from.length>3){
                         int idColumnIndex = cursor.getColumnIndex(from[3]);
                         String id = cursor.getString(idColumnIndex);
                         if (id != null) {
