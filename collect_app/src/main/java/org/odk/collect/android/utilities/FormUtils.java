@@ -44,7 +44,9 @@ public class FormUtils {
                         _ID,
                         FormsProviderAPI.FormsColumns.DISPLAY_NAME,
                         FormsProviderAPI.FormsColumns.DISPLAY_SUBTEXT,
-                        FormsProviderAPI.FormsColumns.JR_VERSION
+                        FormsProviderAPI.FormsColumns.JR_FORM_ID,
+                        FormsProviderAPI.FormsColumns.JR_VERSION,
+                        FormsProviderAPI.FormsColumns.DATE
                 }
         );
 
@@ -54,7 +56,9 @@ public class FormUtils {
                         form.getId(),
                         form.getDisplayName(),
                         form.getDisplaySubtext(),
+                        form.getJrFormId(),
                         form.getJrVersion(),
+                        form.getDate()
                 });
             }
         }
