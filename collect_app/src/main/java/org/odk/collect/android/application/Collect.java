@@ -133,9 +133,6 @@ public class Collect extends Application implements HasActivityInjector {
      *
      * @throws RuntimeException if there is no SDCard or the directory exists as a non directory
      */
-
-    //shouldn't there be a method to create directories on the phone storage or
-    //ask the user for the location of directories
     public static void createODKDirs() throws RuntimeException {
         String cardstatus = Environment.getExternalStorageState();
         if (!cardstatus.equals(Environment.MEDIA_MOUNTED)) {
@@ -362,8 +359,6 @@ public class Collect extends Application implements HasActivityInjector {
     // Preventing multiple clicks, using threshold of 1000 ms
     public static boolean allowClick() {
         long elapsedRealtime = SystemClock.elapsedRealtime();
-
-        //some problem here!
         boolean allowClick = (lastClickTime == 0 || lastClickTime == elapsedRealtime) // just for tests
                 || elapsedRealtime - lastClickTime > 1000;
         if (allowClick) {
