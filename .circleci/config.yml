@@ -84,9 +84,3 @@ jobs:
         
       # run tests!
       - run: gradle test
-
-
-general:
-  branches:
-    only:
-      - Issue#2173 # list of branches to build
