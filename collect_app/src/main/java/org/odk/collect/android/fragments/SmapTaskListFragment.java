@@ -71,6 +71,7 @@ import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.tasks.DeleteInstancesTask;
 import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.ThemeUtils;
 
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -208,7 +209,7 @@ public class SmapTaskListFragment extends ListFragment
     }
 
     private void setupBottomSheet() {
-        bottomSheetDialog = new BottomSheetDialog(getActivity(), R.style.MaterialDialogSheet);
+        bottomSheetDialog = new BottomSheetDialog(getActivity(), new ThemeUtils(getContext()).getBottomDialogTheme());
         View sheetView = getActivity().getLayoutInflater().inflate(R.layout.bottom_sheet, null);
         final RecyclerView recyclerView = (RecyclerView) sheetView.findViewById(R.id.recyclerView);
 
@@ -259,10 +260,6 @@ public class SmapTaskListFragment extends ListFragment
 
     protected String getSortingOrderKey() {
         return TASK_MANAGER_LIST_SORTING_ORDER;
-    }
-
-    private Cursor getCursor() {
-        return new InstancesDao().getSavedInstancesCursor(getFilterText(), getSortingOrder());
     }
 
 

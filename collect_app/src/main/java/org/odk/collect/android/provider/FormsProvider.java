@@ -21,9 +21,9 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import org.odk.collect.android.R;
@@ -42,15 +42,14 @@ import java.util.Locale;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_DELETE;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_SEND;
+import static org.odk.collect.android.utilities.PermissionUtils.checkIfStoragePermissionsGranted;
 
 public class FormsProvider extends ContentProvider {
 
     private static final String t = "FormsProvider";
 
     private static final String DATABASE_NAME = "forms.db";
-    private static final int DATABASE_VERSION = 8;    // smap must be greater than 4
+    private static final int DATABASE_VERSION = 9;    // smap must be greater than 4
     private static final String FORMS_TABLE_NAME = "forms";
 
     private static HashMap<String, String> sFormsProjectionMap;
@@ -104,7 +103,8 @@ public class FormsProvider extends ContentProvider {
                     + FormsColumns.BASE64_RSA_PUBLIC_KEY + " text, "
                     + FormsColumns.JRCACHE_FILE_PATH + " text not null, "
                     + FormsColumns.AUTO_SEND + " text,"
-                    + FormsColumns.AUTO_DELETE + " text);");
+                    + FormsColumns.AUTO_DELETE + " text,"
+                    + FormsColumns.LAST_DETECTED_FORM_VERSION_HASH + " text);");
         }
 
         @Override
@@ -283,6 +283,16 @@ public class FormsProvider extends ContentProvider {
                     e.printStackTrace();
                 }
             }
+            if (oldVersion < 9) {
+                try {
+                    db.execSQL("ALTER TABLE " + FORMS_TABLE_NAME + " ADD COLUMN " +
+                            FormsColumns.LAST_DETECTED_FORM_VERSION_HASH + " text;");
+                } catch (Exception e) {
+                    // Catch errors, its possible the user upgraded then downgraded
+                    Timber.w("Error in upgrading to forms database version 8");
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
@@ -306,17 +316,25 @@ public class FormsProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        // must be at the beginning of any activity that can be called from an external intent
-        DatabaseHelper h = getDbHelper();
-        if (h == null) {
+
+        if (!checkIfStoragePermissionsGranted(getContext())) {
+            Timber.i("Read and write permissions are required for this content provider to function.");
             return false;
         }
-        return true;
+
+        // must be at the beginning of any activity that can be called from an external intent
+        DatabaseHelper h = getDbHelper();
+        return h != null;
     }
 
     @Override
-    public Cursor query(Uri uri, String[] projection, String selection,
+    public Cursor query(@NonNull Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
+
+        if (!checkIfStoragePermissionsGranted(getContext())) {
+            return null;
+        }
+
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         qb.setTables(FORMS_TABLE_NAME);
 
@@ -347,7 +365,7 @@ public class FormsProvider extends ContentProvider {
     }
 
     @Override
-    public String getType(Uri uri) {
+    public String getType(@NonNull Uri uri) {
         switch (sUriMatcher.match(uri)) {
             case FORMS:
                 return FormsColumns.CONTENT_TYPE;
@@ -361,10 +379,15 @@ public class FormsProvider extends ContentProvider {
     }
 
     @Override
-    public synchronized Uri insert(Uri uri, ContentValues initialValues) {
+    public synchronized Uri insert(@NonNull Uri uri, ContentValues initialValues) {
         // Validate the requested uri
         if (sUriMatcher.match(uri) != FORMS) {
             throw new IllegalArgumentException("Unknown URI " + uri);
+        }
+
+
+        if (!checkIfStoragePermissionsGranted(getContext())) {
+            return null;
         }
 
         ContentValues values;
@@ -498,7 +521,10 @@ public class FormsProvider extends ContentProvider {
      * {directory}
      */
     @Override
-    public int delete(Uri uri, String where, String[] whereArgs) {
+    public int delete(@NonNull Uri uri, String where, String[] whereArgs) {
+        if (!checkIfStoragePermissionsGranted(getContext())) {
+            return 0;
+        }
         SQLiteDatabase db = getDbHelper().getWritableDatabase();
         int count;
 
@@ -507,7 +533,7 @@ public class FormsProvider extends ContentProvider {
                 Cursor del = null;
                 try {
                     del = this.query(uri, null, where, whereArgs, null);
-                    if (del.getCount() > 0) {
+                        if (del != null && del.getCount() > 0) {
                         del.moveToFirst();
                         do {
                             deleteFileOrDir(del
@@ -537,7 +563,7 @@ public class FormsProvider extends ContentProvider {
                 try {
                     c = this.query(uri, null, where, whereArgs, null);
                     // This should only ever return 1 record.
-                    if (c.getCount() > 0) {
+                        if (c != null && c.getCount() > 0) {
                         c.moveToFirst();
                         do {
                             deleteFileOrDir(c.getString(c
@@ -591,6 +617,10 @@ public class FormsProvider extends ContentProvider {
     @Override
     public int update(Uri uri, ContentValues values, String where,
                       String[] whereArgs) {
+
+        if (!checkIfStoragePermissionsGranted(getContext())) {
+            return 0;
+        }
         SQLiteDatabase db = getDbHelper().getWritableDatabase();
         int count = 0;
         switch (sUriMatcher.match(uri)) {
@@ -613,7 +643,7 @@ public class FormsProvider extends ContentProvider {
                 try {
                     c = this.query(uri, null, where, whereArgs, null);
 
-                    if (c.getCount() > 0) {
+                    if (c != null && c.getCount() > 0) {
                         c.moveToPosition(-1);
                         while (c.moveToNext()) {
                             // before updating the paths, delete all the files
@@ -623,10 +653,7 @@ public class FormsProvider extends ContentProvider {
                                 String delFile = c
                                         .getString(c
                                                 .getColumnIndex(FormsColumns.FORM_FILE_PATH));
-                                if (newFile.equalsIgnoreCase(delFile)) {
-                                    // same file, so don't delete anything
-                                } else {
-                                    // different files, delete the old one
+                                    if (!newFile.equalsIgnoreCase(delFile)) {
                                     deleteFileOrDir(delFile);
                                 }
 
@@ -645,7 +672,7 @@ public class FormsProvider extends ContentProvider {
                 }
 
                 // Make sure that the necessary fields are all set
-                if (values.containsKey(FormsColumns.DATE) == true) {
+                    if (values.containsKey(FormsColumns.DATE)) {
                     Date today = new Date();
                     String ts = new SimpleDateFormat(getContext().getString(
                             R.string.added_on_date_at_time), Locale.getDefault())
@@ -665,7 +692,7 @@ public class FormsProvider extends ContentProvider {
                     update = this.query(uri, null, where, whereArgs, null);
 
                     // This should only ever return 1 record.
-                    if (update.getCount() > 0) {
+                    if (update != null && update.getCount() > 0) {
                         update.moveToFirst();
 
                         // don't let users manually update md5
@@ -746,7 +773,7 @@ public class FormsProvider extends ContentProvider {
         sUriMatcher.addURI(FormsProviderAPI.AUTHORITY, "forms", FORMS);
         sUriMatcher.addURI(FormsProviderAPI.AUTHORITY, "forms/#", FORM_ID);
 
-        sFormsProjectionMap = new HashMap<String, String>();
+        sFormsProjectionMap = new HashMap<>();
         sFormsProjectionMap.put(FormsColumns._ID, FormsColumns._ID);
         sFormsProjectionMap.put(FormsColumns.DISPLAY_NAME, FormsColumns.DISPLAY_NAME);
         sFormsProjectionMap.put(FormsColumns.DISPLAY_SUBTEXT, FormsColumns.DISPLAY_SUBTEXT);
@@ -766,6 +793,6 @@ public class FormsProvider extends ContentProvider {
         sFormsProjectionMap.put(FormsColumns.LANGUAGE, FormsColumns.LANGUAGE);
         sFormsProjectionMap.put(FormsColumns.AUTO_DELETE, FormsColumns.AUTO_DELETE);
         sFormsProjectionMap.put(FormsColumns.AUTO_SEND, FormsColumns.AUTO_SEND);
+        sFormsProjectionMap.put(FormsColumns.LAST_DETECTED_FORM_VERSION_HASH, FormsColumns.LAST_DETECTED_FORM_VERSION_HASH);
     }
-
 }

@@ -14,50 +14,7 @@ ant.condition(property: 'os', value: 'unix') {
     os(family: 'unix')
 }
 
-// smap comment out the auto setting of version numbers
-// Build numbers were manually set until 1067
-//def LEGACY_BUILD_NUMBER_OFFSET = 1067
-//
-// Based on http://stackoverflow.com/questions/17097263#24121734
-//def getMasterCommitCount = { ->
-//    try {
-//        def stdout = new ByteArrayOutputStream()
-//        exec {
-//            switch (ant.properties.os) {
-//                case 'windows':
-//                    commandLine 'cmd', '/c', 'git', 'rev-list', '--first-parent', '--count', 'master'
-//                    break
-//                case 'unix':
-//                    commandLine 'git', 'rev-list', '--first-parent', '--count', 'master'
-//                    break
-//            }
-//            standardOutput = stdout
-//        }
-//        return Integer.parseInt(stdout.toString().trim())
-//    } catch (ignored) {
-//        return -1
-//    }
-//}
-//
-//def getVersionName = { ->
-//    try {
-//        def stdout = new ByteArrayOutputStream()
-//        exec {
-//            switch (ant.properties.os) {
-//                case 'windows':
-//                    commandLine 'cmd', '/c', 'git', 'describe', '--tags', '--dirty', '--always'
-//                    break
-//                case 'unix':
-//                    commandLine 'git', 'describe', '--tags', '--dirty', '--always'
-//                    break
-//            }
-//            standardOutput = stdout
-//        }
-//        return stdout.toString().trim()
-//    } catch (ignored) {
-//        return null
-//    }
-//}
+// smap delete out the auto setting of version numbers
 
 def secretsFile = file('secrets.properties')
 def secrets = new Properties()
@@ -72,7 +29,7 @@ android {
         applicationId "org.smap.smapTask.android"
         minSdkVersion(16)
         targetSdkVersion(22)
-        versionCode(5034)
+        versionCode(5050)
         versionName getVersionName()
         testInstrumentationRunner('android.support.test.runner.AndroidJUnitRunner')
         multiDexEnabled true
@@ -96,19 +53,19 @@ android {
     productFlavors {
         standard {
             applicationId "org.smap.smapTask.android"
-            versionName "5.34"
+            versionName "5.50"
         }
         plan {
             applicationId "org.smap.smapTask.android.plan"
-            versionName "5.34-plan"
+            versionName "5.50-plan"
         }
         kontrolid {
             applicationId "org.smap.smapTask.android.kontrolid"
-            versionName "5.34-kontrolid"
+            versionName "5.50-kontrolid"
         }
         pop {
             applicationId "org.smap.smapTask.android.pop"
-            versionName "5.34-pop"
+            versionName "5.50-pop"
         }
     }
 

@@ -91,7 +91,9 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
                     String entry = (String) ((ListPreference) preference).getEntries()[index];
                     if (!pref.getEntry().equals(entry)) {
                         preference.setSummary(entry);
-                        MainMenuActivity.startActivityAndCloseAllOthers(UserInterfacePreferences.this.getActivity());
+                        Intent intent = new Intent(getActivity().getBaseContext(), SmapMain.class);     // smap
+                        getActivity().startActivity(intent);
+                        //MainMenuActivity.startActivityAndCloseAllOthers(UserInterfacePreferences.this.getActivity());
                     }
                     return true;
                 }

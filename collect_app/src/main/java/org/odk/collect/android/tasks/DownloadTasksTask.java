@@ -44,6 +44,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.database.Assignment;
 import org.odk.collect.android.database.TaskAssignment;
+import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.logic.FormDetails;
@@ -846,7 +847,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 publishProgress(Collect.getInstance().getString(R.string.smap_downloading, toDownload.size()));
 
                 Timber.i("Downloading " + toDownload.size() + " forms");
-                downloadFormsTask.setDownloaderListener((FormDownloaderListener) mStateListener);
+                downloadFormsTask.setDownloaderListener((DownloadFormsTaskListener) mStateListener);
                 dfResults = downloadFormsTask.doInBackground(toDownload);   // Not in background as called directly
             }
 

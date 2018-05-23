@@ -44,8 +44,6 @@ import android.content.Intent;
 import android.location.Location;
 import android.support.v4.content.LocalBroadcastManager;
 
-import com.google.firebase.crash.FirebaseCrash;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -81,7 +79,6 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
 
     public SaveToDiskTask(Uri uri, boolean saveAndExit, boolean markCompleted, String updatedName,
         long taskId, String formPath, String surveyNotes, boolean canUpdate, FormInfo formInfo) {		// smap added assignment_id, formPath, formDetail
-
         this.uri = uri;
         this.formInfo = formInfo;  // smap
         save = saveAndExit;
@@ -91,8 +88,6 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
         mFormPath = formPath; // smap
         mSurveyNotes = surveyNotes; // smap
         this.canUpdate = canUpdate; // smap
-
-        FirebaseCrash.log("Created SaveToDisk object: " + formDetail);
     }
 
 
@@ -292,7 +287,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
                     // Smap End
 
                 } catch (Exception e) {   // smap
-                    FirebaseCrash.report(e);        // Report Crashes
+                    Timber.e(e);        // Report Crashes
                 } finally {
                     if (c != null) {
                         c.close();
@@ -351,7 +346,6 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
         // Since we saved a reloadable instance, it is flagged as re-openable so that if any error
         // occurs during the packaging of the data for the server fails (e.g., encryption),
         // we can still reopen the filled-out form and re-save it at a later time.
-        FirebaseCrash.log("Update instance database: " + mFormDetail);
         updateInstanceDatabase(true, true, canUpdate);      // smap
 
         if ( markCompleted && canUpdate ) {     // smap

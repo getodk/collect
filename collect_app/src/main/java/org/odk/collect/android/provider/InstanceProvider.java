@@ -23,9 +23,8 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
-
-import com.google.firebase.crash.FirebaseCrash;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -40,6 +39,8 @@ import java.util.HashMap;
 import java.util.Locale;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.utilities.PermissionUtils.checkIfStoragePermissionsGranted;
 
 public class InstanceProvider extends ContentProvider {
 
@@ -225,8 +226,7 @@ public class InstanceProvider extends ContentProvider {
             Collect.createODKDirs();
         } catch (RuntimeException e) {
             databaseHelper = null;
-            FirebaseCrash.report(e);    // smap
-            // return null;  smap
+            Timber.e(e);    // smap
         }
 
         if (databaseHelper != null) {
@@ -239,18 +239,24 @@ public class InstanceProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        // must be at the beginning of any activity that can be called from an external intent
-        DatabaseHelper h = getDbHelper();
-        if (h == null) {
+        if (!checkIfStoragePermissionsGranted(getContext())) {
+            Timber.i("Read and write permissions are required for this content provider to function.");
             return false;
         }
-        return true;
+
+        // must be at the beginning of any activity that can be called from an external intent
+        DatabaseHelper h = getDbHelper();
+        return h != null;
     }
 
-
     @Override
-    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
+    public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs,
                         String sortOrder) {
+
+        if (!checkIfStoragePermissionsGranted(getContext())) {
+            return null;
+        }
+
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         qb.setTables(INSTANCES_TABLE_NAME);
 
@@ -277,9 +283,8 @@ public class InstanceProvider extends ContentProvider {
         return c;
     }
 
-
     @Override
-    public String getType(Uri uri) {
+    public String getType(@NonNull Uri uri) {
         switch (sUriMatcher.match(uri)) {
             case INSTANCES:
                 return InstanceColumns.CONTENT_TYPE;
@@ -292,12 +297,15 @@ public class InstanceProvider extends ContentProvider {
         }
     }
 
-
     @Override
-    public Uri insert(Uri uri, ContentValues initialValues) {
+    public Uri insert(@NonNull Uri uri, ContentValues initialValues) {
         // Validate the requested uri
         if (sUriMatcher.match(uri) != INSTANCES) {
             throw new IllegalArgumentException("Unknown URI " + uri);
+        }
+
+        if (!checkIfStoragePermissionsGranted(getContext())) {
+            return null;
         }
 
         ContentValues values;
@@ -392,23 +400,25 @@ public class InstanceProvider extends ContentProvider {
         }
     }
 
-
     /**
      * This method removes the entry from the content provider, and also removes any associated
      * files.
      * files:  form.xml, [formmd5].formdef, formname-media {directory}
      */
     @Override
-    public int delete(Uri uri, String where, String[] whereArgs) {
-        SQLiteDatabase db = getDbHelper().getWritableDatabase();
-        int count;
+    public int delete(@NonNull Uri uri, String where, String[] whereArgs) {
+        if (!checkIfStoragePermissionsGranted(getContext())) {
+            return 0;
+        }
+        int count = 0;
 
+        SQLiteDatabase db = getDbHelper().getWritableDatabase();
         switch (sUriMatcher.match(uri)) {
             case INSTANCES:
                 Cursor del = null;
                 try {
                     del = this.query(uri, null, where, whereArgs, null);
-                    if (del.getCount() > 0) {
+                    if (del != null && del.getCount() > 0) {
                         del.moveToFirst();
                         do {
                             String instanceFile = del.getString(
@@ -434,7 +444,7 @@ public class InstanceProvider extends ContentProvider {
                 String status = null;
                 try {
                     c = this.query(uri, null, where, whereArgs, null);
-                    if (c.getCount() > 0) {
+                    if (c != null && c.getCount() > 0) {
                         c.moveToFirst();
                         status = c.getString(c.getColumnIndex(InstanceColumns.STATUS));
                         do {
@@ -475,9 +485,13 @@ public class InstanceProvider extends ContentProvider {
         return count;
     }
 
-
     @Override
-    public int update(Uri uri, ContentValues values, String where, String[] whereArgs) {
+    public int update(@NonNull Uri uri, ContentValues values, String where, String[] whereArgs) {
+        if (!checkIfStoragePermissionsGranted(getContext())) {
+            return 0;
+        }
+        int count = 0;
+
         SQLiteDatabase db = getDbHelper().getWritableDatabase();
 
         Long now = System.currentTimeMillis();
@@ -487,8 +501,7 @@ public class InstanceProvider extends ContentProvider {
             values.put(InstanceColumns.LAST_STATUS_CHANGE_DATE, now);
         }
 
-        int count;
-        String status = null;
+        String status;
         switch (sUriMatcher.match(uri)) {
             case INSTANCES:
                 if (values.containsKey(InstanceColumns.STATUS)) {
@@ -537,7 +550,7 @@ public class InstanceProvider extends ContentProvider {
         sUriMatcher.addURI(InstanceProviderAPI.AUTHORITY, "instances", INSTANCES);
         sUriMatcher.addURI(InstanceProviderAPI.AUTHORITY, "instances/#", INSTANCE_ID);
 
-        sInstancesProjectionMap = new HashMap<String, String>();
+        sInstancesProjectionMap = new HashMap<>();
         sInstancesProjectionMap.put(InstanceColumns._ID, InstanceColumns._ID);
         sInstancesProjectionMap.put(InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_NAME);
         sInstancesProjectionMap.put(InstanceColumns.SUBMISSION_URI, InstanceColumns.SUBMISSION_URI);
@@ -548,12 +561,13 @@ public class InstanceProvider extends ContentProvider {
         sInstancesProjectionMap.put(InstanceColumns.JR_FORM_ID, InstanceColumns.JR_FORM_ID);
         sInstancesProjectionMap.put(InstanceColumns.JR_VERSION, InstanceColumns.JR_VERSION);
         sInstancesProjectionMap.put(InstanceColumns.STATUS, InstanceColumns.STATUS);
-        sInstancesProjectionMap.put(InstanceColumns.T_REPEAT, InstanceColumns.T_REPEAT);
-        sInstancesProjectionMap.put(InstanceColumns.T_UPDATEID, InstanceColumns.T_UPDATEID);
-        sInstancesProjectionMap.put(InstanceColumns.T_LOCATION_TRIGGER, InstanceColumns.T_LOCATION_TRIGGER);
-        sInstancesProjectionMap.put(InstanceColumns.T_SURVEY_NOTES, InstanceColumns.T_SURVEY_NOTES);
-        sInstancesProjectionMap.put(InstanceColumns.T_UPDATED, InstanceColumns.T_UPDATED);
-        sInstancesProjectionMap.put(InstanceColumns.LAST_STATUS_CHANGE_DATE, InstanceColumns.LAST_STATUS_CHANGE_DATE);
+        sInstancesProjectionMap.put(InstanceColumns.T_REPEAT, InstanceColumns.T_REPEAT);                // smap
+        sInstancesProjectionMap.put(InstanceColumns.T_UPDATEID, InstanceColumns.T_UPDATEID);            // smap
+        sInstancesProjectionMap.put(InstanceColumns.T_LOCATION_TRIGGER, InstanceColumns.T_LOCATION_TRIGGER);    // smap
+        sInstancesProjectionMap.put(InstanceColumns.T_SURVEY_NOTES, InstanceColumns.T_SURVEY_NOTES);    // smap
+        sInstancesProjectionMap.put(InstanceColumns.T_UPDATED, InstanceColumns.T_UPDATED);              // smap
+        sInstancesProjectionMap.put(InstanceColumns.LAST_STATUS_CHANGE_DATE,
+                InstanceColumns.LAST_STATUS_CHANGE_DATE);
         sInstancesProjectionMap.put(InstanceColumns.DISPLAY_SUBTEXT, InstanceColumns.DISPLAY_SUBTEXT);
         sInstancesProjectionMap.put(InstanceColumns.SOURCE, InstanceColumns.SOURCE);                // smap
         sInstancesProjectionMap.put(InstanceColumns.FORM_PATH, InstanceColumns.FORM_PATH);          // smap
@@ -571,7 +585,8 @@ public class InstanceProvider extends ContentProvider {
         sInstancesProjectionMap.put(InstanceColumns.T_ASS_ID, InstanceColumns.T_ASS_ID);          // smap
         sInstancesProjectionMap.put(InstanceColumns.T_TASK_STATUS, InstanceColumns.T_TASK_STATUS);  // smap
         sInstancesProjectionMap.put(InstanceColumns.UUID, InstanceColumns.UUID);                    // smap
+        sInstancesProjectionMap.put(InstanceColumns.DISPLAY_SUBTEXT,
+                InstanceColumns.DISPLAY_SUBTEXT);
         sInstancesProjectionMap.put(InstanceColumns.DELETED_DATE, InstanceColumns.DELETED_DATE);
     }
-
 }

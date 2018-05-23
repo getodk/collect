@@ -1,25 +1,24 @@
 /*
- * Copyright 2018 Nafundi
+ * Copyright (C) 2009 University of Washington
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */
 
-package org.odk.collect.android.utilities;
+package org.odk.collect.android.tasks;
 
 import android.content.ContentValues;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 
 import org.javarosa.xform.parse.XFormParser;
@@ -27,12 +26,18 @@ import org.kxml2.kdom.Element;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
-import org.odk.collect.android.listeners.FormDownloaderListener;
+import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.logic.MediaFile;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.PreferenceKeys;
-import org.odk.collect.android.provider.FormsProviderAPI;
+import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
+import org.odk.collect.android.utilities.DocumentFetchResult;
+import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.STFileUtils;
+import org.odk.collect.android.utilities.Utilities;
+import org.odk.collect.android.utilities.Validator;
+import org.odk.collect.android.utilities.WebUtils;
 import org.opendatakit.httpclientandroidlib.Header;
 import org.opendatakit.httpclientandroidlib.HttpEntity;
 import org.opendatakit.httpclientandroidlib.HttpResponse;
@@ -58,20 +63,23 @@ import java.util.zip.GZIPInputStream;
 
 import timber.log.Timber;
 
-public class FormDownloader {
+/**
+ * Background task for downloading a given list of forms. We assume right now that the forms are
+ * coming from the same server that presented the form list, but theoretically that won't always be
+ * true.
+ *
+ * @author msundt
+ * @author carlhartung
+ */
+public class FormDownloaderOld extends
+        AsyncTask<ArrayList<FormDetails>, String, HashMap<FormDetails, String>> {
 
     private static final String MD5_COLON_PREFIX = "md5:";
     private static final String TEMP_DOWNLOAD_EXTENSION = ".tempDownload";
 
-    private FormDownloaderListener stateListener;
+    private DownloadFormsTaskListener stateListener;
 
     private FormsDao formsDao;
-
-    public void setDownloaderListener(FormDownloaderListener sl) {
-        synchronized (this) {
-            stateListener = sl;
-        }
-    }
 
     private static final String NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_MANIFEST =
             "http://openrosa.org/xforms/xformsManifest";
@@ -94,7 +102,10 @@ public class FormDownloader {
         }
     }
 
-    public HashMap<FormDetails, String> downloadForms(List<FormDetails> toDownload) {
+    @Override
+    public HashMap<FormDetails, String> doInBackground(ArrayList<FormDetails>... values) {   // smap make public
+        ArrayList<FormDetails> toDownload = values[0];
+
         formsDao = new FormsDao();
         int total = toDownload.size();
         int count = 1;
@@ -116,6 +127,15 @@ public class FormDownloader {
         return result;
     }
 
+    @Override
+    protected void onCancelled(HashMap<FormDetails, String> formDetailsStringHashMap) {
+        synchronized (this) {
+            if (stateListener != null) {
+                stateListener.formsDownloadingCancelled();
+            }
+        }
+    }
+
     /**
      * Processes one form download.
      *
@@ -126,11 +146,9 @@ public class FormDownloader {
      * @throws TaskCancelledException to signal that form downloading is to be canceled
      */
     private String processOneForm(int total, int count, FormDetails fd) throws TaskCancelledException {
-        if (stateListener != null) {
-            stateListener.progressUpdate(fd.getFormName(), String.valueOf(count), String.valueOf(total));
-        }
+        publishProgress(fd.getFormName(), String.valueOf(count), String.valueOf(total));
         String message = "";
-        if (stateListener != null && stateListener.isTaskCanceled()) {
+        if (isCancelled()) {
             throw new TaskCancelledException();
         }
 
@@ -170,7 +188,7 @@ public class FormDownloader {
                 Timber.i("No Manifest for: %s", fd.getFormName());
             }
         } catch (TaskCancelledException e) {
-            Timber.i(e);
+            Timber.i(e.getMessage());
             cleanUp(fileResult, e.file, tempMediaPath, orgTempMediaPath);   // smap
 
             // do not download additional forms.
@@ -179,7 +197,7 @@ public class FormDownloader {
             message += getExceptionMessage(e);
         }
 
-        if (stateListener != null && stateListener.isTaskCanceled()) {
+        if (isCancelled()) {
             cleanUp(fileResult, null, tempMediaPath, orgTempMediaPath);     // smap
             fileResult = null;
         }
@@ -199,7 +217,7 @@ public class FormDownloader {
 
         boolean installed = false;
 
-        if ((stateListener == null || !stateListener.isTaskCanceled()) && parsedFields != null) {   // smap remove check on empty message
+        if (!isCancelled() && parsedFields != null) {       // smap remove check on empty message
             if (isSubmissionOk(parsedFields)) {
                 installEverything(tempMediaPath, fileResult, parsedFields, fd, orgTempMediaPath, orgMediaPath);     // Added organisation paths
                 installed = true;
@@ -273,9 +291,9 @@ public class FormDownloader {
                     + "very beginning.");
         } else {
             if(fileResult.file.exists()) {  // smap
-            formsDao.deleteFormsFromMd5Hash(FileUtils.getMd5Hash(fileResult.file));
-            FileUtils.deleteAndReport(fileResult.getFile());
-        }
+                formsDao.deleteFormsFromMd5Hash(FileUtils.getMd5Hash(fileResult.file));
+                FileUtils.deleteAndReport(fileResult.getFile());
+            }
         }
 
         FileUtils.deleteAndReport(fileOnCancel);
@@ -310,7 +328,7 @@ public class FormDownloader {
      *
      * @param formFile the form definition file
      * @param formInfo certain fields extracted from the parsed XML form, such as title and form ID
-     * @return a {@link UriResult} object
+     * @return a {@link FormDownloaderOld.UriResult} object
      */
     private UriResult findExistingOrCreateNewUri(File formFile, Map<String, String> formInfo, String source, boolean tasks_only)   // smap add source as a parameter
             throws TaskCancelledException {
@@ -327,12 +345,12 @@ public class FormDownloader {
             isNew = cursor.getCount() <= 0;
 
             if (isNew) {
-                uri = saveNewForm(formInfo, formFile, mediaPath, tasks_only, source);       // smap add tasks_only and source
+                uri = saveNewForm(formInfo, formFile, mediaPath, tasks_only, source);              // smap add tasks_only and source
             } else {
                 cursor.moveToFirst();
-                uri = Uri.withAppendedPath(FormsProviderAPI.FormsColumns.CONTENT_URI,
-                        cursor.getString(cursor.getColumnIndex(FormsProviderAPI.FormsColumns._ID)));
-                mediaPath = cursor.getString(cursor.getColumnIndex(FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH));
+                uri = Uri.withAppendedPath(FormsColumns.CONTENT_URI,
+                        cursor.getString(cursor.getColumnIndex(FormsColumns._ID)));
+                mediaPath = cursor.getString(cursor.getColumnIndex(FormsColumns.FORM_MEDIA_PATH));
                 Collect.getInstance().getActivityLogger().logAction(this, "refresh",
                         formFilePath);
             }
@@ -348,18 +366,18 @@ public class FormDownloader {
     private Uri saveNewForm(Map<String, String> formInfo, File formFile, String mediaPath,
                             boolean tasks_only, String source) {    // smap add tasks_only and source
         final ContentValues v = new ContentValues();
-        v.put(FormsProviderAPI.FormsColumns.FORM_FILE_PATH,          formFile.getAbsolutePath());
-        v.put(FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH,         mediaPath);
-        v.put(FormsProviderAPI.FormsColumns.DISPLAY_NAME,            formInfo.get(FileUtils.TITLE));
-        v.put(FormsProviderAPI.FormsColumns.JR_VERSION,              formInfo.get(FileUtils.VERSION));
-        v.put(FormsProviderAPI.FormsColumns.JR_FORM_ID,              formInfo.get(FileUtils.FORMID));
-        v.put(FormsProviderAPI.FormsColumns.PROJECT,                 formInfo.get(FileUtils.PROJECT));      // smap
-        v.put(FormsProviderAPI.FormsColumns.TASKS_ONLY,              tasks_only ? "yes" : "no");            // smap
-        v.put(FormsProviderAPI.FormsColumns.SOURCE,                  source);                               // smap
-        v.put(FormsProviderAPI.FormsColumns.SUBMISSION_URI,          formInfo.get(FileUtils.SUBMISSIONURI));
-        v.put(FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY,   formInfo.get(FileUtils.BASE64_RSA_PUBLIC_KEY));
-        v.put(FormsProviderAPI.FormsColumns.AUTO_DELETE,             formInfo.get(FileUtils.AUTO_DELETE));
-        v.put(FormsProviderAPI.FormsColumns.AUTO_SEND,             formInfo.get(FileUtils.AUTO_SEND));
+        v.put(FormsColumns.FORM_FILE_PATH,          formFile.getAbsolutePath());
+        v.put(FormsColumns.FORM_MEDIA_PATH,         mediaPath);
+        v.put(FormsColumns.DISPLAY_NAME,            formInfo.get(FileUtils.TITLE));
+        v.put(FormsColumns.JR_VERSION,              formInfo.get(FileUtils.VERSION));
+        v.put(FormsColumns.JR_FORM_ID,              formInfo.get(FileUtils.FORMID));
+        v.put(FormsColumns.PROJECT,                 formInfo.get(FileUtils.PROJECT));      // smap
+        v.put(FormsColumns.TASKS_ONLY,              tasks_only ? "yes" : "no");            // smap
+        v.put(FormsColumns.SOURCE,                  source);                               // smap
+        v.put(FormsColumns.SUBMISSION_URI,          formInfo.get(FileUtils.SUBMISSIONURI));
+        v.put(FormsColumns.BASE64_RSA_PUBLIC_KEY,   formInfo.get(FileUtils.BASE64_RSA_PUBLIC_KEY));
+        v.put(FormsColumns.AUTO_DELETE,             formInfo.get(FileUtils.AUTO_DELETE));
+        v.put(FormsColumns.AUTO_SEND,             formInfo.get(FileUtils.AUTO_SEND));
         Uri uri = formsDao.saveForm(v);
         Collect.getInstance().getActivityLogger().logAction(this, "insert",
                 formFile.getAbsolutePath());
@@ -411,7 +429,7 @@ public class FormDownloader {
                     FileUtils.deleteAndReport(f);
 
                     // set the file returned to the file we already had
-                    String existingPath = c.getString(c.getColumnIndex(FormsProviderAPI.FormsColumns.FORM_FILE_PATH));
+                    String existingPath = c.getString(c.getColumnIndex(FormsColumns.FORM_FILE_PATH));
                     f = new File(existingPath);
                     Timber.w("Will use %s", existingPath);
                 }
@@ -459,7 +477,7 @@ public class FormDownloader {
         int attemptCount = 0;
         final int MAX_ATTEMPT_COUNT = 2;
         while (!success && ++attemptCount <= MAX_ATTEMPT_COUNT) {
-            if (stateListener != null && stateListener.isTaskCanceled()) {
+            if (isCancelled()) {
                 throw new TaskCancelledException(tempFile);
             }
             Timber.i("Started downloading to %s from %s", tempFile.getAbsolutePath(), downloadUrl);
@@ -521,7 +539,7 @@ public class FormDownloader {
                     os = new FileOutputStream(tempFile);
                     byte[] buf = new byte[4096];
                     int len;
-                    while ((len = is.read(buf)) > 0 && (stateListener == null || !stateListener.isTaskCanceled())) {
+                    while ((len = is.read(buf)) > 0 && !isCancelled()) {
                         os.write(buf, 0, len);
                     }
                     os.flush();
@@ -563,7 +581,7 @@ public class FormDownloader {
                 }
             }
 
-            if (stateListener != null && stateListener.isTaskCanceled()) {
+            if (isCancelled()) {
                 FileUtils.deleteAndReport(tempFile);
                 throw new TaskCancelledException(tempFile);
             }
@@ -642,10 +660,10 @@ public class FormDownloader {
         }
 
         StringBuffer downloadMsg = new StringBuffer("");        // smap
-        if (stateListener != null) {
-            stateListener.progressUpdate(Collect.getInstance().getString(R.string.fetching_manifest, fd.getFormName()),
-                    String.valueOf(count), String.valueOf(total));
-        }
+
+        publishProgress(Collect.getInstance().getString(R.string.fetching_manifest, fd.getFormName()),
+                String.valueOf(count), String.valueOf(total));
+
 
         List<MediaFile> files = new ArrayList<MediaFile>();
         // get shared HttpContext so that authentication and cookies are retained.
@@ -760,14 +778,11 @@ public class FormDownloader {
 
             for (MediaFile toDownload : files) {
                 ++mediaCount;
-                if (stateListener != null) {
-                    stateListener.progressUpdate(
-                            Collect.getInstance().getString(R.string.form_download_progress,
-                                    fd.getFormName(),
-                                    String.valueOf(mediaCount), String.valueOf(files.size())),
-                            String.valueOf(count), String.valueOf(total));
-                }
-
+                publishProgress(
+                        Collect.getInstance().getString(R.string.form_download_progress,
+                                fd.getFormName(),
+                                String.valueOf(mediaCount), String.valueOf(files.size())),
+                                String.valueOf(count), String.valueOf(total));
                 //try {
                 // start smap organisational media
                 File finalMediaFile = null;
@@ -834,7 +849,35 @@ public class FormDownloader {
         }
     }
 
-    public static String getMd5Hash(String hash) {
-        return hash == null || hash.isEmpty() ? null : hash.substring(MD5_COLON_PREFIX.length());
+    @Override
+    protected void onPostExecute(HashMap<FormDetails, String> value) {
+        synchronized (this) {
+            if (stateListener != null) {
+                stateListener.formsDownloadingComplete(value);
+            }
+        }
+    }
+
+    @Override
+    protected void onProgressUpdate(String... values) {
+        synchronized (this) {
+            if (stateListener != null) {
+                // update progress and total
+                stateListener.progressUpdate(values[0],
+                        Integer.parseInt(values[1]),
+                        Integer.parseInt(values[2]));
+            }
+        }
+
+    }
+
+    public void setDownloaderListener(DownloadFormsTaskListener sl) {
+        synchronized (this) {
+            stateListener = sl;
+        }
+    }
+
+    static String getMd5Hash(String hash) {
+        return hash == null ? null : hash.substring(MD5_COLON_PREFIX.length());
     }
 }

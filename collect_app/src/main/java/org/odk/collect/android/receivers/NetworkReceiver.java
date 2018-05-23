@@ -89,14 +89,10 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
                     .getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
 
-            if (ni == null || !ni.isConnected()) {
-                // not connected, do nothing
-            } else {
-                // uploadForms(context); // smap
+            if (ni != null && ni.isConnected()) {
                 if (isFormAutoSendOptionEnabled(ni)) {    // smap
                     refreshTasks(context);   // smap
                 }
-
             }
         }
     }
@@ -381,22 +377,6 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
         mNotifyMgr.notify(NotificationActivity.NOTIFICATION_ID, mBuilder.build());
     }
 
-    @Override
-    public void formsDownloadingComplete(HashMap<FormDetails, String> results) {
-        // do nothing
-
-    }
-
-    @Override
-    public void formsDownloadingCancelled() {
-        // do nothing
-    }
-
-
-    @Override
-    public void progressUpdate(String currentFile, int progress, int total) {
-        // do nothing
-    }
 
     @Override
     //public void progressUpdate(int progress, int total) {    // smap
@@ -407,6 +387,16 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
     @Override
     public void progressUpdate(int progress, int total) {
         // do nothing
+    }
+
+    @Override
+    public void progressUpdate(String currentFile, String progress, String total) {
+      // do nothing
+    }
+
+    @Override
+    public boolean isTaskCanceled() {
+        return false;
     }
 
     @Override

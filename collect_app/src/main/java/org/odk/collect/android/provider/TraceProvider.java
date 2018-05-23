@@ -13,11 +13,11 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.google.firebase.crash.FirebaseCrash;
-
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ODKSQLiteOpenHelper;
 import org.odk.collect.android.provider.TraceProviderAPI.TraceColumns;
+
+import timber.log.Timber;
 
 /**
  *
@@ -156,7 +156,7 @@ public class TraceProvider extends ContentProvider {
             return traceUri;
         }
 
-        FirebaseCrash.report(new SQLException("Failed to insert row into " + uri));
+        Timber.e(new SQLException("Failed to insert row into " + uri));
         return null;
     }
 

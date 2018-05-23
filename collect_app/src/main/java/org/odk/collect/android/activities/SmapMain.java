@@ -50,6 +50,7 @@ import org.odk.collect.android.adapters.ViewPagerAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.fragments.SmapTaskListFragment;
 import org.odk.collect.android.fragments.SmapTaskMapFragment;
+import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.listeners.NFCListener;
@@ -87,10 +88,10 @@ import java.util.Set;
 
 import timber.log.Timber;
 
-public class SmapMain extends AppCompatActivity implements TaskDownloaderListener,
+public class SmapMain extends CollectAbstractActivity implements TaskDownloaderListener,
         NFCListener,
         InstanceUploaderListener,
-        FormDownloaderListener {
+        DownloadFormsTaskListener {
 
     private static final int PROGRESS_DIALOG = 1;
     private static final int ALERT_DIALOG = 2;

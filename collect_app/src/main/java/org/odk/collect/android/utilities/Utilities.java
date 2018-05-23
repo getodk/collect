@@ -306,13 +306,13 @@ public class Utilities {
 
                     if (instance.files != null && instance.files.size() > 0) {
                         for (String media : instance.files) {
-                            DownloadFormsTask dft = new DownloadFormsTask();
+                            FormDownloader fd = new FormDownloader();
                             String mediaUrl = serverUrl + "/attachments/" +
                                     formId + "/" + media;
                             String mediaPath = file.getParent() + "/" + media;
                             try {
                                 File f = new File(mediaPath);
-                                dft.downloadFile(f, mediaUrl);
+                                fd.downloadFile(f, mediaUrl);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
