@@ -338,7 +338,6 @@
   <string name="geo_clear_warning">Función ya creada. ¿Desea borrar la función?</string>
   <string name="geo_exit_warning">¿Ignorar los cambios y regresar?</string>
   <string name="polygon_validator">Debe tener al menos 3 puntos para crear un polígono</string>
-  <string name="dialog_continue">Continuar</string>
   <string name="clear">Limpiar</string>
   <string name="polyline_polygon_text">Guardar RastroGeo como</string>
   <string name="manual_mode">Modo Manual</string>

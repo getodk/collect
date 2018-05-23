@@ -32,6 +32,7 @@ import android.widget.ImageButton;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.spatial.MapHelper;
+import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoShapeWidget;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.events.MapListener;
@@ -48,6 +49,7 @@ import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -379,7 +381,9 @@ public class GeoShapeOsmMapActivity extends CollectAbstractActivity implements I
     private String generateReturnString() {
         String tempString = "";
         if (mapMarkers.size() > 1) {
-            mapMarkers.add(mapMarkers.get(0));
+            if (Collections.frequency(mapMarkers, mapMarkers.get(0)) < 2) {
+                mapMarkers.add(mapMarkers.get(0));
+            }
             for (int i = 0; i < mapMarkers.size(); i++) {
                 String lat = Double.toString(mapMarkers.get(i).getPosition().getLatitude());
                 String lng = Double.toString(mapMarkers.get(i).getPosition().getLongitude());
@@ -398,7 +402,11 @@ public class GeoShapeOsmMapActivity extends CollectAbstractActivity implements I
                 FormEntryActivity.GEOSHAPE_RESULTS,
                 finalReturnString);
         setResult(RESULT_OK, i);
-        finish();
+        if (mapMarkers.size() < 4) {
+            ToastUtils.showShortToastInMiddle(getString(R.string.polygon_validator));
+        } else {
+            finish();
+        }
     }
 
     private void update_polygon() {

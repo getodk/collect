@@ -320,7 +320,6 @@
   <string name="geo_clear_warning">Fitur sudah dibuat. Apakah anda ingin menghapus fitur ini?</string>
   <string name="geo_exit_warning">Abaikan perubahan dan kembali ke ODK?</string>
   <string name="polygon_validator">Minimal harus memiliki 3 poin untuk membuat Polygon</string>
-  <string name="dialog_continue">Lanjut</string>
   <string name="clear">Hapus</string>
   <string name="polyline_polygon_text">Simpan GeoTrace sebagai</string>
   <string name="manual_mode">Mode manual</string>
