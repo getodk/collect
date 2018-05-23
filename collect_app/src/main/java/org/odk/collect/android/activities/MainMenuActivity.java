@@ -140,9 +140,6 @@ public class MainMenuActivity extends CollectAbstractActivity {
                     Collect.getInstance().getActivityLogger()
                             .logAction(this, ApplicationConstants.FormModes.EDIT_SAVED, "click");
                     Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
-
-                    //DOUBT : do we need to use putExtra..?
-
                     i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE,
                             ApplicationConstants.FormModes.EDIT_SAVED);
                     startActivity(i);
@@ -175,9 +172,6 @@ public class MainMenuActivity extends CollectAbstractActivity {
                     Collect.getInstance().getActivityLogger().logAction(this,
                             ApplicationConstants.FormModes.VIEW_SENT, "click");
                     Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
-
-                    //DOUBT : same thing here...
-
                     i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE,
                             ApplicationConstants.FormModes.VIEW_SENT);
                     startActivity(i);
@@ -223,9 +217,6 @@ public class MainMenuActivity extends CollectAbstractActivity {
             @Override
             public void onClick(View v) {
                 if (Collect.allowClick()) {
-
-                    //to print something to the activity log
-                    //documentation
                     Collect.getInstance().getActivityLogger()
                             .logAction(this, "deleteSavedForms", "click");
                     Intent i = new Intent(getApplicationContext(),
@@ -251,8 +242,6 @@ public class MainMenuActivity extends CollectAbstractActivity {
             mainMenuMessageLabel.setText(Collect.getInstance()
                     .getVersionedAppName());
         }
-
-        //unable to understand this part of the code
 
         File f = new File(Collect.ODK_ROOT + "/collect.settings");
         File j = new File(Collect.ODK_ROOT + "/collect.settings.json");

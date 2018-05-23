@@ -93,7 +93,7 @@
                     android:padding="20dp"
                     android:textAllCaps="false"
                     android:textSize="21sp"
-                    android:textStyle="normal" />
+                    android:textStyle="normal"/>
 
                 <View
                     android:id="@+id/review_spacer"
