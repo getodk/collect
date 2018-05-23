@@ -42,7 +42,7 @@ import timber.log.Timber;
  */
 public class SmapRemoteDataHandlerLookupImagelabels implements IFunctionHandler {
 
-    public static final String HANDLER_NAME = "lookupimagelabels";
+    public static final String HANDLER_NAME = "lookup_image_labels";
     public String mIdent = null;
     public String mServerUrlBase = null;
 

@@ -1400,6 +1400,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     backButton.setEnabled(!formController.isCurrentQuestionFirstInForm() && allowMovingBackwards);
                     nextButton.setEnabled(true);
                 }
+
+                if (Collect.getInstance().inRemoteCall() && Looper.getMainLooper().getThread() == Thread.currentThread()) {  // smap check if we are waiting for a remote call
+                    startProgressBar();
+                }
+
                 return odkView;
 
             case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
@@ -2942,9 +2947,18 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         if (!app.inRemoteCall() && progressBar != null) {
             progressBar.dismiss();
             progressBar = null;
-            if (swipeDirection != null) {
-                if (swipeDirection.equals("forward")) {
-                    showNextView();
+        }
+
+        if (!app.inRemoteCall()) {
+            if(item.choices) {
+                refreshCurrentView();
+            } else {
+                // calculate
+                if (swipeDirection != null) {
+                    if (swipeDirection.equals("forward")) {
+                        swipeDirection = null;
+                        showNextView();
+                    }
                 }
             }
         }

@@ -12,5 +12,6 @@ public class SmapRemoteDataItem {
     public boolean expires;
     public boolean perSubmission;
     public Date expiryDate;
+    public boolean choices;
 
 }

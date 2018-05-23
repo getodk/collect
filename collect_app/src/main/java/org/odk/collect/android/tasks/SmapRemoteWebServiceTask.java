@@ -31,7 +31,7 @@ import timber.log.Timber;
 import static java.lang.Thread.sleep;
 
 /**
- * Background task for appending a timer event to the timer log
+ * Background task for getting values from the server
  */
 public class SmapRemoteWebServiceTask extends AsyncTask<String, Void, SmapRemoteDataItem> {
 
@@ -42,6 +42,7 @@ public class SmapRemoteWebServiceTask extends AsyncTask<String, Void, SmapRemote
 
         String lookupUrl = params[0];
         String timeoutValue = params[1];
+        String choices = params[2];
 
         int timeout = 0;
         try {
@@ -59,6 +60,9 @@ public class SmapRemoteWebServiceTask extends AsyncTask<String, Void, SmapRemote
         item.data = null;
         if(timeout == 0) {
             item.perSubmission = true;
+        }
+        if(params[2] != null && params[2].equals("true")) {
+            item.choices = true;
         }
 
         try {

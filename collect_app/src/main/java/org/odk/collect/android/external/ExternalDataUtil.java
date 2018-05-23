@@ -18,6 +18,7 @@
 
 package org.odk.collect.android.external;
 
+import android.os.Looper;
 import android.util.Log;
 
 import android.widget.Toast;
@@ -34,6 +35,8 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalDataException;
 import org.odk.collect.android.external.handler.ExternalDataHandlerSearch;
+import org.odk.collect.android.external.handler.SmapRemoteDataHandlerSearch;
+import org.odk.collect.android.logic.FormInfo;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,6 +62,7 @@ public final class ExternalDataUtil {
     public static final String SORT_COLUMN_NAME = "c_sortby";
 
     private static final Pattern SEARCH_FUNCTION_REGEX = Pattern.compile("search\\(.+\\)");
+    private static final Pattern REMOTE_SEARCH_FUNCTION_REGEX = Pattern.compile("lookup_choices\\(.+\\)");     // smap
     private static final String COLUMN_SEPARATOR = ",";
     private static final String FALLBACK_COLUMN_SEPARATOR = " ";
     public static final String JR_IMAGES_PREFIX = "jr://images/";
@@ -108,6 +112,9 @@ public final class ExternalDataUtil {
         appearance = appearance.trim();
 
         Matcher matcher = SEARCH_FUNCTION_REGEX.matcher(appearance);
+        if(!matcher.find()) {           // smap try lookup
+            matcher = REMOTE_SEARCH_FUNCTION_REGEX.matcher(appearance);
+        }
         if (matcher.find()) {
             String function = matcher.group(0);
             try {
@@ -115,7 +122,9 @@ public final class ExternalDataUtil {
                 if (XPathFuncExpr.class.isAssignableFrom(xpathExpression.getClass())) {
                     XPathFuncExpr xpathFuncExpr = (XPathFuncExpr) xpathExpression;
                     if (xpathFuncExpr.id.name.equalsIgnoreCase(
-                            ExternalDataHandlerSearch.HANDLER_NAME)) {
+                            ExternalDataHandlerSearch.HANDLER_NAME) ||
+                            xpathFuncExpr.id.name.equalsIgnoreCase(                 // smap
+                                    SmapRemoteDataHandlerSearch.HANDLER_NAME)) {
                         // also check that the args are either 1, 4 or 6.
                         if (xpathFuncExpr.args.length == 1 || xpathFuncExpr.args.length == 4
                                 || xpathFuncExpr.args.length == 6) {
@@ -178,17 +187,25 @@ public final class ExternalDataUtil {
                     // appears to be empty (or has been calculated as empty).");
                     //                    }
 
-                    ExternalDataManager externalDataManager =
-                            Collect.getInstance().getExternalDataManager();
                     FormInstance formInstance =
                             Collect.getInstance().getFormController().getFormDef().getInstance();
                     EvaluationContext baseEvaluationContext = new EvaluationContext(formInstance);
                     EvaluationContext evaluationContext = new EvaluationContext(
                             baseEvaluationContext, formEntryPrompt.getIndex().getReference());
                     // we can only add only the appropriate by querying the xPathFuncExpr.id.name
-                    evaluationContext.addFunctionHandler(
-                            new ExternalDataHandlerSearch(externalDataManager, displayColumns,
-                                    value, imageColumn));
+                    if (xpathfuncexpr.id.name.equalsIgnoreCase(
+                            ExternalDataHandlerSearch.HANDLER_NAME)) {
+                        ExternalDataManager externalDataManager =
+                                Collect.getInstance().getExternalDataManager();
+                        evaluationContext.addFunctionHandler(
+                                new ExternalDataHandlerSearch(externalDataManager, displayColumns,
+                                        value, imageColumn));
+                    } else if (xpathfuncexpr.id.name.equalsIgnoreCase(SmapRemoteDataHandlerSearch.HANDLER_NAME)){       // smap
+                        FormInfo formInfo = Collect.getInstance().getFormInfo();
+                        evaluationContext.addFunctionHandler(
+                                new SmapRemoteDataHandlerSearch(formInfo.getFormID(), displayColumns,
+                                        value, imageColumn));
+                    }
 
                     Object eval = xpathfuncexpr.eval(formInstance, evaluationContext);
                     if (eval.getClass().isAssignableFrom(ArrayList.class)) {

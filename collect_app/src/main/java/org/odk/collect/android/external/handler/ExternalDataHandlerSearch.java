@@ -41,9 +41,7 @@ import java.util.Set;
 import static org.odk.collect.android.external.handler.ExternalDataSearchType.IN;
 
 /**
- * Author: Meletis Margaritis
- * Date: 16/05/13
- * Time: 10:42
+ * Author: Smap Consulting
  */
 public class ExternalDataHandlerSearch extends ExternalDataHandlerBase {
 
