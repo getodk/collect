@@ -110,8 +110,8 @@ public class Collect extends DaggerApplication {
     AuthDialogUtility authDialogUtility;
     @Inject
     LocaleHelper localeHelper;
-
-    private ActivityLogger activityLogger;
+    @Inject
+    ActivityLogger activityLogger;
 
     @Nullable
     private FormController formController;
@@ -351,7 +351,6 @@ public class Collect extends DaggerApplication {
         }
 
         FormController.initializeJavaRosa(mgr);
-        activityLogger = new ActivityLogger(mgr.getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID));
     }
 
     // This method reloads shared preferences in order to load default values for new preferences

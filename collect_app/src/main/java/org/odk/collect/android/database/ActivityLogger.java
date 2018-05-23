@@ -33,6 +33,8 @@ import java.io.File;
 import java.util.Calendar;
 import java.util.LinkedList;
 
+import javax.inject.Inject;
+
 import timber.log.Timber;
 
 import static org.odk.collect.android.preferences.PreferenceKeys.ACTIVITY_LOGGER_ANALYTICS;
@@ -116,6 +118,9 @@ public final class ActivityLogger {
     // action is logged.
     private final LinkedList<ContentValues> scrollActions = new LinkedList<ContentValues>();
 
+    @Inject
+    GeneralSharedPreferences generalSharedPreferences;
+
     public ActivityLogger(String deviceId) {
         this.deviceId = deviceId;
         loggingEnabled = new File(Collect.LOG_PATH, ENABLE_LOGGING).exists();
@@ -125,7 +130,7 @@ public final class ActivityLogger {
 
             if (isFirstTime()) {
                 sendAnalyticsEvent();
-                GeneralSharedPreferences.getInstance().save(ACTIVITY_LOGGER_ANALYTICS, false);
+                generalSharedPreferences.save(ACTIVITY_LOGGER_ANALYTICS, false);
             }
         }
     }
@@ -141,7 +146,7 @@ public final class ActivityLogger {
     }
 
     private boolean isFirstTime() {
-        return GeneralSharedPreferences.getInstance().getBoolean(ACTIVITY_LOGGER_ANALYTICS, true);
+        return generalSharedPreferences.getBoolean(ACTIVITY_LOGGER_ANALYTICS, true);
     }
 
     public boolean isOpen() {
