@@ -211,6 +211,10 @@ public class SpinnerWidget extends QuestionWidget implements MultiChoiceWidget {
             tv.setTextSize(textUnit, textSize);
             tv.setPadding(20, 10, 10, 10);
 
+            if (themeUtils.isDarkTheme()) {
+                convertView.setBackgroundColor(getResources().getColor(R.color.darkPopupDialogColor));
+            }
+
             if (position == items.length - 1) {
                 tv.setText(parent.getContext().getString(R.string.clear_answer));
             } else {
