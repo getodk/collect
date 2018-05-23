@@ -81,7 +81,9 @@ public class GeneralPreferencesFragment extends BasePreferenceFragment implement
         }
 
         if (fragment != null) {
-            getActivity().getFragmentManager().beginTransaction()
+            getActivity()
+                    .getFragmentManager()
+                    .beginTransaction()
                     .replace(android.R.id.content, fragment)
                     .addToBackStack(null)
                     .commit();
@@ -102,7 +104,6 @@ public class GeneralPreferencesFragment extends BasePreferenceFragment implement
 
         if (!hasAtleastOneSettingEnabled(AdminKeys.formManagementKeys)) {
             preferenceScreen.removePreference(findPreference("form_management"));
-
         }
 
         if (!hasAtleastOneSettingEnabled(AdminKeys.identityKeys)) {
