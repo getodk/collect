@@ -1,195 +1,92 @@
+# Java Gradle CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-java/ for more details
+#
 version: 2
-
-references:
-
-  ## Cache
-
-  cache_key: &cache_key
-    key: jars-{{ checksum "build.gradle" }}-{{ checksum "collect_app/build.gradle" }}
-  restore_cache: &restore_cache
-    restore_cache:
-      <<: *cache_key
-  save_cache: &save_cache
-    save_cache:
-      <<: *cache_key
-      paths:
-        - ~/work/.gradle
-
-  accept_licenses : &accept_licenses
-    run:
-      name: Accept licenses
-      command: yes | sdkmanager --licenses || true
-
-  ## Workspace
-
-  workspace: &workspace
-    ~/work
-  attach_debug_workspace: &attach_debug_workspace
-    attach_workspace:
-      at: *workspace
-  persist_debug_workspace: &persist_debug_workspace
-    persist_to_workspace:
-      root: *workspace
-      paths:
-        - collect_app/build/outputs/androidTest-results
-        - collect_app/build/outputs/apk
-        - collect_app/build/outputs/code-coverage
-        - collect_app/build/test-results
-  attach_firebase_workspace: &attach_firebase_workspace
-    attach_workspace:
-      at: *workspace
-  persist_firebase_workspace: &persist_firebase_workspace
-    persist_to_workspace:
-      root: *workspace
-      paths:
-        - firebase
-
-  ## Docker image configurations
-
-  android_config: &android_config
-    resource_class: large
-    working_directory: *workspace
-    docker:
-      - image: circleci/android:api-26-alpha
-  gcloud_config: &gcloud_config
-    working_directory: *workspace
-    docker:
-      - image: google/cloud-sdk:latest
-
 jobs:
+  build:
+    docker:
+      # specify the version you desire here
+      - image: circleci/openjdk:8-jdk
+      
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/postgres:9.4
 
-  ## Build debug APK and instrumented test APK
+    working_directory: ~/repo
 
-  build_debug:
-    <<: *android_config
-    steps:
-        - checkout
-        - *restore_cache
-        - *accept_licenses
-        - run:
-            name: Download dependencies
-            command: ./gradlew androidDependencies
-        - *save_cache
-        - run:
-            name: Run code quality checks
-            command: ./gradlew pmd checkstyle lint findbugs
-        - store_artifacts:
-            path: collect_app/build/reports
-            destination: reports
-        - run:
-            name: Assemble debug and test builds
-            command: |
-                ./gradlew assembleDebug -PdisablePreDex
-                ./gradlew assembleDebugAndroidTest -PdisablePreDex
-        - *persist_debug_workspace
-
-  ## Run unit tests
-
-  test_unit:
-    <<: *android_config
-    steps:
-        - checkout
-        - *restore_cache
-        - *accept_licenses
-        - run:
-            name: Download dependencies
-            command: ./gradlew androidDependencies
-        - *save_cache
-        - run:
-            name: Run unit tests
-            command: ./gradlew testDebugUnitTest
-        - *persist_debug_workspace
-        - store_artifacts:
-            path: collect_app/build/reports
-            destination: reports
-        - store_test_results:
-            path: collect_app/build/test-results
-
-  ## Run instrumented tests
-
-  test_instrumented:
-    <<: *gcloud_config
-    steps:
-      - *attach_debug_workspace
-      - run:
-          name: Authorize gcloud
-          command: |
-            if [[ "$CIRCLE_PROJECT_USERNAME" == "opendatakit" ]]; then \
-              gcloud config set project api-project-322300403941
-              echo $GCLOUD_SERVICE_KEY | base64 --decode > client-secret.json
-              gcloud auth activate-service-account --key-file client-secret.json
-            fi
-      - run:
-          name: Run integration tests
-          command: |
-            if [[ "$CIRCLE_PROJECT_USERNAME" == "opendatakit" ]]; then \
-              echo "y" | gcloud firebase test android run \
-              --type instrumentation \
-              --app collect_app/build/outputs/apk/debug/*.apk \
-              --test collect_app/build/outputs/apk/androidTest/debug/*.apk \
-              --device model=Nexus5,version=21,locale=en,orientation=portrait \
-              --results-bucket opendatakit-collect-test-results \
-              --environment-variables coverage=true,coverageFile=/sdcard/coverage.ec \
-              --directories-to-pull /sdcard --timeout 20m
-            fi
-      - run:
-          name: Copy integration test results
-          command: |
-            if [[ "$CIRCLE_PROJECT_USERNAME" == "opendatakit" ]]; then \
-              mkdir firebase
-              gsutil -m cp -r -U "`gsutil ls gs://opendatakit-collect-test-results | tail -1`*" /root/work/firebase/ | true
-            fi
-      - *persist_firebase_workspace
-      - store_test_results:
-          path: firebase/
-          destination: /firebase/
-
-  ## Submit JaCoCo coverage report
-
-  report_coverage:
-    <<: *android_config
+    environment:
+      # Customize the JVM maximum heap limit
+      JVM_OPTS: -Xmx3200m
+      TERM: dumb
+    
     steps:
       - checkout
-      - *restore_cache
-      - run:
-          name: Download dependencies
-          command: ./gradlew androidDependencies
-      - *attach_debug_workspace
-      - *attach_firebase_workspace
-      - run:
-          name: Move Firebase coverage report
-          command: |
-            if [[ "$CIRCLE_PROJECT_USERNAME" == "opendatakit" ]]; then \
-              mkdir -p collect_app/build/outputs/code-coverage/connected && cp firebase/Nexus5-21-en-portrait/artifacts/coverage.ec collect_app/build/outputs/code-coverage/connected/coverage.ec
-            fi
-      - run:
-          name: Generate JaCoCo report
-          command: ./gradlew -PciBuild=true jacocoTestReport
-      - run:
-          name: Upload coverage report to CodeCov
-          command: bash <(curl -s https://codecov.io/bash)
-      - store_artifacts:
-          path: collect_app/build/reports/
-          destination: /reports/
 
-workflows:
-  version: 2
-  workflow:
-    jobs:
-      - build_debug
-      - test_unit
-      - test_instrumented:
-          requires:
-            - build_debug
-          # We'd like to also filter by username and remove the if/fi above, but username filtering is not supported in CircleCI
-          filters:
-            branches:
-              only: master
-      - report_coverage:
-          requires:
-            - test_unit
-            - test_instrumented
-          # We'd like to also filter by username and remove the if/fi above, but username filtering is not supported in CircleCI
-          filters:
-            branches:
-              only: master
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "build.gradle" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+
+      - run: gradle dependencies
+
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: v1-dependencies-{{ checksum "build.gradle" }}
+        
+      # run tests!
+      - run: gradle test
+
+
+# Java Gradle CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-java/ for more details
+#
+version: 2
+jobs:
+  build:
+    docker:
+      # specify the version you desire here
+      - image: circleci/openjdk:8-jdk
+      
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/postgres:9.4
+
+    working_directory: ~/repo
+
+    environment:
+      # Customize the JVM maximum heap limit
+      JVM_OPTS: -Xmx3200m
+      TERM: dumb
+    
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "build.gradle" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+
+      - run: gradle dependencies
+
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: v1-dependencies-{{ checksum "build.gradle" }}
+        
+      # run tests!
+      - run: gradle test
+
+
+general:
+  branches:
+    only:
+      - Issue#2173 # list of branches to build
