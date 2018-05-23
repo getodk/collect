@@ -73,7 +73,7 @@ public class VersionHidingCursorAdapter extends SimpleCursorAdapter {
                 }
                 return true;
             }
-        });
+        }); 
     }
 
 }
