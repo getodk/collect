@@ -14,6 +14,8 @@ License for the specific language governing permissions and limitations under
 the License.
 -->
 <resources>
+    <color name="red">#F44336</color>
+
     <!-- Dark Theme Palette -->
     <color name="darkPrimaryTextColor">@android:color/white</color>
     <color name="darkPopupDialogColor">#3f3f3f</color>

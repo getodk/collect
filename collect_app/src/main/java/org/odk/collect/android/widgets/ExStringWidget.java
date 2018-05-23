@@ -24,7 +24,6 @@ import android.text.method.TextKeyListener;
 import android.text.method.TextKeyListener.Capitalize;
 import android.util.TypedValue;
 import android.view.KeyEvent;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -42,6 +41,7 @@ import org.odk.collect.android.external.ExternalAppsUtils;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.utilities.ObjectUtils;
+import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
@@ -180,18 +180,13 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
 
     @Override
     public void setFocus(Context context) {
-        // Put focus on text input field and display soft keyboard if appropriate.
-        InputMethodManager inputManager =
-                (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         if (hasExApp) {
-            // hide keyboard
-            inputManager.hideSoftInputFromWindow(answer.getWindowToken(), 0);
+            SoftKeyboardUtils.hideSoftKeyboard(answer);
             // focus on launch button
             launchIntentButton.requestFocus();
         } else {
             if (!getFormEntryPrompt().isReadOnly()) {
-                answer.requestFocus();
-                inputManager.showSoftInput(answer, 0);
+                SoftKeyboardUtils.showSoftKeyboard(answer);
             /*
              * If you do a multi-question screen after a "add another group" dialog, this won't
              * automatically pop up. It's an Android issue.
@@ -203,7 +198,7 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
              * is focused before the dialog pops up, everything works fine. great.
              */
             } else {
-                inputManager.hideSoftInputFromWindow(answer.getWindowToken(), 0);
+                SoftKeyboardUtils.hideSoftKeyboard(answer);
             }
         }
     }
@@ -268,9 +263,7 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
     }
 
     private void focusAnswer() {
-        answer.requestFocus();
-        InputMethodManager inputManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.showSoftInput(answer, 0);
+        SoftKeyboardUtils.showSoftKeyboard(answer);
     }
 
     private void onException(String toastText) {
