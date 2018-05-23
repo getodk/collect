@@ -236,7 +236,7 @@ public class GeoShapeOsmMapActivity extends CollectAbstractActivity implements I
             Marker marker = new Marker(map);
             marker.setPosition(new GeoPoint(gp[0], gp[1]));
             marker.setDraggable(true);
-            marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place));
+            marker.setIcon(ContextCompat.getDrawable(this, R.drawable.ic_place));
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
             marker.setOnMarkerClickListener(nullMarkerListener);
             mapMarkers.add(marker);
@@ -422,7 +422,7 @@ public class GeoShapeOsmMapActivity extends CollectAbstractActivity implements I
             Marker marker = new Marker(map);
             marker.setPosition(point);
             marker.setDraggable(true);
-            marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place));
+            marker.setIcon(ContextCompat.getDrawable(GeoShapeOsmMapActivity.this, R.drawable.ic_place));
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
             marker.setOnMarkerClickListener(nullMarkerListener);
             mapMarkers.add(marker);
