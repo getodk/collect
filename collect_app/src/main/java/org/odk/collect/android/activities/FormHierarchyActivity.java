@@ -339,7 +339,7 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity impl
                             // Display the repeat header for the group.
                             HierarchyElement group =
                                     new HierarchyElement(getLabel(fc), null, ContextCompat
-                                            .getDrawable(getApplicationContext(), R.drawable.expander_ic_minimized),
+                                            .getDrawable(this, R.drawable.expander_ic_minimized),
                                             COLLAPSED, fc.getIndex());
                             formList.add(group);
                         }
