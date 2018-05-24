@@ -22,7 +22,6 @@ import android.widget.LinearLayout;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
-import org.odk.collect.android.utilities.ThemeUtils;
 
 import java.util.List;
 
@@ -46,7 +45,7 @@ public class SelectOneSearchWidget extends AbstractSelectOneWidget implements On
         for (int i = 0; i < buttons.size(); i++) {
             if (tagList == null || tagList.contains(i)) {
                 answerLayout.addView(buttons.get(i));
-                answerLayout.setDividerDrawable(getResources().getDrawable(new ThemeUtils(getContext()).getDivider()));
+                answerLayout.setDividerDrawable(getResources().getDrawable(themeUtils.getDivider()));
                 answerLayout.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
             }
         }

@@ -29,7 +29,6 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.external.ExternalSelectChoice;
-import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.views.MediaLayout;
 
 import java.util.ArrayList;
@@ -152,7 +151,7 @@ public abstract class SelectWidget extends QuestionWidget {
 
         if (index != items.size() - 1) {
             ImageView divider = new ImageView(getContext());
-            divider.setBackgroundResource(new ThemeUtils(getContext()).getDivider());
+            divider.setBackgroundResource(themeUtils.getDivider());
             mediaLayout.addDivider(divider);
         }
 
