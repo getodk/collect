@@ -49,6 +49,7 @@ import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalAppsUtils;
 import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
@@ -175,7 +176,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                 });
 
                 View divider = new View(getContext());
-                divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
+                divider.setBackgroundResource(new ThemeUtils(getContext()).getDivider());
                 divider.setMinimumHeight(3);
                 view.addView(divider);
 
@@ -187,7 +188,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         for (FormEntryPrompt p : questionPrompts) {
             if (!first) {
                 View divider = new View(getContext());
-                divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
+                divider.setBackgroundResource(new ThemeUtils(getContext()).getDivider());
                 divider.setMinimumHeight(3);
                 view.addView(divider);
             } else {
