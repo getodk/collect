@@ -139,6 +139,8 @@ public class FormChooserList extends FormListActivity implements
                 intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
                 startActivity(intent);
             }
+            
+            finish();
         }
     }
 
