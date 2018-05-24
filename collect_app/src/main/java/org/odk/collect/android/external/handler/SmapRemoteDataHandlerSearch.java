@@ -172,31 +172,38 @@ public class SmapRemoteDataHandlerSearch implements IFunctionHandler {
         String selection;
         String[] selectionArgs;
 
-        if (searchRows && useFilter) {
-            // smap modify arguments for createLikeExpression
-            selection = "( " + createLikeExpression(queriedColumns, queriedValues, externalDataSearchType) + " ) AND "
-                    + ExternalDataUtil.toSafeColumnName(filterColumn) + "=? ";
-            String[] likeArgs = externalDataSearchType.constructLikeArguments(queriedValues);    // smap queriedValues - remove column size
-            selectionArgs = new String[likeArgs.length + 1];
-            System.arraycopy(likeArgs, 0, selectionArgs, 0, likeArgs.length);
-            selectionArgs[selectionArgs.length - 1] = filterValue;
-        } else if (searchRows) {
-            selection = createLikeExpression(queriedColumns, queriedValues, externalDataSearchType);    // smap
-            selectionArgs = externalDataSearchType.constructLikeArguments(queriedValues);        // smap queriedValues - remove column size
-        } else if (useFilter) {
-            selection = ExternalDataUtil.toSafeColumnName(filterColumn) + "=? ";
-            selectionArgs = new String[]{filterValue};
-        } else {
-            selection = null;
-            selectionArgs = null;
-        }
+
 
 
         // Get the url which doubles as the cache key
-        String url = mServerUrlBase + dataSetName + "/" + valueColumn + "/" + displayColumns;
+        StringBuffer url = new StringBuffer(mServerUrlBase).append(dataSetName).append("/").append(valueColumn).append("/").append(displayColumns);
+
+        // Add the parameters
+        boolean hasParam = false;
+        if(searchType != null && searchType.trim().length() > 0) {
+            url.append(hasParam ? "&" : "?");
+            url.append("search_type=").append(searchType);
+        }
+        if(queriedColumnsParam != null && queriedColumnsParam.trim().length() > 0) {
+            url.append(hasParam ? "&" : "?");
+            url.append("q_column=").append(queriedColumnsParam);
+        }
+        if(queriedValue != null && queriedValue.trim().length() > 0) {
+            url.append(hasParam ? "&" : "?");
+            url.append("q_value=").append(queriedValue);
+        }
+        if(filterColumn != null && filterColumn.trim().length() > 0) {
+            url.append(hasParam ? "&" : "?");
+            url.append("f_column=").append(filterColumn);
+        }
+        if(filterValue != null && filterValue.trim().length() > 0) {
+            url.append(hasParam ? "&" : "?");
+            url.append("f_value=").append(filterValue);
+        }
 
         // Get the cache results if they exist
-        String data = app.getRemoteData(url);
+        String urlString = url.toString();
+        String data = app.getRemoteData(urlString);
         ArrayList<SelectChoice> choices = null;
         try {
             choices =
@@ -207,10 +214,10 @@ public class SmapRemoteDataHandlerSearch implements IFunctionHandler {
         }
         if (choices == null) {
             // Call a webservice to get the remote record
-            app.startRemoteCall(url);
+            app.startRemoteCall(urlString);
             SmapRemoteWebServiceTask task = new SmapRemoteWebServiceTask();
             task.setSmapRemoteListener(app.getFormEntryActivity());
-            task.execute(url, timeoutValue, "true");
+            task.execute(urlString, timeoutValue, "true");
             return null;
         } else {
             return choices;
@@ -219,28 +226,6 @@ public class SmapRemoteDataHandlerSearch implements IFunctionHandler {
     }
 
 
-    protected String createLikeExpression(List<String> queriedColumns,
-                                          List<String> queriedValues, ExternalDataSearchType type) {  // smap
-        StringBuilder sb = new StringBuilder();
-        if(type.equals(IN) && queriedColumns.size() > 0) {    // smap
-            sb.append(queriedColumns.get(0)).append(" in (");
-            int idx = 0;
-            for (String queriedValue : queriedValues) {
-                if (idx++ > 0) {
-                    sb.append(", ");
-                }
-                sb.append("?");
-            }
-            sb.append(")");
-        } else {
-            for (String queriedColumn : queriedColumns) {
-                if (sb.length() > 0) {
-                    sb.append(" OR ");
-                }
-                sb.append(queriedColumn).append(" LIKE ? ");
-            }
-        }
-        return sb.toString();
-    }
+
 
 }
