@@ -771,17 +771,17 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 // Same with VIDEO_CHOOSER.
             case RequestCodes.VIDEO_CHOOSER:
                 /*
-                * Start a task to save the chosen video with a new Thread,
-                * This could support retrieving file from Google Drive.
-                * */
+                 * Start a task to save the chosen video with a new Thread,
+                 * This could support retrieving file from Google Drive.
+                 * */
                 showDialog(SAVING_DIALOG);
-                Runnable saveVideoRunnable = new Runnable() {
+                Runnable saveMediaRunnable = new Runnable() {
                     @Override
                     public void run() {
-                        saveChosenAudioVideo(intent.getData());
+                        saveChosenMedia(intent.getData());
                     }
                 };
-                new Thread(saveVideoRunnable).start();
+                new Thread(saveMediaRunnable).start();
                 break;
             case RequestCodes.LOCATION_CAPTURE:
                 String sl = intent.getStringExtra(LOCATION_RESULT);
@@ -821,7 +821,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     /**
-     * Save a copy of the chosen audio/video in Collect's own path such as
+     * Save a copy of the chosen media in Collect's own path such as
      * "/storage/emulated/0/odk/instances/{form name}/filename",
      * and if it's from Google Drive and not cached yet, we'll retrieve it using network.
      * This may take a long time.
@@ -829,7 +829,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * @param selectedFile uri of the selected audio
      * @see #getFileExtensionFromUri(Uri)
      */
-    private void saveChosenAudioVideo(Uri selectedFile) {
+    private void saveChosenMedia(Uri selectedFile) {
         String extension = getFileExtensionFromUri(selectedFile);
 
         String instanceFolder = Collect.getInstance().getFormController()
@@ -917,7 +917,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * @param fileUri Whose name we want to get
      * @return The file's extension
      * @see #onActivityResult(int, int, Intent)
-     * @see #saveChosenAudioVideo(Uri)
+     * @see #saveChosenMedia(Uri)
      * @see android.content.ContentResolver
      */
     private String getFileExtensionFromUri(Uri fileUri) {

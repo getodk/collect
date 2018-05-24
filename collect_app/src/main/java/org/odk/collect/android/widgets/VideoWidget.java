@@ -234,17 +234,10 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
         File newVideo = null;
         // get the file path and create a copy in the instance folder
         if (object instanceof Uri) {
-            // Get the source path of the file
             String sourcePath = getSourcePathFromUri((Uri) object);
-            // Get the destinationPath of the new File
             String destinationPath = getDestinationPathFromSourcePath(sourcePath);
-
-            // Get the source file
             File source = fileUtil.getFileAtPath(sourcePath);
-            // Get the destination file
             newVideo = fileUtil.getFileAtPath(destinationPath);
-
-            // Do the copy
             fileUtil.copyFile(source, newVideo);
         } else if (object instanceof File) {
             newVideo = (File) object;
