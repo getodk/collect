@@ -165,7 +165,7 @@ public class GeoShapeOsmMapActivity extends CollectAbstractActivity implements I
 
         map.invalidate();
 
-        zoomDialogView = getLayoutInflater().inflate(R.layout.geoshape_zoom_dialog, null);
+        zoomDialogView = getLayoutInflater().inflate(R.layout.geo_zoom_dialog, null);
 
         zoomLocationButton = zoomDialogView.findViewById(R.id.zoom_location);
         zoomLocationButton.setOnClickListener(new View.OnClickListener() {
@@ -178,7 +178,7 @@ public class GeoShapeOsmMapActivity extends CollectAbstractActivity implements I
             }
         });
 
-        zoomPointButton = zoomDialogView.findViewById(R.id.zoom_shape);
+        zoomPointButton = zoomDialogView.findViewById(R.id.zoom_saved_location);
         zoomPointButton.setOnClickListener(new View.OnClickListener() {
 
             @Override

@@ -200,7 +200,7 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
         });
 
 
-        zoomDialogView = getLayoutInflater().inflate(R.layout.geopoint_zoom_dialog, null);
+        zoomDialogView = getLayoutInflater().inflate(R.layout.geo_zoom_dialog, null);
 
         zoomLocationButton = zoomDialogView.findViewById(R.id.zoom_location);
         zoomLocationButton.setOnClickListener(new View.OnClickListener() {
@@ -212,7 +212,7 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
             }
         });
 
-        zoomPointButton = zoomDialogView.findViewById(R.id.zoom_point);
+        zoomPointButton = zoomDialogView.findViewById(R.id.zoom_saved_location);
         zoomPointButton.setOnClickListener(new View.OnClickListener() {
 
             @Override

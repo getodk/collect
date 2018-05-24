@@ -21,7 +21,7 @@
 
     <android.support.v7.widget.AppCompatButton
         android:text="@string/zoom_to_feature"
-        android:id="@+id/zoom_point"
+        android:id="@+id/zoom_saved_location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="18dp"

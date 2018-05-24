@@ -285,7 +285,7 @@ public class GeoTraceGoogleMapActivity extends CollectAbstractActivity implement
             }
         });
 
-        zoomDialogView = getLayoutInflater().inflate(R.layout.geoshape_zoom_dialog, null);
+        zoomDialogView = getLayoutInflater().inflate(R.layout.geo_zoom_dialog, null);
 
         zoomLocationButton = zoomDialogView.findViewById(R.id.zoom_location);
         zoomLocationButton.setOnClickListener(new View.OnClickListener() {
@@ -296,7 +296,7 @@ public class GeoTraceGoogleMapActivity extends CollectAbstractActivity implement
             }
         });
 
-        zoomPointButton = zoomDialogView.findViewById(R.id.zoom_shape);
+        zoomPointButton = zoomDialogView.findViewById(R.id.zoom_saved_location);
         zoomPointButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -454,7 +454,7 @@ public class GeoTraceGoogleMapActivity extends CollectAbstractActivity implement
 
         alertDialog = dialogBuilder.create();
 
-        zoomDialogView = getLayoutInflater().inflate(R.layout.geoshape_zoom_dialog, null);
+        zoomDialogView = getLayoutInflater().inflate(R.layout.geo_zoom_dialog, null);
 
         zoomLocationButton = zoomDialogView.findViewById(R.id.zoom_location);
         zoomLocationButton.setOnClickListener(new View.OnClickListener() {
@@ -467,7 +467,7 @@ public class GeoTraceGoogleMapActivity extends CollectAbstractActivity implement
             }
         });
 
-        zoomPointButton = zoomDialogView.findViewById(R.id.zoom_shape);
+        zoomPointButton = zoomDialogView.findViewById(R.id.zoom_saved_location);
         zoomPointButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
