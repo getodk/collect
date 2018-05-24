@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:padding="18dp"
         android:visibility="visible"
-        android:textColor="#ff333333"
+        android:textColor="?primaryTextColor"
         android:background="#50cccccc"
         android:drawableLeft="@drawable/ic_person_pin_wrapped"
         android:drawableStart="@drawable/ic_person_pin_wrapped"
@@ -29,7 +29,7 @@
         android:drawableLeft="@drawable/ic_place_wrapped"
         android:drawableStart="@drawable/ic_place_wrapped"
         android:visibility="visible"
-        android:textColor="#ff333333"
+        android:textColor="?primaryTextColor"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20dp" />

@@ -47,6 +47,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.location.client.LocationClient;
 import org.odk.collect.android.location.client.LocationClients;
 import org.odk.collect.android.spatial.MapHelper;
+import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoShapeWidget;
 
@@ -398,7 +399,7 @@ public class GeoShapeGoogleMapActivity extends CollectAbstractActivity implement
             if (curLocation != null) {
                 zoomLocationButton.setEnabled(true);
                 zoomLocationButton.setBackgroundColor(Color.parseColor("#50cccccc"));
-                zoomLocationButton.setTextColor(Color.parseColor("#ff333333"));
+                zoomLocationButton.setTextColor(new ThemeUtils(this).getPrimaryTextColor());
             } else {
                 zoomLocationButton.setEnabled(false);
                 zoomLocationButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));
@@ -408,7 +409,7 @@ public class GeoShapeGoogleMapActivity extends CollectAbstractActivity implement
             if (markerArray.size() != 0) {
                 zoomPointButton.setEnabled(true);
                 zoomPointButton.setBackgroundColor(Color.parseColor("#50cccccc"));
-                zoomPointButton.setTextColor(Color.parseColor("#ff333333"));
+                zoomPointButton.setTextColor(new ThemeUtils(this).getPrimaryTextColor());
             } else {
                 zoomPointButton.setEnabled(false);
                 zoomPointButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));
