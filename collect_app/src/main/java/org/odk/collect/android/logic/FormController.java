@@ -471,6 +471,9 @@ public class FormController {
         ValidateOutcome outcome = getFormDef().validate(markCompleted);
         if (outcome != null) {
             this.jumpToIndex(outcome.failedPrompt);
+            if (indexIsInFieldList()) {
+                stepToPreviousScreenEvent();
+            }
             return outcome.outcome;
         }
         return FormEntryController.ANSWER_OK;

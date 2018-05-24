@@ -64,7 +64,7 @@
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                app:srcCompat="@drawable/ic_add_location_black"
+                app:srcCompat="@drawable/ic_add_location"
                 android:padding="15dp" />
 
             <android.support.v7.widget.AppCompatImageButton
@@ -73,7 +73,7 @@
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                app:srcCompat="@drawable/ic_my_location_black"
+                app:srcCompat="@drawable/ic_my_location"
                 android:padding="15dp" />
 
             <android.support.v7.widget.AppCompatImageButton
@@ -82,7 +82,7 @@
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                app:srcCompat="@drawable/ic_layers_black"
+                app:srcCompat="@drawable/ic_layers"
                 android:padding="15dp" />
 
             <android.support.v7.widget.AppCompatImageButton
@@ -90,7 +90,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
-                app:srcCompat="@drawable/ic_delete_black"
+                app:srcCompat="@drawable/ic_delete"
                 android:padding="15dp" />
 
             <android.support.v7.widget.AppCompatImageButton
@@ -99,7 +99,7 @@
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                app:srcCompat="@drawable/ic_save_black"
+                app:srcCompat="@drawable/ic_save"
                 android:padding="15dp" />
         </LinearLayout>
     </ScrollView>

@@ -17,7 +17,6 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.Gravity;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 
 import org.javarosa.core.model.data.DateTimeData;
@@ -110,14 +109,6 @@ public class DateTimeWidget extends QuestionWidget implements BinaryWidget {
     public void clearAnswer() {
         dateWidget.clearAnswer();
         timeWidget.clearAnswer();
-    }
-
-    @Override
-    public void setFocus(Context context) {
-        // Hide the soft keyboard if it's showing.
-        InputMethodManager inputManager =
-                (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
     }
 
     @Override

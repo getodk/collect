@@ -65,7 +65,7 @@
             android:layout_height="wrap_content"
             android:padding="15dp"
             android:layout_margin="5dp"
-            app:srcCompat="@drawable/ic_add_location_black" />
+            app:srcCompat="@drawable/ic_add_location" />
 
         <android.support.v7.widget.AppCompatImageButton
             android:id="@+id/pause"
@@ -74,11 +74,11 @@
             android:padding="15dp"
             android:layout_margin="5dp"
             android:visibility="gone"
-            app:srcCompat="@drawable/ic_pause_black_36" />
+            app:srcCompat="@drawable/ic_pause_36" />
 
         <android.support.v7.widget.AppCompatImageButton
             android:id="@+id/show_location"
-            app:srcCompat="@drawable/ic_my_location_black"
+            app:srcCompat="@drawable/ic_my_location"
             android:padding="15dp"
             android:layout_margin="5dp"
             android:layout_width="wrap_content"
@@ -90,7 +90,7 @@
             android:layout_height="match_parent"
             android:padding="15dp"
             android:layout_margin="5dp"
-            app:srcCompat="@drawable/ic_layers_black" />
+            app:srcCompat="@drawable/ic_layers" />
 
         <android.support.v7.widget.AppCompatImageButton
             android:id="@+id/clear"
@@ -98,7 +98,7 @@
             android:layout_height="match_parent"
             android:padding="15dp"
             android:layout_margin="5dp"
-            app:srcCompat="@drawable/ic_delete_black" />
+            app:srcCompat="@drawable/ic_delete" />
 
         <android.support.v7.widget.AppCompatImageButton
             android:id="@+id/geotrace_save"
@@ -106,7 +106,7 @@
             android:layout_height="match_parent"
             android:padding="15dp"
             android:layout_margin="5dp"
-            app:srcCompat="@drawable/ic_save_black" />
+            app:srcCompat="@drawable/ic_save" />
     </LinearLayout>
     </ScrollView>
 </RelativeLayout>

@@ -226,7 +226,6 @@
   <string name="ext_search_return_error">El cercador ha retornat un objecte de tipus \'%s\'.</string>
   <string name="ext_import_generic_error">No pot importar dades des de %1$s. Raó: %2$s</string>
   <string name="ext_import_progress_message">Precàrregant dades des de \'%1$s\', espereu si us plau… %2$s</string>
-  <string name="ext_import_cancelled_message">Lectura de dades calcel·lada</string>
   <string name="ext_import_finalizing_message">Acabant dades precarregades…</string>
   <string name="ext_import_completed_message">Lectura de dades completada!</string>
   <string name="ext_not_initialized_error">GestorDadesExternes no s\'ha inicialitzat</string>
@@ -304,7 +303,6 @@
   <string name="geo_clear_warning">Característica ja creada. Vols netejar-la?</string>
   <string name="geo_exit_warning">Descartar canvis i tornar a ODK?</string>
   <string name="polygon_validator">Per crear un polígon calen mínim 3 punts </string>
-  <string name="dialog_continue">Continua</string>
   <string name="clear">Neteja</string>
   <string name="polyline_polygon_text">Desa GeoTraça com</string>
   <string name="manual_mode">Mòdus Manual</string>

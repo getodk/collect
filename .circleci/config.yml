@@ -47,7 +47,6 @@ references:
   ## Docker image configurations
 
   android_config: &android_config
-    resource_class: large
     working_directory: *workspace
     docker:
       - image: circleci/android:api-26-alpha

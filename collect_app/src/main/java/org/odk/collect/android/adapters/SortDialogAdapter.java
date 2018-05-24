@@ -59,7 +59,7 @@ public class SortDialogAdapter extends RecyclerView.Adapter<SortDialogAdapter.Vi
         viewHolder.imgViewIcon.setImageResource(ApplicationConstants.getSortLabelToIconMap().get(sortList[position]));
         viewHolder.imgViewIcon.setImageDrawable(DrawableCompat.wrap(viewHolder.imgViewIcon.getDrawable()).mutate());
 
-        int color = themeUtils.getAttributeValue(position == selectedSortingOrder ? R.attr.colorAccent : R.attr.primaryTextColor);
+        int color = position == selectedSortingOrder ? themeUtils.getAccentColor() : themeUtils.getPrimaryTextColor();
         viewHolder.txtViewTitle.setTextColor(color);
         DrawableCompat.setTintList(viewHolder.imgViewIcon.getDrawable(), position == selectedSortingOrder ? ColorStateList.valueOf(color) : null);
     }
@@ -91,11 +91,11 @@ public class SortDialogAdapter extends RecyclerView.Adapter<SortDialogAdapter.Vi
 
         public void updateItemColor(int selectedSortingOrder) {
             ViewHolder previousHolder = (ViewHolder) recyclerView.findViewHolderForAdapterPosition(selectedSortingOrder);
-            previousHolder.txtViewTitle.setTextColor(themeUtils.getAttributeValue(R.attr.primaryTextColor));
+            previousHolder.txtViewTitle.setTextColor(themeUtils.getPrimaryTextColor());
             DrawableCompat.setTintList(previousHolder.imgViewIcon.getDrawable(), null);
 
-            txtViewTitle.setTextColor(themeUtils.getAttributeValue(R.attr.colorAccent));
-            DrawableCompat.setTint(imgViewIcon.getDrawable(), themeUtils.getAttributeValue(R.attr.colorAccent));
+            txtViewTitle.setTextColor(themeUtils.getAccentColor());
+            DrawableCompat.setTint(imgViewIcon.getDrawable(), themeUtils.getAccentColor());
         }
     }
 }
