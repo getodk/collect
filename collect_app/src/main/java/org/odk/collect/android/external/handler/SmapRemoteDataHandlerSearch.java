@@ -183,22 +183,27 @@ public class SmapRemoteDataHandlerSearch implements IFunctionHandler {
         if(searchType != null && searchType.trim().length() > 0) {
             url.append(hasParam ? "&" : "?");
             url.append("search_type=").append(searchType);
+            hasParam = true;
         }
         if(queriedColumnsParam != null && queriedColumnsParam.trim().length() > 0) {
             url.append(hasParam ? "&" : "?");
             url.append("q_column=").append(queriedColumnsParam);
+            hasParam = true;
         }
         if(queriedValue != null && queriedValue.trim().length() > 0) {
             url.append(hasParam ? "&" : "?");
             url.append("q_value=").append(queriedValue);
+            hasParam = true;
         }
         if(filterColumn != null && filterColumn.trim().length() > 0) {
             url.append(hasParam ? "&" : "?");
             url.append("f_column=").append(filterColumn);
+            hasParam = true;
         }
         if(filterValue != null && filterValue.trim().length() > 0) {
             url.append(hasParam ? "&" : "?");
             url.append("f_value=").append(filterValue);
+            hasParam = true;
         }
 
         // Get the cache results if they exist

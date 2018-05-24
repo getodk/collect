@@ -112,10 +112,12 @@ public final class ExternalDataUtil {
         appearance = appearance.trim();
 
         Matcher matcher = SEARCH_FUNCTION_REGEX.matcher(appearance);
-        if(!matcher.find()) {           // smap try lookup
+        boolean found = matcher.find(); // smap
+        if(!found) {           // smap try lookup
             matcher = REMOTE_SEARCH_FUNCTION_REGEX.matcher(appearance);
+            found = matcher.find();
         }
-        if (matcher.find()) {
+        if (found) {
             String function = matcher.group(0);
             try {
                 XPathExpression xpathExpression = XPathParseTool.parseXPath(function);
