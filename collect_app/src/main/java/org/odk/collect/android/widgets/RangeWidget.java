@@ -98,10 +98,6 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonWidget
     }
 
     @Override
-    public void setFocus(Context context) {
-    }
-
-    @Override
     public void setOnLongClickListener(OnLongClickListener l) {
         if (isPickerAppearance) {
             pickerButton.setOnLongClickListener(l);
@@ -200,13 +196,13 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonWidget
                 switch (action) {
                     case MotionEvent.ACTION_DOWN:
                         v.getParent().requestDisallowInterceptTouchEvent(true);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        v.getParent().requestDisallowInterceptTouchEvent(false);
                         if (actualValue == null) {
                             actualValue = rangeStart;
                             setUpActualValueLabel();
                         }
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        v.getParent().requestDisallowInterceptTouchEvent(false);
                         break;
                 }
                 v.onTouchEvent(event);

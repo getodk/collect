@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -33,6 +32,7 @@ import android.widget.ImageButton;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.spatial.MapHelper;
+import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoShapeWidget;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.events.MapListener;
@@ -49,6 +49,7 @@ import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -59,7 +60,7 @@ import java.util.List;
  */
 
 
-public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceiver {
+public class GeoShapeOsmMapActivity extends CollectAbstractActivity implements IRegisterReceiver {
     private MapView map;
     private ArrayList<Marker> mapMarkers = new ArrayList<Marker>();
     private Polyline polyline;
@@ -237,7 +238,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
             Marker marker = new Marker(map);
             marker.setPosition(new GeoPoint(gp[0], gp[1]));
             marker.setDraggable(true);
-            marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black_36dp));
+            marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place));
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
             marker.setOnMarkerClickListener(nullMarkerListener);
             mapMarkers.add(marker);
@@ -380,7 +381,9 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
     private String generateReturnString() {
         String tempString = "";
         if (mapMarkers.size() > 1) {
-            mapMarkers.add(mapMarkers.get(0));
+            if (Collections.frequency(mapMarkers, mapMarkers.get(0)) < 2) {
+                mapMarkers.add(mapMarkers.get(0));
+            }
             for (int i = 0; i < mapMarkers.size(); i++) {
                 String lat = Double.toString(mapMarkers.get(i).getPosition().getLatitude());
                 String lng = Double.toString(mapMarkers.get(i).getPosition().getLongitude());
@@ -399,7 +402,11 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
                 FormEntryActivity.GEOSHAPE_RESULTS,
                 finalReturnString);
         setResult(RESULT_OK, i);
-        finish();
+        if (mapMarkers.size() < 4) {
+            ToastUtils.showShortToastInMiddle(getString(R.string.polygon_validator));
+        } else {
+            finish();
+        }
     }
 
     private void update_polygon() {
@@ -423,7 +430,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
             Marker marker = new Marker(map);
             marker.setPosition(point);
             marker.setDraggable(true);
-            marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black_36dp));
+            marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place));
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
             marker.setOnMarkerClickListener(nullMarkerListener);
             mapMarkers.add(marker);

@@ -110,7 +110,7 @@ implementation (project(path: ':javarosa-master')) {
 ## Contributing code
 Any and all contributions to the project are welcome. ODK Collect is used across the world primarily by organizations with a social purpose so you can have real impact!
 
-Issues tagged as [quick win](https://github.com/opendatakit/collect/labels/quick%20win) should be a good place to start. There are also currently many issues tagged as [needs reproduction](https://github.com/opendatakit/collect/labels/needs%20reproduction) which need someone to try to reproduce them with the current version of ODK Collect and comment on the issue with their findings.
+Issues tagged as [good first issue](https://github.com/opendatakit/collect/labels/good%20first%20issue) should be a good place to start. There are also currently many issues tagged as [needs reproduction](https://github.com/opendatakit/collect/labels/needs%20reproduction) which need someone to try to reproduce them with the current version of ODK Collect and comment on the issue with their findings.
 
 If you're ready to contribute code, see [the contribution guide](CONTRIBUTING.md).
 
@@ -172,3 +172,22 @@ If you build the app on your own using Android Studio `(Build -> Build APK)` and
 
 This problem occurs building other apps as well.
 
+#### gradlew Failure: `FAILURE: Build failed with an exception.`
+
+If you encounter an error similar to this when running `gradlew`:
+
+```
+FAILURE: Build failed with an exception
+
+What went wrong:
+A problem occurred configuring project ':collect_app'.
+> Failed to notify project evaluation listener.
+   > Could not initialize class com.android.sdklib.repository.AndroidSdkHandler
+```
+
+You may have a mismatch between the embedded Android SDK Java and the JDK installed on your machine. You may wish to set your **JAVA_HOME** environment variable to that SDK. For example, on macOS:
+
+`export JAVA_HOME="/Applications/Android Studio.app/Contents/jre/jdk/Contents/Home"
+`
+
+Note that this change might cause problems with other Java-based applications (e.g., if you uninstall Android Studio).

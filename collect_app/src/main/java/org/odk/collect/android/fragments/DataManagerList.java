@@ -17,16 +17,16 @@ package org.odk.collect.android.fragments;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.CursorLoader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.dao.InstancesDao;
@@ -36,9 +36,6 @@ import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.DeleteInstancesTask;
 import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.utilities.ToastUtils;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import timber.log.Timber;
 
@@ -70,7 +67,7 @@ public class DataManagerList extends InstanceListFragment
     }
 
     @Override
-    public void onViewCreated(View rootView, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View rootView, Bundle savedInstanceState) {
 
         deleteButton.setOnClickListener(this);
         toggleButton.setOnClickListener(this);
@@ -115,21 +112,18 @@ public class DataManagerList extends InstanceListFragment
     }
 
     @Override
-    public void syncComplete(String result) {
-        TextView textView = rootView.findViewById(R.id.status_text);
-        textView.setText(result);
+    public void syncComplete(@NonNull String result) {
+        Timber.i("Disk scan complete");
+        hideProgressBarAndAllow();
+        showSnackbar(result);
     }
 
     private void setupAdapter() {
-        List<Long> checkedInstances = new ArrayList<>();
-        for (long a : getListView().getCheckedItemIds()) {
-            checkedInstances.add(a);
-        }
         String[] data = new String[]{InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT};
         int[] view = new int[]{R.id.text1, R.id.text2};
 
         listAdapter = new SimpleCursorAdapter(getActivity(),
-                R.layout.two_item_multiple_choice, getCursor(), data, view);
+                R.layout.two_item_multiple_choice, null, data, view);
         setListAdapter(listAdapter);
         checkPreviouslyCheckedItems();
     }
@@ -140,13 +134,8 @@ public class DataManagerList extends InstanceListFragment
     }
 
     @Override
-    protected void updateAdapter() {
-        listAdapter.changeCursor(getCursor());
-        super.updateAdapter();
-    }
-
-    private Cursor getCursor() {
-        return new InstancesDao().getSavedInstancesCursor(getFilterText(), getSortingOrder());
+    protected CursorLoader getCursorLoader() {
+        return new InstancesDao().getSavedInstancesCursorLoader(getFilterText(), getSortingOrder());
     }
 
     /**
@@ -273,9 +262,6 @@ public class DataManagerList extends InstanceListFragment
                 }
                 toggleButtonLabel(toggleButton, getListView());
                 deleteButton.setEnabled(allChecked);
-                if (!allChecked) {
-                    selectedInstances.clear();
-                }
                 break;
         }
     }

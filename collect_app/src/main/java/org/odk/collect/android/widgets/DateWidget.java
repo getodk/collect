@@ -25,7 +25,6 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.Window;
-import android.view.accessibility.AccessibilityManager;
 import android.widget.DatePicker;
 
 import org.javarosa.form.api.FormEntryPrompt;
@@ -36,8 +35,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 
 import timber.log.Timber;
-
-import static android.content.Context.ACCESSIBILITY_SERVICE;
 
 /**
  * Displays a DatePicker widget. DateWidget handles leap years and does not allow dates that do not
@@ -77,10 +74,10 @@ public class DateWidget extends AbstractDateWidget implements DatePickerDialog.O
         // https://github.com/opendatakit/collect/issues/1424
         // https://github.com/opendatakit/collect/issues/1367
         if (!isBrokenSamsungDevice() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            theme = android.R.style.Theme_Material_Light_Dialog;
+            theme = themeUtils.getMaterialDialogTheme();
         }
-        if (!datePickerDetails.isCalendarMode() || (isBrokenSamsungDevice() && isTalkBackActive())) {
-            theme = android.R.style.Theme_Holo_Light_Dialog;
+        if (!datePickerDetails.isCalendarMode() || isBrokenSamsungDevice()) {
+            theme = themeUtils.getHoloDialogTheme();
         }
 
         return theme;
@@ -93,11 +90,6 @@ public class DateWidget extends AbstractDateWidget implements DatePickerDialog.O
                 && Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1);
     }
 
-    // https://stackoverflow.com/a/34853067/5479029
-    private boolean isTalkBackActive() {
-        return ((AccessibilityManager) getContext().getSystemService(ACCESSIBILITY_SERVICE)).isTouchExplorationEnabled();
-    }
-
     // Exposed for testing purposes to avoid reflection.
     public void setDatePickerDialog(DatePickerDialog datePickerDialog) {
         this.datePickerDialog = datePickerDialog;
@@ -105,12 +97,10 @@ public class DateWidget extends AbstractDateWidget implements DatePickerDialog.O
 
     private class FixedDatePickerDialog extends DatePickerDialog {
         private String dialogTitle = getContext().getString(R.string.select_date);
-        private int theme;
 
         FixedDatePickerDialog(Context context, int theme, OnDateSetListener listener) {
             super(context, theme, listener, date.getYear(), date.getMonthOfYear() - 1, date.getDayOfMonth());
-            this.theme = theme;
-            if (theme == android.R.style.Theme_Holo_Light_Dialog) {
+            if (themeUtils.isHoloDialogTheme(theme)) {
                 setTitle(dialogTitle);
                 fixSpinner(context, date.getYear(), date.getMonthOfYear() - 1, date.getDayOfMonth());
                 hidePickersIfNeeded();
@@ -122,12 +112,6 @@ public class DateWidget extends AbstractDateWidget implements DatePickerDialog.O
 
                 //noinspection deprecation
                 getDatePicker().setCalendarViewShown(false);
-            }
-        }
-
-        public void setTitle(CharSequence title) {
-            if (theme == android.R.style.Theme_Holo_Light_Dialog) {
-                super.setTitle(dialogTitle);
             }
         }
 

@@ -24,7 +24,6 @@ import android.net.Uri;
 import android.provider.MediaStore.Audio;
 import android.support.annotation.NonNull;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -35,6 +34,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.FileUtil;
+import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtil;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 
@@ -108,14 +108,11 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
 
     @Override
     public void deleteFile() {
-        // get the file path and delete the file
-        String name = binaryName;
-        // clean up variables
+        MediaManager
+                .INSTANCE
+                .markOriginalFileOrDelete(getFormEntryPrompt().getIndex().toString(),
+                getInstanceFolder() + File.separator + binaryName);
         binaryName = null;
-        // delete from media provider
-        int del = mediaUtil.deleteAudioFileFromMediaProvider(
-                getInstanceFolder() + File.separator + name);
-        Timber.i("Deleted %d rows from media content provider", del);
     }
 
     @Override
@@ -162,6 +159,10 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
             values.put(Audio.Media.DATE_ADDED, System.currentTimeMillis());
             values.put(Audio.Media.DATA, newAudio.getAbsolutePath());
 
+            MediaManager
+                    .INSTANCE
+                    .replaceRecentFileForQuestion(getFormEntryPrompt().getIndex().toString(), newAudio.getAbsolutePath());
+
             Uri audioURI = getContext().getContentResolver().insert(
                     Audio.Media.EXTERNAL_CONTENT_URI, values);
 
@@ -199,14 +200,6 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
         String extension = sourcePath.substring(sourcePath.lastIndexOf('.'));
         return getInstanceFolder() + File.separator
                 + fileUtil.getRandomFilename() + extension;
-    }
-
-    @Override
-    public void setFocus(Context context) {
-        // Hide the soft keyboard if it's showing.
-        InputMethodManager inputManager = (InputMethodManager) context
-                .getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
     }
 
     @Override

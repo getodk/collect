@@ -22,7 +22,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
-import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -68,7 +67,7 @@ import java.util.concurrent.TimeUnit;
  *
  * @author jonnordling@gmail.com
  */
-public class GeoTraceGoogleMapActivity extends FragmentActivity implements LocationListener,
+public class GeoTraceGoogleMapActivity extends CollectAbstractActivity implements LocationListener,
         OnMarkerDragListener, OnMapLongClickListener, LocationClient.LocationClientListener {
 
     private ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
@@ -251,7 +250,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
                     saveGeoTrace();
                 } else {
                     alertDialog.dismiss();
-                    showPolygonErrorDialog();
+                    ToastUtils.showShortToastInMiddle(getString(R.string.polygon_validator));
                 }
             }
         });
@@ -259,8 +258,13 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
         polylineSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alertDialog.dismiss();
-                saveGeoTrace();
+                if (markerArray.size() > 1) {
+                    alertDialog.dismiss();
+                    saveGeoTrace();
+                } else {
+                    alertDialog.dismiss();
+                    ToastUtils.showShortToastInMiddle(getString(R.string.polyline_validator));
+                }
             }
         });
 
@@ -648,18 +652,6 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
     public void onMarkerDragEnd(Marker marker) {
         update_polyline();
         marker.setSnippet("0.0;0.0");
-    }
-
-    private void showPolygonErrorDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(getString(R.string.polygon_validator))
-                .setPositiveButton(getString(R.string.dialog_continue),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-
-                            }
-                        }).show();
-
     }
 
     private void clearFeatures() {

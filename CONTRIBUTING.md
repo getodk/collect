@@ -38,11 +38,13 @@ To contribute code to ODK Collect, you will need to open a [pull request](https:
 
 1. Keep your pull request focused on one narrow goal. This could mean addressing an issue with multiple, smaller pull requests. Small pull requests are easier to review and less likely to introduce bugs. If you would like to make stylistic changes to the code, create a separate pull request.
 
-1. Run `./gradlew lint` and `./gradlew checkstyle` and fix any errors.
+1. Run `./gradlew lint checkstyle pmd findbugs` and fix any errors.
 
 1. Write clear code. Use descriptive names and create meaningful abstractions (methods, classes).
 
 1. Document your reasoning. Your commit messages should make it clear why each change has been made.
+
+1. If your pull request makes user-facing changes, we likely need to update documentation. [File an issue on the docs repo](https://github.com/opendatakit/docs/issues/new) describing the changes.
 
 1. Follow the guidelines below.
 
@@ -57,6 +59,7 @@ We try to have at least two people review every pull request and we encourage ev
 - What other functionality could this PR affect? Does that functionality still work as intended?
 - Was the change verified with several different devices and Android versions?
 - Is the code easy to understand and to maintain?
+- Is there sufficient detail to inform any changes to documentation?
 
 When a pull request is first created, @opendatakit-bot tags it as `needs review` to indicate that code review is needed. Community members review the code and leave their comments, verifying that the changes included are relevant and properly address the issue. A maintainer does a thorough code review and when satisfied with the code, tags the pull request as `needs testing` to indicate the need for a manual [black-box testing](https://en.wikipedia.org/wiki/Black-box_testing) pass. A pull request may go back and forth between `needs testing` and `needs review` until the behavior is thoroughly verified. Once the behavior has been thoroughly verified, the pull request is tagged as `behavior verified`. A maintainer then merges the changes. Pull requests that need more complete reviews including review of approach and/or appropriateness are tagged with `reviews wanted`. Any community member is encouraged to participate in the review process!
 
@@ -66,9 +69,19 @@ Small fixes that target very particular bugs may occasionally be merged without 
 
 In addition to contributing code, you can help to triage issues. This can include reproducing bug reports, or asking for vital information such as version numbers or reproduction instructions. If you would like to start triaging issues, one easy way to get started is to [subscribe to opendatakit/collect on CodeTriage](https://www.codetriage.com/opendatakit/collect).
 
-## Style guidelines
+## Code Style guidelines
 Follow the [Android style rules](http://source.android.com/source/code-style.html) and the [Google Java style guide](https://google.github.io/styleguide/javaguide.html).
 
+## UI Components Style guidelines
+Ensure that the added UI components are compatible with both light and dark themes. 
+Follow the below points to get the color for coloring the UI components like text and icons instead of directly using color values (eg. #000000 or R.color.colorName). 
+
+UI Component | Java | Xml _(layouts, drawables, vectors)_:
+--- | --- | ---  
+text color | themeUtils.getPrimaryTextColor() | ?primaryTextColor  
+accent color | themeUtils.getAccentColor() | ?colorAccent  
+icon color | themeUtils.getIconColor() | ?iconColor  
+  
 ## Strings
 Always use [string resources](https://developer.android.com/guide/topics/resources/string-resource.html) instead of literal strings. This ensures wording consistency across the project and also enables full translation of the app. Only make changes to the base `res/values/strings.xml` English file and not to the other language files. The translated files are generated from [Transifex](https://www.transifex.com/opendatakit/collect/) where translations can be submitted by the community. Names of software packages or other untranslatable strings should be placed in `res/values/untranslated.xml`.
 

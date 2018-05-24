@@ -133,7 +133,6 @@
   <string name="submission_url">Caminho para submeter</string>
   <string name="font_size">Tamanho da Fonte do Texto</string>
   <string name="change_font_size">Tamanho da Fonte do Texto</string>
-  <string name="form_scan_starting">Procurando por formulários…</string>
   <string name="access_error">Erro enquanto acessa %s:</string>
   <string name="manifest_server_error">Resposta não retorna uma versão OpenRosa — servidor ruim?</string>
   <string name="root_element_error">Elemento raiz não é &amp;lt;manifest\&gt; — foi %s</string>
@@ -187,7 +186,6 @@ Escolher Imagem</string>
   <string name="draw_image">Desenhar Imagem</string>
   <string name="reset_image">Reset</string>
   <string name="set_color">Definir Cor</string>
-  <string name="select_drawing_color">Definir cor para desenhar</string>
   <string name="admin_preferences">Configurações Administrativas</string>
   <string name="admin_access_settings">Toque para acesso administrativo às configurações</string>
   <string name="save_mid">Mid-form saving</string>
@@ -228,7 +226,6 @@ Escolher Imagem</string>
   <string name="ext_search_return_error">O gestor de procura retornou um objeto do tipo %s\'.</string>
   <string name="ext_import_generic_error">Não foi possível importar os dados de%1$s. Motivo: %2$s</string>
   <string name="ext_import_progress_message">Pré-carregando dados de \'%1$s\', por favor aguarde… %2$s</string>
-  <string name="ext_import_cancelled_message">Leitura de dados cancelada!</string>
   <string name="ext_import_finalizing_message">Finalizando dados pré-carregados…</string>
   <string name="ext_import_completed_message">Leitura de dados finalizada!</string>
   <string name="ext_not_initialized_error">O ExternalDataManager não foi inicializado.</string>
@@ -272,7 +269,6 @@ Escolher Imagem</string>
   <string name="enable_gps_message">O GPS está desabilitado em seu aparelho. Gostaria de habilitá-lo?</string>
   <string name="gps_enable_message">O GPS está desabilitado em seu aparelho. Gostaria de habilitá-lo?</string>
   <string name="minutes">Minutos</string>
-  <string name="dialog_continue">Continuar</string>
   <string name="clear">Limpar</string>
   <string name="manual_mode">Modo manual</string>
   <string name="automatic_mode">Modo automático</string>
@@ -310,6 +306,7 @@ Escolher Imagem</string>
   <string name="reset_layers">Camadas do mapa (pasta de camadas)</string>
   <string name="exit">Sair</string>
   <string name="autosend_selector_title">Enviar automaticamente</string>
+  <string name="guidance_no">Não</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
   <string name="yes">Sim</string>
   <string name="no">Não</string>

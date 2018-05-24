@@ -1,12 +1,12 @@
 /*
  * Copyright (C) 2012 University of Washington
  * Copyright (C) 2007 The Android Open Source Project
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -24,7 +24,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.view.KeyEvent;
 import android.view.View;
@@ -35,13 +34,13 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.common.collect.ImmutableList;
+import com.rarepebble.colorpicker.ColorPickerView;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.IconMenuListAdapter;
 import org.odk.collect.android.adapters.model.IconMenuItem;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.AnimateUtils;
-import org.odk.collect.android.utilities.ColorPickerDialog;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.views.DrawView;
@@ -59,7 +58,7 @@ import timber.log.Timber;
  *
  * @author BehrAtherton@gmail.com
  */
-public class DrawActivity extends AppCompatActivity {
+public class DrawActivity extends CollectAbstractActivity {
     public static final String OPTION = "option";
     public static final String OPTION_SIGNATURE = "signature";
     public static final String OPTION_ANNOTATE = "annotate";
@@ -301,8 +300,8 @@ public class DrawActivity extends AppCompatActivity {
         ListView listView = DialogUtils.createActionListView(this);
 
         List<IconMenuItem> items;
-        items = ImmutableList.of(new IconMenuItem(R.drawable.ic_save_grey_32dp_wrapped, R.string.keep_changes),
-                new IconMenuItem(R.drawable.ic_delete_grey_32dp_wrapped, R.string.do_not_save));
+        items = ImmutableList.of(new IconMenuItem(R.drawable.ic_save, R.string.keep_changes),
+                new IconMenuItem(R.drawable.ic_delete, R.string.do_not_save));
 
         final IconMenuListAdapter adapter = new IconMenuListAdapter(this, items);
         listView.setAdapter(adapter);
@@ -361,14 +360,17 @@ public class DrawActivity extends AppCompatActivity {
     public void setColor(View view) {
         if (view.getVisibility() == View.VISIBLE) {
             fabActions.performClick();
-            ColorPickerDialog cpd = new ColorPickerDialog(this,
-                    new ColorPickerDialog.OnColorChangedListener() {
-                        public void colorChanged(String key, int color) {
-                            drawView.setColor(color);
-                        }
-                    }, "key", drawView.getColor(), drawView.getColor(),
-                    getString(R.string.select_drawing_color));
-            cpd.show();
+
+            final ColorPickerView picker = new ColorPickerView(this);
+            picker.setColor(drawView.getColor());
+            picker.showAlpha(false);
+            picker.showHex(false);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder
+                    .setView(picker)
+                    .setPositiveButton(R.string.ok, (dialog, which) -> drawView.setColor(picker.getColor()))
+                    .show();
         }
     }
 }

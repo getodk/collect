@@ -144,7 +144,6 @@
   <string name="submission_url">Lähetettävien lomakkeiden polku</string>
   <string name="font_size">Tekstin koko</string>
   <string name="change_font_size">Tekstin koko</string>
-  <string name="form_scan_starting">Etsitään lomakkeita…</string>
   <string name="access_error">Virhe käyttäessä %s:</string>
   <string name="manifest_server_error">Manifestivastaus ei raportoi OpenRosa-versiota - palvelinvika?</string>
   <string name="root_element_error">Juurielementti ei ole &lt;manifest\&gt; — oli %s</string>
@@ -157,6 +156,7 @@
   <string name="no_forms_uploaded">Pahoittelut, lomaketta ei siirretty.</string>
   <string name="upload_results">Siirrä tulokset.</string>
   <string name="xform_parse_error">XForm jäsennysvirhe %1$s: %2$s puuttuu tai ei kelpaa.</string>
+  <string name="choose_file">Valitse tiedosto</string>
   <string name="choose_sound">Valitse ääni</string>
   <string name="choose_video">Valitse video</string>
   <string name="choose_image">Valitse kuva</string>
@@ -199,7 +199,6 @@
   <string name="draw_image">Luonnostele kuva</string>
   <string name="reset_image">Nollaus (Reset)</string>
   <string name="set_color">Aseta väri</string>
-  <string name="select_drawing_color">Aseta piirrustusväri</string>
   <string name="admin_preferences">Pääkäyttäjän asetukset</string>
   <string name="admin_access_settings">Napsauta saadaksesi pääkäyttäjäoikeudet asetuksiin</string>
   <string name="save_mid">Tallenna lomake</string>
@@ -337,7 +336,6 @@
   <string name="geo_clear_warning">Ominaisuus on jo luotu. Haluatko tyhjentää ominaisuuden?</string>
   <string name="geo_exit_warning">Hylätäänkö muutokset ja palataan ODK:hon?</string>
   <string name="polygon_validator">Monikulmion luomiseen tarvitaan vähintään 3 pistettä</string>
-  <string name="dialog_continue">Jatka</string>
   <string name="clear">Tyhjennä</string>
   <string name="polyline_polygon_text">Tallenna GeoTrace nimellä</string>
   <string name="manual_mode">Manuaalinen tila</string>
@@ -484,6 +482,9 @@
   <string name="user_access_control">Käyttäjän pääsynvalvonta</string>
   <string name="autosend_selector_title">Automaattinen lähetys</string>
   <string name="off">Pois</string>
+  <string name="guidance_no">Ei</string>
+  <string name="guidance_yes">Kyllä - näytetään aina</string>
+  <string name="guidance_yes_collapsed">Kyllä - tiivistettynä</string>
   <string name="wifi_autosend">Vain Wifi</string>
   <string name="cellular_autosend">Vain puhelinverkko</string>
   <string name="wifi_cellular_autosend">Wifi tai puhelinverkko</string>
@@ -567,9 +568,32 @@
   <string name="moving_backwards_enabled_message">Haluat ehkä tarkastella seuraavia asetuksia:\n\n\u2022 Muokkaa tallennettua lomaketta\n\u2022 Tallenna lomake\n\u2022 Siirry kehotteeseen\n\u2022 Rajoiteprosessointi</string>
   <string name="yes">Kyllä</string>
   <string name="no">Ei</string>
-  <string name="newer_version_of_a_form_info">Tämä on päivitetty versio lomakkeesta joka sinulla jo on!</string>
+  <string name="newer_version_of_a_form_info">Tämä on päivitys lomakkeeseen, joka sinulla on</string>
   <string name="svg_file_does_not_exist">SVG-tiedosto puuttuu!</string>
   <string name="start_video_capture_instruction">Napsauta näyttöä käynnistääksesi tallennuksen.</string>
   <string name="stop_video_capture_instruction">Tallennus aloitettu. Napsauta uudelleen lopettaaksesi.</string>
   <string name="no_columns_to_upload">Palvelimelle siirrettävässä lomakkeessa ei ollut sarakkeita.</string>
+  <string name="storage_runtime_permission_denied_title">Talletusluvat</string>
+  <string name="storage_runtime_permission_denied_desc">Ilman näitä lupia Collect ei pysty lukemaan lomakemäärittelyitä tai tallentamaan vastauksia. Avaa sovellus uudestaan kun olet valmis antamaan luvat.</string>
+  <string name="form_update_category">Lomakepäivitys</string>
+  <string name="periodic_form_updates_check_title">Ajastettu lomakepäivitysten tarkistus</string>
+  <string name="never">Ei koskaan</string>
+  <string name="every_fifteen_minutes">Vartin välein</string>
+  <string name="every_one_hour">Tunnin välein</string>
+  <string name="every_six_hours">Kuuden tunnin välein</string>
+  <string name="every_24_hours">Vuorokauden välein</string>
+  <string name="form_updates_available">Lomakepäivityksiä saatavilla</string>
+  <string name="new_form_versions_downloaded">Uudet lomakeversiot haettu</string>
+  <string name="automatic_download">Automaattinen haku</string>
+  <string name="automatic_download_summary">Hae automaattisesti lomakkeiden päivitettyjä versioita</string>
+  <string name="forms_downloaded">Haetut lomakkeet:</string>
+  <string name="forms_sent">Lähetetyt lomakkeet:</string>
+  <string name="guidance_hint_title">Näytä kysymysopastus</string>
+  <string name="app_theme">Teema</string>
+  <string name="theme_light">Vaalea teema</string>
+  <string name="theme_dark">Tumma teema</string>
+  <string name="cannot_create_directory">Hakemistoa ei voi luoda: %s</string>
+  <string name="not_a_directory">%s on olemassa, mutta ei ole hakemisto</string>
+  <string name="location_metadata">Käytettävissä sateliitteja: %1$d/24\n\nKulunut aika: %2$s</string>
+  <string name="instance_upload_cancelled">Instanssin siirtäminen peruttu</string>
 </resources>

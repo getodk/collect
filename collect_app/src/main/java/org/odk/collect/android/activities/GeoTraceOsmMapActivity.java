@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
@@ -43,6 +42,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.location.client.LocationClient;
 import org.odk.collect.android.location.client.LocationClients;
 import org.odk.collect.android.spatial.MapHelper;
+import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoTraceWidget;
 import org.osmdroid.tileprovider.IRegisterReceiver;
 import org.osmdroid.util.BoundingBox;
@@ -60,7 +60,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 
-public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceiver,
+public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements IRegisterReceiver,
         LocationListener, LocationClient.LocationClientListener {
 
     private ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
@@ -124,7 +124,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
         mapView.setMultiTouchControls(true);
         mapView.setBuiltInZoomControls(true);
-        mapView.setTilesScaledToDpi(true);    
+        mapView.setTilesScaledToDpi(true);
         mapView.getController().setZoom(zoomLevel);
 
         inflater = this.getLayoutInflater();
@@ -275,7 +275,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
                     saveGeoTrace();
                 } else {
                     alertDialog.dismiss();
-                    showPolygonErrorDialog();
+                    ToastUtils.showShortToastInMiddle(getString(R.string.polygon_validator));
                 }
 
 
@@ -286,9 +286,13 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
             @Override
             public void onClick(View v) {
-                alertDialog.dismiss();
-                saveGeoTrace();
-
+                if (mapMarkers.size() > 1) {
+                    alertDialog.dismiss();
+                    saveGeoTrace();
+                } else {
+                    alertDialog.dismiss();
+                    ToastUtils.showShortToastInMiddle(getString(R.string.polyline_validator));
+                }
             }
         });
 
@@ -394,7 +398,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
             marker.setOnMarkerClickListener(nullMarkerListener);
             marker.setDraggable(true);
             marker.setOnMarkerDragListener(dragListener);
-            marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black_36dp));
+            marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place));
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
             mapMarkers.add(marker);
             List<GeoPoint> points = polyline.getPoints();
@@ -640,7 +644,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
             Float lastKnownAccuracy =
                     myLocationOverlay.getMyLocationProvider().getLastKnownLocation().getAccuracy();
             myLocationOverlay.getMyLocationProvider().getLastKnownLocation().getAccuracy();
-            marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black_36dp));
+            marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place));
             marker.setSubDescription(Float.toString(lastKnownAccuracy));
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
             marker.setDraggable(true);
@@ -660,19 +664,6 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
         returnLocation();
         finish();
     }
-
-    private void showPolygonErrorDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(getString(R.string.polygon_validator))
-                .setPositiveButton(getString(R.string.dialog_continue),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                // FIRE ZE MISSILES!
-                            }
-                        }).show();
-
-    }
-
 
     private String generateReturnString() {
         String tempString = "";

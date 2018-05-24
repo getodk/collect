@@ -16,15 +16,12 @@ package org.odk.collect.android.fragments;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
+import android.support.annotation.NonNull;
+import android.support.v4.content.CursorLoader;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.dao.FormsDao;
@@ -35,9 +32,6 @@ import org.odk.collect.android.tasks.DeleteFormsTask;
 import org.odk.collect.android.tasks.DiskSyncTask;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.VersionHidingCursorAdapter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import timber.log.Timber;
 
@@ -58,15 +52,8 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
         return new FormManagerList();
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
-    }
-
-    @Override
-    public void onViewCreated(View rootView, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View rootView, Bundle savedInstanceState) {
 
         deleteButton.setOnClickListener(this);
         toggleButton.setOnClickListener(this);
@@ -114,16 +101,12 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
     }
 
     private void setupAdapter() {
-        List<Long> checkedForms = new ArrayList<>();
-        for (long a : getListView().getCheckedItemIds()) {
-            checkedForms.add(a);
-        }
         String[] data = new String[]{FormsColumns.DISPLAY_NAME, FormsColumns.DISPLAY_SUBTEXT, FormsColumns.JR_VERSION};
         int[] view = new int[]{R.id.text1, R.id.text2, R.id.text3};
 
         listAdapter = new VersionHidingCursorAdapter(
                 FormsColumns.JR_VERSION, getActivity(),
-                R.layout.two_item_multiple_choice, getCursor(), data, view);
+                R.layout.two_item_multiple_choice, null, data, view);
         setListAdapter(listAdapter);
         checkPreviouslyCheckedItems();
     }
@@ -134,13 +117,8 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
     }
 
     @Override
-    protected void updateAdapter() {
-        listAdapter.changeCursor(getCursor());
-        super.updateAdapter();
-    }
-
-    private Cursor getCursor() {
-        return new FormsDao().getFormsCursor(getFilterText(), getSortingOrder());
+    protected CursorLoader getCursorLoader() {
+        return new FormsDao().getFormsCursorLoader(getFilterText(), getSortingOrder());
     }
 
     /**
@@ -201,10 +179,10 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
     }
 
     @Override
-    public void syncComplete(String result) {
+    public void syncComplete(@NonNull String result) {
         Timber.i("Disk scan complete");
-        TextView tv = rootView.findViewById(R.id.status_text);
-        tv.setText(result);
+        hideProgressBarAndAllow();
+        showSnackbar(result);
     }
 
     @Override
@@ -255,9 +233,6 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
                 }
                 toggleButtonLabel(toggleButton, getListView());
                 deleteButton.setEnabled(allChecked);
-                if (!allChecked) {
-                    selectedInstances.clear();
-                }
                 break;
         }
     }

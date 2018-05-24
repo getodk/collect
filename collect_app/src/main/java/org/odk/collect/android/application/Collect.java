@@ -27,12 +27,12 @@ import android.support.annotation.Nullable;
 import android.support.multidex.MultiDex;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 
+import com.evernote.android.job.JobManager;
+import com.evernote.android.job.JobManagerCreateException;
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
-import com.google.firebase.crash.FirebaseCrash;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
@@ -52,6 +52,7 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.PRNGFixes;
+import org.odk.collect.android.utilities.ServerPollingJobCreator;
 import org.opendatakit.httpclientandroidlib.client.CookieStore;
 import org.opendatakit.httpclientandroidlib.client.CredentialsProvider;
 import org.opendatakit.httpclientandroidlib.client.protocol.HttpClientContext;
@@ -148,13 +149,15 @@ public class Collect extends Application implements HasActivityInjector {
             File dir = new File(dirName);
             if (!dir.exists()) {
                 if (!dir.mkdirs()) {
-                    throw new RuntimeException("ODK reports :: Cannot create directory: "
-                            + dirName);
+                    String message = getInstance().getString(R.string.cannot_create_directory, dirName);
+                    Timber.w(message);
+                    throw new RuntimeException(message);
                 }
             } else {
                 if (!dir.isDirectory()) {
-                    throw new RuntimeException("ODK reports :: " + dirName
-                            + " exists, but is not a directory");
+                    String message = getInstance().getString(R.string.not_a_directory, dirName);
+                    Timber.w(message);
+                    throw new RuntimeException(message);
                 }
             }
         }
@@ -249,11 +252,6 @@ public class Collect extends Application implements HasActivityInjector {
         return cookieStore;
     }
 
-    public void hideKeyboard(View view) {
-        InputMethodManager imm = (InputMethodManager) getInstance().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -263,6 +261,14 @@ public class Collect extends Application implements HasActivityInjector {
                 .application(this)
                 .build()
                 .inject(this);
+
+        try {
+            JobManager
+                    .create(this)
+                    .addJobCreator(new ServerPollingJobCreator());
+        } catch (JobManagerCreateException e) {
+            Timber.e(e);
+        }
 
         reloadSharedPreferences();
 
@@ -328,10 +334,10 @@ public class Collect extends Application implements HasActivityInjector {
                 return;
             }
 
-            FirebaseCrash.logcat(priority, tag, message);
+            Crashlytics.log(priority, tag, message);
 
             if (t != null && priority == Log.ERROR) {
-                FirebaseCrash.report(t);
+                Crashlytics.logException(t);
             }
         }
     }

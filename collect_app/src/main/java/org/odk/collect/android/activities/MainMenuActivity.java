@@ -14,19 +14,18 @@
 
 package org.odk.collect.android.activities;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -48,7 +47,9 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
+import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -75,7 +76,7 @@ import timber.log.Timber;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class MainMenuActivity extends AppCompatActivity {
+public class MainMenuActivity extends CollectAbstractActivity {
 
     private static final int PASSWORD_DIALOG = 1;
 
@@ -101,6 +102,12 @@ public class MainMenuActivity extends AppCompatActivity {
     private MyContentObserver contentObserver = new MyContentObserver();
 
     // private static boolean DO_NOT_EXIT = false;
+
+    public static void startActivityAndCloseAllOthers(Activity activity) {
+        activity.startActivity(new Intent(activity, MainMenuActivity.class));
+        activity.overridePendingTransition(0, 0);
+        activity.finishAffinity();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -429,10 +436,8 @@ public class MainMenuActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         Collect.getInstance().getActivityLogger()
                 .logAction(this, "onCreateOptionsMenu", "show");
-        super.onCreateOptionsMenu(menu);
-
         getMenuInflater().inflate(R.menu.main_menu, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -443,16 +448,14 @@ public class MainMenuActivity extends AppCompatActivity {
                         .getActivityLogger()
                         .logAction(this, "onOptionsItemSelected",
                                 "MENU_ABOUT");
-                Intent aboutIntent = new Intent(this, AboutActivity.class);
-                startActivity(aboutIntent);
+                startActivity(new Intent(this, AboutActivity.class));
                 return true;
             case R.id.menu_general_preferences:
                 Collect.getInstance()
                         .getActivityLogger()
                         .logAction(this, "onOptionsItemSelected",
                                 "MENU_PREFERENCES");
-                Intent ig = new Intent(this, PreferencesActivity.class);
-                startActivity(ig);
+                startActivity(new Intent(this, PreferencesActivity.class));
                 return true;
             case R.id.menu_admin_preferences:
                 Collect.getInstance().getActivityLogger()
@@ -460,9 +463,7 @@ public class MainMenuActivity extends AppCompatActivity {
                 String pw = adminPreferences.getString(
                         AdminKeys.KEY_ADMIN_PW, "");
                 if ("".equalsIgnoreCase(pw)) {
-                    Intent i = new Intent(getApplicationContext(),
-                            AdminPreferencesActivity.class);
-                    startActivity(i);
+                    startActivity(new Intent(this, AdminPreferencesActivity.class));
                 } else {
                     showDialog(PASSWORD_DIALOG);
                     Collect.getInstance().getActivityLogger()
@@ -630,57 +631,26 @@ public class MainMenuActivity extends AppCompatActivity {
         ObjectInputStream input = null;
         try {
             input = new ObjectInputStream(new FileInputStream(src));
-            Editor prefEdit = PreferenceManager.getDefaultSharedPreferences(
-                    this).edit();
-            prefEdit.clear();
+            GeneralSharedPreferences.getInstance().clear();
+
             // first object is preferences
             Map<String, ?> entries = (Map<String, ?>) input.readObject();
 
             AutoSendPreferenceMigrator.migrate(entries);
 
             for (Entry<String, ?> entry : entries.entrySet()) {
-                Object v = entry.getValue();
-                String key = entry.getKey();
-
-                if (v instanceof Boolean) {
-                    prefEdit.putBoolean(key, (Boolean) v);
-                } else if (v instanceof Float) {
-                    prefEdit.putFloat(key, (Float) v);
-                } else if (v instanceof Integer) {
-                    prefEdit.putInt(key, (Integer) v);
-                } else if (v instanceof Long) {
-                    prefEdit.putLong(key, (Long) v);
-                } else if (v instanceof String) {
-                    prefEdit.putString(key, ((String) v));
-                }
+                GeneralSharedPreferences.getInstance().save(entry.getKey(), entry.getValue());
             }
-            prefEdit.apply();
+
             AuthDialogUtility.setWebCredentialsFromPreferences();
 
+            AdminSharedPreferences.getInstance().clear();
+
             // second object is admin options
-            Editor adminEdit = getSharedPreferences(AdminPreferencesActivity.ADMIN_PREFERENCES,
-                    0).edit();
-            adminEdit.clear();
-            // first object is preferences
             Map<String, ?> adminEntries = (Map<String, ?>) input.readObject();
             for (Entry<String, ?> entry : adminEntries.entrySet()) {
-                Object v = entry.getValue();
-                String key = entry.getKey();
-
-                if (v instanceof Boolean) {
-                    adminEdit.putBoolean(key, (Boolean) v);
-                } else if (v instanceof Float) {
-                    adminEdit.putFloat(key, (Float) v);
-                } else if (v instanceof Integer) {
-                    adminEdit.putInt(key, (Integer) v);
-                } else if (v instanceof Long) {
-                    adminEdit.putLong(key, (Long) v);
-                } else if (v instanceof String) {
-                    adminEdit.putString(key, ((String) v));
-                }
+                AdminSharedPreferences.getInstance().save(entry.getKey(), entry.getValue());
             }
-            adminEdit.apply();
-
             res = true;
         } catch (IOException | ClassNotFoundException e) {
             Timber.e(e, "Exception while loading preferences from file due to : %s ", e.getMessage());

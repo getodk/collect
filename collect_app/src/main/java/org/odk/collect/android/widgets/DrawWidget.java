@@ -15,21 +15,13 @@
 package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
-
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.DrawActivity;
-import org.odk.collect.android.application.Collect;
-
-import java.io.File;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
@@ -45,18 +37,10 @@ public class DrawWidget extends BaseImageWidget {
 
     public DrawWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
+        imageClickHandler = new DrawImageClickHandler(DrawActivity.OPTION_DRAW, RequestCodes.DRAW_IMAGE, R.string.draw_image);
         setUpLayout();
         setUpBinary();
         addAnswerView(answerLayout);
-    }
-
-    @Override
-    public void onImageClick() {
-        Collect.getInstance()
-                .getActivityLogger()
-                .logInstanceAction(this, "viewImage", "click",
-                        getFormEntryPrompt().getIndex());
-        launchDrawActivity();
     }
 
     @Override
@@ -74,29 +58,9 @@ public class DrawWidget extends BaseImageWidget {
         errorTextView.setVisibility(View.GONE);
     }
 
-    private void launchDrawActivity() {
-        errorTextView.setVisibility(View.GONE);
-        Intent i = new Intent(getContext(), DrawActivity.class);
-        i.putExtra(DrawActivity.OPTION, DrawActivity.OPTION_DRAW);
-        // copy...
-        if (binaryName != null) {
-            File f = new File(getInstanceFolder() + File.separator + binaryName);
-            i.putExtra(DrawActivity.REF_IMAGE, Uri.fromFile(f));
-        }
-        i.putExtra(DrawActivity.EXTRA_OUTPUT,
-                Uri.fromFile(new File(Collect.TMPFILE_PATH)));
-
-        try {
-            waitForData();
-            ((Activity) getContext()).startActivityForResult(i,
-                    RequestCodes.DRAW_IMAGE);
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(
-                    getContext(),
-                    getContext().getString(R.string.activity_not_found,
-                            getContext().getString(R.string.draw_image)), Toast.LENGTH_SHORT).show();
-            cancelWaitingForData();
-        }
+    @Override
+    public Intent addExtrasToIntent(Intent intent) {
+        return intent;
     }
 
     @Override
@@ -120,10 +84,6 @@ public class DrawWidget extends BaseImageWidget {
 
     @Override
     public void onButtonClick(int buttonId) {
-        Collect.getInstance()
-                .getActivityLogger()
-                .logInstanceAction(this, "drawButton", "click",
-                        getFormEntryPrompt().getIndex());
-        launchDrawActivity();
+        imageClickHandler.clickImage("drawButton");
     }
 }
