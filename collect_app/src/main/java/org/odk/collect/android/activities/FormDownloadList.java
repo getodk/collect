@@ -611,7 +611,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                     item.put(FORMNAME, details.getFormName());
                     item.put(FORMID_DISPLAY,
                             ((details.getFormVersion() == null) ? "" : (getString(R.string.version) + " "
-                                    + details.getFormVersion() + " ")) + (getString(R.string.id)) + " " + details.getFormID());
+                                    + details.getFormVersion() + " ")) + "ID: " + details.getFormID());
                     item.put(FORMDETAIL_KEY, formDetailsKey);
                     item.put(FORM_ID_KEY, details.getFormID());
                     item.put(FORM_VERSION_KEY, details.getFormVersion());
