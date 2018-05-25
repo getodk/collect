@@ -41,6 +41,7 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.DownloadFormListUtils;
 import org.odk.collect.android.utilities.FormDownloader;
+import org.odk.collect.android.utilities.IconUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -151,7 +152,7 @@ public class ServerPollingJob extends Job {
         PendingIntent contentIntent = PendingIntent.getActivity(getContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext())
-                .setSmallIcon(R.drawable.notes)
+                .setSmallIcon(IconUtils.getNotificationAppIcon())
                 .setContentTitle(getContext().getString(R.string.form_updates_available))
                 .setAutoCancel(true)
                 .setContentIntent(contentIntent);
@@ -168,7 +169,7 @@ public class ServerPollingJob extends Job {
         PendingIntent contentIntent = PendingIntent.getActivity(getContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext())
-                .setSmallIcon(R.drawable.notes)
+                .setSmallIcon(IconUtils.getNotificationAppIcon())
                 .setContentTitle(getContext().getString(R.string.new_form_versions_downloaded))
                 .setAutoCancel(true)
                 .setContentIntent(contentIntent);

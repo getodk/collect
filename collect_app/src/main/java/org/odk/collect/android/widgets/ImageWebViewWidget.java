@@ -27,7 +27,6 @@ import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
@@ -255,14 +254,6 @@ public class ImageWebViewWidget extends QuestionWidget implements FileWidget {
         } else {
             Timber.e("NO IMAGE EXISTS at: %s", newImage.getAbsolutePath());
         }
-    }
-
-    @Override
-    public void setFocus(Context context) {
-        // Hide the soft keyboard if it's showing.
-        InputMethodManager inputManager = (InputMethodManager) context
-                .getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
     }
 
     @Override

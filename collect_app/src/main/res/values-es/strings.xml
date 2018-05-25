@@ -338,7 +338,6 @@
   <string name="geo_clear_warning">Función ya creada. ¿Desea borrar la función?</string>
   <string name="geo_exit_warning">¿Ignorar los cambios y regresar?</string>
   <string name="polygon_validator">Debe tener al menos 3 puntos para crear un polígono</string>
-  <string name="dialog_continue">Continuar</string>
   <string name="clear">Limpiar</string>
   <string name="polyline_polygon_text">Guardar RastroGeo como</string>
   <string name="manual_mode">Modo Manual</string>
@@ -582,7 +581,7 @@
   <string name="periodic_form_updates_check_title">Chequeo periódico de actualización de formularios</string>
   <string name="never">Nunca</string>
   <string name="every_fifteen_minutes">Cada 15 minutod</string>
-  <string name="every_one_hour">Cada gora</string>
+  <string name="every_one_hour">Cada hora</string>
   <string name="every_six_hours">Cada 6 horas</string>
   <string name="every_24_hours">Cada 24 horas</string>
   <string name="form_updates_available">Formularios actualizados disponibles</string>
@@ -594,7 +593,7 @@
   <string name="guidance_hint_title">Mostrar guías para preguntas</string>
   <string name="app_theme">Tema</string>
   <string name="theme_light">Tema Claro</string>
-  <string name="theme_dark">Tema Oscuto</string>
+  <string name="theme_dark">Tema Oscuro</string>
   <string name="cannot_create_directory">No se puede crear directorio: %s</string>
   <string name="not_a_directory">%s existe, pero no es un directorio</string>
   <string name="location_metadata">Satélites disponibles: %1$d/24\n\nTiempo transcurrido: %2$s</string>

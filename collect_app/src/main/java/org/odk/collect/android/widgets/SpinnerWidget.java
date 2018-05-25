@@ -21,7 +21,6 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
@@ -147,15 +146,6 @@ public class SpinnerWidget extends QuestionWidget implements MultiChoiceWidget {
     }
 
     @Override
-    public void setFocus(Context context) {
-        // Hide the soft keyboard if it's showing.
-        InputMethodManager inputManager =
-                (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
-
-    }
-
-    @Override
     public void setOnLongClickListener(OnLongClickListener l) {
         spinner.setOnLongClickListener(l);
     }
@@ -210,6 +200,10 @@ public class SpinnerWidget extends QuestionWidget implements MultiChoiceWidget {
             TextView tv = convertView.findViewById(android.R.id.text1);
             tv.setTextSize(textUnit, textSize);
             tv.setPadding(20, 10, 10, 10);
+
+            if (themeUtils.isDarkTheme()) {
+                convertView.setBackgroundColor(getResources().getColor(R.color.darkPopupDialogColor));
+            }
 
             if (position == items.length - 1) {
                 tv.setText(parent.getContext().getString(R.string.clear_answer));

@@ -354,7 +354,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         if (uploadedFileId == null) {
             throw new UploadException("Unable to upload the media files. Try again");
         }
-        return getHyperlink(UPLOADED_MEDIA_URL + uploadedFileId, fileName);
+        return UPLOADED_MEDIA_URL + uploadedFileId;
     }
 
     private TreeElement getInstanceElement(String formFilePath, File instanceFile) throws UploadException {
@@ -415,10 +415,9 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             } else {
                 String answer = childElement.getValue() != null ? childElement.getValue().getDisplayText() : "";
                 if (new File(instanceFile.getParentFile() + "/" + answer).isFile()) {
-                    String mediaHyperlink = uploadMediaFile(instanceFile, answer);
-                    answers.put(elementTitle, mediaHyperlink);
+                    String mediaUrl = uploadMediaFile(instanceFile, answer);
+                    answers.put(elementTitle, mediaUrl);
                 } else {
-
                     if (isLocationValid(answer)) {
                         answers.putAll(parseGeopoint(columnTitles, elementTitle, answer));
                     } else {

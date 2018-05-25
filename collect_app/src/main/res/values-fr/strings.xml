@@ -156,6 +156,7 @@
   <string name="no_forms_uploaded">Désolé, pas de formulaires téléchargés.</string>
   <string name="upload_results">Résultats du Téléchargement</string>
   <string name="xform_parse_error">Erreur d\'analyse de l\'XForm %1$s: l\'élément %2$s manque ou est invalide.</string>
+  <string name="choose_file">Choisir un fichier</string>
   <string name="choose_sound">Choisir un Son</string>
   <string name="choose_video">Choisir une Vidéo</string>
   <string name="choose_image">Choisir une Image</string>
@@ -240,6 +241,7 @@
   <string name="ext_search_return_error">Le gestionnaire de recherche a retourné un objet de type \'%s\'.</string>
   <string name="ext_import_generic_error">Impossible d\'importer des données depuis %1$s. Raison: %2$s</string>
   <string name="ext_import_progress_message">Pré-chargement des données depuis \'%1$s\', merci de patienter… %2$s</string>
+  <string name="ext_import_cancelled_message">Lecture des données annulée!</string>
   <string name="ext_import_finalizing_message">Finalisation des données pré-chargées…</string>
   <string name="ext_import_completed_message">Lecture des données terminée !</string>
   <string name="ext_not_initialized_error">Le Gestionnaire des données externes n\'a pas été initialisé.</string>
@@ -334,7 +336,6 @@
   <string name="geo_clear_warning">Objet déjà créé. Souhaitez-vous l\'effacer ?</string>
   <string name="geo_exit_warning">Annuler les changements et revenir à ODK</string>
   <string name="polygon_validator">3 points minimum sont nécessaires pour créer un Polygone</string>
-  <string name="dialog_continue">Continuer</string>
   <string name="clear">Effacer</string>
   <string name="polyline_polygon_text">Enregistrer le TracéGéo sous</string>
   <string name="manual_mode">Mode Manuel</string>
@@ -482,6 +483,8 @@
   <string name="autosend_selector_title">Envoi automatique</string>
   <string name="off">Off</string>
   <string name="guidance_no">Non</string>
+  <string name="guidance_yes">Oui - toujours visible</string>
+  <string name="guidance_yes_collapsed">Oui - Echoué</string>
   <string name="wifi_autosend">Seulement Wifi</string>
   <string name="cellular_autosend">Seulement Cellulaire</string>
   <string name="wifi_cellular_autosend">Wifi ou Cellulaire</string>
@@ -565,8 +568,34 @@
   <string name="moving_backwards_enabled_message">Vous pourrez vouloir consulter les paramètres suivants :\n\n\u2022 Modifier le formulaire sauvegardé\n\u2022 Sauvegarder le formulaire\n\u2022 Aller à la ligne de saisie\n\u2022 Traitement des contraints</string>
   <string name="yes">Oui</string>
   <string name="no">Non</string>
+  <string name="newer_version_of_a_form_info">Ceci est une version mise à jour d\'un formulaire dont vous disposez déjà !</string>
   <string name="svg_file_does_not_exist">Le fichier SVG n\'existe pas !</string>
   <string name="start_video_capture_instruction">Toucher l\'écran pour commencer l\'enregistrement</string>
   <string name="stop_video_capture_instruction">Enregistrement commencé. Toucher l\'écran pour l\'arrêter.</string>
   <string name="no_columns_to_upload">Aucune colonne retrouvée dans le formulaire à téléverser.</string>
+  <string name="storage_runtime_permission_denied_title">Autorisations de stockage</string>
+  <string name="storage_runtime_permission_denied_desc">Sans ces permissions Collect ne peut pas accéder à vos formulaires ou sauvegarder des réponses. Ré-ouvrez l\'application quand vous êtes prêt à donner les permissions requises. </string>
+  <string name="form_update_category">Mise à jour d\'un fomulaire</string>
+  <string name="periodic_form_updates_check_title">Vérification périodique des mises à jour des formulaires</string>
+  <string name="never">Jamais</string>
+  <string name="every_fifteen_minutes">Toutes les quinze minutes</string>
+  <string name="every_one_hour">Toutes les heures</string>
+  <string name="every_six_hours">Toutes les six heures</string>
+  <string name="every_24_hours">Toutes les 24 heures</string>
+  <string name="form_updates_available">Mise à jour de formulaire disponible</string>
+  <string name="new_form_versions_downloaded">Nouvelle version de formulaire téléchargée</string>
+  <string name="automatic_download">Téléchargement automatique</string>
+  <string name="automatic_download_summary">Télécharger automatiquement les versions mise à jour des formulaires</string>
+  <string name="forms_downloaded">Formulaires téléchargés:</string>
+  <string name="forms_sent">Formulaires envoyés:</string>
+  <string name="guidance_hint_title">Montrer des conseils pour les questions</string>
+  <string name="app_theme">Thème</string>
+  <string name="theme_light">Thème clair</string>
+  <string name="theme_dark">Thème sombre</string>
+  <string name="cannot_create_directory">Impossible de créer un dossier: %s</string>
+  <string name="not_a_directory">%s existe, mais ce n\'est pas un dossier</string>
+  <string name="location_metadata">Satellites disponibles: %1$d/24\n\nTemps écoulé: %2$s</string>
+  <string name="instance_upload_cancelled">Instance de téléchargement annulée</string>
+  <string name="hide_old_form_versions_setting_title">Cacher les anciennes versions de formulaires</string>
+  <string name="hide_old_form_versions_setting_summary">Seule la version la plus récente apparaîtra dans Remplir un formulaire</string>
 </resources>
