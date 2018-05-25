@@ -14,7 +14,6 @@ import org.odk.collect.android.tasks.sms.models.MessageStatus;
 import org.odk.collect.android.tasks.sms.models.SmsSubmission;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -23,24 +22,15 @@ public class SmsSubmissionManagerImpl implements SmsSubmissionManagerContract {
     private SharedPreferences.Editor editor;
 
     public static final String PREF_FILE_NAME = "submissions_preferences";
-    public static final String KEY_SUBMISSION_LIST = "submissions_list";
+    public static final String KEY_SUBMISSION = "submissions_list_key";
 
     public SmsSubmissionManagerImpl(Context context) {
         preferences = context.getSharedPreferences(PREF_FILE_NAME, Context.MODE_PRIVATE);
         editor = this.preferences.edit();
     }
 
-
     public SmsSubmission getSubmissionModel(String instanceId) {
-        List<SmsSubmission> models = getSubmissionListFromPrefs();
-
-        for (SmsSubmission model : models) {
-            if (model.getInstanceId().equals(instanceId)) {
-                return model;
-            }
-        }
-
-        return null;
+        return getSubmissionFromPrefs(instanceId);
     }
 
     @Override
@@ -125,46 +115,18 @@ public class SmsSubmissionManagerImpl implements SmsSubmissionManagerContract {
 
     @Override
     public void deleteSubmission(String instanceId) {
-        List<SmsSubmission> models = getSubmissionListFromPrefs();
 
-        SmsSubmission model = null;
-
-        for (SmsSubmission submissionModel : models) {
-            if (submissionModel.getInstanceId().equals(instanceId)) {
-                model = submissionModel;
-            }
-        }
-
-        if (model != null) {
-            models.remove(model);
-            saveSubmissionListToPrefs(models);
-        }
+        editor.remove(KEY_SUBMISSION + "_" + instanceId);
+        editor.commit();
     }
 
     public void saveSubmission(SmsSubmission model) {
 
-        Type submissionModelListTpe = new TypeToken<List<SmsSubmission>>() {
+        Type submissionModel = new TypeToken<SmsSubmission>() {
         }.getType();
 
-        List<SmsSubmission> models = getSubmissionListFromPrefs();
-
-        boolean previousModelFound = false;
-
-        for (SmsSubmission smsSubmission : models) {
-            if (smsSubmission.getInstanceId().equals(model.getInstanceId())) {
-
-                models.set(models.indexOf(smsSubmission), model);
-
-                previousModelFound = true;
-            }
-        }
-
-        if (!previousModelFound) {
-            models.add(model);
-        }
-
-        String list = new Gson().toJson(models, submissionModelListTpe);
-        editor.putString(KEY_SUBMISSION_LIST, list);
+        String data = new Gson().toJson(model, submissionModel);
+        editor.putString(KEY_SUBMISSION + "_" + model.getInstanceId(), data);
         editor.commit();
     }
 
@@ -173,35 +135,25 @@ public class SmsSubmissionManagerImpl implements SmsSubmissionManagerContract {
         preferences.edit().clear().apply();
     }
 
-    private void saveSubmissionListToPrefs(List<SmsSubmission> models) {
-
-        Type submissionModelListTpe = new TypeToken<List<SmsSubmission>>() {
+    private SmsSubmission getSubmissionFromPrefs(String instanceId) {
+        Type submissionModel = new TypeToken<SmsSubmission>() {
         }.getType();
 
-        String list = new Gson().toJson(models, submissionModelListTpe);
-        editor.putString(KEY_SUBMISSION_LIST, list);
-        editor.commit();
-    }
+        String list = preferences.getString(KEY_SUBMISSION + "_" + instanceId, "");
 
-
-    private List<SmsSubmission> getSubmissionListFromPrefs() {
-        Type submissionModelListTpe = new TypeToken<List<SmsSubmission>>() {
-        }.getType();
-        String list = preferences.getString(KEY_SUBMISSION_LIST, "");
-
-        List<SmsSubmission> models = new ArrayList<>();
+        SmsSubmission model;
 
         if (TextUtils.isEmpty(list)) {
-            return models;
+            return null;
         }
 
         try {
-            models = new Gson().fromJson(list, submissionModelListTpe);
+            model = new Gson().fromJson(list, submissionModel);
         } catch (Exception e) {
-            models = new ArrayList<>();
+            model = null;
         }
 
-        return models;
+        return model;
     }
 
     public MessageStatus checkNextMessageStatus(String instanceId) {
