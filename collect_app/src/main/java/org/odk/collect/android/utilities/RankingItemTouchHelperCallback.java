@@ -16,6 +16,7 @@
 
 package org.odk.collect.android.utilities;
 
+import android.graphics.Canvas;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 
@@ -72,5 +73,18 @@ public class RankingItemTouchHelperCallback extends ItemTouchHelper.Callback {
         super.clearView(recyclerView, viewHolder);
 
         ((RankingListAdapter.ItemViewHolder) viewHolder).onItemClear();
+    }
+
+    @Override
+    // Prevent out of bounds dragging
+    public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+        float topY = viewHolder.itemView.getTop() + dY;
+        float bottomY = topY + viewHolder.itemView.getHeight();
+        if (topY < 0) {
+            dY = 0;
+        } else if (bottomY > recyclerView.getHeight()) {
+            dY = recyclerView.getHeight() - viewHolder.itemView.getHeight() - viewHolder.itemView.getTop();
+        }
+        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
     }
 }
