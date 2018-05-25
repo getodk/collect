@@ -101,9 +101,9 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
     }
 
     private void setupAdapter() {
-        String[] data = new String[]{FormsColumns.DISPLAY_NAME, FormsColumns.DISPLAY_SUBTEXT, FormsColumns.JR_VERSION};
+        String[] data = new String[]{FormsColumns.DISPLAY_NAME, FormsColumns.DISPLAY_SUBTEXT, FormsColumns.JR_VERSION,
+                                FormsColumns.JR_FORM_ID};
         int[] view = new int[]{R.id.text1, R.id.text2, R.id.text3};
-
         listAdapter = new VersionHidingCursorAdapter(
                 FormsColumns.JR_VERSION, getActivity(),
                 R.layout.two_item_multiple_choice, null, data, view);
@@ -233,9 +233,6 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
                 }
                 toggleButtonLabel(toggleButton, getListView());
                 deleteButton.setEnabled(allChecked);
-                if (!allChecked) {
-                    selectedInstances.clear();
-                }
                 break;
         }
     }

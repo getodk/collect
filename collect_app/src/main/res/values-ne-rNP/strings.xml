@@ -2,6 +2,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
   <string name="show_password">पासवर्ड देखाउन</string>
   <string name="activity_not_found">प्रयोग गर्न कुनै पनि क्रियाकलाप भेटिएन: %s </string>
+  <string name="view_image">तस्विर हेर्नुहोस्।</string>
+  <string name="annotate_image">तस्विर एनोटेट गर्नुहोस्।</string>
+  <string name="view_video">भिडियो हेर्नुहोस्।</string>
+  <string name="choose_audio">अडियो रोज्नुहोस्।</string>
   <string name="add_another">समूह थप्नुहोस् </string>
   <string name="add_another_repeat">के अर्को \"%s\" समूह थप्नु हुन्छ ?</string>
   <string name="add_repeat">नयाँ \"%s\" समूह थप्न चाहनु हुन्छ ?</string>
@@ -231,7 +235,6 @@
   <string name="ext_search_return_error">खोज ह्याण्डलरले \'%s\' खालको वस्तु फिर्ता पठायो |</string>
   <string name="ext_import_generic_error">%1$s वाट तथ्यांक आयात गर्न सकिएन | कारण: %2$s</string>
   <string name="ext_import_progress_message">\'%1$s\' वाट तथ्यांक पूर्व-लोड गरिदैछ, कृपया पर्खिनुहोला…%2$s</string>
-  <string name="ext_import_cancelled_message">तथ्यांक पढ्न रद्द गरियो !</string>
   <string name="ext_import_finalizing_message">पूर्व-लोड गरिएका तथ्यांकहरुलाई अन्तिम रुप दिइदैछ…</string>
   <string name="ext_import_completed_message">तथ्यांक पढेर सकियो !</string>
   <string name="ext_not_initialized_error">ExternalDataManager लाई चालू गरिएको छैन |</string>
@@ -280,6 +283,9 @@
   <string name="username_error_whitespace">प्रयोगकर्ता नाममा खाली स्पेस हुनु हुँदैन ।</string>
   <string name="google_play_services_error_occured">गुगल  म्याप्स् मा जान सकिएन । के गुगल प्ले सर्भिसेस इन्स्टल गरिएको छ ?</string>
   <string name="about_preferences">जानकारी</string>
+  <string name="tell_your_friends">ODK Collect शेयर गर्नुहोस् ।</string>
+  <string name="tell_your_friends_msg">के तपाईँका सहकर्मीहरू अझै कागजमा डाटा संकलन गर्दै हुनुहुन्छ? तिनीहरुसँग ODK Collect शेयर गर्नुहोस् ।</string>
+  <string name="leave_a_review">हामीलाई  प्ले स्टोर आफ्नो मा समीक्षा छोड्नुहोस् ।</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">नक्शाकंन</string>
   <string name="map_sdk_selector_title">SDK नक्शाकंन गर्न</string>
@@ -310,8 +316,15 @@
   <string name="start">शुरू</string>
   <string name="enable_gps">GPS शुरु गर्नुहोस्</string>
   <string name="enable_gps_message">तपाईंको यन्त्रमा GPS बन्द छ । यसलाई अन गर्न चाहनु हुन्छ ?</string>
+  <string name="polygon_save">बहुभुज सुरक्षित गर्नुहोस्। </string>
   <string name="gps_enable_message">तपाईंको यन्त्रमा GPS बन्द छ । यसलाई अन गर्न चाहनु हुन्छ ?</string>
+  <string name="select_offline_layer">अफलाइन तह चयन गर्नुहोस्।</string>
+  <string name="minutes">मिनेट</string>
   <string name="clear">मेटाउनुहोस्</string>
+  <string name="discard">त्याग्नुहोस्</string>
+  <string name="zoom_to_where">जुम गर्नुहोस्।</string>
+  <string name="zoom_to_location">हालको स्थानमा जुम गर्नुहोस्।</string>
+  <string name="zoom_to_feature">बचत गरिएको स्थानमा फर्कनुहोस्।</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="alert">सावधान</string>
   <string name="install_openmapkit">कृपया ओपन म्याप स्ट्रीट इन्सटल गर्नुहोस् !</string>
@@ -330,6 +343,13 @@
   <string name="gdrive_connection_exception">यो इमेज गुगल ड्राइवमा स्टोर गरिएको छ । तपाईं अफलाइन हुँदा प्राप्त गर्न सकिदैन ।</string>
   <string name="select_all">सबै छान्नुहोस्</string>
   <string name="clear_all">सबै मेटाउनु होस्</string>
+  <string name="reset_settings_result">सबै  सेटिङहरू::%s </string>
+  <string name="reset_saved_forms_result">बचत गरिएको फारमहरू:: %s</string>
+  <string name="reset_blank_forms_result">खाली  फारमहरू :: %s </string>
+  <string name="reset_layers_result">नक्शाका तहहरू::%s </string>
+  <string name="encrypted_form">गुप्तिकृत फारम।</string>
+  <string name="deleted_form">मेटाइएको फारम।</string>
+  <string name="exit">बाहिरिनुस्।</string>
   <string name="form_metadata_title">फारम मेटा डाटा</string>
   <string name="form_metadata">फारम मेटा डाटा</string>
   <string name="form_metadata_summary">यी सूचनाहरु प्रयोगकर्ता नाम , ईमेल र / वा फोन नम्बर भरिएको फारमहरुमा डाटा भरेर बुझाउने व्यक्तीको पहिचान गर्न थप गरिनेछन् ।</string>
@@ -366,6 +386,7 @@
   <string name="user_settings">प्रयोगकर्ता सेटिङ्स</string>
   <string name="main_menu_settings">मूल मेनु सेटिङ्स</string>
   <string name="autosend_selector_title">स्वत: प्रेषण</string>
+  <string name="guidance_no">होइन</string>
   <string name="wifi_autosend">Wifi मात्र</string>
   <string name="cellular_autosend">मोबाईल ईन्टरनेट मात्र</string>
   <string name="wifi_cellular_autosend">Wifi वा मोबाईल ईन्टरनेट</string>
@@ -377,4 +398,7 @@
   <string name="form_import_category">फारम ल्याउदा</string>
   <string name="user_and_device_identity_title">प्रयोगकर्ता तथा यन्त्र पहिचान</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <string name="yes">हो</string>
+  <string name="no">होइन</string>
+  <string name="stop_video_capture_instruction">रेकर्डिङ सुरु भयो। रोक्न फेरि छुनुहोस् ।</string>
 </resources>

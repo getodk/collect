@@ -36,6 +36,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.location.client.LocationClient;
 import org.odk.collect.android.location.client.LocationClients;
 import org.odk.collect.android.spatial.MapHelper;
+import org.odk.collect.android.utilities.GeoPointUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoPointWidget;
 import org.osmdroid.events.MapEventsReceiver;
@@ -128,7 +129,7 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
         }
 
         marker = new Marker(map);
-        marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black_36dp));
+        marker.setIcon(ContextCompat.getDrawable(this, R.drawable.ic_place));
         myLocationOverlay = new MyLocationNewOverlay(map);
 
         handler.postDelayed(new Runnable() {
@@ -244,9 +245,6 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
                 map.invalidate();
             }
         });
-
-        themeUtils.setIconTint(this, reloadLocationButton, showLocationButton, layersButton,
-                clearPointButton, saveLocationButton);
 
         Intent intent = getIntent();
         if (intent != null && intent.getExtras() != null) {
@@ -427,7 +425,7 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
                     foundFirstLocation = true;
                 }
                 locationStatus.setText(
-                        getString(R.string.location_provider_accuracy, this.location.getProvider(),
+                        getString(R.string.location_provider_accuracy, GeoPointUtils.capitalizeGps(this.location.getProvider()),
                                 truncateFloat(this.location.getAccuracy())));
             } else {
                 // Prevent from forever increasing
@@ -487,7 +485,7 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
         showLocationButton.setEnabled(true);
         map.invalidate();
         marker.setPosition(geoPoint);
-        marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black_36dp));
+        marker.setIcon(ContextCompat.getDrawable(this, R.drawable.ic_place));
         marker.setDraggable(true);
         latLng = geoPoint;
         isDragged = true;

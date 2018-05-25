@@ -15,22 +15,15 @@
 package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.utilities.MediaUtils;
-
-import java.io.File;
 
 import timber.log.Timber;
 
@@ -61,37 +54,16 @@ public class AlignedImageWidget extends BaseImageWidget {
 
     private Button captureButton;
     private Button chooseButton;
-
-    private String instanceFolder;
     
     private final int[] iarray = new int[6];
 
     public AlignedImageWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
+        imageClickHandler = new ViewImageClickHandler();
+        imageCaptureHandler = new ImageCaptureHandler();
         setUpLayout();
         setUpBinary();
         addAnswerView(answerLayout);
-    }
-
-    @Override
-    public void onImageClick() {
-        getActivityLogger().logInstanceAction(this, "viewButton",
-                "click", getFormEntryPrompt().getIndex());
-        Intent i = new Intent("android.intent.action.VIEW");
-        Uri uri = MediaUtils.getImageUriFromMediaProvider(
-                instanceFolder + File.separator + binaryName);
-        if (uri != null) {
-            Timber.i("setting view path to: %s", uri.toString());
-            i.setDataAndType(uri, "image/*");
-            try {
-                getContext().startActivity(i);
-            } catch (ActivityNotFoundException e) {
-                Toast.makeText(getContext(),
-                        getContext().getString(R.string.activity_not_found,
-                                getContext().getString(R.string.view_image)),
-                        Toast.LENGTH_SHORT).show();
-            }
-        }
     }
 
     @Override
@@ -106,8 +78,6 @@ public class AlignedImageWidget extends BaseImageWidget {
         for (int i = 0; i < splits.length; i++) {
             iarray[i] = Integer.parseInt(splits[i]);
         }
-
-        instanceFolder = getInstanceFolder();
 
         captureButton = getSimpleButton(getContext().getString(R.string.capture_image), R.id.capture_image);
         captureButton.setEnabled(!getFormEntryPrompt().isReadOnly());
@@ -125,6 +95,11 @@ public class AlignedImageWidget extends BaseImageWidget {
             chooseButton.setVisibility(View.GONE);
         }
         errorTextView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public Intent addExtrasToIntent(Intent intent) {
+        return intent;
     }
 
     @Override
@@ -155,7 +130,7 @@ public class AlignedImageWidget extends BaseImageWidget {
                 captureImage();
                 break;
             case R.id.choose_image:
-                chooseImage();
+                imageCaptureHandler.chooseImage(R.string.choose_image);
                 break;
         }
     }
@@ -184,34 +159,8 @@ public class AlignedImageWidget extends BaseImageWidget {
 
         // if this gets modified, the onActivityResult in
         // FormEntyActivity will also need to be updated.
-        try {
-            waitForData();
-            ((Activity) getContext()).startActivityForResult(i,
-                    RequestCodes.ALIGNED_IMAGE);
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(getContext(),
-                    getContext().getString(R.string.activity_not_found,
-                            getContext().getString(R.string.aligned_image_capture)),
-                    Toast.LENGTH_SHORT).show();
-            cancelWaitingForData();
-        }
+
+        imageCaptureHandler.captureImage(i, RequestCodes.ALIGNED_IMAGE, R.string.aligned_image_capture);
     }
 
-    private void chooseImage() {
-        getActivityLogger().logInstanceAction(this, "chooseButton", "click", getFormEntryPrompt().getIndex());
-        errorTextView.setVisibility(View.GONE);
-        Intent i = new Intent(Intent.ACTION_GET_CONTENT);
-        i.setType("image/*");
-
-        try {
-            waitForData();
-            ((Activity) getContext()).startActivityForResult(i,
-                    RequestCodes.IMAGE_CHOOSER);
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(getContext(),
-                    getContext().getString(R.string.activity_not_found, getContext().getString(R.string.choose_image)),
-                    Toast.LENGTH_SHORT).show();
-            cancelWaitingForData();
-        }
-    }
 }

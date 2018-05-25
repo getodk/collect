@@ -195,7 +195,6 @@
   <string name="no_printer">Umshini wokukhiqisa oceliwe awuxhunyiwe. Sicela uxhume umshini</string>
   <string name="view_change_location">Bheka noma ushintshe isizinda/indawo</string>
   <string name="ext_file_no_data_error">Lomqulu awunalwazi</string>
-  <string name="ext_import_cancelled_message">Ukufunda ulwazi kukhanseliwe</string>
   <string name="ext_import_finalizing_message">Kuqedelwa ulwazi obeluvele lukhona…</string>
   <string name="ext_import_completed_message">Ukufunda ulwazi kuqediwe</string>
   <string name="ext_not_initialized_error">ExternalDataManager wolwazi uqalisiwe</string>

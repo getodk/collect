@@ -73,6 +73,8 @@
   <string name="get_location">Записать местоположение</string>
   <string name="provider_disabled_error">Функция определения местоположения отключена!</string>
   <string name="invalid_answer_error">Этот ответ неверный!</string>
+  <string name="invalid_space_in_answer_singular">Внимание: нижеследующее значение %s содержит пробелы</string>
+  <string name="invalid_space_in_answer_plural">Внимание: нижеследующие значения %s содержат пробелы</string>
   <string name="jump_to_beginning">В начало</string>
   <string name="jump_to_end">В конец</string>
   <string name="jump_to_previous">Назад</string>
@@ -154,6 +156,7 @@
   <string name="no_forms_uploaded">Форма не была загружена.</string>
   <string name="upload_results">Загрузить результаты</string>
   <string name="xform_parse_error">Ошибка распознавания XForm. В %1$s отсутствует элемент %2$s</string>
+  <string name="choose_file">Выберите файл</string>
   <string name="choose_sound">Выберите аудио</string>
   <string name="choose_video">Выберите видео</string>
   <string name="choose_image">Выберите изображение</string>
@@ -271,6 +274,7 @@
   <string name="drive_get_file">Получение %1$s и медиа-файлов.</string>
   <string name="no_google_account">Учётная запись Google не выбрана!</string>
   <string name="google_set_account">Вы выбрали Google Таблицы в качестве сервера. Перед тем, как продолжить, пожалуйста, укажите соответствующую учётную запись Google в общих настройках.</string>
+  <string name="media_upload_error">Не удалось загрузить медиа-файл, который не существует %1$s</string>
   <string name="odk_auth_auth_fail">Ошибка аутентификации при автоматической отправке ODK. Пожалуйста, проверьте настройки</string>
   <string name="odk_auto_note">Уведомление автоматической отправки ODK</string>
   <string name="notification_error">Ошибка отображения текста уведомления</string>
@@ -332,7 +336,6 @@
   <string name="geo_clear_warning">Географическая особенность уже создана. Хотите очистить особенность?</string>
   <string name="geo_exit_warning">Отказаться от изменений и вернуться к ODK?</string>
   <string name="polygon_validator">В многоугольнике должно быть как минимум 3 точки</string>
-  <string name="dialog_continue">Продолжить</string>
   <string name="clear">Очистить</string>
   <string name="polyline_polygon_text">Сохранить геослед как</string>
   <string name="manual_mode">Ручной режим</string>
@@ -479,6 +482,7 @@
   <string name="user_access_control">Контроль доступа пользователя</string>
   <string name="autosend_selector_title">Автоматическая отправка</string>
   <string name="off">Выключено</string>
+  <string name="guidance_no">Нет</string>
   <string name="wifi_autosend">Только Wi-Fi</string>
   <string name="cellular_autosend">Только сотовая связь</string>
   <string name="wifi_cellular_autosend">Wi-Fi или сотовая связь</string>
@@ -562,6 +566,15 @@
   <string name="moving_backwards_enabled_message">Вы можете проверить следующие настройки:\n\n\u2022 Редактирование сохранённой формы\n\u2022 Сохранение формы\n\u2022 Прямой переход\n\u2022 Проверка ограничений</string>
   <string name="yes">Да</string>
   <string name="no">Нет</string>
-  <string name="newer_version_of_a_form_info">Это обновлённая версия формы, которая у вас уже есть!</string>
+  <string name="newer_version_of_a_form_info">Это обновление для уже имеющейся у вас формы</string>
   <string name="svg_file_does_not_exist">SVG файл не найден!</string>
+  <string name="start_video_capture_instruction">Коснитесь экрана, чтобы начать запись</string>
+  <string name="stop_video_capture_instruction">Запись началась. Коснитесь экрана ещё раз, чтобы остановить.</string>
+  <string name="no_columns_to_upload">В форме для загрузки нет ни одного столбца.</string>
+  <string name="app_theme">Тема</string>
+  <string name="theme_light">Светлая тема</string>
+  <string name="theme_dark">Тёмная тема</string>
+  <string name="cannot_create_directory">Не получилось создать папку: %s</string>
+  <string name="not_a_directory">%s существует, но не является папкой</string>
+  <string name="instance_upload_cancelled">Загрузка отменена</string>
 </resources>

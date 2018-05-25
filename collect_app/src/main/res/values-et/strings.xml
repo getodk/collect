@@ -225,7 +225,6 @@
   <string name="ext_search_return_error">Otsing tagastas \'%s\' tüüpi objekti</string>
   <string name="ext_import_generic_error">Import %1$s ebaõnnestus. Põhjus %2$s</string>
   <string name="ext_import_progress_message">Vormi eellaadimine \'%1$s\', palun oodake… %2$s</string>
-  <string name="ext_import_cancelled_message">Andmete lugemine tühistati!</string>
   <string name="ext_import_finalizing_message">Lõpetan andmete eellaadimist…</string>
   <string name="ext_import_completed_message">Andmete lugemine sai valmis!</string>
   <string name="ext_not_initialized_error">ExternalDataManager ei ole algseadistatud.</string>
@@ -308,7 +307,6 @@
   <string name="geo_clear_warning">Kujutis on juba loodud. Kas soovite kujutise eemaldada?</string>
   <string name="geo_exit_warning">Loobu muudatustest ja ava ODK?</string>
   <string name="polygon_validator">Polügooni loomiseks on vaja vähemalt 3 punkti</string>
-  <string name="dialog_continue">Jätka</string>
   <string name="clear">Eemalda</string>
   <string name="polyline_polygon_text">Salvesta rada kui</string>
   <string name="manual_mode">Käsitsi sisestusviis</string>

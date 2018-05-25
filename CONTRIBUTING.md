@@ -69,9 +69,19 @@ Small fixes that target very particular bugs may occasionally be merged without 
 
 In addition to contributing code, you can help to triage issues. This can include reproducing bug reports, or asking for vital information such as version numbers or reproduction instructions. If you would like to start triaging issues, one easy way to get started is to [subscribe to opendatakit/collect on CodeTriage](https://www.codetriage.com/opendatakit/collect).
 
-## Style guidelines
+## Code Style guidelines
 Follow the [Android style rules](http://source.android.com/source/code-style.html) and the [Google Java style guide](https://google.github.io/styleguide/javaguide.html).
 
+## UI Components Style guidelines
+Ensure that the added UI components are compatible with both light and dark themes. 
+Follow the below points to get the color for coloring the UI components like text and icons instead of directly using color values (eg. #000000 or R.color.colorName). 
+
+UI Component | Java | Xml _(layouts, drawables, vectors)_:
+--- | --- | ---  
+text color | themeUtils.getPrimaryTextColor() | ?primaryTextColor  
+accent color | themeUtils.getAccentColor() | ?colorAccent  
+icon color | themeUtils.getIconColor() | ?iconColor  
+  
 ## Strings
 Always use [string resources](https://developer.android.com/guide/topics/resources/string-resource.html) instead of literal strings. This ensures wording consistency across the project and also enables full translation of the app. Only make changes to the base `res/values/strings.xml` English file and not to the other language files. The translated files are generated from [Transifex](https://www.transifex.com/opendatakit/collect/) where translations can be submitted by the community. Names of software packages or other untranslatable strings should be placed in `res/values/untranslated.xml`.
 
