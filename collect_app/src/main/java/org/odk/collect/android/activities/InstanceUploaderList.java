@@ -99,17 +99,9 @@ public class InstanceUploaderList extends InstanceListActivity implements
             @Override
             public void onClick(View v) {
 
-                ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(
-                        Context.CONNECTIVITY_SERVICE);
-                NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
+                String server = (String) GeneralSharedPreferences.getInstance().get(KEY_PROTOCOL);
 
-                if (NetworkReceiver.running) {
-                    ToastUtils.showShortToast(R.string.send_in_progress);
-                } else if (ni == null || !ni.isConnected()) {
-                    logger.logAction(this, "uploadButton", "noConnection");
-
-                    ToastUtils.showShortToast(R.string.no_connection);
-                } else {
+                if (server.equalsIgnoreCase(getString(R.string.protocol_sms))) {
                     int checkedItemCount = getCheckedCount();
                     logger.logAction(this, "uploadButton", Integer.toString(checkedItemCount));
 
@@ -122,6 +114,32 @@ public class InstanceUploaderList extends InstanceListActivity implements
                     } else {
                         // no items selected
                         ToastUtils.showLongToast(R.string.noselect_error);
+                    }
+                } else {
+                    ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(
+                            Context.CONNECTIVITY_SERVICE);
+                    NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
+
+                    if (NetworkReceiver.running) {
+                        ToastUtils.showShortToast(R.string.send_in_progress);
+                    } else if (ni == null || !ni.isConnected()) {
+                        logger.logAction(this, "uploadButton", "noConnection");
+
+                        ToastUtils.showShortToast(R.string.no_connection);
+                    } else {
+                        int checkedItemCount = getCheckedCount();
+                        logger.logAction(this, "uploadButton", Integer.toString(checkedItemCount));
+
+                        if (checkedItemCount > 0) {
+                            // items selected
+                            uploadSelectedFiles();
+                            setAllToCheckedState(listView, false);
+                            toggleButtonLabel(findViewById(R.id.toggle_button), listView);
+                            uploadButton.setEnabled(false);
+                        } else {
+                            // no items selected
+                            ToastUtils.showLongToast(R.string.noselect_error);
+                        }
                     }
                 }
             }
