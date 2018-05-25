@@ -126,7 +126,7 @@
   <string name="submission_url">Njia ya Kutoa Fomu</string>
   <string name="font_size">Text Font Size</string>
   <string name="change_font_size">Text Font Size</string>
-    <string name="access_error">Hitilafu inapojaribu kufungua %s: </string>
+  <string name="access_error">Hitilafu inapojaribu kufungua %s: </string>
   <string name="manifest_server_error">Haiwezi kuripoti kwa OpenRosa version — bad server?</string>
   <string name="root_element_error">Root element is not &lt;manifest\&gt; — was %s</string>
   <string name="root_namespace_error">Root element Namespace is incorrect: %s</string>
@@ -206,7 +206,6 @@
   <string name="open_url">Fungua Url</string>
   <string name="ext_file_no_data_error">Faili halina taarifa!</string>
   <string name="ext_import_generic_error">Imeshindwa kuchukua taarifa kutoka %1$s. Sababu: %2$s</string>
-  <string name="ext_import_cancelled_message">imesitisha kusoma taarifa!</string>
   <string name="ext_import_completed_message">Imemaliza kusoma taarifa!</string>
   <string name="survey_loading_reading_data_message">Inasoma taarifa za survey</string>
   <string name="survey_loading_reading_csv_message">Inasoma faili za CSV</string>

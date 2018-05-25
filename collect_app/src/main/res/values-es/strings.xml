@@ -73,6 +73,8 @@
   <string name="get_location">Obtener localización</string>
   <string name="provider_disabled_error">¡Los proveedores de ubicación están deshabilitados!</string>
   <string name="invalid_answer_error">¡Respuesta invalida!</string>
+  <string name="invalid_space_in_answer_singular">Advertencia: valor subyacente %s contiene espacios</string>
+  <string name="invalid_space_in_answer_plural">Advertencia: valores subyacentes %s contienen espacios</string>
   <string name="jump_to_beginning">Ir al Inicio</string>
   <string name="jump_to_end">Ir al Final</string>
   <string name="jump_to_previous">Subir</string>
@@ -155,6 +157,7 @@
   <string name="no_forms_uploaded">No se ha cargado ningún formulario.</string>
   <string name="upload_results">Resultados de la carga</string>
   <string name="xform_parse_error">XForm error de análisis para %1$s: %2$s es inválido o no se encuentra.</string>
+  <string name="choose_file">Escoger Archivo</string>
   <string name="choose_sound">Escoja el Sonido</string>
   <string name="choose_video">Escoja el Video</string>
   <string name="choose_image">Escoja la Imagen</string>
@@ -239,7 +242,7 @@
   <string name="ext_search_return_error">El gestor de búsqueda ha devuelto un objeto de tipo \'%s\'.</string>
   <string name="ext_import_generic_error">No puede importar datos desde %1$s. Razón: %2$s</string>
   <string name="ext_import_progress_message">Precarga datos desde \'%1$s\'. Por favor espere… %2$s</string>
-  <string name="ext_import_cancelled_message">Lectura de datos cancelada.</string>
+  <string name="ext_import_cancelled_message">Lectura de datos cancelada!</string>
   <string name="ext_import_finalizing_message">Acabando datos precargados…</string>
   <string name="ext_import_completed_message">¡Lectura de datos completada!</string>
   <string name="ext_not_initialized_error">El ExternalDataManager no ha sido inicializado.</string>
@@ -273,6 +276,7 @@
   <string name="drive_get_file">Obteniendo %1$s y archivos multimedia.</string>
   <string name="no_google_account">!Cuenta Google no Seleccionada¡</string>
   <string name="google_set_account">Ha seleccionado Google Sheets como servidor, por favor, seleccionar la correspondiente cuenta Google en Características Generales antes de continuar</string>
+  <string name="media_upload_error">Falla en subida de archivo multimedia. No existe: %1$s</string>
   <string name="odk_auth_auth_fail">Falla de autenticación en envío automático. Favor verificar sus ajustes en servidor</string>
   <string name="odk_auto_note">Notificación de Envío Automático de servidor</string>
   <string name="notification_error">Error al mostrar texto de la notificación</string>
@@ -334,7 +338,6 @@
   <string name="geo_clear_warning">Función ya creada. ¿Desea borrar la función?</string>
   <string name="geo_exit_warning">¿Ignorar los cambios y regresar?</string>
   <string name="polygon_validator">Debe tener al menos 3 puntos para crear un polígono</string>
-  <string name="dialog_continue">Continuar</string>
   <string name="clear">Limpiar</string>
   <string name="polyline_polygon_text">Guardar RastroGeo como</string>
   <string name="manual_mode">Modo Manual</string>
@@ -481,6 +484,9 @@
   <string name="user_access_control">Control de acceso a usuario</string>
   <string name="autosend_selector_title">Envío Automático</string>
   <string name="off">Desactivado</string>
+  <string name="guidance_no">No</string>
+  <string name="guidance_yes">Si - Siempre mostrar</string>
+  <string name="guidance_yes_collapsed">Si - colapsado</string>
   <string name="wifi_autosend">Solo con WIFI</string>
   <string name="cellular_autosend">Solo con Datos Móviles</string>
   <string name="wifi_cellular_autosend">Wifi o Datos Móviles</string>
@@ -564,6 +570,32 @@
   <string name="moving_backwards_enabled_message">Se recomienda revisar la siguiente configuración:\n\n\u2022 Editar Formulario Guardado\n\u2022 Guardar Formularios\n\u2022 Ir a la Pregunta\n\u2022 Manejo de Restricciones</string>
   <string name="yes">Si</string>
   <string name="no">No</string>
-  <string name="newer_version_of_a_form_info">Esta es una versión actualizada de un formularios que ya tiene!</string>
+  <string name="newer_version_of_a_form_info">Esta es una actualización a un formulario que tiene</string>
   <string name="svg_file_does_not_exist">Archivo SVG no existe</string>
+  <string name="start_video_capture_instruction">Toque a pantalla para iniciar grabación</string>
+  <string name="stop_video_capture_instruction">Grabación iniciada. Toque otra vez para detener.</string>
+  <string name="no_columns_to_upload">No se encontraron columnas en el formulario para cargar.</string>
+  <string name="storage_runtime_permission_denied_title">Permisos de Almacenamiento</string>
+  <string name="storage_runtime_permission_denied_desc">Sin estos permisos no se puede accesar los formularios o guardar las respuetas. Abra la aplicación de nuevo cuando esté listo para dar acceso</string>
+  <string name="form_update_category">Actualizar Formulario</string>
+  <string name="periodic_form_updates_check_title">Chequeo periódico de actualización de formularios</string>
+  <string name="never">Nunca</string>
+  <string name="every_fifteen_minutes">Cada 15 minutod</string>
+  <string name="every_one_hour">Cada hora</string>
+  <string name="every_six_hours">Cada 6 horas</string>
+  <string name="every_24_hours">Cada 24 horas</string>
+  <string name="form_updates_available">Formularios actualizados disponibles</string>
+  <string name="new_form_versions_downloaded">Nuevas versiones de formularios descargados</string>
+  <string name="automatic_download">Descarga automática</string>
+  <string name="automatic_download_summary">Nuevas versiones de formularios descargadas automáticamente</string>
+  <string name="forms_downloaded">Formularios descargados:</string>
+  <string name="forms_sent">Formularios enviados:</string>
+  <string name="guidance_hint_title">Mostrar guías para preguntas</string>
+  <string name="app_theme">Tema</string>
+  <string name="theme_light">Tema Claro</string>
+  <string name="theme_dark">Tema Oscuro</string>
+  <string name="cannot_create_directory">No se puede crear directorio: %s</string>
+  <string name="not_a_directory">%s existe, pero no es un directorio</string>
+  <string name="location_metadata">Satélites disponibles: %1$d/24\n\nTiempo transcurrido: %2$s</string>
+  <string name="instance_upload_cancelled">Cargue de Instancia cancelada</string>
 </resources>

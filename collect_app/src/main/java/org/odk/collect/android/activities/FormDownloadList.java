@@ -35,7 +35,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.FormDownloadListAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
-import org.odk.collect.android.listeners.FormDownloaderListener;
+import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.FormListDownloaderListener;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.tasks.DownloadFormListTask;
@@ -53,6 +53,9 @@ import java.util.Set;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.utilities.DownloadFormListUtils.DL_AUTH_REQUIRED;
+import static org.odk.collect.android.utilities.DownloadFormListUtils.DL_ERROR_MSG;
+
 /**
  * Responsible for displaying, adding and deleting all the valid forms in the forms directory. One
  * caveat. If the server requires authentication, a dialog will pop up asking when you request the
@@ -69,7 +72,7 @@ import timber.log.Timber;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class FormDownloadList extends FormListActivity implements FormListDownloaderListener,
-        FormDownloaderListener, AuthDialogUtility.AuthDialogUtilityResultListener, AdapterView.OnItemClickListener {
+        DownloadFormsTaskListener, AuthDialogUtility.AuthDialogUtilityResultListener, AdapterView.OnItemClickListener {
     private static final String FORM_DOWNLOAD_LIST_SORTING_ORDER = "formDownloadListSortingOrder";
 
     private static final int PROGRESS_DIALOG = 1;
@@ -585,14 +588,14 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             return;
         }
 
-        if (result.containsKey(DownloadFormListTask.DL_AUTH_REQUIRED)) {
+        if (result.containsKey(DL_AUTH_REQUIRED)) {
             // need authorization
             showDialog(AUTH_DIALOG);
-        } else if (result.containsKey(DownloadFormListTask.DL_ERROR_MSG)) {
+        } else if (result.containsKey(DL_ERROR_MSG)) {
             // Download failed
             String dialogMessage =
                     getString(R.string.list_failed_with_error,
-                            result.get(DownloadFormListTask.DL_ERROR_MSG).getErrorStr());
+                            result.get(DL_ERROR_MSG).getErrorStr());
             String dialogTitle = getString(R.string.load_remote_form_error);
             createAlertDialog(dialogTitle, dialogMessage, DO_NOT_EXIT);
         } else {
@@ -697,17 +700,21 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             progressDialog.dismiss();
         }
 
+        createAlertDialog(getString(R.string.download_forms_result), getDownloadResultMessage(result), EXIT);
+    }
+
+    public static String getDownloadResultMessage(HashMap<FormDetails, String> result) {
         Set<FormDetails> keys = result.keySet();
         StringBuilder b = new StringBuilder();
         for (FormDetails k : keys) {
             b.append(k.getFormName() + " ("
                     + ((k.getFormVersion() != null)
-                    ? (this.getString(R.string.version) + ": " + k.getFormVersion() + " ")
+                    ? (Collect.getInstance().getString(R.string.version) + ": " + k.getFormVersion() + " ")
                     : "") + "ID: " + k.getFormID() + ") - " + result.get(k));
             b.append("\n\n");
         }
 
-        createAlertDialog(getString(R.string.download_forms_result), b.toString().trim(), EXIT);
+        return b.toString().trim();
     }
 
     @Override

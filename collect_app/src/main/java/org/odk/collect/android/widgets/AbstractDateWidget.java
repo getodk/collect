@@ -17,7 +17,6 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Context;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -64,12 +63,6 @@ public abstract class AbstractDateWidget extends QuestionWidget implements Binar
             date = new LocalDateTime(getFormEntryPrompt().getAnswerValue().getValue());
             setDateLabel();
         }
-    }
-
-    @Override
-    public void setFocus(Context context) {
-        InputMethodManager inputManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
     }
 
     @Override

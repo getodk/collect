@@ -225,7 +225,6 @@
   <string name="ext_search_return_error">Obsługa wyszukiwania zwróciła obiekt typu \'%s\'.</string>
   <string name="ext_import_generic_error">Nie mogę zaimportować danych z %1$s. Powód: %2$s</string>
   <string name="ext_import_progress_message">Wstępne ładowanie danych z \'%1$s\'. Proszę czekać… %2$s</string>
-  <string name="ext_import_cancelled_message">Anulowano wczytywanie danych!</string>
   <string name="ext_import_finalizing_message">Kończę wstępne ładowanie danych…</string>
   <string name="ext_import_completed_message">Zakońyłem wczytywanie danych!</string>
   <string name="ext_not_initialized_error">Manager Danych Zewnętrznych nie został inicjalizowany.</string>
@@ -308,7 +307,6 @@
   <string name="geo_clear_warning">Właściwość już stworzona. Chcesz usunąć właściwość?</string>
   <string name="geo_exit_warning">Usunąć zmiany i wrócić do ODK?</string>
   <string name="polygon_validator">Wymagane są przynajmniej 3 punkty aby utworzyć wielokąt</string>
-  <string name="dialog_continue">Kontynuuj</string>
   <string name="clear">Wyczyść</string>
   <string name="polyline_polygon_text">Zapisz GeoTrace Jako</string>
   <string name="manual_mode">Tryb Ręczny</string>

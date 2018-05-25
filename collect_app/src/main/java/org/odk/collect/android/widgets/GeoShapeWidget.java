@@ -19,7 +19,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -129,13 +128,6 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryWidget {
     public void clearAnswer() {
         answerDisplay.setText(null);
         updateButtonLabelsAndVisibility(false);
-    }
-
-    @Override
-    public void setFocus(Context context) {
-        InputMethodManager inputManager = (InputMethodManager) context
-                .getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
     }
 
     @Override

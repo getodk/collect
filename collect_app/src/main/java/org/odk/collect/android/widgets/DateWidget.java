@@ -25,7 +25,6 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.Window;
-import android.view.accessibility.AccessibilityManager;
 import android.widget.DatePicker;
 
 import org.javarosa.form.api.FormEntryPrompt;
@@ -36,8 +35,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 
 import timber.log.Timber;
-
-import static android.content.Context.ACCESSIBILITY_SERVICE;
 
 /**
  * Displays a DatePicker widget. DateWidget handles leap years and does not allow dates that do not
@@ -79,7 +76,7 @@ public class DateWidget extends AbstractDateWidget implements DatePickerDialog.O
         if (!isBrokenSamsungDevice() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             theme = themeUtils.getMaterialDialogTheme();
         }
-        if (!datePickerDetails.isCalendarMode() || (isBrokenSamsungDevice() && isTalkBackActive())) {
+        if (!datePickerDetails.isCalendarMode() || isBrokenSamsungDevice()) {
             theme = themeUtils.getHoloDialogTheme();
         }
 
@@ -91,11 +88,6 @@ public class DateWidget extends AbstractDateWidget implements DatePickerDialog.O
         return (Build.MANUFACTURER.equalsIgnoreCase("samsung")
                 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
                 && Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1);
-    }
-
-    // https://stackoverflow.com/a/34853067/5479029
-    private boolean isTalkBackActive() {
-        return ((AccessibilityManager) getContext().getSystemService(ACCESSIBILITY_SERVICE)).isTouchExplorationEnabled();
     }
 
     // Exposed for testing purposes to avoid reflection.

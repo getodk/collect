@@ -231,7 +231,6 @@
   <string name="ext_search_return_error">pengendali pencari mengembalikan tipe obyek \'%s\'.</string>
   <string name="ext_import_generic_error">Tidak dapat mengimpor data dari %1$s. Penyebab: %2$s</string>
   <string name="ext_import_progress_message">Pra-memuat data dari \'%1$s\', silahkan tunggu.. %2$s</string>
-  <string name="ext_import_cancelled_message">Pembacaan data dibatalkan!</string>
   <string name="ext_import_finalizing_message">Menyelesaikan Pra-memuat data…</string>
   <string name="ext_import_completed_message">Selesai membaca data!</string>
   <string name="ext_not_initialized_error">ExternalDataManager belum diinisialisasi.</string>
@@ -321,7 +320,6 @@
   <string name="geo_clear_warning">Fitur sudah dibuat. Apakah anda ingin menghapus fitur ini?</string>
   <string name="geo_exit_warning">Abaikan perubahan dan kembali ke ODK?</string>
   <string name="polygon_validator">Minimal harus memiliki 3 poin untuk membuat Polygon</string>
-  <string name="dialog_continue">Lanjut</string>
   <string name="clear">Hapus</string>
   <string name="polyline_polygon_text">Simpan GeoTrace sebagai</string>
   <string name="manual_mode">Mode manual</string>
@@ -465,6 +463,7 @@
   <string name="user_access_control">Kontrol Akses Pengguna</string>
   <string name="autosend_selector_title">Kirim otomatis</string>
   <string name="off">Mati</string>
+  <string name="guidance_no">Tidak</string>
   <string name="wifi_autosend">Hanya Wifi</string>
   <string name="cellular_autosend">Hanya Selular</string>
   <string name="wifi_cellular_autosend">Wifi atau selular</string>
@@ -524,6 +523,5 @@
   <string name="moving_backwards_enabled_message">Anda mungkin ingin meninjau pengaturan berikut:\n\n\u2022 Form Ubah Disimpan\n\u2022 Simpan Form\n\u2022 Pindah ke Prompt\n\u2022 pemrosesan Constraint</string>
   <string name="yes">Ya</string>
   <string name="no">Tidak</string>
-  <string name="newer_version_of_a_form_info">Ini adalah form versi baru dari form yang ada</string>
   <string name="svg_file_does_not_exist">Berkas SVG tidak ada!</string>
 </resources>

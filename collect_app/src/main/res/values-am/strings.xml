@@ -185,7 +185,6 @@
   <string name="ext_file_no_data_error">ፋይሉ ምንም ውሂብ አልያዘም!</string>
   <string name="ext_conflicting_columns_error">አምዶች 1 %s ይመሳሰላሉ!</string>
   <string name="ext_import_generic_error">ከ 1 %1$s ውሂብ ማስመጣት አልተቻለም፡፡ ምክንያት፣ 2 %2$s</string>
-  <string name="ext_import_cancelled_message">የንባብ ውሂብ ተሰርዟል!</string>
   <string name="ext_import_finalizing_message">ቀድሞ የተጫነ ውሂብ በማጠናቀቅ ላይ …</string>
   <string name="ext_import_completed_message">የንባብ ውሂብ ተጠናቅቋል!</string>
   <string name="ext_not_initialized_error">ውጫዊ ውሂብ አደራጅ አልተነሳም</string>
@@ -218,7 +217,6 @@
   <string name="start">ይጀምሩ</string>
   <string name="enable_gps">GPSን አንቃ</string>
   <string name="minutes">ደቂቃዎች</string>
-  <string name="dialog_continue">ይቀጥሉ</string>
   <string name="clear">አጽዳ</string>
   <string name="automatic_mode">ራስ-ሰር ሁኔታ</string>
   <string name="discard">አስወግድ</string>
@@ -269,6 +267,7 @@
   <string name="share">አጋራ</string>
   <string name="generate">ፍጠር</string>
   <string name="off">ጠፍቷል</string>
+  <string name="guidance_no">አይ</string>
   <string name="form_management_preferences">የቅጽ ማስተዳደር</string>
   <string name="form_submission_category">የቅጽ ማስረከብ</string>
   <string name="form_filling_category">የቅጽ መሙላት</string>
