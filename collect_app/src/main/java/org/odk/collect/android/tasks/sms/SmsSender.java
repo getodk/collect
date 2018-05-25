@@ -73,7 +73,7 @@ public class SmsSender {
             submissionManager.markMessageAsSending(instanceId, message.getId());
         }
 
-        smsManager.sendMultipartTextMessage(String.format(Locale.getDefault(), gateway), null, messages, sentIntents, null);
+        smsManager.sendMultipartTextMessage(gateway, null, messages, sentIntents, null);
 
         String log = String.format(Locale.getDefault(), "Sending a SMS of instance id %s", instanceId);
         Timber.i(log);
