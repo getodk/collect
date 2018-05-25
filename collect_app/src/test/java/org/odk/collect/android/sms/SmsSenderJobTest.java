@@ -76,4 +76,26 @@ public class SmsSenderJobTest extends BaseSmsTest {
         //Check to see if the message was marked as sending by the job.
         assertTrue(next.isSending());
     }
+
+    @Test
+    public void sendUnsentMessageTest() {
+
+        SmsSubmission model = submissionManager.getSubmissionModel(SampleData.TEST_UNSENT_MESSAGE_INSTANCE_ID);
+
+        final Message message = model.getNextUnsentMessage();
+
+        SmsSender sender = new SmsSender(RuntimeEnvironment.application, model.getInstanceId());
+        assertTrue(sender.send());
+
+        ShadowSmsManager.TextMultipartParams params = shadowOf(smsManager).getLastSentMultipartTextMessageParams();
+
+        //Only one messaged failed so even though three messages are present only one should be sent.
+        assertEquals(params.getSentIntents().size(), 1);
+
+        //Only one part should exist.
+        assertEquals(params.getParts().size(), 1);
+
+        //The unsent message's text should be equal to the text that was sent.
+        assertEquals(params.getParts().get(0), message.getText());
+    }
 }
