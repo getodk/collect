@@ -6,7 +6,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -18,6 +17,8 @@ import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.tasks.ServerPollingJob;
+import org.odk.collect.android.utilities.IconUtils;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
@@ -59,6 +60,8 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                     && currentNetworkInfo.getState() == NetworkInfo.State.CONNECTED) {
                 uploadForms(context, isFormAutoSendOptionEnabled(currentNetworkInfo));
             }
+
+            ServerPollingJob.pollServerIfNeeded();
         } else if (action.equals("org.odk.collect.android.FormSaved")) {
             ConnectivityManager connectivityManager = (ConnectivityManager) context
                     .getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -187,8 +190,8 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
 
         StringBuilder message = new StringBuilder();
         message
-                .append(Collect.getInstance().getString(R.string.odk_auto_note))
-                .append(" :: \n\n");
+                .append(Collect.getInstance().getString(R.string.forms_sent))
+                .append("\n\n");
 
         if (result == null) {
             message.append(Collect.getInstance().getString(R.string.odk_auth_auth_fail));
@@ -240,14 +243,11 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                 notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(Collect.getInstance())
-                .setSmallIcon(R.drawable.notes)
+                .setSmallIcon(IconUtils.getNotificationAppIcon())
                 .setContentTitle(Collect.getInstance().getString(R.string.odk_auto_note))
                 .setContentIntent(pendingNotify)
                 .setContentText(message.toString().trim())
-                .setAutoCancel(true)
-                .setLargeIcon(
-                        BitmapFactory.decodeResource(Collect.getInstance().getResources(),
-                                android.R.drawable.ic_dialog_info));
+                .setAutoCancel(true);
 
         NotificationManager notificationManager = (NotificationManager) Collect.getInstance()
                 .getSystemService(Context.NOTIFICATION_SERVICE);

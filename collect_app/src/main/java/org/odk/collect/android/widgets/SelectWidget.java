@@ -18,7 +18,6 @@ package org.odk.collect.android.widgets;
 
 import android.content.Context;
 import android.media.MediaPlayer;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -55,12 +54,6 @@ public abstract class SelectWidget extends QuestionWidget {
 
     @Override
     public void clearAnswer() {
-    }
-
-    @Override
-    public void setFocus(Context context) {
-        InputMethodManager inputManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
     }
 
     @Override

@@ -3,7 +3,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:id="@+id/linearlayout"
@@ -51,59 +52,59 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <ImageButton
+            <android.support.v7.widget.AppCompatImageButton
                 android:id="@+id/add_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
                 android:padding="15dp"
-                android:src="@drawable/ic_add_location_black_36dp"
+                app:srcCompat="@drawable/ic_add_location"
                 tools:visibility="visible" />
 
-            <ImageButton
+            <android.support.v7.widget.AppCompatImageButton
                 android:id="@+id/pause_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="15dp"
                 android:layout_margin="5dp"
                 android:visibility="gone"
-                android:src="@drawable/ic_pause_black_36dp" />
+                app:srcCompat="@drawable/ic_pause_36" />
 
-            <ImageButton
+            <android.support.v7.widget.AppCompatImageButton
                 android:id="@+id/show_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
                 android:padding="15dp"
-                android:src="@drawable/ic_my_location_black_36dp" />
+                app:srcCompat="@drawable/ic_my_location" />
 
-            <ImageButton
+            <android.support.v7.widget.AppCompatImageButton
                 android:id="@+id/layers_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
                 android:padding="15dp"
-                android:src="@drawable/ic_layers_black_36dp" />
+                app:srcCompat="@drawable/ic_layers" />
 
-            <ImageButton
+            <android.support.v7.widget.AppCompatImageButton
                 android:id="@+id/clear_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
                 android:padding="15dp"
-                android:src="@drawable/ic_delete_black_36dp" />
+                app:srcCompat="@drawable/ic_delete" />
 
-            <ImageButton
+            <android.support.v7.widget.AppCompatImageButton
                 android:id="@+id/save_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
                 android:padding="15dp"
-                android:src="@drawable/ic_save_black_36dp" />
+                app:srcCompat="@drawable/ic_save" />
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

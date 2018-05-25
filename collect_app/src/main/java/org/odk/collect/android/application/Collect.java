@@ -27,9 +27,9 @@ import android.support.annotation.Nullable;
 import android.support.multidex.MultiDex;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 
+import com.evernote.android.job.JobManager;
+import com.evernote.android.job.JobManagerCreateException;
 import com.crashlytics.android.Crashlytics;
 import com.evernote.android.job.JobManager;
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -55,6 +55,7 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.PRNGFixes;
+import org.odk.collect.android.utilities.ServerPollingJobCreator;
 import org.opendatakit.httpclientandroidlib.client.CookieStore;
 import org.opendatakit.httpclientandroidlib.client.CredentialsProvider;
 import org.opendatakit.httpclientandroidlib.client.protocol.HttpClientContext;
@@ -255,11 +256,6 @@ public class Collect extends Application implements HasActivityInjector {
         return cookieStore;
     }
 
-    public void hideKeyboard(View view) {
-        InputMethodManager imm = (InputMethodManager) getInstance().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -270,6 +266,14 @@ public class Collect extends Application implements HasActivityInjector {
                 .build();
 
         applicationComponent.inject(this);
+
+        try {
+            JobManager
+                    .create(this)
+                    .addJobCreator(new ServerPollingJobCreator());
+        } catch (JobManagerCreateException e) {
+            Timber.e(e);
+        }
 
         reloadSharedPreferences();
 

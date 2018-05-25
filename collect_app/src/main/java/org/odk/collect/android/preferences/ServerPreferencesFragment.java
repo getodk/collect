@@ -17,7 +17,6 @@
 package org.odk.collect.android.preferences;
 
 import android.accounts.AccountManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -25,10 +24,12 @@ import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.v7.content.res.AppCompatResources;
 import android.telephony.PhoneNumberUtils;
 import android.text.InputFilter;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -42,6 +43,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.filters.ControlCharacterFilter;
 import org.odk.collect.android.preferences.filters.WhitespaceFilter;
 import org.odk.collect.android.utilities.AuthDialogUtility;
+import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.Validator;
 import org.odk.collect.android.utilities.WebUtils;
@@ -95,7 +97,9 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
 
         urlDropdownSetup();
 
-        serverUrlPreference.getEditText().setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_drop_down, 0);
+        // TODO: use just 'serverUrlPreference.getEditText().setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_drop_down, 0);' once minSdkVersion is >= 21
+        serverUrlPreference.getEditText().setCompoundDrawablesWithIntrinsicBounds(null, null,
+                AppCompatResources.getDrawable(getActivity(), R.drawable.ic_arrow_drop_down), null);
         serverUrlPreference.getEditText().setOnTouchListener(this);
         serverUrlPreference.setOnPreferenceChangeListener(createChangeListener());
         serverUrlPreference.setSummary(serverUrlPreference.getText());
@@ -226,9 +230,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         if (event.getAction() == MotionEvent.ACTION_UP) {
             if (event.getX() >= (v.getWidth() - ((EditText) v)
                     .getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                InputMethodManager imm = (InputMethodManager) getActivity()
-                        .getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                SoftKeyboardUtils.hideSoftKeyboard(v);
                 listPopupWindow.show();
                 return true;
             }

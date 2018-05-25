@@ -36,7 +36,7 @@ limitations under the License.
             android:minHeight="@dimen/touch_target_size"
             android:minWidth="@dimen/touch_target_size"
             android:padding="@dimen/padding_medium"
-            app:srcCompat="@drawable/ic_fast_rewind_black_24dp" />
+            app:srcCompat="@drawable/ic_fast_rewind_24dp" />
 
         <ImageButton
             android:id="@+id/playBtn"
@@ -49,7 +49,7 @@ limitations under the License.
             android:minHeight="@dimen/touch_target_size"
             android:minWidth="@dimen/touch_target_size"
             android:padding="@dimen/padding_medium"
-            app:srcCompat="@drawable/ic_play_arrow_black_24dp" />
+            app:srcCompat="@drawable/ic_play_arrow_24dp" />
 
         <ImageButton
             android:id="@+id/fastForwardBtn"
@@ -63,7 +63,7 @@ limitations under the License.
             android:minHeight="@dimen/touch_target_size"
             android:minWidth="@dimen/touch_target_size"
             android:padding="@dimen/padding_medium"
-            app:srcCompat="@drawable/ic_fast_forward_black_24dp" />
+            app:srcCompat="@drawable/ic_fast_forward_24dp" />
 
         <TextView
             android:id="@+id/currentDuration"

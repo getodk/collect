@@ -28,7 +28,6 @@ import android.support.v4.content.Loader;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -38,6 +37,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.DiskSyncListener;
+import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.receivers.NetworkReceiver;
@@ -52,6 +52,9 @@ import java.util.List;
 import javax.inject.Inject;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
+import static org.odk.collect.android.utilities.PermissionUtils.requestStoragePermissions;
 
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PROTOCOL;
 
@@ -84,6 +87,9 @@ public class InstanceUploaderList extends InstanceListActivity implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Timber.i("onCreate");
+        // set title
+        setTitle(getString(R.string.send_data));
         setContentView(R.layout.instance_uploader_list);
         getComponent().inject(this);
 
@@ -91,10 +97,24 @@ public class InstanceUploaderList extends InstanceListActivity implements
             showAllMode = savedInstanceState.getBoolean(SHOW_ALL_MODE);
         }
 
-        instancesDao = new InstancesDao();
+        requestStoragePermissions(this, new PermissionListener() {
+            @Override
+            public void granted() {
+                init();
+            }
 
+            @Override
+            public void denied() {
+                // The activity has to finish because ODK Collect cannot function without these permissions.
+                finishAllActivities(InstanceUploaderList.this);
+            }
+        });
+    }
+
+    private void init() {
+        instancesDao = new InstancesDao();
         uploadButton = findViewById(R.id.upload_button);
-        uploadButton.setOnClickListener(new OnClickListener() {
+        uploadButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -147,14 +167,18 @@ public class InstanceUploaderList extends InstanceListActivity implements
 
         final Button toggleSelsButton = findViewById(R.id.toggle_button);
         toggleSelsButton.setLongClickable(true);
-        toggleSelsButton.setOnClickListener(new OnClickListener() {
+        toggleSelsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ListView lv = listView;
                 boolean allChecked = toggleChecked(lv);
                 toggleButtonLabel(toggleSelsButton, lv);
                 uploadButton.setEnabled(allChecked);
-                if (!allChecked) {
+                if (allChecked) {
+                    for (int i = 0; i < lv.getCount(); i++) {
+                        selectedInstances.add(lv.getItemIdAtPosition(i));
+                    }
+                } else {
                     selectedInstances.clear();
                 }
             }
@@ -172,8 +196,6 @@ public class InstanceUploaderList extends InstanceListActivity implements
             }
         });
 
-        // set title
-        setTitle(getString(R.string.send_data));
 
         instanceSyncTask = new InstanceSyncTask();
         instanceSyncTask.setDiskSyncListener(this);
@@ -183,6 +205,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
                 getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc),
                 getString(R.string.sort_by_date_asc), getString(R.string.sort_by_date_desc)
         };
+
         getSupportLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
@@ -190,12 +213,12 @@ public class InstanceUploaderList extends InstanceListActivity implements
     protected void onResume() {
         if (instanceSyncTask != null) {
             instanceSyncTask.setDiskSyncListener(this);
+            if (instanceSyncTask.getStatus() == AsyncTask.Status.FINISHED) {
+                syncComplete(instanceSyncTask.getStatusMessage());
+            }
+
         }
         super.onResume();
-
-        if (instanceSyncTask.getStatus() == AsyncTask.Status.FINISHED) {
-            syncComplete(instanceSyncTask.getStatusMessage());
-        }
     }
 
     @Override
@@ -337,7 +360,6 @@ public class InstanceUploaderList extends InstanceListActivity implements
     @Override
     protected void updateAdapter() {
         getSupportLoaderManager().restartLoader(LOADER_ID, null, this);
-        toggleButtonLabel(findViewById(R.id.toggle_button), listView);
     }
 
     @NonNull
@@ -356,6 +378,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
         hideProgressBarIfAllowed();
         listAdapter.changeCursor(cursor);
         checkPreviouslyCheckedItems();
+        toggleButtonLabel(findViewById(R.id.toggle_button), listView);
     }
 
     @Override

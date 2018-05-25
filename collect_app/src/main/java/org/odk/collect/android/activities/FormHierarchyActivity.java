@@ -145,7 +145,7 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity impl
                     int position = 0;
                     for (int i = 0; i < getListAdapter().getCount(); i++) {
                         HierarchyElement he = (HierarchyElement) getListAdapter().getItem(i);
-                        if (startIndex.equals(he.getFormIndex())) {
+                        if (shouldScrollToTheGivenIndex(he.getFormIndex(), formController)) {
                             position = i;
                             break;
                         }
@@ -154,6 +154,11 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity impl
                 }
             });
         }
+    }
+
+    private boolean shouldScrollToTheGivenIndex(FormIndex formIndex, FormController formController) {
+        return startIndex.equals(formIndex)
+                || (formController.indexIsInFieldList(startIndex) && formIndex.toString().startsWith(startIndex.toString()));
     }
 
     private ListAdapter getListAdapter() {
@@ -300,7 +305,7 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity impl
                     case FormEntryController.EVENT_QUESTION:
 
                         FormEntryPrompt fp = formController.getQuestionPrompt();
-                        String label = fp.getLongText();
+                        String label = getLabel(fp);
                         if (!fp.isReadOnly() || (label != null && label.length() > 0)) {
                             // show the question if it is an editable field.
                             // or if it is read-only and the label is not blank.
@@ -333,20 +338,20 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity impl
                         if (fc.getMultiplicity() == 0) {
                             // Display the repeat header for the group.
                             HierarchyElement group =
-                                    new HierarchyElement(fc.getLongText(), null, ContextCompat
-                                            .getDrawable(getApplicationContext(), R.drawable.expander_ic_minimized),
+                                    new HierarchyElement(getLabel(fc), null, ContextCompat
+                                            .getDrawable(this, R.drawable.expander_ic_minimized),
                                             COLLAPSED, fc.getIndex());
                             formList.add(group);
                         }
-                        String repeatLabel = mIndent + fc.getLongText();
+                        String repeatLabel = mIndent + getLabel(fc);
                         if (fc.getFormElement().getChildren().size() == 1 && fc.getFormElement().getChild(0) instanceof GroupDef) {
                             formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
                             FormEntryCaption fc2 = formController.getCaptionPrompt();
-                            if (fc2.getLongText() != null) {
-                                repeatLabel = fc2.getLongText();
+                            if (getLabel(fc2) != null) {
+                                repeatLabel = getLabel(fc2);
                             }
                         }
-                        repeatLabel += " (" + (fc.getMultiplicity() + 1) + ")";
+                        repeatLabel += " (" + (fc.getMultiplicity() + 1) + ")\u200E";
                         // Add this group name to the drop down list for this repeating group.
                         HierarchyElement h = formList.get(formList.size() - 1);
                         h.addChild(new HierarchyElement(repeatLabel, null, null, CHILD, fc.getIndex()));
@@ -397,5 +402,10 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity impl
         alertDialog.setCancelable(false);
         alertDialog.setButton(getString(R.string.ok), errorListener);
         alertDialog.show();
+    }
+
+    private String getLabel(FormEntryCaption formEntryCaption) {
+        return formEntryCaption.getShortText() != null && !formEntryCaption.getShortText().isEmpty()
+                ? formEntryCaption.getShortText() : formEntryCaption.getLongText();
     }
 }

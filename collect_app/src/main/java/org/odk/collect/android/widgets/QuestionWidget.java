@@ -29,6 +29,7 @@ import android.support.annotation.Nullable;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,8 +48,13 @@ import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.preferences.GuidanceHint;
+import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.utilities.AnimateUtils;
 import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
+import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ViewIds;
@@ -59,6 +65,7 @@ import org.odk.collect.android.widgets.interfaces.Widget;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
@@ -73,9 +80,13 @@ public abstract class QuestionWidget
     private final MediaLayout questionMediaLayout;
     private MediaPlayer player;
     private final TextView helpTextView;
-
+    private final TextView guidanceTextView;
+    private final View helpTextLayout;
+    private final View guidanceTextLayout;
+    private final View textLayout;
+    private static final String GUIDANCE_EXPANDED_STATE = "expanded_state";
+    private AtomicBoolean expanded;
     private Bundle state;
-
     protected ThemeUtils themeUtils;
     private int playColor;
 
@@ -83,7 +94,7 @@ public abstract class QuestionWidget
         super(context);
 
         themeUtils = new ThemeUtils(context);
-        playColor =  themeUtils.getAttributeValue(R.attr.colorAccent);
+        playColor = themeUtils.getAccentColor();
 
         if (context instanceof FormEntryActivity) {
             state = ((FormEntryActivity) context).getState();
@@ -120,13 +131,93 @@ public abstract class QuestionWidget
         setPadding(0, 7, 0, 0);
 
         questionMediaLayout = createQuestionMediaLayout(prompt);
-        helpTextView = createHelpText(prompt);
+        helpTextLayout = createHelpTextLayout();
+        guidanceTextLayout = helpTextLayout.findViewById(R.id.guidance_text_layout);
+        textLayout = helpTextLayout.findViewById(R.id.text_layout);
+        helpTextView = setupHelpText(helpTextLayout.findViewById(R.id.help_text_view), prompt);
+        guidanceTextView = setupGuidanceTextAndLayout(helpTextLayout.findViewById(R.id.guidance_text_view), prompt);
 
         addQuestionMediaLayout(getQuestionMediaLayout());
-        addHelpTextView(getHelpTextView());
+        addHelpTextLayout(getHelpTextLayout());
     }
 
-    /** Releases resources held by this widget */
+    private TextView setupGuidanceTextAndLayout(TextView guidanceTextView, FormEntryPrompt prompt) {
+
+        TextView guidance = null;
+        GuidanceHint setting = GuidanceHint.get((String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_GUIDANCE_HINT));
+
+        if (setting.equals(GuidanceHint.No)) {
+            return null;
+        }
+
+        String guidanceHint = prompt.getSpecialFormQuestionText(prompt.getQuestion().getHelpTextID(), "guidance");
+
+        if (android.text.TextUtils.isEmpty(guidanceHint)) {
+            return null;
+        }
+
+        guidance = configureGuidanceTextView(guidanceTextView, guidanceHint);
+
+        expanded = new AtomicBoolean(false);
+
+        if (getState() != null) {
+            if (getState().containsKey(GUIDANCE_EXPANDED_STATE + getFormEntryPrompt().getIndex())) {
+                Boolean result = getState().getBoolean(GUIDANCE_EXPANDED_STATE + getFormEntryPrompt().getIndex());
+                expanded = new AtomicBoolean(result);
+            }
+        }
+
+        if (setting.equals(GuidanceHint.Yes)) {
+            guidanceTextLayout.setVisibility(VISIBLE);
+            guidanceTextView.setText(guidanceHint);
+        } else if (setting.equals(GuidanceHint.YesCollapsed)) {
+            guidanceTextLayout.setVisibility(expanded.get() ? VISIBLE : GONE);
+
+            View icon = textLayout.findViewById(R.id.help_icon);
+            icon.setVisibility(VISIBLE);
+
+            /**
+             * Added click listeners to the individual views because the TextView
+             * intercepts click events when they are being passed to the parent layout.
+             */
+            icon.setOnClickListener(v -> {
+                if (!expanded.get()) {
+                    AnimateUtils.expand(guidanceTextLayout, result -> expanded.set(true));
+                } else {
+                    AnimateUtils.collapse(guidanceTextLayout, result -> expanded.set(false));
+                }
+            });
+
+            getHelpTextView().setOnClickListener(v -> {
+                if (!expanded.get()) {
+                    AnimateUtils.expand(guidanceTextLayout, result -> expanded.set(true));
+                } else {
+                    AnimateUtils.collapse(guidanceTextLayout, result -> expanded.set(false));
+                }
+            });
+        }
+
+        return guidance;
+    }
+
+    private TextView configureGuidanceTextView(TextView guidanceTextView, String guidance) {
+        guidanceTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getQuestionFontSize() - 3);
+        //noinspection ResourceType
+        guidanceTextView.setPadding(0, -5, 0, 7);
+        // wrap to the widget of view
+        guidanceTextView.setHorizontallyScrolling(false);
+        guidanceTextView.setTypeface(null, Typeface.ITALIC);
+
+        guidanceTextView.setText(TextUtils.textToHtml(guidance));
+
+        guidanceTextView.setTextColor(themeUtils.getPrimaryTextColor());
+        guidanceTextView.setMovementMethod(LinkMovementMethod.getInstance());
+        return guidanceTextView;
+    }
+
+    /**
+     * Releases resources held by this widget
+     */
     public void release() {
         if (player != null) {
             player.release();
@@ -144,7 +235,9 @@ public abstract class QuestionWidget
         return directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT || directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC;
     }
 
-    protected void injectDependencies(DependencyProvider dependencyProvider) {}
+    protected void injectDependencies(DependencyProvider dependencyProvider) {
+        //dependencies for the widget will be wired here.
+    }
 
     private MediaLayout createQuestionMediaLayout(FormEntryPrompt prompt) {
         String promptText = prompt.getLongText();
@@ -153,7 +246,7 @@ public abstract class QuestionWidget
         questionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getQuestionFontSize());
         questionText.setTypeface(null, Typeface.BOLD);
         questionText.setPadding(0, 0, 0, 7);
-        questionText.setTextColor(themeUtils.getAttributeValue(R.attr.primaryTextColor));
+        questionText.setTextColor(themeUtils.getPrimaryTextColor());
         questionText.setText(TextUtils.textToHtml(FormEntryPromptUtils.markQuestionIfIsRequired(promptText, prompt.isRequired())));
         questionText.setMovementMethod(LinkMovementMethod.getInstance());
 
@@ -242,9 +335,9 @@ public abstract class QuestionWidget
         }
     }
 
-    // Abstract methods
-
-    public abstract void setFocus(Context context);
+    public void setFocus(Context context) {
+        SoftKeyboardUtils.hideSoftKeyboard(this);
+    }
 
     public abstract void setOnLongClickListener(OnLongClickListener l);
 
@@ -293,13 +386,17 @@ public abstract class QuestionWidget
     @OverridingMethodsMustInvokeSuper
     protected void saveState() {
         state = new Bundle();
+
+        if (expanded != null) {
+            state.putBoolean(GUIDANCE_EXPANDED_STATE + getFormEntryPrompt().getIndex(), expanded.get());
+        }
     }
 
     /**
      * Add a TextView containing the help text to the default location.
      * Override to reposition.
      */
-    protected void addHelpTextView(View v) {
+    protected void addHelpTextLayout(View v) {
         if (v == null) {
             Timber.e("cannot add a null view as helpTextView");
             return;
@@ -314,15 +411,15 @@ public abstract class QuestionWidget
         addView(v, params);
     }
 
-    private TextView createHelpText(FormEntryPrompt prompt) {
-        TextView helpText = new TextView(getContext());
+    private View createHelpTextLayout() {
+        return LayoutInflater.from(getContext()).inflate(R.layout.help_text_layout, null);
+    }
+
+    private TextView setupHelpText(TextView helpText, FormEntryPrompt prompt) {
         String s = prompt.getHelpText();
 
         if (s != null && !s.equals("")) {
-            helpText.setId(ViewIds.generateViewId());
             helpText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getQuestionFontSize() - 3);
-            //noinspection ResourceType
-            helpText.setPadding(0, -5, 0, 7);
             // wrap to the widget of view
             helpText.setHorizontallyScrolling(false);
             helpText.setTypeface(null, Typeface.ITALIC);
@@ -331,7 +428,7 @@ public abstract class QuestionWidget
             } else {
                 helpText.setText(TextUtils.textToHtml(s));
             }
-            helpText.setTextColor(themeUtils.getAttributeValue(R.attr.primaryTextColor));
+            helpText.setTextColor(themeUtils.getPrimaryTextColor());
             helpText.setMovementMethod(LinkMovementMethod.getInstance());
             return helpText;
         } else {
@@ -355,11 +452,8 @@ public abstract class QuestionWidget
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
-        if (getHelpTextView().getVisibility() == View.VISIBLE) {
-            params.addRule(RelativeLayout.BELOW, getHelpTextView().getId());
-        } else {
-            params.addRule(RelativeLayout.BELOW, getQuestionMediaLayout().getId());
-        }
+        params.addRule(RelativeLayout.BELOW, getHelpTextLayout().getId());
+
         params.setMargins(10, 0, 10, 0);
         addView(v, params);
     }
@@ -449,31 +543,27 @@ public abstract class QuestionWidget
     }
 
     protected TextView getAnswerTextView() {
+        return getAnswerTextView("");
+    }
+
+    protected TextView getAnswerTextView(String text) {
         TextView textView = new TextView(getContext());
 
         textView.setId(R.id.answer_text);
-        textView.setTextColor(themeUtils.getAttributeValue(R.attr.primaryTextColor));
+        textView.setTextColor(themeUtils.getPrimaryTextColor());
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         textView.setPadding(20, 20, 20, 20);
+        textView.setText(text);
 
         return textView;
     }
 
     protected ImageView getAnswerImageView(Bitmap bitmap) {
-        final QuestionWidget questionWidget = this;
         final ImageView imageView = new ImageView(getContext());
         imageView.setId(ViewIds.generateViewId());
         imageView.setPadding(10, 10, 10, 10);
         imageView.setAdjustViewBounds(true);
         imageView.setImageBitmap(bitmap);
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (questionWidget instanceof BaseImageWidget && Collect.allowClick()) {
-                    ((BaseImageWidget) questionWidget).onImageClick();
-                }
-            }
-        });
         return imageView;
     }
 
@@ -584,6 +674,14 @@ public abstract class QuestionWidget
 
     public int getAnswerFontSize() {
         return questionFontSize + 2;
+    }
+
+    public TextView getGuidanceTextView() {
+        return guidanceTextView;
+    }
+
+    public View getHelpTextLayout() {
+        return helpTextLayout;
     }
 
     public MediaLayout getQuestionMediaLayout() {

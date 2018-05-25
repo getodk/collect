@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:id="@+id/linearlayout"
@@ -57,48 +58,48 @@
             <!--android:layout_height="match_parent"-->
             <!--android:layout_weight="1"/>-->
 
-            <ImageButton
+            <android.support.v7.widget.AppCompatImageButton
                 android:id="@+id/reload_location"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:src="@drawable/ic_add_location_black_36dp"
+                app:srcCompat="@drawable/ic_add_location"
                 android:padding="15dp" />
 
-            <ImageButton
+            <android.support.v7.widget.AppCompatImageButton
                 android:id="@+id/show_location"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:src="@drawable/ic_my_location_black_36dp"
+                app:srcCompat="@drawable/ic_my_location"
                 android:padding="15dp" />
 
-            <ImageButton
+            <android.support.v7.widget.AppCompatImageButton
                 android:id="@+id/layer_menu"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:src="@drawable/ic_layers_black_36dp"
+                app:srcCompat="@drawable/ic_layers"
                 android:padding="15dp" />
 
-            <ImageButton
+            <android.support.v7.widget.AppCompatImageButton
                 android:id="@+id/clear"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
-                android:src="@drawable/ic_delete_black_36dp"
+                app:srcCompat="@drawable/ic_delete"
                 android:padding="15dp" />
 
-            <ImageButton
+            <android.support.v7.widget.AppCompatImageButton
                 android:id="@+id/accept_location"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:src="@drawable/ic_save_black_36dp"
+                app:srcCompat="@drawable/ic_save"
                 android:padding="15dp" />
         </LinearLayout>
     </ScrollView>

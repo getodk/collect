@@ -44,6 +44,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.location.client.LocationClient;
 import org.odk.collect.android.location.client.LocationClients;
 import org.odk.collect.android.spatial.MapHelper;
+import org.odk.collect.android.utilities.GeoPointUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoPointWidget;
 
@@ -344,9 +345,6 @@ public class GeoPointMapActivity extends CollectAbstractActivity implements OnMa
             zoomToPoint();
         }
 
-        themeUtils.setIconTint(this, reloadLocation, showLocation, layers,
-                clearPointButton, acceptLocation);
-
         helper.setBasemap();
 
         isMapReady = true;
@@ -583,7 +581,7 @@ public class GeoPointMapActivity extends CollectAbstractActivity implements OnMa
     }
 
     public String getAccuracyStringForLocation(Location location) {
-        return getString(R.string.location_provider_accuracy, location.getProvider(),
+        return getString(R.string.location_provider_accuracy, GeoPointUtils.capitalizeGps(location.getProvider()),
                 truncateFloat(location.getAccuracy()));
     }
 
