@@ -145,7 +145,7 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity impl
                     int position = 0;
                     for (int i = 0; i < getListAdapter().getCount(); i++) {
                         HierarchyElement he = (HierarchyElement) getListAdapter().getItem(i);
-                        if (startIndex.equals(he.getFormIndex())) {
+                        if (shouldScrollToTheGivenIndex(he.getFormIndex(), formController)) {
                             position = i;
                             break;
                         }
@@ -154,6 +154,11 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity impl
                 }
             });
         }
+    }
+
+    private boolean shouldScrollToTheGivenIndex(FormIndex formIndex, FormController formController) {
+        return startIndex.equals(formIndex)
+                || (formController.indexIsInFieldList(startIndex) && formIndex.toString().startsWith(startIndex.toString()));
     }
 
     private ListAdapter getListAdapter() {
