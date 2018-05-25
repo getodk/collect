@@ -95,12 +95,9 @@ references:
 
 
   android_config: &android_config
-<<<<<<< HEAD
 
-||||||| merged common ancestors
     resource_class: large
-=======
->>>>>>> 15d5c87c97e4bf9d13ebae288fcd036993e46e47
+
     working_directory: *workspace
 
     docker:
@@ -388,11 +385,6 @@ workflows:
           filters:
 
             branches:
-<<<<<<< HEAD
 
               only: master
-||||||| merged common ancestors
-              only: master
-=======
-              only: master
->>>>>>> 15d5c87c97e4bf9d13ebae288fcd036993e46e47
+
