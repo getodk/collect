@@ -28,10 +28,9 @@ import android.support.multidex.MultiDex;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 
-import com.evernote.android.job.JobManager;
-import com.evernote.android.job.JobManagerCreateException;
 import com.crashlytics.android.Crashlytics;
 import com.evernote.android.job.JobManager;
+import com.evernote.android.job.JobManagerCreateException;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.squareup.leakcanary.LeakCanary;

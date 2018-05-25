@@ -29,8 +29,6 @@ import android.telephony.PhoneNumberUtils;
 import android.text.InputFilter;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListPopupWindow;
