@@ -161,7 +161,7 @@ public class SmsService {
                 }
             }
 
-            if (!allMessagesAreNotSending) {
+            if (allMessagesAreNotSending) {
                 addMessagesJobToQueue(instanceId);
             }
         } else {
