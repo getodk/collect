@@ -101,7 +101,6 @@ public class Collect extends Application implements HasActivityInjector {
     public static String defaultSysLanguage;
     private static Collect singleton = null;
     private static long lastClickTime;
-    private boolean disableJobManager;
 
     @Inject
     protected CookieStore cookieStore;
@@ -295,13 +294,12 @@ public class Collect extends Application implements HasActivityInjector {
 
         setupLeakCanary();
 
-        if (!isDisableJobManager()) {
-            try {
-                JobManager.create(this).addJobCreator(new SmsSenderJobCreator());
-            } catch (Exception e) {
-                Timber.e(e);
-            }
+        try {
+            JobManager.create(this).addJobCreator(new SmsSenderJobCreator());
+        } catch (Exception e) {
+            Timber.e(e);
         }
+
     }
 
     protected RefWatcher setupLeakCanary() {
@@ -392,9 +390,5 @@ public class Collect extends Application implements HasActivityInjector {
     @Override
     public DispatchingAndroidInjector<Activity> activityInjector() {
         return androidInjector;
-    }
-
-    public boolean isDisableJobManager() {
-        return disableJobManager;
     }
 }

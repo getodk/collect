@@ -8,7 +8,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.application.RoboCollect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.injection.DaggerTestComponent;
@@ -21,7 +20,6 @@ import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.tasks.sms.models.SmsSubmission;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
-import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowSmsManager;
 
 import java.io.BufferedWriter;
@@ -39,7 +37,6 @@ import static org.odk.collect.android.utilities.FileUtil.getSmsInstancePath;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(application = RoboCollect.class)
 public class SmsServiceTest extends BaseSmsTest {
     @Inject
     SmsSubmissionManagerContract submissionManager;
