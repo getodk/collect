@@ -32,6 +32,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Inject;
+
 import tools.fastlane.screengrab.Screengrab;
 import tools.fastlane.screengrab.UiAutomatorScreenshotStrategy;
 
@@ -45,7 +47,7 @@ import static org.odk.collect.android.activities.FormEntryActivity.EXTRA_TESTING
 import static org.odk.collect.android.test.TestUtils.waitId;
 
 @RunWith(AndroidJUnit4.class)
-public class GuidanceHintFormTest {
+public class GuidanceHintFormTest extends DaggerAndroidTest {
 
     private static final String GUIDANCE_SAMPLE_FORM = "guidance_hint_form.xml";
     private static final String FORMS_DIRECTORY = "/odk/forms/";
@@ -56,7 +58,13 @@ public class GuidanceHintFormTest {
     @Mock
     private ActivityAvailability activityAvailability;
 
-    private GeneralSharedPreferences generalSharedPreferences = new GeneralSharedPreferences(Collect.getInstance());
+    @Inject
+    GeneralSharedPreferences generalSharedPreferences;
+
+    @Override
+    protected void injectDependencies() {
+        androidTestComponent.inject(this);
+    }
 
     //region Test prep.
     @BeforeClass
@@ -81,7 +89,8 @@ public class GuidanceHintFormTest {
     }
 
     @Before
-    public void prepareDependencies() {
+    public void setUp() throws IOException {
+        super.setUp();
         FormEntryActivity activity = activityTestRule.getActivity();
         activity.setActivityAvailability(activityAvailability);
         activity.setShouldOverrideAnimations(true);

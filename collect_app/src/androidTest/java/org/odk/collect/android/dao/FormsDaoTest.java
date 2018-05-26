@@ -23,6 +23,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.DaggerAndroidTest;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dto.Form;
 import org.odk.collect.android.provider.FormsProviderAPI;
@@ -33,20 +34,31 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-@RunWith(AndroidJUnit4.class)
 /**
  * This class contains tests for {@link FormsDao}
  */
-public class FormsDaoTest {
+@RunWith(AndroidJUnit4.class)
+public class FormsDaoTest extends DaggerAndroidTest {
 
-    private FormsDao formsDao;
+    @Inject
+    FormsDao formsDao;
+
+    @Inject
+    ResetUtility resetUtility;
+
+    @Override
+    protected void injectDependencies() {
+        androidTestComponent.inject(this);
+    }
 
     @Before
     public void setUp() throws IOException {
-        formsDao = new FormsDao();
+        super.setUp();
         resetAppState();
         fillDatabase();
     }
@@ -306,7 +318,7 @@ public class FormsDaoTest {
                 ResetUtility.ResetAction.RESET_CACHE, ResetUtility.ResetAction.RESET_OSM_DROID
         );
 
-        List<Integer> failedResetActions = new ResetUtility().reset(resetActions);
+        List<Integer> failedResetActions = resetUtility.reset(resetActions);
         assertEquals(0, failedResetActions.size());
     }
 }

@@ -18,15 +18,18 @@ package org.odk.collect.android;
 
 import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
 
+import java.io.IOException;
 import java.util.HashMap;
+
+import javax.inject.Inject;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
@@ -34,10 +37,23 @@ import static org.odk.collect.android.preferences.AdminKeys.KEY_EDIT_SAVED;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_COMPLETED_DEFAULT;
 
 @RunWith(AndroidJUnit4.class)
-public class SharedPreferencesTest {
+public class SharedPreferencesTest extends DaggerAndroidTest {
 
-    private GeneralSharedPreferences generalSharedPreferences = new GeneralSharedPreferences(Collect.getInstance());
-    private AdminSharedPreferences adminSharedPreferences = new AdminSharedPreferences(Collect.getInstance());
+    @Inject
+    GeneralSharedPreferences generalSharedPreferences;
+
+    @Inject
+    AdminSharedPreferences adminSharedPreferences;
+
+    @Override
+    protected void injectDependencies() {
+        androidTestComponent.inject(this);
+    }
+
+    @Before
+    public void setUp() throws IOException {
+        super.setUp();
+    }
 
     @Test
     public void generalDefaultSharedPreferencesTest() {

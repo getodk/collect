@@ -58,7 +58,7 @@ public class ResetAppStateTestCase extends DaggerAndroidTest {
     }
 
     @Before
-    public void setUp() {
+    public void setUp() throws IOException {
         super.setUp();
         resetAppState(Arrays.asList(
                 ResetUtility.ResetAction.RESET_PREFERENCES, ResetUtility.ResetAction.RESET_INSTANCES,

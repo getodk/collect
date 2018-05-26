@@ -23,10 +23,10 @@ import com.google.zxing.ChecksumException;
 import com.google.zxing.FormatException;
 import com.google.zxing.NotFoundException;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.AdminSharedPreferences;
+import org.odk.collect.android.DaggerAndroidTest;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.QRCodeUtils;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
@@ -35,6 +35,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.zip.DataFormatException;
+
+import javax.inject.Inject;
 
 import timber.log.Timber;
 
@@ -49,12 +51,26 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
 
 
 @RunWith(AndroidJUnit4.class)
-public class QrCodeTest {
+public class QrCodeTest extends DaggerAndroidTest {
 
-    private final GeneralSharedPreferences preferences = new GeneralSharedPreferences(Collect.getInstance());
-    private final AdminSharedPreferences adminPrefs = new AdminSharedPreferences(Collect.getInstance());
-    private final SharedPreferencesUtils sharedPreferencesUtils = new SharedPreferencesUtils(adminPrefs, preferences);
-    private final QRCodeUtils qrCodeUtils = new QRCodeUtils(sharedPreferencesUtils);
+    @Inject
+    GeneralSharedPreferences preferences;
+
+    @Inject
+    SharedPreferencesUtils sharedPreferencesUtils;
+
+    @Inject
+    QRCodeUtils qrCodeUtils;
+
+    @Override
+    protected void injectDependencies() {
+        androidTestComponent.inject(this);
+    }
+
+    @Before
+    public void setUp() throws IOException {
+        super.setUp();
+    }
 
     @Test
     public void importSettingsFromQrCode() throws IOException, DataFormatException, ChecksumException, NotFoundException, FormatException {

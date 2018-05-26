@@ -29,11 +29,18 @@ import org.odk.collect.android.provider.FormsProviderAPI;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 /**
  * This class is used to encapsulate all access to the {@link org.odk.collect.android.database.helpers.FormsDatabaseHelper#DATABASE_NAME}
  * For more information about this pattern go to https://en.wikipedia.org/wiki/Data_access_object
  */
 public class FormsDao {
+
+    @Inject
+    public FormsDao() {
+
+    }
 
     public Cursor getFormsCursor() {
         return getFormsCursor(null, null, null, null);
