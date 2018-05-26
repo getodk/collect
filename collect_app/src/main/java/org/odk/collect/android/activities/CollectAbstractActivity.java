@@ -24,6 +24,7 @@ import android.support.v7.app.AlertDialog;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.injection.config.AppComponent;
+import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.LocaleHelper;
@@ -43,14 +44,20 @@ public abstract class CollectAbstractActivity extends DaggerAppCompatActivity {
     protected GeneralSharedPreferences generalSharedPreferences;
     @Inject
     protected AdminSharedPreferences adminSharedPreferences;
-    protected ThemeUtils themeUtils;
+    @Inject
+    ThemeUtils themeUtils;
+
     private boolean isInstanceStateSaved;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        themeUtils = new ThemeUtils(this);
-        setTheme(themeUtils.getAppTheme());
         super.onCreate(savedInstanceState);
+
+        if (this instanceof AdminPreferencesActivity) {
+            setTheme(themeUtils.getSettingsTheme());
+        } else {
+            setTheme(themeUtils.getAppTheme());
+        }
 
         /*
          * If a user has revoked the storage permission then this check ensures the app doesn't quit unexpectedly and

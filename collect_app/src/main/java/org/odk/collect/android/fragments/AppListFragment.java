@@ -14,6 +14,7 @@ limitations under the License.
 
 package org.odk.collect.android.fragments;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.preference.PreferenceManager;
 import android.support.design.widget.BottomSheetDialog;
@@ -44,6 +45,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import dagger.android.support.AndroidSupportInjection;
 import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
@@ -58,6 +62,15 @@ abstract class AppListFragment extends ListFragment {
     private Integer selectedSortingOrder;
     private BottomSheetDialog bottomSheetDialog;
     private String filterText;
+
+    @Inject
+    ThemeUtils themeUtils;
+
+    @Override
+    public void onAttach(Context context) {
+        AndroidSupportInjection.inject(this);
+        super.onAttach(context);
+    }
 
     // toggles to all checked or all unchecked
     // returns:
@@ -172,11 +185,11 @@ abstract class AppListFragment extends ListFragment {
             return;
         }
 
-        bottomSheetDialog = new BottomSheetDialog(activity, new ThemeUtils(getContext()).getBottomDialogTheme());
+        bottomSheetDialog = new BottomSheetDialog(activity, themeUtils.getBottomDialogTheme());
         View sheetView = getActivity().getLayoutInflater().inflate(R.layout.bottom_sheet, null);
         final RecyclerView recyclerView = sheetView.findViewById(R.id.recyclerView);
 
-        final SortDialogAdapter adapter = new SortDialogAdapter(getActivity(), recyclerView, sortingOptions, getSelectedSortingOrder(), new RecyclerViewClickListener() {
+        final SortDialogAdapter adapter = new SortDialogAdapter(getActivity(), themeUtils, recyclerView, sortingOptions, getSelectedSortingOrder(), new RecyclerViewClickListener() {
             @Override
             public void onItemClicked(SortDialogAdapter.ViewHolder holder, int position) {
                 holder.updateItemColor(selectedSortingOrder);

@@ -31,8 +31,10 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_APP_THEME;
 public class ThemeUtilsTests extends DaggerTest {
 
     private final int[] attrs;
-    private ThemeUtils themeUtils;
     private MainMenuActivity mainMenuActivity;
+
+    @Inject
+    ThemeUtils themeUtils;
 
     @Inject
     GeneralSharedPreferences generalSharedPreferences;
@@ -55,7 +57,6 @@ public class ThemeUtilsTests extends DaggerTest {
     @Before
     public void setUp() {
         mainMenuActivity = Robolectric.setupActivity(MainMenuActivity.class);
-        themeUtils = new ThemeUtils(mainMenuActivity);
     }
 
     @Test

@@ -37,10 +37,12 @@ public class SortDialogAdapter extends RecyclerView.Adapter<SortDialogAdapter.Vi
     private final int selectedSortingOrder;
     private final RecyclerView recyclerView;
     private final ThemeUtils themeUtils;
+    private final Context context;
     private final String[] sortList;
 
-    public SortDialogAdapter(Context context, RecyclerView recyclerView, String[] sortList, int selectedSortingOrder, RecyclerViewClickListener recyclerViewClickListener) {
-        themeUtils = new ThemeUtils(context);
+    public SortDialogAdapter(Context context, ThemeUtils themeUtils, RecyclerView recyclerView, String[] sortList, int selectedSortingOrder, RecyclerViewClickListener recyclerViewClickListener) {
+        this.context = context;
+        this.themeUtils = themeUtils;
         this.recyclerView = recyclerView;
         this.sortList = sortList;
         this.selectedSortingOrder = selectedSortingOrder;
@@ -58,7 +60,7 @@ public class SortDialogAdapter extends RecyclerView.Adapter<SortDialogAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         viewHolder.txtViewTitle.setText(sortList[position]);
-        int color = position == selectedSortingOrder ? themeUtils.getAccentColor() : themeUtils.getPrimaryTextColor();
+        int color = position == selectedSortingOrder ? themeUtils.getAccentColor(context) : themeUtils.getPrimaryTextColor(context);
         viewHolder.txtViewTitle.setTextColor(color);
         try {
             viewHolder.imgViewIcon.setImageResource(ApplicationConstants.getSortLabelToIconMap().get(sortList[position]));
@@ -96,11 +98,11 @@ public class SortDialogAdapter extends RecyclerView.Adapter<SortDialogAdapter.Vi
 
         public void updateItemColor(int selectedSortingOrder) {
             ViewHolder previousHolder = (ViewHolder) recyclerView.findViewHolderForAdapterPosition(selectedSortingOrder);
-            previousHolder.txtViewTitle.setTextColor(themeUtils.getPrimaryTextColor());
-            txtViewTitle.setTextColor(themeUtils.getAccentColor());
+            previousHolder.txtViewTitle.setTextColor(themeUtils.getPrimaryTextColor(context));
+            txtViewTitle.setTextColor(themeUtils.getAccentColor(context));
             try {
                 DrawableCompat.setTintList(previousHolder.imgViewIcon.getDrawable(), null);
-                DrawableCompat.setTint(imgViewIcon.getDrawable(), themeUtils.getAccentColor());
+                DrawableCompat.setTint(imgViewIcon.getDrawable(), themeUtils.getAccentColor(context));
             } catch (NullPointerException e) {
                 Timber.i(e);
             }

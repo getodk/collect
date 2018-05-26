@@ -294,7 +294,7 @@ abstract class AppListActivity extends CollectAbstractActivity {
         final View sheetView = getLayoutInflater().inflate(R.layout.bottom_sheet, null);
         final RecyclerView recyclerView = sheetView.findViewById(R.id.recyclerView);
 
-        final SortDialogAdapter adapter = new SortDialogAdapter(this, recyclerView, sortingOptions, getSelectedSortingOrder(), new RecyclerViewClickListener() {
+        final SortDialogAdapter adapter = new SortDialogAdapter(this, themeUtils, recyclerView, sortingOptions, getSelectedSortingOrder(), new RecyclerViewClickListener() {
             @Override
             public void onItemClicked(SortDialogAdapter.ViewHolder holder, int position) {
                 holder.updateItemColor(selectedSortingOrder);

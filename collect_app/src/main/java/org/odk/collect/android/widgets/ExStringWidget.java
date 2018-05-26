@@ -119,7 +119,7 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
         answer.setLayoutParams(params);
         textBackground = answer.getBackground();
         answer.setBackground(null);
-        answer.setTextColor(themeUtils.getPrimaryTextColor());
+        answer.setTextColor(themeUtils.getPrimaryTextColor(getContext()));
 
         // capitalize nothing
         answer.setKeyListener(new TextKeyListener(Capitalize.NONE, false));

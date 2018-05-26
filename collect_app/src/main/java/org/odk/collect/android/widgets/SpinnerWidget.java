@@ -227,7 +227,8 @@ public class SpinnerWidget extends QuestionWidget implements MultiChoiceWidget {
             if (position == (items.length - 1) && spinner.getSelectedItemPosition() == position) {
                 tv.setEnabled(false);
             } else {
-                tv.setTextColor(spinner.getSelectedItemPosition() == position ? themeUtils.getAccentColor() : themeUtils.getPrimaryTextColor());
+                tv.setTextColor(spinner.getSelectedItemPosition() == position ?
+                        themeUtils.getAccentColor(getContext()) : themeUtils.getPrimaryTextColor(getContext()));
             }
 
             return convertView;

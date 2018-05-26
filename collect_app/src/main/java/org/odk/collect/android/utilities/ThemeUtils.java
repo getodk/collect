@@ -27,18 +27,22 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 
+import javax.inject.Inject;
+
 public final class ThemeUtils {
 
-    private final Context context;
-    private final GeneralSharedPreferences generalSharedPreferences;
+    @Inject
+    GeneralSharedPreferences generalSharedPreferences;
+    @Inject
+    Context context;
 
-    /**
-     * @param context Should only be an activity's context. This is because application context
-     *                is unaware of current activity's theme/attributes
-     */
-    public ThemeUtils(Context context) {
-        this.context = context;
-        generalSharedPreferences = new GeneralSharedPreferences(context);
+    @Inject
+    public ThemeUtils() {
+    }
+
+    public boolean isDarkTheme() {
+        String theme = (String) generalSharedPreferences.get(PreferenceKeys.KEY_APP_THEME);
+        return theme.equals(context.getString(R.string.app_theme_dark));
     }
 
     @StyleRes
@@ -81,43 +85,42 @@ public final class ThemeUtils {
                 android.R.style.Theme_Holo_Light_Dialog;
     }
 
-    private int getAttributeValue(@AttrRes int resId) {
-        TypedValue outValue = new TypedValue();
-        context.getTheme().resolveAttribute(resId, outValue, true);
-        return outValue.data;
-    }
-
     public int getAccountPickerTheme() {
         return isDarkTheme() ? 0 : 1;
     }
 
-    public boolean isDarkTheme() {
-        String theme = (String) generalSharedPreferences.get(PreferenceKeys.KEY_APP_THEME);
-        return theme.equals(context.getString(R.string.app_theme_dark));
+    /**
+     * @param context Should only be an activity's context. This is because application context
+     *                is unaware of current activity's theme/attributes.
+     */
+    private int getAttributeValue(Context context, @AttrRes int resId) {
+        TypedValue outValue = new TypedValue();
+        context.getTheme().resolveAttribute(resId, outValue, true);
+        return outValue.data;
     }
 
     /**
      * @return Text color for the current {@link android.content.res.Resources.Theme}
      */
     @ColorInt
-    public int getPrimaryTextColor() {
-        return getAttributeValue(R.attr.primaryTextColor);
+    public int getPrimaryTextColor(Context context) {
+        return getAttributeValue(context, R.attr.primaryTextColor);
     }
 
     /**
      * @return Accent color for the current {@link android.content.res.Resources.Theme}
      */
     @ColorInt
-    public int getAccentColor() {
-        return getAttributeValue(R.attr.colorAccent);
+    public int getAccentColor(Context context) {
+        return getAttributeValue(context, R.attr.colorAccent);
     }
 
     /**
      * @return Icon color for the current {@link android.content.res.Resources.Theme}
      */
     @ColorInt
-    public int getIconColor() {
-        return getAttributeValue(R.attr.iconColor);
+    public int getIconColor(Context context) {
+        return getAttributeValue(context, R.attr.iconColor);
     }
 
     /**

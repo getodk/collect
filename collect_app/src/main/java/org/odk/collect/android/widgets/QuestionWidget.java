@@ -89,19 +89,19 @@ public abstract class QuestionWidget
     private static final String GUIDANCE_EXPANDED_STATE = "expanded_state";
     private AtomicBoolean expanded;
     private Bundle state;
-    protected ThemeUtils themeUtils;
     private int playColor;
 
     @Inject
     protected GeneralSharedPreferences generalSharedPreferences;
+    @Inject
+    protected ThemeUtils themeUtils;
 
     public QuestionWidget(Context context, FormEntryPrompt prompt) {
         super(context);
 
         ((Collect) context.getApplicationContext()).getAppComponent().inject(this);
 
-        themeUtils = new ThemeUtils(context);
-        playColor = themeUtils.getAccentColor();
+        playColor = themeUtils.getAccentColor(getContext());
 
         if (context instanceof FormEntryActivity) {
             state = ((FormEntryActivity) context).getState();
@@ -219,7 +219,7 @@ public abstract class QuestionWidget
 
         guidanceTextView.setText(TextUtils.textToHtml(guidance));
 
-        guidanceTextView.setTextColor(themeUtils.getPrimaryTextColor());
+        guidanceTextView.setTextColor(themeUtils.getPrimaryTextColor(getContext()));
         guidanceTextView.setMovementMethod(LinkMovementMethod.getInstance());
         return guidanceTextView;
     }
@@ -255,7 +255,7 @@ public abstract class QuestionWidget
         questionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getQuestionFontSize());
         questionText.setTypeface(null, Typeface.BOLD);
         questionText.setPadding(0, 0, 0, 7);
-        questionText.setTextColor(themeUtils.getPrimaryTextColor());
+        questionText.setTextColor(themeUtils.getPrimaryTextColor(getContext()));
         questionText.setText(TextUtils.textToHtml(FormEntryPromptUtils.markQuestionIfIsRequired(promptText, prompt.isRequired())));
         questionText.setMovementMethod(LinkMovementMethod.getInstance());
 
@@ -437,7 +437,7 @@ public abstract class QuestionWidget
             } else {
                 helpText.setText(TextUtils.textToHtml(s));
             }
-            helpText.setTextColor(themeUtils.getPrimaryTextColor());
+            helpText.setTextColor(themeUtils.getPrimaryTextColor(getContext()));
             helpText.setMovementMethod(LinkMovementMethod.getInstance());
             return helpText;
         } else {
@@ -564,7 +564,7 @@ public abstract class QuestionWidget
         TextView textView = new TextView(getContext());
 
         textView.setId(R.id.answer_text);
-        textView.setTextColor(themeUtils.getPrimaryTextColor());
+        textView.setTextColor(themeUtils.getPrimaryTextColor(getContext()));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         textView.setPadding(20, 20, 20, 20);
         textView.setText(text);

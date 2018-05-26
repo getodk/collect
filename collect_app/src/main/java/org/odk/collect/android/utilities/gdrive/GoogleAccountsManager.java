@@ -74,12 +74,12 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
     private DriveHelper driveHelper;
     private SheetsHelper sheetsHelper;
     private GoogleAccountCredential credential;
+    private boolean autoChooseAccount = true;
 
     @Inject
-    protected GeneralSharedPreferences preferences;
-
     protected ThemeUtils themeUtils;
-    private boolean autoChooseAccount = true;
+    @Inject
+    protected GeneralSharedPreferences preferences;
 
     public GoogleAccountsManager(@NonNull Activity activity) {
         this.activity = activity;
@@ -120,7 +120,6 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
                 .setBackOff(new ExponentialBackOff());
 
         intentChooseAccount = credential.newChooseAccountIntent();
-        themeUtils = new ThemeUtils(context);
     }
 
     public void setSelectedAccountName(String accountName) {

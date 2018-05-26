@@ -1,5 +1,7 @@
 package org.odk.collect.android.injection;
 
+import org.odk.collect.android.fragments.DataManagerList;
+import org.odk.collect.android.fragments.FormManagerList;
 import org.odk.collect.android.fragments.ShowQRCodeFragment;
 import org.odk.collect.android.injection.config.scopes.PerActivity;
 
@@ -16,4 +18,11 @@ public abstract class FragmentBuilder {
     @ContributesAndroidInjector
     abstract ShowQRCodeFragment showQRCodeFragment();
 
+    @PerActivity
+    @ContributesAndroidInjector
+    abstract FormManagerList formManagerList();
+
+    @PerActivity
+    @ContributesAndroidInjector
+    abstract DataManagerList dataManagerList();
 }
