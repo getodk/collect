@@ -90,7 +90,7 @@ jobs:
         - run:
             name: Download dependencies
             command: ./gradlew androidDependencies
-        # Run code quality checks
+        # Run code quality checks, one at a time, to enable individual performance measurements (in the build log)
         - run: ./gradlew pmd
         - run: ./gradlew checkstyle
         - run: ./gradlew lint
@@ -115,8 +115,8 @@ jobs:
     <<: *android_config
     steps:
         - checkout
-        - *restore_cache
-##      Perhaps we should remove the above restoration since the below one includes it?
+##        - *restore_cache
+##      Depending on actual usage, we could toggle the above cache restoration (the step below includes it..)
         - *restore_tests_cache
         - *accept_licenses
         - run:
@@ -204,14 +204,18 @@ workflows:
   version: 2
   workflow:
     jobs:
-      # This job will run on every commit on the master branch
+#     This job will run on every commit on any branch
       - build_debug:
           filters:
             branches:
               only: /^.*$/
               #only: /(master|(COLLECT)\-([0-9])+(.*))/
-      # Unit tests should only start after a successful build. Or vice versa?
+#       Unit tests should only start after a successful build. Or vice versa?
       - test_unit:
+#         Although the unit testing task could run in parallel with build task,
+#         in such case, it would not benefit from the previous caching in the event of
+#         any change in the .gradle script files.
+#         Hence,
           requires:
             - build_debug
           filters:
