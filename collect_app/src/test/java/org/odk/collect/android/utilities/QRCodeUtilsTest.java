@@ -39,7 +39,7 @@ import static org.odk.collect.android.utilities.QRCodeUtils.QR_CODE_FILEPATH;
 @RunWith(RobolectricTestRunner.class)
 public class QRCodeUtilsTest extends DaggerTest {
 
-    private static final String DEFAULT_SHARED_PREF_AFTER_APP_LOAD = "{\"general\":{\"metadata_migrated\":true},\"admin\":{}}";
+    private static final String DEFAULT_SHARED_PREF_AFTER_APP_LOAD = "{\"general\":{},\"admin\":{}}";
     private final File savedQrCodeImage = new File(QR_CODE_FILEPATH);
     private final File md5File = new File(MD5_CACHE_PATH);
 

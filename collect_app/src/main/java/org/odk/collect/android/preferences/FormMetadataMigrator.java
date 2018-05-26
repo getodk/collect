@@ -29,7 +29,7 @@ public class FormMetadataMigrator {
      * Migrates the form metadata if it hasn’t already been done
      */
     public static void migrate(GeneralSharedPreferences generalSharedPreferences) {
-        boolean migrationAlreadyDone = (boolean) generalSharedPreferences.get(KEY_METADATA_MIGRATED);
+        boolean migrationAlreadyDone = generalSharedPreferences.getBoolean(KEY_METADATA_MIGRATED, false);
         Timber.i("migrate called, %s",
                 (migrationAlreadyDone ? "migration already done" : "will migrate"));
 
