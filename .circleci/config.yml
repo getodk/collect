@@ -66,8 +66,6 @@ references:
 
   android_config: &android_config
     working_directory: *workspace
-    environment:
-        GRADLE_OPTS: '-Dorg.gradle.parallel=true'
     docker:
       # This needs to be in line with the configuration from gradle file.
       # Otherwise an unnecessary platform update is performed on every build
