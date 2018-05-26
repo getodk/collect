@@ -10,18 +10,18 @@ references:
       - ~/.m2
 
   cache_key: &cache_key
-    key: dependencies-{{ checksum "build.gradle" }}-{{ checksum "collect_app/build.gradle" }}
+    key: deps-{{ checksum "build.gradle" }}-{{ checksum "collect_app/build.gradle" }}
 
   cache_tests_key: &cache_tests_key
-    key: test-dependencies-{{ checksum "build.gradle" }}-{{ checksum "collect_app/build.gradle" }}
+    key: test-deps-{{ checksum "build.gradle" }}-{{ checksum "collect_app/build.gradle" }}
 
   restore_cache: &restore_cache
     restore_cache:
-      <<: *cache_tests_key
+      <<: *cache_key
 
   restore_tests_cache: &restore_tests_cache
     restore_cache:
-      <<: *cache_key
+      <<: *cache_tests_key
 
   save_cache: &save_cache
     save_cache:
@@ -112,6 +112,7 @@ jobs:
     steps:
         - checkout
         - *restore_cache
+##      Perhaps we should remove the above restoration since the below one includes it?
         - *restore_tests_cache
         - *accept_licenses
         - run:
