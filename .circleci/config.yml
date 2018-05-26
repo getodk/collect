@@ -70,7 +70,7 @@ references:
 #        GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xms1536m -Xmx4096m -XX:+HeapDumpOnOutOfMemoryError"'
         GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xms1536m -Xmx4096m -XX:+HeapDumpOnOutOfMemoryError" -Dorg.gradle.parallel=true'
     docker:
-      - image: circleci/android:api-26-alpha
+      - image: circleci/android:api-27-alpha
   gcloud_config: &gcloud_config
     working_directory: *workspace
     docker:
