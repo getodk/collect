@@ -14,17 +14,14 @@ import android.net.Uri;
 import android.os.Environment;
 import android.support.v4.content.LocalBroadcastManager;
 
-import org.odk.collect.android.listeners.FormDownloaderListener;
+import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 
 import android.support.v4.app.NotificationCompat;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dao.FormsDao;
-import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.tasks.ServerPollingJob;
-import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.listeners.TaskDownloaderListener;
 import org.odk.collect.android.logic.FormDetails;
@@ -34,24 +31,18 @@ import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.tasks.DownloadTasksTask;
 
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.tasks.InstanceGoogleSheetsUploader;
-import org.odk.collect.android.tasks.InstanceServerUploader;
 import org.odk.collect.android.utilities.Utilities;
-import org.odk.collect.android.utilities.WebUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Set;
 
 import timber.log.Timber;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_SEND;
 
 public class NetworkReceiver extends BroadcastReceiver implements TaskDownloaderListener,
         InstanceUploaderListener,
-        FormDownloaderListener {  // smap implement task, instance, form list
+        DownloadFormsTaskListener {  // smap implement task, instance, form list
 
     // turning on wifi often gets two CONNECTED events. we only want to run one thread at a time
     public static boolean running = false;
@@ -170,8 +161,23 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
         // Refresh task list
         Intent intent = new Intent("org.smap.smapTask.refresh");
         LocalBroadcastManager.getInstance(Collect.getInstance()).sendBroadcast(intent);
-
     }
+
+    @Override
+    public void formsDownloadingComplete(HashMap<FormDetails, String> result) {
+        // Refresh task list
+        Intent intent = new Intent("org.smap.smapTask.refresh");
+        LocalBroadcastManager.getInstance(Collect.getInstance()).sendBroadcast(intent);
+    }
+
+    @Override
+    public void formsDownloadingCancelled() {
+        // Refresh task list
+        Intent intent = new Intent("org.smap.smapTask.refresh");
+        LocalBroadcastManager.getInstance(Collect.getInstance()).sendBroadcast(intent);
+    }
+
+
 
     /* smap comment out upload forms
     private void uploadForms(Context context, boolean isFormAutoSendOptionEnabled) {
@@ -390,14 +396,11 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
     }
 
     @Override
-    public void progressUpdate(String currentFile, String progress, String total) {
+    public void progressUpdate(String currentFile, int progress, int total) {
       // do nothing
     }
 
-    @Override
-    public boolean isTaskCanceled() {
-        return false;
-    }
+
 
     @Override
     public void authRequest(Uri url, HashMap<String, String> doneSoFar) {
