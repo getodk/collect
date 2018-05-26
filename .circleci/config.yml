@@ -50,8 +50,8 @@ references:
 
   android_config: &android_config
     working_directory: *workspace
-    environment:
-        GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xms1536m -Xmx4096m -XX:+HeapDumpOnOutOfMemoryError"'
+#    environment:
+#        GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xms1536m -Xmx4096m -XX:+HeapDumpOnOutOfMemoryError"'
 #        GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xms1536m -Xmx4096m -XX:+HeapDumpOnOutOfMemoryError" -Dorg.gradle.parallel=true'
     docker:
       - image: circleci/android:api-26-alpha
