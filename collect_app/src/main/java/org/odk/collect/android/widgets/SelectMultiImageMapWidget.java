@@ -23,6 +23,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 
 import java.util.List;
 
@@ -38,6 +39,7 @@ public class SelectMultiImageMapWidget extends SelectImageMapWidget {
             selections = (List<Selection>) getFormEntryPrompt().getAnswerValue().getValue();
             refreshSelectedItemsLabel();
         }
+        SpacesInUnderlyingValuesWarning.forQuestionWidget(this).renderWarningIfNecessary(items);
     }
 
     @Override
