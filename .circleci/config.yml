@@ -100,9 +100,12 @@ jobs:
             path: collect_app/build/reports
             destination: reports
         - run:
-            name: Assemble debug and test builds
+            name: Assemble debug build
             command: |
                 ./gradlew assembleDebug -PdisablePreDex
+        - run:
+            name: Assemble test build
+            command: |
                 ./gradlew assembleDebugAndroidTest -PdisablePreDex
         - *persist_debug_workspace
 
