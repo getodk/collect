@@ -3,19 +3,35 @@ version: 2
 references:
 
   ## Cache
+  cache_paths: &cache_paths
+    paths:
+      - ~/work/.gradle
+      - ~/.gradle
+      - ~/.m2
 
   cache_key: &cache_key
     key: dependencies-{{ checksum "build.gradle" }}-{{ checksum "collect_app/build.gradle" }}
+
+  cache_tests_key: &cache_tests_key
+    key: test-dependencies-{{ checksum "build.gradle" }}-{{ checksum "collect_app/build.gradle" }}
+
   restore_cache: &restore_cache
     restore_cache:
+      <<: *cache_tests_key
+
+  restore_tests_cache: &restore_tests_cache
+    restore_cache:
       <<: *cache_key
+
   save_cache: &save_cache
     save_cache:
       <<: *cache_key
-      paths:
-        - ~/work/.gradle
-        - ~/.gradle
-        - ~/.m2
+      <<: *cache_paths
+
+  save_test_cache: &save_test_cache
+    save_cache:
+      <<: *cache_tests_key
+      <<: *cache_paths
 
   accept_licenses : &accept_licenses
     run:
@@ -96,6 +112,7 @@ jobs:
     steps:
         - checkout
         - *restore_cache
+        - *restore_tests_cache
         - *accept_licenses
         - run:
             name: Download dependencies
@@ -103,7 +120,7 @@ jobs:
         - run:
             name: Run unit tests
             command: ./gradlew testDebugUnitTest
-        - *save_cache
+        - *save_tests_cache
         - *persist_debug_workspace
         - store_artifacts:
             path: collect_app/build/reports
@@ -188,14 +205,14 @@ workflows:
             branches:
               only: /^.*$/
               #only: /(master|(COLLECT)\-([0-9])+(.*))/
-      # Unit tests should only start after a successful build
+      # Unit tests should only start after a successful build. Or vice versa?
       - test_unit:
           requires:
             - build_debug
           filters:
             branches:
               only: master
-      # Instrumentation tests should only start after unit tests complete gracefully
+      # Instrumentation tests should only start after unit tests complete gracefully. Or vice versa?
       - test_instrumented:
           requires:
             - test_unit
