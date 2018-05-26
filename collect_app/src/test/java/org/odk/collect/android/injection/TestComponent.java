@@ -7,6 +7,7 @@ import org.odk.collect.android.injection.config.AppComponent;
 import org.odk.collect.android.injection.config.scopes.PerApplication;
 import org.odk.collect.android.sms.SmsSenderJobTest;
 import org.odk.collect.android.sms.SmsServiceTest;
+import org.odk.collect.android.utilities.QRCodeUtilsTest;
 
 import dagger.BindsInstance;
 import dagger.Component;
@@ -20,6 +21,12 @@ import dagger.android.support.AndroidSupportInjectionModule;
 })
 public interface TestComponent extends AppComponent {
 
+    void inject(QRCodeUtilsTest qrCodeUtilsTest);
+
+    void inject(SmsSenderJobTest smsSenderJobTest);
+
+    void inject(SmsServiceTest smsServiceTest);
+
     @Component.Builder
     interface Builder {
 
@@ -28,8 +35,4 @@ public interface TestComponent extends AppComponent {
 
         TestComponent build();
     }
-
-    void inject(SmsSenderJobTest smsSenderJobTest);
-
-    void inject(SmsServiceTest smsServiceTest);
 }

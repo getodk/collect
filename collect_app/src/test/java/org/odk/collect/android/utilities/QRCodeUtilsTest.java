@@ -10,11 +10,10 @@ import com.google.zxing.WriterException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.DaggerTest;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,6 +25,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.zip.DataFormatException;
 
+import javax.inject.Inject;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -36,14 +37,25 @@ import static org.odk.collect.android.utilities.QRCodeUtils.QR_CODE_FILEPATH;
 
 
 @RunWith(RobolectricTestRunner.class)
-public class QRCodeUtilsTest {
+public class QRCodeUtilsTest extends DaggerTest {
 
+    private static final String DEFAULT_SHARED_PREF_AFTER_APP_LOAD = "{\"general\":{\"metadata_migrated\":true},\"admin\":{}}";
     private final File savedQrCodeImage = new File(QR_CODE_FILEPATH);
     private final File md5File = new File(MD5_CACHE_PATH);
-    private GeneralSharedPreferences generalSharedPreferences = new GeneralSharedPreferences(RuntimeEnvironment.application);
+
+    @Inject
+    GeneralSharedPreferences generalSharedPreferences;
+    @Inject
+    QRCodeUtils qrCodeUtils;
+
+    @Override
+    protected void injectDependencies() {
+        testComponent.inject(this);
+    }
 
     @Before
-    public void setup() {
+    public void setUp() {
+        super.setUp();
         generalSharedPreferences.loadDefaultPreferences();
         savedQrCodeImage.delete();
         md5File.delete();
@@ -69,20 +81,17 @@ public class QRCodeUtilsTest {
         assertTrue(savedQrCodeImage.exists());
         assertTrue(md5File.exists());
 
-        String expectedData = "{\"general\":{},\"admin\":{}}";
-        assertQRContains(generationResults.generatedBitmap.get(), expectedData);
+        assertQRContains(generationResults.generatedBitmap.get(), DEFAULT_SHARED_PREF_AFTER_APP_LOAD);
 
-        verifyCachedMd5Data(expectedData);
+        verifyCachedMd5Data(DEFAULT_SHARED_PREF_AFTER_APP_LOAD);
     }
 
     @Test
     public void readQRCodeFromDiskIfCacheExists() throws NoSuchAlgorithmException, IOException, WriterException {
-        String expectedData = "{\"general\":{},\"admin\":{}}";
-
         // stubbing cache and bitmap files
         new File(Collect.SETTINGS).mkdirs();
-        FileUtils.saveBitmapToFile(QRCodeUtils.generateQRBitMap(expectedData, 100), QR_CODE_FILEPATH);
-        FileUtils.write(md5File, getDigest(expectedData.getBytes()));
+        FileUtils.saveBitmapToFile(QRCodeUtils.generateQRBitMap(DEFAULT_SHARED_PREF_AFTER_APP_LOAD, 100), QR_CODE_FILEPATH);
+        FileUtils.write(md5File, getDigest(DEFAULT_SHARED_PREF_AFTER_APP_LOAD.getBytes()));
 
         // verify that QRCode and md5 cache files exist
         assertTrue(savedQrCodeImage.exists());
@@ -98,17 +107,19 @@ public class QRCodeUtilsTest {
         assertEquals(lastModifiedCache, md5File.lastModified());
         assertEquals(lastModifiedQRCode, savedQrCodeImage.lastModified());
 
-        verifyCachedMd5Data(expectedData);
+        verifyCachedMd5Data(DEFAULT_SHARED_PREF_AFTER_APP_LOAD);
     }
 
     public void generateQrCode(GenerationResults generationResults) {
         // subscribe to the QRCode generator in the same thread
 
-        AdminSharedPreferences adminSharedPreferences = new AdminSharedPreferences(RuntimeEnvironment.application);
-        SharedPreferencesUtils sharedPreferencesUtils = new SharedPreferencesUtils(adminSharedPreferences, generalSharedPreferences);
-        new QRCodeUtils(sharedPreferencesUtils)
+        qrCodeUtils
                 .getQRCodeGeneratorObservable(new ArrayList<>())
-                .subscribe(generationResults.generatedBitmap::set, generationResults.errorThrown::set, () -> generationResults.isFinished.set(true));
+                .subscribe(
+                        generationResults.generatedBitmap::set,
+                        generationResults.errorThrown::set,
+                        () -> generationResults.isFinished.set(true)
+                );
 
         generationResults.assertGeneratedOk();
     }
