@@ -40,15 +40,26 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
-public class ResetAppStateTestCase {
+public class ResetAppStateTestCase extends DaggerAndroidTest {
+
+    @Inject
+    ResetUtility resetUtility;
+
+    @Override
+    protected void injectDependencies() {
+        androidTestComponent.inject(this);
+    }
 
     @Before
-    public void setUp() throws IOException {
+    public void setUp() {
+        super.setUp();
         resetAppState(Arrays.asList(
                 ResetUtility.ResetAction.RESET_PREFERENCES, ResetUtility.ResetAction.RESET_INSTANCES,
                 ResetUtility.ResetAction.RESET_FORMS, ResetUtility.ResetAction.RESET_LAYERS,
@@ -119,7 +130,7 @@ public class ResetAppStateTestCase {
     }
 
     private void resetAppState(List<Integer> resetActions) {
-        List<Integer> failedResetActions = new ResetUtility().reset(resetActions);
+        List<Integer> failedResetActions = resetUtility.reset(resetActions);
         assertEquals(0, failedResetActions.size());
     }
 
