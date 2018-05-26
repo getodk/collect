@@ -5,6 +5,7 @@ import android.app.Application;
 
 import org.odk.collect.android.injection.config.AppComponent;
 import org.odk.collect.android.injection.config.scopes.PerApplication;
+import org.odk.collect.android.preferences.FormMetadataMigratorTest;
 import org.odk.collect.android.sms.SmsSenderJobTest;
 import org.odk.collect.android.sms.SmsServiceTest;
 import org.odk.collect.android.utilities.QRCodeUtilsTest;
@@ -26,6 +27,8 @@ public interface TestComponent extends AppComponent {
     void inject(SmsSenderJobTest smsSenderJobTest);
 
     void inject(SmsServiceTest smsServiceTest);
+
+    void inject(FormMetadataMigratorTest formMetadataMigratorTest);
 
     @Component.Builder
     interface Builder {

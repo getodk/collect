@@ -6,7 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.BuildConfig;
-import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.DaggerTest;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
+
+import javax.inject.Inject;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -31,9 +33,10 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
 /** Tests the FormMetadataFragment */
 @Config(constants = BuildConfig.class)
 @RunWith(RobolectricTestRunner.class)
-public class FormMetadataMigratorTest {
+public class FormMetadataMigratorTest extends DaggerTest {
 
-    private GeneralSharedPreferences sharedPreferences;
+    @Inject
+    GeneralSharedPreferences sharedPreferences;
     private final PrintStream printStream = System.out;
 
     /** The keys of preferences affected by the migration */
@@ -58,9 +61,14 @@ public class FormMetadataMigratorTest {
             {KEY_METADATA_EMAIL,            "an email--changed"},
     };
 
+    @Override
+    protected void injectDependencies() {
+        testComponent.inject(this);
+    }
+
     @Before
-    public void setUp() throws Exception {
-        sharedPreferences = new GeneralSharedPreferences(Collect.getInstance());
+    public void setUp() {
+        super.setUp();
     }
 
     @Test
