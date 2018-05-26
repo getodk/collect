@@ -4,16 +4,26 @@ import android.app.Activity;
 import android.preference.PreferenceActivity;
 
 import org.odk.collect.android.activities.AboutActivity;
+import org.odk.collect.android.activities.DrawActivity;
 import org.odk.collect.android.activities.EditFormHierarchyActivity;
 import org.odk.collect.android.activities.FileManagerTabs;
 import org.odk.collect.android.activities.FormChooserList;
 import org.odk.collect.android.activities.FormDownloadList;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.activities.GeoPointActivity;
+import org.odk.collect.android.activities.GeoPointMapActivity;
+import org.odk.collect.android.activities.GeoPointOsmMapActivity;
+import org.odk.collect.android.activities.GeoShapeGoogleMapActivity;
+import org.odk.collect.android.activities.GeoShapeOsmMapActivity;
+import org.odk.collect.android.activities.GeoTraceGoogleMapActivity;
+import org.odk.collect.android.activities.GeoTraceOsmMapActivity;
 import org.odk.collect.android.activities.GoogleDriveActivity;
 import org.odk.collect.android.activities.InstanceChooserList;
 import org.odk.collect.android.activities.InstanceUploaderActivity;
 import org.odk.collect.android.activities.InstanceUploaderList;
 import org.odk.collect.android.activities.MainMenuActivity;
+import org.odk.collect.android.activities.NotificationActivity;
+import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
 import org.odk.collect.android.activities.SplashScreenActivity;
 import org.odk.collect.android.activities.ViewFormHierarchyActivity;
 import org.odk.collect.android.activities.WebViewActivity;
@@ -102,4 +112,45 @@ public abstract class ActivityBuilder {
     @PerActivity
     @ContributesAndroidInjector
     abstract ViewFormHierarchyActivity viewFormHierarchyActivity();
+
+    @PerActivity
+    @ContributesAndroidInjector
+    abstract GeoPointActivity geoPointActivity();
+
+    @PerActivity
+    @ContributesAndroidInjector
+    abstract GeoPointMapActivity geoPointMapActivity();
+
+    @PerActivity
+    @ContributesAndroidInjector
+    abstract GeoPointOsmMapActivity geoPointOsmMapActivity();
+
+    @PerActivity
+    @ContributesAndroidInjector
+    abstract GeoShapeGoogleMapActivity geoShapeGoogleMapActivity();
+
+    @PerActivity
+    @ContributesAndroidInjector
+    abstract GeoShapeOsmMapActivity geoShapeOsmMapActivity();
+
+    @PerActivity
+    @ContributesAndroidInjector
+    abstract GeoTraceGoogleMapActivity geoTraceGoogleMapActivity();
+
+    @PerActivity
+    @ContributesAndroidInjector
+    abstract GeoTraceOsmMapActivity geoTraceOsmMapActivity();
+
+    @PerActivity
+    @ContributesAndroidInjector
+    abstract ScannerWithFlashlightActivity scannerWithFlashlightActivity();
+
+    @PerActivity
+    @ContributesAndroidInjector
+    abstract NotificationActivity notificationActivity();
+
+
+    @PerActivity
+    @ContributesAndroidInjector
+    abstract DrawActivity drawActivity();
 }
