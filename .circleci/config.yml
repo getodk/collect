@@ -51,6 +51,8 @@ references:
 
   android_config: &android_config
     working_directory: *workspace
+    environment:
+        GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xms1536m -Xmx3072m" -Dorg.gradle.parallel=true'
     docker:
       - image: circleci/android:api-26-alpha
   gcloud_config: &gcloud_config
