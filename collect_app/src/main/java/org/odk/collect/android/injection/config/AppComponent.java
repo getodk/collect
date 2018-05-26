@@ -6,8 +6,8 @@ import org.odk.collect.android.activities.InstanceUploaderList;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.fragments.DataManagerList;
-import org.odk.collect.android.fragments.ShowQRCodeFragment;
 import org.odk.collect.android.injection.ActivityBuilder;
+import org.odk.collect.android.injection.FragmentBuilder;
 import org.odk.collect.android.injection.config.scopes.PerApplication;
 import org.odk.collect.android.preferences.BasePreferenceFragment;
 import org.odk.collect.android.preferences.PreferencesActivity;
@@ -36,7 +36,8 @@ import dagger.android.support.AndroidSupportInjectionModule;
 @Component(modules = {
         AndroidSupportInjectionModule.class,
         AppModule.class,
-        ActivityBuilder.class
+        ActivityBuilder.class,
+        FragmentBuilder.class
 })
 public interface AppComponent extends AndroidInjector<Collect> {
 
@@ -45,8 +46,6 @@ public interface AppComponent extends AndroidInjector<Collect> {
     void inject(NetworkReceiver networkReceiver);
 
     void inject(PreferencesActivity preferencesActivity);
-
-    void inject(ShowQRCodeFragment showQRCodeFragment);
 
     void inject(GoogleAccountsManager googleAccountsManager);
 

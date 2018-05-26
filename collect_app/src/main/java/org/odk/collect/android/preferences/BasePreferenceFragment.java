@@ -1,5 +1,6 @@
 package org.odk.collect.android.preferences;
 
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
@@ -34,9 +35,9 @@ public class BasePreferenceFragment extends PreferenceFragment {
     LocaleHelper localeHelper;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onAttach(Context context) {
         ((Collect) getActivity().getApplicationContext()).getAppComponent().inject(this);
+        super.onAttach(context);
     }
 
     @Override

@@ -15,7 +15,6 @@ package org.odk.collect.android.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -64,6 +63,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import dagger.android.DaggerFragment;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -78,7 +78,7 @@ import static org.odk.collect.android.utilities.PermissionUtils.requestCameraPer
 import static org.odk.collect.android.utilities.QRCodeUtils.QR_CODE_FILEPATH;
 
 
-public class ShowQRCodeFragment extends Fragment {
+public class ShowQRCodeFragment extends DaggerFragment {
 
     private static final int SELECT_PHOTO = 111;
 
@@ -112,7 +112,6 @@ public class ShowQRCodeFragment extends Fragment {
         ((AdminPreferencesActivity) getActivity()).setSupportActionBar(toolbar);
         setHasOptionsMenu(true);
         setRetainInstance(true);
-        ((Collect) getActivity().getApplication()).getAppComponent().inject(this);
         generateCode();
         return view;
     }
