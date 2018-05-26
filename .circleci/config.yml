@@ -51,7 +51,7 @@ references:
   android_config: &android_config
     working_directory: *workspace
     environment:
-        GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xms1536m -Xmx4096m" -Dorg.gradle.parallel=true'
+        GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xms1536m -Xmx4096m -XX:+HeapDumpOnOutOfMemoryError" -Dorg.gradle.parallel=true'
     docker:
       - image: circleci/android:api-26-alpha
   gcloud_config: &gcloud_config
@@ -187,7 +187,8 @@ workflows:
       - build_debug:
           filters:
             branches:
-              only: /(master|(COLLECT)\-([0-9])+(.*))/
+              only: /^.*$/
+              #only: /(master|(COLLECT)\-([0-9])+(.*))/
       # Unit tests should only start after a successful build
       - test_unit:
           requires:
