@@ -28,7 +28,7 @@ references:
       <<: *cache_key
       <<: *cache_paths
 
-  save_test_cache: &save_test_cache
+  save_tests_cache: &save_tests_cache
     save_cache:
       <<: *cache_tests_key
       <<: *cache_paths
