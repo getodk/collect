@@ -135,7 +135,7 @@ public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWi
 
         if (items != null) {
             // check if any values have spaces
-            new SpacesInUnderlyingValuesWarning().renderWarningIfNecessary(items, answerLayout);
+            SpacesInUnderlyingValuesWarning.forQuestionWidget(this).renderWarningIfNecessary(items);
 
             for (int i = 0; i < items.size(); i++) {
                 CheckBox checkBox = createCheckBox(i);

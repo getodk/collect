@@ -4,16 +4,16 @@ import com.google.common.collect.Lists;
 import org.javarosa.core.model.SelectChoice;
 import org.junit.Before;
 import org.junit.Test;
-import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning.SpacesInUnderlyingValues;
+import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning.UnderlyingValuesChecker;
 
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning.SpacesInUnderlyingValuesImpl;
+import static org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning.SpacesInUnderlyingValues;
 
 public class SpacesInUnderlyingValuesTest {
 
-    private SpacesInUnderlyingValues subject;
+    private UnderlyingValuesChecker subject;
 
     @Before
     public void setUp() {
