@@ -94,19 +94,19 @@ public class AboutActivity extends CollectAbstractActivity implements
                 case 0:
                     websiteTabHelper.openUri(this, websiteUri);
                     break;
-                case 1:
-                    forumTabHelper.openUri(this, forumUri);
-                    break;
-                case 2:
-                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                    shareIntent.setType("text/plain");
-                    shareIntent.putExtra(Intent.EXTRA_TEXT,
-                            getString(R.string.tell_your_friends_msg) + " " + GOOGLE_PLAY_URL
-                                    + getPackageName());
-                    startActivity(Intent.createChooser(shareIntent,
-                            getString(R.string.tell_your_friends)));
-                    break;
-                case 3:
+                //case 1:   smap
+                //    forumTabHelper.openUri(this, forumUri);
+                //    break;
+                //case 2:
+                //    Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                //    shareIntent.setType("text/plain");
+                //    shareIntent.putExtra(Intent.EXTRA_TEXT,
+                //            getString(R.string.tell_your_friends_msg) + " " + GOOGLE_PLAY_URL
+                //                    + getPackageName());
+                //    startActivity(Intent.createChooser(shareIntent,
+                //            getString(R.string.tell_your_friends)));
+                //    break;
+                case 1:     // smap make this 1
                     boolean intentStarted = false;
                     try {
                         // Open the google play store app if present
