@@ -180,11 +180,22 @@ workflows:
   version: 2
   workflow:
     jobs:
-      - build_debug
-      - test_unit
-      - test_instrumented:
+      # This job will run on every commit on the master branch
+      - build_debug:
+          filters:
+            branches:
+              only: master
+      # Unit tests should start after a successful build
+      - test_unit:
           requires:
             - build_debug
+          filters:
+            branches:
+              only: master
+      # Instrumentation tests should only start after unit tests complete gracefully
+      - test_instrumented:
+          requires:
+            - test_unit
           # We'd like to also filter by username and remove the if/fi above, but username filtering is not supported in CircleCI
           filters:
             branches:
