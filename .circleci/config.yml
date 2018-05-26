@@ -78,7 +78,7 @@ jobs:
         - run: ./gradlew pmd
         - run: ./gradlew checkstyle
         - run: ./gradlew lint
-        - run: ./gradlew findbugs
+        - run: ./gradlew findbugs --stacktrace
         - store_artifacts:
             path: collect_app/build/reports
             destination: reports
