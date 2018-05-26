@@ -8,11 +8,13 @@ import org.odk.collect.android.ResetAppStateTestCase;
 import org.odk.collect.android.SharedPreferencesTest;
 import org.odk.collect.android.dao.FormsDaoTest;
 import org.odk.collect.android.injection.config.AppComponent;
+import org.odk.collect.android.injection.config.AppModule;
 import org.odk.collect.android.injection.config.scopes.PerApplication;
 import org.odk.collect.android.settings.QrCodeTest;
+import org.odk.collect.android.tasks.DownloadFormListTaskTest;
 import org.odk.collect.android.tasks.InstanceServerUploaderTest;
-import org.odk.collect.android.test.MockedServerTest;
 import org.odk.collect.android.utilities.ImageConverterTest;
+import org.odk.collect.android.utilities.WebUtilsTest;
 
 import dagger.BindsInstance;
 import dagger.Component;
@@ -21,8 +23,8 @@ import dagger.android.support.AndroidSupportInjectionModule;
 @PerApplication
 @Component(modules = {
         AndroidSupportInjectionModule.class,
-        AndroidTestModule.class,
-        ActivityBuilder.class
+        AppModule.class,
+        AndroidTestModule.class
 })
 public interface AndroidTestComponent extends AppComponent {
 
@@ -40,7 +42,9 @@ public interface AndroidTestComponent extends AppComponent {
 
     void inject(InstanceServerUploaderTest instanceServerUploaderTest);
 
-    void inject(MockedServerTest mockedServerTest);
+    void inject(WebUtilsTest webUtilsTest);
+
+    void inject(DownloadFormListTaskTest downloadFormListTaskTest);
 
     @Component.Builder
     interface Builder {

@@ -27,6 +27,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.injection.AndroidTestComponent;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.FormsProviderAPI;
@@ -53,13 +54,12 @@ public class ResetAppStateTestCase extends DaggerAndroidTest {
     ResetUtility resetUtility;
 
     @Override
-    protected void injectDependencies() {
+    protected void injectDependencies(AndroidTestComponent androidTestComponent) {
         androidTestComponent.inject(this);
     }
 
     @Before
     public void setUp() throws IOException {
-        super.setUp();
         resetAppState(Arrays.asList(
                 ResetUtility.ResetAction.RESET_PREFERENCES, ResetUtility.ResetAction.RESET_INSTANCES,
                 ResetUtility.ResetAction.RESET_FORMS, ResetUtility.ResetAction.RESET_LAYERS,

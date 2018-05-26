@@ -7,10 +7,8 @@ import android.telephony.SmsManager;
 
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
-import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.injection.config.scopes.PerApplication;
-import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.tasks.sms.SmsSubmissionManager;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.utilities.AgingCredentialsProvider;
@@ -19,7 +17,6 @@ import org.opendatakit.httpclientandroidlib.client.CredentialsProvider;
 import org.opendatakit.httpclientandroidlib.impl.client.BasicCookieStore;
 
 import dagger.Module;
-import dagger.Provides;
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -80,15 +77,4 @@ public class TestModule {
         return new BasicCookieStore();
     }
 
-    @PerApplication
-    @Provides
-    PropertyManager providePropertyManager(Context context) {
-        return new PropertyManager(context);
-    }
-
-    @PerApplication
-    @Provides
-    ActivityLogger provideActivityLogger(PropertyManager propertyManager) {
-        return new ActivityLogger(propertyManager.getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID));
-    }
 }

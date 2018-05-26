@@ -31,21 +31,15 @@ public abstract class MockedServerTest extends DaggerAndroidTest {
     @Inject
     GeneralSharedPreferences generalSharedPreferences;
 
-    @Override
-    protected void injectDependencies() {
-        androidTestComponent.inject(this);
-    }
-
     @Before
-    public void setUp() throws IOException {
-        super.setUp();
+    public void http_setUp() throws IOException {
         prefsBackup = backupPreferences(generalSharedPreferences);
 
         server = mockWebServer();
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void http_tearDown() throws Exception {
         if (server != null) {
             server.shutdown();
         }

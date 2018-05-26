@@ -1,6 +1,7 @@
 package org.odk.collect.android.tasks;
 
 import org.junit.Test;
+import org.odk.collect.android.injection.AndroidTestComponent;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.test.MockedServerTest;
 
@@ -14,6 +15,11 @@ import static org.junit.Assert.assertNull;
 import static org.odk.collect.android.test.TestUtils.assertMatches;
 
 public class DownloadFormListTaskTest extends MockedServerTest {
+
+    @Override
+    protected void injectDependencies(AndroidTestComponent androidTestComponent) {
+        androidTestComponent.inject(this);
+    }
 
     @Test
     public void shouldProcessAndReturnAFormList() throws Exception {

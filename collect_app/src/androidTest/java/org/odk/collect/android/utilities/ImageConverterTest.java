@@ -28,6 +28,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.DaggerAndroidTest;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.injection.AndroidTestComponent;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.widgets.ImageWidget;
 
@@ -57,13 +58,12 @@ public class ImageConverterTest extends DaggerAndroidTest {
     ImageConverter imageConverter;
 
     @Override
-    protected void injectDependencies() {
+    protected void injectDependencies(AndroidTestComponent androidTestComponent) {
         androidTestComponent.inject(this);
     }
 
     @Before
     public void setUp() throws IOException {
-        super.setUp();
         File wallpaperDirectory = new File(Collect.INSTANCES_PATH + File.separator + "testForm_2017-10-12_19-36-15" + File.separator);
         wallpaperDirectory.mkdirs();
     }

@@ -10,6 +10,7 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.DaggerTest;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
+import org.odk.collect.android.injection.TestComponent;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
@@ -47,13 +48,12 @@ public class ThemeUtilsTests extends DaggerTest {
     }
 
     @Override
-    protected void injectDependencies() {
+    protected void injectDependencies(TestComponent testComponent) {
         testComponent.inject(this);
     }
 
     @Before
     public void setUp() {
-        super.setUp();
         mainMenuActivity = Robolectric.setupActivity(MainMenuActivity.class);
         themeUtils = new ThemeUtils(mainMenuActivity);
     }

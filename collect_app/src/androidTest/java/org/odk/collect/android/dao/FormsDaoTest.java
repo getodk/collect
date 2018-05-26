@@ -26,6 +26,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.DaggerAndroidTest;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dto.Form;
+import org.odk.collect.android.injection.AndroidTestComponent;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.utilities.ResetUtility;
 
@@ -52,13 +53,12 @@ public class FormsDaoTest extends DaggerAndroidTest {
     ResetUtility resetUtility;
 
     @Override
-    protected void injectDependencies() {
+    protected void injectDependencies(AndroidTestComponent androidTestComponent) {
         androidTestComponent.inject(this);
     }
 
     @Before
     public void setUp() throws IOException {
-        super.setUp();
         resetAppState();
         fillDatabase();
     }

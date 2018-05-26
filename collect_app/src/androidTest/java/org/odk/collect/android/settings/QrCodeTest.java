@@ -23,10 +23,10 @@ import com.google.zxing.ChecksumException;
 import com.google.zxing.FormatException;
 import com.google.zxing.NotFoundException;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.DaggerAndroidTest;
+import org.odk.collect.android.injection.AndroidTestComponent;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.QRCodeUtils;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
@@ -63,13 +63,8 @@ public class QrCodeTest extends DaggerAndroidTest {
     QRCodeUtils qrCodeUtils;
 
     @Override
-    protected void injectDependencies() {
+    protected void injectDependencies(AndroidTestComponent androidTestComponent) {
         androidTestComponent.inject(this);
-    }
-
-    @Before
-    public void setUp() throws IOException {
-        super.setUp();
     }
 
     @Test

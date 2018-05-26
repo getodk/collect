@@ -20,6 +20,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.injection.AndroidTestComponent;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GuidanceHint;
 import org.odk.collect.android.preferences.PreferenceKeys;
@@ -62,7 +63,7 @@ public class GuidanceHintFormTest extends DaggerAndroidTest {
     GeneralSharedPreferences generalSharedPreferences;
 
     @Override
-    protected void injectDependencies() {
+    protected void injectDependencies(AndroidTestComponent androidTestComponent) {
         androidTestComponent.inject(this);
     }
 
@@ -90,7 +91,6 @@ public class GuidanceHintFormTest extends DaggerAndroidTest {
 
     @Before
     public void setUp() throws IOException {
-        super.setUp();
         FormEntryActivity activity = activityTestRule.getActivity();
         activity.setActivityAvailability(activityAvailability);
         activity.setShouldOverrideAnimations(true);

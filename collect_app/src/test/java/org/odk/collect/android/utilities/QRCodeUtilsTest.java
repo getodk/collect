@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.DaggerTest;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.injection.TestComponent;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.robolectric.RobolectricTestRunner;
 
@@ -49,13 +50,12 @@ public class QRCodeUtilsTest extends DaggerTest {
     QRCodeUtils qrCodeUtils;
 
     @Override
-    protected void injectDependencies() {
+    protected void injectDependencies(TestComponent testComponent) {
         testComponent.inject(this);
     }
 
     @Before
     public void setUp() {
-        super.setUp();
         generalSharedPreferences.loadDefaultPreferences();
         savedQrCodeImage.delete();
         md5File.delete();

@@ -18,15 +18,14 @@ package org.odk.collect.android;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.injection.AndroidTestComponent;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
 
-import java.io.IOException;
 import java.util.HashMap;
 
 import javax.inject.Inject;
@@ -46,13 +45,8 @@ public class SharedPreferencesTest extends DaggerAndroidTest {
     AdminSharedPreferences adminSharedPreferences;
 
     @Override
-    protected void injectDependencies() {
+    protected void injectDependencies(AndroidTestComponent androidTestComponent) {
         androidTestComponent.inject(this);
-    }
-
-    @Before
-    public void setUp() throws IOException {
-        super.setUp();
     }
 
     @Test

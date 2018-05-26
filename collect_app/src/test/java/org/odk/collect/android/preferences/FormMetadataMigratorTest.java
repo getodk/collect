@@ -2,11 +2,11 @@ package org.odk.collect.android.preferences;
 
 import android.annotation.SuppressLint;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.DaggerTest;
+import org.odk.collect.android.injection.TestComponent;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
@@ -62,13 +62,8 @@ public class FormMetadataMigratorTest extends DaggerTest {
     };
 
     @Override
-    protected void injectDependencies() {
+    protected void injectDependencies(TestComponent testComponent) {
         testComponent.inject(this);
-    }
-
-    @Before
-    public void setUp() {
-        super.setUp();
     }
 
     @Test

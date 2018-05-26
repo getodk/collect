@@ -3,6 +3,7 @@ package org.odk.collect.android.utilities;
 import org.junit.Before;
 import org.junit.Test;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.injection.AndroidTestComponent;
 import org.odk.collect.android.test.MockedServerTest;
 import org.opendatakit.httpclientandroidlib.client.HttpClient;
 import org.opendatakit.httpclientandroidlib.client.methods.HttpGet;
@@ -21,9 +22,13 @@ import static org.odk.collect.android.test.TestUtils.assertMatches;
 
 public class WebUtilsTest extends MockedServerTest {
 
+    @Override
+    protected void injectDependencies(AndroidTestComponent androidTestComponent) {
+        androidTestComponent.inject(this);
+    }
+
     @Before
     public void setUp() throws IOException {
-        super.setUp();
         // server hangs without a response queued:
         server.enqueue(new MockResponse());
     }
