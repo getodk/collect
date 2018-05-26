@@ -67,10 +67,10 @@ references:
   android_config: &android_config
     working_directory: *workspace
     environment:
-#        GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xms1536m -Xmx4096m -XX:+HeapDumpOnOutOfMemoryError"'
-#        GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xms1536m -Xmx4096m -XX:+HeapDumpOnOutOfMemoryError" -Dorg.gradle.parallel=true'
         GRADLE_OPTS: '-Dorg.gradle.parallel=true'
     docker:
+      # This needs to be in line with the configuration from gradle file.
+      # Otherwise an unnecessary platform update is performed on every build
       - image: circleci/android:api-27-alpha
   gcloud_config: &gcloud_config
     working_directory: *workspace
