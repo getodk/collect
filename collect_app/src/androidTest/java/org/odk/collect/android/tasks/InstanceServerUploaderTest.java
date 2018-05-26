@@ -12,6 +12,9 @@ import org.odk.collect.android.tasks.InstanceUploader.Outcome;
 import org.odk.collect.android.test.MockedServerTest;
 
 import java.io.File;
+import java.io.IOException;
+
+import javax.inject.Inject;
 
 import okhttp3.mockwebserver.RecordedRequest;
 
@@ -23,12 +26,19 @@ import static org.odk.collect.android.test.TestUtils.createTempFile;
 import static org.odk.collect.android.test.TestUtils.resetInstancesContentProvider;
 
 public class InstanceServerUploaderTest extends MockedServerTest {
-    private InstancesDao dao;
+
+    @Inject
+    InstancesDao dao;
+
+    @Override
+    protected void injectDependencies() {
+        androidTestComponent.inject(this);
+    }
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() throws IOException {
+        super.setUp();
         resetInstancesContentProvider();
-        dao = new InstancesDao();
     }
 
     @After

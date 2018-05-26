@@ -3,13 +3,18 @@ package org.odk.collect.android.test;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 
+import org.junit.After;
+import org.junit.Before;
+import org.odk.collect.android.DaggerAndroidTest;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.preferences.PreferenceKeys;
+
+import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import org.junit.After;
-import org.junit.Before;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import javax.inject.Inject;
 
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
@@ -18,26 +23,35 @@ import okhttp3.mockwebserver.RecordedRequest;
 import static org.odk.collect.android.test.TestUtils.backupPreferences;
 import static org.odk.collect.android.test.TestUtils.restorePreferences;
 
-public abstract class MockedServerTest {
+public abstract class MockedServerTest extends DaggerAndroidTest {
     private Map<String, ?> prefsBackup;
 
     protected MockWebServer server;
 
+    @Inject
+    GeneralSharedPreferences generalSharedPreferences;
+
+    @Override
+    protected void injectDependencies() {
+        androidTestComponent.inject(this);
+    }
+
     @Before
-    public void http_setUp() throws Exception {
-        prefsBackup = backupPreferences();
+    public void setUp() throws IOException {
+        super.setUp();
+        prefsBackup = backupPreferences(generalSharedPreferences);
 
         server = mockWebServer();
     }
 
     @After
-    public void http_tearDown() throws Exception {
+    public void tearDown() throws Exception {
         if (server != null) {
             server.shutdown();
         }
 
         if (prefsBackup != null) {
-            restorePreferences(prefsBackup);
+            restorePreferences(generalSharedPreferences, prefsBackup);
         }
     }
 
@@ -74,7 +88,7 @@ public abstract class MockedServerTest {
         return bob.toString();
     }
 
-    private static MockWebServer mockWebServer() throws Exception {
+    private static MockWebServer mockWebServer() throws IOException {
         MockWebServer server = new MockWebServer();
         server.start();
         configAppFor(server);

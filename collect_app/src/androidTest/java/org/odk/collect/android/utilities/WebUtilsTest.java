@@ -8,6 +8,7 @@ import org.opendatakit.httpclientandroidlib.client.HttpClient;
 import org.opendatakit.httpclientandroidlib.client.methods.HttpGet;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 
+import java.io.IOException;
 import java.net.URI;
 
 import okhttp3.mockwebserver.MockResponse;
@@ -19,8 +20,10 @@ import static org.junit.Assert.assertTrue;
 import static org.odk.collect.android.test.TestUtils.assertMatches;
 
 public class WebUtilsTest extends MockedServerTest {
+
     @Before
-    public void setUp() throws Exception {
+    public void setUp() throws IOException {
+        super.setUp();
         // server hangs without a response queued:
         server.enqueue(new MockResponse());
     }

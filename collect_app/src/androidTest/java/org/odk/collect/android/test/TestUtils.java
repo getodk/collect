@@ -28,13 +28,11 @@ public final class TestUtils {
     private TestUtils() {
     }
 
-    static Map<String, ?> backupPreferences() {
-        GeneralSharedPreferences generalSharedPreferences = new GeneralSharedPreferences(Collect.getInstance());
+    static Map<String, ?> backupPreferences(GeneralSharedPreferences generalSharedPreferences) {
         return Collections.unmodifiableMap(generalSharedPreferences.getAll());
     }
 
-    static void restorePreferences(Map<String, ?> backup) {
-        GeneralSharedPreferences generalSharedPreferences = new GeneralSharedPreferences(Collect.getInstance());
+    static void restorePreferences(GeneralSharedPreferences generalSharedPreferences, Map<String, ?> backup) {
         generalSharedPreferences.clear();
 
         for (Map.Entry<String, ?> e : backup.entrySet()) {

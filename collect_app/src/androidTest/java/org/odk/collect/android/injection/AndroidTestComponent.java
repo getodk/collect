@@ -10,6 +10,9 @@ import org.odk.collect.android.dao.FormsDaoTest;
 import org.odk.collect.android.injection.config.AppComponent;
 import org.odk.collect.android.injection.config.scopes.PerApplication;
 import org.odk.collect.android.settings.QrCodeTest;
+import org.odk.collect.android.tasks.InstanceServerUploaderTest;
+import org.odk.collect.android.test.MockedServerTest;
+import org.odk.collect.android.utilities.ImageConverterTest;
 
 import dagger.BindsInstance;
 import dagger.Component;
@@ -32,6 +35,12 @@ public interface AndroidTestComponent extends AppComponent {
     void inject(QrCodeTest qrCodeTest);
 
     void inject(GuidanceHintFormTest guidanceHintFormTest);
+
+    void inject(ImageConverterTest imageConverterTest);
+
+    void inject(InstanceServerUploaderTest instanceServerUploaderTest);
+
+    void inject(MockedServerTest mockedServerTest);
 
     @Component.Builder
     interface Builder {

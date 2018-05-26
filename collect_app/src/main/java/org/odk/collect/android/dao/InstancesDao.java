@@ -29,11 +29,18 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 /**
  * This class is used to encapsulate all access to the {@link org.odk.collect.android.provider.InstanceProvider#DATABASE_NAME}
  * For more information about this pattern go to https://en.wikipedia.org/wiki/Data_access_object
  */
 public class InstancesDao {
+
+    @Inject
+    public InstancesDao() {
+
+    }
 
     public Cursor getSentInstancesCursor() {
         String selection = InstanceProviderAPI.InstanceColumns.STATUS + " =? ";

@@ -9,6 +9,7 @@ import org.odk.collect.android.preferences.FormMetadataMigratorTest;
 import org.odk.collect.android.sms.SmsSenderJobTest;
 import org.odk.collect.android.sms.SmsServiceTest;
 import org.odk.collect.android.utilities.QRCodeUtilsTest;
+import org.odk.collect.android.utilities.ThemeUtilsTests;
 
 import dagger.BindsInstance;
 import dagger.Component;
@@ -29,6 +30,8 @@ public interface TestComponent extends AppComponent {
     void inject(SmsServiceTest smsServiceTest);
 
     void inject(FormMetadataMigratorTest formMetadataMigratorTest);
+
+    void inject(ThemeUtilsTests themeUtilsTests);
 
     @Component.Builder
     interface Builder {

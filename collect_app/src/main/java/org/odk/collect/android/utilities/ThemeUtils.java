@@ -32,6 +32,10 @@ public final class ThemeUtils {
     private final Context context;
     private final GeneralSharedPreferences generalSharedPreferences;
 
+    /**
+     * @param context Should only be an activity's context. This is because application context
+     *                is unaware of current activity's theme/attributes
+     */
     public ThemeUtils(Context context) {
         this.context = context;
         generalSharedPreferences = new GeneralSharedPreferences(context);

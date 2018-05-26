@@ -7,13 +7,15 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.BuildConfig;
+import org.odk.collect.android.DaggerTest;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
+
+import javax.inject.Inject;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotSame;
@@ -25,12 +27,14 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_APP_THEME;
 
 @Config(constants = BuildConfig.class)
 @RunWith(RobolectricTestRunner.class)
-public class ThemeUtilsTests {
+public class ThemeUtilsTests extends DaggerTest {
 
     private final int[] attrs;
     private ThemeUtils themeUtils;
     private MainMenuActivity mainMenuActivity;
-    private GeneralSharedPreferences generalSharedPreferences;
+
+    @Inject
+    GeneralSharedPreferences generalSharedPreferences;
 
     public ThemeUtilsTests() {
         attrs = new int[]{
@@ -42,10 +46,15 @@ public class ThemeUtilsTests {
         };
     }
 
+    @Override
+    protected void injectDependencies() {
+        testComponent.inject(this);
+    }
+
     @Before
-    public void setup() {
+    public void setUp() {
+        super.setUp();
         mainMenuActivity = Robolectric.setupActivity(MainMenuActivity.class);
-        generalSharedPreferences = new GeneralSharedPreferences(RuntimeEnvironment.application);
         themeUtils = new ThemeUtils(mainMenuActivity);
     }
 
