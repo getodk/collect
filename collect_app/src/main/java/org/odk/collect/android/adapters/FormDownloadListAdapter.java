@@ -47,6 +47,10 @@ public class FormDownloadListAdapter extends ArrayAdapter {
         this.formIdsToDetails = formIdsToDetails;
     }
 
+    public void setFromIdsToDetails(HashMap<String, FormDetails> formIdsToDetails) {
+        this.formIdsToDetails = formIdsToDetails;
+    }
+
     private class ViewHolder {
         TextView text1;
         TextView text2;
