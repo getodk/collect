@@ -129,6 +129,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import javax.inject.Inject;
+
 import timber.log.Timber;
 
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
@@ -242,6 +244,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private String waitingXPath;
     private boolean newForm = true;
     private boolean onResumeWasCalledWithoutPermissions;
+
+    @Inject
+    ImageConverter imageConverter;
 
     public void allowSwiping(boolean doSwipe) {
         this.doSwipe = doSwipe;
@@ -698,7 +703,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                  */
                 // The intent is empty, but we know we saved the image to the temp
                 // file
-                ImageConverter.execute(Collect.TMPFILE_PATH, getWidgetWaitingForBinaryData(), this);
+                imageConverter.execute(Collect.TMPFILE_PATH, getWidgetWaitingForBinaryData(), this);
                 File fi = new File(Collect.TMPFILE_PATH);
 
                 //revoke permissions granted to this file due its possible usage in
@@ -893,35 +898,34 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             String instanceFolder1 = instanceFile.getParent();
             String destImagePath = instanceFolder1 + File.separator + System.currentTimeMillis() + ".jpg";
 
-            File chosenImage;
-            try {
-                chosenImage = MediaUtils.getFileFromUri(this, selectedImage, Images.Media.DATA);
-                if (chosenImage != null) {
-                    final File newImage = new File(destImagePath);
-                    FileUtils.copyFile(chosenImage, newImage);
-                    ImageConverter.execute(newImage.getPath(), getWidgetWaitingForBinaryData(), this);
-                    runOnUiThread(() -> {
-                        dismissDialog(SAVING_IMAGE_DIALOG);
-                        if (getCurrentViewIfODKView() != null) {
-                            getCurrentViewIfODKView().setBinaryData(newImage);
-                        }
-                        saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                        refreshCurrentView();
-                    });
-                } else {
-                    runOnUiThread(() -> {
-                        dismissDialog(SAVING_IMAGE_DIALOG);
-                        Timber.e("Could not receive chosen image");
-                        ToastUtils.showShortToastInMiddle(R.string.error_occured);
-                    });
-                }
-            } catch (GDriveConnectionException e) {
+        File chosenImage;
+        try {
+            chosenImage = MediaUtils.getFileFromUri(this, selectedImage, Images.Media.DATA);
+            if (chosenImage != null) {
+                final File newImage = new File(destImagePath);
+                FileUtils.copyFile(chosenImage, newImage);
+                imageConverter.execute(newImage.getPath(), getWidgetWaitingForBinaryData(), this);
                 runOnUiThread(() -> {
                     dismissDialog(SAVING_IMAGE_DIALOG);
-                    Timber.e("Could not receive chosen image due to connection problem");
-                    ToastUtils.showLongToastInMiddle(R.string.gdrive_connection_exception);
+                    if (getCurrentViewIfODKView() != null) {
+                        getCurrentViewIfODKView().setBinaryData(newImage);
+                    }
+                    saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+                    refreshCurrentView();
+                });
+            } else {
+                runOnUiThread(() -> {
+                    dismissDialog(SAVING_IMAGE_DIALOG);
+                    Timber.e("Could not receive chosen image");
+                    ToastUtils.showShortToastInMiddle(R.string.error_occured);
                 });
             }
+        } catch (GDriveConnectionException e) {
+            runOnUiThread(() -> {
+                dismissDialog(SAVING_IMAGE_DIALOG);
+                Timber.e("Could not receive chosen image due to connection problem");
+                ToastUtils.showLongToastInMiddle(R.string.gdrive_connection_exception);
+            });}
         } else {
             ToastUtils.showLongToast(R.string.image_not_saved);
             Timber.w(getString(R.string.image_not_saved));

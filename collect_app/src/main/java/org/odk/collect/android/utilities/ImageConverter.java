@@ -29,6 +29,8 @@ import org.odk.collect.android.widgets.QuestionWidget;
 
 import java.io.IOException;
 
+import javax.inject.Inject;
+
 import timber.log.Timber;
 
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_IMAGE_SIZE;
@@ -36,15 +38,19 @@ import static org.odk.collect.android.utilities.ApplicationConstants.XML_OPENROS
 
 public class ImageConverter {
 
-    private ImageConverter() {
+    @Inject
+    GeneralSharedPreferences generalSharedPreferences;
+
+    @Inject
+    public ImageConverter() {
     }
 
-    public static void execute(String imagePath, QuestionWidget questionWidget, Context context) {
+    public void execute(String imagePath, QuestionWidget questionWidget, Context context) {
         rotateImageIfNeeded(imagePath);
         scaleDownImageIfNeeded(imagePath, questionWidget, context);
     }
 
-    private static void scaleDownImageIfNeeded(String imagePath, QuestionWidget questionWidget, Context context) {
+    private void scaleDownImageIfNeeded(String imagePath, QuestionWidget questionWidget, Context context) {
         Integer maxPixels;
 
         if (questionWidget != null) {
@@ -74,9 +80,9 @@ public class ImageConverter {
         return maxPixels;
     }
 
-    private static Integer getMaxPixelsFromSettings(Context context) {
+    private Integer getMaxPixelsFromSettings(Context context) {
         Integer maxPixels = null;
-        String imageSizeMode = (String) new GeneralSharedPreferences(context).get(KEY_IMAGE_SIZE);
+        String imageSizeMode = (String) generalSharedPreferences.get(KEY_IMAGE_SIZE);
         String[] imageEntryValues = context.getResources().getStringArray(R.array.image_size_entry_values);
         if (!imageSizeMode.equals(imageEntryValues[0])) {
             if (imageSizeMode.equals(imageEntryValues[1])) {
