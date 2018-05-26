@@ -46,6 +46,7 @@
   <string name="read_only">Tarea completa. Sólo se pueden cambiar sus comentarios</string>
   <string name="no_review">Esta tarea está finalizada y no puede ser revisada</string>
   <string name="smap_add_comment">Agregar Comentario</string>
+  <string name="smap_clear_remote_cache">Borrar cache remoto</string>
   <string name="smap_new_forms">Buscando nuevos formularios y tareas</string>
   <string name="smap_no_forms">No hay formularios para descargar</string>
   <string name="smap_downloading">Descargando %1$d formularios</string>
@@ -70,4 +71,6 @@
   <string name="smap_reset_locations">Rastro de GPS registrado</string>
   <string name="smap_reset_locations_result">Rastro de GPS registrado ::</string>
   <string name="smap_visit_website">Visite el sitio web</string>
+  <string name="smap_get_media">Archivo actualizado: %s</string>
+  <string name="smap_lookup">Solicitando datos remotos</string>
 </resources>

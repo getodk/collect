@@ -408,7 +408,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     // TODO: this doesn' work (dialog does not get removed):
                     // showDialog(PROGRESS_DIALOG);
                     // show dialog before we execute...
-                    formLoaderTask.execute(formPath);
+                    mFormId = formInfo.getFormID(); // smap
+                    formLoaderTask.execute(formPath, mFormId);
                 }
                 return;
             }
