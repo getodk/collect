@@ -74,13 +74,11 @@ jobs:
             name: Download dependencies
             command: ./gradlew androidDependencies
         - *save_cache
-        - run:
-            name: Run code quality checks
-            command: |
-                 ./gradlew pmd
-                 ./gradlew checkstyle
-                 ./gradlew lint
-                 ./gradlew findbugs
+        # Run code quality checks
+        - run: ./gradlew pmd
+        - run: ./gradlew checkstyle
+        - run: ./gradlew lint
+        - run: ./gradlew findbugs
         - store_artifacts:
             path: collect_app/build/reports
             destination: reports
