@@ -39,11 +39,12 @@ public class AuthDialogUtility {
 
     private EditText username;
     private EditText password;
-    private GeneralSharedPreferences generalSharedPreferences;
 
     @Inject
-    AuthDialogUtility(GeneralSharedPreferences generalSharedPreferences) {
-        this.generalSharedPreferences = generalSharedPreferences;
+    GeneralSharedPreferences generalSharedPreferences;
+
+    @Inject
+    AuthDialogUtility() {
     }
 
     public AlertDialog createDialog(final Context context,

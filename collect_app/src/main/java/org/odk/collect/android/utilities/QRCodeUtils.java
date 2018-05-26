@@ -61,11 +61,13 @@ public class QRCodeUtils {
     private static final int QR_CODE_SIDE_LENGTH = 400; // in pixels
     private static final String SETTINGS_MD5_FILE = ".collect-settings-hash";
     static final String MD5_CACHE_PATH = Collect.SETTINGS + File.separator + SETTINGS_MD5_FILE;
-    private final SharedPreferencesUtils sharedPreferencesUtils;
 
     @Inject
-    public QRCodeUtils(SharedPreferencesUtils sharedPreferencesUtils) {
-        this.sharedPreferencesUtils = sharedPreferencesUtils;
+    SharedPreferencesUtils sharedPreferencesUtils;
+
+    @Inject
+    public QRCodeUtils() {
+
     }
 
     public static String decodeFromBitmap(Bitmap bitmap) throws DataFormatException, IOException, FormatException, ChecksumException, NotFoundException {
@@ -129,7 +131,7 @@ public class QRCodeUtils {
             File writeDir = new File(Collect.SETTINGS);
             if (!writeDir.exists()) {
                 if (!writeDir.mkdirs()) {
-                    Timber.e("Error creating directory " + writeDir.getAbsolutePath());
+                    Timber.e("Error creating directory %s", writeDir.getAbsolutePath());
                 }
             }
 
@@ -163,7 +165,7 @@ public class QRCodeUtils {
 
                 // Save the QRCode to disk
                 if (shouldWriteToDisk) {
-                    Timber.i("Saving QR Code to disk... : " + QR_CODE_FILEPATH);
+                    Timber.i("Saving QR Code to disk... : %s", QR_CODE_FILEPATH);
                     FileUtils.saveBitmapToFile(bitmap, QR_CODE_FILEPATH);
 
                     FileUtils.write(mdCacheFile, messageDigest);
