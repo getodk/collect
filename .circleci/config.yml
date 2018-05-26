@@ -18,7 +18,6 @@ references:
         - ~/.m2
 
   accept_licenses : &accept_licenses
-
     run:
       name: Accept licenses
       command: yes | sdkmanager --licenses || true
@@ -188,8 +187,8 @@ workflows:
       - build_debug:
           filters:
             branches:
-              only: master
-      # Unit tests should start after a successful build
+              only: /(master|(COLLECT)\-([0-9])+(.*))/
+      # Unit tests should only start after a successful build
       - test_unit:
           requires:
             - build_debug
