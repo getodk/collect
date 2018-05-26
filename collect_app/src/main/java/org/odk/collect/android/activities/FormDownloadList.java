@@ -426,7 +426,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         } else {
             FormDownloadListAdapter formDownloadListAdapter = (FormDownloadListAdapter) listView.getAdapter();
             formDownloadListAdapter.setFromIdsToDetails(formNamesAndURLs);
-            (formDownloadListAdapter).notifyDataSetChanged();
+            formDownloadListAdapter.notifyDataSetChanged();
         }
         toggleButton.setEnabled(filteredFormList.size() > 0);
         checkPreviouslyCheckedItems();
