@@ -76,7 +76,11 @@ jobs:
         - *save_cache
         - run:
             name: Run code quality checks
-            command: ./gradlew pmd checkstyle lint findbugs
+            command: |
+                 ./gradlew pmd
+                 ./gradlew checkstyle
+                 ./gradlew lint
+                 ./gradlew findbugs
         - store_artifacts:
             path: collect_app/build/reports
             destination: reports
