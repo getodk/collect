@@ -73,12 +73,12 @@ jobs:
         - run:
             name: Download dependencies
             command: ./gradlew androidDependencies
-        - *save_cache
         # Run code quality checks
         - run: ./gradlew pmd
         - run: ./gradlew checkstyle
         - run: ./gradlew lint
         - run: ./gradlew findbugs --stacktrace
+        - *save_cache
         - store_artifacts:
             path: collect_app/build/reports
             destination: reports
@@ -100,10 +100,10 @@ jobs:
         - run:
             name: Download dependencies
             command: ./gradlew androidDependencies
-        - *save_cache
         - run:
             name: Run unit tests
             command: ./gradlew testDebugUnitTest
+        - *save_cache
         - *persist_debug_workspace
         - store_artifacts:
             path: collect_app/build/reports
