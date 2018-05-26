@@ -5,7 +5,7 @@ references:
   ## Cache
 
   cache_key: &cache_key
-    key: jars-{{ checksum "build.gradle" }}-{{ checksum "collect_app/build.gradle" }}
+    key: dependencies-{{ checksum "build.gradle" }}-{{ checksum "collect_app/build.gradle" }}
   restore_cache: &restore_cache
     restore_cache:
       <<: *cache_key
@@ -14,8 +14,11 @@ references:
       <<: *cache_key
       paths:
         - ~/work/.gradle
+        - ~/.gradle
+        - ~/.m2
 
   accept_licenses : &accept_licenses
+
     run:
       name: Accept licenses
       command: yes | sdkmanager --licenses || true
