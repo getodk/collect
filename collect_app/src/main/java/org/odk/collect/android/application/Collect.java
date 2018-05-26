@@ -302,12 +302,16 @@ public class Collect extends DaggerApplication {
 
     @Override
     protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
-        appComponent =  DaggerAppComponent.builder().application(this).build();
+        appComponent = DaggerAppComponent.builder().application(this).build();
         return appComponent;
     }
 
     public AppComponent getAppComponent() {
-         return appComponent;
+        return appComponent;
+    }
+
+    public void setComponent(AppComponent applicationComponent) {
+        this.appComponent = applicationComponent;
     }
 
     protected RefWatcher setupLeakCanary() {

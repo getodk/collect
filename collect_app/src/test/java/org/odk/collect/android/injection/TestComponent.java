@@ -1,5 +1,6 @@
 package org.odk.collect.android.injection;
 
+
 import android.app.Application;
 
 import org.odk.collect.android.injection.config.AppComponent;
@@ -18,6 +19,7 @@ import dagger.android.support.AndroidSupportInjectionModule;
         ActivityBuilder.class
 })
 public interface TestComponent extends AppComponent {
+
     @Component.Builder
     interface Builder {
 
