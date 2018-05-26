@@ -47,6 +47,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
+import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
@@ -90,7 +91,6 @@ public class MainMenuActivity extends CollectAbstractActivity {
     private View reviewSpacer;
     private View getFormsSpacer;
     private AlertDialog alertDialog;
-    private SharedPreferences adminPreferences;
     private int completedCount;
     private int savedCount;
     private int viewSentCount;
@@ -104,6 +104,8 @@ public class MainMenuActivity extends CollectAbstractActivity {
     protected SharedPreferencesUtils sharedPreferencesUtils;
     @Inject
     protected AuthDialogUtility authDialogUtility;
+    @Inject
+    protected AdminSharedPreferences adminPreferences;
 
     // private static boolean DO_NOT_EXIT = false;
 
@@ -279,9 +281,6 @@ public class MainMenuActivity extends CollectAbstractActivity {
         reviewSpacer = findViewById(R.id.review_spacer);
         getFormsSpacer = findViewById(R.id.get_forms_spacer);
 
-        adminPreferences = this.getSharedPreferences(
-                AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
-
         InstancesDao instancesDao = new InstancesDao();
 
         // count for finalized instances
@@ -338,11 +337,8 @@ public class MainMenuActivity extends CollectAbstractActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        SharedPreferences sharedPreferences = this.getSharedPreferences(
-                AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
 
-        boolean edit = sharedPreferences.getBoolean(
-                AdminKeys.KEY_EDIT_SAVED, true);
+        boolean edit = (boolean) adminPreferences.get(AdminKeys.KEY_EDIT_SAVED);
         if (!edit) {
             if (reviewDataButton != null) {
                 reviewDataButton.setVisibility(View.GONE);
@@ -359,8 +355,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
             }
         }
 
-        boolean send = sharedPreferences.getBoolean(
-                AdminKeys.KEY_SEND_FINALIZED, true);
+        boolean send = (boolean) adminPreferences.get(AdminKeys.KEY_SEND_FINALIZED);
         if (!send) {
             if (sendDataButton != null) {
                 sendDataButton.setVisibility(View.GONE);
@@ -371,8 +366,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
             }
         }
 
-        boolean viewSent = sharedPreferences.getBoolean(
-                AdminKeys.KEY_VIEW_SENT, true);
+        boolean viewSent = (boolean) adminPreferences.get(AdminKeys.KEY_VIEW_SENT);
         if (!viewSent) {
             if (viewSentFormsButton != null) {
                 viewSentFormsButton.setVisibility(View.GONE);
@@ -383,8 +377,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
             }
         }
 
-        boolean getBlank = sharedPreferences.getBoolean(
-                AdminKeys.KEY_GET_BLANK, true);
+        boolean getBlank = (boolean) adminPreferences.get(AdminKeys.KEY_GET_BLANK);
         if (!getBlank) {
             if (getFormsButton != null) {
                 getFormsButton.setVisibility(View.GONE);
@@ -401,8 +394,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
             }
         }
 
-        boolean deleteSaved = sharedPreferences.getBoolean(
-                AdminKeys.KEY_DELETE_SAVED, true);
+        boolean deleteSaved = (boolean) adminPreferences.get(AdminKeys.KEY_DELETE_SAVED);
         if (!deleteSaved) {
             if (manageFilesButton != null) {
                 manageFilesButton.setVisibility(View.GONE);
@@ -466,9 +458,8 @@ public class MainMenuActivity extends CollectAbstractActivity {
             case R.id.menu_admin_preferences:
                 Collect.getInstance().getActivityLogger()
                         .logAction(this, "onOptionsItemSelected", "MENU_ADMIN");
-                String pw = adminPreferences.getString(
-                        AdminKeys.KEY_ADMIN_PW, "");
-                if ("".equalsIgnoreCase(pw)) {
+                String pw = (String) adminPreferences.get(AdminKeys.KEY_ADMIN_PW);
+                if (pw.isEmpty()) {
                     startActivity(new Intent(this, AdminPreferencesActivity.class));
                 } else {
                     showDialog(PASSWORD_DIALOG);
@@ -536,9 +527,8 @@ public class MainMenuActivity extends CollectAbstractActivity {
                             public void onClick(DialogInterface dialog,
                                                 int whichButton) {
                                 String value = input.getText().toString();
-                                String pw = adminPreferences.getString(
-                                        AdminKeys.KEY_ADMIN_PW, "");
-                                if (pw.compareTo(value) == 0) {
+                                String pw = (String) adminPreferences.get(AdminKeys.KEY_ADMIN_PW);
+                                if (pw.equals(value)) {
                                     Intent i = new Intent(getApplicationContext(),
                                             AdminPreferencesActivity.class);
                                     startActivity(i);
