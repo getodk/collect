@@ -249,8 +249,9 @@ public final class WebUtils {
         HttpEntity entity = response.getEntity();
         if (entity != null) {
             try (InputStream is = entity.getContent()) {
-                while (is.available() != 0 && is.read() != -1) {
-                    // loop until all bytes read
+                byte[] buffer = new byte[1024];
+                while (is.available() != 0) {
+                    is.read(buffer, 0, is.available());
                 }
             } catch (Exception e) {
                 Timber.e(e);
