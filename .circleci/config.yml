@@ -200,12 +200,8 @@ workflows:
   version: 2
   workflow:
     jobs:
-#     This job will run on every commit on any branch
-      - build_debug:
-          filters:
-            branches:
-              only: /^.*$/
-              #only: /(master|(COLLECT)\-([0-9])+(.*))/
+#       This job will run on every commit on any branch
+      - build_debug
 #       Unit tests should only start after a successful build. Or vice versa?
       - test_unit:
 #         Although the unit testing task could run in parallel with build task,
@@ -214,9 +210,6 @@ workflows:
 #         Hence,
           requires:
             - build_debug
-          filters:
-            branches:
-              only: /^.*$/
       # Instrumentation tests should only start after unit tests complete gracefully. Or vice versa?
       - test_instrumented:
           requires:
