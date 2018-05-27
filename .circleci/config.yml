@@ -81,6 +81,8 @@ jobs:
 
   build_debug:
     <<: *android_config
+    environment:
+        GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xms128m -Xmx1024m -XX:+HeapDumpOnOutOfMemoryError" -DpreDexEnable=false'
     steps:
         - checkout
         - *restore_cache
@@ -89,12 +91,9 @@ jobs:
             name: Download dependencies
             command: ./gradlew androidDependencies
         - *save_cache
-        - run:
-            name: Run code quality checks
-            command: ./gradlew pmd checkstyle lint findbugs --stacktrace
-        - store_artifacts:
-            path: collect_app/build/reports
-            destination: reports
+#       It's faster if we build before running the quality checks, because quality checks depend on build output anyway.
+#       Also, while running gradle on daemon mode, we can even run build targets individually without impacting runtime ramp-up time.
+#       This also implies that we can also observe per-target build timings, instead of just the total execution time from a single command.
         - run:
             name: Assemble debug build
             command: |
@@ -103,6 +102,18 @@ jobs:
             name: Assemble test build
             command: |
                 ./gradlew assembleDebugAndroidTest -PdisablePreDex
+        - run:
+            name: Run code quality checks
+#           When running the plain lint target, it will execute by default for all flavors.
+#           This implies building the release and test flavors as well, which are out of scope for this job.
+#           Instead, using lintDebug it's running only once, for the 'debug' flavor that we are building here
+#           This means ~3x faster for the lint task.
+            command: ./gradlew pmd checkstyle lintDebug findbugs
+        - store_artifacts:
+            path: collect_app/build/reports
+            destination: reports
+#         Since the other workflow are only triggered after this job is successful, caching the build outputs for them can be the last task.
+#         Otherwise we only persist something that will never be used..
         - *persist_debug_workspace
 
   ## Run unit tests
