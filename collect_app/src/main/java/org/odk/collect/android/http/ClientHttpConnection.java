@@ -94,6 +94,7 @@ public class ClientHttpConnection implements HttpInterface {
     private static final String ACCEPT_ENCODING_HEADER = "Accept-Encoding";
     private static final String GZIP_CONTENT_ENCODING = "gzip";
     private static final int CONNECTION_TIMEOUT = 30000;
+    private static final int UPLOAD_CONNECTION_TIMEOUT = 60000; // it can take up to 27 seconds to spin up an Aggregate
 
     private CredentialsProvider credentialsProvider;
     private CookieStore cookieStore;
@@ -288,7 +289,7 @@ public class ClientHttpConnection implements HttpInterface {
         // get shared HttpContext so that authentication and cookies are retained.
 
         HttpContext localContext = getHttpContext();
-        HttpClient httpclient = createHttpClient(CONNECTION_TIMEOUT);
+        HttpClient httpclient = createHttpClient(UPLOAD_CONNECTION_TIMEOUT);
 
         // if https then enable preemptive basic auth...
         if (uri.getScheme().equals("https")) {

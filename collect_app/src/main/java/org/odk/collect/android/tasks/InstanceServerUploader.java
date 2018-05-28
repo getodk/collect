@@ -40,11 +40,7 @@ import timber.log.Timber;
  */
 public class InstanceServerUploader extends InstanceUploader {
 
-    // it can take up to 27 seconds to spin up Aggregate
-    private static final int CONNECTION_TIMEOUT = 60000;
     private static final String URL_PATH_SEP = "/";
-
-
 
     private boolean processChunk(int low, int high, WebUtils.Outcome outcome, Long... values) {
         if (values == null) {
