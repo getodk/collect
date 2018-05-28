@@ -93,13 +93,13 @@
   <string name="replace_barcode">مقام کو بدل دیں</string>
   <string name="required_answer_error">معافی، یہ جواب دینا ضروری ہے</string>
   <string name="review_data">محفوظ شدہ فارم کی تدوین کریں</string>
-  <string name="review_data_button">محفوظ شدہ فارم  (‎%s‏)  کی تدوین کریں</string>
+  <string name="review_data_button">محفوظ شدہ فارم (‎%s‏) کی تدوین کریں</string>
   <string name="save_all_answers">فارم کو محفوظ کریں</string>
   <string name="save_enter_data_description">آپ ‎%s‏ کے آخر پر ہیں۔</string>
   <string name="saving_form">فارم محفوظ ہو رہا ہے</string>
   <string name="sending_items">فارم ‎%2$s‏ کے ‎%1$s‏ کو بھیجا جا رہا ہے</string>
   <string name="send_data">حتمی فارم کو بھیجیں</string>
-  <string name="send_data_button">حتمی فارم  (‎%s‏) کو بھیجیں</string>
+  <string name="send_data_button">حتمی فارم (‎%s‏) کو بھیجیں</string>
   <string name="send_selected_data">منتخب شدہ کو بھیجیں</string>
   <string name="server_requires_auth">سرور کو تصدیق چاہیے</string>
   <string name="server_url">یو آر ایل (URL)</string>
