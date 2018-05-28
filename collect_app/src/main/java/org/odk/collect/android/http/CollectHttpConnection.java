@@ -1,6 +1,8 @@
-package org.odk.collect.android.utilities;
+package org.odk.collect.android.http;
 
 import android.support.annotation.NonNull;
+
+import org.odk.collect.android.utilities.ResponseMessageParser;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,7 +13,7 @@ import java.util.Map;
 
 public interface CollectHttpConnection {
 
-    InputStream getInputStream(@NonNull URI uri, final String contentType, final int connectionTimeout, Map<String, String> responseHeaders) throws Exception;
+    @NonNull CollectInputStreamResult getHTTPInputStream(@NonNull URI uri, final String contentType, boolean calculateHash) throws Exception;
 
     int httpHeadRequest(@NonNull URI uri, Map<String, String> responseHeaders) throws Exception;
 

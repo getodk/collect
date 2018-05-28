@@ -1,12 +1,15 @@
-package org.odk.collect.android.utilities;
+package org.odk.collect.android.http;
 
 import android.support.annotation.NonNull;
 import android.text.format.DateFormat;
 import android.webkit.MimeTypeMap;
 
+import org.apache.commons.io.IOUtils;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.ResponseMessageParser;
 import org.opendatakit.httpclientandroidlib.Header;
 import org.opendatakit.httpclientandroidlib.HttpEntity;
 import org.opendatakit.httpclientandroidlib.HttpHost;
@@ -44,6 +47,7 @@ import org.opendatakit.httpclientandroidlib.protocol.BasicHttpContext;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 import org.opendatakit.httpclientandroidlib.util.EntityUtils;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -55,6 +59,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -78,7 +83,7 @@ public class ClientHttpConnection implements CollectHttpConnection {
     private CredentialsProvider credentialsProvider;
     private CookieStore cookieStore;
 
-    ClientHttpConnection() {
+    public ClientHttpConnection() {
         credentialsProvider = new AgingCredentialsProvider(7 * 60 * 1000);
         cookieStore = new BasicCookieStore();
     }
@@ -123,9 +128,10 @@ public class ClientHttpConnection implements CollectHttpConnection {
 
 
     @Override
-    public InputStream getInputStream(@NonNull URI uri, String contentType, final int connectionTimeout, Map<String,String> responseHeaders) throws Exception {
+    public @NonNull CollectInputStreamResult getHTTPInputStream(@NonNull URI uri, final String contentType, boolean calculateHash) throws Exception
+    {
         HttpContext localContext = getHttpContext();
-        HttpClient httpclient = createHttpClient(connectionTimeout);
+        HttpClient httpclient = createHttpClient(CONNECTION_TIMEOUT);
 
         // if https then enable preemptive basic auth...
         if (uri.getScheme().equals("https")) {
@@ -175,23 +181,33 @@ public class ClientHttpConnection implements CollectHttpConnection {
         }
 
         InputStream downloadStream = entity.getContent();
+
+        String hash = "";
+
+        if (calculateHash) {
+            byte[] bytes = IOUtils.toByteArray(downloadStream);
+            downloadStream = new ByteArrayInputStream(bytes);
+            hash = FileUtils.getMd5Hash(new ByteArrayInputStream(bytes));
+        }
+
         Header contentEncoding = entity.getContentEncoding();
         if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase(GZIP_CONTENT_ENCODING)) {
             downloadStream = new GZIPInputStream(downloadStream);
         }
 
-        if (responseHeaders != null) {
-            Header[] fields = response.getAllHeaders();
+        Map<String, String> responseHeaders = new HashMap<>();
 
-            if (fields != null && fields.length >= 1) {
-                for (Header h : fields) {
-                    responseHeaders.put(h.getName(), h.getValue());
-                }
+        Header[] fields = response.getAllHeaders();
+
+        if (fields != null && fields.length >= 1) {
+            for (Header h : fields) {
+                responseHeaders.put(h.getName(), h.getValue());
             }
         }
 
-        return downloadStream;
+        return new CollectInputStreamResult(downloadStream, responseHeaders, hash);
     }
+
 
     @Override
     public int httpHeadRequest(@NonNull URI uri, Map<String, String> responseHeaders) throws Exception {
@@ -254,7 +270,7 @@ public class ClientHttpConnection implements CollectHttpConnection {
     }
 
     @Override
-    public ResponseMessageParser uploadFiles(@NonNull List<File> fileList,@NonNull File submissionFile, @NonNull URI uri) throws IOException {
+    public ResponseMessageParser uploadFiles(@NonNull List<File> fileList, @NonNull File submissionFile, @NonNull URI uri) throws IOException {
         // get shared HttpContext so that authentication and cookies are retained.
 
         HttpContext localContext = getHttpContext();

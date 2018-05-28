@@ -23,6 +23,9 @@ import org.kxml2.io.KXmlParser;
 import org.kxml2.kdom.Document;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.http.ClientHttpConnection;
+import org.odk.collect.android.http.CollectHttpConnection;
+import org.odk.collect.android.http.CollectInputStreamResult;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.xmlpull.v1.XmlPullParser;
 
@@ -105,22 +108,13 @@ public final class WebUtils {
         // parse response
         Document doc = null;
 
-        InputStreamResult inputStreamResult = null;
-        String hash;
+        CollectInputStreamResult inputStreamResult = null;
         try {
-            inputStreamResult = getDownloadInputStream(urlString, WebUtils.HTTP_CONTENT_TYPE_TEXT_XML);
+            inputStreamResult = getHTTPInputStream(urlString,WebUtils.HTTP_CONTENT_TYPE_TEXT_XML,true);
+
             InputStream is = inputStreamResult.getInputStream();
             InputStreamReader isr = null;
             try {
-                byte[] bytes = IOUtils.toByteArray(is);
-                is = new ByteArrayInputStream(bytes);
-                hash = FileUtils.getMd5Hash(new ByteArrayInputStream(bytes));
-
-//                Header contentEncoding = entity.getContentEncoding();
-//                if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase(WebUtils.GZIP_CONTENT_ENCODING)) {
-//                    is = new GZIPInputStream(is);
-//                }
-
                 isr = new InputStreamReader(is, "UTF-8");
                 doc = new Document();
                 KXmlParser parser = new KXmlParser();
@@ -162,18 +156,13 @@ public final class WebUtils {
             return new DocumentFetchResult(error, 0);
         }
 
-        return new DocumentFetchResult(doc, inputStreamResult.isOpenRosaResponse(),hash);
+        return new DocumentFetchResult(doc, inputStreamResult.isOpenRosaResponse(),inputStreamResult.getHash());
     }
 
-
     /**
-     * Instantiates a file InputStream from a URI
      *
-     * @param downloadUrl
-     * @return InputStream
-     * @throws Exception
      */
-    public static InputStreamResult getDownloadInputStream(@NonNull String downloadUrl, final String contentType) throws Exception {
+    public static @NonNull CollectInputStreamResult getHTTPInputStream(@NonNull String downloadUrl, final String contentType, boolean calculateHash) throws Exception {
         URI uri;
         try {
             // assume the downloadUrl is escaped properly
@@ -188,39 +177,8 @@ public final class WebUtils {
             throw new Exception("Invalid server URL (no hostname): " + downloadUrl);
         }
 
-        Map<String, String> responseHeaders = new HashMap<String, String>();
         CollectHttpConnection httpConnection = WebUtils.getInstance().getHttpConnection();
-        InputStream downloadStream = httpConnection.getInputStream(uri, contentType, WebUtils.CONNECTION_TIMEOUT, responseHeaders);
-
-        boolean openRosaResponse = false;
-
-        if (!responseHeaders.isEmpty()) {
-
-            boolean versionMatch = false;
-            boolean first = true;
-
-            StringBuilder appendedVersions = new StringBuilder();
-
-            for (String key : responseHeaders.keySet()) {
-                if (key.equals(WebUtils.OPEN_ROSA_VERSION_HEADER)) {
-                    openRosaResponse = true;
-                    if (WebUtils.OPEN_ROSA_VERSION.equals(responseHeaders.get(key))) {
-                        versionMatch = true;
-                        break;
-                    }
-                    if (!first) {
-                        appendedVersions.append("; ");
-                    }
-                    first = false;
-                    appendedVersions.append(responseHeaders.get(key));
-                }
-            }
-            if (!versionMatch) {
-                Timber.w("%s unrecognized version(s): %s", WebUtils.OPEN_ROSA_VERSION_HEADER, appendedVersions.toString());
-            }
-        }
-
-        return new InputStreamResult(downloadStream,openRosaResponse);
+        return httpConnection.getHTTPInputStream(uri, contentType, calculateHash);
     }
 
     private CollectHttpConnection getHttpConnection() {
@@ -495,23 +453,4 @@ public final class WebUtils {
         public boolean invalidOAuth;
         public HashMap<String, String> messagesByInstanceId = new HashMap<>();
     }
-
-    public static final class InputStreamResult {
-        private InputStream inputStream;
-        private boolean openRosaResponse;
-
-        InputStreamResult(InputStream is, boolean isOpenRosa) {
-            inputStream = is;
-            openRosaResponse = isOpenRosa;
-        }
-
-        public InputStream getInputStream() {
-            return inputStream;
-        }
-
-        public boolean isOpenRosaResponse() {
-            return openRosaResponse;
-        }
-    }
-
 }
