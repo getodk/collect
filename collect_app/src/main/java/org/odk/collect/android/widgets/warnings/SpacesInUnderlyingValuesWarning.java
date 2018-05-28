@@ -11,6 +11,32 @@ import org.odk.collect.android.widgets.QuestionWidget;
 
 import java.util.List;
 
+/*
+ * For questions with multiple selection, the responses chosen by the user are stored
+ * as a space-separated list of the response values. Most form builders either warn
+ * or error when a user tries to build a form with multiple selection questions
+ * that have values with spaces but it's possible to include them when writing
+ * XML by hand or using external choices.
+ *
+ * This class is responsible for checking if the underlying values in the set of answers
+ * contain spaces. If the values contain spaces, the warning is rendered in QuestionWidget.
+ *
+ * The class is composed of 2 ingredients:
+ * - SpacesInUnderlyingValues: check if the underlying values contain spaces
+ * - WarningRenderer: create and display the warning text
+ *
+ * Both classes are combined in the {@link #renderWarningIfNecessary(List)}
+ * that is responsible for applying the checker to values, and rendering warning if checker
+ * detects an issue.
+ *
+ * The class can be extended to render warnings into other widgets or in other way.
+ * To do that one should implement a new WarningRenderer, and create a new static
+ * initializer that initializes SpacesInUnderlyingValuesWarning with the new renderer
+ * as in {@link ##forQuestionWidget(QuestionWidget)}
+ *
+ * Created as fix for https://github.com/opendatakit/collect/issues/1964
+ *
+ */
 public class SpacesInUnderlyingValuesWarning {
 
     private final UnderlyingValuesChecker valuesChecker;
