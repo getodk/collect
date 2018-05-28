@@ -110,7 +110,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
     private HashMap<String, FormDetails> formNamesAndURLs = new HashMap<String, FormDetails>();
     private ArrayList<HashMap<String, String>> formList;
-    private ArrayList<HashMap<String, String>> filteredFormList = new ArrayList<>();
+    private final ArrayList<HashMap<String, String>> filteredFormList = new ArrayList<>();
     private LinkedHashSet<String> selectedForms = new LinkedHashSet<>();
 
     private static final boolean EXIT = true;

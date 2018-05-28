@@ -79,7 +79,7 @@ public class MapHelper {
     private TileOverlay googleTileOverlay;
     private IRegisterReceiver iregisterReceiver;
 
-    private org.odk.collect.android.spatial.TileSourceFactory tileFactory;
+    private final org.odk.collect.android.spatial.TileSourceFactory tileFactory;
 
 
     public MapHelper(Context context, GoogleMap googleMap) {

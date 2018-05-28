@@ -68,11 +68,11 @@ import timber.log.Timber;
 @SuppressLint("ViewConstructor")
 public class ListMultiWidget extends QuestionWidget implements MultiChoiceWidget {
 
-    private boolean checkboxInit = true;
+    private static final boolean checkboxInit = true;
 
     private List<SelectChoice> items; // may take a while to compute...
 
-    private ArrayList<CheckBox> checkBoxes;
+    private final ArrayList<CheckBox> checkBoxes;
     private View center;
 
 

@@ -47,7 +47,7 @@ public class ResetDialogPreference extends DialogPreference implements CompoundB
     private CheckBox layers;
     private CheckBox cache;
     private CheckBox osmDroid;
-    private Context context;
+    private final Context context;
     private ProgressDialog progressDialog;
 
     public ResetDialogPreference(Context context, AttributeSet attrs) {

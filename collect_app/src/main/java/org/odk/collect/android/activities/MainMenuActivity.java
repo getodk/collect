@@ -98,8 +98,8 @@ public class MainMenuActivity extends CollectAbstractActivity {
     private Cursor finalizedCursor;
     private Cursor savedCursor;
     private Cursor viewSentCursor;
-    private IncomingHandler handler = new IncomingHandler(this);
-    private MyContentObserver contentObserver = new MyContentObserver();
+    private final IncomingHandler handler = new IncomingHandler(this);
+    private final MyContentObserver contentObserver = new MyContentObserver();
 
     // private static boolean DO_NOT_EXIT = false;
 

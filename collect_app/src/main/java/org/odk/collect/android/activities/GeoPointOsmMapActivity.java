@@ -65,7 +65,7 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
     //private GoogleMap map;
     private MapView map;
 
-    private Handler handler = new Handler();
+    private final Handler handler = new Handler();
     private Marker marker;
 
     private GeoPoint latLng;

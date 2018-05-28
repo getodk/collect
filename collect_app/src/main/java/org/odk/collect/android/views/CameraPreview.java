@@ -28,9 +28,9 @@ import java.io.IOException;
 import timber.log.Timber;
 
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
-    private SurfaceHolder holder;
-    private Camera camera;
-    private Context context;
+    private final SurfaceHolder holder;
+    private final Camera camera;
+    private final Context context;
 
     public CameraPreview(Context context, Camera camera) {
         super(context);

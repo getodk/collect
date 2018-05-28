@@ -40,7 +40,7 @@ public class SavePointTask extends AsyncTask<Void, Void, String> {
     private static int lastPriorityUsed = 0;
 
     private final SavePointListener listener;
-    private int priority;
+    private final int priority;
 
     public SavePointTask(SavePointListener listener) {
         this.listener = listener;

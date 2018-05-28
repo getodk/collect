@@ -392,7 +392,7 @@ public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
     // Custom image adapter. Most of the code is copied from
     // media layout for using a picture.
     private class ImageAdapter extends BaseAdapter {
-        private String[] choices;
+        private final String[] choices;
 
         ImageAdapter(String[] choices) {
             this.choices = choices;

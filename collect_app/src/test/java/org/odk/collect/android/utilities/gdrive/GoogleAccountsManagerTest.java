@@ -50,7 +50,7 @@ public class GoogleAccountsManagerTest {
 
     private String currentAccount = null;
     private String savedAccount = null;
-    private String expectedAccount = "abcd@xyz.com";
+    private static final String expectedAccount = "abcd@xyz.com";
 
     /**
      * Stubbing

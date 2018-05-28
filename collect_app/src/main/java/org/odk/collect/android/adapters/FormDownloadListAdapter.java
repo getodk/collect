@@ -37,8 +37,8 @@ import static org.odk.collect.android.activities.FormDownloadList.FORM_ID_KEY;
 
 public class FormDownloadListAdapter extends ArrayAdapter {
 
-    private ArrayList<HashMap<String, String>> filteredFormList;
-    private HashMap<String, FormDetails> formIdsToDetails;
+    private final ArrayList<HashMap<String, String>> filteredFormList;
+    private final HashMap<String, FormDetails> formIdsToDetails;
 
     public FormDownloadListAdapter(Context context, ArrayList<HashMap<String, String>> filteredFormList,
                                    HashMap<String, FormDetails> formIdsToDetails) {

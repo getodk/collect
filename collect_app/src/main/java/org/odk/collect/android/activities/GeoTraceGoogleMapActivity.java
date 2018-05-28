@@ -69,7 +69,7 @@ import java.util.concurrent.TimeUnit;
 public class GeoTraceGoogleMapActivity extends CollectAbstractActivity implements LocationListener,
         OnMarkerDragListener, OnMapLongClickListener, LocationClient.LocationClientListener {
 
-    private ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+    private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture schedulerHandler;
     private ImageButton playButton;
     public ImageButton layersButton;
@@ -95,7 +95,7 @@ public class GeoTraceGoogleMapActivity extends CollectAbstractActivity implement
     private LatLng curlatLng;
     private PolylineOptions polylineOptions;
     private Polyline polyline;
-    private ArrayList<Marker> markerArray = new ArrayList<Marker>();
+    private final ArrayList<Marker> markerArray = new ArrayList<Marker>();
     private MapHelper helper;
 
     private AlertDialog zoomDialog;
