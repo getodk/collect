@@ -709,6 +709,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     getCurrentViewIfODKView().setBinaryData(nf);
                 }
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+                startCropView(nf.getAbsolutePath());
                 break;
             case RequestCodes.ALIGNED_IMAGE:
                 /*
@@ -733,6 +734,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     getCurrentViewIfODKView().setBinaryData(nf);
                 }
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+                startCropView(nf.getAbsolutePath());
                 break;
             case RequestCodes.IMAGE_CHOOSER:
                 /*
@@ -805,6 +807,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         refreshCurrentView();
     }
 
+    private void startCropView(String imageUrl) {
+        Intent intentCrop = new Intent(getApplicationContext(), ImageCropActivity.class);
+        intentCrop.putExtra("crop_path", imageUrl);
+        startActivity(intentCrop);
+    }
+
     private void saveChosenImage(Uri selectedImage) {
         // Copy file to sdcard
         String instanceFolder1 = getFormController().getInstanceFile().getParent();
@@ -817,6 +825,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 final File newImage = new File(destImagePath);
                 FileUtils.copyFile(chosenImage, newImage);
                 ImageConverter.execute(newImage.getPath(), getWidgetWaitingForBinaryData(), this);
+                startCropView(destImagePath);
                 runOnUiThread(() -> {
                     dismissDialog(SAVING_IMAGE_DIALOG);
                     if (getCurrentViewIfODKView() != null) {
