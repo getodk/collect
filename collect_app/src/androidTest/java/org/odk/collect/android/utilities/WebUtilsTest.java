@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.odk.collect.android.test.MockedServerTest;
 import okhttp3.mockwebserver.MockResponse;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.odk.collect.android.test.TestUtils.assertMatches;
@@ -15,16 +16,16 @@ public class WebUtilsTest extends MockedServerTest {
         server.enqueue(new MockResponse());
     }
 
-//    @Test
-//    public void httpRequests_shouldHaveUseragentHeader() throws Exception {
-//        // when
-//        doRequest("/some-path");
-//
-//        // then
-//        RecordedRequest r = nextRequest();
-//        assertEquals("GET /some-path HTTP/1.1", r.getRequestLine());
-//        assertTrue(r.getHeader("User-Agent").matches("Dalvik/.* org.odk.collect.android/.*"));
-//    }
+    //    @Test
+    //    public void httpRequests_shouldHaveUseragentHeader() throws Exception {
+    //        // when
+    //        doRequest("/some-path");
+    //
+    //        // then
+    //        RecordedRequest r = nextRequest();
+    //        assertEquals("GET /some-path HTTP/1.1", r.getRequestLine());
+    //        assertTrue(r.getHeader("User-Agent").matches("Dalvik/.* org.odk.collect.android/.*"));
+    //    }
 
     @Test
     public void getXmlDocument_request_shouldSupplyHeader_UserAgent() throws Exception {
@@ -90,16 +91,16 @@ public class WebUtilsTest extends MockedServerTest {
         return server.url(path).toString();
     }
 
-//    private void doRequest(String path) throws Exception {
-//        HttpGet req = WebUtils.createOpenRosaHttpGet(new URI(url(path)));
-//        httpClient().execute(req, httpContext());
-//    }
-//
-//    private static HttpClient httpClient() {
-//        return WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
-//    }
-//
-//    private static HttpContext httpContext() {
-//        return WebUtils.getHttpContext();
-//    }
+    //    private void doRequest(String path) throws Exception {
+    //        HttpGet req = WebUtils.createOpenRosaHttpGet(new URI(url(path)));
+    //        httpClient().execute(req, httpContext());
+    //    }
+    //
+    //    private static HttpClient httpClient() {
+    //        return WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
+    //    }
+    //
+    //    private static HttpContext httpContext() {
+    //        return WebUtils.getHttpContext();
+    //    }
 }

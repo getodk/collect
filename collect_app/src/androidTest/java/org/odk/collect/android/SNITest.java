@@ -29,14 +29,14 @@ public class SNITest {
     public static final URI SNI_URI = URI.create("https://sni.velox.ch/");
     public static final String SUCCESS_SENTINEL = "sent the following TLS server name indication extension";
 
-//    @Test
-//    public void apacheHttpClientSupportsSNI() throws IOException {
-//        HttpClient client = createHttpClient(CONNECTION_TIMEOUT);
-//        HttpGet req = createOpenRosaHttpGet(SNI_URI);
-//        HttpResponse rsp = client.execute(req);
-//        assertHttpSuccess(rsp.getStatusLine().getStatusCode());
-//        assertPageContent(rsp.getEntity().getContent());
-//    }
+    //    @Test
+    //    public void apacheHttpClientSupportsSNI() throws IOException {
+    //        HttpClient client = createHttpClient(CONNECTION_TIMEOUT);
+    //        HttpGet req = createOpenRosaHttpGet(SNI_URI);
+    //        HttpResponse rsp = client.execute(req);
+    //        assertHttpSuccess(rsp.getStatusLine().getStatusCode());
+    //        assertPageContent(rsp.getEntity().getContent());
+    //    }
 
     @Test
     public void urlConnectionSupportsSNI() throws IOException {

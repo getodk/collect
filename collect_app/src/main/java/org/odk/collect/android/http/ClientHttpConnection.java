@@ -144,8 +144,7 @@ public class ClientHttpConnection implements HttpInterface {
 
     @Override
     public @NonNull
-    HttpInputStreamResult getHTTPInputStream(@NonNull URI uri, final String contentType, boolean calculateHash) throws Exception
-    {
+    HttpInputStreamResult getHTTPInputStream(@NonNull URI uri, final String contentType, boolean calculateHash) throws Exception {
         HttpContext localContext = getHttpContext();
         HttpClient httpclient = createHttpClient(CONNECTION_TIMEOUT);
 
@@ -182,7 +181,7 @@ public class ClientHttpConnection implements HttpInterface {
             throw new Exception("No entity body returned from: " + uri.toString());
         }
 
-        if (contentType != null && contentType.length()>0) {
+        if (contentType != null && contentType.length() > 0) {
             if (!entity.getContentType().getValue().toLowerCase(Locale.ENGLISH).contains(contentType)) {
                 discardEntityBytes(response);
                 String error = "ContentType: "
@@ -573,7 +572,7 @@ public class ClientHttpConnection implements HttpInterface {
             InputStream is = null;
             try {
                 is = response.getEntity().getContent();
-                while (is.read() != -1); {
+                while (is.read() != -1) {
                     // loop until all bytes read
                 }
             } catch (Exception e) {

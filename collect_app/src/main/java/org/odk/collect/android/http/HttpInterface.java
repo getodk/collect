@@ -29,7 +29,7 @@ import java.util.Map;
 public interface HttpInterface {
 
     @NonNull
-    HttpInputStreamResult getHTTPInputStream(@NonNull URI uri, final String contentType, boolean calculateHash) throws Exception;
+    HttpInputStreamResult getHTTPInputStream(@NonNull URI uri, String contentType, boolean calculateHash) throws Exception;
 
     int httpHeadRequest(@NonNull URI uri, Map<String, String> responseHeaders) throws Exception;
 

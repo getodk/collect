@@ -27,13 +27,13 @@ public class HttpInputStreamResult {
     private static final String OPEN_ROSA_VERSION = "1.0";
 
     private InputStream inputStream;
-    private Map<String,String> headers;
-    private String Hash;
+    private Map<String, String> headers;
+    private String hash;
 
     HttpInputStreamResult(InputStream is, @NonNull Map<String, String> headers, String hash) {
         inputStream = is;
         this.headers = headers;
-        Hash = hash;
+        this.hash = hash;
     }
 
     public InputStream getInputStream() {
@@ -41,7 +41,7 @@ public class HttpInputStreamResult {
     }
 
     public String getHash() {
-        return Hash;
+        return hash;
     }
 
     public boolean isOpenRosaResponse() {

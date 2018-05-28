@@ -17,7 +17,6 @@ package org.odk.collect.android.utilities;
 import android.content.ContentValues;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-
 import org.kxml2.io.KXmlParser;
 import org.kxml2.kdom.Document;
 import org.odk.collect.android.R;
@@ -27,7 +26,6 @@ import org.odk.collect.android.http.HttpInterface;
 import org.odk.collect.android.http.HttpInputStreamResult;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.xmlpull.v1.XmlPullParser;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,9 +39,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.net.ssl.HttpsURLConnection;
-
 import timber.log.Timber;
 
 /**
@@ -55,20 +51,13 @@ import timber.log.Timber;
  */
 public final class WebUtils {
 
-    private static final String USER_AGENT_HEADER = "User-Agent";
-
-    private static final String OPEN_ROSA_VERSION_HEADER = "X-OpenRosa-Version";
-    private static final String OPEN_ROSA_VERSION = "1.0";
-
     private static final String HTTP_CONTENT_TYPE_TEXT_XML = "text/xml";
-    private static final int CONNECTION_TIMEOUT = 30000;
 
     private static final String fail = "Error: ";
 
     private static WebUtils instance;
 
     private HttpInterface httpConnection;
-
 
     private WebUtils() {
         httpConnection = new ClientHttpConnection();
@@ -104,11 +93,11 @@ public final class WebUtils {
     public static DocumentFetchResult getXmlDocument(String urlString) {
 
         // parse response
-        Document doc = null;
+        Document doc;
 
-        HttpInputStreamResult inputStreamResult = null;
+        HttpInputStreamResult inputStreamResult;
         try {
-            inputStreamResult = getHTTPInputStream(urlString,WebUtils.HTTP_CONTENT_TYPE_TEXT_XML,true);
+            inputStreamResult = getHTTPInputStream(urlString, WebUtils.HTTP_CONTENT_TYPE_TEXT_XML, true);
 
             InputStream is = inputStreamResult.getInputStream();
             InputStreamReader isr = null;
@@ -154,7 +143,7 @@ public final class WebUtils {
             return new DocumentFetchResult(error, 0);
         }
 
-        return new DocumentFetchResult(doc, inputStreamResult.isOpenRosaResponse(),inputStreamResult.getHash());
+        return new DocumentFetchResult(doc, inputStreamResult.isOpenRosaResponse(), inputStreamResult.getHash());
     }
 
     /**
@@ -185,11 +174,13 @@ public final class WebUtils {
     }
 
     private static List<File> getFilesInParentDirectory(File instanceFile, File submissionFile, boolean openRosaServer) {
-        List<File> files = new ArrayList<File>();
+        List<File> files = new ArrayList<>();
 
         // find all files in parent directory
         File[] allFiles = instanceFile.getParentFile().listFiles();
-        if (allFiles == null) { return null; }
+        if (allFiles == null) {
+            return null;
+        }
 
         for (File f : allFiles) {
             String fileName = f.getName();
@@ -393,7 +384,7 @@ public final class WebUtils {
             return false;
         }
 
-        ResponseMessageParser messageParser = null;
+        ResponseMessageParser messageParser;
 
         try {
             messageParser = getInstance().getHttpConnection().uploadFiles(files, submissionFile, URI.create(submissionUri.toString()));

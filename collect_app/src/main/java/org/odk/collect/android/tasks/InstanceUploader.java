@@ -18,7 +18,6 @@ package org.odk.collect.android.tasks;
 
 import android.database.Cursor;
 import android.database.SQLException;
-import android.net.Uri;
 import android.os.AsyncTask;
 
 import org.odk.collect.android.application.Collect;
@@ -32,7 +31,6 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.WebUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
