@@ -31,7 +31,6 @@ public class DocumentFetchResult {
         isOpenRosaResponse = false;
     }
 
-
     public DocumentFetchResult(Document doc, boolean isOpenRosaResponse, String hash) {
         responseCode = 0;
         errorMessage = null;

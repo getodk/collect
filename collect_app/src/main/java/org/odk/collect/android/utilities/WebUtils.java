@@ -58,7 +58,6 @@ public final class WebUtils {
 
     private static final String OPEN_ROSA_VERSION_HEADER = "X-OpenRosa-Version";
     private static final String OPEN_ROSA_VERSION = "1.0";
-    private static final String DATE_HEADER = "Date";
 
     private static final String HTTP_CONTENT_TYPE_TEXT_XML = "text/xml";
     private static final int CONNECTION_TIMEOUT = 30000;
@@ -122,7 +121,6 @@ public final class WebUtils {
 //                    is = new GZIPInputStream(is);
 //                }
 
-
                 isr = new InputStreamReader(is, "UTF-8");
                 doc = new Document();
                 KXmlParser parser = new KXmlParser();
@@ -164,7 +162,6 @@ public final class WebUtils {
             return new DocumentFetchResult(error, 0);
         }
 
-        //##1
         return new DocumentFetchResult(doc, inputStreamResult.isOpenRosaResponse(),hash);
     }
 
