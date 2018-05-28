@@ -18,18 +18,16 @@ import android.content.ContentValues;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
-import org.apache.commons.io.IOUtils;
 import org.kxml2.io.KXmlParser;
 import org.kxml2.kdom.Document;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.http.ClientHttpConnection;
-import org.odk.collect.android.http.CollectHttpConnection;
-import org.odk.collect.android.http.CollectInputStreamResult;
+import org.odk.collect.android.http.HttpInterface;
+import org.odk.collect.android.http.HttpInputStreamResult;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.xmlpull.v1.XmlPullParser;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -69,7 +67,7 @@ public final class WebUtils {
 
     private static WebUtils instance;
 
-    private CollectHttpConnection httpConnection;
+    private HttpInterface httpConnection;
 
 
     private WebUtils() {
@@ -108,7 +106,7 @@ public final class WebUtils {
         // parse response
         Document doc = null;
 
-        CollectInputStreamResult inputStreamResult = null;
+        HttpInputStreamResult inputStreamResult = null;
         try {
             inputStreamResult = getHTTPInputStream(urlString,WebUtils.HTTP_CONTENT_TYPE_TEXT_XML,true);
 
@@ -162,7 +160,8 @@ public final class WebUtils {
     /**
      *
      */
-    public static @NonNull CollectInputStreamResult getHTTPInputStream(@NonNull String downloadUrl, final String contentType, boolean calculateHash) throws Exception {
+    public static @NonNull
+    HttpInputStreamResult getHTTPInputStream(@NonNull String downloadUrl, final String contentType, boolean calculateHash) throws Exception {
         URI uri;
         try {
             // assume the downloadUrl is escaped properly
@@ -177,11 +176,11 @@ public final class WebUtils {
             throw new Exception("Invalid server URL (no hostname): " + downloadUrl);
         }
 
-        CollectHttpConnection httpConnection = WebUtils.getInstance().getHttpConnection();
+        HttpInterface httpConnection = WebUtils.getInstance().getHttpConnection();
         return httpConnection.getHTTPInputStream(uri, contentType, calculateHash);
     }
 
-    private CollectHttpConnection getHttpConnection() {
+    private HttpInterface getHttpConnection() {
         return httpConnection;
     }
 
@@ -273,7 +272,7 @@ public final class WebUtils {
             }
 
             try {
-                CollectHttpConnection connection = getInstance().getHttpConnection();
+                HttpInterface connection = getInstance().getHttpConnection();
                 Map<String, String> responseHeaders = new HashMap<>();
                 int statusCode = connection.httpHeadRequest(uri, responseHeaders);
 

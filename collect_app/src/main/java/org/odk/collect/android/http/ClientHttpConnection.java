@@ -1,3 +1,19 @@
+/*
+ * Copyright 2018 Nafundi
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.odk.collect.android.http;
 
 import android.support.annotation.NonNull;
@@ -69,7 +85,7 @@ import java.util.zip.GZIPInputStream;
 
 import timber.log.Timber;
 
-public class ClientHttpConnection implements CollectHttpConnection {
+public class ClientHttpConnection implements HttpInterface {
 
     private static final String USER_AGENT_HEADER = "User-Agent";
     private static final String OPEN_ROSA_VERSION_HEADER = "X-OpenRosa-Version";
@@ -77,8 +93,7 @@ public class ClientHttpConnection implements CollectHttpConnection {
     private static final String DATE_HEADER = "Date";
     private static final String ACCEPT_ENCODING_HEADER = "Accept-Encoding";
     private static final String GZIP_CONTENT_ENCODING = "gzip";
-    public static final int CONNECTION_TIMEOUT = 30000;
-
+    private static final int CONNECTION_TIMEOUT = 30000;
 
     private CredentialsProvider credentialsProvider;
     private CookieStore cookieStore;
@@ -128,7 +143,8 @@ public class ClientHttpConnection implements CollectHttpConnection {
 
 
     @Override
-    public @NonNull CollectInputStreamResult getHTTPInputStream(@NonNull URI uri, final String contentType, boolean calculateHash) throws Exception
+    public @NonNull
+    HttpInputStreamResult getHTTPInputStream(@NonNull URI uri, final String contentType, boolean calculateHash) throws Exception
     {
         HttpContext localContext = getHttpContext();
         HttpClient httpclient = createHttpClient(CONNECTION_TIMEOUT);
@@ -205,7 +221,7 @@ public class ClientHttpConnection implements CollectHttpConnection {
             }
         }
 
-        return new CollectInputStreamResult(downloadStream, responseHeaders, hash);
+        return new HttpInputStreamResult(downloadStream, responseHeaders, hash);
     }
 
 
@@ -221,8 +237,7 @@ public class ClientHttpConnection implements CollectHttpConnection {
         }
 
         final HttpResponse response;
-
-        int statusCode = 0;
+        int statusCode;
 
         try {
             Timber.i("Issuing HEAD request to: %s", uri.toString());
@@ -396,7 +411,7 @@ public class ClientHttpConnection implements CollectHttpConnection {
         getCookieStore().clear();
     }
 
-    public synchronized HttpContext getHttpContext() {
+    private synchronized HttpContext getHttpContext() {
 
         // context holds authentication state machine, so it cannot be
         // shared across independent activities.
@@ -415,14 +430,14 @@ public class ClientHttpConnection implements CollectHttpConnection {
      *
      * @return HttpClient properly configured.
      */
-    public synchronized HttpClient createHttpClient(int timeout) {
+    private synchronized HttpClient createHttpClient(int timeout) {
         // configure connection
         SocketConfig socketConfig = SocketConfig.copy(SocketConfig.DEFAULT).setSoTimeout(
                 2 * timeout)
                 .build();
 
         // if possible, bias toward digest auth (may not be in 4.0 beta 2)
-        List<String> targetPreferredAuthSchemes = new ArrayList<String>();
+        List<String> targetPreferredAuthSchemes = new ArrayList<>();
         targetPreferredAuthSchemes.add(AuthSchemes.DIGEST);
         targetPreferredAuthSchemes.add(AuthSchemes.BASIC);
 
@@ -558,7 +573,7 @@ public class ClientHttpConnection implements CollectHttpConnection {
             InputStream is = null;
             try {
                 is = response.getEntity().getContent();
-                while (is.read() != -1) {
+                while (is.read() != -1); {
                     // loop until all bytes read
                 }
             } catch (Exception e) {
@@ -600,9 +615,9 @@ public class ClientHttpConnection implements CollectHttpConnection {
         /**
          * Default constructor.
          */
-        public AgingCredentialsProvider(int expiryInterval) {
+        private AgingCredentialsProvider(int expiryInterval) {
             super();
-            this.credMap = new ConcurrentHashMap<AuthScope, Credentials>();
+            this.credMap = new ConcurrentHashMap<>();
             this.expiryInterval = expiryInterval;
             nextClearTimestamp = System.currentTimeMillis() + expiryInterval;
         }
@@ -674,8 +689,5 @@ public class ClientHttpConnection implements CollectHttpConnection {
         public String toString() {
             return credMap.toString();
         }
-
     }
-
-
 }
