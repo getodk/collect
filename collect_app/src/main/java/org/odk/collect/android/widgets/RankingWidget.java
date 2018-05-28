@@ -95,6 +95,13 @@ public class RankingWidget extends QuestionWidget {
                 }
             }
 
+            for (SelectChoice selectChoice : items) {
+                if (!orderedItems.contains(selectChoice)) {
+                    orderedItems.add(selectChoice);
+                    break;
+                }
+            }
+
             return orderedItems;
         }
     }
