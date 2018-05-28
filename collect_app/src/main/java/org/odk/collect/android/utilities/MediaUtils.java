@@ -617,8 +617,8 @@ public class MediaUtils {
      * @param uri The Uri to check
      * @return Whether the Uri authority is Google Drive.
      */
-    public static boolean isGoogleDriveDocument(Uri uri) {
-        return "com.google.android.apps.docs.storage".equals(uri.getAuthority())
+    private static boolean isGoogleDriveDocument(Uri uri) {
+        return uri.getAuthority().startsWith("com.google.android.apps.docs.storage")
                 || uri.getAuthority().startsWith("com.google.android.apps.photos.content");
     }
 

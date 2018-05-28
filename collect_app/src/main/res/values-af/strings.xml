@@ -180,7 +180,6 @@
   <string name="draw_image">Teken Prentjie</string>
   <string name="reset_image">Reset</string>
   <string name="set_color">Verstel Kleur</string>
-  <string name="select_drawing_color">Kies Tekenkleur</string>
   <string name="admin_preferences">Admin Verstellings</string>
   <string name="admin_access_settings">Raak hier vir admin toegang na Verstellings</string>
   <string name="save_mid">Stoor Vorm</string>
@@ -219,7 +218,6 @@
   <string name="ext_search_return_error">Die search handler het \'n voorwerp van tipe \'%s\' teruggestuur.</string>
   <string name="ext_import_generic_error">Kon nie data van %1$s intrek nie. Rede: %2$s</string>
   <string name="ext_import_progress_message">Laai data vanaf \'%1$s\', wag asseblief… %2$s</string>
-  <string name="ext_import_cancelled_message">Lees van data is gekanselleer!</string>
   <string name="ext_import_finalizing_message">Besig om vooraf-gelaaide data te finaliseer…</string>
   <string name="ext_import_completed_message">Lees van data voltooi!</string>
   <string name="ext_not_initialized_error">Die ExternalDataManager is nie geïnisialiseer nie.</string>

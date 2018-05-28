@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -31,7 +30,7 @@ import org.odk.collect.android.R;
 /**
  * Custom Scannner Activity extending from Activity to display a custom layout form scanner view.
  */
-public class ScannerWithFlashlightActivity extends Activity implements
+public class ScannerWithFlashlightActivity extends CollectAbstractActivity implements
         DecoratedBarcodeView.TorchListener {
 
     private CaptureManager capture;

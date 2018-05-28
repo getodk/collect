@@ -25,6 +25,8 @@ public class FormDetails implements Serializable {
     private String manifestUrl;
     private String formID;
     private String formVersion;
+    private String hash;
+    private String manifestFileHash;
     private boolean isNewerFormVersionAvailable;
     private boolean areNewerMediaFilesAvailable;
 
@@ -33,13 +35,15 @@ public class FormDetails implements Serializable {
     }
 
     public FormDetails(String formName, String downloadUrl, String manifestUrl, String formID,
-                       String formVersion, boolean isNewerFormVersionAvailable,
-                       boolean areNewerMediaFilesAvailable) {
+                       String formVersion, String hash, String manifestFileHash,
+                       boolean isNewerFormVersionAvailable, boolean areNewerMediaFilesAvailable) {
         this.formName = formName;
         this.downloadUrl = downloadUrl;
         this.manifestUrl = manifestUrl;
         this.formID = formID;
         this.formVersion = formVersion;
+        this.hash = hash;
+        this.manifestFileHash = manifestFileHash;
         this.isNewerFormVersionAvailable = isNewerFormVersionAvailable;
         this.areNewerMediaFilesAvailable = areNewerMediaFilesAvailable;
     }
@@ -66,6 +70,14 @@ public class FormDetails implements Serializable {
 
     public String getFormVersion() {
         return formVersion;
+    }
+
+    public String getHash() {
+        return hash;
+    }
+
+    public String getManifestFileHash() {
+        return manifestFileHash;
     }
 
     public boolean isNewerFormVersionAvailable() {

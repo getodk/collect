@@ -179,7 +179,6 @@
   <string name="draw_image">ແຕ້ມຮູບພາບແບບຄ້າວໆ</string>
   <string name="reset_image">ຕັ້ງຄ່າຄືນໃໝ່</string>
   <string name="set_color">ເລືອກສີ</string>
-  <string name="select_drawing_color">ເລືອກສີເພື່ອແຕ້ມຮູບ</string>
   <string name="admin_preferences">​ການຕັ້ງຄ່າສຳລັບຜູ້​ບໍ​ລິ​ຫານລະບົບ</string>
   <string name="admin_access_settings">​​ແຕະ​ເພື່ອ​ໃຫ້​ຜູ້​ບໍ​ລິ​ຫານລະ​ບົບເຂົ້າ​ຫາ​ການ​ຕັ້ງ​ຄ່າ</string>
   <string name="save_mid">ບັນທຶກແບບຟອມ</string>
@@ -218,7 +217,6 @@
   <string name="ext_search_return_error">ໂຕ​ຄວບ​ຄຸມການ​ຊອກ​ຫາ ສົ່ງ​ປະ​ເພດ​ຂອງ \'%s\'.</string>
   <string name="ext_import_generic_error">ບໍ່​ສາ​ມາດ​ເອົາ​ຂໍ້​ມູນ​ເຂົ້າ​ຈາກ %1$s. ເຫດ​ຜົນ: %2$s</string>
   <string name="ext_import_progress_message">ຂໍ້​ມູນ​ກ່ອນ​ໂຫຼດ ຈາກ \'%1$s\', ກະ​ລຸ​ນາ​ລໍ​ຖ້າ… %2$s</string>
-  <string name="ext_import_cancelled_message">ການ​ອ່ານ​ຂໍ້​ມູນ ໄດ້​ຖືກ​ຍົກ​ເລີ​ກ!</string>
   <string name="ext_import_finalizing_message">ກຳ​ລັງ​ເຮັດ​ຂໍ້​ມູນ​ກ່ອນ​ໂຫຼດ ສຳ​ເລັດ​ສົມ​ບູນ…</string>
   <string name="ext_import_completed_message">​ການ​ອ່ານ​ຂໍ້​ມູນ​ສຳ​ເລັດ!</string>
   <string name="ext_not_initialized_error">ExternalDataManager ຍັງ​ບໍ່​ທັນ​ເລີ້ມ​ຕົ້ນ.</string>

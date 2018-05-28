@@ -13,7 +13,7 @@ public final class AdminKeys {
     // otherKeys below, for automated testing.
 
     // key for this preference screen
-    public static final String KEY_ADMIN_PW = "admin_pw";
+    public static final String KEY_ADMIN_PW                     = "admin_pw";
 
     // keys for each preference
 
@@ -39,6 +39,8 @@ public final class AdminKeys {
     private static final String KEY_CHANGE_FORM_METADATA        = "change_form_metadata";
 
     // client
+    private static final String KEY_PERIODIC_FORM_UPDATES_CHECK = "periodic_form_updates_check";
+    private static final String KEY_AUTOMATIC_UPDATE            = "automatic_update";
     private static final String KEY_CHANGE_FONT_SIZE            = "change_font_size";
     private static final String KEY_DEFAULT_TO_FINALIZED        = "default_to_finalized";
     private static final String KEY_HIGH_RESOLUTION             = "high_resolution";
@@ -47,6 +49,7 @@ public final class AdminKeys {
     private static final String KEY_DELETE_AFTER_SEND           = "delete_after_send";
     private static final String KEY_INSTANCE_FORM_SYNC          = "instance_form_sync";
     private static final String KEY_APP_LANGUAGE                = "change_app_language";
+    private static final String KEY_APP_THEME                   = "change_app_theme";
 
     private static final String KEY_AUTOSEND                    = "change_autosend";
 
@@ -70,6 +73,8 @@ public final class AdminKeys {
             ag(KEY_CHANGE_SERVER,              PreferenceKeys.KEY_PROTOCOL),
             ag(KEY_CHANGE_FORM_METADATA,       PreferenceKeys.KEY_FORM_METADATA),
 
+            ag(KEY_PERIODIC_FORM_UPDATES_CHECK, PreferenceKeys.KEY_PERIODIC_FORM_UPDATES_CHECK),
+            ag(KEY_AUTOMATIC_UPDATE,           PreferenceKeys.KEY_AUTOMATIC_UPDATE),
             ag(KEY_CHANGE_FONT_SIZE,           PreferenceKeys.KEY_FONT_SIZE),
             ag(KEY_APP_LANGUAGE,               PreferenceKeys.KEY_APP_LANGUAGE),
             ag(KEY_DEFAULT_TO_FINALIZED,       PreferenceKeys.KEY_COMPLETED_DEFAULT),
@@ -79,6 +84,7 @@ public final class AdminKeys {
             ag(KEY_SHOW_SPLASH_SCREEN,         PreferenceKeys.KEY_SPLASH_PATH),
             ag(KEY_DELETE_AFTER_SEND,          PreferenceKeys.KEY_DELETE_AFTER_SEND),
             ag(KEY_INSTANCE_FORM_SYNC,         PreferenceKeys.KEY_INSTANCE_SYNC),
+            ag(KEY_APP_THEME,                  PreferenceKeys.KEY_APP_THEME),
 
             ag(KEY_AUTOSEND,                   PreferenceKeys.KEY_AUTOSEND),
 
@@ -119,6 +125,8 @@ public final class AdminKeys {
     );
 
     static Collection<String> formManagementKeys = Arrays.asList(
+            KEY_PERIODIC_FORM_UPDATES_CHECK,
+            KEY_AUTOMATIC_UPDATE,
             KEY_AUTOSEND,
             KEY_DELETE_AFTER_SEND,
             KEY_DEFAULT_TO_FINALIZED,
@@ -129,6 +137,7 @@ public final class AdminKeys {
     );
 
     static Collection<String> userInterfaceKeys = Arrays.asList(
+            KEY_APP_THEME,
             KEY_APP_LANGUAGE,
             KEY_CHANGE_FONT_SIZE,
             KEY_NAVIGATION,

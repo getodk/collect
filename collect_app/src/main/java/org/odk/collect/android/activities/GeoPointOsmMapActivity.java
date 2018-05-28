@@ -22,7 +22,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.Window;
@@ -37,6 +36,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.location.client.LocationClient;
 import org.odk.collect.android.location.client.LocationClients;
 import org.odk.collect.android.spatial.MapHelper;
+import org.odk.collect.android.utilities.GeoPointUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoPointWidget;
 import org.osmdroid.events.MapEventsReceiver;
@@ -56,7 +56,7 @@ import timber.log.Timber;
  *
  * @author jonnordling@gmail.com
  */
-public class GeoPointOsmMapActivity extends FragmentActivity implements LocationListener,
+public class GeoPointOsmMapActivity extends CollectAbstractActivity implements LocationListener,
         Marker.OnMarkerDragListener, MapEventsReceiver, IRegisterReceiver,
         LocationClient.LocationClientListener {
 
@@ -129,7 +129,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
         }
 
         marker = new Marker(map);
-        marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black_36dp));
+        marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place));
         myLocationOverlay = new MyLocationNewOverlay(map);
 
         handler.postDelayed(new Runnable() {
@@ -425,7 +425,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
                     foundFirstLocation = true;
                 }
                 locationStatus.setText(
-                        getString(R.string.location_provider_accuracy, this.location.getProvider(),
+                        getString(R.string.location_provider_accuracy, GeoPointUtils.capitalizeGps(this.location.getProvider()),
                                 truncateFloat(this.location.getAccuracy())));
             } else {
                 // Prevent from forever increasing
@@ -485,7 +485,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
         showLocationButton.setEnabled(true);
         map.invalidate();
         marker.setPosition(geoPoint);
-        marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black_36dp));
+        marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place));
         marker.setDraggable(true);
         latLng = geoPoint;
         isDragged = true;

@@ -172,7 +172,6 @@
   <string name="draw_image">Braižyti</string>
   <string name="reset_image">Atstatyti</string>
   <string name="set_color">Nustatyti spalvą</string>
-  <string name="select_drawing_color">Parinkite braižymo spalvą</string>
   <string name="admin_preferences">Administratoriaus nuostatos</string>
   <string name="admin_access_settings">Spustelėkite norėdami keisti administratoriaus nuostatas</string>
   <string name="save_mid">Nebaigtos formos išsaugojimas</string>

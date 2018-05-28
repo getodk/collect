@@ -180,7 +180,6 @@
   <string name="draw_image">Vizato imazh</string>
   <string name="reset_image">Rivendos</string>
   <string name="set_color">Cakto ngjyrën</string>
-  <string name="select_drawing_color">Zgjidh ngjyrën e vizatimit</string>
   <string name="admin_preferences">Parametrat e Administratorit</string>
   <string name="admin_access_settings">Akseso parametrat si administrator</string>
   <string name="save_mid">Ruaj formularin</string>
@@ -218,7 +217,6 @@
   <string name="ext_search_return_error">Kërkimi gjen nj objekt të tipit \'%s\'.</string>
   <string name="ext_import_generic_error">Nuk mund të importohen të dhëna nga %1$s. Arseyja 2%2$s</string>
   <string name="ext_import_progress_message">Duke ngarkuar të dhëna paraprake nga \'%1$s\', lutemi prisni… %2$s</string>
-  <string name="ext_import_cancelled_message">Leximi i të dhënave u anullua!</string>
   <string name="ext_import_finalizing_message">Duke finalizuar të dhënat e ngarkuara paraprakisht…</string>
   <string name="ext_import_completed_message">Leximi i të dhënave përfundoi!</string>
   <string name="ext_not_initialized_error">ExternalDataManager nuk është iniciuar.</string>

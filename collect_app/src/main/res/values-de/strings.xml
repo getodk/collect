@@ -156,6 +156,7 @@
   <string name="no_forms_uploaded">Kein Formular wurde hochgeladen.</string>
   <string name="upload_results">Upload-Ergebnisse</string>
   <string name="xform_parse_error">XForm parse error. Bei %1$s fehlt Element %2$s oder ist ungültig.</string>
+  <string name="choose_file">Datei auswählen</string>
   <string name="choose_sound">Tonaufnahme auswählen</string>
   <string name="choose_video">Video auswählen</string>
   <string name="choose_image">Bild auswählen</string>
@@ -198,7 +199,6 @@
   <string name="draw_image">Zeichnung erstellen</string>
   <string name="reset_image">Zurücksetzen</string>
   <string name="set_color">Farbe wählen</string>
-  <string name="select_drawing_color">Zeichenfarbe wählen</string>
   <string name="admin_preferences">Admineinstellungen</string>
   <string name="admin_access_settings">Adminzugriff auf die Einstellungen</string>
   <string name="save_mid">Formular speichern</string>
@@ -483,6 +483,9 @@
   <string name="user_access_control">Benutzerzugriffskontrolle</string>
   <string name="autosend_selector_title">Auto-Send</string>
   <string name="off">Aus</string>
+  <string name="guidance_no">Nein</string>
+  <string name="guidance_yes">Ja - immer anzeigen</string>
+  <string name="guidance_yes_collapsed">Ja - ausgeblendet</string>
   <string name="wifi_autosend">Nur WLAN</string>
   <string name="cellular_autosend">Nur Mobilfunk</string>
   <string name="wifi_cellular_autosend">WLAN oder Mobilfunk</string>
@@ -571,4 +574,12 @@
   <string name="start_video_capture_instruction">Bildschirm berühren um eine Aufnahme zu starten</string>
   <string name="stop_video_capture_instruction">Aufnahme gestartet. Zum Stoppen Bildschirm erneut berühren.</string>
   <string name="no_columns_to_upload">Keine Spalten zum Hochladen im Formular gefunden.</string>
+  <string name="guidance_hint_title">Hilfe zu Fragen anzeigen</string>
+  <string name="app_theme">Theme</string>
+  <string name="theme_light">Helles Theme</string>
+  <string name="theme_dark">Dunkles Theme</string>
+  <string name="cannot_create_directory">Kann Verzeichnis %s nicht erstellen</string>
+  <string name="not_a_directory">%s existiert, aber ist kein Verzeichnis</string>
+  <string name="location_metadata">verfügbare Satelliten: %1$d/24\n\nabgelaufene Zeit: %2$s</string>
+  <string name="instance_upload_cancelled">Instanz Upload abgebrochen</string>
 </resources>

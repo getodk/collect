@@ -18,6 +18,7 @@ import android.content.ContentValues;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
+import org.apache.commons.io.IOUtils;
 import org.kxml2.io.KXmlParser;
 import org.kxml2.kdom.Document;
 import org.odk.collect.android.R;
@@ -25,6 +26,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.xmlpull.v1.XmlPullParser;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -105,12 +107,22 @@ public final class WebUtils {
         Document doc = null;
 
         InputStreamResult inputStreamResult = null;
-
+        String hash;
         try {
             inputStreamResult = getDownloadInputStream(urlString, WebUtils.HTTP_CONTENT_TYPE_TEXT_XML);
             InputStream is = inputStreamResult.getInputStream();
             InputStreamReader isr = null;
             try {
+                byte[] bytes = IOUtils.toByteArray(is);
+                is = new ByteArrayInputStream(bytes);
+                hash = FileUtils.getMd5Hash(new ByteArrayInputStream(bytes));
+
+//                Header contentEncoding = entity.getContentEncoding();
+//                if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase(WebUtils.GZIP_CONTENT_ENCODING)) {
+//                    is = new GZIPInputStream(is);
+//                }
+
+
                 isr = new InputStreamReader(is, "UTF-8");
                 doc = new Document();
                 KXmlParser parser = new KXmlParser();
@@ -152,7 +164,8 @@ public final class WebUtils {
             return new DocumentFetchResult(error, 0);
         }
 
-        return new DocumentFetchResult(doc, inputStreamResult.isOpenRosaResponse());
+        //##1
+        return new DocumentFetchResult(doc, inputStreamResult.isOpenRosaResponse(),hash);
     }
 
 

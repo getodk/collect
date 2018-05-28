@@ -198,7 +198,6 @@
   <string name="draw_image">Dessiner une image</string>
   <string name="reset_image">Remise à zéro</string>
   <string name="set_color">Sélectionner la couleur</string>
-  <string name="select_drawing_color">Sélectionner la couleur d\'écriture</string>
   <string name="admin_preferences">Paramètres administrateur</string>
   <string name="admin_access_settings">Touchez pour obtenir l\'accès administrateur aux paramètres</string>
   <string name="save_mid">Sauvegarder le formulaire</string>
@@ -241,7 +240,6 @@
   <string name="ext_search_return_error">Le gestionnaire de recherche a retourné un objet de type \'%s\'.</string>
   <string name="ext_import_generic_error">Impossible d\'importer des données depuis %1$s. Raison: %2$s</string>
   <string name="ext_import_progress_message">Pré-chargement des données depuis \'%1$s\', merci de patienter… %2$s</string>
-  <string name="ext_import_cancelled_message">Lecture des données annulée !</string>
   <string name="ext_import_finalizing_message">Finalisation des données pré-chargées…</string>
   <string name="ext_import_completed_message">Lecture des données terminée !</string>
   <string name="ext_not_initialized_error">Le Gestionnaire des données externes n\'a pas été initialisé.</string>
@@ -483,6 +481,7 @@
   <string name="user_access_control">Contrôle d\'Accès Utilisateur</string>
   <string name="autosend_selector_title">Envoi automatique</string>
   <string name="off">Off</string>
+  <string name="guidance_no">Non</string>
   <string name="wifi_autosend">Seulement Wifi</string>
   <string name="cellular_autosend">Seulement Cellulaire</string>
   <string name="wifi_cellular_autosend">Wifi ou Cellulaire</string>
@@ -566,7 +565,6 @@
   <string name="moving_backwards_enabled_message">Vous pourrez vouloir consulter les paramètres suivants :\n\n\u2022 Modifier le formulaire sauvegardé\n\u2022 Sauvegarder le formulaire\n\u2022 Aller à la ligne de saisie\n\u2022 Traitement des contraints</string>
   <string name="yes">Oui</string>
   <string name="no">Non</string>
-  <string name="newer_version_of_a_form_info">Ceci est une version mise à jour d\'un formulaire que vous avez déjà !</string>
   <string name="svg_file_does_not_exist">Le fichier SVG n\'existe pas !</string>
   <string name="start_video_capture_instruction">Toucher l\'écran pour commencer l\'enregistrement</string>
   <string name="stop_video_capture_instruction">Enregistrement commencé. Toucher l\'écran pour l\'arrêter.</string>

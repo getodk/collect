@@ -16,13 +16,50 @@
 
 package org.odk.collect.android.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+
+import org.odk.collect.android.R;
+import org.odk.collect.android.utilities.ThemeUtils;
+
+import static org.odk.collect.android.utilities.PermissionUtils.checkIfStoragePermissionsGranted;
+import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
+import static org.odk.collect.android.utilities.PermissionUtils.isEntryPointActivity;
 
 public abstract class CollectAbstractActivity extends AppCompatActivity {
 
     private boolean isInstanceStateSaved;
+    protected ThemeUtils themeUtils;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        themeUtils = new ThemeUtils(this);
+        setTheme(themeUtils.getAppTheme());
+        super.onCreate(savedInstanceState);
+
+        /**
+         * If a user has revoked the storage permission then this check ensures the app doesn't quit unexpectedly and
+         * informs the user of the implications of their decision before exiting. The app can't function with these permissions
+         * so if a user wishes to grant them they just restart.
+         *
+         * This code won't run on activities that are entry points to the app because those activities
+         * are able to handle permission checks and requests by themselves.
+         */
+        if (!checkIfStoragePermissionsGranted(this) && !isEntryPointActivity(this)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog);
+
+            builder.setTitle(R.string.storage_runtime_permission_denied_title)
+                    .setMessage(R.string.storage_runtime_permission_denied_desc)
+                    .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
+                        finishAllActivities(this);
+                    })
+                    .setIcon(R.drawable.sd)
+                    .setCancelable(false)
+                    .show();
+        }
+    }
 
     @Override
     protected void onPostResume() {
@@ -38,11 +75,5 @@ public abstract class CollectAbstractActivity extends AppCompatActivity {
 
     public boolean isInstanceStateSaved() {
         return isInstanceStateSaved;
-    }
-
-    public void goToTheMainActivityAndCloseAllOthers() {
-        startActivity(new Intent(this, MainMenuActivity.class));
-        overridePendingTransition(0, 0);
-        finishAffinity();
     }
 }

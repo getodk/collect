@@ -187,7 +187,6 @@
   <string name="draw_image">生成图像</string>
   <string name="reset_image">重置</string>
   <string name="set_color">选择颜色</string>
-  <string name="select_drawing_color">选择绘画颜色</string>
   <string name="admin_preferences">管理员设置</string>
   <string name="admin_access_settings">点击进入管理员设置</string>
   <string name="save_mid">保存表格</string>
@@ -222,7 +221,6 @@
   <string name="accept_bearing">记录方位</string>
   <string name="ext_file_no_data_error">此文件不包含数据！</string>
   <string name="ext_import_generic_error">无法从%1$s中导入数据，原因：%2$s</string>
-  <string name="ext_import_cancelled_message">读取数据已被取消！</string>
   <string name="ext_import_completed_message">读取数据已完成！</string>
   <string name="survey_loading_reading_csv_message">正在读取CSV文件…</string>
   <string name="survey_saving_saving_message">正在保存至SD卡…</string>

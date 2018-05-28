@@ -30,6 +30,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import com.evernote.android.job.JobManager;
+import com.evernote.android.job.JobManagerCreateException;
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
@@ -52,7 +54,7 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.PRNGFixes;
-
+import org.odk.collect.android.utilities.ServerPollingJobCreator;
 import java.io.File;
 import java.util.Locale;
 
@@ -232,6 +234,14 @@ public class Collect extends Application implements HasActivityInjector {
                 .application(this)
                 .build()
                 .inject(this);
+
+        try {
+            JobManager
+                    .create(this)
+                    .addJobCreator(new ServerPollingJobCreator());
+        } catch (JobManagerCreateException e) {
+            Timber.e(e);
+        }
 
         reloadSharedPreferences();
 

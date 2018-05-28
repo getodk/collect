@@ -185,7 +185,6 @@
   <string name="draw_image">Joonista pilt</string>
   <string name="reset_image">Lähtesta</string>
   <string name="set_color">Värvi määramine</string>
-  <string name="select_drawing_color">Vali värv joonistamiseks </string>
   <string name="admin_preferences">Administraatori seaded</string>
   <string name="admin_access_settings">Administraatori seadetele ligipääsuks puudutage</string>
   <string name="save_mid">Salvesta vorm</string>
@@ -226,7 +225,6 @@
   <string name="ext_search_return_error">Otsing tagastas \'%s\' tüüpi objekti</string>
   <string name="ext_import_generic_error">Import %1$s ebaõnnestus. Põhjus %2$s</string>
   <string name="ext_import_progress_message">Vormi eellaadimine \'%1$s\', palun oodake… %2$s</string>
-  <string name="ext_import_cancelled_message">Andmete lugemine tühistati!</string>
   <string name="ext_import_finalizing_message">Lõpetan andmete eellaadimist…</string>
   <string name="ext_import_completed_message">Andmete lugemine sai valmis!</string>
   <string name="ext_not_initialized_error">ExternalDataManager ei ole algseadistatud.</string>

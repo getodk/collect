@@ -25,6 +25,7 @@ import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.v7.content.res.AppCompatResources;
 import android.text.InputFilter;
 import android.view.MotionEvent;
 import android.view.View;
@@ -93,7 +94,9 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
 
         urlDropdownSetup();
 
-        serverUrlPreference.getEditText().setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_drop_down, 0);
+        // TODO: use just 'serverUrlPreference.getEditText().setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_drop_down, 0);' once minSdkVersion is >= 21
+        serverUrlPreference.getEditText().setCompoundDrawablesWithIntrinsicBounds(null, null,
+                AppCompatResources.getDrawable(getActivity(), R.drawable.ic_arrow_drop_down), null);
         serverUrlPreference.getEditText().setOnTouchListener(this);
         serverUrlPreference.setOnPreferenceChangeListener(createChangeListener());
         serverUrlPreference.setSummary(serverUrlPreference.getText());

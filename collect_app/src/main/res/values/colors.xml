@@ -14,10 +14,13 @@ License for the specific language governing permissions and limitations under
 the License.
 -->
 <resources>
+    <!-- Dark Theme Palette -->
+    <color name="darkPrimaryTextColor">@android:color/white</color>
+    <color name="darkIconColor">@android:color/white</color>
+    <color name="darkTintColor">#2196F3</color>
 
-    <color name="primaryTextColor">#000000</color>
-    <color name="tintColor">#2196F3</color>
-    <color name="black">#000000</color>
-    <color name="grey">#757575</color>
-
+    <!-- Light Theme Palette -->
+    <color name="lightPrimaryTextColor">@android:color/black</color>
+    <color name="lightIconColor">@android:color/black</color>
+    <color name="lightTintColor">#2196F3</color>
 </resources>
