@@ -94,7 +94,7 @@ jobs:
 #       -DpreDexEnable=false disables pre-dexing step. Pre-dexing is good for local incremental builds during development,
 #       But on a build machine, the performance impact is not worthy because on a CI, every build should be clean.
 
-        GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xms128m -Xmx768m -XX:+HeapDumpOnOutOfMemoryError" -DpreDexEnable=false'
+        GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xms128m -Xmx1024m -XX:+HeapDumpOnOutOfMemoryError" -DpreDexEnable=false'
     steps:
         - checkout
         - *restore_cache
