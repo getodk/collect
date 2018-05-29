@@ -12,6 +12,9 @@ import org.odk.collect.android.tasks.sms.models.SentMessageResult;
 
 import javax.inject.Inject;
 
+import static org.odk.collect.android.tasks.sms.SmsNotificationReceiver.SMS_MESSAGE_RESULT;
+import static org.odk.collect.android.tasks.sms.SmsNotificationReceiver.SMS_NOTIFICATION_ACTION;
+
 /***
  * Receives events from the SMSManager when a SMS has been sent.
  * This intent is triggered by the SMSSenderJob that's sending different
@@ -52,5 +55,9 @@ public class SentBroadcastReceiver extends BroadcastReceiver {
         }
 
         smsService.processMessageSentResult(result);
+
+        Intent notificationIntent = new Intent(SMS_NOTIFICATION_ACTION);
+        notificationIntent.putExtra(SMS_MESSAGE_RESULT, result);
+        context.sendOrderedBroadcast(notificationIntent, null);
     }
 }
