@@ -584,7 +584,7 @@ public class AllWidgetsFormTest {
 
     }
 
-    public void testRangePickerIntegerWidget(){
+    public void testRangePickerIntegerWidget() {
 
         int randomValue = randomInt() % 9;
         onView(withText("Select value")).perform(click());
