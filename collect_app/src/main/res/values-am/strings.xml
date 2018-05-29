@@ -93,7 +93,7 @@
   <string name="replace_barcode">ባርኮዱን ተካ</string>
   <string name="required_answer_error">ይቅርታ፣ ይህ ምላሽ ያስፈልጋል!</string>
   <string name="review_data">የተቀመጠ ቅጽን ያርትዑ</string>
-  <string name="review_data_button">የተቀመጠ ቅጽ ( 1 %s) ያርትዑ</string>
+  <string name="review_data_button">የተቀመጠ ቅጽ ( %s) ያርትዑ</string>
   <string name="save_all_answers">ቅጽ አስቀምጥ</string>
   <string name="save_enter_data_description">በ 1 %s መጨረሻ ላይ ነዎት</string>
   <string name="saving_form">ቅጽን በማስቀመጥ ላይ</string>
@@ -217,7 +217,6 @@
   <string name="start">ይጀምሩ</string>
   <string name="enable_gps">GPSን አንቃ</string>
   <string name="minutes">ደቂቃዎች</string>
-  <string name="dialog_continue">ይቀጥሉ</string>
   <string name="clear">አጽዳ</string>
   <string name="automatic_mode">ራስ-ሰር ሁኔታ</string>
   <string name="discard">አስወግድ</string>

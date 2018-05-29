@@ -98,10 +98,6 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonWidget
     }
 
     @Override
-    public void setFocus(Context context) {
-    }
-
-    @Override
     public void setOnLongClickListener(OnLongClickListener l) {
         if (isPickerAppearance) {
             pickerButton.setOnLongClickListener(l);

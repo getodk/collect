@@ -127,10 +127,6 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget {
     }
 
     @Override
-    public void setFocus(Context context) {
-    }
-
-    @Override
     public void setOnLongClickListener(OnLongClickListener l) {
         chooseFileButton.setOnLongClickListener(l);
         answerLayout.setOnLongClickListener(l);
