@@ -82,7 +82,19 @@ jobs:
   build_debug:
     <<: *android_config
     environment:
-        GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xms128m -Xmx1024m -XX:+HeapDumpOnOutOfMemoryError" -DpreDexEnable=false'
+#       Runtime configuration build tests
+#       ./gradlew clean assembleDebug
+#       Xms128 - the default on most systems is 256m but gradle spawns some java subprocesses during build that don't need 256m
+#       Xmx512m 1m30s
+#       Xmx768m 1m17s
+#       Xmx1024m ~1min
+#       Xmx1536m ~1min
+#       -XX:+HeapDumpOnOutOfMemoryError in case of an out of memory the java process will dump a heap file on the file system.
+#       The heap file can be analyzed to figure out the root cause or the memory leak.
+#       -DpreDexEnable=false disables pre-dexing step. Pre-dexing is good for local incremental builds during development,
+#       But on a build machine, the performance impact is not worthy because on a CI, every build should be clean.
+
+        GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xms128m -Xmx768m -XX:+HeapDumpOnOutOfMemoryError" -DpreDexEnable=false'
     steps:
         - checkout
         - *restore_cache
@@ -113,7 +125,7 @@ jobs:
             path: collect_app/build/reports
             destination: reports
 #         Since the other workflow are only triggered after this job is successful, caching the build outputs for them can be the last task.
-#         Otherwise we only persist something that will never be used..
+#         Otherwise we only persist something that will never be used.
         - *persist_debug_workspace
 
   ## Run unit tests
@@ -123,7 +135,7 @@ jobs:
     steps:
         - checkout
 ##        - *restore_cache
-##      Depending on actual usage, we could toggle the above cache restoration (the step below includes it..)
+##      Depending on actual usage, we could toggle the above cache restoration (the step below includes it.)
         - *restore_tests_cache
         - *accept_licenses
         - run:
