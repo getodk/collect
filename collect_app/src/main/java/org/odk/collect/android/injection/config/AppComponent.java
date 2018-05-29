@@ -9,6 +9,7 @@ import org.odk.collect.android.fragments.DataManagerList;
 import org.odk.collect.android.injection.ActivityBuilder;
 import org.odk.collect.android.injection.config.scopes.PerApplication;
 import org.odk.collect.android.tasks.sms.SentBroadcastReceiver;
+import org.odk.collect.android.tasks.sms.SmsNotificationReceiver;
 import org.odk.collect.android.tasks.sms.SmsSender;
 import org.odk.collect.android.tasks.sms.SmsService;
 
@@ -46,6 +47,8 @@ public interface AppComponent {
     void inject(SmsSender smsSender);
 
     void inject(SentBroadcastReceiver sentBroadcastReceiver);
+
+    void inject(SmsNotificationReceiver smsNotificationReceiver);
 
     void inject(InstanceUploaderList instanceUploaderList);
 

@@ -26,6 +26,7 @@ the specific language governing permissions and limitations under the License.
     <uses-feature
         android:name="android.hardware.wifi"
         android:required="false" />
+
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -33,7 +34,7 @@ the specific language governing permissions and limitations under the License.
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -275,6 +276,14 @@ the specific language governing permissions and limitations under the License.
             android:exported="false">
             <intent-filter>
                 <action android:name="org.odk.collect.android.COLLECT_SMS_SEND_ACTION" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".tasks.sms.SmsNotificationReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="org.odk.collect.android.COLLECT_SMS_NOTIFICATION_ACTION" />
             </intent-filter>
         </receiver>
     </application>
