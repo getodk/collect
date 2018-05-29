@@ -80,7 +80,7 @@ public final class ThemeUtils {
         return isDarkTheme() ? 0 : 1;
     }
 
-    private boolean isDarkTheme() {
+    public boolean isDarkTheme() {
         String theme = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_APP_THEME);
         return theme.equals(context.getString(R.string.app_theme_dark));
     }

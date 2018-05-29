@@ -336,7 +336,7 @@
   <string name="geo_clear_warning">Ознака вже створена. Бажаєте очистити ознаку?</string>
   <string name="geo_exit_warning">Скасувати зміни і повернутись до ODK?</string>
   <string name="polygon_validator">Для багатокутника необхідно мінімум 3 точки</string>
-  <string name="dialog_continue">Продовжити</string>
+  <string name="polyline_validator">Для створення лінії необхідні принаймні дві точки</string>
   <string name="clear">Очистити</string>
   <string name="polyline_polygon_text">Зберегти ГеоМаршрут як</string>
   <string name="manual_mode">Ручний режим</string>
@@ -574,6 +574,21 @@
   <string name="start_video_capture_instruction">Щоб почати запис торкніться екрану</string>
   <string name="stop_video_capture_instruction">Запис розпочато. Торкніться знову щоб зупинити</string>
   <string name="no_columns_to_upload">Стовбців для завантаження в анкеті не знайдено.</string>
+  <string name="storage_runtime_permission_denied_title">Дозволи сховища</string>
+  <string name="storage_runtime_permission_denied_desc">Без цих дозволів Collect не матиме дотупу до ваших анкет (читання, запис відповідей). Відкрийте програму знову, ящо ви вже їх надали.</string>
+  <string name="form_update_category">Оновлення анкети</string>
+  <string name="periodic_form_updates_check_title">Періодична перерівка оновлень анкет</string>
+  <string name="never">Ніколи</string>
+  <string name="every_fifteen_minutes">Кожних п\'ятнадцять хвилин</string>
+  <string name="every_one_hour">Щогодини</string>
+  <string name="every_six_hours">Кожні шість годин</string>
+  <string name="every_24_hours">Кожні 24 години</string>
+  <string name="form_updates_available">Доступні оновлення анкет</string>
+  <string name="new_form_versions_downloaded">Завантажені нові версії анкет</string>
+  <string name="automatic_download">Автоматичне завантаження</string>
+  <string name="automatic_download_summary">Автоматично завантажувати нові версії анкет</string>
+  <string name="forms_downloaded">Завантажено анкети:</string>
+  <string name="forms_sent">Надіслано анкети:</string>
   <string name="guidance_hint_title">Відображати пояснення до питань</string>
   <string name="app_theme">Тема</string>
   <string name="theme_light">Світла тема</string>
@@ -582,4 +597,6 @@
   <string name="not_a_directory">%s існує, але це не директорія</string>
   <string name="location_metadata">Доступні супутники: %1$d/24\n\nПриблизний час: %2$s</string>
   <string name="instance_upload_cancelled">Завантаження екземпляру скасовано</string>
+  <string name="hide_old_form_versions_setting_title">Приховати старі версії анкет</string>
+  <string name="hide_old_form_versions_setting_summary">Тільки найновіша версія буде відображена в Заповнити анкету</string>
 </resources>

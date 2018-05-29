@@ -51,6 +51,7 @@ import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoShapeWidget;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Version of the GeoShapeGoogleMapActivity that uses the new Maps v2 API and Fragments to enable
@@ -226,7 +227,11 @@ public class GeoShapeGoogleMapActivity extends CollectAbstractActivity implement
                 FormEntryActivity.GEOSHAPE_RESULTS,
                 finalReturnString);
         setResult(RESULT_OK, i);
-        finish();
+        if (markerArray.size() < 4) {
+            ToastUtils.showShortToastInMiddle(getString(R.string.polygon_validator));
+        } else {
+            finish();
+        }
     }
 
     private void overlayIntentPolygon(String str) {
@@ -256,7 +261,9 @@ public class GeoShapeGoogleMapActivity extends CollectAbstractActivity implement
         String tempString = "";
         //Add the first marker to the end of the array, so the first and the last are the same
         if (markerArray.size() > 1) {
-            markerArray.add(markerArray.get(0));
+            if (Collections.frequency(markerArray, markerArray.get(0)) < 2) {
+                markerArray.add(markerArray.get(0));
+            }
             for (int i = 0; i < markerArray.size(); i++) {
                 String lat = Double.toString(markerArray.get(i).getPosition().latitude);
                 String lng = Double.toString(markerArray.get(i).getPosition().longitude);

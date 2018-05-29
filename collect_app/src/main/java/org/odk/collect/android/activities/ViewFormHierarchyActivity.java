@@ -78,7 +78,7 @@ public class ViewFormHierarchyActivity extends FormHierarchyActivity {
                 for (int i = 0; i < children.size(); i++) {
                     formList.remove(position + 1);
                 }
-                h.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.expander_ic_minimized));
+                h.setIcon(ContextCompat.getDrawable(this, R.drawable.expander_ic_minimized));
                 break;
             case COLLAPSED:
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "onListItemClick",
@@ -90,7 +90,7 @@ public class ViewFormHierarchyActivity extends FormHierarchyActivity {
                     formList.add(position + 1 + i, children1.get(i));
 
                 }
-                h.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.expander_ic_maximized));
+                h.setIcon(ContextCompat.getDrawable(this, R.drawable.expander_ic_maximized));
                 break;
             case QUESTION:
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "onListItemClick",

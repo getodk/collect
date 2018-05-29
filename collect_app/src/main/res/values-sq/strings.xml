@@ -285,7 +285,6 @@
   <string name="geo_clear_warning">Tipari është krijuar tanimë. A doni ta pastroni këtë tipar?</string>
   <string name="geo_exit_warning">Elimino ndryshimet dhe kthehu në ODK?</string>
   <string name="polygon_validator">Duhen së paku 3 pika për të krijuar Poligonin</string>
-  <string name="dialog_continue">Vazhdo</string>
   <string name="clear">Pastro</string>
   <string name="polyline_polygon_text">Ruaj GeoTrace si</string>
   <string name="manual_mode">Manuale</string>

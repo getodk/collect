@@ -18,12 +18,12 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
 
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.listeners.AudioPlayListener;
+import org.odk.collect.android.utilities.SoftKeyboardUtils;
 
 import java.util.List;
 
@@ -59,10 +59,7 @@ public class SelectOneSearchWidget extends AbstractSelectOneWidget implements On
 
     @Override
     public void setFocus(Context context) {
-        // Put focus on text input field and display soft keyboard if appropriate.
-        searchStr.requestFocus();
-        InputMethodManager inputManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.showSoftInput(searchStr, 0);
+        SoftKeyboardUtils.showSoftKeyboard(searchStr);
     }
 
     @Override

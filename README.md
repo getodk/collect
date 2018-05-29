@@ -115,7 +115,9 @@ Issues tagged as [good first issue](https://github.com/opendatakit/collect/label
 If you're ready to contribute code, see [the contribution guide](CONTRIBUTING.md).
 
 ## Contributing translations
-If you know a language other than English, consider contributing translations through [Transifex](https://www.transifex.com/opendatakit/collect/).
+If you know a language other than English, consider contributing translations through [Transifex](https://www.transifex.com/opendatakit/collect/). 
+
+Translations are updated right before the first beta for a release and before the release itself. To update translations, download the zip from https://www.transifex.com/opendatakit/collect/strings/. The contents of each folder then need to be moved to the Android project folders. A quick script like [the one in this gist](https://gist.github.com/lognaturel/9974fab4e7579fac034511cd4944176b) can help.
 
 ## Contributing testing
 All releases are verified on the following devices (ordered by Android version):

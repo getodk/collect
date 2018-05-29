@@ -25,6 +25,7 @@ public final class PreferenceKeys {
     public static final String KEY_INSTANCE_SYNC            = "instance_sync";
     public static final String KEY_PERIODIC_FORM_UPDATES_CHECK = "periodic_form_updates_check";
     public static final String KEY_AUTOMATIC_UPDATE         = "automatic_update";
+    public static final String KEY_HIDE_OLD_FORM_VERSIONS   = "hide_old_form_versions";
 
     // form_metadata_preferences.xml
     public static final String KEY_METADATA_USERNAME        = "metadata_username";
@@ -57,6 +58,7 @@ public final class PreferenceKeys {
     public static final String KEY_MAP_BASEMAP              = "map_basemap_behavior";
 
     // other keys
+    public static final String ACTIVITY_LOGGER_ANALYTICS    = "activity_logger_event";
     public static final String KEY_LAST_VERSION             = "lastVersion";
     public static final String KEY_FIRST_RUN                = "firstRun";
     /** Whether any existing username and email values have been migrated to form metadata */
@@ -91,6 +93,7 @@ public final class PreferenceKeys {
         hashMap.put(KEY_INSTANCE_SYNC,              true);
         hashMap.put(KEY_PERIODIC_FORM_UPDATES_CHECK, "never");
         hashMap.put(KEY_AUTOMATIC_UPDATE,           false);
+        hashMap.put(KEY_HIDE_OLD_FORM_VERSIONS,     true);
         // form_metadata_preferences.xml
         hashMap.put(KEY_METADATA_USERNAME,          "");
         hashMap.put(KEY_METADATA_PHONENUMBER,       "");
@@ -122,7 +125,8 @@ public final class PreferenceKeys {
             KEY_FIRST_RUN,
             KEY_METADATA_MIGRATED,
             KEY_AUTOSEND_WIFI,
-            KEY_AUTOSEND_NETWORK
+            KEY_AUTOSEND_NETWORK,
+            ACTIVITY_LOGGER_ANALYTICS
     );
 
     public static final HashMap<String, Object> GENERAL_KEYS = getHashMap();

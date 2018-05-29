@@ -307,7 +307,6 @@
   <string name="geo_clear_warning">Kujutis on juba loodud. Kas soovite kujutise eemaldada?</string>
   <string name="geo_exit_warning">Loobu muudatustest ja ava ODK?</string>
   <string name="polygon_validator">Polügooni loomiseks on vaja vähemalt 3 punkti</string>
-  <string name="dialog_continue">Jätka</string>
   <string name="clear">Eemalda</string>
   <string name="polyline_polygon_text">Salvesta rada kui</string>
   <string name="manual_mode">Käsitsi sisestusviis</string>
