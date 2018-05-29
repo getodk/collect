@@ -394,7 +394,7 @@ public class FormDownloader {
                 OutputStream os = null;
 
                 try {
-                    is = WebUtils.getHTTPInputStream(downloadUrl, null, false).getInputStream();
+                    is = WebUtils.getHTTPInputStream(downloadUrl, null).getInputStream();
                     os = new FileOutputStream(tempFile);
 
                     byte[] buf = new byte[4096];

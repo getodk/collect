@@ -21,7 +21,7 @@ import org.kxml2.io.KXmlParser;
 import org.kxml2.kdom.Document;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.http.ClientHttpConnection;
+import org.odk.collect.android.http.HttpClientConnection;
 import org.odk.collect.android.http.HttpInterface;
 import org.odk.collect.android.http.HttpInputStreamResult;
 import org.odk.collect.android.provider.InstanceProviderAPI;
@@ -55,35 +55,49 @@ public final class WebUtils {
 
     private static final String fail = "Error: ";
 
-    private static WebUtils instance;
+    private static HttpInterface httpConnection;
 
-    private HttpInterface httpConnection;
+    private WebUtils() {}
 
-    private WebUtils() {
-        httpConnection = new ClientHttpConnection();
-    }
-
-    private static synchronized WebUtils getInstance() {
-        if (instance == null) {
-            instance = new WebUtils();
+    /**
+     * Gets an object that conforms to the HttpInterface. This is a protected method
+     * so that it can be overridden in a Mock WebUtils class to allow WebUtils to be unit tested.
+     *
+     * @return instance of HttpInterface
+     */
+    protected static synchronized HttpInterface getHttpConnection() {
+        if (httpConnection == null) {
+            httpConnection = new HttpClientConnection();
         }
-        return instance;
+        return httpConnection;
     }
 
     /**
      * Remove all credentials for accessing the specified host.
+     *
+     * @param host host to clear the credentials
      */
     public static void clearHostCredentials(String host) {
-        WebUtils.getInstance().getHttpConnection().clearHostCredentials(host);
+        getHttpConnection().clearHostCredentials(host);
     }
 
+    /**
+     * Clears the cookie store
+     */
     public static void clearCookieStore() {
-        WebUtils.getInstance().getHttpConnection().clearCookieStore();
+        getHttpConnection().clearCookieStore();
     }
 
+    /**
+     * Add credentials to a specified host
+     *
+     * @param username - The users name
+     * @param password - The password
+     * @param host - The host to add credentials to
+     */
     public static void addCredentials(String username, String password,
                                       String host) {
-        WebUtils.getInstance().getHttpConnection().addCredentials(username, password, host);
+        getHttpConnection().addCredentials(username, password, host);
     }
 
     /**
@@ -97,7 +111,7 @@ public final class WebUtils {
 
         HttpInputStreamResult inputStreamResult;
         try {
-            inputStreamResult = getHTTPInputStream(urlString, WebUtils.HTTP_CONTENT_TYPE_TEXT_XML, true);
+            inputStreamResult = getHTTPInputStream(urlString, HTTP_CONTENT_TYPE_TEXT_XML);
 
             InputStream is = inputStreamResult.getInputStream();
             InputStreamReader isr = null;
@@ -146,11 +160,17 @@ public final class WebUtils {
         return new DocumentFetchResult(doc, inputStreamResult.isOpenRosaResponse(), inputStreamResult.getHash());
     }
 
+
     /**
+     * Creates a http connection and sets up an input stream.
      *
+     * @param downloadUrl uri of the stream
+     * @param contentType check the returned Mime Type to ensure it matches. "text/xml" causes a Hash to be calculated
+     * @return HttpInputStreamResult - An object containing the Stream, Hash and Headers
+     * @throws Exception - Can throw a multitude of Exceptions, such as MalformedURLException or IOException
      */
     public static @NonNull
-    HttpInputStreamResult getHTTPInputStream(@NonNull String downloadUrl, final String contentType, boolean calculateHash) throws Exception {
+    HttpInputStreamResult getHTTPInputStream(@NonNull String downloadUrl, final String contentType) throws Exception {
         URI uri;
         try {
             // assume the downloadUrl is escaped properly
@@ -165,54 +185,8 @@ public final class WebUtils {
             throw new Exception("Invalid server URL (no hostname): " + downloadUrl);
         }
 
-        HttpInterface httpConnection = WebUtils.getInstance().getHttpConnection();
-        return httpConnection.getHTTPInputStream(uri, contentType, calculateHash);
-    }
-
-    private HttpInterface getHttpConnection() {
-        return httpConnection;
-    }
-
-    private static List<File> getFilesInParentDirectory(File instanceFile, File submissionFile, boolean openRosaServer) {
-        List<File> files = new ArrayList<>();
-
-        // find all files in parent directory
-        File[] allFiles = instanceFile.getParentFile().listFiles();
-        if (allFiles == null) {
-            return null;
-        }
-
-        for (File f : allFiles) {
-            String fileName = f.getName();
-
-            if (fileName.startsWith(".")) {
-                continue; // ignore invisible files
-            } else if (fileName.equals(instanceFile.getName())) {
-                continue; // the xml file has already been added
-            } else if (fileName.equals(submissionFile.getName())) {
-                continue; // the xml file has already been added
-            }
-
-            String extension = FileUtils.getFileExtension(fileName);
-
-            if (openRosaServer) {
-                files.add(f);
-            } else if (extension.equals("jpg")) { // legacy 0.9x
-                files.add(f);
-            } else if (extension.equals("3gpp")) { // legacy 0.9x
-                files.add(f);
-            } else if (extension.equals("3gp")) { // legacy 0.9x
-                files.add(f);
-            } else if (extension.equals("mp4")) { // legacy 0.9x
-                files.add(f);
-            } else if (extension.equals("osm")) { // legacy 0.9x
-                files.add(f);
-            } else {
-                Timber.w("unrecognized file type %s", f.getName());
-            }
-        }
-
-        return files;
+        HttpInterface httpConnection = getHttpConnection();
+        return httpConnection.getHTTPInputStream(uri, contentType);
     }
 
 
@@ -263,7 +237,7 @@ public final class WebUtils {
             }
 
             try {
-                HttpInterface connection = getInstance().getHttpConnection();
+                HttpInterface connection = getHttpConnection();
                 Map<String, String> responseHeaders = new HashMap<>();
                 int statusCode = connection.httpHeadRequest(uri, responseHeaders);
 
@@ -387,7 +361,7 @@ public final class WebUtils {
         ResponseMessageParser messageParser;
 
         try {
-            messageParser = getInstance().getHttpConnection().uploadFiles(files, submissionFile, URI.create(submissionUri.toString()));
+            messageParser = getHttpConnection().uploadFiles(files, submissionFile, URI.create(submissionUri.toString()));
             int responseCode = messageParser.getResponseCode();
 
             if (responseCode != HttpsURLConnection.HTTP_CREATED && responseCode != HttpsURLConnection.HTTP_ACCEPTED) {
@@ -433,6 +407,49 @@ public final class WebUtils {
         Collect.getInstance().getContentResolver().update(toUpdate, contentValues, null, null);
         return true;
     }
+
+    private static List<File> getFilesInParentDirectory(File instanceFile, File submissionFile, boolean openRosaServer) {
+        List<File> files = new ArrayList<>();
+
+        // find all files in parent directory
+        File[] allFiles = instanceFile.getParentFile().listFiles();
+        if (allFiles == null) {
+            return null;
+        }
+
+        for (File f : allFiles) {
+            String fileName = f.getName();
+
+            if (fileName.startsWith(".")) {
+                continue; // ignore invisible files
+            } else if (fileName.equals(instanceFile.getName())) {
+                continue; // the xml file has already been added
+            } else if (fileName.equals(submissionFile.getName())) {
+                continue; // the xml file has already been added
+            }
+
+            String extension = FileUtils.getFileExtension(fileName);
+
+            if (openRosaServer) {
+                files.add(f);
+            } else if (extension.equals("jpg")) { // legacy 0.9x
+                files.add(f);
+            } else if (extension.equals("3gpp")) { // legacy 0.9x
+                files.add(f);
+            } else if (extension.equals("3gp")) { // legacy 0.9x
+                files.add(f);
+            } else if (extension.equals("mp4")) { // legacy 0.9x
+                files.add(f);
+            } else if (extension.equals("osm")) { // legacy 0.9x
+                files.add(f);
+            } else {
+                Timber.w("unrecognized file type %s", f.getName());
+            }
+        }
+
+        return files;
+    }
+
 
     public static String getPlainTextMimeType() {
         return "text/plain";

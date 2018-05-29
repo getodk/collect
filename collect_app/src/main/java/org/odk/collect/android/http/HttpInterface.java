@@ -17,6 +17,7 @@
 package org.odk.collect.android.http;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import org.odk.collect.android.utilities.ResponseMessageParser;
 
@@ -28,16 +29,57 @@ import java.util.Map;
 
 public interface HttpInterface {
 
+    /**
+     * Creates a http connection and sets up an input stream.
+     *
+     * @param uri of the stream
+     * @param contentType check the returned Mime Type to ensure it matches. "text/xml" causes a Hash to be calculated
+     * @return HttpInputStreamResult - An object containing the Stream, Hash and Headers
+     * @throws Exception a multitude of Exceptions such as IOException can be thrown
+     */
     @NonNull
-    HttpInputStreamResult getHTTPInputStream(@NonNull URI uri, String contentType, boolean calculateHash) throws Exception;
+    HttpInputStreamResult getHTTPInputStream(@NonNull URI uri, @Nullable String contentType) throws Exception;
 
-    int httpHeadRequest(@NonNull URI uri, Map<String, String> responseHeaders) throws Exception;
+    /**
+     * Performs a HTTP Head request.
+     *
+     * @param uri of which to perform a HTTP head
+     * @param responseHeaders Map which is populated with the HTTP Headers
+     * @return HTTP status code
+     * @throws Exception a multitude of Exceptions such as IOException can be thrown
+     */
+    int httpHeadRequest(@NonNull URI uri, @NonNull Map<String, String> responseHeaders) throws Exception;
 
+    /**
+     * Uploads files to a Server.
+     *
+     * @param fileList List of Files to be uploaded
+     * @param submissionFile The main file to be uploaded (Form file)
+     * @param uri where to send the submissionFile and fileList
+     * @return ResponseMessageParser object that contains the response XML
+     * @throws IOException can be thrown if files do not exist
+     */
     ResponseMessageParser uploadFiles(@NonNull List<File> fileList, @NonNull File submissionFile, @NonNull URI uri) throws IOException;
 
+    /**
+     * Clears the Cookie Stores
+     */
     void clearCookieStore();
 
+    /**
+     * Clears the host credentials.
+     *
+     * @param host to clear the credentials of
+     */
     void clearHostCredentials(String host);
 
+    /**
+     * Adds username and password to a particular host.
+     *
+     * @param username the user name
+     * @param password the password
+     * @param host the host to add the username / password to
+     */
     void addCredentials(String username, String password, String host);
+
 }

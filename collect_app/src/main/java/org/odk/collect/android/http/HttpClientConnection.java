@@ -17,6 +17,7 @@
 package org.odk.collect.android.http;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.format.DateFormat;
 import android.webkit.MimeTypeMap;
 
@@ -85,7 +86,7 @@ import java.util.zip.GZIPInputStream;
 
 import timber.log.Timber;
 
-public class ClientHttpConnection implements HttpInterface {
+public class HttpClientConnection implements HttpInterface {
 
     private static final String USER_AGENT_HEADER = "User-Agent";
     private static final String OPEN_ROSA_VERSION_HEADER = "X-OpenRosa-Version";
@@ -93,13 +94,15 @@ public class ClientHttpConnection implements HttpInterface {
     private static final String DATE_HEADER = "Date";
     private static final String ACCEPT_ENCODING_HEADER = "Accept-Encoding";
     private static final String GZIP_CONTENT_ENCODING = "gzip";
+
     private static final int CONNECTION_TIMEOUT = 30000;
     private static final int UPLOAD_CONNECTION_TIMEOUT = 60000; // it can take up to 27 seconds to spin up an Aggregate
+    private static final String HTTP_CONTENT_TYPE_TEXT_XML = "text/xml";
 
     private CredentialsProvider credentialsProvider;
     private CookieStore cookieStore;
 
-    public ClientHttpConnection() {
+    public HttpClientConnection() {
         credentialsProvider = new AgingCredentialsProvider(7 * 60 * 1000);
         cookieStore = new BasicCookieStore();
     }
@@ -145,7 +148,7 @@ public class ClientHttpConnection implements HttpInterface {
 
     @Override
     public @NonNull
-    HttpInputStreamResult getHTTPInputStream(@NonNull URI uri, final String contentType, boolean calculateHash) throws Exception {
+    HttpInputStreamResult getHTTPInputStream(@NonNull URI uri, @Nullable final String contentType) throws Exception {
         HttpContext localContext = getHttpContext();
         HttpClient httpclient = createHttpClient(CONNECTION_TIMEOUT);
 
@@ -200,7 +203,7 @@ public class ClientHttpConnection implements HttpInterface {
 
         String hash = "";
 
-        if (calculateHash) {
+        if (HTTP_CONTENT_TYPE_TEXT_XML.equals(contentType)) {
             byte[] bytes = IOUtils.toByteArray(downloadStream);
             downloadStream = new ByteArrayInputStream(bytes);
             hash = FileUtils.getMd5Hash(new ByteArrayInputStream(bytes));
@@ -226,7 +229,7 @@ public class ClientHttpConnection implements HttpInterface {
 
 
     @Override
-    public int httpHeadRequest(@NonNull URI uri, Map<String, String> responseHeaders) throws Exception {
+    public int httpHeadRequest(@NonNull URI uri, @NonNull Map<String, String> responseHeaders) throws Exception {
         HttpContext localContext = getHttpContext();
         HttpClient httpclient = createHttpClient(CONNECTION_TIMEOUT);
         HttpHead httpHead = createOpenRosaHttpHead(uri);
