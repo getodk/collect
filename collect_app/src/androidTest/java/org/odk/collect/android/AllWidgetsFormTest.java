@@ -94,7 +94,7 @@ import static org.odk.collect.android.activities.FormEntryActivity.EXTRA_TESTING
 @RunWith(AndroidJUnit4.class)
 public class AllWidgetsFormTest {
 
-    private static final String ALL_WIDGETS_FORM = "all_widgets.xml";
+    private static final String ALL_WIDGETS_FORM = "all-widgets.xml";
     private static final String FORMS_DIRECTORY = "/odk/forms/";
 
     private final Random random = new Random();
