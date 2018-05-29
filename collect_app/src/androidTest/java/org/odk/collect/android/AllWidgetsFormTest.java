@@ -17,6 +17,7 @@ import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.View;
+import android.widget.NumberPicker;
 import android.widget.SeekBar;
 
 import net.bytebuddy.utility.RandomString;
@@ -168,12 +169,12 @@ public class AllWidgetsFormTest {
         testBearingWidget();
 
         testRangeIntegerWidget();
-        testRangeVerticalAppearance();
         testRangeDecimalWidget();
-        testRangeDecimalVertical();
-
+        testRangeVerticalAppearance();
+        testRangePickerIntegerWidget();
 
         testImageWidget();
+        testImageWithoutChooseWidget();
         testSelfieWidget();
 
         testDrawWidget();
@@ -187,6 +188,9 @@ public class AllWidgetsFormTest {
 
         testAudioWidget();
         testVideoWidget();
+        testSelfieVideoWidget();
+
+        testFileWidget();
 
         testDateNoAppearanceWidget();
         testDateNoCalendarAppearance();
@@ -226,12 +230,16 @@ public class AllWidgetsFormTest {
         testGridSelectQuickCompactAppearance();
         testGridSelectQuickCompact2Appearance();
 
+        testImageSelectOne();
+
         testMultiSelectWidget();
 
         testGridSelectMultipleCompact();
         testGridSelectCompact2();
 
         testSpinnerSelectMultiple();
+
+        testImageSelectMultiple();
 
         testLabelWidget();
 
@@ -293,6 +301,7 @@ public class AllWidgetsFormTest {
 
         onView(withId(R.id.simple_button)).perform(click());
         onView(withText("URL widget")).perform(swipeLeft());
+        //check!!?
     }
 
     public void testExStringWidget() {
@@ -575,19 +584,21 @@ public class AllWidgetsFormTest {
 
     }
 
-    public void testRangeDecimalVertical() {
+    public void testRangePickerIntegerWidget(){
 
-        int randomValue = randomInt() % 8;
-        onVisibleSeekBar().perform(setProgress(randomValue));
+        int randomValue = randomInt() % 9;
+        onView(withText("Select value")).perform(click());
 
-        Screengrab.screenshot("range-decimal-vertical");
+        onVisibleNumberPickerDialog().perform(setNumberPickerValue(randomValue));
+
+        Screengrab.screenshot("Range picker integer widget");
 
         openWidgetList();
-        onView(withText("Range vertical decimal widget")).perform(click());
+        onView(withText("Range picker integer widget")).perform(click());
 
-        onVisibleSeekBar().check(matches(withProgress(randomValue)));
+        onVisibleEditText().check(matches(withText(randomValue)));
 
-        onView(withText("Range vertical decimal widget")).perform(swipeLeft());
+        onView(withText("Range picker integer widget")).perform(swipeLeft());
 
     }
 
@@ -598,11 +609,20 @@ public class AllWidgetsFormTest {
         onView(withText("Image widget")).perform(swipeLeft());
     }
 
+    public void testImageWithoutChooseWidget() {
+
+        Screengrab.screenshot("image-without-choose-widget");
+
+        onView(withText("Image widget without Choose button")).perform(swipeLeft());
+
+    }
+
     public void testSelfieWidget() {
 
         Screengrab.screenshot("selfie-widget");
 
         onView(withText("Selfie widget")).perform(swipeLeft());
+
     }
 
     public void testDrawWidget() {
@@ -659,6 +679,23 @@ public class AllWidgetsFormTest {
         Screengrab.screenshot("video");
 
         onView(withText("Video widget")).perform(swipeLeft());
+    }
+
+
+    public void testSelfieVideoWidget() {
+
+        Screengrab.screenshot("selfie-video");
+
+        onView(withText("Selfie video widget")).perform(swipeLeft());
+
+    }
+
+    public void testFileWidget() {
+
+        Screengrab.screenshot("file-widget");
+
+        onView(withText("File widget")).perform(swipeLeft());
+
     }
 
     public void testDateNoAppearanceWidget() {
@@ -855,6 +892,13 @@ public class AllWidgetsFormTest {
         onView(withText("Grid select one widget")).perform(swipeLeft());
     }
 
+    public void testImageSelectOne() {
+
+        Screengrab.screenshot("image-select1");
+
+        onView(withText("Image select one widget")).perform(swipeLeft());
+    }
+
     public void testMultiSelectWidget() {
 
         Screengrab.screenshot("multi-select");
@@ -881,6 +925,13 @@ public class AllWidgetsFormTest {
         Screengrab.screenshot("spinner-select");
 
         onView(withText("Spinner widget: select multiple")).perform(swipeLeft());
+    }
+
+    public void testImageSelectMultiple() {
+
+        Screengrab.screenshot("image-select-multiple");
+
+        onView(withText("Image select multiple widget")).perform(swipeLeft());
     }
 
     public void testLabelWidget() {
@@ -956,6 +1007,26 @@ public class AllWidgetsFormTest {
         };
     }
 
+    public static ViewAction setNumberPickerValue(final int value) {
+        return new ViewAction() {
+            @Override
+            public void perform(UiController uiController, View view) {
+                NumberPicker numberPickerDialog = (NumberPicker) view;
+                numberPickerDialog.setValue(value);
+            }
+
+            @Override
+            public String getDescription() {
+                return "Set a value on a Number Picker";
+            }
+
+            @Override
+            public Matcher<View> getConstraints() {
+                return ViewMatchers.isAssignableFrom(NumberPicker.class);
+            }
+        };
+    }
+
     private ViewInteraction onVisibleSeekBar() {
         return onView(withId(R.id.seek_bar));
     }
@@ -966,6 +1037,10 @@ public class AllWidgetsFormTest {
 
     private ViewInteraction onVisibleCheckBox() {
         return onView(withClassName(endsWith("CheckBox")));
+    }
+
+    private ViewInteraction onVisibleNumberPickerDialog() {
+        return onView(withClassName(endsWith("NumberPickerDialog")));
     }
 
     // private void openWidget(String name) {
