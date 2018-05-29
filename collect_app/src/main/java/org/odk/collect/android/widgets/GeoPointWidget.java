@@ -40,6 +40,7 @@ import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import java.text.DecimalFormat;
+import java.util.Locale;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
@@ -87,10 +88,10 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
 
         // use mapsV2 if it is available and was requested;
         useMapsV2 = useMapsV2(context);
-        if (appearance != null && appearance.equalsIgnoreCase("placement-map") && useMapsV2) {
+        if (appearance != null && appearance.toLowerCase(Locale.US).contains("placement-map") && useMapsV2) {
             draggable = true;
             useMaps = true;
-        } else if (appearance != null && appearance.equalsIgnoreCase("maps") && useMapsV2) {
+        } else if (appearance != null && appearance.toLowerCase(Locale.US).contains("maps") && useMapsV2) {
             draggable = false;
             useMaps = true;
         } else {
