@@ -15,8 +15,10 @@
 package org.odk.collect.android.activities;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -24,6 +26,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,8 +45,10 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.receivers.NetworkReceiver;
 import org.odk.collect.android.tasks.InstanceSyncTask;
+import org.odk.collect.android.tasks.sms.SmsNotificationReceiver;
 import org.odk.collect.android.tasks.sms.SmsService;
 import org.odk.collect.android.utilities.PlayServicesUtil;
+import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.util.ArrayList;
@@ -81,6 +86,16 @@ public class InstanceUploaderList extends InstanceListActivity implements
 
     private boolean showAllMode;
 
+    private BroadcastReceiver smsForegroundReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            // This is part of the magic, don't send this notification to anyone else since
+            //this activity is currently in the foreground.
+            abortBroadcast();
+        }
+    };
+
     @Inject
     SmsService smsService;
 
@@ -91,6 +106,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
         // set title
         setTitle(getString(R.string.send_data));
         setContentView(R.layout.instance_uploader_list);
+        setLightThemeBackground();
         getComponent().inject(this);
 
         if (savedInstanceState != null) {
@@ -167,20 +183,17 @@ public class InstanceUploaderList extends InstanceListActivity implements
 
         final Button toggleSelsButton = findViewById(R.id.toggle_button);
         toggleSelsButton.setLongClickable(true);
-        toggleSelsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ListView lv = listView;
-                boolean allChecked = toggleChecked(lv);
-                toggleButtonLabel(toggleSelsButton, lv);
-                uploadButton.setEnabled(allChecked);
-                if (allChecked) {
-                    for (int i = 0; i < lv.getCount(); i++) {
-                        selectedInstances.add(lv.getItemIdAtPosition(i));
-                    }
-                } else {
-                    selectedInstances.clear();
+        toggleSelsButton.setOnClickListener(v -> {
+            ListView lv = listView;
+            boolean allChecked = toggleChecked(lv);
+            toggleButtonLabel(toggleSelsButton, lv);
+            uploadButton.setEnabled(allChecked);
+            if (allChecked) {
+                for (int i = 0; i < lv.getCount(); i++) {
+                    selectedInstances.add(lv.getItemIdAtPosition(i));
                 }
+            } else {
+                selectedInstances.clear();
             }
         });
         toggleSelsButton.setOnLongClickListener(this);
@@ -189,12 +202,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
 
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         listView.setItemsCanFocus(false);
-        listView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-            @Override
-            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                uploadButton.setEnabled(areCheckedItems());
-            }
-        });
+        listView.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> uploadButton.setEnabled(areCheckedItems()));
 
 
         instanceSyncTask = new InstanceSyncTask();
@@ -219,6 +227,13 @@ public class InstanceUploaderList extends InstanceListActivity implements
 
         }
         super.onResume();
+
+        IntentFilter filter = new IntentFilter(SmsNotificationReceiver.SMS_NOTIFICATION_ACTION);
+        // The default priority is 0. Positive values will be before
+        // the default, lower values will be after it.
+        filter.setPriority(1);
+
+        registerReceiver(smsForegroundReceiver, filter);
     }
 
     @Override
@@ -227,6 +242,8 @@ public class InstanceUploaderList extends InstanceListActivity implements
             instanceSyncTask.setDiskSyncListener(null);
         }
         super.onPause();
+
+        unregisterReceiver(smsForegroundReceiver);
     }
 
     @Override
@@ -429,5 +446,20 @@ public class InstanceUploaderList extends InstanceListActivity implements
                 }).create();
         alertDialog.show();
         return true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (listAdapter != null) {
+            ((InstanceUploaderAdapter) listAdapter).onDestroy();
+        }
+    }
+
+    public void setLightThemeBackground() {
+        if (!new ThemeUtils(this).isDarkTheme()) {
+            getWindow().getDecorView().setBackgroundColor(ContextCompat.getColor(this, R.color.card_ui_activity_background));
+        }
     }
 }
