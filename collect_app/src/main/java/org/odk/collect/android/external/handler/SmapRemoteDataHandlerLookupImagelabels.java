@@ -84,7 +84,6 @@ public class SmapRemoteDataHandlerLookupImagelabels implements IFunctionHandler 
         }
 
         Collect app = Collect.getInstance();
-        String url = mServerUrlBase;
 
         String imageName = XPathFuncExpr.toString(args[0]);
         String timeoutValue = "0";
@@ -94,6 +93,7 @@ public class SmapRemoteDataHandlerLookupImagelabels implements IFunctionHandler 
 
         if(imageName.length() > 0) {
 
+            String url = mServerUrlBase + "?name=" + imageName; // Add the name to the URL so that the cache entry is unique
             // Get the cache results if they exist
             String data = app.getRemoteData(url);
 
