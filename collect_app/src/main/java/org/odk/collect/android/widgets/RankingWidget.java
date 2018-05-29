@@ -107,7 +107,7 @@ public class RankingWidget extends QuestionWidget {
     }
 
     private void setUpLayout() {
-        rankingListAdapter = new RankingListAdapter(getOrderedItems(), getFormEntryPrompt());
+        rankingListAdapter = new RankingListAdapter(getContext(), getOrderedItems(), getFormEntryPrompt());
 
         RecyclerView recyclerView = new RecyclerView(getContext());
         recyclerView.setHasFixedSize(true);

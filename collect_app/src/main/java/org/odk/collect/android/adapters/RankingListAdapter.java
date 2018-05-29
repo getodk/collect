@@ -16,7 +16,7 @@
 
 package org.odk.collect.android.adapters;
 
-import android.graphics.Color;
+import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -30,23 +30,26 @@ import org.javarosa.core.model.SelectChoice;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.utilities.ThemeUtils;
 
 import java.util.Collections;
 import java.util.List;
 
 public class RankingListAdapter extends RecyclerView.Adapter<RankingListAdapter.ItemViewHolder> {
 
+    private Context context;
     private List<SelectChoice> items;
     private FormEntryPrompt formEntryPrompt;
 
-    public RankingListAdapter(List<SelectChoice> items, FormEntryPrompt formEntryPrompt) {
+    public RankingListAdapter(Context context, List<SelectChoice> items, FormEntryPrompt formEntryPrompt) {
+        this.context = context;
         this.items = items;
         this.formEntryPrompt = formEntryPrompt;
     }
 
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ItemViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.ranking_item, parent, false));
+        return new ItemViewHolder(context, LayoutInflater.from(parent.getContext()).inflate(R.layout.ranking_item, parent, false));
     }
 
     @Override
@@ -71,23 +74,25 @@ public class RankingListAdapter extends RecyclerView.Adapter<RankingListAdapter.
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
 
+        final Context context;
         final TextView textView;
 
-        ItemViewHolder(View itemView) {
+        ItemViewHolder(Context context, View itemView) {
             super(itemView);
+            this.context = context;
             textView = itemView.findViewById(R.id.rank_item_text);
             textView.setTextSize(Collect.getQuestionFontsize());
         }
 
         public void onItemSelected() {
             GradientDrawable border = new GradientDrawable();
-            border.setColor(ContextCompat.getColor(Collect.getInstance(), R.color.white));
+            border.setColor(new ThemeUtils(context).getRankItemColor());
             border.setStroke(10, ContextCompat.getColor(Collect.getInstance(), R.color.tintColor));
             itemView.setBackground(border);
         }
 
         public void onItemClear() {
-            itemView.setBackgroundColor(Color.WHITE);
+            itemView.setBackgroundColor(new ThemeUtils(context).getRankItemColor());
         }
     }
 }

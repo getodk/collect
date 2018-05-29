@@ -4,11 +4,11 @@
     android:layout_height="wrap_content"
     android:padding="10dp"
     android:layout_marginTop="5dp"
-    android:background="@color/white">
+    android:background="?attr/rankItemColor">
 
     <TextView
         android:id="@+id/rank_item_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/black" />
+        android:textColor="?primaryTextColor" />
 </FrameLayout>
