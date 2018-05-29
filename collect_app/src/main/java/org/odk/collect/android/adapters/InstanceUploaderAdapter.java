@@ -2,12 +2,14 @@ package org.odk.collect.android.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
@@ -18,8 +20,9 @@ import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.tasks.sms.SmsService;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.tasks.sms.models.MessageStatus;
-import org.odk.collect.android.tasks.sms.models.SmsSubmission;
 import org.odk.collect.android.tasks.sms.models.SmsProgress;
+import org.odk.collect.android.tasks.sms.models.SmsSubmission;
+import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.views.ProgressBar;
 
 import java.text.SimpleDateFormat;
@@ -72,6 +75,11 @@ public class InstanceUploaderAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         ViewHolder viewHolder = (ViewHolder) view.getTag();
+
+        GradientDrawable shapeDrawable = (GradientDrawable) viewHolder.imageBackground.getBackground();
+        shapeDrawable.setColor(new ThemeUtils(context).getAccentColor());
+
+        viewHolder.progressBar.setProgressPercent(0, false);
 
         viewHolder.displayName.setText(cursor.getString(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME)));
         viewHolder.displaySubtext.setText(cursor.getString(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.DISPLAY_SUBTEXT)));
@@ -167,6 +175,8 @@ public class InstanceUploaderAdapter extends CursorAdapter {
             case Sent:
                 viewHolder.statusIcon.setImageResource(R.drawable.check);
                 break;
+
+            case Queued:
             case Sending:
                 viewHolder.statusIcon.setImageResource(R.drawable.message_text_outline);
                 break;
@@ -221,6 +231,8 @@ public class InstanceUploaderAdapter extends CursorAdapter {
     }
 
     static class ViewHolder {
+        @BindView(R.id.image_background)
+        LinearLayout imageBackground;
         @BindView(R.id.display_name)
         TextView displayName;
         @BindView(R.id.display_subtext)
