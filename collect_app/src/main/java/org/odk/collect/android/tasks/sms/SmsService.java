@@ -91,8 +91,9 @@ public class SmsService {
                     String filePath = results.getString(results
                             .getColumnIndex(InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH));
                     String id = results.getString(results.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID));
+                    String displayName = results.getString(results.getColumnIndex(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME));
 
-                    submitForm(id, filePath);
+                    submitForm(id, filePath, displayName);
                 }
             }
         }
@@ -105,7 +106,7 @@ public class SmsService {
      *
      * @param instanceId id from instanceDao
      */
-    public boolean submitForm(String instanceId, String instanceFilePath) {
+    public boolean submitForm(String instanceId, String instanceFilePath, String displayName) {
 
         String text;
 
@@ -170,8 +171,10 @@ public class SmsService {
 
             model = new SmsSubmission();
             model.setJobId(0);
+            model.setNotificationId();
             model.setInstanceId(instanceId);
             model.setLastUpdated(new Date());
+            model.setDisplayName(displayName);
 
             List<Message> messages = new ArrayList<>();
 

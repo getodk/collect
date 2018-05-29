@@ -75,7 +75,7 @@ public class SmsServiceTest extends BaseSmsTest {
 
         writeFormToFile(form, file);
 
-        assertTrue(smsService.submitForm(SampleData.TEST_INSTANCE_ID, instancePath));
+        assertTrue(smsService.submitForm(SampleData.TEST_INSTANCE_ID, instancePath, "Sample Form"));
 
         ShadowSmsManager.TextMultipartParams params = shadowOf(smsManager).getLastSentMultipartTextMessageParams();
 
