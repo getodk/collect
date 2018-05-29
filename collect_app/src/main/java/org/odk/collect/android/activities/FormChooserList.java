@@ -33,9 +33,12 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.listeners.PermissionListener;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.tasks.DiskSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.FormUtils;
 import org.odk.collect.android.utilities.VersionHidingCursorAdapter;
 
 import timber.log.Timber;
@@ -249,7 +252,10 @@ public class FormChooserList extends FormListActivity implements
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
         hideProgressBarIfAllowed();
-        listAdapter.changeCursor(cursor);
+        listAdapter.changeCursor(
+                GeneralSharedPreferences.getInstance().getBoolean(PreferenceKeys.KEY_HIDE_OLD_FORM_VERSIONS, false)
+                        ? FormUtils.removeOldForms(cursor)
+                        : cursor);
     }
 
     @Override

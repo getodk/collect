@@ -22,15 +22,20 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.google.android.gms.analytics.HitBuilders;
+
 import org.javarosa.core.model.FormIndex;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 
 import java.io.File;
 import java.util.Calendar;
 import java.util.LinkedList;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.preferences.PreferenceKeys.ACTIVITY_LOGGER_ANALYTICS;
 
 /**
  * Log all user interface activity into a SQLite database. Logging is disabled by default.
@@ -115,7 +120,31 @@ public final class ActivityLogger {
     public ActivityLogger(String deviceId) {
         this.deviceId = deviceId;
         loggingEnabled = new File(Collect.LOG_PATH, ENABLE_LOGGING).exists();
-        open();
+
+        if (loggingEnabled) {
+            open();
+
+            if (isFirstTime()) {
+                sendAnalyticsEvent();
+                GeneralSharedPreferences.getInstance().save(ACTIVITY_LOGGER_ANALYTICS, false);
+            }
+        }
+    }
+
+    private void sendAnalyticsEvent() {
+        /* smap
+        Collect.getInstance()
+                .getDefaultTracker()
+                .send(new HitBuilders.EventBuilder()
+                        .setCategory("ActivityLogger")
+                        .setAction("Enabled")
+                        .setLabel("ActivityLogger is enabled")
+                        .build());
+                        */
+    }
+
+    private boolean isFirstTime() {
+        return GeneralSharedPreferences.getInstance().getBoolean(ACTIVITY_LOGGER_ANALYTICS, true);
     }
 
     public boolean isOpen() {

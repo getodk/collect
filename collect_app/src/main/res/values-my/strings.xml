@@ -26,8 +26,8 @@
   <string name="capture_video">ဗီဒီယိုရိုက်ပါ</string>
   <string name="change_language">ဘာသာစကားပြောင်းပါ</string>
   <string name="change_password">ODK စကားဝှက်</string>
-  <string name="change_username">အခ်က္အလက္စုေဆာင္းသူ အမည္</string>
-  <string name="clearanswer_confirm">ေျဖၾကားမွုကို  \"%s\" သို႔ ဖယ္ထုတ္လိုပါသလား?</string>
+  <string name="change_username">ODK အသုံးပြုသူအမည်</string>
+  <string name="clearanswer_confirm">\"%s\" ၏အဖြေကို ဖယ်မည်လား?</string>
   <string name="clear_answer">ေျဖၾကားမွုကို ဖယ္ထုတ္ရန္</string>
   <string name="clear_answer_ask">ဤေျဖၾကားမွုကို ဖယ္ထုတ္လိုပါသလား</string>
   <string name="clear_answer_no">မဖယ္ထုတ္ပါ</string>

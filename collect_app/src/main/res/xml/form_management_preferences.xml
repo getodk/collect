@@ -13,6 +13,10 @@
             android:key="automatic_update"
             android:summary="@string/automatic_download_summary"
             android:title="@string/automatic_download" />
+        <CheckBoxPreference
+            android:key="hide_old_form_versions"
+            android:title="@string/hide_old_form_versions_setting_title"
+            android:summary="@string/hide_old_form_versions_setting_summary" />
     </PreferenceCategory>
     <PreferenceCategory
         android:key="form_submission"

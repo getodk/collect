@@ -41,6 +41,7 @@ public final class AdminKeys {
     // client
     private static final String KEY_PERIODIC_FORM_UPDATES_CHECK = "periodic_form_updates_check";
     private static final String KEY_AUTOMATIC_UPDATE            = "automatic_update";
+    private static final String KEY_HIDE_OLD_FORM_VERSIONS      = "hide_old_form_versions";
     private static final String KEY_CHANGE_FONT_SIZE            = "change_font_size";
     private static final String KEY_DEFAULT_TO_FINALIZED        = "default_to_finalized";
     private static final String KEY_HIGH_RESOLUTION             = "high_resolution";
@@ -75,6 +76,7 @@ public final class AdminKeys {
 
             ag(KEY_PERIODIC_FORM_UPDATES_CHECK, PreferenceKeys.KEY_PERIODIC_FORM_UPDATES_CHECK),
             ag(KEY_AUTOMATIC_UPDATE,           PreferenceKeys.KEY_AUTOMATIC_UPDATE),
+            ag(KEY_HIDE_OLD_FORM_VERSIONS,     PreferenceKeys.KEY_HIDE_OLD_FORM_VERSIONS),
             ag(KEY_CHANGE_FONT_SIZE,           PreferenceKeys.KEY_FONT_SIZE),
             ag(KEY_APP_LANGUAGE,               PreferenceKeys.KEY_APP_LANGUAGE),
             ag(KEY_DEFAULT_TO_FINALIZED,       PreferenceKeys.KEY_COMPLETED_DEFAULT),
@@ -127,6 +129,7 @@ public final class AdminKeys {
     static Collection<String> formManagementKeys = Arrays.asList(
             KEY_PERIODIC_FORM_UPDATES_CHECK,
             KEY_AUTOMATIC_UPDATE,
+            KEY_HIDE_OLD_FORM_VERSIONS,
             KEY_AUTOSEND,
             KEY_DELETE_AFTER_SEND,
             KEY_DEFAULT_TO_FINALIZED,
