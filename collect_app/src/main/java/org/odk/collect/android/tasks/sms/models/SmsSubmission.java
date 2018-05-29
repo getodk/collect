@@ -2,6 +2,7 @@ package org.odk.collect.android.tasks.sms.models;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import io.reactivex.Observable;
 
@@ -10,9 +11,11 @@ import io.reactivex.Observable;
  */
 public class SmsSubmission {
     private String instanceId;
+    private int notificationId;
     private List<Message> messages;
     private Date lastUpdated;
     private int jobId;
+    private String displayName;
 
     public Date getLastUpdated() {
         return lastUpdated;
@@ -88,5 +91,21 @@ public class SmsSubmission {
 
     public void setJobId(int jobId) {
         this.jobId = jobId;
+    }
+
+    public int getNotificationId() {
+        return notificationId;
+    }
+
+    public void setNotificationId() {
+        this.notificationId = new Random().nextInt(10000);
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 }
