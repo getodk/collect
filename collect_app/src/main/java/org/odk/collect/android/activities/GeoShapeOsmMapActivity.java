@@ -165,7 +165,7 @@ public class GeoShapeOsmMapActivity extends CollectAbstractActivity implements I
 
         map.invalidate();
 
-        zoomDialogView = getLayoutInflater().inflate(R.layout.geoshape_zoom_dialog, null);
+        zoomDialogView = getLayoutInflater().inflate(R.layout.geo_zoom_dialog, null);
 
         zoomLocationButton = zoomDialogView.findViewById(R.id.zoom_location);
         zoomLocationButton.setOnClickListener(new View.OnClickListener() {
@@ -178,7 +178,7 @@ public class GeoShapeOsmMapActivity extends CollectAbstractActivity implements I
             }
         });
 
-        zoomPointButton = zoomDialogView.findViewById(R.id.zoom_shape);
+        zoomPointButton = zoomDialogView.findViewById(R.id.zoom_saved_location);
         zoomPointButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -238,7 +238,7 @@ public class GeoShapeOsmMapActivity extends CollectAbstractActivity implements I
             Marker marker = new Marker(map);
             marker.setPosition(new GeoPoint(gp[0], gp[1]));
             marker.setDraggable(true);
-            marker.setIcon(ContextCompat.getDrawable(this, R.drawable.ic_place));
+            marker.setIcon(ContextCompat.getDrawable(this, R.drawable.ic_place_black));
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
             marker.setOnMarkerClickListener(nullMarkerListener);
             mapMarkers.add(marker);
@@ -430,7 +430,7 @@ public class GeoShapeOsmMapActivity extends CollectAbstractActivity implements I
             Marker marker = new Marker(map);
             marker.setPosition(point);
             marker.setDraggable(true);
-            marker.setIcon(ContextCompat.getDrawable(GeoShapeOsmMapActivity.this, R.drawable.ic_place));
+            marker.setIcon(ContextCompat.getDrawable(GeoShapeOsmMapActivity.this, R.drawable.ic_place_black));
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
             marker.setOnMarkerClickListener(nullMarkerListener);
             mapMarkers.add(marker);
@@ -556,7 +556,7 @@ public class GeoShapeOsmMapActivity extends CollectAbstractActivity implements I
         if (myLocationOverlay.getMyLocation() != null) {
             zoomLocationButton.setEnabled(true);
             zoomLocationButton.setBackgroundColor(Color.parseColor("#50cccccc"));
-            zoomLocationButton.setTextColor(Color.parseColor("#ff333333"));
+            zoomLocationButton.setTextColor(themeUtils.getPrimaryTextColor());
         } else {
             zoomLocationButton.setEnabled(false);
             zoomLocationButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));
@@ -566,7 +566,7 @@ public class GeoShapeOsmMapActivity extends CollectAbstractActivity implements I
         if (mapMarkers.size() != 0) {
             zoomPointButton.setEnabled(true);
             zoomPointButton.setBackgroundColor(Color.parseColor("#50cccccc"));
-            zoomPointButton.setTextColor(Color.parseColor("#ff333333"));
+            zoomPointButton.setTextColor(themeUtils.getPrimaryTextColor());
         } else {
             zoomPointButton.setEnabled(false);
             zoomPointButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));

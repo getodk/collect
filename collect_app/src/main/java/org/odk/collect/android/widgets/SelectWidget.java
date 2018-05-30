@@ -151,7 +151,7 @@ public abstract class SelectWidget extends QuestionWidget {
 
         if (index != items.size() - 1) {
             ImageView divider = new ImageView(getContext());
-            divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
+            divider.setBackgroundResource(themeUtils.getDivider());
             mediaLayout.addDivider(divider);
         }
 
