@@ -54,9 +54,8 @@ public class VersionHidingCursorAdapter extends SimpleCursorAdapter {
                     v.setVisibility(View.GONE);
                     if (version != null) {
                         v.append(String.format(ctxt.getString(R.string.version_number), version));
+                        v.append(" ");
                         v.setVisibility(View.VISIBLE);
-                    } else {
-                        v.append("");
                     }
                     if (from.length > 3) {
                         int idColumnIndex = cursor.getColumnIndex(from[3]);
@@ -64,8 +63,6 @@ public class VersionHidingCursorAdapter extends SimpleCursorAdapter {
                         if (id != null) {
                             v.append(String.format(ctxt.getString(R.string.id_number), id));
                             v.setVisibility(View.VISIBLE);
-                        } else {
-                            v.append("");
                         }
                     }
                 }
