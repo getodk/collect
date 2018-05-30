@@ -17,6 +17,7 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -100,7 +101,7 @@ public class ListMultiWidget extends QuestionWidget implements MultiChoiceWidget
         if (items != null) {
             for (int i = 0; i < items.size(); i++) {
 
-                CheckBox c = new CheckBox(getContext());
+                AppCompatCheckBox c = new AppCompatCheckBox(getContext());
                 c.setTag(i);
                 c.setId(ViewIds.generateViewId());
                 c.setFocusable(!prompt.isReadOnly());

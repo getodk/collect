@@ -16,6 +16,7 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
 import android.view.View;
@@ -37,7 +38,6 @@ import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
 import java.util.ArrayList;
 import java.util.List;
-
 
 /**
  * SelectMultiWidget handles multiple selection fields using checkboxes.
@@ -102,7 +102,7 @@ public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWi
         final String choiceName = getFormEntryPrompt().getSelectChoiceText(items.get(index));
         final CharSequence choiceDisplayName = choiceName == null ? "" : TextUtils.textToHtml(choiceName);
         // no checkbox group so id by answer + offset
-        CheckBox checkBox = new CheckBox(getContext());
+        AppCompatCheckBox checkBox = new AppCompatCheckBox(getContext());
         checkBox.setTag(index);
         checkBox.setId(ViewIds.generateViewId());
         checkBox.setText(choiceDisplayName);
