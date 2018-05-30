@@ -248,22 +248,13 @@ public final class WebUtils {
     public static void discardEntityBytes(HttpResponse response) {
         HttpEntity entity = response.getEntity();
         if (entity != null) {
-            InputStream is = null;
-            try {
-                is = response.getEntity().getContent();
-                while (is.read() != -1) {
-                    // loop until all bytes read
+            try (InputStream is = entity.getContent()) {
+                byte[] buffer = new byte[1024];
+                while (is.available() != 0) {
+                    is.read(buffer, 0, is.available());
                 }
             } catch (Exception e) {
-                Timber.i(e);
-            } finally {
-                if (is != null) {
-                    try {
-                        is.close();
-                    } catch (IOException e) {
-                        Timber.d(e);
-                    }
-                }
+                Timber.e(e);
             }
         }
     }
