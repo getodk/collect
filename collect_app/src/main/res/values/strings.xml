@@ -628,6 +628,8 @@
         <item quantity="other">Submitting form, Sending message %1$d! of %2$d</item>
     </plurals>
     <string name="sms_sent_on_date_at_time">\'Sent as Sms on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
+    <string name="sms_delivered_on_date_at_time">\'Delivered as Sms on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
+    <string name="sms_not_delivered_on_date_at_time">\'Sent as Sms but not delivered on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
     <string name="sms_submission_queued">Queued for submission.</string>
     <string name="sms_submissions_notif_title">Sms Submissions</string>
     <string name="sms_submissions_notif_description">Several forms are currently being submitted.</string>

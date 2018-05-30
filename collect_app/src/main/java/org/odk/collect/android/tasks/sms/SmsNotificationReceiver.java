@@ -117,6 +117,12 @@ public class SmsNotificationReceiver extends BroadcastReceiver {
             case Sent:
                 return new SimpleDateFormat(context.getString(R.string.sms_sent_on_date_at_time),
                         Locale.getDefault()).format(date);
+            case Delivered:
+                return new SimpleDateFormat(context.getString(R.string.sms_delivered_on_date_at_time),
+                        Locale.getDefault()).format(date);
+            case NotDelivered:
+                return new SimpleDateFormat(context.getString(R.string.sms_not_delivered_on_date_at_time),
+                        Locale.getDefault()).format(date);
             case NoMessage:
                 return context.getString(R.string.sms_no_message);
             case Canceled:
