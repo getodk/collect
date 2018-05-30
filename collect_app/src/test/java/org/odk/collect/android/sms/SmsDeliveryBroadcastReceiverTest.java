@@ -5,7 +5,7 @@ import android.content.Intent;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.tasks.sms.SentBroadcastReceiver;
+import org.odk.collect.android.tasks.sms.SmsDeliveryBroadcastReceiver;
 import org.odk.collect.android.tasks.sms.SmsPendingIntents;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.shadows.ShadowApplication;
@@ -13,7 +13,7 @@ import org.robolectric.shadows.ShadowApplication;
 import java.util.List;
 
 @RunWith(RobolectricTestRunner.class)
-public class SentBroadcastReceiverTest {
+public class SmsDeliveryBroadcastReceiverTest {
 
     @Test
     public void testBroadcastReceiverRegistered() {
@@ -25,7 +25,7 @@ public class SentBroadcastReceiverTest {
         boolean receiverFound = false;
         for (ShadowApplication.Wrapper wrapper : registeredReceivers) {
             if (!receiverFound) {
-                receiverFound = SentBroadcastReceiver.class.getSimpleName().equals(
+                receiverFound = SmsDeliveryBroadcastReceiver.class.getSimpleName().equals(
                         wrapper.broadcastReceiver.getClass().getSimpleName());
             }
         }
@@ -38,7 +38,7 @@ public class SentBroadcastReceiverTest {
         /**
          * Testing to see if the broadcast receiver will receive SMS events from Collect.
          */
-        Intent intent = new Intent(SmsPendingIntents.SMS_SEND_ACTION);
+        Intent intent = new Intent(SmsPendingIntents.SMS_DELIVERY_ACTION);
 
         ShadowApplication shadowApplication = ShadowApplication.getInstance();
         Assert.assertTrue(shadowApplication.hasReceiverForIntent(intent));
