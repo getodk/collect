@@ -765,7 +765,15 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 break;
 
             case RequestCodes.ARBITRARY_FILE_CHOOSER:
-                saveFileAnswer(intent.getData());
+
+                showDialog(SAVING_DIALOG);
+                Runnable saveFileRunnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        saveChosenFile(intent.getData());
+                    }
+                };
+                new Thread(saveFileRunnable).start();
                 break;
             case RequestCodes.AUDIO_CHOOSER:
                 // Same with VIDEO_CHOOSER.
@@ -778,7 +786,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 Runnable saveMediaRunnable = new Runnable() {
                     @Override
                     public void run() {
-                        saveChosenMedia(intent.getData());
+                        saveChosenFile(intent.getData());
                     }
                 };
                 new Thread(saveMediaRunnable).start();
@@ -829,7 +837,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * @param selectedFile uri of the selected audio
      * @see #getFileExtensionFromUri(Uri)
      */
-    private void saveChosenMedia(Uri selectedFile) {
+    private void saveChosenFile(Uri selectedFile) {
         String extension = getFileExtensionFromUri(selectedFile);
 
         String instanceFolder = Collect.getInstance().getFormController()
@@ -917,7 +925,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * @param fileUri Whose name we want to get
      * @return The file's extension
      * @see #onActivityResult(int, int, Intent)
-     * @see #saveChosenMedia(Uri)
+     * @see #saveChosenFile(Uri)
      * @see android.content.ContentResolver
      */
     private String getFileExtensionFromUri(Uri fileUri) {
