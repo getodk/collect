@@ -271,7 +271,7 @@ the specific language governing permissions and limitations under the License.
         <activity android:name=".activities.CaptureSelfieVideoActivityNewApi" />
 
         <receiver
-            android:name=".tasks.sms.SentBroadcastReceiver"
+            android:name=".tasks.sms.SmsSentBroadcastReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
@@ -286,6 +286,13 @@ the specific language governing permissions and limitations under the License.
                 <action android:name="org.odk.collect.android.COLLECT_SMS_NOTIFICATION_ACTION" />
             </intent-filter>
         </receiver>
+        <receiver
+            android:name=".tasks.sms.SmsDeliveryBroadcastReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="org.odk.collect.android.COLLECT_SMS_DELIVERY_ACTION" />
+            </intent-filter>
+        </receiver>
     </application>
-
 </manifest>
