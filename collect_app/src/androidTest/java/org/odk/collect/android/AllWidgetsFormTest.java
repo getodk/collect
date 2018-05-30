@@ -301,7 +301,6 @@ public class AllWidgetsFormTest {
 
         onView(withId(R.id.simple_button)).perform(click());
         onView(withText("URL widget")).perform(swipeLeft());
-        //check!!?
     }
 
     public void testExStringWidget() {
