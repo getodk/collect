@@ -20,7 +20,7 @@ import static org.odk.collect.android.tasks.sms.SmsNotificationReceiver.SMS_NOTI
  * This intent is triggered by the SMSSenderJob that's sending different
  * parts of a form each time it's triggered.
  */
-public class SentBroadcastReceiver extends BroadcastReceiver {
+public class SmsSentBroadcastReceiver extends BroadcastReceiver {
 
     @Inject
     SmsService smsService;

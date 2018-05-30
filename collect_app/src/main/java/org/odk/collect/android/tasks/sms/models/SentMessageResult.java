@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * Encapsulates all the data that's received when the SentBroadcastReceiver
+ * Encapsulates all the data that's received when the SmsSentBroadcastReceiver
  * is triggered. This is then passed to the SmsService and Notification Receiver for processing.
  */
 public class SentMessageResult implements Parcelable {

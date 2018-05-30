@@ -229,7 +229,7 @@ public class SmsService {
 
     /***
      * Receives a model that contains the information received by the intent of the
-     * SentBroadcastReceiver that's triggered when a message was sent.
+     * SmsSentBroadcastReceiver that's triggered when a message was sent.
      * This function then determines the next action to perform based on the result it receives.
      * @param sentMessageResult from BroadcastReceiver
      */
