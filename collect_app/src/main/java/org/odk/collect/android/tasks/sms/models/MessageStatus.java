@@ -10,5 +10,7 @@ public enum MessageStatus {
     NoMessage,
     Canceled,
     InvalidGateway,
-    Queued
+    Queued,
+    Delivered,
+    NotDelivered
 }
