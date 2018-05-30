@@ -23,6 +23,7 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.tasks.sms.SmsPendingIntents.getDeliveryPendingIntent;
 import static org.odk.collect.android.tasks.sms.SmsPendingIntents.getSentPendingIntent;
 
 public class SmsSender {
@@ -57,6 +58,7 @@ public class SmsSender {
         SmsSubmission model = submissionManager.getSubmissionModel(instanceId);
 
         ArrayList<PendingIntent> sentIntents = new ArrayList<>();
+        ArrayList<PendingIntent> deliveryIntents = new ArrayList<>();
         ArrayList<String> messages = new ArrayList<>();
 
         for (Message message : model.getMessages()) {
@@ -68,12 +70,15 @@ public class SmsSender {
             PendingIntent sentPendingIntent = getSentPendingIntent(context, instanceId, message.getId());
             sentIntents.add(sentPendingIntent);
 
+            PendingIntent deliveryPendingIntent = getDeliveryPendingIntent(context, instanceId, message.getId());
+            deliveryIntents.add(deliveryPendingIntent);
+
             messages.add(message.getText());
 
             submissionManager.markMessageAsSending(instanceId, message.getId());
         }
 
-        smsManager.sendMultipartTextMessage(gateway, null, messages, sentIntents, null);
+        smsManager.sendMultipartTextMessage(gateway, null, messages, sentIntents, deliveryIntents);
 
         String log = String.format(Locale.getDefault(), "Sending a SMS of instance id %s", instanceId);
         Timber.i(log);
