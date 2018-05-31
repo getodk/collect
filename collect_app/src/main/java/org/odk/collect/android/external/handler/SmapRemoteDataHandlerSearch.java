@@ -19,8 +19,6 @@
 package org.odk.collect.android.external.handler;
 
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.preference.PreferenceManager;
 
 import com.google.gson.Gson;
@@ -33,21 +31,16 @@ import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalDataException;
-import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.external.ExternalDataUtil;
-import org.odk.collect.android.external.ExternalSQLiteOpenHelper;
-import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.tasks.SmapRemoteWebServiceTask;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Set;
+import java.net.URLEncoder;
 
-import static org.odk.collect.android.external.handler.ExternalDataSearchType.IN;
+import timber.log.Timber;
 
 /**
  * Get choices from the server
@@ -56,13 +49,13 @@ public class SmapRemoteDataHandlerSearch implements IFunctionHandler {
 
     public static final String HANDLER_NAME = "lookup_choices";
 
-    private final String displayColumns;
+    private String displayColumns;
     private final String valueColumn;
     private final String imageColumn;
 
     public String mServerUrlBase = null;
 
-    public SmapRemoteDataHandlerSearch(String ident, String displayColumns,
+    public SmapRemoteDataHandlerSearch(String ident, String dColumns,
                                        String valueColumn, String imageColumn) {
 
         SharedPreferences sharedPreferences = PreferenceManager
@@ -70,9 +63,21 @@ public class SmapRemoteDataHandlerSearch implements IFunctionHandler {
         mServerUrlBase = sharedPreferences.getString(PreferenceKeys.KEY_SERVER_URL, null) +
                 "/lookup/choices/" + ident + "/";
 
-        this.displayColumns = displayColumns;
         this.valueColumn = valueColumn;
         this.imageColumn = imageColumn;
+
+        // Remove any spaces around comma separated display columns
+        displayColumns = "";
+        if(dColumns != null) {
+            String[] a = dColumns.split(",");
+            int idx = 0;
+            for(String v : a) {
+                if(idx++ > 0) {
+                    displayColumns += ",";
+                }
+                displayColumns += v.trim();
+            }
+        }
     }
 
     public String getDisplayColumns() {
@@ -109,6 +114,7 @@ public class SmapRemoteDataHandlerSearch implements IFunctionHandler {
 
     @Override
     public Object eval(Object[] args, EvaluationContext ec) {
+
         if (args == null || (args.length != 1 && args.length != 4 && args.length != 6)) {
             // we should never get here since it is already handled in ExternalDataUtil
             // .getSearchXPathExpression(String appearance)
@@ -119,8 +125,6 @@ public class SmapRemoteDataHandlerSearch implements IFunctionHandler {
         String searchType = null;
 
         String queriedColumnsParam = null;
-        List<String> queriedColumns = null;
-        List<String> queriedValues = null;      // smap
         String queriedValue = null;
         if (args.length >= 4) {
             searchType = XPathFuncExpr.toString(args[1]);
@@ -128,28 +132,11 @@ public class SmapRemoteDataHandlerSearch implements IFunctionHandler {
             queriedValue = XPathFuncExpr.toString(args[3]);
         }
 
-        ExternalDataSearchType externalDataSearchType = ExternalDataSearchType.getByKeyword(
-                searchType, ExternalDataSearchType.CONTAINS);
-
-        boolean searchRows = false;
-        boolean useFilter = false;
-
-        if (queriedColumnsParam != null && queriedColumnsParam.trim().length() > 0) {
-            searchRows = true;
-            queriedColumns = ExternalDataUtil.createListOfColumns(queriedColumnsParam);
-        }
-
-        // smap
-        if(queriedValue != null) {
-            queriedValues = ExternalDataUtil.createListOfValues(queriedValue, externalDataSearchType.getKeyword().trim());
-        }
-
         String filterColumn = null;
         String filterValue = null;
         if (args.length == 6) {
             filterColumn = XPathFuncExpr.toString(args[4]);
             filterValue = XPathFuncExpr.toString(args[5]);
-            useFilter = true;
         }
 
         String timeoutValue = "0";
@@ -167,66 +154,69 @@ public class SmapRemoteDataHandlerSearch implements IFunctionHandler {
             columnsToFetch.add(safeImageColumn);
         }
 
-        String[] sqlColumns = columnsToFetch.toArray(new String[columnsToFetch.size()]);
-
-        String selection;
-        String[] selectionArgs;
-
-
-
-
-        // Get the url which doubles as the cache key
-        StringBuffer url = new StringBuffer(mServerUrlBase).append(dataSetName).append("/").append(valueColumn).append("/").append(displayColumns);
-
-        // Add the parameters
-        boolean hasParam = false;
-        if(searchType != null && searchType.trim().length() > 0) {
-            url.append(hasParam ? "&" : "?");
-            url.append("search_type=").append(searchType);
-            hasParam = true;
-        }
-        if(queriedColumnsParam != null && queriedColumnsParam.trim().length() > 0) {
-            url.append(hasParam ? "&" : "?");
-            url.append("q_column=").append(queriedColumnsParam);
-            hasParam = true;
-        }
-        if(queriedValue != null && queriedValue.trim().length() > 0) {
-            url.append(hasParam ? "&" : "?");
-            url.append("q_value=").append(queriedValue);
-            hasParam = true;
-        }
-        if(filterColumn != null && filterColumn.trim().length() > 0) {
-            url.append(hasParam ? "&" : "?");
-            url.append("f_column=").append(filterColumn);
-            hasParam = true;
-        }
-        if(filterValue != null && filterValue.trim().length() > 0) {
-            url.append(hasParam ? "&" : "?");
-            url.append("f_value=").append(filterValue);
-            hasParam = true;
-        }
-
-        // Get the cache results if they exist
-        String urlString = url.toString();
-        String data = app.getRemoteData(urlString);
-        ArrayList<SelectChoice> choices = null;
         try {
-            choices =
-                    new Gson().fromJson(data, new TypeToken<ArrayList<SelectChoice>>() {
-                    }.getType());
+            // Get the url which doubles as the cache key
+            StringBuffer url = new StringBuffer(mServerUrlBase)
+                    .append(dataSetName).append("/")
+                    .append(valueColumn).append("/")
+                    .append(URLEncoder.encode(displayColumns, "UTF-8"));
+
+            // Add the parameters
+            boolean hasParam = false;
+            if (searchType != null && searchType.trim().length() > 0) {
+                url.append(hasParam ? "&" : "?");
+                url.append("search_type=").append(searchType);
+                hasParam = true;
+            }
+            if (queriedColumnsParam != null && queriedColumnsParam.trim().length() > 0) {
+                url.append(hasParam ? "&" : "?");
+                url.append("q_column=").append(URLEncoder.encode(queriedColumnsParam, "UTF-8"));
+                hasParam = true;
+            }
+            if (queriedValue != null && queriedValue.trim().length() > 0) {
+                url.append(hasParam ? "&" : "?");
+                url.append("q_value=").append(URLEncoder.encode(queriedValue, "UTF-8"));
+                hasParam = true;
+            }
+            if (filterColumn != null && filterColumn.trim().length() > 0) {
+                url.append(hasParam ? "&" : "?");
+                url.append("f_column=").append(URLEncoder.encode(filterColumn, "UTF-8"));
+                hasParam = true;
+            }
+            if (filterValue != null && filterValue.trim().length() > 0) {
+                url.append(hasParam ? "&" : "?");
+                url.append("f_value=").append(URLEncoder.encode(filterValue, "UTF-8"));
+                hasParam = true;
+            }
+
+            Timber.i("++++ Remote Search: " + url.toString());
+            // Get the cache results if they exist
+            String urlString = url.toString();
+            String data = app.getRemoteData(urlString);
+            ArrayList<SelectChoice> choices = null;
+            try {
+                choices =
+                        new Gson().fromJson(data, new TypeToken<ArrayList<SelectChoice>>() {
+                        }.getType());
+            } catch (Exception e) {
+                return data;            // Assume the data contains the error message
+            }
+            if (choices == null) {
+                // Call a webservice to get the remote record
+                Timber.i("++++ Make the call");
+                app.startRemoteCall(urlString);
+                SmapRemoteWebServiceTask task = new SmapRemoteWebServiceTask();
+                task.setSmapRemoteListener(app.getFormEntryActivity());
+                task.execute(urlString, timeoutValue, "true");
+                return null;
+            } else {
+                return choices;
+            }
         } catch (Exception e) {
-            return data;            // Assume the data contains the error message
+            Timber.e(e);
         }
-        if (choices == null) {
-            // Call a webservice to get the remote record
-            app.startRemoteCall(urlString);
-            SmapRemoteWebServiceTask task = new SmapRemoteWebServiceTask();
-            task.setSmapRemoteListener(app.getFormEntryActivity());
-            task.execute(urlString, timeoutValue, "true");
-            return null;
-        } else {
-            return choices;
-        }
+
+        return null;
 
     }
 
