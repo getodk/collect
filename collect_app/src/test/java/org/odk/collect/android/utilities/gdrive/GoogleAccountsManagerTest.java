@@ -42,8 +42,6 @@ public class GoogleAccountsManagerTest {
     private GeneralSharedPreferences mockPreferences;
     @Mock
     private Intent mockIntent;
-    @Mock
-    private ThemeUtils mockThemeUtils;
 
     private TestGoogleAccountSelectionListener listener;
     private GoogleAccountsManager googleAccountsManager;
@@ -89,7 +87,7 @@ public class GoogleAccountsManagerTest {
 
     @Before
     public void setup() {
-        googleAccountsManager = spy(new GoogleAccountsManager(mockedCredential, mockPreferences, mockIntent, mockThemeUtils));
+        googleAccountsManager = spy(new GoogleAccountsManager(mockedCredential, mockPreferences, mockIntent));
         listener = new TestGoogleAccountSelectionListener();
         googleAccountsManager.setListener(listener);
 

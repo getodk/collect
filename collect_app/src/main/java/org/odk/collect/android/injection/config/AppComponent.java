@@ -19,7 +19,6 @@ import org.odk.collect.android.tasks.sms.SmsSender;
 import org.odk.collect.android.tasks.sms.SmsSentBroadcastReceiver;
 import org.odk.collect.android.tasks.sms.SmsService;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
-import org.odk.collect.android.widgets.QuestionWidget;
 
 import dagger.BindsInstance;
 import dagger.Component;
@@ -40,8 +39,6 @@ import dagger.android.support.AndroidSupportInjectionModule;
         FragmentBuilder.class
 })
 public interface AppComponent extends AndroidInjector<Collect> {
-
-    void inject(QuestionWidget questionWidget);
 
     void inject(NetworkReceiver networkReceiver);
 

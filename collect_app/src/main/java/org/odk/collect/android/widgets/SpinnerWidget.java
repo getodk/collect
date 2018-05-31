@@ -214,7 +214,7 @@ public class SpinnerWidget extends QuestionWidget implements MultiChoiceWidget {
             tv.setTextSize(textUnit, textSize);
             tv.setPadding(20, 10, 10, 10);
 
-            if (themeUtils.isDarkTheme()) {
+            if (getThemeUtils().isDarkTheme()) {
                 convertView.setBackgroundColor(getResources().getColor(R.color.darkPopupDialogColor));
             }
 
@@ -228,7 +228,7 @@ public class SpinnerWidget extends QuestionWidget implements MultiChoiceWidget {
                 tv.setEnabled(false);
             } else {
                 tv.setTextColor(spinner.getSelectedItemPosition() == position ?
-                        themeUtils.getAccentColor(getContext()) : themeUtils.getPrimaryTextColor(getContext()));
+                        getThemeUtils().getAccentColor() : getThemeUtils().getPrimaryTextColor());
             }
 
             return convertView;

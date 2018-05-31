@@ -26,11 +26,14 @@ public class BasePreferenceFragment extends PreferenceFragment {
     private LinearLayout root;
 
     @Inject
-    protected GeneralSharedPreferences generalSharedPreferences;
+    GeneralSharedPreferences generalSharedPreferences;
+
     @Inject
-    protected AdminSharedPreferences adminSharedPreferences;
+    AdminSharedPreferences adminSharedPreferences;
+
     @Inject
-    protected AuthDialogUtility authDialogUtility;
+    AuthDialogUtility authDialogUtility;
+
     @Inject
     LocaleHelper localeHelper;
 

@@ -99,7 +99,7 @@ public class StringWidget extends QuestionWidget {
         if (readOnly) {
             answerText.setBackground(null);
             answerText.setEnabled(false);
-            answerText.setTextColor(themeUtils.getPrimaryTextColor(getContext()));
+            answerText.setTextColor(getThemeUtils().getPrimaryTextColor());
             answerText.setFocusable(false);
         }
 

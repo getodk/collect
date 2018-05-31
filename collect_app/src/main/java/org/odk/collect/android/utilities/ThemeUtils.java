@@ -27,17 +27,19 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 
-import javax.inject.Inject;
-
 public final class ThemeUtils {
 
-    @Inject
-    GeneralSharedPreferences generalSharedPreferences;
-    @Inject
-    Context context;
+    /**
+     * Should only be an activity's context. This is because application context
+     * is unaware of current activity's theme/attributes.
+     */
+    private final Context context;
 
-    @Inject
-    public ThemeUtils() {
+    private final GeneralSharedPreferences generalSharedPreferences;
+
+    public ThemeUtils(Context context) {
+        this.context = context;
+        generalSharedPreferences = new GeneralSharedPreferences(context);
     }
 
     public boolean isDarkTheme() {
@@ -89,11 +91,7 @@ public final class ThemeUtils {
         return isDarkTheme() ? 0 : 1;
     }
 
-    /**
-     * @param context Should only be an activity's context. This is because application context
-     *                is unaware of current activity's theme/attributes.
-     */
-    private int getAttributeValue(Context context, @AttrRes int resId) {
+    private int getAttributeValue(@AttrRes int resId) {
         TypedValue outValue = new TypedValue();
         context.getTheme().resolveAttribute(resId, outValue, true);
         return outValue.data;
@@ -103,24 +101,24 @@ public final class ThemeUtils {
      * @return Text color for the current {@link android.content.res.Resources.Theme}
      */
     @ColorInt
-    public int getPrimaryTextColor(Context context) {
-        return getAttributeValue(context, R.attr.primaryTextColor);
+    public int getPrimaryTextColor() {
+        return getAttributeValue(R.attr.primaryTextColor);
     }
 
     /**
      * @return Accent color for the current {@link android.content.res.Resources.Theme}
      */
     @ColorInt
-    public int getAccentColor(Context context) {
-        return getAttributeValue(context, R.attr.colorAccent);
+    public int getAccentColor() {
+        return getAttributeValue(R.attr.colorAccent);
     }
 
     /**
      * @return Icon color for the current {@link android.content.res.Resources.Theme}
      */
     @ColorInt
-    public int getIconColor(Context context) {
-        return getAttributeValue(context, R.attr.iconColor);
+    public int getIconColor() {
+        return getAttributeValue(R.attr.iconColor);
     }
 
     /**

@@ -112,7 +112,6 @@ public class GeneralPreferencesFragment extends BasePreferenceFragment implement
     }
 
     private boolean hasAtleastOneSettingEnabled(Collection<String> keys) {
-        AdminSharedPreferences adminSharedPreferences = AdminSharedPreferences.getInstance();
         for (String key : keys) {
             boolean value = (boolean) adminSharedPreferences.get(key);
             if (value) {

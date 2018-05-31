@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.preference.PreferenceActivity;
 
 import org.odk.collect.android.activities.AboutActivity;
+import org.odk.collect.android.activities.BearingActivity;
+import org.odk.collect.android.activities.CaptureSelfieActivity;
+import org.odk.collect.android.activities.CaptureSelfieActivityNewApi;
 import org.odk.collect.android.activities.DrawActivity;
 import org.odk.collect.android.activities.EditFormHierarchyActivity;
 import org.odk.collect.android.activities.FileManagerTabs;
@@ -18,6 +21,7 @@ import org.odk.collect.android.activities.GeoShapeOsmMapActivity;
 import org.odk.collect.android.activities.GeoTraceGoogleMapActivity;
 import org.odk.collect.android.activities.GeoTraceOsmMapActivity;
 import org.odk.collect.android.activities.GoogleDriveActivity;
+import org.odk.collect.android.activities.GoogleSheetsUploaderActivity;
 import org.odk.collect.android.activities.InstanceChooserList;
 import org.odk.collect.android.activities.InstanceUploaderActivity;
 import org.odk.collect.android.activities.InstanceUploaderList;
@@ -30,6 +34,7 @@ import org.odk.collect.android.activities.WebViewActivity;
 import org.odk.collect.android.injection.config.scopes.PerActivity;
 import org.odk.collect.android.location.GeoActivity;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
+import org.odk.collect.android.preferences.PreferencesActivity;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
@@ -41,6 +46,7 @@ import dagger.android.ContributesAndroidInjector;
  * <p>
  * If you don't want to override InjectableActivity, make sure you call
  * {@link dagger.android.AndroidInjection#inject(Activity)} in your Activity's onCreate.
+ *
  * @see Activity (PMD doesn't see Activity in the line above).
  */
 @Module
@@ -92,6 +98,10 @@ public abstract class ActivityBuilder {
     @PerActivity
     @ContributesAndroidInjector
     abstract AdminPreferencesActivity adminPreferencesActivity();
+
+    @PerActivity
+    @ContributesAndroidInjector
+    abstract PreferencesActivity preferencesActivity();
 
     @PerActivity
     @ContributesAndroidInjector
@@ -149,8 +159,23 @@ public abstract class ActivityBuilder {
     @ContributesAndroidInjector
     abstract NotificationActivity notificationActivity();
 
-
     @PerActivity
     @ContributesAndroidInjector
     abstract DrawActivity drawActivity();
+
+    @PerActivity
+    @ContributesAndroidInjector
+    abstract BearingActivity bearingActivity();
+
+    @PerActivity
+    @ContributesAndroidInjector
+    abstract GoogleSheetsUploaderActivity googleSheetsUploaderActivity();
+
+    @PerActivity
+    @ContributesAndroidInjector
+    abstract CaptureSelfieActivity captureSelfieActivity();
+
+    @PerActivity
+    @ContributesAndroidInjector
+    abstract CaptureSelfieActivityNewApi captureSelfieActivityNewApi();
 }

@@ -26,7 +26,7 @@ import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY
 
 class DisabledPreferencesRemover {
 
-    private AdminSharedPreferences adminSharedPreferences;
+    private final AdminSharedPreferences adminSharedPreferences;
     private final PreferencesActivity pa;
     private final PreferenceFragment pf;
 

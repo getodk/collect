@@ -21,7 +21,6 @@ import android.os.Bundle;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.utilities.ThemeUtils;
 
 public class PreferencesActivity extends CollectAbstractActivity {
 
@@ -31,7 +30,6 @@ public class PreferencesActivity extends CollectAbstractActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(new ThemeUtils(this).getSettingsTheme());
 
         setTitle(R.string.general_preferences);
         if (savedInstanceState == null) {

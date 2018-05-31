@@ -68,7 +68,6 @@ import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
-import javax.inject.Inject;
 
 import timber.log.Timber;
 
@@ -76,32 +75,27 @@ public abstract class QuestionWidget
         extends RelativeLayout
         implements Widget, AudioPlayListener {
 
+    private static final String GUIDANCE_EXPANDED_STATE = "expanded_state";
     private final int questionFontSize;
     private final FormEntryPrompt formEntryPrompt;
     private final MediaLayout questionMediaLayout;
-    private MediaPlayer player;
     private final TextView helpTextView;
     private final TextView guidanceTextView;
     private final View helpTextLayout;
     private final View guidanceTextLayout;
     private final View textLayout;
     private final TextView warningText;
-    private static final String GUIDANCE_EXPANDED_STATE = "expanded_state";
+    private ThemeUtils themeUtils;
+    private MediaPlayer player;
     private AtomicBoolean expanded;
     private Bundle state;
     private int playColor;
 
-    @Inject
-    protected GeneralSharedPreferences generalSharedPreferences;
-    @Inject
-    protected ThemeUtils themeUtils;
-
     public QuestionWidget(Context context, FormEntryPrompt prompt) {
         super(context);
 
-        ((Collect) context.getApplicationContext()).getAppComponent().inject(this);
-
-        playColor = themeUtils.getAccentColor(getContext());
+        themeUtils = new ThemeUtils(context);
+        playColor = getThemeUtils().getAccentColor();
 
         if (context instanceof FormEntryActivity) {
             state = ((FormEntryActivity) context).getState();
@@ -150,10 +144,24 @@ public abstract class QuestionWidget
         addHelpTextLayout(getHelpTextLayout());
     }
 
+    //source::https://stackoverflow.com/questions/18996183/identifying-rtl-language-in-android/23203698#23203698
+    public static boolean isRTL() {
+        return isRTL(Locale.getDefault());
+    }
+
+    private static boolean isRTL(Locale locale) {
+        final int directionality = Character.getDirectionality(locale.getDisplayName().charAt(0));
+        return directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT || directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC;
+    }
+
+    public ThemeUtils getThemeUtils() {
+        return themeUtils;
+    }
+
     private TextView setupGuidanceTextAndLayout(TextView guidanceTextView, FormEntryPrompt prompt) {
 
         TextView guidance = null;
-        GuidanceHint setting = GuidanceHint.get((String) generalSharedPreferences.get(PreferenceKeys.KEY_GUIDANCE_HINT));
+        GuidanceHint setting = GuidanceHint.get((String) new GeneralSharedPreferences(getContext()).get(PreferenceKeys.KEY_GUIDANCE_HINT));
 
         if (setting.equals(GuidanceHint.No)) {
             return null;
@@ -219,7 +227,7 @@ public abstract class QuestionWidget
 
         guidanceTextView.setText(TextUtils.textToHtml(guidance));
 
-        guidanceTextView.setTextColor(themeUtils.getPrimaryTextColor(getContext()));
+        guidanceTextView.setTextColor(themeUtils.getPrimaryTextColor());
         guidanceTextView.setMovementMethod(LinkMovementMethod.getInstance());
         return guidanceTextView;
     }
@@ -234,16 +242,6 @@ public abstract class QuestionWidget
         }
     }
 
-    //source::https://stackoverflow.com/questions/18996183/identifying-rtl-language-in-android/23203698#23203698
-    public static boolean isRTL() {
-        return isRTL(Locale.getDefault());
-    }
-
-    private static boolean isRTL(Locale locale) {
-        final int directionality = Character.getDirectionality(locale.getDisplayName().charAt(0));
-        return directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT || directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC;
-    }
-
     protected void injectDependencies(DependencyProvider dependencyProvider) {
         //dependencies for the widget will be wired here.
     }
@@ -255,7 +253,7 @@ public abstract class QuestionWidget
         questionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getQuestionFontSize());
         questionText.setTypeface(null, Typeface.BOLD);
         questionText.setPadding(0, 0, 0, 7);
-        questionText.setTextColor(themeUtils.getPrimaryTextColor(getContext()));
+        questionText.setTextColor(themeUtils.getPrimaryTextColor());
         questionText.setText(TextUtils.textToHtml(FormEntryPromptUtils.markQuestionIfIsRequired(promptText, prompt.isRequired())));
         questionText.setMovementMethod(LinkMovementMethod.getInstance());
 
@@ -437,7 +435,7 @@ public abstract class QuestionWidget
             } else {
                 helpText.setText(TextUtils.textToHtml(s));
             }
-            helpText.setTextColor(themeUtils.getPrimaryTextColor(getContext()));
+            helpText.setTextColor(themeUtils.getPrimaryTextColor());
             helpText.setMovementMethod(LinkMovementMethod.getInstance());
             return helpText;
         } else {
@@ -564,7 +562,7 @@ public abstract class QuestionWidget
         TextView textView = new TextView(getContext());
 
         textView.setId(R.id.answer_text);
-        textView.setTextColor(themeUtils.getPrimaryTextColor(getContext()));
+        textView.setTextColor(themeUtils.getPrimaryTextColor());
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         textView.setPadding(20, 20, 20, 20);
         textView.setText(text);

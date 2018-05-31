@@ -191,7 +191,7 @@ public class TimeWidget extends QuestionWidget implements ButtonWidget, TimePick
         private final String dialogTitle = getContext().getString(R.string.select_time);
 
         CustomTimePickerDialog(Context context, OnTimeSetListener callBack, int hour, int minute) {
-            super(context, themeUtils.getHoloDialogTheme(), callBack, hour, minute, DateFormat.is24HourFormat(context));
+            super(context, getThemeUtils().getHoloDialogTheme(), callBack, hour, minute, DateFormat.is24HourFormat(context));
             setTitle(dialogTitle);
             fixSpinner(context, hour, minute, DateFormat.is24HourFormat(context));
 

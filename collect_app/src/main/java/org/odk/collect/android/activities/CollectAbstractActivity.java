@@ -27,6 +27,7 @@ import org.odk.collect.android.injection.config.AppComponent;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.ThemeUtils;
 
@@ -40,12 +41,13 @@ import static org.odk.collect.android.utilities.PermissionUtils.isEntryPointActi
 
 public abstract class CollectAbstractActivity extends DaggerAppCompatActivity {
 
+    protected ThemeUtils themeUtils;
+
     @Inject
-    protected GeneralSharedPreferences generalSharedPreferences;
+    GeneralSharedPreferences generalSharedPreferences;
+
     @Inject
-    protected AdminSharedPreferences adminSharedPreferences;
-    @Inject
-    ThemeUtils themeUtils;
+    AdminSharedPreferences adminSharedPreferences;
 
     private boolean isInstanceStateSaved;
 
@@ -53,7 +55,9 @@ public abstract class CollectAbstractActivity extends DaggerAppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (this instanceof AdminPreferencesActivity) {
+        themeUtils = new ThemeUtils(this);
+
+        if (this instanceof AdminPreferencesActivity || this instanceof PreferencesActivity) {
             setTheme(themeUtils.getSettingsTheme());
         } else {
             setTheme(themeUtils.getAppTheme());
@@ -101,6 +105,6 @@ public abstract class CollectAbstractActivity extends DaggerAppCompatActivity {
 
     @Override
     protected void attachBaseContext(Context base) {
-        super.attachBaseContext(new LocaleHelper().updateLocale(base));
+        super.attachBaseContext(new LocaleHelper(base).updateLocale());
     }
 }

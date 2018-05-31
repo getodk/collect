@@ -74,10 +74,10 @@ public class DateWidget extends AbstractDateWidget implements DatePickerDialog.O
         // https://github.com/opendatakit/collect/issues/1424
         // https://github.com/opendatakit/collect/issues/1367
         if (!isBrokenSamsungDevice() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            theme = themeUtils.getMaterialDialogTheme();
+            theme = getThemeUtils().getMaterialDialogTheme();
         }
         if (!datePickerDetails.isCalendarMode() || isBrokenSamsungDevice()) {
-            theme = themeUtils.getHoloDialogTheme();
+            theme = getThemeUtils().getHoloDialogTheme();
         }
 
         return theme;
@@ -100,7 +100,7 @@ public class DateWidget extends AbstractDateWidget implements DatePickerDialog.O
 
         FixedDatePickerDialog(Context context, int theme, OnDateSetListener listener) {
             super(context, theme, listener, date.getYear(), date.getMonthOfYear() - 1, date.getDayOfMonth());
-            if (themeUtils.isHoloDialogTheme(theme)) {
+            if (getThemeUtils().isHoloDialogTheme(theme)) {
                 setTitle(dialogTitle);
                 fixSpinner(context, date.getYear(), date.getMonthOfYear() - 1, date.getDayOfMonth());
                 hidePickersIfNeeded();
