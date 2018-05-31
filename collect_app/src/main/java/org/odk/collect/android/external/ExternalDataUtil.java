@@ -18,9 +18,6 @@
 
 package org.odk.collect.android.external;
 
-import android.os.Looper;
-import android.util.Log;
-
 import android.widget.Toast;
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.condition.EvaluationContext;
@@ -225,7 +222,7 @@ public final class ExternalDataUtil {
             }
             return returnedChoices;
         } catch (Exception e) {
-            Log.i("ExternalDataUtil:", e.getMessage());
+            Timber.e(e.getMessage());
             return returnedChoices;  // smap
             //throw new ExternalDataException(e.getMessage(), e);  smap
         }
