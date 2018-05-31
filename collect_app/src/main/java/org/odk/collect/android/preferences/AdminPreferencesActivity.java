@@ -15,6 +15,7 @@
 package org.odk.collect.android.preferences;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -22,6 +23,7 @@ import android.preference.PreferenceManager;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.activities.MainMenuActivity;
+import org.odk.collect.android.activities.SmapMain;
 import org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog;
 import org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog;
 import org.odk.collect.android.utilities.ThemeUtils;
@@ -96,6 +98,8 @@ public class AdminPreferencesActivity extends CollectAbstractActivity implements
 
     @Override
     public void onDialogClosed() {
-        MainMenuActivity.startActivityAndCloseAllOthers(this);
+        //MainMenuActivity.startActivityAndCloseAllOthers(this);            // smap
+        Intent intent = new Intent(this, SmapMain.class);     // smap
+        this.startActivity(intent);                                         // smap
     }
 }

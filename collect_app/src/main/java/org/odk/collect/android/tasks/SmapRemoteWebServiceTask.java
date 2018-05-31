@@ -66,6 +66,7 @@ public class SmapRemoteWebServiceTask extends AsyncTask<String, Void, SmapRemote
         }
 
         try {
+
             URL url = new URL(lookupUrl);
             URI uri = url.toURI();
 
