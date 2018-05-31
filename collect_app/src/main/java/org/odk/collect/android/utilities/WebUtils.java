@@ -111,7 +111,7 @@ public final class WebUtils {
 
         HttpInputStreamResult inputStreamResult;
         try {
-            inputStreamResult = getHTTPInputStream(urlString, HTTP_CONTENT_TYPE_TEXT_XML);
+            inputStreamResult = getHttpInputStream(urlString, HTTP_CONTENT_TYPE_TEXT_XML);
 
             InputStream is = inputStreamResult.getInputStream();
             InputStreamReader isr = null;
@@ -170,7 +170,7 @@ public final class WebUtils {
      * @throws Exception - Can throw a multitude of Exceptions, such as MalformedURLException or IOException
      */
     public static @NonNull
-    HttpInputStreamResult getHTTPInputStream(@NonNull String downloadUrl, final String contentType) throws Exception {
+    HttpInputStreamResult getHttpInputStream(@NonNull String downloadUrl, final String contentType) throws Exception {
         URI uri;
         try {
             // assume the downloadUrl is escaped properly
@@ -186,7 +186,7 @@ public final class WebUtils {
         }
 
         HttpInterface httpConnection = getHttpConnection();
-        return httpConnection.getHTTPInputStream(uri, contentType);
+        return httpConnection.getHttpInputStream(uri, contentType);
     }
 
 
