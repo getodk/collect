@@ -317,7 +317,6 @@
   <string name="geo_clear_warning">الميزة تم انشائها مسبقاً</string>
   <string name="geo_exit_warning">تجاهل التعديلات والعودة الى ODK؟</string>
   <string name="polygon_validator">يجب توفر 3 نقاط GeoPoint لانشاء Polygon</string>
-  <string name="dialog_continue">المتابعة</string>
   <string name="clear">الغاء</string>
   <string name="polyline_polygon_text">حفظ GeoTrace كـ</string>
   <string name="manual_mode">الوضع اليدوي</string>

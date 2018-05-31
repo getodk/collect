@@ -242,12 +242,10 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
                 instanceServerUploader = new InstanceServerUploader();
                 instanceServerUploader.setUploaderListener(this);
 
-                instanceUploaderTask.execute(toSendArray);
+                instanceServerUploader.execute(toSendArray);
 	                }
 	            }
 	            }
-
-
 
     /**
      * @param isFormAutoSendOptionEnabled represents whether the auto-send option is enabled at the app level
@@ -270,9 +268,9 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
 
     @Override
     public void uploadingComplete(HashMap<String, String> result) {
-        // No need to reset uploader tasks as refresh was used
-        if (instanceUploaderTask != null) {
-            instanceUploaderTask.setUploaderListener(null);
+        // task is done
+        if (instanceServerUploader != null) {
+            instanceServerUploader.setUploaderListener(null);
         }
         if (instanceGoogleSheetsUploader != null) {
             instanceGoogleSheetsUploader.setUploaderListener(null);
@@ -334,14 +332,11 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
                 notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(Collect.getInstance())
-                .setSmallIcon(R.drawable.notes)
+                .setSmallIcon(IconUtils.getNotificationAppIcon())
                 .setContentTitle(Collect.getInstance().getString(R.string.odk_auto_note))
                 .setContentIntent(pendingNotify)
                 .setContentText(message.toString().trim())
-                .setAutoCancel(true)
-                .setLargeIcon(
-                        BitmapFactory.decodeResource(Collect.getInstance().getResources(),
-                                android.R.drawable.ic_dialog_info));
+                .setAutoCancel(true);
 
         NotificationManager notificationManager = (NotificationManager) Collect.getInstance()
                 .getSystemService(Context.NOTIFICATION_SERVICE);

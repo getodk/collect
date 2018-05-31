@@ -144,6 +144,8 @@ public class FormChooserList extends FormListActivity implements
                 startActivity(i);
                 // end smap
             }
+            
+            finish();
         }
     }
 

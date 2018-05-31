@@ -18,6 +18,8 @@ package org.odk.collect.android.views;
 import java.io.Serializable;
 import java.util.*;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -238,8 +240,8 @@ public class ODKView extends ScrollView implements OnLongClickListener {
 
         addView(view);
 
-        // see if there is an autoplay option. 
-        // Only execute it during forward swipes through the form 
+        // see if there is an autoplay option.
+        // Only execute it during forward swipes through the form
         if (advancingPage && widgets.size() == 1) {
             final String playOption = widgets.get(
                     0).getFormEntryPrompt().getFormElement().getAdditionalAttribute(null, "autoplay");
@@ -340,7 +342,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                         path
                                 .append(" (")
                                 .append(multiplicity)
-                                .append(")");
+                                .append(")\u200E");
                     }
                     if (index < groups.length) {
                         path.append(" > ");
@@ -508,5 +510,33 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         for (QuestionWidget w : widgets) {
             w.release();
         }
+    }
+
+    public void highlightWidget(FormIndex formIndex) {
+        QuestionWidget qw = getQuestionWidget(formIndex);
+
+        if (qw != null) {
+            // postDelayed is needed because otherwise scrolling may not work as expected in case when
+            // answers are validated during form finalization.
+            new Handler().postDelayed(() -> {
+                scrollTo(0, qw.getTop());
+
+                ValueAnimator va = new ValueAnimator();
+                va.setIntValues(getResources().getColor(R.color.red), getDrawingCacheBackgroundColor());
+                va.setEvaluator(new ArgbEvaluator());
+                va.addUpdateListener(valueAnimator -> qw.setBackgroundColor((int) valueAnimator.getAnimatedValue()));
+                va.setDuration(2500);
+                va.start();
+            }, 100);
+        }
+    }
+
+    private QuestionWidget getQuestionWidget(FormIndex formIndex) {
+        for (QuestionWidget qw : widgets) {
+            if (formIndex.equals(qw.getFormEntryPrompt().getIndex())) {
+                return qw;
+            }
+        }
+        return null;
     }
 }

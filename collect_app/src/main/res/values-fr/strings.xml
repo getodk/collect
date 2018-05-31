@@ -336,7 +336,7 @@
   <string name="geo_clear_warning">Objet déjà créé. Souhaitez-vous l\'effacer ?</string>
   <string name="geo_exit_warning">Annuler les changements et revenir à ODK</string>
   <string name="polygon_validator">3 points minimum sont nécessaires pour créer un Polygone</string>
-  <string name="dialog_continue">Continuer</string>
+  <string name="polyline_validator">Il faut au moins 2 points pour créer une ligne</string>
   <string name="clear">Effacer</string>
   <string name="polyline_polygon_text">Enregistrer le TracéGéo sous</string>
   <string name="manual_mode">Mode Manuel</string>

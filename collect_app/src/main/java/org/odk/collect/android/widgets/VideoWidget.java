@@ -28,7 +28,6 @@ import android.preference.PreferenceManager;
 import android.provider.MediaStore.Video;
 import android.support.annotation.NonNull;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -294,14 +293,6 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
         String extension = sourcePath.substring(sourcePath.lastIndexOf('.'));
         return getInstanceFolder() + File.separator
                 + fileUtil.getRandomFilename() + extension;
-    }
-
-    @Override
-    public void setFocus(Context context) {
-        // Hide the soft keyboard if it's showing.
-        InputMethodManager inputManager = (InputMethodManager) context
-                .getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
     }
 
     @Override

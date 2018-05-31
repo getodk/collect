@@ -336,7 +336,6 @@
   <string name="geo_clear_warning">Географическая особенность уже создана. Хотите очистить особенность?</string>
   <string name="geo_exit_warning">Отказаться от изменений и вернуться к ODK?</string>
   <string name="polygon_validator">В многоугольнике должно быть как минимум 3 точки</string>
-  <string name="dialog_continue">Продолжить</string>
   <string name="clear">Очистить</string>
   <string name="polyline_polygon_text">Сохранить геослед как</string>
   <string name="manual_mode">Ручной режим</string>
