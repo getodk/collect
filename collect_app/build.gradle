@@ -34,7 +34,7 @@ android {
         testInstrumentationRunner('android.support.test.runner.AndroidJUnitRunner')
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
-        archivesBaseName = 'collect'
+        archivesBaseName = 'fieldTask'      // smap
     }
 
     signingConfigs {
@@ -216,7 +216,7 @@ dependencies {
     }
 
 
-    implementation "com.google.android.gms:play-services-gcm:10.0.1"    // smap
+    implementation "com.google.android.gms:play-services-gcm:${rootProject.playServicesVersion}"    // smap
 
     implementation "com.evernote:android-job:1.2.5"
     implementation "com.rarepebble:colorpicker:2.3.1"
