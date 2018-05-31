@@ -99,7 +99,7 @@ public class InstanceServerUploader extends InstanceUploader {
 
                     Collect.getInstance().getActivityLogger().logAction(this, urlString, instance);
 
-                    if (!WebUtils.uploadFile(urlString, id, instance, toUpdate, uriRemap, outcome)) {
+                    if (!WebUtils.uploadSubmissionFile(urlString, id, instance, toUpdate, uriRemap, outcome)) {
                         return false; // get credentials...
                     }
                 }
