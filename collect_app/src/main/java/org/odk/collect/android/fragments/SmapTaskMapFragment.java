@@ -37,8 +37,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
@@ -108,8 +108,8 @@ public class SmapTaskMapFragment extends Fragment
     private GoogleMap mMap;
     private Polyline mPath;
     private MapHelper mHelper;
-    private Button layers_button;
-    private Button location_button;
+    private ImageButton layers_button;
+    private ImageButton location_button;
 
     private SharedPreferences adminPreferences;
 
@@ -152,7 +152,6 @@ public class SmapTaskMapFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.ft_map_layout, container, false);
-
         Timber.i("######## onCreateView");
 
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
@@ -289,7 +288,7 @@ public class SmapTaskMapFragment extends Fragment
         getLoaderManager().initLoader(MAP_LOADER_ID, null, this);       // Get the task locations
         mo = new MapLocationObserver(getContext(), this);
 
-        location_button = (Button) getActivity().findViewById(R.id.show_location);
+        location_button = getActivity().findViewById(R.id.show_location);
         location_button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -305,7 +304,7 @@ public class SmapTaskMapFragment extends Fragment
         });
 
 
-        layers_button = (Button)getActivity().findViewById(R.id.layers);
+        layers_button = getActivity().findViewById(R.id.layers);
         layers_button.setOnClickListener(new View.OnClickListener() {
 
             @Override

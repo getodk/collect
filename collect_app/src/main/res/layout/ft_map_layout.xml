@@ -3,7 +3,8 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:id="@+id/mainlayout"
 	android:layout_width="fill_parent"
-	android:layout_height="fill_parent">
+	android:layout_height="fill_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto" >
 	<LinearLayout
 		android:id="@+id/location_buttons"
 		android:orientation="vertical"
@@ -34,22 +35,22 @@
             android:paddingTop="0dip"
             android:paddingBottom="60dip">
 
-            <Button
+            <android.support.v7.widget.AppCompatImageButton
                 android:id="@+id/show_location"
-                android:drawableRight="@drawable/ic_my_location"
+                app:srcCompat="@drawable/ic_my_location"
                 android:padding="15dp"
                 android:layout_margin="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 />
 
-            <Button
+            <android.support.v7.widget.AppCompatImageButton
                 android:id="@+id/layers"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="15dp"
                 android:layout_margin="5dp"
-                android:drawableRight="@drawable/ic_layers" />
+                app:srcCompat="@drawable/ic_layers" />
         </LinearLayout>
 	</ScrollView>
 </FrameLayout>
