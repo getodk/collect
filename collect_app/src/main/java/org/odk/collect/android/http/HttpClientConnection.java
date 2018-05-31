@@ -288,7 +288,7 @@ public class HttpClientConnection implements HttpInterface {
     }
 
     @Override
-    public ResponseMessageParser uploadFiles(@NonNull List<File> fileList, @NonNull File submissionFile, @NonNull URI uri) throws IOException {
+    public ResponseMessageParser uploadSubmissionFile(@NonNull List<File> fileList, @NonNull File submissionFile, @NonNull URI uri) throws IOException {
         // get shared HttpContext so that authentication and cookies are retained.
 
         HttpContext localContext = getHttpContext();

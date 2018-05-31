@@ -191,7 +191,7 @@ public final class WebUtils {
 
 
     /**
-     * Uploads a file to a url
+     * Uploads a submission file to a url
      *
      * @param urlString - The Destination URL
      * @param id - Form ID
@@ -201,10 +201,10 @@ public final class WebUtils {
      * @param outcome - An object to hold the results of the file upload
      * @return false if credentials are required and we should terminate immediately.
      */
-    public static boolean uploadFile(String urlString, String id, String instanceFilePath,
-                              Uri toUpdate,
-                              Map<Uri, Uri> uriRemap,
-                              Outcome outcome) {
+    public static boolean uploadSubmissionFile(String urlString, String id, String instanceFilePath,
+                                               Uri toUpdate,
+                                               Map<Uri, Uri> uriRemap,
+                                               Outcome outcome) {
 
         ContentValues contentValues = new ContentValues();
         Uri submissionUri = Uri.parse(urlString);
@@ -361,7 +361,7 @@ public final class WebUtils {
         ResponseMessageParser messageParser;
 
         try {
-            messageParser = getHttpConnection().uploadFiles(files, submissionFile, URI.create(submissionUri.toString()));
+            messageParser = getHttpConnection().uploadSubmissionFile(files, submissionFile, URI.create(submissionUri.toString()));
             int responseCode = messageParser.getResponseCode();
 
             if (responseCode != HttpsURLConnection.HTTP_CREATED && responseCode != HttpsURLConnection.HTTP_ACCEPTED) {

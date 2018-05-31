@@ -59,7 +59,7 @@ public interface HttpInterface {
      * @return ResponseMessageParser object that contains the response XML
      * @throws IOException can be thrown if files do not exist
      */
-    ResponseMessageParser uploadFiles(@NonNull List<File> fileList, @NonNull File submissionFile, @NonNull URI uri) throws IOException;
+    ResponseMessageParser uploadSubmissionFile(@NonNull List<File> fileList, @NonNull File submissionFile, @NonNull URI uri) throws IOException;
 
     /**
      * Clears the Cookie Stores
