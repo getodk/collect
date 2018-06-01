@@ -32,6 +32,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalDataException;
 import org.odk.collect.android.external.ExternalDataUtil;
+import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.tasks.SmapRemoteWebServiceTask;
 
@@ -195,9 +196,18 @@ public class SmapRemoteDataHandlerSearch implements IFunctionHandler {
             String data = app.getRemoteData(urlString);
             ArrayList<SelectChoice> choices = null;
             try {
-                choices =
+                ArrayList<SelectChoice> serverChoices =
                         new Gson().fromJson(data, new TypeToken<ArrayList<SelectChoice>>() {
                         }.getType());
+                // Recreate the actual choice list as their is weird constructor stuff here
+                if(serverChoices != null) {
+                    choices = new ArrayList<SelectChoice>();
+                    for (SelectChoice sc : serverChoices) {
+                        ExternalSelectChoice extChoice = new ExternalSelectChoice(sc.getLabelInnerText(), sc.getValue(), false);
+                        extChoice.setIndex(sc.getIndex());
+                        choices.add(extChoice);
+                    }
+                }
             } catch (Exception e) {
                 return data;            // Assume the data contains the error message
             }
@@ -208,7 +218,7 @@ public class SmapRemoteDataHandlerSearch implements IFunctionHandler {
                 SmapRemoteWebServiceTask task = new SmapRemoteWebServiceTask();
                 task.setSmapRemoteListener(app.getFormEntryActivity());
                 task.execute(urlString, timeoutValue, "true");
-                return null;
+                return new ArrayList<SelectChoice>();
             } else {
                 return choices;
             }
