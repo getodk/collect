@@ -765,7 +765,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 break;
 
             case RequestCodes.ARBITRARY_FILE_CHOOSER:
-
+                // Same with VIDEO_CHOOSER.
+            case RequestCodes.AUDIO_CHOOSER:
+                // Same with VIDEO_CHOOSER.
+            case RequestCodes.VIDEO_CHOOSER:
+                /*
+                 * Start a task to save the chosen file/audio/video with a new Thread,
+                 * This could support retrieving file from Google Drive.
+                 * */
                 showDialog(SAVING_DIALOG);
                 Runnable saveFileRunnable = new Runnable() {
                     @Override
@@ -774,22 +781,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     }
                 };
                 new Thread(saveFileRunnable).start();
-                break;
-            case RequestCodes.AUDIO_CHOOSER:
-                // Same with VIDEO_CHOOSER.
-            case RequestCodes.VIDEO_CHOOSER:
-                /*
-                 * Start a task to save the chosen video with a new Thread,
-                 * This could support retrieving file from Google Drive.
-                 * */
-                showDialog(SAVING_DIALOG);
-                Runnable saveMediaRunnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        saveChosenFile(intent.getData());
-                    }
-                };
-                new Thread(saveMediaRunnable).start();
                 break;
             case RequestCodes.LOCATION_CAPTURE:
                 String sl = intent.getStringExtra(LOCATION_RESULT);
