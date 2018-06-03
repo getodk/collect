@@ -154,8 +154,8 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
      */
     public class DateDeserializer implements JsonDeserializer<Date> {
         public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
-            SimpleDateFormat sdfOld = new SimpleDateFormat("dd/MM/yyyy hh:mm");
-            SimpleDateFormat sdfNew = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+            SimpleDateFormat sdfOld = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            SimpleDateFormat sdfNew = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             sdfOld.setTimeZone(TimeZone.getTimeZone("UTC"));
             sdfNew.setTimeZone(TimeZone.getTimeZone("UTC"));
             Date date = null;
