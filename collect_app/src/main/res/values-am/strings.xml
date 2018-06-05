@@ -54,7 +54,7 @@
   <string name="file_delete_in_progress">ይቅርታ፣ ቅጽ የመሰረዝ እርምጃ አስቀድሞ በሂደት ላይ ነው!</string>
   <string name="file_invalid">ፋይል፡ 1 %s ልክ ያልኾነ ነው</string>
   <string name="file_missing">ፋይል፡ 1 %s ይጎድላል</string>
-  <string name="finished_disk_scan">ስካን ተጠናቋል፡፡ ሁሉም ቅጾች ተጭነዋል፡፡</string>
+  z<string name="finished_disk_scan">ስካን ተጠናቋል፡፡ ሁሉም ቅጾች ተጭነዋል፡፡</string>
   <string name="forms">ባዶ ቅጾች</string>
   <string name="getting_location">አካባቢን በመጫን ላይ</string>
   <string name="get_barcode">ባርኮድ ያግኙ</string>
@@ -304,4 +304,6 @@
   <string name="moving_backwards_enabled_title">ወደኋላ መሄድ ተመርጧል</string>
   <string name="yes">አዎ</string>
   <string name="no">አይ</string>
+  <string name="geotrace_sec">ሰከንዶች</string>
+  <string name="geotrace_min">ደቂቃዎች</string>
 </resources>

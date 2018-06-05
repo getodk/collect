@@ -542,4 +542,6 @@
   <string name="coptic_month_12">Mesori</string>
   <string name="coptic_month_13">Pi Kogi Enavot</string>
   <string name="multiple_media_folders_detected_notification">Plusieurs répertoires média détectés, retirez-en un puis réessayer svp</string>
+  <string name="geotrace_sec">Secondes</string>
+  <string name="geotrace_min">Minutes</string>
 </resources>

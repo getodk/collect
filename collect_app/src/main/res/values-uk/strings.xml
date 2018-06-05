@@ -541,4 +541,6 @@
   <string name="coptic_month_12">Месорі</string>
   <string name="coptic_month_13">Пі Когі Енавот</string>
   <string name="multiple_media_folders_detected_notification">Знайдено більше однієї медіа директоріі, будь ласка, видаліть зайві та спробуйте знову</string>
+  <string name="geotrace_sec">Секунди</string>
+  <string name="geotrace_min">Хвилини</string>
 </resources>

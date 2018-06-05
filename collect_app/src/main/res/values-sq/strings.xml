@@ -449,5 +449,7 @@
   <string name="form_entry">Hiq përzgjedhjen për ta fshehur nga Form Entry</string>
   <string name="use_device_language">Përdor gjuhën e aparatit</string>
   <string name="not_supported_offline_layer_format">Shtresa offline që përzgjodhët përdor format PBF, i cili nuk është i suportuar.</string>
+  <string name="geotrace_sec">sekonda</string>
+  <string name="geotrace_min">minuta</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
 </resources>

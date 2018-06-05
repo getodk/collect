@@ -433,5 +433,7 @@
   <string name="qr_code">Codice QR</string>
   <string name="server_settings_title">Server</string>
   <string name="server">Server</string>
+  <string name="geotrace_sec">secondi</string>
+  <string name="geotrace_min">Minuti</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
 </resources>

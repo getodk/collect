@@ -107,7 +107,7 @@
   <string name="view_hierarchy">Pumunta sa Udyok</string>
   <string name="general_preferences">Palitan ang Settings</string>
   <string name="client">Client</string>
-    <string name="show_splash_summary">Pinapakita sa umpisa ng application</string>
+  <string name="show_splash_summary">Pinapakita sa umpisa ng application</string>
   <string name="splash_path">Piniling larawan para sa Panimulang Tabing</string>
   <string name="default_splash_path">Paunang natukoy ng ODK</string>
   <string name="select_another_image">Pumili ng Ibang Imahe</string>
@@ -115,7 +115,7 @@
   <string name="change_splash_path">Palitan ang Imahe</string>
   <string name="keep_changes">Impukin ang mga binago</string>
   <string name="change_formlist_url">Form List Path (appended to Server URL)</string>
-    <string name="change_protocol">Server Platform</string>
+  <string name="change_protocol">Server Platform</string>
   <string name="change_submission_url">Submission Path (appended to Server URL)</string>
   <string name="formlist_url">Form List Path</string>
   <string name="submission_url">Submission Path</string>
@@ -163,8 +163,8 @@
   <string name="reset_image">I-reset</string>
   <string name="set_color">I-set ang Kulay</string>
   <string name="select_drawing_color">Piliian ang Kulay ng pang-guhit</string>
-    <string name="save_mid">Impukin ang mga sagot sa Form</string>
-    <!--Geo string added in feature-geofeatures branch-->
+  <string name="save_mid">Impukin ang mga sagot sa Form</string>
+  <!--Geo string added in feature-geofeatures branch-->
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->

@@ -300,6 +300,8 @@
   <string name="polyline_save">Salvare ca Polyline</string>
   <string name="gps_enable_message">GPS-ul este dezactivat în dispozitivul dumneavoastră. Doriți să-l activați?</string>
   <string name="minutes">Minute</string>
+  <string name="geotrace_sec">secunde</string>
+  <string name="geotrace_min">Minute</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->

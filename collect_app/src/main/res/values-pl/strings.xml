@@ -398,5 +398,7 @@
   <string name="exit">Wyjdź</string>
   <string name="instance_scan_completed">Skanowanie zakończone.</string>
   <string name="instance_scan_count">Dodano %1$d formularzy.</string>
+  <string name="geotrace_sec">sekundy</string>
+  <string name="geotrace_min">Minuty</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
 </resources>

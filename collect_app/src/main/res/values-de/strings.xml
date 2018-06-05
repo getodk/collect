@@ -562,4 +562,6 @@
   <string name="moving_backwards_enabled_message">Bitte überprüfen Sie die folgenden Einstellungen:\n\n\u2022 Gespeichertes Formular bearbeiten\n\u2022 Formular speichern\n\u2022 Gehe zum Prompt\n\u2022 Validierung</string>
   <string name="yes">Ja</string>
   <string name="no">Nein</string>
+  <string name="geotrace_sec">Sekunden</string>
+  <string name="geotrace_min">Protokoll</string>
 </resources>

@@ -503,5 +503,7 @@
   <string name="deleting_form_dialog_update_message">حذف استمارة : %1$d من اصل %2$d</string>
   <string name="search">بحث</string>
   <string name="null_intent_value">حدث خطأ. قيمة فارغة</string>
-  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <string name="geotrace_sec">ثواني</string>
+  <string name="geotrace_min">الدقائق</string>
+    <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
 </resources>

@@ -562,4 +562,6 @@
   <string name="moving_backwards_enabled_message">次の設定を確認することができます:\n\n\u2022 保存したフォームの編集\n\u2022 フォームの保存\n\u2022 プロンプトに移動\n\u2022 制約処理</string>
   <string name="yes">はい</string>
   <string name="no">いいえ</string>
+  <string name="geotrace_sec">秒</string>
+  <string name="geotrace_min">分</string>
 </resources>
