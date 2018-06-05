@@ -139,7 +139,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  *
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Thomas Smyth, Sassafras Tech Collective (tom@sassafrastech.com; constraint behavior
- *         option)
+ * option)
  */
 public class FormEntryActivity extends CollectAbstractActivity implements AnimationListener,
         FormLoaderListener, FormSavedListener, AdvanceToNextListener,
@@ -664,6 +664,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 // file
                 ImageConverter.execute(Collect.TMPFILE_PATH, getWidgetWaitingForBinaryData(), this);
                 File fi = new File(Collect.TMPFILE_PATH);
+
+                //revoke permissions granted to this file due it's possible usage in
+                //the camera app
+                FileUtils.revokeFileReadWritePermission(this, fi);
+
                 String instanceFolder = formController.getInstanceFile()
                         .getParent();
                 String s = instanceFolder + File.separator + System.currentTimeMillis() + ".jpg";
@@ -1012,10 +1017,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             createDeleteRepeatConfirmDialog();
         } else {
             /*
-            * We don't have the right view here, so we store the View's ID as the
-            * item ID and loop through the possible views to find the one the user
-            * clicked on.
-            */
+             * We don't have the right view here, so we store the View's ID as the
+             * item ID and loop through the possible views to find the one the user
+             * clicked on.
+             */
             boolean shouldClearDialogBeShown;
             for (QuestionWidget qw : getCurrentViewIfODKView().getWidgets()) {
                 shouldClearDialogBeShown = false;
