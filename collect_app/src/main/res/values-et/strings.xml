@@ -398,5 +398,5 @@
   <string name="exit">Välju</string>
   <string name="geotrace_sec">Sekundid</string>
   <string name="geotrace_min">Protokollid</string>
-    <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
 </resources>

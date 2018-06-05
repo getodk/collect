@@ -394,5 +394,5 @@
   <string name="main_menu_settings">Menú principal de configuració</string>
   <string name="geotrace_sec">Segles</string>
   <string name="geotrace_min">Minuts</string>
-    <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
 </resources>

@@ -505,5 +505,5 @@
   <string name="null_intent_value">حدث خطأ. قيمة فارغة</string>
   <string name="geotrace_sec">ثواني</string>
   <string name="geotrace_min">الدقائق</string>
-    <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
 </resources>

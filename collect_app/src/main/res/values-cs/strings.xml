@@ -256,7 +256,7 @@
   <string name="no_blank_search">Vyhledávací pole nemůže být prázdné</string>
   <string name="geotrace_sec">Sekundy</string>
   <string name="geotrace_min">Minut</string>
-    <!--Geo string added in feature-geofeatures branch-->
+  <!--Geo string added in feature-geofeatures branch-->
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
