@@ -155,6 +155,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
             newAudio = fileUtil.getFileAtPath(destinationPath);
             fileUtil.copyFile(source, newAudio);
         } else if (object instanceof File) {
+            // Getting a file indicates we've done the copy in the before step
             newAudio = (File) object;
         } else {
             Timber.w("AudioWidget's setBinaryData must receive a File or Uri object.");
