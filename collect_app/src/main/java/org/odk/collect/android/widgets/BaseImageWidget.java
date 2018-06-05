@@ -18,8 +18,12 @@ package org.odk.collect.android.widgets;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
@@ -39,6 +43,7 @@ import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 
 import java.io.File;
+import java.util.List;
 
 import timber.log.Timber;
 
@@ -73,7 +78,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
         MediaManager
                 .INSTANCE
                 .markOriginalFileOrDelete(getFormEntryPrompt().getIndex().toString(),
-                getInstanceFolder() + File.separator + binaryName);
+                        getInstanceFolder() + File.separator + binaryName);
         binaryName = null;
     }
 

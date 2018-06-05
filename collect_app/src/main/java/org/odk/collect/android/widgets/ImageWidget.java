@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2009 University of Washington
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -20,15 +20,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.support.v4.content.FileProvider;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CaptureSelfieActivity;
 import org.odk.collect.android.activities.CaptureSelfieActivityNewApi;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 
 import java.io.File;
@@ -165,15 +168,15 @@ public class ImageWidget extends BaseImageWidget {
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "captureButton",
                 "click", getFormEntryPrompt().getIndex());
         errorTextView.setVisibility(View.GONE);
-        Intent i;
+        Intent intent;
         if (selfie) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                i = new Intent(getContext(), CaptureSelfieActivityNewApi.class);
+                intent = new Intent(getContext(), CaptureSelfieActivityNewApi.class);
             } else {
-                i = new Intent(getContext(), CaptureSelfieActivity.class);
+                intent = new Intent(getContext(), CaptureSelfieActivity.class);
             }
         } else {
-            i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+            intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
             // We give the camera an absolute filename/path where to put the
             // picture because of bug:
             // http://code.google.com/p/android/issues/detail?id=1480
@@ -182,14 +185,17 @@ public class ImageWidget extends BaseImageWidget {
             // images returned by the camera in 1.6 (and earlier) are ~1/4
             // the size. boo.
 
+            Uri uri = FileProvider.getUriForFile(getContext(),
+                    BuildConfig.APPLICATION_ID + ".provider",
+                    new File(Collect.TMPFILE_PATH));
             // if this gets modified, the onActivityResult in
             // FormEntyActivity will also need to be updated.
-            i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
-                    Uri.fromFile(new File(Collect.TMPFILE_PATH)));
+            intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, uri);
+            intent = FileUtils.grantFilePermissions(intent, uri, getContext());
         }
         try {
             waitForData();
-            ((Activity) getContext()).startActivityForResult(i,
+            ((Activity) getContext()).startActivityForResult(intent,
                     RequestCodes.IMAGE_CAPTURE);
         } catch (ActivityNotFoundException e) {
             Toast.makeText(getContext(),
