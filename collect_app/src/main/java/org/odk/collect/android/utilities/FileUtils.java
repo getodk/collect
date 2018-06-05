@@ -14,14 +14,22 @@
 
 package org.odk.collect.android.utilities;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Build;
+import android.support.v4.content.FileProvider;
 
 import org.apache.commons.io.IOUtils;
 import org.javarosa.xform.parse.XFormParser;
 import org.kxml2.kdom.Document;
 import org.kxml2.kdom.Element;
 import org.kxml2.kdom.Node;
+import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 
@@ -40,6 +48,7 @@ import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
 import timber.log.Timber;
@@ -503,6 +512,44 @@ public class FileUtils {
             fos.close();
         } catch (IOException e) {
             Timber.e(e);
+        }
+    }
+
+    /**
+     * With the FileProvider you have to manually grand and revoke read/write permissions to files you
+     * are sharing. With this approach the access only last as long as the target activity on Api versions
+     * above Kit Kat. Once you are below that you have to manually revoke the permissions.
+     *
+     * @param intent
+     * @param uri
+     * @return intent that has read and write permissions
+     */
+    public static Intent grantFilePermissions(Intent intent, Uri uri, Context context) {
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+
+        /*
+         Workaround for Android bug.
+         grantUriPermission also needed for KITKAT,
+         see https://code.google.com/p/android/issues/detail?id=76683
+         */
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+            List<ResolveInfo> resInfoList = context.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+            for (ResolveInfo resolveInfo : resInfoList) {
+                String packageName = resolveInfo.activityInfo.packageName;
+                context.grantUriPermission(packageName, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            }
+        }
+
+        return intent;
+    }
+
+    public static void revokeFileReadWritePermission(Context context, File file) {
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+            Uri uri = FileProvider.getUriForFile(context,
+                    BuildConfig.APPLICATION_ID + ".provider",
+                    file);
+            context.revokeUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
         }
     }
 }
