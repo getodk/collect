@@ -355,7 +355,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 if(statusCode != HttpStatus.SC_OK) {
                     Timber.w("Error:" + statusCode + " for URL " + taskURL);
                     results.put(Collect.getInstance().getString(R.string.smap_get_tasks),
-                            Utilities.translateMsg(response.getStatusLine().getReasonPhrase()));
+                            Utilities.translateMsg(null, response.getStatusLine().getReasonPhrase()));
                     throw new Exception(response.getStatusLine().getReasonPhrase());
                 }
 
@@ -524,16 +524,12 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 	        } catch (Exception e) {	
 	        	
 	        	Timber.e("Error:" + " for URL " + taskURL);
-	        	e.printStackTrace();
-	        	publishProgress(e.getMessage());
-                String msg = Utilities.translateMsg(e.getMessage());
-	        	results.put(Collect.getInstance().getString(R.string.smap_error) + ":", msg);
+                String msg = Utilities.translateMsg(e, null);
+	        	publishProgress(msg);
+	        	results.put(Collect.getInstance().getString(R.string.smap_error) + ":", msg );
 	
 	        }
         }
-
-        
-  
     }
 
     private Outcome submitCompletedForms() {
@@ -697,7 +693,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
             if (statusCode != HttpStatus.SC_OK) {
                 Timber.e("Error:" + statusCode + " for URL " + taskURL);
                 results.put(Collect.getInstance().getString(R.string.smap_get_tasks),
-                        Utilities.translateMsg(response.getStatusLine().getReasonPhrase()));
+                        Utilities.translateMsg(null, response.getStatusLine().getReasonPhrase()));
                 WebUtils.discardEntityBytes(response);
                 throw new Exception(response.getStatusLine().getReasonPhrase());
             }

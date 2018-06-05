@@ -89,4 +89,6 @@
     <string name="smap_visit_website">"Visit the website"</string>
     <string name="smap_get_media">"Getting media file: %s"</string>
     <string name="smap_lookup">"Requesting remote data"</string>
+    <string name="smap_unknown_error">"Unknown error"</string>
+    <string name="smap_forbidden">"The upload of %s was not accepted. It may have been marked as blocked or deleted on the server."</string>
 </resources>

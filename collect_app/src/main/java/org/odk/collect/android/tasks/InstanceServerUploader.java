@@ -492,6 +492,9 @@ public class InstanceServerUploader extends InstanceUploader {
                         Collect.getInstance().getCookieStore().clear();
                         outcome.messagesByInstanceId.put(id, fail + response.getStatusLine().getReasonPhrase()
                                 + " (" + responseCode + ") at " + urlString);
+                    } else if (responseCode == HttpStatus.SC_FORBIDDEN) {      // smap
+                        outcome.messagesByInstanceId.put(id, fail
+                                + Collect.getInstance().getString(R.string.smap_forbidden, instanceFile.getName()));
                     } else {
                         // If response from server is valid use that else use default messaging
                         if (messageParser.isValid()) {

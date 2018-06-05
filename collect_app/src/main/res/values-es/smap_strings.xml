@@ -46,7 +46,7 @@
   <string name="read_only">Tarea completa. Sólo se pueden cambiar sus comentarios</string>
   <string name="no_review">Esta tarea está finalizada y no puede ser revisada</string>
   <string name="smap_add_comment">Agregar Comentario</string>
-  <string name="smap_clear_remote_cache">Borrar cache remoto</string>
+  <string name="smap_clear_remote_cache">Borrar caché de datos remotos</string>
   <string name="smap_new_forms">Buscando nuevos formularios y tareas</string>
   <string name="smap_no_forms">No hay formularios para descargar</string>
   <string name="smap_downloading">Descargando %1$d formularios</string>
@@ -67,10 +67,12 @@
   <string name="smap_server_changed">Hay Cambios - Favor Actualizar Formularios</string>
   <string name="smap_version_changed">La versión del formulario que usted esta abriendo No es la más actualizada. Favor cerrar y volver a abrirla.</string>
   <string name="smap_been_submitted">Este formulario ya fué enviado al servidor y no puede ser revisado</string>
-  <string name="smap_location_tracking">Localización del dispositivo está siendo rastreada.</string>
+  <string name="smap_location_tracking">La localización GPS del dispositivo está siendo registrada.</string>
   <string name="smap_reset_locations">Rastro de GPS registrado</string>
   <string name="smap_reset_locations_result">Rastro de GPS registrado ::</string>
   <string name="smap_visit_website">Visite el sitio web</string>
   <string name="smap_get_media">Archivo actualizado: %s</string>
-  <string name="smap_lookup">Solicitando datos remotos</string>
+  <string name="smap_lookup">Consultando datos remotos</string>
+  <string name="smap_unknown_error">Error desconocido</string>
+  <string name="smap_forbidden">No se pueden subir los datos de%s. El formulario está inactivo o fué borrado del servidor. Consulte al responsable en su Organización.</string>
 </resources>

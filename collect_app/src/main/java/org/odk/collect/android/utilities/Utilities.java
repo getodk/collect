@@ -730,12 +730,29 @@ public class Utilities {
     /*
      * Translate a message
      */
-    public static String translateMsg(String in) {
-        String out = in;
-        if (in != null) {
-            if (in.contains("Unauthorized")) {
+    public static String translateMsg(Exception e, String in) {
+        String msg = null;
+        if(e != null) {
+            msg = e.getMessage();
+        } else {
+            msg = in;
+        }
+        String out = null;
+        if (msg != null) {
+            if (msg.contains("Unauthorized")) {
                 out = Collect.getInstance().getString(R.string.smap_unauth);
+            } else if(msg.contains("Unable to resolve host")) {
+                out = Collect.getInstance().getString(R.string.no_connection);
+            } else {
+                if(e != null) {
+                    out = e.getLocalizedMessage();
+                } else {
+                    out = msg;
+                }
             }
+        }
+        if(out == null) {
+            out = Collect.getInstance().getString(R.string.smap_unknown_error);
         }
         return out;
     }
