@@ -765,23 +765,22 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 break;
 
             case RequestCodes.ARBITRARY_FILE_CHOOSER:
-                saveFileAnswer(intent.getData());
-                break;
+                // Same with VIDEO_CHOOSER.
             case RequestCodes.AUDIO_CHOOSER:
                 // Same with VIDEO_CHOOSER.
             case RequestCodes.VIDEO_CHOOSER:
                 /*
-                 * Start a task to save the chosen video with a new Thread,
+                 * Start a task to save the chosen file/audio/video with a new Thread,
                  * This could support retrieving file from Google Drive.
                  * */
                 showDialog(SAVING_DIALOG);
-                Runnable saveMediaRunnable = new Runnable() {
+                Runnable saveFileRunnable = new Runnable() {
                     @Override
                     public void run() {
-                        saveChosenMedia(intent.getData());
+                        saveChosenFile(intent.getData());
                     }
                 };
-                new Thread(saveMediaRunnable).start();
+                new Thread(saveFileRunnable).start();
                 break;
             case RequestCodes.LOCATION_CAPTURE:
                 String sl = intent.getStringExtra(LOCATION_RESULT);
@@ -829,7 +828,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * @param selectedFile uri of the selected audio
      * @see #getFileExtensionFromUri(Uri)
      */
-    private void saveChosenMedia(Uri selectedFile) {
+    private void saveChosenFile(Uri selectedFile) {
         String extension = getFileExtensionFromUri(selectedFile);
 
         String instanceFolder = Collect.getInstance().getFormController()
@@ -917,7 +916,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * @param fileUri Whose name we want to get
      * @return The file's extension
      * @see #onActivityResult(int, int, Intent)
-     * @see #saveChosenMedia(Uri)
+     * @see #saveChosenFile(Uri)
      * @see android.content.ContentResolver
      */
     private String getFileExtensionFromUri(Uri fileUri) {
