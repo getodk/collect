@@ -1970,21 +1970,21 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         if (formController != null && formController.getInstanceFile() != null) {
             SaveToDiskTask.removeSavepointFiles(formController.getInstanceFile().getName());
-        }
 
-        // if it's not already saved, erase everything
-        if (!InstancesDaoHelper.isInstanceAvailable(getAbsoluteInstancePath())) {
-            // delete media first
-            String instanceFolder = formController.getInstanceFile().getParent();
-            Timber.i("Attempting to delete: %s", instanceFolder);
-            File file = formController.getInstanceFile().getParentFile();
-            int images = MediaUtils.deleteImagesInFolderFromMediaProvider(file);
-            int audio = MediaUtils.deleteAudioInFolderFromMediaProvider(file);
-            int video = MediaUtils.deleteVideoInFolderFromMediaProvider(file);
+            // if it's not already saved, erase everything
+            if (!InstancesDaoHelper.isInstanceAvailable(getAbsoluteInstancePath())) {
+                // delete media first
+                String instanceFolder = formController.getInstanceFile().getParent();
+                Timber.i("Attempting to delete: %s", instanceFolder);
+                File file = formController.getInstanceFile().getParentFile();
+                int images = MediaUtils.deleteImagesInFolderFromMediaProvider(file);
+                int audio = MediaUtils.deleteAudioInFolderFromMediaProvider(file);
+                int video = MediaUtils.deleteVideoInFolderFromMediaProvider(file);
 
-            Timber.i("Removed from content providers: %d image files, %d audio files and %d audio files.",
-                    images, audio, video);
-            FileUtils.purgeMediaPath(instanceFolder);
+                Timber.i("Removed from content providers: %d image files, %d audio files and %d audio files.",
+                        images, audio, video);
+                FileUtils.purgeMediaPath(instanceFolder);
+            }
         }
     }
 
