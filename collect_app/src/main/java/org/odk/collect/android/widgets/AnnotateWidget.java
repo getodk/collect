@@ -209,7 +209,7 @@ public class AnnotateWidget extends BaseImageWidget {
         // if this gets modified, the onActivityResult in
         // FormEntyActivity will also need to be updated.
         intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, uri);
-        intent = FileUtils.grantFilePermissions(intent, uri, getContext());
+         FileUtils.grantFilePermissions(intent, uri, getContext());
 
         try {
             waitForData();

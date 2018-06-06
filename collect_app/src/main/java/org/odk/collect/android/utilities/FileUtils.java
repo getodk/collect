@@ -521,10 +521,10 @@ public class FileUtils {
      * above Kit Kat. Once you are below that you have to manually revoke the permissions.
      *
      * @param intent that needs to have the permission flags
-     * @param uri that the permissions are being applied to
+     * @param uri    that the permissions are being applied to
      * @return intent that has read and write permissions
      */
-    public static Intent grantFilePermissions(Intent intent, Uri uri, Context context) {
+    public static void grantFilePermissions(Intent intent, Uri uri, Context context) {
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 
@@ -540,15 +540,37 @@ public class FileUtils {
                 context.grantUriPermission(packageName, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             }
         }
-
-        return intent;
     }
 
-    public static void revokeFileReadWritePermission(Context context, File file) {
+
+    /**
+     * With the FileProvider you have to manually grand and revoke read/write permissions to files you
+     * are sharing. With this approach the access only last as long as the target activity on Api versions
+     * above Kit Kat. Once you are below that you have to manually revoke the permissions.
+     *
+     * @param intent that needs to have the permission flags
+     * @param uri    that the permissions are being applied to
+     * @return intent that has read and write permissions
+     */
+    public static void grantFileReadPermissions(Intent intent, Uri uri, Context context) {
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        /*
+         Workaround for Android bug.
+         grantUriPermission also needed for KITKAT,
+         see https://code.google.com/p/android/issues/detail?id=76683
+         */
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
-            Uri uri = FileProvider.getUriForFile(context,
-                    BuildConfig.APPLICATION_ID + ".provider",
-                    file);
+            List<ResolveInfo> resInfoList = context.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+            for (ResolveInfo resolveInfo : resInfoList) {
+                String packageName = resolveInfo.activityInfo.packageName;
+                context.grantUriPermission(packageName, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            }
+        }
+    }
+
+    public static void revokeFileReadWritePermission(Context context, Uri uri) {
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
             context.revokeUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
         }
     }
