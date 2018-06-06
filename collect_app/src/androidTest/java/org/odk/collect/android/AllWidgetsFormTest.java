@@ -585,17 +585,17 @@ public class AllWidgetsFormTest {
 
     public void testRangePickerIntegerWidget() {
 
-        int randomValue = randomInt() % 9;
+        int randomValue = randomInt() % 8;
         onView(withText("Select value")).perform(click());
 
         onVisibleNumberPickerDialog().perform(setNumberPickerValue(randomValue));
 
-        Screengrab.screenshot("Range picker integer widget");
+        Screengrab.screenshot("Range-picker-integer-widget");
 
         openWidgetList();
         onView(withText("Range picker integer widget")).perform(click());
 
-        onVisibleEditText().check(matches(withText(randomValue)));
+        onVisibleTextView().check(matches(withText(randomValue)));
 
         onView(withText("Range picker integer widget")).perform(swipeLeft());
 
@@ -1034,12 +1034,16 @@ public class AllWidgetsFormTest {
         return onView(withClassName(endsWith("EditText")));
     }
 
+    private ViewInteraction onVisibleTextView() {
+        return onView(withClassName(endsWith("TextView")));
+    }
+
     private ViewInteraction onVisibleCheckBox() {
         return onView(withClassName(endsWith("CheckBox")));
     }
 
     private ViewInteraction onVisibleNumberPickerDialog() {
-        return onView(withClassName(endsWith("NumberPickerDialog")));
+        return onView(withClassName(endsWith("NumberPicker")));
     }
 
     // private void openWidget(String name) {
