@@ -520,8 +520,8 @@ public class FileUtils {
      * are sharing. With this approach the access only last as long as the target activity on Api versions
      * above Kit Kat. Once you are below that you have to manually revoke the permissions.
      *
-     * @param intent
-     * @param uri
+     * @param intent that needs to have the permission flags
+     * @param uri that the permissions are being applied to
      * @return intent that has read and write permissions
      */
     public static Intent grantFilePermissions(Intent intent, Uri uri, Context context) {
