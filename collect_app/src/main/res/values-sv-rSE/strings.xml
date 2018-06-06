@@ -498,5 +498,5 @@
   <string name="image_size_small">Liten (1 024 px)</string>
   <string name="image_size_very_small">Mycket liten (640 px)</string>
   <string name="image_size_original">Ursprunglig storlek i kamera (standard)</string>
-    <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
 </resources>

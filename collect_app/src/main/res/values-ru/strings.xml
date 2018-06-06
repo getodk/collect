@@ -486,5 +486,5 @@
   <string name="form_entry">Снимите галочку, чтобы скрыть пункт при заполнении формы</string>
   <string name="use_device_language">Использовать язык устройства</string>
   <string name="not_supported_offline_layer_format">Выбранный файл оффлайн-слоя использует неподдерживаемый формат PBF!</string>
-    <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
 </resources>
