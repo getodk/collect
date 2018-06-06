@@ -304,6 +304,4 @@
   <string name="moving_backwards_enabled_title">ወደኋላ መሄድ ተመርጧል</string>
   <string name="yes">አዎ</string>
   <string name="no">አይ</string>
-  <string name="geotrace_sec">ሰከንዶች</string>
-  <string name="geotrace_min">ደቂቃዎች</string>
 </resources>

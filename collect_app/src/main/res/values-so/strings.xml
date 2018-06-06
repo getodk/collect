@@ -32,9 +32,7 @@
   <string name="loading_form">La soo deg foomka</string>
   <string name="main_menu">Liiska asalka ah</string>
   <string name="main_menu_details">Xog ururintu wax bay sahashaa</string>
-  <string name="geotrace_sec">Daqiiqado</string>
-  <string name="geotrace_min">Daqiiqadaha</string>
-  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+    <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->

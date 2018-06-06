@@ -562,6 +562,4 @@
   <string name="moving_backwards_enabled_message">អ្នកប្រហែលជាចង់មើលម្តងទៀតអំពីការកំណត់៖ \n\n\u2022 កែប្រែទម្រង់ដែលបានរក្សាទុក\n\u2022 រក្សាទុកទម្រង់\n\u2022 ទៅកាន់កន្លែងបញ្ចូល\n\u2022 កំពុងដំណើរការកំហិត</string>
   <string name="yes">បាទ/ចាស</string>
   <string name="no">ទេ</string>
-  <string name="geotrace_sec">វិនាទី</string>
-  <string name="geotrace_min">នាទី</string>
 </resources>

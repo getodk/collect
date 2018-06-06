@@ -576,6 +576,6 @@
     <string name="newer_version_of_a_form_info">This is an updated version of a form you already have!</string>
     <string name="svg_file_does_not_exist">SVG file does not exist!</string>
     <string name="svg_not_supported_device">ImageMap widget requires Android 5 (Lollipop) or newer. Your device is not supported!</string>
-    <string name="geotrace_sec">Seconds</string>
-    <string name="geotrace_min">Minutes</string>
+    <string name="seconds">Seconds</string>
+    <string name="minutes">Minutes</string>
 </resources>

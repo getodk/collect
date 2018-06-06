@@ -563,6 +563,4 @@
   <string name="yes">Kyllä</string>
   <string name="no">Ei</string>
   <string name="newer_version_of_a_form_info">Tämä on päivitetty versio lomakkeesta joka sinulla jo on!</string>
-  <string name="geotrace_sec">sekuntia</string>
-  <string name="geotrace_min">Minuutit</string>
 </resources>

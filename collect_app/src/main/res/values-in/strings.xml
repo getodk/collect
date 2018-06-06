@@ -486,7 +486,5 @@
   <string name="form_entry">Centang disembunyikan saat Isi Formulir</string>
   <string name="use_device_language">Gunakan bahasa perangkat</string>
   <string name="not_supported_offline_layer_format">Berkas offline layer menggunakan format PBF yang tidak didukung!</string>
-  <string name="geotrace_sec">Detik</string>
-  <string name="geotrace_min">Menit</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
 </resources>

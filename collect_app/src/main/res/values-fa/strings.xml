@@ -23,8 +23,6 @@
   <string name="do_not_exit">انصراف</string>
   <string name="entering_repeat">اضافه کردن گروه</string>
   <string name="get_location">ثبت مکان</string>
-  <string name="geotrace_sec">ثانیه ها</string>
-  <string name="geotrace_min">دقایق</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
