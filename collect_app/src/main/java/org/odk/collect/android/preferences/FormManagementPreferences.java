@@ -72,7 +72,10 @@ public class FormManagementPreferences extends BasePreferenceFragment {
                 if (key.equals(KEY_PERIODIC_FORM_UPDATES_CHECK)) {
                     ServerPollingJob.schedulePeriodicJob((String) newValue);
                     if (newValue.equals(getString(R.string.never_value))) {
-                        findPreference(KEY_AUTOMATIC_UPDATE).setEnabled(false);
+                        Preference automaticUpdatePreference = findPreference(KEY_AUTOMATIC_UPDATE);
+                        if (automaticUpdatePreference != null) {
+                            automaticUpdatePreference.setEnabled(false);
+                        }
                     }
                     getActivity().recreate();
                 }
