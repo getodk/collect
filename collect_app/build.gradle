@@ -78,6 +78,11 @@ android {
         vectorDrawables.useSupportLibrary = true
         archivesBaseName = 'collect'
     }
+    android {
+        lintOptions {
+            abortOnError false
+        }
+    }
 
     signingConfigs {
         release {

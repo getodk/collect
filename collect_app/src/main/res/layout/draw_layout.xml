@@ -53,7 +53,7 @@
         app:backgroundTint="@android:color/black"
         app:elevation="6dp"
         app:fabSize="mini"
-        app:srcCompat="@drawable/ic_clear_white"
+        android:layout="@drawable/ic_baseline_close_24px"
         android:onClick="clear"/>
 
     <android.support.v7.widget.CardView
@@ -96,7 +96,7 @@
         app:backgroundTint="@android:color/black"
         app:elevation="6dp"
         app:fabSize="mini"
-        app:srcCompat="@drawable/ic_save_white"
+        android:layout="@drawable/ic_baseline_save_24px"
         android:onClick="close"/>
 
     <android.support.v7.widget.CardView
@@ -139,7 +139,7 @@
         app:backgroundTint="@android:color/black"
         app:elevation="6dp"
         app:fabSize="mini"
-        app:srcCompat="@drawable/ic_color_lens_white"
+        android:layout="@drawable/ic_baseline_palette_24px"
         android:onClick="setColor"/>
 
     <android.support.design.widget.FloatingActionButton
@@ -157,6 +157,6 @@
         app:backgroundTint="@android:color/black"
         app:elevation="6dp"
         app:fabSize="normal"
-        app:srcCompat="@drawable/ic_add_white"/>
+        android:layout="@drawable/ic_baseline_add_24px"/>
 
 </android.support.design.widget.CoordinatorLayout>
