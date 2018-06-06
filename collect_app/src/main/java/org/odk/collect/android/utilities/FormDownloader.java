@@ -146,7 +146,8 @@ public class FormDownloader {
             // get the xml file
             // if we've downloaded a duplicate, this gives us the file
             fileResult = downloadXform(fd.getFormName(), fd.getDownloadUrl() + "&deviceID=" + deviceId,
-                    fd.isNewerFormVersionAvailable());  // smap add flag on newer form version available
+                    fd.isNewerFormVersionAvailable(),       // smap add flag on newer form version available
+                    fd.getFormPath());                      // smap
 
             if(fileResult.isNew()) {    // smap
                 message += Collect.getInstance().getString(R.string.success);
@@ -236,11 +237,11 @@ public class FormDownloader {
                 if(orgTempFiles != null && orgTempFiles.length > 0) {           // smap Save a copy the media files in the org media directory
                     for (File mf : orgTempFiles) {
                         try {
-                            FileUtils.deleteOldFile(mf.getName(), orgMediaDir); // smap
+                            FileUtils.deleteOldFile(mf.getName(), orgMediaDir);
                             if (mf.getName().endsWith(".json")) {
                                 org.apache.commons.io.FileUtils.moveFileToDirectory(mf, orgMediaDir, true);     // Move json files
                             } else {
-                                org.apache.commons.io.FileUtils.copyFileToDirectory(mf, orgMediaDir, true);     // For other files only a copy is saved
+                                org.apache.commons.io.FileUtils.copyFileToDirectory(mf, orgMediaDir, true);     // For other files a copy is saved
                             }
                         } catch (Exception e) {
                         }
@@ -370,20 +371,22 @@ public class FormDownloader {
      * Takes the formName and the URL and attempts to download the specified file. Returns a file
      * object representing the downloaded file.
      */
-    public FileResult downloadXform(String formName, String url, boolean download)      // smap add download flag
+    public FileResult downloadXform(String formName, String url, boolean download, String formPath)      // smap add download flag and formPath
             throws IOException, TaskCancelledException, Exception {
         // clean up friendly form name...
         String rootName = formName.replaceAll("[^\\p{L}\\p{Digit}]", " ");
         rootName = rootName.replaceAll("\\p{javaWhitespace}+", " ");
         rootName = rootName.trim();
 
-        // proposed name of xml file...
-        String path = Collect.FORMS_PATH + File.separator + rootName + ".xml";
-        int i = 2;
-        File f = new File(path);
+        File f = null;
 
         boolean isNew = false;      // smap
-        if(download) {              // smap
+        if(download) {             // smap
+            // proposed name of xml file...
+            String path = Collect.FORMS_PATH + File.separator + rootName + ".xml";
+            int i = 2;
+            f = new File(path);
+
             while (f.exists()) {
                 path = Collect.FORMS_PATH + File.separator + rootName + "_" + i + ".xml";
                 f = new File(path);
@@ -421,6 +424,12 @@ public class FormDownloader {
                 }
             }
 
+        } else {
+            if(formPath == null) {
+                f = new File(Collect.FORMS_PATH + File.separator + rootName + ".xml");   // smap
+            } else {
+                f = new File(formPath);     // smap
+            }
         }
         return new FileResult(f, isNew);    // smap
 

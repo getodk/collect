@@ -30,6 +30,7 @@ public class FormDetails implements Serializable {
     private boolean isNewerFormVersionAvailable;
     private boolean areNewerMediaFilesAvailable;
     private boolean tasks_only;    // smap
+    private String formPath;        // smap
 
     public FormDetails(String error) {
         errorStr = error;
@@ -39,7 +40,8 @@ public class FormDetails implements Serializable {
     public FormDetails(String formName, String downloadUrl, String manifestUrl, String formID,
                        String formVersion, String hash, String manifestFileHash,
                        boolean isNewerFormVersionAvailable, boolean areNewerMediaFilesAvailable,
-                       boolean tasks_only) {   // smap add tasks_only
+                       boolean tasks_only,
+                       String formPath) {   // smap add tasks_only
         this.formName = formName;
         this.downloadUrl = downloadUrl;
         this.manifestUrl = manifestUrl;
@@ -50,6 +52,7 @@ public class FormDetails implements Serializable {
         this.isNewerFormVersionAvailable = isNewerFormVersionAvailable;
         this.areNewerMediaFilesAvailable = areNewerMediaFilesAvailable;
         this.tasks_only = tasks_only;   // smap
+        this.formPath = formPath;       // smap
     }
 
     public String getErrorStr() {
@@ -78,6 +81,10 @@ public class FormDetails implements Serializable {
 
     public boolean getTasksOnly() {
         return tasks_only;
+    }           // smap
+
+    public String getFormPath() {
+        return formPath;
     }           // smap
 
     public String getHash() {

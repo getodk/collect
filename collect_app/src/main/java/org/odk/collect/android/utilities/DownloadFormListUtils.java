@@ -242,7 +242,7 @@ public class DownloadFormListUtils {
                 formList.put(formId, new FormDetails(formName, downloadUrl, manifestUrl, formId,
                         (version != null) ? version : majorMinorVersion, hash,
                         manifestFile != null ? manifestFile.getHash() : null,
-                        isNewerFormVersionAvailable, areNewerMediaFilesAvailable, false));  // smap add tasks_only
+                        isNewerFormVersionAvailable, areNewerMediaFilesAvailable, false, null));  // smap add tasks_only and form path
             }
         } else {
             // Aggregate 0.9.x mode...
@@ -286,7 +286,7 @@ public class DownloadFormListUtils {
                         return formList;
                     }
                     formList.put(formName,
-                            new FormDetails(formName, downloadUrl, null, formId, null, null, null, false, false, false));    // smap add tasks_only
+                            new FormDetails(formName, downloadUrl, null, formId, null, null, null, false, false, false, null));    // smap add tasks_only and form path
 
                     formId = null;
                 }

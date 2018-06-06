@@ -15,7 +15,7 @@
 package org.odk.collect.android.tasks;
 
 import java.util.Calendar;
-import java.util.Date;
+
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
@@ -34,7 +34,6 @@ import org.odk.collect.android.logic.FormInfo;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.taskModel.FormDetail;
 import org.odk.collect.android.utilities.EncryptionUtils;
 import org.odk.collect.android.utilities.EncryptionUtils.EncryptedFormInformation;
 import org.odk.collect.android.utilities.FileUtils;
