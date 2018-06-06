@@ -17,6 +17,7 @@ import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.tasks.ServerPollingJob;
 import org.odk.collect.android.utilities.IconUtils;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
@@ -26,7 +27,6 @@ import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceGoogleSheetsUploader;
 import org.odk.collect.android.tasks.InstanceServerUploader;
-import org.odk.collect.android.utilities.WebUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -148,7 +148,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                 String url = server + settings.get(PreferenceKeys.KEY_FORMLIST_URL);
 
                 Uri u = Uri.parse(url);
-                WebUtils.addCredentials(storedUsername, storedPassword, u.getHost());
+                CollectServerClient.addCredentials(storedUsername, storedPassword, u.getHost());
 
                 instanceServerUploader = new InstanceServerUploader();
                 instanceServerUploader.setUploaderListener(this);

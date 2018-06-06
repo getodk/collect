@@ -26,6 +26,7 @@ import android.widget.EditText;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 
@@ -107,7 +108,7 @@ public class AuthDialogUtility {
         }
 
         String host = Uri.parse(getServerFromPreferences()).getHost();
-        WebUtils.addCredentials(username, password, host);
+        CollectServerClient.addCredentials(username, password, host);
     }
 
     private void setWebCredentials(String url) {
@@ -116,7 +117,7 @@ public class AuthDialogUtility {
         }
 
         String host = Uri.parse(url).getHost();
-        WebUtils.addCredentials(username.getText().toString(), password.getText().toString(), host);
+        CollectServerClient.addCredentials(username.getText().toString(), password.getText().toString(), host);
     }
 
     private static String getServerFromPreferences() {

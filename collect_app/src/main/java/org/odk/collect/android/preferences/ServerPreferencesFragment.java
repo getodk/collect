@@ -37,13 +37,13 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.preferences.filters.ControlCharacterFilter;
 import org.odk.collect.android.preferences.filters.WhitespaceFilter;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.Validator;
-import org.odk.collect.android.utilities.WebUtils;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
 import java.util.ArrayList;
@@ -326,8 +326,8 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         String server = (String) GeneralSharedPreferences
                 .getInstance().get(PreferenceKeys.KEY_SERVER_URL);
         Uri u = Uri.parse(server);
-        WebUtils.clearHostCredentials(u.getHost());
-        WebUtils.clearCookieStore();
+        CollectServerClient.clearHostCredentials(u.getHost());
+        CollectServerClient.clearCookieStore();
     }
 
     protected void setDefaultAggregatePaths() {

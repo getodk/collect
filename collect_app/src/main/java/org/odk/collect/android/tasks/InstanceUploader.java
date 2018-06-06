@@ -23,12 +23,12 @@ import android.os.AsyncTask;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.utilities.WebUtils;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -39,12 +39,12 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_DELETE;
 
-public abstract class InstanceUploader extends AsyncTask<Long, Integer, WebUtils.Outcome> {
+public abstract class InstanceUploader extends AsyncTask<Long, Integer, CollectServerClient.Outcome> {
 
     private InstanceUploaderListener stateListener;
 
     @Override
-    protected void onPostExecute(WebUtils.Outcome outcome) {
+    protected void onPostExecute(CollectServerClient.Outcome outcome) {
         synchronized (this) {
             if (outcome != null && stateListener != null) {
                 if (outcome.authRequestingServer != null) {

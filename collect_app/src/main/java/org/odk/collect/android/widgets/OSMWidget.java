@@ -25,7 +25,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.ViewIds;
-import org.odk.collect.android.utilities.WebUtils;
+import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import java.util.ArrayList;
@@ -151,7 +151,7 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
         try {
             //launch with intent that sends plain text
             Intent launchIntent = new Intent(Intent.ACTION_SEND);
-            launchIntent.setType(WebUtils.getPlainTextMimeType());
+            launchIntent.setType(CollectServerClient.getPlainTextMimeType());
 
             //send form id
             launchIntent.putExtra("FORM_ID", String.valueOf(formId));

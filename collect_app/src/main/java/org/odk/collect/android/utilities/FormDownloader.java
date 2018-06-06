@@ -25,6 +25,7 @@ import org.kxml2.kdom.Element;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.logic.MediaFile;
@@ -394,7 +395,7 @@ public class FormDownloader {
                 OutputStream os = null;
 
                 try {
-                    is = WebUtils.getHttpInputStream(downloadUrl, null).getInputStream();
+                    is = CollectServerClient.getHttpInputStream(downloadUrl, null).getInputStream();
                     os = new FileOutputStream(tempFile);
 
                     byte[] buf = new byte[4096];
@@ -524,7 +525,7 @@ public class FormDownloader {
 
         List<MediaFile> files = new ArrayList<MediaFile>();
 
-        DocumentFetchResult result = WebUtils.getXmlDocument(fd.getManifestUrl());
+        DocumentFetchResult result = CollectServerClient.getXmlDocument(fd.getManifestUrl());
 
         if (result.errorMessage != null) {
             return result.errorMessage;

@@ -24,6 +24,7 @@ import org.kxml2.kdom.Element;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.logic.ManifestFile;
 import org.odk.collect.android.logic.MediaFile;
@@ -69,7 +70,7 @@ public class DownloadFormListUtils {
         // <formname, details>
         HashMap<String, FormDetails> formList = new HashMap<String, FormDetails>();
 
-        DocumentFetchResult result = WebUtils.getXmlDocument(downloadListUrl);
+        DocumentFetchResult result = CollectServerClient.getXmlDocument(downloadListUrl);
 
         // If we can't get the document, return the error, cancel the task
         if (result.errorMessage != null) {
@@ -285,7 +286,7 @@ public class DownloadFormListUtils {
             return null;
         }
 
-        DocumentFetchResult result = WebUtils.getXmlDocument(manifestUrl);
+        DocumentFetchResult result = CollectServerClient.getXmlDocument(manifestUrl);
 
         if (result.errorMessage != null) {
             return null;

@@ -43,7 +43,7 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.exception.BadUrlException;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
 import org.odk.collect.android.utilities.UrlUtils;
-import org.odk.collect.android.utilities.WebUtils.Outcome;
+import org.odk.collect.android.http.CollectServerClient.Outcome;
 import org.odk.collect.android.utilities.gdrive.DriveHelper;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.utilities.gdrive.SheetsHelper;

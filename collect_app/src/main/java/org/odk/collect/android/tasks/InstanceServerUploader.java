@@ -25,7 +25,7 @@ import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.utilities.WebUtils;
+import org.odk.collect.android.http.CollectServerClient;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -42,7 +42,7 @@ public class InstanceServerUploader extends InstanceUploader {
 
     private static final String URL_PATH_SEP = "/";
 
-    private boolean processChunk(int low, int high, WebUtils.Outcome outcome, Long... values) {
+    private boolean processChunk(int low, int high, CollectServerClient.Outcome outcome, Long... values) {
         if (values == null) {
             // don't try anything if values is null
             return false;
@@ -99,7 +99,7 @@ public class InstanceServerUploader extends InstanceUploader {
 
                     Collect.getInstance().getActivityLogger().logAction(this, urlString, instance);
 
-                    if (!WebUtils.uploadSubmissionFile(urlString, id, instance, toUpdate, uriRemap, outcome)) {
+                    if (!CollectServerClient.uploadSubmissionFile(urlString, id, instance, toUpdate, uriRemap, outcome)) {
                         return false; // get credentials...
                     }
                 }
@@ -115,8 +115,8 @@ public class InstanceServerUploader extends InstanceUploader {
 
     @Override
 
-    protected WebUtils.Outcome doInBackground(Long... values) {
-        WebUtils.Outcome outcome = new WebUtils.Outcome();
+    protected CollectServerClient.Outcome doInBackground(Long... values) {
+        CollectServerClient.Outcome outcome = new CollectServerClient.Outcome();
         int counter = 0;
         while (counter * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER < values.length) {
             int low = counter * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER;

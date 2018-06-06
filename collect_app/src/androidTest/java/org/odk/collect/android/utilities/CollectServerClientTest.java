@@ -2,6 +2,7 @@ package org.odk.collect.android.utilities;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.test.MockedServerTest;
 import okhttp3.mockwebserver.MockResponse;
 
@@ -9,7 +10,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.odk.collect.android.test.TestUtils.assertMatches;
 
-public class WebUtilsTest extends MockedServerTest {
+public class CollectServerClientTest extends MockedServerTest {
     @Before
     public void setUp() throws Exception {
         // server hangs without a response queued:
@@ -30,7 +31,7 @@ public class WebUtilsTest extends MockedServerTest {
     @Test
     public void getXmlDocument_request_shouldSupplyHeader_UserAgent() throws Exception {
         // when
-        WebUtils.getXmlDocument(url("/list-forms"));
+        CollectServerClient.getXmlDocument(url("/list-forms"));
 
         // then
         String header = nextRequest().getHeader("User-Agent");
@@ -41,7 +42,7 @@ public class WebUtilsTest extends MockedServerTest {
     @Test
     public void getXmlDocument_request_shouldSupplyHeader_X_OpenRosa_Version() throws Exception {
         // when
-        WebUtils.getXmlDocument(url("/list-forms"));
+        CollectServerClient.getXmlDocument(url("/list-forms"));
 
         // then
         assertEquals("1.0",
@@ -51,7 +52,7 @@ public class WebUtilsTest extends MockedServerTest {
     @Test
     public void getXmlDocument_request_shouldSupplyHeader_AcceptEncoding_gzip() throws Exception {
         // when
-        WebUtils.getXmlDocument(url("/list-forms"));
+        CollectServerClient.getXmlDocument(url("/list-forms"));
 
         // then
         assertEquals("gzip",
@@ -61,7 +62,7 @@ public class WebUtilsTest extends MockedServerTest {
     @Test
     public void getXmlDocument_request_shouldNotSupplyHeader_Authorization_forHttpRequest() throws Exception {
         // when
-        WebUtils.getXmlDocument(url("/list-forms"));
+        CollectServerClient.getXmlDocument(url("/list-forms"));
 
         // then
         assertNull(nextRequest().getHeader("Authorization"));
@@ -70,7 +71,7 @@ public class WebUtilsTest extends MockedServerTest {
     @Test
     public void getXmlDocument_request_shouldReportInvalidUrl() throws Exception {
         // when
-        DocumentFetchResult res = WebUtils.getXmlDocument("NOT_A_URL");
+        DocumentFetchResult res = CollectServerClient.getXmlDocument("NOT_A_URL");
 
         // then
         assertEquals(0, res.responseCode);
@@ -80,7 +81,7 @@ public class WebUtilsTest extends MockedServerTest {
     @Test
     public void getXmlDocument_request_shouldReportInvalidHost() throws Exception {
         // when
-        DocumentFetchResult res = WebUtils.getXmlDocument("file:/some/path");
+        DocumentFetchResult res = CollectServerClient.getXmlDocument("file:/some/path");
 
         // then
         assertEquals(0, res.responseCode);
@@ -92,15 +93,15 @@ public class WebUtilsTest extends MockedServerTest {
     }
 
     //    private void doRequest(String path) throws Exception {
-    //        HttpGet req = WebUtils.createOpenRosaHttpGet(new URI(url(path)));
+    //        HttpGet req = CollectServerClient.createOpenRosaHttpGet(new URI(url(path)));
     //        httpClient().execute(req, httpContext());
     //    }
     //
     //    private static HttpClient httpClient() {
-    //        return WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
+    //        return CollectServerClient.createHttpClient(CollectServerClient.CONNECTION_TIMEOUT);
     //    }
     //
     //    private static HttpContext httpContext() {
-    //        return WebUtils.getHttpContext();
+    //        return CollectServerClient.getHttpContext();
     //    }
 }

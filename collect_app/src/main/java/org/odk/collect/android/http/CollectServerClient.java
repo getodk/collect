@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.utilities;
+package org.odk.collect.android.http;
 
 import android.content.ContentValues;
 import android.net.Uri;
@@ -21,10 +21,10 @@ import org.kxml2.io.KXmlParser;
 import org.kxml2.kdom.Document;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.http.HttpClientConnection;
-import org.odk.collect.android.http.HttpInterface;
-import org.odk.collect.android.http.HttpInputStreamResult;
 import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.utilities.DocumentFetchResult;
+import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.ResponseMessageParser;
 import org.xmlpull.v1.XmlPullParser;
 import java.io.File;
 import java.io.IOException;
@@ -49,7 +49,7 @@ import timber.log.Timber;
  *
  * @author mitchellsundt@gmail.com
  */
-public final class WebUtils {
+public final class CollectServerClient {
 
     private static final String HTTP_CONTENT_TYPE_TEXT_XML = "text/xml";
 
@@ -57,11 +57,11 @@ public final class WebUtils {
 
     private static HttpInterface httpConnection;
 
-    private WebUtils() {}
+    private CollectServerClient() {}
 
     /**
      * Gets an object that conforms to the HttpInterface. This is a protected method
-     * so that it can be overridden in a Mock WebUtils class to allow WebUtils to be unit tested.
+     * so that it can be overridden in a Mock CollectServerClient class to allow CollectServerClient to be unit tested.
      *
      * @return instance of HttpInterface
      */
