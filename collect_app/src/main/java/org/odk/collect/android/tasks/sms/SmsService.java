@@ -252,6 +252,7 @@ public class SmsService {
 
         if (model.isSubmissionComplete()) {
             markInstanceAsSubmittedOrDelete(sentMessageResult.getInstanceId());
+            smsSubmissionManager.deleteSubmission(sentMessageResult.getInstanceId());
         }
     }
 
