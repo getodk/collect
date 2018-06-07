@@ -23,8 +23,8 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.tasks.sms.SmsPendingIntents.getDeliveryPendingIntent;
-import static org.odk.collect.android.tasks.sms.SmsPendingIntents.getSentPendingIntent;
+import static org.odk.collect.android.tasks.sms.SmsUtils.getDeliveryPendingIntent;
+import static org.odk.collect.android.tasks.sms.SmsUtils.getSentPendingIntent;
 
 public class SmsSender {
     private Context context;

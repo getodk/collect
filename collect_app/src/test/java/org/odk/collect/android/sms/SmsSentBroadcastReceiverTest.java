@@ -6,7 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.tasks.sms.SmsSentBroadcastReceiver;
-import org.odk.collect.android.tasks.sms.SmsPendingIntents;
+import org.odk.collect.android.tasks.sms.SmsUtils;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.shadows.ShadowApplication;
 
@@ -38,7 +38,7 @@ public class SmsSentBroadcastReceiverTest {
         /**
          * Testing to see if the broadcast receiver will receive SMS events from Collect.
          */
-        Intent intent = new Intent(SmsPendingIntents.SMS_SEND_ACTION);
+        Intent intent = new Intent(SmsUtils.SMS_SEND_ACTION);
 
         ShadowApplication shadowApplication = ShadowApplication.getInstance();
         Assert.assertTrue(shadowApplication.hasReceiverForIntent(intent));

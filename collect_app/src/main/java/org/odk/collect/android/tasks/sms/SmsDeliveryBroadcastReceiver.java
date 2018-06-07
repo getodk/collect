@@ -26,8 +26,8 @@ public class SmsDeliveryBroadcastReceiver extends BroadcastReceiver {
 
         SentMessageResult result = new SentMessageResult();
 
-        result.setMessageId(intent.getExtras().getInt(SmsPendingIntents.SMS_MESSAGE_ID));
-        result.setInstanceId(intent.getExtras().getString(SmsPendingIntents.SMS_INSTANCE_ID));
+        result.setMessageId(intent.getExtras().getInt(SmsUtils.SMS_MESSAGE_ID));
+        result.setInstanceId(intent.getExtras().getString(SmsUtils.SMS_INSTANCE_ID));
 
         switch (getResultCode()) {
             case Activity.RESULT_OK:
