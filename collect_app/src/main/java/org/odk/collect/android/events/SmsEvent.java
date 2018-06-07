@@ -5,7 +5,7 @@ import org.odk.collect.android.tasks.sms.models.SmsProgress;
 
 import java.util.Date;
 
-public class SmsEvent {
+public class SmsEvent extends RxEvent {
     private MessageStatus status;
     private SmsProgress progress;
     private String instanceId;

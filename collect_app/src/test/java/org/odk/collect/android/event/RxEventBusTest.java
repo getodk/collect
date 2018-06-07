@@ -2,7 +2,7 @@ package org.odk.collect.android.event;
 
 
 import org.junit.Test;
-import org.odk.collect.android.events.Event;
+import org.odk.collect.android.events.RxEvent;
 import org.odk.collect.android.events.RxEventBus;
 
 import io.reactivex.observers.TestObserver;
@@ -23,7 +23,7 @@ public class RxEventBusTest {
 
         assertFalse(bus.getBusSubject().hasObservers());
 
-        TestObserver<Event> testObserver = bus.register(Event.class).test();
+        TestObserver<RxEvent> testObserver = bus.register(RxEvent.class).test();
 
         testObserver.assertSubscribed();
 
@@ -31,7 +31,7 @@ public class RxEventBusTest {
     }
 
     /**
-     * Ensures that the register method of the Event Bus is filtering events appropriately.
+     * Ensures that the register method of the RxEvent Bus is filtering events appropriately.
      * The assertValue method of TestObserver is used instead of AssertResult because
      * AssertResult is used to check for completeness and RxRelay's main objective is
      * to get rid of onComplete and onError that could damage a stream especially in the case
@@ -41,12 +41,12 @@ public class RxEventBusTest {
     public void testEventType() {
         RxEventBus bus = new RxEventBus();
 
-        Event event = new Event();
+        CoolerDummyEvent event = new CoolerDummyEvent();
 
-        //Event that won't get propagated to the observer.
+        //RxEvent that won't get propagated to the observer.
         DummyEvent dummyEvent = new DummyEvent();
 
-        TestObserver<Event> testObserver = bus.register(Event.class).test();
+        TestObserver<CoolerDummyEvent> testObserver = bus.register(CoolerDummyEvent.class).test();
 
         bus.post(event);
         bus.post(dummyEvent);
@@ -54,6 +54,9 @@ public class RxEventBusTest {
         testObserver.assertValue(event);
     }
 
-    class DummyEvent {
+    class DummyEvent extends RxEvent {
+    }
+
+    class CoolerDummyEvent extends RxEvent {
     }
 }

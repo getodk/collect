@@ -8,7 +8,7 @@ import com.jakewharton.rxrelay2.Relay;
 import io.reactivex.Observable;
 
 /***
- * A simple Event Bus powered by Jake Wharton's RxRelay and RxJava2
+ * A simple RxEvent Bus powered by Jake Wharton's RxRelay and RxJava2
  */
 public class RxEventBus {
     private Relay<Object> busSubject;
@@ -33,9 +33,9 @@ public class RxEventBus {
     /**
      * Sends an event to all the observers who have registered to receive the event type.
      *
-     * @param event an Event of any type.
+     * @param event an RxEvent of any type.
      */
-    public void post(@NonNull Object event) {
+    public void post(@NonNull RxEvent event) {
         busSubject.accept(event);
     }
 
