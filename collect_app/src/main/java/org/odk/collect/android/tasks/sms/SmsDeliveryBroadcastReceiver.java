@@ -11,9 +11,6 @@ import org.odk.collect.android.tasks.sms.models.SentMessageResult;
 
 import javax.inject.Inject;
 
-import static org.odk.collect.android.tasks.sms.SmsNotificationReceiver.SMS_MESSAGE_RESULT;
-import static org.odk.collect.android.tasks.sms.SmsNotificationReceiver.SMS_NOTIFICATION_ACTION;
-
 public class SmsDeliveryBroadcastReceiver extends BroadcastReceiver {
 
     @Inject
@@ -37,11 +34,5 @@ public class SmsDeliveryBroadcastReceiver extends BroadcastReceiver {
                 result.setMessageResultStatus(MessageResultStatus.NotDelivered);
                 break;
         }
-
-        smsService.processMessageSentResult(result);
-
-        Intent notificationIntent = new Intent(SMS_NOTIFICATION_ACTION);
-        notificationIntent.putExtra(SMS_MESSAGE_RESULT, result);
-        context.sendOrderedBroadcast(notificationIntent, null);
     }
 }
