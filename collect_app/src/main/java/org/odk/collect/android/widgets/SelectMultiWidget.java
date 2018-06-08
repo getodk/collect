@@ -24,9 +24,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.TextUtils;
-import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
@@ -45,11 +43,9 @@ public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWi
     protected final List<CheckBox> checkBoxes = new ArrayList<>();
     private boolean checkboxInit = true;
     private final List<Selection> ve;
-    private final Context context;
 
     public SelectMultiWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
-        this.context = context;
         //noinspection unchecked
         ve = getFormEntryPrompt().getAnswerValue() == null ? new ArrayList<>() :
                 (List<Selection>) getFormEntryPrompt().getAnswerValue().getValue();
@@ -118,12 +114,6 @@ public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWi
         checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (!checkboxInit && getFormEntryPrompt().isReadOnly()) {
                 buttonView.setChecked(!buttonView.isChecked());
-            }
-
-            // show warning when selected choice value has spaces
-            String value = items.get((int) checkBox.getTag()).getValue();
-            if (isChecked && value != null && value.contains(" ")) {
-                ToastUtils.showLongToast(context.getString(R.string.invalid_space_in_answer_singular, value));
             }
         });
 
