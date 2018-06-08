@@ -21,8 +21,8 @@ import java.util.TreeMap;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.odk.collect.android.preferences.FormMetadataMigrator.SOURCE_TARGET_VALUE_PAIRS;
 import static org.odk.collect.android.preferences.FormMetadataMigrator.migrate;
-import static org.odk.collect.android.preferences.FormMetadataMigrator.sourceTargetValuePairs;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_EMAIL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_MIGRATED;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_PHONENUMBER;
@@ -113,7 +113,7 @@ public class FormMetadataMigratorTest {
         assertTrue(sharedPreferences.getBoolean(KEY_METADATA_MIGRATED, false));
         assertPrefsMatchValues(sourceKeyValuePairs);
 
-        for (String[] pair : sourceTargetValuePairs) {
+        for (String[] pair : SOURCE_TARGET_VALUE_PAIRS) {
             assertEquals(sharedPreferences.getString(pair[0], ""),
                     sharedPreferences.getString(pair[1], ""));
         }

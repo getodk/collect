@@ -49,7 +49,7 @@ public class InstanceProvider extends ContentProvider {
     private static final int INSTANCES = 1;
     private static final int INSTANCE_ID = 2;
 
-    private static final UriMatcher sUriMatcher;
+    private static final UriMatcher URI_MATCHER;
 
     private InstancesDatabaseHelper databaseHelper;
 
@@ -92,7 +92,7 @@ public class InstanceProvider extends ContentProvider {
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         qb.setTables(INSTANCES_TABLE_NAME);
 
-        switch (sUriMatcher.match(uri)) {
+        switch (URI_MATCHER.match(uri)) {
             case INSTANCES:
                 qb.setProjectionMap(sInstancesProjectionMap);
                 break;
@@ -120,7 +120,7 @@ public class InstanceProvider extends ContentProvider {
 
     @Override
     public String getType(@NonNull Uri uri) {
-        switch (sUriMatcher.match(uri)) {
+        switch (URI_MATCHER.match(uri)) {
             case INSTANCES:
                 return InstanceColumns.CONTENT_TYPE;
 
@@ -135,7 +135,7 @@ public class InstanceProvider extends ContentProvider {
     @Override
     public Uri insert(@NonNull Uri uri, ContentValues initialValues) {
         // Validate the requested uri
-        if (sUriMatcher.match(uri) != INSTANCES) {
+        if (URI_MATCHER.match(uri) != INSTANCES) {
             throw new IllegalArgumentException("Unknown URI " + uri);
         }
 
@@ -252,7 +252,7 @@ public class InstanceProvider extends ContentProvider {
         if (instancesDatabaseHelper != null) {
             SQLiteDatabase db = instancesDatabaseHelper.getWritableDatabase();
 
-            switch (sUriMatcher.match(uri)) {
+            switch (URI_MATCHER.match(uri)) {
                 case INSTANCES:
                     Cursor del = null;
                     try {
@@ -344,7 +344,7 @@ public class InstanceProvider extends ContentProvider {
             }
 
             String status;
-            switch (sUriMatcher.match(uri)) {
+            switch (URI_MATCHER.match(uri)) {
                 case INSTANCES:
                     if (values.containsKey(InstanceColumns.STATUS)) {
                         status = values.getAsString(InstanceColumns.STATUS);
@@ -390,9 +390,9 @@ public class InstanceProvider extends ContentProvider {
     }
 
     static {
-        sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-        sUriMatcher.addURI(InstanceProviderAPI.AUTHORITY, "instances", INSTANCES);
-        sUriMatcher.addURI(InstanceProviderAPI.AUTHORITY, "instances/#", INSTANCE_ID);
+        URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
+        URI_MATCHER.addURI(InstanceProviderAPI.AUTHORITY, "instances", INSTANCES);
+        URI_MATCHER.addURI(InstanceProviderAPI.AUTHORITY, "instances/#", INSTANCE_ID);
 
         sInstancesProjectionMap = new HashMap<>();
         sInstancesProjectionMap.put(InstanceColumns._ID, InstanceColumns._ID);

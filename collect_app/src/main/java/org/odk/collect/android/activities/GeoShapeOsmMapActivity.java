@@ -65,7 +65,7 @@ public class GeoShapeOsmMapActivity extends CollectAbstractActivity implements I
     private final ArrayList<Marker> mapMarkers = new ArrayList<Marker>();
     private Polyline polyline;
     public int zoomLevel = 3;
-    public static final int stroke_width = 5;
+    public static final int STROKE_WIDTH = 5;
     public String finalReturnString;
     private MapEventsOverlay overlayEvents;
     private boolean clearButtonTest;
@@ -325,7 +325,7 @@ public class GeoShapeOsmMapActivity extends CollectAbstractActivity implements I
         polyline = new Polyline();
         polyline.setColor(Color.RED);
         Paint paint = polyline.getPaint();
-        paint.setStrokeWidth(stroke_width);
+        paint.setStrokeWidth(STROKE_WIDTH);
         map.getOverlays().add(polyline);
         map.getOverlays().add(overlayEvents);
         map.invalidate();

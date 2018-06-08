@@ -101,7 +101,7 @@ public class AllWidgetsFormTest {
     private final ActivityResult okResult = new ActivityResult(RESULT_OK, new Intent());
 
     @ClassRule
-    public static final LocaleTestRule localeTestRule = new LocaleTestRule();
+    public static final LocaleTestRule LOCALE_TEST_RULE = new LocaleTestRule();
 
     @Rule
     public FormEntryActivityTestRule activityTestRule = new FormEntryActivityTestRule();

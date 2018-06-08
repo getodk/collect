@@ -69,9 +69,9 @@ import timber.log.Timber;
 public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
 
     // The RGB value for the orange background
-    public static final int orangeRedVal = 255;
-    public static final int orangeGreenVal = 140;
-    public static final int orangeBlueVal = 0;
+    public static final int ORANGE_RED_VAL = 255;
+    public static final int ORANGE_GREEN_VAL = 140;
+    public static final int ORANGE_BLUE_VAL = 0;
 
     private static final int HORIZONTAL_PADDING = 7;
     private static final int VERTICAL_PADDING = 5;
@@ -308,8 +308,8 @@ public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
                 Collect.getInstance().getActivityLogger().logInstanceAction(this,
                         "onItemClick.select",
                         items.get(position).getValue(), getFormEntryPrompt().getIndex());
-                imageViews[position].setBackgroundColor(Color.rgb(orangeRedVal, orangeGreenVal,
-                        orangeBlueVal));
+                imageViews[position].setBackgroundColor(Color.rgb(ORANGE_RED_VAL, ORANGE_GREEN_VAL,
+                        ORANGE_BLUE_VAL));
 
                 if (quickAdvance && listener != null) {
                     listener.advance();
@@ -331,8 +331,8 @@ public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
 
             selected[i] = match.equals(s);
             if (selected[i]) {
-                imageViews[i].setBackgroundColor(Color.rgb(orangeRedVal, orangeGreenVal,
-                        orangeBlueVal));
+                imageViews[i].setBackgroundColor(Color.rgb(ORANGE_RED_VAL, ORANGE_GREEN_VAL,
+                        ORANGE_BLUE_VAL));
             }
         }
 
