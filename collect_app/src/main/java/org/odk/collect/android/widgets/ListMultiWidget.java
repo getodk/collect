@@ -68,8 +68,6 @@ import timber.log.Timber;
 @SuppressLint("ViewConstructor")
 public class ListMultiWidget extends QuestionWidget implements MultiChoiceWidget {
 
-    private static final boolean checkboxInit = true;
-
     private List<SelectChoice> items; // may take a while to compute...
 
     private final ArrayList<CheckBox> checkBoxes;
@@ -121,7 +119,7 @@ public class ListMultiWidget extends QuestionWidget implements MultiChoiceWidget
                 c.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        if (!checkboxInit && getFormEntryPrompt().isReadOnly()) {
+                        if (getFormEntryPrompt().isReadOnly()) {
                             if (buttonView.isChecked()) {
                                 buttonView.setChecked(false);
                                 Collect.getInstance().getActivityLogger().logInstanceAction(this,
