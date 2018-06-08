@@ -40,6 +40,7 @@ import timber.log.Timber;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_DELETE;
 import static org.odk.collect.android.tasks.sms.Mapper.toMessageStatus;
 import static org.odk.collect.android.tasks.sms.SmsUtils.checkIfSentIntentExists;
+import static org.odk.collect.android.tasks.sms.SmsUtils.checkIfSubmissionSentOrSending;
 import static org.odk.collect.android.utilities.FileUtil.getFileContents;
 import static org.odk.collect.android.utilities.FileUtil.getSmsInstancePath;
 
@@ -245,7 +246,8 @@ public class SmsService {
         SmsEvent event = new SmsEvent();
         event.setInstanceId(sentMessageResult.getInstanceId());
         event.setLastUpdated(model.getLastUpdated());
-        event.setStatus(toMessageStatus(sentMessageResult.getMessageResultStatus()));
+        MessageStatus status = toMessageStatus(sentMessageResult.getMessageResultStatus());
+        event.setStatus(checkIfSubmissionSentOrSending(model, status));
         event.setProgress(model.getCompletion());
 
         rxEventBus.post(event);
@@ -311,8 +313,8 @@ public class SmsService {
 
     /**
      * @param isFormAutoDeleteOptionEnabled represents whether the auto-delete option is enabled at the app level
-     *
-     * If the form explicitly sets the auto-delete property, then it overrides the preferences.
+     *                                      <p>
+     *                                      If the form explicitly sets the auto-delete property, then it overrides the preferences.
      */
     private boolean isFormAutoDeleteEnabled(String jrFormId, boolean isFormAutoDeleteOptionEnabled) {
         Cursor cursor = new FormsDao().getFormsCursorForFormId(jrFormId);

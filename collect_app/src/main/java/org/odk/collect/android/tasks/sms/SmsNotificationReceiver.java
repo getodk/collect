@@ -24,6 +24,7 @@ import java.util.Locale;
 import javax.inject.Inject;
 
 import static org.odk.collect.android.tasks.sms.Mapper.toMessageStatus;
+import static org.odk.collect.android.tasks.sms.SmsUtils.checkIfSubmissionSentOrSending;
 
 public class SmsNotificationReceiver extends BroadcastReceiver {
     public static final String SMS_MESSAGE_RESULT = "sms_message_result";
@@ -101,7 +102,7 @@ public class SmsNotificationReceiver extends BroadcastReceiver {
         Date date = smsSubmission.getLastUpdated();
         SmsProgress progress = smsSubmission.getCompletion();
 
-        MessageStatus status = toMessageStatus(messageResult.getMessageResultStatus());
+        MessageStatus status = checkIfSubmissionSentOrSending(smsSubmission, toMessageStatus(messageResult.getMessageResultStatus()));
 
         switch (status) {
             case NoReception:

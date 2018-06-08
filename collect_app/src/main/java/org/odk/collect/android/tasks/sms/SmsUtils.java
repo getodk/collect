@@ -8,6 +8,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.events.SmsEvent;
 import org.odk.collect.android.tasks.sms.models.MessageStatus;
 import org.odk.collect.android.tasks.sms.models.SmsProgress;
+import org.odk.collect.android.tasks.sms.models.SmsSubmission;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -132,6 +133,28 @@ public class SmsUtils {
         }
 
         return "";
+    }
+
+    /***
+     * Checks to see if the current message is the last or not. If it's not the last it sends
+     * Sending as the status to the InstanceUploaderList so that it shows the current progress but if it's the last
+     * message then that means the submission has been completed so it should show Sent. This has to be done
+     * because the MessageStatus is being used to serve SmsSender Layer and it's status is also tied to the UI.
+     *
+     * @param model The current model that's being submitted.
+     * @param status that was received from the broadcast receiver of the message that was just sent.
+     * @return the MessageStatus that will be transferred via the event.
+     */
+    public static MessageStatus checkIfSubmissionSentOrSending(SmsSubmission model, MessageStatus status) {
+        if (status.equals(MessageStatus.Sent)) {
+            if (model.isSubmissionComplete()) {
+                return MessageStatus.Sent;
+            } else {
+                return MessageStatus.Sending;
+            }
+        }
+
+        return status;
     }
 
 }
