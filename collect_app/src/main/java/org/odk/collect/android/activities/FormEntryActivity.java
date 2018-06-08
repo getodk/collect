@@ -1985,6 +1985,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         images, audio, video);
                 FileUtils.purgeMediaPath(instanceFolder);
             }
+        } else {
+            Timber.w("null returned by getFormController()");
         }
     }
 
