@@ -589,13 +589,16 @@ public class AllWidgetsFormTest {
         onView(withText("Select value")).perform(click());
 
         onVisibleNumberPickerDialog().perform(setNumberPickerValue(randomValue));
+        onView(withText("OK")).perform(click());
 
         Screengrab.screenshot("Range-picker-integer-widget");
 
         openWidgetList();
         onView(withText("Range picker integer widget")).perform(click());
 
-        onVisibleTextView().check(matches(withText(randomValue)));
+        onView(withText("Edit value")).perform(click());
+        onVisibleCustomEditText().check(matches(isDisplayed()));
+        onView(withText("OK")).perform(click());
 
         onView(withText("Range picker integer widget")).perform(swipeLeft());
 
@@ -1034,8 +1037,8 @@ public class AllWidgetsFormTest {
         return onView(withClassName(endsWith("EditText")));
     }
 
-    private ViewInteraction onVisibleTextView() {
-        return onView(withClassName(endsWith("TextView")));
+    private ViewInteraction onVisibleCustomEditText() {
+        return onView(withClassName(endsWith("CustomEditText")));
     }
 
     private ViewInteraction onVisibleCheckBox() {
