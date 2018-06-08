@@ -189,9 +189,6 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         running = false;
 
         StringBuilder message = new StringBuilder();
-        message
-                .append(Collect.getInstance().getString(R.string.forms_sent))
-                .append("\n\n");
 
         if (result == null) {
             message.append(Collect.getInstance().getString(R.string.odk_auth_auth_fail));
@@ -237,7 +234,8 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
 
         Intent notifyIntent = new Intent(Collect.getInstance(), NotificationActivity.class);
         notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        notifyIntent.putExtra(NotificationActivity.NOTIFICATION_KEY, message.toString().trim());
+        notifyIntent.putExtra(NotificationActivity.NOTIFICATION_TITLE, Collect.getInstance().getString(R.string.forms_sent));
+        notifyIntent.putExtra(NotificationActivity.NOTIFICATION_MESSAGE, message.toString().trim());
 
         PendingIntent pendingNotify = PendingIntent.getActivity(Collect.getInstance(), 0,
                 notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
