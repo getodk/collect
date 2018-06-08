@@ -94,14 +94,14 @@ public class FormsProvider extends ContentProvider {
 
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         qb.setTables(FORMS_TABLE_NAME);
+        qb.setProjectionMap(sFormsProjectionMap);
+        qb.setStrict(true);
 
         switch (sUriMatcher.match(uri)) {
             case FORMS:
-                qb.setProjectionMap(sFormsProjectionMap);
                 break;
 
             case FORM_ID:
-                qb.setProjectionMap(sFormsProjectionMap);
                 qb.appendWhere(FormsColumns._ID + "="
                         + uri.getPathSegments().get(1));
                 break;
@@ -360,13 +360,21 @@ public class FormsProvider extends ContentProvider {
                         }
                     }
 
+                    String[] newWhereArgs;
+                    if (whereArgs == null || whereArgs.length == 0) {
+                        newWhereArgs = new String[] {formId};
+                    } else {
+                        newWhereArgs = new String[(whereArgs.length + 1)];
+                        newWhereArgs[0] = formId;
+                        System.arraycopy(whereArgs, 0, newWhereArgs, 1, whereArgs.length);
+                    }
+
                     count = db.delete(
                             FORMS_TABLE_NAME,
                             FormsColumns._ID
-                                    + "="
-                                    + formId
+                                    + "=?"
                                     + (!TextUtils.isEmpty(where) ? " AND (" + where
-                                    + ')' : ""), whereArgs);
+                                    + ')' : ""), newWhereArgs);
                     break;
 
                 default:
@@ -510,14 +518,22 @@ public class FormsProvider extends ContentProvider {
                                 values.put(FormsColumns.DISPLAY_SUBTEXT, ts);
                             }
 
+                            String[] newWhereArgs;
+                            if (whereArgs == null || whereArgs.length == 0) {
+                                newWhereArgs = new String[] {formId};
+                            } else {
+                                newWhereArgs = new String[(whereArgs.length + 1)];
+                                newWhereArgs[0] = formId;
+                                System.arraycopy(whereArgs, 0, newWhereArgs, 1, whereArgs.length);
+                            }
+
                             count = db.update(
                                     FORMS_TABLE_NAME,
                                     values,
                                     FormsColumns._ID
-                                            + "="
-                                            + formId
+                                            + "=?"
                                             + (!TextUtils.isEmpty(where) ? " AND ("
-                                            + where + ')' : ""), whereArgs);
+                                            + where + ')' : ""), newWhereArgs);
                         } else {
                             Timber.e("Attempting to update row that does not exist");
                         }
