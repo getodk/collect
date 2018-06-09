@@ -586,8 +586,6 @@
   <string name="new_form_versions_downloaded">ទម្រង់ជំនាន់ថ្មីបានទាញយក</string>
   <string name="automatic_download">ទាញយក​ដោយ​ស្វ័យ​ប្រវត្តិ</string>
   <string name="automatic_download_summary">ធ្វើបច្ចុប្បន្នភាពជំនាន់ទម្រង់​ដោយទាញយក​​ដោយ​ស្វ័យ​ប្រវត្តិ</string>
-  <string name="forms_downloaded">ទម្រង់ដែលបានទាញយក៖</string>
-  <string name="forms_sent">ឯកសារ​ផ្ញើរចេញ៖</string>
   <string name="guidance_hint_title">បង្ហាញការណែនាំសម្រាប់សំណួរ</string>
   <string name="app_theme">Theme</string>
   <string name="theme_light">Light theme</string>

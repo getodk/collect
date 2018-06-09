@@ -587,8 +587,6 @@
   <string name="new_form_versions_downloaded">Завантажені нові версії анкет</string>
   <string name="automatic_download">Автоматичне завантаження</string>
   <string name="automatic_download_summary">Автоматично завантажувати нові версії анкет</string>
-  <string name="forms_downloaded">Завантажено анкети:</string>
-  <string name="forms_sent">Надіслано анкети:</string>
   <string name="guidance_hint_title">Відображати пояснення до питань</string>
   <string name="app_theme">Тема</string>
   <string name="theme_light">Світла тема</string>

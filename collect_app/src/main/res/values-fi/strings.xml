@@ -587,8 +587,6 @@
   <string name="new_form_versions_downloaded">Uudet lomakeversiot haettu</string>
   <string name="automatic_download">Automaattinen haku</string>
   <string name="automatic_download_summary">Hae automaattisesti lomakkeiden päivitettyjä versioita</string>
-  <string name="forms_downloaded">Haetut lomakkeet:</string>
-  <string name="forms_sent">Lähetetyt lomakkeet:</string>
   <string name="guidance_hint_title">Näytä kysymysopastus</string>
   <string name="app_theme">Teema</string>
   <string name="theme_light">Vaalea teema</string>

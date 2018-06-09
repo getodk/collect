@@ -234,7 +234,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
 
         Intent notifyIntent = new Intent(Collect.getInstance(), NotificationActivity.class);
         notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        notifyIntent.putExtra(NotificationActivity.NOTIFICATION_TITLE, Collect.getInstance().getString(R.string.forms_sent));
+        notifyIntent.putExtra(NotificationActivity.NOTIFICATION_TITLE, Collect.getInstance().getString(R.string.upload_results));
         notifyIntent.putExtra(NotificationActivity.NOTIFICATION_MESSAGE, message.toString().trim());
 
         PendingIntent pendingNotify = PendingIntent.getActivity(Collect.getInstance(), 0,

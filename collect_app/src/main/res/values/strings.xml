@@ -600,8 +600,6 @@
     <string name="new_form_versions_downloaded">New form versions downloaded</string>
     <string name="automatic_download">Automatic download</string>
     <string name="automatic_download_summary">Automatically download updated versions of forms</string>
-    <string name="forms_downloaded">Forms downloaded:</string>
-    <string name="forms_sent">Forms sent:</string>
     <string name="guidance_hint_title">Show guidance for questions</string>
     <string name="app_theme">Theme</string>
     <string name="theme_light">Light theme</string>

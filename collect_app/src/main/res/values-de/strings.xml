@@ -587,8 +587,6 @@
   <string name="new_form_versions_downloaded">Neue Formular-Versionen heruntergeladen</string>
   <string name="automatic_download">Automatischer Download</string>
   <string name="automatic_download_summary">Automatisch aktualisierte Versionen von Formularen herunterladen</string>
-  <string name="forms_downloaded">Formulare heruntergeladen:</string>
-  <string name="forms_sent">Formulare gesendet:</string>
   <string name="guidance_hint_title">Hilfe zu Fragen anzeigen</string>
   <string name="app_theme">Theme</string>
   <string name="theme_light">Helles Theme</string>

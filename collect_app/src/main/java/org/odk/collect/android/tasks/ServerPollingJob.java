@@ -95,7 +95,7 @@ public class ServerPollingJob extends Job {
                 if (!newDetectedForms.isEmpty()) {
                     if (GeneralSharedPreferences.getInstance().getBoolean(KEY_AUTOMATIC_UPDATE, false)) {
                         final HashMap<FormDetails, String> result = new FormDownloader().downloadForms(newDetectedForms);
-                        informAboutNewDownloadedForms(Collect.getInstance().getString(R.string.forms_downloaded), FormDownloadList.getDownloadResultMessage(result));
+                        informAboutNewDownloadedForms(Collect.getInstance().getString(R.string.download_forms_result), FormDownloadList.getDownloadResultMessage(result));
                     } else {
                         for (FormDetails formDetails : newDetectedForms) {
                             String manifestFileHash = formDetails.getManifestFileHash() != null ? formDetails.getManifestFileHash() : "";
