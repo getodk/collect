@@ -77,14 +77,14 @@ public class RankingItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
     @Override
     // Prevent out of bounds dragging
-    public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-        float topY = viewHolder.itemView.getTop() + dY;
+    public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float x, float y, int actionState, boolean isCurrentlyActive) {
+        float topY = viewHolder.itemView.getTop() + y;
         float bottomY = topY + viewHolder.itemView.getHeight();
         if (topY < 0) {
-            dY = 0;
+            y = 0;
         } else if (bottomY > recyclerView.getHeight()) {
-            dY = recyclerView.getHeight() - viewHolder.itemView.getHeight() - viewHolder.itemView.getTop();
+            y = recyclerView.getHeight() - viewHolder.itemView.getHeight() - viewHolder.itemView.getTop();
         }
-        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+        super.onChildDraw(c, recyclerView, viewHolder, x, y, actionState, isCurrentlyActive);
     }
 }

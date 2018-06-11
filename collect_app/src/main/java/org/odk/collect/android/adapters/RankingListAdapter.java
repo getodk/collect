@@ -37,19 +37,18 @@ import java.util.List;
 
 public class RankingListAdapter extends RecyclerView.Adapter<RankingListAdapter.ItemViewHolder> {
 
-    private Context context;
     private List<SelectChoice> items;
     private FormEntryPrompt formEntryPrompt;
 
-    public RankingListAdapter(Context context, List<SelectChoice> items, FormEntryPrompt formEntryPrompt) {
-        this.context = context;
+    public RankingListAdapter(List<SelectChoice> items, FormEntryPrompt formEntryPrompt) {
         this.items = items;
         this.formEntryPrompt = formEntryPrompt;
     }
 
+    @NonNull
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ItemViewHolder(context, LayoutInflater.from(parent.getContext()).inflate(R.layout.ranking_item, parent, false));
+        return new ItemViewHolder(parent.getContext(), LayoutInflater.from(parent.getContext()).inflate(R.layout.ranking_item, parent, false));
     }
 
     @Override
@@ -57,10 +56,9 @@ public class RankingListAdapter extends RecyclerView.Adapter<RankingListAdapter.
         holder.textView.setText(formEntryPrompt.getSelectChoiceText(items.get(position)));
     }
 
-    public boolean onItemMove(int fromPosition, int toPosition) {
+    public void onItemMove(int fromPosition, int toPosition) {
         Collections.swap(items, fromPosition, toPosition);
         notifyItemMoved(fromPosition, toPosition);
-        return true;
     }
 
     @Override
@@ -86,13 +84,13 @@ public class RankingListAdapter extends RecyclerView.Adapter<RankingListAdapter.
 
         public void onItemSelected() {
             GradientDrawable border = new GradientDrawable();
-            border.setColor(new ThemeUtils(context).getRankItemColor());
+            border.setColor(new ThemeUtils(context).getPrimaryBackgroundColor());
             border.setStroke(10, ContextCompat.getColor(Collect.getInstance(), R.color.tintColor));
             itemView.setBackground(border);
         }
 
         public void onItemClear() {
-            itemView.setBackgroundColor(new ThemeUtils(context).getRankItemColor());
+            itemView.setBackgroundColor(new ThemeUtils(context).getPrimaryBackgroundColor());
         }
     }
 }

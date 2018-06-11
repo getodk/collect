@@ -19,7 +19,7 @@
         <item name="alertDialogTheme">@style/AlertDialogTheme.Dark</item>
         <item name="searchViewStyle">@style/SearchViewTheme.Dark</item>
         <item name="iconColor">@color/darkIconColor</item>
-        <item name="rankItemColor">@color/darkRankItemColor</item>
+        <item name="primaryBackgroundColor">@color/darkBackgroundColor</item>
         <item name="android:textDirection" tools:targetApi="17">locale</item>
         <item name="warningColor">@color/red</item>
     </style>
@@ -59,7 +59,7 @@
         <item name="alertDialogTheme">@style/AlertDialogTheme.Light</item>
         <item name="searchViewStyle">@style/SearchViewTheme.Light</item>
         <item name="iconColor">@color/lightIconColor</item>
-        <item name="rankItemColor">@color/lightRankItemColor</item>
+        <item name="primaryBackgroundColor">@color/lightBackgroundColor</item>
         <item name="android:textDirection" tools:targetApi="17">locale</item>
         <item name="warningColor">@color/red</item>
     </style>
