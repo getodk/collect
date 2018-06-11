@@ -22,13 +22,15 @@ import android.preference.PreferenceManager;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.http.DaggerHttpComponent;
+import org.odk.collect.android.http.HttpComponent;
 import org.odk.collect.android.http.HttpInterface;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.http.CollectServerClient;
+import org.odk.collect.android.http.CollectServerClient.Outcome;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ResponseMessageParser;
 
@@ -43,6 +45,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
 import javax.net.ssl.HttpsURLConnection;
 
 import timber.log.Timber;
@@ -58,13 +61,15 @@ public class InstanceServerUploader extends InstanceUploader {
 
     private static final String fail = "Error: ";
 
-    private HttpInterface httpInterface;    // TODO: Use Dagger @Inject
+    @Inject
+    protected HttpInterface httpInterface;
 
     public InstanceServerUploader() {
-        httpInterface = CollectServerClient.getHttpConnection();    // TODO: Temp Solution - Use Dagger instead
+        HttpComponent component = DaggerHttpComponent.create();
+        this.httpInterface = component.buildHttpInterface();
     }
 
-    private boolean processChunk(int low, int high, CollectServerClient.Outcome outcome, Long... values) {
+    private boolean processChunk(int low, int high, Outcome outcome, Long... values) {
         if (values == null) {
             // don't try anything if values is null
             return false;
@@ -149,7 +154,7 @@ public class InstanceServerUploader extends InstanceUploader {
     private boolean uploadSubmissionFile(String urlString, String id, String instanceFilePath,
                                          Uri toUpdate,
                                          Map<Uri, Uri> uriRemap,
-                                         CollectServerClient.Outcome outcome) {
+                                         Outcome outcome) {
 
         ContentValues contentValues = new ContentValues();
         Uri submissionUri = Uri.parse(urlString);
@@ -396,8 +401,8 @@ public class InstanceServerUploader extends InstanceUploader {
 
 
     @Override
-    protected CollectServerClient.Outcome doInBackground(Long... values) {
-        CollectServerClient.Outcome outcome = new CollectServerClient.Outcome();
+    protected Outcome doInBackground(Long... values) {
+        Outcome outcome = new Outcome();
         int counter = 0;
         while (counter * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER < values.length) {
             int low = counter * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER;

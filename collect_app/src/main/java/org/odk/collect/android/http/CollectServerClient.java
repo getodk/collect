@@ -28,6 +28,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashMap;
+
 import timber.log.Timber;
 
 /**
@@ -53,7 +54,8 @@ public final class CollectServerClient {
      */
     public static synchronized HttpInterface getHttpConnection() {
         if (httpConnection == null) {
-            httpConnection = new HttpClientConnection();
+            HttpComponent component = DaggerHttpComponent.create();
+            httpConnection = component.buildHttpInterface();
         }
         return httpConnection;
     }
