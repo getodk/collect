@@ -49,6 +49,7 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.views.AudioButton.AudioHandler;
 import org.odk.collect.android.views.ExpandedHeightGridView;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
+import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -346,6 +347,8 @@ public class GridMultiWidget extends QuestionWidget implements MultiChoiceWidget
         ImageAdapter ia = new ImageAdapter(choices);
         gridview.setAdapter(ia);
         addAnswerView(gridview);
+
+        SpacesInUnderlyingValuesWarning.forQuestionWidget(this).renderWarningIfNecessary(items);
     }
 
 
