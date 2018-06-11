@@ -48,6 +48,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  */
 @SuppressLint("ViewConstructor")
 public class BearingWidget extends QuestionWidget implements BinaryWidget {
+
     private Button getBearingButton;
     private boolean isSensorAvailable;
     private EditText answer;
@@ -124,7 +125,7 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
         answer.cancelLongPress();
     }
 
-    private boolean checkForRequiredSensors() {
+    public boolean checkForRequiredSensors() {
 
         boolean isAccelerometerSensorAvailable = false;
         boolean isMagneticFieldSensorAvailable = false;
@@ -180,4 +181,13 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
             answer.requestFocus();
         }
     }
+
+    public Button getGetBearingButton() {
+        return getBearingButton;
+    }
+
+    public EditText getEditTextAnswer() {
+        return answer;
+    }
+
 }
