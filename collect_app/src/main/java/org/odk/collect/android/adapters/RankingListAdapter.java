@@ -32,6 +32,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.ThemeUtils;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class RankingListAdapter extends RecyclerView.Adapter<RankingListAdapter.
     private FormEntryPrompt formEntryPrompt;
 
     public RankingListAdapter(List<SelectChoice> items, FormEntryPrompt formEntryPrompt) {
-        this.items = items;
+        this.items = new ArrayList<>(items);
         this.formEntryPrompt = formEntryPrompt;
     }
 

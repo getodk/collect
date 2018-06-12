@@ -38,12 +38,13 @@ public class RankingWidget extends QuestionWidget {
 
     private List<SelectChoice> items;
     private RankingListAdapter rankingListAdapter;
+    private RecyclerView recyclerView;
 
     public RankingWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
         readItems();
-        setUpLayout();
+        setUpLayout(getOrderedItems());
     }
 
     @Override
@@ -58,6 +59,8 @@ public class RankingWidget extends QuestionWidget {
 
     @Override
     public void clearAnswer() {
+        removeView(recyclerView);
+        setUpLayout(items);
     }
 
     @Override
@@ -79,8 +82,10 @@ public class RankingWidget extends QuestionWidget {
     }
 
     private List<SelectChoice> getOrderedItems() {
-        List<Selection> savedOrderedItems = getFormEntryPrompt().getAnswerValue() == null ? new ArrayList<>() :
-                (List<Selection>) getFormEntryPrompt().getAnswerValue().getValue();
+        List<Selection> savedOrderedItems =
+                getFormEntryPrompt().getAnswerValue() == null
+                ? new ArrayList<>()
+                : (List<Selection>) getFormEntryPrompt().getAnswerValue().getValue();
 
         if (savedOrderedItems.isEmpty()) {
             return items;
@@ -106,10 +111,10 @@ public class RankingWidget extends QuestionWidget {
         }
     }
 
-    private void setUpLayout() {
-        rankingListAdapter = new RankingListAdapter(getOrderedItems(), getFormEntryPrompt());
+    private void setUpLayout(List<SelectChoice> items) {
+        rankingListAdapter = new RankingListAdapter(items, getFormEntryPrompt());
 
-        RecyclerView recyclerView = new RecyclerView(getContext());
+        recyclerView = new RecyclerView(getContext());
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(rankingListAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
