@@ -21,7 +21,6 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -486,7 +485,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
 
                 ValueAnimator va = new ValueAnimator();
 
-                if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
+                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
                     // only for kitkat and newer versions
                     va.setIntValues(getResources().getColor(R.color.red), getDrawingCacheBackgroundColor());
                 } else {
