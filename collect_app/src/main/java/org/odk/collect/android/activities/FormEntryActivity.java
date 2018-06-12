@@ -1646,7 +1646,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             default:
                 return;
         }
-
+        SoftKeyboardUtils.hideSoftKeyboard(currentView);
+        getCurrentViewIfODKView().highlightWidget(index);
         ToastUtils.showShortToastInMiddle(constraintText);
     }
 
