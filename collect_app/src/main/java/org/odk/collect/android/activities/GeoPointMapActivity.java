@@ -129,13 +129,13 @@ public class GeoPointMapActivity extends CollectAbstractActivity implements OnMa
         showLocation = findViewById(R.id.show_location);
 
         locationClient = LocationClients.clientForContext(this);
-        locationClient.setListener(this);
 
         isMapReady = false;
         ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 setupMap(googleMap);
+                locationClient.setListener(GeoPointMapActivity.this);
             }
         });
     }
