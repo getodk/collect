@@ -97,8 +97,8 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
 
     protected EditText answer;
     private boolean hasExApp = true;
-    private Button launchIntentButton;
-    private Drawable textBackground;
+    private final Button launchIntentButton;
+    private final Drawable textBackground;
 
     private ActivityAvailability activityAvailability;
 

@@ -63,7 +63,7 @@ public abstract class AbstractSelectOneWidget extends SelectTextWidget
     protected List<RadioButton> buttons;
     protected String selectedValue;
 
-    private boolean autoAdvance;
+    private final boolean autoAdvance;
 
     public AbstractSelectOneWidget(Context context, FormEntryPrompt prompt, boolean autoAdvance) {
         super(context, prompt);

@@ -1,9 +1,11 @@
 package org.odk.collect.android.widgets.warnings;
 
 import android.content.Context;
+
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
+
 import org.javarosa.core.model.SelectChoice;
 import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.UnderlyingValuesConcat;
@@ -69,7 +71,7 @@ public class SpacesInUnderlyingValuesWarning {
 
     private static class RenderIntoQuestionWidget implements WarningRenderer {
 
-        private QuestionWidget questionWidget;
+        private final QuestionWidget questionWidget;
         private final WarningTextCreator warningCreator;
 
         RenderIntoQuestionWidget(QuestionWidget questionWidget) {
@@ -130,7 +132,7 @@ public class SpacesInUnderlyingValuesWarning {
 
     private static class SpacesInUnderlyingValuesTextCreator implements WarningTextCreator {
 
-        private UnderlyingValuesConcat formatter = new UnderlyingValuesConcat();
+        private final UnderlyingValuesConcat formatter = new UnderlyingValuesConcat();
 
         @Override
         public String create(List<SelectChoice> invalidValues, Context context) {

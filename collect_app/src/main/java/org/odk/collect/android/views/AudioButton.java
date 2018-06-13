@@ -46,10 +46,10 @@ public class AudioButton extends AppCompatImageButton {
      * @author mitchellsundt@gmail.com
      */
     public static class AudioHandler {
-        private FormIndex index;
-        private String selectionDesignator;
-        private String uri;
-        private MediaPlayer mediaPlayer;
+        private final FormIndex index;
+        private final String selectionDesignator;
+        private final String uri;
+        private final MediaPlayer mediaPlayer;
 
         public AudioHandler(FormIndex index, String selectionDesignator, String uri,
                 MediaPlayer player) {

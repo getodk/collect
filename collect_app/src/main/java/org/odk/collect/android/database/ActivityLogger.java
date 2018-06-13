@@ -115,7 +115,7 @@ public final class ActivityLogger {
     // We buffer scroll actions to make sure there aren't too many pauses
     // during scrolling.  This list is flushed every time any other type of
     // action is logged.
-    private LinkedList<ContentValues> scrollActions = new LinkedList<ContentValues>();
+    private final LinkedList<ContentValues> scrollActions = new LinkedList<ContentValues>();
 
     public ActivityLogger(String deviceId) {
         this.deviceId = deviceId;

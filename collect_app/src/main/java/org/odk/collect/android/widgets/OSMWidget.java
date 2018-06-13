@@ -31,8 +31,6 @@ import org.opendatakit.httpclientandroidlib.entity.ContentType;
 import java.util.ArrayList;
 import java.util.List;
 
-import timber.log.Timber;
-
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
@@ -48,26 +46,22 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
     private static final int OSM_GREEN = Color.rgb(126, 188, 111);
     private static final int OSM_BLUE = Color.rgb(112, 146, 255);
 
-    private Button launchOpenMapKitButton;
-    private String instanceDirectory;
-    private TextView errorTextView;
-    private TextView osmFileNameHeaderTextView;
-    private TextView osmFileNameTextView;
+    private final Button launchOpenMapKitButton;
+    private final String instanceDirectory;
+    private final TextView errorTextView;
+    private final TextView osmFileNameHeaderTextView;
+    private final TextView osmFileNameTextView;
 
-    private List<OSMTag> osmRequiredTags;
-    private String instanceId;
-    private int formId;
-    private String formFileName;
+    private final List<OSMTag> osmRequiredTags;
+    private final String instanceId;
+    private final int formId;
+    private final String formFileName;
     private String osmFileName;
 
     public OSMWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
         FormController formController = Collect.getInstance().getFormController();
-        if (formController == null) {
-            Timber.w("OSMWidget started with null FormController");
-            return;
-        }
 
         /*
          * NH: I'm trying to find the form xml file name, but this is neither

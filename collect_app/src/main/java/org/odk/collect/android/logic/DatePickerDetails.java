@@ -27,8 +27,8 @@ public class DatePickerDetails implements Serializable {
         CALENDAR, SPINNERS, MONTH_YEAR, YEAR
     }
 
-    private DatePickerType datePickerType;
-    private DatePickerMode datePickerMode;
+    private final DatePickerType datePickerType;
+    private final DatePickerMode datePickerMode;
 
     public DatePickerDetails(DatePickerType datePickerType, DatePickerMode datePickerMode) {
         this.datePickerType = datePickerType;

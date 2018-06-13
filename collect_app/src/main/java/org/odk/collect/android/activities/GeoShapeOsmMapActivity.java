@@ -62,10 +62,10 @@ import java.util.List;
 
 public class GeoShapeOsmMapActivity extends CollectAbstractActivity implements IRegisterReceiver {
     private MapView map;
-    private ArrayList<Marker> mapMarkers = new ArrayList<Marker>();
+    private final ArrayList<Marker> mapMarkers = new ArrayList<Marker>();
     private Polyline polyline;
     public int zoomLevel = 3;
-    public static final int stroke_width = 5;
+    public static final int STROKE_WIDTH = 5;
     public String finalReturnString;
     private MapEventsOverlay overlayEvents;
     private boolean clearButtonTest;
@@ -252,9 +252,9 @@ public class GeoShapeOsmMapActivity extends CollectAbstractActivity implements I
     }
 
 
-    private Handler handler = new Handler(Looper.getMainLooper());
+    private final Handler handler = new Handler(Looper.getMainLooper());
 
-    private Runnable centerAroundFix = new Runnable() {
+    private final Runnable centerAroundFix = new Runnable() {
         public void run() {
             handler.post(new Runnable() {
                 public void run() {
@@ -325,7 +325,7 @@ public class GeoShapeOsmMapActivity extends CollectAbstractActivity implements I
         polyline = new Polyline();
         polyline.setColor(Color.RED);
         Paint paint = polyline.getPaint();
-        paint.setStrokeWidth(stroke_width);
+        paint.setStrokeWidth(STROKE_WIDTH);
         map.getOverlays().add(polyline);
         map.getOverlays().add(overlayEvents);
         map.invalidate();
@@ -420,7 +420,7 @@ public class GeoShapeOsmMapActivity extends CollectAbstractActivity implements I
         map.invalidate();
     }
 
-    private MapEventsReceiver receive = new MapEventsReceiver() {
+    private final MapEventsReceiver receive = new MapEventsReceiver() {
         @Override
         public boolean longPressHelper(GeoPoint point) {
             if (!clearButtonTest) {
@@ -451,7 +451,7 @@ public class GeoShapeOsmMapActivity extends CollectAbstractActivity implements I
         }
     };
 
-    private MapListener mapViewListener = new MapListener() {
+    private final MapListener mapViewListener = new MapListener() {
         @Override
         public boolean onZoom(ZoomEvent zoomLev) {
             zoomLevel = zoomLev.getZoomLevel();
@@ -465,7 +465,7 @@ public class GeoShapeOsmMapActivity extends CollectAbstractActivity implements I
 
     };
 
-    private Marker.OnMarkerDragListener dragListener = new Marker.OnMarkerDragListener() {
+    private final Marker.OnMarkerDragListener dragListener = new Marker.OnMarkerDragListener() {
         @Override
         public void onMarkerDragStart(Marker marker) {
 
@@ -485,7 +485,7 @@ public class GeoShapeOsmMapActivity extends CollectAbstractActivity implements I
     };
 
 
-    private Marker.OnMarkerClickListener nullMarkerListener = new Marker.OnMarkerClickListener() {
+    private final Marker.OnMarkerClickListener nullMarkerListener = new Marker.OnMarkerClickListener() {
 
         @Override
         public boolean onMarkerClick(Marker arg0, MapView arg1) {

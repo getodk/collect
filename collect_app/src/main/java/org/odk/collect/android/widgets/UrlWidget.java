@@ -39,9 +39,9 @@ import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 public class UrlWidget extends QuestionWidget implements ButtonWidget {
 
     private Uri uri;
-    private Button openUrlButton;
-    private TextView stringAnswer;
-    private CustomTabHelper customTabHelper;
+    private final Button openUrlButton;
+    private final TextView stringAnswer;
+    private final CustomTabHelper customTabHelper;
 
     public UrlWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);

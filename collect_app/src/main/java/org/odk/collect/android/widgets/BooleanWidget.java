@@ -29,7 +29,7 @@ import org.odk.collect.android.utilities.ViewIds;
 public class BooleanWidget extends QuestionWidget {
 
     private AppCompatCheckBox booleanButton;
-    private FormEntryPrompt prompt;
+    private final FormEntryPrompt prompt;
 
     public BooleanWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);

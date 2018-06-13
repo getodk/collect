@@ -90,7 +90,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     private Button backButton;
     private Button downloadButton;
     private Stack<String> currentPath = new Stack<>();
-    private Stack<String> folderIdStack = new Stack<>();
+    private final Stack<String> folderIdStack = new Stack<>();
     private String alertMsg;
     private boolean alertShowing;
     private String rootId = null;

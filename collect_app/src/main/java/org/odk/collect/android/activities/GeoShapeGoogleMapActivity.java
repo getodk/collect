@@ -70,7 +70,7 @@ public class GeoShapeGoogleMapActivity extends CollectAbstractActivity implement
     private LatLng curlatLng;
     private PolygonOptions polygonOptions;
     private Polygon polygon;
-    private ArrayList<Marker> markerArray = new ArrayList<Marker>();
+    private final ArrayList<Marker> markerArray = new ArrayList<Marker>();
     private ImageButton gpsButton;
     private ImageButton clearButton;
 
