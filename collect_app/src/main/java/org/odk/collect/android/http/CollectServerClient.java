@@ -54,8 +54,7 @@ public final class CollectServerClient {
      */
     public static synchronized HttpInterface getHttpConnection() {
         if (httpConnection == null) {
-            HttpComponent component = DaggerHttpComponent.create();
-            httpConnection = component.buildHttpInterface();
+            httpConnection = DaggerHttpComponent.builder().build().buildHttpInterface();
         }
         return httpConnection;
     }

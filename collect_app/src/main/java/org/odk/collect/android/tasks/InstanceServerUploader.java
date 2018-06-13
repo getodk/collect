@@ -23,7 +23,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.http.DaggerHttpComponent;
-import org.odk.collect.android.http.HttpComponent;
 import org.odk.collect.android.http.HttpInterface;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.PreferenceKeys;
@@ -61,12 +60,10 @@ public class InstanceServerUploader extends InstanceUploader {
 
     private static final String fail = "Error: ";
 
-    @Inject
-    protected HttpInterface httpInterface;
+    @Inject HttpInterface httpInterface;
 
     public InstanceServerUploader() {
-        HttpComponent component = DaggerHttpComponent.create();
-        this.httpInterface = component.buildHttpInterface();
+        DaggerHttpComponent.builder().build().inject(this);
     }
 
     private boolean processChunk(int low, int high, Outcome outcome, Long... values) {
