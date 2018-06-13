@@ -137,7 +137,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
             }
         });
 
-
+        //New forms and getting blank forms
         createFileButton = (ImageView)findViewById(R.id.createFile);
         createFileButton.setImageResource(R.drawable.file_icon_create);
         createFileButton.setOnClickListener(new OnClickListener(){
@@ -261,9 +261,9 @@ public class MainMenuActivity extends CollectAbstractActivity {
 
         {
             // dynamically construct the "ODK Collect vA.B" string
-            TextView mainMenuMessageLabel = findViewById(R.id.main_menu_header);
-            mainMenuMessageLabel.setText(Collect.getInstance()
-                    .getVersionedAppName());
+            //TextView mainMenuMessageLabel = findViewById(R.id.main_menu_header);
+            //mainMenuMessageLabel.setText(Collect.getInstance()
+            //        .getVersionedAppName());
         }
 
         File f = new File(Collect.ODK_ROOT + "/collect.settings");
@@ -347,7 +347,8 @@ public class MainMenuActivity extends CollectAbstractActivity {
 
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
-        setTitle(getString(R.string.main_menu));
+        setTitle("ODK Collect");
+        //setTitle(getString(R.string.main_menu));
         setSupportActionBar(toolbar);
     }
 
