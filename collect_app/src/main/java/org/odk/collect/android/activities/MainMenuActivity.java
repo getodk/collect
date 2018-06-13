@@ -38,6 +38,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -82,14 +83,13 @@ public class MainMenuActivity extends CollectAbstractActivity {
 
     private static final boolean EXIT = true;
     // buttons
-    private Button enterDataButton;
-    private Button manageFilesButton;
-    private Button sendDataButton;
-    private Button viewSentFormsButton;
-    private Button reviewDataButton;
-    private Button getFormsButton;
-    private View reviewSpacer;
-    private View getFormsSpacer;
+    private ImageView enterDataTappable;
+    private ImageView manageFilesTappable;
+    private ImageView sendDataTappable;
+    private ImageView viewSentFormsTappable;
+    private ImageView reviewDataTappable;
+    private ImageView getFormsTappable;
+
     private AlertDialog alertDialog;
     private SharedPreferences adminPreferences;
     private int completedCount;
@@ -100,6 +100,11 @@ public class MainMenuActivity extends CollectAbstractActivity {
     private Cursor viewSentCursor;
     private final IncomingHandler handler = new IncomingHandler(this);
     private final MyContentObserver contentObserver = new MyContentObserver();
+
+    //added by Ryan Proffitt
+    private ImageView createFileButton;
+    private ImageView editFileButton;
+    private ImageView viewFileButton;
 
     // private static boolean DO_NOT_EXIT = false;
 
@@ -116,9 +121,9 @@ public class MainMenuActivity extends CollectAbstractActivity {
         initToolbar();
 
         // enter data button. expects a result.
-        enterDataButton = findViewById(R.id.enter_data);
-        enterDataButton.setText(getString(R.string.enter_data_button));
-        enterDataButton.setOnClickListener(new OnClickListener() {
+        enterDataTappable = (ImageView)findViewById(R.id.fillForm);
+        enterDataTappable.setImageResource(R.drawable.file_icon_fill);
+        enterDataTappable.setOnClickListener(new OnClickListener(){
             @Override
             public void onClick(View v) {
                 if (Collect.allowClick()) {
@@ -131,59 +136,11 @@ public class MainMenuActivity extends CollectAbstractActivity {
             }
         });
 
-        // review data button. expects a result.
-        reviewDataButton = findViewById(R.id.review_data);
-        reviewDataButton.setText(getString(R.string.review_data_button));
-        reviewDataButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (Collect.allowClick()) {
-                    Collect.getInstance().getActivityLogger()
-                            .logAction(this, ApplicationConstants.FormModes.EDIT_SAVED, "click");
-                    Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
-                    i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE,
-                            ApplicationConstants.FormModes.EDIT_SAVED);
-                    startActivity(i);
-                }
-            }
-        });
-
-        // send data button. expects a result.
-        sendDataButton = findViewById(R.id.send_data);
-        sendDataButton.setText(getString(R.string.send_data_button));
-        sendDataButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (Collect.allowClick()) {
-                    Collect.getInstance().getActivityLogger()
-                            .logAction(this, "uploadForms", "click");
-                    Intent i = new Intent(getApplicationContext(),
-                            InstanceUploaderList.class);
-                    startActivity(i);
-                }
-            }
-        });
-
-        //View sent forms
-        viewSentFormsButton = findViewById(R.id.view_sent_forms);
-        viewSentFormsButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (Collect.allowClick()) {
-                    Collect.getInstance().getActivityLogger().logAction(this,
-                            ApplicationConstants.FormModes.VIEW_SENT, "click");
-                    Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
-                    i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE,
-                            ApplicationConstants.FormModes.VIEW_SENT);
-                    startActivity(i);
-                }
-            }
-        });
-
+        //get blank form button
         // manage forms button. no result expected.
-        getFormsButton = findViewById(R.id.get_forms);
-        getFormsButton.setText(getString(R.string.get_forms));
-        getFormsButton.setOnClickListener(new OnClickListener() {
+        getFormsTappable = (ImageView)findViewById(R.id.getForm);
+        getFormsTappable.setImageResource(R.drawable.file_icon_get);
+        getFormsTappable.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (Collect.allowClick()) {
@@ -211,10 +168,91 @@ public class MainMenuActivity extends CollectAbstractActivity {
             }
         });
 
-        // manage forms button. no result expected.
-        manageFilesButton = findViewById(R.id.manage_forms);
-        manageFilesButton.setText(getString(R.string.manage_files));
-        manageFilesButton.setOnClickListener(new OnClickListener() {
+        // review data button. expects a result.
+        reviewDataTappable = (ImageView)findViewById(R.id.editForm);
+        reviewDataTappable.setImageResource(R.drawable.file_icon_edit);
+        reviewDataTappable.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Collect.allowClick()) {
+                    Collect.getInstance().getActivityLogger()
+                            .logAction(this, ApplicationConstants.FormModes.EDIT_SAVED, "click");
+                    Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
+                    i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE,
+                            ApplicationConstants.FormModes.EDIT_SAVED);
+                    startActivity(i);
+                }
+            }
+        });
+
+        // send data button. expects a result.
+        sendDataTappable = (ImageView)findViewById(R.id.sendForm);
+        sendDataTappable.setImageResource(R.drawable.file_icon_send);
+        sendDataTappable.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Collect.allowClick()) {
+                    Collect.getInstance().getActivityLogger()
+                            .logAction(this, "uploadForms", "click");
+                    Intent i = new Intent(getApplicationContext(),
+                            InstanceUploaderList.class);
+                    startActivity(i);
+                }
+            }
+        });
+
+        //View sent forms
+        viewSentFormsTappable = (ImageView)findViewById(R.id.viewForm);
+        viewSentFormsTappable.setImageResource(R.drawable.file_icon_view);
+        viewSentFormsTappable.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Collect.allowClick()) {
+                    Collect.getInstance().getActivityLogger().logAction(this,
+                            ApplicationConstants.FormModes.VIEW_SENT, "click");
+                    Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
+                    i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE,
+                            ApplicationConstants.FormModes.VIEW_SENT);
+                    startActivity(i);
+                }
+            }
+        });
+
+        // get forms button. no result expected.
+        getFormsTappable = (ImageView)findViewById(R.id.getForm);
+        getFormsTappable.setImageResource(R.drawable.file_icon_get);
+        getFormsTappable.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Collect.allowClick()) {
+                    Collect.getInstance().getActivityLogger()
+                            .logAction(this, "downloadBlankForms", "click");
+                    SharedPreferences sharedPreferences = PreferenceManager
+                            .getDefaultSharedPreferences(MainMenuActivity.this);
+                    String protocol = sharedPreferences.getString(
+                            PreferenceKeys.KEY_PROTOCOL, getString(R.string.protocol_odk_default));
+                    Intent i = null;
+                    if (protocol.equalsIgnoreCase(getString(R.string.protocol_google_sheets))) {
+                        if (PlayServicesUtil.isGooglePlayServicesAvailable(MainMenuActivity.this)) {
+                            i = new Intent(getApplicationContext(),
+                                    GoogleDriveActivity.class);
+                        } else {
+                            PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(MainMenuActivity.this);
+                            return;
+                        }
+                    } else {
+                        i = new Intent(getApplicationContext(),
+                                FormDownloadList.class);
+                    }
+                    startActivity(i);
+                }
+            }
+        });
+
+        // delete forms button. no result expected.
+        manageFilesTappable = (ImageView)findViewById(R.id.deleteForm);
+        manageFilesTappable.setImageResource(R.drawable.file_icon_delete);
+        manageFilesTappable.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (Collect.allowClick()) {
@@ -239,9 +277,9 @@ public class MainMenuActivity extends CollectAbstractActivity {
 
         {
             // dynamically construct the "ODK Collect vA.B" string
-            TextView mainMenuMessageLabel = findViewById(R.id.main_menu_header);
-            mainMenuMessageLabel.setText(Collect.getInstance()
-                    .getVersionedAppName());
+            //TextView mainMenuMessageLabel = findViewById(R.id.main_menu_header);
+            //mainMenuMessageLabel.setText(Collect.getInstance()
+            //        .getVersionedAppName());
         }
 
         File f = new File(Collect.ODK_ROOT + "/collect.settings");
@@ -272,8 +310,8 @@ public class MainMenuActivity extends CollectAbstractActivity {
             }
         }
 
-        reviewSpacer = findViewById(R.id.review_spacer);
-        getFormsSpacer = findViewById(R.id.get_forms_spacer);
+        //reviewSpacer = findViewById(R.id.review_spacer);
+        //getFormsSpacer = findViewById(R.id.get_forms_spacer);
 
         adminPreferences = this.getSharedPreferences(
                 AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
@@ -327,7 +365,8 @@ public class MainMenuActivity extends CollectAbstractActivity {
 
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
-        setTitle(getString(R.string.main_menu));
+        setTitle("ODK Collect");
+        //setTitle(getString(R.string.main_menu));
         setSupportActionBar(toolbar);
     }
 
@@ -340,72 +379,60 @@ public class MainMenuActivity extends CollectAbstractActivity {
         boolean edit = sharedPreferences.getBoolean(
                 AdminKeys.KEY_EDIT_SAVED, true);
         if (!edit) {
-            if (reviewDataButton != null) {
-                reviewDataButton.setVisibility(View.GONE);
-            }
-            if (reviewSpacer != null) {
-                reviewSpacer.setVisibility(View.GONE);
+            if (reviewDataTappable != null) {
+                reviewDataTappable.setVisibility(View.GONE);
             }
         } else {
-            if (reviewDataButton != null) {
-                reviewDataButton.setVisibility(View.VISIBLE);
-            }
-            if (reviewSpacer != null) {
-                reviewSpacer.setVisibility(View.VISIBLE);
+            if (reviewDataTappable != null) {
+                reviewDataTappable.setVisibility(View.VISIBLE);
             }
         }
 
         boolean send = sharedPreferences.getBoolean(
                 AdminKeys.KEY_SEND_FINALIZED, true);
         if (!send) {
-            if (sendDataButton != null) {
-                sendDataButton.setVisibility(View.GONE);
+            if (sendDataTappable != null) {
+                sendDataTappable.setVisibility(View.GONE);
             }
         } else {
-            if (sendDataButton != null) {
-                sendDataButton.setVisibility(View.VISIBLE);
+            if (sendDataTappable != null) {
+                sendDataTappable.setVisibility(View.VISIBLE);
             }
         }
 
         boolean viewSent = sharedPreferences.getBoolean(
                 AdminKeys.KEY_VIEW_SENT, true);
         if (!viewSent) {
-            if (viewSentFormsButton != null) {
-                viewSentFormsButton.setVisibility(View.GONE);
+            if (viewSentFormsTappable != null) {
+                viewSentFormsTappable.setVisibility(View.GONE);
             }
         } else {
-            if (viewSentFormsButton != null) {
-                viewSentFormsButton.setVisibility(View.VISIBLE);
+            if (viewSentFormsTappable != null) {
+                viewSentFormsTappable.setVisibility(View.VISIBLE);
             }
         }
 
         boolean getBlank = sharedPreferences.getBoolean(
                 AdminKeys.KEY_GET_BLANK, true);
         if (!getBlank) {
-            if (getFormsButton != null) {
-                getFormsButton.setVisibility(View.GONE);
-            }
-            if (getFormsSpacer != null) {
-                getFormsSpacer.setVisibility(View.GONE);
+            if (getFormsTappable != null) {
+                getFormsTappable.setVisibility(View.GONE);
             }
         } else {
-            if (getFormsButton != null) {
-                getFormsButton.setVisibility(View.VISIBLE);
-            }
-            if (getFormsSpacer != null) {
-                getFormsSpacer.setVisibility(View.VISIBLE);
+            if (getFormsTappable != null) {
+                getFormsTappable.setVisibility(View.VISIBLE);
             }
         }
 
         boolean deleteSaved = sharedPreferences.getBoolean(
                 AdminKeys.KEY_DELETE_SAVED, true);
         if (!deleteSaved) {
-            if (manageFilesButton != null) {
-                manageFilesButton.setVisibility(View.GONE);
+            if (manageFilesTappable != null) {
+                manageFilesTappable.setVisibility(View.GONE);
             }
         } else {
-            if (manageFilesButton != null) {
-                manageFilesButton.setVisibility(View.VISIBLE);
+            if (manageFilesTappable != null) {
+                manageFilesTappable.setVisibility(View.VISIBLE);
             }
         }
 
@@ -585,13 +612,13 @@ public class MainMenuActivity extends CollectAbstractActivity {
             finalizedCursor.requery();
             completedCount = finalizedCursor.getCount();
             if (completedCount > 0) {
-                sendDataButton.setText(
-                        getString(R.string.send_data_button, String.valueOf(completedCount)));
+                //sendDataButton.setText(
+                        //getString(R.string.send_data_button, String.valueOf(completedCount)));
             } else {
-                sendDataButton.setText(getString(R.string.send_data));
+                //sendDataButton.setText(getString(R.string.send_data));
             }
         } else {
-            sendDataButton.setText(getString(R.string.send_data));
+            //sendDataButton.setText(getString(R.string.send_data));
             Timber.w("Cannot update \"Send Finalized\" button label since the database is closed. "
                     + "Perhaps the app is running in the background?");
         }
@@ -600,13 +627,13 @@ public class MainMenuActivity extends CollectAbstractActivity {
             savedCursor.requery();
             savedCount = savedCursor.getCount();
             if (savedCount > 0) {
-                reviewDataButton.setText(getString(R.string.review_data_button,
-                        String.valueOf(savedCount)));
+                //reviewDataButton.setText(getString(R.string.review_data_button,
+                        //String.valueOf(savedCount)));
             } else {
-                reviewDataButton.setText(getString(R.string.review_data));
+                //reviewDataButton.setText(getString(R.string.review_data));
             }
         } else {
-            reviewDataButton.setText(getString(R.string.review_data));
+            //reviewDataButton.setText(getString(R.string.review_data));
             Timber.w("Cannot update \"Edit Form\" button label since the database is closed. "
                     + "Perhaps the app is running in the background?");
         }
@@ -615,13 +642,13 @@ public class MainMenuActivity extends CollectAbstractActivity {
             viewSentCursor.requery();
             viewSentCount = viewSentCursor.getCount();
             if (viewSentCount > 0) {
-                viewSentFormsButton.setText(
-                        getString(R.string.view_sent_forms_button, String.valueOf(viewSentCount)));
+                //viewSentFormsButton.setText(
+                        //getString(R.string.view_sent_forms_button, String.valueOf(viewSentCount)));
             } else {
-                viewSentFormsButton.setText(getString(R.string.view_sent_forms));
+                //viewSentFormsButton.setText(getString(R.string.view_sent_forms));
             }
         } else {
-            viewSentFormsButton.setText(getString(R.string.view_sent_forms));
+            //viewSentFormsButton.setText(getString(R.string.view_sent_forms));
             Timber.w("Cannot update \"View Sent\" button label since the database is closed. "
                     + "Perhaps the app is running in the background?");
         }

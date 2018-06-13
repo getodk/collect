@@ -9,6 +9,7 @@
 -->
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginBottom="0dp"
@@ -33,27 +34,17 @@
         android:layout_below="@id/toolbar"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/main_menu_header"
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/odkLogo"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingBottom="1dp"
-            android:paddingTop="6dp"
-            android:text="@string/app_name"
-            android:textColor="?primaryTextColor"
-            android:textSize="21sp"
-            android:textStyle="bold"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingBottom="10dp"
-            android:paddingTop="1dp"
-            android:text="@string/main_menu_details"
-            android:textColor="?primaryTextColor"
-            android:textSize="17sp"/>
+            android:maxWidth="150dp"
+            android:maxHeight="150dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            app:srcCompat="@drawable/odk_logo" />
 
         <ScrollView
             android:layout_width="match_parent"
@@ -69,88 +60,116 @@
                 android:paddingRight="10dp"
                 android:paddingStart="10dp">
 
-                <View
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="10dp"/>
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_margin="5dp">
 
-                <Button
-                    android:id="@+id/enter_data"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="20dp"
-                    android:textAllCaps="false"
-                    android:textSize="21sp"
-                    android:textStyle="normal"/>
+                    <ImageView
+                        android:id="@+id/getForm"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="true"
+                        android:maxHeight="80dp"
+                        android:maxWidth="80dp"
+                        android:scaleType="fitCenter"
+                        app:srcCompat="@drawable/file_icon_get" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="5dp"/>
+                    <ImageView
+                        android:id="@+id/fillForm"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="true"
+                        android:maxHeight="80dp"
+                        android:maxWidth="80dp"
+                        android:scaleType="fitCenter"
+                        app:srcCompat="@drawable/file_icon_fill" />
 
-                <Button
-                    android:id="@+id/review_data"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="20dp"
-                    android:textAllCaps="false"
-                    android:textSize="21sp"
-                    android:textStyle="normal"/>
+                    <ImageView
+                        android:id="@+id/editForm"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="true"
+                        android:maxHeight="80dp"
+                        android:maxWidth="80dp"
+                        android:scaleType="fitCenter"
+                        app:srcCompat="@drawable/file_icon_edit" />
 
-                <View
-                    android:id="@+id/review_spacer"
-                    android:layout_width="match_parent"
-                    android:layout_height="5dp"/>
+                </LinearLayout>
 
-                <Button
-                    android:id="@+id/send_data"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="20dp"
-                    android:textAllCaps="false"
-                    android:textSize="21sp"
-                    android:textStyle="normal"/>
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_margin="5dp">
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="5dp"/>
+                    <ImageView
+                        android:id="@+id/finalizeForm"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="true"
+                        android:maxHeight="80dp"
+                        android:maxWidth="80dp"
+                        android:scaleType="fitCenter"
+                        app:srcCompat="@drawable/file_icon_finalize" />
 
-                <Button
-                    android:id="@+id/view_sent_forms"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="20dp"
-                    android:text="@string/view_sent_forms"
-                    android:textAllCaps="false"
-                    android:textSize="21sp"
-                    android:textStyle="normal"/>
+                    <ImageView
+                        android:id="@+id/sendForm"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="true"
+                        android:maxHeight="80dp"
+                        android:maxWidth="80dp"
+                        android:scaleType="fitCenter"
+                        app:srcCompat="@drawable/file_icon_send" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="20dp"/>
+                    <ImageView
+                        android:id="@+id/viewForm"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="true"
+                        android:maxHeight="80dp"
+                        android:maxWidth="80dp"
+                        android:scaleType="fitCenter"
+                        app:srcCompat="@drawable/file_icon_view" />
 
-                <Button
-                    android:id="@+id/get_forms"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="20dp"
-                    android:textAllCaps="false"
-                    android:textSize="21sp"
-                    android:textStyle="normal"/>
+                </LinearLayout>
 
-                <View
-                    android:id="@+id/get_forms_spacer"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="5dp"/>
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_margin="5dp">
 
-                <Button
-                    android:id="@+id/manage_forms"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="20dp"
-                    android:textAllCaps="false"
-                    android:textSize="21sp"
-                    android:textStyle="normal"/>
+                    <ImageView
+                        android:id="@+id/deleteForm"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="true"
+                        android:maxHeight="80dp"
+                        android:maxWidth="80dp"
+                        android:scaleType="fitCenter"
+                        app:srcCompat="@drawable/file_icon_delete" />
+                </LinearLayout>
+
             </LinearLayout>
 
         </ScrollView>
+
     </LinearLayout>
 </RelativeLayout>
