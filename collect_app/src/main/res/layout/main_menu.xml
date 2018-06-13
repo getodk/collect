@@ -44,7 +44,7 @@
             android:scaleType="fitCenter"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
-            app:srcCompat="@drawable/odkLogo" />
+            app:srcCompat="@drawable/odk_logo" />
 
         <ScrollView
             android:layout_width="match_parent"
@@ -70,7 +70,7 @@
                     android:scaleType="fitCenter"
                     android:layout_gravity="center"
                     android:layout_margin="10dp"
-                    app:srcCompat="@drawable/fileIconCreate" />
+                    app:srcCompat="@drawable/file_icon_create" />
 
                 <ImageView
                     android:id="@+id/editFile"
@@ -82,7 +82,7 @@
                     android:scaleType="fitCenter"
                     android:layout_gravity="center"
                     android:layout_margin="10dp"
-                    app:srcCompat="@drawable/fileIconEdit" />
+                    app:srcCompat="@drawable/file_icon_edit" />
 
                 <ImageView
                     android:id="@+id/viewFile"
@@ -94,7 +94,7 @@
                     android:scaleType="fitCenter"
                     android:layout_gravity="center"
                     android:layout_margin="10dp"
-                    app:srcCompat="@drawable/fileIconView" />
+                    app:srcCompat="@drawable/file_icon_view" />
 
                 <View
                     android:layout_width="match_parent"

@@ -38,6 +38,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -101,6 +102,11 @@ public class MainMenuActivity extends CollectAbstractActivity {
     private IncomingHandler handler = new IncomingHandler(this);
     private MyContentObserver contentObserver = new MyContentObserver();
 
+    //added by Ryan Proffitt
+    private ImageView createFileButton;
+    private ImageView editFileButton;
+    private ImageView viewFileButton;
+
     // private static boolean DO_NOT_EXIT = false;
 
     public static void startActivityAndCloseAllOthers(Activity activity) {
@@ -119,6 +125,22 @@ public class MainMenuActivity extends CollectAbstractActivity {
         enterDataButton = findViewById(R.id.enter_data);
         enterDataButton.setText(getString(R.string.enter_data_button));
         enterDataButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Collect.allowClick()) {
+                    Collect.getInstance().getActivityLogger()
+                            .logAction(this, "fillBlankForm", "click");
+                    Intent i = new Intent(getApplicationContext(),
+                            FormChooserList.class);
+                    startActivity(i);
+                }
+            }
+        });
+
+
+        createFileButton = (ImageView)findViewById(R.id.createFile);
+        createFileButton.setImageResource(R.drawable.file_icon_create);
+        createFileButton.setOnClickListener(new OnClickListener(){
             @Override
             public void onClick(View v) {
                 if (Collect.allowClick()) {
