@@ -11,19 +11,19 @@ limitations under the License.
 -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <Preference
-        android:icon="@drawable/ic_cloud"
+        android:icon="@drawable/ic_cloud_24dp"
         android:key="protocol"
         android:title="@string/server_settings_title" />
     <Preference
-        android:icon="@drawable/ic_phonelink_setup"
+        android:icon="@drawable/ic_phonelink_setup_24dp"
         android:key="user_interface"
         android:title="@string/client" />
     <Preference
-        android:icon="@drawable/ic_assignment"
+        android:icon="@drawable/ic_assignment_24dp"
         android:key="form_management"
         android:title="@string/form_management_preferences" />
     <Preference
-        android:icon="@drawable/ic_face"
+        android:icon="@drawable/ic_face_24dp"
         android:key="user_and_device_identity"
         android:title="@string/user_and_device_identity_title" />
 </PreferenceScreen>
