@@ -17,8 +17,8 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Context;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.util.TypedValue;
-import android.widget.CheckBox;
 
 import org.javarosa.core.model.data.BooleanData;
 import org.javarosa.core.model.data.IAnswerData;
@@ -28,7 +28,7 @@ import org.odk.collect.android.utilities.ViewIds;
 
 public class BooleanWidget extends QuestionWidget {
 
-    private CheckBox booleanButton;
+    private AppCompatCheckBox booleanButton;
     private FormEntryPrompt prompt;
 
     public BooleanWidget(Context context, FormEntryPrompt prompt) {
@@ -68,7 +68,7 @@ public class BooleanWidget extends QuestionWidget {
     }
 
     private void setupBooleanButton() {
-        booleanButton = new CheckBox(getContext());
+        booleanButton = new AppCompatCheckBox(getContext());
         booleanButton.setId(ViewIds.generateViewId());
         booleanButton.setText(getContext().getString(R.string.trigger));
         booleanButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());

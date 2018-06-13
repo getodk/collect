@@ -24,7 +24,6 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
-
 class DisabledPreferencesRemover {
 
     private PreferencesActivity pa;
