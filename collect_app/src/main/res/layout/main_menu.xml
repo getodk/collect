@@ -9,6 +9,7 @@
 -->
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginBottom="0dp"
@@ -33,27 +34,17 @@
         android:layout_below="@id/toolbar"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/main_menu_header"
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/odkLogo"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingBottom="1dp"
-            android:paddingTop="6dp"
-            android:text="@string/app_name"
-            android:textColor="?primaryTextColor"
-            android:textSize="21sp"
-            android:textStyle="bold"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingBottom="10dp"
-            android:paddingTop="1dp"
-            android:text="@string/main_menu_details"
-            android:textColor="?primaryTextColor"
-            android:textSize="17sp"/>
+            android:maxWidth="150dp"
+            android:maxHeight="150dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            app:srcCompat="@drawable/odkLogo" />
 
         <ScrollView
             android:layout_width="match_parent"
@@ -68,6 +59,42 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:paddingStart="10dp">
+
+                <ImageView
+                    android:id="@+id/createFile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxWidth="80dp"
+                    android:maxHeight="80dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    app:srcCompat="@drawable/fileIconCreate" />
+
+                <ImageView
+                    android:id="@+id/editFile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxWidth="80dp"
+                    android:maxHeight="80dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    app:srcCompat="@drawable/fileIconEdit" />
+
+                <ImageView
+                    android:id="@+id/viewFile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxWidth="80dp"
+                    android:maxHeight="80dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    app:srcCompat="@drawable/fileIconView" />
 
                 <View
                     android:layout_width="match_parent"
