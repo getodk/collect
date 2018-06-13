@@ -17,8 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:paddingEnd="8dip"
-        android:paddingRight="8dip"
-        android:src="@drawable/ic_menu_forward" />
+        android:paddingRight="8dip" />
 
     <TextView
         android:id="@+id/text1"
