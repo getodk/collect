@@ -1,5 +1,4 @@
-<?xml version="1.0"?>
-<!--
+<?xml version="1.0"?><!--
   ~ Copyright 2015 Vincent Brison.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,8 +14,7 @@
   ~ limitations under the License.
   -->
 
-<ruleset
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Android Application Rules"
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Android Application Rules"
     xmlns="http://pmd.sf.net/ruleset/1.0.0"
     xsi:noNamespaceSchemaLocation="http://pmd.sf.net/ruleset_xml_schema.xsd"
     xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0 http://pmd.sf.net/ruleset_xml_schema.xsd">
@@ -26,14 +24,14 @@
     <exclude-pattern>.*/R.java</exclude-pattern>
     <exclude-pattern>.*/gen/.*</exclude-pattern>
 
-    <rule ref="rulesets/java/android.xml"/>
-    <rule ref="rulesets/java/clone.xml"/>
-    <rule ref="rulesets/java/finalizers.xml"/>
+    <rule ref="rulesets/java/android.xml" />
+    <rule ref="rulesets/java/clone.xml" />
+    <rule ref="rulesets/java/finalizers.xml" />
     <rule ref="rulesets/java/imports.xml">
-        <exclude name="TooManyStaticImports"/>
+        <exclude name="TooManyStaticImports" />
     </rule>
-    <rule ref="rulesets/java/logging-java.xml"/>
-    <rule ref="rulesets/java/braces.xml"/>
+    <rule ref="rulesets/java/logging-java.xml" />
+    <rule ref="rulesets/java/braces.xml" />
     <rule ref="rulesets/java/strings.xml">
         <exclude name="AvoidDuplicateLiterals" />
         <exclude name="InefficientEmptyStringCheck" />
@@ -51,15 +49,15 @@
         <exclude name="ReturnFromFinallyBlock" />
     </rule>
     <rule ref="rulesets/java/naming.xml">
-        <exclude name="AbstractNaming"/>
-        <exclude name="LongVariable"/>
-        <exclude name="ShortMethodName"/>
-        <exclude name="ShortVariable"/>
-        <exclude name="VariableNamingConventions"/>
-        <exclude name="AvoidFieldNameMatchingMethodName"/>
-        <exclude name="ShortClassName"/>
-        <exclude name="MethodNamingConventions"/>
-        <exclude name="AvoidFieldNameMatchingTypeName"/>
+        <exclude name="AbstractNaming" />
+        <exclude name="LongVariable" />
+        <exclude name="ShortMethodName" />
+        <exclude name="ShortVariable" />
+        <exclude name="VariableNamingConventions" />
+        <exclude name="AvoidFieldNameMatchingMethodName" />
+        <exclude name="ShortClassName" />
+        <exclude name="MethodNamingConventions" />
+        <exclude name="AvoidFieldNameMatchingTypeName" />
     </rule>
     <rule ref="rulesets/java/design.xml">
         <exclude name="ConfusingTernary" />
@@ -115,13 +113,14 @@
         <exclude name="AvoidCatchingNPE" />
         <exclude name="AvoidCatchingThrowable" />
     </rule>
-    <rule ref="rulesets/java/typeresolution.xml" >
+    <rule ref="rulesets/java/typeresolution.xml">
         <exclude name="SignatureDeclareThrowsException" />
         <exclude name="LooseCoupling" />
     </rule>
-    <rule ref="rulesets/java/unnecessary.xml" >
+    <rule ref="rulesets/java/unnecessary.xml">
         <!-- Decided not to use in #1519 -->
         <exclude name="UselessParentheses" />
+        <exclude name="UselessQualifiedThis" />
     </rule>
     <rule ref="rulesets/java/codesize.xml">
         <exclude name="CyclomaticComplexity" />

@@ -131,18 +131,8 @@ public class GeoPointMapActivity extends CollectAbstractActivity implements OnMa
         isMapReady = false;
         ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMapAsync(googleMap -> {
             setupMap(googleMap);
-            locationClient.setListener(getActivity());
+            locationClient.setListener(GeoPointMapActivity.this);
         });
-    }
-
-    /**
-     * Utilizing GeoPointMapActivity.this for the current activity instance causes
-     * PMD to fail so this method prevents that.
-     *
-     * @return an instance of this activity
-     */
-    private GeoPointMapActivity getActivity() {
-        return this;
     }
 
     @Override
@@ -251,7 +241,7 @@ public class GeoPointMapActivity extends CollectAbstractActivity implements OnMa
 
         // Menu Layer Toggle
         ImageButton layers = findViewById(R.id.layer_menu);
-        layers.setOnClickListener(v -> helper.showLayersDialog(getActivity()));
+        layers.setOnClickListener(v -> helper.showLayersDialog(GeoPointMapActivity.this));
         zoomDialogView = getLayoutInflater().inflate(R.layout.geo_zoom_dialog, null);
         zoomLocationButton = zoomDialogView.findViewById(R.id.zoom_location);
         zoomLocationButton.setOnClickListener(v -> {
