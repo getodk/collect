@@ -486,15 +486,17 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                 ValueAnimator va = new ValueAnimator();
                 if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
                     // only for kitkat and newer versions
-                    va.setIntValues(getResources().getColor(R.color.red), getDrawingCacheBackgroundColor());
+                    va.setIntValues(getResources().getColor(R.color.red),
+                            getDrawingCacheBackgroundColor());
                     } else {
-                    TypedValue a = new TypedValue();
-                    getContext().getTheme().resolveAttribute(android.R.attr.windowBackground, a, true);
-                    if (a.type >= TypedValue.TYPE_FIRST_COLOR_INT && a.type <= TypedValue.TYPE_LAST_COLOR_INT) {
+                    TypedValue typedValue = new TypedValue();
+                    getContext().getTheme().resolveAttribute(android.R.attr.windowBackground, typedValue, true);
+                    if (typedValue.type >= TypedValue.TYPE_FIRST_COLOR_INT && typedValue.type <= TypedValue.TYPE_LAST_COLOR_INT) {
                         // windowBackground is a color
-                        va.setIntValues(getResources().getColor(R.color.red), a.data);
+                        va.setIntValues(getResources().getColor(R.color.red), typedValue.data);
                         } else {
-                        va.setIntValues(getResources().getColor(R.color.red), getDrawingCacheBackgroundColor());
+                        va.setIntValues(getResources().getColor(R.color.red),
+                                getDrawingCacheBackgroundColor());
                     }
                 }
 
