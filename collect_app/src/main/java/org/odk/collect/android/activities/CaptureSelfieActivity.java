@@ -66,7 +66,7 @@ public class CaptureSelfieActivity extends CollectAbstractActivity {
         ToastUtils.showLongToast(R.string.take_picture_instruction);
     }
 
-    private Camera.PictureCallback picture = new Camera.PictureCallback() {
+    private final Camera.PictureCallback picture = new Camera.PictureCallback() {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
             CameraUtils.savePhoto(Collect.TMPFILE_PATH, data);

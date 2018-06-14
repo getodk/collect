@@ -260,7 +260,7 @@ public class GeoPointMapActivity extends CollectAbstractActivity implements OnMa
                 helper.showLayersDialog(GeoPointMapActivity.this);
             }
         });
-        zoomDialogView = getLayoutInflater().inflate(R.layout.geopoint_zoom_dialog, null);
+        zoomDialogView = getLayoutInflater().inflate(R.layout.geo_zoom_dialog, null);
         zoomLocationButton = zoomDialogView.findViewById(R.id.zoom_location);
         zoomLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -270,7 +270,7 @@ public class GeoPointMapActivity extends CollectAbstractActivity implements OnMa
             }
         });
 
-        zoomPointButton = zoomDialogView.findViewById(R.id.zoom_point);
+        zoomPointButton = zoomDialogView.findViewById(R.id.zoom_saved_location);
         zoomPointButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -496,7 +496,7 @@ public class GeoPointMapActivity extends CollectAbstractActivity implements OnMa
             if (location != null) {
                 zoomLocationButton.setEnabled(true);
                 zoomLocationButton.setBackgroundColor(Color.parseColor("#50cccccc"));
-                zoomLocationButton.setTextColor(Color.parseColor("#ff333333"));
+                zoomLocationButton.setTextColor(themeUtils.getPrimaryTextColor());
             } else {
                 zoomLocationButton.setEnabled(false);
                 zoomLocationButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));
@@ -506,7 +506,7 @@ public class GeoPointMapActivity extends CollectAbstractActivity implements OnMa
             if (latLng != null & !setClear) {
                 zoomPointButton.setEnabled(true);
                 zoomPointButton.setBackgroundColor(Color.parseColor("#50cccccc"));
-                zoomPointButton.setTextColor(Color.parseColor("#ff333333"));
+                zoomPointButton.setTextColor(themeUtils.getPrimaryTextColor());
             } else {
                 zoomPointButton.setEnabled(false);
                 zoomPointButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));

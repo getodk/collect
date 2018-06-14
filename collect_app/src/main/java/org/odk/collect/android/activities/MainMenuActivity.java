@@ -98,8 +98,8 @@ public class MainMenuActivity extends CollectAbstractActivity {
     private Cursor finalizedCursor;
     private Cursor savedCursor;
     private Cursor viewSentCursor;
-    private IncomingHandler handler = new IncomingHandler(this);
-    private MyContentObserver contentObserver = new MyContentObserver();
+    private final IncomingHandler handler = new IncomingHandler(this);
+    private final MyContentObserver contentObserver = new MyContentObserver();
 
     // private static boolean DO_NOT_EXIT = false;
 
@@ -252,6 +252,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
             if (success) {
                 ToastUtils.showLongToast(R.string.settings_successfully_loaded_file_notification);
                 j.delete();
+                recreate();
 
                 // Delete settings file to prevent overwrite of settings from JSON file on next startup
                 if (f.exists()) {
@@ -265,6 +266,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
             if (success) {
                 ToastUtils.showLongToast(R.string.settings_successfully_loaded_file_notification);
                 f.delete();
+                recreate();
             } else {
                 ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);
             }

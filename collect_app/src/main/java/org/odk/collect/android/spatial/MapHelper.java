@@ -51,7 +51,7 @@ import java.util.Locale;
 public class MapHelper {
     private static SharedPreferences sharedPreferences;
     public static String[] offilineOverlays;
-    private static final String no_folder_key = "None";
+    private static final String NO_FOLDER_KEY = "None";
 
     public GoogleMap googleMap;
     public MapView osmMap;
@@ -73,13 +73,13 @@ public class MapHelper {
     private int selectedLayer = 0;
 
     public static String[] geofileTypes = new String[]{".mbtiles", ".kml", ".kmz"};
-    private static final String slash = File.separator;
+    private static final String SLASH = File.separator;
 
     private TilesOverlay osmTileOverlay;
     private TileOverlay googleTileOverlay;
     private IRegisterReceiver iregisterReceiver;
 
-    private org.odk.collect.android.spatial.TileSourceFactory tileFactory;
+    private final org.odk.collect.android.spatial.TileSourceFactory tileFactory;
 
 
     public MapHelper(Context context, GoogleMap googleMap) {
@@ -176,7 +176,7 @@ public class MapHelper {
     public static String[] getOfflineLayerList() {
         File[] files = new File(Collect.OFFLINE_LAYERS).listFiles();
         ArrayList<String> results = new ArrayList<String>();
-        results.add(no_folder_key);
+        results.add(NO_FOLDER_KEY);
         for (File f : files) {
             if (f.isDirectory() && !f.isHidden()) {
                 results.add(f.getName());
@@ -258,7 +258,7 @@ public class MapHelper {
     }
 
     private File[] getFileFromSelectedItem(int item) {
-        File directory = new File(Collect.OFFLINE_LAYERS + slash + offilineOverlays[item]);
+        File directory = new File(Collect.OFFLINE_LAYERS + SLASH + offilineOverlays[item]);
         return directory.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String filename) {

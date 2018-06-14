@@ -19,7 +19,7 @@ public class FormMetadataMigrator {
     }
 
     /** The migration flow, from source to target */
-    static final String[][] sourceTargetValuePairs = new String[][]{
+    static final String[][] SOURCE_TARGET_VALUE_PAIRS = new String[][]{
             {KEY_USERNAME,                  KEY_METADATA_USERNAME},
             {KEY_SELECTED_GOOGLE_ACCOUNT,   KEY_METADATA_EMAIL}
     };
@@ -34,7 +34,7 @@ public class FormMetadataMigrator {
         if (! migrationAlreadyDone) {
             SharedPreferences.Editor editor = sharedPreferences.edit();
 
-            for (String[] pair : sourceTargetValuePairs) {
+            for (String[] pair : SOURCE_TARGET_VALUE_PAIRS) {
                 String migratingValue = sharedPreferences.getString(pair[0], "").trim();
                 if (! migratingValue.isEmpty()) {
                     Timber.i("Copying %s from %s to %s", migratingValue, pair[0], pair[1]);
