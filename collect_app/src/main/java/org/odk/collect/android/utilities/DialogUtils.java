@@ -77,7 +77,7 @@ public final class DialogUtils {
     }
 
     /**
-     * Ensures that a dialog is shown safely and doesn't causes a crash. Useful in the event
+     * Ensures that a dialog is dismissed safely and doesn't causes a crash. Useful in the event
      * of a screen rotation, async operations or activity navigation.
      *
      * @param dialog   that needs to be shown
