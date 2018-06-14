@@ -16,6 +16,8 @@
 
 package org.odk.collect.android.utilities;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -23,6 +25,8 @@ import android.support.annotation.NonNull;
 import android.widget.ListView;
 
 import org.odk.collect.android.R;
+
+import timber.log.Timber;
 
 /**
  * Reusable code between dialogs for keeping consistency
@@ -47,5 +51,51 @@ public final class DialogUtils {
         listView.setDivider(new ColorDrawable(Color.TRANSPARENT));
         listView.setDividerHeight(dividerHeight);
         return listView;
+    }
+
+    /**
+     * Ensures that a dialog is shown safely and doesn't causes a crash. Useful in the event
+     * of a screen rotation, async operations or activity navigation.
+     *
+     * @param dialog   that needs to be shown
+     * @param activity that has the dialog
+     */
+    public void showDialog(Dialog dialog, Activity activity) {
+
+        if (activity == null || activity.isFinishing()) {
+            return;
+        }
+        if (dialog == null || !dialog.isShowing()) {
+            return;
+        }
+
+        try {
+            dialog.show();
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+    }
+
+    /**
+     * Ensures that a dialog is shown safely and doesn't causes a crash. Useful in the event
+     * of a screen rotation, async operations or activity navigation.
+     *
+     * @param dialog   that needs to be shown
+     * @param activity that has the dialog
+     */
+    public void dismissDialog(Dialog dialog, Activity activity) {
+
+        if (activity == null || activity.isFinishing()) {
+            return;
+        }
+        if (dialog == null) {
+            return;
+        }
+
+        try {
+            dialog.dismiss();
+        } catch (Exception e) {
+            Timber.e(e);
+        }
     }
 }
