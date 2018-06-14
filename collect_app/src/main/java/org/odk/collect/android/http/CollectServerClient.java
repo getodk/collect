@@ -29,6 +29,8 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashMap;
 
+import javax.inject.Inject;
+
 import timber.log.Timber;
 
 /**
@@ -42,21 +44,20 @@ public final class CollectServerClient {
 
     private static final String HTTP_CONTENT_TYPE_TEXT_XML = "text/xml";
 
-    private static HttpInterface httpConnection;
+    private static CollectServerClient instance;
 
-    private CollectServerClient() {}
+    @Inject
+    HttpInterface httpConnection;
 
-    /**
-     * Gets an object that conforms to the HttpInterface. This is a protected method
-     * so that it can be overridden in a Mock CollectServerClient class to allow CollectServerClient to be unit tested.
-     *
-     * @return instance of HttpInterface
-     */
-    public static synchronized HttpInterface getHttpConnection() {
-        if (httpConnection == null) {
-            httpConnection = DaggerHttpComponent.builder().build().buildHttpInterface();
+    private CollectServerClient() {
+        DaggerHttpComponent.builder().build().inject(this);
+    }
+
+    private static synchronized CollectServerClient getInstance() {
+        if (instance == null) {
+            instance = new CollectServerClient();
         }
-        return httpConnection;
+        return instance;
     }
 
     /**
@@ -65,14 +66,14 @@ public final class CollectServerClient {
      * @param host host to clear the credentials
      */
     public static void clearHostCredentials(String host) {
-        getHttpConnection().clearHostCredentials(host);
+        getInstance().httpConnection.clearHostCredentials(host);
     }
 
     /**
      * Clears the cookie store
      */
     public static void clearCookieStore() {
-        getHttpConnection().clearCookieStore();
+        getInstance().httpConnection.clearCookieStore();
     }
 
     /**
@@ -84,7 +85,7 @@ public final class CollectServerClient {
      */
     public static void addCredentials(String username, String password,
                                       String host) {
-        getHttpConnection().addCredentials(username, password, host);
+        getInstance().httpConnection.addCredentials(username, password, host);
     }
 
     /**
@@ -172,8 +173,7 @@ public final class CollectServerClient {
             throw new Exception("Invalid server URL (no hostname): " + downloadUrl);
         }
 
-        HttpInterface httpConnection = getHttpConnection();
-        return httpConnection.getHttpInputStream(uri, contentType);
+        return getInstance().httpConnection.getHttpInputStream(uri, contentType);
     }
 
 

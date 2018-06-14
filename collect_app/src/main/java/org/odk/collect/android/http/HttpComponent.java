@@ -9,7 +9,7 @@ import dagger.Component;
 @Singleton
 @Component(modules = HttpInterfaceModule.class)
 public interface HttpComponent {
-    HttpInterface buildHttpInterface();
-
     void inject(InstanceServerUploader uploader);
+
+    void inject(CollectServerClient collectClient);
 }
