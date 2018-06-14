@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.maps.OnMapReadyCallback;
 
 /**
  * An interface for classes that allow monitoring and retrieving the User's Location.
