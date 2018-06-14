@@ -60,7 +60,7 @@ public final class DialogUtils {
      * @param dialog   that needs to be shown
      * @param activity that has the dialog
      */
-    public void showDialog(Dialog dialog, Activity activity) {
+    public static void showDialog(Dialog dialog, Activity activity) {
 
         if (activity == null || activity.isFinishing()) {
             return;
@@ -83,7 +83,7 @@ public final class DialogUtils {
      * @param dialog   that needs to be shown
      * @param activity that has the dialog
      */
-    public void dismissDialog(Dialog dialog, Activity activity) {
+    public static void dismissDialog(Dialog dialog, Activity activity) {
 
         if (activity == null || activity.isFinishing()) {
             return;
