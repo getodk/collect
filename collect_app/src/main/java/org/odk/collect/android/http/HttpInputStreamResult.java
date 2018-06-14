@@ -26,9 +26,9 @@ public class HttpInputStreamResult {
     private static final String OPEN_ROSA_VERSION_HEADER = "X-OpenRosa-Version";
     private static final String OPEN_ROSA_VERSION = "1.0";
 
-    private InputStream inputStream;
-    private Map<String, String> headers;
-    private String hash;
+    private final InputStream inputStream;
+    private final Map<String, String> headers;
+    private final String hash;
 
     HttpInputStreamResult(InputStream is, @NonNull Map<String, String> headers, String hash) {
         inputStream = is;

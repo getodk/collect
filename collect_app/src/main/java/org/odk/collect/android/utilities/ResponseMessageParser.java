@@ -20,11 +20,12 @@ import timber.log.Timber;
 
 public class ResponseMessageParser {
     private static final String MESSAGE_XML_TAG = "message";
-    private String httpResponse;
+    private final String httpResponse;
+    private final int responseCode;
+    private final String reasonPhrase;
+
     public boolean isValid;
     public String messageResponse;
-    private int responseCode;
-    private String reasonPhrase;
 
     public ResponseMessageParser(String httpResponse, int responseCode, String reasonPhrase) {
         this.httpResponse = httpResponse;
