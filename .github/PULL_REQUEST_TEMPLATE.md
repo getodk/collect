@@ -13,9 +13,9 @@ https://github.com/opendatakit/collect/blob/master/CONTRIBUTING.md
 
 #### Are there any risks to merging this code? If so, what are they?
 
-#### Do we need any specific form for testing your changes? If so, please attach one.
-
 #### Tips for QAs. What should be tested?
+
+#### Do we need any specific form for testing your changes? If so, please attach one.
 
 #### Does this change require updates to documentation? If so, please file an issue [here]( https://github.com/opendatakit/docs/issues/new) and include the link below.
 
