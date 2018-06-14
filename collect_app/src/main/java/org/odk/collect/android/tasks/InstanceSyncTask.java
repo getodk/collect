@@ -81,6 +81,12 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                 // Build the list of potential path that we need to add to the content provider
                 for (File instanceDir : instanceFolders) {
                     File instanceFile = new File(instanceDir, instanceDir.getName() + ".xml");
+                    if (!instanceFile.exists()) {
+                        File submissionFile = new File(instanceDir, "submission.xml");
+                        if (submissionFile.exists()) {
+                            submissionFile.renameTo(instanceFile);
+                        }
+                    }
                     if (instanceFile.exists() && instanceFile.canRead()) {
                         candidateInstances.add(instanceFile.getAbsolutePath());
                     } else {
