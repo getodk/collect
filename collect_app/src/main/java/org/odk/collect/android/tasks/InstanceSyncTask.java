@@ -21,6 +21,7 @@ import android.preference.PreferenceManager;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.preferences.PreferenceKeys;
@@ -47,7 +48,6 @@ import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColum
  * Returns immediately if it detects an error.
  */
 public class InstanceSyncTask extends AsyncTask<Void, String, String> {
-
 
     private static int counter = 0;
 
@@ -93,10 +93,10 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
 
                 // Remove all the path that's already in the content provider
                 Cursor instanceCursor = null;
+                InstancesDao instancesDao = new InstancesDao();
                 try {
                     String sortOrder = InstanceColumns.INSTANCE_FILE_PATH + " ASC ";
-                    instanceCursor = Collect.getInstance().getContentResolver()
-                            .query(InstanceColumns.CONTENT_URI, null, null, null, sortOrder);
+                    instanceCursor = instancesDao.getSavedInstancesCursor(sortOrder);
                     if (instanceCursor == null) {
                         Timber.e("[%d] Instance content provider returned null", instance);
                         return currentStatus;
@@ -122,7 +122,6 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                     }
                 }
 
-                InstancesDao instancesDao = new InstancesDao();
                 instancesDao.deleteInstancesFromIDs(filesToRemove);
 
                 final boolean instanceSyncFlag = PreferenceManager.getDefaultSharedPreferences(
@@ -140,8 +139,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                             String selection = FormsColumns.JR_FORM_ID + " = ? ";
                             String[] selectionArgs = new String[]{instanceFormId};
                             // retrieve the form definition
-                            formCursor = Collect.getInstance().getContentResolver()
-                                    .query(FormsColumns.CONTENT_URI, null, selection, selectionArgs, null);
+                            formCursor = new FormsDao().getFormsCursor(selection, selectionArgs);
                             // TODO: optimize this by caching the previously found form definition
                             // TODO: optimize this by caching unavailable form definition to skip
                             if (formCursor != null && formCursor.moveToFirst()) {
@@ -164,8 +162,8 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                                         ? InstanceProviderAPI.STATUS_COMPLETE : InstanceProviderAPI.STATUS_INCOMPLETE);
                                 values.put(InstanceColumns.CAN_EDIT_WHEN_COMPLETE, Boolean.toString(true));
                                 // save the new instance object
-                                Collect.getInstance().getContentResolver()
-                                        .insert(InstanceColumns.CONTENT_URI, values);
+
+                                instancesDao.saveInstance(values);
                                 counter++;
                             }
                         } finally {
