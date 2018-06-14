@@ -95,7 +95,7 @@ public class ServerPollingJob extends Job {
                 if (!newDetectedForms.isEmpty()) {
                     if (GeneralSharedPreferences.getInstance().getBoolean(KEY_AUTOMATIC_UPDATE, false)) {
                         final HashMap<FormDetails, String> result = new FormDownloader().downloadForms(newDetectedForms);
-                        informAboutNewDownloadedForms(Collect.getInstance().getString(R.string.forms_downloaded) + "\n\n" + FormDownloadList.getDownloadResultMessage(result));
+                        informAboutNewDownloadedForms(Collect.getInstance().getString(R.string.forms_downloaded), FormDownloadList.getDownloadResultMessage(result));
                     } else {
                         for (FormDetails formDetails : newDetectedForms) {
                             String manifestFileHash = formDetails.getManifestFileHash() != null ? formDetails.getManifestFileHash() : "";
@@ -163,9 +163,10 @@ public class ServerPollingJob extends Job {
         }
     }
 
-    private void informAboutNewDownloadedForms(String message) {
+    private void informAboutNewDownloadedForms(String title, String message) {
         Intent intent = new Intent(Collect.getInstance(), NotificationActivity.class);
-        intent.putExtra(NotificationActivity.NOTIFICATION_KEY, message);
+        intent.putExtra(NotificationActivity.NOTIFICATION_TITLE, title);
+        intent.putExtra(NotificationActivity.NOTIFICATION_MESSAGE, message);
         PendingIntent contentIntent = PendingIntent.getActivity(getContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext())

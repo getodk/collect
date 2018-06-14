@@ -59,11 +59,10 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-
 public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements IRegisterReceiver,
         LocationListener, LocationClient.LocationClientListener {
 
-    private ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+    private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture schedulerHandler;
     public int zoomLevel = 3;
     public boolean gpsStatus = true;
@@ -84,7 +83,7 @@ public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements I
     private View traceSettingsView;
     private View polygonPolylineView;
     private Polyline polyline;
-    private ArrayList<Marker> mapMarkers = new ArrayList<Marker>();
+    private final ArrayList<Marker> mapMarkers = new ArrayList<Marker>();
     private Integer traceMode; // 0 manual, 1 is automatic
     private Spinner timeUnits;
     private Spinner timeDelay;
@@ -296,7 +295,7 @@ public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements I
             }
         });
 
-        zoomDialogView = getLayoutInflater().inflate(R.layout.geoshape_zoom_dialog, null);
+        zoomDialogView = getLayoutInflater().inflate(R.layout.geo_zoom_dialog, null);
 
         zoomLocationButton = zoomDialogView.findViewById(R.id.zoom_location);
         zoomLocationButton.setOnClickListener(new View.OnClickListener() {
@@ -309,7 +308,7 @@ public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements I
             }
         });
 
-        zoomPointButton = zoomDialogView.findViewById(R.id.zoom_shape);
+        zoomPointButton = zoomDialogView.findViewById(R.id.zoom_saved_location);
         zoomPointButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -398,7 +397,7 @@ public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements I
             marker.setOnMarkerClickListener(nullMarkerListener);
             marker.setDraggable(true);
             marker.setOnMarkerDragListener(dragListener);
-            marker.setIcon(ContextCompat.getDrawable(this, R.drawable.ic_place));
+            marker.setIcon(ContextCompat.getDrawable(this, R.drawable.ic_place_black));
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
             mapMarkers.add(marker);
             List<GeoPoint> points = polyline.getPoints();
@@ -450,9 +449,9 @@ public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements I
 
     }
 
-    private Handler handler = new Handler(Looper.getMainLooper());
+    private final Handler handler = new Handler(Looper.getMainLooper());
 
-    private Runnable centerAroundFix = new Runnable() {
+    private final Runnable centerAroundFix = new Runnable() {
         public void run() {
             handler.post(new Runnable() {
                 public void run() {
@@ -644,7 +643,7 @@ public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements I
             Float lastKnownAccuracy =
                     myLocationOverlay.getMyLocationProvider().getLastKnownLocation().getAccuracy();
             myLocationOverlay.getMyLocationProvider().getLastKnownLocation().getAccuracy();
-            marker.setIcon(ContextCompat.getDrawable(this, R.drawable.ic_place));
+            marker.setIcon(ContextCompat.getDrawable(this, R.drawable.ic_place_black));
             marker.setSubDescription(Float.toString(lastKnownAccuracy));
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
             marker.setDraggable(true);
@@ -686,7 +685,7 @@ public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements I
         setResult(RESULT_OK, i);
     }
 
-    private Marker.OnMarkerClickListener nullMarkerListener = new Marker.OnMarkerClickListener() {
+    private final Marker.OnMarkerClickListener nullMarkerListener = new Marker.OnMarkerClickListener() {
 
         @Override
         public boolean onMarkerClick(Marker arg0, MapView arg1) {
@@ -712,7 +711,7 @@ public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements I
     }
 
 
-    private Marker.OnMarkerDragListener dragListener = new Marker.OnMarkerDragListener() {
+    private final Marker.OnMarkerDragListener dragListener = new Marker.OnMarkerDragListener() {
         @Override
         public void onMarkerDragStart(Marker marker) {
 
@@ -819,7 +818,7 @@ public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements I
         if (myLocationOverlay.getMyLocation() != null) {
             zoomLocationButton.setEnabled(true);
             zoomLocationButton.setBackgroundColor(Color.parseColor("#50cccccc"));
-            zoomLocationButton.setTextColor(Color.parseColor("#ff333333"));
+            zoomLocationButton.setTextColor(themeUtils.getPrimaryTextColor());
         } else {
             zoomLocationButton.setEnabled(false);
             zoomLocationButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));
@@ -829,7 +828,7 @@ public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements I
         if (mapMarkers.size() != 0) {
             zoomPointButton.setEnabled(true);
             zoomPointButton.setBackgroundColor(Color.parseColor("#50cccccc"));
-            zoomPointButton.setTextColor(Color.parseColor("#ff333333"));
+            zoomPointButton.setTextColor(themeUtils.getPrimaryTextColor());
         } else {
             zoomPointButton.setEnabled(false);
             zoomPointButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));

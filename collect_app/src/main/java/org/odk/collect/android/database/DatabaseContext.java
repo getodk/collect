@@ -26,7 +26,7 @@ import java.io.File;
 
 public class DatabaseContext extends ContextWrapper {
 
-    private String path;
+    private final String path;
 
     public DatabaseContext(String path) {
         super(Collect.getInstance());

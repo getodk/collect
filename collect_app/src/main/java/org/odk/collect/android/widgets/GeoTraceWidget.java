@@ -54,8 +54,8 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
     public SharedPreferences sharedPreferences;
     public String mapSDK;
 
-    private Button createTraceButton;
-    private TextView answerDisplay;
+    private final Button createTraceButton;
+    private final TextView answerDisplay;
 
     public GeoTraceWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);

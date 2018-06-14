@@ -17,6 +17,7 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -67,11 +68,9 @@ import timber.log.Timber;
 @SuppressLint("ViewConstructor")
 public class ListMultiWidget extends QuestionWidget implements MultiChoiceWidget {
 
-    private boolean checkboxInit = true;
-
     private List<SelectChoice> items; // may take a while to compute...
 
-    private ArrayList<CheckBox> checkBoxes;
+    private final ArrayList<CheckBox> checkBoxes;
     private View center;
 
 
@@ -100,7 +99,7 @@ public class ListMultiWidget extends QuestionWidget implements MultiChoiceWidget
         if (items != null) {
             for (int i = 0; i < items.size(); i++) {
 
-                CheckBox c = new CheckBox(getContext());
+                AppCompatCheckBox c = new AppCompatCheckBox(getContext());
                 c.setTag(i);
                 c.setId(ViewIds.generateViewId());
                 c.setFocusable(!prompt.isReadOnly());
@@ -120,7 +119,7 @@ public class ListMultiWidget extends QuestionWidget implements MultiChoiceWidget
                 c.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        if (!checkboxInit && getFormEntryPrompt().isReadOnly()) {
+                        if (getFormEntryPrompt().isReadOnly()) {
                             if (buttonView.isChecked()) {
                                 buttonView.setChecked(false);
                                 Collect.getInstance().getActivityLogger().logInstanceAction(this,

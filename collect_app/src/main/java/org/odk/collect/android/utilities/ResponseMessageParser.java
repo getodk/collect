@@ -19,7 +19,6 @@ import timber.log.Timber;
  */
 
 public class ResponseMessageParser {
-
     private static final String MESSAGE_XML_TAG = "message";
     private String httpResponse;
     public boolean isValid;

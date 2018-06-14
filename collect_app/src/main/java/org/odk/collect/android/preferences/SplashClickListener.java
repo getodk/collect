@@ -8,8 +8,8 @@ import android.preference.Preference;
 import org.odk.collect.android.R;
 
 class SplashClickListener implements Preference.OnPreferenceClickListener {
-    private UserInterfacePreferences preferencesFragment;
-    private Preference splashPathPreference;
+    private final UserInterfacePreferences preferencesFragment;
+    private final Preference splashPathPreference;
 
     SplashClickListener(UserInterfacePreferences preferenceFragment, Preference splashPathPreference) {
         this.preferencesFragment = preferenceFragment;

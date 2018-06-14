@@ -16,28 +16,21 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
-import android.view.View;
 import android.widget.CheckBox;
-import android.widget.TextView;
-
-import com.google.common.base.Joiner;
-
-import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.TextUtils;
-import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
+import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 
 import java.util.ArrayList;
 import java.util.List;
-
 
 /**
  * SelectMultiWidget handles multiple selection fields using checkboxes.
@@ -50,11 +43,9 @@ public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWi
     protected final List<CheckBox> checkBoxes = new ArrayList<>();
     private boolean checkboxInit = true;
     private final List<Selection> ve;
-    private final Context context;
 
     public SelectMultiWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
-        this.context = context;
         //noinspection unchecked
         ve = getFormEntryPrompt().getAnswerValue() == null ? new ArrayList<>() :
                 (List<Selection>) getFormEntryPrompt().getAnswerValue().getValue();
@@ -102,7 +93,7 @@ public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWi
         final String choiceName = getFormEntryPrompt().getSelectChoiceText(items.get(index));
         final CharSequence choiceDisplayName = choiceName == null ? "" : TextUtils.textToHtml(choiceName);
         // no checkbox group so id by answer + offset
-        CheckBox checkBox = new CheckBox(getContext());
+        AppCompatCheckBox checkBox = new AppCompatCheckBox(getContext());
         checkBox.setTag(index);
         checkBox.setId(ViewIds.generateViewId());
         checkBox.setText(choiceDisplayName);
@@ -124,12 +115,6 @@ public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWi
             if (!checkboxInit && getFormEntryPrompt().isReadOnly()) {
                 buttonView.setChecked(!buttonView.isChecked());
             }
-
-            // show warning when selected choice value has spaces
-            String value = items.get((int) checkBox.getTag()).getValue();
-            if (isChecked && value != null && value.contains(" ")) {
-                ToastUtils.showLongToast(context.getString(R.string.invalid_space_in_answer_singular, value));
-            }
         });
 
         return checkBox;
@@ -140,10 +125,7 @@ public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWi
 
         if (items != null) {
             // check if any values have spaces
-            String valuesWithSpaces = getValuesWithSpaces();
-            if (valuesWithSpaces != null) {
-                answerLayout.addView(createWarning(valuesWithSpaces));
-            }
+            SpacesInUnderlyingValuesWarning.forQuestionWidget(this).renderWarningIfNecessary(items);
 
             for (int i = 0; i < items.size(); i++) {
                 CheckBox checkBox = createCheckBox(i);
@@ -153,27 +135,6 @@ public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWi
             addAnswerView(answerLayout);
         }
         checkboxInit = false;
-    }
-
-    private View createWarning(String valuesWithSpaces) {
-        TextView warning = new TextView(getContext());
-
-        warning.setText(getContext().getResources().getString((valuesWithSpaces.contains(",") ?
-                R.string.invalid_space_in_answer_plural : R.string.invalid_space_in_answer_singular), valuesWithSpaces));
-
-        warning.setPadding(10, 10, 10, 10);
-        return warning;
-    }
-
-    private String getValuesWithSpaces() {
-        final List<String> valuesWithSpaces = new ArrayList<>();
-        for (SelectChoice selectChoice : items) {
-            String value = selectChoice.getValue();
-            if (value.contains(" ")) {
-                valuesWithSpaces.add(value);
-            }
-        }
-        return valuesWithSpaces.isEmpty() ? null : Joiner.on(", ").join(valuesWithSpaces);
     }
 
     @Override

@@ -20,6 +20,7 @@
         <item name="searchViewStyle">@style/SearchViewTheme.Dark</item>
         <item name="iconColor">@color/darkIconColor</item>
         <item name="android:textDirection" tools:targetApi="17">locale</item>
+        <item name="warningColor">@color/red</item>
     </style>
 
     <style name="AlertDialogTheme.Dark" parent="Theme.AppCompat.Dialog.Alert">
@@ -58,6 +59,7 @@
         <item name="searchViewStyle">@style/SearchViewTheme.Light</item>
         <item name="iconColor">@color/lightIconColor</item>
         <item name="android:textDirection" tools:targetApi="17">locale</item>
+        <item name="warningColor">@color/red</item>
     </style>
 
     <style name="AlertDialogTheme.Light" parent="Theme.AppCompat.Light.Dialog.Alert">

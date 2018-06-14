@@ -15,7 +15,7 @@ import org.odk.collect.android.listeners.Result;
  */
 public class AnimateUtils {
 
-    private static final Interpolator easeInOutQuart = PathInterpolatorCompat.create(0.77f, 0f, 0.175f, 1f);
+    private static final Interpolator EASE_IN_OUT_QUART = PathInterpolatorCompat.create(0.77f, 0f, 0.175f, 1f);
 
     private AnimateUtils() {
 
@@ -77,7 +77,7 @@ public class AnimateUtils {
             }
         };
 
-        animation.setInterpolator(easeInOutQuart);
+        animation.setInterpolator(EASE_IN_OUT_QUART);
         animation.setDuration(computeDurationFromHeight(view));
         animation.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -120,7 +120,7 @@ public class AnimateUtils {
             }
         };
 
-        a.setInterpolator(easeInOutQuart);
+        a.setInterpolator(EASE_IN_OUT_QUART);
 
         int durationMillis = computeDurationFromHeight(view);
         a.setDuration(durationMillis);

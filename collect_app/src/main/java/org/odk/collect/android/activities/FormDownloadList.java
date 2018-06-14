@@ -110,7 +110,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
     private HashMap<String, FormDetails> formNamesAndURLs = new HashMap<String, FormDetails>();
     private ArrayList<HashMap<String, String>> formList;
-    private ArrayList<HashMap<String, String>> filteredFormList = new ArrayList<>();
+    private final ArrayList<HashMap<String, String>> filteredFormList = new ArrayList<>();
     private LinkedHashSet<String> selectedForms = new LinkedHashSet<>();
 
     private static final boolean EXIT = true;
@@ -424,7 +424,9 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         if (listView.getAdapter() == null) {
             listView.setAdapter(new FormDownloadListAdapter(this, filteredFormList, formNamesAndURLs));
         } else {
-            ((FormDownloadListAdapter) listView.getAdapter()).notifyDataSetChanged();
+            FormDownloadListAdapter formDownloadListAdapter = (FormDownloadListAdapter) listView.getAdapter();
+            formDownloadListAdapter.setFromIdsToDetails(formNamesAndURLs);
+            formDownloadListAdapter.notifyDataSetChanged();
         }
         toggleButton.setEnabled(filteredFormList.size() > 0);
         checkPreviouslyCheckedItems();

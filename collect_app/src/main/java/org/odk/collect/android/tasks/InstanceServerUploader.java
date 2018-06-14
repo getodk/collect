@@ -58,7 +58,7 @@ public class InstanceServerUploader extends InstanceUploader {
 
     private static final String URL_PATH_SEP = "/";
 
-    private static final String fail = "Error: ";
+    private static final String FAIL = "Error: ";
 
     @Inject HttpInterface httpInterface;
 
@@ -168,7 +168,7 @@ public class InstanceServerUploader extends InstanceUploader {
         } else {
             if (submissionUri.getHost() == null) {
                 Timber.i("Host name may not be null");
-                outcome.messagesByInstanceId.put(id, fail + "Host name may not be null");
+                outcome.messagesByInstanceId.put(id, FAIL + "Host name may not be null");
                 contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                 Collect.getInstance().getContentResolver().update(toUpdate, contentValues, null, null);
                 return true;
@@ -211,7 +211,7 @@ public class InstanceServerUploader extends InstanceUploader {
                                 // We can't tell if this is a spoof or not.
                                 outcome.messagesByInstanceId.put(
                                         id,
-                                        fail
+                                        FAIL
                                                 + "Unexpected redirection attempt to a different "
                                                 + "host: "
                                                 + newURI.toString());
@@ -223,7 +223,7 @@ public class InstanceServerUploader extends InstanceUploader {
                             }
                         } catch (Exception e) {
                             Timber.e(e, "Exception thrown parsing URI for url %s", urlString);
-                            outcome.messagesByInstanceId.put(id, fail + urlString + " " + e.toString());
+                            outcome.messagesByInstanceId.put(id, FAIL + urlString + " " + e.toString());
                             contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS,
                                     InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                             Collect.getInstance().getContentResolver()
@@ -237,7 +237,7 @@ public class InstanceServerUploader extends InstanceUploader {
                     if (statusCode >= HttpsURLConnection.HTTP_OK && statusCode < HttpsURLConnection.HTTP_MULT_CHOICE) {
                         outcome.messagesByInstanceId.put(
                                 id,
-                                fail
+                                FAIL
                                         + "Invalid status code on Head request.  If you have a "
                                         + "web proxy, you may need to login to your network. ");
                         contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS,
@@ -247,14 +247,13 @@ public class InstanceServerUploader extends InstanceUploader {
                         return true;
                     }
                 }
-
             } catch (Exception e) {
                 String msg = e.getMessage();
                 if (msg == null) {
                     msg = e.toString();
                 }
 
-                outcome.messagesByInstanceId.put(id, fail + msg);
+                outcome.messagesByInstanceId.put(id, FAIL + msg);
                 Timber.e(e);
                 contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                 Collect.getInstance().getContentResolver().update(toUpdate, contentValues, null, null);
@@ -292,7 +291,7 @@ public class InstanceServerUploader extends InstanceUploader {
         }
 
         if (!instanceFile.exists() && !submissionFile.exists()) {
-            outcome.messagesByInstanceId.put(id, fail + "instance XML file does not exist!");
+            outcome.messagesByInstanceId.put(id, FAIL + "instance XML file does not exist!");
             contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
             Collect.getInstance().getContentResolver().update(toUpdate, contentValues, null, null);
             return true;
@@ -312,15 +311,15 @@ public class InstanceServerUploader extends InstanceUploader {
 
             if (responseCode != HttpsURLConnection.HTTP_CREATED && responseCode != HttpsURLConnection.HTTP_ACCEPTED) {
                 if (responseCode == HttpsURLConnection.HTTP_OK) {
-                    outcome.messagesByInstanceId.put(id, fail + "Network login failure? Again?");
+                    outcome.messagesByInstanceId.put(id, FAIL + "Network login failure? Again?");
                 } else if (responseCode == HttpsURLConnection.HTTP_UNAUTHORIZED) {
-                    outcome.messagesByInstanceId.put(id, fail + messageParser.getReasonPhrase() + " (" + responseCode + ") at " + urlString);
+                    outcome.messagesByInstanceId.put(id, FAIL + messageParser.getReasonPhrase() + " (" + responseCode + ") at " + urlString);
                 } else {
                     // If response from server is valid use that else use default messaging
                     if (messageParser.isValid()) {
-                        outcome.messagesByInstanceId.put(id, fail + messageParser.getMessageResponse());
+                        outcome.messagesByInstanceId.put(id, FAIL + messageParser.getMessageResponse());
                     } else {
-                        outcome.messagesByInstanceId.put(id, fail + messageParser.getReasonPhrase() + " (" + responseCode + ") at " + urlString);
+                        outcome.messagesByInstanceId.put(id, FAIL + messageParser.getReasonPhrase() + " (" + responseCode + ") at " + urlString);
                     }
 
                 }
@@ -334,7 +333,7 @@ public class InstanceServerUploader extends InstanceUploader {
             if (msg == null) {
                 msg = e.toString();
             }
-            outcome.messagesByInstanceId.put(id, fail + "Generic Exception: " + msg);
+            outcome.messagesByInstanceId.put(id, FAIL + "Generic Exception: " + msg);
             contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
             Collect.getInstance().getContentResolver().update(toUpdate, contentValues, null, null);
             return true;

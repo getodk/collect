@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
 
 public class DecimalWidgetTest extends QuestionWidgetTest<DecimalWidget, DecimalData> {
 
-    private Random random = new Random();
+    private final Random random = new Random();
 
     @Mock
     IAnswerData answerData;

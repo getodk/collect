@@ -16,7 +16,7 @@ import timber.log.Timber;
  * Background task for appending a timer event to the timer log
  */
 public class TimerSaveTask extends AsyncTask<TimerLogger.Event, Void, Void> {
-    private @NonNull File file;
+    private final @NonNull File file;
     private static final String TIMING_CSV_HEADER = "event, node, start, end";
 
     public TimerSaveTask(File file) {
