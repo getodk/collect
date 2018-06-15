@@ -23,7 +23,6 @@ import android.content.SharedPreferences;
 import android.content.pm.ConfigurationInfo;
 import android.preference.PreferenceManager;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -41,6 +40,7 @@ import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import java.text.DecimalFormat;
+import java.util.Locale;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
@@ -62,10 +62,10 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
     private static final String GOOGLE_MAP_KEY = "google_maps";
     private final boolean readOnly;
     private final boolean useMapsV2;
-    private Button getLocationButton;
-    private Button viewButton;
-    private String mapSDK;
-    private TextView answerDisplay;
+    private final Button getLocationButton;
+    private final Button viewButton;
+    private final String mapSDK;
+    private final TextView answerDisplay;
     private boolean useMaps;
     private double accuracyThreshold;
     private boolean draggable = true;
@@ -88,10 +88,10 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
 
         // use mapsV2 if it is available and was requested;
         useMapsV2 = useMapsV2(context);
-        if (appearance != null && appearance.equalsIgnoreCase("placement-map") && useMapsV2) {
+        if (appearance != null && appearance.toLowerCase(Locale.US).contains("placement-map") && useMapsV2) {
             draggable = true;
             useMaps = true;
-        } else if (appearance != null && appearance.equalsIgnoreCase("maps") && useMapsV2) {
+        } else if (appearance != null && appearance.toLowerCase(Locale.US).contains("maps") && useMapsV2) {
             draggable = false;
             useMaps = true;
         } else {
@@ -237,14 +237,6 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
             }
         }
         return degree;
-    }
-
-    @Override
-    public void setFocus(Context context) {
-        // Hide the soft keyboard if it's showing.
-        InputMethodManager inputManager = (InputMethodManager) context
-                .getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
     }
 
     @Override

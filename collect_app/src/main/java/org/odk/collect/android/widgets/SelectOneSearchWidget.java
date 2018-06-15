@@ -16,14 +16,12 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.TypedArray;
-import android.graphics.drawable.Drawable;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
 
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.listeners.AudioPlayListener;
+import org.odk.collect.android.utilities.SoftKeyboardUtils;
 
 import java.util.List;
 
@@ -47,11 +45,7 @@ public class SelectOneSearchWidget extends AbstractSelectOneWidget implements On
         for (int i = 0; i < buttons.size(); i++) {
             if (tagList == null || tagList.contains(i)) {
                 answerLayout.addView(buttons.get(i));
-                //Get divider drawable and set to linearlayout
-                int[] attrs = { android.R.attr.listDivider };
-                TypedArray ta = getContext().obtainStyledAttributes(attrs);
-                Drawable divider = ta.getDrawable(0);
-                answerLayout.setDividerDrawable(divider);
+                answerLayout.setDividerDrawable(getResources().getDrawable(themeUtils.getDivider()));
                 answerLayout.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
             }
         }
@@ -59,10 +53,7 @@ public class SelectOneSearchWidget extends AbstractSelectOneWidget implements On
 
     @Override
     public void setFocus(Context context) {
-        // Put focus on text input field and display soft keyboard if appropriate.
-        searchStr.requestFocus();
-        InputMethodManager inputManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.showSoftInput(searchStr, 0);
+        SoftKeyboardUtils.showSoftKeyboard(searchStr);
     }
 
     @Override

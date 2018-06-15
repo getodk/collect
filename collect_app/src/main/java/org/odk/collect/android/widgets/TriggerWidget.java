@@ -16,10 +16,10 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
@@ -40,16 +40,15 @@ public class TriggerWidget extends QuestionWidget {
 
     public static final String OK_TEXT = "OK";
 
-    private CheckBox triggerButton;
-    private TextView stringAnswer;
-    private FormEntryPrompt prompt;
-
+    private final AppCompatCheckBox triggerButton;
+    private final TextView stringAnswer;
+    private final FormEntryPrompt prompt;
 
     public TriggerWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
         this.prompt = prompt;
 
-        triggerButton = new CheckBox(getContext());
+        triggerButton = new AppCompatCheckBox(getContext());
         triggerButton.setId(ViewIds.generateViewId());
         triggerButton.setText(getContext().getString(R.string.trigger));
         triggerButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
@@ -111,16 +110,6 @@ public class TriggerWidget extends QuestionWidget {
                 ? new StringData(s)
                 : null;
     }
-
-
-    @Override
-    public void setFocus(Context context) {
-        // Hide the soft keyboard if it's showing.
-        InputMethodManager inputManager =
-                (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
-    }
-
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {

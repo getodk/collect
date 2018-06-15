@@ -17,7 +17,6 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.Uri;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -40,9 +39,9 @@ import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 public class UrlWidget extends QuestionWidget implements ButtonWidget {
 
     private Uri uri;
-    private Button openUrlButton;
-    private TextView stringAnswer;
-    private CustomTabHelper customTabHelper;
+    private final Button openUrlButton;
+    private final TextView stringAnswer;
+    private final CustomTabHelper customTabHelper;
 
     public UrlWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -84,14 +83,6 @@ public class UrlWidget extends QuestionWidget implements ButtonWidget {
         return !s.isEmpty()
                 ? new StringData(s)
                 : null;
-    }
-
-    @Override
-    public void setFocus(Context context) {
-        // Hide the soft keyboard if it's showing.
-        InputMethodManager inputManager = (InputMethodManager) context
-                .getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
     }
 
     @Override

@@ -226,7 +226,6 @@ Escolher Imagem</string>
   <string name="ext_search_return_error">O gestor de procura retornou um objeto do tipo %s\'.</string>
   <string name="ext_import_generic_error">Não foi possível importar os dados de%1$s. Motivo: %2$s</string>
   <string name="ext_import_progress_message">Pré-carregando dados de \'%1$s\', por favor aguarde… %2$s</string>
-  <string name="ext_import_cancelled_message">Leitura de dados cancelada!</string>
   <string name="ext_import_finalizing_message">Finalizando dados pré-carregados…</string>
   <string name="ext_import_completed_message">Leitura de dados finalizada!</string>
   <string name="ext_not_initialized_error">O ExternalDataManager não foi inicializado.</string>
@@ -270,7 +269,6 @@ Escolher Imagem</string>
   <string name="enable_gps_message">O GPS está desabilitado em seu aparelho. Gostaria de habilitá-lo?</string>
   <string name="gps_enable_message">O GPS está desabilitado em seu aparelho. Gostaria de habilitá-lo?</string>
   <string name="minutes">Minutos</string>
-  <string name="dialog_continue">Continuar</string>
   <string name="clear">Limpar</string>
   <string name="manual_mode">Modo manual</string>
   <string name="automatic_mode">Modo automático</string>
@@ -308,6 +306,7 @@ Escolher Imagem</string>
   <string name="reset_layers">Camadas do mapa (pasta de camadas)</string>
   <string name="exit">Sair</string>
   <string name="autosend_selector_title">Enviar automaticamente</string>
+  <string name="guidance_no">Não</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
   <string name="yes">Sim</string>
   <string name="no">Não</string>

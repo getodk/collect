@@ -51,6 +51,7 @@ import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoShapeWidget;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Version of the GeoShapeGoogleMapActivity that uses the new Maps v2 API and Fragments to enable
@@ -69,7 +70,7 @@ public class GeoShapeGoogleMapActivity extends CollectAbstractActivity implement
     private LatLng curlatLng;
     private PolygonOptions polygonOptions;
     private Polygon polygon;
-    private ArrayList<Marker> markerArray = new ArrayList<Marker>();
+    private final ArrayList<Marker> markerArray = new ArrayList<Marker>();
     private ImageButton gpsButton;
     private ImageButton clearButton;
 
@@ -186,7 +187,7 @@ public class GeoShapeGoogleMapActivity extends CollectAbstractActivity implement
             }
         });
 
-        zoomDialogView = getLayoutInflater().inflate(R.layout.geoshape_zoom_dialog, null);
+        zoomDialogView = getLayoutInflater().inflate(R.layout.geo_zoom_dialog, null);
 
         zoomLocationButton = zoomDialogView.findViewById(R.id.zoom_location);
         zoomLocationButton.setOnClickListener(new View.OnClickListener() {
@@ -199,7 +200,7 @@ public class GeoShapeGoogleMapActivity extends CollectAbstractActivity implement
             }
         });
 
-        zoomPointButton = zoomDialogView.findViewById(R.id.zoom_shape);
+        zoomPointButton = zoomDialogView.findViewById(R.id.zoom_saved_location);
         zoomPointButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -216,7 +217,6 @@ public class GeoShapeGoogleMapActivity extends CollectAbstractActivity implement
             showZoomDialog();
         }
 
-        themeUtils.setIconTint(this, gpsButton, clearButton, layersButton, returnButton);
         helper.setBasemap();
     }
 
@@ -227,7 +227,11 @@ public class GeoShapeGoogleMapActivity extends CollectAbstractActivity implement
                 FormEntryActivity.GEOSHAPE_RESULTS,
                 finalReturnString);
         setResult(RESULT_OK, i);
-        finish();
+        if (markerArray.size() < 4) {
+            ToastUtils.showShortToastInMiddle(getString(R.string.polygon_validator));
+        } else {
+            finish();
+        }
     }
 
     private void overlayIntentPolygon(String str) {
@@ -257,7 +261,9 @@ public class GeoShapeGoogleMapActivity extends CollectAbstractActivity implement
         String tempString = "";
         //Add the first marker to the end of the array, so the first and the last are the same
         if (markerArray.size() > 1) {
-            markerArray.add(markerArray.get(0));
+            if (Collections.frequency(markerArray, markerArray.get(0)) < 2) {
+                markerArray.add(markerArray.get(0));
+            }
             for (int i = 0; i < markerArray.size(); i++) {
                 String lat = Double.toString(markerArray.get(i).getPosition().latitude);
                 String lng = Double.toString(markerArray.get(i).getPosition().longitude);
@@ -392,7 +398,7 @@ public class GeoShapeGoogleMapActivity extends CollectAbstractActivity implement
             if (curLocation != null) {
                 zoomLocationButton.setEnabled(true);
                 zoomLocationButton.setBackgroundColor(Color.parseColor("#50cccccc"));
-                zoomLocationButton.setTextColor(Color.parseColor("#ff333333"));
+                zoomLocationButton.setTextColor(themeUtils.getPrimaryTextColor());
             } else {
                 zoomLocationButton.setEnabled(false);
                 zoomLocationButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));
@@ -402,7 +408,7 @@ public class GeoShapeGoogleMapActivity extends CollectAbstractActivity implement
             if (markerArray.size() != 0) {
                 zoomPointButton.setEnabled(true);
                 zoomPointButton.setBackgroundColor(Color.parseColor("#50cccccc"));
-                zoomPointButton.setTextColor(Color.parseColor("#ff333333"));
+                zoomPointButton.setTextColor(themeUtils.getPrimaryTextColor());
             } else {
                 zoomPointButton.setEnabled(false);
                 zoomPointButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));

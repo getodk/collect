@@ -24,7 +24,6 @@ import android.net.Uri;
 import android.provider.MediaStore.Audio;
 import android.support.annotation.NonNull;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -112,7 +111,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
         MediaManager
                 .INSTANCE
                 .markOriginalFileOrDelete(getFormEntryPrompt().getIndex().toString(),
-                getInstanceFolder() + File.separator + binaryName);
+                        getInstanceFolder() + File.separator + binaryName);
         binaryName = null;
     }
 
@@ -134,23 +133,39 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
         }
     }
 
+    /**
+     * Set this widget with the actual file returned by OnActivityResult.
+     * Both of Uri and File are supported.
+     * If the file is local, a Uri is enough for the copy task below.
+     * If the chose file is from cloud(such as Google Drive),
+     * The retrieve and copy task is already executed in the previous step,
+     * so a File object would be presented.
+     *
+     * @param object Uri or File of the chosen file.
+     * @see org.odk.collect.android.activities.FormEntryActivity#onActivityResult(int, int, Intent)
+     */
     @Override
-    public void setBinaryData(Object binaryuri) {
-        if (binaryuri == null || !(binaryuri instanceof Uri)) {
-            Timber.w("AudioWidget's setBinaryData must receive a Uri object.");
+    public void setBinaryData(Object object) {
+        File newAudio;
+        // get the file path and create a copy in the instance folder
+        if (object instanceof Uri) {
+            String sourcePath = getSourcePathFromUri((Uri) object);
+            String destinationPath = getDestinationPathFromSourcePath(sourcePath);
+            File source = fileUtil.getFileAtPath(sourcePath);
+            newAudio = fileUtil.getFileAtPath(destinationPath);
+            fileUtil.copyFile(source, newAudio);
+        } else if (object instanceof File) {
+            // Getting a file indicates we've done the copy in the before step
+            newAudio = (File) object;
+        } else {
+            Timber.w("AudioWidget's setBinaryData must receive a File or Uri object.");
             return;
         }
 
-        Uri uri = (Uri) binaryuri;
-
-        // get the file path and create a copy in the instance folder
-        String sourcePath = getSourcePathFromUri(uri);
-        String destinationPath = getDestinationPathFromSourcePath(sourcePath);
-
-        File source = fileUtil.getFileAtPath(sourcePath);
-        File newAudio = fileUtil.getFileAtPath(destinationPath);
-
-        fileUtil.copyFile(source, newAudio);
+        if (newAudio == null) {
+            Timber.e("setBinaryData FAILED");
+            return;
+        }
 
         if (newAudio.exists()) {
             // Add the copy to the content provier
@@ -201,14 +216,6 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
         String extension = sourcePath.substring(sourcePath.lastIndexOf('.'));
         return getInstanceFolder() + File.separator
                 + fileUtil.getRandomFilename() + extension;
-    }
-
-    @Override
-    public void setFocus(Context context) {
-        // Hide the soft keyboard if it's showing.
-        InputMethodManager inputManager = (InputMethodManager) context
-                .getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
     }
 
     @Override

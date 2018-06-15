@@ -23,7 +23,6 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
@@ -50,6 +49,7 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.views.AudioButton.AudioHandler;
 import org.odk.collect.android.views.ExpandedHeightGridView;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
+import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -69,9 +69,9 @@ import timber.log.Timber;
 public class GridMultiWidget extends QuestionWidget implements MultiChoiceWidget {
 
     // The RGB value for the orange background
-    public static final int orangeRedVal = 255;
-    public static final int orangeGreenVal = 140;
-    public static final int orangeBlueVal = 0;
+    public static final int ORANGE_RED_VAL = 255;
+    public static final int ORANGE_GREEN_VAL = 140;
+    public static final int ORANGE_BLUE_VAL = 0;
 
     private static final int HORIZONTAL_PADDING = 7;
     private static final int VERTICAL_PADDING = 5;
@@ -301,8 +301,8 @@ public class GridMultiWidget extends QuestionWidget implements MultiChoiceWidget
                     if (audioHandlers[lastClickPosition] != null) {
                         stopAudio();
                     }
-                    imageViews[position].setBackgroundColor(Color.rgb(orangeRedVal, orangeGreenVal,
-                            orangeBlueVal));
+                    imageViews[position].setBackgroundColor(Color.rgb(ORANGE_RED_VAL, ORANGE_GREEN_VAL,
+                            ORANGE_BLUE_VAL));
                     Collect.getInstance().getActivityLogger().logInstanceAction(this,
                             "onItemClick.select",
                             items.get(position).getValue(), getFormEntryPrompt().getIndex());
@@ -337,8 +337,8 @@ public class GridMultiWidget extends QuestionWidget implements MultiChoiceWidget
 
             selected[i] = found;
             if (selected[i]) {
-                imageViews[i].setBackgroundColor(Color.rgb(orangeRedVal, orangeGreenVal,
-                        orangeBlueVal));
+                imageViews[i].setBackgroundColor(Color.rgb(ORANGE_RED_VAL, ORANGE_GREEN_VAL,
+                        ORANGE_BLUE_VAL));
             }
 
         }
@@ -347,6 +347,8 @@ public class GridMultiWidget extends QuestionWidget implements MultiChoiceWidget
         ImageAdapter ia = new ImageAdapter(choices);
         gridview.setAdapter(ia);
         addAnswerView(gridview);
+
+        SpacesInUnderlyingValuesWarning.forQuestionWidget(this).renderWarningIfNecessary(items);
     }
 
 
@@ -378,16 +380,6 @@ public class GridMultiWidget extends QuestionWidget implements MultiChoiceWidget
 
     }
 
-
-    @Override
-    public void setFocus(Context context) {
-        // Hide the soft keyboard if it's showing.
-        InputMethodManager inputManager =
-                (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
-
-    }
-
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
         gridview.setOnLongClickListener(l);
@@ -412,7 +404,7 @@ public class GridMultiWidget extends QuestionWidget implements MultiChoiceWidget
     // Custom image adapter. Most of the code is copied from
     // media layout for using a picture.
     private class ImageAdapter extends BaseAdapter {
-        private String[] choices;
+        private final String[] choices;
 
         ImageAdapter(String[] choices) {
             this.choices = choices;

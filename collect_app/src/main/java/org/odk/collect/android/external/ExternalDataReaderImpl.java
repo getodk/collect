@@ -36,7 +36,7 @@ import timber.log.Timber;
  */
 public class ExternalDataReaderImpl implements ExternalDataReader {
 
-    private FormLoaderTask formLoaderTask;
+    private final FormLoaderTask formLoaderTask;
 
     public ExternalDataReaderImpl(FormLoaderTask formLoaderTask) {
         this.formLoaderTask = formLoaderTask;

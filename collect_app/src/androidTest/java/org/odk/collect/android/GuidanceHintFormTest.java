@@ -1,6 +1,5 @@
 package org.odk.collect.android;
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
@@ -14,6 +13,7 @@ import org.apache.commons.io.IOUtils;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,17 +30,19 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.concurrent.TimeUnit;
 
 import tools.fastlane.screengrab.Screengrab;
 import tools.fastlane.screengrab.UiAutomatorScreenshotStrategy;
 
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.Assert.assertFalse;
 import static org.odk.collect.android.activities.FormEntryActivity.EXTRA_TESTING_PATH;
+import static org.odk.collect.android.test.TestUtils.waitId;
 
 @RunWith(AndroidJUnit4.class)
 public class GuidanceHintFormTest {
@@ -83,9 +85,10 @@ public class GuidanceHintFormTest {
         activity.setShouldOverrideAnimations(true);
     }
 
+    @Ignore
     @Test
     public void guidanceVisibilityContentTest() {
-        GeneralSharedPreferences.getInstance().save(PreferenceKeys.KEY_GUIDANCE_HINT, GuidanceHint.YesCollapsed.toString());
+        GeneralSharedPreferences.getInstance().save(PreferenceKeys.KEY_GUIDANCE_HINT, GuidanceHint.Yes.toString());
 
         FormEntryPrompt prompt = Collect.getInstance().getFormController().getQuestionPrompt();
 
@@ -93,12 +96,10 @@ public class GuidanceHintFormTest {
 
         assertFalse(TextUtils.isEmpty(guidance));
 
-        onView(withId(R.id.help_text_view)).perform(click());
-
         Screengrab.screenshot("guidance_hint");
 
+        onView(isRoot()).perform(waitId(R.id.guidance_text_view, TimeUnit.SECONDS.toMillis(15)));
         onView(withId(R.id.guidance_text_view)).check(matches(withText(guidance)));
-
     }
 
     //region Helper methods.
@@ -107,8 +108,6 @@ public class GuidanceHintFormTest {
                 + FORMS_DIRECTORY
                 + GUIDANCE_SAMPLE_FORM;
     }
-
-
 
     //region Custom TestRule.
     private class FormEntryActivityTestRule extends IntentsTestRule<FormEntryActivity> {
@@ -128,6 +127,4 @@ public class GuidanceHintFormTest {
         }
     }
     //endregion
-
-
 }

@@ -60,7 +60,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-
 /**
  * Version of the GeoTraceMapActivity that uses the new Maps v2 API and Fragments to enable
  * specifying a location via placing a tracker on a map.
@@ -70,7 +69,7 @@ import java.util.concurrent.TimeUnit;
 public class GeoTraceGoogleMapActivity extends CollectAbstractActivity implements LocationListener,
         OnMarkerDragListener, OnMapLongClickListener, LocationClient.LocationClientListener {
 
-    private ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+    private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture schedulerHandler;
     private ImageButton playButton;
     public ImageButton layersButton;
@@ -96,7 +95,7 @@ public class GeoTraceGoogleMapActivity extends CollectAbstractActivity implement
     private LatLng curlatLng;
     private PolylineOptions polylineOptions;
     private Polyline polyline;
-    private ArrayList<Marker> markerArray = new ArrayList<Marker>();
+    private final ArrayList<Marker> markerArray = new ArrayList<Marker>();
     private MapHelper helper;
 
     private AlertDialog zoomDialog;
@@ -250,7 +249,7 @@ public class GeoTraceGoogleMapActivity extends CollectAbstractActivity implement
                     saveGeoTrace();
                 } else {
                     alertDialog.dismiss();
-                    showPolygonErrorDialog();
+                    ToastUtils.showShortToastInMiddle(getString(R.string.polygon_validator));
                 }
             }
         });
@@ -258,8 +257,13 @@ public class GeoTraceGoogleMapActivity extends CollectAbstractActivity implement
         polylineSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alertDialog.dismiss();
-                saveGeoTrace();
+                if (markerArray.size() > 1) {
+                    alertDialog.dismiss();
+                    saveGeoTrace();
+                } else {
+                    alertDialog.dismiss();
+                    ToastUtils.showShortToastInMiddle(getString(R.string.polyline_validator));
+                }
             }
         });
 
@@ -280,7 +284,7 @@ public class GeoTraceGoogleMapActivity extends CollectAbstractActivity implement
             }
         });
 
-        zoomDialogView = getLayoutInflater().inflate(R.layout.geoshape_zoom_dialog, null);
+        zoomDialogView = getLayoutInflater().inflate(R.layout.geo_zoom_dialog, null);
 
         zoomLocationButton = zoomDialogView.findViewById(R.id.zoom_location);
         zoomLocationButton.setOnClickListener(new View.OnClickListener() {
@@ -291,7 +295,7 @@ public class GeoTraceGoogleMapActivity extends CollectAbstractActivity implement
             }
         });
 
-        zoomPointButton = zoomDialogView.findViewById(R.id.zoom_shape);
+        zoomPointButton = zoomDialogView.findViewById(R.id.zoom_saved_location);
         zoomPointButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -318,9 +322,6 @@ public class GeoTraceGoogleMapActivity extends CollectAbstractActivity implement
         }
 
         helper.setBasemap();
-
-        themeUtils.setIconTint(this, playButton, pauseButton, locationButton, layersButton,
-                clearButton, saveButton);
     }
 
     private void overlayIntentTrace(String str) {
@@ -452,7 +453,7 @@ public class GeoTraceGoogleMapActivity extends CollectAbstractActivity implement
 
         alertDialog = dialogBuilder.create();
 
-        zoomDialogView = getLayoutInflater().inflate(R.layout.geoshape_zoom_dialog, null);
+        zoomDialogView = getLayoutInflater().inflate(R.layout.geo_zoom_dialog, null);
 
         zoomLocationButton = zoomDialogView.findViewById(R.id.zoom_location);
         zoomLocationButton.setOnClickListener(new View.OnClickListener() {
@@ -465,7 +466,7 @@ public class GeoTraceGoogleMapActivity extends CollectAbstractActivity implement
             }
         });
 
-        zoomPointButton = zoomDialogView.findViewById(R.id.zoom_shape);
+        zoomPointButton = zoomDialogView.findViewById(R.id.zoom_saved_location);
         zoomPointButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -652,18 +653,6 @@ public class GeoTraceGoogleMapActivity extends CollectAbstractActivity implement
         marker.setSnippet("0.0;0.0");
     }
 
-    private void showPolygonErrorDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(getString(R.string.polygon_validator))
-                .setPositiveButton(getString(R.string.dialog_continue),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-
-                            }
-                        }).show();
-
-    }
-
     private void clearFeatures() {
 
         map.clear();
@@ -764,7 +753,7 @@ public class GeoTraceGoogleMapActivity extends CollectAbstractActivity implement
             if (curLocation != null) {
                 zoomLocationButton.setEnabled(true);
                 zoomLocationButton.setBackgroundColor(Color.parseColor("#50cccccc"));
-                zoomLocationButton.setTextColor(Color.parseColor("#ff333333"));
+                zoomLocationButton.setTextColor(themeUtils.getPrimaryTextColor());
             } else {
                 zoomLocationButton.setEnabled(false);
                 zoomLocationButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));
@@ -773,7 +762,7 @@ public class GeoTraceGoogleMapActivity extends CollectAbstractActivity implement
             if (markerArray.size() != 0) {
                 zoomPointButton.setEnabled(true);
                 zoomPointButton.setBackgroundColor(Color.parseColor("#50cccccc"));
-                zoomPointButton.setTextColor(Color.parseColor("#ff333333"));
+                zoomPointButton.setTextColor(themeUtils.getPrimaryTextColor());
             } else {
                 zoomPointButton.setEnabled(false);
                 zoomPointButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));

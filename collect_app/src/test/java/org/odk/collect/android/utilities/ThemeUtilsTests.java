@@ -26,13 +26,14 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_APP_THEME;
 @RunWith(RobolectricTestRunner.class)
 public class ThemeUtilsTests {
 
+    private final int[] attrs;
     private ThemeUtils themeUtils;
     private MainMenuActivity mainMenuActivity;
-    private final int[] attrs;
 
     public ThemeUtilsTests() {
         attrs = new int[]{
                 R.attr.primaryTextColor,
+                R.attr.iconColor,
                 android.R.attr.alertDialogTheme,
                 android.R.attr.searchViewStyle,
                 android.R.attr.colorControlNormal

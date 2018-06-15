@@ -20,7 +20,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -35,6 +34,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
+import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -127,6 +127,8 @@ public class SpinnerMultiWidget extends QuestionWidget implements ButtonWidget, 
         answerLayout.addView(button);
         answerLayout.addView(selectionText);
         addAnswerView(answerLayout);
+
+        SpacesInUnderlyingValuesWarning.forQuestionWidget(this).renderWarningIfNecessary(items);
     }
 
     @Override
@@ -154,15 +156,6 @@ public class SpinnerMultiWidget extends QuestionWidget implements ButtonWidget, 
         for (int i = 0; i < selections.length; i++) {
             selections[i] = false;
         }
-    }
-
-    @Override
-    public void setFocus(Context context) {
-        // Hide the soft keyboard if it's showing.
-        InputMethodManager inputManager =
-                (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
-
     }
 
     @Override

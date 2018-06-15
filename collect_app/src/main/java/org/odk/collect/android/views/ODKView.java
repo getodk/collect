@@ -14,6 +14,8 @@
 
 package org.odk.collect.android.views;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -47,11 +49,12 @@ import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalAppsUtils;
 import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.ViewIds;
-import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.WidgetFactory;
+import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -72,9 +75,9 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
 @SuppressLint("ViewConstructor")
 public class ODKView extends ScrollView implements OnLongClickListener {
 
-    private LinearLayout view;
-    private LinearLayout.LayoutParams layout;
-    private ArrayList<QuestionWidget> widgets;
+    private final LinearLayout view;
+    private final LinearLayout.LayoutParams layout;
+    private final ArrayList<QuestionWidget> widgets;
 
     public static final String FIELD_LIST = "field-list";
 
@@ -173,7 +176,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                 });
 
                 View divider = new View(getContext());
-                divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
+                divider.setBackgroundResource(new ThemeUtils(getContext()).getDivider());
                 divider.setMinimumHeight(3);
                 view.addView(divider);
 
@@ -185,7 +188,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         for (FormEntryPrompt p : questionPrompts) {
             if (!first) {
                 View divider = new View(getContext());
-                divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
+                divider.setBackgroundResource(new ThemeUtils(getContext()).getDivider());
                 divider.setMinimumHeight(3);
                 view.addView(divider);
             } else {
@@ -205,8 +208,8 @@ public class ODKView extends ScrollView implements OnLongClickListener {
 
         addView(view);
 
-        // see if there is an autoplay option. 
-        // Only execute it during forward swipes through the form 
+        // see if there is an autoplay option.
+        // Only execute it during forward swipes through the form
         if (advancingPage && widgets.size() == 1) {
             final String playOption = widgets.get(
                     0).getFormEntryPrompt().getFormElement().getAdditionalAttribute(null, "autoplay");
@@ -301,7 +304,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                         path
                                 .append(" (")
                                 .append(multiplicity)
-                                .append(")");
+                                .append(")\u200E");
                     }
                     if (index < groups.length) {
                         path.append(" > ");
@@ -469,5 +472,33 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         for (QuestionWidget w : widgets) {
             w.release();
         }
+    }
+
+    public void highlightWidget(FormIndex formIndex) {
+        QuestionWidget qw = getQuestionWidget(formIndex);
+
+        if (qw != null) {
+            // postDelayed is needed because otherwise scrolling may not work as expected in case when
+            // answers are validated during form finalization.
+            new Handler().postDelayed(() -> {
+                scrollTo(0, qw.getTop());
+
+                ValueAnimator va = new ValueAnimator();
+                va.setIntValues(getResources().getColor(R.color.red), getDrawingCacheBackgroundColor());
+                va.setEvaluator(new ArgbEvaluator());
+                va.addUpdateListener(valueAnimator -> qw.setBackgroundColor((int) valueAnimator.getAnimatedValue()));
+                va.setDuration(2500);
+                va.start();
+            }, 100);
+        }
+    }
+
+    private QuestionWidget getQuestionWidget(FormIndex formIndex) {
+        for (QuestionWidget qw : widgets) {
+            if (formIndex.equals(qw.getFormEntryPrompt().getIndex())) {
+                return qw;
+            }
+        }
+        return null;
     }
 }

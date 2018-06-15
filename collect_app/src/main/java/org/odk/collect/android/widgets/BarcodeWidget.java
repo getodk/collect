@@ -16,7 +16,6 @@ package org.odk.collect.android.widgets;
 
 import android.app.Activity;
 import android.content.Context;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -38,8 +37,8 @@ import org.odk.collect.android.widgets.interfaces.BinaryWidget;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class BarcodeWidget extends QuestionWidget implements BinaryWidget {
-    private Button getBarcodeButton;
-    private TextView stringAnswer;
+    private final Button getBarcodeButton;
+    private final TextView stringAnswer;
 
     public BarcodeWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -89,14 +88,6 @@ public class BarcodeWidget extends QuestionWidget implements BinaryWidget {
             response = response.replaceAll("\\p{C}", "");
         }
         stringAnswer.setText(response);
-    }
-
-    @Override
-    public void setFocus(Context context) {
-        // Hide the soft keyboard if it's showing.
-        InputMethodManager inputManager = (InputMethodManager) context
-                .getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
     }
 
     @Override

@@ -67,7 +67,6 @@
         <exclude name="AbstractClassWithoutAbstractMethod" />
         <exclude name="SwitchStmtsShouldHaveDefault" />
         <exclude name="AvoidDeeplyNestedIfStmts" />
-        <exclude name="ImmutableField" />
         <exclude name="GodClass" />
         <exclude name="FieldDeclarationsShouldBeAtStartOfClass" />
         <exclude name="SwitchDensity" />

@@ -235,7 +235,6 @@
   <string name="ext_search_bad_function_error">Fout in search() functie: \'%s\' werd niet als functie geavalueerd.</string>
   <string name="ext_import_generic_error">Kon geen data importeren uit %1$s. Oorzaak: %2$s</string>
   <string name="ext_import_progress_message">Vooraf inlezen data \'%1$s\', een ogenblik geduld… %2$s</string>
-  <string name="ext_import_cancelled_message">Data inlezen afgebroken!</string>
   <string name="ext_import_finalizing_message">Afronden vooraf ingevulde data…</string>
   <string name="ext_import_completed_message">Data inlezen voltooid!</string>
   <string name="ext_not_initialized_error">De ExternalDataManager is niet opstart.</string>

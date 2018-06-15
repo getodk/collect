@@ -143,7 +143,7 @@ public class FileUtils {
         return getMd5Hash(is);
     }
 
-    private static String getMd5Hash(InputStream is) {
+    public static String getMd5Hash(InputStream is) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
             final byte[] buffer = new byte[bufSize];

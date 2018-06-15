@@ -18,8 +18,9 @@
         <item name="android:panelBackground">@android:color/white</item>
         <item name="alertDialogTheme">@style/AlertDialogTheme.Dark</item>
         <item name="searchViewStyle">@style/SearchViewTheme.Dark</item>
-        <item name="colorControlNormal">@android:color/white</item>
+        <item name="iconColor">@color/darkIconColor</item>
         <item name="android:textDirection" tools:targetApi="17">locale</item>
+        <item name="warningColor">@color/red</item>
     </style>
 
     <style name="AlertDialogTheme.Dark" parent="Theme.AppCompat.Dialog.Alert">
@@ -56,8 +57,9 @@
         <item name="android:panelBackground">@android:color/white</item>
         <item name="alertDialogTheme">@style/AlertDialogTheme.Light</item>
         <item name="searchViewStyle">@style/SearchViewTheme.Light</item>
-        <item name="colorControlNormal">@android:color/black</item>
+        <item name="iconColor">@color/lightIconColor</item>
         <item name="android:textDirection" tools:targetApi="17">locale</item>
+        <item name="warningColor">@color/red</item>
     </style>
 
     <style name="AlertDialogTheme.Light" parent="Theme.AppCompat.Light.Dialog.Alert">

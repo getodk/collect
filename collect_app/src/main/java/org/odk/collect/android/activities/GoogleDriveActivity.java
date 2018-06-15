@@ -90,7 +90,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     private Button backButton;
     private Button downloadButton;
     private Stack<String> currentPath = new Stack<>();
-    private Stack<String> folderIdStack = new Stack<>();
+    private final Stack<String> folderIdStack = new Stack<>();
     private String alertMsg;
     private boolean alertShowing;
     private String rootId = null;
@@ -492,17 +492,6 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     }
 
     @Override
-    protected void onPause() {
-        if (retrieveDriveFileContentsAsyncTask != null) {
-            retrieveDriveFileContentsAsyncTask.setTaskListener(null);
-        }
-        if (getFileTask != null) {
-            getFileTask.setGoogleDriveFormDownloadListener(null);
-        }
-        super.onPause();
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         if (retrieveDriveFileContentsAsyncTask != null) {
@@ -544,6 +533,24 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     protected void onStop() {
         Collect.getInstance().getActivityLogger().logOnStop(this);
         super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (retrieveDriveFileContentsAsyncTask != null) {
+            if (!retrieveDriveFileContentsAsyncTask.isCancelled()) {
+                retrieveDriveFileContentsAsyncTask.cancel(true);
+            }
+            retrieveDriveFileContentsAsyncTask.setTaskListener(null);
+        }
+        if (getFileTask != null) {
+            if (!getFileTask.isCancelled()) {
+                getFileTask.cancel(true);
+            }
+            getFileTask.setGoogleDriveFormDownloadListener(null);
+        }
+        finish();
+        super.onDestroy();
     }
 
     public void listFiles(String dir, String query) {

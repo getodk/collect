@@ -25,7 +25,6 @@ import android.text.InputType;
 import android.text.method.DigitsKeyListener;
 import android.util.TypedValue;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -49,10 +48,10 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  */
 @SuppressLint("ViewConstructor")
 public class BearingWidget extends QuestionWidget implements BinaryWidget {
-    private Button getBearingButton;
-    private boolean isSensorAvailable;
-    private EditText answer;
-    private Drawable textBackground;
+    private final Button getBearingButton;
+    private final boolean isSensorAvailable;
+    private final EditText answer;
+    private final Drawable textBackground;
 
     public BearingWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -101,14 +100,6 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
         } else {
             return new StringData(s);
         }
-    }
-
-    @Override
-    public void setFocus(Context context) {
-        // Hide the soft keyboard if it's showing.
-        InputMethodManager inputManager = (InputMethodManager) context
-                .getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
     }
 
     @Override

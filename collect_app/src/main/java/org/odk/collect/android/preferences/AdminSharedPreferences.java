@@ -25,7 +25,7 @@ import static org.odk.collect.android.preferences.AdminPreferencesFragment.ADMIN
 public class AdminSharedPreferences {
 
     private static AdminSharedPreferences instance = null;
-    private android.content.SharedPreferences sharedPreferences;
+    private final android.content.SharedPreferences sharedPreferences;
 
     private AdminSharedPreferences() {
         sharedPreferences = Collect.getInstance().getSharedPreferences(ADMIN_PREFERENCES, 0);
@@ -75,7 +75,7 @@ public class AdminSharedPreferences {
         editor.apply();
     }
 
-    private void clear() {
+    public void clear() {
         sharedPreferences
                 .edit()
                 .clear()

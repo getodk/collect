@@ -97,24 +97,28 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget {
     }
 
     @Override
-    public void setBinaryData(Object binaryuri) {
-        if (binaryuri == null || !(binaryuri instanceof Uri)) {
-            Timber.w("ArbitraryFileWidget's setBinaryData must receive a Uri object.");
+    public void setBinaryData(Object object) {
+        File newFile;
+        // get the file path and create a copy in the instance folder
+        if (object instanceof Uri) {
+            FileUtils.revokeFileReadWritePermission(getContext(), (Uri) object);
+            String sourcePath = getSourcePathFromUri((Uri) object);
+            String destinationPath = getDestinationPathFromSourcePath(sourcePath);
+            File source = fileUtil.getFileAtPath(sourcePath);
+            newFile = fileUtil.getFileAtPath(destinationPath);
+            fileUtil.copyFile(source, newFile);
+        } else if (object instanceof File) {
+            // Getting a file indicates we've done the copy in the before step
+            newFile = (File) object;
+        } else {
+            Timber.w("FileWidget's setBinaryData must receive a File or Uri object.");
             return;
         }
 
-        Uri uri = (Uri) binaryuri;
-
-        FileUtils.revokeFileReadWritePermission(getContext(), uri);
-
-        // get the file path and create a copy in the instance folder
-        String sourcePath = getSourcePathFromUri(uri);
-        String destinationPath = getDestinationPathFromSourcePath(sourcePath);
-
-        File source = fileUtil.getFileAtPath(sourcePath);
-        File newFile = fileUtil.getFileAtPath(destinationPath);
-
-        fileUtil.copyFile(source, newFile);
+        if (newFile == null) {
+            Timber.e("setBinaryData FAILED");
+            return;
+        }
 
         if (newFile.exists()) {
             // when replacing an answer remove the current one.
@@ -129,10 +133,6 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget {
         } else {
             Timber.e("Inserting Arbitrary file FAILED");
         }
-    }
-
-    @Override
-    public void setFocus(Context context) {
     }
 
     @Override

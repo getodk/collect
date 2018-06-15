@@ -25,7 +25,6 @@ import android.text.format.DateFormat;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.Window;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -54,7 +53,7 @@ public class TimeWidget extends QuestionWidget implements ButtonWidget, TimePick
     private TimePickerDialog timePickerDialog;
 
     private Button timeButton;
-    private TextView timeTextView;
+    private final TextView timeTextView;
 
     private int hourOfDay;
     private int minuteOfHour;
@@ -88,14 +87,6 @@ public class TimeWidget extends QuestionWidget implements ButtonWidget, TimePick
         return !nullAnswer
                 ? new TimeData(localDateTime.toDate())
                 : null;
-    }
-
-    @Override
-    public void setFocus(Context context) {
-        // Hide the soft keyboard if it's showing.
-        InputMethodManager inputManager =
-                (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
     }
 
     @Override
@@ -197,7 +188,7 @@ public class TimeWidget extends QuestionWidget implements ButtonWidget, TimePick
     }
 
     private class CustomTimePickerDialog extends TimePickerDialog {
-        private String dialogTitle = getContext().getString(R.string.select_time);
+        private final String dialogTitle = getContext().getString(R.string.select_time);
 
         CustomTimePickerDialog(Context context, OnTimeSetListener callBack, int hour, int minute) {
             super(context, themeUtils.getHoloDialogTheme(), callBack, hour, minute, DateFormat.is24HourFormat(context));

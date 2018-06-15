@@ -3,17 +3,35 @@ version: 2
 references:
 
   ## Cache
+  cache_paths: &cache_paths
+    paths:
+      - ~/work/.gradle
+      - ~/.gradle
+      - ~/.m2
 
   cache_key: &cache_key
-    key: jars-{{ checksum "build.gradle" }}-{{ checksum "collect_app/build.gradle" }}
+    key: deps-{{ checksum "build.gradle" }}-{{ checksum "collect_app/build.gradle" }}
+
+  cache_tests_key: &cache_tests_key
+    key: test-deps-{{ checksum "build.gradle" }}-{{ checksum "collect_app/build.gradle" }}
+
   restore_cache: &restore_cache
     restore_cache:
       <<: *cache_key
+
+  restore_tests_cache: &restore_tests_cache
+    restore_cache:
+      <<: *cache_tests_key
+
   save_cache: &save_cache
     save_cache:
       <<: *cache_key
-      paths:
-        - ~/work/.gradle
+      <<: *cache_paths
+
+  save_tests_cache: &save_tests_cache
+    save_cache:
+      <<: *cache_tests_key
+      <<: *cache_paths
 
   accept_licenses : &accept_licenses
     run:
@@ -47,10 +65,11 @@ references:
   ## Docker image configurations
 
   android_config: &android_config
-    resource_class: large
     working_directory: *workspace
     docker:
-      - image: circleci/android:api-26-alpha
+      # This needs to be in line with the configuration from gradle file.
+      # Otherwise an unnecessary platform update is performed on every build
+      - image: circleci/android:api-27-alpha
   gcloud_config: &gcloud_config
     working_directory: *workspace
     docker:
@@ -62,6 +81,20 @@ jobs:
 
   build_debug:
     <<: *android_config
+    environment:
+#       Runtime configuration build tests
+#       ./gradlew clean assembleDebug
+#       Xms128 - the default on most systems is 256m but gradle spawns some java subprocesses during build that don't need 256m
+#       Xmx512m 1m30s
+#       Xmx768m 1m17s
+#       Xmx1024m ~1min
+#       Xmx1536m ~1min
+#       -XX:+HeapDumpOnOutOfMemoryError in case of an out of memory the java process will dump a heap file on the file system.
+#       The heap file can be analyzed to figure out the root cause or the memory leak.
+#       -DpreDexEnable=false disables pre-dexing step. Pre-dexing is good for local incremental builds during development,
+#       But on a build machine, the performance impact is not worthy because on a CI, every build should be clean.
+
+        GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xms128m -Xmx1024m -XX:+HeapDumpOnOutOfMemoryError" -DpreDexEnable=false'
     steps:
         - checkout
         - *restore_cache
@@ -70,17 +103,29 @@ jobs:
             name: Download dependencies
             command: ./gradlew androidDependencies
         - *save_cache
+#       It's faster if we build before running the quality checks, because quality checks depend on build output anyway.
+#       Also, while running gradle on daemon mode, we can even run build targets individually without impacting runtime ramp-up time.
+#       This also implies that we can also observe per-target build timings, instead of just the total execution time from a single command.
+        - run:
+            name: Assemble debug build
+            command: |
+                ./gradlew assembleDebug -PdisablePreDex
+        - run:
+            name: Assemble test build
+            command: |
+                ./gradlew assembleDebugAndroidTest -PdisablePreDex
         - run:
             name: Run code quality checks
-            command: ./gradlew pmd checkstyle lint findbugs
+#           When running the plain lint target, it will execute by default for all flavors.
+#           This implies building the release and test flavors as well, which are out of scope for this job.
+#           Instead, using lintDebug it's running only once, for the 'debug' flavor that we are building here
+#           This means ~3x faster for the lint task.
+            command: ./gradlew pmd checkstyle lintDebug findbugs
         - store_artifacts:
             path: collect_app/build/reports
             destination: reports
-        - run:
-            name: Assemble debug and test builds
-            command: |
-                ./gradlew assembleDebug -PdisablePreDex
-                ./gradlew assembleDebugAndroidTest -PdisablePreDex
+#         Since the other workflow are only triggered after this job is successful, caching the build outputs for them can be the last task.
+#         Otherwise we only persist something that will never be used.
         - *persist_debug_workspace
 
   ## Run unit tests
@@ -89,15 +134,17 @@ jobs:
     <<: *android_config
     steps:
         - checkout
-        - *restore_cache
+##        - *restore_cache
+##      Depending on actual usage, we could toggle the above cache restoration (the step below includes it.)
+        - *restore_tests_cache
         - *accept_licenses
         - run:
             name: Download dependencies
             command: ./gradlew androidDependencies
-        - *save_cache
         - run:
             name: Run unit tests
             command: ./gradlew testDebugUnitTest
+        - *save_tests_cache
         - *persist_debug_workspace
         - store_artifacts:
             path: collect_app/build/reports
@@ -176,11 +223,20 @@ workflows:
   version: 2
   workflow:
     jobs:
+#       This job will run on every commit on any branch
       - build_debug
-      - test_unit
-      - test_instrumented:
+#       Unit tests should only start after a successful build. Or vice versa?
+      - test_unit:
+#         Although the unit testing task could run in parallel with build task,
+#         in such case, it would not benefit from the previous caching in the event of
+#         any change in the .gradle script files.
+#         Hence,
           requires:
             - build_debug
+      # Instrumentation tests should only start after unit tests complete gracefully. Or vice versa?
+      - test_instrumented:
+          requires:
+            - test_unit
           # We'd like to also filter by username and remove the if/fi above, but username filtering is not supported in CircleCI
           filters:
             branches:

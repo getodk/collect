@@ -18,26 +18,31 @@ package org.odk.collect.android.dto;
 
 /**
  * This class represents a single row from the forms table which is located in
- * {@link org.odk.collect.android.provider.FormsProvider#DATABASE_NAME}
+ * {@link org.odk.collect.android.database.helpers.FormsDatabaseHelper#DATABASE_NAME}
  * For more information about this pattern go to https://en.wikipedia.org/wiki/Data_transfer_object
  * Objects of this class are created using builder pattern: https://en.wikipedia.org/wiki/Builder_pattern
  */
 public class Form {
-    private String displayName;
-    private String description;
-    private String jrFormId;
-    private String jrVersion;
-    private String formFilePath;
-    private String submissionUri;
-    private String base64RSAPublicKey;
-    private String displaySubtext;
-    private String md5Hash;
-    private Long date;
-    private String jrCacheFilePath;
-    private String formMediaPath;
-    private String language;
+    private final int id;
+    private final String displayName;
+    private final String description;
+    private final String jrFormId;
+    private final String jrVersion;
+    private final String formFilePath;
+    private final String submissionUri;
+    private final String base64RSAPublicKey;
+    private final String displaySubtext;
+    private final String md5Hash;
+    private final Long date;
+    private final String jrCacheFilePath;
+    private final String formMediaPath;
+    private final String language;
+    private final String autoSend;
+    private final String autoDelete;
+    private final String lastDetectedFormVersionHash;
 
     private Form(Form.Builder builder) {
+        id = builder.id;
         displayName = builder.displayName;
         description = builder.description;
         jrFormId = builder.jrFormId;
@@ -51,9 +56,13 @@ public class Form {
         jrCacheFilePath = builder.jrCacheFilePath;
         formMediaPath = builder.formMediaPath;
         language = builder.language;
+        autoSend = builder.autoSend;
+        autoDelete = builder.autoDelete;
+        lastDetectedFormVersionHash = builder.lastDetectedFormVersionHash;
     }
 
     public static class Builder {
+        private int id;
         private String displayName;
         private String description;
         private String jrFormId;
@@ -67,6 +76,14 @@ public class Form {
         private String jrCacheFilePath;
         private String formMediaPath;
         private String language;
+        private String autoSend;
+        private String autoDelete;
+        private String lastDetectedFormVersionHash;
+
+        public Builder id(int id) {
+            this.id = id;
+            return this;
+        }
 
         public Builder displayName(String displayName) {
             this.displayName = displayName;
@@ -135,9 +152,28 @@ public class Form {
             return this;
         }
 
+        public Builder autoSend(String autoSend) {
+            this.autoSend = autoSend;
+            return this;
+        }
+
+        public Builder autoDelete(String autoDelete) {
+            this.autoDelete = autoDelete;
+            return this;
+        }
+
+        public Builder lastDetectedFormVersionHash(String lastDetectedFormVersionHash) {
+            this.lastDetectedFormVersionHash = lastDetectedFormVersionHash;
+            return this;
+        }
+
         public Form build() {
             return new Form(this);
         }
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getDisplayName() {
@@ -190,5 +226,17 @@ public class Form {
 
     public String getLanguage() {
         return language;
+    }
+
+    public String getAutoSend() {
+        return autoSend;
+    }
+
+    public String getAutoDelete() {
+        return autoDelete;
+    }
+
+    public String getLastDetectedFormVersionHash() {
+        return lastDetectedFormVersionHash;
     }
 }

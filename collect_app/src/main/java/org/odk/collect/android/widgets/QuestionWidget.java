@@ -54,6 +54,7 @@ import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.AnimateUtils;
 import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
+import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ViewIds;
@@ -83,6 +84,7 @@ public abstract class QuestionWidget
     private final View helpTextLayout;
     private final View guidanceTextLayout;
     private final View textLayout;
+    private final TextView warningText;
     private static final String GUIDANCE_EXPANDED_STATE = "expanded_state";
     private AtomicBoolean expanded;
     private Bundle state;
@@ -93,7 +95,7 @@ public abstract class QuestionWidget
         super(context);
 
         themeUtils = new ThemeUtils(context);
-        playColor = themeUtils.getAttributeValue(R.attr.colorAccent);
+        playColor = themeUtils.getAccentColor();
 
         if (context instanceof FormEntryActivity) {
             state = ((FormEntryActivity) context).getState();
@@ -133,6 +135,7 @@ public abstract class QuestionWidget
         helpTextLayout = createHelpTextLayout();
         guidanceTextLayout = helpTextLayout.findViewById(R.id.guidance_text_layout);
         textLayout = helpTextLayout.findViewById(R.id.text_layout);
+        warningText = helpTextLayout.findViewById(R.id.warning_text);
         helpTextView = setupHelpText(helpTextLayout.findViewById(R.id.help_text_view), prompt);
         guidanceTextView = setupGuidanceTextAndLayout(helpTextLayout.findViewById(R.id.guidance_text_view), prompt);
 
@@ -209,7 +212,7 @@ public abstract class QuestionWidget
 
         guidanceTextView.setText(TextUtils.textToHtml(guidance));
 
-        guidanceTextView.setTextColor(themeUtils.getAttributeValue(R.attr.primaryTextColor));
+        guidanceTextView.setTextColor(themeUtils.getPrimaryTextColor());
         guidanceTextView.setMovementMethod(LinkMovementMethod.getInstance());
         return guidanceTextView;
     }
@@ -245,7 +248,7 @@ public abstract class QuestionWidget
         questionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getQuestionFontSize());
         questionText.setTypeface(null, Typeface.BOLD);
         questionText.setPadding(0, 0, 0, 7);
-        questionText.setTextColor(themeUtils.getAttributeValue(R.attr.primaryTextColor));
+        questionText.setTextColor(themeUtils.getPrimaryTextColor());
         questionText.setText(TextUtils.textToHtml(FormEntryPromptUtils.markQuestionIfIsRequired(promptText, prompt.isRequired())));
         questionText.setMovementMethod(LinkMovementMethod.getInstance());
 
@@ -334,9 +337,9 @@ public abstract class QuestionWidget
         }
     }
 
-    // Abstract methods
-
-    public abstract void setFocus(Context context);
+    public void setFocus(Context context) {
+        SoftKeyboardUtils.hideSoftKeyboard(this);
+    }
 
     public abstract void setOnLongClickListener(OnLongClickListener l);
 
@@ -427,7 +430,7 @@ public abstract class QuestionWidget
             } else {
                 helpText.setText(TextUtils.textToHtml(s));
             }
-            helpText.setTextColor(themeUtils.getAttributeValue(R.attr.primaryTextColor));
+            helpText.setTextColor(themeUtils.getPrimaryTextColor());
             helpText.setMovementMethod(LinkMovementMethod.getInstance());
             return helpText;
         } else {
@@ -484,6 +487,11 @@ public abstract class QuestionWidget
 
     public void resetAudioButtonImage() {
         getQuestionMediaLayout().resetAudioButtonBitmap();
+    }
+
+    public void showWarning(String warningBody) {
+        warningText.setVisibility(View.VISIBLE);
+        warningText.setText(warningBody);
     }
 
     @Override
@@ -549,7 +557,7 @@ public abstract class QuestionWidget
         TextView textView = new TextView(getContext());
 
         textView.setId(R.id.answer_text);
-        textView.setTextColor(themeUtils.getAttributeValue(R.attr.primaryTextColor));
+        textView.setTextColor(themeUtils.getPrimaryTextColor());
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         textView.setPadding(20, 20, 20, 20);
         textView.setText(text);
@@ -558,20 +566,11 @@ public abstract class QuestionWidget
     }
 
     protected ImageView getAnswerImageView(Bitmap bitmap) {
-        final QuestionWidget questionWidget = this;
         final ImageView imageView = new ImageView(getContext());
         imageView.setId(ViewIds.generateViewId());
         imageView.setPadding(10, 10, 10, 10);
         imageView.setAdjustViewBounds(true);
         imageView.setImageBitmap(bitmap);
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (questionWidget instanceof BaseImageWidget && Collect.allowClick()) {
-                    ((BaseImageWidget) questionWidget).onImageClick();
-                }
-            }
-        });
         return imageView;
     }
 

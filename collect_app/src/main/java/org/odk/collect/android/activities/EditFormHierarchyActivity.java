@@ -12,14 +12,11 @@
  * the License.
  */
 
-
 package org.odk.collect.android.activities;
 
-
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.KeyEvent;
-import android.view.View;
-import android.widget.AdapterView;
 
 import org.javarosa.core.model.FormIndex;
 import org.odk.collect.android.R;
@@ -36,36 +33,36 @@ import timber.log.Timber;
 public class EditFormHierarchyActivity extends FormHierarchyActivity {
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-        HierarchyElement h = (HierarchyElement) listView.getItemAtPosition(position);
-        FormIndex index = h.getFormIndex();
+    public void onElementClick(HierarchyElement element) {
+        int position = formList.indexOf(element);
+        FormIndex index = element.getFormIndex();
         if (index == null) {
             goUpLevel();
             return;
         }
 
-        switch (h.getType()) {
+        switch (element.getType()) {
             case EXPANDED:
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "onListItemClick",
-                        "COLLAPSED", h.getFormIndex());
-                h.setType(COLLAPSED);
-                ArrayList<HierarchyElement> children = h.getChildren();
+                        "COLLAPSED", element.getFormIndex());
+                element.setType(COLLAPSED);
+                ArrayList<HierarchyElement> children = element.getChildren();
                 for (int i = 0; i < children.size(); i++) {
                     formList.remove(position + 1);
                 }
-                h.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.expander_ic_minimized));
+                element.setIcon(ContextCompat.getDrawable(this, R.drawable.expander_ic_minimized));
                 break;
             case COLLAPSED:
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "onListItemClick",
-                        "EXPANDED", h.getFormIndex());
-                h.setType(EXPANDED);
-                ArrayList<HierarchyElement> children1 = h.getChildren();
+                        "EXPANDED", element.getFormIndex());
+                element.setType(EXPANDED);
+                ArrayList<HierarchyElement> children1 = element.getChildren();
                 for (int i = 0; i < children1.size(); i++) {
                     Timber.i("adding child: %s", children1.get(i).getFormIndex());
                     formList.add(position + 1 + i, children1.get(i));
 
                 }
-                h.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.expander_ic_maximized));
+                element.setIcon(ContextCompat.getDrawable(this, R.drawable.expander_ic_maximized));
                 break;
             case QUESTION:
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "onListItemClick",
@@ -85,18 +82,15 @@ public class EditFormHierarchyActivity extends FormHierarchyActivity {
                 return;
             case CHILD:
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "onListItemClick",
-                        "REPEAT-JUMP", h.getFormIndex());
-                Collect.getInstance().getFormController().jumpToIndex(h.getFormIndex());
+                        "REPEAT-JUMP", element.getFormIndex());
+                Collect.getInstance().getFormController().jumpToIndex(element.getFormIndex());
                 setResult(RESULT_OK);
                 refreshView();
                 return;
         }
 
-        // Should only get here if we've expanded or collapsed a group
-        HierarchyListAdapter itla = new HierarchyListAdapter(this);
-        itla.setListItems(formList);
-        listView.setAdapter(itla);
-        listView.setSelection(position);
+        recyclerView.setAdapter(new HierarchyListAdapter(formList, this::onElementClick));
+        ((LinearLayoutManager) recyclerView.getLayoutManager()).scrollToPositionWithOffset(position, 0);
     }
 
     @Override
