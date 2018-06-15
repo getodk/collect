@@ -19,5 +19,23 @@
             android:key="password"
             android:title="@string/password" />
     </PreferenceCategory>
-
+    <PreferenceCategory
+        android:key="@string/submission_transport"
+        android:title="@string/submission_transport">
+        <ListPreference
+            android:dialogTitle="@string/submission_transport_types_title"
+            android:entries="@array/transport_type_entries"
+            android:entryValues="@array/transport_type_entry_values"
+            android:key="submission_transport_type"
+            android:title="@string/submission_transport_types_title" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="@string/sms_submission_preferences"
+        android:title="@string/sms_submission_preferences">
+        <EditTextPreference
+            android:dialogTitle="@string/sms_pref_dialog_title"
+            android:inputType="phone"
+            android:key="sms_gateway"
+            android:title="@string/sms_pref_title" />
+    </PreferenceCategory>
 </PreferenceScreen>
