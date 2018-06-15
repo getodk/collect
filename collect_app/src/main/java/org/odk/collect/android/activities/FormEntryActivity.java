@@ -698,7 +698,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 ImageConverter.execute(Collect.TMPFILE_PATH, getWidgetWaitingForBinaryData(), this);
                 File fi = new File(Collect.TMPFILE_PATH);
 
-                //revoke permissions granted to this file due it's possible usage in
+                //revoke permissions granted to this file due its possible usage in
                 //the camera app
                 Uri uri = FileProvider.getUriForFile(this,
                         BuildConfig.APPLICATION_ID + ".provider",

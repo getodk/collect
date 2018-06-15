@@ -514,8 +514,8 @@ public class FileUtils {
     }
 
     /**
-     * With the FileProvider you have to manually grand and revoke read/write permissions to files you
-     * are sharing. With this approach the access only last as long as the target activity on Api versions
+     * With the FileProvider you have to manually grant and revoke read/write permissions to files you
+     * are sharing. With this approach the access only lasts as long as the target activity on Api versions
      * above Kit Kat. Once you are below that you have to manually revoke the permissions.
      *
      * @param intent that needs to have the permission flags
@@ -542,8 +542,8 @@ public class FileUtils {
 
 
     /**
-     * With the FileProvider you have to manually grand and revoke read/write permissions to files you
-     * are sharing. With this approach the access only last as long as the target activity on Api versions
+     * With the FileProvider you have to manually grant and revoke read/write permissions to files you
+     * are sharing. With this approach the access only lasts as long as the target activity on Api versions
      * above Kit Kat. Once you are below that you have to manually revoke the permissions.
      *
      * @param intent that needs to have the permission flags
