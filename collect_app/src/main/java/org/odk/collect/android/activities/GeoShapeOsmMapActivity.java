@@ -31,6 +31,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.fragments.OsmMapFragment;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoShapeWidget;
@@ -87,18 +88,24 @@ public class GeoShapeOsmMapActivity extends CollectAbstractActivity implements I
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.geoshape_osm_layout);
-        setTitle(getString(R.string.geoshape_title)); // Setting title of the action
-        ImageButton saveButton = findViewById(R.id.save);
-        clearButton = findViewById(R.id.clear);
+        setTitle(getString(R.string.geoshape_title));
+        setContentView(R.layout.geoshape_layout);
+        OsmMapFragment mapFragment = new OsmMapFragment();
+        getSupportFragmentManager().beginTransaction()
+            .add(R.id.map_container, mapFragment).commit();
+        mapFragment.getMapAsync(this::setupMap);
+    }
 
-        map = findViewById(R.id.geoshape_mapview);
+    private void setupMap(MapView map) {
+        this.map = map;
         helper = new MapHelper(this, map, this);
         map.setMultiTouchControls(true);
         map.setBuiltInZoomControls(true);
         map.setTilesScaledToDpi(true);
         map.setMapListener(mapViewListener);
         overlayPointPathListener();
+        ImageButton saveButton = findViewById(R.id.save);
+        clearButton = findViewById(R.id.clear);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

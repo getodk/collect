@@ -33,7 +33,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -87,24 +86,14 @@ public class GeoShapeGoogleMapActivity extends CollectAbstractActivity implement
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setContentView(R.layout.geoshape_layout);
+        SupportMapFragment mapFragment = new SupportMapFragment();
+        getSupportFragmentManager().beginTransaction()
+            .add(R.id.map_container, mapFragment).commit();
+        mapFragment.getMapAsync(this::setupMap);
 
-        setContentView(R.layout.geoshape_google_layout);
-
-        // Do this here so we can test it:
         gpsButton = findViewById(R.id.gps);
         gpsButton.setEnabled(false);
-
-        clearButton = findViewById(R.id.clear);
-
-        locationClient = LocationClients.clientForContext(this);
-        locationClient.setListener(this);
-
-        ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.gmap)).getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap googleMap) {
-                setupMap(googleMap);
-            }
-        });
     }
 
     @Override
@@ -112,6 +101,8 @@ public class GeoShapeGoogleMapActivity extends CollectAbstractActivity implement
         super.onStart();
         Collect.getInstance().getActivityLogger().logOnStart(this);
 
+        locationClient = LocationClients.clientForContext(this);
+        locationClient.setListener(this);
         locationClient.start();
     }
 
@@ -152,6 +143,7 @@ public class GeoShapeGoogleMapActivity extends CollectAbstractActivity implement
             }
         });
 
+        clearButton = findViewById(R.id.clear);
         clearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
