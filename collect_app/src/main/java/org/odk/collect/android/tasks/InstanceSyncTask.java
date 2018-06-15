@@ -16,21 +16,28 @@ package org.odk.collect.android.tasks;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
+import android.provider.BaseColumns;
 
+import org.apache.commons.io.FileUtils;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.exception.EncryptionException;
 import org.odk.collect.android.listeners.DiskSyncListener;
+import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.utilities.EncryptionUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -171,7 +178,32 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
 
                                 instancesDao.saveInstance(values);
                                 counter++;
+
+                                instanceCursor = new InstancesDao().getInstancesCursor(InstanceColumns.INSTANCE_FILE_PATH + "=?", new String[]{candidateInstance});
+                                if (instanceCursor != null && instanceCursor.moveToFirst()) {
+                                    if (formCursor.getString(formCursor.getColumnIndex(FormsColumns.BASE64_RSA_PUBLIC_KEY)) != null) {
+                                        File instanceXml = new File(candidateInstance);
+                                        if (!new File(instanceXml.getParentFile(), "submission.xml.enc").exists()) {
+                                            int id = instanceCursor.getInt(instanceCursor.getColumnIndex(BaseColumns._ID));
+                                            EncryptionUtils.EncryptedFormInformation formInfo =
+                                                    EncryptionUtils.getEncryptedFormInformation(Uri.parse(InstanceColumns.CONTENT_URI + "/" + id), new FormController.InstanceMetadata(getInstanceIdFromInstance(candidateInstance), null, false));
+                                            if (formInfo != null) {
+                                                File submissionXml = new File(instanceXml.getParentFile(), "submission.xml");
+                                                FileUtils.copyFile(instanceXml, submissionXml);
+                                                EncryptionUtils.generateEncryptedSubmission(instanceXml, submissionXml, formInfo);
+                                                values.put(InstanceColumns.CAN_EDIT_WHEN_COMPLETE, Boolean.toString(false));
+                                                instancesDao.updateInstance(values, InstanceColumns.INSTANCE_FILE_PATH + "=?", new String[]{candidateInstance});
+                                                SaveToDiskTask.manageFilesAfterSavingEncryptedFom(instanceXml, submissionXml);
+                                                if (!EncryptionUtils.deletePlaintextFiles(instanceXml)) {
+                                                    Timber.e("Error deleting plaintext files for %s", instanceXml.getAbsolutePath());
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                             }
+                        } catch (IOException | EncryptionException e) {
+                            e.printStackTrace();
                         } finally {
                             if (formCursor != null) {
                                 formCursor.close();
@@ -203,6 +235,20 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
             Timber.w("Unable to read form id from %s", instancePath);
         }
         return instanceFormId;
+    }
+
+    private String getInstanceIdFromInstance(final String instancePath) {
+        String instanceId = null;
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        try {
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document document = builder.parse(new File(instancePath));
+            Element element = document.getDocumentElement();
+            instanceId = element.getAttribute("instanceID");
+        } catch (Exception e) {
+            Timber.w("Unable to read form instanceID from %s", instancePath);
+        }
+        return instanceId;
     }
 
     @Override
