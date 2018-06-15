@@ -47,6 +47,7 @@ public final class PreferenceKeys {
     // server_preferences.xml
     public static final String KEY_PROTOCOL = "protocol";
     public static final String KEY_SMS_GATEWAY = "sms_gateway";
+    public static final String KEY_SUBMISSION_TRANSPORT_TYPE = "submission_transport_type";
 
     // user_interface_preferences.xml
     public static final String KEY_APP_THEME                = "appTheme";
@@ -110,6 +111,7 @@ public final class PreferenceKeys {
         // server_preferences.xml
         hashMap.put(KEY_PROTOCOL, Collect.getInstance().getString(R.string.protocol_odk_default));
         hashMap.put(KEY_SMS_GATEWAY, "");
+        hashMap.put(KEY_SUBMISSION_TRANSPORT_TYPE,Collect.getInstance().getString(R.string.transport_type_value_internet));
         // user_interface_preferences.xml
         hashMap.put(KEY_APP_THEME,                  Collect.getInstance().getString(R.string.app_theme_light));
         hashMap.put(KEY_APP_LANGUAGE,               "");

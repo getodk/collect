@@ -65,8 +65,6 @@ public class ServerPreferences extends ServerPreferencesFragment {
             addAggregatePreferences();
         } else if (value.equals(getString(R.string.protocol_google_sheets))) {
             addGooglePreferences();
-        } else if (value.equals(getString(R.string.protocol_sms))) {
-            addSmsPreferences();
         } else {
             // other
             addOtherPreferences();

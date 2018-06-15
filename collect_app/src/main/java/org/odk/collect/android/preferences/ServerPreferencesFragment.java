@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.EditTextPreference;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -53,6 +54,7 @@ import java.util.List;
 import static android.app.Activity.RESULT_OK;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FORMLIST_URL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SMS_GATEWAY;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_TRANSPORT_TYPE;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_URL;
 import static org.odk.collect.android.utilities.gdrive.GoogleAccountsManager.REQUEST_ACCOUNT_PICKER;
 
@@ -70,7 +72,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     private List<String> urlList;
     private Preference selectedGoogleAccountPreference;
     private GoogleAccountsManager accountsManager;
-
+    private ListPreference transportPreference;
 
     public void addAggregatePreferences() {
         addPreferencesFromResource(R.xml.aggregate_preferences);
@@ -113,10 +115,14 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         maskPasswordSummary(passwordPreference.getText());
         passwordPreference.getEditText().setFilters(
                 new InputFilter[]{new ControlCharacterFilter()});
+
+        setupTransportPreferences();
     }
 
-    public void addSmsPreferences() {
-        addPreferencesFromResource(R.xml.sms_submission_preferences);
+    public void setupTransportPreferences() {
+        transportPreference = (ListPreference) findPreference(KEY_SUBMISSION_TRANSPORT_TYPE);
+        transportPreference.setOnPreferenceChangeListener(createTransportChangeListener());
+        transportPreference.setSummary(transportPreference.getEntry());
 
         smsGatewayPreference = (EditTextPreference) findPreference(KEY_SMS_GATEWAY);
 
@@ -124,6 +130,37 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         smsGatewayPreference.setSummary(smsGatewayPreference.getText());
         smsGatewayPreference.getEditText().setFilters(
                 new InputFilter[]{new ControlCharacterFilter()});
+
+        String transportSetting = (String) GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE);
+
+        if (transportSetting.equals(getString(R.string.transport_type_value_internet))) {
+            smsGatewayPreference.setEnabled(false);
+        } else if (transportPreference.equals(getString(R.string.transport_type_value_sms))) {
+            smsGatewayPreference.setEnabled(true);
+        }
+    }
+
+    private Preference.OnPreferenceChangeListener createTransportChangeListener() {
+        return (preference, newValue) -> {
+            if (preference.getKey().equals(KEY_SUBMISSION_TRANSPORT_TYPE)) {
+                String stringValue = (String) newValue;
+                ListPreference pref = (ListPreference) preference;
+                String oldValue = pref.getValue();
+
+                if (!newValue.equals(oldValue)) {
+                    pref.setValue(stringValue);
+
+                    if (newValue.equals(getString(R.string.transport_type_value_internet))) {
+                        smsGatewayPreference.setEnabled(false);
+                        transportPreference.setSummary(R.string.transport_type_internet);
+                    } else if (newValue.equals(getString(R.string.transport_type_value_sms))) {
+                        smsGatewayPreference.setEnabled(true);
+                        transportPreference.setSummary(R.string.transport_type_sms);
+                    }
+                }
+            }
+            return true;
+        };
     }
 
     public void addGooglePreferences() {
