@@ -111,7 +111,7 @@ public final class PreferenceKeys {
         // server_preferences.xml
         hashMap.put(KEY_PROTOCOL, Collect.getInstance().getString(R.string.protocol_odk_default));
         hashMap.put(KEY_SMS_GATEWAY, "");
-        hashMap.put(KEY_SUBMISSION_TRANSPORT_TYPE,Collect.getInstance().getString(R.string.transport_type_value_internet));
+        hashMap.put(KEY_SUBMISSION_TRANSPORT_TYPE, Collect.getInstance().getString(R.string.transport_type_value_internet));
         // user_interface_preferences.xml
         hashMap.put(KEY_APP_THEME,                  Collect.getInstance().getString(R.string.app_theme_light));
         hashMap.put(KEY_APP_LANGUAGE,               "");
