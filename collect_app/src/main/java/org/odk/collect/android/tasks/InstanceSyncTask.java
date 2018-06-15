@@ -179,31 +179,10 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                                 instancesDao.saveInstance(values);
                                 counter++;
 
-                                instanceCursor = new InstancesDao().getInstancesCursor(InstanceColumns.INSTANCE_FILE_PATH + "=?", new String[]{candidateInstance});
-                                if (instanceCursor != null && instanceCursor.moveToFirst()) {
-                                    if (formCursor.getString(formCursor.getColumnIndex(FormsColumns.BASE64_RSA_PUBLIC_KEY)) != null) {
-                                        File instanceXml = new File(candidateInstance);
-                                        if (!new File(instanceXml.getParentFile(), "submission.xml.enc").exists()) {
-                                            int id = instanceCursor.getInt(instanceCursor.getColumnIndex(BaseColumns._ID));
-                                            EncryptionUtils.EncryptedFormInformation formInfo =
-                                                    EncryptionUtils.getEncryptedFormInformation(Uri.parse(InstanceColumns.CONTENT_URI + "/" + id), new FormController.InstanceMetadata(getInstanceIdFromInstance(candidateInstance), null, false));
-                                            if (formInfo != null) {
-                                                File submissionXml = new File(instanceXml.getParentFile(), "submission.xml");
-                                                FileUtils.copyFile(instanceXml, submissionXml);
-                                                EncryptionUtils.generateEncryptedSubmission(instanceXml, submissionXml, formInfo);
-                                                values.put(InstanceColumns.CAN_EDIT_WHEN_COMPLETE, Boolean.toString(false));
-                                                instancesDao.updateInstance(values, InstanceColumns.INSTANCE_FILE_PATH + "=?", new String[]{candidateInstance});
-                                                SaveToDiskTask.manageFilesAfterSavingEncryptedFom(instanceXml, submissionXml);
-                                                if (!EncryptionUtils.deletePlaintextFiles(instanceXml)) {
-                                                    Timber.e("Error deleting plaintext files for %s", instanceXml.getAbsolutePath());
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
+                                encryptInstanceIfNeeded(formCursor, candidateInstance, values, instancesDao);
                             }
                         } catch (IOException | EncryptionException e) {
-                            e.printStackTrace();
+                            Timber.w(e);
                         } finally {
                             if (formCursor != null) {
                                 formCursor.close();
@@ -249,6 +228,50 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
             Timber.w("Unable to read form instanceID from %s", instancePath);
         }
         return instanceId;
+    }
+
+    private void encryptInstanceIfNeeded(Cursor formCursor, String candidateInstance,
+                                         ContentValues values, InstancesDao instancesDao)
+            throws EncryptionException, IOException {
+
+        Cursor instanceCursor = new InstancesDao().getInstancesCursorForFilePath(candidateInstance);
+        if (instanceCursor != null && instanceCursor.moveToFirst()) {
+            if (shouldInstanceBeEncrypted(formCursor)) {
+                encryptInstance(instanceCursor, candidateInstance, values, instancesDao);
+            }
+        }
+    }
+
+    private void encryptInstance(Cursor instanceCursor, String candidateInstance,
+                                 ContentValues values, InstancesDao instancesDao)
+            throws EncryptionException, IOException {
+
+        File instanceXml = new File(candidateInstance);
+        if (!new File(instanceXml.getParentFile(), "submission.xml.enc").exists()) {
+            Uri uri = Uri.parse(InstanceColumns.CONTENT_URI + "/" + instanceCursor.getInt(instanceCursor.getColumnIndex(BaseColumns._ID)));
+            FormController.InstanceMetadata instanceMetadata = new FormController.InstanceMetadata(getInstanceIdFromInstance(candidateInstance), null, false);
+            EncryptionUtils.EncryptedFormInformation formInfo = EncryptionUtils.getEncryptedFormInformation(uri, instanceMetadata);
+
+            if (formInfo != null) {
+                File submissionXml = new File(instanceXml.getParentFile(), "submission.xml");
+                FileUtils.copyFile(instanceXml, submissionXml);
+
+                EncryptionUtils.generateEncryptedSubmission(instanceXml, submissionXml, formInfo);
+
+                values.put(InstanceColumns.CAN_EDIT_WHEN_COMPLETE, Boolean.toString(false));
+                instancesDao.updateInstance(values, InstanceColumns.INSTANCE_FILE_PATH + "=?", new String[]{candidateInstance});
+
+                SaveToDiskTask.manageFilesAfterSavingEncryptedForm(instanceXml, submissionXml);
+                if (!EncryptionUtils.deletePlaintextFiles(instanceXml)) {
+                    Timber.e("Error deleting plaintext files for %s", instanceXml.getAbsolutePath());
+                }
+            }
+        }
+    }
+
+    private boolean shouldInstanceBeEncrypted(Cursor formCursor) {
+        String base64RSAPublicKey = formCursor.getString(formCursor.getColumnIndex(FormsColumns.BASE64_RSA_PUBLIC_KEY));
+        return base64RSAPublicKey != null && !base64RSAPublicKey.isEmpty();
     }
 
     @Override

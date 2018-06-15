@@ -330,7 +330,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
             updateInstanceDatabase(false, canEditAfterCompleted);
 
             if (!canEditAfterCompleted) {
-                manageFilesAfterSavingEncryptedFom(instanceXml, submissionXml);
+                manageFilesAfterSavingEncryptedForm(instanceXml, submissionXml);
             } else {
                 // try to delete the submissionXml file, since it is
                 // identical to the existing instanceXml file
@@ -352,7 +352,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
         }
     }
 
-    static void manageFilesAfterSavingEncryptedFom(File instanceXml, File submissionXml) throws IOException {
+    static void manageFilesAfterSavingEncryptedForm(File instanceXml, File submissionXml) throws IOException {
         // AT THIS POINT, there is no going back.  We are committed
         // to returning "success" (true) whether or not we can
         // rename "submission.xml" to instanceXml and whether or
