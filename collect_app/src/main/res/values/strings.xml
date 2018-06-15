@@ -179,7 +179,6 @@
     <string name="edit_prompt">Edit Prompt</string>
     <string name="selected_google_account_text">Google account</string>
     <string name="server_platform_odk_aggregate">ODK Aggregate</string>
-    <string name="server_platform_sms_submission">Sms Submission</string>
     <string name="server_platform_other">Other</string>
     <string name="font_size_extra_large">Extra Large</string>
     <string name="font_size_large">Large</string>
@@ -276,7 +275,9 @@
     <string name="go_shared">Shared with Me</string>
     <string name="modified_on_date_at_time">\'Modified on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
     <string name="aggregate_preferences">ODK Aggregate settings</string>
-    <string name="sms_submission_preferences">Sms Submission settings</string>
+    <string name="sms_submission_preferences">SMS submission settings</string>
+    <string name="submission_transport">Submission transport (advanced)</string>
+    <string name="submission_transport_types_title">Send submissions via</string>
     <string name="other_preferences">Other platform settings</string>
     <string name="google_preferences">Google Sheets settings</string>
     <string name="google_sheets_url_hint">Forms must set a submission URL. If they don\'t, this URL will be used.</string>
@@ -613,24 +614,28 @@
     <string name="instance_upload_cancelled">Instance upload canceled</string>
     <string name="hide_old_form_versions_setting_title">Hide old form versions</string>
     <string name="hide_old_form_versions_setting_summary">Only the newest version will appear in Fill Blank Form</string>
-    <string name="sms_pref_dialog_title">Destination Phone Number</string>
-    <string name="sms_pref_title">Phone Number</string>
+    <string name="sms_pref_dialog_title">Destination phone number</string>
+    <string name="sms_pref_title">Destination phone number</string>
     <string name="sms_invalid_phone_number">Invalid phone number!</string>
 
     <!-- Sms submission -->
     <string name="sms_no_reception">\'Failed on\' EEE, MMM dd, yyyy \'at\' HH:mm \'due to no reception\'</string>
     <string name="sms_fatal_error">\'Failed on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
     <string name="sms_airplane_mode">\'Failed on\' EEE, MMM dd, yyyy \'at\' HH:mm \'due to Airplane Mode being on.\'</string>
-    <string name="sms_no_message">This form has no questions with sms tags.</string>
+    <string name="sms_no_message">This form has no questions with SMS tags.</string>
     <string name="sms_last_submission_on_date_at_time">\'Last submission attempt at\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
     <plurals name="sms_sending">
         <item quantity="one">Submitting form as a single message.</item>
         <item quantity="other">Submitting form, Sending message %1$d! of %2$d</item>
     </plurals>
-    <string name="sms_sent_on_date_at_time">\'Sent as Sms on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
-    <string name="sms_delivered_on_date_at_time">\'Delivered as Sms on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
-    <string name="sms_not_delivered_on_date_at_time">\'Sent as Sms but not delivered on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
+    <string name="sms_sent_on_date_at_time">\'Sent as SMS on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
+    <string name="sms_delivered_on_date_at_time">\'Delivered as SMS on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
+    <string name="sms_not_delivered_on_date_at_time">\'Sent as SMS but not delivered on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
     <string name="sms_submission_queued">Queued for submission.</string>
-    <string name="sms_submissions_notif_title">Sms Submissions</string>
+    <string name="sms_submissions_notif_title">SMS submissions</string>
     <string name="sms_submissions_notif_description">Several forms are currently being submitted.</string>
+    <string name="transport_type_internet">Wifi/Cellular (recommended)</string>
+    <string name="transport_type_value_internet">internet</string>
+    <string name="transport_type_sms">SMS</string>
+    <string name="transport_type_value_sms">sms</string>
 </resources>
