@@ -121,7 +121,6 @@
     <rule ref="rulesets/java/unnecessary.xml">
         <!-- Decided not to use in #1519 -->
         <exclude name="UselessParentheses" />
-        <exclude name="UselessQualifiedThis" />
     </rule>
     <rule ref="rulesets/java/codesize.xml">
         <exclude name="CyclomaticComplexity" />
