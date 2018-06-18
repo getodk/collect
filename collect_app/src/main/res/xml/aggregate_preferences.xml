@@ -29,13 +29,13 @@
             android:key="submission_transport_type"
             android:title="@string/submission_transport_types_title" />
     </PreferenceCategory>
-    <PreferenceCategory
+    <org.odk.collect.android.preferences.ExtendedPreferenceCategory
         android:key="@string/sms_submission_preferences"
         android:title="@string/sms_submission_preferences">
-        <EditTextPreference
+        <org.odk.collect.android.preferences.ExtendedEditTextPreference
             android:dialogTitle="@string/sms_pref_dialog_title"
             android:inputType="phone"
             android:key="sms_gateway"
             android:title="@string/sms_pref_title" />
-    </PreferenceCategory>
+    </org.odk.collect.android.preferences.ExtendedPreferenceCategory>
 </PreferenceScreen>

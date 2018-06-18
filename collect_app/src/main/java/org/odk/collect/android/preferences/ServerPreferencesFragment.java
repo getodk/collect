@@ -64,7 +64,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     protected EditTextPreference serverUrlPreference;
     protected EditTextPreference usernamePreference;
     protected EditTextPreference passwordPreference;
-    protected EditTextPreference smsGatewayPreference;
+    protected ExtendedEditTextPreference smsGatewayPreference;
     protected boolean credentialsHaveChanged = false;
     protected EditTextPreference submissionUrlPreference;
     protected EditTextPreference formListUrlPreference;
@@ -73,6 +73,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     private Preference selectedGoogleAccountPreference;
     private GoogleAccountsManager accountsManager;
     private ListPreference transportPreference;
+    private ExtendedPreferenceCategory smsPreferenceCategory;
 
     public void addAggregatePreferences() {
         addPreferencesFromResource(R.xml.aggregate_preferences);
@@ -124,7 +125,9 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         transportPreference.setOnPreferenceChangeListener(createTransportChangeListener());
         transportPreference.setSummary(transportPreference.getEntry());
 
-        smsGatewayPreference = (EditTextPreference) findPreference(KEY_SMS_GATEWAY);
+        smsPreferenceCategory = (ExtendedPreferenceCategory) findPreference(getString(R.string.sms_submission_preferences));
+
+        smsGatewayPreference = (ExtendedEditTextPreference) findPreference(KEY_SMS_GATEWAY);
 
         smsGatewayPreference.setOnPreferenceChangeListener(createChangeListener());
         smsGatewayPreference.setSummary(smsGatewayPreference.getText());
@@ -135,8 +138,10 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
 
         if (transportSetting.equals(getString(R.string.transport_type_value_internet))) {
             smsGatewayPreference.setEnabled(false);
-        } else if (transportPreference.equals(getString(R.string.transport_type_value_sms))) {
+            smsPreferenceCategory.setEnabled(false);
+        } else if (transportSetting.equals(getString(R.string.transport_type_value_sms))) {
             smsGatewayPreference.setEnabled(true);
+            smsPreferenceCategory.setEnabled(true);
         }
     }
 
@@ -152,9 +157,11 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
 
                     if (newValue.equals(getString(R.string.transport_type_value_internet))) {
                         smsGatewayPreference.setEnabled(false);
+                        smsPreferenceCategory.setEnabled(false);
                         transportPreference.setSummary(R.string.transport_type_internet);
                     } else if (newValue.equals(getString(R.string.transport_type_value_sms))) {
                         smsGatewayPreference.setEnabled(true);
+                        smsPreferenceCategory.setEnabled(true);
                         transportPreference.setSummary(R.string.transport_type_sms);
                     }
                 }
