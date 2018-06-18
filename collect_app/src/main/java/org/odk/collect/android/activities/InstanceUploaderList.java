@@ -58,6 +58,7 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_TRANSPORT_TYPE;
 import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
 import static org.odk.collect.android.utilities.PermissionUtils.requestStoragePermissions;
 
@@ -137,7 +138,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
 
                 String server = (String) GeneralSharedPreferences.getInstance().get(KEY_PROTOCOL);
 
-                if (server.equalsIgnoreCase(getString(R.string.protocol_sms))) {
+                if (server.equalsIgnoreCase(getString(R.string.transport_type_value_sms))) {
                     int checkedItemCount = getCheckedCount();
                     logger.logAction(this, "uploadButton", Integer.toString(checkedItemCount));
 
@@ -266,26 +267,33 @@ public class InstanceUploaderList extends InstanceListActivity implements
     }
 
     private void uploadSelectedFiles() {
-        String server = (String) GeneralSharedPreferences.getInstance().get(KEY_PROTOCOL);
         long[] instanceIds = listView.getCheckedItemIds();
-        if (server.equalsIgnoreCase(getString(R.string.protocol_google_sheets))) {
-            // if it's Sheets, start the Sheets uploader
-            // first make sure we have a google account selected
+        String transport = (String) GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE);
 
-            if (PlayServicesUtil.isGooglePlayServicesAvailable(this)) {
-                Intent i = new Intent(this, GoogleSheetsUploaderActivity.class);
-                i.putExtra(FormEntryActivity.KEY_INSTANCES, instanceIds);
-                startActivityForResult(i, INSTANCE_UPLOADER);
-            } else {
-                PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(this);
-            }
-        } else if (server.equalsIgnoreCase(getString(R.string.protocol_sms))) {
+        if (transport.equalsIgnoreCase(getString(R.string.transport_type_value_sms))) {
             smsService.submitForms(instanceIds);
         } else {
-            // otherwise, do the normal aggregate/other thing.
-            Intent i = new Intent(this, InstanceUploaderActivity.class);
-            i.putExtra(FormEntryActivity.KEY_INSTANCES, instanceIds);
-            startActivityForResult(i, INSTANCE_UPLOADER);
+
+            String server = (String) GeneralSharedPreferences.getInstance().get(KEY_PROTOCOL);
+
+            if (server.equalsIgnoreCase(getString(R.string.protocol_google_sheets))) {
+                // if it's Sheets, start the Sheets uploader
+                // first make sure we have a google account selected
+
+                if (PlayServicesUtil.isGooglePlayServicesAvailable(this)) {
+                    Intent i = new Intent(this, GoogleSheetsUploaderActivity.class);
+                    i.putExtra(FormEntryActivity.KEY_INSTANCES, instanceIds);
+                    startActivityForResult(i, INSTANCE_UPLOADER);
+                } else {
+                    PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(this);
+                }
+
+            } else {
+                // otherwise, do the normal aggregate/other thing.
+                Intent i = new Intent(this, InstanceUploaderActivity.class);
+                i.putExtra(FormEntryActivity.KEY_INSTANCES, instanceIds);
+                startActivityForResult(i, INSTANCE_UPLOADER);
+            }
         }
     }
 
