@@ -15,14 +15,23 @@ limitations under the License.
 -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="10dp"
-    android:layout_marginTop="5dp"
-    android:background="?attr/primaryBackgroundColor">
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/ranking_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </android.support.v7.widget.RecyclerView>
 
     <TextView
-        android:id="@+id/rank_item_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="?primaryTextColor" />
+        android:id="@+id/ranking_null_value_message"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/tap_to_start"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        android:textColor="?primaryTextColor"
+        android:gravity="center"/>
+
 </FrameLayout>

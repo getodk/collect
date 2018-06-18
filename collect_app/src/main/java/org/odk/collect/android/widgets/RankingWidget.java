@@ -20,6 +20,9 @@ import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.LayoutInflater;
+import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
@@ -27,6 +30,7 @@ import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.xpath.expr.XPathFuncExpr;
+import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.RankingListAdapter;
 import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.utilities.RankingItemTouchHelperCallback;
@@ -38,7 +42,8 @@ public class RankingWidget extends QuestionWidget {
 
     private List<SelectChoice> items;
     private RankingListAdapter rankingListAdapter;
-    private RecyclerView recyclerView;
+    private FrameLayout widgetLayout;
+    private boolean nullValue;
 
     public RankingWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -54,12 +59,13 @@ public class RankingWidget extends QuestionWidget {
             orderedItems.add(new Selection(selectChoice));
         }
 
-        return new SelectMultiData(orderedItems);
+        return nullValue ? null : new SelectMultiData(orderedItems);
     }
 
     @Override
     public void clearAnswer() {
-        removeView(recyclerView);
+        nullValue = true;
+        removeView(widgetLayout);
         setUpLayout(items);
     }
 
@@ -88,6 +94,7 @@ public class RankingWidget extends QuestionWidget {
                 : (List<Selection>) getFormEntryPrompt().getAnswerValue().getValue();
 
         if (savedOrderedItems.isEmpty()) {
+            nullValue = true;
             return items;
         } else {
             List<SelectChoice> orderedItems = new ArrayList<>();
@@ -114,7 +121,10 @@ public class RankingWidget extends QuestionWidget {
     private void setUpLayout(List<SelectChoice> items) {
         rankingListAdapter = new RankingListAdapter(items, getFormEntryPrompt());
 
-        recyclerView = new RecyclerView(getContext());
+        LayoutInflater li = LayoutInflater.from(getContext());
+        widgetLayout = (FrameLayout) li.inflate(R.layout.ranking_widget, null);
+
+        RecyclerView recyclerView = widgetLayout.findViewById(R.id.ranking_recycler_view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(rankingListAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -122,6 +132,17 @@ public class RankingWidget extends QuestionWidget {
         ItemTouchHelper.Callback callback = new RankingItemTouchHelperCallback(rankingListAdapter);
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
-        addAnswerView(recyclerView);
+
+        TextView nullValueMessage = widgetLayout.findViewById(R.id.ranking_null_value_message);
+        recyclerView.setAlpha(nullValue ? 0.2f : 1);
+        nullValueMessage.setVisibility(nullValue ? VISIBLE : GONE);
+        nullValueMessage.setOnTouchListener((view, motionEvent) -> {
+            nullValue = false;
+            removeView(widgetLayout);
+            setUpLayout(items);
+            return true;
+        });
+
+        addAnswerView(widgetLayout);
     }
 }
