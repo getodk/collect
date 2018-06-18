@@ -188,6 +188,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                 new ControlCharacterFilter(), new WhitespaceFilter()
         });
         initAccountPreferences();
+        setupTransportPreferences();
     }
 
     public void addOtherPreferences() {
