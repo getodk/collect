@@ -26,8 +26,10 @@ import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_EDIT_SAVED;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_COMPLETED_DEFAULT;
 
@@ -42,6 +44,23 @@ public class SharedPreferencesTest {
         GeneralSharedPreferences generalSharedPreferences = GeneralSharedPreferences.getInstance();
         for (String key : SharedPreferencesUtils.getAllGeneralKeys()) {
             assertEquals(generalSharedPreferences.get(key), defaultValues.get(key));
+        }
+    }
+
+    @Test
+    public void generalDefaultsExpectedTypeTest() {
+        HashMap<String, Class> expectedTypesForGeneral = PreferenceKeys.getExpectedTypesForGeneralPreferencesValues();
+        for (Map.Entry<String, Object> generalPref : PreferenceKeys.GENERAL_KEYS.entrySet()) {
+
+            boolean foundKey = expectedTypesForGeneral.containsKey(generalPref.getKey());
+            //Check if all keys declared in GENERAL_KEYS has a declared type
+            assertTrue(String.format("Not found default key %s from PreferenceKeys.GENERAL_KEYS in PreferenceKeys.getExpectedTypesForGeneralPreferencesValues()", generalPref.getKey()), foundKey);
+
+            Object value = generalPref.getValue();
+            Class desiredClass = expectedTypesForGeneral.get(generalPref.getKey());
+
+            //Check if the key has a correct declared type
+            assertTrue(String.format("Incorrect type of default key %s from PreferenceKeys.GENERAL_KEYS", generalPref.getKey()), desiredClass.isInstance(value));
         }
     }
 
