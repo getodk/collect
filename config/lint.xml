@@ -5,7 +5,7 @@
     <issue id="MissingRegistered" severity="warning"/>
     <issue id="AppCompatResource" severity="warning"/>
     <issue id="StaticFieldLeak" severity="warning"/>
-    <issue id="UnusedIds" severity="warning"/>
+    <issue id="UnusedIds" severity="error"/>
     <issue id="AppLinkUrlError" severity="warning" />
 
     <!-- require inputType attribute on all text fields -->
