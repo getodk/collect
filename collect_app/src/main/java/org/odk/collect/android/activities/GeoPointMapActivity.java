@@ -131,7 +131,7 @@ public class GeoPointMapActivity extends CollectAbstractActivity implements OnMa
         isMapReady = false;
         ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMapAsync(googleMap -> {
             setupMap(googleMap);
-            locationClient.setListener(GeoPointMapActivity.this);
+            locationClient.setListener(this);
         });
     }
 
@@ -241,7 +241,7 @@ public class GeoPointMapActivity extends CollectAbstractActivity implements OnMa
 
         // Menu Layer Toggle
         ImageButton layers = findViewById(R.id.layer_menu);
-        layers.setOnClickListener(v -> helper.showLayersDialog(GeoPointMapActivity.this));
+        layers.setOnClickListener(v -> helper.showLayersDialog(this));
         zoomDialogView = getLayoutInflater().inflate(R.layout.geo_zoom_dialog, null);
         zoomLocationButton = zoomDialogView.findViewById(R.id.zoom_location);
         zoomLocationButton.setOnClickListener(v -> {
