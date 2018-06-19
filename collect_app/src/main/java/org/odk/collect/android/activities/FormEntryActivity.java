@@ -20,6 +20,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -743,6 +744,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                  * Android 1.6) we want to handle images the audio and video
                  */
 
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
                 showDialog(SAVING_IMAGE_DIALOG);
                 Runnable runnable = () -> saveChosenImage(intent.getData());
                 new Thread(runnable).start();
@@ -824,6 +826,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     }
                     saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                     refreshCurrentView();
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_USER);
                 });
             } else {
                 runOnUiThread(() -> {
