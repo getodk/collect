@@ -613,5 +613,5 @@
     <string name="hide_old_form_versions_setting_title">Hide old form versions</string>
     <string name="hide_old_form_versions_setting_summary">Only the newest version will appear in Fill Blank Form</string>
     <string name="seconds">Seconds</string>
-    <string name="tap_to_start">Tap to start</string>
+    <string name="double_tap_to_start">Double tap to start</string>
 </resources>

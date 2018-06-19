@@ -21,6 +21,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -33,6 +34,7 @@ import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.RankingListAdapter;
 import org.odk.collect.android.external.ExternalDataUtil;
+import org.odk.collect.android.listeners.DoubleClickListener;
 import org.odk.collect.android.utilities.RankingItemTouchHelperCallback;
 
 import java.util.ArrayList;
@@ -136,11 +138,18 @@ public class RankingWidget extends QuestionWidget {
         TextView nullValueMessage = widgetLayout.findViewById(R.id.ranking_null_value_message);
         recyclerView.setAlpha(nullValue ? 0.2f : 1);
         nullValueMessage.setVisibility(nullValue ? VISIBLE : GONE);
-        nullValueMessage.setOnTouchListener((view, motionEvent) -> {
-            nullValue = false;
-            removeView(widgetLayout);
-            setUpLayout(items);
-            return true;
+
+        nullValueMessage.setOnClickListener(new DoubleClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+            }
+
+            @Override
+            public void onDoubleClick(View v) {
+                nullValue = false;
+                removeView(widgetLayout);
+                setUpLayout(items);
+            }
         });
 
         addAnswerView(widgetLayout);

@@ -28,8 +28,8 @@ limitations under the License.
         android:id="@+id/ranking_null_value_message"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/tap_to_start"
-        android:textSize="40sp"
+        android:text="@string/double_tap_to_start"
+        android:textSize="35sp"
         android:textStyle="bold"
         android:textColor="?primaryTextColor"
         android:gravity="center"/>
