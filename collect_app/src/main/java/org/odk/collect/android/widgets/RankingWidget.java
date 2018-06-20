@@ -36,6 +36,7 @@ import org.odk.collect.android.adapters.RankingListAdapter;
 import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.listeners.DoubleClickListener;
 import org.odk.collect.android.utilities.RankingItemTouchHelperCallback;
+import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -152,5 +153,8 @@ public class RankingWidget extends QuestionWidget {
         });
 
         addAnswerView(widgetLayout);
+        SpacesInUnderlyingValuesWarning
+                .forQuestionWidget(this)
+                .renderWarningIfNecessary(items);
     }
 }
