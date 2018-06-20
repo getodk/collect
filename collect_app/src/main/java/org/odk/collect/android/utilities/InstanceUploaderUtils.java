@@ -17,7 +17,6 @@
 package org.odk.collect.android.utilities;
 
 import android.database.Cursor;
-import android.database.SQLException;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -25,9 +24,9 @@ import org.odk.collect.android.provider.InstanceProviderAPI;
 
 import java.util.HashMap;
 
-import timber.log.Timber;
-
 public class InstanceUploaderUtils {
+
+    public static final String DEFAULT_AGGREGATE_SUCCESSFUL_TEXT = "full submission upload was successful!";
 
     private InstanceUploaderUtils() {
     }
@@ -35,7 +34,7 @@ public class InstanceUploaderUtils {
     public static String getUploadResultMessage(Cursor results, HashMap<String, String> result) {
         StringBuilder queryMessage = new StringBuilder();
         try {
-            if (results.getCount() > 0) {
+            if (results != null && results.getCount() > 0) {
                 results.moveToPosition(-1);
                 while (results.moveToNext()) {
                     String name =
@@ -50,8 +49,6 @@ public class InstanceUploaderUtils {
                             .append("\n\n");
                 }
             }
-        } catch (SQLException e) {
-            Timber.e(e);
         } finally {
             if (results != null) {
                 results.close();
@@ -61,7 +58,7 @@ public class InstanceUploaderUtils {
     }
 
     private static String localizeDefaultAggregateSuccessfulText(String text) {
-        if (text.equals("full submission upload was successful!")) {
+        if (text.equals(DEFAULT_AGGREGATE_SUCCESSFUL_TEXT)) {
             text = Collect.getInstance().getString(R.string.success);
         }
         return text;

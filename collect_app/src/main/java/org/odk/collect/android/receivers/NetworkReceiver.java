@@ -242,7 +242,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
 
     private boolean allFormsDownloadedSuccessfully(HashMap<String, String> result) {
         for (Map.Entry<String, String> item : result.entrySet()) {
-            if (!item.getValue().equals("full submission upload was successful!")) {
+            if (!item.getValue().equals(InstanceUploaderUtils.DEFAULT_AGGREGATE_SUCCESSFUL_TEXT)) {
                 return false;
             }
         }
