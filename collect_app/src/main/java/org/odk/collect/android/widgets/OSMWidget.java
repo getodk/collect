@@ -171,7 +171,7 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
             Context ctx = getContext();
             PackageManager packageManager = ctx.getPackageManager();
             List<ResolveInfo> activities = packageManager.queryIntentActivities(launchIntent, 0);
-            boolean isIntentSafe = activities.size() > 0;
+            boolean isIntentSafe = !activities.isEmpty();
 
             //launch activity if it is safe
             if (isIntentSafe) {

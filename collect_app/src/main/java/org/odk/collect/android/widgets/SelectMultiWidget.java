@@ -20,6 +20,7 @@ import android.support.v7.widget.AppCompatCheckBox;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
 import android.widget.CheckBox;
+
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
@@ -71,7 +72,7 @@ public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWi
             }
         }
 
-        return vc.size() == 0 ? null : new SelectMultiData(vc);
+        return vc.isEmpty() ? null : new SelectMultiData(vc);
     }
 
     @Override

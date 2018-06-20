@@ -87,7 +87,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                     new Gson().fromJson(urlListString, new TypeToken<List<String>>() {
                     }.getType());
         }
-        if (urlList.size() == 0) {
+        if (urlList.isEmpty()) {
             addUrlToPreferencesList(getString(R.string.default_server_url), prefs);
         }
 

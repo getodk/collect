@@ -428,7 +428,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             formDownloadListAdapter.setFromIdsToDetails(formNamesAndURLs);
             formDownloadListAdapter.notifyDataSetChanged();
         }
-        toggleButton.setEnabled(filteredFormList.size() > 0);
+        toggleButton.setEnabled(!filteredFormList.isEmpty());
         checkPreviouslyCheckedItems();
         toggleButtonLabel(toggleButton, listView);
     }
@@ -622,7 +622,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                     item.put(FORM_VERSION_KEY, details.getFormVersion());
 
                     // Insert the new form in alphabetical order.
-                    if (formList.size() == 0) {
+                    if (formList.isEmpty()) {
                         formList.add(item);
                     } else {
                         int j;
@@ -641,7 +641,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             updateAdapter();
             selectSupersededForms();
             downloadButton.setEnabled(listView.getCheckedItemCount() > 0);
-            toggleButton.setEnabled(listView.getCount() > 0); 
+            toggleButton.setEnabled(listView.getCount() > 0);
             toggleButtonLabel(toggleButton, listView);
         }
     }

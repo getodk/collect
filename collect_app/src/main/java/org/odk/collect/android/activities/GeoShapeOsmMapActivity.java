@@ -108,7 +108,7 @@ public class GeoShapeOsmMapActivity extends CollectAbstractActivity implements I
         clearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mapMarkers.size() != 0) {
+                if (!mapMarkers.isEmpty()) {
                     showClearDialog();
                 }
             }
@@ -203,7 +203,7 @@ public class GeoShapeOsmMapActivity extends CollectAbstractActivity implements I
 
     @Override
     public void onBackPressed() {
-        if (mapMarkers != null && mapMarkers.size() > 0) {
+        if (!mapMarkers.isEmpty()) {
             showBackDialog();
         } else {
             finish();
@@ -563,7 +563,7 @@ public class GeoShapeOsmMapActivity extends CollectAbstractActivity implements I
             zoomLocationButton.setTextColor(Color.parseColor("#FF979797"));
         }
 
-        if (mapMarkers.size() != 0) {
+        if (!mapMarkers.isEmpty()) {
             zoomPointButton.setEnabled(true);
             zoomPointButton.setBackgroundColor(Color.parseColor("#50cccccc"));
             zoomPointButton.setTextColor(themeUtils.getPrimaryTextColor());

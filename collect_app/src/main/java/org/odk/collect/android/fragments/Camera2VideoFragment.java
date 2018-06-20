@@ -267,7 +267,7 @@ public class Camera2VideoFragment extends Fragment
         }
 
         // Pick the smallest of those, assuming we found any
-        if (bigEnough.size() > 0) {
+        if (!bigEnough.isEmpty()) {
             return Collections.min(bigEnough, new Camera2Fragment.CompareSizesByArea());
         } else {
             Timber.e("Couldn't find any suitable preview size");
