@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.telephony.SmsManager;
 
+import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.injection.ViewModelBuilder;
@@ -44,6 +45,11 @@ public class AppModule {
     @Provides
     InstancesDao provideInstancesDao() {
         return new InstancesDao();
+    }
+
+    @Provides
+    FormsDao provideFormsDao() {
+        return new FormsDao();
     }
 
     @PerApplication

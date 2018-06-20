@@ -229,6 +229,8 @@ public class InstanceUploaderAdapter extends CursorAdapter {
                         Locale.getDefault()).format(date);
             case NoMessage:
                 return context.getString(R.string.sms_no_message);
+            case Encrypted:
+                return context.getString(R.string.sms_encrypted_message);
             case Canceled:
                 return new SimpleDateFormat(context.getString(R.string.sms_last_submission_on_date_at_time),
                         Locale.getDefault()).format(date);

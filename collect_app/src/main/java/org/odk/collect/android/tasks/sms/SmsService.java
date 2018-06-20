@@ -23,6 +23,7 @@ import org.odk.collect.android.tasks.sms.models.Message;
 import org.odk.collect.android.tasks.sms.models.MessageStatus;
 import org.odk.collect.android.tasks.sms.models.SentMessageResult;
 import org.odk.collect.android.tasks.sms.models.SmsSubmission;
+import org.odk.collect.android.tasks.sms.models.SubmitFormModel;
 import org.odk.collect.android.utilities.ArrayUtils;
 
 import java.io.File;
@@ -55,14 +56,16 @@ public class SmsService {
     private Context context;
     private RxEventBus rxEventBus;
     private InstancesDao instancesDao;
+    private FormsDao formsDao;
 
     @Inject
-    public SmsService(SmsManager smsManager, SmsSubmissionManagerContract smsSubmissionManager, InstancesDao instancesDao, Context context, RxEventBus rxEventBus) {
+    public SmsService(SmsManager smsManager, SmsSubmissionManagerContract smsSubmissionManager, InstancesDao instancesDao, Context context, RxEventBus rxEventBus, FormsDao formsDao) {
         this.smsManager = smsManager;
         this.smsSubmissionManager = smsSubmissionManager;
         this.context = context;
         this.instancesDao = instancesDao;
         this.rxEventBus = rxEventBus;
+        this.formsDao = formsDao;
     }
 
     public void submitForms(long[] instanceIds) {
@@ -93,8 +96,17 @@ public class SmsService {
                             .getColumnIndex(InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH));
                     String id = results.getString(results.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID));
                     String displayName = results.getString(results.getColumnIndex(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME));
+                    String formId = results.getString(results.getColumnIndex(InstanceProviderAPI.InstanceColumns.JR_FORM_ID));
+                    String formVersion = results.getString(results.getColumnIndex(InstanceProviderAPI.InstanceColumns.JR_VERSION));
 
-                    submitForm(id, filePath, displayName);
+                    SubmitFormModel submitFormModel = new SubmitFormModel();
+                    submitFormModel.setDisplayName(displayName);
+                    submitFormModel.setInstanceFilePath(filePath);
+                    submitFormModel.setInstanceId(id);
+                    submitFormModel.setFormId(formId);
+                    submitFormModel.setFormVersion(formVersion);
+
+                    submitForm(submitFormModel);
                 }
             }
         }
@@ -105,13 +117,19 @@ public class SmsService {
      * persisting the form as a group of messages so that they can be sent via a
      * background job.
      *
-     * @param instanceId id from instanceDao
+     * @param submitFormModel contains all the properties necessary for form submission
      */
-    public boolean submitForm(String instanceId, String instanceFilePath, String displayName) {
+    public boolean submitForm(SubmitFormModel submitFormModel) {
 
         String text;
+        String instanceId = submitFormModel.getInstanceId();
 
-        File smsFile = new File(getSmsInstancePath(instanceFilePath));
+        if (formsDao.isFormEncrypted(submitFormModel.getFormId(), submitFormModel.getFormVersion())) {
+            rxEventBus.post(new SmsEvent(instanceId, MessageStatus.Encrypted));
+            return false;
+        }
+
+        File smsFile = new File(getSmsInstancePath(submitFormModel.getInstanceFilePath()));
 
         /**
          * No instance.txt file is generated if a form doesn't have sms tags.
@@ -175,7 +193,7 @@ public class SmsService {
             model.setNotificationId();
             model.setInstanceId(instanceId);
             model.setLastUpdated(new Date());
-            model.setDisplayName(displayName);
+            model.setDisplayName(submitFormModel.getDisplayName());
 
             List<Message> messages = new ArrayList<>();
 

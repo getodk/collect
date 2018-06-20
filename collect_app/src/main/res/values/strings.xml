@@ -623,6 +623,7 @@
     <string name="sms_fatal_error">\'Failed on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
     <string name="sms_airplane_mode">\'Failed on\' EEE, MMM dd, yyyy \'at\' HH:mm \'due to Airplane Mode being on.\'</string>
     <string name="sms_no_message">This form has no questions with SMS tags.</string>
+    <string name="sms_encrypted_message">Encrypted forms can\'t be submitted as SMS.</string>
     <string name="sms_last_submission_on_date_at_time">\'Last submission attempt at\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
     <plurals name="sms_sending">
         <item quantity="one">Submitting form as a single message.</item>

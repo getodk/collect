@@ -12,5 +12,6 @@ public enum MessageStatus {
     InvalidGateway,
     Queued,
     Delivered,
-    NotDelivered
+    NotDelivered,
+    Encrypted
 }
