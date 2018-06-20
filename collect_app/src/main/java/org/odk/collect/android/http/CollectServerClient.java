@@ -40,20 +40,20 @@ import timber.log.Timber;
  *
  * @author mitchellsundt@gmail.com
  */
-public final class CollectServerClient {
+public class CollectServerClient {
 
     private static final String HTTP_CONTENT_TYPE_TEXT_XML = "text/xml";
 
-    private static CollectServerClient instance;
+    protected static CollectServerClient instance;
 
     @Inject
     HttpInterface httpConnection;
 
-    private CollectServerClient() {
+    protected CollectServerClient() {
         DaggerHttpComponent.builder().build().inject(this);
     }
 
-    private static synchronized CollectServerClient getInstance() {
+    protected static synchronized CollectServerClient getInstance() {
         if (instance == null) {
             instance = new CollectServerClient();
         }
