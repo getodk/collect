@@ -28,7 +28,6 @@
         <exclude name="PreserveStackTrace" />
         <exclude name="SwitchStmtsShouldHaveDefault" />
         <exclude name="UnusedFormalParameter" />
-        <exclude name="UseCollectionIsEmpty" />
         <exclude name="UseVarargs" />
     </rule>
 

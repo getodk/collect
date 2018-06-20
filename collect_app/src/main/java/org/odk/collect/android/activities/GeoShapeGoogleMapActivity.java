@@ -155,7 +155,7 @@ public class GeoShapeGoogleMapActivity extends CollectAbstractActivity implement
         clearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (markerArray.size() != 0) {
+                if (!markerArray.isEmpty()) {
                     showClearDialog();
                 }
             }
@@ -405,7 +405,7 @@ public class GeoShapeGoogleMapActivity extends CollectAbstractActivity implement
                 zoomLocationButton.setTextColor(Color.parseColor("#FF979797"));
             }
 
-            if (markerArray.size() != 0) {
+            if (!markerArray.isEmpty()) {
                 zoomPointButton.setEnabled(true);
                 zoomPointButton.setBackgroundColor(Color.parseColor("#50cccccc"));
                 zoomPointButton.setTextColor(themeUtils.getPrimaryTextColor());

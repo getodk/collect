@@ -91,7 +91,7 @@ public class CustomTabHelper {
     }
 
     public void openUri(Context context, Uri uri) {
-        if (getPackageName(context).size() != 0) {
+        if (!getPackageName(context).isEmpty()) {
             //open in chrome custom tab
             new CustomTabsIntent.Builder()
                     .build()
