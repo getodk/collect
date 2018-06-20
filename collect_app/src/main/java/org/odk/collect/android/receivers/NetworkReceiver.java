@@ -19,6 +19,7 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.tasks.ServerPollingJob;
 import org.odk.collect.android.utilities.IconUtils;
+import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
@@ -188,10 +189,10 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         }
         running = false;
 
-        StringBuilder message = new StringBuilder();
+        String message;
 
         if (result == null) {
-            message.append(Collect.getInstance().getString(R.string.odk_auth_auth_fail));
+            message = Collect.getInstance().getString(R.string.odk_auth_auth_fail);
         } else {
             StringBuilder selection = new StringBuilder();
             Set<String> keys = result.keySet();
@@ -208,34 +209,14 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                 }
             }
 
-            Cursor results = null;
-            try {
-                results = new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs);
-                if (results.getCount() > 0) {
-                    results.moveToPosition(-1);
-                    while (results.moveToNext()) {
-                        String name = results.getString(results
-                                .getColumnIndex(InstanceColumns.DISPLAY_NAME));
-                        String id = results.getString(results
-                                .getColumnIndex(InstanceColumns._ID));
-                        message
-                                .append(name)
-                                .append(" - ")
-                                .append(result.get(id))
-                                .append("\n\n");
-                    }
-                }
-            } finally {
-                if (results != null) {
-                    results.close();
-                }
-            }
+            message = InstanceUploaderUtils
+                    .getUploadResultMessage(new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs), result);
         }
 
         Intent notifyIntent = new Intent(Collect.getInstance(), NotificationActivity.class);
         notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         notifyIntent.putExtra(NotificationActivity.NOTIFICATION_TITLE, Collect.getInstance().getString(R.string.upload_results));
-        notifyIntent.putExtra(NotificationActivity.NOTIFICATION_MESSAGE, message.toString().trim());
+        notifyIntent.putExtra(NotificationActivity.NOTIFICATION_MESSAGE, message.trim());
 
         PendingIntent pendingNotify = PendingIntent.getActivity(Collect.getInstance(), 0,
                 notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -244,7 +225,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                 .setSmallIcon(IconUtils.getNotificationAppIcon())
                 .setContentTitle(Collect.getInstance().getString(R.string.odk_auto_note))
                 .setContentIntent(pendingNotify)
-                .setContentText(message.toString().trim())
+                .setContentText(message.trim())
                 .setAutoCancel(true);
 
         NotificationManager notificationManager = (NotificationManager) Collect.getInstance()
