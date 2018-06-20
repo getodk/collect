@@ -66,7 +66,7 @@ public class SharedPreferencesTest {
         GeneralSharedPreferences generalSharedPreferences = GeneralSharedPreferences.getInstance();
         for (String key : SharedPreferencesUtils.getAllGeneralKeys()) {
             if (key.equals(KEY_COMPLETED_DEFAULT)) {
-                assertFalse((Boolean) generalSharedPreferences.get(key));
+                assertFalse((boolean) generalSharedPreferences.get(key));
             } else {
                 assertEquals(generalSharedPreferences.get(key), defaultValues.get(key));
             }
@@ -81,7 +81,7 @@ public class SharedPreferencesTest {
         AdminSharedPreferences adminSharedPreferences = AdminSharedPreferences.getInstance();
         for (String key : SharedPreferencesUtils.getAllAdminKeys()) {
             if (key.equals(KEY_EDIT_SAVED)) {
-                assertFalse((Boolean) adminSharedPreferences.get(key));
+                assertFalse((boolean) adminSharedPreferences.get(key));
             } else {
                 assertEquals(adminSharedPreferences.get(key), adminSharedPreferences.getDefault(key));
             }
