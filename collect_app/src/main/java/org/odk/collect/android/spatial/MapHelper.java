@@ -84,7 +84,7 @@ public class MapHelper {
 
     private final org.odk.collect.android.spatial.TileSourceFactory tileFactory;
 
-    private Context context;
+    private final Context context;
 
     public MapHelper(Context context, GoogleMap googleMap) {
         this.context = context;
