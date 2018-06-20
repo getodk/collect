@@ -1,6 +1,7 @@
 package org.odk.collect.android.widgets.warnings;
 
 import com.google.common.collect.Lists;
+
 import org.javarosa.core.model.SelectChoice;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,6 +10,8 @@ import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning.
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning.SpacesInUnderlyingValues;
 
 public class SpacesInUnderlyingValuesTest {
@@ -27,7 +30,7 @@ public class SpacesInUnderlyingValuesTest {
         );
 
         subject.check(items);
-        assertEquals(subject.hasInvalidValues(), false);
+        assertFalse(subject.hasInvalidValues());
     }
 
     @Test
@@ -35,7 +38,7 @@ public class SpacesInUnderlyingValuesTest {
         List<SelectChoice> items = Lists.newArrayList();
 
         subject.check(items);
-        assertEquals(subject.hasInvalidValues(), false);
+        assertFalse(subject.hasInvalidValues());
     }
 
     @Test
@@ -45,7 +48,7 @@ public class SpacesInUnderlyingValuesTest {
         );
 
         subject.check(items);
-        assertEquals(subject.hasInvalidValues(), true);
+        assertTrue(subject.hasInvalidValues());
     }
 
     @Test
@@ -56,7 +59,7 @@ public class SpacesInUnderlyingValuesTest {
         );
 
         subject.check(items);
-        assertEquals(subject.hasInvalidValues(), true);
+        assertTrue(subject.hasInvalidValues());
     }
 
     @Test
@@ -77,7 +80,7 @@ public class SpacesInUnderlyingValuesTest {
         );
 
         subject.check(items);
-        assertEquals(subject.hasInvalidValues(), true);
+        assertTrue(subject.hasInvalidValues());
     }
 
     @Test
@@ -87,6 +90,6 @@ public class SpacesInUnderlyingValuesTest {
         );
 
         subject.check(items);
-        assertEquals(subject.hasInvalidValues(), true);
+        assertTrue(subject.hasInvalidValues());
     }
 }

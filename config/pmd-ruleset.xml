@@ -28,9 +28,6 @@
         <exclude name="PreserveStackTrace" />
         <exclude name="SwitchStmtsShouldHaveDefault" />
         <exclude name="UnusedFormalParameter" />
-        <exclude name="UseAssertEqualsInsteadOfAssertTrue" />
-        <exclude name="UseAssertSameInsteadOfAssertTrue" />
-        <exclude name="UseAssertTrueInsteadOfAssertEquals" />
         <exclude name="UseCollectionIsEmpty" />
         <exclude name="UseVarargs" />
     </rule>
