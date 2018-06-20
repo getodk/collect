@@ -137,7 +137,7 @@ public class RankingWidget extends QuestionWidget {
 
         TextView nullValueMessage = widgetLayout.findViewById(R.id.ranking_null_value_message);
         recyclerView.setAlpha(nullValue ? 0.2f : 1);
-        nullValueMessage.setVisibility(nullValue ? VISIBLE : GONE);
+        nullValueMessage.setVisibility(nullValue && !items.isEmpty() ? VISIBLE : GONE);
 
         nullValueMessage.setOnClickListener(new DoubleClickListener() {
             @Override
