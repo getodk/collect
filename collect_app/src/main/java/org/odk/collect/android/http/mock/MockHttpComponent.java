@@ -11,5 +11,6 @@ import dagger.Component;
 @Component(modules = MockHttpInterfaceModule.class)
 public interface MockHttpComponent {
     void inject(InstanceServerUploader uploader);
+
     void inject(CollectServerClient collectClient);
 }

@@ -42,7 +42,7 @@ public class CollectServerClientTest {
 
     @Test
     public void testGetPlainTextMimeType() {
-        Assert.assertEquals(TestableCollectServerClient.getPlainTextMimeType(),"text/plain");
+        Assert.assertEquals(TestableCollectServerClient.getPlainTextMimeType(), "text/plain");
     }
 
 
