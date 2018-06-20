@@ -86,7 +86,6 @@
   <string name="parse_legacy_formlist_failed">Máy chủ không có các biểu mẫu tương thích với Aggregate 0.9.x. : %s</string>
   <string name="parse_openrosa_formlist_failed">Máy chủ không có các biểu mẫu tương thích với OpenRosa phiên bản chuẩn 1.0: %s</string>
   <string name="password">Mật khẩu</string>
-  <string name="play_audio">Chạy âm thanh</string>
   <string name="play_video">Chạy Video</string>
   <string name="please_wait">Hãy đợi 1 lúc.</string>
   <string name="please_wait_long">Hãy đợi trong ít phút.</string>
@@ -126,7 +125,6 @@
   <string name="submission_url">Đường dẫn gửi dữ liệu</string>
   <string name="font_size">Kích thước chữ</string>
   <string name="change_font_size">Kích thước chữ</string>
-  <string name="form_scan_starting">Quét tìm biểu mẫu …</string>
   <string name="access_error">Lỗi khi truy cập %s: </string>
   <string name="manifest_server_error">Manifest không báo cáo về phiên bản của OpenRosa — máy chủ lỗi?</string>
   <string name="root_element_error">Yếu tố gốc không &amp;lt;manifest\&gt; — was %s</string>
@@ -178,7 +176,6 @@
   <string name="draw_image">Sketch Image</string>
   <string name="reset_image">Reset</string>
   <string name="set_color">Chọn màu</string>
-  <string name="select_drawing_color">Select Drawing Color</string>
   <string name="admin_preferences">Admin Settings</string>
   <string name="admin_access_settings">Tap for admin access to settings</string>
   <string name="save_mid">Mid-form saving</string>
@@ -205,4 +202,5 @@
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
 </resources>

@@ -22,6 +22,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
@@ -37,6 +38,8 @@ import java.util.Set;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_DELETE;
+
 public abstract class InstanceUploader extends AsyncTask<Long, Integer, InstanceUploader.Outcome> {
 
     private InstanceUploaderListener stateListener;
@@ -46,11 +49,11 @@ public abstract class InstanceUploader extends AsyncTask<Long, Integer, Instance
         synchronized (this) {
             if (outcome != null && stateListener != null) {
                 if (outcome.authRequestingServer != null) {
-                    stateListener.authRequest(outcome.authRequestingServer, outcome.results);
+                    stateListener.authRequest(outcome.authRequestingServer, outcome.messagesByInstanceId);
                 } else {
-                    stateListener.uploadingComplete(outcome.results);
+                    stateListener.uploadingComplete(outcome.messagesByInstanceId);
 
-                    Set<String> keys = outcome.results.keySet();
+                    Set<String> keys = outcome.messagesByInstanceId.keySet();
                     Iterator<String> it = keys.iterator();
                     int count = keys.size();
                     while (count > 0) {
@@ -91,8 +94,10 @@ public abstract class InstanceUploader extends AsyncTask<Long, Integer, Instance
                                 results.moveToPosition(-1);
 
                                 boolean isFormAutoDeleteOptionEnabled = (boolean) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_DELETE_AFTER_SEND);
+                                String formId;
                                 while (results.moveToNext()) {
-                                    if (isFormAutoDeleteOptionEnabled) {
+                                    formId = results.getString(results.getColumnIndex(InstanceProviderAPI.InstanceColumns.JR_FORM_ID));
+                                    if (isFormAutoDeleteEnabled(formId, isFormAutoDeleteOptionEnabled)) {
                                         toDelete.add(results.getLong(results.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID)));
                                     }
                                 }
@@ -114,6 +119,25 @@ public abstract class InstanceUploader extends AsyncTask<Long, Integer, Instance
         }
     }
 
+    /**
+     * @param isFormAutoDeleteOptionEnabled represents whether the auto-delete option is enabled at the app level
+     *
+     * If the form explicitly sets the auto-delete property, then it overrides the preferences.
+     */
+    private boolean isFormAutoDeleteEnabled(String jrFormId, boolean isFormAutoDeleteOptionEnabled) {
+        Cursor cursor = new FormsDao().getFormsCursorForFormId(jrFormId);
+        String autoDelete = null;
+        if (cursor != null && cursor.moveToFirst()) {
+            try {
+                int autoDeleteColumnIndex = cursor.getColumnIndex(AUTO_DELETE);
+                autoDelete = cursor.getString(autoDeleteColumnIndex);
+            } finally {
+                cursor.close();
+            }
+        }
+        return autoDelete == null ? isFormAutoDeleteOptionEnabled : Boolean.valueOf(autoDelete);
+    }
+
     @Override
     protected void onProgressUpdate(Integer... values) {
         synchronized (this) {
@@ -129,8 +153,9 @@ public abstract class InstanceUploader extends AsyncTask<Long, Integer, Instance
         }
     }
 
-    public static class Outcome {
+    static class Outcome {
         Uri authRequestingServer = null;
-        public HashMap<String, String> results = new HashMap<String, String>();
+        boolean invalidOAuth;
+        HashMap<String, String> messagesByInstanceId = new HashMap<>();
     }
 }

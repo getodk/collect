@@ -17,14 +17,13 @@
 package org.odk.collect.android.utilities;
 
 import android.content.Context;
-import android.preference.PreferenceManager;
 
-import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.database.ItemsetDbAdapter;
-import org.odk.collect.android.preferences.AdminPreferencesActivity;
+import org.odk.collect.android.preferences.AdminSharedPreferences;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.osmdroid.config.Configuration;
 
 import java.io.File;
@@ -35,7 +34,7 @@ public class ResetUtility {
 
     private List<Integer> failedResetActions;
 
-    public List<Integer> reset(final Context context, List<Integer> resetActions) {
+    public List<Integer> reset(Context context, List<Integer> resetActions) {
 
         failedResetActions = new ArrayList<>();
         failedResetActions.addAll(resetActions);
@@ -73,27 +72,18 @@ public class ResetUtility {
     }
 
     private void resetPreferences(Context context) {
-        boolean clearedDefaultPreferences = PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .edit()
-                .clear()
-                .commit();
-
-        PreferenceManager.setDefaultValues(context, R.xml.preferences, true);
-
-        boolean clearedAdminPreferences = context
-                .getSharedPreferences(AdminPreferencesActivity.ADMIN_PREFERENCES, 0)
-                .edit()
-                .clear()
-                .commit();
+        GeneralSharedPreferences.getInstance().loadDefaultPreferences();
+        AdminSharedPreferences.getInstance().loadDefaultPreferences();
 
         boolean deletedSettingsFolderContest = !new File(Collect.SETTINGS).exists()
                 || deleteFolderContents(Collect.SETTINGS);
 
         boolean deletedSettingsFile = !new File(Collect.ODK_ROOT + "/collect.settings").exists()
                 || (new File(Collect.ODK_ROOT + "/collect.settings").delete());
+        
+        new LocaleHelper().updateLocale(context);
 
-        if (clearedDefaultPreferences && clearedAdminPreferences && deletedSettingsFolderContest && deletedSettingsFile) {
+        if (deletedSettingsFolderContest && deletedSettingsFile) {
             failedResetActions.remove(failedResetActions.indexOf(ResetAction.RESET_PREFERENCES));
         }
     }

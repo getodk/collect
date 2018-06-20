@@ -17,7 +17,6 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Context;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -30,6 +29,8 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.DateTimeUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
+
+import java.util.Date;
 
 /**
  * @author Grzegorz Orczykowski (gorczykowski@soldevelo.com)
@@ -65,12 +66,6 @@ public abstract class AbstractDateWidget extends QuestionWidget implements Binar
     }
 
     @Override
-    public void setFocus(Context context) {
-        InputMethodManager inputManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
-    }
-
-    @Override
     public void setOnLongClickListener(OnLongClickListener l) {
         dateButton.setOnLongClickListener(l);
         dateTextView.setOnLongClickListener(l);
@@ -102,7 +97,11 @@ public abstract class AbstractDateWidget extends QuestionWidget implements Binar
             date = (LocalDateTime) answer;
             setDateLabel();
         }
-        cancelWaitingForData();
+    }
+
+    @Override
+    public void onButtonClick(int buttonId) {
+        showDatePickerDialog();
     }
 
     public boolean isDayHidden() {
@@ -139,7 +138,10 @@ public abstract class AbstractDateWidget extends QuestionWidget implements Binar
                 .withMillisOfSecond(0);
     }
 
-    protected abstract void setDateLabel();
+    protected void setDateLabel() {
+        isNullAnswer = false;
+        dateTextView.setText(DateTimeUtils.getDateTimeLabel((Date) getAnswer().getValue(), datePickerDetails, false, getContext()));
+    }
 
     protected abstract void showDatePickerDialog();
 }

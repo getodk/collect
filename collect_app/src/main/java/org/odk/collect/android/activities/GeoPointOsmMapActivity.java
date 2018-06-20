@@ -22,7 +22,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.Window;
@@ -34,9 +33,10 @@ import com.google.android.gms.location.LocationListener;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.location.LocationClient;
-import org.odk.collect.android.location.LocationClients;
+import org.odk.collect.android.location.client.LocationClient;
+import org.odk.collect.android.location.client.LocationClients;
 import org.odk.collect.android.spatial.MapHelper;
+import org.odk.collect.android.utilities.GeoPointUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoPointWidget;
 import org.osmdroid.events.MapEventsReceiver;
@@ -56,7 +56,7 @@ import timber.log.Timber;
  *
  * @author jonnordling@gmail.com
  */
-public class GeoPointOsmMapActivity extends FragmentActivity implements LocationListener,
+public class GeoPointOsmMapActivity extends CollectAbstractActivity implements LocationListener,
         Marker.OnMarkerDragListener, MapEventsReceiver, IRegisterReceiver,
         LocationClient.LocationClientListener {
 
@@ -65,7 +65,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
     //private GoogleMap map;
     private MapView map;
 
-    private Handler handler = new Handler();
+    private final Handler handler = new Handler();
     private Marker marker;
 
     private GeoPoint latLng;
@@ -118,17 +118,18 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
             return;
         }
 
-        map = (MapView) findViewById(R.id.omap);
+        map = findViewById(R.id.omap);
         if (helper == null) {
             // For testing:
             helper = new MapHelper(this, map, this);
 
             map.setMultiTouchControls(true);
             map.setBuiltInZoomControls(true);
+            map.setTilesScaledToDpi(true);
         }
 
         marker = new Marker(map);
-        marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black_36dp));
+        marker.setIcon(ContextCompat.getDrawable(this, R.drawable.ic_place_black));
         myLocationOverlay = new MyLocationNewOverlay(map);
 
         handler.postDelayed(new Runnable() {
@@ -139,13 +140,13 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
             }
         }, 100);
 
-        locationStatus = (TextView) findViewById(R.id.location_status);
-        TextView locationInfo = (TextView) findViewById(R.id.location_info);
+        locationStatus = findViewById(R.id.location_status);
+        TextView locationInfo = findViewById(R.id.location_info);
 
         locationClient = LocationClients.clientForContext(this);
         locationClient.setListener(this);
 
-        ImageButton saveLocationButton = (ImageButton) findViewById(R.id.accept_location);
+        ImageButton saveLocationButton = findViewById(R.id.accept_location);
         saveLocationButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -156,7 +157,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
             }
         });
 
-        reloadLocationButton = (ImageButton) findViewById(R.id.reload_location);
+        reloadLocationButton = findViewById(R.id.reload_location);
         reloadLocationButton.setEnabled(false);
         reloadLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -173,7 +174,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
         });
 
         // Focuses on marked location
-        showLocationButton = (ImageButton) findViewById(R.id.show_location);
+        showLocationButton = findViewById(R.id.show_location);
         showLocationButton.setVisibility(View.VISIBLE);
         showLocationButton.setEnabled(false);
         showLocationButton.setOnClickListener(new View.OnClickListener() {
@@ -189,7 +190,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
         showLocationButton.setClickable(false);
 
         // Menu Layer Toggle
-        ImageButton layersButton = (ImageButton) findViewById(R.id.layer_menu);
+        ImageButton layersButton = findViewById(R.id.layer_menu);
         layersButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -199,9 +200,9 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
         });
 
 
-        zoomDialogView = getLayoutInflater().inflate(R.layout.geopoint_zoom_dialog, null);
+        zoomDialogView = getLayoutInflater().inflate(R.layout.geo_zoom_dialog, null);
 
-        zoomLocationButton = (Button) zoomDialogView.findViewById(R.id.zoom_location);
+        zoomLocationButton = zoomDialogView.findViewById(R.id.zoom_location);
         zoomLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -211,7 +212,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
             }
         });
 
-        zoomPointButton = (Button) zoomDialogView.findViewById(R.id.zoom_point);
+        zoomPointButton = zoomDialogView.findViewById(R.id.zoom_saved_location);
         zoomPointButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -222,7 +223,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
             }
         });
 
-        ImageButton clearPointButton = (ImageButton) findViewById(R.id.clear);
+        ImageButton clearPointButton = findViewById(R.id.clear);
         clearPointButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -424,7 +425,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
                     foundFirstLocation = true;
                 }
                 locationStatus.setText(
-                        getString(R.string.location_provider_accuracy, this.location.getProvider(),
+                        getString(R.string.location_provider_accuracy, GeoPointUtils.capitalizeGps(this.location.getProvider()),
                                 truncateFloat(this.location.getAccuracy())));
             } else {
                 // Prevent from forever increasing
@@ -484,7 +485,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
         showLocationButton.setEnabled(true);
         map.invalidate();
         marker.setPosition(geoPoint);
-        marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black_36dp));
+        marker.setIcon(ContextCompat.getDrawable(this, R.drawable.ic_place_black));
         marker.setDraggable(true);
         latLng = geoPoint;
         isDragged = true;
@@ -518,7 +519,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
         if (myLocationOverlay.getMyLocation() != null) {
             zoomLocationButton.setEnabled(true);
             zoomLocationButton.setBackgroundColor(Color.parseColor("#50cccccc"));
-            zoomLocationButton.setTextColor(Color.parseColor("#ff333333"));
+            zoomLocationButton.setTextColor(themeUtils.getPrimaryTextColor());
         } else {
             zoomLocationButton.setEnabled(false);
             zoomLocationButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));
@@ -528,7 +529,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
         if (latLng != null & !setClear) {
             zoomPointButton.setEnabled(true);
             zoomPointButton.setBackgroundColor(Color.parseColor("#50cccccc"));
-            zoomPointButton.setTextColor(Color.parseColor("#ff333333"));
+            zoomPointButton.setTextColor(themeUtils.getPrimaryTextColor());
         } else {
             zoomPointButton.setEnabled(false);
             zoomPointButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));

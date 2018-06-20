@@ -87,7 +87,6 @@
   <string name="parse_legacy_formlist_failed">เซิร์ฟเวอร์ที่เชื่อมต่ออยู่ไม่มีแบบสำรวจที่ใช้งานได้กับ Aggregate 0.9.x. : %s</string>
   <string name="parse_openrosa_formlist_failed">เซิร์ฟเวอร์ที่เชื่อมต่ออยู่ไม่มีแบบสำรวจที่ใช้งานได้กับ OpenRosa version 1.0 standard: %s</string>
   <string name="password">รหัสผ่าน</string>
-  <string name="play_audio">เปิดเสียง</string>
   <string name="play_video">เปิดภาพเคลื่อนไหว</string>
   <string name="please_wait">โปรดรอสักครู่</string>
   <string name="please_wait_long">โปรดรอ อาจต้องใช้เวลาสักครู่</string>
@@ -131,7 +130,6 @@
   <string name="submission_url">Submission path</string>
   <string name="font_size">ขนาดตัวอักษร</string>
   <string name="change_font_size">ขนาดอักษร</string>
-  <string name="form_scan_starting">กำลังค้นหาแบบสำรวจ</string>
   <string name="access_error">มีข้อผิดพลาดขณะเปิด %s:</string>
   <string name="manifest_server_error">Manifest reply does not report an OpenRosa version — bad server?</string>
   <string name="root_element_error">Root element is not &lt;manifest\&gt; — was %s</string>
@@ -185,7 +183,6 @@
   <string name="draw_image">ภาพวาด</string>
   <string name="reset_image">ตั้งค่าใหม่</string>
   <string name="set_color">เลือกสี</string>
-  <string name="select_drawing_color">เลือกสีสำหรับวาด</string>
   <string name="admin_preferences">ตั้งค่าสำหรับผู้ควบคุมระบบ</string>
   <string name="admin_access_settings">Tap for admin access to settings</string>
   <string name="save_mid">บันทึกแบบสำรวจ</string>
@@ -222,7 +219,6 @@
   <string name="ext_sortBy_numeric_error">ข้อมูลในคอลัมน์ที่จัดเรียงต้องมีค่าเป็นตัวเลข ค่าที่ผิดพลาดคือ \'%s\'</string>
   <string name="ext_import_generic_error">ไม่สามารถนำเข้าข้อมูลจาก %1$s. เนื่องจาก: %2$s</string>
   <string name="ext_import_progress_message">กำลังโหลดข้อมูลล่วงหน้าจาก \'%1$s\', กรุณารอสักครู่… %2$s</string>
-  <string name="ext_import_cancelled_message">การอ่านข้อมูลถูกยกเลิก</string>
   <string name="ext_import_finalizing_message">กำลังตรวจสอบข้อมูลตั้งต้น…</string>
   <string name="ext_import_completed_message">การอ่านข้อมูลเสร็จสมบูรณ์</string>
   <string name="ext_not_initialized_error">ระบบจัดการข้อมูลภายนอกยังไม่ถูกเปิดใช้งาน</string>
@@ -251,14 +247,11 @@
   <string name="drive_get_file">ได้รับ %1$s และไฟล์ภาพและเสียง</string>
   <string name="no_google_account">ไม่ได้เลือกบัญชีผู้ใช้งาน Google</string>
   <string name="google_set_account">คุณเลือก Google Sheets เป็นเซิร์ฟเวอร์ โปรดเลือกบัญชี Google ที่เกี่ยวข้องในการตั้งค่าทั่วไปก่อนดำเนินการต่อ</string>
-  <string name="invalid_oauth">OAuth 2 token ไม่ถูกต้อง</string>
-  <string name="google_repeat_error">ไม่รองรับการทำซ้ำโดย Google Sheet ในตอนนี้</string>
   <string name="notification_error">การแสดงข้อความเตือนผิดพลาด</string>
   <string name="delete_after_send">ลบหลังจากส่งแล้ว</string>
   <string name="delete_after_send_summary">ลบฟอร์มที่ตรวจสอบแล้วและไฟล์ภาพและเสียงหลังจากส่งไปที่เซิร์ฟเวอร์แล้ว</string>
   <string name="change_server_url">URL ของเซิร์ฟเวอร์</string>
   <string name="google_search_browse">ค้นหาแบบฟอร์ม หรือเลือก \'My Drive\' ด้านล่างเพื่อค้นหา</string>
-  <string name="no_blank_search">ช่องค้นหาปล่อยว่างไม่ได้</string>
   <string name="send_in_progress">กำลังส่งข้อมูล โปรดลองใหม่อีกครั้ง</string>
   <string name="sheets_max_columns">จำนวนคอลัมน์สูงสุดคือ 255 แบบฟอร์มของคุณมี %s ไม่สามารถอัพโหลดไปที่  spreadsheet ได้</string>
   <string name="invalid_sheet_id">หมายเลขชีทไม่ถุกต้อง: %1$s</string>
@@ -268,7 +261,6 @@
   <string name="google_play_services_error_occured">เปิด Google Maps ไม่ได้ ตรวจสอบว่ามี Google Play Services ติดตั้งหรือไม่
 </string>
   <string name="about_preferences">เกี่ยวกับ</string>
-  <string name="tell_your_friends_msg">ดาวน์โหลดแอพ ODK Collect</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">ทำแผนที่</string>
   <string name="map_sdk_selector_title">Mapping SDK</string>
@@ -278,7 +270,6 @@
   <string name="show_map_sdk">แสดงตัวเลือกของ Map SDK</string>
   <string name="openmap_streets">OSM Streets</string>
   <string name="openmap_usgs_topo">USGS National Map Topo</string>
-  <string name="openmap_usgs_sat">USGS National Map Sat</string>
   <string name="openmap_stamen_terrain">Stamen Terrain</string>
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
@@ -307,7 +298,6 @@
   <string name="minutes">นาที</string>
   <string name="geo_exit_warning">ยกเลิกการเปลี่ยนแปลงและกลับไปที่ ODK?</string>
   <string name="polygon_validator">ต้องมีจุดพิกัด 3 จุดขึ้นไปเพื่อสร้าง Polygon</string>
-  <string name="dialog_continue">ดำเนินการต่อ</string>
   <string name="clear">ลบ</string>
   <string name="polyline_polygon_text">บันทึก GeoTrace เป็น</string>
   <string name="manual_mode">โหมดตั้งค่าเอง</string>
@@ -354,7 +344,6 @@
   <string name="reset_settings_dialog_title">เลือกสิ่งที่ต้องตั้งค่าใหม่</string>
   <string name="reset_settings_dialog">ตั้งค่าใหม่…</string>
   <string name="reset_settings_button_reset">ตั้งค่าใหม่</string>
-  <string name="reset_dialog_nothing">คุณยังไม่ได้เลือกอะไรให้ตั้งค่าใหม่</string>
   <string name="reset_in_progress">กำลังตั้งค่าเริ่มต้นใหม่</string>
   <string name="reset_app_state_result">ผลการตั้งค่าใหม่</string>
   <string name="reset_app_state_warning">ข้อมูลที่เลือกไว้ทั้งหมดจะถูกลบ และไม่สามารถย้อนกลับได้</string>
@@ -382,4 +371,5 @@
   <string name="select_time">เลือกเวลา</string>
   <string name="no_date_selected">ยังไม่ได้เลือกวันที่</string>
   <string name="no_time_selected">ยังไม่ได้เลือกเวลา</string>
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
 </resources>

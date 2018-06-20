@@ -27,7 +27,6 @@ import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
@@ -41,7 +40,7 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 
@@ -62,15 +61,15 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
 @SuppressLint("ViewConstructor")
 public class ImageWebViewWidget extends QuestionWidget implements FileWidget {
 
-    private Button captureButton;
-    private Button chooseButton;
+    private final Button captureButton;
+    private final Button chooseButton;
 
     @Nullable
     private WebView imageDisplay;
 
     private String binaryName;
 
-    private TextView errorTextView;
+    private final TextView errorTextView;
 
     public ImageWebViewWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -84,71 +83,9 @@ public class ImageWebViewWidget extends QuestionWidget implements FileWidget {
 
         captureButton = getSimpleButton(getContext().getString(R.string.capture_image), R.id.capture_image);
         captureButton.setEnabled(!prompt.isReadOnly());
-        captureButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(this, "captureButton", "click",
-                                getFormEntryPrompt().getIndex());
-                errorTextView.setVisibility(View.GONE);
-                Intent i = new Intent(
-                        android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                // We give the camera an absolute filename/path where to put the
-                // picture because of bug:
-                // http://code.google.com/p/android/issues/detail?id=1480
-                // The bug appears to be fixed in Android 2.0+, but as of feb 2,
-                // 2010, G1 phones only run 1.6. Without specifying the path the
-                // images returned by the camera in 1.6 (and earlier) are ~1/4
-                // the size. boo.
-
-                // if this gets modified, the onActivityResult in
-                // FormEntyActivity will also need to be updated.
-                i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
-                        Uri.fromFile(new File(Collect.TMPFILE_PATH)));
-                try {
-                    waitForData();
-                    ((Activity) getContext()).startActivityForResult(i,
-                            RequestCodes.IMAGE_CAPTURE);
-                } catch (ActivityNotFoundException e) {
-                    Toast.makeText(
-                            getContext(),
-                            getContext().getString(R.string.activity_not_found,
-                                    "image capture"), Toast.LENGTH_SHORT)
-                            .show();
-                    cancelWaitingForData();
-                }
-
-            }
-        });
 
         chooseButton = getSimpleButton(getContext().getString(R.string.choose_image), R.id.choose_image);
         chooseButton.setEnabled(!prompt.isReadOnly());
-        chooseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(this, "chooseButton", "click",
-                                getFormEntryPrompt().getIndex());
-                errorTextView.setVisibility(View.GONE);
-                Intent i = new Intent(Intent.ACTION_GET_CONTENT);
-                i.setType("image/*");
-
-                try {
-                    waitForData();
-                    ((Activity) getContext()).startActivityForResult(i,
-                            RequestCodes.IMAGE_CHOOSER);
-                } catch (ActivityNotFoundException e) {
-                    Toast.makeText(
-                            getContext(),
-                            getContext().getString(R.string.activity_not_found,
-                                    "choose image"), Toast.LENGTH_SHORT).show();
-                    cancelWaitingForData();
-                }
-
-            }
-        });
 
         // finish complex layout
         LinearLayout answerLayout = new LinearLayout(getContext());
@@ -245,14 +182,11 @@ public class ImageWebViewWidget extends QuestionWidget implements FileWidget {
 
     @Override
     public void deleteFile() {
-        // get the file path and delete the file
-        String name = binaryName;
-        // clean up variables
+        MediaManager
+                .INSTANCE
+                .markOriginalFileOrDelete(getFormEntryPrompt().getIndex().toString(),
+                getInstanceFolder() + File.separator + binaryName);
         binaryName = null;
-        // delete from media provider
-        int del = MediaUtils.deleteImageFileFromMediaProvider(
-                getInstanceFolder() + File.separator + name);
-        Timber.i("Deleted %d rows from media content provider", del);
     }
 
     @Override
@@ -304,6 +238,10 @@ public class ImageWebViewWidget extends QuestionWidget implements FileWidget {
             values.put(Images.Media.MIME_TYPE, "image/jpeg");
             values.put(Images.Media.DATA, newImage.getAbsolutePath());
 
+            MediaManager
+                    .INSTANCE
+                    .replaceRecentFileForQuestion(getFormEntryPrompt().getIndex().toString(), newImage.getAbsolutePath());
+
             Uri imageURI = getContext().getContentResolver().insert(
                     Images.Media.EXTERNAL_CONTENT_URI, values);
 
@@ -316,16 +254,6 @@ public class ImageWebViewWidget extends QuestionWidget implements FileWidget {
         } else {
             Timber.e("NO IMAGE EXISTS at: %s", newImage.getAbsolutePath());
         }
-
-        cancelWaitingForData();
-    }
-
-    @Override
-    public void setFocus(Context context) {
-        // Hide the soft keyboard if it's showing.
-        InputMethodManager inputManager = (InputMethodManager) context
-                .getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
     }
 
     @Override
@@ -339,5 +267,73 @@ public class ImageWebViewWidget extends QuestionWidget implements FileWidget {
         super.cancelLongPress();
         captureButton.cancelLongPress();
         chooseButton.cancelLongPress();
+    }
+
+    @Override
+    public void onButtonClick(int buttonId) {
+        switch (buttonId) {
+            case R.id.capture_image:
+                captureImage();
+                break;
+            case R.id.choose_image:
+                chooseImage();
+                break;
+        }
+    }
+
+    private void captureImage() {
+        Collect.getInstance()
+                .getActivityLogger()
+                .logInstanceAction(this, "captureButton", "click",
+                        getFormEntryPrompt().getIndex());
+        errorTextView.setVisibility(View.GONE);
+        Intent i = new Intent(
+                android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        // We give the camera an absolute filename/path where to put the
+        // picture because of bug:
+        // http://code.google.com/p/android/issues/detail?id=1480
+        // The bug appears to be fixed in Android 2.0+, but as of feb 2,
+        // 2010, G1 phones only run 1.6. Without specifying the path the
+        // images returned by the camera in 1.6 (and earlier) are ~1/4
+        // the size. boo.
+
+        // if this gets modified, the onActivityResult in
+        // FormEntyActivity will also need to be updated.
+        i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
+                Uri.fromFile(new File(Collect.TMPFILE_PATH)));
+        try {
+            waitForData();
+            ((Activity) getContext()).startActivityForResult(i,
+                    RequestCodes.IMAGE_CAPTURE);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(
+                    getContext(),
+                    getContext().getString(R.string.activity_not_found,
+                            getContext().getString(R.string.capture_image)), Toast.LENGTH_SHORT)
+                    .show();
+            cancelWaitingForData();
+        }
+    }
+
+    private void chooseImage() {
+        Collect.getInstance()
+                .getActivityLogger()
+                .logInstanceAction(this, "chooseButton", "click",
+                        getFormEntryPrompt().getIndex());
+        errorTextView.setVisibility(View.GONE);
+        Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+        i.setType("image/*");
+
+        try {
+            waitForData();
+            ((Activity) getContext()).startActivityForResult(i,
+                    RequestCodes.IMAGE_CHOOSER);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(
+                    getContext(),
+                    getContext().getString(R.string.activity_not_found,
+                            getContext().getString(R.string.choose_image)), Toast.LENGTH_SHORT).show();
+            cancelWaitingForData();
+        }
     }
 }

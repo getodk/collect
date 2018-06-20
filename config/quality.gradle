@@ -1,9 +1,3 @@
-apply plugin: 'checkstyle'
-apply plugin: 'findbugs'
-apply plugin: 'pmd'
-
-apply plugin: 'jacoco-everywhere'
-
 /*
  * Copyright 2015 Vincent Brison.
  *
@@ -20,52 +14,79 @@ apply plugin: 'jacoco-everywhere'
  * limitations under the License.
  */
 
-// Add checkstyle, findbugs, pmd and lint to the check task.
-check.dependsOn 'checkstyle', 'findbugs', 'pmd', 'lint'
-
-def configDir = "${project.rootDir}/config/quality"
+def configDir = "${project.rootDir}/config"
 def reportsDir = "${project.buildDir}/reports"
 
-// Required to use fileExtensions property in checkstyle file
+//------------------------Checkstyle------------------------//
+
+apply plugin: 'checkstyle'
+
 checkstyle.toolVersion = '7.6.1'
 
 task checkstyle(type: Checkstyle) {
-    configFile file("$configDir/checkstyle/checkstyle.xml")
-    configProperties.checkstyleSuppressionsPath = file("$configDir/checkstyle/suppressions.xml").absolutePath
+    configFile file("$configDir/checkstyle.xml")
+
+    ignoreFailures false // Fail early
+    showViolations true
+
     source 'src'
     include '**/*.java'
     exclude '**/gen/**'
     classpath = files()
 }
 
+//------------------------Findbugs------------------------//
+
+apply plugin: 'findbugs'
+
 task findbugs(type: FindBugs, dependsOn: "assembleDebug") {
-    ignoreFailures = false
-    effort = "max"
-    reportLevel = "high"
-    excludeFilter = new File("$configDir/findbugs/findbugs-filter.xml")
+
+    ignoreFailures false // Fail early
+    effort = 'max'
+
+    // Reporting only high priority problems {Possible reportLevels: 'high', 'medium', 'low'}
+    reportLevel = 'high'
+
+    excludeFilter = new File("$configDir/findbugs-filter.xml")
     classes = files("${project.rootDir}/collect_app/build/intermediates/classes")
 
     source 'src'
     include '**/*.java'
     exclude '**/gen/**'
+/**
+ * Tweak worker process max heap size
+ * 128m = OutOfMemory
+ * 256m=~31s
+ * 384m=~31s
+ * 768m=~31s
+ * */
+    setMaxHeapSize('256m')
 
     reports {
         xml.enabled = false
         html.enabled = true
         xml {
-            destination "$reportsDir/findbugs/findbugs.xml"
+            setDestination new File("$reportsDir/findbugs/findbugs.xml")
         }
         html {
-            destination "$reportsDir/findbugs/findbugs.html"
+            setDestination new File("$reportsDir/findbugs/findbugs.html")
         }
     }
 
     classpath = files()
 }
 
+//------------------------Pmd------------------------//
+
+apply plugin: 'pmd'
+
+pmd {
+    toolVersion = '6.4.0'
+}
+
 task pmd(type: Pmd) {
-    ignoreFailures = false
-    ruleSetFiles = files("$configDir/pmd/pmd-ruleset.xml")
+    ignoreFailures = false // Fail early
+    ruleSetFiles = files("$configDir/pmd-ruleset.xml")
     ruleSets = []
 
     source 'src'
@@ -76,20 +97,22 @@ task pmd(type: Pmd) {
         xml.enabled = false
         html.enabled = true
         xml {
-            destination "$reportsDir/pmd/pmd.xml"
+            setDestination new File("$reportsDir/pmd/pmd.xml")
         }
         html {
-            destination "$reportsDir/pmd/pmd.html"
+            setDestination new File("$reportsDir/pmd/pmd.html")
         }
     }
 }
+
+//------------------------Lint------------------------//
 
 android {
     lintOptions {
         abortOnError true
         xmlReport true
         htmlReport true
-        lintConfig file("$configDir/lint/lint.xml")
+        lintConfig file("$configDir/lint.xml")
         htmlOutput file("$reportsDir/lint/lint-result.html")
         xmlOutput file("$reportsDir/lint/lint-result.xml")
     }

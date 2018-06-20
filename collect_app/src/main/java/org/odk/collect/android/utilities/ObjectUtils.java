@@ -5,9 +5,13 @@ import android.support.annotation.Nullable;
 import timber.log.Timber;
 
 public class ObjectUtils {
+
+    private ObjectUtils() {
+    }
+
     @SuppressWarnings("unchecked")
     @Nullable
-    public static  <T> T uncheckedCast(Object object) {
+    public static <T> T uncheckedCast(Object object) {
         try {
             return (T) object;
 

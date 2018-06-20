@@ -24,16 +24,16 @@ package org.odk.collect.android.dto;
  */
 public class Instance {
 
-    private String displayName;
-    private String submissionUri;
-    private String canEditWhenComplete;
-    private String instanceFilePath;
-    private String jrFormId;
-    private String jrVersion;
-    private String status;
-    private Long lastStatusChangeDate;
-    private String displaySubtext;
-    private Long deletedDate;
+    private final String displayName;
+    private final String submissionUri;
+    private final String canEditWhenComplete;
+    private final String instanceFilePath;
+    private final String jrFormId;
+    private final String jrVersion;
+    private final String status;
+    private final Long lastStatusChangeDate;
+    private final String displaySubtext;
+    private final Long deletedDate;
 
     private Instance(Builder builder) {
         displayName = builder.displayName;

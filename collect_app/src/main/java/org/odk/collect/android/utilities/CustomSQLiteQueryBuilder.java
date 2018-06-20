@@ -97,4 +97,19 @@ public class CustomSQLiteQueryBuilder {
         query.append("INSERT INTO").append(SPACE).append(table);
         return this;
     }
+
+    public CustomSQLiteQueryBuilder alter() {
+        query.append("ALTER").append(SPACE);
+        return this;
+    }
+
+    public CustomSQLiteQueryBuilder table(final String table) {
+        query.append("TABLE").append(SPACE).append(table).append(SPACE);
+        return this;
+    }
+
+    public CustomSQLiteQueryBuilder addColumn(final String columnName, final String columnType) {
+        query.append("ADD COLUMN").append(SPACE).append(columnName).append(SPACE).append(columnType);
+        return this;
+    }
 }

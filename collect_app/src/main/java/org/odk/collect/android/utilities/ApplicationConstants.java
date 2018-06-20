@@ -30,19 +30,23 @@ public class ApplicationConstants {
 
     public static final String[] TRANSLATIONS_AVAILABLE = {"af", "am", "ar", "bn",
             "ca", "cs", "de", "en", "es", "et", "fa", "fi", "fr", "ha",
-            "hi", "hu", "in", "it", "ja", "ka", "km", "lo_LA", "lt", "mg", "mr",
+            "hi", "hu", "in", "it", "ja", "ka", "km", "lo_LA", "lt", "mg", "ml", "mr",
             "my", "nb", "ne_NP", "nl", "no", "pl", "ps", "pt", "ro", "ru", "so",
-            "sq", "sw", "sw_KE", "ta", "th_TH", "ti", "tl", "tr", "uk", "ur",
+            "sq", "sv_SE", "sw", "sw_KE", "ta", "th_TH", "ti", "tl", "tr", "uk", "ur",
             "ur_PK", "vi", "zh", "zu"};
+
+    private ApplicationConstants() {
+
+    }
 
     public static HashMap<String, Integer> getSortLabelToIconMap() {
         HashMap<String, Integer> hashMap = new HashMap<>();
-        hashMap.put(Collect.getInstance().getString(R.string.sort_by_name_asc), R.drawable.ic_sort_by_alpha_black_24dp);
-        hashMap.put(Collect.getInstance().getString(R.string.sort_by_name_desc), R.drawable.ic_sort_by_alpha_black_24dp_2);
-        hashMap.put(Collect.getInstance().getString(R.string.sort_by_date_asc), R.drawable.ic_access_time_black_24dp);
-        hashMap.put(Collect.getInstance().getString(R.string.sort_by_date_desc), R.drawable.ic_access_time_black_24dp_2);
-        hashMap.put(Collect.getInstance().getString(R.string.sort_by_status_asc), R.drawable.ic_assignment_turned_in_black_24dp);
-        hashMap.put(Collect.getInstance().getString(R.string.sort_by_status_desc), R.drawable.ic_assignment_late_black_24dp);
+        hashMap.put(Collect.getInstance().getString(R.string.sort_by_name_asc), R.drawable.ic_sort_by_alpha);
+        hashMap.put(Collect.getInstance().getString(R.string.sort_by_name_desc), R.drawable.ic_sort_by_alpha);
+        hashMap.put(Collect.getInstance().getString(R.string.sort_by_date_asc), R.drawable.ic_access_time);
+        hashMap.put(Collect.getInstance().getString(R.string.sort_by_date_desc), R.drawable.ic_access_time);
+        hashMap.put(Collect.getInstance().getString(R.string.sort_by_status_asc), R.drawable.ic_assignment_turned_in);
+        hashMap.put(Collect.getInstance().getString(R.string.sort_by_status_desc), R.drawable.ic_assignment_late);
         return hashMap;
     }
 
@@ -86,5 +90,6 @@ public class ApplicationConstants {
         public static final int OSM_CAPTURE = 19;
         public static final int GEOSHAPE_CAPTURE = 20;
         public static final int GEOTRACE_CAPTURE = 21;
+        public static final int ARBITRARY_FILE_CHOOSER = 22;
     }
 }

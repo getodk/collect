@@ -17,12 +17,12 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.v7.widget.AppCompatRadioButton;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
@@ -96,8 +96,7 @@ public class ListWidget extends QuestionWidget implements MultiChoiceWidget, OnC
 
         if (items != null) {
             for (int i = 0; i < items.size(); i++) {
-                RadioButton r = new RadioButton(getContext());
-
+                AppCompatRadioButton r = new AppCompatRadioButton(getContext());
                 r.setId(ViewIds.generateViewId());
                 r.setTag(i);
                 r.setEnabled(!prompt.isReadOnly());
@@ -137,9 +136,7 @@ public class ListWidget extends QuestionWidget implements MultiChoiceWidget, OnC
                                 DisplayMetrics metrics = context.getResources().getDisplayMetrics();
                                 int screenWidth = metrics.widthPixels;
                                 int screenHeight = metrics.heightPixels;
-                                b =
-                                        FileUtils.getBitmapScaledToDisplay(imageFile, screenHeight,
-                                                screenWidth);
+                                b = FileUtils.getBitmapScaledToDisplay(imageFile, screenHeight, screenWidth);
                             } catch (OutOfMemoryError e) {
                                 errorMsg = "ERROR: " + e.getMessage();
                             }
@@ -262,16 +259,6 @@ public class ListWidget extends QuestionWidget implements MultiChoiceWidget, OnC
             return new SelectOneData(new Selection(sc));
         }
     }
-
-
-    @Override
-    public void setFocus(Context context) {
-        // Hide the soft keyboard if it's showing.
-        InputMethodManager inputManager =
-                (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
-    }
-
 
     public int getCheckedId() {
         for (int i = 0; i < buttons.size(); ++i) {

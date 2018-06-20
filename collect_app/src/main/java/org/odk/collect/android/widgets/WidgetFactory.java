@@ -30,6 +30,10 @@ import timber.log.Timber;
  */
 public class WidgetFactory {
 
+    private WidgetFactory() {
+
+    }
+
     /**
      * Returns the appropriate QuestionWidget for the given FormEntryPrompt.
      *
@@ -48,7 +52,7 @@ public class WidgetFactory {
         // for now, all appearance tags are in english...
         appearance = appearance.toLowerCase(Locale.ENGLISH);
 
-        QuestionWidget questionWidget = new StringWidget(context, fep, readOnlyOverride);
+        final QuestionWidget questionWidget;
         switch (fep.getControlType()) {
             case Constants.CONTROL_INPUT:
                 switch (fep.getDataType()) {
@@ -60,6 +64,8 @@ public class WidgetFactory {
                             questionWidget = new EthiopianDateWidget(context, fep);
                         } else if (appearance.contains("coptic")) {
                             questionWidget = new CopticDateWidget(context, fep);
+                        } else if (appearance.contains("islamic")) {
+                            questionWidget = new IslamicDateWidget(context, fep);
                         } else {
                             questionWidget = new DateWidget(context, fep);
                         }
@@ -73,14 +79,24 @@ public class WidgetFactory {
                         } else if (appearance.equals("bearing")) {
                             questionWidget = new BearingWidget(context, fep);
                         } else {
-                            questionWidget = new DecimalWidget(context, fep, readOnlyOverride);
+                            boolean useThousandSeparator = false;
+                            if (appearance.contains("thousands-sep")) {
+                                useThousandSeparator = true;
+                            }
+                            questionWidget = new DecimalWidget(context, fep, readOnlyOverride,
+                                    useThousandSeparator);
                         }
                         break;
                     case Constants.DATATYPE_INTEGER:
                         if (appearance.startsWith("ex:")) {
                             questionWidget = new ExIntegerWidget(context, fep);
                         } else {
-                            questionWidget = new IntegerWidget(context, fep, readOnlyOverride);
+                            boolean useThousandSeparator = false;
+                            if (appearance.contains("thousands-sep")) {
+                                useThousandSeparator = true;
+                            }
+                            questionWidget = new IntegerWidget(context, fep, readOnlyOverride,
+                                    useThousandSeparator);
                         }
                         break;
                     case Constants.DATATYPE_GEOPOINT:
@@ -98,19 +114,18 @@ public class WidgetFactory {
                     case Constants.DATATYPE_TEXT:
                         String query = fep.getQuestion().getAdditionalAttribute(null, "query");
                         if (query != null) {
-                            if (appearance.startsWith("quick")) {
-                                questionWidget = new ItemsetWidget(context, fep, readOnlyOverride,
-                                        true);
-                            } else {
-                                questionWidget = new ItemsetWidget(context, fep, readOnlyOverride,
-                                        false);
-                            }
+                            questionWidget = new ItemsetWidget(context, fep, appearance.startsWith("quick"));
                         } else if (appearance.startsWith("printer")) {
                             questionWidget = new ExPrinterWidget(context, fep);
                         } else if (appearance.startsWith("ex:")) {
                             questionWidget = new ExStringWidget(context, fep);
-                        } else if (appearance.equals("numbers")) {
-                            questionWidget = new StringNumberWidget(context, fep, readOnlyOverride);
+                        } else if (appearance.contains("numbers")) {
+                            boolean useThousandsSeparator = false;
+                            if (appearance.contains("thousands-sep")) {
+                                useThousandsSeparator = true;
+                            }
+                            questionWidget = new StringNumberWidget(context, fep, readOnlyOverride,
+                                    useThousandsSeparator);
                         } else if (appearance.equals("url")) {
                             questionWidget = new UrlWidget(context, fep);
                         } else {
@@ -120,23 +135,27 @@ public class WidgetFactory {
                     case Constants.DATATYPE_BOOLEAN:
                         questionWidget = new BooleanWidget(context, fep);
                         break;
+                    default:
+                        questionWidget = new StringWidget(context, fep, readOnlyOverride);
+                        break;
                 }
+                break;
+            case Constants.CONTROL_FILE_CAPTURE:
+                questionWidget = new ArbitraryFileWidget(context, fep);
                 break;
             case Constants.CONTROL_IMAGE_CHOOSE:
                 if (appearance.equals("web")) {
                     questionWidget = new ImageWebViewWidget(context, fep);
                 } else if (appearance.equals("signature")) {
                     questionWidget = new SignatureWidget(context, fep);
-                } else if (appearance.equals("annotate")) {
+                } else if (appearance.contains("annotate")) {
                     questionWidget = new AnnotateWidget(context, fep);
                 } else if (appearance.equals("draw")) {
                     questionWidget = new DrawWidget(context, fep);
                 } else if (appearance.startsWith("align:")) {
                     questionWidget = new AlignedImageWidget(context, fep);
-                } else if (appearance.equals("selfie")) {
-                    questionWidget = new ImageWidget(context, fep, true);
                 } else {
-                    questionWidget = new ImageWidget(context, fep, false);
+                    questionWidget = new ImageWidget(context, fep);
                 }
                 break;
             case Constants.CONTROL_OSM_CAPTURE:
@@ -173,7 +192,7 @@ public class WidgetFactory {
                 } else if (appearance.startsWith("minimal")) {
                     questionWidget = new SpinnerWidget(context, fep);
                 } else if (appearance.startsWith("quick")) {
-                    questionWidget = new SelectOneAutoAdvanceWidget(context, fep);
+                    questionWidget = new SelectOneWidget(context, fep, true);
                 } else if (appearance.equals("list-nolabel")) {
                     questionWidget = new ListWidget(context, fep, false);
                 } else if (appearance.equals("list")) {
@@ -182,8 +201,10 @@ public class WidgetFactory {
                     questionWidget = new LabelWidget(context, fep);
                 } else if (appearance.contains("search") || appearance.contains("autocomplete")) {
                     questionWidget = new SelectOneSearchWidget(context, fep);
+                } else if (appearance.startsWith("image-map")) {
+                    questionWidget = new SelectOneImageMapWidget(context, fep);
                 } else {
-                    questionWidget = new SelectOneWidget(context, fep);
+                    questionWidget = new SelectOneWidget(context, fep, false);
                 }
                 break;
             case Constants.CONTROL_SELECT_MULTI:
@@ -214,6 +235,8 @@ public class WidgetFactory {
                     questionWidget = new LabelWidget(context, fep);
                 } else if (appearance.contains("autocomplete")) {
                     questionWidget = new SelectMultipleAutocompleteWidget(context, fep);
+                } else if (appearance.startsWith("image-map")) {
+                    questionWidget = new SelectMultiImageMapWidget(context, fep);
                 } else {
                     questionWidget = new SelectMultiWidget(context, fep);
                 }
@@ -229,9 +252,16 @@ public class WidgetFactory {
                     case Constants.DATATYPE_DECIMAL:
                         questionWidget = new RangeDecimalWidget(context, fep);
                         break;
+                    default:
+                        questionWidget = new StringWidget(context, fep, readOnlyOverride);
+                        break;
                 }
+                break;
+            default:
+                questionWidget = new StringWidget(context, fep, readOnlyOverride);
                 break;
         }
         return questionWidget;
     }
+
 }

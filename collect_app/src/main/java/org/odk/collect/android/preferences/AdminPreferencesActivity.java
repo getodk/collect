@@ -18,9 +18,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.CollectAbstractActivity;
+import org.odk.collect.android.activities.MainMenuActivity;
+import org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog;
+import org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog;
+import org.odk.collect.android.utilities.ThemeUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -36,7 +40,7 @@ import timber.log.Timber;
  * @author Thomas Smyth, Sassafras Tech Collective (tom@sassafrastech.com; constraint behavior
  *         option)
  */
-public class AdminPreferencesActivity extends AppCompatActivity {
+public class AdminPreferencesActivity extends CollectAbstractActivity implements MovingBackwardsDialog.MovingBackwardsDialogListener, ResetSettingsResultDialog.ResetSettingsResultDialogListener {
     public static final String ADMIN_PREFERENCES = "admin_prefs";
     public static final String TAG = "AdminPreferencesFragment";
 
@@ -73,6 +77,7 @@ public class AdminPreferencesActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(new ThemeUtils(this).getSettingsTheme());
 
         setTitle(R.string.admin_preferences);
         if (savedInstanceState == null) {
@@ -81,5 +86,16 @@ public class AdminPreferencesActivity extends AppCompatActivity {
                     .add(android.R.id.content, new AdminPreferencesFragment(), TAG)
                     .commit();
         }
+    }
+
+    @Override
+    public void preventOtherWaysOfEditingForm() {
+        AdminPreferencesFragment fragment = (AdminPreferencesFragment) getFragmentManager().findFragmentByTag(TAG);
+        fragment.preventOtherWaysOfEditingForm();
+    }
+
+    @Override
+    public void onDialogClosed() {
+        MainMenuActivity.startActivityAndCloseAllOthers(this);
     }
 }

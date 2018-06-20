@@ -16,10 +16,10 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
@@ -28,33 +28,28 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
+import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * SelctMultiWidget handles multiple selection fields using checkboxes.
+ * SelectMultiWidget handles multiple selection fields using checkboxes.
  *
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public class SelectMultiWidget extends SelectWidget implements MultiChoiceWidget {
-    protected ArrayList<CheckBox> checkBoxes;
+public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWidget {
+    protected final List<CheckBox> checkBoxes = new ArrayList<>();
     private boolean checkboxInit = true;
-    private List<Selection> ve;
+    private final List<Selection> ve;
 
     public SelectMultiWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
-        checkBoxes = new ArrayList<>();
-        ve = new ArrayList<>();
-        if (getFormEntryPrompt().getAnswerValue() != null) {
-            //noinspection unchecked
-            ve = (List<Selection>) getFormEntryPrompt().getAnswerValue().getValue();
-        } else {
-            ve = new ArrayList<>();
-        }
-
+        //noinspection unchecked
+        ve = getFormEntryPrompt().getAnswerValue() == null ? new ArrayList<>() :
+                (List<Selection>) getFormEntryPrompt().getAnswerValue().getValue();
         createLayout();
     }
 
@@ -77,7 +72,7 @@ public class SelectMultiWidget extends SelectWidget implements MultiChoiceWidget
             }
         }
 
-        return vc.size() == 0 ? null : new SelectMultiData(vc);
+        return vc.isEmpty() ? null : new SelectMultiData(vc);
     }
 
     @Override
@@ -96,15 +91,10 @@ public class SelectMultiWidget extends SelectWidget implements MultiChoiceWidget
     }
 
     protected CheckBox createCheckBox(int index) {
-        String choiceName = getFormEntryPrompt().getSelectChoiceText(items.get(index));
-        CharSequence choiceDisplayName;
-        if (choiceName != null) {
-            choiceDisplayName = TextUtils.textToHtml(choiceName);
-        } else {
-            choiceDisplayName = "";
-        }
+        final String choiceName = getFormEntryPrompt().getSelectChoiceText(items.get(index));
+        final CharSequence choiceDisplayName = choiceName == null ? "" : TextUtils.textToHtml(choiceName);
         // no checkbox group so id by answer + offset
-        CheckBox checkBox = new CheckBox(getContext());
+        AppCompatCheckBox checkBox = new AppCompatCheckBox(getContext());
         checkBox.setTag(index);
         checkBox.setId(ViewIds.generateViewId());
         checkBox.setText(choiceDisplayName);
@@ -122,16 +112,9 @@ public class SelectMultiWidget extends SelectWidget implements MultiChoiceWidget
         }
 
         // when clicked, check for readonly before toggling
-        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (!checkboxInit && getFormEntryPrompt().isReadOnly()) {
-                    if (buttonView.isChecked()) {
-                        buttonView.setChecked(false);
-                    } else {
-                        buttonView.setChecked(true);
-                    }
-                }
+        checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (!checkboxInit && getFormEntryPrompt().isReadOnly()) {
+                buttonView.setChecked(!buttonView.isChecked());
             }
         });
 
@@ -139,7 +122,12 @@ public class SelectMultiWidget extends SelectWidget implements MultiChoiceWidget
     }
 
     protected void createLayout() {
+        readItems();
+
         if (items != null) {
+            // check if any values have spaces
+            SpacesInUnderlyingValuesWarning.forQuestionWidget(this).renderWarningIfNecessary(items);
+
             for (int i = 0; i < items.size(); i++) {
                 CheckBox checkBox = createCheckBox(i);
                 checkBoxes.add(checkBox);

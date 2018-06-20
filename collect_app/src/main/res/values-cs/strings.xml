@@ -86,7 +86,6 @@
   <string name="parse_legacy_formlist_failed">Server neposkytnul seznam dostupných dotazníků kompatibilní s Aggregate 0.9.x. : %s</string>
   <string name="parse_openrosa_formlist_failed">Server neposkytnul seznam dostupných dotazníků kompatibilní se standartem OpenRosa 1.0: %s</string>
   <string name="password">Heslo</string>
-  <string name="play_audio">Přehrát zvuk</string>
   <string name="play_video">Přehrát video</string>
   <string name="please_wait">Prosím chvilku počkejte.</string>
   <string name="please_wait_long">Prosím čekejte. Může to trvat několik minut.</string>
@@ -127,7 +126,6 @@
   <string name="submission_url">Cesta pro odeslání</string>
   <string name="font_size">Velikost písma</string>
   <string name="change_font_size">Velikost písma</string>
-  <string name="form_scan_starting">Vyhledávám dotazníky…</string>
   <string name="access_error">Chyba při přístupu k %s:</string>
   <string name="manifest_server_error">Odpověď manifestu nehlásí verzi OpenRosa - špatný server?</string>
   <string name="root_element_error">Kořenový prvek není &lt;manifest\&gt; — místo toho předán %s</string>
@@ -180,7 +178,6 @@
   <string name="draw_image">Sketch Image</string>
   <string name="reset_image">Resetovat</string>
   <string name="set_color">Nastavit barvu</string>
-  <string name="select_drawing_color">Vybrat barvu čáry</string>
   <string name="admin_preferences">Administrátorská nastavení</string>
   <string name="admin_access_settings">Klepněte pro administrátorský přístup do Nastavení</string>
   <string name="save_mid">Uložit dotazník</string>
@@ -219,7 +216,6 @@
   <string name="ext_search_return_error">Vyhledávání vrátilo objekt typu \'%s\'.</string>
   <string name="ext_import_generic_error">Nemohu importovat data z %1$s. Důvod: %2$s</string>
   <string name="ext_import_progress_message">Nahrávám data z \'%1$s\', počkejte prosím… %2$s</string>
-  <string name="ext_import_cancelled_message">Načtení dat přerušeno!</string>
   <string name="ext_import_finalizing_message">Dokončuji nahraná data…</string>
   <string name="ext_import_completed_message">Načtení dat dokončeno!</string>
   <string name="ext_not_initialized_error">ExternalDataManager nebyl spuštěn.</string>
@@ -248,16 +244,15 @@
   <string name="other_preferences">Ostatní nastavení platformy</string>
   <string name="drive_get_file">Získávám %1$s a mediální soubory</string>
   <string name="no_google_account">Není vybrán žádný účet Google!</string>
-  <string name="invalid_oauth">Neplatný kód OAuth 2</string>
   <string name="notification_error">Chyba při zobrazení oznámení</string>
   <string name="delete_after_send">Vymazat po odeslání</string>
   <string name="delete_after_send_summary">Vymaže dokončené dotazníky a média po odeslání na server</string>
   <string name="change_server_url">URL Serveru</string>
-  <string name="no_blank_search">Vyhledávací pole nemůže být prázdné</string>
   <!--Geo string added in feature-geofeatures branch-->
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
 </resources>

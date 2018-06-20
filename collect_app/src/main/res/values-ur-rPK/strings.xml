@@ -93,13 +93,13 @@
   <string name="replace_barcode">مقام کو بدل دیں</string>
   <string name="required_answer_error">معافی، یہ جواب دینا ضروری ہے</string>
   <string name="review_data">محفوظ شدہ فارم کی تدوین کریں</string>
-  <string name="review_data_button">محفوظ شدہ فارم  (‎%s‏)  کی تدوین کریں</string>
+  <string name="review_data_button">محفوظ شدہ فارم (‎%s‏) کی تدوین کریں</string>
   <string name="save_all_answers">فارم کو محفوظ کریں</string>
   <string name="save_enter_data_description">آپ ‎%s‏ کے آخر پر ہیں۔</string>
   <string name="saving_form">فارم محفوظ ہو رہا ہے</string>
   <string name="sending_items">فارم ‎%2$s‏ کے ‎%1$s‏ کو بھیجا جا رہا ہے</string>
   <string name="send_data">حتمی فارم کو بھیجیں</string>
-  <string name="send_data_button">حتمی فارم  (‎%s‏) کو بھیجیں</string>
+  <string name="send_data_button">حتمی فارم (‎%s‏) کو بھیجیں</string>
   <string name="send_selected_data">منتخب شدہ کو بھیجیں</string>
   <string name="server_requires_auth">سرور کو تصدیق چاہیے</string>
   <string name="server_url">یو آر ایل (URL)</string>
@@ -124,7 +124,6 @@
   <string name="submission_url">سبمشن کا پاتھ</string>
   <string name="font_size">ہجوں کے فانٹ کا ناپ</string>
   <string name="change_font_size">فانٹ کا سائز</string>
-  <string name="form_scan_starting">فارم (ز) کی سکیننگ ہو رہی ہے</string>
   <string name="access_error">‎%s‏ تک رسائی غلطی آ رہی ہے</string>
   <string name="manifest_server_error">دکھایا گیا جواب ‎OpenRosa‏ ورژن کو رپورت نہیں کرتا ۔ خراب سرور</string>
   <string name="manifest_tag_error">دکھایا گیا ‎%s‏  کے اندراج سے ایک یا ذیادہ  tagsغائب ہیں ۔ فائل کا نام، ہیش، یا ڈاون لوڈ </string>
@@ -172,7 +171,6 @@
   <string name="draw_image">تصویر کا خاکہ بنایئں</string>
   <string name="reset_image">دوبارہ ترتیب دیں</string>
   <string name="set_color">رنگ ترتیب دیں</string>
-  <string name="select_drawing_color">ڈرائنگ کا رنگ منتخب کریں</string>
   <string name="admin_preferences">منتظم کا دیا ہوا ترتیب</string>
   <string name="admin_access_settings">منتظم کا سیتتینگز کی رسائی دبایئں۔</string>
   <string name="save_mid">فارم کو محفوظ کریں</string>
@@ -203,4 +201,5 @@
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
 </resources>

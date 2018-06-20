@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright 2018 Shobhit
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="7dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_large">
+
+        <ImageButton
+            android:id="@+id/fastRewindBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_small"
+            android:layout_marginRight="@dimen/margin_small"
+            android:layout_toLeftOf="@id/playBtn"
+            android:layout_toStartOf="@id/playBtn"
+            android:background="?android:attr/selectableItemBackground"
+            android:minHeight="@dimen/touch_target_size"
+            android:minWidth="@dimen/touch_target_size"
+            android:padding="@dimen/padding_medium"
+            app:srcCompat="@drawable/ic_fast_rewind_24dp" />
+
+        <ImageButton
+            android:id="@+id/playBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="@dimen/margin_small"
+            android:layout_marginRight="@dimen/margin_small"
+            android:background="?android:attr/selectableItemBackground"
+            android:minHeight="@dimen/touch_target_size"
+            android:minWidth="@dimen/touch_target_size"
+            android:padding="@dimen/padding_medium"
+            app:srcCompat="@drawable/ic_play_arrow_24dp" />
+
+        <ImageButton
+            android:id="@+id/fastForwardBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_small"
+            android:layout_marginRight="@dimen/margin_small"
+            android:layout_toEndOf="@id/playBtn"
+            android:layout_toRightOf="@id/playBtn"
+            android:background="?android:attr/selectableItemBackground"
+            android:minHeight="@dimen/touch_target_size"
+            android:minWidth="@dimen/touch_target_size"
+            android:padding="@dimen/padding_medium"
+            app:srcCompat="@drawable/ic_fast_forward_24dp" />
+
+        <TextView
+            android:id="@+id/currentDuration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/playBtn"
+            android:textColor="?primaryTextColor"
+            android:textSize="@dimen/text_size_small"
+            android:textStyle="bold"
+            tools:text="00:00" />
+
+        <TextView
+            android:id="@+id/totalDuration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/playBtn"
+            android:textColor="?primaryTextColor"
+            android:textSize="@dimen/text_size_small"
+            android:textStyle="bold"
+            tools:text="00:00" />
+
+        <SeekBar
+            android:id="@+id/seekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/currentDuration"
+            android:paddingEnd="0dp"
+            android:paddingStart="0dp"
+            android:thumbOffset="3dp" />
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

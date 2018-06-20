@@ -1,5 +1,6 @@
 package org.odk.collect.android.utilities;
 
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +13,8 @@ import android.support.customtabs.CustomTabsService;
 import android.support.customtabs.CustomTabsServiceConnection;
 import android.support.customtabs.CustomTabsSession;
 
+import org.odk.collect.android.activities.WebViewActivity;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +23,7 @@ import java.util.List;
  */
 
 public class CustomTabHelper {
+    public static final String OPEN_URL = "url";
     private static final String CUSTOM_TAB_PACKAGE_NAME = "com.android.chrome";
     private CustomTabsClient customTabsClient;
     private CustomTabsSession customTabsSession;
@@ -87,14 +91,21 @@ public class CustomTabHelper {
     }
 
     public void openUri(Context context, Uri uri) {
-        if (getPackageName(context).size() != 0) {
+        if (!getPackageName(context).isEmpty()) {
             //open in chrome custom tab
-            CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder().build();
-            customTabsIntent.intent.setPackage(getPackageName(context).get(0));
-            customTabsIntent.launchUrl(context, uri);
+            new CustomTabsIntent.Builder()
+                    .build()
+                    .launchUrl(context, uri);
         } else {
-            //open in an external browser
-            context.startActivity(new Intent(Intent.ACTION_VIEW, uri));
+            try {
+                //open in external browser
+                context.startActivity(new Intent(Intent.ACTION_VIEW, uri));
+            } catch (ActivityNotFoundException e) {
+                //open in webview
+                Intent intent = new Intent(context, WebViewActivity.class);
+                intent.putExtra(OPEN_URL, uri.toString());
+                context.startActivity(intent);
+            }
         }
     }
 }

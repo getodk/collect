@@ -20,7 +20,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -33,7 +32,9 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.R;
 import org.odk.collect.android.external.ExternalDataUtil;
+import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
+import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +51,7 @@ import java.util.List;
  * @author Jeff Beorse (jeff@beorse.net)
  */
 @SuppressLint("ViewConstructor")
-public class SpinnerMultiWidget extends QuestionWidget implements MultiChoiceWidget {
+public class SpinnerMultiWidget extends QuestionWidget implements ButtonWidget, MultiChoiceWidget {
 
     List<SelectChoice> items;
 
@@ -95,39 +96,6 @@ public class SpinnerMultiWidget extends QuestionWidget implements MultiChoiceWid
         selectionText = getAnswerTextView();
         selectionText.setVisibility(View.GONE);
 
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                alertBuilder.setTitle(getFormEntryPrompt().getQuestionText()).setPositiveButton(R.string.ok,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                List<String> selectedValues = new ArrayList<>();
-
-                                for (int i = 0; i < selections.length; i++) {
-                                    if (selections[i]) {
-                                        selectedValues.add(answerItems[i].toString());
-                                    }
-                                }
-
-                                selectionText.setText(String.format(context.getString(R.string.selected_answer),
-                                        TextUtils.join(", ", selectedValues)));
-                                selectionText.setVisibility(View.VISIBLE);
-                            }
-                        });
-
-                alertBuilder.setMultiChoiceItems(answerItems, selections,
-                        new DialogInterface.OnMultiChoiceClickListener() {
-
-                            @Override
-                            public void onClick(DialogInterface dialog, int which,
-                                                boolean isChecked) {
-                                selections[which] = isChecked;
-                            }
-                        });
-                AlertDialog alert = alertBuilder.create();
-                alert.show();
-            }
-        });
-
         if (prompt.isReadOnly()) {
             button.setEnabled(false);
         }
@@ -151,10 +119,7 @@ public class SpinnerMultiWidget extends QuestionWidget implements MultiChoiceWid
                     }
                 }
             }
-
-            selectionText.setText(String.format(context.getString(R.string.selected_answer),
-                    TextUtils.join(", ", selectedValues)));
-            selectionText.setVisibility(View.VISIBLE);
+            showSelectedValues(selectedValues);
         }
 
         LinearLayout answerLayout = new LinearLayout(getContext());
@@ -162,6 +127,8 @@ public class SpinnerMultiWidget extends QuestionWidget implements MultiChoiceWid
         answerLayout.addView(button);
         answerLayout.addView(selectionText);
         addAnswerView(answerLayout);
+
+        SpacesInUnderlyingValuesWarning.forQuestionWidget(this).renderWarningIfNecessary(items);
     }
 
     @Override
@@ -174,7 +141,7 @@ public class SpinnerMultiWidget extends QuestionWidget implements MultiChoiceWid
                 vc.add(new Selection(sc));
             }
         }
-        if (vc.size() == 0) {
+        if (vc.isEmpty()) {
             return null;
         } else {
             return new SelectMultiData(vc);
@@ -189,15 +156,6 @@ public class SpinnerMultiWidget extends QuestionWidget implements MultiChoiceWid
         for (int i = 0; i < selections.length; i++) {
             selections[i] = false;
         }
-    }
-
-    @Override
-    public void setFocus(Context context) {
-        // Hide the soft keyboard if it's showing.
-        InputMethodManager inputManager =
-                (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
-
     }
 
     @Override
@@ -221,4 +179,42 @@ public class SpinnerMultiWidget extends QuestionWidget implements MultiChoiceWid
         selections[choiceIndex] = isSelected;
     }
 
+    @Override
+    public void onButtonClick(int buttonId) {
+        alertBuilder.setTitle(getFormEntryPrompt().getQuestionText()).setPositiveButton(R.string.ok,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        List<String> selectedValues = new ArrayList<>();
+
+                        for (int i = 0; i < selections.length; i++) {
+                            if (selections[i]) {
+                                selectedValues.add(answerItems[i].toString());
+                            }
+                        }
+                        showSelectedValues(selectedValues);
+                    }
+                });
+
+        alertBuilder.setMultiChoiceItems(answerItems, selections,
+                new DialogInterface.OnMultiChoiceClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which,
+                                        boolean isChecked) {
+                        selections[which] = isChecked;
+                    }
+                });
+        AlertDialog alert = alertBuilder.create();
+        alert.show();
+    }
+
+    private void showSelectedValues(List<String> selectedValues) {
+        if (selectedValues.isEmpty()) {
+            clearAnswer();
+        } else {
+            selectionText.setText(String.format(getContext().getString(R.string.selected_answer),
+                    TextUtils.join(", ", selectedValues)));
+            selectionText.setVisibility(View.VISIBLE);
+        }
+    }
 }

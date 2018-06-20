@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#BF000000"
-    >
-
+    android:background="#BF000000">
 
     <TextView
         android:id="@+id/geotrace_instruction"
@@ -17,18 +16,15 @@
         android:paddingTop="5dip"
         android:paddingLeft="5dip"
         android:paddingRight="5dip"
-        android:paddingBottom="5dip"
-
-        />
+        android:paddingBottom="5dip"/>
 
     <org.osmdroid.views.MapView
         android:id="@+id/geotrace_mapview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="28dip"
-        />
+        android:layout_marginTop="28dip"/>
 
-    <Button
+    <android.support.v7.widget.AppCompatButton
         android:text="@string/record_geopoint"
         android:id="@+id/manual_button"
         android:layout_width="match_parent"
@@ -40,8 +36,8 @@
         android:layout_marginLeft="5dp"
         android:layout_marginStart="5dp"
         android:paddingBottom="20dp"
-        android:drawableRight="@drawable/distance"
-        android:drawableEnd="@drawable/distance"
+        android:drawableRight="@drawable/ic_distance_wrapped"
+        android:drawableEnd="@drawable/ic_distance_wrapped"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_toLeftOf="@+id/scroller"
@@ -63,59 +59,54 @@
         android:paddingTop="0dip"
         android:paddingBottom="60dip">
 
-        <ImageButton
+        <android.support.v7.widget.AppCompatImageButton
             android:id="@+id/play"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="15dp"
             android:layout_margin="5dp"
-            android:src="@drawable/ic_add_location_black_36dp" />
+            app:srcCompat="@drawable/ic_add_location" />
 
-        <ImageButton
+        <android.support.v7.widget.AppCompatImageButton
             android:id="@+id/pause"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="15dp"
             android:layout_margin="5dp"
             android:visibility="gone"
-            android:src="@drawable/ic_pause_black_36dp" />
+            app:srcCompat="@drawable/ic_pause_36" />
 
-        <ImageButton
+        <android.support.v7.widget.AppCompatImageButton
             android:id="@+id/show_location"
-            android:src="@drawable/ic_my_location_black_36dp"
+            app:srcCompat="@drawable/ic_my_location"
             android:padding="15dp"
             android:layout_margin="5dp"
             android:layout_width="wrap_content"
             android:layout_height="match_parent" />
 
-
-
-        <ImageButton
+        <android.support.v7.widget.AppCompatImageButton
             android:id="@+id/layers"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:padding="15dp"
             android:layout_margin="5dp"
-            android:src="@drawable/ic_layers_black_36dp" />
+            app:srcCompat="@drawable/ic_layers" />
 
-
-        <ImageButton
+        <android.support.v7.widget.AppCompatImageButton
             android:id="@+id/clear"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:padding="15dp"
             android:layout_margin="5dp"
-            android:src="@drawable/ic_delete_black_36dp" />
-        <ImageButton
+            app:srcCompat="@drawable/ic_delete" />
+
+        <android.support.v7.widget.AppCompatImageButton
             android:id="@+id/geotrace_save"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:padding="15dp"
             android:layout_margin="5dp"
-            android:src="@drawable/ic_save_black_36dp" />
+            app:srcCompat="@drawable/ic_save" />
     </LinearLayout>
     </ScrollView>
-
-
-
 </RelativeLayout>

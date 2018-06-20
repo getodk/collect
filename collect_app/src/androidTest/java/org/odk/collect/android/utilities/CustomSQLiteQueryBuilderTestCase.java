@@ -36,7 +36,7 @@ public class CustomSQLiteQueryBuilderTestCase {
     private static final String TEST_TABLE_NAME = "testTable";
     private static final String TEST_TABLE_NAME_2 = "testTable2";
 
-    private String[] tableColumns = new String[] {"_id", "col1", "col2", "col3"};
+    private final String[] tableColumns = new String[] {"_id", "col1", "col2", "col3"};
 
     private SQLiteDatabase sqLiteDatabase;
 
@@ -113,6 +113,28 @@ public class CustomSQLiteQueryBuilderTestCase {
 
         assertTrue(tableExists(TEST_TABLE_NAME));
         assertFalse(tableExists(TEST_TABLE_NAME_2));
+    }
+
+    @Test
+    public void addColumnTest() {
+        createTestTable();
+        assertTrue(tableExists(TEST_TABLE_NAME));
+
+        CustomSQLiteQueryBuilder
+                .begin(sqLiteDatabase)
+                .alter()
+                .table(TEST_TABLE_NAME)
+                .addColumn("col4", "text")
+                .end();
+
+        Cursor cursor = sqLiteDatabase.query(TEST_TABLE_NAME, null, null, null, null, null, null);
+        String[] columnNames = cursor.getColumnNames();
+
+        assertEquals(5, columnNames.length);
+        assertEquals("col1", columnNames[1]);
+        assertEquals("col2", columnNames[2]);
+        assertEquals("col3", columnNames[3]);
+        assertEquals("col4", columnNames[4]);
     }
 
     private void dropTable(String tableName) {

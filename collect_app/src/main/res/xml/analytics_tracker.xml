@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="ga_trackingId">UA-90983851-2</string>
-    <bool name="ga_reportUncaughtExceptions">true</bool>
-</resources>

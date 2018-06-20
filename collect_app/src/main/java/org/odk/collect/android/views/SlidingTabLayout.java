@@ -60,7 +60,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
     private boolean distributeEvenly;
 
     private ViewPager viewPager;
-    private SparseArray<String> contentDescriptions = new SparseArray<String>();
+    private final SparseArray<String> contentDescriptions = new SparseArray<String>();
     private ViewPager.OnPageChangeListener viewPagerPageChangeListener;
     private int titleFontSize = -1;
     private int titleFontColor = -1;
@@ -182,7 +182,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
                 // If there is a custom tab view layout id set, try and inflate it
                 tabView = LayoutInflater.from(getContext()).inflate(tabViewLayoutId, tabStrip,
                         false);
-                tabTitleView = (TextView) tabView.findViewById(tabViewTextViewId);
+                tabTitleView = tabView.findViewById(tabViewTextViewId);
             }
 
             if (tabView == null) {

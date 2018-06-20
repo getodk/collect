@@ -22,6 +22,9 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.SimpleCursorAdapter;
@@ -32,10 +35,15 @@ import org.odk.collect.android.adapters.ViewSentListAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.DiskSyncListener;
+import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import timber.log.Timber;
+
+import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
+import static org.odk.collect.android.utilities.PermissionUtils.requestStoragePermissions;
 
 /**
  * Responsible for displaying all the valid instances in the instance directory.
@@ -43,7 +51,8 @@ import org.odk.collect.android.utilities.ApplicationConstants;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class InstanceChooserList extends InstanceListActivity implements DiskSyncListener, AdapterView.OnItemClickListener {
+public class InstanceChooserList extends InstanceListActivity implements
+        DiskSyncListener, AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
     private static final String INSTANCE_LIST_ACTIVITY_SORTING_ORDER = "instanceListActivitySortingOrder";
     private static final String VIEW_SENT_FORM_SORTING_ORDER = "ViewSentFormSortingOrder";
 
@@ -56,17 +65,8 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
-        // must be at the beginning of any activity that can be called from an external intent
-        try {
-            Collect.createODKDirs();
-        } catch (RuntimeException e) {
-            createErrorDialog(e.getMessage(), EXIT);
-            return;
-        }
-
-        setContentView(R.layout.chooser_list_layout);
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.chooser_list_layout);
 
         String formMode = getIntent().getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
         if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
@@ -87,16 +87,35 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
             };
             ((TextView) findViewById(android.R.id.empty)).setText(R.string.no_items_display_sent_forms);
         }
-        setupAdapter();
 
+        requestStoragePermissions(this, new PermissionListener() {
+            @Override
+            public void granted() {
+                // must be at the beginning of any activity that can be called from an external intent
+                try {
+                    Collect.createODKDirs();
+                    Collect.getInstance().getActivityLogger().open();
+                } catch (RuntimeException e) {
+                    createErrorDialog(e.getMessage(), EXIT);
+                    return;
+                }
+                init();
+            }
+
+            @Override
+            public void denied() {
+                // The activity has to finish because ODK Collect cannot function without these permissions.
+                finishAllActivities(InstanceChooserList.this);
+            }
+        });
+    }
+
+    private void init() {
+        setupAdapter();
         instanceSyncTask = new InstanceSyncTask();
         instanceSyncTask.setDiskSyncListener(this);
         instanceSyncTask.execute();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
+        getSupportLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
     /**
@@ -104,47 +123,49 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
      */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Cursor c = (Cursor) listView.getAdapter().getItem(position);
-        startManagingCursor(c);
-        Uri instanceUri =
-                ContentUris.withAppendedId(InstanceColumns.CONTENT_URI,
-                        c.getLong(c.getColumnIndex(InstanceColumns._ID)));
+        if (Collect.allowClick()) {
+            Cursor c = (Cursor) listView.getAdapter().getItem(position);
+            startManagingCursor(c);
+            Uri instanceUri =
+                    ContentUris.withAppendedId(InstanceColumns.CONTENT_URI,
+                            c.getLong(c.getColumnIndex(InstanceColumns._ID)));
 
-        Collect.getInstance().getActivityLogger().logAction(this, "onListItemClick",
-                instanceUri.toString());
+            Collect.getInstance().getActivityLogger().logAction(this, "onListItemClick",
+                    instanceUri.toString());
 
-        if (view.findViewById(R.id.visible_off).getVisibility() != View.VISIBLE) {
-            String action = getIntent().getAction();
-            if (Intent.ACTION_PICK.equals(action)) {
-                // caller is waiting on a picked form
-                setResult(RESULT_OK, new Intent().setData(instanceUri));
-            } else {
-                // the form can be edited if it is incomplete or if, when it was
-                // marked as complete, it was determined that it could be edited
-                // later.
-                String status = c.getString(c.getColumnIndex(InstanceColumns.STATUS));
-                String strCanEditWhenComplete =
-                        c.getString(c.getColumnIndex(InstanceColumns.CAN_EDIT_WHEN_COMPLETE));
-
-                boolean canEdit = status.equals(InstanceProviderAPI.STATUS_INCOMPLETE)
-                        || Boolean.parseBoolean(strCanEditWhenComplete);
-                if (!canEdit) {
-                    createErrorDialog(getString(R.string.cannot_edit_completed_form),
-                            DO_NOT_EXIT);
-                    return;
-                }
-                // caller wants to view/edit a form, so launch formentryactivity
-                Intent parentIntent = this.getIntent();
-                Intent intent = new Intent(Intent.ACTION_EDIT, instanceUri);
-                String formMode = parentIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
-                if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
-                    intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
+            if (view.findViewById(R.id.visible_off).getVisibility() != View.VISIBLE) {
+                String action = getIntent().getAction();
+                if (Intent.ACTION_PICK.equals(action)) {
+                    // caller is waiting on a picked form
+                    setResult(RESULT_OK, new Intent().setData(instanceUri));
                 } else {
-                    intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.VIEW_SENT);
+                    // the form can be edited if it is incomplete or if, when it was
+                    // marked as complete, it was determined that it could be edited
+                    // later.
+                    String status = c.getString(c.getColumnIndex(InstanceColumns.STATUS));
+                    String strCanEditWhenComplete =
+                            c.getString(c.getColumnIndex(InstanceColumns.CAN_EDIT_WHEN_COMPLETE));
+
+                    boolean canEdit = status.equals(InstanceProviderAPI.STATUS_INCOMPLETE)
+                            || Boolean.parseBoolean(strCanEditWhenComplete);
+                    if (!canEdit) {
+                        createErrorDialog(getString(R.string.cannot_edit_completed_form),
+                                DO_NOT_EXIT);
+                        return;
+                    }
+                    // caller wants to view/edit a form, so launch formentryactivity
+                    Intent parentIntent = this.getIntent();
+                    Intent intent = new Intent(Intent.ACTION_EDIT, instanceUri);
+                    String formMode = parentIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
+                    if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
+                        intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
+                    } else {
+                        intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.VIEW_SENT);
+                    }
+                    startActivity(intent);
                 }
-                startActivity(intent);
+                finish();
             }
-            finish();
         }
     }
 
@@ -152,12 +173,11 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
     protected void onResume() {
         if (instanceSyncTask != null) {
             instanceSyncTask.setDiskSyncListener(this);
+            if (instanceSyncTask.getStatus() == AsyncTask.Status.FINISHED) {
+                syncComplete(instanceSyncTask.getStatusMessage());
+            }
         }
         super.onResume();
-
-        if (instanceSyncTask.getStatus() == AsyncTask.Status.FINISHED) {
-            syncComplete(instanceSyncTask.getStatusMessage());
-        }
     }
 
     @Override
@@ -169,9 +189,10 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
     }
 
     @Override
-    public void syncComplete(String result) {
-        TextView textView = (TextView) findViewById(R.id.status_text);
-        textView.setText(result);
+    public void syncComplete(@NonNull String result) {
+        Timber.i("Disk scan complete");
+        hideProgressBarAndAllow();
+        showSnackbar(result);
     }
 
     @Override
@@ -195,9 +216,9 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
         };
 
         if (editMode) {
-            listAdapter = new SimpleCursorAdapter(this, R.layout.two_item, getCursor(), data, view);
+            listAdapter = new SimpleCursorAdapter(this, R.layout.two_item, null, data, view);
         } else {
-            listAdapter = new ViewSentListAdapter(this, R.layout.two_item, getCursor(), data, view);
+            listAdapter = new ViewSentListAdapter(this, R.layout.two_item, null, data, view);
         }
         listView.setAdapter(listAdapter);
     }
@@ -209,18 +230,29 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
 
     @Override
     protected void updateAdapter() {
-        listAdapter.changeCursor(getCursor());
+        getSupportLoaderManager().restartLoader(LOADER_ID, null, this);
     }
 
-    private Cursor getCursor() {
-        Cursor cursor;
+    @NonNull
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        showProgressBar();
         if (editMode) {
-            cursor = new InstancesDao().getUnsentInstancesCursor(getFilterText(), getSortingOrder());
+            return new InstancesDao().getUnsentInstancesCursorLoader(getFilterText(), getSortingOrder());
         } else {
-            cursor = new InstancesDao().getSentInstancesCursor(getFilterText(), getSortingOrder());
+            return new InstancesDao().getSentInstancesCursorLoader(getFilterText(), getSortingOrder());
         }
+    }
 
-        return cursor;
+    @Override
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
+        hideProgressBarIfAllowed();
+        listAdapter.changeCursor(cursor);
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader loader) {
+        listAdapter.swapCursor(null);
     }
 
     private void createErrorDialog(String errorMsg, final boolean shouldExit) {
@@ -248,6 +280,4 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
         alertDialog.setButton(getString(R.string.ok), errorListener);
         alertDialog.show();
     }
-
-
 }

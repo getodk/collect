@@ -16,27 +16,23 @@
 
 package org.odk.collect.android.preferences;
 
-import android.Manifest;
 import android.accounts.AccountManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.v7.content.res.AppCompatResources;
 import android.text.InputFilter;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListPopupWindow;
 
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.util.ExponentialBackOff;
-import com.google.api.services.drive.DriveScopes;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -45,25 +41,22 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.filters.ControlCharacterFilter;
 import org.odk.collect.android.preferences.filters.WhitespaceFilter;
 import org.odk.collect.android.utilities.AuthDialogUtility;
+import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.utilities.UrlUtils;
+import org.odk.collect.android.utilities.Validator;
 import org.odk.collect.android.utilities.WebUtils;
+import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-import pub.devrel.easypermissions.EasyPermissions;
-
-import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FORMLIST_URL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_URL;
-import static org.odk.collect.android.tasks.InstanceGoogleSheetsUploader.REQUEST_ACCOUNT_PICKER;
-import static org.odk.collect.android.tasks.InstanceGoogleSheetsUploader.REQUEST_PERMISSION_GET_ACCOUNTS;
+import static org.odk.collect.android.utilities.gdrive.GoogleAccountsManager.REQUEST_ACCOUNT_PICKER;
 
-
-public class ServerPreferencesFragment extends BasePreferenceFragment implements View.OnTouchListener, Preference.OnPreferenceChangeListener {
+public class ServerPreferencesFragment extends BasePreferenceFragment implements View.OnTouchListener,
+        GoogleAccountsManager.GoogleAccountSelectionListener {
     private static final String KNOWN_URL_LIST = "knownUrlList";
     protected EditTextPreference serverUrlPreference;
     protected EditTextPreference usernamePreference;
@@ -74,7 +67,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     private ListPopupWindow listPopupWindow;
     private List<String> urlList;
     private Preference selectedGoogleAccountPreference;
-    private GoogleAccountCredential credential;
+    private GoogleAccountsManager accountsManager;
 
 
     public void addAggregatePreferences() {
@@ -94,25 +87,27 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                     new Gson().fromJson(urlListString, new TypeToken<List<String>>() {
                     }.getType());
         }
-        if (urlList.size() == 0) {
+        if (urlList.isEmpty()) {
             addUrlToPreferencesList(getString(R.string.default_server_url), prefs);
         }
 
         urlDropdownSetup();
 
-        serverUrlPreference.getEditText().setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_drop_down, 0);
+        // TODO: use just 'serverUrlPreference.getEditText().setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_drop_down, 0);' once minSdkVersion is >= 21
+        serverUrlPreference.getEditText().setCompoundDrawablesWithIntrinsicBounds(null, null,
+                AppCompatResources.getDrawable(getActivity(), R.drawable.ic_arrow_drop_down), null);
         serverUrlPreference.getEditText().setOnTouchListener(this);
-        serverUrlPreference.setOnPreferenceChangeListener(this);
+        serverUrlPreference.setOnPreferenceChangeListener(createChangeListener());
         serverUrlPreference.setSummary(serverUrlPreference.getText());
         serverUrlPreference.getEditText().setFilters(
                 new InputFilter[]{new ControlCharacterFilter(), new WhitespaceFilter()});
 
-        usernamePreference.setOnPreferenceChangeListener(this);
+        usernamePreference.setOnPreferenceChangeListener(createChangeListener());
         usernamePreference.setSummary(usernamePreference.getText());
         usernamePreference.getEditText().setFilters(
                 new InputFilter[]{new ControlCharacterFilter()});
 
-        passwordPreference.setOnPreferenceChangeListener(this);
+        passwordPreference.setOnPreferenceChangeListener(createChangeListener());
         maskPasswordSummary(passwordPreference.getText());
         passwordPreference.getEditText().setFilters(
                 new InputFilter[]{new ControlCharacterFilter()});
@@ -124,7 +119,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
 
         EditTextPreference googleSheetsUrlPreference = (EditTextPreference) findPreference(
                 PreferenceKeys.KEY_GOOGLE_SHEETS_URL);
-        googleSheetsUrlPreference.setOnPreferenceChangeListener(this);
+        googleSheetsUrlPreference.setOnPreferenceChangeListener(createChangeListener());
 
         String currentGoogleSheetsURL = googleSheetsUrlPreference.getText();
         if (currentGoogleSheetsURL != null && currentGoogleSheetsURL.length() > 0) {
@@ -149,35 +144,36 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
 
         serverUrlPreference.getEditText().setFilters(filters);
 
-        formListUrlPreference.setOnPreferenceChangeListener(this);
+        formListUrlPreference.setOnPreferenceChangeListener(createChangeListener());
         formListUrlPreference.setSummary(formListUrlPreference.getText());
         formListUrlPreference.getEditText().setFilters(filters);
 
-        submissionUrlPreference.setOnPreferenceChangeListener(this);
+        submissionUrlPreference.setOnPreferenceChangeListener(createChangeListener());
         submissionUrlPreference.setSummary(submissionUrlPreference.getText());
         submissionUrlPreference.getEditText().setFilters(filters);
     }
 
     public void initAccountPreferences() {
-        credential =  GoogleAccountCredential.usingOAuth2(getActivity(), Collections.singletonList(DriveScopes.DRIVE))
-                .setBackOff(new ExponentialBackOff());
+        accountsManager = new GoogleAccountsManager(this);
+        accountsManager.setListener(this);
+        accountsManager.disableAutoChooseAccount();
 
+        selectedGoogleAccountPreference.setSummary(accountsManager.getSelectedAccount());
         selectedGoogleAccountPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                if (EasyPermissions.hasPermissions(getActivity(), Manifest.permission.GET_ACCOUNTS)) {
-                    startActivityForResult(credential.newChooseAccountIntent(),REQUEST_ACCOUNT_PICKER);
-                } else {
-                    EasyPermissions.requestPermissions(this,
-                            getString(R.string.request_permissions_google_account),
-                            REQUEST_PERMISSION_GET_ACCOUNTS,
-                            Manifest.permission.GET_ACCOUNTS);
-                }
+                accountsManager.chooseAccount();
                 return true;
             }
         });
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        accountsManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
 
     private void addUrlToPreferencesList(String url, SharedPreferences prefs) {
         urlList.add(0, url);
@@ -221,9 +217,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         if (event.getAction() == MotionEvent.ACTION_UP) {
             if (event.getX() >= (v.getWidth() - ((EditText) v)
                     .getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                InputMethodManager imm = (InputMethodManager) getActivity()
-                        .getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                SoftKeyboardUtils.hideSoftKeyboard(v);
                 listPopupWindow.show();
                 return true;
             }
@@ -231,97 +225,96 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         return false;
     }
 
-    @Override
-    public boolean onPreferenceChange(Preference preference, Object newValue) {
+    private Preference.OnPreferenceChangeListener createChangeListener() {
+        return (preference, newValue) -> {
+            switch (preference.getKey()) {
+                case PreferenceKeys.KEY_SERVER_URL:
 
-        switch (preference.getKey()) {
+                    String url = newValue.toString();
 
-            case PreferenceKeys.KEY_SERVER_URL:
-
-                String url = newValue.toString();
-
-                // remove all trailing "/"s
-                while (url.endsWith("/")) {
-                    url = url.substring(0, url.length() - 1);
-                }
-
-                if (UrlUtils.isValidUrl(url)) {
-                    preference.setSummary(newValue.toString());
-                    SharedPreferences prefs = PreferenceManager
-                            .getDefaultSharedPreferences(getActivity().getApplicationContext());
-                    String urlListString = prefs.getString(KNOWN_URL_LIST, "");
-
-                    urlList =
-                            new Gson().fromJson(urlListString,
-                                    new TypeToken<List<String>>() {
-                                    }.getType());
-
-                    if (!urlList.contains(url)) {
-                        // We store a list with at most 5 elements
-                        if (urlList.size() == 5) {
-                            urlList.remove(4);
-                        }
-                        addUrlToPreferencesList(url, prefs);
-                        setupUrlDropdownAdapter();
+                    // remove all trailing "/"s
+                    while (url.endsWith("/")) {
+                        url = url.substring(0, url.length() - 1);
                     }
-                } else {
-                    ToastUtils.showShortToast(R.string.url_error);
-                    return false;
-                }
-                break;
 
-            case PreferenceKeys.KEY_USERNAME:
-                String username = newValue.toString();
+                    if (Validator.isUrlValid(url)) {
+                        preference.setSummary(newValue.toString());
+                        SharedPreferences prefs = PreferenceManager
+                                .getDefaultSharedPreferences(getActivity().getApplicationContext());
+                        String urlListString = prefs.getString(KNOWN_URL_LIST, "");
 
-                // do not allow leading and trailing whitespace
-                if (!username.equals(username.trim())) {
-                    ToastUtils.showShortToast(R.string.username_error_whitespace);
-                    return false;
-                }
+                        urlList =
+                                new Gson().fromJson(urlListString,
+                                        new TypeToken<List<String>>() {
+                                        }.getType());
 
-                preference.setSummary(username);
-                clearCachedCrendentials();
+                        if (!urlList.contains(url)) {
+                            // We store a list with at most 5 elements
+                            if (urlList.size() == 5) {
+                                urlList.remove(4);
+                            }
+                            addUrlToPreferencesList(url, prefs);
+                            setupUrlDropdownAdapter();
+                        }
+                    } else {
+                        ToastUtils.showShortToast(R.string.url_error);
+                        return false;
+                    }
+                    break;
 
-                // To ensure we update current credentials in CredentialsProvider
-                credentialsHaveChanged = true;
+                case PreferenceKeys.KEY_USERNAME:
+                    String username = newValue.toString();
 
-                return true;
+                    // do not allow leading and trailing whitespace
+                    if (!username.equals(username.trim())) {
+                        ToastUtils.showShortToast(R.string.username_error_whitespace);
+                        return false;
+                    }
 
-            case PreferenceKeys.KEY_PASSWORD:
-                String pw = newValue.toString();
+                    preference.setSummary(username);
+                    clearCachedCrendentials();
 
-                // do not allow leading and trailing whitespace
-                if (!pw.equals(pw.trim())) {
-                    ToastUtils.showShortToast(R.string.password_error_whitespace);
-                    return false;
-                }
+                    // To ensure we update current credentials in CredentialsProvider
+                    credentialsHaveChanged = true;
 
-                maskPasswordSummary(pw);
-                clearCachedCrendentials();
+                    return true;
 
-                // To ensure we update current credentials in CredentialsProvider
-                credentialsHaveChanged = true;
-                break;
+                case PreferenceKeys.KEY_PASSWORD:
+                    String pw = newValue.toString();
 
-            case PreferenceKeys.KEY_GOOGLE_SHEETS_URL:
-                url = newValue.toString();
+                    // do not allow leading and trailing whitespace
+                    if (!pw.equals(pw.trim())) {
+                        ToastUtils.showShortToast(R.string.password_error_whitespace);
+                        return false;
+                    }
 
-                // remove all trailing "/"s
-                while (url.endsWith("/")) {
-                    url = url.substring(0, url.length() - 1);
-                }
+                    maskPasswordSummary(pw);
+                    clearCachedCrendentials();
 
-                if (UrlUtils.isValidUrl(url)) {
-                    preference.setSummary(url + "\n\n" + getString(R.string.google_sheets_url_hint));
-                } else if (url.length() == 0) {
-                    preference.setSummary(getString(R.string.google_sheets_url_hint));
-                } else {
-                    ToastUtils.showShortToast(R.string.url_error);
-                    return false;
-                }
-                break;
-        }
-        return true;
+                    // To ensure we update current credentials in CredentialsProvider
+                    credentialsHaveChanged = true;
+                    break;
+
+                case PreferenceKeys.KEY_GOOGLE_SHEETS_URL:
+                    url = newValue.toString();
+
+                    // remove all trailing "/"s
+                    while (url.endsWith("/")) {
+                        url = url.substring(0, url.length() - 1);
+                    }
+
+                    if (Validator.isUrlValid(url)) {
+                        preference.setSummary(url + "\n\n" + getString(R.string.google_sheets_url_hint));
+                    } else if (url.length() == 0) {
+                        preference.setSummary(getString(R.string.google_sheets_url_hint));
+                    } else {
+                        ToastUtils.showShortToast(R.string.url_error);
+                        return false;
+                    }
+                    break;
+            }
+            return true;
+        };
     }
 
     private void maskPasswordSummary(String password) {
@@ -351,21 +344,14 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
             case REQUEST_ACCOUNT_PICKER:
                 if (resultCode == RESULT_OK && data != null && data.getExtras() != null) {
                     String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-                    if (accountName != null) {
-                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                        SharedPreferences.Editor editor = prefs.edit();
-                        editor.putString(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT, accountName);
-                        editor.apply();
-                        selectedGoogleAccountPreference.setSummary(accountName);
-                        credential.setSelectedAccountName(accountName);
-                    }
+                    accountsManager.setSelectedAccountName(accountName);
                 }
                 break;
         }
-        if (resultCode == RESULT_CANCELED) {
-            ToastUtils.showShortToast("Account selection cancelled");
-        }
-
     }
 
+    @Override
+    public void onGoogleAccountSelected(String accountName) {
+        selectedGoogleAccountPreference.setSummary(accountName);
+    }
 }

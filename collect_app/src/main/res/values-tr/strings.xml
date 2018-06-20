@@ -67,7 +67,6 @@
   <string name="ok">Tamam</string>
   <string name="parse_error">Form ayrıştırılamadi.</string>
   <string name="password">Şifre</string>
-  <string name="play_audio">Ses kaydini Çal</string>
   <string name="play_video">Video Oynat</string>
   <string name="please_wait">Biraz Bekleyin..</string>
   <string name="please_wait_long">Biraz sürecek gibi.. Az kaldi</string>
@@ -104,7 +103,6 @@
   <string name="submission_url">Gönderim yolu</string>
   <string name="font_size">Text font büyüklüğü</string>
   <string name="change_font_size">Text font büyüklüğü</string>
-  <string name="form_scan_starting">Formlar Taraniyor..</string>
   <string name="access_error">Hata:%s ulaşırken</string>
   <string name="root_element_error">kök element  &lt;manifest\&gt; — was %s degil</string>
   <string name="root_namespace_error">Kök elementin alanadi doğru değil: %s</string>
@@ -160,4 +158,5 @@
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
 </resources>

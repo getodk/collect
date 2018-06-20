@@ -88,7 +88,6 @@
   <string name="parse_legacy_formlist_failed">Nuk gjenden formularë të përputhshëm me Aggregate 0.9.x. në server: 1%s</string>
   <string name="parse_openrosa_formlist_failed">Nuk gjenden formularë të përputhshëm me Open Rosa versioni 1.0 standard në server: 1%s</string>
   <string name="password">Fjalëkalimi</string>
-  <string name="play_audio">Dëgjo tingullin</string>
   <string name="play_video">Shih videon</string>
   <string name="please_wait">Lutemi, prisni pak sekonda.</string>
   <string name="please_wait_long">Lutemi, prisni. Mund të duhen disa minuta.</string>
@@ -132,7 +131,6 @@
   <string name="submission_url">Adresa për dërgimin</string>
   <string name="font_size">Madhësia tekstit</string>
   <string name="change_font_size">Madhësia e tekstit</string>
-  <string name="form_scan_starting">Duke skanuar për formularë…</string>
   <string name="access_error">Gabim në aksesimin e %s:</string>
   <string name="manifest_server_error">Përgjigja e manifestit nuk raporton një version OpenRosa - server i gabuar?</string>
   <string name="form_download_progress">%1$s. Duke ngarkuar media: %2$s of %3$s</string>
@@ -182,7 +180,6 @@
   <string name="draw_image">Vizato imazh</string>
   <string name="reset_image">Rivendos</string>
   <string name="set_color">Cakto ngjyrën</string>
-  <string name="select_drawing_color">Zgjidh ngjyrën e vizatimit</string>
   <string name="admin_preferences">Parametrat e Administratorit</string>
   <string name="admin_access_settings">Akseso parametrat si administrator</string>
   <string name="save_mid">Ruaj formularin</string>
@@ -220,7 +217,6 @@
   <string name="ext_search_return_error">Kërkimi gjen nj objekt të tipit \'%s\'.</string>
   <string name="ext_import_generic_error">Nuk mund të importohen të dhëna nga %1$s. Arseyja 2%2$s</string>
   <string name="ext_import_progress_message">Duke ngarkuar të dhëna paraprake nga \'%1$s\', lutemi prisni… %2$s</string>
-  <string name="ext_import_cancelled_message">Leximi i të dhënave u anullua!</string>
   <string name="ext_import_finalizing_message">Duke finalizuar të dhënat e ngarkuara paraprakisht…</string>
   <string name="ext_import_completed_message">Leximi i të dhënave përfundoi!</string>
   <string name="ext_not_initialized_error">ExternalDataManager nuk është iniciuar.</string>
@@ -249,8 +245,6 @@
   <string name="drive_get_file">Duke ngarkuar %1$s dhe file-t media.</string>
   <string name="no_google_account">Nuk keni përzgjedhur një llogari në Google!</string>
   <string name="google_set_account">Keni përzgjedhur Google Sheets si server, lutemi, zjidhni një llogari në  Google në parametrat e përgjithshëm përpara se të vazhdoni.</string>
-  <string name="google_repeat_error">Google Sheets nuk suporton përsërtije në këtë moment.</string>
-  <string name="media_upload_error">Foto nuk mund të dërgohet pasi nuk ekziston: %1$s</string>
   <string name="odk_auth_auth_fail">Autentikimi i dërgimit automatik të ODK dështoi, lutemi sigurohuni që parametrat janë të saktë.</string>
   <string name="odk_auto_note">Njoftim ODK për dërgimin automatik </string>
   <string name="notification_error">Gabim në shfaqjen e tekstit të njoftimit</string>
@@ -258,18 +252,13 @@
   <string name="delete_after_send_summary">Fshi formularët e finalizuar dhe mediat pasi të jenë ngarkuar në server</string>
   <string name="change_server_url">URL e serverit</string>
   <string name="google_search_browse">Kërko për formularë. Ose përzgjidh \'My Drive\' më poshtë dhe kërkoni manualisht.</string>
-  <string name="no_blank_search">Fusha e kërkimit nuk mund të jetë bosh.</string>
   <string name="send_in_progress">Një dërgim po ekzekutohet në background, lutemi provoni sërish pas pak.</string>
   <string name="sheets_max_columns">Numri maksimal i kolonave është 255, formulari juaj ka %s. Spreadsheet nuk mund të ngarkohet.</string>
   <string name="invalid_sheet_id">Numri i identifikimit të tabelës: %1$s i pavlefshëm.</string>
   <string name="google_play_services_error_occured">E pamundur të aksesohen Google Maps. A është i instaluar Google Play Services?</string>
   <string name="about_preferences">Rreth</string>
-  <string name="tell_your_friends">Ndaj ODK Collect me kolegët</string>
-  <string name="tell_your_friends_msg">Shkarko aplikacionin ODK Collect!</string>
-  <string name="leave_a_review">Ler një koment në Google Play Store</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="openmap_streets">Rrugë OSM</string>
-  <string name="openmap_usgs_sat">Sat i Hartave Kombëtare USGS</string>
   <string name="streets">Rrugë</string>
   <string name="terrain">Terren</string>
   <string name="hybrid">Hibride</string>
@@ -296,7 +285,6 @@
   <string name="geo_clear_warning">Tipari është krijuar tanimë. A doni ta pastroni këtë tipar?</string>
   <string name="geo_exit_warning">Elimino ndryshimet dhe kthehu në ODK?</string>
   <string name="polygon_validator">Duhen së paku 3 pika për të krijuar Poligonin</string>
-  <string name="dialog_continue">Vazhdo</string>
   <string name="clear">Pastro</string>
   <string name="polyline_polygon_text">Ruaj GeoTrace si</string>
   <string name="manual_mode">Manuale</string>
@@ -333,8 +321,6 @@
   <string name="odk_website">Vizitoni faqen e ODK në internet</string>
   <string name="odk_website_summary">Open Data Kit (ODK) përdoret për mbledhur të dhëna për të mirën shoqërore në mjedise sfiduese.</string>
   <string name="odk_forum">Bëhu pjesë e forumit ODK</string>
-  <string name="odk_forum_summary">Bëhu pjesë e forumit për të marrë mbështetje, kërkuar të shtohen elementë në aplikacion, kontribuosh me kod/përkthim!</string>
-  <string name="all_open_source_licenses">Libraritë dhe liçensat open source</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">P %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -347,7 +333,6 @@
   <string name="not_exactly_one_record_for_this_instance">Nuk ka vetëm një të dhënë regjistruar për këtë kërkesë!</string>
   <string name="not_exactly_one_blank_form_for_this_form_id">Kjo jr_form_id nuk përputhet vetëm me një formular bosh.</string>
   <string name="no_form_id_specified">Nuk është specifikuar numër identifikimi për formën/at???</string>
-  <string name="phone_does_not_have_base64_class">Telefoni nuk ka Base64 class, por niveli API është %s</string>
   <string name="phone_does_not_support_rsa">Telefoni nuk mund të suportojë enkriptim RSA</string>
   <string name="invalid_rsa_public_key">Çelësi publik RSA i pavlefshëm.</string>
   <string name="encryption_error_message">Formulari %s nuk është ruajtur si i finalizuar</string>
@@ -365,7 +350,6 @@
   <string name="reset_settings_dialog_title">Zgjidh çfarë do të rivendoset</string>
   <string name="reset_settings_dialog">Rivendos aplikacionin…</string>
   <string name="reset_settings_button_reset">Rivendos</string>
-  <string name="reset_dialog_nothing">Nuk keni zgjedhur asgjë për rivendosje.</string>
   <string name="reset_in_progress">Duke rivendosur…</string>
   <string name="reset_app_state_result">Rivendos rezultatet</string>
   <string name="reset_app_state_warning">Të gjitha të dhënat do të fshihen përgjithmonë. Ky veprim nuk mund të kthehet mbrapsht. </string>
@@ -380,8 +364,6 @@
   <string name="exit">Dil</string>
   <string name="instance_scan_completed">Skanimi përfundoi</string>
   <string name="instance_scan_count">%1$d formë/a u shtuan.</string>
-  <string name="instance_sync">Importo formularët e ruajtur si të finalizuar</string>
-  <string name="instance_sync_summary">Importon formularët e ruajtur nga instances folder</string>
   <string name="sort_the_list">Rendit listën</string>
   <string name="request_permissions_google_account">ODK Collect ka nevojë të aksesojë loogarinë tuaj në Google në mënyrë që të marrë formularë bosh dhe të ngarkojë formularë të plotësuar</string>
   <string name="filter_the_list">Filtro listën</string>
@@ -451,4 +433,5 @@
   <string name="form_entry">Hiq përzgjedhjen për ta fshehur nga Form Entry</string>
   <string name="use_device_language">Përdor gjuhën e aparatit</string>
   <string name="not_supported_offline_layer_format">Shtresa offline që përzgjodhët përdor format PBF, i cili nuk është i suportuar.</string>
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
 </resources>

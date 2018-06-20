@@ -93,7 +93,7 @@ public class ItemsetWidgetTest extends QuestionWidgetTest<ItemsetWidget, StringD
     @Override
     public ItemsetWidget createWidget() {
         return new ItemsetWidget(RuntimeEnvironment.application, formEntryPrompt,
-                false, false, parseTool, adapter, fileUtil);
+                false, parseTool, adapter, fileUtil);
     }
 
     @NonNull
@@ -172,7 +172,7 @@ public class ItemsetWidgetTest extends QuestionWidgetTest<ItemsetWidget, StringD
 
     public static class CursorMocker {
         private int cursorIndex = -1;
-        private Cursor cursor;
+        private final Cursor cursor;
 
         CursorMocker(final Map<String, String> choices, Cursor cursor) {
             this.cursor = cursor;

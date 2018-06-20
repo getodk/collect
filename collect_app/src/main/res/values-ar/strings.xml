@@ -91,7 +91,6 @@
   <string name="parse_legacy_formlist_failed">الخادم لو يوفر النماذج المتطابقة مع Aggregate الأصدار 0.9: %s</string>
   <string name="parse_openrosa_formlist_failed">الخادم لو يوفر النماذج المتطابقة مع مقاييس OpenRosa الأصدار الأول: %s</string>
   <string name="password">كلمة المرور</string>
-  <string name="play_audio">تشغيل التسجيل الصوتي</string>
   <string name="play_video">تشغيل تسجيل الفيديو</string>
   <string name="please_wait">الرجاء الانتظار للحظات قليلة.</string>
   <string name="please_wait_long">الرجاء الانتظار. قد يتطلّب ذلك بضع دقائق.</string>
@@ -109,6 +108,9 @@
   <string name="send_data">إرسال الاستمارة النهائية</string>
   <string name="send_data_button">إرسال الاستمارة النهائية (%s)</string>
   <string name="send_selected_data">إرسال الاستمارات المُختارة</string>
+  <string name="view_sent_forms">عرض الاستمارات المرسلة</string>
+  <string name="view_sent_forms_button">عرض الاستمارات المرسلة : (%s)</string>
+  <string name="server_auth_credentials">%s :  كلمة المرو او اسم المستخدم غير صحيح</string>
   <string name="server_requires_auth">المخدم يتطلب المصادقة</string>
   <string name="server_url">الرابط</string>
   <string name="server_preferences">إعدادات الخادم</string>
@@ -133,7 +135,6 @@
   <string name="submission_url">مسار الارسال</string>
   <string name="font_size">حجم الخط</string>
   <string name="change_font_size">حجم الخط</string>
-  <string name="form_scan_starting">البحث عن الاستمارات…</string>
   <string name="access_error">خطأ اثناء الوصول %s:</string>
   <string name="manifest_server_error">المانيفست لايعلم نسخة OpenRosa - الخادم لايستجيب؟</string>
   <string name="root_element_error">العنصرالأساسي &lt;manifest\&gt; كان %s</string>
@@ -145,6 +146,7 @@
   <string name="success">نجاح</string>
   <string name="no_forms_uploaded">عذرا، لا يوجد استمارة للتحميل.</string>
   <string name="upload_results">تحميل النتائج</string>
+  <string name="xform_parse_error">خطاء في محلل البيانات لـ %1$s: %2$s مفقود او غير صالح</string>
   <string name="choose_sound">إختر تسجيل صوتي</string>
   <string name="choose_video">إختر فيديو</string>
   <string name="choose_image">إختر صورة</string>
@@ -187,7 +189,6 @@
   <string name="draw_image">تخطيط الصورة</string>
   <string name="reset_image">اعادة تعيين</string>
   <string name="set_color">تحديد اللون</string>
-  <string name="select_drawing_color">اختر لون الرسم</string>
   <string name="admin_preferences">إعدادات المدير</string>
   <string name="admin_access_settings">انقر للوصول الى اعدادات المدير</string>
   <string name="save_mid">حفظ الاستمارة</string>
@@ -229,7 +230,6 @@
   <string name="ext_search_return_error">معالج البحث استعاد نوع الموضوع  \'%s\'.</string>
   <string name="ext_import_generic_error">لم يمكن استيراد البيانات من  %1$s السبب: %2$s</string>
   <string name="ext_import_progress_message">التحميل المسبق للبيانات من \'%1$s\'،  يرجى الانتظار…  %2$s</string>
-  <string name="ext_import_cancelled_message">الغاء قراءة البيانات!</string>
   <string name="ext_import_finalizing_message">جاري انهاء التحميل المسبق للبيانات.</string>
   <string name="ext_import_completed_message">اكتملت قراءة البيانات!</string>
   <string name="ext_not_initialized_error">مدير البيانات الخارجية لم يتم تفعيله.</string>
@@ -262,8 +262,6 @@
   <string name="drive_get_file">الحصول على %1$s وملفات الوسائط.</string>
   <string name="no_google_account">لم يتم اختيار حساب جوجل!</string>
   <string name="google_set_account">لقد قمت باختيار صفحات الجوجل كخادم لك، أرجو اختيار حساب الجوجل  المتوافق عن طريق الاعدادت العامة قبل الاستمرار</string>
-  <string name="invalid_oauth">الرمز غير صالح</string>
-  <string name="google_repeat_error">التكرارات غير مدعومة من قبل صفحات الجوجل بهذا الوقت</string>
   <string name="odk_auth_auth_fail">فشل في عملية التحقق من بيانات المصادقة</string>
   <string name="odk_auto_note">ملاحظات تلقائية</string>
   <string name="notification_error">خطأ في عرض اشعار النص</string>
@@ -271,7 +269,6 @@
   <string name="delete_after_send_summary">حذف الاستمارة النهائية والوسائط المتعددة بعد ارسالها الى الخادم</string>
   <string name="change_server_url">رابط الخادم</string>
   <string name="google_search_browse">ابحث عن الاستمارات. أو اختار  \'My Drive\' من الاسفل لكي تتصفح</string>
-  <string name="no_blank_search">حقل البحث لا يمكن ان يكون فارغا.</string>
   <string name="google_sheets_url">رابط اوراق جوجل</string>
   <string name="send_in_progress">خلفية الارسال تعمل. يرجى المحاولة مرة أخرى في وقت قريب</string>
   <string name="sheets_max_columns">الحد الأقصى لعدد الأعمدة هو 255، استماراتك تحتوي على %s. غير قادر على تحميل الجدول.</string>
@@ -282,9 +279,6 @@
   <string name="username_error_whitespace">الزيادات في البداية أو الفراغات غير مسموح بها في اسم المستخدم</string>
   <string name="google_play_services_error_occured">غير قادرعلى الوصول الى خرائط الجوجل. هل خدمات تشغيل الجوجل مثبتة؟</string>
   <string name="about_preferences">حول التطبيق</string>
-  <string name="tell_your_friends">أخبر اصدقائك</string>
-  <string name="tell_your_friends_msg">رسالة أخبر اصدقائك</string>
-  <string name="leave_a_review">إترك ملاحظة</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">رسم الخريطة</string>
   <string name="map_sdk_selector_title">خدمة الخريطة</string>
@@ -294,7 +288,6 @@
   <string name="show_map_sdk">عرض خيارات الخريطة</string>
   <string name="openmap_streets">اخريطة لطرق</string>
   <string name="openmap_usgs_topo">خرطة البنية</string>
-  <string name="openmap_usgs_sat">خريطة الاقمار الاصطناعية</string>
   <string name="openmap_stamen_terrain">خريطة التضاريس</string>
   <string name="openmap_cartodb_positron">خريطة CartoDB</string>
   <string name="openmap_cartodb_darkmatter">خريطة CartoDB</string>
@@ -324,7 +317,6 @@
   <string name="geo_clear_warning">الميزة تم انشائها مسبقاً</string>
   <string name="geo_exit_warning">تجاهل التعديلات والعودة الى ODK؟</string>
   <string name="polygon_validator">يجب توفر 3 نقاط GeoPoint لانشاء Polygon</string>
-  <string name="dialog_continue">المتابعة</string>
   <string name="clear">الغاء</string>
   <string name="polyline_polygon_text">حفظ GeoTrace كـ</string>
   <string name="manual_mode">الوضع اليدوي</string>
@@ -342,6 +334,8 @@
   <string name="bearing">تحمل %.3f</string>
   <string name="direction">الاتجاة: %s</string>
   <string name="select_odk_shortcut">اختيار الاختصار</string>
+  <string name="bad_uri">عنوان غير صحيح : %s</string>
+  <string name="unrecognized_uri">عنوان غير معروف : %s</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="no_form_loaded">لم يتم العثور على الاستمارات…</string>
   <string name="settings_successfully_loaded_file_notification">تم تحميل ملف الاعدادت بنجاح</string>
@@ -361,8 +355,6 @@
   <string name="odk_website">موقع ODK</string>
   <string name="odk_website_summary">ملخص موقع ODK</string>
   <string name="odk_forum">نقاشات ODK</string>
-  <string name="odk_forum_summary">ملخص نقاشات ODK</string>
-  <string name="all_open_source_licenses">الترخيص مفتوح المصدر</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">غرب %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -392,7 +384,6 @@
   <string name="reset_settings_dialog_title">مسح واستعادة الإعدادات الافتراضية لعناوين مربع الحوار</string>
   <string name="reset_settings_dialog">مسح واستعادة الإعدادات الافتراضية لمربع الحوار</string>
   <string name="reset_settings_button_reset">مسح واستعادة الإعدادات الافتراضية…</string>
-  <string name="reset_dialog_nothing">لم يتم اختيار اي خيار للإستعادة</string>
   <string name="reset_in_progress">جاري عملية المسح والاستعادة</string>
   <string name="reset_app_state_result">نتائج عملية المسح والاستعادة</string>
   <string name="reset_app_state_warning">تحذير… سيتم حذف البيانات المحددة. ولا امكانية للتراجع</string>
@@ -407,8 +398,6 @@
   <string name="exit">خروج</string>
   <string name="instance_scan_completed">انتهت عملية البحث عن الاستمارات</string>
   <string name="instance_scan_count">تم العثور على %1$d إستمارة</string>
-  <string name="instance_sync">خيارات الاستيراد للاستمارات المحفوظة كاستمارات منتهية</string>
-  <string name="instance_sync_summary">استيراد الاستمارات المحفوظة كاستمارات منتهية من مجلد الحفظ</string>
   <string name="sort_by_name_asc">ترتيب حسب الاسم تصاعدياً</string>
   <string name="sort_by_name_desc">ترتيب حسب الاسم تنازلياً</string>
   <string name="sort_by_date_asc">ترتيب حسب التاريخ تصاعدياً</string>
@@ -492,6 +481,8 @@
   <string name="edit_value">غير</string>
   <string name="no_value_selected">لم يتم اختيار قيمة</string>
   <string name="form_delete_message">تحذير…سيتم مسح الاستمارات المحددة.</string>
+  <string name="deleting_form_dialog_update_message">حذف استمارة : %1$d من اصل %2$d</string>
   <string name="search">بحث</string>
   <string name="null_intent_value">حدث خطأ. قيمة فارغة</string>
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
 </resources>

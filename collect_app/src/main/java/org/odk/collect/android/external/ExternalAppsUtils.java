@@ -54,6 +54,10 @@ public class ExternalAppsUtils {
     private static final String LEFT_PARENTHESIS = "(";
     private static final String RIGHT_PARENTHESIS = ")";
 
+    private ExternalAppsUtils() {
+
+    }
+
     public static String extractIntentName(String exString) {
         if (!exString.contains(LEFT_PARENTHESIS)) {
             if (exString.contains(RIGHT_PARENTHESIS)) {
@@ -123,7 +127,7 @@ public class ExternalAppsUtils {
                         // instanceProviderID returns -1 if the current instance has not been
                         // saved to disk already
                         String path =
-                                Collect.getInstance().getFormController().getInstancePath()
+                                Collect.getInstance().getFormController().getInstanceFile()
                                         .getAbsolutePath();
 
                         String instanceProviderID = "-1";

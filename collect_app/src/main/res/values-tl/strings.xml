@@ -81,7 +81,6 @@
   <string name="parse_legacy_formlist_failed">Ang server ay walang maibigay na form na kaugma sa Aggregate 0.9.x. : %s</string>
   <string name="parse_openrosa_formlist_failed">Ang server ay walang maibigay na dokumentong form na kaugma sa pamantayan ng OpenRosa version 1.0: %s</string>
   <string name="password">Kontrasenyas</string>
-  <string name="play_audio">I-play ang Tunog</string>
   <string name="play_video">I-play ang Bidyo</string>
   <string name="please_wait">Mag-hintay ng ilang sandali.</string>
   <string name="please_wait_long">Mag-hintay. Ito ay maaring tumagal ng ilang minuto.</string>
@@ -120,7 +119,6 @@
   <string name="submission_url">Submission Path</string>
   <string name="font_size">Laki ng Teklado</string>
   <string name="change_font_size">Laki ng Tipo ng Teksto</string>
-  <string name="form_scan_starting">Nag-i-i-scanning ng mga forms…</string>
   <string name="access_error">May mali habang sa pag-access ng %s: </string>
   <string name="manifest_server_error">Manifest reply does not report an OpenRosa version — bad server?</string>
   <string name="root_element_error">Root element is not &lt;manifest\&gt; — was %s</string>
@@ -172,7 +170,6 @@
   <string name="draw_image">Guhitan ang Imahe</string>
   <string name="reset_image">I-reset</string>
   <string name="set_color">I-set ang Kulay</string>
-  <string name="select_drawing_color">Piliian ang Kulay ng pang-guhit</string>
   <string name="admin_preferences">Admin Settings</string>
   <string name="admin_access_settings">Tap for admin access to settings</string>
   <string name="save_mid">Impukin ang mga sagot sa Form</string>
@@ -199,4 +196,5 @@
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
 </resources>

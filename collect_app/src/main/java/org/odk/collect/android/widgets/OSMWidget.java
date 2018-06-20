@@ -10,9 +10,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.util.TypedValue;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
@@ -33,8 +31,6 @@ import org.opendatakit.httpclientandroidlib.entity.ContentType;
 import java.util.ArrayList;
 import java.util.List;
 
-import timber.log.Timber;
-
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
@@ -50,26 +46,22 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
     private static final int OSM_GREEN = Color.rgb(126, 188, 111);
     private static final int OSM_BLUE = Color.rgb(112, 146, 255);
 
-    private Button launchOpenMapKitButton;
-    private String instanceDirectory;
-    private TextView errorTextView;
-    private TextView osmFileNameHeaderTextView;
-    private TextView osmFileNameTextView;
+    private final Button launchOpenMapKitButton;
+    private final String instanceDirectory;
+    private final TextView errorTextView;
+    private final TextView osmFileNameHeaderTextView;
+    private final TextView osmFileNameTextView;
 
-    private List<OSMTag> osmRequiredTags;
-    private String instanceId;
-    private int formId;
-    private String formFileName;
+    private final List<OSMTag> osmRequiredTags;
+    private final String instanceId;
+    private final int formId;
+    private final String formFileName;
     private String osmFileName;
 
     public OSMWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
         FormController formController = Collect.getInstance().getFormController();
-        if (formController == null) {
-            Timber.w("OSMWidget started with null FormController");
-            return;
-        }
 
         /*
          * NH: I'm trying to find the form xml file name, but this is neither
@@ -80,7 +72,7 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
          */
         formFileName = formController.getMediaFolder().getName().split("-media")[0];
 
-        instanceDirectory = formController.getInstancePath().getParent();
+        instanceDirectory = formController.getInstanceFile().getParent();
         instanceId = formController.getSubmissionMetadata().instanceId;
         formId = formController.getFormDef().getID();
 
@@ -95,8 +87,7 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
         osmFileName = prompt.getAnswerText();
 
         // Setup Launch OpenMapKit Button
-        launchOpenMapKitButton = new Button(getContext());
-        launchOpenMapKitButton.setId(ViewIds.generateViewId());
+        launchOpenMapKitButton = getSimpleButton(ViewIds.generateViewId());
 
         // Button Styling
         if (osmFileName != null) {
@@ -110,25 +101,7 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
         } else {
             launchOpenMapKitButton.setText(getContext().getString(R.string.capture_osm));
         }
-        launchOpenMapKitButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
-        launchOpenMapKitButton.setPadding(20, 20, 20, 20);
         launchOpenMapKitButton.setEnabled(!prompt.isReadOnly());
-        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
-        params.setMargins(35, 30, 30, 35);
-        launchOpenMapKitButton.setLayoutParams(params);
-
-        // Launch OpenMapKit intent on click
-        launchOpenMapKitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                launchOpenMapKitButton.setBackgroundColor(OSM_BLUE);
-                Collect.getInstance().getActivityLogger().logInstanceAction(this,
-                        "launchOpenMapKitButton",
-                        "click", getFormEntryPrompt().getIndex());
-                errorTextView.setVisibility(View.GONE);
-                launchOpenMapKit();
-            }
-        });
 
         osmFileNameHeaderTextView = new TextView(context);
         osmFileNameHeaderTextView.setId(ViewIds.generateViewId());
@@ -147,6 +120,8 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
         } else {
             osmFileNameHeaderTextView.setVisibility(View.GONE);
         }
+        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
+        params.setMargins(35, 30, 30, 35);
         osmFileNameTextView.setLayoutParams(params);
 
 
@@ -196,7 +171,7 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
             Context ctx = getContext();
             PackageManager packageManager = ctx.getPackageManager();
             List<ResolveInfo> activities = packageManager.queryIntentActivities(launchIntent, 0);
-            boolean isIntentSafe = activities.size() > 0;
+            boolean isIntentSafe = !activities.isEmpty();
 
             //launch activity if it is safe
             if (isIntentSafe) {
@@ -231,8 +206,6 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
         osmFileNameTextView.setText(osmFileName);
         osmFileNameHeaderTextView.setVisibility(View.VISIBLE);
         osmFileNameTextView.setVisibility(View.VISIBLE);
-
-        cancelWaitingForData();
     }
 
     @Override
@@ -250,11 +223,13 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
     }
 
     @Override
-    public void setFocus(Context context) {
-        // Hide the soft keyboard if it's showing.
-        InputMethodManager inputManager = (InputMethodManager) context
-                .getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
+    public void onButtonClick(int buttonId) {
+        launchOpenMapKitButton.setBackgroundColor(OSM_BLUE);
+        Collect.getInstance().getActivityLogger().logInstanceAction(this,
+                "launchOpenMapKitButton",
+                "click", getFormEntryPrompt().getIndex());
+        errorTextView.setVisibility(View.GONE);
+        launchOpenMapKit();
     }
 
     @Override

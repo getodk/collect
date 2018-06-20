@@ -88,7 +88,6 @@
   <string name="parse_legacy_formlist_failed">সার্ভার থেকে Aggregate 0.9.x. : %s এর একযোগে ব্যবহারযোগ্য কোন ফরম পাওয়া যায় নি।</string>
   <string name="parse_openrosa_formlist_failed">সার্ভার থেকে OpenRosa version 1.0 standard: %s এর একযোগে ব্যবহারযোগ্য কোন ফরম পাওয়া যায় নি।</string>
   <string name="password">পাসওয়ার্ড</string>
-  <string name="play_audio">শব্দ বাজান</string>
   <string name="play_video">ভিডিও চালান</string>
   <string name="please_wait">দয়া করে কিছু সময় অপেক্ষা করুন।</string>
   <string name="please_wait_long">দয়া করে অপেক্ষা করুন। এটি শেষ হতে কয়েক মিনিট সময় লাগতে পারে।</string>
@@ -169,7 +168,6 @@
   <string name="draw_image">স্কেচ চিত্র</string>
   <string name="reset_image">রিসেট</string>
   <string name="set_color">কালার সেট</string>
-  <string name="select_drawing_color">ড্রয়িং কালার সিলেক্ট</string>
   <string name="admin_preferences">অ্যাডমিনের পছন্দ</string>
   <string name="admin_access_settings">অ্যাডমিনের settings</string>
   <string name="save_mid">সংরক্ষণ করুন ফরম </string>
@@ -205,4 +203,5 @@
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
 </resources>

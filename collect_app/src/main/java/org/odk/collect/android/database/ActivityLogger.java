@@ -22,15 +22,20 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.google.android.gms.analytics.HitBuilders;
+
 import org.javarosa.core.model.FormIndex;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 
 import java.io.File;
 import java.util.Calendar;
 import java.util.LinkedList;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.preferences.PreferenceKeys.ACTIVITY_LOGGER_ANALYTICS;
 
 /**
  * Log all user interface activity into a SQLite database. Logging is disabled by default.
@@ -110,12 +115,34 @@ public final class ActivityLogger {
     // We buffer scroll actions to make sure there aren't too many pauses
     // during scrolling.  This list is flushed every time any other type of
     // action is logged.
-    private LinkedList<ContentValues> scrollActions = new LinkedList<ContentValues>();
+    private final LinkedList<ContentValues> scrollActions = new LinkedList<ContentValues>();
 
     public ActivityLogger(String deviceId) {
         this.deviceId = deviceId;
         loggingEnabled = new File(Collect.LOG_PATH, ENABLE_LOGGING).exists();
-        open();
+
+        if (loggingEnabled) {
+            open();
+
+            if (isFirstTime()) {
+                sendAnalyticsEvent();
+                GeneralSharedPreferences.getInstance().save(ACTIVITY_LOGGER_ANALYTICS, false);
+            }
+        }
+    }
+
+    private void sendAnalyticsEvent() {
+        Collect.getInstance()
+                .getDefaultTracker()
+                .send(new HitBuilders.EventBuilder()
+                        .setCategory("ActivityLogger")
+                        .setAction("Enabled")
+                        .setLabel("ActivityLogger is enabled")
+                        .build());
+    }
+
+    private boolean isFirstTime() {
+        return GeneralSharedPreferences.getInstance().getBoolean(ACTIVITY_LOGGER_ANALYTICS, true);
     }
 
     public boolean isOpen() {
@@ -176,7 +203,7 @@ public final class ActivityLogger {
     }
 
     private String getInstancePath(FormController formController) {
-        File f = formController.getInstancePath();
+        File f = formController.getInstanceFile();
         if (f == null) {
             return "<not-yet-specified>";
         } else {

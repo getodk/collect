@@ -16,7 +16,7 @@
     than title-->
     <item
         android:id="@+id/menu_save"
-        android:icon="@drawable/ic_menu_save"
+        android:icon="@drawable/ic_save"
         android:title="@string/save_all_answers"
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction"/>

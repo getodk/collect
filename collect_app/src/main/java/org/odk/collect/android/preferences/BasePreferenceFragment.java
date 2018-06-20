@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import org.odk.collect.android.R;
@@ -44,21 +43,12 @@ public class BasePreferenceFragment extends PreferenceFragment {
     // inflates toolbar in the preference fragments
     public void initToolbar(PreferenceScreen preferenceScreen, View view) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-
-            if (getActivity() instanceof PreferencesActivity) {
-                root = (LinearLayout) ((ViewGroup) view.findViewById(android.R.id.list).getRootView()).getChildAt(0);
-                toolbar = (Toolbar) root.findViewById(R.id.toolbar);
-
-            } else {
-                root = (LinearLayout) view.findViewById(android.R.id.list).getParent().getParent();
-                toolbar = (Toolbar) LayoutInflater.from(getActivity()).inflate(R.layout.toolbar, root, false);
-
-                inflateToolbar(preferenceScreen.getTitle());
-            }
-
+            root = (LinearLayout) view.findViewById(android.R.id.list).getParent().getParent();
+            toolbar = (Toolbar) LayoutInflater.from(getActivity()).inflate(R.layout.toolbar_without_progressbar, root, false);
+            inflateToolbar(preferenceScreen.getTitle());
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             root = (LinearLayout) view.findViewById(android.R.id.list).getParent();
-            toolbar = (Toolbar) LayoutInflater.from(getActivity()).inflate(R.layout.toolbar, root, false);
+            toolbar = (Toolbar) LayoutInflater.from(getActivity()).inflate(R.layout.toolbar_without_progressbar, root, false);
 
             inflateToolbar(preferenceScreen.getTitle());
         }

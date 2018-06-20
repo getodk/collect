@@ -15,6 +15,8 @@
 package org.odk.collect.android.adapters;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.support.annotation.NonNull;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -26,43 +28,40 @@ import android.widget.TextView;
 import org.odk.collect.android.R;
 import org.odk.collect.android.listeners.RecyclerViewClickListener;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.ThemeUtils;
 
 public class SortDialogAdapter extends RecyclerView.Adapter<SortDialogAdapter.ViewHolder> {
     private final RecyclerViewClickListener listener;
     private final int selectedSortingOrder;
-    private final Context context;
     private final RecyclerView recyclerView;
-    private String[] sortList;
+    private final ThemeUtils themeUtils;
+    private final String[] sortList;
 
     public SortDialogAdapter(Context context, RecyclerView recyclerView, String[] sortList, int selectedSortingOrder, RecyclerViewClickListener recyclerViewClickListener) {
-        this.context = context;
+        themeUtils = new ThemeUtils(context);
         this.recyclerView = recyclerView;
         this.sortList = sortList;
         this.selectedSortingOrder = selectedSortingOrder;
         listener = recyclerViewClickListener;
     }
 
+    @NonNull
     @Override
-    public SortDialogAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public SortDialogAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemLayoutView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.sort_item_layout, parent, false);
         return new ViewHolder(itemLayoutView);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         viewHolder.txtViewTitle.setText(sortList[position]);
         viewHolder.imgViewIcon.setImageResource(ApplicationConstants.getSortLabelToIconMap().get(sortList[position]));
-        viewHolder.imgViewIcon.setImageDrawable(DrawableCompat.wrap(viewHolder.imgViewIcon.getDrawable()));
+        viewHolder.imgViewIcon.setImageDrawable(DrawableCompat.wrap(viewHolder.imgViewIcon.getDrawable()).mutate());
 
-        if (position == selectedSortingOrder) {
-            viewHolder.txtViewTitle.setTextColor(context.getResources().getColor(R.color.tintColor));
-            DrawableCompat.setTint(viewHolder.imgViewIcon.getDrawable(),
-                    context.getResources().getColor(R.color.tintColor));
-        } else {
-            viewHolder.txtViewTitle.setTextColor(context.getResources().getColor(R.color.black));
-            DrawableCompat.setTintList(viewHolder.imgViewIcon.getDrawable(), null);
-        }
+        int color = position == selectedSortingOrder ? themeUtils.getAccentColor() : themeUtils.getPrimaryTextColor();
+        viewHolder.txtViewTitle.setTextColor(color);
+        DrawableCompat.setTintList(viewHolder.imgViewIcon.getDrawable(), position == selectedSortingOrder ? ColorStateList.valueOf(color) : null);
     }
 
     // Return the size of your itemsData (invoked by the layout manager)
@@ -71,7 +70,7 @@ public class SortDialogAdapter extends RecyclerView.Adapter<SortDialogAdapter.Vi
         return sortList.length;
     }
 
-    // inner class to hold a reference to each item of RecyclerView 
+    // inner class to hold a reference to each item of RecyclerView
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView txtViewTitle;
@@ -79,8 +78,8 @@ public class SortDialogAdapter extends RecyclerView.Adapter<SortDialogAdapter.Vi
 
         ViewHolder(final View itemLayoutView) {
             super(itemLayoutView);
-            txtViewTitle = (TextView) itemLayoutView.findViewById(R.id.title);
-            imgViewIcon = (ImageView) itemLayoutView.findViewById(R.id.icon);
+            txtViewTitle = itemLayoutView.findViewById(R.id.title);
+            imgViewIcon = itemLayoutView.findViewById(R.id.icon);
 
             itemLayoutView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -92,11 +91,11 @@ public class SortDialogAdapter extends RecyclerView.Adapter<SortDialogAdapter.Vi
 
         public void updateItemColor(int selectedSortingOrder) {
             ViewHolder previousHolder = (ViewHolder) recyclerView.findViewHolderForAdapterPosition(selectedSortingOrder);
-            previousHolder.txtViewTitle.setTextColor(context.getResources().getColor(R.color.black));
+            previousHolder.txtViewTitle.setTextColor(themeUtils.getPrimaryTextColor());
             DrawableCompat.setTintList(previousHolder.imgViewIcon.getDrawable(), null);
 
-            txtViewTitle.setTextColor(context.getResources().getColor(R.color.tintColor));
-            DrawableCompat.setTint(imgViewIcon.getDrawable(), context.getResources().getColor(R.color.tintColor));
+            txtViewTitle.setTextColor(themeUtils.getAccentColor());
+            DrawableCompat.setTint(imgViewIcon.getDrawable(), themeUtils.getAccentColor());
         }
     }
 }

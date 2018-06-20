@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+  <string name="show_password">Mostra a senha</string>
   <string name="activity_not_found">Não foi encontrada nenhuma atividade por ser tratada: %s</string>
   <string name="add_another">Adicionar Grupo</string>
   <string name="add_another_repeat">Adicionar outro \"%s\" grupo?</string>
@@ -10,6 +11,7 @@
   <string name="cancel">Cancelar</string>
   <string name="cancel_loading_form">Cancelar</string>
   <string name="cancel_location">Cancelar</string>
+  <string name="cannot_edit_completed_form">Este formulário não pode ser editado, pois ele foi marcado como finalizado. Ele pode estar criptografado.</string>
   <string name="capture_audio">Gravar Áudio</string>
   <string name="capture_image">Tirar Foto</string>
   <string name="capture_video">Gravar Vídeo</string>
@@ -48,6 +50,7 @@
   <string name="enter_data_button">Formulário em Branco</string>
   <string name="error_occured">Ocorreu um erro</string>
   <string name="error_attaching_binary_file">Um erro ocorreu ao anexar o arquivo: %s</string>
+  <string name="fetching_file">Baixando %1$s.\n\nFormulário %2$s de %3$s.</string>
   <string name="file_deleted_error">Desculpe, %1$s de %2$s formulário(s) selecionado falhou ao apagar!</string>
   <string name="file_deleted_ok">%s formulário(s) apagados com sucesso!</string>
   <string name="file_delete_in_progress">Desculpe, a ação de apagar está em andamento!</string>
@@ -78,12 +81,14 @@
   <string name="noselect_error">Desculpe, você não selecionou nenhum formulário!</string>
   <string name="no_connection">Sem conexão disponível</string>
   <string name="no_items_display">Nada disponível para mostrar</string>
+  <string name="no_items_display_forms">Nada disponível para exibir.\n\nTente baixar e preencher um formulário em branco.</string>
+  <string name="no_items_display_sent_forms">Nada disponível para exibir.\n\nTente enviar um formulário finalizado antes de visualizar.</string>
+  <string name="no_items_display_instances">Nada disponível para exibir.\n\nTente finalizar formulários salvos antes de enviar.</string>
   <string name="ok">OK</string>
   <string name="parse_error">Desculpe, não é possível analisar formulário.</string>
   <string name="parse_legacy_formlist_failed">O servidor não tinha formulários disponíveis compatíveis com Aggregate 0.9.x. : %s</string>
   <string name="parse_openrosa_formlist_failed">O servidor não tinha formulários disponíveis compatíveis com OpenRosa version 1.0 standard: %s</string>
   <string name="password">Senha</string>
-  <string name="play_audio">Tocar Áudio</string>
   <string name="play_video">Assistir o Vídeo</string>
   <string name="please_wait">Por favor, aguarde um pouco.</string>
   <string name="please_wait_long">Por favor, aguarde. Isto levará alguns minutos.</string>
@@ -101,6 +106,9 @@
   <string name="send_data">Enviar Formulário Finalizado</string>
   <string name="send_data_button">Enviar formulário finalizado (%s)</string>
   <string name="send_selected_data">Enviar selecionado</string>
+  <string name="view_sent_forms">Ver Formulário Enviado</string>
+  <string name="view_sent_forms_button">Visualizar formulário enviado (%s)</string>
+  <string name="server_auth_credentials">Nome de usuário ou senha inválidos para o servidor: %s</string>
   <string name="server_requires_auth">Servidor Requer Autenticação</string>
   <string name="server_url">Servidor URL</string>
   <string name="server_preferences">Servidor</string>
@@ -110,6 +118,7 @@
   <string name="username">Nome do usuário</string>
   <string name="view_hierarchy">Ir para atual</string>
   <string name="general_preferences">Alterar configuração</string>
+  <string name="client">Interface de usuário</string>
   <string name="show_splash_summary">Mostrar quando a aplicação iniciar</string>
   <string name="splash_path">Selecionada imagem Splash</string>
   <string name="default_splash_path">ODK Default</string>
@@ -124,7 +133,6 @@
   <string name="submission_url">Caminho para submeter</string>
   <string name="font_size">Tamanho da Fonte do Texto</string>
   <string name="change_font_size">Tamanho da Fonte do Texto</string>
-  <string name="form_scan_starting">Procurando por formulários…</string>
   <string name="access_error">Erro enquanto acessa %s:</string>
   <string name="manifest_server_error">Resposta não retorna uma versão OpenRosa — servidor ruim?</string>
   <string name="root_element_error">Elemento raiz não é &amp;lt;manifest\&gt; — foi %s</string>
@@ -167,6 +175,7 @@ Escolher Imagem</string>
   <string name="sending_failed_on_date_at_time">\'O Envio falhou em\' EEE, MMM dd, yyyy \'em\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="version">Versão:</string>
+  <string name="parent_form_not_present">Não foi possível editar o formulário salvo porque o formulário em branco correspondente não está presente ou foi deletado.\n\nID do formulário: %1$s</string>
   <string name="launch_app">Play App</string>
   <string name="no_app">Aplicativo perdido. Por favor, inserir manualmente</string>
   <string name="select_one">Selecionar uma resposta</string>
@@ -177,15 +186,16 @@ Escolher Imagem</string>
   <string name="draw_image">Desenhar Imagem</string>
   <string name="reset_image">Reset</string>
   <string name="set_color">Definir Cor</string>
-  <string name="select_drawing_color">Definir cor para desenhar</string>
   <string name="admin_preferences">Configurações Administrativas</string>
   <string name="admin_access_settings">Toque para acesso administrativo às configurações</string>
   <string name="save_mid">Mid-form saving</string>
   <string name="enter_new_password">Digite a nova senha</string>
+  <string name="admin_password">Senha Administrativa</string>
   <string name="admin_password_changed">Senha administrativa alterada com sucesso</string>
   <string name="admin_password_disabled">Senha administrativa desabilitada</string>
   <string name="admin_password_incorrect">Lamento, senha incorreta!</string>
   <string name="enter_admin_password">Digite a senha administrativa</string>
+  <string name="autosend">Enviar automaticamente</string>
   <string name="found_in_main">Desmarque para esconder no Menu Principal</string>
   <string name="found_in_settings">Desmarque para não exibir nas Configurações Gerais  </string>
   <string name="save_preferences">Salvar configurações no disco</string>
@@ -216,7 +226,6 @@ Escolher Imagem</string>
   <string name="ext_search_return_error">O gestor de procura retornou um objeto do tipo %s\'.</string>
   <string name="ext_import_generic_error">Não foi possível importar os dados de%1$s. Motivo: %2$s</string>
   <string name="ext_import_progress_message">Pré-carregando dados de \'%1$s\', por favor aguarde… %2$s</string>
-  <string name="ext_import_cancelled_message">Leitura de dados cancelada!</string>
   <string name="ext_import_finalizing_message">Finalizando dados pré-carregados…</string>
   <string name="ext_import_completed_message">Leitura de dados finalizada!</string>
   <string name="ext_not_initialized_error">O ExternalDataManager não foi inicializado.</string>
@@ -245,16 +254,60 @@ Escolher Imagem</string>
   <string name="other_preferences">Configurações de outras plataformas.</string>
   <string name="drive_get_file">Obtendo %1$s e arquivos de mídia.</string>
   <string name="no_google_account">Nenhuma conta do Google foi selecionada!</string>
-  <string name="invalid_oauth">Modo OAuth 2 inválido</string>
+  <string name="odk_auth_auth_fail">Falha na autenticação para envio automático, por favor verifique se as configurações estão corretas</string>
+  <string name="odk_auto_note">Notificação de envio automático</string>
   <string name="notification_error">Erro ao exibir texto de notificação.</string>
   <string name="delete_after_send">Apagar depois de enviado</string>
   <string name="delete_after_send_summary">Apaga formulários completos e arquivos de mídia depois de enviados ao servidor.</string>
   <string name="change_server_url">Servidor URL</string>
-  <string name="no_blank_search">O campo de busca não pode estar em branco.</string>
+  <string name="send_in_progress">Envio automático em segundo plano sendo executado, por favor tente novamente em alguns instantes</string>
+  <string name="about_preferences">Sobre</string>
   <!--Geo string added in feature-geofeatures branch-->
+  <string name="map_preferences">Cartografia</string>
+  <string name="start">Iniciar</string>
+  <string name="enable_gps">Habilitar GPS</string>
+  <string name="enable_gps_message">O GPS está desabilitado em seu aparelho. Gostaria de habilitá-lo?</string>
+  <string name="gps_enable_message">O GPS está desabilitado em seu aparelho. Gostaria de habilitá-lo?</string>
+  <string name="minutes">Minutos</string>
+  <string name="clear">Limpar</string>
+  <string name="manual_mode">Modo manual</string>
+  <string name="automatic_mode">Modo automático</string>
+  <string name="discard">Descartar</string>
+  <string name="zoom_to_where">Aproximar para…</string>
+  <string name="zoom_to_location">Aproximar para a localização atual</string>
+  <string name="zoom_to_feature">Aproximar para a feição salva</string>
+  <string name="bearing">Rumo: %.3f</string>
+  <string name="direction">Direção: %s</string>
+  <string name="unrecognized_uri">URL não reconhecida: %s</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <string name="settings_successfully_loaded_file_notification">Configurações do arquivo carregadas com sucesso</string>
+  <string name="corrupt_settings_file_notification">Desculpe, o arquivo de configurações está corrompido e deveria ser deletado ou substituído</string>
+  <string name="selected_invalid_image">O arquivo selecionado não é uma imagem válida</string>
+  <string name="invalid_osm_data">Algo deu errado. Não conseguimos obter dados válidos do OSM.</string>
+  <string name="alert">Alerta</string>
+  <string name="go_back">Voltar</string>
+  <string name="download_selected">Baixar selecionados</string>
+  <string name="record_geopoint">Gravar ponto de GPS</string>
+  <string name="selected_answer">Selecionado: %s</string>
+  <string name="version_number">Versão: %s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <string name="gdrive_connection_exception">Esta imagem está armazenada no Google Drive e não pode ser acessada offline.</string>
+  <string name="analytics_preferences">Uso de dados</string>
+  <string name="analytics">Coletar dados anônimos</string>
+  <string name="analytics_summary">Os dados anônimos ajudam a equipe do ODK a priorizar a correção de erros e funcionalidades</string>
+  <string name="select_all">Selecionar tudo</string>
+  <string name="clear_all">Limpar tudo</string>
+  <string name="reset_settings">Todas as configurações (configurações internas, configurações salvas)</string>
+  <string name="reset_saved_forms">Formulários salvos (pasta com as instâncias, bancos de dados das instâncias)</string>
+  <string name="reset_blank_forms">Formulários em branco (pasta de formulários, banco de dados de formulários, banco de dados dos conjuntos de itens)</string>
+  <string name="reset_layers">Camadas do mapa (pasta de camadas)</string>
+  <string name="exit">Sair</string>
+  <string name="autosend_selector_title">Enviar automaticamente</string>
+  <string name="guidance_no">Não</string>
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <string name="yes">Sim</string>
+  <string name="no">Não</string>
 </resources>

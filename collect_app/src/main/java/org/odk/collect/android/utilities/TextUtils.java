@@ -19,6 +19,7 @@ import android.text.Html;
 import java.util.regex.MatchResult;
 
 public class TextUtils {
+
     private static ReplaceCallback.Callback createHeader = new ReplaceCallback.Callback() {
         public String matchFound(MatchResult match) {
             int level = match.group(1).length();
@@ -64,6 +65,10 @@ public class TextUtils {
         }
     };
 
+    private TextUtils() {
+
+    }
+
     protected static String markdownToHtml(String text) {
 
         text = text.replaceAll("<([^a-zA-Z/])", "&lt;$1");
@@ -72,12 +77,21 @@ public class TextUtils {
         // span - replaced &lt; and &gt; with <>
         text = ReplaceCallback.replace("(?s)<\\s?span([^\\/\n]*)>((?:(?!<\\/).)+)<\\/\\s?span\\s?>",
                 text, createSpan);
+
+        //intermediary replacements keys for special characters, N/B: These symbols are not meant to be interpreted as markdown
+        text = text.replaceAll("(?s)\\\\#", "&#35;");
+        text = text.replaceAll("(?s)\\\\\\\\", "&#92;");
+        text = text.replaceAll("(?s)\\\\_", "&#95;");
+        text = text.replaceAll("(?s)\\\\\\*", "&#42;");
+
         // strong
         text = text.replaceAll("(?s)__(.*?)__", "<strong>$1</strong>");
         text = text.replaceAll("(?s)\\*\\*(.*?)\\*\\*", "<strong>$1</strong>");
+
         // emphasis
         text = text.replaceAll("(?s)_([^\\s][^_\n]*)_", "<em>$1</em>");
         text = text.replaceAll("(?s)\\*([^\\s][^\\*\n]*)\\*", "<em>$1</em>");
+
         // links
         text = text.replaceAll("(?s)\\[([^\\]]*)\\]\\(([^\\)]+)\\)",
                 "<a href=\"$2\" target=\"_blank\">$1</a>");
@@ -86,6 +100,11 @@ public class TextUtils {
         // paragraphs
         text = ReplaceCallback.replace("(?s)([^\n]+)\n", text, createParagraph);
 
+        // replacing intermediary keys with the proper markdown symbols
+        text = text.replaceAll("(?s)&#35;", "#");
+        text = text.replaceAll("(?s)&#42;", "*");
+        text = text.replaceAll("(?s)&#95;", "_");
+        text = text.replaceAll("(?s)&#92;", "\\\\");
         return text;
     }
 
@@ -97,4 +116,5 @@ public class TextUtils {
 
         return Html.fromHtml(markdownToHtml(text));
     }
-} 
+}
+

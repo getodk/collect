@@ -14,19 +14,18 @@
 
 package org.odk.collect.android.activities;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -46,18 +45,19 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
-import org.odk.collect.android.preferences.AboutPreferencesActivity;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
+import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.PlayServicesUtil;
-import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
+import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -76,7 +76,7 @@ import timber.log.Timber;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class MainMenuActivity extends AppCompatActivity {
+public class MainMenuActivity extends CollectAbstractActivity {
 
     private static final int PASSWORD_DIALOG = 1;
 
@@ -98,10 +98,16 @@ public class MainMenuActivity extends AppCompatActivity {
     private Cursor finalizedCursor;
     private Cursor savedCursor;
     private Cursor viewSentCursor;
-    private IncomingHandler handler = new IncomingHandler(this);
-    private MyContentObserver contentObserver = new MyContentObserver();
+    private final IncomingHandler handler = new IncomingHandler(this);
+    private final MyContentObserver contentObserver = new MyContentObserver();
 
     // private static boolean DO_NOT_EXIT = false;
+
+    public static void startActivityAndCloseAllOthers(Activity activity) {
+        activity.startActivity(new Intent(activity, MainMenuActivity.class));
+        activity.overridePendingTransition(0, 0);
+        activity.finishAffinity();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,103 +116,114 @@ public class MainMenuActivity extends AppCompatActivity {
         initToolbar();
 
         // enter data button. expects a result.
-        enterDataButton = (Button) findViewById(R.id.enter_data);
+        enterDataButton = findViewById(R.id.enter_data);
         enterDataButton.setText(getString(R.string.enter_data_button));
         enterDataButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Collect.getInstance().getActivityLogger()
-                        .logAction(this, "fillBlankForm", "click");
-                Intent i = new Intent(getApplicationContext(),
-                        FormChooserList.class);
-                startActivity(i);
+                if (Collect.allowClick()) {
+                    Collect.getInstance().getActivityLogger()
+                            .logAction(this, "fillBlankForm", "click");
+                    Intent i = new Intent(getApplicationContext(),
+                            FormChooserList.class);
+                    startActivity(i);
+                }
             }
         });
 
         // review data button. expects a result.
-        reviewDataButton = (Button) findViewById(R.id.review_data);
+        reviewDataButton = findViewById(R.id.review_data);
         reviewDataButton.setText(getString(R.string.review_data_button));
         reviewDataButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Collect.getInstance().getActivityLogger()
-                        .logAction(this, ApplicationConstants.FormModes.EDIT_SAVED, "click");
-                Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
-                i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE,
-                        ApplicationConstants.FormModes.EDIT_SAVED);
-                startActivity(i);
+                if (Collect.allowClick()) {
+                    Collect.getInstance().getActivityLogger()
+                            .logAction(this, ApplicationConstants.FormModes.EDIT_SAVED, "click");
+                    Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
+                    i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE,
+                            ApplicationConstants.FormModes.EDIT_SAVED);
+                    startActivity(i);
+                }
             }
         });
 
         // send data button. expects a result.
-        sendDataButton = (Button) findViewById(R.id.send_data);
+        sendDataButton = findViewById(R.id.send_data);
         sendDataButton.setText(getString(R.string.send_data_button));
         sendDataButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Collect.getInstance().getActivityLogger()
-                        .logAction(this, "uploadForms", "click");
-                Intent i = new Intent(getApplicationContext(),
-                        InstanceUploaderList.class);
-                startActivity(i);
+                if (Collect.allowClick()) {
+                    Collect.getInstance().getActivityLogger()
+                            .logAction(this, "uploadForms", "click");
+                    Intent i = new Intent(getApplicationContext(),
+                            InstanceUploaderList.class);
+                    startActivity(i);
+                }
             }
         });
 
         //View sent forms
-        viewSentFormsButton = (Button) findViewById(R.id.view_sent_forms);
+        viewSentFormsButton = findViewById(R.id.view_sent_forms);
         viewSentFormsButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Collect.getInstance().getActivityLogger().logAction(this,
-                        ApplicationConstants.FormModes.VIEW_SENT, "click");
-                Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
-                i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE,
-                        ApplicationConstants.FormModes.VIEW_SENT);
-                startActivity(i);
+                if (Collect.allowClick()) {
+                    Collect.getInstance().getActivityLogger().logAction(this,
+                            ApplicationConstants.FormModes.VIEW_SENT, "click");
+                    Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
+                    i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE,
+                            ApplicationConstants.FormModes.VIEW_SENT);
+                    startActivity(i);
+                }
             }
         });
 
         // manage forms button. no result expected.
-        getFormsButton = (Button) findViewById(R.id.get_forms);
+        getFormsButton = findViewById(R.id.get_forms);
         getFormsButton.setText(getString(R.string.get_forms));
         getFormsButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Collect.getInstance().getActivityLogger()
-                        .logAction(this, "downloadBlankForms", "click");
-                SharedPreferences sharedPreferences = PreferenceManager
-                        .getDefaultSharedPreferences(MainMenuActivity.this);
-                String protocol = sharedPreferences.getString(
-                        PreferenceKeys.KEY_PROTOCOL, getString(R.string.protocol_odk_default));
-                Intent i = null;
-                if (protocol.equalsIgnoreCase(getString(R.string.protocol_google_sheets))) {
-                    if (PlayServicesUtil.isGooglePlayServicesAvailable(MainMenuActivity.this)) {
-                        i = new Intent(getApplicationContext(),
-                                GoogleDriveActivity.class);
+                if (Collect.allowClick()) {
+                    Collect.getInstance().getActivityLogger()
+                            .logAction(this, "downloadBlankForms", "click");
+                    SharedPreferences sharedPreferences = PreferenceManager
+                            .getDefaultSharedPreferences(MainMenuActivity.this);
+                    String protocol = sharedPreferences.getString(
+                            PreferenceKeys.KEY_PROTOCOL, getString(R.string.protocol_odk_default));
+                    Intent i = null;
+                    if (protocol.equalsIgnoreCase(getString(R.string.protocol_google_sheets))) {
+                        if (PlayServicesUtil.isGooglePlayServicesAvailable(MainMenuActivity.this)) {
+                            i = new Intent(getApplicationContext(),
+                                    GoogleDriveActivity.class);
+                        } else {
+                            PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(MainMenuActivity.this);
+                            return;
+                        }
                     } else {
-                        PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(MainMenuActivity.this);
-                        return;
+                        i = new Intent(getApplicationContext(),
+                                FormDownloadList.class);
                     }
-                } else {
-                    i = new Intent(getApplicationContext(),
-                            FormDownloadList.class);
+                    startActivity(i);
                 }
-                startActivity(i);
-
             }
         });
 
         // manage forms button. no result expected.
-        manageFilesButton = (Button) findViewById(R.id.manage_forms);
+        manageFilesButton = findViewById(R.id.manage_forms);
         manageFilesButton.setText(getString(R.string.manage_files));
         manageFilesButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Collect.getInstance().getActivityLogger()
-                        .logAction(this, "deleteSavedForms", "click");
-                Intent i = new Intent(getApplicationContext(),
-                        FileManagerTabs.class);
-                startActivity(i);
+                if (Collect.allowClick()) {
+                    Collect.getInstance().getActivityLogger()
+                            .logAction(this, "deleteSavedForms", "click");
+                    Intent i = new Intent(getApplicationContext(),
+                            FileManagerTabs.class);
+                    startActivity(i);
+                }
             }
         });
 
@@ -222,7 +239,7 @@ public class MainMenuActivity extends AppCompatActivity {
 
         {
             // dynamically construct the "ODK Collect vA.B" string
-            TextView mainMenuMessageLabel = (TextView) findViewById(R.id.main_menu_header);
+            TextView mainMenuMessageLabel = findViewById(R.id.main_menu_header);
             mainMenuMessageLabel.setText(Collect.getInstance()
                     .getVersionedAppName());
         }
@@ -231,11 +248,11 @@ public class MainMenuActivity extends AppCompatActivity {
         File j = new File(Collect.ODK_ROOT + "/collect.settings.json");
         // Give JSON file preference
         if (j.exists()) {
-            SharedPreferencesUtils sharedPrefs = new SharedPreferencesUtils();
-            boolean success = sharedPrefs.loadSharedPreferencesFromJSONFile(j);
+            boolean success = SharedPreferencesUtils.loadSharedPreferencesFromJSONFile(j);
             if (success) {
                 ToastUtils.showLongToast(R.string.settings_successfully_loaded_file_notification);
                 j.delete();
+                recreate();
 
                 // Delete settings file to prevent overwrite of settings from JSON file on next startup
                 if (f.exists()) {
@@ -249,6 +266,7 @@ public class MainMenuActivity extends AppCompatActivity {
             if (success) {
                 ToastUtils.showLongToast(R.string.settings_successfully_loaded_file_notification);
                 f.delete();
+                recreate();
             } else {
                 ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);
             }
@@ -308,7 +326,7 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     private void initToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setTitle(getString(R.string.main_menu));
         setSupportActionBar(toolbar);
     }
@@ -420,10 +438,8 @@ public class MainMenuActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         Collect.getInstance().getActivityLogger()
                 .logAction(this, "onCreateOptionsMenu", "show");
-        super.onCreateOptionsMenu(menu);
-
         getMenuInflater().inflate(R.menu.main_menu, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -434,16 +450,14 @@ public class MainMenuActivity extends AppCompatActivity {
                         .getActivityLogger()
                         .logAction(this, "onOptionsItemSelected",
                                 "MENU_ABOUT");
-                Intent aboutIntent = new Intent(this, AboutPreferencesActivity.class);
-                startActivity(aboutIntent);
+                startActivity(new Intent(this, AboutActivity.class));
                 return true;
             case R.id.menu_general_preferences:
                 Collect.getInstance()
                         .getActivityLogger()
                         .logAction(this, "onOptionsItemSelected",
                                 "MENU_PREFERENCES");
-                Intent ig = new Intent(this, PreferencesActivity.class);
-                startActivity(ig);
+                startActivity(new Intent(this, PreferencesActivity.class));
                 return true;
             case R.id.menu_admin_preferences:
                 Collect.getInstance().getActivityLogger()
@@ -451,9 +465,7 @@ public class MainMenuActivity extends AppCompatActivity {
                 String pw = adminPreferences.getString(
                         AdminKeys.KEY_ADMIN_PW, "");
                 if ("".equalsIgnoreCase(pw)) {
-                    Intent i = new Intent(getApplicationContext(),
-                            AdminPreferencesActivity.class);
-                    startActivity(i);
+                    startActivity(new Intent(this, AdminPreferencesActivity.class));
                 } else {
                     showDialog(PASSWORD_DIALOG);
                     Collect.getInstance().getActivityLogger()
@@ -502,8 +514,8 @@ public class MainMenuActivity extends AppCompatActivity {
                 LayoutInflater inflater = this.getLayoutInflater();
                 View dialogView = inflater.inflate(R.layout.dialogbox_layout, null);
                 passwordDialog.setView(dialogView, 20, 10, 20, 10);
-                final CheckBox checkBox = (CheckBox) dialogView.findViewById(R.id.checkBox);
-                final EditText input = (EditText) dialogView.findViewById(R.id.editText);
+                final CheckBox checkBox = dialogView.findViewById(R.id.checkBox);
+                final EditText input = dialogView.findViewById(R.id.editText);
                 checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -621,57 +633,26 @@ public class MainMenuActivity extends AppCompatActivity {
         ObjectInputStream input = null;
         try {
             input = new ObjectInputStream(new FileInputStream(src));
-            Editor prefEdit = PreferenceManager.getDefaultSharedPreferences(
-                    this).edit();
-            prefEdit.clear();
+            GeneralSharedPreferences.getInstance().clear();
+
             // first object is preferences
             Map<String, ?> entries = (Map<String, ?>) input.readObject();
 
             AutoSendPreferenceMigrator.migrate(entries);
 
             for (Entry<String, ?> entry : entries.entrySet()) {
-                Object v = entry.getValue();
-                String key = entry.getKey();
-
-                if (v instanceof Boolean) {
-                    prefEdit.putBoolean(key, (Boolean) v);
-                } else if (v instanceof Float) {
-                    prefEdit.putFloat(key, (Float) v);
-                } else if (v instanceof Integer) {
-                    prefEdit.putInt(key, (Integer) v);
-                } else if (v instanceof Long) {
-                    prefEdit.putLong(key, (Long) v);
-                } else if (v instanceof String) {
-                    prefEdit.putString(key, ((String) v));
-                }
+                GeneralSharedPreferences.getInstance().save(entry.getKey(), entry.getValue());
             }
-            prefEdit.apply();
+
             AuthDialogUtility.setWebCredentialsFromPreferences();
 
+            AdminSharedPreferences.getInstance().clear();
+
             // second object is admin options
-            Editor adminEdit = getSharedPreferences(AdminPreferencesActivity.ADMIN_PREFERENCES,
-                    0).edit();
-            adminEdit.clear();
-            // first object is preferences
             Map<String, ?> adminEntries = (Map<String, ?>) input.readObject();
             for (Entry<String, ?> entry : adminEntries.entrySet()) {
-                Object v = entry.getValue();
-                String key = entry.getKey();
-
-                if (v instanceof Boolean) {
-                    adminEdit.putBoolean(key, (Boolean) v);
-                } else if (v instanceof Float) {
-                    adminEdit.putFloat(key, (Float) v);
-                } else if (v instanceof Integer) {
-                    adminEdit.putInt(key, (Integer) v);
-                } else if (v instanceof Long) {
-                    adminEdit.putLong(key, (Long) v);
-                } else if (v instanceof String) {
-                    adminEdit.putString(key, ((String) v));
-                }
+                AdminSharedPreferences.getInstance().save(entry.getKey(), entry.getValue());
             }
-            adminEdit.apply();
-
             res = true;
         } catch (IOException | ClassNotFoundException e) {
             Timber.e(e, "Exception while loading preferences from file due to : %s ", e.getMessage());
@@ -711,7 +692,7 @@ public class MainMenuActivity extends AppCompatActivity {
      */
     private class MyContentObserver extends ContentObserver {
 
-        public MyContentObserver() {
+        MyContentObserver() {
             super(null);
         }
 

@@ -19,6 +19,11 @@ package org.odk.collect.android.utilities;
 import java.util.regex.Pattern;
 
 public class Validator {
+
+    private Validator() {
+
+    }
+
     /*
     There are lots of ways to validate email addresses and it's hard to find one perfect.
     That's why we use here a very simple approach just to confirm that passed string contains:
@@ -30,6 +35,13 @@ public class Validator {
         return Pattern
                 .compile(".+@.+")
                 .matcher(emailAddress)
+                .matches();
+    }
+
+    public static boolean isUrlValid(String url) {
+        return Pattern
+                .compile("^https?://.+$", Pattern.CASE_INSENSITIVE)
+                .matcher(url)
                 .matches();
     }
 }

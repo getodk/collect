@@ -14,6 +14,8 @@
 
 package org.odk.collect.android.views;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -21,6 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -46,11 +49,12 @@ import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalAppsUtils;
 import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.ViewIds;
-import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.WidgetFactory;
+import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -71,9 +75,9 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
 @SuppressLint("ViewConstructor")
 public class ODKView extends ScrollView implements OnLongClickListener {
 
-    private LinearLayout view;
-    private LinearLayout.LayoutParams layout;
-    private ArrayList<QuestionWidget> widgets;
+    private final LinearLayout view;
+    private final LinearLayout.LayoutParams layout;
+    private final ArrayList<QuestionWidget> widgets;
 
     public static final String FIELD_LIST = "field-list";
 
@@ -164,7 +168,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
 
                             ToastUtils.showShortToast(e.getMessage());
                         } catch (ActivityNotFoundException e) {
-                            Timber.e(e, "ActivityNotFoundExcept");
+                            Timber.d(e, "ActivityNotFoundExcept");
 
                             ToastUtils.showShortToast(errorString);
                         }
@@ -172,7 +176,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                 });
 
                 View divider = new View(getContext());
-                divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
+                divider.setBackgroundResource(new ThemeUtils(getContext()).getDivider());
                 divider.setMinimumHeight(3);
                 view.addView(divider);
 
@@ -184,7 +188,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         for (FormEntryPrompt p : questionPrompts) {
             if (!first) {
                 View divider = new View(getContext());
-                divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
+                divider.setBackgroundResource(new ThemeUtils(getContext()).getDivider());
                 divider.setMinimumHeight(3);
                 view.addView(divider);
             } else {
@@ -204,8 +208,8 @@ public class ODKView extends ScrollView implements OnLongClickListener {
 
         addView(view);
 
-        // see if there is an autoplay option. 
-        // Only execute it during forward swipes through the form 
+        // see if there is an autoplay option.
+        // Only execute it during forward swipes through the form
         if (advancingPage && widgets.size() == 1) {
             final String playOption = widgets.get(
                     0).getFormEntryPrompt().getFormElement().getAdditionalAttribute(null, "autoplay");
@@ -271,38 +275,50 @@ public class ODKView extends ScrollView implements OnLongClickListener {
      * // * Add a TextView containing the hierarchy of groups to which the question belongs. //
      */
     private void addGroupText(FormEntryCaption[] groups) {
-        StringBuilder s = new StringBuilder("");
-        String t;
-        int i;
-        // list all groups in one string
-        for (FormEntryCaption g : groups) {
-            i = g.getMultiplicity() + 1;
-            t = g.getLongText();
-            if (t != null) {
-                s.append(t);
-                if (g.repeats() && i > 0) {
-                    s.append(" (")
-                            .append(i)
-                            .append(")");
-                }
-                s.append(" > ");
-            }
-        }
+        String path = getGroupsPath(groups);
 
         // build view
-        if (s.length() > 0) {
+        if (!path.isEmpty()) {
             TextView tv = new TextView(getContext());
-            tv.setText(s.substring(0, s.length() - 3));
-            int questionFontsize = Collect.getQuestionFontsize();
-            tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, questionFontsize - 4);
+            tv.setText(path);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Collect.getQuestionFontsize() - 4);
             tv.setPadding(0, 0, 0, 5);
             view.addView(tv, layout);
         }
     }
 
+    @NonNull
+    public static String getGroupsPath(FormEntryCaption[] groups) {
+        StringBuilder path = new StringBuilder("");
+        if (groups != null) {
+            String longText;
+            int multiplicity;
+            int index = 1;
+            // list all groups in one string
+            for (FormEntryCaption group : groups) {
+                multiplicity = group.getMultiplicity() + 1;
+                longText = group.getLongText();
+                if (longText != null) {
+                    path.append(longText);
+                    if (group.repeats() && multiplicity > 0) {
+                        path
+                                .append(" (")
+                                .append(multiplicity)
+                                .append(")\u200E");
+                    }
+                    if (index < groups.length) {
+                        path.append(" > ");
+                    }
+                    index++;
+                }
+            }
+        }
+
+        return path.toString();
+    }
 
     public void setFocus(Context context) {
-        if (widgets.size() > 0) {
+        if (!widgets.isEmpty()) {
             widgets.get(0).setFocus(context);
         }
     }
@@ -319,6 +335,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                 if (binaryWidget.isWaitingForData()) {
                     try {
                         binaryWidget.setBinaryData(answer);
+                        binaryWidget.cancelWaitingForData();
                     } catch (Exception e) {
                         Timber.e(e);
                         ToastUtils.showLongToast(getContext().getString(R.string.error_attaching_binary_file,
@@ -448,4 +465,40 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         widgets.get(0).stopAudio();
     }
 
+    /**
+     * Releases widget resources, such as {@link android.media.MediaPlayer}s
+     */
+    public void releaseWidgetResources() {
+        for (QuestionWidget w : widgets) {
+            w.release();
+        }
+    }
+
+    public void highlightWidget(FormIndex formIndex) {
+        QuestionWidget qw = getQuestionWidget(formIndex);
+
+        if (qw != null) {
+            // postDelayed is needed because otherwise scrolling may not work as expected in case when
+            // answers are validated during form finalization.
+            new Handler().postDelayed(() -> {
+                scrollTo(0, qw.getTop());
+
+                ValueAnimator va = new ValueAnimator();
+                va.setIntValues(getResources().getColor(R.color.red), getDrawingCacheBackgroundColor());
+                va.setEvaluator(new ArgbEvaluator());
+                va.addUpdateListener(valueAnimator -> qw.setBackgroundColor((int) valueAnimator.getAnimatedValue()));
+                va.setDuration(2500);
+                va.start();
+            }, 100);
+        }
+    }
+
+    private QuestionWidget getQuestionWidget(FormIndex formIndex) {
+        for (QuestionWidget qw : widgets) {
+            if (formIndex.equals(qw.getFormEntryPrompt().getIndex())) {
+                return qw;
+            }
+        }
+        return null;
+    }
 }

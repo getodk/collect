@@ -22,7 +22,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -45,13 +44,14 @@ import com.google.android.gms.maps.model.PolygonOptions;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.location.LocationClient;
-import org.odk.collect.android.location.LocationClients;
+import org.odk.collect.android.location.client.LocationClient;
+import org.odk.collect.android.location.client.LocationClients;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoShapeWidget;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Version of the GeoShapeGoogleMapActivity that uses the new Maps v2 API and Fragments to enable
@@ -60,7 +60,7 @@ import java.util.ArrayList;
  * @author jonnordling@gmail.com
  */
 
-public class GeoShapeGoogleMapActivity extends FragmentActivity implements LocationListener,
+public class GeoShapeGoogleMapActivity extends CollectAbstractActivity implements LocationListener,
         OnMarkerDragListener, OnMapLongClickListener, LocationClient.LocationClientListener {
 
     private LocationClient locationClient;
@@ -70,7 +70,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
     private LatLng curlatLng;
     private PolygonOptions polygonOptions;
     private Polygon polygon;
-    private ArrayList<Marker> markerArray = new ArrayList<Marker>();
+    private final ArrayList<Marker> markerArray = new ArrayList<Marker>();
     private ImageButton gpsButton;
     private ImageButton clearButton;
 
@@ -91,10 +91,10 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
         setContentView(R.layout.geoshape_google_layout);
 
         // Do this here so we can test it:
-        gpsButton = (ImageButton) findViewById(R.id.gps);
+        gpsButton = findViewById(R.id.gps);
         gpsButton.setEnabled(false);
 
-        clearButton = (ImageButton) findViewById(R.id.clear);
+        clearButton = findViewById(R.id.clear);
 
         locationClient = LocationClients.clientForContext(this);
         locationClient.setListener(this);
@@ -155,12 +155,12 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
         clearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (markerArray.size() != 0) {
+                if (!markerArray.isEmpty()) {
                     showClearDialog();
                 }
             }
         });
-        ImageButton returnButton = (ImageButton) findViewById(R.id.save);
+        ImageButton returnButton = findViewById(R.id.save);
         returnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -179,7 +179,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
             }
         }
 
-        ImageButton layersButton = (ImageButton) findViewById(R.id.layers);
+        ImageButton layersButton = findViewById(R.id.layers);
         layersButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -187,20 +187,20 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
             }
         });
 
-        zoomDialogView = getLayoutInflater().inflate(R.layout.geoshape_zoom_dialog, null);
+        zoomDialogView = getLayoutInflater().inflate(R.layout.geo_zoom_dialog, null);
 
-        zoomLocationButton = (Button) zoomDialogView.findViewById(R.id.zoom_location);
+        zoomLocationButton = zoomDialogView.findViewById(R.id.zoom_location);
         zoomLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (curLocation != null) {
+                if (curLocation != null && curlatLng != null) {
                     map.animateCamera(CameraUpdateFactory.newLatLngZoom(curlatLng, 17));
                 }
                 zoomDialog.dismiss();
             }
         });
 
-        zoomPointButton = (Button) zoomDialogView.findViewById(R.id.zoom_shape);
+        zoomPointButton = zoomDialogView.findViewById(R.id.zoom_saved_location);
         zoomPointButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -227,7 +227,11 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
                 FormEntryActivity.GEOSHAPE_RESULTS,
                 finalReturnString);
         setResult(RESULT_OK, i);
-        finish();
+        if (markerArray.size() < 4) {
+            ToastUtils.showShortToastInMiddle(getString(R.string.polygon_validator));
+        } else {
+            finish();
+        }
     }
 
     private void overlayIntentPolygon(String str) {
@@ -257,7 +261,9 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
         String tempString = "";
         //Add the first marker to the end of the array, so the first and the last are the same
         if (markerArray.size() > 1) {
-            markerArray.add(markerArray.get(0));
+            if (Collections.frequency(markerArray, markerArray.get(0)) < 2) {
+                markerArray.add(markerArray.get(0));
+            }
             for (int i = 0; i < markerArray.size(); i++) {
                 String lat = Double.toString(markerArray.get(i).getPosition().latitude);
                 String lng = Double.toString(markerArray.get(i).getPosition().longitude);
@@ -392,17 +398,17 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
             if (curLocation != null) {
                 zoomLocationButton.setEnabled(true);
                 zoomLocationButton.setBackgroundColor(Color.parseColor("#50cccccc"));
-                zoomLocationButton.setTextColor(Color.parseColor("#ff333333"));
+                zoomLocationButton.setTextColor(themeUtils.getPrimaryTextColor());
             } else {
                 zoomLocationButton.setEnabled(false);
                 zoomLocationButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));
                 zoomLocationButton.setTextColor(Color.parseColor("#FF979797"));
             }
 
-            if (markerArray.size() != 0) {
+            if (!markerArray.isEmpty()) {
                 zoomPointButton.setEnabled(true);
                 zoomPointButton.setBackgroundColor(Color.parseColor("#50cccccc"));
-                zoomPointButton.setTextColor(Color.parseColor("#ff333333"));
+                zoomPointButton.setTextColor(themeUtils.getPrimaryTextColor());
             } else {
                 zoomPointButton.setEnabled(false);
                 zoomPointButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));

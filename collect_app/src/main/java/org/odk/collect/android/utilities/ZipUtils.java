@@ -37,70 +37,42 @@ import timber.log.Timber;
  */
 public final class ZipUtils {
 
-    static final String t = "ZipUtils";
+    private ZipUtils() {
+
+    }
 
     public static void unzip(File[] zipFiles) {
         for (File zipFile : zipFiles) {
-            ZipInputStream zipInputStream = null;
-            try {
-                zipInputStream = new ZipInputStream(new FileInputStream(zipFile));
+            try (ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(zipFile))) {
                 ZipEntry zipEntry;
                 while ((zipEntry = zipInputStream.getNextEntry()) != null) {
                     doExtractInTheSameFolder(zipFile, zipInputStream, zipEntry);
                 }
             } catch (Exception e) {
                 Timber.e(e);
-            } finally {
-                IOUtils.closeQuietly(zipInputStream);
             }
         }
     }
 
-    public static File extractFirstZipEntry(File zipFile, boolean deleteAfterUnzip)
-            throws IOException {
-        ZipInputStream zipInputStream = null;
-        File targetFile = null;
-        try {
-            zipInputStream = new ZipInputStream(new FileInputStream(zipFile));
-            ZipEntry zipEntry = zipInputStream.getNextEntry();
-            if (zipEntry != null) {
-                targetFile = doExtractInTheSameFolder(zipFile, zipInputStream, zipEntry);
-            }
-        } finally {
-            IOUtils.closeQuietly(zipInputStream);
-        }
-
-        if (deleteAfterUnzip && targetFile != null && targetFile.exists()) {
-            FileUtils.deleteAndReport(zipFile);
-        }
-
-        return targetFile;
-    }
-
-    private static File doExtractInTheSameFolder(File zipFile, ZipInputStream zipInputStream,
-            ZipEntry zipEntry) throws IOException {
+    private static void doExtractInTheSameFolder(File zipFile, ZipInputStream zipInputStream,
+                                                 ZipEntry zipEntry) throws IOException {
         File targetFile;
         String fileName = zipEntry.getName();
 
-        Timber.w("Found zipEntry with name: %s", fileName);
+        Timber.i("Found zipEntry with name: %s", fileName);
 
         if (fileName.contains("/") || fileName.contains("\\")) {
             // that means that this is a directory of a file inside a directory, so ignore it
             Timber.w("Ignored: %s", fileName);
-            return null;
+            return;
         }
 
         // extract the new file
         targetFile = new File(zipFile.getParentFile(), fileName);
-        FileOutputStream fileOutputStream = null;
-        try {
-            fileOutputStream = new FileOutputStream(targetFile);
+        try (FileOutputStream fileOutputStream = new FileOutputStream(targetFile)) {
             IOUtils.copy(zipInputStream, fileOutputStream);
-        } finally {
-            IOUtils.closeQuietly(fileOutputStream);
         }
 
-        Timber.w("Extracted file \"%s\" out of %s", fileName, zipFile.getName());
-        return targetFile;
+        Timber.i("Extracted file \"%s\" out of %s", fileName, zipFile.getName());
     }
 }

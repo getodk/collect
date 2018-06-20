@@ -28,10 +28,14 @@ import org.odk.collect.android.R;
  * Reusable code between dialogs for keeping consistency
  */
 
-public class DialogUtils {
+public final class DialogUtils {
+
+    private DialogUtils() {
+    }
 
     /**
      * List View used with actions
+     *
      * @param context UI Context (Activity/Fragment)
      * @return ListView with white divider between items to prevent accidental taps
      */
@@ -40,7 +44,7 @@ public class DialogUtils {
         int dividerHeight = UiUtils.getDimen(R.dimen.divider_accidental_tap);
         ListView listView = new ListView(context);
         listView.setPadding(0, dividerHeight, 0, 0);
-        listView.setDivider(new ColorDrawable(Color.WHITE));
+        listView.setDivider(new ColorDrawable(Color.TRANSPARENT));
         listView.setDividerHeight(dividerHeight);
         return listView;
     }

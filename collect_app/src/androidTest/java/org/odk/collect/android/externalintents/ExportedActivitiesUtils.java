@@ -19,6 +19,10 @@ class ExportedActivitiesUtils {
             ODK_ROOT, FORMS_PATH, INSTANCES_PATH, CACHE_PATH, METADATA_PATH, OFFLINE_LAYERS
     };
 
+    private ExportedActivitiesUtils() {
+
+    }
+
     static void clearDirectories() {
         for (String dirName : DIRS) {
             File dir = new File(dirName);

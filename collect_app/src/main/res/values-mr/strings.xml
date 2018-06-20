@@ -91,7 +91,6 @@
   <string name="parse_legacy_formlist_failed">सर्व्हरने एकूण 0.9.x. सह सुसंगत एक उपलब्ध-फॉर्म दस्तऐवज प्रदान केलेला नाही. : %s</string>
   <string name="parse_openrosa_formlist_failed">सर्व्हरने ओपेनरोसा आवृत्ती 1.0 मानक सह सुसंगत एक उपलब्ध-फॉर्म दस्तऐवज प्रदान केलेले नाही : %s</string>
   <string name="password">संकेतशब्द</string>
-  <string name="play_audio">ध्वनी प्ले करा</string>
   <string name="play_video">व्हिडिओ प्ले करा</string>
   <string name="please_wait">कृपया काही क्षण प्रतीक्षा करा</string>
   <string name="please_wait_long">कृपया थांबा. यास काही मिनिटे लागू शकेल.</string>
@@ -136,7 +135,6 @@
   <string name="submission_url">सबमिशन पथ</string>
   <string name="font_size">मजकूर फॉन्ट आकार</string>
   <string name="change_font_size">मजकूर फॉन्ट आकार</string>
-  <string name="form_scan_starting">फॉर्मसाठी स्कॅन करत आहे …</string>
   <string name="access_error">%s: ऍक्सेस करताना त्रुटी:</string>
   <string name="manifest_server_error">मॅनिफेस्ट रिझल्ट एक ओपेनरोसा आवृत्तीची तक्रार करत नाही - खराब सर्व्हर?</string>
   <string name="root_element_error">मूळ घटक &amp; lt; मॅनिफेस्ट &amp; gt; नाही. %sआहे  </string>
@@ -176,7 +174,7 @@
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="sent_on_date_at_time">\'सेंड ऑन\' ईईई, एमएमएम डीडी, य्य्य \'एचएच: एमएम</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="sending_failed_on_date_at_time">\'ईईई, एमएमएम डीडी, येय\' एचएच: एमएम \'वर पाठविणे अयशस्वी झाले</string>
+  <string name="sending_failed_on_date_at_time">\'ईईई, एमएमएम डीडी, येय एचएच: एमएम \'वर पाठविणे अयशस्वी झाले</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="deleted_on_date_at_time">\'EEE वर हटविले\', \'एमएमएम डीडी, याय\' \'एचएच: एमएम\'</string>
   <string name="version">आवृत्ती:</string>
@@ -191,7 +189,6 @@
   <string name="draw_image">स्केच प्रतिमा</string>
   <string name="reset_image">रीसेट करा</string>
   <string name="set_color">रंग सेट करा</string>
-  <string name="select_drawing_color">रेखांकन रंग निवडा</string>
   <string name="admin_preferences">प्रशासन सेटिंग्ज</string>
   <string name="admin_access_settings">सेटिंग्जमध्ये प्रशासकीय प्रवेशासाठी टॅप करा</string>
   <string name="save_mid">फॉर्म जतन करा</string>
@@ -233,7 +230,6 @@
   <string name="ext_search_return_error">शोध हँडलरने \'1%s\' प्रकारचे ऑब्जेक्ट परत केले.</string>
   <string name="ext_import_generic_error"> %1$sवरून डेटा आयात करू शकले नाही . कारण: %2$s</string>
   <string name="ext_import_progress_message"> \'%1$s\' वरून डेटा पूर्व लोड होत आहे, कृपया प्रतीक्षा करा, %2$s</string>
-  <string name="ext_import_cancelled_message">डेटा वाचन रद्द!</string>
   <string name="ext_import_finalizing_message">पूर्व लोड केलेल्या डेटाला अंतिम रूप देत आहे …</string>
   <string name="ext_import_completed_message">डेटा वाचन पूर्ण!</string>
   <string name="ext_not_initialized_error">बाह्यडेटा व्यवस्थापक प्रारंभ झाला नाही.</string>
@@ -266,9 +262,6 @@
   <string name="drive_get_file"> %1$s आणि मीडिया फायली मिळवत आहे</string>
   <string name="no_google_account">कोणतेही गूगल खाते निवडलेले नाही!</string>
   <string name="google_set_account">आपण गूगल पत्रक आपल्या सर्व्हर म्हणून निवडले आहे, कृपया सुरू ठेवण्यापूर्वी सामान्य सेटिंग्जमध्ये संबंधित गूगल खाते निवडा</string>
-  <string name="invalid_oauth">अवैध OAuth 2 टोकन</string>
-  <string name="google_repeat_error">पुनरावृत्ती गूगल पत्रके द्वारे यावेळी समर्थित नाहीत.</string>
-  <string name="media_upload_error">अस्तित्वात नाही असा फोटो अपलोड करण्यात अयशस्वी:  %1$s</string>
   <string name="odk_auth_auth_fail">ओडीके ऑटोसॅन्ड प्रमाणीकरण अयशस्वी, कृपया आपली सेटिंग्ज योग्य असल्याची खात्री करा.</string>
   <string name="odk_auto_note">ओडीके ऑटोसॅन्ड सूचना.</string>
   <string name="notification_error">सूचना मजकूर प्रदर्शित करताना त्रुटी</string>
@@ -276,7 +269,6 @@
   <string name="delete_after_send_summary">सर्व्हरवर पाठविल्यानंतर अंतिम स्वरूप आणि मीडिया हटविते</string>
   <string name="change_server_url">सर्व्हर युरएल</string>
   <string name="google_search_browse">फॉर्म शोधा किंवा ब्राउझ करण्यासाठी खालील \'माझे ड्राइव्ह\' निवडा.</string>
-  <string name="no_blank_search">शोध फील्ड रिक्त असू शकत नाही.</string>
   <string name="google_sheets_url">फॉलबॅक सबमिशन युरएल</string>
   <string name="send_in_progress">पार्श्वभूमी पाठविणे चालू आहे, कृपया लवकरच पुन्हा प्रयत्न करा</string>
   <string name="sheets_max_columns">स्तंभांची कमाल संख्या 255 आहे, आपल्या फॉर्ममध्ये  %s आहे. स्प्रेडशीटवर अपलोड करण्यास अक्षम</string>
@@ -287,9 +279,6 @@
   <string name="username_error_whitespace">वापरकर्तानावांमध्ये अग्रगण्य किंवा अनुसरणी व्हायरसपेस अनुमत नाहीत</string>
   <string name="google_play_services_error_occured">गूगल नकाशे मध्ये प्रवेश करण्यात अक्षम. गूगल प्ले सेवा स्थापित केली आहे का?</string>
   <string name="about_preferences">विषयी</string>
-  <string name="tell_your_friends">ओडीक आपल्या मित्रांसह सामायिक करा</string>
-  <string name="tell_your_friends_msg">ओडीक गोळा अनुप्रयोग डाउनलोड करा!</string>
-  <string name="leave_a_review">गूगल प्ले स्टोर वर एक पुनरावलोकन सोडा</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">मॅपिंग</string>
   <string name="map_sdk_selector_title">मॅपिंग एसडीके</string>
@@ -299,7 +288,6 @@
   <string name="show_map_sdk">नकाशा एसडीके पर्याय दर्शवा</string>
   <string name="openmap_streets">ओपन स्ट्रीट नकाशा रस्ते</string>
   <string name="openmap_usgs_topo">यूएसजीएस राष्ट्रीय नकाशा टोपो</string>
-  <string name="openmap_usgs_sat">यूएसजीएस राष्ट्रीय नकाशा उपग्रह</string>
   <string name="openmap_stamen_terrain">स्टेमेन टेरेइन</string>
   <string name="openmap_cartodb_positron">कार्टो डीबी पॉझिट्रॉन</string>
   <string name="openmap_cartodb_darkmatter">कार्टो डीबी गडद बाब</string>
@@ -329,7 +317,6 @@
   <string name="geo_clear_warning">वैशिष्ट्य आधीच तयार केले आपण वैशिष्ट्य साफ करू इच्छिता?</string>
   <string name="geo_exit_warning">बदल टाकून ओडीके कडे परत जा?</string>
   <string name="polygon_validator">बहुभुज तयार करण्यासाठी किमान 3 गुण असणे आवश्यक आहे</string>
-  <string name="dialog_continue">चालू ठेवा</string>
   <string name="clear">साफ करा</string>
   <string name="polyline_polygon_text">जिओ ट्रेस जतन हे प्रमाणे करा</string>
   <string name="manual_mode">मॅन्युअल माध्यम</string>
@@ -342,8 +329,6 @@
   <string name="zoom_to_where">झूम टु …</string>
   <string name="zoom_to_location">वर्तमान स्थानावर झूम</string>
   <string name="zoom_to_feature">जतन केलेल्या वैशिष्ट्य पर्यंत झूम करा</string>
-  <string name="google_sheets_invalid_column_form">आपल्या फॉर्ममध्ये  \'n%1$s\'  एक अवैध स्तंभ नाव आहे. गूगल पत्रक केवळ स्तंभ नावांमध्ये अल्फान्यूमेरिक वर्ण आणि हायफनला अनुमती देतात.</string>
-  <string name="google_sheets_invalid_column_instance">आपल्या जतन केलेल्या घटनेमध्ये \'n%1$s\'  एक अवैध स्तंभ नाव आहे. गूगल पत्रक केवळ स्तंभ नावांमध्ये अल्फान्यूमेरिक वर्ण आणि हायफनला अनुमती देतात</string>
   <string name="geoshape_view_change_location">जिओ शेप पहा किंवा बदला</string>
   <string name="geotrace_view_change_location">जिओ ट्रेस पहा किंवा बदला</string>
   <string name="bearing">असणारा:%.3f</string>
@@ -370,8 +355,6 @@
   <string name="odk_website">ओडीके वेबसाइट ला भेट द्या</string>
   <string name="odk_website_summary">ओपन डाटा किट (ओडीकेे) चा उपयोग आव्हानात्मक पर्यावरणात सामाजिक चांगल्यासाठी डेटा गोळा करण्यासाठी केला जातो.</string>
   <string name="odk_forum">ओडीके मंचात सहभागी व्हा</string>
-  <string name="odk_forum_summary">समर्थन, विनंती गुणधर्म, कोड / अनुवादाचे योगदान देण्यासाठी मंचमध्ये सामील व्हा!</string>
-  <string name="all_open_source_licenses">मुक्त स्त्रोत परवाने</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">पश्चिम %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -384,7 +367,6 @@
   <string name="not_exactly_one_record_for_this_instance">या घटनेसाठी नक्की एक रेकॉर्ड नाही!</string>
   <string name="not_exactly_one_blank_form_for_this_form_id">या jr_form_id शी न जुळणारे एक रिक्त स्वरूप</string>
   <string name="no_form_id_specified">फॉर्मID निर्दिष्ट नाही ???</string>
-  <string name="phone_does_not_have_base64_class">फोनजवळ Base64 वर्ग नाही परंतु API स्तर%s. आहे</string>
   <string name="phone_does_not_support_rsa">फोन RSA एन्क्रिप्शनचे समर्थन करत नाही.</string>
   <string name="invalid_rsa_public_key">Invalid RSA public key.</string>
   <string name="encryption_error_message">%s फॉर्म अंतिम रूपाने जतन केले गेले नाही.</string>
@@ -402,7 +384,6 @@
   <string name="reset_settings_dialog_title">काय रीसेट करावे ते निवडा</string>
   <string name="reset_settings_dialog">अनुप्रयोग रीसेट करा …</string>
   <string name="reset_settings_button_reset">रीसेट करा</string>
-  <string name="reset_dialog_nothing">रीसेट करण्यासाठी आपण काहीही निवडले नाही.</string>
   <string name="reset_in_progress">रीसेट करत आहे …</string>
   <string name="reset_app_state_result">परिणाम रीसेट करा</string>
   <string name="reset_app_state_warning">सर्व निवडलेला डेटा कायमचा हटविला जाईल. तेथे पूर्ववत नाही</string>
@@ -417,8 +398,6 @@
   <string name="exit">निर्गमन करा</string>
   <string name="instance_scan_completed">पूर्ण स्कॅनिंग</string>
   <string name="instance_scan_count">%1$d  फॉर्म जोडले.</string>
-  <string name="instance_sync">जतन केलेले फॉर्म अंतिम रूपाने आयात करा</string>
-  <string name="instance_sync_summary">उदाहरणे फोल्डरमधून जतन केलेले फॉर्म आयात करा</string>
   <string name="sort_the_list">सूची क्रमवारी लावा</string>
   <string name="request_permissions_google_account">ओडीके ची संकल्पना रिक्त फॉर्म प्राप्त करण्यासाठी आणि भरलेल्या फॉर्म सबमिट करण्यासाठी आपल्या गूगल खात्यात प्रवेश करण्याची आवश्यकता आहे.</string>
   <string name="filter_the_list">सूची फिल्टर करा</string>
@@ -488,4 +467,5 @@
   <string name="form_entry">फॉर्म एन्ट्रीमधून लपविण्यासाठी अनचेक करा</string>
   <string name="use_device_language">डिव्हाइस भाषा वापरा</string>
   <string name="not_supported_offline_layer_format">निवडलेली ऑफलाइन स्तर फाइल PBF स्वरूपन वापरते जी समर्थित नाही!</string>
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
 </resources>

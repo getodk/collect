@@ -26,27 +26,35 @@ the License.
         android:layout_height="wrap_content"
         android:layout_below="@id/toolbar" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/toolbar"
-        android:orientation="vertical">
+        android:layout_below="@id/toolbar">
 
-        <ListView
-            android:id="@android:id/list"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_above="@+id/buttonholder">
 
-        <TextView
-            android:id="@android:id/empty"
-            style="@style/emptyViewStyle"
-            android:text="@string/no_items_display" />
+            <ListView
+                android:id="@android:id/list"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@android:id/empty"
+                style="@style/emptyViewStyle"
+                android:text="@string/no_items_display" />
+
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/buttonholder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
             android:orientation="horizontal"
             android:weightSum="3">
 
@@ -80,6 +88,6 @@ the License.
                 android:textAllCaps="false"
                 android:textSize="16sp" />
         </LinearLayout>
-    </LinearLayout>
+    </RelativeLayout>
 
 </RelativeLayout>

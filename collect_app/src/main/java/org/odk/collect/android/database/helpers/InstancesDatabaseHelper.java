@@ -49,7 +49,7 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 4;
 
-    private String[] instancesTableColumnsInVersion4 = new String[] {_ID, DISPLAY_NAME, SUBMISSION_URI, CAN_EDIT_WHEN_COMPLETE,
+    private final String[] instancesTableColumnsInVersion4 = new String[] {_ID, DISPLAY_NAME, SUBMISSION_URI, CAN_EDIT_WHEN_COMPLETE,
             INSTANCE_FILE_PATH, JR_FORM_ID, JR_VERSION, STATUS, LAST_STATUS_CHANGE_DATE, DISPLAY_SUBTEXT, DELETED_DATE};
 
     public InstancesDatabaseHelper() {
@@ -82,7 +82,7 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
         if (success) {
             Timber.i("Upgrading database from version " + oldVersion + " to " + newVersion + " completed with success.");
         } else {
-            Timber.i("Upgrading database from version " + oldVersion + " to " + newVersion + " failed.");
+            Timber.e("Upgrading database from version " + oldVersion + " to " + newVersion + " failed.");
         }
     }
 
@@ -101,7 +101,7 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
         if (success) {
             Timber.i("Downgrading database completed with success.");
         } else {
-            Timber.i("Downgrading database from version " + oldVersion + " to " + newVersion + " failed.");
+            Timber.e("Downgrading database from version " + oldVersion + " to " + newVersion + " failed.");
         }
     }
 

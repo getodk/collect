@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 package org.odk.collect.android.preferences;
 
 import android.os.Bundle;
@@ -27,8 +26,7 @@ import org.odk.collect.android.R;
 
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PROTOCOL;
 
-
-public class ServerPreferences extends ServerPreferencesFragment implements Preference.OnPreferenceChangeListener {
+public class ServerPreferences extends ServerPreferencesFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,13 +54,13 @@ public class ServerPreferences extends ServerPreferencesFragment implements Pref
         ListPreference protocolPref = (ListPreference) findPreference(KEY_PROTOCOL);
 
         protocolPref.setSummary(protocolPref.getEntry());
-        protocolPref.setOnPreferenceChangeListener(this);
+        protocolPref.setOnPreferenceChangeListener(createChangeListener());
 
         addPreferencesResource(protocolPref.getValue());
     }
 
     private void addPreferencesResource(CharSequence value) {
-        if (value.equals(getString(R.string.protocol_odk_default))) {
+        if (value == null || value.equals(getString(R.string.protocol_odk_default))) {
             setDefaultAggregatePaths();
             addAggregatePreferences();
         } else if (value.equals(getString(R.string.protocol_google_sheets))) {
@@ -73,22 +71,21 @@ public class ServerPreferences extends ServerPreferencesFragment implements Pref
         }
     }
 
-    @Override
-    public boolean onPreferenceChange(Preference preference, Object newValue) {
-        super.onPreferenceChange(preference, newValue);
+    private Preference.OnPreferenceChangeListener createChangeListener() {
+        return (preference, newValue) -> {
+            if (preference.getKey().equals(KEY_PROTOCOL)) {
+                String stringValue = (String) newValue;
+                ListPreference lpref = (ListPreference) preference;
+                String oldValue = lpref.getValue();
+                lpref.setValue(stringValue);
 
-        if (preference.getKey().equals(KEY_PROTOCOL)) {
-            String stringValue = (String) newValue;
-            ListPreference lpref = (ListPreference) preference;
-            String oldValue = lpref.getValue();
-            lpref.setValue(stringValue);
-
-            if (!newValue.equals(oldValue)) {
-                removeTypeSettings();
-                initProtocolPrefs();
+                if (!newValue.equals(oldValue)) {
+                    removeTypeSettings();
+                    initProtocolPrefs();
+                }
             }
-        }
-        return true;
+            return true;
+        };
     }
 
     private void removeTypeSettings() {

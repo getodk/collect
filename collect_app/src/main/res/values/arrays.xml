@@ -7,6 +7,15 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES
 OR CONDITIONS OF ANY KIND, either express or implied. See the License for
 the specific language governing permissions and limitations under the License. -->
 <resources>
+    <string-array name="theme_entries">
+        <item>@string/theme_light</item>
+        <item>@string/theme_dark</item>
+    </string-array>
+    <!-- DO NOT translate theme_entry_values - only used internally -->
+    <string-array name="theme_entry_values" translatable="false">
+        <item>@string/app_theme_light</item>
+        <item>@string/app_theme_dark</item>
+    </string-array>
     <!-- DO NOT translate protocol_entry_values - only used internally -->
     <string-array name="protocol_entry_values">
         <item>@string/protocol_odk_default</item>
@@ -93,6 +102,7 @@ the specific language governing permissions and limitations under the License. -
         <item>openmap_streets</item>
         <item>openmap_usgs_topo</item>
         <item>openmap_usgs_sat</item>
+        <item>openmap_usgs_img</item>
         <item>openmap_stamen_terrain</item>
         <item>openmap_cartodb_positron</item>
         <item>openmap_cartodb_darkmatter</item>
@@ -101,6 +111,7 @@ the specific language governing permissions and limitations under the License. -
         <item>@string/openmap_streets</item>
         <item>@string/openmap_usgs_topo</item>
         <item>@string/openmap_usgs_sat</item>
+        <item>@string/openmap_usgs_img</item>
         <item>@string/openmap_stamen_terrain</item>
         <item>@string/openmap_cartodb_positron</item>
         <item>@string/openmap_cartodb_darkmatter</item>
@@ -113,8 +124,8 @@ the specific language governing permissions and limitations under the License. -
         <item>30</item>
     </string-array>
     <string-array name="time_scale" translatable="false">
-        <item>Seconds</item>
-        <item>Minutes</item>
+        <item>@string/seconds</item>
+        <item>@string/minutes</item>
     </string-array>
     <string-array name="autosend_selector_entries">
         <item>@string/off</item>
@@ -128,34 +139,73 @@ the specific language governing permissions and limitations under the License. -
         <item>cellular_only</item>
         <item>wifi_and_cellular</item>
     </string-array>
+    <string-array name="guidance_hint_selector_entries">
+        <item>@string/guidance_no</item>
+        <item>@string/guidance_yes</item>
+        <item>@string/guidance_yes_collapsed</item>
+    </string-array>
+    <string-array name="guidance_hint_selector_entries_values" translatable="false">
+        <item>no</item>
+        <item>yes</item>
+        <item>yes_collapsed</item>
+    </string-array>
+
     <string-array name="ethiopian_months">
-        <item>@string/ethiopian_month_meskerem</item>
-        <item>@string/ethiopian_month_tikimt</item>
-        <item>@string/ethiopian_month_hidar</item>
-        <item>@string/ethiopian_month_tahsas</item>
-        <item>@string/ethiopian_month_tir</item>
-        <item>@string/ethiopian_month_yekatit</item>
-        <item>@string/ethiopian_month_megabit</item>
-        <item>@string/ethiopian_month_miazia</item>
-        <item>@string/ethiopian_month_ginbot</item>
-        <item>@string/ethiopian_month_senie</item>
-        <item>@string/ethiopian_month_hamlie</item>
-        <item>@string/ethiopian_month_nehasie</item>
-        <item>@string/ethiopian_month_pagumien</item>
+        <item>@string/ethiopian_month_1</item>
+        <item>@string/ethiopian_month_2</item>
+        <item>@string/ethiopian_month_3</item>
+        <item>@string/ethiopian_month_4</item>
+        <item>@string/ethiopian_month_5</item>
+        <item>@string/ethiopian_month_6</item>
+        <item>@string/ethiopian_month_7</item>
+        <item>@string/ethiopian_month_8</item>
+        <item>@string/ethiopian_month_9</item>
+        <item>@string/ethiopian_month_10</item>
+        <item>@string/ethiopian_month_11</item>
+        <item>@string/ethiopian_month_12</item>
+        <item>@string/ethiopian_month_13</item>
     </string-array>
     <string-array name="coptic_months">
-        <item>@string/coptic_month_thout</item>
-        <item>@string/coptic_month_paopi</item>
-        <item>@string/coptic_month_hathor</item>
-        <item>@string/coptic_month_koiak</item>
-        <item>@string/coptic_month_tobi</item>
-        <item>@string/coptic_month_meshir</item>
-        <item>@string/coptic_month_paremhat</item>
-        <item>@string/coptic_month_parmouti</item>
-        <item>@string/coptic_month_pashons</item>
-        <item>@string/coptic_month_paoni</item>
-        <item>@string/coptic_month_epip</item>
-        <item>@string/coptic_month_mesori</item>
-        <item>@string/coptic_month_pi_kogi_enavot</item>
+        <item>@string/coptic_month_1</item>
+        <item>@string/coptic_month_2</item>
+        <item>@string/coptic_month_3</item>
+        <item>@string/coptic_month_4</item>
+        <item>@string/coptic_month_5</item>
+        <item>@string/coptic_month_6</item>
+        <item>@string/coptic_month_7</item>
+        <item>@string/coptic_month_8</item>
+        <item>@string/coptic_month_9</item>
+        <item>@string/coptic_month_10</item>
+        <item>@string/coptic_month_11</item>
+        <item>@string/coptic_month_12</item>
+        <item>@string/coptic_month_13</item>
+    </string-array>
+    <string-array name="islamic_months">
+        <item>@string/islamic_month_1</item>
+        <item>@string/islamic_month_2</item>
+        <item>@string/islamic_month_3</item>
+        <item>@string/islamic_month_4</item>
+        <item>@string/islamic_month_5</item>
+        <item>@string/islamic_month_6</item>
+        <item>@string/islamic_month_7</item>
+        <item>@string/islamic_month_8</item>
+        <item>@string/islamic_month_9</item>
+        <item>@string/islamic_month_10</item>
+        <item>@string/islamic_month_11</item>
+        <item>@string/islamic_month_12</item>
+    </string-array>
+    <string-array name="periodic_form_updates_check_entry_values">
+        <item>@string/never_value</item>
+        <item>@string/every_fifteen_minutes_value</item>
+        <item>@string/every_one_hour_value</item>
+        <item>@string/every_six_hours_value</item>
+        <item>@string/every_24_hours_value</item>
+    </string-array>
+    <string-array name="periodic_form_updates_check_entries">
+        <item>@string/never</item>
+        <item>@string/every_fifteen_minutes</item>
+        <item>@string/every_one_hour</item>
+        <item>@string/every_six_hours</item>
+        <item>@string/every_24_hours</item>
     </string-array>
 </resources>
