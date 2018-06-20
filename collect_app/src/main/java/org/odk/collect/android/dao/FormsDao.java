@@ -74,6 +74,36 @@ public class FormsDao {
         return getFormsCursor(null, selection, selectionArgs, null);
     }
 
+    public boolean isFormEncrypted(String formId, String formVersion) {
+        boolean encrypted = false;
+
+        String[] selectionArgs;
+        String selection;
+
+        if (formVersion == null) {
+            selectionArgs = new String[]{formId};
+            selection = FormsProviderAPI.FormsColumns.JR_FORM_ID + "=? AND "
+                    + FormsProviderAPI.FormsColumns.JR_VERSION + " IS NULL";
+        } else {
+            selectionArgs = new String[]{formId, formVersion};
+            selection = FormsProviderAPI.FormsColumns.JR_FORM_ID + "=? AND "
+                    + FormsProviderAPI.FormsColumns.JR_VERSION + "=?";
+        }
+
+        Cursor cursor = getFormsCursor(null, selection, selectionArgs, null);
+        if (cursor != null) {
+            try {
+                if (cursor.moveToFirst()) {
+                    int base64RSAPublicKeyColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY);
+                    encrypted = cursor.getString(base64RSAPublicKeyColumnIndex) != null;
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+        return encrypted;
+    }
+
     public String getFormMediaPath(String formId, String formVersion) {
         String formMediaPath = null;
 
