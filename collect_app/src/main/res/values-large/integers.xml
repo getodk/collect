@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- weights -->
+    <integer name="instance_icon_weight">1</integer>
+    <integer name="instance_icon_weight_total">15</integer>
+    <integer name="instance_content_weight">14</integer>
+</resources>

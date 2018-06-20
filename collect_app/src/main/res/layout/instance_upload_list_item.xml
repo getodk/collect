@@ -8,10 +8,13 @@
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
         app:cardPreventCornerOverlap="true"
         app:cardUseCompatPadding="true"
-        app:contentPadding="10dp">
+        app:contentPadding="5dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -22,13 +25,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:weightSum="10">
+                android:weightSum="@integer/instance_icon_weight_total">
 
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_weight="2">
+                    android:layout_weight="@integer/instance_icon_weight">
 
                     <LinearLayout
                         android:id="@+id/image_background"
@@ -49,7 +52,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
-                    android:layout_weight="8"
+                    android:layout_weight="@integer/instance_content_weight"
                     android:minHeight="?android:attr/listPreferredItemHeight"
                     android:orientation="horizontal"
                     android:paddingBottom="8dip"
