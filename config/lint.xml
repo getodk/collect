@@ -38,6 +38,8 @@
     </issue>
 
     <issue id="TimberExceptionLogging" severity="error"/>
+    <issue id="UselessLeaf" severity="warning"/>
+    <issue id="DuplicateIncludedIds" severity="error"/>
 
     <issue id="ContentDescription" severity="ignore"/>
     <issue id="HardwareIds" severity="ignore"/>
