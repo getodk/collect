@@ -584,7 +584,6 @@
   <string name="every_six_hours">Alle 6 Stunden</string>
   <string name="every_24_hours">Alle 24 Stunden</string>
   <string name="form_updates_available">Formular-Updates verfügbar</string>
-  <string name="new_form_versions_downloaded">Neue Formular-Versionen heruntergeladen</string>
   <string name="automatic_download">Automatischer Download</string>
   <string name="automatic_download_summary">Automatisch aktualisierte Versionen von Formularen herunterladen</string>
   <string name="guidance_hint_title">Hilfe zu Fragen anzeigen</string>

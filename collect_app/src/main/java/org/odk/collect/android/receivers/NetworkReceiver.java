@@ -32,6 +32,7 @@ import org.odk.collect.android.utilities.WebUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_SEND;
@@ -225,12 +226,27 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                 .setSmallIcon(IconUtils.getNotificationAppIcon())
                 .setContentTitle(Collect.getInstance().getString(R.string.odk_auto_note))
                 .setContentIntent(pendingNotify)
-                .setContentText(message.trim())
+                .setContentText(getContentText(result))
                 .setAutoCancel(true);
 
         NotificationManager notificationManager = (NotificationManager) Collect.getInstance()
                 .getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(1328974928, builder.build());
+    }
+
+    private String getContentText(HashMap<String, String> result) {
+        return allFormsDownloadedSuccessfully(result)
+                ? Collect.getInstance().getString(R.string.success)
+                : Collect.getInstance().getString(R.string.failures);
+    }
+
+    private boolean allFormsDownloadedSuccessfully(HashMap<String, String> result) {
+        for (Map.Entry<String, String> item : result.entrySet()) {
+            if (!item.getValue().equals("full submission upload was successful!")) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
