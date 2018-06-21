@@ -307,8 +307,6 @@ public class InstanceUploaderList extends InstanceListActivity implements
                     }
                 }
                 break;
-            default:
-                break;
         }
         super.onActivityResult(requestCode, resultCode, intent);
     }
