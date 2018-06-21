@@ -249,7 +249,7 @@ public class MapHelper {
                 break;
             default:
                 File[] spFiles = getFileFromSelectedItem(item);
-                if (spFiles.length == 0) {
+                if (spFiles == null || spFiles.length == 0) {
                     break;
                 } else {
                     File spfile = spFiles[0];

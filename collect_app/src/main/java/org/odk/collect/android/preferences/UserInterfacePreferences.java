@@ -218,7 +218,14 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
             return true;
         });
 
-        mapBasemap.setSummary(mapBasemap.getEntry());
+        CharSequence entry = mapBasemap.getEntry();
+        if (entry != null) {
+            mapBasemap.setSummary(entry);
+        } else {
+            mapBasemap.setSummary(mapBasemap.getEntries()[0]);
+            mapBasemap.setValueIndex(0);
+        }
+
         mapBasemap.setOnPreferenceChangeListener((preference, newValue) -> {
             int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
             preference.setSummary(((ListPreference) preference).getEntries()[index]);
