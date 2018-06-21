@@ -91,7 +91,7 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
                 String entry = (String) ((ListPreference) preference).getEntries()[index];
                 if (!pref.getEntry().equals(entry)) {
                     preference.setSummary(entry);
-                    MainMenuActivity.startActivityAndCloseAllOthers(UserInterfacePreferences.this.getActivity());
+                    MainMenuActivity.startActivityAndCloseAllOthers(getActivity());
                 }
                 return true;
             });
@@ -158,7 +158,7 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
                 edit.apply();
 
                 localeHelper.updateLocale(getActivity());
-                MainMenuActivity.startActivityAndCloseAllOthers(UserInterfacePreferences.this.getActivity());
+                MainMenuActivity.startActivityAndCloseAllOthers(getActivity());
                 return true;
             });
         }
