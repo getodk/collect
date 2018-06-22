@@ -136,9 +136,9 @@ public class InstanceUploaderList extends InstanceListActivity implements
             @Override
             public void onClick(View v) {
 
-                String server = (String) GeneralSharedPreferences.getInstance().get(KEY_PROTOCOL);
+                String transport = (String) GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE);
 
-                if (server.equalsIgnoreCase(getString(R.string.transport_type_value_sms))) {
+                if (transport.equalsIgnoreCase(getString(R.string.transport_type_value_sms))) {
                     int checkedItemCount = getCheckedCount();
                     logger.logAction(this, "uploadButton", Integer.toString(checkedItemCount));
 
