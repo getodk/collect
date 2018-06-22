@@ -4,8 +4,15 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
+import org.odk.collect.android.R;
+import org.odk.collect.android.events.SmsEvent;
 import org.odk.collect.android.tasks.sms.models.MessageStatus;
+import org.odk.collect.android.tasks.sms.models.SmsProgress;
 import org.odk.collect.android.tasks.sms.models.SmsSubmission;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class SmsUtils {
 
@@ -84,6 +91,48 @@ public class SmsUtils {
         sendIntent.putExtra(SMS_MESSAGE_ID, messageId);
 
         return PendingIntent.getBroadcast(context, messageId, sendIntent, PendingIntent.FLAG_NO_CREATE) != null;
+    }
+
+    public static String getDisplaySubtext(SmsEvent event, Context context) {
+        Date date = event.getLastUpdated();
+        SmsProgress progress = event.getProgress();
+
+        if (event.getStatus() == null) {
+            return null;
+        }
+
+        if (event.getProgress().getPercentage() == 100 && event.getStatus().equals(MessageStatus.Sent)) {
+            event.setStatus(MessageStatus.Sending);
+        }
+
+        switch (event.getStatus()) {
+            case NoReception:
+                return new SimpleDateFormat(context.getString(R.string.sms_no_reception), Locale.getDefault()).format(date);
+            case AirplaneMode:
+                return new SimpleDateFormat(context.getString(R.string.sms_airplane_mode), Locale.getDefault()).format(date);
+            case FatalError:
+                return new SimpleDateFormat(context.getString(R.string.sms_fatal_error), Locale.getDefault()).format(date);
+            case Sending:
+                return context.getResources().getQuantityString(R.plurals.sms_sending, (int) progress.getTotalCount(), progress.getCompletedCount(), progress.getTotalCount());
+            case Queued:
+                return context.getString(R.string.sms_submission_queued);
+            case Sent:
+                return new SimpleDateFormat(context.getString(R.string.sms_sent_on_date_at_time),
+                        Locale.getDefault()).format(date);
+            case Delivered:
+                return new SimpleDateFormat(context.getString(R.string.sms_delivered_on_date_at_time),
+                        Locale.getDefault()).format(date);
+            case NotDelivered:
+                return new SimpleDateFormat(context.getString(R.string.sms_not_delivered_on_date_at_time),
+                        Locale.getDefault()).format(date);
+            case NoMessage:
+                return context.getString(R.string.sms_no_message);
+            case Canceled:
+                return new SimpleDateFormat(context.getString(R.string.sms_last_submission_on_date_at_time),
+                        Locale.getDefault()).format(date);
+        }
+
+        return "";
     }
 
     /***
