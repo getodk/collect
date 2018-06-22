@@ -42,6 +42,7 @@ import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUT
 import static org.odk.collect.android.tasks.sms.Mapper.toMessageStatus;
 import static org.odk.collect.android.tasks.sms.SmsUtils.checkIfSentIntentExists;
 import static org.odk.collect.android.tasks.sms.SmsUtils.checkIfSubmissionSentOrSending;
+import static org.odk.collect.android.tasks.sms.SmsUtils.getDisplaySubtext;
 import static org.odk.collect.android.utilities.FileUtil.getFileContents;
 import static org.odk.collect.android.utilities.FileUtil.getSmsInstancePath;
 
@@ -125,7 +126,9 @@ public class SmsService {
         String instanceId = submitFormModel.getInstanceId();
 
         if (formsDao.isFormEncrypted(submitFormModel.getFormId(), submitFormModel.getFormVersion())) {
-            rxEventBus.post(new SmsEvent(instanceId, MessageStatus.Encrypted));
+            SmsEvent event = new SmsEvent(instanceId, MessageStatus.Encrypted);
+            updateInstanceStatusFailedText(instanceId, event);
+            rxEventBus.post(event);
             return false;
         }
 
@@ -135,7 +138,9 @@ public class SmsService {
          * No instance.txt file is generated if a form doesn't have sms tags.
          */
         if (!smsFile.exists()) {
-            rxEventBus.post(new SmsEvent(instanceId, MessageStatus.NoMessage));
+            SmsEvent event = new SmsEvent(instanceId, MessageStatus.NoMessage);
+            updateInstanceStatusFailedText(instanceId, event);
+            rxEventBus.post(event);
             return false;
         }
 
@@ -143,7 +148,9 @@ public class SmsService {
             text = getFileContents(smsFile);
         } catch (IOException e) {
 
-            rxEventBus.post(new SmsEvent(instanceId, MessageStatus.FatalError));
+            SmsEvent event = new SmsEvent(instanceId, MessageStatus.FatalError);
+            updateInstanceStatusFailedText(instanceId, event);
+            rxEventBus.post(event);
             Timber.e(e);
             return false;
         }
@@ -270,9 +277,16 @@ public class SmsService {
 
         rxEventBus.post(event);
 
+        /*
+         * If the submission has completed then the instance is marked as submitted.
+         * If not and the message isn't still sending then that means an error occurred
+         * so that error message is persisted along with SUBMISSION_STATUS_FAILED
+         * */
         if (model.isSubmissionComplete()) {
             markInstanceAsSubmittedOrDelete(sentMessageResult.getInstanceId());
             smsSubmissionManager.deleteSubmission(sentMessageResult.getInstanceId());
+        } else if (!status.equals(MessageStatus.Sent)) {
+            updateInstanceStatusFailedText(sentMessageResult.getInstanceId(), event);
         }
     }
 
@@ -327,6 +341,21 @@ public class SmsService {
                 }
             }
         }
+    }
+
+    /**
+     * @param instanceId of the instance being updated
+     * @param event with the specific failed status that's gonna be persisted
+     */
+    private void updateInstanceStatusFailedText(String instanceId, SmsEvent event) {
+        String where = InstanceProviderAPI.InstanceColumns._ID + "=?";
+        String[] whereArgs = {instanceId};
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
+        contentValues.put(InstanceProviderAPI.InstanceColumns.DISPLAY_SUBTEXT, getDisplaySubtext(event, context));
+
+        instancesDao.updateInstance(contentValues, where, whereArgs);
     }
 
     /**
