@@ -38,8 +38,8 @@ import java.util.List;
 
 public class RankingListAdapter extends RecyclerView.Adapter<RankingListAdapter.ItemViewHolder> {
 
-    private List<SelectChoice> items;
-    private FormEntryPrompt formEntryPrompt;
+    private final List<SelectChoice> items;
+    private final FormEntryPrompt formEntryPrompt;
 
     public RankingListAdapter(List<SelectChoice> items, FormEntryPrompt formEntryPrompt) {
         this.items = new ArrayList<>(items);
