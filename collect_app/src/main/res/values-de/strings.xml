@@ -471,7 +471,6 @@
   <string name="share_qrcode">QR-Code teilen</string>
   <string name="take_picture_instruction">Bildschirm berühren um ein Foto aufzunehmen</string>
   <string name="error_front_camera_unavailable">Frontkamera bei diesem Gerät nicht verfügbar</string>
-  <string name="request_permission">Die App benötigt die Kamera-Berechtigung.</string>
   <string name="camera_error">Dieses Gerät unterstützt die Camera2-API nicht.</string>
   <string name="invalid_range_widget">Dieses Widget hat ungültige Parameter!</string>
   <string name="form_entry_setting">Eingabe-Einstellungen</string>

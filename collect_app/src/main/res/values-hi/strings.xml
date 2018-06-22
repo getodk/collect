@@ -448,7 +448,6 @@
   <string name="invalid_qrcode">QR कोड में मान्य सेटिंग्स शामिल नहीं हैं I</string>
   <string name="share_qrcode">QR कोड साझा करें</string>
   <string name="take_picture_instruction">तस्वीर लेने के लिए स्क्रीन को टैप करें</string>
-  <string name="request_permission">एप्लिकेशन को कैमरा अनुमति की आवश्यकता है।</string>
   <string name="camera_error">यह डिवाइस Camera2 API का समर्थन नहीं करता है</string>
   <string name="invalid_range_widget">इस विजेट में अमान्य मापदंड हैं!</string>
   <string name="form_entry_setting">फॉर्म एंट्री सेटिंग</string>
