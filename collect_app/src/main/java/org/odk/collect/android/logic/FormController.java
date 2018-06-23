@@ -38,6 +38,7 @@ import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryModel;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.javarosa.model.xform.CompactSerializingVisitor;
 import org.javarosa.model.xform.SMSSerializingVisitor;
 import org.javarosa.model.xform.XFormSerializingVisitor;
 import org.javarosa.model.xform.XFormsModule;
@@ -1184,7 +1185,7 @@ public class FormController {
      */
     public ByteArrayPayload getFilledInFormSMS() throws IOException {
         FormInstance dataModel = getInstance();
-        SMSSerializingVisitor serializer = new SMSSerializingVisitor();
+        CompactSerializingVisitor serializer = new CompactSerializingVisitor();
         return (ByteArrayPayload) serializer.createSerializedPayload(dataModel);
     }
 

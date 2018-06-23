@@ -265,7 +265,6 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
 
         publishProgress(Collect.getInstance().getString(R.string.survey_saving_collecting_message));
 
-        final ByteArrayPayload payloadSms = formController.getFilledInFormSMS();
 
         ByteArrayPayload payload = formController.getFilledInFormXml();
         // write out xml
@@ -277,8 +276,13 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
 
         exportXmlFile(payload, instancePath);
 
-        // Write SMS to card
-        exportXmlFile(payloadSms, getSmsInstancePath(instancePath));
+        try {
+            final ByteArrayPayload payloadSms = formController.getFilledInFormSMS();
+            // Write SMS to card
+            exportXmlFile(payloadSms, getSmsInstancePath(instancePath));
+        } catch (Exception e) {
+            Timber.e(e);
+        }
 
         // update the uri. We have exported the reloadable instance, so update status...
         // Since we saved a reloadable instance, it is flagged as re-openable so that if any error
@@ -418,13 +422,6 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
                 }
             }
         }
-        //        } catch (IOException e) {
-        //            Log.e(t, "Error reading from payload data stream");
-        //            e.printStackTrace();
-        //            return false;
-        //        }
-        //
-        //        return false;
     }
 
     @Override
