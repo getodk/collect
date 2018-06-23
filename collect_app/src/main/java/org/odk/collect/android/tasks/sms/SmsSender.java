@@ -27,8 +27,8 @@ import static org.odk.collect.android.tasks.sms.SmsUtils.getDeliveryPendingInten
 import static org.odk.collect.android.tasks.sms.SmsUtils.getSentPendingIntent;
 
 public class SmsSender {
-    private Context context;
-    private String instanceId;
+    private final Context context;
+    private final String instanceId;
 
     @Inject
     SmsManager smsManager;

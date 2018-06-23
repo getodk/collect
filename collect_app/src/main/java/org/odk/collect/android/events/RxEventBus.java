@@ -11,7 +11,7 @@ import io.reactivex.Observable;
  * A simple RxEvent Bus powered by Jake Wharton's RxRelay and RxJava2
  */
 public class RxEventBus {
-    private Relay<Object> busSubject;
+    private final Relay<Object> busSubject;
 
     public RxEventBus() {
         busSubject = PublishRelay.create().toSerialized();

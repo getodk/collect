@@ -52,12 +52,12 @@ import static org.odk.collect.android.utilities.FileUtil.getSmsInstancePath;
  */
 public class SmsService {
 
-    private SmsManager smsManager;
-    private SmsSubmissionManagerContract smsSubmissionManager;
-    private Context context;
-    private RxEventBus rxEventBus;
-    private InstancesDao instancesDao;
-    private FormsDao formsDao;
+    private final SmsManager smsManager;
+    private final SmsSubmissionManagerContract smsSubmissionManager;
+    private final Context context;
+    private final RxEventBus rxEventBus;
+    private final InstancesDao instancesDao;
+    private final FormsDao formsDao;
 
     @Inject
     public SmsService(SmsManager smsManager, SmsSubmissionManagerContract smsSubmissionManager, InstancesDao instancesDao, Context context, RxEventBus rxEventBus, FormsDao formsDao) {

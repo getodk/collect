@@ -49,8 +49,8 @@ public class InstanceUploaderAdapter extends CursorAdapter {
     @Inject
     SmsService smsService;
 
-    private Context context;
-    private CompositeDisposable compositeDisposable;
+    private final Context context;
+    private final CompositeDisposable compositeDisposable;
 
     public InstanceUploaderAdapter(Context context, Cursor cursor) {
         super(context, cursor);

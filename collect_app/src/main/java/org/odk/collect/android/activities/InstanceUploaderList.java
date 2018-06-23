@@ -87,7 +87,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
 
     private boolean showAllMode;
 
-    private BroadcastReceiver smsForegroundReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver smsForegroundReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
 

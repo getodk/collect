@@ -19,14 +19,14 @@ import java.util.List;
 
 public class SmsSubmissionManagerImpl implements SmsSubmissionManagerContract {
     private static SharedPreferences preferences;
-    private SharedPreferences.Editor editor;
+    private final SharedPreferences.Editor editor;
 
     public static final String PREF_FILE_NAME = "submissions_preferences";
     public static final String KEY_SUBMISSION = "submissions_list_key";
 
     public SmsSubmissionManagerImpl(Context context) {
         preferences = context.getSharedPreferences(PREF_FILE_NAME, Context.MODE_PRIVATE);
-        editor = this.preferences.edit();
+        editor = preferences.edit();
     }
 
     public SmsSubmission getSubmissionModel(String instanceId) {
