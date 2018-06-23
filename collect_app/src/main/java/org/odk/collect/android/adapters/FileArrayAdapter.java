@@ -18,6 +18,7 @@ package org.odk.collect.android.adapters;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,11 +36,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import android.support.annotation.NonNull;
-
 public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
 
-    private List<DriveListItem> items;
+    private final List<DriveListItem> items;
 
     public FileArrayAdapter(Context context, List<DriveListItem> filteredDriveList) {
         super(context, R.layout.two_item_image, filteredDriveList);

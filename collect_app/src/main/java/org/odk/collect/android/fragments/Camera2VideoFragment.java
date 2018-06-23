@@ -123,7 +123,7 @@ public class Camera2VideoFragment extends Fragment
      * {@link TextureView.SurfaceTextureListener} handles several lifecycle events on a
      * {@link TextureView}.
      */
-    private TextureView.SurfaceTextureListener surfaceTextureListener
+    private final TextureView.SurfaceTextureListener surfaceTextureListener
             = new TextureView.SurfaceTextureListener() {
 
         @Override
@@ -182,12 +182,12 @@ public class Camera2VideoFragment extends Fragment
     /**
      * A {@link Semaphore} to prevent the app from exiting before closing the camera.
      */
-    private Semaphore cameraOpenCloseLock = new Semaphore(1);
+    private final Semaphore cameraOpenCloseLock = new Semaphore(1);
 
     /**
      * {@link CameraDevice.StateCallback} is called when {@link CameraDevice} changes its status.
      */
-    private CameraDevice.StateCallback stateCallback = new CameraDevice.StateCallback() {
+    private final CameraDevice.StateCallback stateCallback = new CameraDevice.StateCallback() {
 
         @Override
         public void onOpened(@NonNull CameraDevice cameraDevice) {
@@ -267,7 +267,7 @@ public class Camera2VideoFragment extends Fragment
         }
 
         // Pick the smallest of those, assuming we found any
-        if (bigEnough.size() > 0) {
+        if (!bigEnough.isEmpty()) {
             return Collections.min(bigEnough, new Camera2Fragment.CompareSizesByArea());
         } else {
             Timber.e("Couldn't find any suitable preview size");

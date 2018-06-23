@@ -215,6 +215,10 @@ dependencies {
     implementation "commons-io:commons-io:2.6"
     implementation "net.sf.kxml:kxml2:2.3.0"
     implementation "net.sf.opencsv:opencsv:2.3"
+    implementation("org.opendatakit:opendatakit-javarosa:2.11.0-SNAPSHOT") {
+        exclude group: 'joda-time'
+        exclude group: 'org.slf4j'
+    }
     implementation "com.karumi:dexter:4.2.0"
     implementation "org.osmdroid:osmdroid-android:5.6.4"
     implementation "org.slf4j:slf4j-android:1.6.1-RC1"

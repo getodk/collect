@@ -24,9 +24,9 @@ public class HierarchyElement {
     private final ArrayList<HierarchyElement> children = new ArrayList<>();
 
     private int type;
-    private FormIndex formIndex;
-    private String primaryText = "";
-    private String secondaryText = "";
+    private final FormIndex formIndex;
+    private final String primaryText;
+    private final String secondaryText;
     private Drawable icon;
 
     public HierarchyElement(String primaryText, String secondaryText, Drawable icon, int type, FormIndex formIndex) {

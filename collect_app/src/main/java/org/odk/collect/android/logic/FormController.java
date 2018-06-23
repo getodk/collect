@@ -130,10 +130,10 @@ public class FormController {
                 .setPropertyManager(mgr);
     }
 
-    private File mediaFolder;
+    private final File mediaFolder;
     @Nullable
     private File instanceFile;
-    private FormEntryController formEntryController;
+    private final FormEntryController formEntryController;
     private FormIndex indexWaitingForData = null;
 
     public FormController(File mediaFolder, FormEntryController fec, File instanceFile) {

@@ -159,7 +159,7 @@ public class TimerLogger {
     private File timerlogFile = null;
     private long surveyOpenTime = 0;
     private long surveyOpenElapsedTime = 0;
-    private boolean timerEnabled = false;              // Set true of the timer logger is enabled
+    private final boolean timerEnabled;              // Set true of the timer logger is enabled
 
 
     public TimerLogger(File instanceFile, FormController formController) {

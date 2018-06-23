@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.content.FileProvider;
 import android.view.Gravity;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -31,10 +32,12 @@ import android.widget.TextView;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FileUtil;
+import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtil;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
@@ -94,22 +97,28 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget {
     }
 
     @Override
-    public void setBinaryData(Object binaryuri) {
-        if (binaryuri == null || !(binaryuri instanceof Uri)) {
-            Timber.w("ArbitraryFileWidget's setBinaryData must receive a Uri object.");
+    public void setBinaryData(Object object) {
+        File newFile;
+        // get the file path and create a copy in the instance folder
+        if (object instanceof Uri) {
+            FileUtils.revokeFileReadWritePermission(getContext(), (Uri) object);
+            String sourcePath = getSourcePathFromUri((Uri) object);
+            String destinationPath = getDestinationPathFromSourcePath(sourcePath);
+            File source = fileUtil.getFileAtPath(sourcePath);
+            newFile = fileUtil.getFileAtPath(destinationPath);
+            fileUtil.copyFile(source, newFile);
+        } else if (object instanceof File) {
+            // Getting a file indicates we've done the copy in the before step
+            newFile = (File) object;
+        } else {
+            Timber.w("FileWidget's setBinaryData must receive a File or Uri object.");
             return;
         }
 
-        Uri uri = (Uri) binaryuri;
-
-        // get the file path and create a copy in the instance folder
-        String sourcePath = getSourcePathFromUri(uri);
-        String destinationPath = getDestinationPathFromSourcePath(sourcePath);
-
-        File source = fileUtil.getFileAtPath(sourcePath);
-        File newFile = fileUtil.getFileAtPath(destinationPath);
-
-        fileUtil.copyFile(source, newFile);
+        if (newFile == null) {
+            Timber.e("setBinaryData FAILED");
+            return;
+        }
 
         if (newFile.exists()) {
             // when replacing an answer remove the current one.
@@ -181,11 +190,15 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget {
     }
 
     private void openFile() {
-        Uri uri = Uri.fromFile(new File(getInstanceFolder() + File.separator + binaryName));
+
+        Uri fileUri = Uri.fromFile(new File(getInstanceFolder() + File.separator + binaryName));
+        Uri contentUri = FileProvider.getUriForFile(getContext(),
+                BuildConfig.APPLICATION_ID + ".provider",
+                new File(getInstanceFolder() + File.separator + binaryName));
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
-        intent.setDataAndType(uri, getMimeType(getSourcePathFromUri(uri)));
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.setDataAndType(contentUri, getMimeType(getSourcePathFromUri(fileUri)));
+        FileUtils.grantFileReadPermissions(intent, contentUri, getContext());
         getContext().startActivity(intent);
     }
 }

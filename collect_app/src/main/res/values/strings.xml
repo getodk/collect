@@ -121,16 +121,16 @@
     <string name="replace_barcode">Replace Barcode</string>
     <string name="required_answer_error">Sorry, this response is required!</string>
     <string name="review_data">Edit Saved Form</string>
-    <string name="review_data_button">Edit Saved Form (%s)‎‎‎‎\u200E</string>
+    <string name="review_data_button">Edit Saved Form (%s)‎‎‎‎</string>
     <string name="save_all_answers">Save Form</string>
     <string name="save_enter_data_description">You are at the end of %s.</string>
     <string name="saving_form">Saving Form</string>
-    <string name="sending_items">Sending %1$s of %2$s form(s)\u200E</string>
+    <string name="sending_items">Sending %1$s of %2$s form(s)</string>
     <string name="send_data">Send Finalized Form</string>
-    <string name="send_data_button">Send Finalized Form (%s)\u200E</string>
+    <string name="send_data_button">Send Finalized Form (%s)</string>
     <string name="send_selected_data">Send Selected</string>
     <string name="view_sent_forms">View Sent Form</string>
-    <string name="view_sent_forms_button">View Sent Form (%s)\u200E</string>
+    <string name="view_sent_forms_button">View Sent Form (%s)</string>
     <string name="server_auth_credentials">Invalid username or password for server: %s</string>
     <string name="server_requires_auth">Server Requires Authentication</string>
     <string name="server_url">URL</string>
@@ -384,6 +384,7 @@
     <string name="parser_exception">XPathParser Exception: \"%s\"</string>
     <string name="selected_answer">Selected: %s</string>
     <string name="version_number">Version: %s</string>
+    <string name="id_number">ID: %s</string>
     <string name="odk_website">Visit the ODK website</string>
     <string name="odk_website_summary">Open Data Kit (ODK) is used to collect data for social good in challenging environments.</string>
     <string name="odk_forum">Join the ODK forum</string>
@@ -639,4 +640,6 @@
     <string name="transport_type_value_internet">internet</string>
     <string name="transport_type_sms">SMS</string>
     <string name="transport_type_value_sms">sms</string>
+    <string name="seconds">Seconds</string>
+    <string name="double_tap_to_start">Double tap to start</string>
 </resources>

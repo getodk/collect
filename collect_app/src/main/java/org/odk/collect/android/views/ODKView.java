@@ -49,11 +49,12 @@ import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalAppsUtils;
 import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.ViewIds;
-import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.WidgetFactory;
+import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -74,9 +75,9 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
 @SuppressLint("ViewConstructor")
 public class ODKView extends ScrollView implements OnLongClickListener {
 
-    private LinearLayout view;
-    private LinearLayout.LayoutParams layout;
-    private ArrayList<QuestionWidget> widgets;
+    private final LinearLayout view;
+    private final LinearLayout.LayoutParams layout;
+    private final ArrayList<QuestionWidget> widgets;
 
     public static final String FIELD_LIST = "field-list";
 
@@ -175,7 +176,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                 });
 
                 View divider = new View(getContext());
-                divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
+                divider.setBackgroundResource(new ThemeUtils(getContext()).getDivider());
                 divider.setMinimumHeight(3);
                 view.addView(divider);
 
@@ -187,7 +188,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         for (FormEntryPrompt p : questionPrompts) {
             if (!first) {
                 View divider = new View(getContext());
-                divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
+                divider.setBackgroundResource(new ThemeUtils(getContext()).getDivider());
                 divider.setMinimumHeight(3);
                 view.addView(divider);
             } else {
@@ -317,7 +318,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
     }
 
     public void setFocus(Context context) {
-        if (widgets.size() > 0) {
+        if (!widgets.isEmpty()) {
             widgets.get(0).setFocus(context);
         }
     }

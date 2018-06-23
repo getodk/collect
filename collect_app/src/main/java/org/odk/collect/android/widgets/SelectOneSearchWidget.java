@@ -16,8 +16,6 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.TypedArray;
-import android.graphics.drawable.Drawable;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
 
@@ -47,11 +45,7 @@ public class SelectOneSearchWidget extends AbstractSelectOneWidget implements On
         for (int i = 0; i < buttons.size(); i++) {
             if (tagList == null || tagList.contains(i)) {
                 answerLayout.addView(buttons.get(i));
-                //Get divider drawable and set to linearlayout
-                int[] attrs = { android.R.attr.listDivider };
-                TypedArray ta = getContext().obtainStyledAttributes(attrs);
-                Drawable divider = ta.getDrawable(0);
-                answerLayout.setDividerDrawable(divider);
+                answerLayout.setDividerDrawable(getResources().getDrawable(themeUtils.getDivider()));
                 answerLayout.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
             }
         }

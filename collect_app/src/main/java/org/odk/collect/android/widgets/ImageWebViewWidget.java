@@ -61,15 +61,15 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
 @SuppressLint("ViewConstructor")
 public class ImageWebViewWidget extends QuestionWidget implements FileWidget {
 
-    private Button captureButton;
-    private Button chooseButton;
+    private final Button captureButton;
+    private final Button chooseButton;
 
     @Nullable
     private WebView imageDisplay;
 
     private String binaryName;
 
-    private TextView errorTextView;
+    private final TextView errorTextView;
 
     public ImageWebViewWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);

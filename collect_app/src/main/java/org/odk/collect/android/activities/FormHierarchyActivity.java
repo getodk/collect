@@ -18,13 +18,13 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import org.javarosa.core.model.FormIndex;
@@ -45,14 +45,12 @@ import java.util.List;
 
 import timber.log.Timber;
 
-public abstract class FormHierarchyActivity extends CollectAbstractActivity implements AdapterView.OnItemClickListener {
+public abstract class FormHierarchyActivity extends CollectAbstractActivity {
 
     protected static final int CHILD = 1;
     protected static final int EXPANDED = 2;
     protected static final int COLLAPSED = 3;
     protected static final int QUESTION = 4;
-
-    private static final String mIndent = "     ";
 
     List<HierarchyElement> formList;
     TextView path;
@@ -62,16 +60,18 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity impl
     protected Button jumpPreviousButton;
     protected Button jumpBeginningButton;
     protected Button jumpEndButton;
-    protected ListView listView;
-
+    protected RecyclerView recyclerView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.hierarchy_layout);
 
-        listView = findViewById(android.R.id.list);
-        listView.setOnItemClickListener(this);
+        recyclerView = findViewById(R.id.list);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+
         TextView emptyView = findViewById(android.R.id.empty);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -132,26 +132,20 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity impl
             }
         });
 
-
         refreshView();
 
-        // kinda slow, but works.
-        // this scrolls to the last question the user was looking at
-        if (getListAdapter() != null && listView != null) {
+        // Kinda slow, but works. This scrolls to the last question the user was looking at.
+        if (recyclerView != null && recyclerView.getAdapter() != null && recyclerView.getAdapter().getItemCount() > 0) {
             emptyView.setVisibility(View.GONE);
-            listView.post(new Runnable() {
-                @Override
-                public void run() {
-                    int position = 0;
-                    for (int i = 0; i < getListAdapter().getCount(); i++) {
-                        HierarchyElement he = (HierarchyElement) getListAdapter().getItem(i);
-                        if (shouldScrollToTheGivenIndex(he.getFormIndex(), formController)) {
-                            position = i;
-                            break;
-                        }
+            recyclerView.post(() -> {
+                int position = 0;
+                for (HierarchyElement hierarchyElement : formList) {
+                    if (shouldScrollToTheGivenIndex(hierarchyElement.getFormIndex(), formController)) {
+                        position = formList.indexOf(hierarchyElement);
+                        break;
                     }
-                    listView.setSelection(position);
                 }
+                ((LinearLayoutManager) recyclerView.getLayoutManager()).scrollToPositionWithOffset(position, 0);
             });
         }
     }
@@ -159,10 +153,6 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity impl
     private boolean shouldScrollToTheGivenIndex(FormIndex formIndex, FormController formController) {
         return startIndex.equals(formIndex)
                 || (formController.indexIsInFieldList(startIndex) && formIndex.toString().startsWith(startIndex.toString()));
-    }
-
-    private ListAdapter getListAdapter() {
-        return listView.getAdapter();
     }
 
     @Override
@@ -207,7 +197,7 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity impl
             // display
             // everything enclosed within that group.
             String contextGroupRef = "";
-            formList = new ArrayList<HierarchyElement>();
+            formList = new ArrayList<>();
 
             // If we're currently at a repeat node, record the name of the node and step to the next
             // node to display.
@@ -343,7 +333,7 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity impl
                                             COLLAPSED, fc.getIndex());
                             formList.add(group);
                         }
-                        String repeatLabel = mIndent + getLabel(fc);
+                        String repeatLabel = getLabel(fc);
                         if (fc.getFormElement().getChildren().size() == 1 && fc.getFormElement().getChild(0) instanceof GroupDef) {
                             formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
                             FormEntryCaption fc2 = formController.getCaptionPrompt();
@@ -361,9 +351,7 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity impl
                         formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
             }
 
-            HierarchyListAdapter itla = new HierarchyListAdapter(this);
-            itla.setListItems(formList);
-            listView.setAdapter(itla);
+            recyclerView.setAdapter(new HierarchyListAdapter(formList, this::onElementClick));
 
             // set the controller back to the current index in case the user hits 'back'
             formController.jumpToIndex(currentIndex);
@@ -372,6 +360,8 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity impl
             createErrorDialog(e.getMessage());
         }
     }
+
+    protected abstract void onElementClick(HierarchyElement element);
 
     /**
      * Creates and displays dialog with the given errorMsg.

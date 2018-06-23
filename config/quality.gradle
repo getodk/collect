@@ -53,6 +53,14 @@ task findbugs(type: FindBugs, dependsOn: "assembleDebug") {
     source 'src'
     include '**/*.java'
     exclude '**/gen/**'
+/**
+ * Tweak worker process max heap size
+ * 128m = OutOfMemory
+ * 256m=~31s
+ * 384m=~31s
+ * 768m=~31s
+ * */
+    setMaxHeapSize('256m')
 
     reports {
         xml.enabled = false
@@ -71,6 +79,10 @@ task findbugs(type: FindBugs, dependsOn: "assembleDebug") {
 //------------------------Pmd------------------------//
 
 apply plugin: 'pmd'
+
+pmd {
+    toolVersion = '6.4.0'
+}
 
 task pmd(type: Pmd) {
     ignoreFailures = false // Fail early

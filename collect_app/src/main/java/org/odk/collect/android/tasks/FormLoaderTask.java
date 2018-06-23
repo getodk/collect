@@ -378,7 +378,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                 externalDataMap.put(dataSetName, csvFile);
             }
 
-            if (externalDataMap.size() > 0) {
+            if (!externalDataMap.isEmpty()) {
 
                 publishProgress(Collect.getInstance()
                         .getString(R.string.survey_loading_reading_csv_message));

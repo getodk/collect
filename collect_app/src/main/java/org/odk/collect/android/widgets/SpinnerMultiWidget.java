@@ -34,6 +34,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
+import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -126,6 +127,8 @@ public class SpinnerMultiWidget extends QuestionWidget implements ButtonWidget, 
         answerLayout.addView(button);
         answerLayout.addView(selectionText);
         addAnswerView(answerLayout);
+
+        SpacesInUnderlyingValuesWarning.forQuestionWidget(this).renderWarningIfNecessary(items);
     }
 
     @Override
@@ -138,7 +141,7 @@ public class SpinnerMultiWidget extends QuestionWidget implements ButtonWidget, 
                 vc.add(new Selection(sc));
             }
         }
-        if (vc.size() == 0) {
+        if (vc.isEmpty()) {
             return null;
         } else {
             return new SelectMultiData(vc);

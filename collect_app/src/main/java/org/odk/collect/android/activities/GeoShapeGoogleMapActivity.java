@@ -33,7 +33,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -70,7 +69,7 @@ public class GeoShapeGoogleMapActivity extends CollectAbstractActivity implement
     private LatLng curlatLng;
     private PolygonOptions polygonOptions;
     private Polygon polygon;
-    private ArrayList<Marker> markerArray = new ArrayList<Marker>();
+    private final ArrayList<Marker> markerArray = new ArrayList<Marker>();
     private ImageButton gpsButton;
     private ImageButton clearButton;
 
@@ -87,24 +86,14 @@ public class GeoShapeGoogleMapActivity extends CollectAbstractActivity implement
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setContentView(R.layout.geoshape_layout);
+        SupportMapFragment mapFragment = new SupportMapFragment();
+        getSupportFragmentManager().beginTransaction()
+            .add(R.id.map_container, mapFragment).commit();
+        mapFragment.getMapAsync(this::setupMap);
 
-        setContentView(R.layout.geoshape_google_layout);
-
-        // Do this here so we can test it:
         gpsButton = findViewById(R.id.gps);
         gpsButton.setEnabled(false);
-
-        clearButton = findViewById(R.id.clear);
-
-        locationClient = LocationClients.clientForContext(this);
-        locationClient.setListener(this);
-
-        ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.gmap)).getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap googleMap) {
-                setupMap(googleMap);
-            }
-        });
     }
 
     @Override
@@ -112,6 +101,8 @@ public class GeoShapeGoogleMapActivity extends CollectAbstractActivity implement
         super.onStart();
         Collect.getInstance().getActivityLogger().logOnStart(this);
 
+        locationClient = LocationClients.clientForContext(this);
+        locationClient.setListener(this);
         locationClient.start();
     }
 
@@ -152,10 +143,11 @@ public class GeoShapeGoogleMapActivity extends CollectAbstractActivity implement
             }
         });
 
+        clearButton = findViewById(R.id.clear);
         clearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (markerArray.size() != 0) {
+                if (!markerArray.isEmpty()) {
                     showClearDialog();
                 }
             }
@@ -187,7 +179,7 @@ public class GeoShapeGoogleMapActivity extends CollectAbstractActivity implement
             }
         });
 
-        zoomDialogView = getLayoutInflater().inflate(R.layout.geoshape_zoom_dialog, null);
+        zoomDialogView = getLayoutInflater().inflate(R.layout.geo_zoom_dialog, null);
 
         zoomLocationButton = zoomDialogView.findViewById(R.id.zoom_location);
         zoomLocationButton.setOnClickListener(new View.OnClickListener() {
@@ -200,7 +192,7 @@ public class GeoShapeGoogleMapActivity extends CollectAbstractActivity implement
             }
         });
 
-        zoomPointButton = zoomDialogView.findViewById(R.id.zoom_shape);
+        zoomPointButton = zoomDialogView.findViewById(R.id.zoom_saved_location);
         zoomPointButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -398,17 +390,17 @@ public class GeoShapeGoogleMapActivity extends CollectAbstractActivity implement
             if (curLocation != null) {
                 zoomLocationButton.setEnabled(true);
                 zoomLocationButton.setBackgroundColor(Color.parseColor("#50cccccc"));
-                zoomLocationButton.setTextColor(Color.parseColor("#ff333333"));
+                zoomLocationButton.setTextColor(themeUtils.getPrimaryTextColor());
             } else {
                 zoomLocationButton.setEnabled(false);
                 zoomLocationButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));
                 zoomLocationButton.setTextColor(Color.parseColor("#FF979797"));
             }
 
-            if (markerArray.size() != 0) {
+            if (!markerArray.isEmpty()) {
                 zoomPointButton.setEnabled(true);
                 zoomPointButton.setBackgroundColor(Color.parseColor("#50cccccc"));
-                zoomPointButton.setTextColor(Color.parseColor("#ff333333"));
+                zoomPointButton.setTextColor(themeUtils.getPrimaryTextColor());
             } else {
                 zoomPointButton.setEnabled(false);
                 zoomPointButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));
