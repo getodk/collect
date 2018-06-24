@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2011 University of Washington
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -19,6 +19,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.support.v7.widget.AppCompatImageButton;
+import android.util.AttributeSet;
 
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.reference.InvalidReferenceException;
@@ -38,6 +39,29 @@ import timber.log.Timber;
  */
 public class AudioButton extends AppCompatImageButton {
 
+    private AudioHandler handler;
+
+    public AudioButton(Context context) {
+        super(context);
+    }
+
+    public AudioButton(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    public void init(FormIndex index, String selectionDesignator, String uri, MediaPlayer player) {
+        handler = new AudioHandler(index, selectionDesignator, uri, player);
+        Bitmap b =
+                BitmapFactory.decodeResource(
+                        getContext().getResources(),
+                        android.R.drawable.ic_lock_silent_mode_off);
+        setImageBitmap(b);
+    }
+
+    public void playAudio() {
+        handler.playAudio(getContext());
+    }
+
     /**
      * Useful class for handling the playing and stopping of audio prompts.
      * This is used here, and also in the GridMultiWidget and GridWidget
@@ -52,7 +76,7 @@ public class AudioButton extends AppCompatImageButton {
         private final MediaPlayer mediaPlayer;
 
         public AudioHandler(FormIndex index, String selectionDesignator, String uri,
-                MediaPlayer player) {
+                            MediaPlayer player) {
             this.index = index;
             this.selectionDesignator = selectionDesignator;
             this.uri = uri;
@@ -96,23 +120,6 @@ public class AudioButton extends AppCompatImageButton {
                 Timber.e(errorMsg);
                 ToastUtils.showLongToast(errorMsg);
             }
-
         }
-    }
-
-    AudioHandler handler;
-
-    public AudioButton(Context context, FormIndex index, String selectionDesignator, String uri,
-            MediaPlayer player) {
-        super(context);
-        handler = new AudioHandler(index, selectionDesignator, uri, player);
-        Bitmap b =
-                BitmapFactory.decodeResource(context.getResources(),
-                        android.R.drawable.ic_lock_silent_mode_off);
-        this.setImageBitmap(b);
-    }
-
-    public void playAudio() {
-        handler.playAudio(getContext());
     }
 }
