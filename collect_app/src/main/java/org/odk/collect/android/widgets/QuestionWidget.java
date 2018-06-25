@@ -133,6 +133,7 @@ public abstract class QuestionWidget
 
         questionMediaLayout = createQuestionMediaLayout(prompt);
         helpTextLayout = createHelpTextLayout();
+        helpTextLayout.setId(ViewIds.generateViewId());
         guidanceTextLayout = helpTextLayout.findViewById(R.id.guidance_text_layout);
         textLayout = helpTextLayout.findViewById(R.id.text_layout);
         warningText = helpTextLayout.findViewById(R.id.warning_text);
