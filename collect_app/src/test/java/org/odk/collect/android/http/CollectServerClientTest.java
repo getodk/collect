@@ -20,6 +20,9 @@ public class CollectServerClientTest {
         Assert.assertTrue(true);
     }
 
+    /**
+     * All the tests below are work in progress, need to complete the Dagger Architecture
+     */
     @Test
     public void testClearHostCredentials() {
         Assert.assertTrue(true);
