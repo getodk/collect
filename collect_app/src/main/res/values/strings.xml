@@ -614,4 +614,5 @@
     <string name="hide_old_form_versions_setting_summary">Only the newest version will appear in Fill Blank Form</string>
     <string name="seconds">Seconds</string>
     <string name="double_tap_to_start">Double tap to start</string>
+    <string name="image_not_saved">The image can not be saved because of a problem with the corresponding instance file.</string>
 </resources>
