@@ -618,7 +618,7 @@ public class FormDownloader {
         // OK we now have the full set of files to download...
         Timber.i("Downloading %d media files.", files.size());
         int mediaCount = 0;
-        if (files.size() > 0) {
+        if (!files.isEmpty()) {
             File tempMediaDir = new File(tempMediaPath);
             File finalMediaDir = new File(finalMediaPath);
 

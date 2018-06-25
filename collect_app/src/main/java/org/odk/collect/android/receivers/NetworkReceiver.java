@@ -116,7 +116,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                 }
             }
 
-            if (toUpload.size() < 1) {
+            if (toUpload.isEmpty()) {
                 running = false;
                 return;
             }

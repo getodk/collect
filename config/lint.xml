@@ -5,7 +5,7 @@
     <issue id="MissingRegistered" severity="warning"/>
     <issue id="AppCompatResource" severity="warning"/>
     <issue id="StaticFieldLeak" severity="warning"/>
-    <issue id="UnusedIds" severity="warning"/>
+    <issue id="UnusedIds" severity="error"/>
     <issue id="AppLinkUrlError" severity="warning" />
 
     <!-- require inputType attribute on all text fields -->
@@ -38,6 +38,8 @@
     </issue>
 
     <issue id="TimberExceptionLogging" severity="error"/>
+    <issue id="UselessLeaf" severity="warning"/>
+    <issue id="DuplicateIncludedIds" severity="error"/>
 
     <issue id="ContentDescription" severity="ignore"/>
     <issue id="HardwareIds" severity="ignore"/>

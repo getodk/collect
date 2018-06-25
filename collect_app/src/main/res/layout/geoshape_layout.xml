@@ -3,39 +3,38 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical">
+
     <LinearLayout
         android:id="@+id/linearlayout"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:paddingLeft="0dip"
-        android:paddingRight="0dip"
-        android:paddingTop="5dip"
-        android:paddingBottom="0dip"
+        android:padding="0dip"
         android:background="#BF000000">
 
         <TextView
             android:text="@string/geoshape_instruction"
             android:textColor="#FFFFFF"
             android:layout_width="wrap_content"
-            android:paddingBottom="5dip"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:paddingTop="5dip"
+            android:paddingBottom="5dip" />
     </LinearLayout>
 
-    <org.osmdroid.views.MapView
-        android:id="@+id/geoshape_mapview"
+    <FrameLayout
+        android:id="@+id/map_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/linearlayout"/>
+        android:layout_below="@id/linearlayout" />
 
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/linearlayout"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@+id/linearlayout">
+        android:layout_alignParentEnd="true">
 
     <LinearLayout
         android:orientation="vertical"

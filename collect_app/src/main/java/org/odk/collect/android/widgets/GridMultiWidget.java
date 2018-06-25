@@ -362,7 +362,7 @@ public class GridMultiWidget extends QuestionWidget implements MultiChoiceWidget
             }
         }
 
-        if (vc.size() == 0) {
+        if (vc.isEmpty()) {
             return null;
 
         } else {

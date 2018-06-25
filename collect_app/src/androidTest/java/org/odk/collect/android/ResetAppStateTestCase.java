@@ -42,8 +42,8 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 public class ResetAppStateTestCase {
@@ -74,7 +74,7 @@ public class ResetAppStateTestCase {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
         assertEquals(settings.getString(PreferenceKeys.KEY_USERNAME, ""), "");
         assertEquals(settings.getString(PreferenceKeys.KEY_PASSWORD, ""), "");
-        assertEquals(true, settings.getBoolean(AdminKeys.KEY_VIEW_SENT, true));
+        assertTrue(settings.getBoolean(AdminKeys.KEY_VIEW_SENT, true));
 
         assertEquals(0, getFormsCount());
         assertEquals(0, getInstancesCount());
@@ -142,7 +142,7 @@ public class ResetAppStateTestCase {
                 .putBoolean(AdminKeys.KEY_VIEW_SENT, false)
                 .apply();
 
-        assertEquals(false, settings.getBoolean(AdminKeys.KEY_VIEW_SENT, false));
+        assertFalse(settings.getBoolean(AdminKeys.KEY_VIEW_SENT, false));
 
         assertTrue(new File(Collect.SETTINGS).exists() || new File(Collect.SETTINGS).mkdir());
         assertTrue(new File(Collect.SETTINGS + "/collect.settings").createNewFile());

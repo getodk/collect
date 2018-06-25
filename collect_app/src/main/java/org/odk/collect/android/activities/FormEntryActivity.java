@@ -28,6 +28,7 @@ import android.provider.MediaStore.Images;
 import android.provider.OpenableColumns;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -71,6 +72,7 @@ import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.LocalDateTime;
+import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.IconMenuListAdapter;
 import org.odk.collect.android.adapters.model.IconMenuItem;
@@ -695,6 +697,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 // file
                 ImageConverter.execute(Collect.TMPFILE_PATH, getWidgetWaitingForBinaryData(), this);
                 File fi = new File(Collect.TMPFILE_PATH);
+
+                //revoke permissions granted to this file due its possible usage in
+                //the camera app
+                Uri uri = FileProvider.getUriForFile(this,
+                        BuildConfig.APPLICATION_ID + ".provider",
+                        fi);
+                FileUtils.revokeFileReadWritePermission(this, uri);
+
                 String instanceFolder = formController.getInstanceFile()
                         .getParent();
                 String s = instanceFolder + File.separator + System.currentTimeMillis() + ".jpg";

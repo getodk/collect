@@ -215,7 +215,7 @@ public class DownloadFormListUtils {
                         manifestFile = getManifestFile(manifestUrl);
                         if (manifestFile != null) {
                             List<MediaFile> newMediaFiles = manifestFile.getMediaFiles();
-                            if (newMediaFiles != null && newMediaFiles.size() > 0) {
+                            if (newMediaFiles != null && !newMediaFiles.isEmpty()) {
                                 areNewerMediaFilesAvailable = areNewerMediaFilesAvailable(formId, version, newMediaFiles);
                             }
                         }

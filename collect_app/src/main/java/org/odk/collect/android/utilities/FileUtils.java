@@ -14,8 +14,14 @@
 
 package org.odk.collect.android.utilities;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Build;
 
 import org.apache.commons.io.IOUtils;
 import org.javarosa.xform.parse.XFormParser;
@@ -40,6 +46,7 @@ import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
 import timber.log.Timber;
@@ -514,4 +521,63 @@ public class FileUtils {
         return fileName.substring(dotIndex + 1).toLowerCase(Locale.ROOT);
     }
 
+    /**
+     * With the FileProvider you have to manually grant and revoke read/write permissions to files you
+     * are sharing. With this approach the access only lasts as long as the target activity on Api versions
+     * above Kit Kat. Once you are below that you have to manually revoke the permissions.
+     *
+     * @param intent that needs to have the permission flags
+     * @param uri    that the permissions are being applied to
+     * @return intent that has read and write permissions
+     */
+    public static void grantFilePermissions(Intent intent, Uri uri, Context context) {
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+
+        /*
+         Workaround for Android bug.
+         grantUriPermission also needed for KITKAT,
+         see https://code.google.com/p/android/issues/detail?id=76683
+         */
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+            List<ResolveInfo> resInfoList = context.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+            for (ResolveInfo resolveInfo : resInfoList) {
+                String packageName = resolveInfo.activityInfo.packageName;
+                context.grantUriPermission(packageName, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            }
+        }
+    }
+
+
+    /**
+     * With the FileProvider you have to manually grant and revoke read/write permissions to files you
+     * are sharing. With this approach the access only lasts as long as the target activity on Api versions
+     * above Kit Kat. Once you are below that you have to manually revoke the permissions.
+     *
+     * @param intent that needs to have the permission flags
+     * @param uri    that the permissions are being applied to
+     * @return intent that has read and write permissions
+     */
+    public static void grantFileReadPermissions(Intent intent, Uri uri, Context context) {
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        /*
+         Workaround for Android bug.
+         grantUriPermission also needed for KITKAT,
+         see https://code.google.com/p/android/issues/detail?id=76683
+         */
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+            List<ResolveInfo> resInfoList = context.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+            for (ResolveInfo resolveInfo : resInfoList) {
+                String packageName = resolveInfo.activityInfo.packageName;
+                context.grantUriPermission(packageName, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            }
+        }
+    }
+
+    public static void revokeFileReadWritePermission(Context context, Uri uri) {
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+            context.revokeUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        }
+    }
 }
