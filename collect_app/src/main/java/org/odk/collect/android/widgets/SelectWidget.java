@@ -18,7 +18,6 @@ package org.odk.collect.android.widgets;
 
 import android.content.Context;
 import android.media.MediaPlayer;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -150,9 +149,7 @@ public abstract class SelectWidget extends QuestionWidget {
         playList.add(mediaLayout);
 
         if (index != items.size() - 1) {
-            ImageView divider = new ImageView(getContext());
-            divider.setBackgroundResource(themeUtils.getDivider());
-            mediaLayout.addDivider(divider);
+            mediaLayout.addDivider();
         }
 
         return mediaLayout;
