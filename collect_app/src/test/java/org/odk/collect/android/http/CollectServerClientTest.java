@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+import org.odk.collect.android.utilities.DocumentFetchResult;
 
 @RunWith(JUnit4.class)
 public class CollectServerClientTest {
@@ -15,40 +16,24 @@ public class CollectServerClientTest {
     }
 
     @Test
-    public void testAddCredential() {
-        TestableCollectServerClient.getInstance();
-        Assert.assertTrue(true);
-    }
-
-    /**
-     * All the tests below are work in progress, need to complete the Dagger Architecture
-     */
-    @Test
-    public void testClearHostCredentials() {
-        Assert.assertTrue(true);
-    }
-
-    @Test
-    public void testAddCredentials() {
-        Assert.assertTrue(true);
+    public void testGetXMLDocumentErrorResponse() {
+        TestableCollectServerClient.setGetHttpShouldReturnNull(true);
+        DocumentFetchResult fetchResult = TestableCollectServerClient.getXmlDocument("http://testurl");
+        Assert.assertEquals(fetchResult.errorMessage, "Parsing failed with null while accessing http://testurl");
     }
 
     @Test
     public void testGetXMLDocument() {
-        Assert.assertTrue(true);
-    }
-
-    @Test
-    public void testGetHttpInputStream() {
-        Assert.assertTrue(true);
+        DocumentFetchResult fetchResult = TestableCollectServerClient.getXmlDocument("http://testurl");
+        Assert.assertNull(fetchResult.errorMessage);
+        Assert.assertEquals(fetchResult.responseCode,0);
+        Assert.assertEquals(fetchResult.isOpenRosaResponse,true);
     }
 
     @Test
     public void testGetPlainTextMimeType() {
         Assert.assertEquals(TestableCollectServerClient.getPlainTextMimeType(), "text/plain");
     }
-
-
 }
 
 

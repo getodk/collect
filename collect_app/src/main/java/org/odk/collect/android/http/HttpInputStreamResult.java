@@ -30,7 +30,7 @@ public class HttpInputStreamResult {
     private final Map<String, String> headers;
     private final String hash;
 
-    HttpInputStreamResult(InputStream is, @NonNull Map<String, String> headers, String hash) {
+    public HttpInputStreamResult(InputStream is, @NonNull Map<String, String> headers, String hash) {
         inputStream = is;
         this.headers = headers;
         this.hash = hash;

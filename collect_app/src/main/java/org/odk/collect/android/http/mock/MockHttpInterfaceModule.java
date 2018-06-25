@@ -14,7 +14,7 @@ public class MockHttpInterfaceModule {
     @Provides
     @Singleton
     public HttpInterface provideHttpInterface() {
-        return new HttpClientConnection();
+        return new MockHttpClientConnection();
     }
 
 }
