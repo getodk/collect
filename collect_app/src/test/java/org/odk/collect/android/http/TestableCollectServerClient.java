@@ -2,7 +2,6 @@ package org.odk.collect.android.http;
 
 import org.odk.collect.android.http.mock.DaggerMockHttpComponent;
 import org.odk.collect.android.http.mock.MockHttpClientConnection;
-import org.odk.collect.android.http.mock.MockHttpInterfaceModule;
 
 public final class TestableCollectServerClient extends CollectServerClient {
 
@@ -15,7 +14,7 @@ public final class TestableCollectServerClient extends CollectServerClient {
     }
 
     public static void setGetHttpShouldReturnNull(boolean getHttpShouldReturnNull) {
-        MockHttpClientConnection mockedClient = (MockHttpClientConnection)getInstance().httpConnection;
+        MockHttpClientConnection mockedClient = (MockHttpClientConnection) getInstance().httpConnection;
         mockedClient.setGetHttpShouldReturnNull(getHttpShouldReturnNull);
     }
 

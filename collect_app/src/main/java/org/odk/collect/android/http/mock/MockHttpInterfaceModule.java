@@ -1,6 +1,5 @@
 package org.odk.collect.android.http.mock;
 
-import org.odk.collect.android.http.HttpClientConnection;
 import org.odk.collect.android.http.HttpInterface;
 
 import javax.inject.Singleton;

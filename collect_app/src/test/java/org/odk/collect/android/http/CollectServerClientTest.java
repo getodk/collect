@@ -26,8 +26,8 @@ public class CollectServerClientTest {
     public void testGetXMLDocument() {
         DocumentFetchResult fetchResult = TestableCollectServerClient.getXmlDocument("http://testurl");
         Assert.assertNull(fetchResult.errorMessage);
-        Assert.assertEquals(fetchResult.responseCode,0);
-        Assert.assertEquals(fetchResult.isOpenRosaResponse,true);
+        Assert.assertEquals(fetchResult.responseCode, 0);
+        Assert.assertEquals(fetchResult.isOpenRosaResponse, true);
     }
 
     @Test
