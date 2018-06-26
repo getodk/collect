@@ -175,7 +175,7 @@ public class GeoShapeGoogleMapActivity extends CollectAbstractActivity implement
         layersButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                helper.showLayersDialog(GeoShapeGoogleMapActivity.this);
+                helper.showLayersDialog();
             }
         });
 
