@@ -129,7 +129,6 @@
     </rule>
 
     <rule ref="category/java/performance.xml">
-        <exclude name="AppendCharacterWithChar" />
         <exclude name="AvoidFileStream" />
         <exclude name="AvoidInstantiatingObjectsInLoops" />
         <exclude name="ConsecutiveAppendsShouldReuse" />
