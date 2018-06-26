@@ -272,7 +272,7 @@ public class GeoTraceGoogleMapActivity extends CollectAbstractActivity implement
         layersButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                helper.showLayersDialog(GeoTraceGoogleMapActivity.this);
+                helper.showLayersDialog();
             }
         });
 
