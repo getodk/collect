@@ -247,6 +247,7 @@ public class ShowQRCodeFragment extends Fragment {
         SharedPreferencesUtils.savePreferencesFromString(content, new ActionListener() {
             @Override
             public void onSuccess() {
+                Collect.getInstance().initProperties();
                 ToastUtils.showLongToast(Collect.getInstance().getString(R.string.successfully_imported_settings));
                 getActivity().finish();
                 final LocaleHelper localeHelper = new LocaleHelper();
