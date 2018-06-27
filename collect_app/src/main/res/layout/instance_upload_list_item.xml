@@ -21,7 +21,6 @@
             android:layout_height="wrap_content">
 
             <LinearLayout
-                android:id="@+id/list_item_holder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
