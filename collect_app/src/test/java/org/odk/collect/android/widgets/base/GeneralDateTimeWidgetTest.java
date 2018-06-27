@@ -11,7 +11,7 @@ import org.odk.collect.android.widgets.interfaces.Widget;
 public abstract class GeneralDateTimeWidgetTest<W extends Widget, A extends IAnswerData>
         extends QuestionWidgetTest<W, A> {
 
-    private DateTime lastDate = null;
+    private DateTime lastDate;
 
     protected DateTime getNextDateTime() {
         if (lastDate == null) {

@@ -22,7 +22,7 @@ public class SignatureWidgetTest extends FileWidgetTest<SignatureWidget> {
     @Mock
     File file;
 
-    private String fileName = null;
+    private String fileName;
 
     public SignatureWidgetTest() {
         super();

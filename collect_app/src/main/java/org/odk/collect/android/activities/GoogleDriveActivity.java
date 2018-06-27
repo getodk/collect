@@ -93,7 +93,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     private final Stack<String> folderIdStack = new Stack<>();
     private String alertMsg;
     private boolean alertShowing;
-    private String rootId = null;
+    private String rootId;
     private boolean myDrive;
     private FileArrayAdapter adapter;
     private RetrieveDriveFileContentsAsyncTask retrieveDriveFileContentsAsyncTask;

@@ -45,7 +45,7 @@ public class CaptureSelfieVideoActivity extends Activity {
     private Camera camera;
     private CameraPreview camPreview;
     private int cameraId;
-    private boolean recording = false;
+    private boolean recording;
     private MediaRecorder mediaRecorder;
     private String outputFile;
 

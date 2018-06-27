@@ -35,8 +35,8 @@ public class DeleteFormsTask extends AsyncTask<Long, Void, Integer> {
     private ContentResolver cr;
     private DeleteFormsListener dl;
 
-    private int successCount = 0;
-    private int toDeleteCount = 0;
+    private int successCount;
+    private int toDeleteCount;
 
     @Override
     protected Integer doInBackground(Long... params) {

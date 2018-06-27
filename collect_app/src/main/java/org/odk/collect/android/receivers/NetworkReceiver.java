@@ -38,7 +38,7 @@ import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUT
 public class NetworkReceiver extends BroadcastReceiver implements InstanceUploaderListener {
 
     // turning on wifi often gets two CONNECTED events. we only want to run one thread at a time
-    public static boolean running = false;
+    public static boolean running;
     InstanceServerUploader instanceServerUploader;
 
     InstanceGoogleSheetsUploader instanceGoogleSheetsUploader;

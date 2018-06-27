@@ -212,7 +212,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     private Animation inAnimation;
     private Animation outAnimation;
-    private View staleView = null;
+    private View staleView;
 
     private LinearLayout questionHolder;
     private View currentView;
@@ -226,7 +226,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private boolean beenSwiped;
 
     private final Object saveDialogLock = new Object();
-    private int viewCount = 0;
+    private int viewCount;
 
     private FormLoaderTask formLoaderTask;
     private SaveToDiskTask saveToDiskTask;
@@ -257,7 +257,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     @NonNull
     private ActivityAvailability activityAvailability = new ActivityAvailability(this);
 
-    private boolean shouldOverrideAnimations = false;
+    private boolean shouldOverrideAnimations;
 
     /**
      * Called when the activity is first created.
@@ -2454,7 +2454,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     }
 
-    private int animationCompletionSet = 0;
+    private int animationCompletionSet;
 
     private void afterAllAnimations() {
         if (staleView != null) {

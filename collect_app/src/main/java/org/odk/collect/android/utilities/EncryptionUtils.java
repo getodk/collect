@@ -110,9 +110,9 @@ public class EncryptionUtils {
         public final String base64RsaEncryptedSymmetricKey;
         public final SecretKeySpec symmetricKey;
         public final byte[] ivSeedArray;
-        private int ivCounter = 0;
+        private int ivCounter;
         public final StringBuilder elementSignatureSource = new StringBuilder();
-        private boolean isNotBouncyCastle = false;
+        private boolean isNotBouncyCastle;
 
         EncryptedFormInformation(String formId, String formVersion,
                                  InstanceMetadata instanceMetadata, PublicKey rsaPublicKey) {
