@@ -40,26 +40,48 @@ import timber.log.Timber;
 public class AudioButton extends AppCompatImageButton {
 
     private AudioHandler handler;
+    private MediaPlayer player;
+    private Bitmap bitmapPlay;
+    private Bitmap bitmapStop;
 
     public AudioButton(Context context) {
         super(context);
+        initView();
     }
 
     public AudioButton(Context context, AttributeSet attrs) {
         super(context, attrs);
+        initView();
+    }
+
+    private void initView() {
+        bitmapPlay = BitmapFactory.decodeResource(getResources(), android.R.drawable.ic_lock_silent_mode_off);
+        bitmapStop = BitmapFactory.decodeResource(getResources(), android.R.drawable.ic_media_pause);
+
+        resetBitmap();
     }
 
     public void init(FormIndex index, String selectionDesignator, String uri, MediaPlayer player) {
+        this.player = player;
         handler = new AudioHandler(index, selectionDesignator, uri, player);
-        Bitmap b =
-                BitmapFactory.decodeResource(
-                        getContext().getResources(),
-                        android.R.drawable.ic_lock_silent_mode_off);
-        setImageBitmap(b);
+    }
+
+    public void resetBitmap() {
+        setImageBitmap(bitmapPlay);
     }
 
     public void playAudio() {
         handler.playAudio(getContext());
+        setImageBitmap(bitmapStop);
+    }
+
+    public void onClick() {
+        if (player.isPlaying()) {
+            player.stop();
+            resetBitmap();
+        } else {
+            playAudio();
+        }
     }
 
     /**
