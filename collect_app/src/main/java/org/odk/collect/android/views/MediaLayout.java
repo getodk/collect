@@ -25,7 +25,6 @@ import android.net.Uri;
 import android.support.v7.widget.AppCompatImageButton;
 import android.util.DisplayMetrics;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -51,17 +50,11 @@ import butterknife.ButterKnife;
 import timber.log.Timber;
 
 /**
- * This layout is used anywhere we can have image/audio/video/text. TODO: It would probably be nice
- * to put this in a layout.xml file of some sort at some point.
+ * This layout is used anywhere we can have image/audio/video/text
  *
  * @author carlhartung
  */
-public class MediaLayout extends RelativeLayout implements OnClickListener {
-
-    private final MediaPlayer player;
-    private final Context context;
-    private final Bitmap bitmapPlay;
-    private final Bitmap bitmapStop;
+public class MediaLayout extends RelativeLayout implements View.OnClickListener {
 
     @BindView(R.id.audioButton)
     AudioButton audioButton;
@@ -86,33 +79,36 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
     private TextView viewText;
     private String videoURI;
     private AudioPlayListener audioPlayListener;
-    private int playTextColor;
+    private int playTextColor = Color.BLUE;
     private CharSequence originalText;
+    private String bigImageURI;
+    private MediaPlayer player;
 
-    public MediaLayout(Context c, MediaPlayer player) {
-        super(c);
-        context = c;
-        viewText = null;
-        index = null;
-        this.player = player;
-        audioPlayListener = null;
-        playTextColor = Color.BLUE;
-        bitmapPlay = BitmapFactory.decodeResource(getContext().getResources(),
-                android.R.drawable.ic_lock_silent_mode_off);
-        bitmapStop = BitmapFactory.decodeResource(getContext().getResources(),
-                android.R.drawable.ic_media_pause);
+    public MediaLayout(Context context) {
+        super(context);
 
         View.inflate(context, R.layout.media_layout, this);
         ButterKnife.bind(this);
     }
 
     public void playAudio() {
+        if (audioPlayListener != null) {
+            audioPlayListener.resetQuestionTextColor();
+            audioPlayListener.resetAudioButtonImage();
+        }
+
+        audioButton.onClick();
+
         // have to call toString() to remove the html formatting
         // (it's a spanned thing...)
         viewText.setText(viewText.getText().toString());
         viewText.setTextColor(playTextColor);
-        audioButton.playAudio();
-        audioButton.setImageBitmap(bitmapStop);
+
+        player.setOnCompletionListener(mediaPlayer -> {
+            resetTextFormatting();
+            mediaPlayer.reset();
+            audioButton.resetBitmap();
+        });
     }
 
     public void setPlayTextColor(int textColor) {
@@ -125,73 +121,71 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
      */
     public void resetTextFormatting() {
         // first set it to defaults
-        viewText.setTextColor(new ThemeUtils(context).getPrimaryTextColor());
+        viewText.setTextColor(new ThemeUtils(getContext()).getPrimaryTextColor());
         // then set the text to our original (brings back any html formatting)
         viewText.setText(originalText);
     }
 
     public void resetAudioButtonBitmap() {
-        audioButton.setImageBitmap(bitmapPlay);
+        audioButton.resetBitmap();
     }
 
     public void playVideo() {
-        if (videoURI != null) {
-            String videoFilename = "";
-            try {
-                videoFilename =
-                        ReferenceManager.instance().DeriveReference(videoURI).getLocalURI();
-            } catch (InvalidReferenceException e) {
-                Timber.e(e, "Invalid reference exception due to %s ", e.getMessage());
-            }
+        Collect.getInstance().getActivityLogger().logInstanceAction(this, "onClick",
+                "playVideoPrompt" + selectionDesignator, index);
 
-            File videoFile = new File(videoFilename);
-            if (!videoFile.exists()) {
-                // We should have a video clip, but the file doesn't exist.
-                String errorMsg =
-                        getContext().getString(R.string.file_missing, videoFilename);
-                Timber.d("File %s is missing", videoFilename);
-                ToastUtils.showLongToast(errorMsg);
-                return;
-            }
+        String videoFilename = "";
+        try {
+            videoFilename =
+                    ReferenceManager.instance().DeriveReference(videoURI).getLocalURI();
+        } catch (InvalidReferenceException e) {
+            Timber.e(e, "Invalid reference exception due to %s ", e.getMessage());
+        }
 
-            Intent i = new Intent("android.intent.action.VIEW");
-            i.setDataAndType(Uri.fromFile(videoFile), "video/*");
-            if (i.resolveActivity(getContext().getPackageManager()) != null) {
-                getContext().startActivity(i);
-            } else {
-                ToastUtils.showShortToast(getContext().getString(R.string.activity_not_found, getContext().getString(R.string.view_video)));
-            }
+        File videoFile = new File(videoFilename);
+        if (!videoFile.exists()) {
+            // We should have a video clip, but the file doesn't exist.
+            String errorMsg = getContext().getString(R.string.file_missing, videoFilename);
+            Timber.d("File %s is missing", videoFilename);
+            ToastUtils.showLongToast(errorMsg);
+            return;
+        }
+
+        Intent intent = new Intent("android.intent.action.VIEW");
+        intent.setDataAndType(Uri.fromFile(videoFile), "video/*");
+        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
+            getContext().startActivity(intent);
+        } else {
+            ToastUtils.showShortToast(getContext().getString(R.string.activity_not_found, getContext().getString(R.string.view_video)));
         }
     }
 
-    public void setAVT(FormIndex index, String selectionDesignator, TextView text, String audioURI,
-                       String imageURI, String videoURI,
-                       final String bigImageURI) {
-        this.selectionDesignator = selectionDesignator;
+    public void setAVT(FormIndex index, String selectionDesignator, TextView text,
+                       String audioURI, String imageURI, String videoURI,
+                       String bigImageURI, MediaPlayer player) {
         this.index = index;
+        this.selectionDesignator = selectionDesignator;
+        this.bigImageURI = bigImageURI;
+        this.player = player;
+        this.videoURI = videoURI;
+
         viewText = text;
         originalText = text.getText();
         viewText.setId(ViewIds.generateViewId());
-        this.videoURI = videoURI;
 
         // Setup audio button
         if (audioURI != null) {
             audioButton.setVisibility(VISIBLE);
-            audioButton.init(this.index, this.selectionDesignator, audioURI, player);
+            audioButton.init(index, selectionDesignator, audioURI, player);
             audioButton.setOnClickListener(this);
         }
 
         // Setup video button
         if (videoURI != null) {
             videoButton.setVisibility(VISIBLE);
-            Bitmap b = BitmapFactory.decodeResource(getContext().getResources(),
-                    android.R.drawable.ic_media_play);
+            Bitmap b = BitmapFactory.decodeResource(getResources(), android.R.drawable.ic_media_play);
             videoButton.setImageBitmap(b);
-            videoButton.setOnClickListener(view -> {
-                Collect.getInstance().getActivityLogger().logInstanceAction(this, "onClick",
-                        "playVideoPrompt" + this.selectionDesignator, this.index);
-                playVideo();
-            });
+            videoButton.setOnClickListener(this);
         }
 
         // Setup image view
@@ -201,45 +195,14 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                 String imageFilename = ReferenceManager.instance().DeriveReference(imageURI).getLocalURI();
                 final File imageFile = new File(imageFilename);
                 if (imageFile.exists()) {
-                    DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+                    DisplayMetrics metrics = getResources().getDisplayMetrics();
                     int screenWidth = metrics.widthPixels;
                     int screenHeight = metrics.heightPixels;
                     Bitmap b = FileUtils.getBitmapScaledToDisplay(imageFile, screenHeight, screenWidth);
                     if (b != null) {
                         imageView.setVisibility(VISIBLE);
                         imageView.setImageBitmap(b);
-                        imageView.setOnClickListener(view -> {
-                            if (bigImageURI != null) {
-                                Collect.getInstance().getActivityLogger().logInstanceAction(
-                                        this, "onClick",
-                                        "showImagePromptBigImage" + this.selectionDesignator,
-                                        this.index);
-
-                                try {
-                                    File bigImage = new File(ReferenceManager
-                                            .instance()
-                                            .DeriveReference(bigImageURI)
-                                            .getLocalURI());
-
-                                    Intent intent = new Intent("android.intent.action.VIEW");
-                                    intent.setDataAndType(Uri.fromFile(bigImage), "image/*");
-                                    getContext().startActivity(intent);
-                                } catch (InvalidReferenceException e) {
-                                    Timber.e(e, "Invalid image reference due to %s ", e.getMessage());
-                                } catch (ActivityNotFoundException e) {
-                                    Timber.d(e, "No Activity found to handle due to %s", e.getMessage());
-                                    ToastUtils.showShortToast(getContext().getString(R.string.activity_not_found,
-                                            getContext().getString(R.string.view_image)));
-                                }
-                            } else {
-                                if (viewText instanceof RadioButton) {
-                                    ((RadioButton) viewText).setChecked(true);
-                                } else if (viewText instanceof CheckBox) {
-                                    CheckBox checkbox = (CheckBox) viewText;
-                                    checkbox.setChecked(!checkbox.isChecked());
-                                }
-                            }
-                        });
+                        imageView.setOnClickListener(this);
                     } else {
                         // Loading the image failed, so it's likely a bad file.
                         errorMsg = getContext().getString(R.string.file_invalid, imageFile);
@@ -263,35 +226,55 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
         flContainer.addView(viewText);
     }
 
-    public void setTextcolor(int color) {
-        viewText.setTextColor(color);
-    }
-
     public TextView getView_Text() {
         return viewText;
     }
 
-    /**
-     * This is what gets called when the AudioButton gets clicked
-     */
     @Override
     public void onClick(View v) {
-        if (audioPlayListener != null) {
-            audioPlayListener.resetQuestionTextColor();
-            audioPlayListener.resetAudioButtonImage();
+        switch (v.getId()) {
+            case R.id.audioButton:
+                playAudio();
+                break;
+            case R.id.videoButton:
+                playVideo();
+                break;
+            case R.id.imageView:
+                openImage();
+                break;
         }
-        if (player.isPlaying()) {
-            player.stop();
-            audioButton.setImageBitmap(bitmapPlay);
+    }
+
+    private void openImage() {
+        if (bigImageURI != null) {
+            Collect.getInstance().getActivityLogger().logInstanceAction(
+                    this, "onClick",
+                    "showImagePromptBigImage" + selectionDesignator, index);
+
+            try {
+                File bigImage = new File(ReferenceManager
+                        .instance()
+                        .DeriveReference(bigImageURI)
+                        .getLocalURI());
+
+                Intent intent = new Intent("android.intent.action.VIEW");
+                intent.setDataAndType(Uri.fromFile(bigImage), "image/*");
+                getContext().startActivity(intent);
+            } catch (InvalidReferenceException e) {
+                Timber.e(e, "Invalid image reference due to %s ", e.getMessage());
+            } catch (ActivityNotFoundException e) {
+                Timber.d(e, "No Activity found to handle due to %s", e.getMessage());
+                ToastUtils.showShortToast(getContext().getString(R.string.activity_not_found,
+                        getContext().getString(R.string.view_image)));
+            }
         } else {
-            playAudio();
-            audioButton.setImageBitmap(bitmapStop);
+            if (viewText instanceof RadioButton) {
+                ((RadioButton) viewText).setChecked(true);
+            } else if (viewText instanceof CheckBox) {
+                CheckBox checkbox = (CheckBox) viewText;
+                checkbox.setChecked(!checkbox.isChecked());
+            }
         }
-        player.setOnCompletionListener(mediaPlayer -> {
-            resetTextFormatting();
-            mediaPlayer.reset();
-            audioButton.setImageBitmap(bitmapPlay);
-        });
     }
 
     public void setAudioListener(AudioPlayListener listener) {

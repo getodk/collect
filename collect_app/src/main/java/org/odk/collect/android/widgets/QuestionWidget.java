@@ -269,10 +269,10 @@ public abstract class QuestionWidget
         String bigImageURI = prompt.getSpecialFormQuestionText("big-image");
 
         // Create the layout for audio, image, text
-        MediaLayout questionMediaLayout = new MediaLayout(getContext(), getPlayer());
+        MediaLayout questionMediaLayout = new MediaLayout(getContext());
         questionMediaLayout.setId(ViewIds.generateViewId()); // assign random id
         questionMediaLayout.setAVT(prompt.getIndex(), "", questionText, audioURI, imageURI, videoURI,
-                bigImageURI);
+                bigImageURI, getPlayer());
         questionMediaLayout.setAudioListener(this);
 
         String playColorString = prompt.getFormElement().getAdditionalAttribute(null, "playColor");

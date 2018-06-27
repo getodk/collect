@@ -140,10 +140,9 @@ public abstract class SelectWidget extends QuestionWidget {
         String videoURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), "video");
         String bigImageURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), "big-image");
 
-        MediaLayout mediaLayout = new MediaLayout(getContext(), getPlayer());
+        MediaLayout mediaLayout = new MediaLayout(getContext());
         mediaLayout.setAVT(getFormEntryPrompt().getIndex(), "." + Integer.toString(index), textView, audioURI,
-                imageURI, videoURI, bigImageURI);
-
+                imageURI, videoURI, bigImageURI, getPlayer());
         mediaLayout.setAudioListener(this);
         mediaLayout.setPlayTextColor(getPlayColor());
         playList.add(mediaLayout);
