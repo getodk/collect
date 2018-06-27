@@ -6,7 +6,6 @@ import android.support.annotation.ColorInt;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import butterknife.BindView;
@@ -40,24 +39,6 @@ public class ExtendedPreferenceCategory extends PreferenceCategory {
         super(context, attrs, defStyle);
     }
 
-    @Override
-    protected View onCreateView(ViewGroup parent) {
-
-        View view = super.onCreateView(parent);
-        ButterKnife.bind(this, view);
-
-        setupColorStates();
-
-        if (isEnabled) {
-            title.setTextColor(enabledColor);
-        } else {
-            title.setTextColor(ContextCompat.getColor(getContext(), android.R.color.secondary_text_dark));
-        }
-
-        return view;
-    }
-
-
     /**
      * Set the color that is gonna be used for the enabled state.
      * This is necessary because we are pulling the current color of the control
@@ -67,6 +48,20 @@ public class ExtendedPreferenceCategory extends PreferenceCategory {
         if (!colorsInitialized) {
             enabledColor = title.getCurrentTextColor();
             colorsInitialized = true;
+        }
+    }
+
+    @Override
+    protected void onBindView(View view) {
+        super.onBindView(view);
+        ButterKnife.bind(this, view);
+
+        setupColorStates();
+
+        if (isEnabled) {
+            title.setTextColor(enabledColor);
+        } else {
+            title.setTextColor(ContextCompat.getColor(getContext(), android.R.color.secondary_text_dark));
         }
     }
 

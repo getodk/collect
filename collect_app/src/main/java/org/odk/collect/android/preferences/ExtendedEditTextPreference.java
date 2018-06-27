@@ -6,7 +6,6 @@ import android.support.annotation.ColorInt;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import butterknife.BindView;
@@ -46,25 +45,6 @@ public class ExtendedEditTextPreference extends EditTextPreference {
         super(context);
     }
 
-    @Override
-    protected View onCreateView(ViewGroup parent) {
-
-        View view = super.onCreateView(parent);
-        ButterKnife.bind(this, view);
-
-        setupColorStates();
-
-        if (isEnabled) {
-            title.setTextColor(enabledTitleColor);
-            summary.setTextColor(enabledSummaryColor);
-        } else {
-            title.setTextColor(disabledColor);
-            summary.setTextColor(disabledColor);
-        }
-
-        return view;
-    }
-
     /**
      * Sets the colors that are gonna be used for each state once.
      * This is necessary because we are pulling the current colors of the control
@@ -76,6 +56,22 @@ public class ExtendedEditTextPreference extends EditTextPreference {
             enabledSummaryColor = summary.getCurrentTextColor();
             disabledColor = ContextCompat.getColor(getContext(), android.R.color.secondary_text_dark);
             colorsInitialized = true;
+        }
+    }
+
+    @Override
+    protected void onBindView(View view) {
+        super.onBindView(view);
+        ButterKnife.bind(this, view);
+
+        setupColorStates();
+
+        if (isEnabled) {
+            title.setTextColor(enabledTitleColor);
+            summary.setTextColor(enabledSummaryColor);
+        } else {
+            title.setTextColor(disabledColor);
+            summary.setTextColor(disabledColor);
         }
     }
 

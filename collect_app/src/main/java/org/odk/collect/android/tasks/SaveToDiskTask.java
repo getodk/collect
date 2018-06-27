@@ -276,13 +276,9 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
 
         exportXmlFile(payload, instancePath);
 
-        try {
-            final ByteArrayPayload payloadSms = formController.getFilledInFormSMS();
-            // Write SMS to card
-            exportXmlFile(payloadSms, getSmsInstancePath(instancePath));
-        } catch (Exception e) {
-            Timber.e(e);
-        }
+        final ByteArrayPayload payloadSms = formController.getFilledInFormSMS();
+        // Write SMS to card
+        exportXmlFile(payloadSms, getSmsInstancePath(instancePath));
 
         // update the uri. We have exported the reloadable instance, so update status...
         // Since we saved a reloadable instance, it is flagged as re-openable so that if any error
