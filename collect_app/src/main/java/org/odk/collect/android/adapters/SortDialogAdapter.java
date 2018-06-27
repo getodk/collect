@@ -30,6 +30,8 @@ import org.odk.collect.android.listeners.RecyclerViewClickListener;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ThemeUtils;
 
+import timber.log.Timber;
+
 public class SortDialogAdapter extends RecyclerView.Adapter<SortDialogAdapter.ViewHolder> {
     private final RecyclerViewClickListener listener;
     private final int selectedSortingOrder;
@@ -56,12 +58,15 @@ public class SortDialogAdapter extends RecyclerView.Adapter<SortDialogAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         viewHolder.txtViewTitle.setText(sortList[position]);
-        viewHolder.imgViewIcon.setImageResource(ApplicationConstants.getSortLabelToIconMap().get(sortList[position]));
-        viewHolder.imgViewIcon.setImageDrawable(DrawableCompat.wrap(viewHolder.imgViewIcon.getDrawable()).mutate());
-
         int color = position == selectedSortingOrder ? themeUtils.getAccentColor() : themeUtils.getPrimaryTextColor();
         viewHolder.txtViewTitle.setTextColor(color);
-        DrawableCompat.setTintList(viewHolder.imgViewIcon.getDrawable(), position == selectedSortingOrder ? ColorStateList.valueOf(color) : null);
+        try {
+            viewHolder.imgViewIcon.setImageResource(ApplicationConstants.getSortLabelToIconMap().get(sortList[position]));
+            viewHolder.imgViewIcon.setImageDrawable(DrawableCompat.wrap(viewHolder.imgViewIcon.getDrawable()).mutate());
+            DrawableCompat.setTintList(viewHolder.imgViewIcon.getDrawable(), position == selectedSortingOrder ? ColorStateList.valueOf(color) : null);
+        } catch (NullPointerException e) {
+            Timber.i(e);
+        }
     }
 
     // Return the size of your itemsData (invoked by the layout manager)
@@ -92,10 +97,13 @@ public class SortDialogAdapter extends RecyclerView.Adapter<SortDialogAdapter.Vi
         public void updateItemColor(int selectedSortingOrder) {
             ViewHolder previousHolder = (ViewHolder) recyclerView.findViewHolderForAdapterPosition(selectedSortingOrder);
             previousHolder.txtViewTitle.setTextColor(themeUtils.getPrimaryTextColor());
-            DrawableCompat.setTintList(previousHolder.imgViewIcon.getDrawable(), null);
-
             txtViewTitle.setTextColor(themeUtils.getAccentColor());
-            DrawableCompat.setTint(imgViewIcon.getDrawable(), themeUtils.getAccentColor());
+            try {
+                DrawableCompat.setTintList(previousHolder.imgViewIcon.getDrawable(), null);
+                DrawableCompat.setTint(imgViewIcon.getDrawable(), themeUtils.getAccentColor());
+            } catch (NullPointerException e) {
+                Timber.i(e);
+            }
         }
     }
 }

@@ -171,7 +171,7 @@ public class EncryptionUtils {
         }
 
         public void appendElementSignatureSource(String value) {
-            elementSignatureSource.append(value).append("\n");
+            elementSignatureSource.append(value).append('\n');
         }
 
         public void appendFileSignatureSource(File file) {

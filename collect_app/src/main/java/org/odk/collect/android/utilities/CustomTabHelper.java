@@ -21,7 +21,6 @@ import java.util.List;
 /**
  * Created by sanjeev on 17/3/17.
  */
-
 public class CustomTabHelper {
     public static final String OPEN_URL = "url";
     private static final String CUSTOM_TAB_PACKAGE_NAME = "com.android.chrome";
@@ -44,12 +43,15 @@ public class CustomTabHelper {
                 CustomTabHelper.this.customTabsClient = customTabsClient;
                 CustomTabHelper.this.customTabsClient.warmup(0L);
                 customTabsSession = CustomTabHelper.this.customTabsClient.newSession(null);
-                customTabsSession.mayLaunchUrl(getNonNullUri(url), null, null);
+                if (customTabsSession != null) {
+                    customTabsSession.mayLaunchUrl(getNonNullUri(url), null, null);
+                }
             }
 
             @Override
             public void onServiceDisconnected(ComponentName name) {
                 customTabsClient = null;
+                customTabsSession = null;
             }
         };
         CustomTabsClient.bindCustomTabsService(context, CUSTOM_TAB_PACKAGE_NAME, serviceConnection);
@@ -61,7 +63,6 @@ public class CustomTabHelper {
      * http://stackoverflow.com/a/33281092/137744
      * https://medium.com/google-developers/best-practices-for-custom-tabs-5700e55143ee
      */
-
     private List<String> getPackageName(Context context) {
         // Get default VIEW intent handler that can view a web url.
         Intent activityIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.test-url.com"));

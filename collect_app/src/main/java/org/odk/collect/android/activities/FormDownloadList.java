@@ -127,8 +127,9 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         setContentView(R.layout.remote_file_manage_list);
         setTitle(getString(R.string.get_forms));
 
-        if (getIntent().getExtras() != null) {
-            displayOnlyUpdatedForms = (boolean) getIntent().getExtras().get(DISPLAY_ONLY_UPDATED_FORMS);
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null && bundle.containsKey(DISPLAY_ONLY_UPDATED_FORMS)) {
+            displayOnlyUpdatedForms = (boolean) bundle.get(DISPLAY_ONLY_UPDATED_FORMS);
         }
 
         alertMsg = getString(R.string.please_wait);

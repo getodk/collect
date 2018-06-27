@@ -194,7 +194,7 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
         layersButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                helper.showLayersDialog(GeoPointOsmMapActivity.this);
+                helper.showLayersDialog();
 
             }
         });
