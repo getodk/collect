@@ -133,9 +133,11 @@ public class ExternalSQLiteOpenHelper extends SQLiteOpenHelper {
 
             boolean sortColumnAlreadyPresent = false;
 
-            sb.append("CREATE TABLE ");
-            sb.append(tableName);
-            sb.append(" ( ");
+            sb
+                    .append("CREATE TABLE ")
+                    .append(tableName)
+                    .append(" ( ");
+
             for (int i = 0; i < headerRow.length; i++) {
                 String columnName = headerRow[i].trim();
                 if (columnName.length() == 0) {
