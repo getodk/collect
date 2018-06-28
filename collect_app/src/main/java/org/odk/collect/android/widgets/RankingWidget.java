@@ -20,10 +20,8 @@ import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.view.LayoutInflater;
-import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
@@ -34,7 +32,6 @@ import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.RankingListAdapter;
 import org.odk.collect.android.external.ExternalDataUtil;
-import org.odk.collect.android.listeners.DoubleClickListener;
 import org.odk.collect.android.utilities.RankingItemTouchHelperCallback;
 import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 
@@ -123,34 +120,27 @@ public class RankingWidget extends QuestionWidget {
     private void setUpLayout(List<SelectChoice> items) {
         rankingListAdapter = new RankingListAdapter(items, getFormEntryPrompt());
 
-        LayoutInflater li = LayoutInflater.from(getContext());
-        widgetLayout = (FrameLayout) li.inflate(R.layout.ranking_widget, null);
-
-        RecyclerView recyclerView = widgetLayout.findViewById(R.id.ranking_recycler_view);
+        RecyclerView recyclerView = new RecyclerView(getContext());
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(rankingListAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setVisibility(nullValue ? GONE : VISIBLE);
 
         ItemTouchHelper.Callback callback = new RankingItemTouchHelperCallback(rankingListAdapter);
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
-        TextView nullValueMessage = widgetLayout.findViewById(R.id.ranking_null_value_message);
-        recyclerView.setAlpha(nullValue ? 0.2f : 1);
-        nullValueMessage.setVisibility(nullValue && !items.isEmpty() ? VISIBLE : GONE);
-
-        nullValueMessage.setOnClickListener(new DoubleClickListener() {
-            @Override
-            public void onSingleClick(View v) {
-            }
-
-            @Override
-            public void onDoubleClick(View v) {
-                nullValue = false;
-                removeView(widgetLayout);
-                setUpLayout(items);
-            }
+        Button startRankingButton = getSimpleButton(getContext().getString(R.string.start_ranking));
+        startRankingButton.setVisibility(nullValue ? VISIBLE : GONE);
+        startRankingButton.setOnClickListener(view -> {
+            nullValue = false;
+            recyclerView.setVisibility(VISIBLE);
+            startRankingButton.setVisibility(GONE);
         });
+
+        widgetLayout = new FrameLayout(getContext());
+        widgetLayout.addView(startRankingButton);
+        widgetLayout.addView(recyclerView);
 
         addAnswerView(widgetLayout);
         SpacesInUnderlyingValuesWarning
