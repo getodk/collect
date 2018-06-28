@@ -18,7 +18,7 @@ public class LocationClients {
     }
 
     @Nullable
-    private static LocationClient testClient = null;
+    private static LocationClient testClient;
 
     /**
      * Checks and returns a {@link LocationClient} based on whether or not Google Play Services

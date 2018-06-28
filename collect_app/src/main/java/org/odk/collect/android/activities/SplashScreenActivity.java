@@ -192,7 +192,7 @@ public class SplashScreenActivity extends Activity {
 
         // create a thread that counts up to the timeout
         Thread t = new Thread() {
-            int count = 0;
+            int count;
 
             @Override
             public void run() {

@@ -136,7 +136,6 @@
         <exclude name="InefficientStringBuffering" />
         <exclude name="InsufficientStringBufferDeclaration" />
         <exclude name="OptimizableToArrayCall" />
-        <exclude name="RedundantFieldInitializer" />
         <exclude name="SimplifyStartsWith" />
         <exclude name="TooFewBranchesForASwitchStatement" />
         <exclude name="UnnecessaryWrapperObjectCreation" />

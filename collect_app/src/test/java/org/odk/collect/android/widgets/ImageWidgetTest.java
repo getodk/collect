@@ -22,7 +22,7 @@ public class ImageWidgetTest extends FileWidgetTest<ImageWidget> {
     @Mock
     File file;
 
-    private String fileName = null;
+    private String fileName;
 
     public ImageWidgetTest() {
         super();

@@ -68,7 +68,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
     private ImageView imageView;
     private TextView missingImage;
 
-    private String videoURI = null;
+    private String videoURI;
     private final MediaPlayer player;
     private AudioPlayListener audioPlayListener;
     private int playTextColor;
