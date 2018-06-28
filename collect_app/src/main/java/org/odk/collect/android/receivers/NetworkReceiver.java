@@ -234,15 +234,15 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         notificationManager.notify(1328974928, builder.build());
     }
 
-    private String getContentText(HashMap<String, String> result) {
+    private String getContentText(Map<String, String> result) {
         return allFormsDownloadedSuccessfully(result)
                 ? Collect.getInstance().getString(R.string.success)
                 : Collect.getInstance().getString(R.string.failures);
     }
 
-    private boolean allFormsDownloadedSuccessfully(HashMap<String, String> result) {
+    private boolean allFormsDownloadedSuccessfully(Map<String, String> result) {
         for (Map.Entry<String, String> item : result.entrySet()) {
-            if (!item.getValue().equals(InstanceUploaderUtils.DEFAULT_AGGREGATE_SUCCESSFUL_TEXT)) {
+            if (!item.getValue().equals(InstanceUploaderUtils.DEFAULT_SUCCESSFUL_TEXT)) {
                 return false;
             }
         }

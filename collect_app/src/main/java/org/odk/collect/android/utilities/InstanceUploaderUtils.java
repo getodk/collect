@@ -26,7 +26,7 @@ import java.util.HashMap;
 
 public class InstanceUploaderUtils {
 
-    public static final String DEFAULT_AGGREGATE_SUCCESSFUL_TEXT = "full submission upload was successful!";
+    public static final String DEFAULT_SUCCESSFUL_TEXT = "full submission upload was successful!";
 
     private InstanceUploaderUtils() {
     }
@@ -58,7 +58,7 @@ public class InstanceUploaderUtils {
     }
 
     private static String localizeDefaultAggregateSuccessfulText(String text) {
-        if (text.equals(DEFAULT_AGGREGATE_SUCCESSFUL_TEXT)) {
+        if (text.equals(DEFAULT_SUCCESSFUL_TEXT)) {
             text = Collect.getInstance().getString(R.string.success);
         }
         return text;
