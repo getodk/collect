@@ -49,12 +49,7 @@ public class StringWidget extends QuestionWidget {
     boolean readOnly;
     private EditText answerText;
 
-    public StringWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride) {
-        this(context, prompt, readOnlyOverride, true);
-    }
-
-    protected StringWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride,
-                           boolean derived) {
+    protected StringWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride) {
         super(context, prompt);
 
         answerText = new EditText(context);

@@ -39,8 +39,7 @@ public class OsmMBTileModuleProvider extends MapTileFileStorageProviderBase {
 
     protected OsmMBTileSource tileSource;
 
-    public OsmMBTileModuleProvider(IRegisterReceiver receiverRegistrar,
-            File file, OsmMBTileSource tileSource) {
+    public OsmMBTileModuleProvider(IRegisterReceiver receiverRegistrar, OsmMBTileSource tileSource) {
 
         // Call the super constructor
         super(receiverRegistrar,
