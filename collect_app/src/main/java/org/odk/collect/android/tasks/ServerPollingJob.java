@@ -46,6 +46,7 @@ import org.odk.collect.android.utilities.IconUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.odk.collect.android.activities.FormDownloadList.DISPLAY_ONLY_UPDATED_FORMS;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOMATIC_UPDATE;
@@ -95,7 +96,7 @@ public class ServerPollingJob extends Job {
                 if (!newDetectedForms.isEmpty()) {
                     if (GeneralSharedPreferences.getInstance().getBoolean(KEY_AUTOMATIC_UPDATE, false)) {
                         final HashMap<FormDetails, String> result = new FormDownloader().downloadForms(newDetectedForms);
-                        informAboutNewDownloadedForms(Collect.getInstance().getString(R.string.forms_downloaded), FormDownloadList.getDownloadResultMessage(result));
+                        informAboutNewDownloadedForms(Collect.getInstance().getString(R.string.download_forms_result), result);
                     } else {
                         for (FormDetails formDetails : newDetectedForms) {
                             String manifestFileHash = formDetails.getManifestFileHash() != null ? formDetails.getManifestFileHash() : "";
@@ -163,15 +164,16 @@ public class ServerPollingJob extends Job {
         }
     }
 
-    private void informAboutNewDownloadedForms(String title, String message) {
+    private void informAboutNewDownloadedForms(String title, HashMap<FormDetails, String> result) {
         Intent intent = new Intent(Collect.getInstance(), NotificationActivity.class);
         intent.putExtra(NotificationActivity.NOTIFICATION_TITLE, title);
-        intent.putExtra(NotificationActivity.NOTIFICATION_MESSAGE, message);
+        intent.putExtra(NotificationActivity.NOTIFICATION_MESSAGE, FormDownloadList.getDownloadResultMessage(result));
         PendingIntent contentIntent = PendingIntent.getActivity(getContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext())
                 .setSmallIcon(IconUtils.getNotificationAppIcon())
-                .setContentTitle(getContext().getString(R.string.new_form_versions_downloaded))
+                .setContentTitle(getContext().getString(R.string.odk_auto_download_notification_title))
+                .setContentText(getContentText(result))
                 .setAutoCancel(true)
                 .setContentIntent(contentIntent);
 
@@ -202,5 +204,20 @@ public class ServerPollingJob extends Job {
                     .build()
                     .schedule();
         }
+    }
+
+    private String getContentText(HashMap<FormDetails, String> result) {
+        return allFormsDownloadedSuccessfully(result)
+                ? Collect.getInstance().getString(R.string.success)
+                : Collect.getInstance().getString(R.string.failures);
+    }
+
+    private boolean allFormsDownloadedSuccessfully(HashMap<FormDetails, String> result) {
+        for (Map.Entry<FormDetails, String> item : result.entrySet()) {
+            if (!item.getValue().equals(Collect.getInstance().getString(R.string.success))) {
+                return false;
+            }
+        }
+        return true;
     }
 }
