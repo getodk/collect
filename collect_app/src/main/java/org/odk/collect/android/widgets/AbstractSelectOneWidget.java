@@ -116,7 +116,7 @@ public abstract class AbstractSelectOneWidget extends SelectTextWidget
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (isChecked) {
             for (RadioButton button : buttons) {
-                if (button.isChecked() && !(buttonView == button)) {
+                if (button.isChecked() && buttonView != button) {
                     button.setChecked(false);
                     clearNextLevelsOfCascadingSelect();
                 }

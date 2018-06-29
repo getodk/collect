@@ -71,7 +71,6 @@
         <exclude name="ExcessiveClassLength" />
         <exclude name="GodClass" />
         <exclude name="LawOfDemeter" />
-        <exclude name="LogicInversion" />
         <exclude name="LoosePackageCoupling" />
         <exclude name="NcssCount" />
         <exclude name="NPathComplexity" />
