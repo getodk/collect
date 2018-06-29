@@ -24,10 +24,6 @@ public class ImageWebViewWidgetTest extends FileWidgetTest<ImageWebViewWidget> {
 
     private String fileName;
 
-    public ImageWebViewWidgetTest() {
-        super();
-    }
-
     @NonNull
     @Override
     public ImageWebViewWidget createWidget() {
