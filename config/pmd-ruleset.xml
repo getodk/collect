@@ -81,7 +81,6 @@
         <exclude name="SignatureDeclareThrowsException" />
         <exclude name="SimplifiedTernary" />
         <exclude name="SimplifyConditional" />
-        <exclude name="SimplifyBooleanReturns" />
         <exclude name="SingularField" />
         <exclude name="SwitchDensity" />
         <exclude name="TooManyFields" />

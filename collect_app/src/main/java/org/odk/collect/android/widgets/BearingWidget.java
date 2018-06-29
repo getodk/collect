@@ -137,11 +137,7 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
             isMagneticFieldSensorAvailable = true;
         }
 
-        if (!isAccelerometerSensorAvailable || !isMagneticFieldSensorAvailable) {
-            return false;
-        }
-
-        return true;
+        return isAccelerometerSensorAvailable && isMagneticFieldSensorAvailable;
     }
 
     private EditText getEditText() {
