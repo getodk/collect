@@ -137,7 +137,6 @@
         <exclude name="OptimizableToArrayCall" />
         <exclude name="SimplifyStartsWith" />
         <exclude name="TooFewBranchesForASwitchStatement" />
-        <exclude name="UnnecessaryWrapperObjectCreation" />
         <exclude name="UseStringBufferForStringAppends" />
     </rule>
 </ruleset>
