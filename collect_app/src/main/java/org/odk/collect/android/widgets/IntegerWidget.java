@@ -81,8 +81,6 @@ public class IntegerWidget extends StringWidget {
             answerText.setText(String.format(Locale.US, "%d", i));
             Selection.setSelection(answerText.getText(), answerText.getText().toString().length());
         }
-
-        setupChangeListener();
     }
 
     private Integer getIntegerAnswerValue() {

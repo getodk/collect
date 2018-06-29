@@ -78,10 +78,7 @@ public class StringNumberWidget extends StringWidget {
             answerTextField.setText(s);
             Selection.setSelection(answerTextField.getText(), answerTextField.getText().toString().length());
         }
-
-        setupChangeListener();
     }
-
 
     @Override
     public IAnswerData getAnswer() {

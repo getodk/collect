@@ -93,8 +93,6 @@ public class DecimalWidget extends StringWidget {
             setFocusable(false);
             setClickable(false);
         }
-
-        setupChangeListener();
     }
 
     private Double getDoubleAnswerValue() {

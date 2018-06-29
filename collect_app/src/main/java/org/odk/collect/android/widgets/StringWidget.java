@@ -51,7 +51,6 @@ public class StringWidget extends QuestionWidget {
 
     public StringWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride) {
         this(context, prompt, readOnlyOverride, true);
-        setupChangeListener();
     }
 
     protected StringWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride,
@@ -113,32 +112,6 @@ public class StringWidget extends QuestionWidget {
         }
 
         addAnswerView(answerText);
-    }
-
-    protected void setupChangeListener() {
-        answerText.addTextChangedListener(new TextWatcher() {
-            private String oldText = "";
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (!s.toString().equals(oldText)) {
-                    Collect.getInstance().getActivityLogger()
-                            .logInstanceAction(this, "answerTextChanged", s.toString(),
-                                    getFormEntryPrompt().getIndex());
-                }
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count,
-                                          int after) {
-                oldText = s.toString();
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before,
-                                      int count) {
-            }
-        });
     }
 
     @Override
