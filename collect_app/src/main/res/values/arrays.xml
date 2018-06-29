@@ -124,8 +124,8 @@ the specific language governing permissions and limitations under the License. -
         <item>30</item>
     </string-array>
     <string-array name="time_scale" translatable="false">
-        <item>Seconds</item>
-        <item>Minutes</item>
+        <item>@string/seconds</item>
+        <item>@string/minutes</item>
     </string-array>
     <string-array name="autosend_selector_entries">
         <item>@string/off</item>

@@ -292,7 +292,7 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
         Set<String> keys = result.keySet();
         String message;
 
-        if (keys.size() == 0) {
+        if (keys.isEmpty()) {
             if (instanceGoogleSheetsUploader.isAuthFailed()) {
                 message = getString(R.string.google_auth_io_exception_msg);
                 instanceGoogleSheetsUploader.setAuthFailedToFalse();

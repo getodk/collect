@@ -16,7 +16,7 @@ import timber.log.Timber;
  */
 
 public class ThousandsSeparatorTextWatcher implements TextWatcher {
-    private EditText editText;
+    private final EditText editText;
     private static String thousandSeparator;
     private int cursorPosition;
 

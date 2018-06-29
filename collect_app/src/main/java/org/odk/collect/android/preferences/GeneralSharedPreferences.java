@@ -29,8 +29,8 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PERIODIC_FO
 
 public class GeneralSharedPreferences {
 
-    private static GeneralSharedPreferences instance = null;
-    private android.content.SharedPreferences sharedPreferences;
+    private static GeneralSharedPreferences instance;
+    private final android.content.SharedPreferences sharedPreferences;
     private android.content.SharedPreferences.Editor editor;
 
     private GeneralSharedPreferences() {

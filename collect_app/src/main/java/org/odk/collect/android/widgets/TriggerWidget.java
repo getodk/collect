@@ -40,9 +40,9 @@ public class TriggerWidget extends QuestionWidget {
 
     public static final String OK_TEXT = "OK";
 
-    private AppCompatCheckBox triggerButton;
-    private TextView stringAnswer;
-    private FormEntryPrompt prompt;
+    private final AppCompatCheckBox triggerButton;
+    private final TextView stringAnswer;
+    private final FormEntryPrompt prompt;
 
     public TriggerWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);

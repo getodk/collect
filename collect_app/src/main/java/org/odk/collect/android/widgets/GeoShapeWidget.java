@@ -47,8 +47,8 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryWidget {
     public static final String GOOGLE_MAP_KEY = "google_maps";
     public SharedPreferences sharedPreferences;
     public String mapSDK;
-    private Button createShapeButton;
-    private TextView answerDisplay;
+    private final Button createShapeButton;
+    private final TextView answerDisplay;
 
     public GeoShapeWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);

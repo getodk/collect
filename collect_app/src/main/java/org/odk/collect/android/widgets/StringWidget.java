@@ -46,7 +46,7 @@ import timber.log.Timber;
 @SuppressLint("ViewConstructor")
 public class StringWidget extends QuestionWidget {
     private static final String ROWS = "rows";
-    boolean readOnly = false;
+    boolean readOnly;
     private EditText answerText;
 
     public StringWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride) {

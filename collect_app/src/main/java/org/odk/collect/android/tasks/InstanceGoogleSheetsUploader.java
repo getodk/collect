@@ -42,16 +42,16 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.exception.BadUrlException;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
-import org.odk.collect.android.utilities.UrlUtils;
-import org.odk.collect.android.utilities.gdrive.DriveHelper;
-import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
-import org.odk.collect.android.utilities.gdrive.SheetsHelper;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.UrlUtils;
+import org.odk.collect.android.utilities.gdrive.DriveHelper;
+import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
+import org.odk.collect.android.utilities.gdrive.SheetsHelper;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -128,13 +128,13 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                 String[] selectionArgs = new String[high - low];
                 for (int i = 0; i < (high - low); i++) {
                     if (i > 0) {
-                        selectionBuf.append(",");
+                        selectionBuf.append(',');
                     }
-                    selectionBuf.append("?");
+                    selectionBuf.append('?');
                     selectionArgs[i] = values[i + low].toString();
                 }
 
-                selectionBuf.append(")");
+                selectionBuf.append(')');
 
                 outcome.messagesByInstanceId.putAll(uploadInstances(selectionBuf.toString(), selectionArgs, low, values.length));
                 counter++;

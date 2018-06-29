@@ -36,8 +36,8 @@ public class DeleteInstancesTask extends AsyncTask<Long, Integer, Integer> {
     private ContentResolver contentResolver;
     private DeleteInstancesListener deleteInstancesListener;
 
-    private int successCount = 0;
-    private int toDeleteCount = 0;
+    private int successCount;
+    private int toDeleteCount;
 
     @Override
     protected Integer doInBackground(Long... params) {

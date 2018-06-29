@@ -40,6 +40,7 @@ import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ViewIds;
+import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 
 import java.io.File;
 import java.util.List;
@@ -195,6 +196,8 @@ public class LabelWidget extends QuestionWidget {
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         params.addRule(RelativeLayout.RIGHT_OF, center.getId());
         addView(buttonLayout, params);
+
+        SpacesInUnderlyingValuesWarning.forQuestionWidget(this).renderWarningIfNecessary(items);
     }
 
 

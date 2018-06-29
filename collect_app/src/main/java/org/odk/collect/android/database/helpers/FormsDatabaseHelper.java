@@ -90,7 +90,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
         if (success) {
             Timber.i("Upgrading database from version " + oldVersion + " to " + newVersion + " completed with success.");
         } else {
-            Timber.i("Upgrading database from version " + oldVersion + " to " + newVersion + " failed.");
+            Timber.e("Upgrading database from version " + oldVersion + " to " + newVersion + " failed.");
         }
     }
 
@@ -112,7 +112,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
         if (success) {
             Timber.i("Downgrading database completed with success.");
         } else {
-            Timber.i("Downgrading database from version " + oldVersion + " to " + newVersion + " failed.");
+            Timber.e("Downgrading database from version " + oldVersion + " to " + newVersion + " failed.");
         }
     }
 

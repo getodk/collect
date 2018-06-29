@@ -49,7 +49,7 @@ public class InstanceProvider extends ContentProvider {
     private static final int INSTANCES = 1;
     private static final int INSTANCE_ID = 2;
 
-    private static final UriMatcher sUriMatcher;
+    private static final UriMatcher URI_MATCHER;
 
     private InstancesDatabaseHelper databaseHelper;
 
@@ -91,14 +91,14 @@ public class InstanceProvider extends ContentProvider {
 
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         qb.setTables(INSTANCES_TABLE_NAME);
+        qb.setProjectionMap(sInstancesProjectionMap);
+        qb.setStrict(true);
 
-        switch (sUriMatcher.match(uri)) {
+        switch (URI_MATCHER.match(uri)) {
             case INSTANCES:
-                qb.setProjectionMap(sInstancesProjectionMap);
                 break;
 
             case INSTANCE_ID:
-                qb.setProjectionMap(sInstancesProjectionMap);
                 qb.appendWhere(InstanceColumns._ID + "=" + uri.getPathSegments().get(1));
                 break;
 
@@ -120,7 +120,7 @@ public class InstanceProvider extends ContentProvider {
 
     @Override
     public String getType(@NonNull Uri uri) {
-        switch (sUriMatcher.match(uri)) {
+        switch (URI_MATCHER.match(uri)) {
             case INSTANCES:
                 return InstanceColumns.CONTENT_TYPE;
 
@@ -135,7 +135,7 @@ public class InstanceProvider extends ContentProvider {
     @Override
     public Uri insert(@NonNull Uri uri, ContentValues initialValues) {
         // Validate the requested uri
-        if (sUriMatcher.match(uri) != INSTANCES) {
+        if (URI_MATCHER.match(uri) != INSTANCES) {
             throw new IllegalArgumentException("Unknown URI " + uri);
         }
 
@@ -252,7 +252,7 @@ public class InstanceProvider extends ContentProvider {
         if (instancesDatabaseHelper != null) {
             SQLiteDatabase db = instancesDatabaseHelper.getWritableDatabase();
 
-            switch (sUriMatcher.match(uri)) {
+            switch (URI_MATCHER.match(uri)) {
                 case INSTANCES:
                     Cursor del = null;
                     try {
@@ -308,11 +308,21 @@ public class InstanceProvider extends ContentProvider {
                         cv.put(InstanceColumns.DELETED_DATE, System.currentTimeMillis());
                         count = Collect.getInstance().getContentResolver().update(uri, cv, null, null);
                     } else {
+                        String[] newWhereArgs;
+                        if (whereArgs == null || whereArgs.length == 0) {
+                            newWhereArgs = new String[] {instanceId};
+                        } else {
+                            newWhereArgs = new String[(whereArgs.length + 1)];
+                            newWhereArgs[0] = instanceId;
+                            System.arraycopy(whereArgs, 0, newWhereArgs, 1, whereArgs.length);
+                        }
+
                         count =
                                 db.delete(INSTANCES_TABLE_NAME,
-                                        InstanceColumns._ID + "=" + instanceId
-                                                + (!TextUtils.isEmpty(where) ? " AND (" + where + ')' : ""),
-                                        whereArgs);
+                                        InstanceColumns._ID
+                                                + "=?"
+                                                + (!TextUtils.isEmpty(where) ? " AND ("
+                                                + where + ')' : ""), newWhereArgs);
                     }
                     break;
 
@@ -344,7 +354,7 @@ public class InstanceProvider extends ContentProvider {
             }
 
             String status;
-            switch (sUriMatcher.match(uri)) {
+            switch (URI_MATCHER.match(uri)) {
                 case INSTANCES:
                     if (values.containsKey(InstanceColumns.STATUS)) {
                         status = values.getAsString(InstanceColumns.STATUS);
@@ -372,11 +382,22 @@ public class InstanceProvider extends ContentProvider {
                         }
                     }
 
+                    String[] newWhereArgs;
+                    if (whereArgs == null || whereArgs.length == 0) {
+                        newWhereArgs = new String[] {instanceId};
+                    } else {
+                        newWhereArgs = new String[(whereArgs.length + 1)];
+                        newWhereArgs[0] = instanceId;
+                        System.arraycopy(whereArgs, 0, newWhereArgs, 1, whereArgs.length);
+                    }
+
                     count =
-                            db.update(INSTANCES_TABLE_NAME, values,
-                                    InstanceColumns._ID + "=" + instanceId
-                                            + (!TextUtils.isEmpty(where) ? " AND (" + where + ')' : ""),
-                                    whereArgs);
+                            db.update(INSTANCES_TABLE_NAME,
+                                    values,
+                                    InstanceColumns._ID
+                                            + "=?"
+                                            + (!TextUtils.isEmpty(where) ? " AND ("
+                                            + where + ')' : ""), newWhereArgs);
                     break;
 
                 default:
@@ -390,9 +411,9 @@ public class InstanceProvider extends ContentProvider {
     }
 
     static {
-        sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-        sUriMatcher.addURI(InstanceProviderAPI.AUTHORITY, "instances", INSTANCES);
-        sUriMatcher.addURI(InstanceProviderAPI.AUTHORITY, "instances/#", INSTANCE_ID);
+        URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
+        URI_MATCHER.addURI(InstanceProviderAPI.AUTHORITY, "instances", INSTANCES);
+        URI_MATCHER.addURI(InstanceProviderAPI.AUTHORITY, "instances/#", INSTANCE_ID);
 
         sInstancesProjectionMap = new HashMap<>();
         sInstancesProjectionMap.put(InstanceColumns._ID, InstanceColumns._ID);

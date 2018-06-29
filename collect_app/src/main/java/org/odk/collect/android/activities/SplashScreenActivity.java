@@ -49,7 +49,7 @@ import static org.odk.collect.android.utilities.PermissionUtils.requestStoragePe
 
 public class SplashScreenActivity extends Activity {
 
-    private static final int mSplashTimeout = 2000; // milliseconds
+    private static final int SPLASH_TIMEOUT = 2000; // milliseconds
     private static final boolean EXIT = true;
 
     private int imageMaxWidth;
@@ -192,13 +192,13 @@ public class SplashScreenActivity extends Activity {
 
         // create a thread that counts up to the timeout
         Thread t = new Thread() {
-            int count = 0;
+            int count;
 
             @Override
             public void run() {
                 try {
                     super.run();
-                    while (count < mSplashTimeout) {
+                    while (count < SPLASH_TIMEOUT) {
                         sleep(100);
                         count += 100;
                     }

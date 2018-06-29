@@ -83,7 +83,7 @@ public class ShowQRCodeFragment extends Fragment {
 
     @BindView(R.id.ivQRcode)
     ImageView ivQRCode;
-    @BindView(R.id.progressBar)
+    @BindView(R.id.circularProgressBar)
     ProgressBar progressBar;
     @BindView(R.id.tvPasswordWarning)
     TextView tvPasswordWarning;

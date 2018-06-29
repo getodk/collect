@@ -36,7 +36,7 @@ public class VideoWidgetTest extends FileWidgetTest<VideoWidget> {
     @Mock
     File file;
 
-    private String destinationName = null;
+    private String destinationName;
 
     public VideoWidgetTest() {
         super();

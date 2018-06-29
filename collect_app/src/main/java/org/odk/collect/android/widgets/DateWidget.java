@@ -96,7 +96,7 @@ public class DateWidget extends AbstractDateWidget implements DatePickerDialog.O
     }
 
     private class FixedDatePickerDialog extends DatePickerDialog {
-        private String dialogTitle = getContext().getString(R.string.select_date);
+        private final String dialogTitle = getContext().getString(R.string.select_date);
 
         FixedDatePickerDialog(Context context, int theme, OnDateSetListener listener) {
             super(context, theme, listener, date.getYear(), date.getMonthOfYear() - 1, date.getDayOfMonth());
