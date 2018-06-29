@@ -83,12 +83,20 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
     private CharSequence originalText;
     private String bigImageURI;
     private MediaPlayer player;
+    private ReferenceManager referenceManager = ReferenceManager.instance();
 
     public MediaLayout(Context context) {
         super(context);
 
         View.inflate(context, R.layout.media_layout, this);
         ButterKnife.bind(this);
+    }
+
+    /**
+     * For stubbing during unit testing
+     */
+    public void setReferenceManager(ReferenceManager referenceManager) {
+        this.referenceManager = referenceManager;
     }
 
     public void playAudio() {
@@ -136,8 +144,7 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
 
         String videoFilename = "";
         try {
-            videoFilename =
-                    ReferenceManager.instance().DeriveReference(videoURI).getLocalURI();
+            videoFilename = referenceManager.DeriveReference(videoURI).getLocalURI();
         } catch (InvalidReferenceException e) {
             Timber.e(e, "Invalid reference exception due to %s ", e.getMessage());
         }
@@ -192,7 +199,7 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
         String errorMsg = null;
         if (imageURI != null) {
             try {
-                String imageFilename = ReferenceManager.instance().DeriveReference(imageURI).getLocalURI();
+                String imageFilename = referenceManager.DeriveReference(imageURI).getLocalURI();
                 final File imageFile = new File(imageFilename);
                 if (imageFile.exists()) {
                     DisplayMetrics metrics = getResources().getDisplayMetrics();
@@ -252,11 +259,7 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
                     "showImagePromptBigImage" + selectionDesignator, index);
 
             try {
-                File bigImage = new File(ReferenceManager
-                        .instance()
-                        .DeriveReference(bigImageURI)
-                        .getLocalURI());
-
+                File bigImage = new File(referenceManager.DeriveReference(bigImageURI).getLocalURI());
                 Intent intent = new Intent("android.intent.action.VIEW");
                 intent.setDataAndType(Uri.fromFile(bigImage), "image/*");
                 getContext().startActivity(intent);
