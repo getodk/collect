@@ -43,7 +43,6 @@
         <exclude name="DefaultPackage" />
         <exclude name="EmptyMethodInAbstractClassShouldBeAbstract" />
         <exclude name="FieldDeclarationsShouldBeAtStartOfClass" />
-        <exclude name="IdenticalCatchBranches" />
         <exclude name="LongVariable" />
         <exclude name="LocalVariableCouldBeFinal" />
         <exclude name="MIsLeadingVariableName" />
