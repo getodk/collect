@@ -885,37 +885,43 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     private void saveChosenImage(Uri selectedImage) {
         // Copy file to sdcard
-        String instanceFolder1 = getFormController().getInstanceFile().getParent();
-        String destImagePath = instanceFolder1 + File.separator + System.currentTimeMillis() + ".jpg";
+        File instanceFile = getFormController().getInstanceFile();
+        if (instanceFile != null) {
+            String instanceFolder1 = instanceFile.getParent();
+            String destImagePath = instanceFolder1 + File.separator + System.currentTimeMillis() + ".jpg";
 
-        File chosenImage;
-        try {
-            chosenImage = MediaUtils.getFileFromUri(this, selectedImage, Images.Media.DATA);
-            if (chosenImage != null) {
-                final File newImage = new File(destImagePath);
-                FileUtils.copyFile(chosenImage, newImage);
-                ImageConverter.execute(newImage.getPath(), getWidgetWaitingForBinaryData(), this);
+            File chosenImage;
+            try {
+                chosenImage = MediaUtils.getFileFromUri(this, selectedImage, Images.Media.DATA);
+                if (chosenImage != null) {
+                    final File newImage = new File(destImagePath);
+                    FileUtils.copyFile(chosenImage, newImage);
+                    ImageConverter.execute(newImage.getPath(), getWidgetWaitingForBinaryData(), this);
+                    runOnUiThread(() -> {
+                        dismissDialog(SAVING_IMAGE_DIALOG);
+                        if (getCurrentViewIfODKView() != null) {
+                            getCurrentViewIfODKView().setBinaryData(newImage);
+                        }
+                        saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+                        refreshCurrentView();
+                    });
+                } else {
+                    runOnUiThread(() -> {
+                        dismissDialog(SAVING_IMAGE_DIALOG);
+                        Timber.e("Could not receive chosen image");
+                        ToastUtils.showShortToastInMiddle(R.string.error_occured);
+                    });
+                }
+            } catch (GDriveConnectionException e) {
                 runOnUiThread(() -> {
                     dismissDialog(SAVING_IMAGE_DIALOG);
-                    if (getCurrentViewIfODKView() != null) {
-                        getCurrentViewIfODKView().setBinaryData(newImage);
-                    }
-                    saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                    refreshCurrentView();
-                });
-            } else {
-                runOnUiThread(() -> {
-                    dismissDialog(SAVING_IMAGE_DIALOG);
-                    Timber.e("Could not receive chosen image");
-                    ToastUtils.showShortToastInMiddle(R.string.error_occured);
+                    Timber.e("Could not receive chosen image due to connection problem");
+                    ToastUtils.showLongToastInMiddle(R.string.gdrive_connection_exception);
                 });
             }
-        } catch (GDriveConnectionException e) {
-            runOnUiThread(() -> {
-                dismissDialog(SAVING_IMAGE_DIALOG);
-                Timber.e("Could not receive chosen image due to connection problem");
-                ToastUtils.showLongToastInMiddle(R.string.gdrive_connection_exception);
-            });
+        } else {
+            ToastUtils.showLongToast(R.string.image_not_saved);
+            Timber.w(getString(R.string.image_not_saved));
         }
     }
 
