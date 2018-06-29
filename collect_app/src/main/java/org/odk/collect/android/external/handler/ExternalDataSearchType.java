@@ -56,7 +56,14 @@ enum ExternalDataSearchType {
         }
     },
 
-    IN("in") {      // smap
+    IN("in") {              // smap
+        @Override
+        protected String getSingleLikeArgument(String queriedValue) {
+            return queriedValue;
+        }
+    },
+
+    NOT_IN("not in") {      // smap
         @Override
         protected String getSingleLikeArgument(String queriedValue) {
             return queriedValue;

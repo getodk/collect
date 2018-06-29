@@ -39,6 +39,7 @@ import java.util.List;
 import java.util.Set;
 
 import static org.odk.collect.android.external.handler.ExternalDataSearchType.IN;
+import static org.odk.collect.android.external.handler.ExternalDataSearchType.NOT_IN;
 
 /**
  * Author: Smap Consulting
@@ -249,6 +250,16 @@ public class ExternalDataHandlerSearch extends ExternalDataHandlerBase {
         StringBuilder sb = new StringBuilder();
         if(type.equals(IN) && queriedColumns.size() > 0) {    // smap
             sb.append(queriedColumns.get(0)).append(" in (");
+            int idx = 0;
+            for (String queriedValue : queriedValues) {
+                if (idx++ > 0) {
+                    sb.append(", ");
+                }
+                sb.append("?");
+            }
+            sb.append(")");
+        } else if(type.equals(NOT_IN) && queriedColumns.size() > 0) {    // smap
+            sb.append(queriedColumns.get(0)).append(" not in (");
             int idx = 0;
             for (String queriedValue : queriedValues) {
                 if (idx++ > 0) {

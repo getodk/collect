@@ -279,7 +279,7 @@ public final class ExternalDataUtil {
         List<String> values = new ArrayList<String>();
 
         // Only split values for "in" type otherwise values that cntain spaces will not work
-        if(searchType.equals("in")) {
+        if(searchType.equals("in") || searchType.equals("not in")) {
             List<String> commaSplitParts = splitTrimmed(valueString, COLUMN_SEPARATOR,
                     FALLBACK_COLUMN_SEPARATOR);
 
