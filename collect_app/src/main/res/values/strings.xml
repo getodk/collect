@@ -589,7 +589,7 @@
     <string name="storage_runtime_permission_denied_title">Storage permissions</string>
     <string name="storage_runtime_permission_denied_desc">Without these permissions Collect can\'t access your forms or save answers. Reopen the app when you are ready to grant them.</string>
     <string name="camera_runtime_permission_denied_title">Camera permission</string>
-    <string name="camera_runtime_permission_denied_desc">Without this permission Collect can\'t access camera. Please try again when you are ready to grant it.</string>
+    <string name="camera_runtime_permission_denied_desc">Without this permission Collect can\'t access the camera. Please try again when you are ready to grant it.</string>
     <string name="form_update_category">Form update</string>
     <string name="periodic_form_updates_check_title">Periodic form updates check</string>
     <string name="never">Never</string>
