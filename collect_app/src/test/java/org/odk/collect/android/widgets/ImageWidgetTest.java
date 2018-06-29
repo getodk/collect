@@ -24,10 +24,6 @@ public class ImageWidgetTest extends FileWidgetTest<ImageWidget> {
 
     private String fileName;
 
-    public ImageWidgetTest() {
-        super();
-    }
-
     @NonNull
     @Override
     public ImageWidget createWidget() {

@@ -24,10 +24,6 @@ public class SignatureWidgetTest extends FileWidgetTest<SignatureWidget> {
 
     private String fileName;
 
-    public SignatureWidgetTest() {
-        super();
-    }
-
     @NonNull
     @Override
     public SignatureWidget createWidget() {

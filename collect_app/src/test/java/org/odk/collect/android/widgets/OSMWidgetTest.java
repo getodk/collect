@@ -35,10 +35,6 @@ public class OSMWidgetTest extends BinaryWidgetTest<OSMWidget, StringData> {
     QuestionDef questionDef;
     private String fileName;
 
-    public OSMWidgetTest() {
-        super();
-    }
-
     @NonNull
     @Override
     public OSMWidget createWidget() {

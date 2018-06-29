@@ -38,10 +38,6 @@ public class VideoWidgetTest extends FileWidgetTest<VideoWidget> {
 
     private String destinationName;
 
-    public VideoWidgetTest() {
-        super();
-    }
-
     @NonNull
     @Override
     public VideoWidget createWidget() {
