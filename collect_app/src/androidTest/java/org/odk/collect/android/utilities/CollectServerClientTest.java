@@ -3,6 +3,7 @@ package org.odk.collect.android.utilities;
 import org.junit.Before;
 import org.junit.Test;
 import org.odk.collect.android.http.CollectServerClient;
+import org.odk.collect.android.http.HttpClientConnection;
 import org.odk.collect.android.test.MockedServerTest;
 import okhttp3.mockwebserver.MockResponse;
 
@@ -11,10 +12,14 @@ import static org.junit.Assert.assertNull;
 import static org.odk.collect.android.test.TestUtils.assertMatches;
 
 public class CollectServerClientTest extends MockedServerTest {
+
+    private CollectServerClient collectServerClient;
+
     @Before
     public void setUp() throws Exception {
         // server hangs without a response queued:
         server.enqueue(new MockResponse());
+        collectServerClient = new CollectServerClient(new HttpClientConnection());
     }
 
     //    @Test
@@ -31,7 +36,7 @@ public class CollectServerClientTest extends MockedServerTest {
     @Test
     public void getXmlDocument_request_shouldSupplyHeader_UserAgent() throws Exception {
         // when
-        CollectServerClient.getXmlDocument(url("/list-forms"));
+        collectServerClient.getXmlDocument(url("/list-forms"));
 
         // then
         String header = nextRequest().getHeader("User-Agent");
@@ -42,7 +47,7 @@ public class CollectServerClientTest extends MockedServerTest {
     @Test
     public void getXmlDocument_request_shouldSupplyHeader_X_OpenRosa_Version() throws Exception {
         // when
-        CollectServerClient.getXmlDocument(url("/list-forms"));
+        collectServerClient.getXmlDocument(url("/list-forms"));
 
         // then
         assertEquals("1.0",
@@ -52,7 +57,7 @@ public class CollectServerClientTest extends MockedServerTest {
     @Test
     public void getXmlDocument_request_shouldSupplyHeader_AcceptEncoding_gzip() throws Exception {
         // when
-        CollectServerClient.getXmlDocument(url("/list-forms"));
+        collectServerClient.getXmlDocument(url("/list-forms"));
 
         // then
         assertEquals("gzip",
@@ -62,7 +67,7 @@ public class CollectServerClientTest extends MockedServerTest {
     @Test
     public void getXmlDocument_request_shouldNotSupplyHeader_Authorization_forHttpRequest() throws Exception {
         // when
-        CollectServerClient.getXmlDocument(url("/list-forms"));
+        collectServerClient.getXmlDocument(url("/list-forms"));
 
         // then
         assertNull(nextRequest().getHeader("Authorization"));
@@ -71,7 +76,7 @@ public class CollectServerClientTest extends MockedServerTest {
     @Test
     public void getXmlDocument_request_shouldReportInvalidUrl() throws Exception {
         // when
-        DocumentFetchResult res = CollectServerClient.getXmlDocument("NOT_A_URL");
+        DocumentFetchResult res = collectServerClient.getXmlDocument("NOT_A_URL");
 
         // then
         assertEquals(0, res.responseCode);
@@ -81,7 +86,7 @@ public class CollectServerClientTest extends MockedServerTest {
     @Test
     public void getXmlDocument_request_shouldReportInvalidHost() throws Exception {
         // when
-        DocumentFetchResult res = CollectServerClient.getXmlDocument("file:/some/path");
+        DocumentFetchResult res = collectServerClient.getXmlDocument("file:/some/path");
 
         // then
         assertEquals(0, res.responseCode);
