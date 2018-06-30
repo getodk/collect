@@ -109,9 +109,9 @@ public final class ActivityLogger {
 
     private final boolean loggingEnabled;
     private final String deviceId;
-    private DatabaseHelper databaseHelper = null;
-    private SQLiteDatabase database = null;
-    private boolean isOpen = false;
+    private DatabaseHelper databaseHelper;
+    private SQLiteDatabase database;
+    private boolean isOpen;
     // We buffer scroll actions to make sure there aren't too many pauses
     // during scrolling.  This list is flushed every time any other type of
     // action is logged.
@@ -165,8 +165,8 @@ public final class ActivityLogger {
 
     // cached to improve logging performance...
     // only access these through getXPath(FormIndex index);
-    private FormIndex cachedXPathIndex = null;
-    private String cachedXPathValue = null;
+    private FormIndex cachedXPathIndex;
+    private String cachedXPathValue;
 
     // DO NOT CALL THIS OUTSIDE OF synchronized(scrollActions) !!!!
     // DO NOT CALL THIS OUTSIDE OF synchronized(scrollActions) !!!!

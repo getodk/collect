@@ -73,7 +73,7 @@ public class MapHelper {
     private static final String OPENMAP_STAMEN_TERRAIN = "openmap_stamen_terrain";
     private static final String OPENMAP_CARTODB_POSITRON = "openmap_cartodb_positron";
     private static final String OPENMAP_CARTODB_DARKMATTER = "openmap_cartodb_darkmatter";
-    private int selectedLayer = 0;
+    private int selectedLayer;
 
     public static String[] geofileTypes = new String[]{".mbtiles", ".kml", ".kmz"};
     private static final String SLASH = File.separator;

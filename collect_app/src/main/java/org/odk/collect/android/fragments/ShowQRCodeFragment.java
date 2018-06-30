@@ -229,10 +229,7 @@ public class ShowQRCodeFragment extends Fragment {
                 } catch (FormatException | NotFoundException | ChecksumException e) {
                     Timber.i(e);
                     ToastUtils.showLongToast("QR Code not found in the selected image");
-                } catch (IOException e) {
-                    Timber.e(e);
-                    ToastUtils.showLongToast("Unable to read the settings");
-                } catch (DataFormatException e) {
+                } catch (DataFormatException | IOException e) {
                     Timber.e(e);
                     ToastUtils.showShortToast(getString(R.string.invalid_qrcode));
                 }

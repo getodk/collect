@@ -275,16 +275,16 @@ public class InstancesDao {
             while (j < selectionArgs.length) {
                 selectionArgs[j] = ids.get(
                         counter * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER + j);
-                selection.append("?");
+                selection.append('?');
 
                 if (j != selectionArgs.length - 1) {
-                    selection.append(",");
+                    selection.append(',');
                 }
                 j++;
             }
             counter++;
             count -= selectionArgs.length;
-            selection.append(")");
+            selection.append(')');
             Collect.getInstance().getContentResolver()
                     .delete(InstanceProviderAPI.InstanceColumns.CONTENT_URI,
                             selection.toString(), selectionArgs);

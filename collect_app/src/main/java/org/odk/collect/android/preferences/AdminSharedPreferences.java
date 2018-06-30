@@ -24,7 +24,7 @@ import static org.odk.collect.android.preferences.AdminPreferencesFragment.ADMIN
 
 public class AdminSharedPreferences {
 
-    private static AdminSharedPreferences instance = null;
+    private static AdminSharedPreferences instance;
     private final android.content.SharedPreferences sharedPreferences;
 
     private AdminSharedPreferences() {

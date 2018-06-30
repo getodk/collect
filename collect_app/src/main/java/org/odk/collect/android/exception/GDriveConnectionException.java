@@ -17,8 +17,4 @@
 package org.odk.collect.android.exception;
 
 public class GDriveConnectionException extends Exception {
-
-    public GDriveConnectionException() {
-        super();
-    }
 }
