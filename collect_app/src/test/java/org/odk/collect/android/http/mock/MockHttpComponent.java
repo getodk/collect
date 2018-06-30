@@ -1,7 +1,5 @@
 package org.odk.collect.android.http.mock;
 
-import org.odk.collect.android.http.CollectServerClientTest;
-
 import javax.inject.Singleton;
 
 import dagger.Component;

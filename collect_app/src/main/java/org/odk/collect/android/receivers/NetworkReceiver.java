@@ -11,7 +11,6 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.NotificationActivity;
@@ -51,7 +50,6 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
 
     public NetworkReceiver() {
         DaggerHttpComponent.builder().build().inject(this);
-        Log.d("INJECT", "NetworkReceiver: " + collectServerClient.toString());
     }
 
     @Override

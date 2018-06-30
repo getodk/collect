@@ -28,7 +28,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.content.res.AppCompatResources;
 import android.text.InputFilter;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -81,8 +80,6 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         super.onCreate(savedInstanceState);
 
         DaggerHttpComponent.builder().build().inject(this);
-
-        Log.d("INJECT", "ServerPreferencesFragment: " + collectServerClient.toString());
     }
 
     public void addAggregatePreferences() {

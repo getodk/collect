@@ -2,7 +2,6 @@ package org.odk.collect.android.utilities;
 
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.http.injection.DaggerHttpComponent;
@@ -18,7 +17,6 @@ public class WebCredentialsUtils {
 
     public WebCredentialsUtils() {
         DaggerHttpComponent.builder().build().inject(this);
-        Log.d("INJECT", "WebCredentialsUtils: " + collectServerClient.toString());
     }
 
     public void setWebCredentialsFromPreferences() {

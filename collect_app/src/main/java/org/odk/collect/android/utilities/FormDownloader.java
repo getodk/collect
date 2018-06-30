@@ -19,7 +19,6 @@ package org.odk.collect.android.utilities;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
-import android.util.Log;
 
 import org.javarosa.xform.parse.XFormParser;
 import org.kxml2.kdom.Element;
@@ -61,7 +60,6 @@ public class FormDownloader {
 
     public FormDownloader() {
         DaggerHttpComponent.builder().build().inject(this);
-        Log.d("INJECT", "FormDownloader: " + collectServerClient.toString());
     }
 
     public void setDownloaderListener(FormDownloaderListener sl) {

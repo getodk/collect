@@ -16,7 +16,6 @@ package org.odk.collect.android.http;
 
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import org.kxml2.io.KXmlParser;
 import org.kxml2.kdom.Document;
@@ -53,7 +52,6 @@ public class CollectServerClient {
     @Inject
     public CollectServerClient(HttpInterface httpInterface) {
         this.httpInterface = httpInterface;
-        Log.d("INJECT", "CollectServerClient: " + httpInterface.toString());
     }
 
     /**

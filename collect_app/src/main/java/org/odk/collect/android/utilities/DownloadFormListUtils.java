@@ -18,7 +18,6 @@ package org.odk.collect.android.utilities;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import org.javarosa.xform.parse.XFormParser;
 import org.kxml2.kdom.Element;
@@ -58,8 +57,6 @@ public class DownloadFormListUtils {
 
     public DownloadFormListUtils() {
         DaggerHttpComponent.builder().build().inject(this);
-        Log.d("INJECT", "DownloadFormListUtils: " + collectServerClient.toString());
-
     }
 
     public HashMap<String, FormDetails> downloadFormList(boolean alwaysCheckMediaFiles) {
