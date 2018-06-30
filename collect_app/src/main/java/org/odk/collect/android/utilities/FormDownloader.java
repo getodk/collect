@@ -19,6 +19,7 @@ package org.odk.collect.android.utilities;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
+import android.util.Log;
 
 import org.javarosa.xform.parse.XFormParser;
 import org.kxml2.kdom.Element;
@@ -26,6 +27,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.http.CollectServerClient;
+import org.odk.collect.android.http.injection.DaggerHttpComponent;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.logic.MediaFile;
@@ -42,6 +44,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import timber.log.Timber;
 
 public class FormDownloader {
@@ -52,6 +56,13 @@ public class FormDownloader {
     private FormDownloaderListener stateListener;
 
     private FormsDao formsDao;
+
+    @Inject CollectServerClient collectServerClient;
+
+    public FormDownloader() {
+        DaggerHttpComponent.builder().build().inject(this);
+        Log.d("INJECT", "FormDownloader: " + collectServerClient.toString());
+    }
 
     public void setDownloaderListener(FormDownloaderListener sl) {
         synchronized (this) {
@@ -395,7 +406,7 @@ public class FormDownloader {
                 OutputStream os = null;
 
                 try {
-                    is = CollectServerClient.getHttpInputStream(downloadUrl, null).getInputStream();
+                    is = collectServerClient.getHttpInputStream(downloadUrl, null).getInputStream();
                     os = new FileOutputStream(tempFile);
 
                     byte[] buf = new byte[4096];
@@ -525,7 +536,7 @@ public class FormDownloader {
 
         List<MediaFile> files = new ArrayList<MediaFile>();
 
-        DocumentFetchResult result = CollectServerClient.getXmlDocument(fd.getManifestUrl());
+        DocumentFetchResult result = collectServerClient.getXmlDocument(fd.getManifestUrl());
 
         if (result.errorMessage != null) {
             return result.errorMessage;

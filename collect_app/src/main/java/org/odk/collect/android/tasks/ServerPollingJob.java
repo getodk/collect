@@ -38,10 +38,10 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.DownloadFormListUtils;
 import org.odk.collect.android.utilities.FormDownloader;
 import org.odk.collect.android.utilities.IconUtils;
+import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -72,13 +72,14 @@ public class ServerPollingJob extends Job {
             GeneralSharedPreferences.getInstance().save(POLL_SERVER_IMMEDIATELY_AFTER_RECEIVING_NETWORK, true);
             return Result.FAILURE;
         } else {
+            DownloadFormListUtils downloadFormListTask = new DownloadFormListUtils();
             GeneralSharedPreferences.getInstance().reset(POLL_SERVER_IMMEDIATELY_AFTER_RECEIVING_NETWORK);
-            HashMap<String, FormDetails> formList = DownloadFormListUtils.downloadFormList(true);
+            HashMap<String, FormDetails> formList = downloadFormListTask.downloadFormList(true);
 
             if (formList != null && !formList.containsKey(DL_ERROR_MSG)) {
                 if (formList.containsKey(DL_AUTH_REQUIRED)) {
-                    AuthDialogUtility.setWebCredentialsFromPreferences();
-                    formList = DownloadFormListUtils.downloadFormList(true);
+                    new WebCredentialsUtils().setWebCredentialsFromPreferences();
+                    formList = downloadFormListTask.downloadFormList(true);
 
                     if (formList == null || formList.containsKey(DL_AUTH_REQUIRED) || formList.containsKey(DL_ERROR_MSG)) {
                         return Result.FAILURE;

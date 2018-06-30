@@ -19,10 +19,12 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.util.Log;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
-import org.odk.collect.android.http.DaggerHttpComponent;
+import org.odk.collect.android.http.injection.DaggerHttpComponent;
 import org.odk.collect.android.http.HttpInterface;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.PreferenceKeys;
@@ -64,6 +66,7 @@ public class InstanceServerUploader extends InstanceUploader {
 
     public InstanceServerUploader() {
         DaggerHttpComponent.builder().build().inject(this);
+        Log.d("INJECT", "InstanceServerUploader: " + httpInterface.toString());
     }
 
     private boolean processChunk(int low, int high, Outcome outcome, Long... values) {

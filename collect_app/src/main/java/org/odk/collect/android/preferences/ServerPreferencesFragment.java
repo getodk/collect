@@ -20,12 +20,15 @@ import android.accounts.AccountManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.content.res.AppCompatResources;
 import android.text.InputFilter;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -38,16 +41,19 @@ import com.google.gson.reflect.TypeToken;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.http.CollectServerClient;
+import org.odk.collect.android.http.injection.DaggerHttpComponent;
 import org.odk.collect.android.preferences.filters.ControlCharacterFilter;
 import org.odk.collect.android.preferences.filters.WhitespaceFilter;
-import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.Validator;
+import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import static android.app.Activity.RESULT_OK;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FORMLIST_URL;
@@ -68,6 +74,16 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     private Preference selectedGoogleAccountPreference;
     private GoogleAccountsManager accountsManager;
 
+    @Inject CollectServerClient collectServerClient;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        DaggerHttpComponent.builder().build().inject(this);
+
+        Log.d("INJECT", "ServerPreferencesFragment: " + collectServerClient.toString());
+    }
 
     public void addAggregatePreferences() {
         addPreferencesFromResource(R.xml.aggregate_preferences);
@@ -206,7 +222,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         super.onPause();
 
         if (credentialsHaveChanged) {
-            AuthDialogUtility.setWebCredentialsFromPreferences();
+            new WebCredentialsUtils().setWebCredentialsFromPreferences();
         }
     }
 
@@ -326,8 +342,8 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         String server = (String) GeneralSharedPreferences
                 .getInstance().get(PreferenceKeys.KEY_SERVER_URL);
         Uri u = Uri.parse(server);
-        CollectServerClient.clearHostCredentials(u.getHost());
-        CollectServerClient.clearCookieStore();
+        collectServerClient.clearHostCredentials(u.getHost());
+        collectServerClient.clearCookieStore();
     }
 
     protected void setDefaultAggregatePaths() {

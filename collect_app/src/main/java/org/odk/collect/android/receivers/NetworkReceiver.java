@@ -11,6 +11,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.NotificationActivity;
@@ -18,6 +19,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.http.CollectServerClient;
+import org.odk.collect.android.http.injection.DaggerHttpComponent;
 import org.odk.collect.android.tasks.ServerPollingJob;
 import org.odk.collect.android.utilities.IconUtils;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
@@ -33,6 +35,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
+import javax.inject.Inject;
+
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_SEND;
 
 public class NetworkReceiver extends BroadcastReceiver implements InstanceUploaderListener {
@@ -42,6 +46,13 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
     InstanceServerUploader instanceServerUploader;
 
     InstanceGoogleSheetsUploader instanceGoogleSheetsUploader;
+
+    @Inject CollectServerClient collectServerClient;
+
+    public NetworkReceiver() {
+        DaggerHttpComponent.builder().build().inject(this);
+        Log.d("INJECT", "NetworkReceiver: " + collectServerClient.toString());
+    }
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -148,7 +159,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                 String url = server + settings.get(PreferenceKeys.KEY_FORMLIST_URL);
 
                 Uri u = Uri.parse(url);
-                CollectServerClient.addCredentials(storedUsername, storedPassword, u.getHost());
+                collectServerClient.addCredentials(storedUsername, storedPassword, u.getHost());
 
                 instanceServerUploader = new InstanceServerUploader();
                 instanceServerUploader.setUploaderListener(this);

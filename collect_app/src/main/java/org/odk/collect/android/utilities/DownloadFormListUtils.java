@@ -18,6 +18,7 @@ package org.odk.collect.android.utilities;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import org.javarosa.xform.parse.XFormParser;
 import org.kxml2.kdom.Element;
@@ -25,6 +26,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.http.CollectServerClient;
+import org.odk.collect.android.http.injection.DaggerHttpComponent;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.logic.ManifestFile;
 import org.odk.collect.android.logic.MediaFile;
@@ -34,6 +36,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import timber.log.Timber;
 
@@ -50,10 +54,15 @@ public class DownloadFormListUtils {
         return e.getNamespace().equalsIgnoreCase(NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_LIST);
     }
 
-    private DownloadFormListUtils() {
+    @Inject CollectServerClient collectServerClient;
+
+    public DownloadFormListUtils() {
+        DaggerHttpComponent.builder().build().inject(this);
+        Log.d("INJECT", "DownloadFormListUtils: " + collectServerClient.toString());
+
     }
 
-    public static HashMap<String, FormDetails> downloadFormList(boolean alwaysCheckMediaFiles) {
+    public HashMap<String, FormDetails> downloadFormList(boolean alwaysCheckMediaFiles) {
         SharedPreferences settings =
                 PreferenceManager.getDefaultSharedPreferences(
                         Collect.getInstance().getBaseContext());
@@ -70,7 +79,7 @@ public class DownloadFormListUtils {
         // <formname, details>
         HashMap<String, FormDetails> formList = new HashMap<String, FormDetails>();
 
-        DocumentFetchResult result = CollectServerClient.getXmlDocument(downloadListUrl);
+        DocumentFetchResult result = collectServerClient.getXmlDocument(downloadListUrl);
 
         // If we can't get the document, return the error, cancel the task
         if (result.errorMessage != null) {
@@ -281,12 +290,12 @@ public class DownloadFormListUtils {
         return new FormsDao().getFormsCursorForFormId(formId).getCount() > 0;
     }
 
-    private static ManifestFile getManifestFile(String manifestUrl) {
+    private ManifestFile getManifestFile(String manifestUrl) {
         if (manifestUrl == null) {
             return null;
         }
 
-        DocumentFetchResult result = CollectServerClient.getXmlDocument(manifestUrl);
+        DocumentFetchResult result = collectServerClient.getXmlDocument(manifestUrl);
 
         if (result.errorMessage != null) {
             return null;

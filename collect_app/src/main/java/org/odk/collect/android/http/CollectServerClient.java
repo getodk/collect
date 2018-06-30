@@ -16,6 +16,8 @@ package org.odk.collect.android.http;
 
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.util.Log;
+
 import org.kxml2.io.KXmlParser;
 import org.kxml2.kdom.Document;
 import org.odk.collect.android.utilities.DocumentFetchResult;
@@ -46,18 +48,12 @@ public class CollectServerClient {
 
     protected static CollectServerClient instance;
 
+    protected HttpInterface httpInterface;
+
     @Inject
-    HttpInterface httpConnection;
-
-    protected CollectServerClient() {
-        DaggerHttpComponent.builder().build().inject(this);
-    }
-
-    protected static synchronized CollectServerClient getInstance() {
-        if (instance == null) {
-            instance = new CollectServerClient();
-        }
-        return instance;
+    public CollectServerClient(HttpInterface httpInterface) {
+        this.httpInterface = httpInterface;
+        Log.d("INJECT", "CollectServerClient: " + httpInterface.toString());
     }
 
     /**
@@ -65,15 +61,15 @@ public class CollectServerClient {
      *
      * @param host host to clear the credentials
      */
-    public static void clearHostCredentials(String host) {
-        getInstance().httpConnection.clearHostCredentials(host);
+    public void clearHostCredentials(String host) {
+        httpInterface.clearHostCredentials(host);
     }
 
     /**
      * Clears the cookie store
      */
-    public static void clearCookieStore() {
-        getInstance().httpConnection.clearCookieStore();
+    public void clearCookieStore() {
+        httpInterface.clearCookieStore();
     }
 
     /**
@@ -83,16 +79,16 @@ public class CollectServerClient {
      * @param password - The password
      * @param host - The host to add credentials to
      */
-    public static void addCredentials(String username, String password,
+    public void addCredentials(String username, String password,
                                       String host) {
-        getInstance().httpConnection.addCredentials(username, password, host);
+        httpInterface.addCredentials(username, password, host);
     }
 
     /**
      * Common method for returning a parsed xml document given a url and the
      * http context and client objects involved in the web connection.
      */
-    public static DocumentFetchResult getXmlDocument(String urlString) {
+    public DocumentFetchResult getXmlDocument(String urlString) {
 
         // parse response
         Document doc;
@@ -157,7 +153,7 @@ public class CollectServerClient {
      * @return HttpInputStreamResult - An object containing the Stream, Hash and Headers
      * @throws Exception - Can throw a multitude of Exceptions, such as MalformedURLException or IOException
      */
-    public static @NonNull
+    public @NonNull
     HttpInputStreamResult getHttpInputStream(@NonNull String downloadUrl, final String contentType) throws Exception {
         URI uri;
         try {
@@ -173,7 +169,7 @@ public class CollectServerClient {
             throw new Exception("Invalid server URL (no hostname): " + downloadUrl);
         }
 
-        return getInstance().httpConnection.getHttpInputStream(uri, contentType);
+        return httpInterface.getHttpInputStream(uri, contentType);
     }
 
 
