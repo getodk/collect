@@ -239,13 +239,15 @@ public final class ExternalDataUtil {
      * @return A {@link java.util.LinkedHashMap} that contains the SQL columns as keys, and the CSV
      * columns as values
      */
-    public static LinkedHashMap<String, String> createMapWithDisplayingColumns(String valueColumn,
+    public static void createMapWithDisplayingColumns(      // smap  change signature
+            LinkedHashMap<String, String> selectColumnMap,
+            List<String> columnsToFetch,
+            String valueColumn,
             String displayColumns) {
         valueColumn = valueColumn.trim();
 
-        LinkedHashMap<String, String> columns = new LinkedHashMap<String, String>();
-
-        columns.put(toSafeColumnName(valueColumn), valueColumn);
+        selectColumnMap.put(toSafeColumnName(valueColumn), valueColumn);    // smap
+        columnsToFetch.add(toSafeColumnName(valueColumn));
 
         if (displayColumns != null && displayColumns.trim().length() > 0) {
             displayColumns = displayColumns.trim();
@@ -254,11 +256,11 @@ public final class ExternalDataUtil {
                     FALLBACK_COLUMN_SEPARATOR);
 
             for (String commaSplitPart : commaSplitParts) {
-                columns.put(toSafeColumnName(commaSplitPart), commaSplitPart);
+                selectColumnMap.put(toSafeColumnName(commaSplitPart), commaSplitPart);    // smap
+                columnsToFetch.add(toSafeColumnName(commaSplitPart));
             }
         }
 
-        return columns;
     }
 
     public static List<String> createListOfColumns(String columnString) {
@@ -278,7 +280,7 @@ public final class ExternalDataUtil {
     public static List<String> createListOfValues(String valueString, String searchType) {
         List<String> values = new ArrayList<String>();
 
-        // Only split values for "in" type otherwise values that cntain spaces will not work
+        // Only split values for "in" and "not in" type otherwise values that contain spaces will not work
         if(searchType.equals("in") || searchType.equals("not in")) {
             List<String> commaSplitParts = splitTrimmed(valueString, COLUMN_SEPARATOR,
                     FALLBACK_COLUMN_SEPARATOR);

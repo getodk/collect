@@ -144,17 +144,6 @@ public class SmapRemoteDataHandlerSearch implements IFunctionHandler {
         Collect app = Collect.getInstance();
         String dataSetName = XPathFuncExpr.toString(args[0]);
 
-        LinkedHashMap<String, String> selectColumnMap =
-                ExternalDataUtil.createMapWithDisplayingColumns(getValueColumn(),
-                        getDisplayColumns());
-
-        List<String> columnsToFetch = new ArrayList<String>(selectColumnMap.keySet());
-        String safeImageColumn = null;
-        if (getImageColumn() != null && getImageColumn().trim().length() > 0) {
-            safeImageColumn = ExternalDataUtil.toSafeColumnName(getImageColumn());
-            columnsToFetch.add(safeImageColumn);
-        }
-
         try {
             // Get the url which doubles as the cache key
             StringBuffer url = new StringBuffer(mServerUrlBase)
