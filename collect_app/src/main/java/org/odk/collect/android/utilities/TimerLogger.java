@@ -54,7 +54,7 @@ public class TimerLogger {
         /*
          * Create a new event
          */
-        Event(long start, EventTypes eventType, int fecType, String node, boolean advancingPage) {
+        Event(long start, EventTypes eventType, int fecType, String node) {
             this.start = start;
             this.eventType = eventType;
             this.fecType = fecType;
@@ -213,7 +213,7 @@ public class TimerLogger {
                 }
             }
 
-            Event newEvent = new Event(start, eventType, fecType, node, advancingPage);
+            Event newEvent = new Event(start, eventType, fecType, node);
 
             /*
              * Close any existing interval events if the view is being exited

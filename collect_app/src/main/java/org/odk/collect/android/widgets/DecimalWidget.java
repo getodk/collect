@@ -43,7 +43,7 @@ public class DecimalWidget extends StringWidget {
     boolean useThousandSeparator;
 
     public DecimalWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride, boolean useThousandSeparator) {
-        super(context, prompt, readOnlyOverride, true);
+        super(context, prompt, readOnlyOverride);
 
         // formatting
         EditText answerText = getAnswerTextField();
@@ -93,8 +93,6 @@ public class DecimalWidget extends StringWidget {
             setFocusable(false);
             setClickable(false);
         }
-
-        setupChangeListener();
     }
 
     private Double getDoubleAnswerValue() {
