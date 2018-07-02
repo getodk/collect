@@ -177,7 +177,7 @@ public class CollectServerClient {
 
 
     public static class Outcome {
-        public Uri authRequestingServer = null;
+        public Uri authRequestingServer;
         public boolean invalidOAuth;
         public HashMap<String, String> messagesByInstanceId = new HashMap<>();
     }

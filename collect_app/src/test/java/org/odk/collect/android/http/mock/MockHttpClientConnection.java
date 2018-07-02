@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class MockHttpClientConnection implements HttpInterface {
 
-    private boolean getHttpShouldReturnNull = false;
+    private boolean getHttpShouldReturnNull;
 
     @NonNull
     @Override

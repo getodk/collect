@@ -77,13 +77,13 @@ public class InstanceServerUploader extends InstanceUploader {
         String[] selectionArgs = new String[high - low];
         for (int i = 0; i < (high - low); i++) {
             if (i > 0) {
-                selectionBuf.append(",");
+                selectionBuf.append(',');
             }
-            selectionBuf.append("?");
+            selectionBuf.append('?');
             selectionArgs[i] = values[i + low].toString();
         }
 
-        selectionBuf.append(")");
+        selectionBuf.append(')');
         String selection = selectionBuf.toString();
 
         String deviceId = new PropertyManager(Collect.getInstance().getApplicationContext())
