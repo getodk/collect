@@ -95,7 +95,7 @@ public class GridMultiWidget extends QuestionWidget implements MultiChoiceWidget
     AudioHandler[] audioHandlers;
 
     // need to remember the last click position for audio treatment
-    int lastClickPosition = 0;
+    int lastClickPosition;
 
     // The number of columns in the grid, can be user defined (<= 0 if unspecified)
     int numColumns;

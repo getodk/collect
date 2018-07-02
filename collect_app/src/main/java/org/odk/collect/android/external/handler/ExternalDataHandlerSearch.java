@@ -277,13 +277,13 @@ public class ExternalDataHandlerSearch extends ExternalDataHandlerBase {
                 break;
             }
             if (columnIndex > 1) {
-                sb.append(" ");
+                sb.append(' ');
             }
-            sb.append("(");
+            sb.append('(');
             sb.append(selectColumnMap.get(columnName));
             sb.append(": ");
             sb.append(value);
-            sb.append(")");
+            sb.append(')');
         }
         return sb.toString();
     }

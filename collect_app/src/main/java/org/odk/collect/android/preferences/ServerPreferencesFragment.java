@@ -65,7 +65,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     protected EditTextPreference serverUrlPreference;
     protected EditTextPreference usernamePreference;
     protected EditTextPreference passwordPreference;
-    protected boolean credentialsHaveChanged = false;
+    protected boolean credentialsHaveChanged;
     protected EditTextPreference submissionUrlPreference;
     protected EditTextPreference formListUrlPreference;
     private ListPopupWindow listPopupWindow;

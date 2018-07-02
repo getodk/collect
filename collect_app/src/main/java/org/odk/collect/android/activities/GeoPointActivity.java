@@ -61,7 +61,7 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
 
     private double locationAccuracy;
 
-    private int locationCount = 0;
+    private int locationCount;
     private int numberOfAvailableSatellites;
 
     private long startTime = System.currentTimeMillis();

@@ -78,7 +78,7 @@ public class GeoPointMapActivity extends CollectAbstractActivity implements OnMa
     private boolean isDragged;
     private ImageButton showLocation;
 
-    private int locationCount = 0;
+    private int locationCount;
 
     private MapHelper helper;
     //private KmlLayer kk;

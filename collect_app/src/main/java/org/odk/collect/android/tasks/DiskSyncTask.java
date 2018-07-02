@@ -45,7 +45,7 @@ import timber.log.Timber;
  */
 public class DiskSyncTask extends AsyncTask<Void, String, String> {
 
-    private static int counter = 0;
+    private static int counter;
     private DiskSyncListener listener;
     private String statusMessage = "";
     private FormsDao formsDao;

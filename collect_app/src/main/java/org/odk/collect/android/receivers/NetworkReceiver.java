@@ -22,6 +22,7 @@ import org.odk.collect.android.http.injection.DaggerHttpComponent;
 import org.odk.collect.android.tasks.ServerPollingJob;
 import org.odk.collect.android.utilities.IconUtils;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
+import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
@@ -32,6 +33,7 @@ import org.odk.collect.android.tasks.InstanceServerUploader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -41,7 +43,7 @@ import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUT
 public class NetworkReceiver extends BroadcastReceiver implements InstanceUploaderListener {
 
     // turning on wifi often gets two CONNECTED events. we only want to run one thread at a time
-    public static boolean running = false;
+    public static boolean running;
     InstanceServerUploader instanceServerUploader;
 
     InstanceGoogleSheetsUploader instanceGoogleSheetsUploader;
@@ -197,10 +199,10 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         }
         running = false;
 
-        StringBuilder message = new StringBuilder();
+        String message;
 
         if (result == null) {
-            message.append(Collect.getInstance().getString(R.string.odk_auth_auth_fail));
+            message = Collect.getInstance().getString(R.string.odk_auth_auth_fail);
         } else {
             StringBuilder selection = new StringBuilder();
             Set<String> keys = result.keySet();
@@ -217,34 +219,14 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                 }
             }
 
-            Cursor results = null;
-            try {
-                results = new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs);
-                if (results.getCount() > 0) {
-                    results.moveToPosition(-1);
-                    while (results.moveToNext()) {
-                        String name = results.getString(results
-                                .getColumnIndex(InstanceColumns.DISPLAY_NAME));
-                        String id = results.getString(results
-                                .getColumnIndex(InstanceColumns._ID));
-                        message
-                                .append(name)
-                                .append(" - ")
-                                .append(result.get(id))
-                                .append("\n\n");
-                    }
-                }
-            } finally {
-                if (results != null) {
-                    results.close();
-                }
-            }
+            message = InstanceUploaderUtils
+                    .getUploadResultMessage(new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs), result);
         }
 
         Intent notifyIntent = new Intent(Collect.getInstance(), NotificationActivity.class);
         notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        notifyIntent.putExtra(NotificationActivity.NOTIFICATION_TITLE, Collect.getInstance().getString(R.string.forms_sent));
-        notifyIntent.putExtra(NotificationActivity.NOTIFICATION_MESSAGE, message.toString().trim());
+        notifyIntent.putExtra(NotificationActivity.NOTIFICATION_TITLE, Collect.getInstance().getString(R.string.upload_results));
+        notifyIntent.putExtra(NotificationActivity.NOTIFICATION_MESSAGE, message.trim());
 
         PendingIntent pendingNotify = PendingIntent.getActivity(Collect.getInstance(), 0,
                 notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -253,12 +235,27 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                 .setSmallIcon(IconUtils.getNotificationAppIcon())
                 .setContentTitle(Collect.getInstance().getString(R.string.odk_auto_note))
                 .setContentIntent(pendingNotify)
-                .setContentText(message.toString().trim())
+                .setContentText(getContentText(result))
                 .setAutoCancel(true);
 
         NotificationManager notificationManager = (NotificationManager) Collect.getInstance()
                 .getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(1328974928, builder.build());
+    }
+
+    private String getContentText(Map<String, String> result) {
+        return allFormsDownloadedSuccessfully(result)
+                ? Collect.getInstance().getString(R.string.success)
+                : Collect.getInstance().getString(R.string.failures);
+    }
+
+    private boolean allFormsDownloadedSuccessfully(Map<String, String> result) {
+        for (Map.Entry<String, String> item : result.entrySet()) {
+            if (!item.getValue().equals(InstanceUploaderUtils.DEFAULT_SUCCESSFUL_TEXT)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override

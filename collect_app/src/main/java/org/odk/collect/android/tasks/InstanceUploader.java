@@ -71,10 +71,10 @@ public abstract class InstanceUploader extends AsyncTask<Long, Integer, CollectS
 
                         while (it.hasNext() && i < selectionArgs.length - 1) {
                             selectionArgs[i] = it.next();
-                            selection.append("?");
+                            selection.append('?');
 
                             if (i != selectionArgs.length - 2) {
-                                selection.append(",");
+                                selection.append(',');
                             }
                             i++;
                         }

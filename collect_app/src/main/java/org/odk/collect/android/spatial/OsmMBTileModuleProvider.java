@@ -29,7 +29,6 @@ import org.osmdroid.tileprovider.modules.MapTileModuleProviderBase;
 import org.osmdroid.tileprovider.tilesource.ITileSource;
 import org.osmdroid.tileprovider.util.StreamUtils;
 
-import java.io.File;
 import java.io.InputStream;
 
 import timber.log.Timber;
@@ -39,8 +38,7 @@ public class OsmMBTileModuleProvider extends MapTileFileStorageProviderBase {
 
     protected OsmMBTileSource tileSource;
 
-    public OsmMBTileModuleProvider(IRegisterReceiver receiverRegistrar,
-            File file, OsmMBTileSource tileSource) {
+    public OsmMBTileModuleProvider(IRegisterReceiver receiverRegistrar, OsmMBTileSource tileSource) {
 
         // Call the super constructor
         super(receiverRegistrar,

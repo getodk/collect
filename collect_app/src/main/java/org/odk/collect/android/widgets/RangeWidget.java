@@ -304,7 +304,7 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonWidget
         }
     }
 
-    private LayoutInflater layoutInflater = null;
+    private LayoutInflater layoutInflater;
 
     // For testing purposes only:
     void setLayoutInflater(LayoutInflater layoutInflater) {
