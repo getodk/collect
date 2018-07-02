@@ -12,7 +12,7 @@ public interface SmsSubmissionManagerContract {
 
     boolean markMessageAsSent(String instanceId, int messageId);
 
-    boolean markMessageAsSending(String instanceId, int messageId);
+    void markMessageAsSending(String instanceId, int messageId);
 
     void deleteSubmission(String instanceId);
 
@@ -22,8 +22,5 @@ public interface SmsSubmissionManagerContract {
 
     MessageStatus checkNextMessageStatus(String instanceId);
 
-    boolean updateMessageStatus(MessageStatus messageStatus, String instanceId, int messageId);
+    void updateMessageStatus(MessageStatus messageStatus, String instanceId, int messageId);
 }
-
-
-

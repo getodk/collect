@@ -8,13 +8,13 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import org.odk.collect.android.preferences.PreferenceKeys;
-import org.odk.collect.android.tasks.sms.SmsSubmissionManagerImpl;
+import org.odk.collect.android.tasks.sms.SmsSubmissionManager;
 import org.odk.collect.android.tasks.sms.models.SmsSubmission;
 import org.robolectric.RuntimeEnvironment;
 
 import java.lang.reflect.Type;
 
-import static org.odk.collect.android.tasks.sms.SmsSubmissionManagerImpl.KEY_SUBMISSION;
+import static org.odk.collect.android.tasks.sms.SmsSubmissionManager.KEY_SUBMISSION;
 
 public abstract class BaseSmsTest {
     public static final String GATEWAY = "1918-344-4545";
@@ -30,7 +30,7 @@ public abstract class BaseSmsTest {
 
         context = RuntimeEnvironment.application;
 
-        sharedPreferences = context.getSharedPreferences(SmsSubmissionManagerImpl.PREF_FILE_NAME, Context.MODE_PRIVATE);
+        sharedPreferences = context.getSharedPreferences(SmsSubmissionManager.PREF_FILE_NAME, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
 
         Type submissionModelListTpe = new TypeToken<SmsSubmission>() {
@@ -39,7 +39,7 @@ public abstract class BaseSmsTest {
         for (SmsSubmission smsSubmission : SampleData.generateModels()) {
             String data = new Gson().toJson(smsSubmission, submissionModelListTpe);
 
-            editor.putString(KEY_SUBMISSION + "_" + smsSubmission.getInstanceId(), data);
+            editor.putString(KEY_SUBMISSION + smsSubmission.getInstanceId(), data);
             editor.commit();
         }
     }

@@ -15,6 +15,7 @@ the specific language governing permissions and limitations under the License. -
     <string name="default_server_url" translatable="false">https://opendatakit.appspot.com</string>
     <string name="default_odk_formlist" translatable="false">/formList</string>
     <string name="default_odk_submission" translatable="false">/submission</string>
+    <string name="sms_submission_preference_key" translatable="false">sms_preference</string>
     <string name="app_url" translatable="false">http://opendatakit.org</string>
     <string name="never_value" translatable="false">never</string>
     <string name="every_fifteen_minutes_value" translatable="false">every_fifteen_minutes</string>

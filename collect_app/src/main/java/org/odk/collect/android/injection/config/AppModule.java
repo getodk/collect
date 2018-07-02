@@ -10,7 +10,7 @@ import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.injection.ViewModelBuilder;
 import org.odk.collect.android.injection.config.architecture.ViewModelFactoryModule;
 import org.odk.collect.android.injection.config.scopes.PerApplication;
-import org.odk.collect.android.tasks.sms.SmsSubmissionManagerImpl;
+import org.odk.collect.android.tasks.sms.SmsSubmissionManager;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.utilities.AgingCredentialsProvider;
 import org.opendatakit.httpclientandroidlib.client.CookieStore;
@@ -34,7 +34,7 @@ public class AppModule {
 
     @Provides
     SmsSubmissionManagerContract provideSmsSubmissionManager(Application application) {
-        return new SmsSubmissionManagerImpl(application);
+        return new SmsSubmissionManager(application);
     }
 
     @Provides

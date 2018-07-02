@@ -13,5 +13,20 @@ public enum MessageStatus {
     Queued,
     Delivered,
     NotDelivered,
-    Encrypted
+    Encrypted;
+
+    public static MessageStatus toMessageStatus(MessageResultStatus status) {
+        switch (status) {
+            case AirplaneMode:
+                return MessageStatus.AirplaneMode;
+            case Sent:
+                return MessageStatus.Sent;
+            case FatalError:
+                return MessageStatus.FatalError;
+            case NoReception:
+                return MessageStatus.NoReception;
+        }
+
+        return null;
+    }
 }

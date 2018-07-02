@@ -4,11 +4,6 @@ public class SmsProgress {
     private double totalCount;
     private double completedCount;
 
-    public SmsProgress() {
-        totalCount = 0;
-        completedCount = 0;
-    }
-
     public double getPercentage() {
         return (completedCount / totalCount) * 100;
     }
@@ -17,7 +12,7 @@ public class SmsProgress {
         return totalCount;
     }
 
-    public void setTotalCount(double totalCount) {
+    void setTotalCount(double totalCount) {
         this.totalCount = totalCount;
     }
 
@@ -25,7 +20,7 @@ public class SmsProgress {
         return completedCount;
     }
 
-    public void setCompletedCount(double completedCount) {
+    void setCompletedCount(double completedCount) {
         this.completedCount = completedCount;
     }
 }

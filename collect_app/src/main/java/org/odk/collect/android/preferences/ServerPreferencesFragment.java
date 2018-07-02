@@ -125,7 +125,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         transportPreference.setOnPreferenceChangeListener(createTransportChangeListener());
         transportPreference.setSummary(transportPreference.getEntry());
 
-        smsPreferenceCategory = (ExtendedPreferenceCategory) findPreference(getString(R.string.sms_submission_preferences));
+        smsPreferenceCategory = (ExtendedPreferenceCategory) findPreference(getString(R.string.sms_submission_preference_key));
 
         smsGatewayPreference = (ExtendedEditTextPreference) findPreference(KEY_SMS_GATEWAY);
 

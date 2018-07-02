@@ -1,6 +1,5 @@
 package org.odk.collect.android.tasks.sms;
 
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
@@ -17,14 +16,14 @@ import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
 
-public class SmsSubmissionManagerImpl implements SmsSubmissionManagerContract {
+public class SmsSubmissionManager implements SmsSubmissionManagerContract {
     private static SharedPreferences preferences;
     private final SharedPreferences.Editor editor;
 
     public static final String PREF_FILE_NAME = "submissions_preferences";
-    public static final String KEY_SUBMISSION = "submissions_list_key";
+    public static final String KEY_SUBMISSION = "submissions_list_key_";
 
-    public SmsSubmissionManagerImpl(Context context) {
+    public SmsSubmissionManager(Context context) {
         preferences = context.getSharedPreferences(PREF_FILE_NAME, Context.MODE_PRIVATE);
         editor = preferences.edit();
     }
@@ -61,62 +60,52 @@ public class SmsSubmissionManagerImpl implements SmsSubmissionManagerContract {
     }
 
     @Override
-    public boolean markMessageAsSending(String instanceId, int messageId) {
+    public void markMessageAsSending(String instanceId, int messageId) {
         SmsSubmission model = getSubmissionModel(instanceId);
 
         if (model == null) {
-            return false;
+            return;
         }
 
         List<Message> list = model.getMessages();
 
-        boolean updated = false;
         for (Message message : list) {
             if (message.getId() == messageId) {
                 message.setMessageStatus(MessageStatus.Sending);
                 list.set(list.indexOf(message), message);
-
-                updated = true;
             }
         }
 
         model.setMessages(list);
         saveSubmission(model);
 
-        return updated;
     }
 
     @Override
-    public boolean updateMessageStatus(MessageStatus messageStatus, String instanceId, int messageId) {
+    public void updateMessageStatus(MessageStatus messageStatus, String instanceId, int messageId) {
         SmsSubmission model = getSubmissionModel(instanceId);
 
         if (model == null) {
-            return false;
+            return;
         }
 
         List<Message> list = model.getMessages();
-
-        boolean updated = false;
         for (Message message : list) {
             if (message.getId() == messageId) {
                 message.setMessageStatus(messageStatus);
                 list.set(list.indexOf(message), message);
-
-                updated = true;
             }
         }
 
         model.setMessages(list);
         model.setLastUpdated(new Date());
         saveSubmission(model);
-
-        return updated;
     }
 
     @Override
     public void deleteSubmission(String instanceId) {
 
-        editor.remove(KEY_SUBMISSION + "_" + instanceId);
+        editor.remove(KEY_SUBMISSION + instanceId);
         editor.commit();
     }
 
@@ -126,7 +115,7 @@ public class SmsSubmissionManagerImpl implements SmsSubmissionManagerContract {
         }.getType();
 
         String data = new Gson().toJson(model, submissionModel);
-        editor.putString(KEY_SUBMISSION + "_" + model.getInstanceId(), data);
+        editor.putString(KEY_SUBMISSION + model.getInstanceId(), data);
         editor.commit();
     }
 
@@ -139,7 +128,7 @@ public class SmsSubmissionManagerImpl implements SmsSubmissionManagerContract {
         Type submissionModel = new TypeToken<SmsSubmission>() {
         }.getType();
 
-        String list = preferences.getString(KEY_SUBMISSION + "_" + instanceId, "");
+        String list = preferences.getString(KEY_SUBMISSION + instanceId, "");
 
         SmsSubmission model;
 

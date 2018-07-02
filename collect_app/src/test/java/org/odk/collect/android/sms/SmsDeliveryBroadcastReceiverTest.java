@@ -6,11 +6,12 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.tasks.sms.SmsDeliveryBroadcastReceiver;
-import org.odk.collect.android.tasks.sms.SmsUtils;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.shadows.ShadowApplication;
 
 import java.util.List;
+
+import static org.odk.collect.android.tasks.sms.SmsSender.SMS_DELIVERY_ACTION;
 
 @RunWith(RobolectricTestRunner.class)
 public class SmsDeliveryBroadcastReceiverTest {
@@ -38,7 +39,7 @@ public class SmsDeliveryBroadcastReceiverTest {
         /**
          * Testing to see if the broadcast receiver will receive SMS events from Collect.
          */
-        Intent intent = new Intent(SmsUtils.SMS_DELIVERY_ACTION);
+        Intent intent = new Intent(SMS_DELIVERY_ACTION);
 
         ShadowApplication shadowApplication = ShadowApplication.getInstance();
         Assert.assertTrue(shadowApplication.hasReceiverForIntent(intent));

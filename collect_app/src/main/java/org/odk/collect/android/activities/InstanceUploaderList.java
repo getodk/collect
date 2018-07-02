@@ -90,9 +90,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
     private final BroadcastReceiver smsForegroundReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-
-            // This is part of the magic, don't send this notification to anyone else since
-            //this activity is currently in the foreground.
+            //Stops the notification from being sent to others that are listening for this broadcast.
             abortBroadcast();
         }
     };
@@ -467,7 +465,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
 
     public void setLightThemeBackground() {
         if (!new ThemeUtils(this).isDarkTheme()) {
-            getWindow().getDecorView().setBackgroundColor(ContextCompat.getColor(this, R.color.card_ui_activity_background));
+            getWindow().getDecorView().setBackgroundColor(ContextCompat.getColor(this, R.color.cardview_light_background));
         }
     }
 }

@@ -36,7 +36,6 @@ public class SentMessageResult implements Parcelable {
         this.instanceId = instanceId;
     }
 
-
     @Override
     public int describeContents() {
         return 0;
@@ -52,7 +51,7 @@ public class SentMessageResult implements Parcelable {
     public SentMessageResult() {
     }
 
-    protected SentMessageResult(Parcel in) {
+    private SentMessageResult(Parcel in) {
         int tmpMessageResultStatus = in.readInt();
         this.messageResultStatus = tmpMessageResultStatus == -1 ? null : MessageResultStatus.values()[tmpMessageResultStatus];
         this.messageId = in.readInt();

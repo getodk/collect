@@ -25,7 +25,6 @@ the License.
     <!-- Light Theme Palette -->
     <color name="lightPrimaryTextColor">@android:color/black</color>
     <color name="lightIconColor">@android:color/black</color>
-    <color name="card_ui_activity_background">#f5f5f5</color>
     <color name="lightBackgroundColor">@android:color/white</color>
     <color name="tintColor">#2196F3</color>
 </resources>

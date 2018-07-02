@@ -59,7 +59,7 @@ public class SmsSubmission {
         SmsProgress progress = new SmsProgress();
 
         long complete = Observable.fromIterable(messages)
-                .filter(message -> message.isSent())
+                .filter(Message::isSent)
                 .count().blockingGet();
 
         int total = messages.size();
@@ -70,10 +70,27 @@ public class SmsSubmission {
         return progress;
     }
 
-    public void saveMessage(Message message) {
-        int index = getMessages().indexOf(message);
-        getMessages().set(index, message);
+    /***
+     * Checks to see if the current message is the last or not. If it's not the last it sends
+     * Sending as the status to the InstanceUploaderList so that it shows the current progress but if it's the last
+     * message then that means the submission has been completed so it should show Sent. This has to be done
+     * because the MessageStatus is being used to serve SmsSender Layer and it's status is also tied to the UI.
+     *
+     * @param status that was received from the broadcast receiver of the message that was just sent.
+     * @return the MessageStatus that will be transferred via the event.
+     */
+    public MessageStatus isSentOrSending(MessageStatus status) {
+        if (status.equals(MessageStatus.Sent)) {
+            if (isSubmissionComplete()) {
+                return MessageStatus.Sent;
+            } else {
+                return MessageStatus.Sending;
+            }
+        }
+
+        return status;
     }
+
 
     public int getJobId() {
         return jobId;

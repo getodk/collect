@@ -12,8 +12,12 @@ import org.odk.collect.android.tasks.sms.models.SentMessageResult;
 
 import javax.inject.Inject;
 
+import timber.log.Timber;
+
 import static org.odk.collect.android.tasks.sms.SmsNotificationReceiver.SMS_MESSAGE_RESULT;
 import static org.odk.collect.android.tasks.sms.SmsNotificationReceiver.SMS_NOTIFICATION_ACTION;
+import static org.odk.collect.android.tasks.sms.SmsSender.SMS_INSTANCE_ID;
+import static org.odk.collect.android.tasks.sms.SmsSender.SMS_MESSAGE_ID;
 
 /***
  * Receives events from the SMSManager when a SMS has been sent.
@@ -32,8 +36,13 @@ public class SmsSentBroadcastReceiver extends BroadcastReceiver {
 
         SentMessageResult result = new SentMessageResult();
 
-        result.setMessageId(intent.getExtras().getInt(SmsUtils.SMS_MESSAGE_ID));
-        result.setInstanceId(intent.getExtras().getString(SmsUtils.SMS_INSTANCE_ID));
+        if (intent.getExtras() == null) {
+            Timber.e("getExtras returned a null value.");
+            return;
+        }
+
+        result.setMessageId(intent.getExtras().getInt(SMS_MESSAGE_ID));
+        result.setInstanceId(intent.getExtras().getString(SMS_INSTANCE_ID));
 
         switch (getResultCode()) {
             case Activity.RESULT_OK:

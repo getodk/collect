@@ -10,6 +10,7 @@ import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
 import com.evernote.android.job.util.support.PersistableBundleCompat;
 
+import org.odk.collect.android.R;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.events.RxEventBus;
@@ -22,12 +23,14 @@ import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.tasks.sms.models.Message;
 import org.odk.collect.android.tasks.sms.models.MessageStatus;
 import org.odk.collect.android.tasks.sms.models.SentMessageResult;
+import org.odk.collect.android.tasks.sms.models.SmsProgress;
 import org.odk.collect.android.tasks.sms.models.SmsSubmission;
 import org.odk.collect.android.tasks.sms.models.SubmitFormModel;
 import org.odk.collect.android.utilities.ArrayUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -39,10 +42,8 @@ import javax.inject.Inject;
 import timber.log.Timber;
 
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_DELETE;
-import static org.odk.collect.android.tasks.sms.Mapper.toMessageStatus;
-import static org.odk.collect.android.tasks.sms.SmsUtils.checkIfSentIntentExists;
-import static org.odk.collect.android.tasks.sms.SmsUtils.checkIfSubmissionSentOrSending;
-import static org.odk.collect.android.tasks.sms.SmsUtils.getDisplaySubtext;
+import static org.odk.collect.android.tasks.sms.SmsSender.checkIfSentIntentExists;
+import static org.odk.collect.android.tasks.sms.models.MessageStatus.toMessageStatus;
 import static org.odk.collect.android.utilities.FileUtil.getFileContents;
 import static org.odk.collect.android.utilities.FileUtil.getSmsInstancePath;
 
@@ -272,7 +273,7 @@ public class SmsService {
         event.setInstanceId(sentMessageResult.getInstanceId());
         event.setLastUpdated(model.getLastUpdated());
         MessageStatus status = toMessageStatus(sentMessageResult.getMessageResultStatus());
-        event.setStatus(checkIfSubmissionSentOrSending(model, status));
+        event.setStatus(model.isSentOrSending(status));
         event.setProgress(model.getCompletion());
 
         rxEventBus.post(event);
@@ -345,7 +346,7 @@ public class SmsService {
 
     /**
      * @param instanceId of the instance being updated
-     * @param event with the specific failed status that's gonna be persisted
+     * @param event      with the specific failed status that's gonna be persisted
      */
     private void updateInstanceStatusFailedText(String instanceId, SmsEvent event) {
         String where = InstanceProviderAPI.InstanceColumns._ID + "=?";
@@ -375,5 +376,51 @@ public class SmsService {
             }
         }
         return autoDelete == null ? isFormAutoDeleteOptionEnabled : Boolean.valueOf(autoDelete);
+    }
+
+     public static String getDisplaySubtext(SmsEvent event, Context context) {
+        Date date = event.getLastUpdated();
+        SmsProgress progress = event.getProgress();
+
+        if (event.getStatus() == null) {
+            return null;
+        }
+
+        if (event.getProgress().getPercentage() == 100 && event.getStatus().equals(MessageStatus.Sent)) {
+            event.setStatus(MessageStatus.Sending);
+        }
+
+        try {
+            switch (event.getStatus()) {
+                case NoReception:
+                    return new SimpleDateFormat(context.getString(R.string.sms_no_reception), Locale.getDefault()).format(date);
+                case AirplaneMode:
+                    return new SimpleDateFormat(context.getString(R.string.sms_airplane_mode), Locale.getDefault()).format(date);
+                case FatalError:
+                    return new SimpleDateFormat(context.getString(R.string.sms_fatal_error), Locale.getDefault()).format(date);
+                case Sending:
+                    return context.getResources().getQuantityString(R.plurals.sms_sending, (int) progress.getTotalCount(), progress.getCompletedCount(), progress.getTotalCount());
+                case Queued:
+                    return context.getString(R.string.sms_submission_queued);
+                case Sent:
+                    return new SimpleDateFormat(context.getString(R.string.sms_sent_on_date_at_time),
+                            Locale.getDefault()).format(date);
+                case Delivered:
+                    return new SimpleDateFormat(context.getString(R.string.sms_delivered_on_date_at_time),
+                            Locale.getDefault()).format(date);
+                case NotDelivered:
+                    return new SimpleDateFormat(context.getString(R.string.sms_not_delivered_on_date_at_time),
+                            Locale.getDefault()).format(date);
+                case NoMessage:
+                    return context.getString(R.string.sms_no_message);
+                case Canceled:
+                    return new SimpleDateFormat(context.getString(R.string.sms_last_submission_on_date_at_time),
+                            Locale.getDefault()).format(date);
+            }
+        } catch (IllegalArgumentException e) {
+            Timber.e(e);
+        }
+
+        return "";
     }
 }

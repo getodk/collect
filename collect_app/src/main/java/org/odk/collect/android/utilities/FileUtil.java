@@ -50,10 +50,6 @@ public class FileUtil {
     }
 
     public static String getSmsInstancePath(String instancePath) {
-        StringBuilder builder = new StringBuilder();
-        builder.append(instancePath)
-                .append(".txt");
-
-        return builder.toString();
+        return instancePath + ".txt";
     }
 }

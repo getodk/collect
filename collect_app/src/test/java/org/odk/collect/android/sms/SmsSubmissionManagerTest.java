@@ -8,7 +8,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.sms.base.BaseSmsTest;
 import org.odk.collect.android.sms.base.SampleData;
 import org.odk.collect.android.tasks.sms.models.Message;
-import org.odk.collect.android.tasks.sms.SmsSubmissionManagerImpl;
+import org.odk.collect.android.tasks.sms.SmsSubmissionManager;
 import org.odk.collect.android.tasks.sms.models.SmsSubmission;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.robolectric.RobolectricTestRunner;
@@ -24,13 +24,12 @@ import static org.odk.collect.android.sms.base.SampleData.TEST_INSTANCE_ID;
 @RunWith(RobolectricTestRunner.class)
 public class SmsSubmissionManagerTest extends BaseSmsTest {
 
-    private Context context;
     private SmsSubmissionManagerContract manager;
 
     @Before
     public void setup() {
-        context = RuntimeEnvironment.application;
-        manager = new SmsSubmissionManagerImpl(context);
+        Context context = RuntimeEnvironment.application;
+        manager = new SmsSubmissionManager(context);
 
         setupSmsSubmissionManagerData();
     }

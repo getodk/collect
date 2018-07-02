@@ -8,7 +8,7 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.injection.config.scopes.PerApplication;
-import org.odk.collect.android.tasks.sms.SmsSubmissionManagerImpl;
+import org.odk.collect.android.tasks.sms.SmsSubmissionManager;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.utilities.AgingCredentialsProvider;
 import org.opendatakit.httpclientandroidlib.client.CookieStore;
@@ -37,7 +37,7 @@ public class TestModule {
 
     @Provides
     SmsSubmissionManagerContract provideSmsSubmissionManager(Application application) {
-        return new SmsSubmissionManagerImpl(application);
+        return new SmsSubmissionManager(application);
     }
 
     @Provides

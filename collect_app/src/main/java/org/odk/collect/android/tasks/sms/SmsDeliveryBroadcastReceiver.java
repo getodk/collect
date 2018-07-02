@@ -11,6 +11,9 @@ import org.odk.collect.android.tasks.sms.models.SentMessageResult;
 
 import javax.inject.Inject;
 
+import static org.odk.collect.android.tasks.sms.SmsSender.SMS_INSTANCE_ID;
+import static org.odk.collect.android.tasks.sms.SmsSender.SMS_MESSAGE_ID;
+
 public class SmsDeliveryBroadcastReceiver extends BroadcastReceiver {
 
     @Inject
@@ -23,8 +26,8 @@ public class SmsDeliveryBroadcastReceiver extends BroadcastReceiver {
 
         SentMessageResult result = new SentMessageResult();
 
-        result.setMessageId(intent.getExtras().getInt(SmsUtils.SMS_MESSAGE_ID));
-        result.setInstanceId(intent.getExtras().getString(SmsUtils.SMS_INSTANCE_ID));
+        result.setMessageId(intent.getExtras().getInt(SMS_MESSAGE_ID));
+        result.setInstanceId(intent.getExtras().getString(SMS_INSTANCE_ID));
 
         switch (getResultCode()) {
             case Activity.RESULT_OK:

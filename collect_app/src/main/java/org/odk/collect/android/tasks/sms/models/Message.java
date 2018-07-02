@@ -15,7 +15,6 @@ public class Message {
         return part;
     }
 
-
     public int getId() {
         return id;
     }
