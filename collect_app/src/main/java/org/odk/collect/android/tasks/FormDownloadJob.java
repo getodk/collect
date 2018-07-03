@@ -1,3 +1,19 @@
+/*
+Copyright 2018 Ephraim Kigamba
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License
+*/
+
 package org.odk.collect.android.tasks;
 
 import android.os.Bundle;
@@ -17,7 +33,20 @@ import java.util.HashMap;
 import timber.log.Timber;
 
 /**
- * Created by Ephraim Kigamba - ekigamba@ona.io on 03/07/2018
+ * This job manages form downloads from external sources. It therefore makes an extra step of verifying that
+ * the {@link ApplicationConstants.BundleKeys#FORM_ID} passed points to a form on the forms server.
+ * You need to pass {@code transientExtras} with the {@link ApplicationConstants.BundleKeys#FORM_ID}
+ * to the {@link com.evernote.android.job.JobRequest.Builder}
+ *
+ * <code>
+ * new JobRequest.Builder(FormDownloadJob.TAG)
+ *     .startNow()
+ *     .setTransientExtras(jobBundle)
+ *     .build()
+ *     .schedule();
+ * </code>
+ *
+ * @author by Ephraim Kigamba (nek.eam@gmail.com)
  */
 
 public class FormDownloadJob extends Job {
