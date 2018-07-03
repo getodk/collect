@@ -71,7 +71,7 @@ public class FormDownloadService extends IntentService {
                 FormDownloadBroadcastHelper.sendDownloadServiceBroadcastResult(this, formId, false, "Null " + ApplicationConstants.BundleKeys.FORM_ID);
             }
         } else {
-            FormDownloadBroadcastHelper.sendDownloadServiceBroadcastResult(this, formId,false, "Bundle does not contain the " + ApplicationConstants.BundleKeys.FORM_ID);
+            FormDownloadBroadcastHelper.sendDownloadServiceBroadcastResult(this, formId, false, "Bundle does not contain the " + ApplicationConstants.BundleKeys.FORM_ID);
         }
     }
 }

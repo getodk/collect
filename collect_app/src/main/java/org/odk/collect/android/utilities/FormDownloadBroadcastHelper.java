@@ -18,6 +18,7 @@ package org.odk.collect.android.utilities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 /**
@@ -43,12 +44,12 @@ public final class FormDownloadBroadcastHelper {
      *  - {@link ApplicationConstants.BundleKeys#FORM_ID}(Integer) - Optional. Some errors might be because the form id was not passed. This is the FORM_ID for which
      *  the error occurred
      *
-     * @param context
-     * @param formId
-     * @param success
-     * @param errorReason
+     * @param context Android context which should not be null for accessing {@link Context#sendBroadcast(Intent)}
+     * @param formId The FORM ID for which the form download result is being communicated
+     * @param success Is the form download a success
+     * @param errorReason Reason why the form download was a failure
      */
-    public static void sendDownloadServiceBroadcastResult(Context context, @Nullable String formId, boolean success, @Nullable String errorReason) {
+    public static void sendDownloadServiceBroadcastResult(@NonNull Context context, @Nullable String formId, boolean success, @Nullable String errorReason) {
         Intent intent = new Intent(ACTION);
         intent.putExtra(ApplicationConstants.BundleKeys.SUCCESS_KEY, success);
 

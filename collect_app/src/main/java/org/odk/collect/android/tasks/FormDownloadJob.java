@@ -78,13 +78,13 @@ public class FormDownloadJob extends Job {
                 FormDownloadBroadcastHelper.sendDownloadServiceBroadcastResult(getContext(), formId, true, null);
             } else {
                 Timber.e("DOWNLOAD FORM FAILED BECAUSE FORM DOES NOT EXIST ON THE SERVER");
-                FormDownloadBroadcastHelper.sendDownloadServiceBroadcastResult(getContext(), formId,false, "Requested form could not be found");
+                FormDownloadBroadcastHelper.sendDownloadServiceBroadcastResult(getContext(), formId, false, "Requested form could not be found");
             }
 
             return Result.SUCCESS;
         } else {
             Timber.e("DOWNLOAD FORM FAILED BECAUSE BUNDLE DOES NOT CONTAIN FORM_ID");
-            FormDownloadBroadcastHelper.sendDownloadServiceBroadcastResult(getContext(), formId,false, "Bundle does not contain the " + ApplicationConstants.BundleKeys.FORM_ID);
+            FormDownloadBroadcastHelper.sendDownloadServiceBroadcastResult(getContext(), formId, false, "Bundle does not contain the " + ApplicationConstants.BundleKeys.FORM_ID);
             return Result.FAILURE;
         }
     }
