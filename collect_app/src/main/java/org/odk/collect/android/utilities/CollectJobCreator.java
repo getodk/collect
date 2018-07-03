@@ -22,13 +22,23 @@ import android.support.annotation.Nullable;
 import com.evernote.android.job.Job;
 import com.evernote.android.job.JobCreator;
 
+import org.odk.collect.android.tasks.FormDownloadJob;
 import org.odk.collect.android.tasks.ServerPollingJob;
 
-public class ServerPollingJobCreator implements JobCreator {
+public class CollectJobCreator implements JobCreator {
 
     @Override
     @Nullable
     public Job create(@NonNull String tag) {
-        return tag.equals(ServerPollingJob.TAG) ? new ServerPollingJob() : null;
+        switch (tag) {
+            case ServerPollingJob.TAG:
+                return new ServerPollingJob();
+
+            case FormDownloadJob.TAG:
+                return new FormDownloadJob();
+
+            default:
+                return null;
+        }
     }
 }

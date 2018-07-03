@@ -33,7 +33,7 @@ the specific language governing permissions and limitations under the License.
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -93,7 +93,6 @@ the specific language governing permissions and limitations under the License.
             android:name=".provider.InstanceProvider"
             android:authorities="org.odk.collect.android.provider.odk.instances"
             android:exported="true" />
-
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -101,7 +100,7 @@ the specific language governing permissions and limitations under the License.
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths"/>
+                android:resource="@xml/provider_paths" />
         </provider>
 
         <activity
@@ -278,6 +277,10 @@ the specific language governing permissions and limitations under the License.
         <activity android:name=".activities.WebViewActivity" />
         <activity android:name=".activities.CaptureSelfieVideoActivity" />
         <activity android:name=".activities.CaptureSelfieVideoActivityNewApi" />
+
+        <service
+            android:name=".services.FormDownloadService"
+            android:exported="true"></service>
     </application>
 
 </manifest>
