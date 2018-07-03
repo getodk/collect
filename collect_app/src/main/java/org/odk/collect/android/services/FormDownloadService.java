@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import com.evernote.android.job.JobRequest;
 
 import org.odk.collect.android.tasks.FormDownloadJob;
+import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FormDownloadBroadcastHelper;
 
 import timber.log.Timber;
@@ -21,33 +22,32 @@ import timber.log.Timber;
  */
 public class FormDownloadService extends IntentService {
 
-    public static final String FORM_ID = "FORM_ID";
     private String formId;
 
     public FormDownloadService() {
-        super("FormDownloadService2");
+        super("FormDownloadService");
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
         Timber.i("RECEIVED FORM DOWNLOAD REQUEST IN SERVICE");
-        if (intent != null) {
-            if (intent.hasExtra(FORM_ID)) {
-                formId = intent.getStringExtra(FORM_ID);
-                if (!TextUtils.isEmpty(formId)) {
-                    Bundle jobBundle = new Bundle();
-                    jobBundle.putString(FORM_ID, formId);
+        if (intent != null && intent.hasExtra(ApplicationConstants.BundleKeys.FORM_ID)) {
+            formId = intent.getStringExtra(ApplicationConstants.BundleKeys.FORM_ID);
+            if (!TextUtils.isEmpty(formId)) {
+                Bundle jobBundle = new Bundle();
+                jobBundle.putString(ApplicationConstants.BundleKeys.FORM_ID, formId);
 
-                    // Start new Job immediately
-                    new JobRequest.Builder(FormDownloadJob.TAG)
-                            .startNow()
-                            .setTransientExtras(jobBundle)
-                            .build()
-                            .schedule();
-                } else {
-                    FormDownloadBroadcastHelper.sendDownloadServiceBroadcastResult(this, formId, false, "FORM_ID");
-                }
+                // Start new Job immediately
+                new JobRequest.Builder(FormDownloadJob.TAG)
+                        .startNow()
+                        .setTransientExtras(jobBundle)
+                        .build()
+                        .schedule();
+            } else {
+                FormDownloadBroadcastHelper.sendDownloadServiceBroadcastResult(this, formId, false, "Null " + ApplicationConstants.BundleKeys.FORM_ID);
             }
+        } else {
+            FormDownloadBroadcastHelper.sendDownloadServiceBroadcastResult(this, formId,false, "Bundle does not contain the " + ApplicationConstants.BundleKeys.FORM_ID);
         }
     }
 }

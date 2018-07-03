@@ -52,6 +52,9 @@ public class ApplicationConstants {
 
     public abstract static class BundleKeys {
         public static final String FORM_MODE = "formMode";
+        public static final String SUCCESS_KEY = "SUCCESSFUL";
+        public static final String ERROR_REASON = "ERROR_MSG";
+        public static final String FORM_ID = "FORM_ID";
     }
 
     public abstract static class FormModes {
