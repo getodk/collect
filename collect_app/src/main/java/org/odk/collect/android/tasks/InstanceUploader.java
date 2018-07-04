@@ -124,7 +124,7 @@ public abstract class InstanceUploader extends AsyncTask<Long, Integer, Instance
      *                                      <p>
      *                                      If the form explicitly sets the auto-delete property, then it overrides the preferences.
      */
-    private boolean isFormAutoDeleteEnabled(String jrFormId, boolean isFormAutoDeleteOptionEnabled) {
+    public static boolean isFormAutoDeleteEnabled(String jrFormId, boolean isFormAutoDeleteOptionEnabled) {
         Cursor cursor = new FormsDao().getFormsCursorForFormId(jrFormId);
         String autoDelete = null;
         if (cursor != null && cursor.moveToFirst()) {
