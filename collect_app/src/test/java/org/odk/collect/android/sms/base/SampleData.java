@@ -1,7 +1,7 @@
 package org.odk.collect.android.sms.base;
 
 import org.odk.collect.android.tasks.sms.models.Message;
-import org.odk.collect.android.tasks.sms.models.MessageStatus;
+import org.odk.collect.android.tasks.sms.models.SmsStatus;
 import org.odk.collect.android.tasks.sms.models.SmsSubmission;
 
 import java.util.ArrayList;
@@ -52,20 +52,20 @@ public class SampleData {
     public static List<Message> generateSampleMessages() {
 
         Message first = new Message();
-        first.setMessageStatus(MessageStatus.Sent);
-        first.setPart(1);
+        first.setSmsStatus(SmsStatus.Sent);
+        first.setPartNumber(1);
         first.generateRandomMessageID();
         first.setText("+N Joel Dean");
 
         Message second = new Message();
-        second.setPart(2);
-        second.setMessageStatus(MessageStatus.Ready);
+        second.setPartNumber(2);
+        second.setSmsStatus(SmsStatus.Ready);
         second.generateRandomMessageID();
         second.setText("+C America");
 
         Message third = new Message();
-        third.setPart(2);
-        third.setMessageStatus(MessageStatus.Ready);
+        third.setPartNumber(2);
+        third.setSmsStatus(SmsStatus.Ready);
         third.generateRandomMessageID();
         third.setText("+G Male");
 
@@ -80,20 +80,20 @@ public class SampleData {
     public static List<Message> generateUnsentSampleMessage() {
 
         Message first = new Message();
-        first.setMessageStatus(MessageStatus.FatalError);
-        first.setPart(1);
+        first.setSmsStatus(SmsStatus.FatalError);
+        first.setPartNumber(1);
         first.generateRandomMessageID();
         first.setText("+N Joel Dean");
 
         Message second = new Message();
-        second.setPart(2);
-        second.setMessageStatus(MessageStatus.Sent);
+        second.setPartNumber(2);
+        second.setSmsStatus(SmsStatus.Sent);
         second.generateRandomMessageID();
         second.setText("+C America");
 
         Message third = new Message();
-        third.setPart(2);
-        third.setMessageStatus(MessageStatus.Sent);
+        third.setPartNumber(2);
+        third.setSmsStatus(SmsStatus.Sent);
         third.generateRandomMessageID();
         third.setText("+G Male");
 

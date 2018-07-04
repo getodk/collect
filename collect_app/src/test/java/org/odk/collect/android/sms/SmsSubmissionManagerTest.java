@@ -24,7 +24,7 @@ import static org.odk.collect.android.sms.base.SampleData.TEST_INSTANCE_ID;
 @RunWith(RobolectricTestRunner.class)
 public class SmsSubmissionManagerTest extends BaseSmsTest {
 
-    private SmsSubmissionManagerContract manager;
+    private SmsSubmissionManager manager;
 
     @Before
     public void setup() {
@@ -52,7 +52,7 @@ public class SmsSubmissionManagerTest extends BaseSmsTest {
     public void addSubmissionTest() {
 
         /**
-         * Clears all submissions so that the sample data can be readded.
+         * Clears all submissions so that the sample data can be re-added.
          */
         manager.clearSubmissions();
 
@@ -76,7 +76,7 @@ public class SmsSubmissionManagerTest extends BaseSmsTest {
 
         assertNotNull(model);
 
-        manager.deleteSubmission(TEST_INSTANCE_ID);
+        manager.forgetSubmission(TEST_INSTANCE_ID);
 
         model = manager.getSubmissionModel(TEST_INSTANCE_ID);
 

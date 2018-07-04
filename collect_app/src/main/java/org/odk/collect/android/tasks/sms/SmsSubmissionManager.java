@@ -9,7 +9,7 @@ import com.google.gson.reflect.TypeToken;
 
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.tasks.sms.models.Message;
-import org.odk.collect.android.tasks.sms.models.MessageStatus;
+import org.odk.collect.android.tasks.sms.models.SmsStatus;
 import org.odk.collect.android.tasks.sms.models.SmsSubmission;
 
 import java.lang.reflect.Type;
@@ -29,7 +29,24 @@ public class SmsSubmissionManager implements SmsSubmissionManagerContract {
     }
 
     public SmsSubmission getSubmissionModel(String instanceId) {
-        return getSubmissionFromPrefs(instanceId);
+        Type submissionModel = new TypeToken<SmsSubmission>() {
+        }.getType();
+
+        String submissionGson = preferences.getString(KEY_SUBMISSION + instanceId, "");
+
+        SmsSubmission model;
+
+        if (TextUtils.isEmpty(submissionGson)) {
+            return null;
+        }
+
+        try {
+            model = new Gson().fromJson(submissionGson, submissionModel);
+        } catch (Exception e) {
+            model = null;
+        }
+
+        return model;
     }
 
     @Override
@@ -46,7 +63,7 @@ public class SmsSubmissionManager implements SmsSubmissionManagerContract {
         boolean updated = false;
         for (Message message : list) {
             if (message.getId() == messageId) {
-                message.setMessageStatus(MessageStatus.Sent);
+                message.setSmsStatus(SmsStatus.Sent);
                 list.set(list.indexOf(message), message);
 
                 updated = true;
@@ -71,7 +88,7 @@ public class SmsSubmissionManager implements SmsSubmissionManagerContract {
 
         for (Message message : list) {
             if (message.getId() == messageId) {
-                message.setMessageStatus(MessageStatus.Sending);
+                message.setSmsStatus(SmsStatus.Sending);
                 list.set(list.indexOf(message), message);
             }
         }
@@ -82,7 +99,7 @@ public class SmsSubmissionManager implements SmsSubmissionManagerContract {
     }
 
     @Override
-    public void updateMessageStatus(MessageStatus messageStatus, String instanceId, int messageId) {
+    public void updateMessageStatus(SmsStatus smsStatus, String instanceId, int messageId) {
         SmsSubmission model = getSubmissionModel(instanceId);
 
         if (model == null) {
@@ -92,7 +109,7 @@ public class SmsSubmissionManager implements SmsSubmissionManagerContract {
         List<Message> list = model.getMessages();
         for (Message message : list) {
             if (message.getId() == messageId) {
-                message.setMessageStatus(messageStatus);
+                message.setSmsStatus(smsStatus);
                 list.set(list.indexOf(message), message);
             }
         }
@@ -103,7 +120,7 @@ public class SmsSubmissionManager implements SmsSubmissionManagerContract {
     }
 
     @Override
-    public void deleteSubmission(String instanceId) {
+    public void forgetSubmission(String instanceId) {
 
         editor.remove(KEY_SUBMISSION + instanceId);
         editor.commit();
@@ -119,33 +136,11 @@ public class SmsSubmissionManager implements SmsSubmissionManagerContract {
         editor.commit();
     }
 
-    @Override
     public void clearSubmissions() {
         preferences.edit().clear().apply();
     }
 
-    private SmsSubmission getSubmissionFromPrefs(String instanceId) {
-        Type submissionModel = new TypeToken<SmsSubmission>() {
-        }.getType();
-
-        String list = preferences.getString(KEY_SUBMISSION + instanceId, "");
-
-        SmsSubmission model;
-
-        if (TextUtils.isEmpty(list)) {
-            return null;
-        }
-
-        try {
-            model = new Gson().fromJson(list, submissionModel);
-        } catch (Exception e) {
-            model = null;
-        }
-
-        return model;
-    }
-
-    public MessageStatus checkNextMessageStatus(String instanceId) {
+    public SmsStatus checkNextMessageStatus(String instanceId) {
         SmsSubmission model = getSubmissionModel(instanceId);
 
         Message message = model.getNextUnsentMessage();
@@ -154,6 +149,6 @@ public class SmsSubmissionManager implements SmsSubmissionManagerContract {
             return null;
         }
 
-        return message.getMessageStatus();
+        return message.getSmsStatus();
     }
 }
