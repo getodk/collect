@@ -4,8 +4,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
-import io.reactivex.Observable;
-
 /**
  * Tracks an instance's sms submission.
  */
@@ -48,23 +46,26 @@ public class SmsSubmission {
      * @return next message to be sent.
      */
     public Message getNextUnsentMessage() {
-        return Observable.fromIterable(messages)
-                .filter(message -> !message.isSent())
-                .sorted((message, otherMessage) -> message.getPart() - otherMessage.getPart())
-                .firstElement()
-                .blockingGet();
+        for (Message message : messages) {
+            if (!message.isSent()) {
+                return message;
+            }
+        }
+        return null;
     }
 
     public SmsProgress getCompletion() {
         SmsProgress progress = new SmsProgress();
 
-        long complete = Observable.fromIterable(messages)
-                .filter(Message::isSent)
-                .count().blockingGet();
+        int total = 0;
 
-        int total = messages.size();
+        for (Message message : messages) {
+            if (message.isSent()) {
+                total++;
+            }
+        }
 
-        progress.setCompletedCount((int) complete);
+        progress.setCompletedCount(total);
         progress.setTotalCount(total);
 
         return progress;
@@ -74,17 +75,17 @@ public class SmsSubmission {
      * Checks to see if the current message is the last or not. If it's not the last it sends
      * Sending as the status to the InstanceUploaderList so that it shows the current progress but if it's the last
      * message then that means the submission has been completed so it should show Sent. This has to be done
-     * because the MessageStatus is being used to serve SmsSender Layer and it's status is also tied to the UI.
+     * because the SmsStatus is being used to serve SmsSender Layer and it's status is also tied to the UI.
      *
      * @param status that was received from the broadcast receiver of the message that was just sent.
-     * @return the MessageStatus that will be transferred via the event.
+     * @return the SmsStatus that will be transferred via the event.
      */
-    public MessageStatus isSentOrSending(MessageStatus status) {
-        if (status.equals(MessageStatus.Sent)) {
+    public SmsStatus isSentOrSending(SmsStatus status) {
+        if (status.equals(SmsStatus.Sent)) {
             if (isSubmissionComplete()) {
-                return MessageStatus.Sent;
+                return SmsStatus.Sent;
             } else {
-                return MessageStatus.Sending;
+                return SmsStatus.Sending;
             }
         }
 

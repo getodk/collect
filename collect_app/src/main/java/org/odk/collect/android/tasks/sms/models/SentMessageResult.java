@@ -1,5 +1,6 @@
 package org.odk.collect.android.tasks.sms.models;
 
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -8,16 +9,16 @@ import android.os.Parcelable;
  * is triggered. This is then passed to the SmsService and Notification Receiver for processing.
  */
 public class SentMessageResult implements Parcelable {
-    private MessageResultStatus messageResultStatus;
+    private SmsSendResultStatus smsSendResultStatus;
     private int messageId;
     private String instanceId;
 
-    public MessageResultStatus getMessageResultStatus() {
-        return messageResultStatus;
+    public SmsSendResultStatus getSmsSendResultStatus() {
+        return smsSendResultStatus;
     }
 
-    public void setMessageResultStatus(MessageResultStatus messageResultStatus) {
-        this.messageResultStatus = messageResultStatus;
+    public void setSmsSendResultStatus(SmsSendResultStatus smsSendResultStatus) {
+        this.smsSendResultStatus = smsSendResultStatus;
     }
 
     public int getMessageId() {
@@ -43,7 +44,7 @@ public class SentMessageResult implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.messageResultStatus == null ? -1 : this.messageResultStatus.ordinal());
+        dest.writeInt(this.smsSendResultStatus == null ? -1 : this.smsSendResultStatus.ordinal());
         dest.writeInt(this.messageId);
         dest.writeString(this.instanceId);
     }
@@ -53,7 +54,7 @@ public class SentMessageResult implements Parcelable {
 
     private SentMessageResult(Parcel in) {
         int tmpMessageResultStatus = in.readInt();
-        this.messageResultStatus = tmpMessageResultStatus == -1 ? null : MessageResultStatus.values()[tmpMessageResultStatus];
+        this.smsSendResultStatus = tmpMessageResultStatus == -1 ? null : SmsSendResultStatus.values()[tmpMessageResultStatus];
         this.messageId = in.readInt();
         this.instanceId = in.readString();
     }

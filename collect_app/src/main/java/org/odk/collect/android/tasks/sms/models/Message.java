@@ -3,24 +3,24 @@ package org.odk.collect.android.tasks.sms.models;
 import java.util.Random;
 
 /**
- * Represents a single message that's been sent.
+ *  Represents a message that could be all or partNumber of a submission but its status could be queued,failed etc.
  */
 public class Message {
-    private int part;
+    private int partNumber;
     private int id;
     private String text;
-    private MessageStatus messageStatus;
+    private SmsStatus smsStatus;
 
-    public int getPart() {
-        return part;
+    public int getPartNumber() {
+        return partNumber;
     }
 
     public int getId() {
         return id;
     }
 
-    public void setPart(int part) {
-        this.part = part;
+    public void setPartNumber(int partNumber) {
+        this.partNumber = partNumber;
     }
 
     public String getText() {
@@ -32,22 +32,22 @@ public class Message {
     }
 
     public boolean isSent() {
-        return messageStatus.equals(MessageStatus.Sent);
+        return smsStatus.equals(SmsStatus.Sent);
     }
 
     public boolean isSending() {
-        return messageStatus.equals(MessageStatus.Sending);
+        return smsStatus.equals(SmsStatus.Sending);
     }
 
     public void generateRandomMessageID() {
         id = new Random().nextInt(10000);
     }
 
-    public MessageStatus getMessageStatus() {
-        return messageStatus;
+    public SmsStatus getSmsStatus() {
+        return smsStatus;
     }
 
-    public void setMessageStatus(MessageStatus messageStatus) {
-        this.messageStatus = messageStatus;
+    public void setSmsStatus(SmsStatus smsStatus) {
+        this.smsStatus = smsStatus;
     }
 }
