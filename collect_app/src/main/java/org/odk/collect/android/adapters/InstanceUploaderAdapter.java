@@ -15,11 +15,11 @@ import android.widget.TextView;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.events.RxEventBus;
-import org.odk.collect.android.events.SmsEvent;
+import org.odk.collect.android.events.SmsRxEvent;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.tasks.sms.SmsService;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
-import org.odk.collect.android.tasks.sms.models.MessageStatus;
+import org.odk.collect.android.tasks.sms.models.SmsStatus;
 import org.odk.collect.android.tasks.sms.models.SmsSubmission;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.views.ProgressBar;
@@ -117,24 +117,24 @@ public class InstanceUploaderAdapter extends CursorAdapter {
         }
 
         if (isSmsSubmission) {
-            MessageStatus messageStatus = submissionManager.checkNextMessageStatus(String.valueOf(instanceId));
+            SmsStatus smsStatus = submissionManager.checkNextMessageStatus(String.valueOf(instanceId));
 
-            if (messageStatus != null) {
-                setSmsSubmissionStateIcons(messageStatus, viewHolder);
+            if (smsStatus != null) {
+                setSmsSubmissionStateIcons(smsStatus, viewHolder);
             }
 
-            SmsEvent currentStatus = new SmsEvent();
-            currentStatus.setStatus(messageStatus);
+            SmsRxEvent currentStatus = new SmsRxEvent();
+            currentStatus.setStatus(smsStatus);
             currentStatus.setLastUpdated(model.getLastUpdated());
             currentStatus.setProgress(model.getCompletion());
 
             setDisplaySubTextView(currentStatus, viewHolder);
 
-            setupCloseButton(viewHolder, messageStatus);
+            setupCloseButton(viewHolder, smsStatus);
             viewHolder.closeButton.setOnClickListener(v -> smsService.cancelFormSubmission(String.valueOf(instanceId)));
         }
 
-        compositeDisposable.add(eventBus.register(SmsEvent.class)
+        compositeDisposable.add(eventBus.register(SmsRxEvent.class)
                 .filter(event -> event.getInstanceId().equals(String.valueOf(instanceId)))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -146,13 +146,13 @@ public class InstanceUploaderAdapter extends CursorAdapter {
                 }));
     }
 
-    private void setupCloseButton(ViewHolder viewHolder, MessageStatus status) {
+    private void setupCloseButton(ViewHolder viewHolder, SmsStatus status) {
 
         if (status == null) {
             return;
         }
 
-        if (status.equals(MessageStatus.Sending)) {
+        if (status.equals(SmsStatus.Sending)) {
             viewHolder.closeButton.setVisibility(View.VISIBLE);
             viewHolder.checkbox.setVisibility(View.GONE);
         } else {
@@ -161,13 +161,13 @@ public class InstanceUploaderAdapter extends CursorAdapter {
         }
     }
 
-    private void setSmsSubmissionStateIcons(MessageStatus messageStatus, ViewHolder viewHolder) {
+    private void setSmsSubmissionStateIcons(SmsStatus smsStatus, ViewHolder viewHolder) {
 
-        if (messageStatus == null) {
+        if (smsStatus == null) {
             return;
         }
 
-        switch (messageStatus) {
+        switch (smsStatus) {
             case Delivered:
             case Sent:
                 viewHolder.statusIcon.setImageResource(R.drawable.check);
@@ -188,7 +188,7 @@ public class InstanceUploaderAdapter extends CursorAdapter {
         }
     }
 
-    private void setDisplaySubTextView(SmsEvent progress, ViewHolder viewHolder) {
+    private void setDisplaySubTextView(SmsRxEvent progress, ViewHolder viewHolder) {
         String text = getDisplaySubtext(progress, context);
         if (text != null) {
             viewHolder.displaySubtext.setText(text);

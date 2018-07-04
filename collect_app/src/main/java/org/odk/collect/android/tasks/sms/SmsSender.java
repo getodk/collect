@@ -10,11 +10,11 @@ import android.telephony.SmsManager;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.events.RxEventBus;
-import org.odk.collect.android.events.SmsEvent;
+import org.odk.collect.android.events.SmsRxEvent;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.tasks.sms.models.Message;
-import org.odk.collect.android.tasks.sms.models.MessageStatus;
+import org.odk.collect.android.tasks.sms.models.SmsStatus;
 import org.odk.collect.android.tasks.sms.models.SmsSubmission;
 
 import java.util.ArrayList;
@@ -53,7 +53,7 @@ public class SmsSender {
         String gateway = settings.getString(PreferenceKeys.KEY_SMS_GATEWAY, null);
 
         if (!PhoneNumberUtils.isGlobalPhoneNumber(gateway)) {
-            eventBus.post(new SmsEvent(instanceId, MessageStatus.InvalidGateway));
+            eventBus.post(new SmsRxEvent(instanceId, SmsStatus.InvalidGateway));
             return false;
         }
 
@@ -123,7 +123,7 @@ public class SmsSender {
 
     /***
      * Recreates the sent intent that was passed to SMS Manager to check if it exists.
-     * Usefully in cases such as device restarts.
+     * Useful in cases such as device restarts.
      * @param context necessary to create pending intent.
      * @param instanceId identifies the instance of the form being targeted.
      * @param messageId identifies the specific messages this intent applies to.
@@ -136,6 +136,4 @@ public class SmsSender {
 
         return PendingIntent.getBroadcast(context, messageId, sendIntent, PendingIntent.FLAG_NO_CREATE) != null;
     }
-
-
 }
