@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.telephony.SmsManager;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.tasks.sms.models.MessageResultStatus;
+import org.odk.collect.android.tasks.sms.models.SmsSendResultStatus;
 import org.odk.collect.android.tasks.sms.models.SentMessageResult;
 
 import javax.inject.Inject;
@@ -46,19 +46,19 @@ public class SmsSentBroadcastReceiver extends BroadcastReceiver {
 
         switch (getResultCode()) {
             case Activity.RESULT_OK:
-                result.setMessageResultStatus(MessageResultStatus.Sent);
+                result.setSmsSendResultStatus(SmsSendResultStatus.Sent);
                 break;
             case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
-                result.setMessageResultStatus(MessageResultStatus.FatalError);
+                result.setSmsSendResultStatus(SmsSendResultStatus.FatalError);
                 break;
             case SmsManager.RESULT_ERROR_NO_SERVICE:
-                result.setMessageResultStatus(MessageResultStatus.NoReception);
+                result.setSmsSendResultStatus(SmsSendResultStatus.NoReception);
                 break;
             case SmsManager.RESULT_ERROR_NULL_PDU:
-                result.setMessageResultStatus(MessageResultStatus.FatalError);
+                result.setSmsSendResultStatus(SmsSendResultStatus.FatalError);
                 break;
             case SmsManager.RESULT_ERROR_RADIO_OFF:
-                result.setMessageResultStatus(MessageResultStatus.AirplaneMode);
+                result.setSmsSendResultStatus(SmsSendResultStatus.AirplaneMode);
 
                 break;
         }

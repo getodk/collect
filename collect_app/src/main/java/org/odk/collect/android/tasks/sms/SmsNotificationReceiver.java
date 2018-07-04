@@ -12,7 +12,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.InstanceUploaderList;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
-import org.odk.collect.android.tasks.sms.models.MessageStatus;
+import org.odk.collect.android.tasks.sms.models.SmsStatus;
 import org.odk.collect.android.tasks.sms.models.SentMessageResult;
 import org.odk.collect.android.tasks.sms.models.SmsProgress;
 import org.odk.collect.android.tasks.sms.models.SmsSubmission;
@@ -24,8 +24,6 @@ import java.util.Locale;
 import javax.inject.Inject;
 
 import timber.log.Timber;
-
-import static org.odk.collect.android.tasks.sms.models.MessageStatus.toMessageStatus;
 
 public class SmsNotificationReceiver extends BroadcastReceiver {
     public static final String SMS_MESSAGE_RESULT = "sms_message_result";
@@ -84,7 +82,7 @@ public class SmsNotificationReceiver extends BroadcastReceiver {
     }
 
     /***
-     * Creates a summary notification that's shown there are multiple submissions taking place.
+     * Creates a summary notification that's shown when there are multiple submissions taking place.
      * Will create a collapsed notification list on compatible versions of Android.
      * @return Notification
      */
@@ -109,7 +107,7 @@ public class SmsNotificationReceiver extends BroadcastReceiver {
         Date date = smsSubmission.getLastUpdated();
         SmsProgress progress = smsSubmission.getCompletion();
 
-        MessageStatus status = smsSubmission.isSentOrSending(toMessageStatus(messageResult.getMessageResultStatus()));
+        SmsStatus status = smsSubmission.isSentOrSending(messageResult.getSmsSendResultStatus().toMessageStatus());
         try {
             switch (status) {
                 case NoReception:

@@ -6,7 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.tasks.sms.models.MessageResultStatus;
+import org.odk.collect.android.tasks.sms.models.SmsSendResultStatus;
 import org.odk.collect.android.tasks.sms.models.SentMessageResult;
 
 import javax.inject.Inject;
@@ -31,10 +31,10 @@ public class SmsDeliveryBroadcastReceiver extends BroadcastReceiver {
 
         switch (getResultCode()) {
             case Activity.RESULT_OK:
-                result.setMessageResultStatus(MessageResultStatus.Delivered);
+                result.setSmsSendResultStatus(SmsSendResultStatus.Delivered);
                 break;
             case Activity.RESULT_CANCELED:
-                result.setMessageResultStatus(MessageResultStatus.NotDelivered);
+                result.setSmsSendResultStatus(SmsSendResultStatus.NotDelivered);
                 break;
         }
     }
