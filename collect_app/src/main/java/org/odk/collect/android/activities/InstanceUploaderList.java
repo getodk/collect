@@ -26,7 +26,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -48,7 +47,6 @@ import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.tasks.sms.SmsNotificationReceiver;
 import org.odk.collect.android.tasks.sms.SmsService;
 import org.odk.collect.android.utilities.PlayServicesUtil;
-import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.util.ArrayList;
@@ -58,11 +56,10 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PROTOCOL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_TRANSPORT_TYPE;
 import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
 import static org.odk.collect.android.utilities.PermissionUtils.requestStoragePermissions;
-
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PROTOCOL;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores
@@ -105,7 +102,6 @@ public class InstanceUploaderList extends InstanceListActivity implements
         // set title
         setTitle(getString(R.string.send_data));
         setContentView(R.layout.instance_uploader_list);
-        setLightThemeBackground();
         getComponent().inject(this);
 
         if (savedInstanceState != null) {
@@ -135,47 +131,35 @@ public class InstanceUploaderList extends InstanceListActivity implements
             public void onClick(View v) {
 
                 String transport = (String) GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE);
+                if (!transport.equalsIgnoreCase(getString(R.string.transport_type_value_sms))) {
 
-                if (transport.equalsIgnoreCase(getString(R.string.transport_type_value_sms))) {
-                    int checkedItemCount = getCheckedCount();
-                    logger.logAction(this, "uploadButton", Integer.toString(checkedItemCount));
-
-                    if (checkedItemCount > 0) {
-                        // items selected
-                        uploadSelectedFiles();
-                        setAllToCheckedState(listView, false);
-                        toggleButtonLabel(findViewById(R.id.toggle_button), listView);
-                        uploadButton.setEnabled(false);
-                    } else {
-                        // no items selected
-                        ToastUtils.showLongToast(R.string.noselect_error);
-                    }
-                } else {
                     ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(
                             Context.CONNECTIVITY_SERVICE);
                     NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
 
                     if (NetworkReceiver.running) {
                         ToastUtils.showShortToast(R.string.send_in_progress);
+                        return;
                     } else if (ni == null || !ni.isConnected()) {
                         logger.logAction(this, "uploadButton", "noConnection");
-
                         ToastUtils.showShortToast(R.string.no_connection);
-                    } else {
-                        int checkedItemCount = getCheckedCount();
-                        logger.logAction(this, "uploadButton", Integer.toString(checkedItemCount));
+                        return;
 
-                        if (checkedItemCount > 0) {
-                            // items selected
-                            uploadSelectedFiles();
-                            setAllToCheckedState(listView, false);
-                            toggleButtonLabel(findViewById(R.id.toggle_button), listView);
-                            uploadButton.setEnabled(false);
-                        } else {
-                            // no items selected
-                            ToastUtils.showLongToast(R.string.noselect_error);
-                        }
                     }
+                }
+
+                int checkedItemCount = getCheckedCount();
+                logger.logAction(this, "uploadButton", Integer.toString(checkedItemCount));
+
+                if (checkedItemCount > 0) {
+                    // items selected
+                    uploadSelectedFiles();
+                    setAllToCheckedState(listView, false);
+                    toggleButtonLabel(findViewById(R.id.toggle_button), listView);
+                    uploadButton.setEnabled(false);
+                } else {
+                    // no items selected
+                    ToastUtils.showLongToast(R.string.noselect_error);
                 }
             }
         });
@@ -460,12 +444,6 @@ public class InstanceUploaderList extends InstanceListActivity implements
 
         if (listAdapter != null) {
             ((InstanceUploaderAdapter) listAdapter).onDestroy();
-        }
-    }
-
-    public void setLightThemeBackground() {
-        if (!new ThemeUtils(this).isDarkTheme()) {
-            getWindow().getDecorView().setBackgroundColor(ContextCompat.getColor(this, R.color.cardview_light_background));
         }
     }
 }
