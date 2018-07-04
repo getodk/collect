@@ -14,26 +14,26 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.events.RxEventBus;
-import org.odk.collect.android.events.SmsEvent;
+import org.odk.collect.android.events.SmsRxEvent;
 import org.odk.collect.android.jobs.SmsSenderJob;
+import org.odk.collect.android.logic.FormInfo;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.tasks.InstanceUploader;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.tasks.sms.models.Message;
-import org.odk.collect.android.tasks.sms.models.MessageStatus;
 import org.odk.collect.android.tasks.sms.models.SentMessageResult;
 import org.odk.collect.android.tasks.sms.models.SmsProgress;
+import org.odk.collect.android.tasks.sms.models.SmsStatus;
 import org.odk.collect.android.tasks.sms.models.SmsSubmission;
 import org.odk.collect.android.tasks.sms.models.SubmitFormModel;
-import org.odk.collect.android.utilities.ArrayUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -41,9 +41,7 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_DELETE;
 import static org.odk.collect.android.tasks.sms.SmsSender.checkIfSentIntentExists;
-import static org.odk.collect.android.tasks.sms.models.MessageStatus.toMessageStatus;
 import static org.odk.collect.android.utilities.FileUtil.getFileContents;
 import static org.odk.collect.android.utilities.FileUtil.getSmsInstancePath;
 
@@ -72,20 +70,13 @@ public class SmsService {
 
     public void submitForms(long[] instanceIds) {
 
-        Long[] instanceIdObjects = ArrayUtils.toObject(instanceIds);
-        List<Long> list = java.util.Arrays.asList(instanceIdObjects);
-
         StringBuilder selection = new StringBuilder();
-
-        Iterator<Long> it = list.iterator();
-
-        String[] selectionArgs = new String[list.size()];
-        int i = 0;
-        while (it.hasNext()) {
-            String id = it.next().toString();
+        String[] selectionArgs = new String[instanceIds.length];
+        for (int i = 0; i < instanceIds.length; i++) {
+            long id = instanceIds[i];
             selection.append(InstanceProviderAPI.InstanceColumns._ID + "=?");
-            selectionArgs[i++] = id;
-            if (i != list.size()) {
+            selectionArgs[i] = String.valueOf(id);
+            if (i < instanceIds.length && instanceIds.length > 1) {
                 selection.append(" or ");
             }
         }
@@ -96,19 +87,14 @@ public class SmsService {
                 while (results.moveToNext()) {
                     String filePath = results.getString(results
                             .getColumnIndex(InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH));
-                    String id = results.getString(results.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID));
+                    String instanceId = results.getString(results.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID));
                     String displayName = results.getString(results.getColumnIndex(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME));
                     String formId = results.getString(results.getColumnIndex(InstanceProviderAPI.InstanceColumns.JR_FORM_ID));
                     String formVersion = results.getString(results.getColumnIndex(InstanceProviderAPI.InstanceColumns.JR_VERSION));
 
-                    SubmitFormModel submitFormModel = new SubmitFormModel();
-                    submitFormModel.setDisplayName(displayName);
-                    submitFormModel.setInstanceFilePath(filePath);
-                    submitFormModel.setInstanceId(id);
-                    submitFormModel.setFormId(formId);
-                    submitFormModel.setFormVersion(formVersion);
+                    FormInfo info = new FormInfo(filePath,formId,formVersion);
 
-                    submitForm(submitFormModel);
+                    submitForm(instanceId,info,displayName);
                 }
             }
         }
@@ -118,28 +104,25 @@ public class SmsService {
      * Responsible for fetching the saved form that adheres to the SMS spec and
      * persisting the form as a group of messages so that they can be sent via a
      * background job.
-     *
-     * @param submitFormModel contains all the properties necessary for form submission
      */
-    public boolean submitForm(SubmitFormModel submitFormModel) {
+    public boolean submitForm(String instanceId, FormInfo info, String displayName) {
 
         String text;
-        String instanceId = submitFormModel.getInstanceId();
 
-        if (formsDao.isFormEncrypted(submitFormModel.getFormId(), submitFormModel.getFormVersion())) {
-            SmsEvent event = new SmsEvent(instanceId, MessageStatus.Encrypted);
+        if (formsDao.isFormEncrypted(info.getFormID(), info.getFormVersion())) {
+            SmsRxEvent event = new SmsRxEvent(instanceId, SmsStatus.Encrypted);
             updateInstanceStatusFailedText(instanceId, event);
             rxEventBus.post(event);
             return false;
         }
 
-        File smsFile = new File(getSmsInstancePath(submitFormModel.getInstanceFilePath()));
+        File smsFile = new File(getSmsInstancePath(info.getInstancePath()));
 
         /**
          * No instance.txt file is generated if a form doesn't have sms tags.
          */
         if (!smsFile.exists()) {
-            SmsEvent event = new SmsEvent(instanceId, MessageStatus.NoMessage);
+            SmsRxEvent event = new SmsRxEvent(instanceId, SmsStatus.NoMessage);
             updateInstanceStatusFailedText(instanceId, event);
             rxEventBus.post(event);
             return false;
@@ -149,7 +132,7 @@ public class SmsService {
             text = getFileContents(smsFile);
         } catch (IOException e) {
 
-            SmsEvent event = new SmsEvent(instanceId, MessageStatus.FatalError);
+            SmsRxEvent event = new SmsRxEvent(instanceId, SmsStatus.FatalError);
             updateInstanceStatusFailedText(instanceId, event);
             rxEventBus.post(event);
             Timber.e(e);
@@ -158,10 +141,7 @@ public class SmsService {
 
         SmsSubmission model = smsSubmissionManager.getSubmissionModel(instanceId);
 
-
-        boolean allMessagesAreNotSending = false;
-
-        /**
+        /*
          * If the model exists that means this instance was probably sent in the pasty.
          */
         if (model != null) {
@@ -180,17 +160,13 @@ public class SmsService {
 
             for (Message message : model.getMessages()) {
 
-                /**
+                /*
                  * If there's a message that hasn't sent then a job should be added to continue the process.
                  */
                 if (!(message.isSending() && checkIfSentIntentExists(context, instanceId, message.getId())) || !message.isSent()) {
-                    allMessagesAreNotSending = true;
+                    addMessagesJobToQueue(instanceId);
                     break;
                 }
-            }
-
-            if (allMessagesAreNotSending) {
-                addMessagesJobToQueue(instanceId);
             }
         } else {
 
@@ -201,16 +177,16 @@ public class SmsService {
             model.setNotificationId();
             model.setInstanceId(instanceId);
             model.setLastUpdated(new Date());
-            model.setDisplayName(submitFormModel.getDisplayName());
+            model.setDisplayName(displayName);
 
             List<Message> messages = new ArrayList<>();
 
             for (String part : parts) {
 
                 Message message = new Message();
-                message.setPart(parts.indexOf(part) + 1);
+                message.setPartNumber(parts.indexOf(part) + 1);
                 message.setText(part);
-                message.setMessageStatus(MessageStatus.Ready);
+                message.setSmsStatus(SmsStatus.Ready);
                 message.generateRandomMessageID();
 
                 messages.add(message);
@@ -240,14 +216,14 @@ public class SmsService {
             return false;
         }
 
-        smsSubmissionManager.deleteSubmission(instanceId);
+        smsSubmissionManager.forgetSubmission(instanceId);
 
         JobManager.instance().cancel(model.getJobId());
 
-        SmsEvent event = new SmsEvent();
+        SmsRxEvent event = new SmsRxEvent();
         event.setInstanceId(instanceId);
         event.setLastUpdated(model.getLastUpdated());
-        event.setStatus(MessageStatus.Canceled);
+        event.setStatus(SmsStatus.Canceled);
 
         rxEventBus.post(event);
 
@@ -265,14 +241,14 @@ public class SmsService {
         String log = String.format(Locale.getDefault(), "Received result from broadcast receiver of instance id %s with message id of %d", sentMessageResult.getInstanceId(), sentMessageResult.getMessageId());
         Timber.i(log);
 
-        smsSubmissionManager.updateMessageStatus(toMessageStatus(sentMessageResult.getMessageResultStatus()), sentMessageResult.getInstanceId(), sentMessageResult.getMessageId());
+        smsSubmissionManager.updateMessageStatus(sentMessageResult.getSmsSendResultStatus().toMessageStatus(), sentMessageResult.getInstanceId(), sentMessageResult.getMessageId());
 
         SmsSubmission model = smsSubmissionManager.getSubmissionModel(sentMessageResult.getInstanceId());
 
-        SmsEvent event = new SmsEvent();
+        SmsRxEvent event = new SmsRxEvent();
         event.setInstanceId(sentMessageResult.getInstanceId());
         event.setLastUpdated(model.getLastUpdated());
-        MessageStatus status = toMessageStatus(sentMessageResult.getMessageResultStatus());
+        SmsStatus status = sentMessageResult.getSmsSendResultStatus().toMessageStatus();
         event.setStatus(model.isSentOrSending(status));
         event.setProgress(model.getCompletion());
 
@@ -285,8 +261,8 @@ public class SmsService {
          * */
         if (model.isSubmissionComplete()) {
             markInstanceAsSubmittedOrDelete(sentMessageResult.getInstanceId());
-            smsSubmissionManager.deleteSubmission(sentMessageResult.getInstanceId());
-        } else if (!status.equals(MessageStatus.Sent)) {
+            smsSubmissionManager.forgetSubmission(sentMessageResult.getInstanceId());
+        } else if (!status.equals(SmsStatus.Sent)) {
             updateInstanceStatusFailedText(sentMessageResult.getInstanceId(), event);
         }
     }
@@ -314,7 +290,7 @@ public class SmsService {
         model.setJobId(jobId);
 
         smsSubmissionManager.saveSubmission(model);
-        rxEventBus.post(new SmsEvent(instanceId, MessageStatus.Queued));
+        rxEventBus.post(new SmsRxEvent(instanceId, SmsStatus.Queued));
     }
 
     private void markInstanceAsSubmittedOrDelete(String instanceId) {
@@ -331,7 +307,7 @@ public class SmsService {
             String formId;
             while (cursor.moveToNext()) {
                 formId = cursor.getString(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.JR_FORM_ID));
-                if (isFormAutoDeleteEnabled(formId, isFormAutoDeleteOptionEnabled)) {
+                if (InstanceUploader.isFormAutoDeleteEnabled(formId, isFormAutoDeleteOptionEnabled)) {
 
                     List<String> instancesToDelete = new ArrayList<>();
                     instancesToDelete.add(instanceId);
@@ -348,7 +324,7 @@ public class SmsService {
      * @param instanceId of the instance being updated
      * @param event      with the specific failed status that's gonna be persisted
      */
-    private void updateInstanceStatusFailedText(String instanceId, SmsEvent event) {
+    private void updateInstanceStatusFailedText(String instanceId, SmsRxEvent event) {
         String where = InstanceProviderAPI.InstanceColumns._ID + "=?";
         String[] whereArgs = {instanceId};
 
@@ -359,35 +335,12 @@ public class SmsService {
         instancesDao.updateInstance(contentValues, where, whereArgs);
     }
 
-    /**
-     * @param isFormAutoDeleteOptionEnabled represents whether the auto-delete option is enabled at the app level
-     *                                      <p>
-     *                                      If the form explicitly sets the auto-delete property, then it overrides the preferences.
-     */
-    private boolean isFormAutoDeleteEnabled(String jrFormId, boolean isFormAutoDeleteOptionEnabled) {
-        Cursor cursor = new FormsDao().getFormsCursorForFormId(jrFormId);
-        String autoDelete = null;
-        if (cursor != null && cursor.moveToFirst()) {
-            try {
-                int autoDeleteColumnIndex = cursor.getColumnIndex(AUTO_DELETE);
-                autoDelete = cursor.getString(autoDeleteColumnIndex);
-            } finally {
-                cursor.close();
-            }
-        }
-        return autoDelete == null ? isFormAutoDeleteOptionEnabled : Boolean.valueOf(autoDelete);
-    }
-
-     public static String getDisplaySubtext(SmsEvent event, Context context) {
+    public static String getDisplaySubtext(SmsRxEvent event, Context context) {
         Date date = event.getLastUpdated();
         SmsProgress progress = event.getProgress();
 
         if (event.getStatus() == null) {
             return null;
-        }
-
-        if (event.getProgress().getPercentage() == 100 && event.getStatus().equals(MessageStatus.Sent)) {
-            event.setStatus(MessageStatus.Sending);
         }
 
         try {
