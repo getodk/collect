@@ -27,7 +27,6 @@ import org.odk.collect.android.tasks.sms.models.SentMessageResult;
 import org.odk.collect.android.tasks.sms.models.SmsProgress;
 import org.odk.collect.android.tasks.sms.models.SmsStatus;
 import org.odk.collect.android.tasks.sms.models.SmsSubmission;
-import org.odk.collect.android.tasks.sms.models.SubmitFormModel;
 
 import java.io.File;
 import java.io.IOException;
@@ -92,9 +91,9 @@ public class SmsService {
                     String formId = results.getString(results.getColumnIndex(InstanceProviderAPI.InstanceColumns.JR_FORM_ID));
                     String formVersion = results.getString(results.getColumnIndex(InstanceProviderAPI.InstanceColumns.JR_VERSION));
 
-                    FormInfo info = new FormInfo(filePath,formId,formVersion);
+                    FormInfo info = new FormInfo(filePath, formId, formVersion);
 
-                    submitForm(instanceId,info,displayName);
+                    submitForm(instanceId, info, displayName);
                 }
             }
         }

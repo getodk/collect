@@ -12,13 +12,13 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.injection.DaggerTestComponent;
 import org.odk.collect.android.injection.TestComponent;
+import org.odk.collect.android.logic.FormInfo;
 import org.odk.collect.android.sms.base.BaseSmsTest;
 import org.odk.collect.android.sms.base.SampleData;
 import org.odk.collect.android.tasks.sms.SmsSender;
 import org.odk.collect.android.tasks.sms.SmsService;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.tasks.sms.models.SmsSubmission;
-import org.odk.collect.android.tasks.sms.models.SubmitFormModel;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.shadows.ShadowSmsManager;
@@ -77,14 +77,9 @@ public class SmsServiceTest extends BaseSmsTest {
 
         writeFormToFile(form, file);
 
-        SubmitFormModel submitFormModel = new SubmitFormModel();
-        submitFormModel.setDisplayName("Sample Form");
-        submitFormModel.setInstanceFilePath(instancePath);
-        submitFormModel.setInstanceId(SampleData.TEST_INSTANCE_ID);
-        submitFormModel.setFormId("");
-        submitFormModel.setFormVersion("");
+        FormInfo info = new FormInfo(instancePath, "", "");
 
-        assertTrue(smsService.submitForm(submitFormModel));
+        assertTrue(smsService.submitForm(SampleData.TEST_INSTANCE_ID, info, "Sample Form"));
 
         ShadowSmsManager.TextMultipartParams params = shadowOf(smsManager).getLastSentMultipartTextMessageParams();
 
