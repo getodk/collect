@@ -274,11 +274,11 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
 
         publishProgress(Collect.getInstance().getString(R.string.survey_saving_saving_message));
 
-        exportXmlFile(payload, instancePath);
+        writeFile(payload, instancePath);
 
         final ByteArrayPayload payloadSms = formController.getFilledInFormSMS();
         // Write SMS to card
-        exportXmlFile(payloadSms, getSmsInstancePath(instancePath));
+        writeFile(payloadSms, getSmsInstancePath(instancePath));
 
         // update the uri. We have exported the reloadable instance, so update status...
         // Since we saved a reloadable instance, it is flagged as re-openable so that if any error
@@ -306,7 +306,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
             publishProgress(
                     Collect.getInstance().getString(R.string.survey_saving_finalizing_message));
 
-            exportXmlFile(payload, submissionXml.getAbsolutePath());
+            writeFile(payload, submissionXml.getAbsolutePath());
 
             // see if the form is encrypted and we can encrypt it...
             EncryptedFormInformation formInfo = EncryptionUtils.getEncryptedFormInformation(uri,
@@ -382,11 +382,10 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
         }
     }
 
-
     /**
-     * This method actually writes the xml to disk.
+     * Writes payload contents to the disk.
      */
-    static void exportXmlFile(ByteArrayPayload payload, String path) throws IOException {
+    static void writeFile(ByteArrayPayload payload, String path) throws IOException {
         File file = new File(path);
         if (file.exists() && !file.delete()) {
             throw new IOException("Cannot overwrite " + path + ". Perhaps the file is locked?");
