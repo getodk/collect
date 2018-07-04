@@ -637,9 +637,7 @@
     <string name="sms_submissions_notif_title">SMS submissions</string>
     <string name="sms_submissions_notif_description">Several forms are currently being submitted.</string>
     <string name="transport_type_internet">Wifi/Cellular (recommended)</string>
-    <string name="transport_type_value_internet">internet</string>
     <string name="transport_type_sms">SMS</string>
-    <string name="transport_type_value_sms">sms</string>
     <string name="seconds">Seconds</string>
     <string name="double_tap_to_start">Double tap to start</string>
 </resources>
