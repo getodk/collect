@@ -76,7 +76,6 @@
         <exclude name="NPathComplexity" />
         <exclude name="SignatureDeclareThrowsException" />
         <exclude name="SimplifyConditional" />
-        <exclude name="SingularField" />
         <exclude name="SwitchDensity" />
         <exclude name="TooManyFields" />
         <exclude name="TooManyMethods" />

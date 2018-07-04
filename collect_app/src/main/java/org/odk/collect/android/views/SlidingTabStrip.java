@@ -38,7 +38,6 @@ class SlidingTabStrip extends LinearLayout {
     private final int selectedIndicatorThickness;
     private final Paint selectedIndicatorPaint;
 
-    private final int defaultBottomBorderColor;
     private final SimpleTabColorizer defaultTabColorizer;
     private int selectedPosition;
     private float selectionOffset;
@@ -58,7 +57,7 @@ class SlidingTabStrip extends LinearLayout {
         context.getTheme().resolveAttribute(android.R.attr.colorForeground, outValue, true);
         final int themeForegroundColor = outValue.data;
 
-        defaultBottomBorderColor = setColorAlpha(themeForegroundColor,
+        final int defaultBottomBorderColor = setColorAlpha(themeForegroundColor,
                 DEFAULT_BOTTOM_BORDER_COLOR_ALPHA);
 
         defaultTabColorizer = new SimpleTabColorizer();
