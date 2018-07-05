@@ -2,6 +2,7 @@ package org.odk.collect.android.tasks.sms;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.telephony.SmsManager;
 
@@ -23,16 +24,16 @@ import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.tasks.InstanceUploader;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.tasks.sms.models.Message;
-import org.odk.collect.android.tasks.sms.models.SentMessageResult;
 import org.odk.collect.android.tasks.sms.models.SmsProgress;
-import org.odk.collect.android.tasks.sms.models.SmsStatus;
 import org.odk.collect.android.tasks.sms.models.SmsSubmission;
+import org.odk.collect.android.utilities.ArrayUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -40,6 +41,13 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
+import static android.app.Activity.RESULT_OK;
+import static android.telephony.SmsManager.RESULT_ERROR_NO_SERVICE;
+import static android.telephony.SmsManager.RESULT_ERROR_RADIO_OFF;
+import static org.odk.collect.android.tasks.sms.SmsNotificationReceiver.SMS_NOTIFICATION_ACTION;
+import static org.odk.collect.android.tasks.sms.SmsSender.SMS_INSTANCE_ID;
+import static org.odk.collect.android.tasks.sms.SmsSender.SMS_MESSAGE_ID;
+import static org.odk.collect.android.tasks.sms.SmsSender.SMS_RESULT_CODE;
 import static org.odk.collect.android.tasks.sms.SmsSender.checkIfSentIntentExists;
 import static org.odk.collect.android.utilities.FileUtil.getFileContents;
 import static org.odk.collect.android.utilities.FileUtil.getSmsInstancePath;
@@ -57,6 +65,16 @@ public class SmsService {
     private final InstancesDao instancesDao;
     private final FormsDao formsDao;
 
+    private static final int RESULT_ENCRYPTED = 100;
+    public static final int RESULT_QUEUED = 101;
+    private static final int RESULT_NO_MESSAGE = 102;
+    public static final int RESULT_SENT_OTHERS_PENDING = 103;
+    private static final int RESULT_FILE_ERROR = 104;
+    public static final int RESULT_INVALID_GATEWAY = 105;
+    public static final int RESULT_MESSAGE_READY = 106;
+    private static final int RESULT_SUBMISSION_CANCELED = 107;
+    public static final int RESULT_SENDING = 108;
+
     @Inject
     public SmsService(SmsManager smsManager, SmsSubmissionManagerContract smsSubmissionManager, InstancesDao instancesDao, Context context, RxEventBus rxEventBus, FormsDao formsDao) {
         this.smsManager = smsManager;
@@ -68,14 +86,18 @@ public class SmsService {
     }
 
     public void submitForms(long[] instanceIds) {
+        Long[] instanceIdObjects = ArrayUtils.toObject(instanceIds);
+        List<Long> list = java.util.Arrays.asList(instanceIdObjects);
 
         StringBuilder selection = new StringBuilder();
-        String[] selectionArgs = new String[instanceIds.length];
-        for (int i = 0; i < instanceIds.length; i++) {
-            long id = instanceIds[i];
+        Iterator<Long> it = list.iterator();
+        String[] selectionArgs = new String[list.size()];
+        int i = 0;
+        while (it.hasNext()) {
+            String id = it.next().toString();
             selection.append(InstanceProviderAPI.InstanceColumns._ID + "=?");
-            selectionArgs[i] = String.valueOf(id);
-            if (i < instanceIds.length && instanceIds.length > 1) {
+            selectionArgs[i++] = id;
+            if (i != list.size()) {
                 selection.append(" or ");
             }
         }
@@ -109,7 +131,7 @@ public class SmsService {
         String text;
 
         if (formsDao.isFormEncrypted(info.getFormID(), info.getFormVersion())) {
-            SmsRxEvent event = new SmsRxEvent(instanceId, SmsStatus.Encrypted);
+            SmsRxEvent event = new SmsRxEvent(instanceId, RESULT_ENCRYPTED);
             updateInstanceStatusFailedText(instanceId, event);
             rxEventBus.post(event);
             return false;
@@ -121,7 +143,7 @@ public class SmsService {
          * No instance.txt file is generated if a form doesn't have sms tags.
          */
         if (!smsFile.exists()) {
-            SmsRxEvent event = new SmsRxEvent(instanceId, SmsStatus.NoMessage);
+            SmsRxEvent event = new SmsRxEvent(instanceId, RESULT_NO_MESSAGE);
             updateInstanceStatusFailedText(instanceId, event);
             rxEventBus.post(event);
             return false;
@@ -131,7 +153,7 @@ public class SmsService {
             text = getFileContents(smsFile);
         } catch (IOException e) {
 
-            SmsRxEvent event = new SmsRxEvent(instanceId, SmsStatus.FatalError);
+            SmsRxEvent event = new SmsRxEvent(instanceId, RESULT_FILE_ERROR);
             updateInstanceStatusFailedText(instanceId, event);
             rxEventBus.post(event);
             Timber.e(e);
@@ -185,7 +207,7 @@ public class SmsService {
                 Message message = new Message();
                 message.setPartNumber(parts.indexOf(part) + 1);
                 message.setText(part);
-                message.setSmsStatus(SmsStatus.Ready);
+                message.setResultCode(RESULT_MESSAGE_READY);
                 message.generateRandomMessageID();
 
                 messages.add(message);
@@ -222,7 +244,7 @@ public class SmsService {
         SmsRxEvent event = new SmsRxEvent();
         event.setInstanceId(instanceId);
         event.setLastUpdated(model.getLastUpdated());
-        event.setStatus(SmsStatus.Canceled);
+        event.setResultCode(RESULT_SUBMISSION_CANCELED);
 
         rxEventBus.post(event);
 
@@ -233,25 +255,31 @@ public class SmsService {
      * Receives a model that contains the information received by the intent of the
      * SmsSentBroadcastReceiver that's triggered when a message was sent.
      * This function then determines the next action to perform based on the result it receives.
-     * @param sentMessageResult from BroadcastReceiver
      */
-    void processMessageSentResult(SentMessageResult sentMessageResult) {
+    void processMessageSentResult(String instanceId, int messageId, int resultCode) {
 
-        String log = String.format(Locale.getDefault(), "Received result from broadcast receiver of instance id %s with message id of %d", sentMessageResult.getInstanceId(), sentMessageResult.getMessageId());
+        String log = String.format(Locale.getDefault(), "Received result from broadcast receiver of instance id %s with message id of %d", instanceId, messageId);
         Timber.i(log);
 
-        smsSubmissionManager.updateMessageStatus(sentMessageResult.getSmsSendResultStatus().toMessageStatus(), sentMessageResult.getInstanceId(), sentMessageResult.getMessageId());
+        smsSubmissionManager.updateMessageStatus(resultCode, instanceId, messageId);
 
-        SmsSubmission model = smsSubmissionManager.getSubmissionModel(sentMessageResult.getInstanceId());
+        SmsSubmission model = smsSubmissionManager.getSubmissionModel(instanceId);
+
+        resultCode = model.validateResultCode(resultCode);
 
         SmsRxEvent event = new SmsRxEvent();
-        event.setInstanceId(sentMessageResult.getInstanceId());
+        event.setInstanceId(instanceId);
         event.setLastUpdated(model.getLastUpdated());
-        SmsStatus status = sentMessageResult.getSmsSendResultStatus().toMessageStatus();
-        event.setStatus(model.isSentOrSending(status));
+        event.setResultCode(resultCode);
         event.setProgress(model.getCompletion());
 
         rxEventBus.post(event);
+
+        Intent notificationIntent = new Intent(SMS_NOTIFICATION_ACTION);
+        notificationIntent.putExtra(SMS_MESSAGE_ID, messageId);
+        notificationIntent.putExtra(SMS_INSTANCE_ID, instanceId);
+        notificationIntent.putExtra(SMS_RESULT_CODE, resultCode);
+        context.sendOrderedBroadcast(notificationIntent, null);
 
         /*
          * If the submission has completed then the instance is marked as submitted.
@@ -259,10 +287,10 @@ public class SmsService {
          * so that error message is persisted along with SUBMISSION_STATUS_FAILED
          * */
         if (model.isSubmissionComplete()) {
-            markInstanceAsSubmittedOrDelete(sentMessageResult.getInstanceId());
-            smsSubmissionManager.forgetSubmission(sentMessageResult.getInstanceId());
-        } else if (!status.equals(SmsStatus.Sent)) {
-            updateInstanceStatusFailedText(sentMessageResult.getInstanceId(), event);
+            markInstanceAsSubmittedOrDelete(instanceId);
+            smsSubmissionManager.forgetSubmission(instanceId);
+        } else if (resultCode != RESULT_OK) {
+            updateInstanceStatusFailedText(instanceId, event);
         }
     }
 
@@ -289,7 +317,7 @@ public class SmsService {
         model.setJobId(jobId);
 
         smsSubmissionManager.saveSubmission(model);
-        rxEventBus.post(new SmsRxEvent(instanceId, SmsStatus.Queued));
+        rxEventBus.post(new SmsRxEvent(instanceId, RESULT_QUEUED));
     }
 
     private void markInstanceAsSubmittedOrDelete(String instanceId) {
@@ -329,45 +357,35 @@ public class SmsService {
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
-        contentValues.put(InstanceProviderAPI.InstanceColumns.DISPLAY_SUBTEXT, getDisplaySubtext(event, context));
+        contentValues.put(InstanceProviderAPI.InstanceColumns.DISPLAY_SUBTEXT, getDisplaySubtext(event.getResultCode(), event.getLastUpdated(), event.getProgress(), context));
 
         instancesDao.updateInstance(contentValues, where, whereArgs);
     }
 
-    public static String getDisplaySubtext(SmsRxEvent event, Context context) {
-        Date date = event.getLastUpdated();
-        SmsProgress progress = event.getProgress();
-
-        if (event.getStatus() == null) {
-            return null;
-        }
-
+    public static String getDisplaySubtext(int resultCode, Date date, SmsProgress progress, Context context) {
         try {
-            switch (event.getStatus()) {
-                case NoReception:
+            switch (resultCode) {
+                case RESULT_ERROR_NO_SERVICE:
                     return new SimpleDateFormat(context.getString(R.string.sms_no_reception), Locale.getDefault()).format(date);
-                case AirplaneMode:
+                case RESULT_ERROR_RADIO_OFF:
                     return new SimpleDateFormat(context.getString(R.string.sms_airplane_mode), Locale.getDefault()).format(date);
-                case FatalError:
-                    return new SimpleDateFormat(context.getString(R.string.sms_fatal_error), Locale.getDefault()).format(date);
-                case Sending:
+                case RESULT_SENT_OTHERS_PENDING:
                     return context.getResources().getQuantityString(R.plurals.sms_sending, (int) progress.getTotalCount(), progress.getCompletedCount(), progress.getTotalCount());
-                case Queued:
+                case RESULT_QUEUED:
                     return context.getString(R.string.sms_submission_queued);
-                case Sent:
+                case RESULT_OK:
                     return new SimpleDateFormat(context.getString(R.string.sms_sent_on_date_at_time),
                             Locale.getDefault()).format(date);
-                case Delivered:
-                    return new SimpleDateFormat(context.getString(R.string.sms_delivered_on_date_at_time),
-                            Locale.getDefault()).format(date);
-                case NotDelivered:
-                    return new SimpleDateFormat(context.getString(R.string.sms_not_delivered_on_date_at_time),
-                            Locale.getDefault()).format(date);
-                case NoMessage:
+                case RESULT_NO_MESSAGE:
                     return context.getString(R.string.sms_no_message);
-                case Canceled:
+                case RESULT_SUBMISSION_CANCELED:
                     return new SimpleDateFormat(context.getString(R.string.sms_last_submission_on_date_at_time),
                             Locale.getDefault()).format(date);
+                case RESULT_ENCRYPTED:
+                    return context.getString(R.string.sms_encrypted_message);
+
+                default:
+                    return new SimpleDateFormat(context.getString(R.string.sms_fatal_error), Locale.getDefault()).format(date);
             }
         } catch (IllegalArgumentException e) {
             Timber.e(e);

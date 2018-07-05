@@ -42,7 +42,7 @@ public class SmsServiceTest extends BaseSmsTest {
     SmsSubmissionManagerContract submissionManager;
     @Inject
     SmsManager smsManager;
-    StubSmsService smsService;
+    private StubSmsService smsService;
     @Inject
     InstancesDao instancesDao;
     @Inject
@@ -53,7 +53,7 @@ public class SmsServiceTest extends BaseSmsTest {
     @Before
     public void setUp() {
 
-        /**
+        /*
          * Setting up dagger to utilize test dependencies across the app.
          */
         TestComponent testComponent = DaggerTestComponent.builder().application(RuntimeEnvironment.application).build();

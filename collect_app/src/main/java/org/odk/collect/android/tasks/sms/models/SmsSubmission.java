@@ -1,5 +1,9 @@
 package org.odk.collect.android.tasks.sms.models;
 
+import android.app.Activity;
+
+import org.odk.collect.android.tasks.sms.SmsService;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -72,24 +76,22 @@ public class SmsSubmission {
     }
 
     /***
-     * Checks to see if the current message is the last or not. If it's not the last it sends
+     * Checks to see if the current message is the last or not based on the result code. If it's not the last it sends
      * Sending as the status to the InstanceUploaderList so that it shows the current progress but if it's the last
      * message then that means the submission has been completed so it should show Sent. This has to be done
      * because the SmsStatus is being used to serve SmsSender Layer and it's status is also tied to the UI.
      *
-     * @param status that was received from the broadcast receiver of the message that was just sent.
+     * @param resultCode that was received from the broadcast receiver of the message that was just sent.
      * @return the SmsStatus that will be transferred via the event.
      */
-    public SmsStatus isSentOrSending(SmsStatus status) {
-        if (status.equals(SmsStatus.Sent)) {
-            if (isSubmissionComplete()) {
-                return SmsStatus.Sent;
-            } else {
-                return SmsStatus.Sending;
+    public int validateResultCode(int resultCode) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (!isSubmissionComplete()) {
+                return SmsService.RESULT_SENT_OTHERS_PENDING;
             }
         }
 
-        return status;
+        return resultCode;
     }
 
 
@@ -116,7 +118,7 @@ public class SmsSubmission {
     }
 
     public void setNotificationId() {
-        this.notificationId = new Random().nextInt(10000);
+        this.notificationId = new Random().nextInt(Integer.MAX_VALUE);
     }
 
     public String getDisplayName() {

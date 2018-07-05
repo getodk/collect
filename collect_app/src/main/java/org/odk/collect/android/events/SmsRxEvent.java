@@ -1,33 +1,25 @@
 package org.odk.collect.android.events;
 
-import org.odk.collect.android.tasks.sms.models.SmsStatus;
 import org.odk.collect.android.tasks.sms.models.SmsProgress;
 
 import java.util.Date;
 
 public class SmsRxEvent extends RxEvent {
-    private SmsStatus status;
     private SmsProgress progress;
     private String instanceId;
     private Date lastUpdated;
+    private int resultCode;
 
     public SmsRxEvent() {
         progress = new SmsProgress();
     }
 
-    public SmsRxEvent(String instanceId, SmsStatus status) {
-        this.status = status;
+    public SmsRxEvent(String instanceId, int resultCode) {
         this.instanceId = instanceId;
+        this.resultCode = resultCode;
         progress = new SmsProgress();
     }
 
-    public SmsStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(SmsStatus status) {
-        this.status = status;
-    }
 
     public String getInstanceId() {
         return instanceId;
@@ -51,5 +43,13 @@ public class SmsRxEvent extends RxEvent {
 
     public void setLastUpdated(Date lastUpdated) {
         this.lastUpdated = lastUpdated;
+    }
+
+    public int getResultCode() {
+        return resultCode;
+    }
+
+    public void setResultCode(int resultCode) {
+        this.resultCode = resultCode;
     }
 }

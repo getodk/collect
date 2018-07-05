@@ -1,6 +1,5 @@
 package org.odk.collect.android.tasks.sms.contracts;
 
-import org.odk.collect.android.tasks.sms.models.SmsStatus;
 import org.odk.collect.android.tasks.sms.models.SmsSubmission;
 
 /**
@@ -18,7 +17,7 @@ public interface SmsSubmissionManagerContract {
 
     void saveSubmission(SmsSubmission model);
 
-    SmsStatus checkNextMessageStatus(String instanceId);
+    int checkNextMessageResultCode(String instanceId);
 
-    void updateMessageStatus(SmsStatus smsStatus, String instanceId, int messageId);
+    void updateMessageStatus(int resultCode, String instanceId, int messageId);
 }

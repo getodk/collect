@@ -1,5 +1,6 @@
 package org.odk.collect.android.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.drawable.GradientDrawable;
@@ -19,7 +20,6 @@ import org.odk.collect.android.events.SmsRxEvent;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.tasks.sms.SmsService;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
-import org.odk.collect.android.tasks.sms.models.SmsStatus;
 import org.odk.collect.android.tasks.sms.models.SmsSubmission;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.views.ProgressBar;
@@ -34,6 +34,9 @@ import io.reactivex.schedulers.Schedulers;
 
 import static org.odk.collect.android.provider.InstanceProviderAPI.STATUS_SUBMISSION_FAILED;
 import static org.odk.collect.android.provider.InstanceProviderAPI.STATUS_SUBMITTED;
+import static org.odk.collect.android.tasks.sms.SmsService.RESULT_MESSAGE_READY;
+import static org.odk.collect.android.tasks.sms.SmsService.RESULT_QUEUED;
+import static org.odk.collect.android.tasks.sms.SmsService.RESULT_SENT_OTHERS_PENDING;
 import static org.odk.collect.android.tasks.sms.SmsService.getDisplaySubtext;
 
 public class InstanceUploaderAdapter extends CursorAdapter {
@@ -117,14 +120,12 @@ public class InstanceUploaderAdapter extends CursorAdapter {
         }
 
         if (isSmsSubmission) {
-            SmsStatus smsStatus = submissionManager.checkNextMessageStatus(String.valueOf(instanceId));
+            int smsStatus = submissionManager.checkNextMessageResultCode(String.valueOf(instanceId));
 
-            if (smsStatus != null) {
-                setSmsSubmissionStateIcons(smsStatus, viewHolder);
-            }
+            setSmsSubmissionStateIcons(smsStatus, viewHolder);
 
             SmsRxEvent currentStatus = new SmsRxEvent();
-            currentStatus.setStatus(smsStatus);
+            currentStatus.setResultCode(smsStatus);
             currentStatus.setLastUpdated(model.getLastUpdated());
             currentStatus.setProgress(model.getCompletion());
 
@@ -140,19 +141,15 @@ public class InstanceUploaderAdapter extends CursorAdapter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(event -> {
                     viewHolder.progressBar.setProgressPercent((int) event.getProgress().getPercentage(), true);
-                    setSmsSubmissionStateIcons(event.getStatus(), viewHolder);
+                    setSmsSubmissionStateIcons(event.getResultCode(), viewHolder);
                     setDisplaySubTextView(event, viewHolder);
-                    setupCloseButton(viewHolder, event.getStatus());
+                    setupCloseButton(viewHolder, event.getResultCode());
                 }));
     }
 
-    private void setupCloseButton(ViewHolder viewHolder, SmsStatus status) {
+    private void setupCloseButton(ViewHolder viewHolder, int resultCode) {
 
-        if (status == null) {
-            return;
-        }
-
-        if (status.equals(SmsStatus.Sending)) {
+        if (resultCode == RESULT_QUEUED || resultCode == RESULT_SENT_OTHERS_PENDING) {
             viewHolder.closeButton.setVisibility(View.VISIBLE);
             viewHolder.checkbox.setVisibility(View.GONE);
         } else {
@@ -161,24 +158,19 @@ public class InstanceUploaderAdapter extends CursorAdapter {
         }
     }
 
-    private void setSmsSubmissionStateIcons(SmsStatus smsStatus, ViewHolder viewHolder) {
-
-        if (smsStatus == null) {
-            return;
-        }
+    private void setSmsSubmissionStateIcons(int smsStatus, ViewHolder viewHolder) {
 
         switch (smsStatus) {
-            case Delivered:
-            case Sent:
+            case Activity.RESULT_OK:
                 viewHolder.statusIcon.setImageResource(R.drawable.check);
                 break;
 
-            case Queued:
-            case Sending:
+            case RESULT_QUEUED:
+            case RESULT_SENT_OTHERS_PENDING:
                 viewHolder.statusIcon.setImageResource(R.drawable.message_text_outline);
                 break;
 
-            case Ready:
+            case RESULT_MESSAGE_READY:
                 viewHolder.statusIcon.setImageResource(R.drawable.pencil);
                 break;
 
@@ -188,8 +180,8 @@ public class InstanceUploaderAdapter extends CursorAdapter {
         }
     }
 
-    private void setDisplaySubTextView(SmsRxEvent progress, ViewHolder viewHolder) {
-        String text = getDisplaySubtext(progress, context);
+    private void setDisplaySubTextView(SmsRxEvent event, ViewHolder viewHolder) {
+        String text = getDisplaySubtext(event.getResultCode(), event.getLastUpdated(), event.getProgress(), context);
         if (text != null) {
             viewHolder.displaySubtext.setText(text);
         }

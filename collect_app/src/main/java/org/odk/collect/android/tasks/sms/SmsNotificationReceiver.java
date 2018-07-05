@@ -12,30 +12,28 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.InstanceUploaderList;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
-import org.odk.collect.android.tasks.sms.models.SmsStatus;
-import org.odk.collect.android.tasks.sms.models.SentMessageResult;
 import org.odk.collect.android.tasks.sms.models.SmsProgress;
 import org.odk.collect.android.tasks.sms.models.SmsSubmission;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.tasks.sms.SmsSender.SMS_INSTANCE_ID;
+import static org.odk.collect.android.tasks.sms.SmsSender.SMS_RESULT_CODE;
+
 public class SmsNotificationReceiver extends BroadcastReceiver {
-    public static final String SMS_MESSAGE_RESULT = "sms_message_result";
     public static final String SMS_NOTIFICATION_ACTION = "org.odk.collect.android.COLLECT_SMS_NOTIFICATION_ACTION";
     public static final String SMS_NOTIFICATION_GROUP = "org.odk.collect.android.COLLECT_SMS_NOTIFICATION_GROUP";
     private static final int SUMMARY_ID = 4324;
+    private int resultCode;
 
     @Inject
     SmsSubmissionManagerContract submissionManagerContract;
 
     private SmsSubmission smsSubmission;
-    private SentMessageResult messageResult;
     private NotificationManagerCompat notificationManager;
     private Context context;
 
@@ -50,8 +48,9 @@ public class SmsNotificationReceiver extends BroadcastReceiver {
             return;
         }
 
-        messageResult = intent.getExtras().getParcelable(SMS_MESSAGE_RESULT);
-        smsSubmission = submissionManagerContract.getSubmissionModel(messageResult.getInstanceId());
+        String instanceId = intent.getExtras().getString(SMS_INSTANCE_ID);
+        resultCode = intent.getExtras().getInt(SMS_RESULT_CODE);
+        smsSubmission = submissionManagerContract.getSubmissionModel(instanceId);
         notificationManager = NotificationManagerCompat.from(context);
 
         sendBundledNotification();
@@ -107,40 +106,6 @@ public class SmsNotificationReceiver extends BroadcastReceiver {
         Date date = smsSubmission.getLastUpdated();
         SmsProgress progress = smsSubmission.getCompletion();
 
-        SmsStatus status = smsSubmission.isSentOrSending(messageResult.getSmsSendResultStatus().toMessageStatus());
-        try {
-            switch (status) {
-                case NoReception:
-                    return new SimpleDateFormat(context.getString(R.string.sms_no_reception), Locale.getDefault()).format(date);
-                case AirplaneMode:
-                    return new SimpleDateFormat(context.getString(R.string.sms_airplane_mode), Locale.getDefault()).format(date);
-                case FatalError:
-                    return new SimpleDateFormat(context.getString(R.string.sms_fatal_error), Locale.getDefault()).format(date);
-                case Sending:
-                    return context.getResources().getQuantityString(R.plurals.sms_sending, (int) progress.getTotalCount(), progress.getCompletedCount(), progress.getTotalCount());
-                case Queued:
-                    return context.getString(R.string.sms_submission_queued);
-                case Sent:
-                    return new SimpleDateFormat(context.getString(R.string.sms_sent_on_date_at_time),
-                            Locale.getDefault()).format(date);
-                case Delivered:
-                    return new SimpleDateFormat(context.getString(R.string.sms_delivered_on_date_at_time),
-                            Locale.getDefault()).format(date);
-                case NotDelivered:
-                    return new SimpleDateFormat(context.getString(R.string.sms_not_delivered_on_date_at_time),
-                            Locale.getDefault()).format(date);
-                case NoMessage:
-                    return context.getString(R.string.sms_no_message);
-                case Encrypted:
-                    return context.getString(R.string.sms_encrypted_message);
-                case Canceled:
-                    return new SimpleDateFormat(context.getString(R.string.sms_last_submission_on_date_at_time),
-                            Locale.getDefault()).format(date);
-            }
-        } catch (Exception e) {
-            Timber.e(e);
-        }
-
-        return "";
+        return SmsService.getDisplaySubtext(resultCode, date, progress, context);
     }
 }

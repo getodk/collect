@@ -1,7 +1,10 @@
 package org.odk.collect.android.sms.base;
 
+import android.app.Activity;
+import android.telephony.SmsManager;
+
+import org.odk.collect.android.tasks.sms.SmsService;
 import org.odk.collect.android.tasks.sms.models.Message;
-import org.odk.collect.android.tasks.sms.models.SmsStatus;
 import org.odk.collect.android.tasks.sms.models.SmsSubmission;
 
 import java.util.ArrayList;
@@ -52,20 +55,20 @@ public class SampleData {
     public static List<Message> generateSampleMessages() {
 
         Message first = new Message();
-        first.setSmsStatus(SmsStatus.Sent);
+        first.setResultCode(Activity.RESULT_OK);
         first.setPartNumber(1);
         first.generateRandomMessageID();
         first.setText("+N Joel Dean");
 
         Message second = new Message();
         second.setPartNumber(2);
-        second.setSmsStatus(SmsStatus.Ready);
+        second.setResultCode(SmsService.RESULT_MESSAGE_READY);
         second.generateRandomMessageID();
         second.setText("+C America");
 
         Message third = new Message();
         third.setPartNumber(2);
-        third.setSmsStatus(SmsStatus.Ready);
+        third.setResultCode(SmsService.RESULT_MESSAGE_READY);
         third.generateRandomMessageID();
         third.setText("+G Male");
 
@@ -80,20 +83,20 @@ public class SampleData {
     public static List<Message> generateUnsentSampleMessage() {
 
         Message first = new Message();
-        first.setSmsStatus(SmsStatus.FatalError);
+        first.setResultCode(SmsManager.RESULT_ERROR_NULL_PDU);
         first.setPartNumber(1);
         first.generateRandomMessageID();
         first.setText("+N Joel Dean");
 
         Message second = new Message();
         second.setPartNumber(2);
-        second.setSmsStatus(SmsStatus.Sent);
+        second.setResultCode(Activity.RESULT_OK);
         second.generateRandomMessageID();
         second.setText("+C America");
 
         Message third = new Message();
         third.setPartNumber(2);
-        third.setSmsStatus(SmsStatus.Sent);
+        third.setResultCode(Activity.RESULT_OK);
         third.generateRandomMessageID();
         third.setText("+G Male");
 

@@ -631,8 +631,6 @@
         <item quantity="other">Submitting form, sending message %1$d! of %2$d</item>
     </plurals>
     <string name="sms_sent_on_date_at_time">\'Sent as SMS on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
-    <string name="sms_delivered_on_date_at_time">\'Delivered as SMS on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
-    <string name="sms_not_delivered_on_date_at_time">\'Sent as SMS but not delivered on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
     <string name="sms_submission_queued">Queued for submission.</string>
     <string name="sms_submissions_notif_title">SMS submissions</string>
     <string name="sms_submissions_notif_description">Several forms are currently being submitted.</string>

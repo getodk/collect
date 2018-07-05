@@ -50,7 +50,7 @@ public class SmsSubmissionManagerTest extends BaseSmsTest {
     @Test
     public void addSubmissionTest() {
 
-        /**
+        /*
          * Clears all submissions so that the sample data can be re-added.
          */
         manager.clearSubmissions();
@@ -91,7 +91,7 @@ public class SmsSubmissionManagerTest extends BaseSmsTest {
     public void testMarkMessageAsSent() {
 
         SmsSubmission model = manager.getSubmissionModel(TEST_INSTANCE_ID);
-        /**
+        /*
          * Gets the next unsent message which should be the second message since it's marked as unsent.
          */
         Message message = model.getNextUnsentMessage();
@@ -101,7 +101,7 @@ public class SmsSubmissionManagerTest extends BaseSmsTest {
         assertTrue(manager.markMessageAsSent(TEST_INSTANCE_ID, message.getId()));
 
         model = manager.getSubmissionModel(TEST_INSTANCE_ID);
-        /**
+        /*
          * Grabs the next message for testing which should be the third message.
          */
         message = model.getNextUnsentMessage();

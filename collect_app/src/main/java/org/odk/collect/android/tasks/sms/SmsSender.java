@@ -14,7 +14,6 @@ import org.odk.collect.android.events.SmsRxEvent;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.tasks.sms.models.Message;
-import org.odk.collect.android.tasks.sms.models.SmsStatus;
 import org.odk.collect.android.tasks.sms.models.SmsSubmission;
 
 import java.util.ArrayList;
@@ -31,6 +30,7 @@ public class SmsSender {
     public static final String SMS_DELIVERY_ACTION = "org.odk.collect.android.COLLECT_SMS_DELIVERY_ACTION";
     static final String SMS_INSTANCE_ID = "COLLECT_SMS_INSTANCE_ID";
     static final String SMS_MESSAGE_ID = "COLLECT_SMS_MESSAGE_ID";
+    static final String SMS_RESULT_CODE = "COLLECT_SMS_RESULT_CODE";
 
     @Inject
     SmsManager smsManager;
@@ -53,7 +53,7 @@ public class SmsSender {
         String gateway = settings.getString(PreferenceKeys.KEY_SMS_GATEWAY, null);
 
         if (!PhoneNumberUtils.isGlobalPhoneNumber(gateway)) {
-            eventBus.post(new SmsRxEvent(instanceId, SmsStatus.InvalidGateway));
+            eventBus.post(new SmsRxEvent(instanceId, SmsService.RESULT_INVALID_GATEWAY));
             return false;
         }
 

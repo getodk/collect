@@ -1,15 +1,19 @@
 package org.odk.collect.android.tasks.sms.models;
 
+import android.app.Activity;
+
+import org.odk.collect.android.tasks.sms.SmsService;
+
 import java.util.Random;
 
 /**
- *  Represents a message that could be all or partNumber of a submission but its status could be queued,failed etc.
+ * Represents a message that could be all or partNumber of a submission but its status could be queued,failed etc.
  */
 public class Message {
     private int partNumber;
     private int id;
     private String text;
-    private SmsStatus smsStatus;
+    private int resultCode;
 
     public int getPartNumber() {
         return partNumber;
@@ -32,22 +36,22 @@ public class Message {
     }
 
     public boolean isSent() {
-        return smsStatus.equals(SmsStatus.Sent);
+        return resultCode == Activity.RESULT_OK;
     }
 
     public boolean isSending() {
-        return smsStatus.equals(SmsStatus.Sending);
+        return resultCode == SmsService.RESULT_SENDING;
+    }
+
+    public int getResultCode() {
+        return resultCode;
+    }
+
+    public void setResultCode(int resultCode) {
+        this.resultCode = resultCode;
     }
 
     public void generateRandomMessageID() {
-        id = new Random().nextInt(10000);
-    }
-
-    public SmsStatus getSmsStatus() {
-        return smsStatus;
-    }
-
-    public void setSmsStatus(SmsStatus smsStatus) {
-        this.smsStatus = smsStatus;
+        id = new Random().nextInt(Integer.MAX_VALUE);
     }
 }
