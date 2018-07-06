@@ -239,8 +239,8 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
     }
 
     private static class BackgroundTasks {
-        DiskSyncTask diskSyncTask = null;
-        DeleteFormsTask deleteFormsTask = null;
+        DiskSyncTask diskSyncTask;
+        DeleteFormsTask deleteFormsTask;
 
         BackgroundTasks() {
         }

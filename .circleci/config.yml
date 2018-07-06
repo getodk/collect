@@ -120,7 +120,7 @@ jobs:
 #           This implies building the release and test flavors as well, which are out of scope for this job.
 #           Instead, using lintDebug it's running only once, for the 'debug' flavor that we are building here
 #           This means ~3x faster for the lint task.
-            command: ./gradlew pmd checkstyle lintDebug findbugs
+            command: ./gradlew pmd checkstyle lintDebug spotbugsDebug
         - store_artifacts:
             path: collect_app/build/reports
             destination: reports

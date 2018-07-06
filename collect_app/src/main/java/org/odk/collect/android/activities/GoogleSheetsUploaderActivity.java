@@ -44,6 +44,7 @@ import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceGoogleSheetsUploader;
 import org.odk.collect.android.utilities.ArrayUtils;
+import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
@@ -55,7 +56,6 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.tasks.InstanceGoogleSheetsUploader.REQUEST_AUTHORIZATION;
 import static org.odk.collect.android.utilities.gdrive.GoogleAccountsManager.REQUEST_ACCOUNT_PICKER;
-
 
 public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implements InstanceUploaderListener,
         GoogleAccountsManager.GoogleAccountSelectionListener {
@@ -290,14 +290,14 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
 
         StringBuilder selection = new StringBuilder();
         Set<String> keys = result.keySet();
-        StringBuilder message = new StringBuilder();
+        String message;
 
-        if (keys.size() == 0) {
+        if (keys.isEmpty()) {
             if (instanceGoogleSheetsUploader.isAuthFailed()) {
-                message.append(getString(R.string.google_auth_io_exception_msg));
+                message = getString(R.string.google_auth_io_exception_msg);
                 instanceGoogleSheetsUploader.setAuthFailedToFalse();
             } else {
-                message.append(getString(R.string.no_forms_uploaded));
+                message = getString(R.string.no_forms_uploaded);
             }
         } else {
             Iterator<String> it = keys.iterator();
@@ -313,32 +313,19 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
                 }
             }
 
-            Cursor results = null;
-            try {
-                results = new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs);
-                if (results.getCount() > 0) {
-                    results.moveToPosition(-1);
-                    while (results.moveToNext()) {
-                        String name = results.getString(results
-                                .getColumnIndex(InstanceColumns.DISPLAY_NAME));
-                        String id = results.getString(results.getColumnIndex(InstanceColumns._ID));
-                        message.append(name).append(" - ").append(result.get(id)).append("\n\n");
-                    }
+            Cursor results = new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs);
+            if (results.getCount() > 0) {
+                message = InstanceUploaderUtils.getUploadResultMessage(results, result);
+            } else {
+                if (instanceGoogleSheetsUploader.isAuthFailed()) {
+                    message = getString(R.string.google_auth_io_exception_msg);
+                    instanceGoogleSheetsUploader.setAuthFailedToFalse();
                 } else {
-                    if (instanceGoogleSheetsUploader.isAuthFailed()) {
-                        message.append(getString(R.string.google_auth_io_exception_msg));
-                        instanceGoogleSheetsUploader.setAuthFailedToFalse();
-                    } else {
-                        message.append(getString(R.string.no_forms_uploaded));
-                    }
-                }
-            } finally {
-                if (results != null) {
-                    results.close();
+                    message = getString(R.string.no_forms_uploaded);
                 }
             }
         }
-        createAlertDialog(message.toString().trim());
+        createAlertDialog(message.trim());
     }
 
     @Override
@@ -414,7 +401,6 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
         };
         alertDialog.setCancelable(false);
         alertDialog.setButton(getString(R.string.ok), quitListener);
-        alertDialog.setIcon(android.R.drawable.ic_dialog_info);
         alertShowing = true;
         alertMsg = message;
         alertDialog.show();

@@ -586,11 +586,8 @@
   <string name="every_six_hours">Cada 6 horas</string>
   <string name="every_24_hours">Cada 24 horas</string>
   <string name="form_updates_available">Formularios actualizados disponibles</string>
-  <string name="new_form_versions_downloaded">Nuevas versiones de formularios</string>
   <string name="automatic_download">Descarga automática</string>
   <string name="automatic_download_summary">Nuevas versiones de formularios descargadas automáticamente</string>
-  <string name="forms_downloaded">Formularios descargados:</string>
-  <string name="forms_sent">Formularios enviados:</string>
   <string name="guidance_hint_title">Mostrar guías de preguntas</string>
   <string name="app_theme">Tema</string>
   <string name="theme_light">Tema Claro</string>

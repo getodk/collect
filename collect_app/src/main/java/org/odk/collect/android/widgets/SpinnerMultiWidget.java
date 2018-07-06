@@ -141,7 +141,7 @@ public class SpinnerMultiWidget extends QuestionWidget implements ButtonWidget, 
                 vc.add(new Selection(sc));
             }
         }
-        if (vc.size() == 0) {
+        if (vc.isEmpty()) {
             return null;
         } else {
             return new SelectMultiData(vc);

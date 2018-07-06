@@ -53,9 +53,8 @@ public class FormsProvider extends ContentProvider {
 
     private static final UriMatcher URI_MATCHER;
 
-    private FormsDatabaseHelper databaseHelper;
-
     private FormsDatabaseHelper getDbHelper() {
+        FormsDatabaseHelper databaseHelper = null;
         // wrapper to test and reset/set the dbHelper based upon the attachment state of the device.
         try {
             Collect.createODKDirs();
@@ -360,21 +359,12 @@ public class FormsProvider extends ContentProvider {
                         }
                     }
 
-                    String[] newWhereArgs;
-                    if (whereArgs == null || whereArgs.length == 0) {
-                        newWhereArgs = new String[] {formId};
-                    } else {
-                        newWhereArgs = new String[(whereArgs.length + 1)];
-                        newWhereArgs[0] = formId;
-                        System.arraycopy(whereArgs, 0, newWhereArgs, 1, whereArgs.length);
-                    }
-
                     count = db.delete(
                             FORMS_TABLE_NAME,
                             FormsColumns._ID
                                     + "=?"
                                     + (!TextUtils.isEmpty(where) ? " AND (" + where
-                                    + ')' : ""), newWhereArgs);
+                                    + ')' : ""), prepareWhereArgs(whereArgs, formId));
                     break;
 
                 default:
@@ -518,22 +508,13 @@ public class FormsProvider extends ContentProvider {
                                 values.put(FormsColumns.DISPLAY_SUBTEXT, ts);
                             }
 
-                            String[] newWhereArgs;
-                            if (whereArgs == null || whereArgs.length == 0) {
-                                newWhereArgs = new String[] {formId};
-                            } else {
-                                newWhereArgs = new String[(whereArgs.length + 1)];
-                                newWhereArgs[0] = formId;
-                                System.arraycopy(whereArgs, 0, newWhereArgs, 1, whereArgs.length);
-                            }
-
                             count = db.update(
                                     FORMS_TABLE_NAME,
                                     values,
                                     FormsColumns._ID
                                             + "=?"
                                             + (!TextUtils.isEmpty(where) ? " AND ("
-                                            + where + ')' : ""), newWhereArgs);
+                                            + where + ')' : ""), prepareWhereArgs(whereArgs, formId));
                         } else {
                             Timber.e("Attempting to update row that does not exist");
                         }
@@ -552,6 +533,19 @@ public class FormsProvider extends ContentProvider {
         }
 
         return count;
+    }
+
+    @NonNull
+    private String[] prepareWhereArgs(String[] whereArgs, String formId) {
+        String[] newWhereArgs;
+        if (whereArgs == null || whereArgs.length == 0) {
+            newWhereArgs = new String[] {formId};
+        } else {
+            newWhereArgs = new String[(whereArgs.length + 1)];
+            newWhereArgs[0] = formId;
+            System.arraycopy(whereArgs, 0, newWhereArgs, 1, whereArgs.length);
+        }
+        return newWhereArgs;
     }
 
     static {

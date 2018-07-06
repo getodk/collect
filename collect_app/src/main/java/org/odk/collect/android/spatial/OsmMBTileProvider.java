@@ -52,9 +52,7 @@ public class OsmMBTileProvider extends MapTileProviderArray {
         // Create the module provider; this class provides a TileLoader that
         // actually loads the tile from the DB.
         OsmMBTileModuleProvider moduleProvider;
-        moduleProvider = new OsmMBTileModuleProvider(receiverRegistrar,
-                file,
-                (OsmMBTileSource) getTileSource());
+        moduleProvider = new OsmMBTileModuleProvider(receiverRegistrar, (OsmMBTileSource) getTileSource());
 
         MapTileModuleProviderBase[] tileProviderArray;
         tileProviderArray = new MapTileModuleProviderBase[]{moduleProvider};

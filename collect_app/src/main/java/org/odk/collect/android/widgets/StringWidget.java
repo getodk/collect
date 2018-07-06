@@ -17,9 +17,7 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.text.Editable;
 import android.text.Selection;
-import android.text.TextWatcher;
 import android.text.method.TextKeyListener;
 import android.text.method.TextKeyListener.Capitalize;
 import android.util.TypedValue;
@@ -31,7 +29,6 @@ import android.widget.TableLayout;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ViewIds;
 
@@ -46,16 +43,10 @@ import timber.log.Timber;
 @SuppressLint("ViewConstructor")
 public class StringWidget extends QuestionWidget {
     private static final String ROWS = "rows";
-    boolean readOnly = false;
-    private EditText answerText;
+    boolean readOnly;
+    private final EditText answerText;
 
-    public StringWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride) {
-        this(context, prompt, readOnlyOverride, true);
-        setupChangeListener();
-    }
-
-    protected StringWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride,
-                           boolean derived) {
+    protected StringWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride) {
         super(context, prompt);
 
         answerText = new EditText(context);
@@ -113,32 +104,6 @@ public class StringWidget extends QuestionWidget {
         }
 
         addAnswerView(answerText);
-    }
-
-    protected void setupChangeListener() {
-        answerText.addTextChangedListener(new TextWatcher() {
-            private String oldText = "";
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (!s.toString().equals(oldText)) {
-                    Collect.getInstance().getActivityLogger()
-                            .logInstanceAction(this, "answerTextChanged", s.toString(),
-                                    getFormEntryPrompt().getIndex());
-                }
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count,
-                                          int after) {
-                oldText = s.toString();
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before,
-                                      int count) {
-            }
-        });
     }
 
     @Override

@@ -18,8 +18,6 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.SQLException;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -33,6 +31,7 @@ import org.odk.collect.android.tasks.InstanceServerUploader;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ArrayUtils;
 import org.odk.collect.android.utilities.AuthDialogUtility;
+import org.odk.collect.android.utilities.InstanceUploaderUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -179,10 +178,10 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
         Set<String> keys = result.keySet();
         Iterator<String> it = keys.iterator();
 
-        StringBuilder message = new StringBuilder();
+        String message = "";
         int count = keys.size();
         while (count > 0) {
-            String[] selectionArgs = null;
+            String[] selectionArgs;
 
             if (count > ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER) {
                 selectionArgs = new String[ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER];
@@ -196,61 +195,29 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
             int i = 0;
             while (it.hasNext() && i < selectionArgs.length) {
                 selectionArgs[i] = it.next();
-                selection.append("?");
+                selection.append('?');
 
                 if (i != selectionArgs.length - 1) {
-                    selection.append(",");
+                    selection.append(',');
                 }
                 i++;
             }
 
-            selection.append(")");
+            selection.append(')');
             count -= selectionArgs.length;
 
-            StringBuilder queryMessage = new StringBuilder();
-            Cursor results = null;
-            try {
-                results = new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs);
-                if (results.getCount() > 0) {
-                    results.moveToPosition(-1);
-                    while (results.moveToNext()) {
-                        String name =
-                                results.getString(
-                                        results.getColumnIndex(InstanceColumns.DISPLAY_NAME));
-                        String id = results.getString(results.getColumnIndex(InstanceColumns._ID));
-                        String text = localizeDefaultAggregateSuccessfulText(result.get(id));
-                        queryMessage
-                                .append(name)
-                                .append(" - ")
-                                .append(text)
-                                .append("\n\n");
-                    }
-                }
-            } catch (SQLException e) {
-                Timber.e(e);
-            } finally {
-                if (results != null) {
-                    results.close();
-                }
-            }
-            message.append(queryMessage.toString());
+            message = InstanceUploaderUtils
+                    .getUploadResultMessage(new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs), result);
         }
         if (message.length() == 0) {
-            message.append(getString(R.string.no_forms_uploaded));
+            message = getString(R.string.no_forms_uploaded);
         }
 
         if (!isInstanceStateSaved()) {
-            createUploadInstancesResultDialog(message.toString().trim());
+            createUploadInstancesResultDialog(message.trim());
         } else {
             finish();
         }
-    }
-
-    private String localizeDefaultAggregateSuccessfulText(String text) {
-        if (text.equals("full submission upload was successful!")) {
-            text = getString(R.string.success);
-        }
-        return text;
     }
 
     @Override
@@ -338,10 +305,9 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
         Collect.getInstance().getActivityLogger().logAction(this, "createUploadInstancesResultDialog", "show");
 
         String dialogTitle = getString(R.string.upload_results);
-        int iconID = android.R.drawable.ic_dialog_info;
         String buttonTitle = getString(R.string.ok);
 
-        SimpleDialog simpleDialog = SimpleDialog.newInstance(dialogTitle, iconID, message, buttonTitle, true);
+        SimpleDialog simpleDialog = SimpleDialog.newInstance(dialogTitle, 0, message, buttonTitle, true);
         simpleDialog.show(getSupportFragmentManager(), SimpleDialog.COLLECT_DIALOG_TAG);
     }
 

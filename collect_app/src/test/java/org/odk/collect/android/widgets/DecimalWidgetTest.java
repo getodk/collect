@@ -16,8 +16,8 @@ import java.util.Random;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 public class DecimalWidgetTest extends QuestionWidgetTest<DecimalWidget, DecimalData> {
@@ -127,7 +127,7 @@ public class DecimalWidgetTest extends QuestionWidgetTest<DecimalWidget, Decimal
     public void fifteenDigitValueShouldDisplayAllDigits() {
         Double fifteenDigitDouble = 999999999999999.;
         String fifteenDigitString = "999999999999999";
-        assertTrue(fifteenDigitString.length() == 15);
+        assertSame(15, fifteenDigitString.length());
 
         when(formEntryPrompt.getAnswerValue()).thenReturn(answerData);
         when(answerData.getValue()).thenReturn(fifteenDigitDouble);
@@ -149,7 +149,7 @@ public class DecimalWidgetTest extends QuestionWidgetTest<DecimalWidget, Decimal
     public void fifteenDigitNegativeValueShouldDisplayAllDigits() {
         Double fifteenDigitNegativeDouble = -99999999999999.;
         String fifteenDigitNegativeString = "-99999999999999";
-        assertTrue(fifteenDigitNegativeString.length() == 15);
+        assertSame(15, fifteenDigitNegativeString.length());
 
         when(formEntryPrompt.getAnswerValue()).thenReturn(answerData);
         when(answerData.getValue()).thenReturn(fifteenDigitNegativeDouble);
@@ -173,7 +173,7 @@ public class DecimalWidgetTest extends QuestionWidgetTest<DecimalWidget, Decimal
     public void fifteenDigitDecimalValueShouldDisplayAllDigits() {
         Double fifteenDigitDecimalDouble = 0.9999999999999;
         String fifteenDigitDecimalString = "0.9999999999999";
-        assertTrue(fifteenDigitDecimalString.length() == 15);
+        assertSame(15, fifteenDigitDecimalString.length());
 
         when(formEntryPrompt.getAnswerValue()).thenReturn(answerData);
         when(answerData.getValue()).thenReturn(fifteenDigitDecimalDouble);
@@ -196,7 +196,7 @@ public class DecimalWidgetTest extends QuestionWidgetTest<DecimalWidget, Decimal
     public void digitsAboveLimitOfFifteenShouldBeTruncatedFromLeft() {
         Double eighteenDigitDouble = 9999999999999994.;
         String fifteenDigitString = "999999999999994";
-        assertTrue(fifteenDigitString.length() == 15);
+        assertSame(15, fifteenDigitString.length());
 
         when(formEntryPrompt.getAnswerValue()).thenReturn(answerData);
         when(answerData.getValue()).thenReturn(eighteenDigitDouble);
