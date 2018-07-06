@@ -72,8 +72,10 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
             try {
                 if (mediaPlayer.isPlaying()) {
                     updateTimer();
+                    seekHandler.postDelayed(this, 100);
+                } else {
+                    seekHandler.removeCallbacks(updateTimeTask);
                 }
-                seekHandler.postDelayed(this, 100);
             } catch (IllegalStateException e) {
                 seekHandler.removeCallbacks(updateTimeTask);
                 Timber.i(e, "Attempting to update timer when player is stopped");
