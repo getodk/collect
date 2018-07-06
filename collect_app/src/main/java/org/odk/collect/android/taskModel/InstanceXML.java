@@ -23,6 +23,7 @@ public class InstanceXML {
     public String instanceStrToEditId;
     public int assignmentId;
     public String accessKey;
-    public ArrayList<String> files;
+    public ArrayList<String> files;     // Deprecate
+    public ArrayList<String> paths;     // Use this as it will include the correct folder for the media
 
 }

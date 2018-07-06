@@ -304,7 +304,24 @@ public class Utilities {
 
                     os.write(instance.instanceStrToEdit.getBytes());
 
-                    if (instance.files != null && instance.files.size() > 0) {
+                    if (instance.paths != null && instance.paths.size() > 0) {
+                        for (String media : instance.paths) {
+                            FormDownloader fd = new FormDownloader();
+                            String mediaUrl = serverUrl + "/" + media;
+                            int idx = media.lastIndexOf('/');
+                            String mediaName = null;
+                            if (idx > -1) {
+                                mediaName = media.substring(idx + 1);
+                            }
+                            String mediaPath = file.getParent() + "/" + mediaName;
+                            try {
+                                File f = new File(mediaPath);
+                                fd.downloadFile(f, mediaUrl);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    } else if (instance.files != null && instance.files.size() > 0) {       // Deprecate instance.files
                         for (String media : instance.files) {
                             FormDownloader fd = new FormDownloader();
                             String mediaUrl = serverUrl + "/attachments/" +
