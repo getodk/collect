@@ -82,7 +82,6 @@ public class MainMenuActivity extends CollectAbstractActivity {
 
     private static final boolean EXIT = true;
     // buttons
-    private Button enterDataButton;
     private Button manageFilesButton;
     private Button sendDataButton;
     private Button viewSentFormsButton;
@@ -116,7 +115,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
         initToolbar();
 
         // enter data button. expects a result.
-        enterDataButton = findViewById(R.id.enter_data);
+        Button enterDataButton = findViewById(R.id.enter_data);
         enterDataButton.setText(getString(R.string.enter_data_button));
         enterDataButton.setOnClickListener(new OnClickListener() {
             @Override
