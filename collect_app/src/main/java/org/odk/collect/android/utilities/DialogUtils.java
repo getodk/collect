@@ -65,7 +65,7 @@ public final class DialogUtils {
         if (activity == null || activity.isFinishing()) {
             return;
         }
-        if (dialog == null || !dialog.isShowing()) {
+        if (dialog == null || dialog.isShowing()) {
             return;
         }
 
@@ -88,7 +88,7 @@ public final class DialogUtils {
         if (activity == null || activity.isFinishing()) {
             return;
         }
-        if (dialog == null) {
+        if (dialog == null || !dialog.isShowing()) {
             return;
         }
 
