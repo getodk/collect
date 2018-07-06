@@ -13,8 +13,8 @@ import io.reactivex.Observable;
 @PerViewModel
 public class GeoViewModel extends RxMVVMViewModel {
 
-    private BehaviorRelay<Boolean> isReloadEnabled = BehaviorRelay.createDefault(false);
-    private BehaviorRelay<Boolean> isShowEnabled = BehaviorRelay.createDefault(false);
+    private final BehaviorRelay<Boolean> isReloadEnabled = BehaviorRelay.createDefault(false);
+    private final BehaviorRelay<Boolean> isShowEnabled = BehaviorRelay.createDefault(false);
 
     @Inject
     GeoViewModel() {

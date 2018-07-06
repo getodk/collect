@@ -267,7 +267,7 @@ public class Camera2Fragment extends Fragment
     /**
      * A {@link Semaphore} to prevent the app from exiting before closing the camera.
      */
-    private Semaphore cameraOpenCloseLock = new Semaphore(1);
+    private final Semaphore cameraOpenCloseLock = new Semaphore(1);
 
     /**
      * Whether the current camera device supports Flash or not.
@@ -282,7 +282,7 @@ public class Camera2Fragment extends Fragment
     /**
      * A {@link CameraCaptureSession.CaptureCallback} that handles events related to JPEG capture.
      */
-    private CameraCaptureSession.CaptureCallback captureCallback
+    private final CameraCaptureSession.CaptureCallback captureCallback
             = new CameraCaptureSession.CaptureCallback() {
 
         private void process(CaptureResult result) {
@@ -385,9 +385,9 @@ public class Camera2Fragment extends Fragment
 
         // Pick the smallest of those big enough. If there is no one big enough, pick the
         // largest of those not big enough.
-        if (bigEnough.size() > 0) {
+        if (!bigEnough.isEmpty()) {
             return Collections.min(bigEnough, new CompareSizesByArea());
-        } else if (notBigEnough.size() > 0) {
+        } else if (!notBigEnough.isEmpty()) {
             return Collections.max(notBigEnough, new CompareSizesByArea());
         } else {
             return choices[0];
@@ -548,7 +548,7 @@ public class Camera2Fragment extends Fragment
 
                 // Check if the flash is supported.
                 Boolean available = characteristics.get(CameraCharacteristics.FLASH_INFO_AVAILABLE);
-                flashSupported = available == null ? false : available;
+                flashSupported = available != null && available;
 
                 this.cameraId = cameraId;
                 return;

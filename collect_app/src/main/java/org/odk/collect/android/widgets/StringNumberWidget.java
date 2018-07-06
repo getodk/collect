@@ -38,7 +38,7 @@ public class StringNumberWidget extends StringWidget {
     boolean useThousandSeparator;
 
     public StringNumberWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride, boolean useThousandSeparator) {
-        super(context, prompt, readOnlyOverride, true);
+        super(context, prompt, readOnlyOverride);
 
         EditText answerTextField = getAnswerTextField();
 
@@ -78,10 +78,7 @@ public class StringNumberWidget extends StringWidget {
             answerTextField.setText(s);
             Selection.setSelection(answerTextField.getText(), answerTextField.getText().toString().length());
         }
-
-        setupChangeListener();
     }
-
 
     @Override
     public IAnswerData getAnswer() {

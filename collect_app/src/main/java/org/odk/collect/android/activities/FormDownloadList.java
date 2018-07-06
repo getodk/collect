@@ -96,7 +96,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     private static final String FORM_VERSION_KEY = "formversion";
 
     private String alertMsg;
-    private boolean alertShowing = false;
+    private boolean alertShowing;
     private String alertTitle;
 
     private AlertDialog alertDialog;
@@ -110,7 +110,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
     private HashMap<String, FormDetails> formNamesAndURLs = new HashMap<String, FormDetails>();
     private ArrayList<HashMap<String, String>> formList;
-    private ArrayList<HashMap<String, String>> filteredFormList = new ArrayList<>();
+    private final ArrayList<HashMap<String, String>> filteredFormList = new ArrayList<>();
     private LinkedHashSet<String> selectedForms = new LinkedHashSet<>();
 
     private static final boolean EXIT = true;
@@ -127,8 +127,9 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         setContentView(R.layout.remote_file_manage_list);
         setTitle(getString(R.string.get_forms));
 
-        if (getIntent().getExtras() != null) {
-            displayOnlyUpdatedForms = (boolean) getIntent().getExtras().get(DISPLAY_ONLY_UPDATED_FORMS);
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null && bundle.containsKey(DISPLAY_ONLY_UPDATED_FORMS)) {
+            displayOnlyUpdatedForms = (boolean) bundle.get(DISPLAY_ONLY_UPDATED_FORMS);
         }
 
         alertMsg = getString(R.string.please_wait);
@@ -424,9 +425,11 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         if (listView.getAdapter() == null) {
             listView.setAdapter(new FormDownloadListAdapter(this, filteredFormList, formNamesAndURLs));
         } else {
-            ((FormDownloadListAdapter) listView.getAdapter()).notifyDataSetChanged();
+            FormDownloadListAdapter formDownloadListAdapter = (FormDownloadListAdapter) listView.getAdapter();
+            formDownloadListAdapter.setFromIdsToDetails(formNamesAndURLs);
+            formDownloadListAdapter.notifyDataSetChanged();
         }
-        toggleButton.setEnabled(filteredFormList.size() > 0);
+        toggleButton.setEnabled(!filteredFormList.isEmpty());
         checkPreviouslyCheckedItems();
         toggleButtonLabel(toggleButton, listView);
     }
@@ -620,7 +623,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                     item.put(FORM_VERSION_KEY, details.getFormVersion());
 
                     // Insert the new form in alphabetical order.
-                    if (formList.size() == 0) {
+                    if (formList.isEmpty()) {
                         formList.add(item);
                     } else {
                         int j;
@@ -639,7 +642,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             updateAdapter();
             selectSupersededForms();
             downloadButton.setEnabled(listView.getCheckedItemCount() > 0);
-            toggleButton.setEnabled(listView.getCount() > 0); 
+            toggleButton.setEnabled(listView.getCount() > 0);
             toggleButtonLabel(toggleButton, listView);
         }
     }

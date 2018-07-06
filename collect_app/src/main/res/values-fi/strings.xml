@@ -336,6 +336,7 @@
   <string name="geo_clear_warning">Ominaisuus on jo luotu. Haluatko tyhjentää ominaisuuden?</string>
   <string name="geo_exit_warning">Hylätäänkö muutokset ja palataan ODK:hon?</string>
   <string name="polygon_validator">Monikulmion luomiseen tarvitaan vähintään 3 pistettä</string>
+  <string name="polyline_validator">Polylinen luomiseen tarvitaan vähintään 2 pistettä</string>
   <string name="clear">Tyhjennä</string>
   <string name="polyline_polygon_text">Tallenna GeoTrace nimellä</string>
   <string name="manual_mode">Manuaalinen tila</string>
@@ -583,11 +584,8 @@
   <string name="every_six_hours">Kuuden tunnin välein</string>
   <string name="every_24_hours">Vuorokauden välein</string>
   <string name="form_updates_available">Lomakepäivityksiä saatavilla</string>
-  <string name="new_form_versions_downloaded">Uudet lomakeversiot haettu</string>
   <string name="automatic_download">Automaattinen haku</string>
   <string name="automatic_download_summary">Hae automaattisesti lomakkeiden päivitettyjä versioita</string>
-  <string name="forms_downloaded">Haetut lomakkeet:</string>
-  <string name="forms_sent">Lähetetyt lomakkeet:</string>
   <string name="guidance_hint_title">Näytä kysymysopastus</string>
   <string name="app_theme">Teema</string>
   <string name="theme_light">Vaalea teema</string>
@@ -596,4 +594,6 @@
   <string name="not_a_directory">%s on olemassa, mutta ei ole hakemisto</string>
   <string name="location_metadata">Käytettävissä sateliitteja: %1$d/24\n\nKulunut aika: %2$s</string>
   <string name="instance_upload_cancelled">Instanssin siirtäminen peruttu</string>
+  <string name="hide_old_form_versions_setting_title">Piilota vanhat lomakeversiot</string>
+  <string name="hide_old_form_versions_setting_summary">Vain uusin versio tulee näkymään \"Täytä tyhjä lomake\" -näkymässä.</string>
 </resources>

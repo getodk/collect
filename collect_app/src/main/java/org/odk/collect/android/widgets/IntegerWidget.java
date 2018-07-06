@@ -42,7 +42,7 @@ public class IntegerWidget extends StringWidget {
     boolean useThousandSeparator;
 
     public IntegerWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride, boolean useThousandSeparator) {
-        super(context, prompt, readOnlyOverride, true);
+        super(context, prompt, readOnlyOverride);
 
         EditText answerText = getAnswerTextField();
         answerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
@@ -81,8 +81,6 @@ public class IntegerWidget extends StringWidget {
             answerText.setText(String.format(Locale.US, "%d", i));
             Selection.setSelection(answerText.getText(), answerText.getText().toString().length());
         }
-
-        setupChangeListener();
     }
 
     private Integer getIntegerAnswerValue() {

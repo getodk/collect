@@ -53,7 +53,7 @@ public class TimeWidget extends QuestionWidget implements ButtonWidget, TimePick
     private TimePickerDialog timePickerDialog;
 
     private Button timeButton;
-    private TextView timeTextView;
+    private final TextView timeTextView;
 
     private int hourOfDay;
     private int minuteOfHour;
@@ -188,7 +188,7 @@ public class TimeWidget extends QuestionWidget implements ButtonWidget, TimePick
     }
 
     private class CustomTimePickerDialog extends TimePickerDialog {
-        private String dialogTitle = getContext().getString(R.string.select_time);
+        private final String dialogTitle = getContext().getString(R.string.select_time);
 
         CustomTimePickerDialog(Context context, OnTimeSetListener callBack, int hour, int minute) {
             super(context, themeUtils.getHoloDialogTheme(), callBack, hour, minute, DateFormat.is24HourFormat(context));

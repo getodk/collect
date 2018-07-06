@@ -113,6 +113,7 @@ public class QRCodeUtilsTest {
         assertCachedFileIsCorrect(expectedData.getBytes(), md5File);
     }
 
+    @SuppressWarnings("PMD.UseAssertEqualsInsteadOfAssertTrue")
     private void assertCachedFileIsCorrect(byte[] data, File file) throws NoSuchAlgorithmException {
         byte[] messageDigest = getDigest(data);
         byte[] cachedMessageDigest = FileUtils.read(file);

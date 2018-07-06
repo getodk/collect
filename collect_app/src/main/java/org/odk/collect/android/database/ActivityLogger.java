@@ -109,13 +109,12 @@ public final class ActivityLogger {
 
     private final boolean loggingEnabled;
     private final String deviceId;
-    private DatabaseHelper databaseHelper = null;
-    private SQLiteDatabase database = null;
-    private boolean isOpen = false;
+    private SQLiteDatabase database;
+    private boolean isOpen;
     // We buffer scroll actions to make sure there aren't too many pauses
     // during scrolling.  This list is flushed every time any other type of
     // action is logged.
-    private LinkedList<ContentValues> scrollActions = new LinkedList<ContentValues>();
+    private final LinkedList<ContentValues> scrollActions = new LinkedList<ContentValues>();
 
     public ActivityLogger(String deviceId) {
         this.deviceId = deviceId;
@@ -154,7 +153,7 @@ public final class ActivityLogger {
             return;
         }
         try {
-            databaseHelper = new DatabaseHelper();
+            DatabaseHelper databaseHelper = new DatabaseHelper();
             database = databaseHelper.getWritableDatabase();
             isOpen = true;
         } catch (SQLiteException e) {
@@ -165,8 +164,8 @@ public final class ActivityLogger {
 
     // cached to improve logging performance...
     // only access these through getXPath(FormIndex index);
-    private FormIndex cachedXPathIndex = null;
-    private String cachedXPathValue = null;
+    private FormIndex cachedXPathIndex;
+    private String cachedXPathValue;
 
     // DO NOT CALL THIS OUTSIDE OF synchronized(scrollActions) !!!!
     // DO NOT CALL THIS OUTSIDE OF synchronized(scrollActions) !!!!

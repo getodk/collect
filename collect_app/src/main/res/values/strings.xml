@@ -60,7 +60,7 @@
     <string name="discard_answer">Remove response</string>
     <string name="discard_group">Remove group</string>
     <string name="download">Get Selected</string>
-    <string name="download_forms_result">Download Result</string>
+    <string name="download_forms_result">Download Results</string>
     <string name="downloading_data">Connecting to Server</string>
     <string name="do_not_change">Cancel</string>
     <string name="do_not_exit">Cancel</string>
@@ -121,16 +121,16 @@
     <string name="replace_barcode">Replace Barcode</string>
     <string name="required_answer_error">Sorry, this response is required!</string>
     <string name="review_data">Edit Saved Form</string>
-    <string name="review_data_button">Edit Saved Form (%s)‎‎‎‎\u200E</string>
+    <string name="review_data_button">Edit Saved Form (%s)‎‎‎‎</string>
     <string name="save_all_answers">Save Form</string>
     <string name="save_enter_data_description">You are at the end of %s.</string>
     <string name="saving_form">Saving Form</string>
-    <string name="sending_items">Sending %1$s of %2$s form(s)\u200E</string>
+    <string name="sending_items">Sending %1$s of %2$s form(s)</string>
     <string name="send_data">Send Finalized Form</string>
-    <string name="send_data_button">Send Finalized Form (%s)\u200E</string>
+    <string name="send_data_button">Send Finalized Form (%s)</string>
     <string name="send_selected_data">Send Selected</string>
     <string name="view_sent_forms">View Sent Form</string>
-    <string name="view_sent_forms_button">View Sent Form (%s)\u200E</string>
+    <string name="view_sent_forms_button">View Sent Form (%s)</string>
     <string name="server_auth_credentials">Invalid username or password for server: %s</string>
     <string name="server_requires_auth">Server Requires Authentication</string>
     <string name="server_url">URL</string>
@@ -165,6 +165,7 @@
     <string name="file_fetch_failed">Error: %2$s (%3$s) at %1$s</string>
     <string name="fetching_manifest">%s. Getting manifest </string>
     <string name="success">Success</string>
+    <string name="failures">Failures</string>
     <string name="no_forms_uploaded">Sorry, no form was uploaded.</string>
     <string name="upload_results">Upload Results</string>
     <string name="xform_parse_error">XForm parse error for %1$s: %2$s is missing or invalid.</string>
@@ -283,7 +284,8 @@
     <string name="google_set_account">You have selected Google Sheets as your server, please select a corresponding Google account in the General Settings before continuing</string>
     <string name="media_upload_error">Failed to upload media file that does not exist: %1$s</string>
     <string name="odk_auth_auth_fail">ODK auto send authentication failure, please make sure your settings are correct</string>
-    <string name="odk_auto_note">ODK Auto Send Notification</string>
+    <string name="odk_auto_note">ODK auto-send results</string>
+    <string name="odk_auto_download_notification_title">ODK auto-download results</string>
     <string name="notification_error">Error displaying notification text</string>
     <string name="delete_after_send">Delete after send</string>
     <string name="delete_after_send_summary">Deletes finalized forms and media after sending to server</string>
@@ -381,6 +383,7 @@
     <string name="parser_exception">XPathParser Exception: \"%s\"</string>
     <string name="selected_answer">Selected: %s</string>
     <string name="version_number">Version: %s</string>
+    <string name="id_number">ID: %s</string>
     <string name="odk_website">Visit the ODK website</string>
     <string name="odk_website_summary">Open Data Kit (ODK) is used to collect data for social good in challenging environments.</string>
     <string name="odk_forum">Join the ODK forum</string>
@@ -596,11 +599,8 @@
     <string name="every_six_hours">Every six hours</string>
     <string name="every_24_hours">Every 24 hours</string>
     <string name="form_updates_available">Form updates available</string>
-    <string name="new_form_versions_downloaded">New form versions downloaded</string>
     <string name="automatic_download">Automatic download</string>
     <string name="automatic_download_summary">Automatically download updated versions of forms</string>
-    <string name="forms_downloaded">Forms downloaded:</string>
-    <string name="forms_sent">Forms sent:</string>
     <string name="guidance_hint_title">Show guidance for questions</string>
     <string name="app_theme">Theme</string>
     <string name="theme_light">Light theme</string>
@@ -611,4 +611,7 @@
     <string name="instance_upload_cancelled">Instance upload canceled</string>
     <string name="hide_old_form_versions_setting_title">Hide old form versions</string>
     <string name="hide_old_form_versions_setting_summary">Only the newest version will appear in Fill Blank Form</string>
+    <string name="seconds">Seconds</string>
+    <string name="start_ranking">Start ranking</string>
+    <string name="image_not_saved">The image can not be saved because of a problem with the corresponding instance file.</string>
 </resources>

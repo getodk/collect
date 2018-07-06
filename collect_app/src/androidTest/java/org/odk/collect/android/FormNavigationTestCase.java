@@ -85,8 +85,8 @@ public class FormNavigationTestCase {
         return new Object[] {formName, expectedIndices};
     }
 
-    private String formName;
-    private String[] expectedIndices;
+    private final String formName;
+    private final String[] expectedIndices;
 
     public FormNavigationTestCase(String formName, String[] expectedIndices) {
         this.formName = formName;

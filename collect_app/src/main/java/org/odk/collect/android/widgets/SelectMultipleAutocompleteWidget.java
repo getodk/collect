@@ -22,6 +22,7 @@ import android.widget.CompoundButton;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
+import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 
 import java.util.List;
 
@@ -49,6 +50,7 @@ public class SelectMultipleAutocompleteWidget extends SelectMultiWidget implemen
         readItems();
 
         if (items != null) {
+            SpacesInUnderlyingValuesWarning.forQuestionWidget(this).renderWarningIfNecessary(items);
             for (int i = 0; i < items.size(); i++) {
                 checkBoxes.add(createCheckBox(i));
             }

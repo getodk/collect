@@ -36,11 +36,11 @@ import timber.log.Timber;
  */
 public class SavePointTask extends AsyncTask<Void, Void, String> {
 
-    private static final Object lock = new Object();
-    private static int lastPriorityUsed = 0;
+    private static final Object LOCK = new Object();
+    private static int lastPriorityUsed;
 
     private final SavePointListener listener;
-    private int priority;
+    private final int priority;
 
     public SavePointTask(SavePointListener listener) {
         this.listener = listener;
@@ -49,7 +49,7 @@ public class SavePointTask extends AsyncTask<Void, Void, String> {
 
     @Override
     protected String doInBackground(Void... params) {
-        synchronized (lock) {
+        synchronized (LOCK) {
             if (priority < lastPriorityUsed) {
                 Timber.w("Savepoint thread (p=%d) was cancelled (a) because another one is waiting (p=%d)", priority, lastPriorityUsed);
                 return null;

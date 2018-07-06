@@ -180,7 +180,7 @@ public final class PRNGFixes {
 
         private static final File URANDOM_FILE = new File("/dev/urandom");
 
-        private static final Object sLock = new Object();
+        private static final Object LOCK = new Object();
 
         /**
          * Input stream for reading from Linux PRNG or {@code null} if not yet
@@ -209,7 +209,7 @@ public final class PRNGFixes {
         protected void engineSetSeed(byte[] bytes) {
             try {
                 OutputStream out;
-                synchronized (sLock) {
+                synchronized (LOCK) {
                     out = getUrandomOutputStream();
                 }
                 out.write(bytes);
@@ -233,7 +233,7 @@ public final class PRNGFixes {
 
             try {
                 DataInputStream in;
-                synchronized (sLock) {
+                synchronized (LOCK) {
                     in = getUrandomInputStream();
                 }
                 synchronized (in) {
@@ -253,7 +253,7 @@ public final class PRNGFixes {
         }
 
         private DataInputStream getUrandomInputStream() {
-            synchronized (sLock) {
+            synchronized (LOCK) {
                 if (sUrandomIn == null) {
                     // NOTE: Consider inserting a BufferedInputStream between
                     // DataInputStream and FileInputStream if you need higher
@@ -272,7 +272,7 @@ public final class PRNGFixes {
         }
 
         private OutputStream getUrandomOutputStream() throws IOException {
-            synchronized (sLock) {
+            synchronized (LOCK) {
                 if (sUrandomOut == null) {
                     sUrandomOut = new FileOutputStream(URANDOM_FILE);
                 }

@@ -18,5 +18,5 @@ https://github.com/opendatakit/collect/blob/master/CONTRIBUTING.md
 #### Does this change require updates to documentation? If so, please file an issue [here]( https://github.com/opendatakit/docs/issues/new) and include the link below.
 
 #### Before submitting this PR, please make sure you have:
-- [ ] run `./gradlew pmd checkstyle lint findbugs` and confirmed all checks still pass.
+- [ ] run `./gradlew pmd checkstyle lintDebug spotbugsDebug` and confirmed all checks still pass.
 - [ ] verified that any new UI elements use theme colors. [UI Components Style guidelines](https://github.com/opendatakit/collect/blob/master/CONTRIBUTING.md#ui-components-style-guidelines)
