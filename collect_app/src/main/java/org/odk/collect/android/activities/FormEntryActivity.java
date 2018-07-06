@@ -913,23 +913,24 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     FileUtils.copyFile(chosenImage, newImage);
                     ImageConverter.execute(newImage.getPath(), getWidgetWaitingForBinaryData(), this);
                     runOnUiThread(() -> {
-                        dismissDialog(SAVING_IMAGE_DIALOG);
+                        progressDialog.dismiss();
                         if (getCurrentViewIfODKView() != null) {
                             getCurrentViewIfODKView().setBinaryData(newImage);
                         }
                         saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                         refreshCurrentView();
+                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
                     });
                 } else {
                     runOnUiThread(() -> {
-                        dismissDialog(SAVING_IMAGE_DIALOG);
+                        progressDialog.dismiss();
                         Timber.e("Could not receive chosen image");
                         ToastUtils.showShortToastInMiddle(R.string.error_occured);
                     });
                 }
             } catch (GDriveConnectionException e) {
                 runOnUiThread(() -> {
-                    dismissDialog(SAVING_IMAGE_DIALOG);
+                    progressDialog.dismiss();
                     Timber.e("Could not receive chosen image due to connection problem");
                     ToastUtils.showLongToastInMiddle(R.string.gdrive_connection_exception);
                 });
