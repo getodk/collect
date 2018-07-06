@@ -202,6 +202,11 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
                         formEntryPrompt.getIndex());
 
         playButton.setImageResource(R.drawable.ic_pause_24dp);
+
+        if (seekBar.getProgress() == mediaPlayer.getDuration()) {
+            seekBar.setProgress(0);
+        }
+
         mediaPlayer.start();
         updateProgressBar();
     }
