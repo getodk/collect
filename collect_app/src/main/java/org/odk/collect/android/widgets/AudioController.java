@@ -74,6 +74,7 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
                     updateTimer();
                     seekHandler.postDelayed(this, 100);
                 } else {
+                    seekBar.setProgress(mediaPlayer.getDuration());
                     seekHandler.removeCallbacks(updateTimeTask);
                 }
             } catch (IllegalStateException e) {
