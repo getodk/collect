@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -162,7 +161,6 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
 
     // LocationClientListener:
 
-    @SuppressLint("MissingPermission")
     @Override
     public void onClientStart() {
         locationClient.requestLocationUpdates(this);
@@ -295,7 +293,7 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
         if (event == GpsStatus.GPS_EVENT_SATELLITE_STATUS) {
             LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
             if (locationManager != null) {
-                @SuppressLint("MissingPermission") GpsStatus status = locationManager.getGpsStatus(null);
+                GpsStatus status = locationManager.getGpsStatus(null);
                 Iterable<GpsSatellite> satellites = status.getSatellites();
                 int satellitesNumber = 0;
                 for (GpsSatellite satellite : satellites) {
