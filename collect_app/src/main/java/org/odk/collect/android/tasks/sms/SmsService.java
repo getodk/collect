@@ -68,7 +68,7 @@ public class SmsService {
     private static final int RESULT_ENCRYPTED = 100;
     public static final int RESULT_QUEUED = 101;
     private static final int RESULT_NO_MESSAGE = 102;
-    public static final int RESULT_SENT_OTHERS_PENDING = 103;
+    public static final int RESULT_OK_OTHERS_PENDING = 103;
     private static final int RESULT_FILE_ERROR = 104;
     public static final int RESULT_INVALID_GATEWAY = 105;
     public static final int RESULT_MESSAGE_READY = 106;
@@ -163,11 +163,20 @@ public class SmsService {
         SmsSubmission model = smsSubmissionManager.getSubmissionModel(instanceId);
 
         /*
+         * Checks to see if a previous instance was sent successfully. If so
+         * remove that instance so a new one can be sent.
+         * */
+        if (model != null && model.isSubmissionComplete()) {
+            model = null;
+            smsSubmissionManager.forgetSubmission(instanceId);
+        }
+
+        /*
          * If the model exists that means this instance was probably sent in the pasty.
          */
         if (model != null) {
 
-            /**
+            /*
              * If the background job for this instance is running then the messages won't be sent again.
              */
             if (model.getJobId() != 0) {
@@ -185,7 +194,7 @@ public class SmsService {
                  * If there's a message that hasn't sent then a job should be added to continue the process.
                  */
                 if (!(message.isSending() && checkIfSentIntentExists(context, instanceId, message.getId())) || !message.isSent()) {
-                    addMessagesJobToQueue(instanceId);
+                    startSendMessagesJob(instanceId);
                     break;
                 }
             }
@@ -194,7 +203,6 @@ public class SmsService {
             final List<String> parts = smsManager.divideMessage(text);
 
             model = new SmsSubmission();
-            model.setJobId(0);
             model.setNotificationId();
             model.setInstanceId(instanceId);
             model.setLastUpdated(new Date());
@@ -217,7 +225,7 @@ public class SmsService {
 
             smsSubmissionManager.saveSubmission(model);
 
-            addMessagesJobToQueue(instanceId);
+            startSendMessagesJob(instanceId);
         }
 
         return true;
@@ -288,8 +296,7 @@ public class SmsService {
          * */
         if (model.isSubmissionComplete()) {
             markInstanceAsSubmittedOrDelete(instanceId);
-            smsSubmissionManager.forgetSubmission(instanceId);
-        } else if (resultCode != RESULT_OK) {
+        } else if (resultCode != RESULT_OK && resultCode != RESULT_OK_OTHERS_PENDING) {
             updateInstanceStatusFailedText(instanceId, event);
         }
     }
@@ -301,7 +308,7 @@ public class SmsService {
      *
      * @param instanceId from instanceDao
      */
-    protected void addMessagesJobToQueue(String instanceId) {
+    protected void startSendMessagesJob(String instanceId) {
 
         PersistableBundleCompat extras = new PersistableBundleCompat();
         extras.putString(SmsSenderJob.INSTANCE_ID, instanceId);
@@ -369,7 +376,7 @@ public class SmsService {
                     return new SimpleDateFormat(context.getString(R.string.sms_no_reception), Locale.getDefault()).format(date);
                 case RESULT_ERROR_RADIO_OFF:
                     return new SimpleDateFormat(context.getString(R.string.sms_airplane_mode), Locale.getDefault()).format(date);
-                case RESULT_SENT_OTHERS_PENDING:
+                case RESULT_OK_OTHERS_PENDING:
                     return context.getResources().getQuantityString(R.plurals.sms_sending, (int) progress.getTotalCount(), progress.getCompletedCount(), progress.getTotalCount());
                 case RESULT_QUEUED:
                     return context.getString(R.string.sms_submission_queued);

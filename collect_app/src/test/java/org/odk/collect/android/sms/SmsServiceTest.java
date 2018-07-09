@@ -114,7 +114,7 @@ public class SmsServiceTest extends BaseSmsTest {
          * @param instanceId from instanceDao
          */
         @Override
-        protected void addMessagesJobToQueue(String instanceId) {
+        protected void startSendMessagesJob(String instanceId) {
             new SmsSender(RuntimeEnvironment.application, instanceId).send();
         }
     }
