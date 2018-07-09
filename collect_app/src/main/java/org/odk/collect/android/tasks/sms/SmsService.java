@@ -172,7 +172,7 @@ public class SmsService {
         }
 
         /*
-         * If the model exists that means this instance was probably sent in the pasty.
+         * If the model exists that means this instance was probably sent in the past.
          */
         if (model != null) {
 
