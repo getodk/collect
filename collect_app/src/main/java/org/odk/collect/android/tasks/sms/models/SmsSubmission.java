@@ -87,7 +87,7 @@ public class SmsSubmission {
     public int validateResultCode(int resultCode) {
         if (resultCode == Activity.RESULT_OK) {
             if (!isSubmissionComplete()) {
-                return SmsService.RESULT_SENT_OTHERS_PENDING;
+                return SmsService.RESULT_OK_OTHERS_PENDING;
             }
         }
 

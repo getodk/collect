@@ -27,7 +27,7 @@ public class SmsSender {
     private final String instanceId;
 
     public static final String SMS_SEND_ACTION = "org.odk.collect.android.COLLECT_SMS_SEND_ACTION";
-    public static final String SMS_DELIVERY_ACTION = "org.odk.collect.android.COLLECT_SMS_DELIVERY_ACTION";
+    private static final String SMS_DELIVERY_ACTION = "org.odk.collect.android.COLLECT_SMS_DELIVERY_ACTION";
     static final String SMS_INSTANCE_ID = "COLLECT_SMS_INSTANCE_ID";
     static final String SMS_MESSAGE_ID = "COLLECT_SMS_MESSAGE_ID";
     static final String SMS_RESULT_CODE = "COLLECT_SMS_RESULT_CODE";
@@ -65,7 +65,7 @@ public class SmsSender {
 
         for (Message message : model.getMessages()) {
 
-            if (message.isSent() || message.isSent()) {
+            if (message.isSent() || message.isSending()) {
                 continue;
             }
 
