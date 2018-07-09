@@ -80,6 +80,7 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity {
         // https://github.com/opendatakit/collect/issues/998
         if (formController == null) {
             finish();
+            Timber.w("FormController is null");
             return;
         }
 
