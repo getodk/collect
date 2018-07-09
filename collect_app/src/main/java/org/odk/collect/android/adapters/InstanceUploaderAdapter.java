@@ -36,7 +36,8 @@ import static org.odk.collect.android.provider.InstanceProviderAPI.STATUS_SUBMIS
 import static org.odk.collect.android.provider.InstanceProviderAPI.STATUS_SUBMITTED;
 import static org.odk.collect.android.tasks.sms.SmsService.RESULT_MESSAGE_READY;
 import static org.odk.collect.android.tasks.sms.SmsService.RESULT_QUEUED;
-import static org.odk.collect.android.tasks.sms.SmsService.RESULT_SENT_OTHERS_PENDING;
+import static org.odk.collect.android.tasks.sms.SmsService.RESULT_OK_OTHERS_PENDING;
+import static org.odk.collect.android.tasks.sms.SmsService.RESULT_SENDING;
 import static org.odk.collect.android.tasks.sms.SmsService.getDisplaySubtext;
 
 public class InstanceUploaderAdapter extends CursorAdapter {
@@ -149,7 +150,7 @@ public class InstanceUploaderAdapter extends CursorAdapter {
 
     private void setupCloseButton(ViewHolder viewHolder, int resultCode) {
 
-        if (resultCode == RESULT_QUEUED || resultCode == RESULT_SENT_OTHERS_PENDING) {
+        if (resultCode == RESULT_QUEUED || resultCode == RESULT_OK_OTHERS_PENDING) {
             viewHolder.closeButton.setVisibility(View.VISIBLE);
             viewHolder.checkbox.setVisibility(View.GONE);
         } else {
@@ -166,7 +167,8 @@ public class InstanceUploaderAdapter extends CursorAdapter {
                 break;
 
             case RESULT_QUEUED:
-            case RESULT_SENT_OTHERS_PENDING:
+            case RESULT_OK_OTHERS_PENDING:
+            case RESULT_SENDING:
                 viewHolder.statusIcon.setImageResource(R.drawable.message_text_outline);
                 break;
 
