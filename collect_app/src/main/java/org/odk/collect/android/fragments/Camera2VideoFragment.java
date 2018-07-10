@@ -56,6 +56,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.fragments.dialogs.ErrorDialog;
 import org.odk.collect.android.utilities.ToastUtils;
 
@@ -308,10 +309,13 @@ public class Camera2VideoFragment extends Fragment
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.texture) {
-            if (isRecordingVideo) {
-                stopRecordingVideo();
-            } else {
-                startRecordingVideo();
+            if (Collect.allowClick()) { // avoid multiple quick taps that may cause various problems
+                if (isRecordingVideo) {
+                    textureView.setClickable(false);
+                    stopRecordingVideo();
+                } else {
+                    startRecordingVideo();
+                }
             }
         }
     }
