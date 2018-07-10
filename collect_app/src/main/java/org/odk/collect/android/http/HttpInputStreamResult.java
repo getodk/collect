@@ -55,7 +55,8 @@ public class HttpInputStreamResult {
             StringBuilder appendedVersions = new StringBuilder();
 
             for (String key : headers.keySet()) {
-                if (key.equals(OPEN_ROSA_VERSION_HEADER)) {
+
+                if (key.equalsIgnoreCase(OPEN_ROSA_VERSION_HEADER)) {
                     openRosaResponse = true;
                     if (OPEN_ROSA_VERSION.equals(headers.get(key))) {
                         versionMatch = true;
