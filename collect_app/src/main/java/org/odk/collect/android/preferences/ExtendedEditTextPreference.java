@@ -5,8 +5,11 @@ import android.preference.EditTextPreference;
 import android.support.annotation.ColorInt;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+
+import org.odk.collect.android.utilities.ThemeUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,7 +56,15 @@ public class ExtendedEditTextPreference extends EditTextPreference {
     private void setupColorStates() {
         if (!colorsInitialized) {
             enabledTitleColor = title.getCurrentTextColor();
-            enabledSummaryColor = summary.getCurrentTextColor();
+
+            ThemeUtils themeUtils = new ThemeUtils(getContext());
+
+            if (themeUtils.isDarkTheme()) {
+                enabledSummaryColor = 1275068417;
+            } else {
+                enabledSummaryColor = -1979711488;
+            }
+
             disabledColor = ContextCompat.getColor(getContext(), android.R.color.secondary_text_dark);
             colorsInitialized = true;
         }

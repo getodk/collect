@@ -9,9 +9,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginRight="10dp"
         android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
         app:cardPreventCornerOverlap="true"
         app:cardUseCompatPadding="true"
         app:contentPadding="5dp">
@@ -21,7 +21,6 @@
             android:layout_height="wrap_content">
 
             <LinearLayout
-                android:id="@+id/list_item_holder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -35,16 +34,16 @@
 
                     <LinearLayout
                         android:id="@+id/image_background"
-                        android:background="@drawable/instance_list_icon_background"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerInParent="true">
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/instance_list_icon_background">
 
                         <ImageView
-                            android:layout_margin="10dp"
                             android:id="@+id/status_icon"
                             android:layout_width="30dp"
-                            android:layout_height="30dp" />
+                            android:layout_height="30dp"
+                            android:layout_margin="10dp" />
                     </LinearLayout>
                 </RelativeLayout>
 
@@ -114,28 +113,29 @@
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
-                            android:checked="false"
                             android:layout_gravity="center_vertical"
+                            android:checked="false"
                             android:clickable="false"
                             android:focusable="false" />
+
                         <ImageView
-                            android:visibility="gone"
                             android:id="@+id/close_box"
-                            app:srcCompat="@drawable/close_box_outline"
                             android:layout_width="30dp"
                             android:layout_height="25dp"
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
                             android:layout_gravity="center_vertical"
-                             />
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/close_box_outline" />
                     </RelativeLayout>
+
                     <org.odk.collect.android.views.ProgressBar
                         android:id="@+id/progress_bar"
-                        android:layout_marginTop="5dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/text_holder" />
+                        android:layout_below="@id/text_holder"
+                        android:layout_marginTop="5dp" />
                 </RelativeLayout>
             </LinearLayout>
         </RelativeLayout>

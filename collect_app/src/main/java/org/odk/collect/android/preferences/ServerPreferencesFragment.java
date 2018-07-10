@@ -156,6 +156,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                     pref.setValue(stringValue);
 
                     if (newValue.equals(getString(R.string.transport_type_value_internet))) {
+                        smsGatewayPreference.setEnabled(true);
                         smsGatewayPreference.setEnabled(false);
                         smsPreferenceCategory.setEnabled(false);
                         transportPreference.setSummary(R.string.transport_type_internet);
