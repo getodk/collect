@@ -108,7 +108,7 @@ public class FormController {
         }
     }
 
-    private static boolean isJavaRosaInitialized = false;
+    private static boolean isJavaRosaInitialized;
 
     /**
      * Isolate the initialization of JavaRosa into one method, called first
@@ -134,7 +134,7 @@ public class FormController {
     @Nullable
     private File instanceFile;
     private final FormEntryController formEntryController;
-    private FormIndex indexWaitingForData = null;
+    private FormIndex indexWaitingForData;
 
     public FormController(File mediaFolder, FormEntryController fec, File instanceFile) {
         this.mediaFolder = mediaFolder;

@@ -10,7 +10,7 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
  */
 public class MVVMViewModel extends ViewModel {
 
-    private boolean wasCreated = false;
+    private boolean wasCreated;
 
     final synchronized void create() {
         if (wasCreated) {

@@ -22,11 +22,7 @@ public class ImageWebViewWidgetTest extends FileWidgetTest<ImageWebViewWidget> {
     @Mock
     File file;
 
-    private String fileName = null;
-
-    public ImageWebViewWidgetTest() {
-        super();
-    }
+    private String fileName;
 
     @NonNull
     @Override

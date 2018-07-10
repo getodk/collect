@@ -45,7 +45,7 @@ public class CaptureSelfieVideoActivity extends Activity {
     private Camera camera;
     private CameraPreview camPreview;
     private int cameraId;
-    private boolean recording = false;
+    private boolean recording;
     private MediaRecorder mediaRecorder;
     private String outputFile;
 
@@ -147,11 +147,7 @@ public class CaptureSelfieVideoActivity extends Activity {
         // Step 6: Prepare configured MediaRecorder
         try {
             mediaRecorder.prepare();
-        } catch (IllegalStateException e) {
-            Timber.e(e);
-            releaseMediaRecorder();
-            return false;
-        } catch (IOException e) {
+        } catch (IllegalStateException | IOException e) {
             Timber.e(e);
             releaseMediaRecorder();
             return false;

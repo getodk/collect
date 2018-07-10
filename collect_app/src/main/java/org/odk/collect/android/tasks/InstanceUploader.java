@@ -72,10 +72,10 @@ public abstract class InstanceUploader extends AsyncTask<Long, Integer, Instance
 
                         while (it.hasNext() && i < selectionArgs.length - 1) {
                             selectionArgs[i] = it.next();
-                            selection.append("?");
+                            selection.append('?');
 
                             if (i != selectionArgs.length - 2) {
-                                selection.append(",");
+                                selection.append(',');
                             }
                             i++;
                         }
@@ -154,7 +154,7 @@ public abstract class InstanceUploader extends AsyncTask<Long, Integer, Instance
     }
 
     static class Outcome {
-        Uri authRequestingServer = null;
+        Uri authRequestingServer;
         boolean invalidOAuth;
         HashMap<String, String> messagesByInstanceId = new HashMap<>();
     }

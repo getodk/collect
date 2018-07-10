@@ -37,7 +37,7 @@ import timber.log.Timber;
 public class SavePointTask extends AsyncTask<Void, Void, String> {
 
     private static final Object LOCK = new Object();
-    private static int lastPriorityUsed = 0;
+    private static int lastPriorityUsed;
 
     private final SavePointListener listener;
     private final int priority;

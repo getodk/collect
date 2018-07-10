@@ -7,7 +7,7 @@ public abstract class DoubleClickListener implements View.OnClickListener {
 
     private static final long DOUBLE_CLICK_TIME_DELTA = 300;
 
-    private long lastClickTime = 0;
+    private long lastClickTime;
 
     @Override
     public void onClick(View v) {

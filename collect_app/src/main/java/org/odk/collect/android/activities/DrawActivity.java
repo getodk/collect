@@ -72,10 +72,10 @@ public class DrawActivity extends CollectAbstractActivity {
     private FloatingActionButton fabActions;
 
     // incoming options...
-    private String loadOption = null;
-    private File refImage = null;
-    private File output = null;
-    private File savepointImage = null;
+    private String loadOption;
+    private File refImage;
+    private File output;
+    private File savepointImage;
 
     private DrawView drawView;
     private String alertTitleString;

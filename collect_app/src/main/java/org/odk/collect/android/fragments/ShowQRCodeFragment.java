@@ -83,7 +83,7 @@ public class ShowQRCodeFragment extends Fragment {
 
     @BindView(R.id.ivQRcode)
     ImageView ivQRCode;
-    @BindView(R.id.progressBar)
+    @BindView(R.id.circularProgressBar)
     ProgressBar progressBar;
     @BindView(R.id.tvPasswordWarning)
     TextView tvPasswordWarning;
@@ -229,10 +229,7 @@ public class ShowQRCodeFragment extends Fragment {
                 } catch (FormatException | NotFoundException | ChecksumException e) {
                     Timber.i(e);
                     ToastUtils.showLongToast("QR Code not found in the selected image");
-                } catch (IOException e) {
-                    Timber.e(e);
-                    ToastUtils.showLongToast("Unable to read the settings");
-                } catch (DataFormatException e) {
+                } catch (DataFormatException | IOException e) {
                     Timber.e(e);
                     ToastUtils.showShortToast(getString(R.string.invalid_qrcode));
                 }
@@ -247,6 +244,7 @@ public class ShowQRCodeFragment extends Fragment {
         SharedPreferencesUtils.savePreferencesFromString(content, new ActionListener() {
             @Override
             public void onSuccess() {
+                Collect.getInstance().initProperties();
                 ToastUtils.showLongToast(Collect.getInstance().getString(R.string.successfully_imported_settings));
                 getActivity().finish();
                 final LocaleHelper localeHelper = new LocaleHelper();

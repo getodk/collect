@@ -50,10 +50,9 @@ public class InstanceProvider extends ContentProvider {
     private static final int INSTANCE_ID = 2;
 
     private static final UriMatcher URI_MATCHER;
-
-    private InstancesDatabaseHelper databaseHelper;
-
+    
     private InstancesDatabaseHelper getDbHelper() {
+        InstancesDatabaseHelper databaseHelper = null;
         // wrapper to test and reset/set the dbHelper based upon the attachment state of the device.
         try {
             Collect.createODKDirs();

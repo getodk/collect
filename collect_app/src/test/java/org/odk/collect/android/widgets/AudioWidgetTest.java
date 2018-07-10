@@ -38,7 +38,7 @@ public class AudioWidgetTest extends FileWidgetTest<AudioWidget> {
     @Mock
     AudioController audioController;
 
-    private String destinationName = null;
+    private String destinationName;
 
     @NonNull
     @Override

@@ -21,10 +21,6 @@ public class TimeWidgetTest extends GeneralDateTimeWidgetTest<TimeWidget, TimeDa
     @Mock
     QuestionDef questionDef;
 
-    public TimeWidgetTest() {
-        super();
-    }
-
     @NonNull
     @Override
     public TimeWidget createWidget() {

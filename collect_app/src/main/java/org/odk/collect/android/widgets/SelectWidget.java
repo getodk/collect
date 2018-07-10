@@ -38,7 +38,7 @@ public abstract class SelectWidget extends QuestionWidget {
     protected List<SelectChoice> items;
     protected ArrayList<MediaLayout> playList;
     protected LinearLayout answerLayout;
-    private int playcounter = 0;
+    private int playcounter;
 
     public SelectWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);

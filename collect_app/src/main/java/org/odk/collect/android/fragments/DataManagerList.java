@@ -57,7 +57,7 @@ public class DataManagerList extends InstanceListFragment
         implements DeleteInstancesListener, DiskSyncListener, View.OnClickListener {
     private static final String DATA_MANAGER_LIST_SORTING_ORDER = "dataManagerListSortingOrder";
 
-    DeleteInstancesTask deleteInstancesTask = null;
+    DeleteInstancesTask deleteInstancesTask;
     private AlertDialog alertDialog;
     private InstanceSyncTask instanceSyncTask;
     private ProgressDialog progressDialog;
