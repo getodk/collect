@@ -210,8 +210,6 @@ dependencies {
         exclude group: 'org.apache.httpcomponents'
     }
 
-    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
-
     implementation "com.evernote:android-job:1.2.5"
     implementation "com.rarepebble:colorpicker:2.3.1"
     implementation "commons-io:commons-io:2.6"
