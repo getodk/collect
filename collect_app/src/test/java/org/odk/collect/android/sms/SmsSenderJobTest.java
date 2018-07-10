@@ -22,6 +22,7 @@ import javax.inject.Inject;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.robolectric.Shadows.shadowOf;
 
@@ -65,7 +66,7 @@ public class SmsSenderJobTest extends BaseSmsTest {
 
         assertEquals(params.getDestinationAddress(), GATEWAY);
         assertNotNull(params.getSentIntents());
-        assertNotNull(params.getDeliveryIntents());
+        assertNull(params.getDeliveryIntents());
 
         SmsSubmission result = submissionManager.getSubmissionModel(SampleData.TEST_INSTANCE_ID);
         Message next = result.getNextUnsentMessage();
