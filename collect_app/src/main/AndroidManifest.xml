@@ -102,7 +102,7 @@ the specific language governing permissions and limitations under the License.
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths"/>
+                android:resource="@xml/provider_paths" />
         </provider>
 
         <activity
@@ -130,9 +130,9 @@ the specific language governing permissions and limitations under the License.
         <activity
             android:name=".activities.NotificationActivity"
             android:excludeFromRecents="true"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
             android:launchMode="singleTask"
-            android:taskAffinity="" />
+            android:taskAffinity=""
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" />
         <activity
             android:name=".activities.DrawActivity"
             android:screenOrientation="landscape" />
@@ -294,14 +294,6 @@ the specific language governing permissions and limitations under the License.
             android:exported="false">
             <intent-filter>
                 <action android:name="org.odk.collect.android.COLLECT_SMS_NOTIFICATION_ACTION" />
-            </intent-filter>
-        </receiver>
-        <receiver
-            android:name=".tasks.sms.SmsDeliveryBroadcastReceiver"
-            android:enabled="true"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="org.odk.collect.android.COLLECT_SMS_DELIVERY_ACTION" />
             </intent-filter>
         </receiver>
     </application>

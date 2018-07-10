@@ -27,7 +27,6 @@ public class SmsSender {
     private final String instanceId;
 
     public static final String SMS_SEND_ACTION = "org.odk.collect.android.COLLECT_SMS_SEND_ACTION";
-    private static final String SMS_DELIVERY_ACTION = "org.odk.collect.android.COLLECT_SMS_DELIVERY_ACTION";
     static final String SMS_INSTANCE_ID = "COLLECT_SMS_INSTANCE_ID";
     static final String SMS_MESSAGE_ID = "COLLECT_SMS_MESSAGE_ID";
     static final String SMS_RESULT_CODE = "COLLECT_SMS_RESULT_CODE";
@@ -60,7 +59,6 @@ public class SmsSender {
         SmsSubmission model = submissionManager.getSubmissionModel(instanceId);
 
         ArrayList<PendingIntent> sentIntents = new ArrayList<>();
-        ArrayList<PendingIntent> deliveryIntents = new ArrayList<>();
         ArrayList<String> messages = new ArrayList<>();
 
         for (Message message : model.getMessages()) {
@@ -72,36 +70,16 @@ public class SmsSender {
             PendingIntent sentPendingIntent = getSentPendingIntent(context, instanceId, message.getId());
             sentIntents.add(sentPendingIntent);
 
-            PendingIntent deliveryPendingIntent = getDeliveryPendingIntent(context, instanceId, message.getId());
-            deliveryIntents.add(deliveryPendingIntent);
-
             messages.add(message.getText());
 
             submissionManager.markMessageAsSending(instanceId, message.getId());
         }
 
-        smsManager.sendMultipartTextMessage(gateway, null, messages, sentIntents, deliveryIntents);
+        smsManager.sendMultipartTextMessage(gateway, null, messages, sentIntents, null);
 
         Timber.i("Sending a SMS of instance id %s", instanceId);
 
         return true;
-    }
-
-    /***
-     * Create the intent that's passed to SMS Manager so that the Delivery SMS
-     * BroadcastReceiver can be triggered.
-     * @param context necessary to create pending intent.
-     * @param instanceId identifies the instance of the form being targeted.
-     * @param messageId identifies the specific messages this intent applies to.
-     * @return PendingIntent
-     */
-
-    private static PendingIntent getDeliveryPendingIntent(Context context, String instanceId, int messageId) {
-        Intent sendIntent = new Intent(SMS_DELIVERY_ACTION);
-        sendIntent.putExtra(SMS_INSTANCE_ID, instanceId);
-        sendIntent.putExtra(SMS_MESSAGE_ID, messageId);
-
-        return PendingIntent.getBroadcast(context, messageId, sendIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     /***
