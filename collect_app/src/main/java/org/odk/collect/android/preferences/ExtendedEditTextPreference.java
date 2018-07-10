@@ -5,7 +5,6 @@ import android.preference.EditTextPreference;
 import android.support.annotation.ColorInt;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -27,8 +26,6 @@ public class ExtendedEditTextPreference extends EditTextPreference {
 
     @ColorInt
     private int enabledTitleColor;
-    @ColorInt
-    private int enabledSummaryColor;
     @ColorInt
     private int disabledColor;
 
@@ -57,14 +54,6 @@ public class ExtendedEditTextPreference extends EditTextPreference {
         if (!colorsInitialized) {
             enabledTitleColor = title.getCurrentTextColor();
 
-            ThemeUtils themeUtils = new ThemeUtils(getContext());
-
-            if (themeUtils.isDarkTheme()) {
-                enabledSummaryColor = 1275068417;
-            } else {
-                enabledSummaryColor = -1979711488;
-            }
-
             disabledColor = ContextCompat.getColor(getContext(), android.R.color.secondary_text_dark);
             colorsInitialized = true;
         }
@@ -79,7 +68,16 @@ public class ExtendedEditTextPreference extends EditTextPreference {
 
         if (isEnabled) {
             title.setTextColor(enabledTitleColor);
-            summary.setTextColor(enabledSummaryColor);
+
+            ThemeUtils themeUtils = new ThemeUtils(getContext());
+
+            if (themeUtils.isDarkTheme()) {
+                int darkEnabledSummaryColor = 1275068417;
+                summary.setTextColor(darkEnabledSummaryColor);
+            } else {
+                int lightEnabledSummaryColor = 1979711488;
+                summary.setTextColor(lightEnabledSummaryColor);
+            }
         } else {
             title.setTextColor(disabledColor);
             summary.setTextColor(disabledColor);
