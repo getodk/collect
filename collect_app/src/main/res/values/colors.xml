@@ -27,4 +27,5 @@ the License.
     <color name="lightIconColor">@android:color/black</color>
     <color name="lightBackgroundColor">@android:color/white</color>
     <color name="tintColor">#2196F3</color>
+    <color name="displaySubtextColor">#4CAF50</color>
 </resources>
