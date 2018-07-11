@@ -58,11 +58,13 @@ import org.odk.collect.android.preferences.GuidanceHint;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.ActivityResultHelper;
 import org.odk.collect.android.utilities.AnimateUtils;
+import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
+import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.views.MediaLayout;
 import org.odk.collect.android.widgets.interfaces.ButtonWidget;
@@ -77,6 +79,7 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import timber.log.Timber;
 
+import static android.app.Activity.RESULT_OK;
 import static org.odk.collect.android.activities.FormEntryActivity.DO_NOT_EVALUATE_CONSTRAINTS;
 
 public abstract class QuestionWidget
@@ -732,5 +735,22 @@ public abstract class QuestionWidget
 
     protected void saveAnswersForCurrentScreen() {
         ((FormEntryActivity) getContext()).saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+    }
+
+    protected boolean isResultValid(int requestingCode, int requestCode, int resultCode, Intent data) {
+
+        // intent is needed for all requestCodes except of DRAW_IMAGE, ANNOTATE_IMAGE, SIGNATURE_CAPTURE, IMAGE_CAPTURE and HIERARCHY_ACTIVITY
+        if (data == null &&
+                requestCode != ApplicationConstants.RequestCodes.DRAW_IMAGE &&
+                requestCode != ApplicationConstants.RequestCodes.ANNOTATE_IMAGE &&
+                requestCode != ApplicationConstants.RequestCodes.SIGNATURE_CAPTURE &&
+                requestCode != ApplicationConstants.RequestCodes.IMAGE_CAPTURE) {
+            Timber.w("The intent has a null value for requestCode: %s", requestCode);
+            ToastUtils.showLongToast(getContext().getString(R.string.null_intent_value));
+            return false;
+        }
+
+        return resultCode == RESULT_OK && requestingCode == requestCode;
+
     }
 }

@@ -18,6 +18,7 @@ import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 
@@ -26,6 +27,8 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.PermissionListener;
+
+import java.io.File;
 
 import timber.log.Timber;
 
@@ -55,10 +58,10 @@ public class AlignedImageWidget extends BaseImageWidget {
 
     private static final String FILE_PATH_EXTRA = "filePath";
 
+    private final int[] iarray = new int[6];
+
     private Button captureButton;
     private Button chooseButton;
-    
-    private final int[] iarray = new int[6];
 
     public AlignedImageWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -124,6 +127,31 @@ public class AlignedImageWidget extends BaseImageWidget {
         super.cancelLongPress();
         captureButton.cancelLongPress();
         chooseButton.cancelLongPress();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (isResultValid(RequestCodes.ALIGNED_IMAGE, requestCode, resultCode, data)) {
+            /*
+             * We saved the image to the tempfile_path; the app returns the full
+             * path to the saved file in the EXTRA_OUTPUT extra. Take that file
+             * and move it into the instance folder.
+             */
+            String path = data.getStringExtra(MediaStore.EXTRA_OUTPUT);
+            File file = new File(path);
+            String instanceFolder = getFormController().getInstanceFile().getParent();
+            String s = instanceFolder + File.separator + System.currentTimeMillis() + ".jpg";
+
+            File nf = new File(s);
+            if (!file.renameTo(nf)) {
+                Timber.e("Failed to rename %s", file.getAbsolutePath());
+            } else {
+                Timber.i("Renamed %s to %s", file.getAbsolutePath(), nf.getAbsolutePath());
+            }
+
+            setBinaryData(nf);
+            saveAnswersForCurrentScreen();
+        }
     }
 
     @Override
