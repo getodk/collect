@@ -72,7 +72,7 @@ public class ExtendedEditTextPreference extends EditTextPreference {
             ThemeUtils themeUtils = new ThemeUtils(getContext());
 
             if (themeUtils.isDarkTheme()) {
-                int darkEnabledSummaryColor = 1275068417;
+                int darkEnabledSummaryColor = -1275068417;
                 summary.setTextColor(darkEnabledSummaryColor);
             } else {
                 int lightEnabledSummaryColor = 1979711488;
@@ -89,5 +89,4 @@ public class ExtendedEditTextPreference extends EditTextPreference {
         super.setEnabled(enabled);
         isEnabled = enabled;
     }
-
 }
