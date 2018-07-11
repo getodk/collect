@@ -182,6 +182,50 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
         binaryName = getFormEntryPrompt().getAnswerText();
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (!isResultValid(requestCode, resultCode, data)) {
+            return;
+        }
+
+        switch (requestCode) {
+            case ApplicationConstants.RequestCodes.ALIGNED_IMAGE:
+
+                /*
+                 * We saved the image to the tempfile_path; the app returns the full
+                 * path to the saved file in the EXTRA_OUTPUT extra. Take that file
+                 * and move it into the instance folder.
+                 */
+                String path = data.getStringExtra(MediaStore.EXTRA_OUTPUT);
+                File file = new File(path);
+                String instanceFolder = getFormController().getInstanceFile().getParent();
+                String s = instanceFolder + File.separator + System.currentTimeMillis() + ".jpg";
+
+                File nf = new File(s);
+                if (!file.renameTo(nf)) {
+                    Timber.e("Failed to rename %s", file.getAbsolutePath());
+                } else {
+                    Timber.i("Renamed %s to %s", file.getAbsolutePath(), nf.getAbsolutePath());
+                }
+
+                setBinaryData(nf);
+                saveAnswersForCurrentScreen();
+                break;
+
+            case ApplicationConstants.RequestCodes.IMAGE_CHOOSER:
+                Runnable runnable = () -> saveChosenImage(data.getData());
+                new Thread(runnable).start();
+                break;
+
+            case ApplicationConstants.RequestCodes.DRAW_IMAGE:
+            case ApplicationConstants.RequestCodes.ANNOTATE_IMAGE:
+            case ApplicationConstants.RequestCodes.SIGNATURE_CAPTURE:
+            case ApplicationConstants.RequestCodes.IMAGE_CAPTURE:
+                saveCapturedImage();
+                break;
+        }
+    }
+
     /**
      * Enables a subclass to add extras to the intent before launching the draw activity.
      *

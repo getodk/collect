@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.widgets;
 
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -24,11 +25,14 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
@@ -46,10 +50,12 @@ import android.widget.Toast;
 
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ActivityLogger;
+import org.odk.collect.android.exception.GDriveConnectionException;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.logic.FormController;
@@ -60,16 +66,21 @@ import org.odk.collect.android.utilities.ActivityResultHelper;
 import org.odk.collect.android.utilities.AnimateUtils;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DependencyProvider;
+import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
+import org.odk.collect.android.utilities.ImageConverter;
+import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.views.MediaLayout;
+import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 import org.odk.collect.android.widgets.interfaces.Widget;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -737,7 +748,7 @@ public abstract class QuestionWidget
         ((FormEntryActivity) getContext()).saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
     }
 
-    protected boolean isResultValid(int requestingCode, int requestCode, int resultCode, Intent data) {
+    protected boolean isResultValid(int requestCode, int resultCode, Intent data) {
 
         // intent is needed for all requestCodes except of DRAW_IMAGE, ANNOTATE_IMAGE, SIGNATURE_CAPTURE, IMAGE_CAPTURE and HIERARCHY_ACTIVITY
         if (data == null &&
@@ -750,7 +761,90 @@ public abstract class QuestionWidget
             return false;
         }
 
-        return resultCode == RESULT_OK && requestingCode == requestCode;
+        return resultCode == RESULT_OK;
+    }
 
+    /*
+     * We have a saved image somewhere, but we really want it to be in:
+     * /sdcard/odk/instances/[current instnace]/something.jpg so we move
+     * it there before inserting it into the content provider. Once the
+     * android image capture bug gets fixed, (read, we move on from
+     * Android 1.6) we want to handle images the audio and video
+     */
+    protected void saveChosenImage(Uri selectedImage) {
+        // Copy file to sdcard
+        File instanceFile = getFormController().getInstanceFile();
+        if (instanceFile != null) {
+            String instanceFolder1 = instanceFile.getParent();
+            String destImagePath = instanceFolder1 + File.separator + System.currentTimeMillis() + ".jpg";
+
+            File chosenImage;
+            try {
+                chosenImage = MediaUtils.getFileFromUri(getContext(), selectedImage, MediaStore.Images.Media.DATA);
+                if (chosenImage != null) {
+                    final File newImage = new File(destImagePath);
+                    FileUtils.copyFile(chosenImage, newImage);
+                    ImageConverter.execute(newImage.getPath(), this, getContext());
+                    ((Activity) getContext()).runOnUiThread(() -> {
+                        if (this instanceof BinaryWidget) {
+                            ((BinaryWidget) this).setBinaryData(newImage);
+                        }
+                        saveAnswersForCurrentScreen();
+                        refreshCurrentView();
+                    });
+                } else {
+                    ((Activity) getContext()).runOnUiThread(() -> {
+                        Timber.e("Could not receive chosen image");
+                        ToastUtils.showShortToastInMiddle(R.string.error_occured);
+                    });
+                }
+            } catch (GDriveConnectionException e) {
+                ((Activity) getContext()).runOnUiThread(() -> {
+                    Timber.e("Could not receive chosen image due to connection problem");
+                    ToastUtils.showLongToastInMiddle(R.string.gdrive_connection_exception);
+                });
+            }
+        } else {
+            ToastUtils.showLongToast(R.string.image_not_saved);
+            Timber.w(getContext().getString(R.string.image_not_saved));
+        }
+    }
+
+    /*
+     * We saved the image to the tempfile_path, but we really want it to
+     * be in: /sdcard/odk/instances/[current instnace]/something.jpg so
+     * we move it there before inserting it into the content provider.
+     * Once the android image capture bug gets fixed, (read, we move on
+     * from Android 1.6) we want to handle images the audio and video
+     */
+    protected void saveCapturedImage() {
+        // The intent is empty, but we know we saved the image to the temp file
+        ImageConverter.execute(Collect.TMPFILE_PATH, this, getContext());
+        File fi = new File(Collect.TMPFILE_PATH);
+
+        //revoke permissions granted to this file due its possible usage in the camera app
+        Uri uri = FileProvider.getUriForFile(getContext(),
+                BuildConfig.APPLICATION_ID + ".provider",
+                fi);
+        FileUtils.revokeFileReadWritePermission(getContext(), uri);
+
+        String instanceFolder = getFormController().getInstanceFile().getParent();
+        String s = instanceFolder + File.separator + System.currentTimeMillis() + ".jpg";
+
+        File nf = new File(s);
+        if (!fi.renameTo(nf)) {
+            Timber.e("Failed to rename %s", fi.getAbsolutePath());
+        } else {
+            Timber.i("Renamed %s to %s", fi.getAbsolutePath(), nf.getAbsolutePath());
+        }
+
+        if (this instanceof BinaryWidget) {
+            ((BinaryWidget) this).setBinaryData(nf);
+        }
+        saveAnswersForCurrentScreen();
+    }
+
+    private void refreshCurrentView() {
+        ((FormEntryActivity) getContext()).refreshCurrentView();
     }
 }
