@@ -84,7 +84,7 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
     private boolean isDragged;
     private ImageButton showLocationButton;
 
-    private int locationCount = 0;
+    private int locationCount;
 
     private MapHelper helper;
 
@@ -100,7 +100,7 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
     private boolean draggable;
     private boolean intentDraggable;
     private boolean locationFromIntent;
-    private int locationCountNum = 0;
+    private int locationCountNum;
     private boolean foundFirstLocation;
 
     @Override
@@ -202,7 +202,7 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
         layersButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                helper.showLayersDialog(GeoPointOsmMapActivity.this);
+                helper.showLayersDialog();
 
             }
         });

@@ -53,9 +53,8 @@ public class FormsProvider extends ContentProvider {
 
     private static final UriMatcher URI_MATCHER;
 
-    private FormsDatabaseHelper databaseHelper;
-
     private FormsDatabaseHelper getDbHelper() {
+        FormsDatabaseHelper databaseHelper = null;
         // wrapper to test and reset/set the dbHelper based upon the attachment state of the device.
         try {
             Collect.createODKDirs();

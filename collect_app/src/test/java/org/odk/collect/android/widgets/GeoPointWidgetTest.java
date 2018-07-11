@@ -77,7 +77,7 @@ public class GeoPointWidgetTest extends BinaryWidgetTest<GeoPointWidget, GeoPoin
         for (int i = 0; i < doubles.length; i++) {
             b.append(doubles[i]);
             if (i != doubles.length - 1) {
-                b.append(" ");
+                b.append(' ');
             }
         }
 

@@ -471,7 +471,6 @@
   <string name="share_qrcode">Jaa QR-koodi</string>
   <string name="take_picture_instruction">Napsauta näyttöä ottaaksesi kuvan</string>
   <string name="error_front_camera_unavailable">Etukamera ei ole käytettävissä tällä laitteella</string>
-  <string name="request_permission">Tämä sovellus tarvitsee luvan kameran käyttöön.</string>
   <string name="camera_error">Tämä laite ei tue Camera2 API:a (ohjelmarajapintaa).</string>
   <string name="invalid_range_widget">Tällä widgetillä on väärät asetukset!</string>
   <string name="form_entry_setting">Lomakesyöttöasetukset</string>
@@ -584,11 +583,8 @@
   <string name="every_six_hours">Kuuden tunnin välein</string>
   <string name="every_24_hours">Vuorokauden välein</string>
   <string name="form_updates_available">Lomakepäivityksiä saatavilla</string>
-  <string name="new_form_versions_downloaded">Uudet lomakeversiot haettu</string>
   <string name="automatic_download">Automaattinen haku</string>
   <string name="automatic_download_summary">Hae automaattisesti lomakkeiden päivitettyjä versioita</string>
-  <string name="forms_downloaded">Haetut lomakkeet:</string>
-  <string name="forms_sent">Lähetetyt lomakkeet:</string>
   <string name="guidance_hint_title">Näytä kysymysopastus</string>
   <string name="app_theme">Teema</string>
   <string name="theme_light">Vaalea teema</string>

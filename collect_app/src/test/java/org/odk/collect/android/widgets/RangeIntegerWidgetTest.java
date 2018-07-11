@@ -12,10 +12,6 @@ import org.robolectric.RuntimeEnvironment;
 
 public class RangeIntegerWidgetTest extends RangeWidgetTest<RangeIntegerWidget, IntegerData> {
 
-    public RangeIntegerWidgetTest() {
-        super();
-    }
-
     @NonNull
     @Override
     public RangeIntegerWidget createWidget() {

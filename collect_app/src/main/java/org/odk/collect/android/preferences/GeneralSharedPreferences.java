@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.preferences;
 
+import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 
 import org.odk.collect.android.application.Collect;
@@ -29,9 +30,8 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PERIODIC_FO
 
 public class GeneralSharedPreferences {
 
-    private static GeneralSharedPreferences instance = null;
+    private static GeneralSharedPreferences instance;
     private final android.content.SharedPreferences sharedPreferences;
-    private android.content.SharedPreferences.Editor editor;
 
     private GeneralSharedPreferences() {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
@@ -74,7 +74,7 @@ public class GeneralSharedPreferences {
     }
 
     public GeneralSharedPreferences save(String key, Object value) {
-        editor = sharedPreferences.edit();
+        Editor editor = sharedPreferences.edit();
 
         if (value == null || value instanceof String) {
             if (key.equals(KEY_PERIODIC_FORM_UPDATES_CHECK) && get(KEY_PERIODIC_FORM_UPDATES_CHECK) != value) {

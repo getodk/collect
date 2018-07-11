@@ -61,7 +61,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     protected EditTextPreference serverUrlPreference;
     protected EditTextPreference usernamePreference;
     protected EditTextPreference passwordPreference;
-    protected boolean credentialsHaveChanged = false;
+    protected boolean credentialsHaveChanged;
     protected EditTextPreference submissionUrlPreference;
     protected EditTextPreference formListUrlPreference;
     private ListPopupWindow listPopupWindow;
@@ -311,6 +311,10 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                         ToastUtils.showShortToast(R.string.url_error);
                         return false;
                     }
+                    break;
+                case KEY_FORMLIST_URL:
+                case KEY_SUBMISSION_URL:
+                    preference.setSummary(newValue.toString());
                     break;
             }
             return true;

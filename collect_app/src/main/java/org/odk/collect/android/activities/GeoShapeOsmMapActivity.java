@@ -133,7 +133,7 @@ public class GeoShapeOsmMapActivity extends CollectAbstractActivity implements I
 
             @Override
             public void onClick(View v) {
-                helper.showLayersDialog(GeoShapeOsmMapActivity.this);
+                helper.showLayersDialog();
 
             }
         });

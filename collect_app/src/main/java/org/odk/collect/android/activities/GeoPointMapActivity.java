@@ -80,7 +80,7 @@ public class GeoPointMapActivity extends CollectAbstractActivity implements OnMa
     private boolean isDragged;
     private ImageButton showLocation;
 
-    private int locationCount = 0;
+    private int locationCount;
 
     private MapHelper helper;
     //private KmlLayer kk;
@@ -248,7 +248,7 @@ public class GeoPointMapActivity extends CollectAbstractActivity implements OnMa
 
         // Menu Layer Toggle
         ImageButton layers = findViewById(R.id.layer_menu);
-        layers.setOnClickListener(v -> helper.showLayersDialog(this));
+        layers.setOnClickListener(v -> helper.showLayersDialog());
         zoomDialogView = getLayoutInflater().inflate(R.layout.geo_zoom_dialog, null);
         zoomLocationButton = zoomDialogView.findViewById(R.id.zoom_location);
         zoomLocationButton.setOnClickListener(v -> {
