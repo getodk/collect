@@ -14,7 +14,9 @@
 
 package org.odk.collect.android.widgets;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -26,6 +28,8 @@ import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
+import android.support.v7.app.AppCompatActivity;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -38,6 +42,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -51,6 +56,7 @@ import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GuidanceHint;
 import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.utilities.ActivityResultHelper;
 import org.odk.collect.android.utilities.AnimateUtils;
 import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
@@ -71,9 +77,11 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.activities.FormEntryActivity.DO_NOT_EVALUATE_CONSTRAINTS;
+
 public abstract class QuestionWidget
         extends RelativeLayout
-        implements Widget, AudioPlayListener {
+        implements Widget, AudioPlayListener, ActivityResultHelper.OnActivityResult {
 
     private final int questionFontSize;
     private final FormEntryPrompt formEntryPrompt;
@@ -580,7 +588,7 @@ public abstract class QuestionWidget
      * out of the box when we use internal choices instead
      */
     protected void clearNextLevelsOfCascadingSelect() {
-        FormController formController = Collect.getInstance().getFormController();
+        FormController formController = getFormController();
         if (formController == null) {
             return;
         }
@@ -599,6 +607,11 @@ public abstract class QuestionWidget
                 Timber.d(e);
             }
         }
+    }
+
+    @Nullable
+    protected FormController getFormController() {
+        return ((Collect) getContext().getApplicationContext()).getFormController();
     }
 
     //region Data waiting
@@ -702,5 +715,22 @@ public abstract class QuestionWidget
 
     public int getPlayColor() {
         return playColor;
+    }
+
+    protected void startActivityForResult(Intent intent, int requestCode, @StringRes int errorStringResource) {
+        try {
+            ActivityResultHelper.startActivityForResult((AppCompatActivity) getContext(), intent, requestCode, this);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(getContext(),
+                    getContext().getString(R.string.activity_not_found, getContext().getString(errorStringResource)),
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public abstract void onActivityResult(int requestCode, int resultCode, Intent data);
+
+    protected void saveAnswersForCurrentScreen() {
+        ((FormEntryActivity) getContext()).saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
     }
 }
