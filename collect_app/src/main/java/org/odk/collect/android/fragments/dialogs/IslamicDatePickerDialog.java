@@ -22,6 +22,7 @@ import org.joda.time.chrono.IslamicChronology;
 import org.odk.collect.android.R;
 import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.DateTimeUtils;
+import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import java.util.Arrays;
 
@@ -32,9 +33,9 @@ public class IslamicDatePickerDialog extends CustomDatePickerDialog {
 
     private String[] monthsArray;
 
-    public static IslamicDatePickerDialog newInstance(FormIndex formIndex, LocalDateTime date, DatePickerDetails datePickerDetails) {
+    public static IslamicDatePickerDialog newInstance(FormIndex formIndex, LocalDateTime date, DatePickerDetails datePickerDetails, BinaryWidget binaryWidget) {
         IslamicDatePickerDialog dialog = new IslamicDatePickerDialog();
-        dialog.setArguments(getArgs(formIndex, date, datePickerDetails));
+        dialog.setArguments(getArgs(formIndex, date, datePickerDetails, binaryWidget));
 
         return dialog;
     }

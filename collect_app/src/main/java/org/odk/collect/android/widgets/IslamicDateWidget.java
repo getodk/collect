@@ -31,7 +31,7 @@ public class IslamicDateWidget extends AbstractDateWidget {
     }
 
     protected void showDatePickerDialog() {
-        IslamicDatePickerDialog islamicDatePickerDialog = IslamicDatePickerDialog.newInstance(getFormEntryPrompt().getIndex(), date, datePickerDetails);
+        IslamicDatePickerDialog islamicDatePickerDialog = IslamicDatePickerDialog.newInstance(getFormEntryPrompt().getIndex(), date, datePickerDetails, this);
         islamicDatePickerDialog.show(((FormEntryActivity) getContext()).getSupportFragmentManager(), DATE_PICKER_DIALOG);
     }
 }

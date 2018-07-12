@@ -14,11 +14,13 @@
 
 package org.odk.collect.android.widgets.interfaces;
 
+import java.io.Serializable;
+
 /**
  * Interface implemented by widgets that need binary data.
  *
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public interface BinaryWidget extends ButtonWidget {
+public interface BinaryWidget extends ButtonWidget, Serializable {
     void setBinaryData(Object answer);
 }

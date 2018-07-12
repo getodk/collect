@@ -17,7 +17,6 @@
 package org.odk.collect.android.fragments.dialogs;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -30,10 +29,9 @@ import org.javarosa.core.model.FormIndex;
 import org.joda.time.LocalDateTime;
 import org.joda.time.chrono.GregorianChronology;
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.DatePickerDetails;
-import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.DateTimeUtils;
+import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 /**
  * @author Grzegorz Orczykowski (gorczykowski@soldevelo.com)
@@ -44,6 +42,7 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
     private static final String FORM_INDEX = "formIndex";
     private static final String DATE = "date";
     private static final String DATE_PICKER_DETAILS = "datePickerDetails";
+    private static final String BINARY_WIDGET = "binaryWidget";
 
     private NumberPicker dayPicker;
     private NumberPicker monthPicker;
@@ -56,19 +55,16 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
     private FormIndex formIndex;
 
     private DatePickerDetails datePickerDetails;
+    private BinaryWidget binaryWidget;
 
-    private CustomDatePickerDialogListener listener;
+    protected static Bundle getArgs(FormIndex formIndex, LocalDateTime date, DatePickerDetails datePickerDetails, BinaryWidget binaryWidget) {
+        Bundle args = new Bundle();
+        args.putSerializable(FORM_INDEX, formIndex);
+        args.putSerializable(DATE, date);
+        args.putSerializable(DATE_PICKER_DETAILS, datePickerDetails);
+        args.putSerializable(BINARY_WIDGET, binaryWidget);
 
-    public interface CustomDatePickerDialogListener {
-        void onDateChanged(LocalDateTime date);
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof CustomDatePickerDialogListener) {
-            listener = (CustomDatePickerDialogListener) context;
-        }
+        return args;
     }
 
     @Override
@@ -83,6 +79,7 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
         formIndex = (FormIndex) savedInstanceStateToRead.getSerializable(FORM_INDEX);
         date = (LocalDateTime) savedInstanceStateToRead.getSerializable(DATE);
         datePickerDetails = (DatePickerDetails) savedInstanceStateToRead.getSerializable(DATE_PICKER_DETAILS);
+        binaryWidget = (BinaryWidget) savedInstanceStateToRead.getSerializable(BINARY_WIDGET);
     }
 
     @Override
@@ -93,11 +90,7 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        FormController formController = Collect.getInstance().getFormController();
-                        if (formController != null) {
-                            formController.setIndexWaitingForData(formIndex);
-                        }
-                        listener.onDateChanged(getDateAsGregorian(getOriginalDate()));
+                        binaryWidget.setBinaryData(getDateAsGregorian(getOriginalDate()));
                         dismiss();
                     }
                 })
@@ -122,6 +115,7 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
         outState.putSerializable(FORM_INDEX, formIndex);
         outState.putSerializable(DATE, getDateAsGregorian(getOriginalDate()));
         outState.putSerializable(DATE_PICKER_DETAILS, datePickerDetails);
+        outState.putSerializable(BINARY_WIDGET, binaryWidget);
 
         super.onSaveInstanceState(outState);
     }
@@ -171,15 +165,6 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
                 .toDateTime()
                 .withChronology(GregorianChronology.getInstance())
                 .toLocalDateTime();
-    }
-
-    protected static Bundle getArgs(FormIndex formIndex, LocalDateTime date, DatePickerDetails datePickerDetails) {
-        Bundle args = new Bundle();
-        args.putSerializable(FORM_INDEX, formIndex);
-        args.putSerializable(DATE, date);
-        args.putSerializable(DATE_PICKER_DETAILS, datePickerDetails);
-
-        return args;
     }
 
     protected void updateGregorianDateLabel() {
