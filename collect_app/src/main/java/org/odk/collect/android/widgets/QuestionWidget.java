@@ -733,6 +733,10 @@ public abstract class QuestionWidget
         return playColor;
     }
 
+    protected void startActivityForResult(Intent intent, int requestCode) {
+        startActivityForResult(intent, requestCode, -1);
+    }
+
     protected void startActivityForResult(Intent intent, int requestCode, @StringRes int errorStringResource) {
         try {
             ActivityResultHelper.startActivityForResult((AppCompatActivity) getContext(), intent, requestCode, this);
