@@ -29,7 +29,7 @@ public final class ActivityResultHelper {
 
     @SuppressWarnings("ValidFragment")
     public static class FragmentForResult extends Fragment {
-        private OnActivityResult callback;
+        private final OnActivityResult callback;
 
         public FragmentForResult(OnActivityResult callback) {
             this.callback = callback;
