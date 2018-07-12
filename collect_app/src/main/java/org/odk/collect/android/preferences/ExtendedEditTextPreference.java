@@ -46,7 +46,7 @@ public class ExtendedEditTextPreference extends EditTextPreference {
     }
 
     /**
-     * Sets the colors that are gonna be used for each state once.
+     * Sets the colors that are going be used for each state once.
      * This is necessary because we are pulling the current colors of the control
      * that will be based on the theme (light/dark) being used.
      */
