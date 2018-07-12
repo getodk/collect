@@ -47,11 +47,6 @@ the specific language governing permissions and limitations under the License.
     <uses-permission android:name="android.permission.USE_CREDENTIALS" android:maxSdkVersion="22"/>
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" android:maxSdkVersion="22"/>
 
-    <!-- Not needed anymore -->
-    <permission android:name="org.odk.collect.android.permission.MAPS_RECEIVE" android:protectionLevel="signature" />
-    <uses-permission android:name="org.odk.collect.android.permission.MAPS_RECEIVE" />
-    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
-
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
