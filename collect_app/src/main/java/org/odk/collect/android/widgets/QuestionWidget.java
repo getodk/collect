@@ -18,6 +18,7 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -28,6 +29,7 @@ import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -735,9 +737,11 @@ public abstract class QuestionWidget
         try {
             ActivityResultHelper.startActivityForResult((AppCompatActivity) getContext(), intent, requestCode, this);
         } catch (ActivityNotFoundException e) {
-            Toast.makeText(getContext(),
-                    getContext().getString(R.string.activity_not_found, getContext().getString(errorStringResource)),
-                    Toast.LENGTH_SHORT).show();
+            if (errorStringResource != -1) {
+                Toast.makeText(getContext(),
+                        getContext().getString(R.string.activity_not_found, getContext().getString(errorStringResource)),
+                        Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -842,6 +846,105 @@ public abstract class QuestionWidget
             ((BinaryWidget) this).setBinaryData(nf);
         }
         saveAnswersForCurrentScreen();
+    }
+
+    protected void saveFileAnswer(Uri media) {
+        // For audio/video capture/chooser, we get the URI from the content
+        // provider
+        // then the widget copies the file and makes a new entry in the
+        // content provider.
+        if (this instanceof BinaryWidget) {
+            ((BinaryWidget) this).setBinaryData(media);
+        }
+        saveAnswersForCurrentScreen();
+        deleteMediaFromContentProvider(media);
+    }
+
+    protected void deleteMediaFromContentProvider(Uri media) {
+        String filePath = MediaUtils.getDataColumn(getContext(), media, null, null);
+        if (filePath != null) {
+            new File(filePath).delete();
+        }
+        try {
+            getContext().getContentResolver().delete(media, null, null);
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+    }
+
+    /*
+     * Start a task to save the chosen file/audio/video with a new Thread,
+     * This could support retrieving file from Google Drive.
+     */
+    protected void saveChosenFileInBackground(Uri media) {
+        Runnable saveFileRunnable = () -> saveChosenFile(media);
+        new Thread(saveFileRunnable).start();
+    }
+
+    /**
+     * Save a copy of the chosen media in Collect's own path such as
+     * "/storage/emulated/0/odk/instances/{form name}/filename",
+     * and if it's from Google Drive and not cached yet, we'll retrieve it using network.
+     * This may take a long time.
+     *
+     * @param selectedFile uri of the selected audio
+     * @see #getFileExtensionFromUri(Uri)
+     */
+    private void saveChosenFile(Uri selectedFile) {
+        String extension = getFileExtensionFromUri(selectedFile);
+        String instanceFolder = Collect.getInstance().getFormController().getInstanceFile().getParent();
+        String destPath = instanceFolder + File.separator + System.currentTimeMillis() + extension;
+
+        try {
+            File chosenFile = MediaUtils.getFileFromUri(getContext(), selectedFile, MediaStore.Images.Media.DATA);
+            if (chosenFile != null) {
+                final File newFile = new File(destPath);
+                FileUtils.copyFile(chosenFile, newFile);
+                ((Activity) getContext()).runOnUiThread(() -> {
+                    if (this instanceof BinaryWidget) {
+                        ((BinaryWidget) this).setBinaryData(newFile);
+                    }
+                    saveAnswersForCurrentScreen();
+                    refreshCurrentView();
+                });
+            } else {
+                ((Activity) getContext()).runOnUiThread(() -> {
+                    Timber.e("Could not receive chosen file");
+                    ToastUtils.showShortToastInMiddle(R.string.error_occured);
+                });
+            }
+        } catch (GDriveConnectionException e) {
+            ((Activity) getContext()).runOnUiThread(() -> {
+                Timber.e("Could not receive chosen file due to connection problem");
+                ToastUtils.showLongToastInMiddle(R.string.gdrive_connection_exception);
+            });
+        }
+    }
+
+    /**
+     * Using contentResolver to get a file's extension by the uri returned from OnActivityResult.
+     *
+     * @param fileUri Whose name we want to get
+     * @return The file's extension
+     * @see #onActivityResult(int, int, Intent)
+     * @see #saveChosenFile(Uri)
+     * @see android.content.ContentResolver
+     */
+    private String getFileExtensionFromUri(Uri fileUri) {
+        try (Cursor returnCursor = getContext().getContentResolver()
+                .query(fileUri, null, null, null, null)) {
+            int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+            returnCursor.moveToFirst();
+            String filename = returnCursor.getString(nameIndex);
+            // If the file's name contains extension , we cut it down for latter use (copy a new file).
+            if (filename.lastIndexOf('.') != -1) {
+                return filename.substring(filename.lastIndexOf('.'));
+            } else {
+                // I found some mp3 files' name don't contain extension, but can be played as Audio
+                // So I write so, but I still there are some way to get its extension
+                return "";
+            }
+        }
     }
 
     private void refreshCurrentView() {

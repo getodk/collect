@@ -19,6 +19,7 @@ package org.odk.collect.android.widgets;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
@@ -34,7 +35,6 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.FileUtils;
@@ -92,7 +92,6 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget {
 
     @Override
     public void onButtonClick(int buttonId) {
-        waitForData();
         performFileSearch();
     }
 
@@ -136,6 +135,15 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget {
         answerLayout.setOnLongClickListener(l);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (isResultValid(requestCode, resultCode, data)) {
+            if (requestCode == ApplicationConstants.RequestCodes.VIDEO_CHOOSER) {
+                saveChosenFileInBackground(data.getData());
+            }
+        }
+    }
+
     private void setUpLayout() {
         LinearLayout widgetLayout = new LinearLayout(getContext());
         widgetLayout.setOrientation(LinearLayout.VERTICAL);
@@ -163,11 +171,11 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget {
     }
 
     private void performFileSearch() {
-        Intent intent = new Intent(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT
+        Intent intent = new Intent(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
                 ? Intent.ACTION_OPEN_DOCUMENT : Intent.ACTION_GET_CONTENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("*/*"); // all file types
-        ((FormEntryActivity) getContext()).startActivityForResult(intent, ApplicationConstants.RequestCodes.ARBITRARY_FILE_CHOOSER);
+        startActivityForResult(intent, ApplicationConstants.RequestCodes.ARBITRARY_FILE_CHOOSER, -1);
     }
 
     private String getSourcePathFromUri(@NonNull Uri uri) {
