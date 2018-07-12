@@ -390,23 +390,6 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         }
     }
 
-    public void cancelWaitingForBinaryData() {
-        int count = 0;
-        for (QuestionWidget q : widgets) {
-            if (q instanceof BinaryWidget) {
-                if (q.isWaitingForData()) {
-                    q.cancelWaitingForData();
-                    ++count;
-                }
-            }
-        }
-
-        if (count != 1) {
-            Timber.w("Attempting to cancel waiting for binary data to a widget or set of widgets "
-                            + "not looking for data");
-        }
-    }
-
     public boolean suppressFlingGesture(MotionEvent e1, MotionEvent e2, float velocityX,
             float velocityY) {
         for (QuestionWidget q : widgets) {
