@@ -92,12 +92,13 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import timber.log.Timber;
 
+import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 import static org.odk.collect.android.activities.FormEntryActivity.DO_NOT_EVALUATE_CONSTRAINTS;
 
 public abstract class QuestionWidget
         extends RelativeLayout
-        implements Widget, AudioPlayListener, ActivityResultHelper.OnActivityResult {
+        implements Widget, AudioPlayListener {
 
     private final int questionFontSize;
     private final FormEntryPrompt formEntryPrompt;
@@ -739,7 +740,7 @@ public abstract class QuestionWidget
 
     protected void startActivityForResult(Intent intent, int requestCode, @StringRes int errorStringResource) {
         try {
-            ActivityResultHelper.startActivityForResult((AppCompatActivity) getContext(), intent, requestCode, this);
+            ActivityResultHelper.startActivityForResult((AppCompatActivity) getContext(), intent, requestCode, this::onActivityResultReceived);
         } catch (ActivityNotFoundException e) {
             if (errorStringResource != -1) {
                 Toast.makeText(getContext(),
@@ -749,7 +750,23 @@ public abstract class QuestionWidget
         }
     }
 
-    @Override
+    public void onActivityResultReceived(int requestCode, int resultCode, Intent data) {
+        FormController formController = getFormController();
+        if (formController == null) {
+            ((FormEntryActivity) getContext()).saveToFormLoaderTask(requestCode, resultCode, data);
+            return;
+        }
+
+        if (resultCode == RESULT_CANCELED || resultCode != RESULT_OK) {
+            // request was canceled...
+            return;
+        }
+
+        onActivityResult(requestCode, resultCode, data);
+
+        refreshCurrentView();
+    }
+
     public abstract void onActivityResult(int requestCode, int resultCode, Intent data);
 
     protected void saveAnswersForCurrentScreen() {
@@ -798,7 +815,6 @@ public abstract class QuestionWidget
                             ((BinaryWidget) this).setBinaryData(newImage);
                         }
                         saveAnswersForCurrentScreen();
-                        refreshCurrentView();
                     });
                 } else {
                     ((Activity) getContext()).runOnUiThread(() -> {
@@ -909,7 +925,6 @@ public abstract class QuestionWidget
                         ((BinaryWidget) this).setBinaryData(newFile);
                     }
                     saveAnswersForCurrentScreen();
-                    refreshCurrentView();
                 });
             } else {
                 ((Activity) getContext()).runOnUiThread(() -> {
