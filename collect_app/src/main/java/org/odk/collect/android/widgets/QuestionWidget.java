@@ -100,20 +100,23 @@ public abstract class QuestionWidget
         extends RelativeLayout
         implements Widget, AudioPlayListener {
 
+    private static final String GUIDANCE_EXPANDED_STATE = "expanded_state";
+
     private final int questionFontSize;
     private final FormEntryPrompt formEntryPrompt;
     private final MediaLayout questionMediaLayout;
-    private MediaPlayer player;
     private final TextView helpTextView;
     private final TextView guidanceTextView;
     private final View helpTextLayout;
     private final View guidanceTextLayout;
     private final View textLayout;
     private final TextView warningText;
-    private static final String GUIDANCE_EXPANDED_STATE = "expanded_state";
+
+    protected ThemeUtils themeUtils;
+
+    private MediaPlayer player;
     private AtomicBoolean expanded;
     private Bundle state;
-    protected ThemeUtils themeUtils;
     private int playColor;
 
     public QuestionWidget(Context context, FormEntryPrompt prompt) {
@@ -167,6 +170,16 @@ public abstract class QuestionWidget
 
         addQuestionMediaLayout(getQuestionMediaLayout());
         addHelpTextLayout(getHelpTextLayout());
+    }
+
+    //source::https://stackoverflow.com/questions/18996183/identifying-rtl-language-in-android/23203698#23203698
+    public static boolean isRTL() {
+        return isRTL(Locale.getDefault());
+    }
+
+    private static boolean isRTL(Locale locale) {
+        final int directionality = Character.getDirectionality(locale.getDisplayName().charAt(0));
+        return directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT || directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC;
     }
 
     private TextView setupGuidanceTextAndLayout(TextView guidanceTextView, FormEntryPrompt prompt) {
@@ -251,16 +264,6 @@ public abstract class QuestionWidget
             player.release();
             player = null;
         }
-    }
-
-    //source::https://stackoverflow.com/questions/18996183/identifying-rtl-language-in-android/23203698#23203698
-    public static boolean isRTL() {
-        return isRTL(Locale.getDefault());
-    }
-
-    private static boolean isRTL(Locale locale) {
-        final int directionality = Character.getDirectionality(locale.getDisplayName().charAt(0));
-        return directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT || directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC;
     }
 
     protected void injectDependencies(DependencyProvider dependencyProvider) {
@@ -769,7 +772,9 @@ public abstract class QuestionWidget
         refreshCurrentView();
     }
 
-    public abstract void onActivityResult(int requestCode, int resultCode, Intent data);
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // to be overridden by widgets launching external intents
+    }
 
     protected void saveAnswersForCurrentScreen() {
         ((FormEntryActivity) getContext()).saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
