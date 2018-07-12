@@ -231,10 +231,8 @@ public class ExPrinterWidget extends QuestionWidget implements BinaryWidget {
         String v = getFormEntryPrompt().getSpecialFormQuestionText("noPrinterErrorString");
         errorString = (v != null) ? v : getContext().getString(R.string.no_printer);
         try {
-            waitForData();
             firePrintingActivity(intentName);
         } catch (ActivityNotFoundException e) {
-            cancelWaitingForData();
             Toast.makeText(getContext(),
                     errorString, Toast.LENGTH_SHORT)
                     .show();
