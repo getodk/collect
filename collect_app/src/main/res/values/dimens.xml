@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <!-- padding -->
     <dimen name="padding_small">4dp</dimen>
     <dimen name="padding_medium">8dp</dimen>
@@ -48,7 +47,18 @@
     <dimen name="corner_radius">2dp</dimen>
 
     <!-- divider -->
-    <dimen name="divier_height">3dp</dimen>
+    <dimen name="divider_height">3dp</dimen>
     <dimen name="divider_accidental_tap">8dp</dimen>
 
+    <!-- instance upload list -->
+    <dimen name="instance_list_icon_layout_margin">4dp</dimen>
+    <dimen name="instance_list_icon_size">30dp</dimen>
+    <dimen name="instance_list_icon_margin">10dp</dimen>
+    <dimen name="instance_list_icon_left_right_margin">10dp</dimen>
+    <dimen name="instance_list_icon_top_bottom_margin">5dp</dimen>
+    <dimen name="instance_list_card_view_padding">5dp</dimen>
+    <dimen name="instance_list_text_padding">8dip</dimen>
+    <dimen name="instance_list_text_padding_top">4dip</dimen>
+    <dimen name="instance_list_close_width">25dp</dimen>
+    <dimen name="instance_list_close_height">30dp</dimen>
 </resources>

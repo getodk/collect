@@ -32,10 +32,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CursorAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.SimpleCursorAdapter;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.SortDialogAdapter;
@@ -61,7 +61,7 @@ abstract class AppListActivity extends CollectAbstractActivity {
     private static final String SEARCH_TEXT = "searchText";
 
     protected final ActivityLogger logger = Collect.getInstance().getActivityLogger();
-    protected SimpleCursorAdapter listAdapter;
+    protected CursorAdapter listAdapter;
     protected LinkedHashSet<Long> selectedInstances = new LinkedHashSet<>();
     protected String[] sortingOptions;
     protected Integer selectedSortingOrder;
