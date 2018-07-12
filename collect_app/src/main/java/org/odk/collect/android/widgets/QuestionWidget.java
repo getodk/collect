@@ -762,7 +762,9 @@ public abstract class QuestionWidget
             return;
         }
 
-        onActivityResult(requestCode, resultCode, data);
+        if (isResultValid(requestCode, resultCode, data)) {
+            onActivityResult(requestCode, resultCode, data);
+        }
 
         refreshCurrentView();
     }
@@ -774,7 +776,6 @@ public abstract class QuestionWidget
     }
 
     protected boolean isResultValid(int requestCode, int resultCode, Intent data) {
-
         // intent is needed for all requestCodes except of DRAW_IMAGE, ANNOTATE_IMAGE, SIGNATURE_CAPTURE, IMAGE_CAPTURE and HIERARCHY_ACTIVITY
         if (data == null &&
                 requestCode != ApplicationConstants.RequestCodes.DRAW_IMAGE &&

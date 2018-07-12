@@ -187,16 +187,16 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
         } else {
             if (!getFormEntryPrompt().isReadOnly()) {
                 SoftKeyboardUtils.showSoftKeyboard(answer);
-            /*
-             * If you do a multi-question screen after a "add another group" dialog, this won't
-             * automatically pop up. It's an Android issue.
-             *
-             * That is, if I have an edit text in an activity, and pop a dialog, and in that
-             * dialog's button's OnClick() I call edittext.requestFocus() and
-             * showSoftInput(edittext, 0), showSoftinput() returns false. However, if the
-             * edittext
-             * is focused before the dialog pops up, everything works fine. great.
-             */
+                /*
+                 * If you do a multi-question screen after a "add another group" dialog, this won't
+                 * automatically pop up. It's an Android issue.
+                 *
+                 * That is, if I have an edit text in an activity, and pop a dialog, and in that
+                 * dialog's button's OnClick() I call edittext.requestFocus() and
+                 * showSoftInput(edittext, 0), showSoftinput() returns false. However, if the
+                 * edittext
+                 * is focused before the dialog pops up, everything works fine. great.
+                 */
             } else {
                 SoftKeyboardUtils.hideSoftKeyboard(answer);
             }
@@ -223,17 +223,15 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (isResultValid(requestCode, resultCode, data)) {
-            if (requestCode == RequestCodes.EX_STRING_CAPTURE ||
-                    requestCode == RequestCodes.EX_DECIMAL_CAPTURE ||
-                    requestCode == RequestCodes.EX_INT_CAPTURE) {
-                String key = "value";
-                boolean exists = data.getExtras().containsKey(key);
-                if (exists) {
-                    Object externalValue = data.getExtras().get(key);
-                    setBinaryData(externalValue);
-                    saveAnswersForCurrentScreen();
-                }
+        if (requestCode == RequestCodes.EX_STRING_CAPTURE ||
+                requestCode == RequestCodes.EX_DECIMAL_CAPTURE ||
+                requestCode == RequestCodes.EX_INT_CAPTURE) {
+            String key = "value";
+            boolean exists = data.getExtras().containsKey(key);
+            if (exists) {
+                Object externalValue = data.getExtras().get(key);
+                setBinaryData(externalValue);
+                saveAnswersForCurrentScreen();
             }
         }
     }

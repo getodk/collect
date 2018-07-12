@@ -278,12 +278,10 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (isResultValid(requestCode, resultCode, data)) {
-            if (requestCode == RequestCodes.LOCATION_CAPTURE) {
-                String sl = data.getStringExtra(LOCATION_RESULT);
-                setBinaryData(sl);
-                saveAnswersForCurrentScreen();
-            }
+        if (requestCode == RequestCodes.LOCATION_CAPTURE) {
+            String sl = data.getStringExtra(LOCATION_RESULT);
+            setBinaryData(sl);
+            saveAnswersForCurrentScreen();
         }
     }
 

@@ -184,10 +184,6 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (!isResultValid(requestCode, resultCode, data)) {
-            return;
-        }
-
         switch (requestCode) {
             case ApplicationConstants.RequestCodes.ALIGNED_IMAGE:
 

@@ -141,13 +141,11 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryWidget {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (isResultValid(requestCode, resultCode, data)) {
-            if (requestCode == RequestCodes.GEOSHAPE_CAPTURE) {
-                String gshr = data.getStringExtra(GEOSHAPE_RESULTS);
-                setBinaryData(gshr);
-            }
-            saveAnswersForCurrentScreen();
+        if (requestCode == RequestCodes.GEOSHAPE_CAPTURE) {
+            String gshr = data.getStringExtra(GEOSHAPE_RESULTS);
+            setBinaryData(gshr);
         }
+        saveAnswersForCurrentScreen();
     }
 
     @Override

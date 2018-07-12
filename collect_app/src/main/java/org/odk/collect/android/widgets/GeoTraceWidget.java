@@ -147,13 +147,11 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (isResultValid(requestCode, resultCode, data)) {
-            if (requestCode == RequestCodes.GEOTRACE_CAPTURE) {
-                String traceExtra = data.getStringExtra(GEOTRACE_RESULTS);
-                setBinaryData(traceExtra);
-            }
-            saveAnswersForCurrentScreen();
+        if (requestCode == RequestCodes.GEOTRACE_CAPTURE) {
+            String traceExtra = data.getStringExtra(GEOTRACE_RESULTS);
+            setBinaryData(traceExtra);
         }
+        saveAnswersForCurrentScreen();
     }
 
     @Override

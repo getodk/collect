@@ -228,12 +228,10 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (isResultValid(requestCode, resultCode, data)) {
-            if (requestCode == RequestCodes.AUDIO_CAPTURE) {
-                saveFileAnswer(data.getData());
-            } else if (requestCode == RequestCodes.AUDIO_CHOOSER) {
-                saveChosenFileInBackground(data.getData());
-            }
+        if (requestCode == RequestCodes.AUDIO_CAPTURE) {
+            saveFileAnswer(data.getData());
+        } else if (requestCode == RequestCodes.AUDIO_CHOOSER) {
+            saveChosenFileInBackground(data.getData());
         }
     }
 
