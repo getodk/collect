@@ -8,6 +8,9 @@ import org.junit.runners.JUnit4;
 import org.odk.collect.android.http.mock.MockHttpClientConnection;
 import org.odk.collect.android.utilities.DocumentFetchResult;
 
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNull;
+
 @RunWith(JUnit4.class)
 public class CollectServerClientTest {
 
@@ -22,20 +25,20 @@ public class CollectServerClientTest {
     public void testGetXMLDocumentErrorResponse() {
         collectServerClient.setGetHttpShouldReturnNull(true);
         DocumentFetchResult fetchResult = collectServerClient.getXmlDocument("http://testurl");
-        Assert.assertEquals(fetchResult.errorMessage, "Parsing failed with null while accessing http://testurl");
+        assertEquals(fetchResult.errorMessage, "Parsing failed with null while accessing http://testurl");
     }
 
     @Test
     public void testGetXMLDocument() {
         DocumentFetchResult fetchResult = collectServerClient.getXmlDocument("http://testurl");
-        Assert.assertNull(fetchResult.errorMessage);
-        Assert.assertEquals(fetchResult.responseCode, 0);
-        Assert.assertEquals(fetchResult.isOpenRosaResponse, true);
+        assertNull(fetchResult.errorMessage);
+        assertEquals(fetchResult.responseCode, 0);
+        assertEquals(fetchResult.isOpenRosaResponse, true);
     }
 
     @Test
     public void testGetPlainTextMimeType() {
-        Assert.assertEquals(TestableCollectServerClient.getPlainTextMimeType(), "text/plain");
+        assertEquals(TestableCollectServerClient.getPlainTextMimeType(), "text/plain");
     }
 }
 
