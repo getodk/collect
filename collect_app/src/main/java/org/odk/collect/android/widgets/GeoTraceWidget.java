@@ -15,7 +15,6 @@
 package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -36,6 +35,7 @@ import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
+import static org.odk.collect.android.activities.FormEntryActivity.GEOTRACE_RESULTS;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 import static org.odk.collect.android.utilities.PermissionUtils.requestLocationPermissions;
 
@@ -108,7 +108,7 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
         if (s.length() != 0) {
             i.putExtra(TRACE_LOCATION, s);
         }
-        ((Activity) getContext()).startActivityForResult(i, RequestCodes.GEOTRACE_CAPTURE);
+        startActivityForResult(i, RequestCodes.GEOTRACE_CAPTURE);
     }
 
     private void updateButtonLabelsAndVisibility(boolean dataAvailable) {
@@ -146,11 +146,21 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (isResultValid(requestCode, resultCode, data)) {
+            if (requestCode == RequestCodes.GEOTRACE_CAPTURE) {
+                String traceExtra = data.getStringExtra(GEOTRACE_RESULTS);
+                setBinaryData(traceExtra);
+            }
+            saveAnswersForCurrentScreen();
+        }
+    }
+
+    @Override
     public void onButtonClick(int buttonId) {
         requestLocationPermissions((FormEntryActivity) getContext(), new PermissionListener() {
             @Override
             public void granted() {
-                waitForData();
                 startGeoTraceActivity();
             }
 
