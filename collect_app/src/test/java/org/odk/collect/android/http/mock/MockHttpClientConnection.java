@@ -11,6 +11,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
@@ -41,7 +42,7 @@ public class MockHttpClientConnection implements HttpInterface {
         headers.put("X-OpenRosa-Version", "1.0");
         headers.put("Content-Type", "text/xml;charset=utf-8");
 
-        return new HttpInputStreamResult(is, headers, "test-hash");
+        return new HttpInputStreamResult(is, headers, "test-hash", HttpURLConnection.HTTP_OK);
     }
 
     @Override

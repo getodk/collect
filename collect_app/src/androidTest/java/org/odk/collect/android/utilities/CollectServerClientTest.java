@@ -6,7 +6,9 @@ import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.http.HttpClientConnection;
 import org.odk.collect.android.test.MockedServerTest;
 import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.RecordedRequest;
 
+import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.odk.collect.android.test.TestUtils.assertMatches;
@@ -22,16 +24,16 @@ public class CollectServerClientTest extends MockedServerTest {
         collectServerClient = new CollectServerClient(new HttpClientConnection());
     }
 
-    //    @Test
-    //    public void httpRequests_shouldHaveUseragentHeader() throws Exception {
-    //        // when
-    //        doRequest("/some-path");
-    //
-    //        // then
-    //        RecordedRequest r = nextRequest();
-    //        assertEquals("GET /some-path HTTP/1.1", r.getRequestLine());
-    //        assertTrue(r.getHeader("User-Agent").matches("Dalvik/.* org.odk.collect.android/.*"));
-    //    }
+        @Test
+        public void httpRequests_shouldHaveUseragentHeader() throws Exception {
+            // when
+            doRequest(url("/some-path"));
+
+            // then
+            RecordedRequest r = nextRequest();
+            assertEquals("GET /some-path HTTP/1.1", r.getRequestLine());
+            assertTrue(r.getHeader("User-Agent").matches("Dalvik/.* org.odk.collect.android/.*"));
+        }
 
     @Test
     public void getXmlDocument_request_shouldSupplyHeader_UserAgent() throws Exception {
@@ -97,16 +99,8 @@ public class CollectServerClientTest extends MockedServerTest {
         return server.url(path).toString();
     }
 
-    //    private void doRequest(String path) throws Exception {
-    //        HttpGet req = CollectServerClient.createOpenRosaHttpGet(new URI(url(path)));
-    //        httpClient().execute(req, httpContext());
-    //    }
-    //
-    //    private static HttpClient httpClient() {
-    //        return CollectServerClient.createHttpClient(CollectServerClient.CONNECTION_TIMEOUT);
-    //    }
-    //
-    //    private static HttpContext httpContext() {
-    //        return CollectServerClient.getHttpContext();
-    //    }
+    private void doRequest(String path) throws Exception {
+        collectServerClient.getHttpInputStream(path, null);
+    }
+
 }

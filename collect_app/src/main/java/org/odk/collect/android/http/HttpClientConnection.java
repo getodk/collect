@@ -224,7 +224,7 @@ public class HttpClientConnection implements HttpInterface {
             }
         }
 
-        return new HttpInputStreamResult(downloadStream, responseHeaders, hash);
+        return new HttpInputStreamResult(downloadStream, responseHeaders, hash, statusCode);
     }
 
 

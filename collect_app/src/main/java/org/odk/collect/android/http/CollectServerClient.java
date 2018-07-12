@@ -16,6 +16,7 @@ package org.odk.collect.android.http;
 
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import org.kxml2.io.KXmlParser;
 import org.kxml2.kdom.Document;
@@ -152,7 +153,7 @@ public class CollectServerClient {
      * @throws Exception - Can throw a multitude of Exceptions, such as MalformedURLException or IOException
      */
     public @NonNull
-    HttpInputStreamResult getHttpInputStream(@NonNull String downloadUrl, final String contentType) throws Exception {
+    HttpInputStreamResult getHttpInputStream(@NonNull String downloadUrl, @Nullable final String contentType) throws Exception {
         URI uri;
         try {
             // assume the downloadUrl is escaped properly

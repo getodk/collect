@@ -29,11 +29,13 @@ public class HttpInputStreamResult {
     private final InputStream inputStream;
     private final Map<String, String> headers;
     private final String hash;
+    private final int statusCode;
 
-    public HttpInputStreamResult(InputStream is, @NonNull Map<String, String> headers, String hash) {
+    public HttpInputStreamResult(InputStream is, @NonNull Map<String, String> headers, String hash, int statusCode) {
         inputStream = is;
         this.headers = headers;
         this.hash = hash;
+        this.statusCode = statusCode;
     }
 
     public InputStream getInputStream() {
@@ -74,5 +76,9 @@ public class HttpInputStreamResult {
         }
 
         return openRosaResponse;
+    }
+
+    public int getStatusCode() {
+        return statusCode;
     }
 }

@@ -5,12 +5,15 @@ import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.http.CollectServerClient;
+import org.odk.collect.android.http.HttpClientConnection;
+import org.odk.collect.android.http.HttpInputStreamResult;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URI;
+import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -26,21 +29,20 @@ import static junit.framework.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class SNITest {
 
-    public static final URI SNI_URI = URI.create("https://sni.velox.ch/");
+    public static final String SNI_URI = "https://sni.velox.ch/";
     public static final String SUCCESS_SENTINEL = "sent the following TLS server name indication extension";
 
-    //    @Test
-    //    public void apacheHttpClientSupportsSNI() throws IOException {
-    //        HttpClient client = createHttpClient(CONNECTION_TIMEOUT);
-    //        HttpGet req = createOpenRosaHttpGet(SNI_URI);
-    //        HttpResponse rsp = client.execute(req);
-    //        assertHttpSuccess(rsp.getStatusLine().getStatusCode());
-    //        assertPageContent(rsp.getEntity().getContent());
-    //    }
+    @Test
+    public void testThatHttpClientSupportsSNI() throws Exception {
+        CollectServerClient serverClient = new CollectServerClient(new HttpClientConnection());
+        HttpInputStreamResult inputStreamResult = serverClient.getHttpInputStream(SNI_URI, null);
+        assertHttpSuccess(inputStreamResult.getStatusCode());
+        assertPageContent(inputStreamResult.getInputStream());
+    }
 
     @Test
     public void urlConnectionSupportsSNI() throws IOException {
-        HttpsURLConnection conn = (HttpsURLConnection) SNI_URI.toURL().openConnection();
+        HttpsURLConnection conn = (HttpsURLConnection) new URL(SNI_URI).openConnection();
         assertHttpSuccess(conn.getResponseCode());
         assertPageContent(conn.getInputStream());
     }
