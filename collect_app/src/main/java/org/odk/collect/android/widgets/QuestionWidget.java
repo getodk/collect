@@ -17,7 +17,6 @@ package org.odk.collect.android.widgets;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -28,7 +27,6 @@ import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.provider.OpenableColumns;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -56,6 +54,7 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.helpers.ContentResolverHelper;
 import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.exception.GDriveConnectionException;
 import org.odk.collect.android.exception.JavaRosaException;
@@ -855,11 +854,10 @@ public abstract class QuestionWidget
      * This may take a long time.
      *
      * @param selectedFile uri of the selected audio
-     * @see #getFileExtensionFromUri(Uri)
      */
     protected void saveChosenFile(Uri selectedFile) {
-        String extension = getFileExtensionFromUri(selectedFile);
-        String instanceFolder = Collect.getInstance().getFormController().getInstanceFile().getParent();
+        String extension = ContentResolverHelper.getFileExtensionFromUri(getContext(), selectedFile);
+        String instanceFolder = getFormController().getInstanceFile().getParent();
         String destPath = instanceFolder + File.separator + System.currentTimeMillis() + extension;
 
         try {
@@ -878,32 +876,6 @@ public abstract class QuestionWidget
         } catch (GDriveConnectionException e) {
             Timber.e("Could not receive chosen file due to connection problem");
             ToastUtils.showLongToastInMiddle(R.string.gdrive_connection_exception);
-        }
-    }
-
-    /**
-     * Using contentResolver to get a file's extension by the uri returned from OnActivityResult.
-     *
-     * @param fileUri Whose name we want to get
-     * @return The file's extension
-     * @see #onActivityResult(int, int, Intent)
-     * @see #saveChosenFile(Uri)
-     * @see android.content.ContentResolver
-     */
-    private String getFileExtensionFromUri(Uri fileUri) {
-        try (Cursor returnCursor = getContext().getContentResolver()
-                .query(fileUri, null, null, null, null)) {
-            int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-            returnCursor.moveToFirst();
-            String filename = returnCursor.getString(nameIndex);
-            // If the file's name contains extension , we cut it down for latter use (copy a new file).
-            if (filename.lastIndexOf('.') != -1) {
-                return filename.substring(filename.lastIndexOf('.'));
-            } else {
-                // I found some mp3 files' name don't contain extension, but can be played as Audio
-                // So I write so, but I still there are some way to get its extension
-                return "";
-            }
         }
     }
 
