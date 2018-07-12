@@ -321,7 +321,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
         if (requestCode == RequestCodes.VIDEO_CAPTURE) {
             saveFileAnswer(data.getData());
         } else if (requestCode == RequestCodes.VIDEO_CHOOSER) {
-            saveChosenFileInBackground(data.getData());
+            saveChosenFile(data.getData());
         }
     }
 

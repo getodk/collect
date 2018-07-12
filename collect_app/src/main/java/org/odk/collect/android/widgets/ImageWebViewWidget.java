@@ -267,8 +267,7 @@ public class ImageWebViewWidget extends QuestionWidget implements FileWidget {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == ApplicationConstants.RequestCodes.IMAGE_CHOOSER) {
-            Runnable runnable = () -> saveChosenImage(data.getData());
-            new Thread(runnable).start();
+            saveChosenImage(data.getData());
         } else if (requestCode == ApplicationConstants.RequestCodes.IMAGE_CAPTURE) {
             saveCapturedImage();
         }

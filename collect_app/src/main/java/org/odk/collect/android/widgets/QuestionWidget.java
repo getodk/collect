@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.widgets;
 
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -218,7 +217,7 @@ public abstract class QuestionWidget
             View icon = textLayout.findViewById(R.id.help_icon);
             icon.setVisibility(VISIBLE);
 
-            /**
+            /*
              * Added click listeners to the individual views because the TextView
              * intercepts click events when they are being passed to the parent layout.
              */
@@ -773,23 +772,17 @@ public abstract class QuestionWidget
                     final File newImage = new File(destImagePath);
                     FileUtils.copyFile(chosenImage, newImage);
                     ImageConverter.execute(newImage.getPath(), this, getContext());
-                    ((Activity) getContext()).runOnUiThread(() -> {
-                        if (this instanceof BinaryWidget) {
-                            ((BinaryWidget) this).setBinaryData(newImage);
-                        }
-                        saveAnswersForCurrentScreen();
-                    });
+                    if (this instanceof BinaryWidget) {
+                        ((BinaryWidget) this).setBinaryData(newImage);
+                    }
+                    saveAnswersForCurrentScreen();
                 } else {
-                    ((Activity) getContext()).runOnUiThread(() -> {
-                        Timber.e("Could not receive chosen image");
-                        ToastUtils.showShortToastInMiddle(R.string.error_occured);
-                    });
+                    Timber.e("Could not receive chosen image");
+                    ToastUtils.showShortToastInMiddle(R.string.error_occured);
                 }
             } catch (GDriveConnectionException e) {
-                ((Activity) getContext()).runOnUiThread(() -> {
-                    Timber.e("Could not receive chosen image due to connection problem");
-                    ToastUtils.showLongToastInMiddle(R.string.gdrive_connection_exception);
-                });
+                Timber.e("Could not receive chosen image due to connection problem");
+                ToastUtils.showLongToastInMiddle(R.string.gdrive_connection_exception);
             }
         } else {
             ToastUtils.showLongToast(R.string.image_not_saved);
@@ -855,15 +848,6 @@ public abstract class QuestionWidget
         }
     }
 
-    /*
-     * Start a task to save the chosen file/audio/video with a new Thread,
-     * This could support retrieving file from Google Drive.
-     */
-    protected void saveChosenFileInBackground(Uri media) {
-        Runnable saveFileRunnable = () -> saveChosenFile(media);
-        new Thread(saveFileRunnable).start();
-    }
-
     /**
      * Save a copy of the chosen media in Collect's own path such as
      * "/storage/emulated/0/odk/instances/{form name}/filename",
@@ -873,7 +857,7 @@ public abstract class QuestionWidget
      * @param selectedFile uri of the selected audio
      * @see #getFileExtensionFromUri(Uri)
      */
-    private void saveChosenFile(Uri selectedFile) {
+    protected void saveChosenFile(Uri selectedFile) {
         String extension = getFileExtensionFromUri(selectedFile);
         String instanceFolder = Collect.getInstance().getFormController().getInstanceFile().getParent();
         String destPath = instanceFolder + File.separator + System.currentTimeMillis() + extension;
@@ -883,23 +867,17 @@ public abstract class QuestionWidget
             if (chosenFile != null) {
                 final File newFile = new File(destPath);
                 FileUtils.copyFile(chosenFile, newFile);
-                ((Activity) getContext()).runOnUiThread(() -> {
-                    if (this instanceof BinaryWidget) {
-                        ((BinaryWidget) this).setBinaryData(newFile);
-                    }
-                    saveAnswersForCurrentScreen();
-                });
+                if (this instanceof BinaryWidget) {
+                    ((BinaryWidget) this).setBinaryData(newFile);
+                }
+                saveAnswersForCurrentScreen();
             } else {
-                ((Activity) getContext()).runOnUiThread(() -> {
-                    Timber.e("Could not receive chosen file");
-                    ToastUtils.showShortToastInMiddle(R.string.error_occured);
-                });
+                Timber.e("Could not receive chosen file");
+                ToastUtils.showShortToastInMiddle(R.string.error_occured);
             }
         } catch (GDriveConnectionException e) {
-            ((Activity) getContext()).runOnUiThread(() -> {
-                Timber.e("Could not receive chosen file due to connection problem");
-                ToastUtils.showLongToastInMiddle(R.string.gdrive_connection_exception);
-            });
+            Timber.e("Could not receive chosen file due to connection problem");
+            ToastUtils.showLongToastInMiddle(R.string.gdrive_connection_exception);
         }
     }
 
