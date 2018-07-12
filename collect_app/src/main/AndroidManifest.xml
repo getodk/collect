@@ -129,9 +129,7 @@ the specific language governing permissions and limitations under the License.
             android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
             android:launchMode="singleTask"
             android:taskAffinity="" />
-        <activity
-            android:name=".activities.DrawActivity"
-            android:screenOrientation="landscape" />
+        <activity android:name=".activities.DrawActivity" />
         <activity
             android:name=".activities.GoogleDriveActivity"
             android:configChanges="orientation|screenSize"

@@ -373,4 +373,28 @@ public class DrawActivity extends CollectAbstractActivity {
                     .show();
         }
     }
+
+    public boolean isApiBiggerThanO() {
+        return android.os.Build.VERSION.SDK_INT >= 27;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (isApiBiggerThanO()
+                && !(getIntent().getIntExtra(SCREEN_ORIENTATION, 0) == 1)) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
+
+        if (isApiBiggerThanO()
+                && getIntent().getIntExtra(SCREEN_ORIENTATION, 0) == 1) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
+    }
 }
