@@ -15,7 +15,6 @@
 package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
@@ -44,6 +43,7 @@ import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 import java.text.DecimalFormat;
 import java.util.Locale;
 
+import static org.odk.collect.android.activities.FormEntryActivity.LOCATION_RESULT;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 import static org.odk.collect.android.utilities.PermissionUtils.requestLocationPermissions;
 
@@ -276,6 +276,17 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
         answerDisplay.cancelLongPress();
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (isResultValid(requestCode, resultCode, data)) {
+            if (requestCode == RequestCodes.LOCATION_CAPTURE) {
+                String sl = data.getStringExtra(LOCATION_RESULT);
+                setBinaryData(sl);
+                saveAnswersForCurrentScreen();
+            }
+        }
+    }
+
     private boolean useMapsV2(final Context context) {
         final ActivityManager activityManager = (ActivityManager) context.getSystemService(
                 Context.ACTIVITY_SERVICE);
@@ -332,8 +343,6 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
         i.putExtra(DRAGGABLE_ONLY, draggable);
         i.putExtra(ACCURACY_THRESHOLD, accuracyThreshold);
 
-        waitForData();
-
-        ((Activity) getContext()).startActivityForResult(i, RequestCodes.LOCATION_CAPTURE);
+        startActivityForResult(i, RequestCodes.LOCATION_CAPTURE, -1);
     }
 }
