@@ -15,7 +15,6 @@
 package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -156,8 +155,7 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
         i.putExtra("value", getFormEntryPrompt().getAnswerText());
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "launchIntent",
                 i.getAction(), getFormEntryPrompt().getIndex());
-        ((Activity) getContext()).startActivityForResult(i,
-                RequestCodes.EX_STRING_CAPTURE);
+        startActivityForResult(i, RequestCodes.EX_STRING_CAPTURE, -1);
     }
 
     @Override
@@ -224,6 +222,23 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (isResultValid(requestCode, resultCode, data)) {
+            if (requestCode == RequestCodes.EX_STRING_CAPTURE ||
+                    requestCode == RequestCodes.EX_DECIMAL_CAPTURE ||
+                    requestCode == RequestCodes.EX_INT_CAPTURE) {
+                String key = "value";
+                boolean exists = data.getExtras().containsKey(key);
+                if (exists) {
+                    Object externalValue = data.getExtras().get(key);
+                    setBinaryData(externalValue);
+                    saveAnswersForCurrentScreen();
+                }
+            }
+        }
+    }
+
+    @Override
     protected void injectDependencies(DependencyProvider dependencyProvider) {
         DependencyProvider<ActivityAvailability> activityUtilProvider =
                 ObjectUtils.uncheckedCast(dependencyProvider);
@@ -266,7 +281,6 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
                 ExternalAppsUtils.populateParameters(i, exParams,
                         getFormEntryPrompt().getIndex().getReference());
 
-                waitForData();
                 fireActivity(i);
 
             } catch (ExternalParamsException | ActivityNotFoundException e) {
@@ -292,7 +306,6 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
         }
         launchIntentButton.setEnabled(false);
         launchIntentButton.setFocusable(false);
-        cancelWaitingForData();
 
         Toast.makeText(getContext(),
                 toastText, Toast.LENGTH_SHORT)

@@ -646,19 +646,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         switch (requestCode) {
 
-            case RequestCodes.EX_STRING_CAPTURE:
-            case RequestCodes.EX_INT_CAPTURE:
-            case RequestCodes.EX_DECIMAL_CAPTURE:
-                String key = "value";
-                boolean exists = intent.getExtras().containsKey(key);
-                if (exists) {
-                    Object externalValue = intent.getExtras().get(key);
-                    if (getCurrentViewIfODKView() != null) {
-                        getCurrentViewIfODKView().setBinaryData(externalValue);
-                    }
-                    saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                }
-                break;
             case RequestCodes.EX_GROUP_CAPTURE:
                 try {
                     Bundle extras = intent.getExtras();
