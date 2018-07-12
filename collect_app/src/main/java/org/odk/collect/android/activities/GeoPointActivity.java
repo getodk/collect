@@ -43,6 +43,8 @@ import java.util.TimerTask;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.utilities.PermissionUtils.checkIfLocationPermissionsGranted;
+
 public class GeoPointActivity extends CollectAbstractActivity implements LocationListener,
         LocationClient.LocationClientListener, GpsStatus.Listener {
 
@@ -71,6 +73,12 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (!checkIfLocationPermissionsGranted(this)) {
+            finish();
+            return;
+        }
+
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         if (savedInstanceState != null) {

@@ -488,7 +488,6 @@
     <string name="share_qrcode">Share QR code</string>
     <string name="take_picture_instruction">Tap the screen to take a picture</string>
     <string name="error_front_camera_unavailable">Front camera not available on this device</string>
-    <string name="request_permission">This application needs camera permission.</string>
     <string name="camera_error">This device doesn\'t support the Camera2 API.</string>
     <string name="invalid_range_widget">This widget has invalid parameters!</string>
     <string name="form_entry_setting">Form Entry Settings</string>
@@ -594,6 +593,10 @@
     <string name="no_columns_to_upload">No columns found in the form to upload.</string>
     <string name="storage_runtime_permission_denied_title">Storage permissions</string>
     <string name="storage_runtime_permission_denied_desc">Without these permissions Collect can\'t access your forms or save answers. Reopen the app when you are ready to grant them.</string>
+    <string name="location_runtime_permissions_denied_title">Location permissions</string>
+    <string name="location_runtime_permissions_denied_desc">Without these permissions Collect can\'t record your location. Please try again when you are ready to grant them.</string>
+    <string name="camera_runtime_permission_denied_title">Camera permission</string>
+    <string name="camera_runtime_permission_denied_desc">Without this permission Collect can\'t access the camera. Please try again when you are ready to grant it.</string>
     <string name="form_update_category">Form update</string>
     <string name="periodic_form_updates_check_title">Periodic form updates check</string>
     <string name="never">Never</string>
