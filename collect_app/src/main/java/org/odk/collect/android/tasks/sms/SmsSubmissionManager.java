@@ -124,7 +124,7 @@ public class SmsSubmissionManager implements SmsSubmissionManagerContract {
         Message message = model.getNextUnsentMessage();
 
         if (message == null) {
-            return 0;
+            return Activity.RESULT_OK;
         }
 
         return message.getResultCode();
