@@ -219,7 +219,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         super.onPause();
 
         if (credentialsHaveChanged) {
-            new WebCredentialsUtils().setWebCredentialsFromPreferences();
+            WebCredentialsUtils.getInstance().setWebCredentialsFromPreferences();
         }
     }
 

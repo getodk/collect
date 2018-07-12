@@ -79,7 +79,7 @@ public class ServerPollingJob extends Job {
 
             if (formList != null && !formList.containsKey(DL_ERROR_MSG)) {
                 if (formList.containsKey(DL_AUTH_REQUIRED)) {
-                    new WebCredentialsUtils().setWebCredentialsFromPreferences();
+                    WebCredentialsUtils.getInstance().setWebCredentialsFromPreferences();
                     formList = downloadFormListTask.downloadFormList(true);
 
                     if (formList == null || formList.containsKey(DL_AUTH_REQUIRED) || formList.containsKey(DL_ERROR_MSG)) {

@@ -251,7 +251,7 @@ public class Collect extends Application implements HasActivityInjector {
 
         initProperties();
 
-        new WebCredentialsUtils().setWebCredentialsFromPreferences();
+        WebCredentialsUtils.getInstance().setWebCredentialsFromPreferences();
         if (BuildConfig.BUILD_TYPE.equals("odkCollectRelease")) {
             Timber.plant(new CrashReportingTree());
         } else {

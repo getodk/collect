@@ -1,6 +1,5 @@
 package org.odk.collect.android.http;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,6 +9,7 @@ import org.odk.collect.android.utilities.DocumentFetchResult;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
+import static junit.framework.Assert.assertTrue;
 
 @RunWith(JUnit4.class)
 public class CollectServerClientTest {
@@ -33,7 +33,7 @@ public class CollectServerClientTest {
         DocumentFetchResult fetchResult = collectServerClient.getXmlDocument("http://testurl");
         assertNull(fetchResult.errorMessage);
         assertEquals(fetchResult.responseCode, 0);
-        assertEquals(fetchResult.isOpenRosaResponse, true);
+        assertTrue(fetchResult.isOpenRosaResponse);
     }
 
     @Test

@@ -15,8 +15,22 @@ public class WebCredentialsUtils {
     @Inject
     CollectServerClient collectServerClient;
 
-    public WebCredentialsUtils() {
+    private static WebCredentialsUtils instance;
+
+    private WebCredentialsUtils() {
         DaggerHttpComponent.builder().build().inject(this);
+    }
+
+    /**
+     * A factory method to return a new WebCredentialsUtils object.
+     *
+     * @return an instance of WebCredentialsUtils
+     */
+    public static synchronized WebCredentialsUtils getInstance() {
+        if (instance == null) {
+            instance = new WebCredentialsUtils();
+        }
+        return instance;
     }
 
     public void setWebCredentialsFromPreferences() {

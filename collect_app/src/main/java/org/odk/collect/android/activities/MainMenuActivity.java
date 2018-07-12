@@ -644,7 +644,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
                 GeneralSharedPreferences.getInstance().save(entry.getKey(), entry.getValue());
             }
 
-            new WebCredentialsUtils().setWebCredentialsFromPreferences();
+            WebCredentialsUtils.getInstance().setWebCredentialsFromPreferences();
 
             AdminSharedPreferences.getInstance().clear();
 

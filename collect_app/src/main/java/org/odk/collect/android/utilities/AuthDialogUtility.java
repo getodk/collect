@@ -40,7 +40,7 @@ public class AuthDialogUtility {
     public AlertDialog createDialog(final Context context,
                                     final AuthDialogUtilityResultListener resultListener, String url) {
 
-        webCredentialsUtils = new WebCredentialsUtils();
+        webCredentialsUtils = WebCredentialsUtils.getInstance();
 
         final View dialogView = LayoutInflater.from(context)
                 .inflate(R.layout.server_auth_dialog, null);
