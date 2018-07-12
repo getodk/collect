@@ -34,6 +34,7 @@ import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.LinkMovementMethod;
@@ -741,9 +742,13 @@ public abstract class QuestionWidget
         startActivityForResult(intent, requestCode, -1);
     }
 
+    protected Fragment getAuxFragment() {
+        return ActivityResultHelper.getAuxFragment(((AppCompatActivity) getContext()), this::onActivityResultReceived);
+    }
+
     protected void startActivityForResult(Intent intent, int requestCode, @StringRes int errorStringResource) {
         try {
-            ActivityResultHelper.startActivityForResult((AppCompatActivity) getContext(), intent, requestCode, this::onActivityResultReceived);
+            getAuxFragment().startActivityForResult(intent, requestCode);
         } catch (ActivityNotFoundException e) {
             if (errorStringResource != -1) {
                 Toast.makeText(getContext(),

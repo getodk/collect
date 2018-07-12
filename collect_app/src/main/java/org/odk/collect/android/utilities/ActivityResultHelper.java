@@ -1,6 +1,5 @@
 package org.odk.collect.android.utilities;
 
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -16,13 +15,12 @@ public final class ActivityResultHelper {
 
     }
 
-    public static void startActivityForResult(AppCompatActivity activity, Intent intent, int requestCode,
-                                              OnActivityResult callback) throws ActivityNotFoundException {
+    public static Fragment getAuxFragment(AppCompatActivity activity, OnActivityResult callback) {
         Fragment aux = new FragmentForResult(callback);
         FragmentManager fm = activity.getSupportFragmentManager();
         fm.beginTransaction().add(aux, "FRAGMENT_TAG").commit();
         fm.executePendingTransactions();
-        aux.startActivityForResult(intent, requestCode);
+        return aux;
     }
 
     public interface OnActivityResult {
