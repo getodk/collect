@@ -460,7 +460,12 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
 
             mAlertMsg = message.toString().trim();
             if (mAlertMsg.length() > 0) {
-                showDialog(ALERT_DIALOG);
+                try {
+                    showDialog(ALERT_DIALOG);
+                } catch (Exception e) {
+                    // Tried to show a dialog but the activity may have been closed don't care
+                    // However presumably this dialog showing should be replaced by use of progress bar
+                }
             }
 
         }
