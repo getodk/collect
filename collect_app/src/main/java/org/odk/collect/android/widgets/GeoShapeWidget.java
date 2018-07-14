@@ -100,7 +100,7 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryWidget {
         if (s.length() != 0) {
             i.putExtra(SHAPE_LOCATION, s);
         }
-        startActivityForResult(i, RequestCodes.GEOSHAPE_CAPTURE);
+        startActivityForResult(i, RequestCodes.GEOSHAPE_CAPTURE, -1);
     }
 
     private void updateButtonLabelsAndVisibility(boolean dataAvailable) {

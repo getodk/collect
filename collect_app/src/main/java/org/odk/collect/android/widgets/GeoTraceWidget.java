@@ -108,7 +108,7 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
         if (s.length() != 0) {
             i.putExtra(TRACE_LOCATION, s);
         }
-        startActivityForResult(i, RequestCodes.GEOTRACE_CAPTURE);
+        startActivityForResult(i, RequestCodes.GEOTRACE_CAPTURE, -1);
     }
 
     private void updateButtonLabelsAndVisibility(boolean dataAvailable) {

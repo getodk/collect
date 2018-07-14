@@ -688,10 +688,6 @@ public abstract class QuestionWidget
         return playColor;
     }
 
-    protected void startActivityForResult(Intent intent, int requestCode) {
-        startActivityForResult(intent, requestCode, -1);
-    }
-
     protected Fragment getAuxFragment() {
         return ActivityResultHelper.getAuxFragment(((AppCompatActivity) getContext()), this::onActivityResultReceived);
     }
