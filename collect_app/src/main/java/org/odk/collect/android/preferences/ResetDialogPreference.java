@@ -60,7 +60,7 @@ public class ResetDialogPreference extends DialogPreference implements CompoundB
         setDialogLayoutResource(R.layout.reset_dialog_layout);
         this.context = context;
 
-        ((Collect) context.getApplicationContext()).getAppComponent().inject(this);
+        ((Collect) context.getApplicationContext()).getComponent().inject(this);
     }
 
     @Override

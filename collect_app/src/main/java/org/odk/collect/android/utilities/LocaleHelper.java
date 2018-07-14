@@ -23,18 +23,18 @@ import javax.inject.Inject;
 
 public class LocaleHelper {
 
-    @Inject
-    Context context;
-    @Inject
-    GeneralSharedPreferences sharedPreferences;
+    private final Context context;
+    private final GeneralSharedPreferences sharedPreferences;
 
     @Inject
-    LocaleHelper() {
+    public LocaleHelper(Context context) {
+        this.context = context;
+        sharedPreferences = new GeneralSharedPreferences(context);
     }
 
     // Created based on https://gunhansancar.com/change-language-programmatically-in-android/
-    public Context updateLocale(Context context) {
-        return updateLocale(context, getLocaleCode(context));
+    public Context updateLocale() {
+        return updateLocale(context, getLocaleCode());
     }
 
     private Context updateLocale(Context context, String language) {

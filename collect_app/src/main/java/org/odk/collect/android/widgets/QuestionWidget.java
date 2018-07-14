@@ -85,7 +85,7 @@ public abstract class QuestionWidget
     private final View guidanceTextLayout;
     private final View textLayout;
     private final TextView warningText;
-    private ThemeUtils themeUtils;
+    private final ThemeUtils themeUtils;
     private MediaPlayer player;
     private AtomicBoolean expanded;
     private Bundle state;

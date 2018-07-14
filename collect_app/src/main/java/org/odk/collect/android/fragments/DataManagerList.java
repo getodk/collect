@@ -29,7 +29,6 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.DeleteInstancesListener;
 import org.odk.collect.android.listeners.DiskSyncListener;
@@ -58,11 +57,13 @@ public class DataManagerList extends InstanceListFragment
     private static final String DATA_MANAGER_LIST_SORTING_ORDER = "dataManagerListSortingOrder";
 
     DeleteInstancesTask deleteInstancesTask;
+
+    @Inject
+    SmsSubmissionManagerContract smsSubmissionManager;
+
     private AlertDialog alertDialog;
     private InstanceSyncTask instanceSyncTask;
     private ProgressDialog progressDialog;
-    @Inject
-    SmsSubmissionManagerContract smsSubmissionManager;
 
     public static DataManagerList newInstance() {
         return new DataManagerList();
@@ -73,12 +74,6 @@ public class DataManagerList extends InstanceListFragment
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         return super.onCreateView(inflater, container, savedInstanceState);
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Collect.getInstance().getComponent().inject(this);
     }
 
     @Override

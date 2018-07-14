@@ -39,7 +39,7 @@ public class BasePreferenceFragment extends PreferenceFragment {
 
     @Override
     public void onAttach(Context context) {
-        ((Collect) getActivity().getApplicationContext()).getAppComponent().inject(this);
+        ((Collect) getActivity().getApplicationContext()).getComponent().inject(this);
         super.onAttach(context);
     }
 

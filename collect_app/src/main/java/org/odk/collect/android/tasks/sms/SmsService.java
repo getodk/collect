@@ -66,6 +66,7 @@ public class SmsService {
     private final RxEventBus rxEventBus;
     private final InstancesDao instancesDao;
     private final FormsDao formsDao;
+    private final GeneralSharedPreferences generalSharedPreferences;
 
     private static final int RESULT_ENCRYPTED = 100;
     public static final int RESULT_QUEUED = 101;
@@ -78,13 +79,14 @@ public class SmsService {
     public static final int RESULT_SENDING = 108;
 
     @Inject
-    public SmsService(SmsManager smsManager, SmsSubmissionManagerContract smsSubmissionManager, InstancesDao instancesDao, Context context, RxEventBus rxEventBus, FormsDao formsDao) {
+    public SmsService(SmsManager smsManager, SmsSubmissionManagerContract smsSubmissionManager, InstancesDao instancesDao, Context context, RxEventBus rxEventBus, FormsDao formsDao, GeneralSharedPreferences generalSharedPreferences) {
         this.smsManager = smsManager;
         this.smsSubmissionManager = smsSubmissionManager;
         this.context = context;
         this.instancesDao = instancesDao;
         this.rxEventBus = rxEventBus;
         this.formsDao = formsDao;
+        this.generalSharedPreferences = generalSharedPreferences;
     }
 
     public void submitForms(long[] instanceIds) {
@@ -333,7 +335,7 @@ public class SmsService {
         try (Cursor cursor = instancesDao.getInstancesCursorForId(instanceId)) {
             cursor.moveToPosition(-1);
 
-            boolean isFormAutoDeleteOptionEnabled = (boolean) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_DELETE_AFTER_SEND);
+            boolean isFormAutoDeleteOptionEnabled = (boolean) generalSharedPreferences.get(PreferenceKeys.KEY_DELETE_AFTER_SEND);
             String formId;
             while (cursor.moveToNext()) {
                 formId = cursor.getString(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.JR_FORM_ID));

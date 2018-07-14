@@ -21,6 +21,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
 import android.os.SystemClock;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.multidex.MultiDex;
 import android.support.v7.app.AppCompatDelegate;
@@ -123,12 +124,6 @@ public class Collect extends DaggerApplication {
         return singleton;
     }
 
-    private AppComponent appComponent;
-
-    public int getQuestionFontsize() {
-        return Integer.parseInt(String.valueOf(generalSharedPreferences.get(KEY_FONT_SIZE)));
-    }
-
     /**
      * Creates required directories on the SDCard (or other external storage)
      *
@@ -193,6 +188,10 @@ public class Collect extends DaggerApplication {
             lastClickTime = elapsedRealtime;
         }
         return allowClick;
+    }
+
+    public int getQuestionFontsize() {
+        return Integer.parseInt(String.valueOf(generalSharedPreferences.get(KEY_FONT_SIZE)));
     }
 
     public ActivityLogger getActivityLogger() {
@@ -302,16 +301,8 @@ public class Collect extends DaggerApplication {
 
     @Override
     protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
-        appComponent = DaggerAppComponent.builder().application(this).build();
-        return appComponent;
-    }
-
-    public AppComponent getAppComponent() {
-        return appComponent;
-    }
-
-    public void setComponent(AppComponent applicationComponent) {
-        this.appComponent = applicationComponent;
+        applicationComponent = DaggerAppComponent.builder().application(this).build();
+        return applicationComponent;
     }
 
     protected RefWatcher setupLeakCanary() {
@@ -373,7 +364,7 @@ public class Collect extends DaggerApplication {
 
     private static class CrashReportingTree extends Timber.Tree {
         @Override
-        protected void log(int priority, String tag, String message, Throwable t) {
+        protected void log(int priority, String tag, @NonNull String message, Throwable t) {
             if (priority == Log.VERBOSE || priority == Log.DEBUG || priority == Log.INFO) {
                 return;
             }

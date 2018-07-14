@@ -40,11 +40,6 @@ public class AppModule {
     }
 
     @Provides
-    Context context(Application application) {
-        return application;
-    }
-
-    @Provides
     InstancesDao provideInstancesDao() {
         return new InstancesDao();
     }

@@ -50,6 +50,7 @@ import dagger.android.ContributesAndroidInjector;
  * @see Activity (PMD doesn't see Activity in the line above).
  */
 @Module
+@SuppressWarnings("PMD.CouplingBetweenObjects")
 public abstract class ActivityBuilder {
 
     @PerActivity

@@ -53,7 +53,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        ((Collect) context.getApplicationContext()).getAppComponent().inject(this);
+        ((Collect) context.getApplicationContext()).getComponent().inject(this);
 
         // make sure sd card is ready, if not don't try to send
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {

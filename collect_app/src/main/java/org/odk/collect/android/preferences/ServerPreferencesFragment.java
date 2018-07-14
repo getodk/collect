@@ -134,7 +134,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         smsGatewayPreference.getEditText().setFilters(
                 new InputFilter[]{new ControlCharacterFilter()});
 
-        String transportSetting = (String) GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE);
+        String transportSetting = (String) generalSharedPreferences.get(KEY_SUBMISSION_TRANSPORT_TYPE);
 
         if (transportSetting.equals(getString(R.string.transport_type_value_internet))) {
             smsGatewayPreference.setEnabled(false);
