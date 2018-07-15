@@ -465,8 +465,7 @@
   <string name="guidance_no">Nej</string>
   <string name="wifi_autosend">Endast WiFi</string>
   <string name="cellular_autosend">Endast mobilt nätverk</string>
-  <string name="wifi_cellular_autosend">WiFi eller mobilt nätverk</string>
-  <string name="map_basemap_behavior_title">Grundkarta</string>
+    <string name="map_basemap_behavior_title">Grundkarta</string>
   <string name="form_management_preferences">Formulärhantering</string>
   <string name="form_submission_category">Formulärinskickning</string>
   <string name="form_filling_category">Formulärifyllnad</string>

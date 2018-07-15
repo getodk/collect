@@ -458,8 +458,7 @@
   <string name="off">مغلق</string>
   <string name="wifi_autosend">ارسال تلقائي عبر Wifi</string>
   <string name="cellular_autosend">ارسال تلقائي عبر شبكة الاتصال</string>
-  <string name="wifi_cellular_autosend">ارسال تلقائي عبر Wifi و شبكة الاتصال</string>
-  <string name="map_basemap_behavior_title">الخريطة</string>
+    <string name="map_basemap_behavior_title">الخريطة</string>
   <string name="form_management_preferences">إعدادات ادارة الاستمارة</string>
   <string name="form_submission_category">خيارات الارسال</string>
   <string name="form_filling_category">تعبئة الاستمارة</string>

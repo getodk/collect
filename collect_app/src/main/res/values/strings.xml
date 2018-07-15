@@ -502,9 +502,9 @@
     <string name="guidance_no">No</string>
     <string name="guidance_yes">Yes - always shown</string>
     <string name="guidance_yes_collapsed">Yes - collapsed</string>
-    <string name="wifi_autosend">Wifi only</string>
-    <string name="cellular_autosend">Cellular only</string>
-    <string name="wifi_cellular_autosend">Wifi or cellular</string>
+    <string name="wifi_autosend">Wifi</string>
+    <string name="cellular_autosend">Cellular</string>
+    <string name="sms_autosend">SMS</string>
     <string name="map_basemap_behavior_title">Basemap</string>
     <string name="form_management_preferences">Form management</string>
     <string name="form_submission_category">Form submission</string>

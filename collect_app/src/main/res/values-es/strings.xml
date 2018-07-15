@@ -489,8 +489,7 @@
   <string name="guidance_yes_collapsed">Si - Colapsado</string>
   <string name="wifi_autosend">Solo con WIFI</string>
   <string name="cellular_autosend">Solo con Datos Móviles</string>
-  <string name="wifi_cellular_autosend">Wifi o Datos Móviles</string>
-  <string name="map_basemap_behavior_title">Mapa Base</string>
+    <string name="map_basemap_behavior_title">Mapa Base</string>
   <string name="form_management_preferences">Gestión de formulario</string>
   <string name="form_submission_category">Enviar formulario</string>
   <string name="form_filling_category">Llenado de Formularios</string>

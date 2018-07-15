@@ -462,8 +462,7 @@
   <string name="guidance_no">नहीं</string>
   <string name="wifi_autosend">केवल वाई-फाई </string>
   <string name="cellular_autosend"> केवल सेलुलर</string>
-  <string name="wifi_cellular_autosend">वाई-फाई या सेलुलर</string>
-  <string name="map_basemap_behavior_title">बेसमैप</string>
+    <string name="map_basemap_behavior_title">बेसमैप</string>
   <string name="form_management_preferences">फॉर्म मैनेजमेंट</string>
   <string name="form_submission_category">फॉर्म भेजना</string>
   <string name="form_filling_category">फॉर्म भरना</string>

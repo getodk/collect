@@ -487,8 +487,7 @@
   <string name="guidance_yes_collapsed">Так - згорнуті</string>
   <string name="wifi_autosend">Тільки Wi-Fi</string>
   <string name="cellular_autosend">Тільки мобільна мережа</string>
-  <string name="wifi_cellular_autosend">Wi-Fi або мобільна мережа</string>
-  <string name="map_basemap_behavior_title">Базова мапа</string>
+    <string name="map_basemap_behavior_title">Базова мапа</string>
   <string name="form_management_preferences">Управління анкетою</string>
   <string name="form_submission_category">Відправка анкети</string>
   <string name="form_filling_category">Заповнення анкети</string>

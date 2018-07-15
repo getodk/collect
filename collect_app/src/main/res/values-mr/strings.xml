@@ -451,8 +451,7 @@
   <string name="off">बंद</string>
   <string name="wifi_autosend">केवळ Wifi</string>
   <string name="cellular_autosend">केवळ सेल्यूलर</string>
-  <string name="wifi_cellular_autosend">वायफाय किंवा सेल्यूलर</string>
-  <string name="map_basemap_behavior_title">बेसमॅप</string>
+    <string name="map_basemap_behavior_title">बेसमॅप</string>
   <string name="form_management_preferences">फॉर्म व्यवस्थापन</string>
   <string name="form_submission_category">फॉर्म सबमिशन</string>
   <string name="form_filling_category">फॉर्म भरणे</string>

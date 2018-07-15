@@ -482,8 +482,7 @@
   <string name="guidance_no">いいえ</string>
   <string name="wifi_autosend">Wifi のみ</string>
   <string name="cellular_autosend">データ通信のみ</string>
-  <string name="wifi_cellular_autosend">Wifi またはデータ通信</string>
-  <string name="map_basemap_behavior_title">基本地図</string>
+    <string name="map_basemap_behavior_title">基本地図</string>
   <string name="form_management_preferences">フォーム管理</string>
   <string name="form_submission_category">フォーム送信</string>
   <string name="form_filling_category">フォーム入力</string>

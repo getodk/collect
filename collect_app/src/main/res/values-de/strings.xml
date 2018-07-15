@@ -487,8 +487,7 @@
   <string name="guidance_yes_collapsed">Ja - ausgeblendet</string>
   <string name="wifi_autosend">Nur WLAN</string>
   <string name="cellular_autosend">Nur Mobilfunk</string>
-  <string name="wifi_cellular_autosend">WLAN oder Mobilfunk</string>
-  <string name="map_basemap_behavior_title">Basiskarte</string>
+    <string name="map_basemap_behavior_title">Basiskarte</string>
   <string name="form_management_preferences">Formularverwaltung</string>
   <string name="form_submission_category">Formulareinsendung</string>
   <string name="form_filling_category">Formulareingabe</string>
