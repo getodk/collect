@@ -21,11 +21,11 @@
     <PreferenceCategory
         android:key="form_submission"
         android:title="@string/form_submission_category">
-        <ListPreference
+        <MultiSelectListPreference
             android:dialogTitle="@string/autosend_selector_title"
             android:entries="@array/autosend_selector_entries"
             android:entryValues="@array/autosend_selector_entries_values"
-            android:key="autosend"
+            android:key="multi_autosend"
             android:title="@string/autosend" />
         <CheckBoxPreference
             android:key="delete_send"
