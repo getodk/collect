@@ -64,6 +64,8 @@ public class GeneralSharedPreferences {
             value = sharedPreferences.getInt(key, (Integer) defaultValue);
         } else if (defaultValue instanceof Float) {
             value = sharedPreferences.getFloat(key, (Float) defaultValue);
+        } else if (defaultValue instanceof Set) {
+            value = sharedPreferences.getStringSet(key, (Set<String>) defaultValue);
         }
         return value;
     }
