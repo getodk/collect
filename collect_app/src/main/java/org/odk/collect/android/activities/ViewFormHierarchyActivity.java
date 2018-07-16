@@ -37,6 +37,12 @@ public class ViewFormHierarchyActivity extends FormHierarchyActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // super.onCreate() can call finish() if it finds the FormController to be null
+        // in that case, we want to shortcut this method, and let the Activity finish itself
+        if (isFinishing()) {
+            return;
+        }
+
         Collect.getInstance().getFormController().stepToOuterScreenEvent();
 
         Button exitButton = findViewById(R.id.exitButton);

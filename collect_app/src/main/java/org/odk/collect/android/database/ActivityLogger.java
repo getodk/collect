@@ -109,7 +109,6 @@ public final class ActivityLogger {
 
     private final boolean loggingEnabled;
     private final String deviceId;
-    private DatabaseHelper databaseHelper;
     private SQLiteDatabase database;
     private boolean isOpen;
     // We buffer scroll actions to make sure there aren't too many pauses
@@ -154,7 +153,7 @@ public final class ActivityLogger {
             return;
         }
         try {
-            databaseHelper = new DatabaseHelper();
+            DatabaseHelper databaseHelper = new DatabaseHelper();
             database = databaseHelper.getWritableDatabase();
             isOpen = true;
         } catch (SQLiteException e) {

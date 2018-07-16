@@ -52,6 +52,8 @@ import org.odk.collect.android.widgets.GeoShapeWidget;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import static org.odk.collect.android.utilities.PermissionUtils.checkIfLocationPermissionsGranted;
+
 /**
  * Version of the GeoShapeGoogleMapActivity that uses the new Maps v2 API and Fragments to enable
  * specifying a location via placing a tracker on a map.
@@ -85,6 +87,12 @@ public class GeoShapeGoogleMapActivity extends CollectAbstractActivity implement
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (!checkIfLocationPermissionsGranted(this)) {
+            finish();
+            return;
+        }
+
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.geoshape_layout);
         SupportMapFragment mapFragment = new SupportMapFragment();

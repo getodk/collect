@@ -71,13 +71,11 @@
         <exclude name="ExcessiveClassLength" />
         <exclude name="GodClass" />
         <exclude name="LawOfDemeter" />
-        <exclude name="LogicInversion" />
         <exclude name="LoosePackageCoupling" />
         <exclude name="NcssCount" />
         <exclude name="NPathComplexity" />
         <exclude name="SignatureDeclareThrowsException" />
         <exclude name="SimplifyConditional" />
-        <exclude name="SingularField" />
         <exclude name="SwitchDensity" />
         <exclude name="TooManyFields" />
         <exclude name="TooManyMethods" />

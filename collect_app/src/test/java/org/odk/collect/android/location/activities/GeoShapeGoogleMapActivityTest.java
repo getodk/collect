@@ -24,10 +24,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.location.activities.GeoPointActivityTest.newMockLocation;
 
-
 @Config(constants = BuildConfig.class)
 @RunWith(RobolectricTestRunner.class)
-public class GeoShapeGoogleMapActivityTest {
+public class GeoShapeGoogleMapActivityTest extends BaseGeoActivityTest {
 
     @Rule
     public MockitoRule rule = MockitoJUnit.rule();
@@ -44,6 +43,7 @@ public class GeoShapeGoogleMapActivityTest {
      */
     @Before
     public void setUp() throws Exception {
+        super.setUp();
         activityController = Robolectric.buildActivity(GeoShapeGoogleMapActivity.class);
         activity = activityController.get();
 

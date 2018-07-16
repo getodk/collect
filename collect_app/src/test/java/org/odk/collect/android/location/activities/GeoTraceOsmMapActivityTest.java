@@ -35,7 +35,7 @@ import static org.odk.collect.android.location.activities.GeoPointActivityTest.n
 
 @Config(constants = BuildConfig.class)
 @RunWith(RobolectricTestRunner.class)
-public class GeoTraceOsmMapActivityTest {
+public class GeoTraceOsmMapActivityTest extends BaseGeoActivityTest {
 
     @Rule
     public MockitoRule rule = MockitoJUnit.rule();
@@ -64,6 +64,7 @@ public class GeoTraceOsmMapActivityTest {
      */
     @Before
     public void setUp() throws Exception {
+        super.setUp();
         activityController = Robolectric.buildActivity(GeoTraceOsmMapActivity.class);
         activity = activityController.get();
 

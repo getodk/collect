@@ -279,7 +279,7 @@ public class ListWidget extends QuestionWidget implements MultiChoiceWidget, OnC
         }
 
         for (RadioButton button : this.buttons) {
-            if (button.isChecked() && !(buttonView == button)) {
+            if (button.isChecked() && buttonView != button) {
                 button.setChecked(false);
             }
         }

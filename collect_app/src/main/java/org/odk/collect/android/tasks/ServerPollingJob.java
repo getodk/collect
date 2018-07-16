@@ -53,6 +53,8 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOMATIC_U
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JR_FORM_ID;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.LAST_DETECTED_FORM_VERSION_HASH;
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORM_UPDATES_AVAILABLE_NOTIFICATION;
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORMS_DOWNLOADED_NOTIFICATION;
 import static org.odk.collect.android.utilities.DownloadFormListUtils.DL_AUTH_REQUIRED;
 import static org.odk.collect.android.utilities.DownloadFormListUtils.DL_ERROR_MSG;
 
@@ -151,7 +153,7 @@ public class ServerPollingJob extends Job {
     private void informAboutNewAvailableForms() {
         Intent intent = new Intent(getContext(), FormDownloadList.class);
         intent.putExtra(DISPLAY_ONLY_UPDATED_FORMS, true);
-        PendingIntent contentIntent = PendingIntent.getActivity(getContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent contentIntent = PendingIntent.getActivity(getContext(), FORM_UPDATES_AVAILABLE_NOTIFICATION, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext())
                 .setSmallIcon(IconUtils.getNotificationAppIcon())
@@ -169,7 +171,7 @@ public class ServerPollingJob extends Job {
         Intent intent = new Intent(Collect.getInstance(), NotificationActivity.class);
         intent.putExtra(NotificationActivity.NOTIFICATION_TITLE, title);
         intent.putExtra(NotificationActivity.NOTIFICATION_MESSAGE, FormDownloadList.getDownloadResultMessage(result));
-        PendingIntent contentIntent = PendingIntent.getActivity(getContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent contentIntent = PendingIntent.getActivity(getContext(), FORMS_DOWNLOADED_NOTIFICATION, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext())
                 .setSmallIcon(IconUtils.getNotificationAppIcon())

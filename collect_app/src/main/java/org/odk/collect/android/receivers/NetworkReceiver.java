@@ -39,6 +39,7 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_SEND;
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORMS_UPLOADED_NOTIFICATION;
 
 public class NetworkReceiver extends BroadcastReceiver implements InstanceUploaderListener {
 
@@ -150,7 +151,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                 instanceGoogleSheetsUploader = new InstanceGoogleSheetsUploader(accountsManager);
                 instanceGoogleSheetsUploader.setUploaderListener(this);
                 instanceGoogleSheetsUploader.execute(toSendArray);
-            } else {
+            } else if (protocol.equals(context.getString(R.string.protocol_odk_default))) {
                 // get the username, password, and server from preferences
 
                 String storedUsername = (String) settings.get(PreferenceKeys.KEY_USERNAME);
@@ -171,8 +172,8 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
 
     /**
      * @param isFormAutoSendOptionEnabled represents whether the auto-send option is enabled at the app level
-     *
-     * If the form explicitly sets the auto-send property, then it overrides the preferences.
+     *                                    <p>
+     *                                    If the form explicitly sets the auto-send property, then it overrides the preferences.
      */
     private boolean isFormAutoSendEnabled(String jrFormId, boolean isFormAutoSendOptionEnabled) {
         Cursor cursor = new FormsDao().getFormsCursorForFormId(jrFormId);
@@ -228,7 +229,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         notifyIntent.putExtra(NotificationActivity.NOTIFICATION_TITLE, Collect.getInstance().getString(R.string.upload_results));
         notifyIntent.putExtra(NotificationActivity.NOTIFICATION_MESSAGE, message.trim());
 
-        PendingIntent pendingNotify = PendingIntent.getActivity(Collect.getInstance(), 0,
+        PendingIntent pendingNotify = PendingIntent.getActivity(Collect.getInstance(), FORMS_UPLOADED_NOTIFICATION,
                 notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(Collect.getInstance())

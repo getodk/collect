@@ -53,7 +53,6 @@ public class SplashScreenActivity extends Activity {
     private static final boolean EXIT = true;
 
     private int imageMaxWidth;
-    private AlertDialog alertDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -214,7 +213,7 @@ public class SplashScreenActivity extends Activity {
 
     private void createErrorDialog(String errorMsg, final boolean shouldExit) {
         Collect.getInstance().getActivityLogger().logAction(this, "createErrorDialog", "show");
-        alertDialog = new AlertDialog.Builder(this).create();
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setIcon(android.R.drawable.ic_dialog_info);
         alertDialog.setMessage(errorMsg);
         DialogInterface.OnClickListener errorListener = new DialogInterface.OnClickListener() {
