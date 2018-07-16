@@ -3,7 +3,8 @@ package org.odk.collect.android.http.mock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import org.odk.collect.android.http.HttpInputStreamResult;
+import org.odk.collect.android.http.HttpGetResult;
+import org.odk.collect.android.http.HttpHeadResult;
 import org.odk.collect.android.http.HttpInterface;
 import org.odk.collect.android.utilities.ResponseMessageParser;
 
@@ -23,7 +24,7 @@ public class MockHttpClientConnection implements HttpInterface {
 
     @NonNull
     @Override
-    public HttpInputStreamResult getHttpInputStream(@NonNull URI uri, @Nullable String contentType) throws Exception {
+    public HttpGetResult get(@NonNull URI uri, @Nullable String contentType) throws Exception {
         if (getHttpShouldReturnNull) {
             return null;
         }
@@ -42,13 +43,14 @@ public class MockHttpClientConnection implements HttpInterface {
         headers.put("X-OpenRosa-Version", "1.0");
         headers.put("Content-Type", "text/xml;charset=utf-8");
 
-        return new HttpInputStreamResult(is, headers, "test-hash", HttpURLConnection.HTTP_OK);
+        return new HttpGetResult(is, headers, "test-hash", HttpURLConnection.HTTP_OK);
     }
 
     @Override
-    public int httpHeadRequest(@NonNull URI uri, @NonNull Map<String, String> responseHeaders) throws Exception {
-        return 0;
+    public @NonNull HttpHeadResult head(@NonNull URI uri) {
+        return new HttpHeadResult(0, new HashMap<String, String>());
     }
+
 
     @Override
     public ResponseMessageParser uploadSubmissionFile(@NonNull List<File> fileList, @NonNull File submissionFile, @NonNull URI uri) throws IOException {

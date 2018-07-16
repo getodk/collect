@@ -25,7 +25,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
-import java.util.Map;
 
 public interface HttpInterface {
 
@@ -34,21 +33,21 @@ public interface HttpInterface {
      *
      * @param uri of the stream
      * @param contentType check the returned Mime Type to ensure it matches. "text/xml" causes a Hash to be calculated
-     * @return HttpInputStreamResult - An object containing the Stream, Hash and Headers
+     * @return HttpGetResult - An object containing the Stream, Hash and Headers
      * @throws Exception a multitude of Exceptions such as IOException can be thrown
      */
     @NonNull
-    HttpInputStreamResult getHttpInputStream(@NonNull URI uri, @Nullable String contentType) throws Exception;
+    HttpGetResult get(@NonNull URI uri, @Nullable String contentType) throws Exception;
 
     /**
      * Performs a HTTP Head request.
      *
      * @param uri of which to perform a HTTP head
-     * @param responseHeaders Map which is populated with the HTTP Headers
-     * @return HTTP status code
+     * @return HttpHeadResult containing status code and headers
      * @throws Exception a multitude of Exceptions such as IOException can be thrown
      */
-    int httpHeadRequest(@NonNull URI uri, @NonNull Map<String, String> responseHeaders) throws Exception;
+    @NonNull
+    HttpHeadResult head(@NonNull URI uri) throws Exception;
 
     /**
      * Uploads files to a Server.

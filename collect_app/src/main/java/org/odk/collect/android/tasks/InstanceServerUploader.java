@@ -23,6 +23,7 @@ import android.preference.PreferenceManager;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.http.HttpHeadResult;
 import org.odk.collect.android.http.injection.DaggerHttpComponent;
 import org.odk.collect.android.http.HttpInterface;
 import org.odk.collect.android.logic.PropertyManager;
@@ -185,13 +186,13 @@ public class InstanceServerUploader extends InstanceUploader {
             }
 
             try {
-                Map<String, String> responseHeaders = new HashMap<>();
-                int statusCode = httpInterface.httpHeadRequest(uri, responseHeaders);
+                HttpHeadResult headResult = httpInterface.head(uri);
+                Map<String, String> responseHeaders = headResult.getHeaders();
 
-                if (statusCode == HttpsURLConnection.HTTP_UNAUTHORIZED) {
+                if (headResult.getStatusCode() == HttpsURLConnection.HTTP_UNAUTHORIZED) {
                     outcome.authRequestingServer = submissionUri;
                     return false;
-                } else if (statusCode == HttpsURLConnection.HTTP_NO_CONTENT) {
+                } else if (headResult.getStatusCode() == HttpsURLConnection.HTTP_NO_CONTENT) {
                     if (responseHeaders.containsKey("Location")) {
                         try {
                             Uri newURI = Uri.parse(URLDecoder.decode(responseHeaders.get("Location"), "utf-8"));
@@ -234,8 +235,8 @@ public class InstanceServerUploader extends InstanceUploader {
                     }
 
                 } else {
-                    Timber.w("Status code on Head request: %d", statusCode);
-                    if (statusCode >= HttpsURLConnection.HTTP_OK && statusCode < HttpsURLConnection.HTTP_MULT_CHOICE) {
+                    Timber.w("Status code on Head request: %d", headResult.getStatusCode());
+                    if (headResult.getStatusCode() >= HttpsURLConnection.HTTP_OK && headResult.getStatusCode() < HttpsURLConnection.HTTP_MULT_CHOICE) {
                         outcome.messagesByInstanceId.put(
                                 id,
                                 FAIL

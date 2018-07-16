@@ -148,7 +148,7 @@ public class HttpClientConnection implements HttpInterface {
 
     @Override
     public @NonNull
-    HttpInputStreamResult getHttpInputStream(@NonNull URI uri, @Nullable final String contentType) throws Exception {
+    HttpGetResult get(@NonNull URI uri, @Nullable final String contentType) throws Exception {
         HttpContext localContext = getHttpContext();
         HttpClient httpclient = createHttpClient(CONNECTION_TIMEOUT);
 
@@ -224,15 +224,16 @@ public class HttpClientConnection implements HttpInterface {
             }
         }
 
-        return new HttpInputStreamResult(downloadStream, responseHeaders, hash, statusCode);
+        return new HttpGetResult(downloadStream, responseHeaders, hash, statusCode);
     }
 
 
     @Override
-    public int httpHeadRequest(@NonNull URI uri, @NonNull Map<String, String> responseHeaders) throws Exception {
+    public HttpHeadResult head(@NonNull URI uri) throws Exception {
         HttpContext localContext = getHttpContext();
         HttpClient httpclient = createHttpClient(CONNECTION_TIMEOUT);
         HttpHead httpHead = createOpenRosaHttpHead(uri);
+        Map<String, String> responseHeaders = new HashMap<>();
 
         // if https then enable preemptive basic auth...
         if (uri.getScheme() != null && uri.getScheme().equals("https")) {
@@ -284,7 +285,7 @@ public class HttpClientConnection implements HttpInterface {
             throw new Exception("Generic Exception: " + msg);
         }
 
-        return statusCode;
+        return new HttpHeadResult(statusCode, responseHeaders);
     }
 
     @Override

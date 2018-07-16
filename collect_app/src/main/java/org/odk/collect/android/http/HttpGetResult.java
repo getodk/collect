@@ -21,7 +21,7 @@ import java.io.InputStream;
 import java.util.Map;
 import timber.log.Timber;
 
-public class HttpInputStreamResult {
+public class HttpGetResult {
 
     private static final String OPEN_ROSA_VERSION_HEADER = "X-OpenRosa-Version";
     private static final String OPEN_ROSA_VERSION = "1.0";
@@ -31,7 +31,7 @@ public class HttpInputStreamResult {
     private final String hash;
     private final int statusCode;
 
-    public HttpInputStreamResult(InputStream is, @NonNull Map<String, String> headers, String hash, int statusCode) {
+    public HttpGetResult(InputStream is, @NonNull Map<String, String> headers, String hash, int statusCode) {
         inputStream = is;
         this.headers = headers;
         this.hash = hash;
