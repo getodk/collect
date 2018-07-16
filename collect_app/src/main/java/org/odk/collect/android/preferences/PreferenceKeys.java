@@ -18,6 +18,9 @@ public final class PreferenceKeys {
     // form_management_preferences.xml
     public static final String KEY_AUTOSEND                 = "autosend";
     public static final String KEY_MULTI_AUTOSEND           = "multi_autosend";
+    public static final String KEY_AUTOSEND_MIGRATED        = "autosend_migrated";
+    public static final String KEY_AUTOSEND_WIFI            = "autosend_wifi";
+    public static final String KEY_AUTOSEND_NETWORK         = "autosend_network";
     public static final String KEY_DELETE_AFTER_SEND        = "delete_send";
     public static final String KEY_COMPLETED_DEFAULT        = "default_completed";
     public static final String KEY_CONSTRAINT_BEHAVIOR      = "constraint_behavior";
@@ -67,8 +70,6 @@ public final class PreferenceKeys {
     public static final String KEY_FIRST_RUN                = "firstRun";
     /** Whether any existing username and email values have been migrated to form metadata */
     static final String KEY_METADATA_MIGRATED               = "metadata_migrated";
-    static final String KEY_AUTOSEND_WIFI                   = "autosend_wifi";
-    static final String KEY_AUTOSEND_NETWORK                = "autosend_network";
 
     // values
     public static final String NAVIGATION_SWIPE             = "swipe";
@@ -89,6 +90,7 @@ public final class PreferenceKeys {
         // form_management_preferences.xml
         hashMap.put(KEY_AUTOSEND,                   AUTOSEND_OFF);
         hashMap.put(KEY_MULTI_AUTOSEND,             new HashSet<>());
+        hashMap.put(KEY_AUTOSEND_MIGRATED,          false);
         hashMap.put(KEY_GUIDANCE_HINT,              GUIDANCE_HINT_OFF);
         hashMap.put(KEY_DELETE_AFTER_SEND,          false);
         hashMap.put(KEY_COMPLETED_DEFAULT,          true);
@@ -141,5 +143,4 @@ public final class PreferenceKeys {
     private PreferenceKeys() {
 
     }
-
 }

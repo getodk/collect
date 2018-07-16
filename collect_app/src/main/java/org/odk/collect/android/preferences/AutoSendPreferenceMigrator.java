@@ -3,11 +3,15 @@ package org.odk.collect.android.preferences;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOSEND;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOSEND_MIGRATED;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOSEND_NETWORK;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOSEND_WIFI;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_MULTI_AUTOSEND;
 
 /**
  * Migrates existing autosend_wifi and autosend_network preference values to autosend
@@ -77,5 +81,47 @@ public class AutoSendPreferenceMigrator {
 
         //save to shared preferences
         GeneralSharedPreferences.getInstance().save(KEY_AUTOSEND, autoSend);
+
+        migrateToMultiListPreferences();
+    }
+
+    /**
+     * Migrates the auto-send options to the multi-auto-send schema
+     *
+     * This involves checking the AUTO_SEND key for the current value and comparing it
+     * with the values from the previous array that represented it's option.
+     * Once that's done, the MULTI_AUTOSEND is populated with the selected options based on how
+     * it correlates to the current options for the multi-select list.
+     */
+    private static void migrateToMultiListPreferences() {
+
+        boolean migrated = GeneralSharedPreferences.getInstance().getBoolean(KEY_AUTOSEND_MIGRATED, false);
+
+        if (migrated) {
+            return;
+        }
+
+        GeneralSharedPreferences.getInstance().save(KEY_AUTOSEND_MIGRATED, true);
+
+        String autoSend = (String) GeneralSharedPreferences.getInstance().get(KEY_AUTOSEND);
+
+        Set<String> multiAutoSend = new HashSet<>();
+
+        switch (autoSend) {
+            case "wifi_only":
+                multiAutoSend.add("wifi");
+                break;
+
+            case "cellular_only":
+                multiAutoSend.add("cellular");
+                break;
+
+            case "wifi_and_cellular":
+                multiAutoSend.add("wifi");
+                multiAutoSend.add("cellular");
+                break;
+        }
+
+        GeneralSharedPreferences.getInstance().save(KEY_MULTI_AUTOSEND, multiAutoSend);
     }
 }
