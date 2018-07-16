@@ -82,7 +82,6 @@ public class MainMenuActivity extends CollectAbstractActivity {
 
     private static final boolean EXIT = true;
     // buttons
-    private Button enterDataButton;
     private Button manageFilesButton;
     private Button sendDataButton;
     private Button viewSentFormsButton;
@@ -116,7 +115,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
         initToolbar();
 
         // enter data button. expects a result.
-        enterDataButton = findViewById(R.id.enter_data);
+        Button enterDataButton = findViewById(R.id.enter_data);
         enterDataButton.setText(getString(R.string.enter_data_button));
         enterDataButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -653,6 +652,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
             for (Entry<String, ?> entry : adminEntries.entrySet()) {
                 AdminSharedPreferences.getInstance().save(entry.getKey(), entry.getValue());
             }
+            Collect.getInstance().initProperties();
             res = true;
         } catch (IOException | ClassNotFoundException e) {
             Timber.e(e, "Exception while loading preferences from file due to : %s ", e.getMessage());

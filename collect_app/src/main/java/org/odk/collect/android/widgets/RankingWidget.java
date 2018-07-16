@@ -21,8 +21,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
-import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.javarosa.core.model.SelectChoice;
@@ -33,8 +35,8 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.RankingListAdapter;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.ExternalDataUtil;
-import org.odk.collect.android.listeners.DoubleClickListener;
 import org.odk.collect.android.utilities.RankingItemTouchHelperCallback;
 import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 
@@ -121,40 +123,71 @@ public class RankingWidget extends QuestionWidget {
     }
 
     private void setUpLayout(List<SelectChoice> items) {
-        rankingListAdapter = new RankingListAdapter(items, getFormEntryPrompt());
+        LinearLayout rankingLayout = setUpRankingLayout(items);
 
-        LayoutInflater li = LayoutInflater.from(getContext());
-        widgetLayout = (FrameLayout) li.inflate(R.layout.ranking_widget, null);
-
-        RecyclerView recyclerView = widgetLayout.findViewById(R.id.ranking_recycler_view);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setAdapter(rankingListAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        ItemTouchHelper.Callback callback = new RankingItemTouchHelperCallback(rankingListAdapter);
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
-        itemTouchHelper.attachToRecyclerView(recyclerView);
-
-        TextView nullValueMessage = widgetLayout.findViewById(R.id.ranking_null_value_message);
-        recyclerView.setAlpha(nullValue ? 0.2f : 1);
-        nullValueMessage.setVisibility(nullValue && !items.isEmpty() ? VISIBLE : GONE);
-
-        nullValueMessage.setOnClickListener(new DoubleClickListener() {
-            @Override
-            public void onSingleClick(View v) {
-            }
-
-            @Override
-            public void onDoubleClick(View v) {
-                nullValue = false;
-                removeView(widgetLayout);
-                setUpLayout(items);
-            }
-        });
+        widgetLayout = new FrameLayout(getContext());
+        widgetLayout.addView(setUpStartRankingButton(rankingLayout));
+        widgetLayout.addView(rankingLayout);
 
         addAnswerView(widgetLayout);
         SpacesInUnderlyingValuesWarning
                 .forQuestionWidget(this)
                 .renderWarningIfNecessary(items);
+    }
+
+    private Button setUpStartRankingButton(LinearLayout rankingLayout) {
+        Button startRankingButton = getSimpleButton(getContext().getString(R.string.start_ranking));
+        startRankingButton.setVisibility(nullValue ? VISIBLE : GONE);
+        startRankingButton.setOnClickListener(view -> {
+            nullValue = false;
+            rankingLayout.setVisibility(VISIBLE);
+            startRankingButton.setVisibility(GONE);
+        });
+
+        return startRankingButton;
+    }
+
+    private LinearLayout setUpRankingLayout(List<SelectChoice> items) {
+        LinearLayout rankingLayout = new LinearLayout(getContext());
+        rankingLayout.setOrientation(LinearLayout.HORIZONTAL);
+        rankingLayout.setVisibility(nullValue ? GONE : VISIBLE);
+        rankingLayout.addView(setUpPositionsLayout());
+        rankingLayout.addView(setUpRecyclerView(items));
+        return rankingLayout;
+    }
+
+    private LinearLayout setUpPositionsLayout() {
+        LinearLayout positionsLayout = new LinearLayout(getContext());
+        positionsLayout.setOrientation(LinearLayout.VERTICAL);
+
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(0, 0, 10, 0);
+        positionsLayout.setLayoutParams(layoutParams);
+
+        for (SelectChoice item : items) {
+            FrameLayout positionLayout = (FrameLayout) LayoutInflater.from(getContext()).inflate(R.layout.ranking_item, positionsLayout, false);
+            TextView textView = positionLayout.findViewById(R.id.rank_item_text);
+            textView.setText(String.valueOf(items.indexOf(item) + 1));
+            textView.setTextSize(Collect.getQuestionFontsize());
+
+            positionsLayout.addView(positionLayout);
+        }
+        return positionsLayout;
+    }
+
+    private RecyclerView setUpRecyclerView(List<SelectChoice> items) {
+        rankingListAdapter = new RankingListAdapter(items, getFormEntryPrompt());
+
+        RecyclerView recyclerView = new RecyclerView(getContext());
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setAdapter(rankingListAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        ItemTouchHelper.Callback callback = new RankingItemTouchHelperCallback(rankingListAdapter);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
+
+        return recyclerView;
     }
 }

@@ -14,21 +14,14 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.utilities;
+package org.odk.collect.android.location.activities;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import org.robolectric.shadows.ShadowApplication;
 
-import com.evernote.android.job.Job;
-import com.evernote.android.job.JobCreator;
+public abstract class BaseGeoActivityTest {
 
-import org.odk.collect.android.tasks.ServerPollingJob;
-
-public class ServerPollingJobCreator implements JobCreator {
-
-    @Override
-    @Nullable
-    public Job create(@NonNull String tag) {
-        return tag.equals(ServerPollingJob.TAG) ? new ServerPollingJob() : null;
+    public void setUp() throws Exception {
+        ShadowApplication.getInstance().grantPermissions("android.permission.ACCESS_FINE_LOCATION");
+        ShadowApplication.getInstance().grantPermissions("android.permission.ACCESS_COARSE_LOCATION");
     }
 }

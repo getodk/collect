@@ -28,9 +28,9 @@ import android.support.multidex.MultiDex;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobManagerCreateException;
-import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.squareup.leakcanary.LeakCanary;
@@ -42,7 +42,9 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.external.ExternalDataManager;
+import org.odk.collect.android.injection.config.AppComponent;
 import org.odk.collect.android.injection.config.DaggerAppComponent;
+import org.odk.collect.android.jobs.CollectJobCreator;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
@@ -52,7 +54,6 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.PRNGFixes;
-import org.odk.collect.android.utilities.ServerPollingJobCreator;
 import org.opendatakit.httpclientandroidlib.client.CookieStore;
 import org.opendatakit.httpclientandroidlib.client.CredentialsProvider;
 import org.opendatakit.httpclientandroidlib.client.protocol.HttpClientContext;
@@ -111,6 +112,7 @@ public class Collect extends Application implements HasActivityInjector {
     private FormController formController;
     private ExternalDataManager externalDataManager;
     private Tracker tracker;
+    private AppComponent applicationComponent;
 
     @Inject
     DispatchingAndroidInjector<Activity> androidInjector;
@@ -257,15 +259,16 @@ public class Collect extends Application implements HasActivityInjector {
         super.onCreate();
         singleton = this;
 
-        DaggerAppComponent.builder()
+        applicationComponent = DaggerAppComponent.builder()
                 .application(this)
-                .build()
-                .inject(this);
+                .build();
+
+        applicationComponent.inject(this);
 
         try {
             JobManager
                     .create(this)
-                    .addJobCreator(new ServerPollingJobCreator());
+                    .addJobCreator(new CollectJobCreator());
         } catch (JobManagerCreateException e) {
             Timber.e(e);
         }
@@ -369,6 +372,14 @@ public class Collect extends Application implements HasActivityInjector {
             lastClickTime = elapsedRealtime;
         }
         return allowClick;
+    }
+
+    public AppComponent getComponent() {
+        return applicationComponent;
+    }
+
+    public void setComponent(AppComponent applicationComponent) {
+        this.applicationComponent = applicationComponent;
     }
 
     @Override
