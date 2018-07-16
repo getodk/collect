@@ -408,7 +408,6 @@
   <string name="sort_by_status_asc">Status, avslutade först</string>
   <string name="sort_by_status_desc">Status, oavslutade first</string>
   <string name="sort_the_list">Sortera listan</string>
-  <string name="request_permissions_google_account">ODK Collect behöver få tillgång till ditt Google-konto för att hämta tomma formulär och ladda upp ifyllda formulär.</string>
   <string name="filter_the_list">Filtrera listan</string>
   <string name="language">Språk</string>
   <string name="google_auth_io_exception_msg">API-anrop misslyckades. Om du kör programmet lokalt, vänligen gå igenom projektets \'readme\'.</string>

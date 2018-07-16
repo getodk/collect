@@ -429,7 +429,6 @@
   <string name="sort_by_status_asc">Tila, viimeistellyt ensin</string>
   <string name="sort_by_status_desc">Tila, viimeistelemättömät ensin</string>
   <string name="sort_the_list">Lajittele lista</string>
-  <string name="request_permissions_google_account">ODK Collect tarvitsee pääsyn Google-tilillesi hakeakseen tyhjiä lomakkeita ja lähettääkseen täytettyjä lomakkeita.</string>
   <string name="filter_the_list">Suodata listaa</string>
   <string name="language">Kieli</string>
   <string name="google_auth_io_exception_msg">API-kutsuja ei pystytä tekemään. Jos käytät paikallista ohjelmaversiota, katso projektin readme.</string>

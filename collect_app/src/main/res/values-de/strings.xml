@@ -436,7 +436,6 @@
   <string name="sort_by_status_asc">Status, vollständig zuerst</string>
   <string name="sort_by_status_desc">Status, unvollständig zuerst</string>
   <string name="sort_the_list">Die Liste sortieren</string>
-  <string name="request_permissions_google_account">ODK Collect benötigt Zugriff auf Ihr Google-Konto um leere Formulare zu laden und ausgefüllte Formulare hochzuladen.</string>
   <string name="filter_the_list">Liste filtern</string>
   <string name="language">Sprache</string>
   <string name="google_auth_io_exception_msg">API-Aufrufe nicht möglich. Wenn Sie einen lokalen Build laufen lassen, beachten Sie die Readme des Projekts.</string>

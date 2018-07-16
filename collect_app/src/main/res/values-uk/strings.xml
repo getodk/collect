@@ -436,7 +436,6 @@
   <string name="sort_by_status_asc">За статусом, завершені перші</string>
   <string name="sort_by_status_desc">За статусом, незавершені перші</string>
   <string name="sort_the_list">Відсортувати список</string>
-  <string name="request_permissions_google_account">ODK Collect потрібен доступ до Вашого Облікового запису Google щоб отримувати чисті і надсилати заповнені анкети.</string>
   <string name="filter_the_list">Фільтрувати список</string>
   <string name="language">Мова</string>
   <string name="google_auth_io_exception_msg">Неможливо здійснити виклики API. Якщо ви використовуєте локальну збірку, будь ласка, звурніться до документації проекту.</string>

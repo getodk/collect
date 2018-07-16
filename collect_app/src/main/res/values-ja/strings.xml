@@ -433,7 +433,6 @@
   <string name="sort_by_status_asc">ステータス順、確定済が最初</string>
   <string name="sort_by_status_desc">ステータス順、未確定が最初</string>
   <string name="sort_the_list">一覧の並び替え</string>
-  <string name="request_permissions_google_account">ODK Collect は、空白のフォームを取得して、入力フォームを送信するために、Google アカウントへのアクセスが必要です。</string>
   <string name="filter_the_list">一覧をフィルター</string>
   <string name="language">言語</string>
   <string name="google_auth_io_exception_msg">API 呼び出しを行うことができません。 ローカルビルドを実行している場合は、プロジェクトのreadmeを確認してください。</string>
