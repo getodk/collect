@@ -365,7 +365,6 @@
   <string name="instance_scan_completed">Skanimi përfundoi</string>
   <string name="instance_scan_count">%1$d formë/a u shtuan.</string>
   <string name="sort_the_list">Rendit listën</string>
-  <string name="request_permissions_google_account">ODK Collect ka nevojë të aksesojë loogarinë tuaj në Google në mënyrë që të marrë formularë bosh dhe të ngarkojë formularë të plotësuar</string>
   <string name="filter_the_list">Filtro listën</string>
   <string name="language">Gjuha</string>
   <string name="google_auth_io_exception_msg">Nuk është e mundur të kryhen thirrje API. Nëse jeni duke përdorur një ndërtim lokal, lutemi rishihni instruksionet (readme) e projektit. </string>

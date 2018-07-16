@@ -410,7 +410,6 @@
   <string name="sort_by_status_asc">Statusnya finalisasi terlebih dahulu</string>
   <string name="sort_by_status_desc">Statusnya tidak difinalisasi terlebih dahulu</string>
   <string name="sort_the_list">Urutkan daftar</string>
-  <string name="request_permissions_google_account">ODK Collect membutuhkan akses akun Google anda untuk mendapatkan formulir kosong dan mengirimkan isi formulir.</string>
   <string name="filter_the_list">Pilah daftar</string>
   <string name="language">Bahasa</string>
   <string name="google_auth_io_exception_msg">Tidak dapat memanggil API. Jika Anda melakukan kompilasi  lokal, silahkan baca readme.</string>

@@ -429,7 +429,6 @@
   <string name="sort_by_status_asc">По статусу, завершённые сначала</string>
   <string name="sort_by_status_desc">По статусу, незавершённые сначала</string>
   <string name="sort_the_list">Сортировать список</string>
-  <string name="request_permissions_google_account">ODK Collect требуется доступ к Вашему аккаунту Google, чтобы получать пустые формы и отправлять заполненные формы.</string>
   <string name="filter_the_list">Фильтровать список</string>
   <string name="language">Язык</string>
   <string name="google_auth_io_exception_msg">Не удалось вызвать API. Если Вы запустили локальную сборку, пожалуйста, почитайте readme проекта.</string>

@@ -355,7 +355,6 @@
   <string name="deleted_form">แบบสำรวจที่ถูกลบ</string>
   <string name="instance_scan_completed">สแกนเสร็จสิ้น</string>
   <string name="sort_the_list">จัดเรียงรายการ</string>
-  <string name="request_permissions_google_account">ODK Collect ต้องการเชื่อมต่อกับบัญชี Google เพื่อนำเข้าแบบสำรวจเปล่าและส่งข้อมูลที่เก็บแล้ว</string>
   <string name="language">ภาษา</string>
   <string name="form_metadata_title">Metadata ของแบบสำรวจ</string>
   <string name="form_metadata">Form metadata</string>

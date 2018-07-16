@@ -21,8 +21,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -58,11 +56,6 @@ public class GoogleAccountsManagerTest {
 
     private void stubSavedAccount(String accountName) {
         when(mockPreferences.get(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT)).thenReturn(accountName);
-    }
-
-    private void stubAccountPermission(boolean permission) {
-        doReturn(permission).when(googleAccountsManager).checkAccountPermission();
-        doNothing().when(googleAccountsManager).requestAccountPermission();
     }
 
     private void stubCredential() {
@@ -117,10 +110,9 @@ public class GoogleAccountsManagerTest {
 
     @Test
     public void displayAccountPickerDialogWhenAutoChooseDisabledTest() {
-        stubAccountPermission(true);
         stubSavedAccount(EXPECTED_ACCOUNT);
         googleAccountsManager.disableAutoChooseAccount();
-        googleAccountsManager.chooseAccount();
+        googleAccountsManager.chooseAccountAndRequestPermissionIfNeeded();
 
         assertNull(listener.getAccountName());
         assertNull(currentAccount);
@@ -130,9 +122,8 @@ public class GoogleAccountsManagerTest {
 
     @Test
     public void autoSelectAccountInAutoChooseWhenAccountIsAvailableTest() {
-        stubAccountPermission(true);
         stubSavedAccount(EXPECTED_ACCOUNT);
-        googleAccountsManager.chooseAccount();
+        googleAccountsManager.chooseAccountAndRequestPermissionIfNeeded();
 
         assertEquals(EXPECTED_ACCOUNT, listener.getAccountName());
         assertEquals(EXPECTED_ACCOUNT, currentAccount);
@@ -142,9 +133,8 @@ public class GoogleAccountsManagerTest {
 
     @Test
     public void displayAccountPickerDialogInAutoChooseWhenNoAccountIsNotAvailableTest() {
-        stubAccountPermission(true);
         stubSavedAccount("");
-        googleAccountsManager.chooseAccount();
+        googleAccountsManager.chooseAccountAndRequestPermissionIfNeeded();
 
         assertNull(listener.getAccountName());
         assertNull(currentAccount);
@@ -153,23 +143,9 @@ public class GoogleAccountsManagerTest {
     }
 
     @Test
-    public void shouldRequestForPermissionIfPermissionNotGivenTest() {
-        stubAccountPermission(false);
-        stubSavedAccount(EXPECTED_ACCOUNT);
-        googleAccountsManager.chooseAccount();
-
-        assertNull(listener.getAccountName());
-        assertNull(currentAccount);
-        verify(googleAccountsManager, times(0)).selectAccount(EXPECTED_ACCOUNT);
-        verify(googleAccountsManager, times(0)).showAccountPickerDialog();
-        verify(googleAccountsManager, times(1)).requestAccountPermission();
-    }
-
-    @Test
     public void accountNameShouldBeSetProperlyIfPermissionsGivenAndAutoSelectEnabledTest() {
-        stubAccountPermission(true);
         stubSavedAccount(EXPECTED_ACCOUNT);
-        googleAccountsManager.chooseAccount();
+        googleAccountsManager.chooseAccountAndRequestPermissionIfNeeded();
 
         assertEquals(EXPECTED_ACCOUNT, listener.getAccountName());
         assertEquals(EXPECTED_ACCOUNT, currentAccount);

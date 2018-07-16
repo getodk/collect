@@ -222,7 +222,6 @@ dependencies {
     implementation "com.karumi:dexter:4.2.0"
     implementation "org.osmdroid:osmdroid-android:5.6.4"
     implementation "org.slf4j:slf4j-android:1.6.1-RC1"
-    implementation "pub.devrel:easypermissions:0.2.1"
     implementation("com.google.api-client:google-api-client-android:1.22.0") {
         exclude group: 'org.apache.httpcomponents'
     }

@@ -217,7 +217,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
      */
     private void getResultsFromApi() {
         if (!accountsManager.isGoogleAccountSelected()) {
-            accountsManager.chooseAccount();
+            accountsManager.chooseAccountAndRequestPermissionIfNeeded();
         } else {
             if (isDeviceOnline()) {
                 toDownload.clear();
@@ -235,13 +235,6 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
             currentPath.clear();
             currentPath.add((String) rootButton.getText());
         }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        accountsManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     /**
