@@ -465,7 +465,7 @@ public class SmsService {
 
                     FormInfo info = new FormInfo(filePath, formId, formVersion);
 
-                    submitForm(instanceId, info, displayName, false);
+                    submitForm(instanceId, info, displayName, true);
                 }
             }
         }
