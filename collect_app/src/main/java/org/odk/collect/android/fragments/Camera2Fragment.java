@@ -821,6 +821,7 @@ public class Camera2Fragment extends Fragment
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.texture: {
+                textureView.setClickable(false);
                 takePicture();
                 break;
             }

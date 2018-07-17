@@ -29,13 +29,20 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.DeleteInstancesListener;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.DeleteInstancesTask;
 import org.odk.collect.android.tasks.InstanceSyncTask;
+import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.utilities.ToastUtils;
+
+import java.util.Arrays;
+import java.util.List;
+
+import javax.inject.Inject;
 
 import timber.log.Timber;
 
@@ -54,6 +61,8 @@ public class DataManagerList extends InstanceListFragment
     private AlertDialog alertDialog;
     private InstanceSyncTask instanceSyncTask;
     private ProgressDialog progressDialog;
+    @Inject
+    SmsSubmissionManagerContract smsSubmissionManager;
 
     public static DataManagerList newInstance() {
         return new DataManagerList();
@@ -64,6 +73,12 @@ public class DataManagerList extends InstanceListFragment
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Collect.getInstance().getComponent().inject(this);
     }
 
     @Override
@@ -195,12 +210,22 @@ public class DataManagerList extends InstanceListFragment
             progressDialog.setCancelable(false);
             progressDialog.show();
 
+            deleteSmsSubmissions(getCheckedIdObjects());
+
             deleteInstancesTask = new DeleteInstancesTask();
             deleteInstancesTask.setContentResolver(getActivity().getContentResolver());
             deleteInstancesTask.setDeleteListener(this);
             deleteInstancesTask.execute(getCheckedIdObjects());
         } else {
             ToastUtils.showLongToast(R.string.file_delete_in_progress);
+        }
+    }
+
+    private void deleteSmsSubmissions(Long[] ids) {
+        List<Long> list = Arrays.asList(ids);
+
+        for (Long id : list) {
+            smsSubmissionManager.forgetSubmission(String.valueOf(id));
         }
     }
 
