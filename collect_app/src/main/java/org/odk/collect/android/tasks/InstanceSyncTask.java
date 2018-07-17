@@ -89,6 +89,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                 for (File instanceDir : instanceFolders) {
                     File instanceFile = new File(instanceDir, instanceDir.getName() + ".xml");
                     if (!instanceFile.exists()) {
+                        // Look for submission file that might have been manually copied from e.g. Briefcase
                         File submissionFile = new File(instanceDir, "submission.xml");
                         if (submissionFile.exists()) {
                             submissionFile.renameTo(instanceFile);
