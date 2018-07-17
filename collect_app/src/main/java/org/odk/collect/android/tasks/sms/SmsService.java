@@ -127,7 +127,6 @@ public class SmsService {
      * background job.
      */
     public boolean submitForm(String instanceId, FormInfo info, String displayName) {
-
         String text;
 
         if (formsDao.isFormEncrypted(info.getFormID(), info.getFormVersion())) {
@@ -175,7 +174,6 @@ public class SmsService {
          * If the model exists that means this instance was probably sent in the past.
          */
         if (model != null) {
-
             /*
              * If the background job for this instance is running then the messages won't be sent again.
              */
@@ -189,7 +187,6 @@ public class SmsService {
             }
 
             for (Message message : model.getMessages()) {
-
                 /*
                  * If there's a message that hasn't sent then a job should be added to continue the process.
                  */
@@ -199,7 +196,6 @@ public class SmsService {
                 }
             }
         } else {
-
             final List<String> parts = smsManager.divideMessage(text);
 
             model = new SmsSubmission();
@@ -295,7 +291,7 @@ public class SmsService {
          * so that error message is persisted along with SUBMISSION_STATUS_FAILED
          * */
         if (model.isSubmissionComplete()) {
-            markInstanceAsSubmittedOrDelete(instanceId);
+            markInstanceAsSubmittedOrDelete(instanceId, model.getCompletion(), model.getLastUpdated(), context);
         } else if (resultCode != RESULT_OK && resultCode != RESULT_OK_OTHERS_PENDING) {
             updateInstanceStatusFailedText(instanceId, event);
         }
@@ -309,7 +305,6 @@ public class SmsService {
      * @param instanceId from instanceDao
      */
     protected void startSendMessagesJob(String instanceId) {
-
         PersistableBundleCompat extras = new PersistableBundleCompat();
         extras.putString(SmsSenderJob.INSTANCE_ID, instanceId);
 
@@ -327,11 +322,12 @@ public class SmsService {
         rxEventBus.post(new SmsRxEvent(instanceId, RESULT_QUEUED));
     }
 
-    private void markInstanceAsSubmittedOrDelete(String instanceId) {
+    private void markInstanceAsSubmittedOrDelete(String instanceId, SmsProgress progress, Date date, Context context) {
         String where = InstanceProviderAPI.InstanceColumns._ID + "=?";
         String[] whereArgs = {instanceId};
 
         ContentValues contentValues = new ContentValues();
+        contentValues.put(InstanceProviderAPI.InstanceColumns.DISPLAY_SUBTEXT, getDisplaySubtext(RESULT_OK, date, progress, context));
         contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMITTED);
 
         try (Cursor cursor = instancesDao.getInstancesCursorForId(instanceId)) {
