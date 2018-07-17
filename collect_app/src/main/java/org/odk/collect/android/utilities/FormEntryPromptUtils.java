@@ -21,7 +21,7 @@ import android.content.Context;
 import org.javarosa.core.model.data.DateData;
 import org.javarosa.core.model.data.DateTimeData;
 import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.data.SelectMultiData;
+import org.javarosa.core.model.data.MultipleItemsData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.dao.ItemsetDao;
@@ -44,7 +44,7 @@ public class FormEntryPromptUtils {
         IAnswerData data = fep.getAnswerValue();
         final String appearance = fep.getQuestion().getAppearanceAttr();
 
-        if (data instanceof SelectMultiData) {
+        if (data instanceof MultipleItemsData) {
             StringBuilder b = new StringBuilder();
             String sep = "";
             for (Selection value : (List<Selection>) data.getValue()) {

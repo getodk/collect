@@ -59,6 +59,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+import static org.odk.collect.android.utilities.PermissionUtils.checkIfLocationPermissionsGranted;
+
 public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements IRegisterReceiver,
         LocationListener, LocationClient.LocationClientListener {
 
@@ -103,6 +105,12 @@ public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements I
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (!checkIfLocationPermissionsGranted(this)) {
+            finish();
+            return;
+        }
+
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         setContentView(R.layout.geotrace_osm_layout);
@@ -137,7 +145,7 @@ public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements I
 
             @Override
             public void onClick(View v) {
-                helper.showLayersDialog(GeoTraceOsmMapActivity.this);
+                helper.showLayersDialog();
 
             }
         });
@@ -171,14 +179,14 @@ public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements I
             @Override
             public void onClick(View v) {
 
-                if (mapMarkers.size() != 0) {
+                if (!mapMarkers.isEmpty()) {
                     alertDialog.show();
                 } else {
                     saveGeoTrace();
                 }
             }
         });
-        if (mapMarkers == null || mapMarkers.size() == 0) {
+        if (mapMarkers.isEmpty()) {
             clearButton.setEnabled(false);
         }
         manualCaptureButton = findViewById(R.id.manual_button);
@@ -227,7 +235,7 @@ public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements I
             @Override
             public void onClick(final View v) {
                 playButton.setVisibility(View.VISIBLE);
-                if (mapMarkers != null && mapMarkers.size() > 0) {
+                if (!mapMarkers.isEmpty()) {
                     clearButton.setEnabled(true);
                 }
                 pauseButton.setVisibility(View.GONE);
@@ -825,7 +833,7 @@ public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements I
             zoomLocationButton.setTextColor(Color.parseColor("#FF979797"));
         }
         //If feature enable zoom to button else disable
-        if (mapMarkers.size() != 0) {
+        if (!mapMarkers.isEmpty()) {
             zoomPointButton.setEnabled(true);
             zoomPointButton.setBackgroundColor(Color.parseColor("#50cccccc"));
             zoomPointButton.setTextColor(themeUtils.getPrimaryTextColor());

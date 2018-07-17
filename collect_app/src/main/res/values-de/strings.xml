@@ -471,7 +471,6 @@
   <string name="share_qrcode">QR-Code teilen</string>
   <string name="take_picture_instruction">Bildschirm berühren um ein Foto aufzunehmen</string>
   <string name="error_front_camera_unavailable">Frontkamera bei diesem Gerät nicht verfügbar</string>
-  <string name="request_permission">Die App benötigt die Kamera-Berechtigung.</string>
   <string name="camera_error">Dieses Gerät unterstützt die Camera2-API nicht.</string>
   <string name="invalid_range_widget">Dieses Widget hat ungültige Parameter!</string>
   <string name="form_entry_setting">Eingabe-Einstellungen</string>
@@ -584,11 +583,8 @@
   <string name="every_six_hours">Alle 6 Stunden</string>
   <string name="every_24_hours">Alle 24 Stunden</string>
   <string name="form_updates_available">Formular-Updates verfügbar</string>
-  <string name="new_form_versions_downloaded">Neue Formular-Versionen heruntergeladen</string>
   <string name="automatic_download">Automatischer Download</string>
   <string name="automatic_download_summary">Automatisch aktualisierte Versionen von Formularen herunterladen</string>
-  <string name="forms_downloaded">Formulare heruntergeladen:</string>
-  <string name="forms_sent">Formulare gesendet:</string>
   <string name="guidance_hint_title">Hilfe zu Fragen anzeigen</string>
   <string name="app_theme">Theme</string>
   <string name="theme_light">Helles Theme</string>

@@ -37,9 +37,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import timber.log.Timber;
-
 import au.com.bytecode.opencsv.CSVReader;
+import timber.log.Timber;
 
 /**
  * Author: Meletis Margaritis
@@ -119,7 +118,7 @@ public class ExternalSQLiteOpenHelper extends SQLiteOpenHelper {
             List<String> conflictingColumns =
                     ExternalDataUtil.findMatchingColumnsAfterSafeningNames(headerRow);
 
-            if (conflictingColumns != null && conflictingColumns.size() > 0) {
+            if (conflictingColumns != null && !conflictingColumns.isEmpty()) {
                 // this means that after removing invalid characters, some column names resulted
                 // with the same name,
                 // so the create table query will fail with "duplicate column" error.
@@ -134,9 +133,11 @@ public class ExternalSQLiteOpenHelper extends SQLiteOpenHelper {
 
             boolean sortColumnAlreadyPresent = false;
 
-            sb.append("CREATE TABLE ");
-            sb.append(tableName);
-            sb.append(" ( ");
+            sb
+                    .append("CREATE TABLE ")
+                    .append(tableName)
+                    .append(" ( ");
+
             for (int i = 0; i < headerRow.length; i++) {
                 String columnName = headerRow[i].trim();
                 if (columnName.length() == 0) {

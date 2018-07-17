@@ -56,7 +56,7 @@ import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColum
  */
 public class InstanceSyncTask extends AsyncTask<Void, String, String> {
 
-    private static int counter = 0;
+    private static int counter;
 
     private String currentStatus = "";
     private DiskSyncListener diskSyncListener;

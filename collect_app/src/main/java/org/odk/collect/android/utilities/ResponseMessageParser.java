@@ -65,10 +65,7 @@ public class ResponseMessageParser {
 
             return message;
 
-        } catch (SAXException | IOException e) {
-            Timber.e(e, "Error parsing XML message due to %s ", e.getMessage());
-            isValid = false;
-        } catch (ParserConfigurationException e) {
+        } catch (SAXException | IOException | ParserConfigurationException e) {
             Timber.e(e, "Error parsing XML message due to %s ", e.getMessage());
             isValid = false;
         }

@@ -473,7 +473,6 @@
   <string name="share_qrcode">Compartir código QR</string>
   <string name="take_picture_instruction">Toca la pantalla para tomar una foto</string>
   <string name="error_front_camera_unavailable">Este dispositivo no tiene Cámara frontal disponible </string>
-  <string name="request_permission">Esta aplicación necesita permisos para usar la cámara</string>
   <string name="camera_error">Este dispositivo no soporta el API Camera2</string>
   <string name="invalid_range_widget">Esta opción tiene parámetros inválidos</string>
   <string name="form_entry_setting">Configuración de entrada de formularios</string>
@@ -586,11 +585,8 @@
   <string name="every_six_hours">Cada 6 horas</string>
   <string name="every_24_hours">Cada 24 horas</string>
   <string name="form_updates_available">Formularios actualizados disponibles</string>
-  <string name="new_form_versions_downloaded">Nuevas versiones de formularios</string>
   <string name="automatic_download">Descarga automática</string>
   <string name="automatic_download_summary">Nuevas versiones de formularios descargadas automáticamente</string>
-  <string name="forms_downloaded">Formularios descargados:</string>
-  <string name="forms_sent">Formularios enviados:</string>
   <string name="guidance_hint_title">Mostrar guías de preguntas</string>
   <string name="app_theme">Tema</string>
   <string name="theme_light">Tema Claro</string>

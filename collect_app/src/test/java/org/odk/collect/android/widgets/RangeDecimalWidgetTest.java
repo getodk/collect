@@ -12,10 +12,6 @@ import org.robolectric.RuntimeEnvironment;
 
 public class RangeDecimalWidgetTest extends RangeWidgetTest<RangeDecimalWidget, DecimalData> {
 
-    public RangeDecimalWidgetTest() {
-        super();
-    }
-
     @NonNull
     @Override
     public RangeDecimalWidget createWidget() {

@@ -113,4 +113,12 @@ public final class ThemeUtils {
     public int getIconColor() {
         return getAttributeValue(R.attr.iconColor);
     }
+
+    /**
+     * @return Rank item color for the current {@link android.content.res.Resources.Theme}
+     */
+    @ColorInt
+    public int getPrimaryBackgroundColor() {
+        return getAttributeValue(R.attr.primaryBackgroundColor);
+    }
 }

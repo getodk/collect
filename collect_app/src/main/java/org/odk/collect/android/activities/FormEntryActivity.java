@@ -28,6 +28,7 @@ import android.provider.MediaStore.Images;
 import android.provider.OpenableColumns;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -71,6 +72,7 @@ import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.LocalDateTime;
+import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.IconMenuListAdapter;
 import org.odk.collect.android.adapters.model.IconMenuItem;
@@ -210,7 +212,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     private Animation inAnimation;
     private Animation outAnimation;
-    private View staleView = null;
+    private View staleView;
 
     private LinearLayout questionHolder;
     private View currentView;
@@ -224,7 +226,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private boolean beenSwiped;
 
     private final Object saveDialogLock = new Object();
-    private int viewCount = 0;
+    private int viewCount;
 
     private FormLoaderTask formLoaderTask;
     private SaveToDiskTask saveToDiskTask;
@@ -255,7 +257,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     @NonNull
     private ActivityAvailability activityAvailability = new ActivityAvailability(this);
 
-    private boolean shouldOverrideAnimations = false;
+    private boolean shouldOverrideAnimations;
 
     /**
      * Called when the activity is first created.
@@ -390,7 +392,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             // Not a restart from a screen orientation change (or other).
             Collect.getInstance().setFormController(null);
             supportInvalidateOptionsMenu();
-
             Intent intent = getIntent();
             if (intent != null) {
                 loadFromIntent(intent);
@@ -695,6 +696,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 // file
                 ImageConverter.execute(Collect.TMPFILE_PATH, getWidgetWaitingForBinaryData(), this);
                 File fi = new File(Collect.TMPFILE_PATH);
+
+                //revoke permissions granted to this file due its possible usage in
+                //the camera app
+                Uri uri = FileProvider.getUriForFile(this,
+                        BuildConfig.APPLICATION_ID + ".provider",
+                        fi);
+                FileUtils.revokeFileReadWritePermission(this, uri);
+
                 String instanceFolder = formController.getInstanceFile()
                         .getParent();
                 String s = instanceFolder + File.separator + System.currentTimeMillis() + ".jpg";
@@ -875,37 +884,43 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     private void saveChosenImage(Uri selectedImage) {
         // Copy file to sdcard
-        String instanceFolder1 = getFormController().getInstanceFile().getParent();
-        String destImagePath = instanceFolder1 + File.separator + System.currentTimeMillis() + ".jpg";
+        File instanceFile = getFormController().getInstanceFile();
+        if (instanceFile != null) {
+            String instanceFolder1 = instanceFile.getParent();
+            String destImagePath = instanceFolder1 + File.separator + System.currentTimeMillis() + ".jpg";
 
-        File chosenImage;
-        try {
-            chosenImage = MediaUtils.getFileFromUri(this, selectedImage, Images.Media.DATA);
-            if (chosenImage != null) {
-                final File newImage = new File(destImagePath);
-                FileUtils.copyFile(chosenImage, newImage);
-                ImageConverter.execute(newImage.getPath(), getWidgetWaitingForBinaryData(), this);
+            File chosenImage;
+            try {
+                chosenImage = MediaUtils.getFileFromUri(this, selectedImage, Images.Media.DATA);
+                if (chosenImage != null) {
+                    final File newImage = new File(destImagePath);
+                    FileUtils.copyFile(chosenImage, newImage);
+                    ImageConverter.execute(newImage.getPath(), getWidgetWaitingForBinaryData(), this);
+                    runOnUiThread(() -> {
+                        dismissDialog(SAVING_IMAGE_DIALOG);
+                        if (getCurrentViewIfODKView() != null) {
+                            getCurrentViewIfODKView().setBinaryData(newImage);
+                        }
+                        saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+                        refreshCurrentView();
+                    });
+                } else {
+                    runOnUiThread(() -> {
+                        dismissDialog(SAVING_IMAGE_DIALOG);
+                        Timber.e("Could not receive chosen image");
+                        ToastUtils.showShortToastInMiddle(R.string.error_occured);
+                    });
+                }
+            } catch (GDriveConnectionException e) {
                 runOnUiThread(() -> {
                     dismissDialog(SAVING_IMAGE_DIALOG);
-                    if (getCurrentViewIfODKView() != null) {
-                        getCurrentViewIfODKView().setBinaryData(newImage);
-                    }
-                    saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                    refreshCurrentView();
-                });
-            } else {
-                runOnUiThread(() -> {
-                    dismissDialog(SAVING_IMAGE_DIALOG);
-                    Timber.e("Could not receive chosen image");
-                    ToastUtils.showShortToastInMiddle(R.string.error_occured);
+                    Timber.e("Could not receive chosen image due to connection problem");
+                    ToastUtils.showLongToastInMiddle(R.string.gdrive_connection_exception);
                 });
             }
-        } catch (GDriveConnectionException e) {
-            runOnUiThread(() -> {
-                dismissDialog(SAVING_IMAGE_DIALOG);
-                Timber.e("Could not receive chosen image due to connection problem");
-                ToastUtils.showLongToastInMiddle(R.string.gdrive_connection_exception);
-            });
+        } else {
+            ToastUtils.showLongToast(R.string.image_not_saved);
+            Timber.w(getString(R.string.image_not_saved));
         }
     }
 
@@ -2444,7 +2459,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     }
 
-    private int animationCompletionSet = 0;
+    private int animationCompletionSet;
 
     private void afterAllAnimations() {
         if (staleView != null) {

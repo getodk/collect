@@ -7,6 +7,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.zip.DataFormatException;
 
+import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 
 /**
@@ -46,14 +47,14 @@ public class CompressionTest {
     public void compressNullText() throws IOException {
         String nullText = "";
         compressedText = CompressionUtils.compress(nullText);
-        assertTrue(nullText.equals(compressedText));
+        assertEquals(nullText, compressedText);
     }
 
     @Test
     public void decompress() throws IOException, DataFormatException {
         compressedText = CompressionUtils.compress(text);
         decompressedText = CompressionUtils.decompress(compressedText);
-        assertTrue(text.equals(decompressedText));
+        assertEquals(text, decompressedText);
     }
 
 
@@ -61,7 +62,7 @@ public class CompressionTest {
     public void decompressNullText() throws IOException, DataFormatException {
         String nullText = "";
         decompressedText = CompressionUtils.decompress(nullText);
-        assertTrue(nullText.equals(decompressedText));
+        assertEquals(nullText, decompressedText);
     }
 
     @Test(expected = DataFormatException.class)
