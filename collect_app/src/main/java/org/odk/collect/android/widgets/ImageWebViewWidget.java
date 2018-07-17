@@ -39,7 +39,9 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
@@ -50,6 +52,7 @@ import java.util.Date;
 import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
+import static org.odk.collect.android.utilities.PermissionUtils.requestCameraPermission;
 
 /**
  * Widget that allows user to take pictures, sounds or video and add them to the
@@ -171,13 +174,8 @@ public class ImageWebViewWidget extends QuestionWidget implements FileWidget {
             return true;
         }
 
-        // transits WebView
-        if (rect.contains((int) ((e1.getRawX() + e2.getRawX()) / 2.0),
-                (int) ((e1.getRawY() + e2.getRawY()) / 2.0))) {
-            return true;
-        }
-        // Log.i(t, "NOT SUPPRESSED");
-        return false;
+        return rect.contains((int) ((e1.getRawX() + e2.getRawX()) / 2.0),
+                (int) ((e1.getRawY() + e2.getRawY()) / 2.0));
     }
 
     @Override
@@ -273,7 +271,16 @@ public class ImageWebViewWidget extends QuestionWidget implements FileWidget {
     public void onButtonClick(int buttonId) {
         switch (buttonId) {
             case R.id.capture_image:
-                captureImage();
+                requestCameraPermission((FormEntryActivity) getContext(), new PermissionListener() {
+                    @Override
+                    public void granted() {
+                        captureImage();
+                    }
+
+                    @Override
+                    public void denied() {
+                    }
+                });
                 break;
             case R.id.choose_image:
                 chooseImage();

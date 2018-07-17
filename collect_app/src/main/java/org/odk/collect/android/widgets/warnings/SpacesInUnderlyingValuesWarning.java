@@ -96,7 +96,7 @@ public class SpacesInUnderlyingValuesWarning {
     public static class SpacesInUnderlyingValues implements UnderlyingValuesChecker {
 
         private List<SelectChoice> invalidValues = Lists.newArrayList();
-        private boolean checked = false;
+        private boolean checked;
 
         @Override
         public void check(List<SelectChoice> items) {

@@ -69,6 +69,7 @@ import java.util.regex.Pattern;
 import timber.log.Timber;
 
 import static org.odk.collect.android.logic.FormController.INSTANCE_ID;
+import static org.odk.collect.android.utilities.InstanceUploaderUtils.DEFAULT_SUCCESSFUL_TEXT;
 
 /**
  * @author carlhartung (chartung@nafundi.com)
@@ -193,7 +194,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                         uploadOneInstance(new File(instance), formFilePath, getGoogleSheetsUrl(cursor));
                         cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMITTED);
                         Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
-                        messagesByInstanceId.put(id, Collect.getInstance().getString(R.string.success));
+                        messagesByInstanceId.put(id, DEFAULT_SUCCESSFUL_TEXT);
                     } catch (UploadException e) {
                         Timber.e(e);
                         messagesByInstanceId.put(id, e.getMessage() != null ? e.getMessage() : e.getCause().getMessage());

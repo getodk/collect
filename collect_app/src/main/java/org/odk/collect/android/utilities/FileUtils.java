@@ -119,14 +119,10 @@ public class FileUtils {
             }
 
             return bytes;
-
-        } catch (FileNotFoundException e) {
-            Timber.d(e, "Cannot find file %s", file.getName());
-            return null;
         } catch (IOException e) {
-            Timber.e(e, "Cannot close input stream for file %s", file.getName());
-            return null;
+            Timber.e(e);
         }
+        return new byte[0];
     }
 
     public static String getMd5Hash(File file) {

@@ -37,7 +37,7 @@ import timber.log.Timber;
 public class SavePointTask extends AsyncTask<Void, Void, String> {
 
     private static final Object LOCK = new Object();
-    private static int lastPriorityUsed = 0;
+    private static int lastPriorityUsed;
 
     private final SavePointListener listener;
     private final int priority;
@@ -68,7 +68,7 @@ public class SavePointTask extends AsyncTask<Void, Void, String> {
                 }
 
                 // write out xml
-                SaveToDiskTask.exportXmlFile(payload, temp.getAbsolutePath());
+                SaveToDiskTask.writeFile(payload, temp.getAbsolutePath());
 
                 long end = System.currentTimeMillis();
                 Timber.i("Savepoint ms: %s to %s", Long.toString(end - start), temp.toString());

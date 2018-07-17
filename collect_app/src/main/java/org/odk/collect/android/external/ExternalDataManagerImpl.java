@@ -56,20 +56,8 @@ public class ExternalDataManagerImpl implements ExternalDataManager {
                     return null;
                 }
             } else {
-                File dbFile = new File(mediaFolder, dataSetName + ".db");
-                if (!dbFile.exists()) {
-                    String msg = Collect.getInstance().getString(
-                            R.string.ext_import_csv_missing_error, dataSetName, dataSetName);
-                    Timber.e(msg);
-                    if (required) {
-                        throw new ExternalDataException(msg);
-                    } else {
-                        return null;
-                    }
-                } else {
-                    sqLiteOpenHelper = new ExternalSQLiteOpenHelper(dbFile);
-                    dbMap.put(dataSetName, sqLiteOpenHelper);
-                }
+                sqLiteOpenHelper = new ExternalSQLiteOpenHelper(new File(mediaFolder, dataSetName + ".db"));
+                dbMap.put(dataSetName, sqLiteOpenHelper);
             }
         }
         return sqLiteOpenHelper;

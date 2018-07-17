@@ -13,10 +13,6 @@ import java.util.Random;
  */
 public class IntegerWidgetTest extends GeneralStringWidgetTest<IntegerWidget, IntegerData> {
 
-    public IntegerWidgetTest() {
-        super();
-    }
-
     @NonNull
     @Override
     public IntegerWidget createWidget() {

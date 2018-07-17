@@ -16,10 +16,6 @@ import java.util.Random;
 public class StringNumberWidgetTest
         extends GeneralStringWidgetTest<StringNumberWidget, StringData> {
 
-    public StringNumberWidgetTest() {
-        super();
-    }
-
     @NonNull
     @Override
     public StringNumberWidget createWidget() {

@@ -96,7 +96,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     private static final String FORM_VERSION_KEY = "formversion";
 
     private String alertMsg;
-    private boolean alertShowing = false;
+    private boolean alertShowing;
     private String alertTitle;
 
     private AlertDialog alertDialog;

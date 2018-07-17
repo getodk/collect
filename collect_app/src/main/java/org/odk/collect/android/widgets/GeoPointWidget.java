@@ -31,10 +31,12 @@ import org.javarosa.core.model.data.GeoPointData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.activities.GeoPointOsmMapActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
@@ -43,6 +45,7 @@ import java.text.DecimalFormat;
 import java.util.Locale;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
+import static org.odk.collect.android.utilities.PermissionUtils.requestLocationPermissions;
 
 /**
  * GeoPointWidget is the widget that allows the user to get GPS readings.
@@ -283,6 +286,19 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
 
     @Override
     public void onButtonClick(int buttonId) {
+        requestLocationPermissions((FormEntryActivity) getContext(), new PermissionListener() {
+            @Override
+            public void granted() {
+                startGeoPoint();
+            }
+
+            @Override
+            public void denied() {
+            }
+        });
+    }
+
+    private void startGeoPoint() {
         Collect.getInstance()
                 .getActivityLogger()
                 .logInstanceAction(this, "recordLocation", "click",

@@ -48,8 +48,8 @@ public class GoogleAccountsManagerTest {
     private TestGoogleAccountSelectionListener listener;
     private GoogleAccountsManager googleAccountsManager;
 
-    private String currentAccount = null;
-    private String savedAccount = null;
+    private String currentAccount;
+    private String savedAccount;
     private static final String EXPECTED_ACCOUNT = "abcd@xyz.com";
 
     /**

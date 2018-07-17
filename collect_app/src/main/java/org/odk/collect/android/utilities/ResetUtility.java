@@ -86,6 +86,8 @@ public class ResetUtility {
         if (deletedSettingsFolderContest && deletedSettingsFile) {
             failedResetActions.remove(failedResetActions.indexOf(ResetAction.RESET_PREFERENCES));
         }
+
+        Collect.getInstance().initProperties();
     }
 
     private void resetInstances() {

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.utilities;
+package org.odk.collect.android.jobs;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -26,11 +26,13 @@ import org.odk.collect.android.tasks.FormDownloadJob;
 import org.odk.collect.android.tasks.ServerPollingJob;
 
 public class CollectJobCreator implements JobCreator {
-
-    @Override
     @Nullable
+    @Override
     public Job create(@NonNull String tag) {
         switch (tag) {
+            case SmsSenderJob.TAG:
+                return new SmsSenderJob();
+
             case ServerPollingJob.TAG:
                 return new ServerPollingJob();
 
@@ -42,3 +44,4 @@ public class CollectJobCreator implements JobCreator {
         }
     }
 }
+

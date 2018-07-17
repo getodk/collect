@@ -43,9 +43,6 @@ import timber.log.Timber;
  * @author Ephraim Kigamba (nek.eam@gmail.com)
  */
 public class FormDownloadService extends IntentService {
-
-    private String formId;
-
     public FormDownloadService() {
         super("FormDownloadService");
     }
@@ -54,7 +51,7 @@ public class FormDownloadService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         Timber.i("RECEIVED FORM DOWNLOAD REQUEST IN SERVICE");
 
-        formId = intent.getStringExtra(ApplicationConstants.BundleKeys.FORM_ID);
+        String formId = intent.getStringExtra(ApplicationConstants.BundleKeys.FORM_ID);
 
         Bundle jobBundle = new Bundle();
         jobBundle.putString(ApplicationConstants.BundleKeys.FORM_ID, formId);

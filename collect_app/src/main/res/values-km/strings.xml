@@ -470,7 +470,6 @@
   <string name="share_qrcode">ចែក​រំលែក​ QR Code</string>
   <string name="take_picture_instruction">ប៉ះលើផ្ទៃ​អេក្រង់ដើម្បីថត​រូប</string>
   <string name="error_front_camera_unavailable">កាមេរ៉ាខាងមុខមិនមាននៅលើឧបករណ៍នេះទេ</string>
-  <string name="request_permission">កម្មវិធី​នេះ​ត្រូវ​ការ​សិទ្ធិ​ក្នុង​ការប្រើ​ប្រាស់​កាម៉េរ៉ាលើឧបករណ៍</string>
   <string name="camera_error">ឧបករណ៍នេះមិនមានការគាំទ្រ​ក្នុង​ការ​ប្រើ​ប្រាស់ API របស់ Camera2</string>
   <string name="invalid_range_widget">ធាតុក្រាហ្វិកនេះមានប៉ារ៉ាម៉ែត្រមិនត្រឹមត្រូវ!</string>
   <string name="form_entry_setting">ការ​កំណត់​នៃ​ទម្រង់​បញ្ជូល</string>
@@ -583,11 +582,8 @@
   <string name="every_six_hours">រៀងរាល់ ៦ ម៉ោង</string>
   <string name="every_24_hours">រៀងរាល់ ២៤ ម៉ោង</string>
   <string name="form_updates_available">មានទម្រង់សម្រាប់ធ្វើបច្ចុប្បន្នភាព</string>
-  <string name="new_form_versions_downloaded">ទម្រង់ជំនាន់ថ្មីបានទាញយក</string>
   <string name="automatic_download">ទាញយក​ដោយ​ស្វ័យ​ប្រវត្តិ</string>
   <string name="automatic_download_summary">ធ្វើបច្ចុប្បន្នភាពជំនាន់ទម្រង់​ដោយទាញយក​​ដោយ​ស្វ័យ​ប្រវត្តិ</string>
-  <string name="forms_downloaded">ទម្រង់ដែលបានទាញយក៖</string>
-  <string name="forms_sent">ឯកសារ​ផ្ញើរចេញ៖</string>
   <string name="guidance_hint_title">បង្ហាញការណែនាំសម្រាប់សំណួរ</string>
   <string name="app_theme">Theme</string>
   <string name="theme_light">Light theme</string>
