@@ -641,6 +641,6 @@
     <string name="transport_type_internet">Wifi/Cellular (recommended)</string>
     <string name="transport_type_sms">SMS</string>
     <string name="seconds">Seconds</string>
-    <string name="start_ranking">Start ranking</string>
+    <string name="rank_items">Rank items</string>
     <string name="image_not_saved">The image can not be saved because of a problem with the corresponding instance file.</string>
 </resources>
