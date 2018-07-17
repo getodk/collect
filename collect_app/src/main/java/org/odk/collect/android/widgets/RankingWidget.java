@@ -87,8 +87,8 @@ public class RankingWidget extends QuestionWidget implements BinaryWidget {
     }
 
     @Override
-    public void setBinaryData(Object items) {
-        savedItems = (List<SelectChoice>) items;
+    public void setBinaryData(Object values) {
+        savedItems = getSavedItems((List<String>) values);
         setUpLayout(savedItems);
     }
 
@@ -98,8 +98,31 @@ public class RankingWidget extends QuestionWidget implements BinaryWidget {
         if (formController != null) {
             formController.setIndexWaitingForData(formController.getFormIndex());
         }
-        RankingWidgetDialog rankingWidgetDialog = RankingWidgetDialog.newInstance(savedItems == null ? originalItems : savedItems);
+        RankingWidgetDialog rankingWidgetDialog = RankingWidgetDialog.newInstance(savedItems == null
+                ? getValues(originalItems)
+                : getValues(savedItems));
         rankingWidgetDialog.show(((FormEntryActivity) getContext()).getSupportFragmentManager(), "RankingDialog");
+    }
+
+    private List<SelectChoice> getSavedItems(List<String> values) {
+        List<SelectChoice> savedItems = new ArrayList<>();
+        for (String value : values) {
+            for (SelectChoice item : originalItems) {
+                if (item.getValue().equals(value)) {
+                    savedItems.add(item);
+                    break;
+                }
+            }
+        }
+        return savedItems;
+    }
+
+    private List<String> getValues(List<SelectChoice> items) {
+        List<String> values = new ArrayList<>();
+        for (SelectChoice item : items) {
+            values.add(item.getValue());
+        }
+        return values;
     }
 
     private void readItems() {

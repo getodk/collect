@@ -33,7 +33,6 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import org.javarosa.core.model.SelectChoice;
 import org.odk.collect.android.R;
 import org.odk.collect.android.R.string;
 import org.odk.collect.android.adapters.RankingListAdapter;
@@ -45,21 +44,21 @@ import java.util.List;
 
 public class RankingWidgetDialog extends DialogFragment {
 
-    private static final String ITEMS = "items";
+    private static final String VALUES = "values";
 
     private RankingListener listener;
 
     private RankingListAdapter rankingListAdapter;
-    private List<SelectChoice> items;
+    private List<String> values;
 
     public interface RankingListener {
-        void onRankingChanged(List<SelectChoice> items);
+        void onRankingChanged(List<String> values);
     }
 
-    public static RankingWidgetDialog newInstance(List<SelectChoice> items) {
+    public static RankingWidgetDialog newInstance(List<String> values) {
         RankingWidgetDialog dialog = new RankingWidgetDialog();
         Bundle bundle = new Bundle();
-        bundle.putSerializable(ITEMS, (Serializable) items);
+        bundle.putSerializable(VALUES, (Serializable) values);
         dialog.setArguments(bundle);
 
         return dialog;
@@ -76,17 +75,17 @@ public class RankingWidgetDialog extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        items = savedInstanceState == null
-                ? (List<SelectChoice>) getArguments().getSerializable(ITEMS)
-                : (List<SelectChoice>) savedInstanceState.getSerializable(ITEMS);
+        values = (List<String>) (savedInstanceState == null
+                        ? getArguments().getSerializable(VALUES)
+                        : savedInstanceState.getSerializable(VALUES));
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         return new Builder(getActivity())
-                .setView(setUpRankingLayout(items))
+                .setView(setUpRankingLayout(values))
                 .setPositiveButton(string.ok, (dialog, id) -> {
-                    listener.onRankingChanged(rankingListAdapter.getItems());
+                    listener.onRankingChanged(rankingListAdapter.getValues());
                     dismiss();
                 })
                 .setNegativeButton(string.cancel, (dialog, id) -> dismiss())
@@ -95,15 +94,15 @@ public class RankingWidgetDialog extends DialogFragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putSerializable(ITEMS, (Serializable) rankingListAdapter.getItems());
+        outState.putSerializable(VALUES, (Serializable) rankingListAdapter.getValues());
         super.onSaveInstanceState(outState);
     }
 
-    private ScrollView setUpRankingLayout(List<SelectChoice> items) {
+    private ScrollView setUpRankingLayout(List<String> values) {
         LinearLayout rankingLayout = new LinearLayout(getContext());
         rankingLayout.setOrientation(LinearLayout.HORIZONTAL);
-        rankingLayout.addView(setUpPositionsLayout(items));
-        rankingLayout.addView(setUpRecyclerView(items));
+        rankingLayout.addView(setUpPositionsLayout(values));
+        rankingLayout.addView(setUpRecyclerView(values));
         rankingLayout.setPadding(10, 0, 10, 0);
 
         ScrollView scrollView = new ScrollView(getContext());
@@ -111,7 +110,7 @@ public class RankingWidgetDialog extends DialogFragment {
         return scrollView;
     }
 
-    private LinearLayout setUpPositionsLayout(List<SelectChoice> items) {
+    private LinearLayout setUpPositionsLayout(List<String> values) {
         LinearLayout positionsLayout = new LinearLayout(getContext());
         positionsLayout.setOrientation(LinearLayout.VERTICAL);
 
@@ -119,10 +118,10 @@ public class RankingWidgetDialog extends DialogFragment {
         layoutParams.setMargins(0, 0, 10, 0);
         positionsLayout.setLayoutParams(layoutParams);
 
-        for (SelectChoice item : items) {
+        for (String value : values) {
             FrameLayout positionLayout = (FrameLayout) LayoutInflater.from(getContext()).inflate(R.layout.ranking_item, positionsLayout, false);
             TextView textView = positionLayout.findViewById(R.id.rank_item_text);
-            textView.setText(String.valueOf(items.indexOf(item) + 1));
+            textView.setText(String.valueOf(values.indexOf(value) + 1));
             textView.setTextSize(Collect.getQuestionFontsize());
 
             positionsLayout.addView(positionLayout);
@@ -130,8 +129,8 @@ public class RankingWidgetDialog extends DialogFragment {
         return positionsLayout;
     }
 
-    private RecyclerView setUpRecyclerView(List<SelectChoice> items) {
-        rankingListAdapter = new RankingListAdapter(items);
+    private RecyclerView setUpRecyclerView(List<String> values) {
+        rankingListAdapter = new RankingListAdapter(values);
 
         RecyclerView recyclerView = new RecyclerView(getContext());
         recyclerView.setHasFixedSize(true);

@@ -40,11 +40,11 @@ import java.util.List;
 
 public class RankingListAdapter extends Adapter<ItemViewHolder> {
 
-    private final List<SelectChoice> items;
+    private final List<String> values;
     private final FormController formController;
 
-    public RankingListAdapter(List<SelectChoice> items) {
-        this.items = new ArrayList<>(items);
+    public RankingListAdapter(List<String> values) {
+        this.values = new ArrayList<>(values);
         formController = Collect.getInstance().getFormController();
     }
 
@@ -57,23 +57,32 @@ public class RankingListAdapter extends Adapter<ItemViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull final ItemViewHolder holder, int position) {
         String itemName = formController != null
-                ? formController.getQuestionPrompt().getSelectChoiceText(items.get(position))
-                : items.get(position).getValue();
+                ? formController.getQuestionPrompt().getSelectChoiceText(getItem(values.get(position)))
+                : values.get(position);
         holder.textView.setText(itemName);
     }
 
+    private SelectChoice getItem(String value) {
+        for (SelectChoice item : formController.getQuestionPrompt().getSelectChoices()) {
+            if (item.getValue().equals(value)) {
+                return item;
+            }
+        }
+        return null;
+    }
+
     public void onItemMove(int fromPosition, int toPosition) {
-        Collections.swap(items, fromPosition, toPosition);
+        Collections.swap(values, fromPosition, toPosition);
         notifyItemMoved(fromPosition, toPosition);
     }
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return values.size();
     }
 
-    public List<SelectChoice> getItems() {
-        return items;
+    public List<String> getValues() {
+        return values;
     }
 
     public static class ItemViewHolder extends ViewHolder {
