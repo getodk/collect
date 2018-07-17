@@ -21,6 +21,8 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.webkit.MimeTypeMap;
 
+import com.google.android.gms.analytics.HitBuilders;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
@@ -494,6 +496,13 @@ public class InstanceServerUploader extends InstanceUploader {
 
         cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMITTED);
         Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
+
+        Collect.getInstance()
+                .getDefaultTracker()
+                .send(new HitBuilders.EventBuilder()
+                        .setCategory("Submission")
+                        .setAction("HTTP")
+                        .build());
         return true;
     }
 
