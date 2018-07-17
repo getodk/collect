@@ -46,6 +46,8 @@ import org.odk.collect.android.receivers.NetworkReceiver;
 import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.tasks.sms.SmsNotificationReceiver;
 import org.odk.collect.android.tasks.sms.SmsService;
+import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
+import org.odk.collect.android.tasks.sms.models.SmsSubmission;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.ToastUtils;
 
@@ -58,6 +60,7 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PROTOCOL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_TRANSPORT_TYPE;
+import static org.odk.collect.android.tasks.sms.SmsSender.SMS_INSTANCE_ID;
 import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
 import static org.odk.collect.android.utilities.PermissionUtils.requestStoragePermissions;
 
@@ -89,11 +92,18 @@ public class InstanceUploaderList extends InstanceListActivity implements
         public void onReceive(Context context, Intent intent) {
             //Stops the notification from being sent to others that are listening for this broadcast.
             abortBroadcast();
+
+            //deletes submission since the app is in the foreground and the NotificationReceiver won't be triggered.
+            if (intent.hasExtra(SMS_INSTANCE_ID)) {
+                deleteIfSubmissionCompleted(intent.getStringExtra(SMS_INSTANCE_ID));
+            }
         }
     };
 
     @Inject
     SmsService smsService;
+    @Inject
+    SmsSubmissionManagerContract smsSubmissionManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -442,6 +452,13 @@ public class InstanceUploaderList extends InstanceListActivity implements
 
         if (listAdapter != null) {
             ((InstanceUploaderAdapter) listAdapter).onDestroy();
+        }
+    }
+
+    private void deleteIfSubmissionCompleted(String instanceId) {
+        SmsSubmission model = smsSubmissionManager.getSubmissionModel(instanceId);
+        if (model.isSubmissionComplete()) {
+            smsSubmissionManager.forgetSubmission(model.getInstanceId());
         }
     }
 }

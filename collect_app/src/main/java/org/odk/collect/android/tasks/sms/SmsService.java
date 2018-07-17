@@ -162,15 +162,6 @@ public class SmsService {
         SmsSubmission model = smsSubmissionManager.getSubmissionModel(instanceId);
 
         /*
-         * Checks to see if a previous instance was sent successfully. If so
-         * remove that instance so a new one can be sent.
-         * */
-        if (model != null && model.isSubmissionComplete()) {
-            model = null;
-            smsSubmissionManager.forgetSubmission(instanceId);
-        }
-
-        /*
          * If the model exists that means this instance was probably sent in the past.
          */
         if (model != null) {
