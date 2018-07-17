@@ -81,20 +81,18 @@ public class AutoSendPreferenceMigrator {
 
         //save to shared preferences
         GeneralSharedPreferences.getInstance().save(KEY_AUTOSEND, autoSend);
-
         migrateToMultiListPreferences();
     }
 
     /**
      * Migrates the auto-send options to the multi-auto-send schema
-     *
+     * <p>
      * This involves checking the AUTO_SEND key for the current value and comparing it
      * with the values from the previous array that represented it's option.
      * Once that's done, the MULTI_AUTOSEND is populated with the selected options based on how
      * it correlates to the current options for the multi-select list.
      */
     private static void migrateToMultiListPreferences() {
-
         boolean migrated = GeneralSharedPreferences.getInstance().getBoolean(KEY_AUTOSEND_MIGRATED, false);
 
         if (migrated) {

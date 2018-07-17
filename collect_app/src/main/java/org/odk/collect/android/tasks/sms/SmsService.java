@@ -134,7 +134,6 @@ public class SmsService {
      * background job.
      */
     public boolean submitForm(String instanceId, FormInfo info, String displayName, boolean autoSend) {
-
         String text;
 
         if (formsDao.isFormEncrypted(info.getFormID(), info.getFormVersion())) {
@@ -167,7 +166,6 @@ public class SmsService {
         try {
             text = getFileContents(smsFile);
         } catch (IOException e) {
-
             SmsRxEvent event = new SmsRxEvent(instanceId, RESULT_FILE_ERROR);
             updateInstanceStatusFailedText(instanceId, event);
             rxEventBus.post(event);
@@ -253,7 +251,6 @@ public class SmsService {
      * @param instanceId id from instanceDao
      */
     public boolean cancelFormSubmission(String instanceId) {
-
         SmsSubmission model = smsSubmissionManager.getSubmissionModel(instanceId);
 
         if (model == null) {
@@ -280,7 +277,6 @@ public class SmsService {
      * This function then determines the next action to perform based on the result it receives.
      */
     void processMessageSentResult(String instanceId, int messageId, int resultCode) {
-
         String log = String.format(Locale.getDefault(), "Received result from broadcast receiver of instance id %s with message id of %d", instanceId, messageId);
         Timber.i(log);
 
@@ -324,7 +320,6 @@ public class SmsService {
      * @param instanceId from instanceDao
      */
     protected void startSendMessagesJob(String instanceId) {
-
         PersistableBundleCompat extras = new PersistableBundleCompat();
         extras.putString(SmsSenderJob.INSTANCE_ID, instanceId);
 

@@ -43,7 +43,6 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
     // turning on wifi often gets two CONNECTED events. we only want to run one thread at a time
     public static boolean running;
     InstanceServerUploader instanceServerUploader;
-
     InstanceGoogleSheetsUploader instanceGoogleSheetsUploader;
 
     @Override

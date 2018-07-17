@@ -91,7 +91,6 @@ public class FormManagementPreferences extends BasePreferenceFragment {
     }
 
     private void setMultiListPreferenceSummary(MultiSelectListPreference preference, Set<String> values) {
-
         if (values.isEmpty()) {
             preference.setSummary(getString(R.string.off));
         } else {
@@ -102,7 +101,6 @@ public class FormManagementPreferences extends BasePreferenceFragment {
             }
 
             String summary = TextUtils.join(", ", selectedEntries);
-
             preference.setSummary(summary);
         }
     }
