@@ -118,7 +118,7 @@ public final class ThemeUtils {
      * @return Rank item color for the current {@link android.content.res.Resources.Theme}
      */
     @ColorInt
-    public int getPrimaryBackgroundColor() {
-        return getAttributeValue(R.attr.primaryBackgroundColor);
+    public int getRankItemColor() {
+        return getAttributeValue(R.attr.rankItemColor);
     }
 }
