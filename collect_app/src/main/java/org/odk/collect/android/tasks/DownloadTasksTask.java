@@ -398,10 +398,10 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                     /*
                      * Override the user trail setting if this is set from the server
                      */
-                    if(tr.settings.ft_send_location != null && tr.settings.ft_send_location.equals("off")) {
+                    if(tr.settings.ft_send_location == null || tr.settings.ft_send_location.equals("off")) {
                         editor.putBoolean(KEY_SMAP_USER_LOCATION, false);
                         editor.putBoolean(PreferenceKeys.KEY_SMAP_OVERRIDE_LOCATION, true);
-                    } else if(tr.settings.ft_send_location != null && tr.settings.ft_send_location.equals("on")) {
+                    } else if(tr.settings.ft_send_location.equals("on")) {
                         editor.putBoolean(KEY_SMAP_USER_LOCATION, true);
                         editor.putBoolean(PreferenceKeys.KEY_SMAP_OVERRIDE_LOCATION, true);
                     } else {
