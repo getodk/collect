@@ -17,6 +17,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.events.SmsRxEvent;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.tasks.sms.SmsService;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
@@ -32,11 +33,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_TRANSPORT_TYPE;
 import static org.odk.collect.android.provider.InstanceProviderAPI.STATUS_SUBMISSION_FAILED;
 import static org.odk.collect.android.provider.InstanceProviderAPI.STATUS_SUBMITTED;
 import static org.odk.collect.android.tasks.sms.SmsService.RESULT_MESSAGE_READY;
-import static org.odk.collect.android.tasks.sms.SmsService.RESULT_QUEUED;
 import static org.odk.collect.android.tasks.sms.SmsService.RESULT_OK_OTHERS_PENDING;
+import static org.odk.collect.android.tasks.sms.SmsService.RESULT_QUEUED;
 import static org.odk.collect.android.tasks.sms.SmsService.RESULT_SENDING;
 import static org.odk.collect.android.tasks.sms.SmsService.getDisplaySubtext;
 
@@ -88,7 +90,9 @@ public class InstanceUploaderAdapter extends CursorAdapter {
 
         SmsSubmission model = submissionManager.getSubmissionModel(String.valueOf(instanceId));
 
-        boolean isSmsSubmission = model != null;
+        boolean smsTransportEnabled = ((String) GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE)).equalsIgnoreCase(context.getString(R.string.transport_type_value_sms));
+
+        boolean isSmsSubmission = model != null && smsTransportEnabled;
 
         String status = cursor.getString(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.STATUS));
 
@@ -112,15 +116,7 @@ public class InstanceUploaderAdapter extends CursorAdapter {
 
         if (isSmsSubmission) {
             viewHolder.progressBar.setProgressPercent((int) model.getCompletion().getPercentage(), false);
-        } else {
-            if (status.equals(STATUS_SUBMITTED)) {
-                viewHolder.progressBar.setProgressPercent(100, false);
-            } else if (status.equals(STATUS_SUBMISSION_FAILED)) {
-                viewHolder.progressBar.setProgressPercent(50, false);
-            }
-        }
 
-        if (isSmsSubmission) {
             int smsStatus = submissionManager.checkNextMessageResultCode(String.valueOf(instanceId));
 
             setSmsSubmissionStateIcons(smsStatus, viewHolder);
@@ -134,6 +130,12 @@ public class InstanceUploaderAdapter extends CursorAdapter {
 
             setupCloseButton(viewHolder, smsStatus);
             viewHolder.closeButton.setOnClickListener(v -> smsService.cancelFormSubmission(String.valueOf(instanceId)));
+        } else {
+            if (status.equals(STATUS_SUBMITTED)) {
+                viewHolder.progressBar.setProgressPercent(100, false);
+            } else if (status.equals(STATUS_SUBMISSION_FAILED)) {
+                viewHolder.progressBar.setProgressPercent(50, false);
+            }
         }
 
         compositeDisposable.add(eventBus.register(SmsRxEvent.class)
