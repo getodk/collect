@@ -58,7 +58,6 @@
   <string name="enter_data">Leeres Formular ausfüllen</string>
   <string name="enter_data_button">Leeres Formular ausfüllen</string>
   <string name="error_occured">Fehler</string>
-  <string name="error_attaching_binary_file">Fehler beim Anhängen des Mediums: %s</string>
   <string name="fetching_file">Lade %1$s.\n\nFormular %2$s von %3$s Formular(en).</string>
   <string name="file_deleted_error">%1$s von %2$s Formular(en) konnte(n) nicht gelöscht werden!</string>
   <string name="file_deleted_ok">%s Formular(e) erfolgreich gelöscht!</string>
@@ -633,6 +632,5 @@
   <string name="transport_type_both">Beim Senden auswählen</string>
   <string name="seconds">Sekunden</string>
   <string name="rank_items">Rangfolge festlegen</string>
-  <string name="image_not_saved">Das Bild kann nicht gespeichert werden, wegen eines Problems mit der zugehörigen Instanz-Datei.</string>
   <string name="loading_form_failed">Beim Laden des Formulars ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.</string>
 </resources>

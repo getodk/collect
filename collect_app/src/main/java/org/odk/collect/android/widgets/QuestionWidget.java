@@ -56,7 +56,6 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.helpers.ContentResolverHelper;
 import org.odk.collect.android.database.ActivityLogger;
-import org.odk.collect.android.exception.GDriveConnectionException;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.logic.FormController;
@@ -89,11 +88,16 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
+import io.reactivex.Single;
+import io.reactivex.SingleObserver;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 import static org.odk.collect.android.activities.FormEntryActivity.DO_NOT_EVALUATE_CONSTRAINTS;
+import static org.odk.collect.android.activities.FormEntryActivity.SAVING_DIALOG;
 
 public abstract class QuestionWidget
         extends RelativeLayout
@@ -110,6 +114,7 @@ public abstract class QuestionWidget
     private final View guidanceTextLayout;
     private final View textLayout;
     private final TextView warningText;
+    private final CompositeDisposable disposables = new CompositeDisposable();
 
     protected ThemeUtils themeUtils;
 
@@ -171,7 +176,7 @@ public abstract class QuestionWidget
         addHelpTextLayout(getHelpTextLayout());
     }
 
-    //source::https://stackoverflow.com/questions/18996183/identifying-rtl-language-in-android/23203698#23203698
+    // https://stackoverflow.com/questions/18996183/identifying-rtl-language-in-android/23203698#23203698
     public static boolean isRTL() {
         return isRTL(Locale.getDefault());
     }
@@ -747,45 +752,6 @@ public abstract class QuestionWidget
     }
 
     /*
-     * We have a saved image somewhere, but we really want it to be in:
-     * /sdcard/odk/instances/[current instnace]/something.jpg so we move
-     * it there before inserting it into the content provider. Once the
-     * android image capture bug gets fixed, (read, we move on from
-     * Android 1.6) we want to handle images the audio and video
-     */
-    protected void saveChosenImage(Uri selectedImage) {
-        // Copy file to sdcard
-        File instanceFile = getFormController().getInstanceFile();
-        if (instanceFile != null) {
-            String instanceFolder1 = instanceFile.getParent();
-            String destImagePath = instanceFolder1 + File.separator + System.currentTimeMillis() + ".jpg";
-
-            File chosenImage;
-            try {
-                chosenImage = MediaUtils.getFileFromUri(getContext(), selectedImage, MediaStore.Images.Media.DATA);
-                if (chosenImage != null) {
-                    final File newImage = new File(destImagePath);
-                    FileUtils.copyFile(chosenImage, newImage);
-                    ImageConverter.execute(newImage.getPath(), this, getContext());
-                    if (this instanceof BinaryWidget) {
-                        ((BinaryWidget) this).setBinaryData(newImage);
-                    }
-                    saveAnswersForCurrentScreen();
-                } else {
-                    Timber.e("Could not receive chosen image");
-                    ToastUtils.showShortToastInMiddle(R.string.error_occured);
-                }
-            } catch (GDriveConnectionException e) {
-                Timber.e("Could not receive chosen image due to connection problem");
-                ToastUtils.showLongToastInMiddle(R.string.gdrive_connection_exception);
-            }
-        } else {
-            ToastUtils.showLongToast(R.string.image_not_saved);
-            Timber.w(getContext().getString(R.string.image_not_saved));
-        }
-    }
-
-    /*
      * We saved the image to the tempfile_path, but we really want it to
      * be in: /sdcard/odk/instances/[current instnace]/something.jpg so
      * we move it there before inserting it into the content provider.
@@ -849,33 +815,59 @@ public abstract class QuestionWidget
      * and if it's from Google Drive and not cached yet, we'll retrieve it using network.
      * This may take a long time.
      *
-     * @param selectedFile uri of the selected audio
+     * @param selectedFile uri of the selected media (audio/video/image/arbitrary file)
      */
     protected void saveChosenFile(Uri selectedFile) {
-        String extension = ContentResolverHelper.getFileExtensionFromUri(getContext(), selectedFile);
-        String instanceFolder = getFormController().getInstanceFile().getParent();
-        String destPath = instanceFolder + File.separator + System.currentTimeMillis() + extension;
 
-        try {
-            File chosenFile = MediaUtils.getFileFromUri(getContext(), selectedFile, MediaStore.Images.Media.DATA);
-            if (chosenFile != null) {
-                final File newFile = new File(destPath);
-                FileUtils.copyFile(chosenFile, newFile);
-                if (this instanceof BinaryWidget) {
-                    ((BinaryWidget) this).setBinaryData(newFile);
-                }
-                saveAnswersForCurrentScreen();
-            } else {
-                Timber.e("Could not receive chosen file");
-                ToastUtils.showShortToastInMiddle(R.string.error_occured);
-            }
-        } catch (GDriveConnectionException e) {
-            Timber.e("Could not receive chosen file due to connection problem");
-            ToastUtils.showLongToastInMiddle(R.string.gdrive_connection_exception);
-        }
+        // show dialog
+        ((FormEntryActivity) getContext()).showDialog(SAVING_DIALOG);
+
+        saveFile(getContext(), selectedFile)
+                .subscribe(new SingleObserver<File>() {
+                    @Override
+                    public void onSubscribe(Disposable disposable) {
+                        disposables.add(disposable);
+                    }
+
+                    @Override
+                    public void onSuccess(File file) {
+                        QuestionWidget widget = QuestionWidget.this;
+
+                        if (widget instanceof BinaryWidget) {
+                            if (widget instanceof BaseImageWidget || widget instanceof ImageWebViewWidget) {
+                                ImageConverter.execute(file.getPath(), widget, getContext());
+                            }
+
+                            ((BinaryWidget) widget).setBinaryData(file);
+                            saveAnswersForCurrentScreen();
+                            ((FormEntryActivity) getContext()).dismissDialog(SAVING_DIALOG);
+                            refreshCurrentView();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        ((FormEntryActivity) getContext()).dismissDialog(SAVING_DIALOG);
+                        Timber.e(e);
+                    }
+                });
     }
 
-    private void refreshCurrentView() {
+    private Single<File> saveFile(Context context, Uri selectedFile) {
+        return Single.fromCallable(() -> {
+            FormController formController = Collect.getInstance().getFormController();
+            String extension = ContentResolverHelper.getFileExtensionFromUri(context, selectedFile);
+            String instanceFolder = formController.getInstanceFile().getParent();
+            String destPath = instanceFolder + File.separator + System.currentTimeMillis() + extension;
+
+            File chosenFile = MediaUtils.getFileFromUri(context, selectedFile, MediaStore.Images.Media.DATA);
+            File newFile = new File(destPath);
+            Timber.d(FileUtils.copyFile(chosenFile, newFile));
+            return newFile;
+        });
+    }
+
+    protected void refreshCurrentView() {
         ((FormEntryActivity) getContext()).refreshCurrentView();
     }
 }

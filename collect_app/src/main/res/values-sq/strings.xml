@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">Shfaq fjalëkalimin</string>
   <string name="activity_not_found">Nuk gjendet aktivitet për t\'u procesuar: %s</string>
   <string name="view_image">Shih Imazhin</string>
@@ -54,7 +54,6 @@
   <string name="enter_data">Mbush formular bosh</string>
   <string name="enter_data_button">Mbush formular bosh</string>
   <string name="error_occured">Ndodhi një gabim</string>
-  <string name="error_attaching_binary_file">Ndodhi një gabim gjatë lidhjes së medias: %s</string>
   <string name="file_deleted_ok">%s formë(a) u fshinë me sukses!</string>
   <string name="file_delete_in_progress">Një komandë për të fshirë formularin është duke u ekzekutuar!</string>
   <string name="file_invalid">File: 1%s është i pavlefshëm</string>

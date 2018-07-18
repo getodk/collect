@@ -235,11 +235,9 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == RequestCodes.OSM_CAPTURE) {
-            String osmFileName = data.getStringExtra("OSM_FILE_NAME");
-            setBinaryData(osmFileName);
-            saveAnswersForCurrentScreen();
-        }
+        String osmFileName = data.getStringExtra("OSM_FILE_NAME");
+        setBinaryData(osmFileName);
+        saveAnswersForCurrentScreen();
     }
 
     /**

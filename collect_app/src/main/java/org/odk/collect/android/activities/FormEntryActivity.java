@@ -185,9 +185,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     public static final String EXTRA_TESTING_PATH = "testingPath";
 
-    private static final int PROGRESS_DIALOG = 1;
-    private static final int SAVING_DIALOG = 2;
-    private static final int SAVING_IMAGE_DIALOG = 3;
+    public static final int PROGRESS_DIALOG = 1;
+    public static final int SAVING_DIALOG = 2;
+    public static final int SAVING_IMAGE_DIALOG = 3;
 
     private boolean autoSaved;
     private boolean allowMovingBackwards;

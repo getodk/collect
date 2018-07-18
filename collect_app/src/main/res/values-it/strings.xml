@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">Mostra password</string>
   <string name="activity_not_found">Nessuna attività trovata per gestire: %s</string>
   <string name="add_another">Aggiungi gruppo</string>
@@ -51,7 +51,6 @@
   <string name="enter_data">Compila Modulo Vuoto</string>
   <string name="enter_data_button">Compila Modulo Vuoto</string>
   <string name="error_occured">Si è verificato un errore.</string>
-  <string name="error_attaching_binary_file">Si è verificato un errore mentre allegavi: %s</string>
   <string name="fetching_file">Caricamento %1$s.\n\nModulo %2$s di %3$s modulo(i).</string>
   <string name="file_deleted_error">Spiacenti, eliminazione di %1$s su %2$s modulo(i) fallita!</string>
   <string name="file_deleted_ok">%s modulo(i) cancellato(i) con successo!</string>

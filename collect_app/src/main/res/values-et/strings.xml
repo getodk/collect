@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="activity_not_found">%s teostamiseks ei leidu toimingut</string>
   <string name="add_another">Lisa grupp</string>
   <string name="add_another_repeat">Lisa veel üks \"%s\" grupp?</string>
@@ -48,7 +48,6 @@
   <string name="enter_data">Täida vorm</string>
   <string name="enter_data_button">Täida vorm</string>
   <string name="error_occured">Esines viga</string>
-  <string name="error_attaching_binary_file">Meedia %s lisamisel esines viga </string>
   <string name="fetching_file">Laen alla %1$s.\n\nVormi(id) (%2$s/%3$s).</string>
   <string name="file_deleted_error">Kahjuks ei õnnestunud kustutada %1$s / %2$s valitud vormidest.
 </string>

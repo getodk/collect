@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="activity_not_found">არ არსებობს განსახილველი ფუნქცია: %s</string>
   <string name="add_another">ჯგუფის დამატება</string>
   <string name="add_another_repeat">დავამატოთ \"%s\"-ის ახალი ჯგუფი?</string>
@@ -48,7 +48,6 @@
   <string name="enter_data">ცარიელი ფორმის შევსება</string>
   <string name="enter_data_button">შეავსეთ ცარიელი ფორმა</string>
   <string name="error_occured">მოხდა შეცდომა</string>
-  <string name="error_attaching_binary_file">შეცდომა მოხდა მედიაფაილის მიმაგრებისას: %s</string>
   <string name="fetching_file">%1$s.\n\nForm %2$sდან of %3$s ფორმ(ებ)ის მიღება</string>
   <string name="file_deleted_error">უკაცრავად, არჩეული %2$s ფორმიდან %1$s ვერ წაიშალა</string>
   <string name="file_deleted_ok">%s ფორმა წარმატებით წაიშალა</string>

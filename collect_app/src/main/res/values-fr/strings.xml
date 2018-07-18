@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">Afficher le mot de passe</string>
   <string name="activity_not_found">Aucune activité à gérer: %s</string>
   <string name="view_image">Afficher l\'image</string>
@@ -58,7 +58,6 @@
   <string name="enter_data">Remplir un formulaire</string>
   <string name="enter_data_button">Remplir un formulaire</string>
   <string name="error_occured">Une erreur s\'est produite</string>
-  <string name="error_attaching_binary_file">Erreur pendant l\'attachement du média: %s</string>
   <string name="fetching_file">Récupération de %1$s.\n\nFormulaire %2$s de %3$s formulaire(s).</string>
   <string name="file_deleted_error">Désolé, %1$s de %2$s formulaires sélectionnés ont échoué la suppression.</string>
   <string name="file_deleted_ok">%s formulaire(s) supprimé(s) avec succès.</string>
@@ -616,6 +615,4 @@
   <string name="transport_type_sms">SMS</string>
   <string name="seconds">Secondes</string>
   <string name="rank_items">Choisir l\'ordre des éléments</string>
-  <string name="image_not_saved">L\'image n\'a pas pu être enregistrée à cause
-d\'un problème sur l\'instance du fichier.</string>
 </resources>

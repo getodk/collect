@@ -58,7 +58,6 @@
   <string name="enter_data">空のフォームに入力してください</string>
   <string name="enter_data_button">空のフォームに入力する</string>
   <string name="error_occured">エラーが発生しました</string>
-  <string name="error_attaching_binary_file">メディアの添付中にエラーが発生しました: %s</string>
   <string name="fetching_file">%1$s 取得中。\n\n%2$s / %3$s フォーム。</string>
   <string name="file_deleted_error">申し訳ありません、%1$s / %2$s の選択されたフォームが削除できませんでした!</string>
   <string name="file_deleted_ok">%s フォームを削除しました!</string>
@@ -628,5 +627,4 @@
   <string name="transport_type_sms">SMS</string>
   <string name="seconds">秒</string>
   <string name="rank_items">ランキングアイテム</string>
-  <string name="image_not_saved">対応するインスタンスファイルに問題があるため、画像を保存できません。</string>
 </resources>

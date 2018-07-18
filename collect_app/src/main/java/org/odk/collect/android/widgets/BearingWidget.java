@@ -126,11 +126,9 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == RequestCodes.BEARING_CAPTURE) {
-            String bearing = data.getStringExtra(BEARING_RESULT);
-            setBinaryData(bearing);
-            saveAnswersForCurrentScreen();
-        }
+        String bearing = data.getStringExtra(BEARING_RESULT);
+        setBinaryData(bearing);
+        saveAnswersForCurrentScreen();
     }
 
     private boolean checkForRequiredSensors() {

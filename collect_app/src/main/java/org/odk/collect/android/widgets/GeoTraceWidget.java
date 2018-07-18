@@ -53,12 +53,10 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
 
     public static final String GOOGLE_MAP_KEY = "google_maps";
     public static final String TRACE_LOCATION = "gp";
-
-    public SharedPreferences sharedPreferences;
-    public String mapSDK;
-
     private final Button createTraceButton;
     private final TextView answerDisplay;
+    public SharedPreferences sharedPreferences;
+    public String mapSDK;
 
     public GeoTraceWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -147,10 +145,8 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == RequestCodes.GEOTRACE_CAPTURE) {
-            String traceExtra = data.getStringExtra(GEOTRACE_RESULTS);
-            setBinaryData(traceExtra);
-        }
+        String traceExtra = data.getStringExtra(GEOTRACE_RESULTS);
+        setBinaryData(traceExtra);
         saveAnswersForCurrentScreen();
     }
 

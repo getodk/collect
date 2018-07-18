@@ -48,10 +48,10 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryWidget {
 
     public static final String SHAPE_LOCATION = "gp";
     public static final String GOOGLE_MAP_KEY = "google_maps";
-    public SharedPreferences sharedPreferences;
-    public String mapSDK;
     private final Button createShapeButton;
     private final TextView answerDisplay;
+    public SharedPreferences sharedPreferences;
+    public String mapSDK;
 
     public GeoShapeWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -141,10 +141,8 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryWidget {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == RequestCodes.GEOSHAPE_CAPTURE) {
-            String gshr = data.getStringExtra(GEOSHAPE_RESULTS);
-            setBinaryData(gshr);
-        }
+        String gshr = data.getStringExtra(GEOSHAPE_RESULTS);
+        setBinaryData(gshr);
         saveAnswersForCurrentScreen();
     }
 

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">Visa lösenordet</string>
   <string name="activity_not_found">Ingen aktivitet finns för att hantera: %s</string>
   <string name="add_another">Lägg till grupp</string>
@@ -51,7 +51,6 @@
   <string name="enter_data">Fyll i tomt formulär</string>
   <string name="enter_data_button">Fyll i tomt formulär</string>
   <string name="error_occured">Ett fel inträffade</string>
-  <string name="error_attaching_binary_file">Ett fel inträffade vid infogning av mediefil: %s</string>
   <string name="fetching_file">Hämtar %1$s.\n\nFormulär %2$s av %3$s formulär.</string>
   <string name="file_deleted_error">Tyvärr, %1$s av %2$s valda formulär kunde inte raderas!</string>
   <string name="file_deleted_ok">%s formulär har raderats!</string>

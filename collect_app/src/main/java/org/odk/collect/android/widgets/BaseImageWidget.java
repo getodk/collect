@@ -209,7 +209,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
                 break;
 
             case ApplicationConstants.RequestCodes.IMAGE_CHOOSER:
-                saveChosenImage(data.getData());
+                saveChosenFile(data.getData());
                 break;
 
             case ApplicationConstants.RequestCodes.DRAW_IMAGE:
