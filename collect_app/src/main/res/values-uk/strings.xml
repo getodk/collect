@@ -48,7 +48,7 @@
   <string name="discard_answer">Видалити відповідь</string>
   <string name="discard_group">Видалити групу</string>
   <string name="download">Отримати обране</string>
-  <string name="download_forms_result">Стан завантаження</string>
+  <string name="download_forms_result">Результати завантажень</string>
   <string name="downloading_data">Під`єднуюсь до сервера</string>
   <string name="do_not_change">Скасувати</string>
   <string name="do_not_exit">Скасувати</string>
@@ -153,6 +153,7 @@
   <string name="file_fetch_failed">Помилка: %2$s (%3$s) в %1$s</string>
   <string name="fetching_manifest">%s. Отримання маніфесту</string>
   <string name="success">Успішно!</string>
+  <string name="failures">Невдалі</string>
   <string name="no_forms_uploaded">Вибачте, жодна анкета не була вивантажена.</string>
   <string name="upload_results">Вивантаження результатів</string>
   <string name="xform_parse_error">Помилка XForm парсингу в %1$s: %2$s пропущений або некоректний. </string>
@@ -268,6 +269,9 @@
   <string name="go_shared">Розділене зі мною</string>
   <string name="modified_on_date_at_time">\'Зімінено в\' EEE, dd MMM, yyyy \'at\' HH:mm</string>
   <string name="aggregate_preferences">Налаштування ODK Aggregate</string>
+  <string name="sms_submission_preferences">Налаштування надсилання SMS</string>
+  <string name="submission_transport">Транспортування відправлень (розширені)</string>
+  <string name="submission_transport_types_title">Надіслати відправлення через</string>
   <string name="other_preferences">Налаштування інших платформ</string>
   <string name="google_preferences">Налаштування Google Сторінок</string>
   <string name="google_sheets_url_hint">URL для відправки має бути зазначено в анкетах. Інакше, буде використано цей URL.</string>
@@ -276,7 +280,8 @@
   <string name="google_set_account">Ви обрали своїм сервером Google Сторінки, для продовження, будь ласка, вкажіть відповідний обліковий запис Google в Загальних налаштуваннях</string>
   <string name="media_upload_error">Помилка завантаження неіснуючого медіа файлу: %1$s</string>
   <string name="odk_auth_auth_fail">Помилка авторизації під час автоматичного надсилання, будь ласка, перевірте налаштування</string>
-  <string name="odk_auto_note">Сповіщення автоматичного надсилання ODK</string>
+  <string name="odk_auto_note">Результати автонадсилання ODK</string>
+  <string name="odk_auto_download_notification_title">Результати автозавантаження ODK</string>
   <string name="notification_error">Помилка відображення тексту оповіщення</string>
   <string name="delete_after_send">Видалити після надсилання</string>
   <string name="delete_after_send_summary">Видаляє завершені анкети та медіа файли після надсилання на сервер</string>
@@ -372,6 +377,7 @@
   <string name="parser_exception">XPathParser Exception: \"%s\"</string>
   <string name="selected_answer">Обрано: %s</string>
   <string name="version_number">Версія: %s</string>
+  <string name="id_number">ID: %s</string>
   <string name="odk_website">Перейти на сайт ODK</string>
   <string name="odk_website_summary">Open Data Kit (ODK) використовується для збору даних для суспільних потреб.</string>
   <string name="odk_forum">Долучитись до форуму ODK</string>
@@ -575,6 +581,12 @@
   <string name="no_columns_to_upload">Стовбців для завантаження в анкеті не знайдено.</string>
   <string name="storage_runtime_permission_denied_title">Дозволи сховища</string>
   <string name="storage_runtime_permission_denied_desc">Без цих дозволів Collect не матиме дотупу до ваших анкет (читання, запис відповідей). Відкрийте програму знову, ящо ви вже їх надали.</string>
+  <string name="location_runtime_permissions_denied_title">Місцеві дозволи</string>
+  <string name="location_runtime_permissions_denied_desc">Без цих дозволів Collect не зможе записати ваше розташування. Будь ласка, спробуйте знову коли будете готові надати їх.</string>
+  <string name="camera_runtime_permission_denied_title">Дозвіл використання камери</string>
+  <string name="camera_runtime_permission_denied_desc">Без цього дозволу Collect не має доступу до камери. Будь ласка, спробуйте знову коли будете готові надати його.</string>
+  <string name="record_audio_runtime_permission_denied_title">Дозвіл на аудіозапис</string>
+  <string name="record_audio_runtime_permission_denied_desc">Без цього дозволу Collect не має доступу до мікрофону. Будь ласка, спробуйте знову коли будете готові надати його.</string>
   <string name="form_update_category">Оновлення анкети</string>
   <string name="periodic_form_updates_check_title">Періодична перерівка оновлень анкет</string>
   <string name="never">Ніколи</string>
@@ -595,4 +607,29 @@
   <string name="instance_upload_cancelled">Завантаження екземпляру скасовано</string>
   <string name="hide_old_form_versions_setting_title">Приховати старі версії анкет</string>
   <string name="hide_old_form_versions_setting_summary">Тільки найновіша версія буде відображена в Заповнити анкету</string>
+  <string name="sms_pref_dialog_title">Номер телефону отримувача</string>
+  <string name="sms_pref_title">Номер телефону отримувача</string>
+  <string name="sms_invalid_phone_number">Некоректний номер!</string>
+  <!--Sms submission-->
+  <string name="sms_no_reception">\'Не вдалося\' EEE, MMM dd, yyyy \'в\' HH:mm \'через відсутність отримувача\'</string>
+  <string name="sms_fatal_error">\'Не вдалося\' EEE, MMM dd, yyyy \'в\' HH:mm</string>
+  <string name="sms_airplane_mode">\'Не вдалося\' EEE, MMM dd, yyyy \'в\' HH:mm \'через ввімкнений Режим Без Зв/\'язку\'</string>
+  <string name="sms_no_message">Ця анкета не має питань з позначками повідомлень.</string>
+  <string name="sms_encrypted_message">Зашифровані анкети не можуть бути відправлені як повідомлення.</string>
+  <string name="sms_last_submission_on_date_at_time">\'Остання спроба відправки\' EEE, MMM dd, yyyy \'в\' HH:mm</string>
+  <plurals name="sms_sending">
+    <item quantity="one">Надсилання анкети як в одному повідомленні.</item>
+    <item quantity="few">Надсилання анкети, повдомлення %1$d! з %2$d</item>
+    <item quantity="many">Надсилання анкети, повдомлення %1$d! з %2$d</item>
+    <item quantity="other">Надсилання анкети, повдомлення %1$d! з %2$d</item>
+  </plurals>
+  <string name="sms_sent_on_date_at_time">\'Надіслана як повідомлення\' EEE, MMM dd, yyyy \'о\' HH:mm</string>
+  <string name="sms_submission_queued">Черга на надсилання.</string>
+  <string name="sms_submissions_notif_title">Надсилання повідомлень</string>
+  <string name="sms_submissions_notif_description">Декілька анкет наразі надсилаються.</string>
+  <string name="transport_type_internet">Wifi/Мобільна мережа (рекомендовано)</string>
+  <string name="transport_type_sms">Повідомлення</string>
+  <string name="seconds">Секунди</string>
+  <string name="rank_items">Засоби оцінки</string>
+  <string name="image_not_saved">Зображення не може бути збережене через проблеми з файлом відповідної анкети.</string>
 </resources>

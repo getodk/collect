@@ -42,7 +42,6 @@
   <string name="discard_answer">Rimuovere la risposta</string>
   <string name="discard_group">Rimuovere il gruppo</string>
   <string name="download">Scarica Selezionato</string>
-  <string name="download_forms_result">Risultato del Download</string>
   <string name="downloading_data">Si sta connettendo al server</string>
   <string name="do_not_change">Annulla</string>
   <string name="do_not_exit">Annulla</string>
@@ -265,7 +264,6 @@
   <string name="no_google_account">Nessun Account Google selezionato!</string>
   <string name="google_set_account">Hai selezionato Google Sheets come tuo server. Perpiacere seleziona un corrispondente account Google nelle Impostazioni Generali prima di procedere.</string>
   <string name="odk_auth_auth_fail">Autenticazione ODK per invio automatico fallita, per favore verificare che i parametri di configurazione siano corretti.</string>
-  <string name="odk_auto_note">Notifica invio automatico ODK</string>
   <string name="notification_error">Errore di visualizzazione nella notifica</string>
   <string name="delete_after_send">Elimina dopo invio</string>
   <string name="delete_after_send_summary">Elimina moduli finalizzati e media dopo l\'\'invio al server</string>
@@ -436,4 +434,5 @@
   <string name="server_settings_title">Server</string>
   <string name="server">Server</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <!--Sms submission-->
 </resources>
