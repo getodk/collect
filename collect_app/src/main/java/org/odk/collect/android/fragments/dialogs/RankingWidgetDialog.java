@@ -17,8 +17,8 @@
 package org.odk.collect.android.fragments.dialogs;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog.Builder;
 import android.support.v7.widget.LinearLayoutManager;
@@ -38,26 +38,24 @@ import org.odk.collect.android.R.string;
 import org.odk.collect.android.adapters.RankingListAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.RankingItemTouchHelperCallback;
+import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import java.io.Serializable;
 import java.util.List;
 
 public class RankingWidgetDialog extends DialogFragment {
 
+    private static final String BINARY_WIDGET = "binary_widget";
     private static final String VALUES = "values";
-
-    private RankingListener listener;
 
     private RankingListAdapter rankingListAdapter;
     private List<String> values;
+    private BinaryWidget binaryWidget;
 
-    public interface RankingListener {
-        void onRankingChanged(List<String> values);
-    }
-
-    public static RankingWidgetDialog newInstance(List<String> values) {
+    public static RankingWidgetDialog newInstance(BinaryWidget binaryWidget, List<String> values) {
         RankingWidgetDialog dialog = new RankingWidgetDialog();
         Bundle bundle = new Bundle();
+        bundle.putSerializable(BINARY_WIDGET, binaryWidget);
         bundle.putSerializable(VALUES, (Serializable) values);
         dialog.setArguments(bundle);
 
@@ -65,27 +63,20 @@ public class RankingWidgetDialog extends DialogFragment {
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof RankingListener) {
-            listener = (RankingListener) context;
-        }
-    }
-
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        values = (List<String>) (savedInstanceState == null
-                        ? getArguments().getSerializable(VALUES)
-                        : savedInstanceState.getSerializable(VALUES));
+        Bundle bundle = savedInstanceState == null ? getArguments() : savedInstanceState;
+        binaryWidget = (BinaryWidget) bundle.getSerializable(BINARY_WIDGET);
+        values = (List<String>) bundle.getSerializable(VALUES);
     }
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         return new Builder(getActivity())
                 .setView(setUpRankingLayout(values))
                 .setPositiveButton(string.ok, (dialog, id) -> {
-                    listener.onRankingChanged(rankingListAdapter.getValues());
+                    binaryWidget.setBinaryData(rankingListAdapter.getValues());
                     dismiss();
                 })
                 .setNegativeButton(string.cancel, (dialog, id) -> dismiss())

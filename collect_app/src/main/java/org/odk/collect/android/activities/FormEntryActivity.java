@@ -77,7 +77,6 @@ import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
-import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.FormSavedListener;
@@ -143,7 +142,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         FormLoaderListener, FormSavedListener, AdvanceToNextListener,
         OnGestureListener, SavePointListener, NumberPickerDialog.NumberPickerListener,
         DependencyProvider<ActivityAvailability>,
-        RankingWidgetDialog.RankingListener,
         SaveFormIndexTask.SaveFormIndexListener {
 
     // save with every swipe forward or back. Timings indicate this takes .25
@@ -2544,14 +2542,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     ((RangeWidget) qw).setNumberPickerValue(value);
                 }
             }
-        }
-    }
-
-    @Override
-    public void onRankingChanged(List<String> values) {
-        ODKView odkView = getCurrentViewIfODKView();
-        if (odkView != null) {
-            odkView.setBinaryData(values);
         }
     }
 

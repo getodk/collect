@@ -29,10 +29,8 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
-import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 
@@ -94,11 +92,7 @@ public class RankingWidget extends QuestionWidget implements BinaryWidget {
 
     @Override
     public void onButtonClick(int buttonId) {
-        FormController formController = Collect.getInstance().getFormController();
-        if (formController != null) {
-            formController.setIndexWaitingForData(formController.getFormIndex());
-        }
-        RankingWidgetDialog rankingWidgetDialog = RankingWidgetDialog.newInstance(savedItems == null
+        RankingWidgetDialog rankingWidgetDialog = RankingWidgetDialog.newInstance(this, savedItems == null
                 ? getValues(originalItems)
                 : getValues(savedItems));
         rankingWidgetDialog.show(((FormEntryActivity) getContext()).getSupportFragmentManager(), "RankingDialog");
@@ -138,8 +132,8 @@ public class RankingWidget extends QuestionWidget implements BinaryWidget {
     private List<SelectChoice> getOrderedItems() {
         List<Selection> savedOrderedItems =
                 getFormEntryPrompt().getAnswerValue() == null
-                ? new ArrayList<>()
-                : (List<Selection>) getFormEntryPrompt().getAnswerValue().getValue();
+                        ? new ArrayList<>()
+                        : (List<Selection>) getFormEntryPrompt().getAnswerValue().getValue();
 
         if (savedOrderedItems.isEmpty()) {
             return originalItems;
