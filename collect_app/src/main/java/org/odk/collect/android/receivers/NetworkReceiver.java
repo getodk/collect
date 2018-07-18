@@ -43,7 +43,6 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
     // turning on wifi often gets two CONNECTED events. we only want to run one thread at a time
     public static boolean running;
     InstanceServerUploader instanceServerUploader;
-
     InstanceGoogleSheetsUploader instanceGoogleSheetsUploader;
 
     @Override
@@ -78,17 +77,24 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
 
     private boolean isFormAutoSendOptionEnabled(NetworkInfo currentNetworkInfo) {
         // make sure autosend is enabled on the given connected interface
-        String autosend = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_AUTOSEND);
-        boolean sendwifi = autosend.equals("wifi_only");
-        boolean sendnetwork = autosend.equals("cellular_only");
-        if (autosend.equals("wifi_and_cellular")) {
-            sendwifi = true;
-            sendnetwork = true;
+        Set<String> multiAutoSend = (Set<String>) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_MULTI_AUTOSEND);
+        boolean sendWifi = false;
+        boolean sendNetwork = false;
+
+        for (String option : multiAutoSend) {
+
+            if (option.equals("wifi")) {
+                sendWifi = true;
+            }
+
+            if (option.equals("cellular")) {
+                sendNetwork = true;
+            }
         }
 
         return (currentNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI
-                && sendwifi || currentNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE
-                && sendnetwork);
+                && sendWifi || currentNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE
+                && sendNetwork);
     }
 
     /**
@@ -166,7 +172,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
      *                                    <p>
      *                                    If the form explicitly sets the auto-send property, then it overrides the preferences.
      */
-    private boolean isFormAutoSendEnabled(String jrFormId, boolean isFormAutoSendOptionEnabled) {
+    public static boolean isFormAutoSendEnabled(String jrFormId, boolean isFormAutoSendOptionEnabled) {
         Cursor cursor = new FormsDao().getFormsCursorForFormId(jrFormId);
         String autoSend = null;
         if (cursor != null && cursor.moveToFirst()) {

@@ -487,8 +487,7 @@
   <string name="guidance_yes_collapsed">Kyllä - tiivistettynä</string>
   <string name="wifi_autosend">Vain Wifi</string>
   <string name="cellular_autosend">Vain puhelinverkko</string>
-  <string name="wifi_cellular_autosend">Wifi tai puhelinverkko</string>
-  <string name="map_basemap_behavior_title">Peruskartta</string>
+    <string name="map_basemap_behavior_title">Peruskartta</string>
   <string name="form_management_preferences">Lomakkeen hallinta</string>
   <string name="form_submission_category">Lomakkeen lähetys</string>
   <string name="form_filling_category">Lomakkeen täyttö</string>

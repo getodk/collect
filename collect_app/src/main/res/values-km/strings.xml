@@ -486,8 +486,7 @@
   <string name="guidance_yes_collapsed">បាទ - បញ្ចូលគ្នា</string>
   <string name="wifi_autosend">តែ Wifi ប៉ុណ្ណោះ</string>
   <string name="cellular_autosend">តែ Cellular ប៉ុណ្ណោះ</string>
-  <string name="wifi_cellular_autosend">Wifi ឬ Cellular</string>
-  <string name="map_basemap_behavior_title">ផែនទីមូលដ្ឋាន</string>
+    <string name="map_basemap_behavior_title">ផែនទីមូលដ្ឋាន</string>
   <string name="form_management_preferences">ការគ្រប់គ្រងទម្រង់</string>
   <string name="form_submission_category">ការដាក់ស្នើរទម្រង់</string>
   <string name="form_filling_category">ការបំពេញទម្រង់</string>

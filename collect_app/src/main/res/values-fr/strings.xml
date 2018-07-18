@@ -487,8 +487,7 @@
   <string name="guidance_yes_collapsed">Oui - Echoué</string>
   <string name="wifi_autosend">Seulement Wifi</string>
   <string name="cellular_autosend">Seulement Cellulaire</string>
-  <string name="wifi_cellular_autosend">Wifi ou Cellulaire</string>
-  <string name="map_basemap_behavior_title">Fonds de carte</string>
+    <string name="map_basemap_behavior_title">Fonds de carte</string>
   <string name="form_management_preferences">Gestion de formulaire</string>
   <string name="form_submission_category">Soumission de formulaire</string>
   <string name="form_filling_category">Remplissage de formulaire</string>

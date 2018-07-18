@@ -51,6 +51,7 @@ import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.FormMetadataMigrator;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.tasks.sms.SmsService;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.PRNGFixes;
@@ -116,6 +117,8 @@ public class Collect extends Application implements HasActivityInjector {
 
     @Inject
     DispatchingAndroidInjector<Activity> androidInjector;
+    @Inject
+    SmsService smsService;
 
     public static Collect getInstance() {
         return singleton;
@@ -295,6 +298,8 @@ public class Collect extends Application implements HasActivityInjector {
         }
 
         setupLeakCanary();
+
+        smsService.autoSendForms();
     }
 
     protected RefWatcher setupLeakCanary() {

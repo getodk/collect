@@ -465,8 +465,7 @@
   <string name="guidance_no">Tidak</string>
   <string name="wifi_autosend">Hanya Wifi</string>
   <string name="cellular_autosend">Hanya Selular</string>
-  <string name="wifi_cellular_autosend">Wifi atau selular</string>
-  <string name="map_basemap_behavior_title">Peta dasar</string>
+    <string name="map_basemap_behavior_title">Peta dasar</string>
   <string name="form_management_preferences">Manajemen Formulir</string>
   <string name="form_submission_category">Pengiriman Formulir</string>
   <string name="form_filling_category">Mengisi Formulir</string>

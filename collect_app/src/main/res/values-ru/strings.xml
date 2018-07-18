@@ -484,8 +484,7 @@
   <string name="guidance_no">Нет</string>
   <string name="wifi_autosend">Только Wi-Fi</string>
   <string name="cellular_autosend">Только сотовая связь</string>
-  <string name="wifi_cellular_autosend">Wi-Fi или сотовая связь</string>
-  <string name="map_basemap_behavior_title">Базовый слой</string>
+    <string name="map_basemap_behavior_title">Базовый слой</string>
   <string name="form_management_preferences">Управление формами</string>
   <string name="form_submission_category">Отправка формы</string>
   <string name="form_filling_category">Заполнение формы</string>

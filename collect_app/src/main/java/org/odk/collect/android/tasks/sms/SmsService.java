@@ -23,6 +23,7 @@ import org.odk.collect.android.logic.FormInfo;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.receivers.NetworkReceiver;
 import org.odk.collect.android.tasks.InstanceUploader;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.tasks.sms.models.Message;
@@ -38,6 +39,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -46,6 +48,7 @@ import timber.log.Timber;
 import static android.app.Activity.RESULT_OK;
 import static android.telephony.SmsManager.RESULT_ERROR_NO_SERVICE;
 import static android.telephony.SmsManager.RESULT_ERROR_RADIO_OFF;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_TRANSPORT_TYPE;
 import static org.odk.collect.android.tasks.sms.SmsNotificationReceiver.SMS_NOTIFICATION_ACTION;
 import static org.odk.collect.android.tasks.sms.SmsSender.SMS_INSTANCE_ID;
 import static org.odk.collect.android.tasks.sms.SmsSender.SMS_MESSAGE_ID;
@@ -123,13 +126,16 @@ public class SmsService {
         }
     }
 
+    public boolean submitForm(String instanceId, FormInfo info, String displayName) {
+        return submitForm(instanceId, info, displayName, false);
+    }
+
     /**
      * Responsible for fetching the saved form that adheres to the SMS spec and
      * persisting the form as a group of messages so that they can be sent via a
      * background job.
      */
-    public boolean submitForm(String instanceId, FormInfo info, String displayName) {
-
+    public boolean submitForm(String instanceId, FormInfo info, String displayName, boolean autoSend) {
         String text;
 
         if (formsDao.isFormEncrypted(info.getFormID(), info.getFormVersion())) {
@@ -141,20 +147,27 @@ public class SmsService {
 
         File smsFile = new File(getSmsInstancePath(info.getInstancePath()));
 
-        /**
+        /*
          * No instance.txt file is generated if a form doesn't have sms tags.
          */
         if (!smsFile.exists()) {
-            SmsRxEvent event = new SmsRxEvent(instanceId, RESULT_NO_MESSAGE);
-            updateInstanceStatusFailedText(instanceId, event);
-            rxEventBus.post(event);
+
+            /*
+             * When in auto send mode an instance that doesn't have sms tags should fail silently,
+             * rather than displaying a notification or updating the status field.
+             * */
+            if (!autoSend) {
+                SmsRxEvent event = new SmsRxEvent(instanceId, RESULT_NO_MESSAGE);
+                updateInstanceStatusFailedText(instanceId, event);
+                rxEventBus.post(event);
+            }
+
             return false;
         }
 
         try {
             text = getFileContents(smsFile);
         } catch (IOException e) {
-
             SmsRxEvent event = new SmsRxEvent(instanceId, RESULT_FILE_ERROR);
             updateInstanceStatusFailedText(instanceId, event);
             rxEventBus.post(event);
@@ -240,7 +253,6 @@ public class SmsService {
      * @param instanceId id from instanceDao
      */
     public boolean cancelFormSubmission(String instanceId) {
-
         SmsSubmission model = smsSubmissionManager.getSubmissionModel(instanceId);
 
         if (model == null) {
@@ -267,7 +279,6 @@ public class SmsService {
      * This function then determines the next action to perform based on the result it receives.
      */
     void processMessageSentResult(String instanceId, int messageId, int resultCode) {
-
         String log = String.format(Locale.getDefault(), "Received result from broadcast receiver of instance id %s with message id of %d", instanceId, messageId);
         Timber.i(log);
 
@@ -311,7 +322,6 @@ public class SmsService {
      * @param instanceId from instanceDao
      */
     protected void startSendMessagesJob(String instanceId) {
-
         PersistableBundleCompat extras = new PersistableBundleCompat();
         extras.putString(SmsSenderJob.INSTANCE_ID, instanceId);
 
@@ -408,5 +418,60 @@ public class SmsService {
         }
 
         return "";
+    }
+
+    /**
+     * Automatically submits finalized instances that have sms tags.
+     * Before submission there are checks to see if
+     *
+     * 1) The transport is set to SMS
+     * 2) SMS auto send is enabled.
+     * 3) The form's auto send option isn't overriding the app settings.
+     * 4) SMS tags are included in the form submission.
+     */
+    public void autoSendForms() {
+        String transport = (String) GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE);
+        boolean smsTransportEnabled = transport.equalsIgnoreCase(context.getString(R.string.transport_type_value_sms));
+
+        if (!smsTransportEnabled) {
+            return;
+        }
+
+        boolean autoSend = false;
+        Set<String> multiAutoSend = (Set<String>) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_MULTI_AUTOSEND);
+
+        for (String option : multiAutoSend) {
+
+            if (option.equals("sms")) {
+                autoSend = true;
+                break;
+            }
+        }
+
+        try (Cursor results = new InstancesDao().getFinalizedInstancesCursor()) {
+            if (results.getCount() > 0) {
+                results.moveToPosition(-1);
+                while (results.moveToNext()) {
+
+                    String formId = results.getString(results.getColumnIndex(InstanceProviderAPI.InstanceColumns.JR_FORM_ID));
+
+                    boolean shouldSend = NetworkReceiver.isFormAutoSendEnabled(formId, autoSend);
+
+                    if (!shouldSend) {
+                        continue;
+                    }
+
+                    String filePath = results.getString(results
+                            .getColumnIndex(InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH));
+                    String instanceId = results.getString(results.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID));
+                    String displayName = results.getString(results.getColumnIndex(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME));
+                    String formVersion = results.getString(results.getColumnIndex(InstanceProviderAPI.InstanceColumns.JR_VERSION));
+
+                    FormInfo info = new FormInfo(filePath, formId, formVersion);
+
+                    submitForm(instanceId, info, displayName, true);
+                }
+            }
+        }
     }
 }

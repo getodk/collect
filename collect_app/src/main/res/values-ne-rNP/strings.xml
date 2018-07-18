@@ -388,8 +388,7 @@
   <string name="guidance_no">होइन</string>
   <string name="wifi_autosend">Wifi मात्र</string>
   <string name="cellular_autosend">मोबाईल ईन्टरनेट मात्र</string>
-  <string name="wifi_cellular_autosend">Wifi वा मोबाईल ईन्टरनेट</string>
-  <string name="form_management_preferences">फारम व्यवस्थापन</string>
+    <string name="form_management_preferences">फारम व्यवस्थापन</string>
   <string name="form_submission_category">फारम बुझाउँदा</string>
   <string name="form_filling_category">फारम भर्दा</string>
   <string name="high_resolution_title">ठुलो साइजको भिडियो</string>

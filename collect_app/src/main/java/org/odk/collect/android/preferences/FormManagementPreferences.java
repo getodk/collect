@@ -16,19 +16,24 @@ package org.odk.collect.android.preferences;
 
 import android.os.Bundle;
 import android.preference.ListPreference;
+import android.preference.MultiSelectListPreference;
 import android.preference.Preference;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.tasks.ServerPollingJob;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import static org.odk.collect.android.preferences.AdminKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOMATIC_UPDATE;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOSEND;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_CONSTRAINT_BEHAVIOR;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_GUIDANCE_HINT;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_IMAGE_SIZE;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_MULTI_AUTOSEND;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
 
 public class FormManagementPreferences extends BasePreferenceFragment {
@@ -39,9 +44,9 @@ public class FormManagementPreferences extends BasePreferenceFragment {
         addPreferencesFromResource(R.xml.form_management_preferences);
 
         initListPref(KEY_PERIODIC_FORM_UPDATES_CHECK);
-        initPref(KEY_AUTOMATIC_UPDATE);  
+        initPref(KEY_AUTOMATIC_UPDATE);
         initListPref(KEY_CONSTRAINT_BEHAVIOR);
-        initListPref(KEY_AUTOSEND);
+        initMultiSelectListPref(KEY_MULTI_AUTOSEND);
         initListPref(KEY_IMAGE_SIZE);
         initGuidancePrefs();
     }
@@ -57,6 +62,46 @@ public class FormManagementPreferences extends BasePreferenceFragment {
         super.onDetach();
         if (toolbar != null) {
             toolbar.setTitle(R.string.general_preferences);
+        }
+    }
+
+    private void initMultiSelectListPref(String key) {
+        final MultiSelectListPreference preference = (MultiSelectListPreference) findPreference(key);
+
+        if (preference == null) {
+            return;
+        }
+
+        Set<String> currentValues = (Set<String>) GeneralSharedPreferences.getInstance().get(key);
+
+        preference.setValues(currentValues);
+        setMultiListPreferenceSummary(preference, currentValues);
+
+        preference.setOnPreferenceChangeListener((currentPref, newValue) -> {
+
+            Set<String> selectedValues = (Set<String>) newValue;
+            ((MultiSelectListPreference) currentPref).setValues(selectedValues);
+
+            setMultiListPreferenceSummary(preference, selectedValues);
+
+            GeneralSharedPreferences.getInstance().save(key, selectedValues);
+
+            return false;
+        });
+    }
+
+    private void setMultiListPreferenceSummary(MultiSelectListPreference preference, Set<String> values) {
+        if (values.isEmpty()) {
+            preference.setSummary(getString(R.string.off));
+        } else {
+            Set<CharSequence> selectedEntries = new HashSet<>();
+            for (String value : values) {
+                int index = preference.findIndexOfValue(value);
+                selectedEntries.add(preference.getEntries()[index]);
+            }
+
+            String summary = TextUtils.join(", ", selectedEntries);
+            preference.setSummary(summary);
         }
     }
 
@@ -106,14 +151,11 @@ public class FormManagementPreferences extends BasePreferenceFragment {
         }
 
         guidance.setSummary(guidance.getEntry());
-        guidance.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
-                String entry = (String) ((ListPreference) preference).getEntries()[index];
-                preference.setSummary(entry);
-                return true;
-            }
+        guidance.setOnPreferenceChangeListener((preference, newValue) -> {
+            int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
+            String entry = (String) ((ListPreference) preference).getEntries()[index];
+            preference.setSummary(entry);
+            return true;
         });
     }
 
