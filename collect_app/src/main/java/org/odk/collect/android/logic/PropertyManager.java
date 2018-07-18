@@ -88,15 +88,15 @@ public class PropertyManager implements IPropertyManager {
             putProperty(PROPMGR_PHONE_NUMBER,  SCHEME_TEL,          telMgr.getLine1Number());
             putProperty(PROPMGR_SUBSCRIBER_ID, SCHEME_IMSI,         telMgr.getSubscriberId());
             putProperty(PROPMGR_SIM_SERIAL,    SCHEME_SIMSERIAL,    telMgr.getSimSerialNumber());
-
-            // User-defined properties. Will replace any above with the same PROPMGR_ name.
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-            initUserDefined(prefs, KEY_METADATA_USERNAME,    PROPMGR_USERNAME,      SCHEME_USERNAME);
-            initUserDefined(prefs, KEY_METADATA_PHONENUMBER, PROPMGR_PHONE_NUMBER,  SCHEME_TEL);
-            initUserDefined(prefs, KEY_METADATA_EMAIL,       PROPMGR_EMAIL,         SCHEME_MAILTO);
         } catch (SecurityException e) {
             Timber.e(e);
         }
+
+        // User-defined properties. Will replace any above with the same PROPMGR_ name.
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        initUserDefined(prefs, KEY_METADATA_USERNAME,    PROPMGR_USERNAME,      SCHEME_USERNAME);
+        initUserDefined(prefs, KEY_METADATA_PHONENUMBER, PROPMGR_PHONE_NUMBER,  SCHEME_TEL);
+        initUserDefined(prefs, KEY_METADATA_EMAIL,       PROPMGR_EMAIL,         SCHEME_MAILTO);
     }
 
     private IdAndPrefix findDeviceId(Context context, TelephonyManager telephonyManager) {

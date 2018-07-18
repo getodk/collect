@@ -59,6 +59,7 @@ import timber.log.Timber;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PROTOCOL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_TRANSPORT_TYPE;
 import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
+import static org.odk.collect.android.utilities.PermissionUtils.requestReadPhoneStatePermission;
 import static org.odk.collect.android.utilities.PermissionUtils.requestSendSMSPermission;
 import static org.odk.collect.android.utilities.PermissionUtils.requestStoragePermissions;
 
@@ -284,7 +285,19 @@ public class InstanceUploaderList extends InstanceListActivity implements
                 // otherwise, do the normal aggregate/other thing.
                 Intent i = new Intent(this, InstanceUploaderActivity.class);
                 i.putExtra(FormEntryActivity.KEY_INSTANCES, instanceIds);
-                startActivityForResult(i, INSTANCE_UPLOADER);
+
+                // Not required but without this permission a Device ID attached to a request will be empty.
+                requestReadPhoneStatePermission(this, new PermissionListener() {
+                    @Override
+                    public void granted() {
+                        startActivityForResult(i, INSTANCE_UPLOADER);
+                    }
+
+                    @Override
+                    public void denied() {
+                        startActivityForResult(i, INSTANCE_UPLOADER);
+                    }
+                }, false);
             }
         }
     }

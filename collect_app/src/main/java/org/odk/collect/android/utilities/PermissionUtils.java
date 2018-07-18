@@ -256,6 +256,43 @@ public class PermissionUtils {
                 .check();
     }
 
+    public static void requestReadPhoneStatePermission(@NonNull Activity activity, @NonNull PermissionListener action, boolean displayPermissionDeniedDialog) {
+        com.karumi.dexter.listener.single.PermissionListener permissionListener = new com.karumi.dexter.listener.single.PermissionListener() {
+            @Override
+            public void onPermissionGranted(PermissionGrantedResponse response) {
+                action.granted();
+            }
+
+            @Override
+            public void onPermissionDenied(PermissionDeniedResponse response) {
+                if (displayPermissionDeniedDialog) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.Theme_AppCompat_Light_Dialog);
+
+                    builder.setTitle(R.string.read_phone_state_runtime_permission_denied_title)
+                            .setMessage(R.string.read_phone_state_runtime_permission_denied_desc)
+                            .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> action.denied())
+                            .setCancelable(false)
+                            .setIcon(R.drawable.ic_phone)
+                            .show();
+                } else {
+                    action.denied();
+                }
+            }
+
+            @Override
+            public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+                token.continuePermissionRequest();
+            }
+        };
+
+        Dexter.withActivity(activity)
+                .withPermission(
+                        Manifest.permission.READ_PHONE_STATE
+                ).withListener(permissionListener)
+                .withErrorListener(error -> Timber.i(error.name()))
+                .check();
+    }
+
     public static boolean checkIfStoragePermissionsGranted(Context context) {
         int read = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE);
         int write = ContextCompat.checkSelfPermission(context, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
