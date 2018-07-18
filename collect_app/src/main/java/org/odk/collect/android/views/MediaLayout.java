@@ -110,7 +110,12 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
         // have to call toString() to remove the html formatting
         // (it's a spanned thing...)
         viewText.setText(viewText.getText().toString());
-        viewText.setTextColor(playTextColor);
+
+        if (player.isPlaying()) {
+            viewText.setTextColor(playTextColor);
+        } else {
+            resetTextFormatting();
+        }
 
         player.setOnCompletionListener(mediaPlayer -> {
             resetTextFormatting();
