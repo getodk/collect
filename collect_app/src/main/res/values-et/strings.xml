@@ -39,7 +39,6 @@
   <string name="discard_answer">Eemalda vastus</string>
   <string name="discard_group">Eemalda grupp</string>
   <string name="download">Lae alla</string>
-  <string name="download_forms_result">Lae tulemused alla</string>
   <string name="downloading_data">Serveriga ühendumine</string>
   <string name="do_not_change">Tühista</string>
   <string name="do_not_exit">Tühista</string>
@@ -383,4 +382,5 @@
   <string name="deleted_form">Kustutatud vorm</string>
   <string name="exit">Välju</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <!--Sms submission-->
 </resources>

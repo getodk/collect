@@ -48,7 +48,7 @@
   <string name="discard_answer">Antwort löschen</string>
   <string name="discard_group">Gruppenelement löschen</string>
   <string name="download">Auswahl herunterladen</string>
-  <string name="download_forms_result">Download-Ergebnis</string>
+  <string name="download_forms_result">Download-Ergebnisse</string>
   <string name="downloading_data">Verbindung mit dem Server wird aufgebaut</string>
   <string name="do_not_change">Abbrechen</string>
   <string name="do_not_exit">Abbrechen</string>
@@ -153,6 +153,7 @@
   <string name="file_fetch_failed">Fehler: %2$s (%3$s) bei %1$s</string>
   <string name="fetching_manifest">%s. Manifest wird geladen </string>
   <string name="success">Erfolg</string>
+  <string name="failures">Fehler</string>
   <string name="no_forms_uploaded">Kein Formular wurde hochgeladen.</string>
   <string name="upload_results">Upload-Ergebnisse</string>
   <string name="xform_parse_error">XForm parse error. Bei %1$s fehlt Element %2$s oder ist ungültig.</string>
@@ -276,7 +277,8 @@
   <string name="google_set_account">Sie haben Google Sheets als Server ausgewählt. Bitte geben Sie unter den Einstellungen ein Google-Konto an, bevor Sie fortfahren.</string>
   <string name="media_upload_error">Nicht vorhandene Mediendatei konnte nicht hochgeladen werden: %1$s</string>
   <string name="odk_auth_auth_fail">Auto-Send-Authentifizierungsfehler, bitte überprüfen Sie Ihre Einstellungen.</string>
-  <string name="odk_auto_note">ODK Auto-Send Benachrichtigung</string>
+  <string name="odk_auto_note">ODK Auto-Send-Ergebnisse</string>
+  <string name="odk_auto_download_notification_title">ODK Auto-Download-Ergebnisse</string>
   <string name="notification_error">Fehler beim Anzeigen des Benachrichtigungstextes</string>
   <string name="delete_after_send">Löschen nach dem Senden</string>
   <string name="delete_after_send_summary">Löscht abgeschlossene Formulare und Medien nach dem Senden zum Server</string>
@@ -333,7 +335,7 @@
   <string name="select_offline_layer">Offline-Ebene auswählen</string>
   <string name="polygon_or_polyline">GeoTrace speichern als</string>
   <string name="minutes">Minuten</string>
-  <string name="geo_clear_warning">Feature already created. Would you like to clear the feature?</string>
+  <string name="geo_clear_warning">Merkmal bereits erzeugt. Möchten Sie das Merkmal löschen?</string>
   <string name="geo_exit_warning">Änderungen verwerfen und zu ODK zurückkehren?</string>
   <string name="polygon_validator">Min. 3 Punkte notwendig um ein Polygon zu erzeugen</string>
   <string name="polyline_validator">Min. 2 Punkte notwendig um eine Polylinie zu erzeugen</string>
@@ -372,6 +374,7 @@
   <string name="parser_exception">XPathParser Exception: \"%s\"</string>
   <string name="selected_answer">Ausgewählt: %s</string>
   <string name="version_number">Version: %s</string>
+  <string name="id_number">ID: %s</string>
   <string name="odk_website">ODK-Webseite öffnen</string>
   <string name="odk_website_summary">Open Data Kit (ODK) wird verwendet um Daten für soziale Zwecke in herausfordernden Umgebungen zu sammeln.</string>
   <string name="odk_forum">Dem ODK-Forum beitreten</string>
@@ -397,7 +400,7 @@
   <string name="analytics">Anonyme Nutzungsdaten sammeln</string>
   <string name="analytics_summary">Anonyme Nutzungsdaten helfen dem ODK-Team Fehlerbehebungen und neue Funktionen zu priorisieren.</string>
   <string name="select_all">Alle auswählen</string>
-  <string name="clear_all">Alle löschen</string>
+  <string name="clear_all">Auswahl aufheben</string>
   <string name="reset_settings">Alle Einstellungen (interne Einstellungen, gespeicherte Einstellungen)</string>
   <string name="reset_saved_forms">Gespeicherte Formulare (Instanz-Ordner, Instanz-Datenbank)</string>
   <string name="reset_blank_forms">Leere Formulare (Formular-Ordner, Formular-Datenbank, Itemsets-Datenbank)</string>
@@ -575,6 +578,8 @@
   <string name="no_columns_to_upload">Keine Spalten zum Hochladen im Formular gefunden.</string>
   <string name="storage_runtime_permission_denied_title">Speicher-Berechtigungen</string>
   <string name="storage_runtime_permission_denied_desc">Ohne diese Berechtigungen kann Collect nicht auf Formulare zugreifen und Antworten speichern. Starten Sie die App erneut, wenn sie bereit dazu sind die Berechtigung zu erteilen.</string>
+  <string name="camera_runtime_permission_denied_title">Kamera-Berechtigung</string>
+  <string name="camera_runtime_permission_denied_desc">Ohne diese Berechtigung kann Collect nicht auf die Kamera zugreifen. Bitte versuchen Sie es erneut, wenn Sie dazu bereit sind die Berechtigung zu erteilen.</string>
   <string name="form_update_category">Formular-Update</string>
   <string name="periodic_form_updates_check_title">Periodischer Formular-Update-Check</string>
   <string name="never">Nie</string>
@@ -595,4 +600,12 @@
   <string name="instance_upload_cancelled">Instanz Upload abgebrochen</string>
   <string name="hide_old_form_versions_setting_title">Alte Formular-Versionen verbergen</string>
   <string name="hide_old_form_versions_setting_summary">Nur die neueste Version wird in \"Leeres Formular ausfüllen\" angezeigt</string>
+  <string name="sms_pref_dialog_title">Ziel-Telefonnummer</string>
+  <string name="sms_pref_title">Ziel-Telefonnummer</string>
+  <string name="sms_invalid_phone_number">Ungültige Telefonnummer!</string>
+  <!--Sms submission-->
+  <string name="transport_type_internet">WLAN/Mobilfunk (empfohlen)</string>
+  <string name="transport_type_sms">SMS</string>
+  <string name="seconds">Sekunden</string>
+  <string name="image_not_saved">Das Bild kann nicht gespeichert werden, wegen eines Problems mit der zugehörigen Instanz-Datei.</string>
 </resources>

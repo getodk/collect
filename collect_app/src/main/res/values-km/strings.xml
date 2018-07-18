@@ -48,7 +48,6 @@
   <string name="discard_answer">បោះបង់ចម្លើយ</string>
   <string name="discard_group">ដក​ក្រុម​ចេញ</string>
   <string name="download">ទទួលការជ្រើសរើស</string>
-  <string name="download_forms_result">លទ្ធផលនៃការទាញយក</string>
   <string name="downloading_data">កំពុង​ភ្ជាប់​ទៅ​កាន់​ម៉ាស៊ីន​មេ</string>
   <string name="do_not_change">បោះបង់</string>
   <string name="do_not_exit">បោះបង់</string>
@@ -276,7 +275,6 @@
   <string name="google_set_account">អ្នក​បាន​ជ្រើស​សន្លឹក​ Google ជា​ម៉ាស៊ីន​មេ​របស់​អ្នក​សូម​ជ្រើស​រើស​គណនី Google ត្រូវគ្នា ដែលឋិតក្នុងការកំណត់ទូទៅមុននឹងបន្ត</string>
   <string name="media_upload_error">បរាជ័យក្នុងការផ្ទុកឯកសារមេឌៀដែលមិនមាន៖ %1$s</string>
   <string name="odk_auth_auth_fail">​ការផ្ទៀង​ផ្ទាត់​បរាជ័យដើម្បីឲ្យ ODK ផ្ញើរចេញដោយស្វ័យប្រវត្តិ សូមធ្វើឲ្យប្រាកដថា​ការកំណត់របស់​អ្នក​ត្រឹម​ត្រូវ</string>
-  <string name="odk_auto_note">ការជូនដំណឹងពីការផ្ញើរចេញដោយ​ស្វ័យ​ប្រវត្តិរបស់​ ODK </string>
   <string name="notification_error">បង្ហាញសារជួនដំណឹងដែលមានបញ្ហា</string>
   <string name="delete_after_send">លុបទម្រង់បន្ទាប់ការផ្ញើចេញ</string>
   <string name="delete_after_send_summary">លុប​សំណុំ​​បែប​​បទ​ដែល​បាន​បញ្ចប់ និង​មីឌៀ ​បន្ទាប់​ពី​ការ​ផ្ញើ​ចេញ​ទៅ​កាន់​ម៉ាស៊ីន​មេ</string>
@@ -592,4 +590,5 @@
   <string name="not_a_directory">%s មានរួច, ប៉ុន្តែ​ពុំមែន​ជាថត​ឯក​សារ</string>
   <string name="location_metadata">ផ្កាយរណបមាន៖ %1$d/24\n\nពេលវេលាកន្លងទៅ៖ %2$s</string>
   <string name="instance_upload_cancelled">បានបោះបង់ការផ្ទុកឡើងភ្លាមៗ</string>
+  <!--Sms submission-->
 </resources>

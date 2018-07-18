@@ -37,7 +37,6 @@
   <string name="discard_answer">Ondoa jibu</string>
   <string name="discard_group">Ondoa kikundi</string>
   <string name="download">Chaguliwa</string>
-  <string name="download_forms_result">Pakua Tokeo</string>
   <string name="downloading_data">Inaunganisha kwenye seva</string>
   <string name="do_not_change">Tangua</string>
   <string name="do_not_exit">Tangua</string>
@@ -231,4 +230,5 @@
   <string name="select_all">Chagua Zote</string>
   <string name="reset_settings_dialog_title">Chagua kipi cha kurekebisha</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <!--Sms submission-->
 </resources>

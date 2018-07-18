@@ -48,7 +48,6 @@
   <string name="discard_answer">Odstrani odgovor</string>
   <string name="discard_group">Odstrani skupino</string>
   <string name="download">Prevzami izbrane</string>
-  <string name="download_forms_result">Naloži rezultate</string>
   <string name="downloading_data">Povezujem se s strežnikom</string>
   <string name="do_not_change">Prekini</string>
   <string name="do_not_exit">Prekini</string>
@@ -280,4 +279,5 @@
   <string name="reset_settings_button_reset">Resetiraj</string>
   <string name="autosend_selector_title">Samodejno pošlji</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <!--Sms submission-->
 </resources>

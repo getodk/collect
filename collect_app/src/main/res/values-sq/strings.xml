@@ -2,6 +2,9 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
   <string name="show_password">Shfaq fjalëkalimin</string>
   <string name="activity_not_found">Nuk gjendet aktivitet për t\'u procesuar: %s</string>
+  <string name="view_image">Shih Imazhin</string>
+  <string name="view_video">Shih videon</string>
+  <string name="choose_audio">Përzgjidh audio</string>
   <string name="add_another">Shto grup</string>
   <string name="add_another_repeat">Shto një grup tjetër \"%s\"?</string>
   <string name="add_repeat">Shto një grup tjetër \"%s\"?</string>
@@ -40,7 +43,7 @@
   <string name="discard_answer">Hiq përgjigjen</string>
   <string name="discard_group">Hiq grupin</string>
   <string name="download">Përzgjidhu</string>
-  <string name="download_forms_result">Shkarko rezultatin</string>
+  <string name="download_forms_result">Shkarko rezultatet</string>
   <string name="downloading_data">Duke u lidhur me server-in</string>
   <string name="do_not_change">Anullo</string>
   <string name="do_not_exit">Anullo</string>
@@ -206,6 +209,7 @@
   <string name="constraint_behavior_on_swipe">Valido pasi të ecet përpara</string>
   <string name="constraint_behavior_on_finalize">Mos valido deri sa të finalizohet</string>
   <string name="view_change_location">Shih ose ndrysho vendndodhjen</string>
+  <string name="change_location">Ndrysho vendndodhjen</string>
   <string name="open_url">Hap URL</string>
   <string name="sdcard_unmounted">Collect nuk mund të aksesojë kartën SD. Ndoshta është ngarkuar nga USB? (Gjendja aktuale: %s)</string>
   <string name="ext_file_no_data_error">Ky file nuk ka të dhëna!</string>
@@ -239,6 +243,7 @@
   <string name="go_shared">Ndarë me mua</string>
   <string name="modified_on_date_at_time">\'Modifikuar më\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
   <string name="aggregate_preferences">Parametrat e ODK Aggregate</string>
+  <string name="sms_submission_preferences">Parametrat për të dërguar SMS</string>
   <string name="other_preferences">Parametrat e tjetër platforme</string>
   <string name="google_preferences">Parametrat e Google Sheets</string>
   <string name="google_sheets_url_hint">Formularët duhet të kenë një URL ku dërgohen. Nëse jo, do të përdoret kjo URL.</string>
@@ -246,7 +251,6 @@
   <string name="no_google_account">Nuk keni përzgjedhur një llogari në Google!</string>
   <string name="google_set_account">Keni përzgjedhur Google Sheets si server, lutemi, zjidhni një llogari në  Google në parametrat e përgjithshëm përpara se të vazhdoni.</string>
   <string name="odk_auth_auth_fail">Autentikimi i dërgimit automatik të ODK dështoi, lutemi sigurohuni që parametrat janë të saktë.</string>
-  <string name="odk_auto_note">Njoftim ODK për dërgimin automatik </string>
   <string name="notification_error">Gabim në shfaqjen e tekstit të njoftimit</string>
   <string name="delete_after_send">Fshi formularët pasi të nisen</string>
   <string name="delete_after_send_summary">Fshi formularët e finalizuar dhe mediat pasi të jenë ngarkuar në server</string>
@@ -255,8 +259,12 @@
   <string name="send_in_progress">Një dërgim po ekzekutohet në background, lutemi provoni sërish pas pak.</string>
   <string name="sheets_max_columns">Numri maksimal i kolonave është 255, formulari juaj ka %s. Spreadsheet nuk mund të ngarkohet.</string>
   <string name="invalid_sheet_id">Numri i identifikimit të tabelës: %1$s i pavlefshëm.</string>
+  <string name="google_sheets_access_denied">Ju është mohuar aksesi. Lutemi, sigurohuni që zotëruesi i spreadsheet-it ju ka dhënë të drejtën për të modifikuar.</string>
   <string name="google_play_services_error_occured">E pamundur të aksesohen Google Maps. A është i instaluar Google Play Services?</string>
   <string name="about_preferences">Rreth</string>
+  <string name="tell_your_friends">Ndaj ODK Collect</string>
+  <string name="tell_your_friends_msg">Kolegët tuaj i mbledhin të dhënat me letër akoma? Ndaj ODK Collect me ta.</string>
+  <string name="leave_a_review">Vlerëso në Play Store</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="openmap_streets">Rrugë OSM</string>
   <string name="streets">Rrugë</string>
@@ -321,6 +329,8 @@
   <string name="odk_website">Vizitoni faqen e ODK në internet</string>
   <string name="odk_website_summary">Open Data Kit (ODK) përdoret për mbledhur të dhëna për të mirën shoqërore në mjedise sfiduese.</string>
   <string name="odk_forum">Bëhu pjesë e forumit ODK</string>
+  <string name="odk_forum_summary">Regjistrohu në forum për suport, kërkuar elementë të rinj apo kontribuar me kodim apo përkthim.</string>
+  <string name="all_open_source_licenses_msg">Ne qëndrojmë mbi shpatullat e gjigantëve!</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">P %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -364,6 +374,12 @@
   <string name="exit">Dil</string>
   <string name="instance_scan_completed">Skanimi përfundoi</string>
   <string name="instance_scan_count">%1$d formë/a u shtuan.</string>
+  <string name="sort_by_name_asc">Emër, A-Z</string>
+  <string name="sort_by_name_desc">Emër, Z-A</string>
+  <string name="sort_by_date_asc">Datë, më të rejat në fillim</string>
+  <string name="sort_by_date_desc">Datë, më të vjetrat në fillim</string>
+  <string name="sort_by_status_asc">Status, të përmbyllurat të parat</string>
+  <string name="sort_by_status_desc">Status, të papërmbyllurat të parat</string>
   <string name="sort_the_list">Rendit listën</string>
   <string name="request_permissions_google_account">ODK Collect ka nevojë të aksesojë loogarinë tuaj në Google në mënyrë që të marrë formularë bosh dhe të ngarkojë formularë të plotësuar</string>
   <string name="filter_the_list">Filtro listën</string>
@@ -398,12 +414,14 @@
   <string name="qrcode_with_server_password">Ky kod QR përmban fajlëkalimin e server-it tuaj. \n(Hiq fjalëkalimin)</string>
   <string name="import_export_settings">Parametrat e importit dhe eksportit</string>
   <string name="qrcode_scanner_prompt">Vendos kodin QR brenda katrorit</string>
+  <string name="barcode_scanner_prompt">Vendos barcode-in brenda drejtkëndëshit</string>
   <string name="server_password">Fjalëkalimi i serverit</string>
   <string name="include_password_dialog">Fjalëkalimët të përfshirë në kod</string>
   <string name="generate">Gjenero</string>
   <string name="invalid_qrcode">Kodi QR nuk ka parametra të vlefshëm</string>
   <string name="share_qrcode">Ndaj kodin QR</string>
   <string name="take_picture_instruction">Prek ekranin për të bërë fotografi</string>
+  <string name="error_front_camera_unavailable">Ky aparat nuk ka maera të përparme</string>
   <string name="camera_error">Ky aparat nuk suporton Camera2 API.</string>
   <string name="invalid_range_widget">Ky widget ka parametra të paplotë!</string>
   <string name="form_entry_setting">Parametrat e plotësimit të formularëve</string>
@@ -415,6 +433,7 @@
   <string name="user_access_control">Kontrolli i aksesi të përdoruesit</string>
   <string name="autosend_selector_title">Dërgo automatikisht</string>
   <string name="off">Fikur</string>
+  <string name="guidance_no">Jo</string>
   <string name="wifi_autosend">Vetëm wifi</string>
   <string name="cellular_autosend">Vetëm celular</string>
   <string name="wifi_cellular_autosend">Wifi ose celular</string>
@@ -432,5 +451,52 @@
   <string name="form_entry">Hiq përzgjedhjen për ta fshehur nga Form Entry</string>
   <string name="use_device_language">Përdor gjuhën e aparatit</string>
   <string name="not_supported_offline_layer_format">Shtresa offline që përzgjodhët përdor format PBF, i cili nuk është i suportuar.</string>
+  <string name="invalid_email_address">Adresa email nuk është e vlefshme</string>
+  <string name="sort_by">Rendit sipas</string>
+  <string name="select_value">Përzgjidh vlerën</string>
+  <string name="edit_value">Ndrysho vlerën</string>
+  <string name="no_value_selected">Nuk keni përzgjedhur vlerën</string>
+  <string name="form_delete_message">Duke fshirë formularët e përzgjedhur</string>
+  <string name="deleting_form_dialog_update_message">Duke fshirë formularin:%1$dnga%2$d</string>
+  <string name="search">Kërko</string>
+  <string name="null_intent_value">Aplikacioni i jashtëm nuk dha informacionin e pritshëm.</string>
+  <string name="image_size_large">E madhe (3072px)</string>
+  <string name="image_size_medium">Mesatare (2048px)</string>
+  <string name="image_size_small">E vogël (1024px)</string>
+  <string name="image_size_very_small">Shumë e vogël (640px)</string>
+  <string name="image_size_original">Madhësia origjinale nga kamera (e parazgjedhur)</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <string name="multiple_media_folders_detected_notification">U identifikua më tepër sesa një folder me media, lutemi hiqni një prej tyre dhe provoni sërish</string>
+  <string name="yes">Po</string>
+  <string name="no">Jo</string>
+  <string name="newer_version_of_a_form_info">Ky është një përditësim i një formulari që e keni tanimë</string>
+  <string name="svg_file_does_not_exist">File-i SVG nuk ekziston!</string>
+  <string name="start_video_capture_instruction">Prekni ekranin për të nisur regjistrimin</string>
+  <string name="stop_video_capture_instruction">Regjistrimi nisi. Prekni sërish ekranin për ta ndaluar</string>
+  <string name="never">Asnjëherë</string>
+  <string name="every_fifteen_minutes">Çdo pesëmbëdhjetë minuta</string>
+  <string name="every_one_hour">Çdo një orë</string>
+  <string name="every_six_hours">Çdo gjashtë orë</string>
+  <string name="every_24_hours">Çdo 24 orë</string>
+  <string name="automatic_download">Shkarkim automatik</string>
+  <string name="automatic_download_summary">Shkarko automatikisht variantet e vjetra të formularit</string>
+  <string name="guidance_hint_title">Trego udhëzuesin për pyetjet</string>
+  <string name="app_theme">Tema</string>
+  <string name="hide_old_form_versions_setting_title">Fshih variantet e vjetra të formularit</string>
+  <string name="sms_pref_dialog_title">Numri i telefonit i destinacionit</string>
+  <string name="sms_pref_title">Numri i telefonit i destinacionit</string>
+  <string name="sms_invalid_phone_number">Numri i telefonit nuk është i vlefshëm!</string>
+  <!--Sms submission-->
+  <string name="sms_no_reception">\'Dështoi më datë\' EEE, MMM dd, yyyy \'në orën\' HH:mm \'pasi nuk ka mbulim me valë\'</string>
+  <string name="sms_fatal_error">\'Dështoi më datë\' EEE, MMM dd, yyyy \'në orën\' HH:mm</string>
+  <string name="sms_airplane_mode">\'Dështoi më datë\' EEE, MMM dd, yyyy \'në orën\' HH:mm \'pasi Airplane Mode ishte i aktivizuar\'</string>
+  <string name="sms_encrypted_message">Formularët e enkriptuar nuk mund të nisen me SMS</string>
+  <string name="sms_sent_on_date_at_time">\'Dërguar si SMS më datë\' EEE, MMM dd, yyyy \'në orën\' HH:mm</string>
+  <string name="sms_submission_queued">Në radhë për t\'u dërguar.</string>
+  <string name="sms_submissions_notif_title">Dërguar me SMS</string>
+  <string name="sms_submissions_notif_description">Disa formularë janë duke u dërguar.</string>
+  <string name="transport_type_internet">Wifi/Celular (e rekomanduar)</string>
+  <string name="transport_type_sms">SMS</string>
+  <string name="seconds">Sekonda</string>
+  <string name="rank_items">Rendit pohimet</string>
 </resources>

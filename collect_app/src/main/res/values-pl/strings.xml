@@ -1,6 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+  <string name="show_password">Pokaż hasło</string>
   <string name="activity_not_found">Nie znaleziono aktywności do obsługi: %s</string>
+  <string name="choose_audio">Wybierz audio</string>
   <string name="add_another">Dodaj Grupę</string>
   <string name="add_another_repeat">Czy dodać kolejną grupę \"%s\"?</string>
   <string name="add_repeat">Czy dodać nową grupę \"%s\"?</string>
@@ -10,6 +12,7 @@
   <string name="cancel">Anuluj</string>
   <string name="cancel_loading_form">Anuluj</string>
   <string name="cancel_location">Anuluj</string>
+  <string name="canceling">Anulowanie</string>
   <string name="cannot_edit_completed_form">Po zaznaczeniu jako skończony ten formularz nie może być edytowany. Może być zaszyfrowany.</string>
   <string name="capture_audio">Nagraj Dźwięk</string>
   <string name="capture_image">Zrób Zdjęcie</string>
@@ -40,7 +43,6 @@
   <string name="discard_answer">Usuń odpowiedź</string>
   <string name="discard_group">Usuń grupę</string>
   <string name="download">Pobierz Wybrane</string>
-  <string name="download_forms_result">Pobierz Wynik</string>
   <string name="downloading_data">Łączenie z Serwerem</string>
   <string name="do_not_change">Anuluj</string>
   <string name="do_not_exit">Anuluj</string>
@@ -118,6 +120,7 @@
   <string name="username">Identyfikator użytkownika</string>
   <string name="view_hierarchy">Idź Do Pytania</string>
   <string name="general_preferences">Ustawienia Ogólne</string>
+  <string name="client">Interfejs użytkownika</string>
   <string name="show_splash_summary">Pokazuje się, gdy aplikacja startuje</string>
   <string name="splash_path">Wybrany obraz ekranu powitalnego</string>
   <string name="default_splash_path">Domyślne ODK</string>
@@ -143,6 +146,7 @@
   <string name="success">Sukces</string>
   <string name="no_forms_uploaded">Przykro mi, nie wysłano żadnego formularza.</string>
   <string name="upload_results">Wyślij Wyniki</string>
+  <string name="choose_file">Wybierz plik</string>
   <string name="choose_sound">Wybierz Dźwięk</string>
   <string name="choose_video">Wybierz Wideo</string>
   <string name="choose_image">Wybierz Obraz</string>
@@ -195,6 +199,7 @@
   <string name="admin_password_incorrect">Przykro mi, hasło jest niepoprawne!</string>
   <string name="enter_admin_password">Wprowadź Hasło Administratora</string>
   <string name="change_admin_password">Zmień Hasło Administratora</string>
+  <string name="autosend">Automatyczne wysyłanie</string>
   <string name="found_in_main">Odznacz aby ukryć w Głównym Menu</string>
   <string name="found_in_settings">Odznacz aby ukryć w Ogólnych Ustawieniach</string>
   <string name="save_preferences">Zapisz Ustawienia na Dysk</string>
@@ -210,6 +215,7 @@
   <string name="constraint_behavior_on_swipe">Sprawdź poprawność po przeciągnięciu do przodu</string>
   <string name="constraint_behavior_on_finalize">Odłóż sprawdzanie poprawności do chwili zakończenia</string>
   <string name="view_change_location">Obejrzyj lub Zmień Lokalizację</string>
+  <string name="change_location">Zmień Lokalizację</string>
   <string name="open_url">Otwórz URL</string>
   <string name="get_bearing">Zapisz Namiar</string>
   <string name="replace_bearing">Zamień Namiar</string>
@@ -269,6 +275,7 @@
   <string name="username_error_whitespace">Spacje na początku lub na końcu nazwy użytkownika są niedozwolone</string>
   <string name="google_play_services_error_occured">Nie można uzyskać dostępu do Google Maps. Czy Google Play Services są zainstalowane?</string>
   <string name="about_preferences">O Aplikacji</string>
+  <string name="tell_your_friends">Udostępnij ODK Collect</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">Mapowanie</string>
   <string name="map_sdk_selector_title">SDK Mapowania</string>
@@ -316,6 +323,7 @@
   <string name="geopoint_instruction">Długo naciśnij aby umieścić znacznik lub dotknij przycisk Dodaj znacznik.</string>
   <string name="geopoint_no_draggable_instruction">Dotknij przycisk Dodaj znacznik.</string>
   <string name="discard">Usuń</string>
+  <string name="zoom_to_where">Przybliż do…</string>
   <string name="zoom_to_location">Zbliżenie na bieżącą lokalizację</string>
   <string name="zoom_to_feature">Zbliżenie na zapisaną właściwość</string>
   <string name="geoshape_view_change_location">Pokaż lub Zmień GeoShape</string>
@@ -341,6 +349,8 @@
   <string name="parser_exception">Wyjątek XPathParser: \"%s\"</string>
   <string name="selected_answer">Wybrany: %s</string>
   <string name="version_number">Wersja: %s</string>
+  <string name="odk_website">Odwiedź stronę ODK</string>
+  <string name="odk_forum">Dołącz do forum ODK</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">Z %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -384,5 +394,53 @@
   <string name="exit">Wyjdź</string>
   <string name="instance_scan_completed">Skanowanie zakończone.</string>
   <string name="instance_scan_count">Dodano %1$d formularzy.</string>
+  <string name="sort_by_name_asc">Nazwa, A-Z</string>
+  <string name="sort_by_name_desc">Nazwa, Z-A</string>
+  <string name="sort_by_date_asc">Data, najpierw najnowsze</string>
+  <string name="sort_by_date_desc">Data, najpierw najstarsze</string>
+  <string name="sort_by_status_asc">Status, najpierw ukończone</string>
+  <string name="sort_by_status_desc">Status, najpierw nieukończone</string>
+  <string name="sort_the_list">Sortuj listę</string>
+  <string name="filter_the_list">Filtruj listę</string>
+  <string name="language">Język</string>
+  <string name="phone_number">Numer telefonu</string>
+  <string name="email">Adres email</string>
+  <string name="device_id">ID urządzenia</string>
+  <string name="select_date">Wybierz datę</string>
+  <string name="select_time">Wybierz godzinę</string>
+  <string name="no_date_selected">Nie wybrano daty</string>
+  <string name="no_time_selected">Nie wybrano godziny</string>
+  <string name="import_settings">Importowanie/Eksportowanie ustawień</string>
+  <string name="qr_code">Kod QR</string>
+  <string name="scan_qrcode">Skanuj kod z innego urządzenia</string>
+  <string name="share">Udostępnij</string>
+  <string name="select_qrcode">Wybierz kod z karty SD</string>
+  <string name="import_export_settings">Importowanie/Eksportowanie Ustawień</string>
+  <string name="share_qrcode">Udostępnij kod QR</string>
+  <string name="user_settings">Ustawienia użytkownika</string>
+  <string name="autosend_selector_title">Automatyczne wysyłanie</string>
+  <string name="guidance_no">Nie</string>
+  <string name="wifi_autosend">Tylko wifi</string>
+  <string name="cellular_autosend">Tylko sieć</string>
+  <string name="wifi_cellular_autosend">Wifi oraz sieć</string>
+  <string name="server_settings_title">Serwer</string>
+  <string name="server">Serwer</string>
+  <string name="search">Szukaj</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <string name="yes">Tak</string>
+  <string name="no">Nie</string>
+  <string name="svg_file_does_not_exist">Plik SVG nie istnieje!</string>
+  <string name="never">Nigdy</string>
+  <string name="every_fifteen_minutes">Co piętnaście minut</string>
+  <string name="every_one_hour">Co godzinę</string>
+  <string name="every_six_hours">Co sześć godzin</string>
+  <string name="every_24_hours">Co 24 godziny</string>
+  <string name="form_updates_available">Dostępne nowe wersje formularzy</string>
+  <string name="automatic_download">Automatyczne pobieranie</string>
+  <string name="app_theme">Motyw</string>
+  <string name="theme_light">Jasny motyw</string>
+  <string name="theme_dark">Ciemny motyw</string>
+  <string name="not_a_directory">%sistnieje, ale nie jest w folderze</string>
+  <string name="hide_old_form_versions_setting_title">Ukryj stare wersje formularzy</string>
+  <!--Sms submission-->
 </resources>
