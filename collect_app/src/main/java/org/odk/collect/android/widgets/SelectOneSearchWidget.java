@@ -16,8 +16,8 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.LinearLayout;
 
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.listeners.AudioPlayListener;
@@ -35,18 +35,18 @@ import java.util.List;
  */
 @SuppressLint("ViewConstructor")
 public class SelectOneSearchWidget extends AbstractSelectOneWidget implements OnCheckedChangeListener, AudioPlayListener {
-    public SelectOneSearchWidget(Context context, FormEntryPrompt prompt) {
-        super(context, prompt, false);
+    public SelectOneSearchWidget(Context context, FormEntryPrompt prompt, boolean autoAdvance) {
+        super(context, prompt, autoAdvance);
         createLayout();
     }
 
     @Override
     protected void addButtonsToLayout(List<Integer> tagList) {
-        for (int i = 0; i < buttons.size(); i++) {
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        buttons.clear();
+        for (int i = 0; i < items.size(); i++) {
             if (tagList == null || tagList.contains(i)) {
-                answerLayout.addView(buttons.get(i));
-                answerLayout.setDividerDrawable(getResources().getDrawable(themeUtils.getDivider()));
-                answerLayout.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
+                answerLayout.addView(createRadioButtonLayout(inflater, i));
             }
         }
     }
@@ -59,13 +59,6 @@ public class SelectOneSearchWidget extends AbstractSelectOneWidget implements On
     @Override
     protected void createLayout() {
         readItems();
-
-        if (items != null) {
-            for (int i = 0; i < items.size(); i++) {
-                buttons.add(createRadioButton(i));
-            }
-        }
-
         setUpSearchBox();
     }
 }

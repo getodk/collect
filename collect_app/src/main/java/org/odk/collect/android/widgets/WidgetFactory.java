@@ -176,35 +176,27 @@ public class WidgetFactory {
                         String firstWord = appearance.split("\\s+")[0];
                         int idx = firstWord.indexOf('-');
                         if (idx != -1) {
-                            numColumns =
-                                    Integer.parseInt(firstWord.substring(idx + 1));
+                            numColumns = Integer.parseInt(firstWord.substring(idx + 1));
                         }
                     } catch (Exception e) {
                         // Do nothing, leave numColumns as -1
                         Timber.e("Exception parsing numColumns");
                     }
-
-                    if (appearance.startsWith("quick")) {
-                        questionWidget = new GridWidget(context, fep, numColumns, true);
-                    } else {
-                        questionWidget = new GridWidget(context, fep, numColumns, false);
-                    }
+                    questionWidget = new GridWidget(context, fep, numColumns, appearance.contains("quick"));
                 } else if (appearance.startsWith("minimal")) {
                     questionWidget = new SpinnerWidget(context, fep);
-                } else if (appearance.startsWith("quick")) {
-                    questionWidget = new SelectOneWidget(context, fep, true);
+                } else if (appearance.contains("search") || appearance.contains("autocomplete")) {
+                    questionWidget = new SelectOneSearchWidget(context, fep, appearance.contains("quick"));
                 } else if (appearance.equals("list-nolabel")) {
                     questionWidget = new ListWidget(context, fep, false);
                 } else if (appearance.equals("list")) {
                     questionWidget = new ListWidget(context, fep, true);
                 } else if (appearance.equals("label")) {
                     questionWidget = new LabelWidget(context, fep);
-                } else if (appearance.contains("search") || appearance.contains("autocomplete")) {
-                    questionWidget = new SelectOneSearchWidget(context, fep);
                 } else if (appearance.startsWith("image-map")) {
                     questionWidget = new SelectOneImageMapWidget(context, fep);
                 } else {
-                    questionWidget = new SelectOneWidget(context, fep, false);
+                    questionWidget = new SelectOneWidget(context, fep, appearance.contains("quick"));
                 }
                 break;
             case Constants.CONTROL_SELECT_MULTI:
