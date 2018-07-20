@@ -34,6 +34,7 @@ import android.widget.Toast;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.javarosa.xpath.parser.XPathSyntaxException;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
@@ -97,9 +98,6 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
 public class ExStringWidget extends QuestionWidget implements BinaryWidget {
     // If an extra with this key is specified, it will be parsed as a URI and used as intent data
     private static final String URI_KEY = "uri_data";
-    // Placeholder URI to ensure an activity to handle the intent is found
-    private static final Uri PLACEHOLDER_URI = Uri.parse("smsto:5555555");
-
 
     protected EditText answer;
     private boolean hasExApp = true;
@@ -251,19 +249,25 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
         errorString = (v != null) ? v : getContext().getString(R.string.no_app);
 
         Intent i = new Intent(intentName);
+
+        // Use special "uri_data" key to set intent data. This must be done before checking if an
+        // activity is available to handle implicit intents.
         if (exParams.containsKey(URI_KEY)) {
-            i.setData(PLACEHOLDER_URI);
+            try {
+                String uriValue = (String) ExternalAppsUtils.getValueRepresentedBy(exParams.get(URI_KEY),
+                            getFormEntryPrompt().getIndex().getReference());
+                i.setData(Uri.parse(uriValue));
+                exParams.remove(URI_KEY);
+            } catch (XPathSyntaxException e) {
+                Timber.d(e);
+                onException(e.getMessage());
+            }
         }
 
         if (activityAvailability.isActivityAvailable(i)) {
             try {
                 ExternalAppsUtils.populateParameters(i, exParams,
                         getFormEntryPrompt().getIndex().getReference());
-
-                if (exParams.containsKey(URI_KEY)) {
-                    i.setData(Uri.parse(i.getStringExtra(URI_KEY)));
-                    i.removeExtra(URI_KEY);
-                }
 
                 waitForData();
                 fireActivity(i);

@@ -38,7 +38,6 @@
   <string name="discard_answer">ምላሹን አስወግድ</string>
   <string name="discard_group">ቡድን አስወግድ</string>
   <string name="download">የተመረጠውን ያግኙ</string>
-  <string name="download_forms_result">ውጤቱን አውርድ</string>
   <string name="downloading_data">ከአገልጋይ ኮምፒውተር ጋር በመገናኘት ላይ</string>
   <string name="do_not_change">ሰርዝ</string>
   <string name="do_not_exit">ሰርዝ</string>
@@ -298,4 +297,5 @@
   <string name="moving_backwards_enabled_title">ወደኋላ መሄድ ተመርጧል</string>
   <string name="yes">አዎ</string>
   <string name="no">አይ</string>
+  <!--Sms submission-->
 </resources>
