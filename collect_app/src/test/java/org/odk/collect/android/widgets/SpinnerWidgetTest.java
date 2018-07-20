@@ -13,6 +13,6 @@ public class SpinnerWidgetTest extends GeneralSelectOneWidgetTest<SpinnerWidget>
     @NonNull
     @Override
     public SpinnerWidget createWidget() {
-        return new SpinnerWidget(RuntimeEnvironment.application, formEntryPrompt);
+        return new SpinnerWidget(RuntimeEnvironment.application, formEntryPrompt, false);
     }
 }
