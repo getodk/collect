@@ -193,8 +193,8 @@ public class WidgetFactory {
                     questionWidget = new ListWidget(context, fep, true);
                 } else if (appearance.equals("label")) {
                     questionWidget = new LabelWidget(context, fep);
-                } else if (appearance.startsWith("image-map")) {
-                    questionWidget = new SelectOneImageMapWidget(context, fep);
+                } else if (appearance.contains("image-map")) {
+                    questionWidget = new SelectOneImageMapWidget(context, fep, appearance.contains("quick"));
                 } else {
                     questionWidget = new SelectOneWidget(context, fep, appearance.contains("quick"));
                 }
