@@ -194,8 +194,8 @@ public class WidgetFactory {
                         Timber.e("Exception parsing numColumns");
                     }
                     questionWidget = new GridWidget(context, fep, numColumns, appearance.contains("quick"));
-                } else if (appearance.startsWith("minimal")) {
-                    questionWidget = new SpinnerWidget(context, fep);
+                } else if (appearance.contains("minimal")) {
+                    questionWidget = new SpinnerWidget(context, fep, appearance.contains("quick"));
                 } else if (appearance.contains("search") || appearance.contains("autocomplete")) {
                     questionWidget = new SelectOneSearchWidget(context, fep, appearance.contains("quick"));
                 } else if (appearance.equals("list-nolabel")) {
