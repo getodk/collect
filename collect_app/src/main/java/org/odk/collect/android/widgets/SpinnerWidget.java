@@ -17,6 +17,7 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +36,7 @@ import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.ExternalDataUtil;
+import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.views.ScrolledToTopSpinner;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
@@ -53,8 +55,15 @@ public class SpinnerWidget extends QuestionWidget implements MultiChoiceWidget {
     ScrolledToTopSpinner spinner;
     String[] choices;
 
-    public SpinnerWidget(Context context, FormEntryPrompt prompt) {
+    @Nullable
+    private AdvanceToNextListener listener;
+
+    public SpinnerWidget(Context context, FormEntryPrompt prompt, boolean autoAdvance) {
         super(context, prompt);
+
+        if (context instanceof AdvanceToNextListener) {
+            listener = (AdvanceToNextListener) context;
+        }
 
         // SurveyCTO-added support for dynamic select content (from .csv files)
         XPathFuncExpr xpathFuncExpr = ExternalDataUtil.getSearchXPathExpression(
@@ -113,6 +122,10 @@ public class SpinnerWidget extends QuestionWidget implements MultiChoiceWidget {
                     Collect.getInstance().getActivityLogger().logInstanceAction(this,
                             "onCheckedChanged",
                             items.get(position).getValue(), getFormEntryPrompt().getIndex());
+
+                    if (autoAdvance && listener != null) {
+                        listener.advance();
+                    }
                 }
             }
 
