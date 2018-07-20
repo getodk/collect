@@ -17,20 +17,35 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.webkit.WebView;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.listeners.AdvanceToNextListener;
 
 /**
  * A widget which is responsible for multi select questions represented by
  * an svg map. You can use maps of the world, countries, human body etc.
  */
 public class SelectOneImageMapWidget extends SelectImageMapWidget {
-    public SelectOneImageMapWidget(Context context, FormEntryPrompt prompt) {
+
+    @Nullable
+    private AdvanceToNextListener listener;
+
+    private final boolean autoAdvance;
+
+    public SelectOneImageMapWidget(Context context, FormEntryPrompt prompt, boolean autoAdvance) {
         super(context, prompt);
+
+        this.autoAdvance = autoAdvance;
+
+        if (context instanceof AdvanceToNextListener) {
+            listener = (AdvanceToNextListener) context;
+        }
 
         if (prompt.getAnswerValue() != null) {
             selections.add((Selection) prompt.getAnswerValue().getValue());
@@ -49,5 +64,16 @@ public class SelectOneImageMapWidget extends SelectImageMapWidget {
     public IAnswerData getAnswer() {
         return selections.isEmpty() ? null
                 : new SelectOneData(selections.get(0));
+    }
+
+    @Override
+    protected void selectArea(String areaId) {
+        super.selectArea(areaId);
+
+        ((FormEntryActivity) getContext()).runOnUiThread(() -> {
+            if (autoAdvance && listener != null) {
+                listener.advance();
+            }
+        });
     }
 }
