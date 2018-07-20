@@ -17,6 +17,7 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatRadioButton;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -45,6 +46,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.external.ExternalSelectChoice;
+import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
@@ -68,13 +70,23 @@ import timber.log.Timber;
 @SuppressLint("ViewConstructor")
 public class ListWidget extends QuestionWidget implements MultiChoiceWidget, OnCheckedChangeListener {
 
+    @Nullable
+    private AdvanceToNextListener listener;
+
+    private final boolean autoAdvance;
+
     List<SelectChoice> items; // may take a while to compute
 
     ArrayList<RadioButton> buttons;
     View center;
 
-    public ListWidget(Context context, FormEntryPrompt prompt, boolean displayLabel) {
+    public ListWidget(Context context, FormEntryPrompt prompt, boolean displayLabel, boolean autoAdvance) {
         super(context, prompt);
+
+        this.autoAdvance = autoAdvance;
+        if (context instanceof AdvanceToNextListener) {
+            listener = (AdvanceToNextListener) context;
+        }
 
         // SurveyCTO-added support for dynamic select content (from .csv files)
         XPathFuncExpr xpathFuncExpr = ExternalDataUtil.getSearchXPathExpression(
@@ -285,6 +297,10 @@ public class ListWidget extends QuestionWidget implements MultiChoiceWidget, OnC
         }
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCheckedChanged",
                 items.get((Integer) buttonView.getTag()).getValue(), getFormEntryPrompt().getIndex());
+
+        if (autoAdvance && listener != null) {
+            listener.advance();
+        }
     }
 
 

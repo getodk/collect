@@ -198,10 +198,10 @@ public class WidgetFactory {
                     questionWidget = new SpinnerWidget(context, fep, appearance.contains("quick"));
                 } else if (appearance.contains("search") || appearance.contains("autocomplete")) {
                     questionWidget = new SelectOneSearchWidget(context, fep, appearance.contains("quick"));
-                } else if (appearance.equals("list-nolabel")) {
-                    questionWidget = new ListWidget(context, fep, false);
-                } else if (appearance.equals("list")) {
-                    questionWidget = new ListWidget(context, fep, true);
+                } else if (appearance.contains("list-nolabel")) {
+                    questionWidget = new ListWidget(context, fep, false, appearance.contains("quick"));
+                } else if (appearance.contains("list")) {
+                    questionWidget = new ListWidget(context, fep, true, appearance.contains("quick"));
                 } else if (appearance.equals("label")) {
                     questionWidget = new LabelWidget(context, fep);
                 } else if (appearance.contains("image-map")) {
