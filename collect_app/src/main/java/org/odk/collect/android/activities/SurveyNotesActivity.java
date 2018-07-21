@@ -44,7 +44,7 @@ import org.odk.collect.android.logic.HierarchyElement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SurveyNotesActivity extends Activity {
+public class SurveyNotesActivity extends CollectAbstractActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

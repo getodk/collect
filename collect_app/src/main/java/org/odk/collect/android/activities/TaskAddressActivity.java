@@ -44,7 +44,7 @@ import org.odk.collect.android.utilities.Utilities;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-public class TaskAddressActivity extends Activity implements OnClickListener {
+public class TaskAddressActivity extends CollectAbstractActivity implements OnClickListener {
 
 	private class Address {
 		String name;
@@ -66,11 +66,7 @@ public class TaskAddressActivity extends Activity implements OnClickListener {
         taskEntry = Utilities.getTaskWithIdOrPath(bundle.getLong("id"), null);
 
     	try {
-
-    		//String assignment_status = c.getString(c.getColumnIndex(FileDbAdapter.KEY_T_STATUS));
-    		//String taskTitle = c.getString(c.getColumnIndex(FileDbAdapter.KEY_T_TITLE));
-        	//String taskAddress = c.getString(c.getColumnIndex(FileDbAdapter.KEY_T_ADDRESS));
-        	
+            
         	// Formatting
    			LinearLayout.LayoutParams textLayout = 
 					new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
