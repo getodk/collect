@@ -17,6 +17,7 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.v7.widget.AppCompatRadioButton;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -95,8 +96,7 @@ public class ListWidget extends QuestionWidget implements MultiChoiceWidget, OnC
 
         if (items != null) {
             for (int i = 0; i < items.size(); i++) {
-                RadioButton r = new RadioButton(getContext());
-
+                AppCompatRadioButton r = new AppCompatRadioButton(getContext());
                 r.setId(ViewIds.generateViewId());
                 r.setTag(i);
                 r.setEnabled(!prompt.isReadOnly());
@@ -279,7 +279,7 @@ public class ListWidget extends QuestionWidget implements MultiChoiceWidget, OnC
         }
 
         for (RadioButton button : this.buttons) {
-            if (button.isChecked() && !(buttonView == button)) {
+            if (button.isChecked() && buttonView != button) {
                 button.setChecked(false);
             }
         }

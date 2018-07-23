@@ -47,6 +47,26 @@ public class FormsDao {
         return Collect.getInstance().getContentResolver().query(FormsProviderAPI.FormsColumns.CONTENT_URI, projection, selection, selectionArgs, sortOrder);
     }
 
+    private Cursor getFormsCursor(String formId, String formVersion) {
+
+        String[] selectionArgs;
+        String selection;
+
+        if (formVersion == null) {
+            selectionArgs = new String[]{formId};
+            selection = FormsProviderAPI.FormsColumns.JR_FORM_ID + "=? AND "
+                    + FormsProviderAPI.FormsColumns.JR_VERSION + " IS NULL";
+        } else {
+            selectionArgs = new String[]{formId, formVersion};
+            selection = FormsProviderAPI.FormsColumns.JR_FORM_ID + "=? AND "
+                    + FormsProviderAPI.FormsColumns.JR_VERSION + "=?";
+        }
+
+        String order = FormsProviderAPI.FormsColumns.DATE + " DESC"; //as long as we allow to store multiple forms with the same id and version number, choose the newest one
+
+        return getFormsCursor(null, selection, selectionArgs, order);
+    }
+
     private CursorLoader getFormsCursorLoader(String sortOrder) {
         return getFormsCursorLoader(null, null, null, sortOrder);
     }
@@ -74,25 +94,29 @@ public class FormsDao {
         return getFormsCursor(null, selection, selectionArgs, null);
     }
 
+    public boolean isFormEncrypted(String formId, String formVersion) {
+        boolean encrypted = false;
+
+        Cursor cursor = getFormsCursor(formId, formVersion);
+        if (cursor != null) {
+            try {
+                if (cursor.moveToFirst()) {
+                    int base64RSAPublicKeyColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY);
+                    encrypted = cursor.getString(base64RSAPublicKeyColumnIndex) != null;
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+        return encrypted;
+    }
+
+
     public String getFormMediaPath(String formId, String formVersion) {
         String formMediaPath = null;
 
-        String[] selectionArgs;
-        String selection;
+        Cursor cursor = getFormsCursor(formId, formVersion);
 
-        if (formVersion == null) {
-            selectionArgs = new String[]{formId};
-            selection = FormsProviderAPI.FormsColumns.JR_FORM_ID + "=? AND "
-                    + FormsProviderAPI.FormsColumns.JR_VERSION + " IS NULL";
-        } else {
-            selectionArgs = new String[]{formId, formVersion};
-            selection = FormsProviderAPI.FormsColumns.JR_FORM_ID + "=? AND "
-                    + FormsProviderAPI.FormsColumns.JR_VERSION + "=?";
-        }
-
-        String order = FormsProviderAPI.FormsColumns.DATE + " DESC"; //as long as we allow to store multiple forms with the same id and version number, choose the newest one
-
-        Cursor cursor = getFormsCursor(null, selection, selectionArgs, order);
         if (cursor != null) {
             try {
                 if (cursor.moveToFirst()) {
@@ -106,9 +130,9 @@ public class FormsDao {
         return formMediaPath;
     }
 
-    public Cursor getFormsCursorForFormFilePath(String formFIlePath) {
+    public Cursor getFormsCursorForFormFilePath(String formFilePath) {
         String selection = FormsProviderAPI.FormsColumns.FORM_FILE_PATH + "=?";
-        String[] selectionArgs = {formFIlePath};
+        String[] selectionArgs = {formFilePath};
 
         return getFormsCursor(null, selection, selectionArgs, null);
     }

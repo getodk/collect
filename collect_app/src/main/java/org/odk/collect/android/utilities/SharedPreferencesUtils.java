@@ -16,6 +16,7 @@ package org.odk.collect.android.utilities;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.ActionListener;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
@@ -147,6 +148,7 @@ public final class SharedPreferencesUtils {
 
             savePreferencesFromString(builder.toString(), null);
 
+            Collect.getInstance().initProperties();
             res = true;
         } catch (IOException e) {
             Timber.e(e, "Exception while loading preferences from file due to : %s ", e.getMessage());

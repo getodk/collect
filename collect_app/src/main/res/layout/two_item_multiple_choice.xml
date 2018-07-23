@@ -39,12 +39,22 @@ the specific language governing permissions and limitations under the License. -
             tools:text="text1" />
 
         <TextView
-            android:id="@+id/text2"
+            android:id="@+id/text3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/text1"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/text2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/text3"
             android:layout_toLeftOf="@+id/checkbox"
             android:layout_toStartOf="@+id/checkbox"
             android:gravity="center_vertical"

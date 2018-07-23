@@ -27,8 +27,10 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore.Images;
+import android.provider.OpenableColumns;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -72,6 +74,7 @@ import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.LocalDateTime;
+import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.IconMenuListAdapter;
 import org.odk.collect.android.adapters.model.IconMenuItem;
@@ -86,6 +89,7 @@ import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.external.handler.SmapRemoteDataItem;
 import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
+import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.FormSavedListener;
@@ -153,7 +157,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         FormLoaderListener, FormSavedListener, AdvanceToNextListener,
         OnGestureListener, SavePointListener, NumberPickerDialog.NumberPickerListener,
         DependencyProvider<ActivityAvailability>,
-        CustomDatePickerDialog.CustomDatePickerDialogListener, SaveFormIndexTask.SaveFormIndexListener,
+        CustomDatePickerDialog.CustomDatePickerDialogListener,
+        RankingWidgetDialog.RankingListener,
+        SaveFormIndexTask.SaveFormIndexListener,
         SmapRemoteListener {        // smap add SmapRemoteListener
 
     // save with every swipe forward or back. Timings indicate this takes .25
@@ -226,7 +232,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     private Animation inAnimation;
     private Animation outAnimation;
-    private View staleView = null;
+    private View staleView;
 
     private LinearLayout questionHolder;
     private View currentView;
@@ -240,7 +246,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private boolean beenSwiped;
 
     private final Object saveDialogLock = new Object();
-    private int viewCount = 0;
+    private int viewCount;
 
     private FormLoaderTask formLoaderTask;
     private SaveToDiskTask saveToDiskTask;
@@ -271,7 +277,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     @NonNull
     private ActivityAvailability activityAvailability = new ActivityAvailability(this);
 
-    private boolean shouldOverrideAnimations = false;
+    private boolean shouldOverrideAnimations;
 
     /**
      * Called when the activity is first created.
@@ -418,7 +424,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             // Not a restart from a screen orientation change (or other).
             Collect.getInstance().setFormController(null);
             supportInvalidateOptionsMenu();
-
             Intent intent = getIntent();
             if (intent != null) {
                 loadFromIntent(intent);
@@ -760,6 +765,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 // file
                 ImageConverter.execute(Collect.TMPFILE_PATH, getWidgetWaitingForBinaryData(), this);
                 File fi = new File(Collect.TMPFILE_PATH);
+
+                //revoke permissions granted to this file due its possible usage in
+                //the camera app
+                Uri uri = FileProvider.getUriForFile(this,
+                        BuildConfig.APPLICATION_ID + ".provider",
+                        fi);
+                FileUtils.revokeFileReadWritePermission(this, uri);
+
                 String instanceFolder = formController.getInstanceFile()
                         .getParent();
                 String s = instanceFolder + File.separator + System.currentTimeMillis() + ".jpg";
@@ -830,9 +843,22 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 break;
 
             case RequestCodes.ARBITRARY_FILE_CHOOSER:
+                // Same with VIDEO_CHOOSER.
             case RequestCodes.AUDIO_CHOOSER:
+                // Same with VIDEO_CHOOSER.
             case RequestCodes.VIDEO_CHOOSER:
-                saveFileAnswer(intent.getData());
+                /*
+                 * Start a task to save the chosen file/audio/video with a new Thread,
+                 * This could support retrieving file from Google Drive.
+                 * */
+                showDialog(SAVING_DIALOG);
+                Runnable saveFileRunnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        saveChosenFile(intent.getData());
+                    }
+                };
+                new Thread(saveFileRunnable).start();
                 break;
             case RequestCodes.LOCATION_CAPTURE:
                 String sl = intent.getStringExtra(LOCATION_RESULT);
@@ -876,39 +902,126 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         refreshCurrentView();
     }
 
-    private void saveChosenImage(Uri selectedImage) {
-        // Copy file to sdcard
-        String instanceFolder1 = getFormController().getInstanceFile().getParent();
-        String destImagePath = instanceFolder1 + File.separator + System.currentTimeMillis() + ".jpg";
+    /**
+     * Save a copy of the chosen media in Collect's own path such as
+     * "/storage/emulated/0/odk/instances/{form name}/filename",
+     * and if it's from Google Drive and not cached yet, we'll retrieve it using network.
+     * This may take a long time.
+     *
+     * @param selectedFile uri of the selected audio
+     * @see #getFileExtensionFromUri(Uri)
+     */
+    private void saveChosenFile(Uri selectedFile) {
+        String extension = getFileExtensionFromUri(selectedFile);
 
-        File chosenImage;
+        String instanceFolder = Collect.getInstance().getFormController()
+                .getInstanceFile().getParent();
+        String destPath = instanceFolder + File.separator
+                + System.currentTimeMillis() + extension;
+
+        File chosenFile;
         try {
-            chosenImage = MediaUtils.getFileFromUri(this, selectedImage, Images.Media.DATA);
-            if (chosenImage != null) {
-                final File newImage = new File(destImagePath);
-                FileUtils.copyFile(chosenImage, newImage);
-                ImageConverter.execute(newImage.getPath(), getWidgetWaitingForBinaryData(), this);
+            chosenFile = MediaUtils.getFileFromUri(this, selectedFile, Images.Media.DATA);
+            if (chosenFile != null) {
+                final File newFile = new File(destPath);
+                FileUtils.copyFile(chosenFile, newFile);
                 runOnUiThread(() -> {
-                    dismissDialog(SAVING_IMAGE_DIALOG);
+                    dismissDialog(SAVING_DIALOG);
                     if (getCurrentViewIfODKView() != null) {
-                        getCurrentViewIfODKView().setBinaryData(newImage);
+                        getCurrentViewIfODKView().setBinaryData(newFile);
                     }
                     saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                     refreshCurrentView();
                 });
             } else {
-                runOnUiThread(() -> {
-                    dismissDialog(SAVING_IMAGE_DIALOG);
-                    Timber.e("Could not receive chosen image");
-                    ToastUtils.showShortToastInMiddle(R.string.error_occured);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        dismissDialog(SAVING_DIALOG);
+                        Timber.e("Could not receive chosen file");
+                        ToastUtils.showShortToastInMiddle(R.string.error_occured);
+                    }
                 });
             }
         } catch (GDriveConnectionException e) {
-            runOnUiThread(() -> {
-                dismissDialog(SAVING_IMAGE_DIALOG);
-                Timber.e("Could not receive chosen image due to connection problem");
-                ToastUtils.showLongToastInMiddle(R.string.gdrive_connection_exception);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    dismissDialog(SAVING_DIALOG);
+                    Timber.e("Could not receive chosen file due to connection problem");
+                    ToastUtils.showLongToastInMiddle(R.string.gdrive_connection_exception);
+                }
             });
+        }
+    }
+
+
+    private void saveChosenImage(Uri selectedImage) {
+        // Copy file to sdcard
+        File instanceFile = getFormController().getInstanceFile();
+        if (instanceFile != null) {
+            String instanceFolder1 = instanceFile.getParent();
+            String destImagePath = instanceFolder1 + File.separator + System.currentTimeMillis() + ".jpg";
+
+            File chosenImage;
+            try {
+                chosenImage = MediaUtils.getFileFromUri(this, selectedImage, Images.Media.DATA);
+                if (chosenImage != null) {
+                    final File newImage = new File(destImagePath);
+                    FileUtils.copyFile(chosenImage, newImage);
+                    ImageConverter.execute(newImage.getPath(), getWidgetWaitingForBinaryData(), this);
+                    runOnUiThread(() -> {
+                        dismissDialog(SAVING_IMAGE_DIALOG);
+                        if (getCurrentViewIfODKView() != null) {
+                            getCurrentViewIfODKView().setBinaryData(newImage);
+                        }
+                        saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+                        refreshCurrentView();
+                    });
+                } else {
+                    runOnUiThread(() -> {
+                        dismissDialog(SAVING_IMAGE_DIALOG);
+                        Timber.e("Could not receive chosen image");
+                        ToastUtils.showShortToastInMiddle(R.string.error_occured);
+                    });
+                }
+            } catch (GDriveConnectionException e) {
+                runOnUiThread(() -> {
+                    dismissDialog(SAVING_IMAGE_DIALOG);
+                    Timber.e("Could not receive chosen image due to connection problem");
+                    ToastUtils.showLongToastInMiddle(R.string.gdrive_connection_exception);
+                });
+            }
+        } else {
+            ToastUtils.showLongToast(R.string.image_not_saved);
+            Timber.w(getString(R.string.image_not_saved));
+        }
+    }
+
+
+    /**
+     * Using contentResolver to get a file's extension by the uri returned from OnActivityResult.
+     *
+     * @param fileUri Whose name we want to get
+     * @return The file's extension
+     * @see #onActivityResult(int, int, Intent)
+     * @see #saveChosenFile(Uri)
+     * @see android.content.ContentResolver
+     */
+    private String getFileExtensionFromUri(Uri fileUri) {
+        try (Cursor returnCursor =
+                     getContentResolver().query(fileUri, null, null, null, null)) {
+            int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+            returnCursor.moveToFirst();
+            String filename = returnCursor.getString(nameIndex);
+            // If the file's name contains extension , we cut it down for latter use (copy a new file).
+            if (filename.lastIndexOf('.') != -1) {
+                return filename.substring(filename.lastIndexOf('.'));
+            } else {
+                // I found some mp3 files' name don't contain extension, but can be played as Audio
+                // So I write so, but I still there are some way to get its extension
+                return "";
+            }
         }
     }
 
@@ -2090,21 +2203,23 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         if (formController != null && formController.getInstanceFile() != null) {
             SaveToDiskTask.removeSavepointFiles(formController.getInstanceFile().getName());
-        }
 
-        // if it's not already saved, erase everything
-        if (!InstancesDaoHelper.isInstanceAvailable(getAbsoluteInstancePath())) {
-            // delete media first
-            String instanceFolder = formController.getInstanceFile().getParent();
-            Timber.i("Attempting to delete: %s", instanceFolder);
-            File file = formController.getInstanceFile().getParentFile();
-            int images = MediaUtils.deleteImagesInFolderFromMediaProvider(file);
-            int audio = MediaUtils.deleteAudioInFolderFromMediaProvider(file);
-            int video = MediaUtils.deleteVideoInFolderFromMediaProvider(file);
+            // if it's not already saved, erase everything
+            if (!InstancesDaoHelper.isInstanceAvailable(getAbsoluteInstancePath())) {
+                // delete media first
+                String instanceFolder = formController.getInstanceFile().getParent();
+                Timber.i("Attempting to delete: %s", instanceFolder);
+                File file = formController.getInstanceFile().getParentFile();
+                int images = MediaUtils.deleteImagesInFolderFromMediaProvider(file);
+                int audio = MediaUtils.deleteAudioInFolderFromMediaProvider(file);
+                int video = MediaUtils.deleteVideoInFolderFromMediaProvider(file);
 
-            Timber.i("Removed from content providers: %d image files, %d audio files and %d audio files.",
-                    images, audio, video);
-            FileUtils.purgeMediaPath(instanceFolder);
+                Timber.i("Removed from content providers: %d image files, %d audio files and %d audio files.",
+                        images, audio, video);
+                FileUtils.purgeMediaPath(instanceFolder);
+            }
+        } else {
+            Timber.w("null returned by getFormController()");
         }
     }
 
@@ -2474,7 +2589,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     }
 
-    private int animationCompletionSet = 0;
+    private int animationCompletionSet;
 
     private void afterAllAnimations() {
         if (staleView != null) {
@@ -2899,6 +3014,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         ODKView odkView = getCurrentViewIfODKView();
         if (odkView != null) {
             odkView.setBinaryData(date);
+        }
+    }
+
+    @Override
+    public void onRankingChanged(List<String> values) {
+        ODKView odkView = getCurrentViewIfODKView();
+        if (odkView != null) {
+            odkView.setBinaryData(values);
         }
     }
 

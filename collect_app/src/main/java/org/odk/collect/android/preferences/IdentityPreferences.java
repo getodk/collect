@@ -34,6 +34,14 @@ public class IdentityPreferences extends BasePreferenceFragment {
         addPreferencesFromResource(R.xml.identity_preferences);
 
         // initAnalyticsPref();  // smap
+        findPreference("form_metadata").setOnPreferenceClickListener(preference -> {
+            getActivity().getFragmentManager().beginTransaction()
+                    .replace(android.R.id.content, new FormMetadataFragment())
+                    .addToBackStack(null)
+                    .commit();
+            return true;
+        });
+
     }
 
     @Override

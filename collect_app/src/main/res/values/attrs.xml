@@ -3,5 +3,7 @@
     <declare-styleable name="Collect">
         <attr name="primaryTextColor" format="color" />
         <attr name="iconColor" format="color" />
+        <attr name="warningColor" format="color" />
+        <attr name="rankItemColor" format="color" />
     </declare-styleable>
 </resources>

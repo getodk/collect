@@ -15,8 +15,10 @@
 package org.odk.collect.android.activities;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -35,6 +37,7 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.listeners.PermissionListener;
@@ -44,14 +47,23 @@ import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.receivers.NetworkReceiver;
 import org.odk.collect.android.tasks.InstanceSyncTask;
+import org.odk.collect.android.tasks.sms.SmsNotificationReceiver;
+import org.odk.collect.android.tasks.sms.SmsService;
+import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
+import org.odk.collect.android.tasks.sms.models.SmsSubmission;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import timber.log.Timber;
 
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PROTOCOL;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_TRANSPORT_TYPE;
+import static org.odk.collect.android.tasks.sms.SmsSender.SMS_INSTANCE_ID;
 import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
 import static org.odk.collect.android.utilities.PermissionUtils.requestStoragePermissions;
 
@@ -78,6 +90,24 @@ public class InstanceUploaderList extends InstanceListActivity implements
 
     private boolean showAllMode;
 
+    private final BroadcastReceiver smsForegroundReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            //Stops the notification from being sent to others that are listening for this broadcast.
+            abortBroadcast();
+
+            //deletes submission since the app is in the foreground and the NotificationReceiver won't be triggered.
+            if (intent.hasExtra(SMS_INSTANCE_ID)) {
+                deleteIfSubmissionCompleted(intent.getStringExtra(SMS_INSTANCE_ID));
+            }
+        }
+    };
+
+    @Inject
+    SmsService smsService;
+    @Inject
+    SmsSubmissionManagerContract smsSubmissionManager;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +115,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
         // set title
         setTitle(getString(R.string.send_data));
         setContentView(R.layout.instance_uploader_list);
+        getComponent().inject(this);
 
         if (savedInstanceState != null) {
             showAllMode = savedInstanceState.getBoolean(SHOW_ALL_MODE);
@@ -111,50 +142,54 @@ public class InstanceUploaderList extends InstanceListActivity implements
 
             @Override
             public void onClick(View v) {
-                ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(
-                        Context.CONNECTIVITY_SERVICE);
-                NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
 
-                if (NetworkReceiver.running) {
-                    ToastUtils.showShortToast(R.string.send_in_progress);
-                } else if (ni == null || !ni.isConnected()) {
-                    logger.logAction(this, "uploadButton", "noConnection");
+                String transport = (String) GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE);
+                if (!transport.equalsIgnoreCase(getString(R.string.transport_type_value_sms))) {
 
-                    ToastUtils.showShortToast(R.string.no_connection);
-                } else {
-                    int checkedItemCount = getCheckedCount();
-                    logger.logAction(this, "uploadButton", Integer.toString(checkedItemCount));
+                    ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(
+                            Context.CONNECTIVITY_SERVICE);
+                    NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
 
-                    if (checkedItemCount > 0) {
-                        // items selected
-                        uploadSelectedFiles();
-                        setAllToCheckedState(listView, false);
-                        toggleButtonLabel(findViewById(R.id.toggle_button), listView);
-                        uploadButton.setEnabled(false);
-                    } else {
-                        // no items selected
-                        ToastUtils.showLongToast(R.string.noselect_error);
+                    if (NetworkReceiver.running) {
+                        ToastUtils.showShortToast(R.string.send_in_progress);
+                        return;
+                    } else if (ni == null || !ni.isConnected()) {
+                        logger.logAction(this, "uploadButton", "noConnection");
+                        ToastUtils.showShortToast(R.string.no_connection);
+                        return;
+
                     }
+                }
+
+                int checkedItemCount = getCheckedCount();
+                logger.logAction(this, "uploadButton", Integer.toString(checkedItemCount));
+
+                if (checkedItemCount > 0) {
+                    // items selected
+                    uploadSelectedFiles();
+                    setAllToCheckedState(listView, false);
+                    toggleButtonLabel(findViewById(R.id.toggle_button), listView);
+                    uploadButton.setEnabled(false);
+                } else {
+                    // no items selected
+                    ToastUtils.showLongToast(R.string.noselect_error);
                 }
             }
         });
 
         final Button toggleSelsButton = findViewById(R.id.toggle_button);
         toggleSelsButton.setLongClickable(true);
-        toggleSelsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ListView lv = listView;
-                boolean allChecked = toggleChecked(lv);
-                toggleButtonLabel(toggleSelsButton, lv);
-                uploadButton.setEnabled(allChecked);
-                if (allChecked) {
-                    for (int i = 0; i < lv.getCount(); i++) {
-                        selectedInstances.add(lv.getItemIdAtPosition(i));
-                    }
-                } else {
-                    selectedInstances.clear();
+        toggleSelsButton.setOnClickListener(v -> {
+            ListView lv = listView;
+            boolean allChecked = toggleChecked(lv);
+            toggleButtonLabel(toggleSelsButton, lv);
+            uploadButton.setEnabled(allChecked);
+            if (allChecked) {
+                for (int i = 0; i < lv.getCount(); i++) {
+                    selectedInstances.add(lv.getItemIdAtPosition(i));
                 }
+            } else {
+                selectedInstances.clear();
             }
         });
         toggleSelsButton.setOnLongClickListener(this);
@@ -163,12 +198,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
 
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         listView.setItemsCanFocus(false);
-        listView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-            @Override
-            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                uploadButton.setEnabled(areCheckedItems());
-            }
-        });
+        listView.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> uploadButton.setEnabled(areCheckedItems()));
 
 
         instanceSyncTask = new InstanceSyncTask();
@@ -193,6 +223,13 @@ public class InstanceUploaderList extends InstanceListActivity implements
 
         }
         super.onResume();
+
+        IntentFilter filter = new IntentFilter(SmsNotificationReceiver.SMS_NOTIFICATION_ACTION);
+        // The default priority is 0. Positive values will be before
+        // the default, lower values will be after it.
+        filter.setPriority(1);
+
+        registerReceiver(smsForegroundReceiver, filter);
     }
 
     @Override
@@ -201,6 +238,8 @@ public class InstanceUploaderList extends InstanceListActivity implements
             instanceSyncTask.setDiskSyncListener(null);
         }
         super.onPause();
+
+        unregisterReceiver(smsForegroundReceiver);
     }
 
     @Override
@@ -223,12 +262,33 @@ public class InstanceUploaderList extends InstanceListActivity implements
     }
 
     private void uploadSelectedFiles() {
-        // Smap no google sheets update removed
-        String server = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_PROTOCOL);
         long[] instanceIds = listView.getCheckedItemIds();
-        Intent i = new Intent(this, InstanceUploaderActivity.class);
-        i.putExtra(FormEntryActivity.KEY_INSTANCES, instanceIds);
-        startActivityForResult(i, INSTANCE_UPLOADER);
+        String transport = (String) GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE);
+
+        if (transport.equalsIgnoreCase(getString(R.string.transport_type_value_sms))) {
+            smsService.submitForms(instanceIds);
+        } else {
+
+            String server = (String) GeneralSharedPreferences.getInstance().get(KEY_PROTOCOL);
+
+            //if (server.equalsIgnoreCase(getString(R.string.protocol_google_sheets))) {   // smap
+            // if it's Sheets, start the Sheets uploader
+            // first make sure we have a google account selected
+
+            //    if (PlayServicesUtil.isGooglePlayServicesAvailable(this)) {
+            //        Intent i = new Intent(this, GoogleSheetsUploaderActivity.class);
+            //        i.putExtra(FormEntryActivity.KEY_INSTANCES, instanceIds);
+            //        startActivityForResult(i, INSTANCE_UPLOADER);
+            //    } else {
+            //        PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(this);
+            //    }
+
+            //} else {
+            // otherwise, do the normal aggregate/other thing.
+            Intent i = new Intent(this, InstanceUploaderActivity.class);
+            i.putExtra(FormEntryActivity.KEY_INSTANCES, instanceIds);
+            startActivityForResult(i, INSTANCE_UPLOADER);
+        }
     }
 
     @Override
@@ -294,8 +354,6 @@ public class InstanceUploaderList extends InstanceListActivity implements
                     }
                 }
                 break;
-            default:
-                break;
         }
         super.onActivityResult(requestCode, resultCode, intent);
     }
@@ -305,10 +363,8 @@ public class InstanceUploaderList extends InstanceListActivity implements
         for (long a : listView.getCheckedItemIds()) {
             checkedInstances.add(a);
         }
-        String[] data = new String[]{InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT};
-        int[] view = new int[]{R.id.text1, R.id.text2};
 
-        listAdapter = new SimpleCursorAdapter(this, R.layout.two_item_multiple_choice, null, data, view);
+        listAdapter = new InstanceUploaderAdapter(this, null);
         listView.setAdapter(listAdapter);
         checkPreviouslyCheckedItems();
     }
@@ -391,26 +447,20 @@ public class InstanceUploaderList extends InstanceListActivity implements
         alertDialog.show();
         return true;
     }
-    /* smap -- no google dialog
+
     @Override
-    protected Dialog onCreateDialog(int id) {
-        switch (id) {
-            case GOOGLE_USER_DIALOG:
-                AlertDialog.Builder gudBuilder = new AlertDialog.Builder(this);
+    protected void onDestroy() {
+        super.onDestroy();
 
-                gudBuilder.setTitle(R.string.no_google_account);
-                gudBuilder
-                        .setMessage(R.string.sheets_google_account_needed);
-                gudBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                });
-                gudBuilder.setCancelable(false);
-                return gudBuilder.create();
+        if (listAdapter != null) {
+            ((InstanceUploaderAdapter) listAdapter).onDestroy();
         }
-        return null;
     }
-    */
 
+    private void deleteIfSubmissionCompleted(String instanceId) {
+        SmsSubmission model = smsSubmissionManager.getSubmissionModel(instanceId);
+        if (model.isSubmissionComplete()) {
+            smsSubmissionManager.forgetSubmission(model.getInstanceId());
+        }
+    }
 }

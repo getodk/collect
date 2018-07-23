@@ -44,7 +44,7 @@ public class CaptureSelfieActivity extends CollectAbstractActivity {
                 .LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_capture_selfie);
-        FrameLayout preview = findViewById(R.id.camera_preview);
+        FrameLayout previewLayout = findViewById(R.id.camera_preview);
 
         try {
             cameraId = CameraUtils.getFrontCameraId();
@@ -53,12 +53,13 @@ public class CaptureSelfieActivity extends CollectAbstractActivity {
             Timber.e(e);
         }
 
-        this.preview = new CameraPreview(this, camera);
-        preview.addView(this.preview);
+        preview = new CameraPreview(this, camera);
+        previewLayout.addView(preview);
 
-        this.preview.setOnClickListener(new View.OnClickListener() {
+        preview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                preview.setEnabled(false);
                 camera.takePicture(null, null, picture);
             }
         });
@@ -66,7 +67,7 @@ public class CaptureSelfieActivity extends CollectAbstractActivity {
         ToastUtils.showLongToast(R.string.take_picture_instruction);
     }
 
-    private Camera.PictureCallback picture = new Camera.PictureCallback() {
+    private final Camera.PictureCallback picture = new Camera.PictureCallback() {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
             CameraUtils.savePhoto(Collect.TMPFILE_PATH, data);

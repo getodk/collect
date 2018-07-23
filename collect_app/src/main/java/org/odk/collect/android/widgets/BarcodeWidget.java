@@ -39,7 +39,10 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
+
+import static org.odk.collect.android.utilities.PermissionUtils.requestCameraPermission;
 
 /**
  * Widget that allows user to scan barcodes and add them to the form.
@@ -47,8 +50,8 @@ import org.odk.collect.android.widgets.interfaces.BinaryWidget;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class BarcodeWidget extends QuestionWidget implements BinaryWidget {
-    private Button getBarcodeButton;
-    private TextView stringAnswer;
+    private final Button getBarcodeButton;
+    private final TextView stringAnswer;
 
     public BarcodeWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -115,18 +118,27 @@ public class BarcodeWidget extends QuestionWidget implements BinaryWidget {
 
     @Override
     public void onButtonClick(int buttonId) {
-        Collect.getInstance()
-                .getActivityLogger()
-                .logInstanceAction(this, "recordBarcode", "click",
-                        getFormEntryPrompt().getIndex());
+        requestCameraPermission((FormEntryActivity) getContext(), new PermissionListener() {
+            @Override
+            public void granted() {
+                Collect.getInstance()
+                        .getActivityLogger()
+                        .logInstanceAction(this, "recordBarcode", "click",
+                                getFormEntryPrompt().getIndex());
 
-        waitForData();
+                waitForData();
 
-        new IntentIntegrator((Activity) getContext())
-                .setCaptureActivity(ScannerWithFlashlightActivity.class)
-                .setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES)
-                .setOrientationLocked(false)
-                .setPrompt(getContext().getString(R.string.barcode_scanner_prompt))
-                .initiateScan();
+                new IntentIntegrator((Activity) getContext())
+                        .setCaptureActivity(ScannerWithFlashlightActivity.class)
+                        .setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES)
+                        .setOrientationLocked(false)
+                        .setPrompt(getContext().getString(R.string.barcode_scanner_prompt))
+                        .initiateScan();
+            }
+
+            @Override
+            public void denied() {
+            }
+        });
     }
 }

@@ -16,9 +16,9 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.annotation.Nullable;
+import android.support.v7.content.res.AppCompatResources;
+import android.support.v7.widget.AppCompatRadioButton;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -62,7 +62,7 @@ public abstract class AbstractSelectOneWidget extends SelectTextWidget
     protected List<RadioButton> buttons;
     protected String selectedValue;
 
-    private boolean autoAdvance;
+    private final boolean autoAdvance;
 
     public AbstractSelectOneWidget(Context context, FormEntryPrompt prompt, boolean autoAdvance, boolean readOnlyOverride) {
         super(context, prompt);
@@ -116,7 +116,7 @@ public abstract class AbstractSelectOneWidget extends SelectTextWidget
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (isChecked) {
             for (RadioButton button : buttons) {
-                if (button.isChecked() && !(buttonView == button)) {
+                if (button.isChecked() && buttonView != button) {
                     button.setChecked(false);
                     clearNextLevelsOfCascadingSelect();
                 }
@@ -148,7 +148,7 @@ public abstract class AbstractSelectOneWidget extends SelectTextWidget
             choiceDisplayName = "";
         }
 
-        RadioButton radioButton = new RadioButton(getContext());
+        AppCompatRadioButton radioButton = new AppCompatRadioButton(getContext());
         radioButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         radioButton.setText(choiceDisplayName);
         radioButton.setMovementMethod(LinkMovementMethod.getInstance());
@@ -177,7 +177,6 @@ public abstract class AbstractSelectOneWidget extends SelectTextWidget
         readItems();
 
         LayoutInflater inflater = LayoutInflater.from(getContext());
-        Bitmap rightArrowBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.expander_ic_right);
 
         if (items != null) {
             for (int i = 0; i < items.size(); i++) {
@@ -188,7 +187,7 @@ public abstract class AbstractSelectOneWidget extends SelectTextWidget
                 radioButton.setOnClickListener(this);
 
                 ImageView rightArrow = (ImageView) thisParentLayout.getChildAt(1);
-                rightArrow.setImageBitmap(autoAdvance ? rightArrowBitmap : null);
+                rightArrow.setImageDrawable(autoAdvance ? AppCompatResources.getDrawable(getContext(), R.drawable.expander_ic_right) : null);
 
                 buttons.add(radioButton);
 

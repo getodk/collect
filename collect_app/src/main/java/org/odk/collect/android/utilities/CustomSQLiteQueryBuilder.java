@@ -58,15 +58,15 @@ public class CustomSQLiteQueryBuilder {
 
     @SuppressWarnings("PMD.ConsecutiveLiteralAppends")
     public CustomSQLiteQueryBuilder columnsForInsert(String... columns) {
-        query.append("(");
+        query.append('(');
         columnsForSelect(columns);
-        query.append(")").append(SPACE);
+        query.append(')').append(SPACE);
         return this;
     }
 
     public CustomSQLiteQueryBuilder columnsForSelect(String... columns) {
         for (String column : columns) {
-            query.append(column).append(",");
+            query.append(column).append(',');
         }
         int lastCommaIndex = query.lastIndexOf(",");
         query.deleteCharAt(lastCommaIndex).append(SPACE);

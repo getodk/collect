@@ -1,10 +1,11 @@
 package org.odk.collect.android.utilities;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Build;
 import android.preference.PreferenceManager;
-import android.util.DisplayMetrics;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.PreferenceKeys;
@@ -20,28 +21,60 @@ import java.util.TreeMap;
 
 public class LocaleHelper {
 
-    public void updateLocale(Context context, String localeCode) {
-        Locale locale = getLocale(localeCode);
-        Locale.setDefault(locale);
-        Configuration configuration = new Configuration();
-        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            configuration.setLocale(locale);
-        } else {
-            configuration.locale = locale;
-        }
-        context.getResources().updateConfiguration(configuration, displayMetrics);
-        context.getApplicationContext().getResources().updateConfiguration(configuration, displayMetrics);
+    // Created based on https://gunhansancar.com/change-language-programmatically-in-android/
+    public Context updateLocale(Context context) {
+        return updateLocale(context, getLocaleCode(context));
     }
 
-    public void updateLocale(Context context) {
+    private Context updateLocale(Context context, String language) {
+        Locale locale = getLocale(language);
+        Locale.setDefault(locale);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return updateResources(context, language);
+        }
+
+        return updateResourcesLegacy(context, language);
+    }
+
+    private String getLocaleCode(Context context) {
         String localeCode = PreferenceManager.getDefaultSharedPreferences(context)
                 .getString(PreferenceKeys.KEY_APP_LANGUAGE, "");
         boolean isUsingSysLanguage = localeCode.equals("");
         if (isUsingSysLanguage) {
             localeCode = Collect.defaultSysLanguage;
         }
-        updateLocale(context, localeCode);
+        return localeCode;
+    }
+
+    @TargetApi(Build.VERSION_CODES.N)
+    private Context updateResources(Context context, String language) {
+        Locale locale = getLocale(language);
+        Locale.setDefault(locale);
+
+        Configuration configuration = context.getResources().getConfiguration();
+        configuration.setLocale(locale);
+        configuration.setLayoutDirection(locale);
+
+        return context.createConfigurationContext(configuration);
+    }
+
+    @SuppressWarnings("deprecation")
+    private Context updateResourcesLegacy(Context context, String language) {
+        Locale locale = getLocale(language);
+        Locale.setDefault(locale);
+
+        Resources resources = context.getResources();
+
+        Configuration configuration = resources.getConfiguration();
+        configuration.locale = locale;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            configuration.setLayoutDirection(locale);
+        }
+
+        resources.updateConfiguration(configuration, resources.getDisplayMetrics());
+
+        return context;
     }
 
     public TreeMap<String, String> getEntryListValues() {

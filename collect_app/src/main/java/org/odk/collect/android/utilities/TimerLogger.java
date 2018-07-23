@@ -58,7 +58,6 @@ public class TimerLogger {
          * Create a new event
          */
         Event(long start, EventTypes eventType, int fecType, String node,
-              boolean advancingPage,
               Location location) {      // smap add location
             this.start = start;
             this.eventType = eventType;
@@ -175,13 +174,13 @@ public class TimerLogger {
         }
     }
 
-    private static AsyncTask saveTask = null;
-    private ArrayList<Event> events = null;
-    private String filename = null;
-    private File timerlogFile = null;
-    private long surveyOpenTime = 0;
-    private long surveyOpenElapsedTime = 0;
-    private boolean timerEnabled = false;              // Set true of the timer logger is enabled
+    private static AsyncTask saveTask;
+    private ArrayList<Event> events;
+    private String filename;
+    private File timerlogFile;
+    private long surveyOpenTime;
+    private long surveyOpenElapsedTime;
+    private final boolean timerEnabled;              // Set true of the timer logger is enabled
 
 
     public TimerLogger(File instanceFile, FormController formController) {
@@ -236,7 +235,7 @@ public class TimerLogger {
             }
 
             // smap add location
-            Event newEvent = new Event(start, eventType, fecType, node, advancingPage, Collect.getInstance().getLocation());
+            Event newEvent = new Event(start, eventType, fecType, node, Collect.getInstance().getLocation());
 
             /*
              * Close any existing interval events if the view is being exited

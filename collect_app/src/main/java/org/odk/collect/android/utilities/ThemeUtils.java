@@ -19,13 +19,13 @@ import android.content.Context;
 import android.os.Build;
 import android.support.annotation.AttrRes;
 import android.support.annotation.ColorInt;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.StyleRes;
 import android.util.TypedValue;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
-
 
 public final class ThemeUtils {
 
@@ -48,6 +48,11 @@ public final class ThemeUtils {
     @StyleRes
     public int getBottomDialogTheme() {
         return isDarkTheme() ? R.style.DarkMaterialDialogSheet : R.style.LightMaterialDialogSheet;
+    }
+
+    @DrawableRes
+    public int getDivider() {
+        return isDarkTheme() ? android.R.drawable.divider_horizontal_dark : android.R.drawable.divider_horizontal_bright;
     }
 
     public boolean isHoloDialogTheme(int theme) {
@@ -107,5 +112,13 @@ public final class ThemeUtils {
     @ColorInt
     public int getIconColor() {
         return getAttributeValue(R.attr.iconColor);
+    }
+
+    /**
+     * @return Rank item color for the current {@link android.content.res.Resources.Theme}
+     */
+    @ColorInt
+    public int getRankItemColor() {
+        return getAttributeValue(R.attr.rankItemColor);
     }
 }

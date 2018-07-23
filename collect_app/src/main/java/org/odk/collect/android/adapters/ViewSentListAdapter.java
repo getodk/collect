@@ -34,7 +34,7 @@ import java.util.Date;
 import java.util.Locale;
 
 public class ViewSentListAdapter extends SimpleCursorAdapter {
-    private Context context;
+    private final Context context;
 
     public ViewSentListAdapter(Context context, int layout, Cursor c, String[] from, int[] to) {
         super(context, layout, c, from, to);

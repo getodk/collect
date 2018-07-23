@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class ViewIds {
 
-    private static final AtomicInteger sNextGeneratedId = new AtomicInteger(1);
+    private static final AtomicInteger NEXT_GENERATED_ID = new AtomicInteger(1);
 
     /**
      * Generates a unique integer ID for a View.
@@ -32,14 +32,14 @@ public class ViewIds {
      */
     private static int generateViewIdPre17() {
         while (true) {
-            final int result = sNextGeneratedId.get();
+            final int result = NEXT_GENERATED_ID.get();
             // aapt-generated IDs have the high byte nonzero; clamp to the range under that.
             int newValue = result + 1;
             if (newValue > 0x00FFFFFF) {
                 newValue = 1; // Roll over to 1, not 0.
             }
 
-            if (sNextGeneratedId.compareAndSet(result, newValue)) {
+            if (NEXT_GENERATED_ID.compareAndSet(result, newValue)) {
                 return result;
             }
         }

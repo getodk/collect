@@ -57,7 +57,7 @@ public class FormsProvider extends ContentProvider {
     private static final int FORMS = 1;
     private static final int FORM_ID = 2;
 
-    private static final UriMatcher sUriMatcher;
+    private static final UriMatcher URI_MATCHER;
 
     /**
      * This class helps open, create, and upgrade the database file.
@@ -337,14 +337,14 @@ public class FormsProvider extends ContentProvider {
 
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         qb.setTables(FORMS_TABLE_NAME);
+        qb.setProjectionMap(sFormsProjectionMap);
+        qb.setStrict(true);
 
-        switch (sUriMatcher.match(uri)) {
+        switch (URI_MATCHER.match(uri)) {
             case FORMS:
-                qb.setProjectionMap(sFormsProjectionMap);
                 break;
 
             case FORM_ID:
-                qb.setProjectionMap(sFormsProjectionMap);
                 qb.appendWhere(FormsColumns._ID + "="
                         + uri.getPathSegments().get(1));
                 break;
@@ -358,15 +358,14 @@ public class FormsProvider extends ContentProvider {
         Cursor c = qb.query(db, projection, selection, selectionArgs, null,
                 null, sortOrder);
 
-        // Tell the cursor what uri to watch, so it knows when its source data
-        // changes
+        // Tell the cursor what uri to watch, so it knows when its source data changes
         c.setNotificationUri(getContext().getContentResolver(), uri);
         return c;
     }
 
     @Override
     public String getType(@NonNull Uri uri) {
-        switch (sUriMatcher.match(uri)) {
+        switch (URI_MATCHER.match(uri)) {
             case FORMS:
                 return FormsColumns.CONTENT_TYPE;
 
@@ -381,7 +380,7 @@ public class FormsProvider extends ContentProvider {
     @Override
     public synchronized Uri insert(@NonNull Uri uri, ContentValues initialValues) {
         // Validate the requested uri
-        if (sUriMatcher.match(uri) != FORMS) {
+        if (URI_MATCHER.match(uri) != FORMS) {
             throw new IllegalArgumentException("Unknown URI " + uri);
         }
 
@@ -528,7 +527,7 @@ public class FormsProvider extends ContentProvider {
         SQLiteDatabase db = getDbHelper().getWritableDatabase();
         int count;
 
-        switch (sUriMatcher.match(uri)) {
+            switch (URI_MATCHER.match(uri)) {
             case FORMS:
                 Cursor del = null;
                 try {
@@ -600,10 +599,9 @@ public class FormsProvider extends ContentProvider {
                 count = db.delete(
                         FORMS_TABLE_NAME,
                         FormsColumns._ID
-                                + "="
-                                + formId
+                                    + "=?"
                                 + (!TextUtils.isEmpty(where) ? " AND (" + where
-                                + ')' : ""), whereArgs);
+                                    + ')' : ""), prepareWhereArgs(whereArgs, formId));
                 break;
 
             default:
@@ -623,7 +621,7 @@ public class FormsProvider extends ContentProvider {
         }
         SQLiteDatabase db = getDbHelper().getWritableDatabase();
         int count = 0;
-        switch (sUriMatcher.match(uri)) {
+        switch (URI_MATCHER.match(uri)) {
             case FORMS:
                 // don't let users manually update md5
                 if (values.containsKey(FormsColumns.MD5_HASH)) {
@@ -734,7 +732,7 @@ public class FormsProvider extends ContentProvider {
                         }
 
                         // Make sure that the necessary fields are all set
-                        if (values.containsKey(FormsColumns.DATE) == true) {
+                            if (values.containsKey(FormsColumns.DATE)) {
                             Date today = new Date();
                             String ts = new SimpleDateFormat(getContext()
                                     .getString(R.string.added_on_date_at_time),
@@ -746,10 +744,9 @@ public class FormsProvider extends ContentProvider {
                                 FORMS_TABLE_NAME,
                                 values,
                                 FormsColumns._ID
-                                        + "="
-                                        + formId
+                                            + "=?"
                                         + (!TextUtils.isEmpty(where) ? " AND ("
-                                        + where + ')' : ""), whereArgs);
+                                            + where + ')' : ""), prepareWhereArgs(whereArgs, formId));
                     } else {
                         Timber.e("Attempting to update row that does not exist");
                     }
@@ -768,10 +765,23 @@ public class FormsProvider extends ContentProvider {
         return count;
     }
 
+    @NonNull
+    private String[] prepareWhereArgs(String[] whereArgs, String formId) {
+        String[] newWhereArgs;
+        if (whereArgs == null || whereArgs.length == 0) {
+            newWhereArgs = new String[] {formId};
+        } else {
+            newWhereArgs = new String[(whereArgs.length + 1)];
+            newWhereArgs[0] = formId;
+            System.arraycopy(whereArgs, 0, newWhereArgs, 1, whereArgs.length);
+        }
+        return newWhereArgs;
+    }
+
     static {
-        sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-        sUriMatcher.addURI(FormsProviderAPI.AUTHORITY, "forms", FORMS);
-        sUriMatcher.addURI(FormsProviderAPI.AUTHORITY, "forms/#", FORM_ID);
+        URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
+        URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, "forms", FORMS);
+        URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, "forms/#", FORM_ID);
 
         sFormsProjectionMap = new HashMap<>();
         sFormsProjectionMap.put(FormsColumns._ID, FormsColumns._ID);

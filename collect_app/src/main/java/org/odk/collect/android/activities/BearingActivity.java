@@ -35,10 +35,10 @@ public class BearingActivity extends CollectAbstractActivity implements SensorEv
     private Sensor accelerometer;
     private Sensor magnetometer;
 
-    private static float[] mAccelerometer = null;
-    private static float[] mGeomagnetic = null;
+    private static float[] mAccelerometer;
+    private static float[] mGeomagnetic;
 
-    private String bearingDecimal = null;
+    private String bearingDecimal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

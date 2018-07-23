@@ -23,23 +23,23 @@ package org.odk.collect.android.dto;
  * Objects of this class are created using builder pattern: https://en.wikipedia.org/wiki/Builder_pattern
  */
 public class Form {
-    private int id;
-    private String displayName;
-    private String description;
-    private String jrFormId;
-    private String jrVersion;
-    private String formFilePath;
-    private String submissionUri;
-    private String base64RSAPublicKey;
-    private String displaySubtext;
-    private String md5Hash;
-    private Long date;
-    private String jrCacheFilePath;
-    private String formMediaPath;
-    private String language;
-    private String autoSend;
-    private String autoDelete;
-    private String lastDetectedFormVersionHash;
+    private final int id;
+    private final String displayName;
+    private final String description;
+    private final String jrFormId;
+    private final String jrVersion;
+    private final String formFilePath;
+    private final String submissionUri;
+    private final String base64RSAPublicKey;
+    private final String displaySubtext;
+    private final String md5Hash;
+    private final Long date;
+    private final String jrCacheFilePath;
+    private final String formMediaPath;
+    private final String language;
+    private final String autoSend;
+    private final String autoDelete;
+    private final String lastDetectedFormVersionHash;
 
     private Form(Form.Builder builder) {
         id = builder.id;

@@ -25,9 +25,12 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.view.View;
 
+import com.google.common.collect.ObjectArrays;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.activities.SmapMain;
+import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.MediaUtils;
 
@@ -84,19 +87,16 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
 
         if (pref != null) {
             pref.setSummary(pref.getEntry());
-            pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
-                    String entry = (String) ((ListPreference) preference).getEntries()[index];
-                    if (!pref.getEntry().equals(entry)) {
-                        preference.setSummary(entry);
-                        Intent intent = new Intent(getActivity().getBaseContext(), SmapMain.class);     // smap
-                        getActivity().startActivity(intent);
-                        //MainMenuActivity.startActivityAndCloseAllOthers(UserInterfacePreferences.this.getActivity());
-                    }
-                    return true;
+            pref.setOnPreferenceChangeListener((preference, newValue) -> {
+                int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
+                String entry = (String) ((ListPreference) preference).getEntries()[index];
+                if (!pref.getEntry().equals(entry)) {
+                    preference.setSummary(entry);
+                    Intent intent = new Intent(getActivity().getBaseContext(), SmapMain.class);     // smap
+                    getActivity().startActivity(intent);
+                    // MainMenuActivity.startActivityAndCloseAllOthers(getActivity());
                 }
+                return true;
             });
         }
     }
@@ -106,15 +106,11 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
 
         if (pref != null) {
             pref.setSummary(pref.getEntry());
-            pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
-                    String entry = (String) ((ListPreference) preference).getEntries()[index];
-                    preference.setSummary(entry);
-                    return true;
-                }
+            pref.setOnPreferenceChangeListener((preference, newValue) -> {
+                int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
+                String entry = (String) ((ListPreference) preference).getEntries()[index];
+                preference.setSummary(entry);
+                return true;
             });
         }
     }
@@ -124,15 +120,11 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
 
         if (pref != null) {
             pref.setSummary(pref.getEntry());
-            pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
-                    CharSequence entry = ((ListPreference) preference).getEntries()[index];
-                    preference.setSummary(entry);
-                    return true;
-                }
+            pref.setOnPreferenceChangeListener((preference, newValue) -> {
+                int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
+                CharSequence entry = ((ListPreference) preference).getEntries()[index];
+                preference.setSummary(entry);
+                return true;
             });
         }
     }
@@ -158,29 +150,21 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
                 pref.setValueIndex(0);
             }
             pref.setSummary(pref.getEntry());
-            pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            pref.setOnPreferenceChangeListener((preference, newValue) -> {
+                int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
+                String entry = (String) ((ListPreference) preference).getEntries()[index];
+                preference.setSummary(entry);
 
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
-                    String entry = (String) ((ListPreference) preference).getEntries()[index];
-                    preference.setSummary(entry);
+                SharedPreferences.Editor edit = PreferenceManager
+                        .getDefaultSharedPreferences(getActivity()).edit();
+                edit.putString(KEY_APP_LANGUAGE, newValue.toString());
+                edit.apply();
 
-                    SharedPreferences.Editor edit = PreferenceManager
-                            .getDefaultSharedPreferences(getActivity()).edit();
-                    edit.putString(KEY_APP_LANGUAGE, newValue.toString());
-                    edit.apply();
-
-                    localeHelper.updateLocale(getActivity());
-
-                    Intent intent = new Intent(getActivity().getBaseContext(), SmapMain.class);             // smap
-                    getActivity().startActivity(intent);
-                    getActivity().overridePendingTransition(0, 0);
-                    getActivity().finishAffinity();
-                    // MainMenuActivity.startActivityAndCloseAllOthers(UserInterfacePreferences.this.getActivity());
-
-                    return true;
-                }
+                localeHelper.updateLocale(getActivity());
+                Intent intent = new Intent(getActivity().getBaseContext(), SmapMain.class);             // smap
+                getActivity().startActivity(intent);                            // smap
+                //MainMenuActivity.startActivityAndCloseAllOthers(getActivity());			// smap
+                return true;
             });
         }
     }
@@ -202,48 +186,55 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
             return;
         }
 
-        mapSdk.setSummary(mapSdk.getEntry());
-        mapSdk.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-
-                int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
-                if (index == 0) {
-                    mapBasemap.setEntryValues(R.array.map_google_basemap_selector_entry_values);
-                    mapBasemap.setEntries(R.array.map_google_basemap_selector_entries);
-                    mapBasemap.setValue(GOOGLE_MAPS_BASEMAP_DEFAULT);
-                    mapBasemap.setSummary(mapBasemap.getEntry());
-                } else {
-                    // Else its OSM Maps
-                    mapBasemap.setEntryValues(R.array.map_osm_basemap_selector_entry_values);
-                    mapBasemap.setEntries(R.array.map_osm_basemap_selector_entries);
-                    mapBasemap.setValue(OSM_MAPS_BASEMAP_DEFAULT);
-                    mapBasemap.setSummary(mapBasemap.getEntry());
-                }
-
-                String entry = (String) ((ListPreference) preference).getEntries()[index];
-                preference.setSummary(entry);
-                return true;
-            }
-        });
+        String[] onlineLayerEntryValues;
+        String[] onlineLayerEntries;
 
         if (mapSdk.getValue().equals(OSM_BASEMAP_KEY)) {
-            mapBasemap.setEntryValues(R.array.map_osm_basemap_selector_entry_values);
-            mapBasemap.setEntries(R.array.map_osm_basemap_selector_entries);
+            onlineLayerEntryValues = getResources().getStringArray(R.array.map_osm_basemap_selector_entry_values);
+            onlineLayerEntries = getResources().getStringArray(R.array.map_osm_basemap_selector_entries);
         } else {
-            mapBasemap.setEntryValues(R.array.map_google_basemap_selector_entry_values);
-            mapBasemap.setEntries(R.array.map_google_basemap_selector_entries);
+            onlineLayerEntryValues = getResources().getStringArray(R.array.map_google_basemap_selector_entry_values);
+            onlineLayerEntries = getResources().getStringArray(R.array.map_google_basemap_selector_entries);
         }
-        mapBasemap.setSummary(mapBasemap.getEntry());
-        mapBasemap.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
-                String entry = (String) ((ListPreference) preference).getEntries()[index];
-                preference.setSummary(entry);
-                return true;
+        mapBasemap.setEntryValues(ObjectArrays.concat(onlineLayerEntryValues, MapHelper.getOfflineLayerListWithTags(), String.class));
+        mapBasemap.setEntries(ObjectArrays.concat(onlineLayerEntries, MapHelper.getOfflineLayerListWithTags(), String.class));
+
+        mapSdk.setSummary(mapSdk.getEntry());
+        mapSdk.setOnPreferenceChangeListener((preference, newValue) -> {
+            String[] onlineLayerEntryValues1;
+            String[] onlineLayerEntries1;
+
+            int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
+            if (index == 0) { // Google Maps
+                onlineLayerEntryValues1 = getResources().getStringArray(R.array.map_google_basemap_selector_entry_values);
+                onlineLayerEntries1 = getResources().getStringArray(R.array.map_google_basemap_selector_entries);
+                mapBasemap.setValue(GOOGLE_MAPS_BASEMAP_DEFAULT);
+            } else { // OSM Maps
+                onlineLayerEntryValues1 = getResources().getStringArray(R.array.map_osm_basemap_selector_entry_values);
+                onlineLayerEntries1 = getResources().getStringArray(R.array.map_osm_basemap_selector_entries);
+                mapBasemap.setValue(OSM_MAPS_BASEMAP_DEFAULT);
             }
+
+            mapBasemap.setEntryValues(ObjectArrays.concat(onlineLayerEntryValues1, MapHelper.getOfflineLayerListWithTags(), String.class));
+            mapBasemap.setEntries(ObjectArrays.concat(onlineLayerEntries1, MapHelper.getOfflineLayerListWithTags(), String.class));
+            mapBasemap.setSummary(mapBasemap.getEntry());
+
+            preference.setSummary(((ListPreference) preference).getEntries()[index]);
+            return true;
+        });
+
+        CharSequence entry = mapBasemap.getEntry();
+        if (entry != null) {
+            mapBasemap.setSummary(entry);
+        } else {
+            mapBasemap.setSummary(mapBasemap.getEntries()[0]);
+            mapBasemap.setValueIndex(0);
+        }
+
+        mapBasemap.setOnPreferenceChangeListener((preference, newValue) -> {
+            int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
+            preference.setSummary(((ListPreference) preference).getEntries()[index]);
+            return true;
         });
     }
 
@@ -258,7 +249,6 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
 
         switch (requestCode) {
             case IMAGE_CHOOSER:
-
                 // get gp of chosen file
                 Uri selectedMedia = intent.getData();
                 String sourceMediaPath = MediaUtils.getPathFromUri(getActivity(), selectedMedia,

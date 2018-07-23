@@ -2,6 +2,9 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
   <string name="show_password">عرض كلمة المرور</string>
   <string name="activity_not_found">لا يوجد مهمات للمعالجة: %s</string>
+  <string name="view_image">عرض الصورة</string>
+  <string name="view_video">عرض الفيديو</string>
+  <string name="choose_audio">إختر تسجيل صوتي</string>
   <string name="add_another">إضافة مجموعة</string>
   <string name="add_another_repeat">إضافة \"%s\" مجموعة أخرى؟</string>
   <string name="add_repeat">إضافة \"%s\" مجموعة جديدة؟</string>
@@ -11,7 +14,8 @@
   <string name="cancel">إلغاء</string>
   <string name="cancel_loading_form">إلغاء</string>
   <string name="cancel_location">إلغاء</string>
-  <string name="cannot_edit_completed_form">لا يمكن تعديل الاستمارة النهائية</string>
+  <string name="canceling">جاري الإلغاء</string>
+  <string name="cannot_edit_completed_form">يتعذر تعديل هذه الاستمارة عندما يتم وضع علامة على أنها مكتملة. قد تكون مشفرة.</string>
   <string name="capture_audio">تسجيل الصوت</string>
   <string name="capture_image">التقط صورة</string>
   <string name="capture_osm">شغل ال OpenMapKit</string>
@@ -41,7 +45,6 @@
   <string name="discard_answer">حذف الإجابة</string>
   <string name="discard_group">حذف المجموعة</string>
   <string name="download">الحصول على الاستمارات المحددة</string>
-  <string name="download_forms_result">تحميل النتائج</string>
   <string name="downloading_data">الإتصال بالخادم</string>
   <string name="do_not_change">إلغاء</string>
   <string name="do_not_exit">إلغاء</string>
@@ -84,7 +87,7 @@
   <string name="no_connection">لا يوجد اتصال بالشبكة</string>
   <string name="no_items_display">لا يوجد شيء للعرض.</string>
   <string name="no_items_display_forms">لا شيء متاح للعرض./n/n حاول الحصول على نموذج فارغ و قم بتعبئته.</string>
-  <string name="no_items_display_sent_forms">لا يوجد استمارات مرسلة للعرض</string>
+  <string name="no_items_display_sent_forms">لا شيء متاح للعرض./n/n حاول إرسال الاستمارات المكتملة قبل العرض.</string>
   <string name="no_items_display_instances">لا شيء متاح للعرض./n/n حاول وضع الصيغ النهائية للاستمارات المحفوظة قبل الارسال.</string>
   <string name="ok">حسناً</string>
   <string name="parse_error">عذراً لا يمكن تحليل الاستمارة.</string>
@@ -104,13 +107,13 @@
   <string name="save_all_answers">حفظ الاستمارة</string>
   <string name="save_enter_data_description">إنّك في نهاية الـ%s.</string>
   <string name="saving_form">جاري حفظ الاستمارة</string>
-  <string name="sending_items">ارسال %1$s من أصل %2$s استمارة</string>
+  <string name="sending_items">إرسال %1$s من أصل %2$s استمارة</string>
   <string name="send_data">إرسال الاستمارة النهائية</string>
-  <string name="send_data_button">إرسال الاستمارة النهائية (%s)</string>
+  <string name="send_data_button">إرسال الاستمارة المكتملة (%s)</string>
   <string name="send_selected_data">إرسال الاستمارات المُختارة</string>
   <string name="view_sent_forms">عرض الاستمارات المرسلة</string>
   <string name="view_sent_forms_button">عرض الاستمارات المرسلة : (%s)</string>
-  <string name="server_auth_credentials">%s :  كلمة المرو او اسم المستخدم غير صحيح</string>
+  <string name="server_auth_credentials">%sكلمة المرور أو اسم المستخدم غير صحيح:</string>
   <string name="server_requires_auth">المخدم يتطلب المصادقة</string>
   <string name="server_url">الرابط</string>
   <string name="server_preferences">إعدادات الخادم</string>
@@ -146,7 +149,8 @@
   <string name="success">نجاح</string>
   <string name="no_forms_uploaded">عذرا، لا يوجد استمارة للتحميل.</string>
   <string name="upload_results">تحميل النتائج</string>
-  <string name="xform_parse_error">خطاء في محلل البيانات لـ %1$s: %2$s مفقود او غير صالح</string>
+  <string name="xform_parse_error">خطأ في محلل XForm من أجل %1$s: %2$s مفقود أو غير صالح.</string>
+  <string name="choose_file">إختر ملف</string>
   <string name="choose_sound">إختر تسجيل صوتي</string>
   <string name="choose_video">إختر فيديو</string>
   <string name="choose_image">إختر صورة</string>
@@ -176,7 +180,7 @@
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="sending_failed_on_date_at_time">\'فشل الارسال ب\' yyyy, dd MMM, EEE  \'في الساعة\' mm:HH</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="deleted_on_date_at_time">تمت عملية الحذف في تاريخ والوقت</string>
+  <string name="deleted_on_date_at_time">\'تمت عملية الحذف في\' yyyy, dd MMM, EEE  \'الساعة\' mm:HH</string>
   <string name="version">رقم الاصدار:</string>
   <string name="parent_form_not_present">غير قادر على تعديل هذه الاستمارة المحفوظة لان الاستمارة المقابلة غير موجودة جاليا او قد تم مسحها./n/n اعدادات الاستمارة: %1$s</string>
   <string name="launch_app">تشغيل</string>
@@ -199,7 +203,7 @@
   <string name="admin_password_incorrect">عذرًا، كلمة المرور غير صحيحة!</string>
   <string name="enter_admin_password">أدخل كلمة مرور المدير</string>
   <string name="change_admin_password">تغيير كلمة مرور المدير</string>
-  <string name="autosend">الارسال التلقائي</string>
+  <string name="autosend">الإرسال التلقائي</string>
   <string name="found_in_main">الغاء القفل للاخفاء من القائمة الرئيسية</string>
   <string name="found_in_settings">الغاء القفل للاخفاء من الاعدادات الرئيسية</string>
   <string name="save_preferences">حفظ الاعدادات في القرص</string>
@@ -215,6 +219,7 @@
   <string name="constraint_behavior_on_swipe">التدقيق عند السحب باتجاه الامام</string>
   <string name="constraint_behavior_on_finalize">تأجيل المصادقة حتى الانتهاء</string>
   <string name="view_change_location">الاطلاع على الموقع أو تغيير الموقع</string>
+  <string name="change_location">تغيير الموقع</string>
   <string name="open_url">فتح الرابط</string>
   <string name="get_bearing">تسجيل الاتجاه</string>
   <string name="replace_bearing">استبدال الاتجاه</string>
@@ -230,6 +235,7 @@
   <string name="ext_search_return_error">معالج البحث استعاد نوع الموضوع  \'%s\'.</string>
   <string name="ext_import_generic_error">لم يمكن استيراد البيانات من  %1$s السبب: %2$s</string>
   <string name="ext_import_progress_message">التحميل المسبق للبيانات من \'%1$s\'،  يرجى الانتظار…  %2$s</string>
+  <string name="ext_import_cancelled_message">إلغاء قراءة البيانات!</string>
   <string name="ext_import_finalizing_message">جاري انهاء التحميل المسبق للبيانات.</string>
   <string name="ext_import_completed_message">اكتملت قراءة البيانات!</string>
   <string name="ext_not_initialized_error">مدير البيانات الخارجية لم يتم تفعيله.</string>
@@ -263,7 +269,6 @@
   <string name="no_google_account">لم يتم اختيار حساب جوجل!</string>
   <string name="google_set_account">لقد قمت باختيار صفحات الجوجل كخادم لك، أرجو اختيار حساب الجوجل  المتوافق عن طريق الاعدادت العامة قبل الاستمرار</string>
   <string name="odk_auth_auth_fail">فشل في عملية التحقق من بيانات المصادقة</string>
-  <string name="odk_auto_note">ملاحظات تلقائية</string>
   <string name="notification_error">خطأ في عرض اشعار النص</string>
   <string name="delete_after_send">حذف بعد الارسال</string>
   <string name="delete_after_send_summary">حذف الاستمارة النهائية والوسائط المتعددة بعد ارسالها الى الخادم</string>
@@ -273,7 +278,7 @@
   <string name="send_in_progress">خلفية الارسال تعمل. يرجى المحاولة مرة أخرى في وقت قريب</string>
   <string name="sheets_max_columns">الحد الأقصى لعدد الأعمدة هو 255، استماراتك تحتوي على %s. غير قادر على تحميل الجدول.</string>
   <string name="invalid_sheet_id">رقم تعرفة الصفحة غير صحيح: %1$s</string>
-  <string name="google_sheets_access_denied">رفض الوصول الى اوراق جوجل</string>
+  <string name="google_sheets_access_denied">تم رفض الوصول. الرجاء التأكد من منح مالك الجدول إذن الوصول لك.</string>
   <string name="google_sheets_missing_columns">الأعمدة التالية مفقودة من الجدول: %1$s </string>
   <string name="password_error_whitespace">الزيادات في البداية أو الفراغات غير مسموح بها في كلمات المرور</string>
   <string name="username_error_whitespace">الزيادات في البداية أو الفراغات غير مسموح بها في اسم المستخدم</string>
@@ -320,7 +325,7 @@
   <string name="clear">الغاء</string>
   <string name="polyline_polygon_text">حفظ GeoTrace كـ</string>
   <string name="manual_mode">الوضع اليدوي</string>
-  <string name="automatic_mode">الوضع الألي</string>
+  <string name="automatic_mode">الوضع الآلي</string>
   <string name="geoshape_instruction">انقر مطولاً لانشاء علامة</string>
   <string name="geotrace_instruction">انتظر للقفل. ثم اضغط على زر إضافة علامة للبداء.</string>
   <string name="geopoint_instruction">انقر مطولاً لانشاء علامة او انقر على زر إضافة علامة</string>
@@ -445,7 +450,6 @@
   <string name="invalid_qrcode">كود QR غير صحيح</string>
   <string name="share_qrcode">مشاركة كود QR</string>
   <string name="take_picture_instruction">التقط صورة</string>
-  <string name="request_permission">طلب صلاحيات</string>
   <string name="camera_error">خطأ في الكاميرا</string>
   <string name="invalid_range_widget">هذة الميزة غير موجودة</string>
   <string name="form_entry_setting">إعدادات تعبئة الاستمارة</string>
@@ -457,6 +461,7 @@
   <string name="user_access_control">قيود المستخدم</string>
   <string name="autosend_selector_title">الارسال التلقائي</string>
   <string name="off">مغلق</string>
+  <string name="guidance_no">لا</string>
   <string name="wifi_autosend">ارسال تلقائي عبر Wifi</string>
   <string name="cellular_autosend">ارسال تلقائي عبر شبكة الاتصال</string>
   <string name="wifi_cellular_autosend">ارسال تلقائي عبر Wifi و شبكة الاتصال</string>
@@ -484,5 +489,38 @@
   <string name="deleting_form_dialog_update_message">حذف استمارة : %1$d من اصل %2$d</string>
   <string name="search">بحث</string>
   <string name="null_intent_value">حدث خطأ. قيمة فارغة</string>
+  <string name="image_size_large">كبيرة (3072 بكسل)</string>
+  <string name="image_size_medium">متوسطة (2048 بكسل)</string>
+  <string name="image_size_small">صغيرة (1024 بكسل)</string>
+  <string name="image_size_very_small">صغيرة جدا (640 بكسل)</string>
+  <string name="image_size_original">الحجم الأصلي من الكاميرا (افتراضي)</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <string name="islamic_month_1">محرم</string>
+  <string name="islamic_month_2">صفر</string>
+  <string name="islamic_month_3">ربيع الأول</string>
+  <string name="islamic_month_4">ربيع الثاني</string>
+  <string name="islamic_month_5">جمادى الأولى</string>
+  <string name="islamic_month_6">جمادى الثانية</string>
+  <string name="islamic_month_7">رجب</string>
+  <string name="islamic_month_8">شعبان</string>
+  <string name="islamic_month_9">رمضان</string>
+  <string name="islamic_month_10">شوال</string>
+  <string name="islamic_month_11">ذو القعدة</string>
+  <string name="islamic_month_12">ذو الحجة</string>
+  <string name="yes">نعم</string>
+  <string name="no">لا</string>
+  <string name="newer_version_of_a_form_info">هذا تحديث للإستمارة التي لديك</string>
+  <string name="svg_file_does_not_exist">ملف SVG غير موجود!</string>
+  <string name="start_video_capture_instruction">إنقر على الشاشة لبدء التسجيل</string>
+  <string name="stop_video_capture_instruction">بدأ التسجيل. إنقر مجددا للتوقف</string>
+  <string name="form_update_category">تحديث الاستمارة</string>
+  <string name="never">إطلاقا</string>
+  <string name="every_fifteen_minutes">كل 15 دقيقة</string>
+  <string name="every_one_hour">كل ساعة</string>
+  <string name="every_six_hours">كل 6 ساعات</string>
+  <string name="every_24_hours">كل 24 ساعة</string>
+  <string name="form_updates_available">تحديثات الاستمارة متاحة</string>
+  <string name="automatic_download">تحميل آلي</string>
+  <string name="hide_old_form_versions_setting_title">إخفاء الإصدارات القديمة من الاستمارة</string>
+  <!--Sms submission-->
 </resources>

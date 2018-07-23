@@ -51,6 +51,8 @@ import java.text.DecimalFormat;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.utilities.PermissionUtils.checkIfLocationPermissionsGranted;
+
 /**
  * Version of the GeoPointMapActivity that uses the new OSMDDroid
  *
@@ -65,7 +67,7 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
     //private GoogleMap map;
     private MapView map;
 
-    private Handler handler = new Handler();
+    private final Handler handler = new Handler();
     private Marker marker;
 
     private GeoPoint latLng;
@@ -82,7 +84,7 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
     private boolean isDragged;
     private ImageButton showLocationButton;
 
-    private int locationCount = 0;
+    private int locationCount;
 
     private MapHelper helper;
 
@@ -98,12 +100,18 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
     private boolean draggable;
     private boolean intentDraggable;
     private boolean locationFromIntent;
-    private int locationCountNum = 0;
+    private int locationCountNum;
     private boolean foundFirstLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (!checkIfLocationPermissionsGranted(this)) {
+            finish();
+            return;
+        }
+
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         if (savedInstanceState != null) {
@@ -129,7 +137,7 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
         }
 
         marker = new Marker(map);
-        marker.setIcon(ContextCompat.getDrawable(this, R.drawable.ic_place));
+        marker.setIcon(ContextCompat.getDrawable(this, R.drawable.ic_place_black));
         myLocationOverlay = new MyLocationNewOverlay(map);
 
         handler.postDelayed(new Runnable() {
@@ -194,13 +202,13 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
         layersButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                helper.showLayersDialog(GeoPointOsmMapActivity.this);
+                helper.showLayersDialog();
 
             }
         });
 
 
-        zoomDialogView = getLayoutInflater().inflate(R.layout.geopoint_zoom_dialog, null);
+        zoomDialogView = getLayoutInflater().inflate(R.layout.geo_zoom_dialog, null);
 
         zoomLocationButton = zoomDialogView.findViewById(R.id.zoom_location);
         zoomLocationButton.setOnClickListener(new View.OnClickListener() {
@@ -212,7 +220,7 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
             }
         });
 
-        zoomPointButton = zoomDialogView.findViewById(R.id.zoom_point);
+        zoomPointButton = zoomDialogView.findViewById(R.id.zoom_saved_location);
         zoomPointButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -485,7 +493,7 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
         showLocationButton.setEnabled(true);
         map.invalidate();
         marker.setPosition(geoPoint);
-        marker.setIcon(ContextCompat.getDrawable(this, R.drawable.ic_place));
+        marker.setIcon(ContextCompat.getDrawable(this, R.drawable.ic_place_black));
         marker.setDraggable(true);
         latLng = geoPoint;
         isDragged = true;
@@ -519,7 +527,7 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
         if (myLocationOverlay.getMyLocation() != null) {
             zoomLocationButton.setEnabled(true);
             zoomLocationButton.setBackgroundColor(Color.parseColor("#50cccccc"));
-            zoomLocationButton.setTextColor(Color.parseColor("#ff333333"));
+            zoomLocationButton.setTextColor(themeUtils.getPrimaryTextColor());
         } else {
             zoomLocationButton.setEnabled(false);
             zoomLocationButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));
@@ -529,7 +537,7 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
         if (latLng != null & !setClear) {
             zoomPointButton.setEnabled(true);
             zoomPointButton.setBackgroundColor(Color.parseColor("#50cccccc"));
-            zoomPointButton.setTextColor(Color.parseColor("#ff333333"));
+            zoomPointButton.setTextColor(themeUtils.getPrimaryTextColor());
         } else {
             zoomPointButton.setEnabled(false);
             zoomPointButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));

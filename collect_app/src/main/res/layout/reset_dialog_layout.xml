@@ -42,6 +42,7 @@ limitations under the License.
             android:text="@string/reset_settings"
             android:padding="5dp"
             android:button="@null"
+            android:background="?android:attr/selectableItemBackground"
             android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
             android:drawableRight="?android:attr/listChoiceIndicatorMultiple" />
 
@@ -52,6 +53,7 @@ limitations under the License.
             android:text="@string/reset_saved_forms"
             android:padding="5dp"
             android:button="@null"
+            android:background="?android:attr/selectableItemBackground"
             android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
             android:drawableRight="?android:attr/listChoiceIndicatorMultiple" />
 
@@ -62,6 +64,7 @@ limitations under the License.
             android:text="@string/reset_blank_forms"
             android:padding="5dp"
             android:button="@null"
+            android:background="?android:attr/selectableItemBackground"
             android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
             android:drawableRight="?android:attr/listChoiceIndicatorMultiple" />
 
@@ -72,6 +75,7 @@ limitations under the License.
             android:text="@string/reset_cache"
             android:padding="5dp"
             android:button="@null"
+            android:background="?android:attr/selectableItemBackground"
             android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
             android:drawableRight="?android:attr/listChoiceIndicatorMultiple" />
 
@@ -82,6 +86,7 @@ limitations under the License.
             android:text="@string/reset_layers"
             android:padding="5dp"
             android:button="@null"
+            android:background="?android:attr/selectableItemBackground"
             android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
             android:drawableRight="?android:attr/listChoiceIndicatorMultiple" />
 
@@ -92,6 +97,7 @@ limitations under the License.
             android:text="@string/reset_osm_tiles"
             android:padding="5dp"
             android:button="@null"
+            android:background="?android:attr/selectableItemBackground"
             android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
             android:drawableRight="?android:attr/listChoiceIndicatorMultiple" />
 

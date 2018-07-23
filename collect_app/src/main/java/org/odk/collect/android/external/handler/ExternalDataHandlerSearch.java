@@ -25,6 +25,7 @@ import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.R;
+import org.odk.collect.android.R.string;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalDataException;
 import org.odk.collect.android.external.ExternalDataManager;
@@ -38,6 +39,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 
+import timber.log.Timber;
 import static org.odk.collect.android.external.handler.ExternalDataSearchType.IN;
 import static org.odk.collect.android.external.handler.ExternalDataSearchType.NOT_IN;
 
@@ -190,6 +192,7 @@ public class ExternalDataHandlerSearch extends ExternalDataHandlerBase {
                 c = db.query(ExternalDataUtil.EXTERNAL_DATA_TABLE_NAME, sqlColumns, selection,
                         selectionArgs, null, null, ExternalDataUtil.SORT_COLUMN_NAME);
             } catch (Exception e) {
+                Timber.e(Collect.getInstance().getString(string.ext_import_csv_missing_error, dataSetName, dataSetName));
                 if (c != null) {
                     c.close();
                 }
@@ -311,13 +314,13 @@ public class ExternalDataHandlerSearch extends ExternalDataHandlerBase {
                 break;
             }
             if (columnIndex > 1) {
-                sb.append(" ");
+                sb.append(' ');
             }
-            sb.append("(");
+            sb.append('(');
             sb.append(selectColumnMap.get(columnName));
             sb.append(": ");
             sb.append(value);
-            sb.append(")");
+            sb.append(')');
         }
         return sb.toString();
     }

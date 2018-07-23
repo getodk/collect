@@ -16,20 +16,28 @@ package org.odk.collect.android.tasks;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
+import android.provider.BaseColumns;
 
+import org.apache.commons.io.FileUtils;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.exception.EncryptionException;
 import org.odk.collect.android.listeners.DiskSyncListener;
+import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.utilities.EncryptionUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -48,8 +56,7 @@ import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColum
  */
 public class InstanceSyncTask extends AsyncTask<Void, String, String> {
 
-
-    private static int counter = 0;
+    private static int counter;
 
     private String currentStatus = "";
     private DiskSyncListener diskSyncListener;
@@ -81,6 +88,13 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                 // Build the list of potential path that we need to add to the content provider
                 for (File instanceDir : instanceFolders) {
                     File instanceFile = new File(instanceDir, instanceDir.getName() + ".xml");
+                    if (!instanceFile.exists()) {
+                        // Look for submission file that might have been manually copied from e.g. Briefcase
+                        File submissionFile = new File(instanceDir, "submission.xml");
+                        if (submissionFile.exists()) {
+                            submissionFile.renameTo(instanceFile);
+                        }
+                    }
                     if (instanceFile.exists() && instanceFile.canRead()) {
                         candidateInstances.add(instanceFile.getAbsolutePath());
                     } else {
@@ -93,10 +107,10 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
 
                 // Remove all the path that's already in the content provider
                 Cursor instanceCursor = null;
+                InstancesDao instancesDao = new InstancesDao();
                 try {
                     String sortOrder = InstanceColumns.INSTANCE_FILE_PATH + " ASC ";
-                    instanceCursor = Collect.getInstance().getContentResolver()
-                            .query(InstanceColumns.CONTENT_URI, null, null, null, sortOrder);
+                    instanceCursor = instancesDao.getSavedInstancesCursor(sortOrder);
                     if (instanceCursor == null) {
                         Timber.e("[%d] Instance content provider returned null", instance);
                         return currentStatus;
@@ -122,8 +136,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                     }
                 }
 
-                InstancesDao instancesDao = new InstancesDao();
-                //instancesDao.deleteInstancesFromIDs(filesToRemove);  smap - these could be tasks
+                //instancesDao.deleteInstancesFromIDs(filesToRemove);	// smap - these could be tasks
 
                 final boolean instanceSyncFlag = PreferenceManager.getDefaultSharedPreferences(
                         Collect.getInstance().getApplicationContext()).getBoolean(
@@ -140,8 +153,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                             String selection = FormsColumns.JR_FORM_ID + " = ? ";
                             String[] selectionArgs = new String[]{instanceFormId};
                             // retrieve the form definition
-                            formCursor = Collect.getInstance().getContentResolver()
-                                    .query(FormsColumns.CONTENT_URI, null, selection, selectionArgs, null);
+                            formCursor = new FormsDao().getFormsCursor(selection, selectionArgs);
                             // TODO: optimize this by caching the previously found form definition
                             // TODO: optimize this by caching unavailable form definition to skip
                             if (formCursor != null && formCursor.moveToFirst()) {
@@ -164,10 +176,14 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                                         ? InstanceProviderAPI.STATUS_COMPLETE : InstanceProviderAPI.STATUS_INCOMPLETE);
                                 values.put(InstanceColumns.CAN_EDIT_WHEN_COMPLETE, Boolean.toString(true));
                                 // save the new instance object
-                                Collect.getInstance().getContentResolver()
-                                        .insert(InstanceColumns.CONTENT_URI, values);
+
+                                instancesDao.saveInstance(values);
                                 counter++;
+
+                                encryptInstanceIfNeeded(formCursor, candidateInstance, values, instancesDao);
                             }
+                        } catch (IOException | EncryptionException e) {
+                            Timber.w(e);
                         } finally {
                             if (formCursor != null) {
                                 formCursor.close();
@@ -199,6 +215,64 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
             Timber.w("Unable to read form id from %s", instancePath);
         }
         return instanceFormId;
+    }
+
+    private String getInstanceIdFromInstance(final String instancePath) {
+        String instanceId = null;
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        try {
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document document = builder.parse(new File(instancePath));
+            Element element = document.getDocumentElement();
+            instanceId = element.getAttribute("instanceID");
+        } catch (Exception e) {
+            Timber.w("Unable to read form instanceID from %s", instancePath);
+        }
+        return instanceId;
+    }
+
+    private void encryptInstanceIfNeeded(Cursor formCursor, String candidateInstance,
+                                         ContentValues values, InstancesDao instancesDao)
+            throws EncryptionException, IOException {
+
+        Cursor instanceCursor = new InstancesDao().getInstancesCursorForFilePath(candidateInstance);
+        if (instanceCursor != null && instanceCursor.moveToFirst()) {
+            if (shouldInstanceBeEncrypted(formCursor)) {
+                encryptInstance(instanceCursor, candidateInstance, values, instancesDao);
+            }
+        }
+    }
+
+    private void encryptInstance(Cursor instanceCursor, String candidateInstance,
+                                 ContentValues values, InstancesDao instancesDao)
+            throws EncryptionException, IOException {
+
+        File instanceXml = new File(candidateInstance);
+        if (!new File(instanceXml.getParentFile(), "submission.xml.enc").exists()) {
+            Uri uri = Uri.parse(InstanceColumns.CONTENT_URI + "/" + instanceCursor.getInt(instanceCursor.getColumnIndex(BaseColumns._ID)));
+            FormController.InstanceMetadata instanceMetadata = new FormController.InstanceMetadata(getInstanceIdFromInstance(candidateInstance), null, false);
+            EncryptionUtils.EncryptedFormInformation formInfo = EncryptionUtils.getEncryptedFormInformation(uri, instanceMetadata);
+
+            if (formInfo != null) {
+                File submissionXml = new File(instanceXml.getParentFile(), "submission.xml");
+                FileUtils.copyFile(instanceXml, submissionXml);
+
+                EncryptionUtils.generateEncryptedSubmission(instanceXml, submissionXml, formInfo);
+
+                values.put(InstanceColumns.CAN_EDIT_WHEN_COMPLETE, Boolean.toString(false));
+                instancesDao.updateInstance(values, InstanceColumns.INSTANCE_FILE_PATH + "=?", new String[]{candidateInstance});
+
+                SaveToDiskTask.manageFilesAfterSavingEncryptedForm(instanceXml, submissionXml);
+                if (!EncryptionUtils.deletePlaintextFiles(instanceXml)) {
+                    Timber.e("Error deleting plaintext files for %s", instanceXml.getAbsolutePath());
+                }
+            }
+        }
+    }
+
+    private boolean shouldInstanceBeEncrypted(Cursor formCursor) {
+        String base64RSAPublicKey = formCursor.getString(formCursor.getColumnIndex(FormsColumns.BASE64_RSA_PUBLIC_KEY));
+        return base64RSAPublicKey != null && !base64RSAPublicKey.isEmpty();
     }
 
     @Override

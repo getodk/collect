@@ -45,7 +45,7 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
         DownloadFormsTaskListener {  // smap implement task, instance, form list
 
     // turning on wifi often gets two CONNECTED events. we only want to run one thread at a time
-    public static boolean running = false;
+    public static boolean running;
     //InstanceServerUploader instanceServerUploader;    // smap
     public DownloadTasksTask mDownloadTasks;    // smap
     Context mContext = null;        // smap
@@ -205,7 +205,7 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
                 }
             }
 
-            if (toUpload.size() < 1) {
+            if (toUpload.isEmpty()) {
                 running = false;
                 return;
             }
@@ -228,7 +228,7 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
                 instanceGoogleSheetsUploader = new InstanceGoogleSheetsUploader(accountsManager);
                 instanceGoogleSheetsUploader.setUploaderListener(this);
                 instanceGoogleSheetsUploader.execute(toSendArray);
-            } else {
+            } else if (protocol.equals(context.getString(R.string.protocol_odk_default))) {
                 // get the username, password, and server from preferences
 
                 String storedUsername = (String) settings.get(PreferenceKeys.KEY_USERNAME);
@@ -249,8 +249,8 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
 
     /**
      * @param isFormAutoSendOptionEnabled represents whether the auto-send option is enabled at the app level
-     *
-     * If the form explicitly sets the auto-send property, then it overrides the preferences.
+     *                                    <p>
+     *                                    If the form explicitly sets the auto-send property, then it overrides the preferences.
      *
     private boolean isFormAutoSendEnabled(String jrFormId, boolean isFormAutoSendOptionEnabled) {
         Cursor cursor = new FormsDao().getFormsCursorForFormId(jrFormId);
@@ -277,13 +277,10 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
         }
         running = false;
 
-        StringBuilder message = new StringBuilder();
-        message
-                .append(Collect.getInstance().getString(R.string.forms_sent))
-                .append("\n\n");
+        String message;
 
         if (result == null) {
-            message.append(Collect.getInstance().getString(R.string.odk_auth_auth_fail));
+            message = Collect.getInstance().getString(R.string.odk_auth_auth_fail);
         } else {
             StringBuilder selection = new StringBuilder();
             Set<String> keys = result.keySet();
@@ -300,42 +297,23 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
     	}
     }
 
-            Cursor results = null;
-            try {
-                results = new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs);
-                if (results.getCount() > 0) {
-                    results.moveToPosition(-1);
-                    while (results.moveToNext()) {
-                        String name = results.getString(results
-                                .getColumnIndex(InstanceColumns.DISPLAY_NAME));
-                        String id = results.getString(results
-                                .getColumnIndex(InstanceColumns._ID));
-                        message
-                                .append(name)
-                                .append(" - ")
-                                .append(result.get(id))
-                                .append("\n\n");
-                    }
-                }
-            } finally {
-                if (results != null) {
-                    results.close();
-                }
-            }
+            message = InstanceUploaderUtils
+                    .getUploadResultMessage(new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs), result);
         }
 
         Intent notifyIntent = new Intent(Collect.getInstance(), NotificationActivity.class);
         notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        notifyIntent.putExtra(NotificationActivity.NOTIFICATION_KEY, message.toString().trim());
+        notifyIntent.putExtra(NotificationActivity.NOTIFICATION_TITLE, Collect.getInstance().getString(R.string.upload_results));
+        notifyIntent.putExtra(NotificationActivity.NOTIFICATION_MESSAGE, message.trim());
 
-        PendingIntent pendingNotify = PendingIntent.getActivity(Collect.getInstance(), 0,
+        PendingIntent pendingNotify = PendingIntent.getActivity(Collect.getInstance(), FORMS_UPLOADED_NOTIFICATION,
                 notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(Collect.getInstance())
                 .setSmallIcon(IconUtils.getNotificationAppIcon())
                 .setContentTitle(Collect.getInstance().getString(R.string.odk_auto_note))
                 .setContentIntent(pendingNotify)
-                .setContentText(message.toString().trim())
+                .setContentText(getContentText(result))
                 .setAutoCancel(true);
 
         NotificationManager notificationManager = (NotificationManager) Collect.getInstance()

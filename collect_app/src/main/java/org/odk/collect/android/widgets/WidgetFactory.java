@@ -258,6 +258,9 @@ public class WidgetFactory {
                     questionWidget = new SelectMultiWidget(context, fep,  readOnlyOverride);
                 }
                 break;
+            case Constants.CONTROL_RANK:
+                questionWidget = new RankingWidget(context, fep);
+                break;
             case Constants.CONTROL_TRIGGER:
                 questionWidget = new TriggerWidget(context, fep);
                 break;

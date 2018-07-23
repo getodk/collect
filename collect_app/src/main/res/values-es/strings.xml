@@ -48,7 +48,7 @@
   <string name="discard_answer">Borrar respuesta</string>
   <string name="discard_group">Borrar grupo</string>
   <string name="download">Obtener los Seleccionados</string>
-  <string name="download_forms_result">Resultado de la Descarga</string>
+  <string name="download_forms_result">Descargar Resultados</string>
   <string name="downloading_data">Conectandose al Servidor</string>
   <string name="do_not_change">Cancelar</string>
   <string name="do_not_exit">Cancelar</string>
@@ -154,6 +154,7 @@
   <string name="fetching_manifest">%s. Obteniendo el manifesto
 </string>
   <string name="success">Correcto</string>
+  <string name="failures">Fallas</string>
   <string name="no_forms_uploaded">No se ha cargado ningún formulario.</string>
   <string name="upload_results">Resultados de la carga</string>
   <string name="xform_parse_error">XForm error de análisis para %1$s: %2$s es inválido o no se encuentra.</string>
@@ -270,6 +271,9 @@
   <string name="go_shared">Compartido conmigo</string>
   <string name="modified_on_date_at_time">\'Modificado el\' EEE, MMM dd, yyyy \'a las\' HH:mm</string>
   <string name="aggregate_preferences">Ajustes de ODK Aggregate</string>
+  <string name="sms_submission_preferences">Ajustes para envío de SMS</string>
+  <string name="submission_transport">Envío de transporte (avanzado)</string>
+  <string name="submission_transport_types_title">Hacer envíos vía</string>
   <string name="other_preferences">Ajustes de Otras Plataformas</string>
   <string name="google_preferences">Características de Google Sheets</string>
   <string name="google_sheets_url_hint">Los formularios deben establecer una URL para envio. Si no lo hacen, se usará la siguiente URL</string>
@@ -278,7 +282,8 @@
   <string name="google_set_account">Ha seleccionado Google Sheets como servidor, por favor, seleccionar la correspondiente cuenta Google en Características Generales antes de continuar</string>
   <string name="media_upload_error">Falla en subida de archivo multimedia. No existe: %1$s</string>
   <string name="odk_auth_auth_fail">Falla de autenticación en envío automático. Favor verificar sus ajustes en servidor</string>
-  <string name="odk_auto_note">Notificación de Envío Automático de servidor</string>
+  <string name="odk_auto_note">ODK resultados de auto-envío</string>
+  <string name="odk_auto_download_notification_title">ODK resultados de auto-descarga</string>
   <string name="notification_error">Error al mostrar texto de la notificación</string>
   <string name="delete_after_send">Eliminar después de enviar</string>
   <string name="delete_after_send_summary">Eliminar formularios finalizados y archivos multimedia después de enviar al servidor</string>
@@ -374,6 +379,7 @@
   <string name="parser_exception">Excepción XPathParser: \"%s\"</string>
   <string name="selected_answer">Seleccionado: %s</string>
   <string name="version_number">Versión: %s</string>
+  <string name="id_number">ID: %s</string>
   <string name="odk_website">Visitar el sitio web</string>
   <string name="odk_website_summary">Open Data Kit (ODK) es usado para toma de datos  y beneficiar la sociedad en ambientes desafiantes</string>
   <string name="odk_forum">Unirse al foro de ODK</string>
@@ -473,7 +479,6 @@
   <string name="share_qrcode">Compartir código QR</string>
   <string name="take_picture_instruction">Toca la pantalla para tomar una foto</string>
   <string name="error_front_camera_unavailable">Este dispositivo no tiene Cámara frontal disponible </string>
-  <string name="request_permission">Esta aplicación necesita permisos para usar la cámara</string>
   <string name="camera_error">Este dispositivo no soporta el API Camera2</string>
   <string name="invalid_range_widget">Esta opción tiene parámetros inválidos</string>
   <string name="form_entry_setting">Configuración de entrada de formularios</string>
@@ -578,6 +583,12 @@
   <string name="no_columns_to_upload">No se encontraron columnas en el formulario para cargar.</string>
   <string name="storage_runtime_permission_denied_title">Permisos de Almacenamiento</string>
   <string name="storage_runtime_permission_denied_desc">Sin estos permisos no se puede accesar los formularios o guardar las respuetas. Abra la aplicación de nuevo cuando esté listo para dar acceso</string>
+  <string name="location_runtime_permissions_denied_title">Permisos de Ubicación</string>
+  <string name="location_runtime_permissions_denied_desc">Sin este permiso la aplicación no puede registrar su ubicación.  Intente de nuevo cuando esté el permiso.</string>
+  <string name="camera_runtime_permission_denied_title">Permiso de Cámara</string>
+  <string name="camera_runtime_permission_denied_desc">Sin este permiso la aplicación no puede acceder a la cámara. Intente de nuevo cuando esté el permiso.</string>
+  <string name="record_audio_runtime_permission_denied_title">Permiso de Grabación de Audio</string>
+  <string name="record_audio_runtime_permission_denied_desc">Sin este permiso la aplicación no puede acceder al micrófono. Intente de nuevo cuando esté el permiso.</string>
   <string name="form_update_category">Actualizar Formulario</string>
   <string name="periodic_form_updates_check_title">Buscar actualizaciones de formularios</string>
   <string name="never">Nunca</string>
@@ -586,11 +597,8 @@
   <string name="every_six_hours">Cada 6 horas</string>
   <string name="every_24_hours">Cada 24 horas</string>
   <string name="form_updates_available">Formularios actualizados disponibles</string>
-  <string name="new_form_versions_downloaded">Nuevas versiones de formularios</string>
   <string name="automatic_download">Descarga automática</string>
   <string name="automatic_download_summary">Nuevas versiones de formularios descargadas automáticamente</string>
-  <string name="forms_downloaded">Formularios descargados:</string>
-  <string name="forms_sent">Formularios enviados:</string>
   <string name="guidance_hint_title">Mostrar guías de preguntas</string>
   <string name="app_theme">Tema</string>
   <string name="theme_light">Tema Claro</string>
@@ -601,4 +609,27 @@
   <string name="instance_upload_cancelled">Cargue de Instancia cancelada</string>
   <string name="hide_old_form_versions_setting_title">Ocultar formularios anteriores </string>
   <string name="hide_old_form_versions_setting_summary">Sólo la versión mas nueva aparecerá en Llenar Nuevo Formulario</string>
+  <string name="sms_pref_dialog_title">Teléfono de destino</string>
+  <string name="sms_pref_title">Teléfono de destino</string>
+  <string name="sms_invalid_phone_number">Número de teléfono inválido!</string>
+  <!--Sms submission-->
+  <string name="sms_no_reception">\'Fallo en\' EEE, MMM dd, yyyy \' \' HH:mm \'debido a no recepción\'</string>
+  <string name="sms_fatal_error">\'Fallo en\' EEE, MMM dd, yyyy \' \' HH:mm</string>
+  <string name="sms_airplane_mode">\'Fallo en\' EEE, MMM dd, yyyy \' \' HH:mm \'debido a  que el Modo Avión esta activado\'</string>
+  <string name="sms_no_message">Este formulario no tiene etiquetas SMS</string>
+  <string name="sms_encrypted_message">Formularios encriptados no pueden ser enviados vía SMS</string>
+  <string name="sms_last_submission_on_date_at_time">\'Ultimo intento de envío a\' EEE, MMM dd, yyyy \' \' HH:mm</string>
+  <plurals name="sms_sending">
+    <item quantity="one">Formulario enviado como un sólo mensaje</item>
+    <item quantity="other">Enviando formulario, trasmitiendo mensaje %1$d! de %2$d</item>
+  </plurals>
+  <string name="sms_sent_on_date_at_time">\'Enviado como SMS en\' EEE, MMM dd, yyyy \' \' HH:mm</string>
+  <string name="sms_submission_queued">En cola para envío</string>
+  <string name="sms_submissions_notif_title">SMS enviados</string>
+  <string name="sms_submissions_notif_description">Varios formularios están siendo enviados actualmente.</string>
+  <string name="transport_type_internet">Wifi/Datos (recomendado)</string>
+  <string name="transport_type_sms">SMS</string>
+  <string name="seconds">Segundos</string>
+  <string name="rank_items">Ranking de Items</string>
+  <string name="image_not_saved">La imagen no se puede guardar debido a un problema con el archivo de instancia correspondiente.</string>
 </resources>

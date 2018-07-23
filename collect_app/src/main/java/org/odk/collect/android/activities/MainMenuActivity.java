@@ -82,7 +82,6 @@ public class MainMenuActivity extends CollectAbstractActivity {
 
     private static final boolean EXIT = true;
     // buttons
-    private Button enterDataButton;
     private Button manageFilesButton;
     private Button sendDataButton;
     private Button viewSentFormsButton;
@@ -98,8 +97,8 @@ public class MainMenuActivity extends CollectAbstractActivity {
     private Cursor finalizedCursor;
     private Cursor savedCursor;
     private Cursor viewSentCursor;
-    private IncomingHandler handler = new IncomingHandler(this);
-    private MyContentObserver contentObserver = new MyContentObserver();
+    private final IncomingHandler handler = new IncomingHandler(this);
+    private final MyContentObserver contentObserver = new MyContentObserver();
 
     // private static boolean DO_NOT_EXIT = false;
 
@@ -116,7 +115,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
         initToolbar();
 
         // enter data button. expects a result.
-        enterDataButton = findViewById(R.id.enter_data);
+        Button enterDataButton = findViewById(R.id.enter_data);
         enterDataButton.setText(getString(R.string.enter_data_button));
         enterDataButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -252,6 +251,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
             if (success) {
                 ToastUtils.showLongToast(R.string.settings_successfully_loaded_file_notification);
                 j.delete();
+                recreate();
 
                 // Delete settings file to prevent overwrite of settings from JSON file on next startup
                 if (f.exists()) {
@@ -265,6 +265,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
             if (success) {
                 ToastUtils.showLongToast(R.string.settings_successfully_loaded_file_notification);
                 f.delete();
+                recreate();
             } else {
                 ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);
             }
@@ -656,6 +657,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
             for (Entry<String, ?> entry : adminEntries.entrySet()) {
                 AdminSharedPreferences.getInstance().save(entry.getKey(), entry.getValue());
             }
+            Collect.getInstance().initProperties();
             res = true;
         } catch (IOException | ClassNotFoundException e) {
             Timber.e(e, "Exception while loading preferences from file due to : %s ", e.getMessage());

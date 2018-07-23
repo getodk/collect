@@ -32,8 +32,8 @@ import java.util.ArrayList;
 
 public class FileManagerTabs extends CollectAbstractActivity {
 
-    private DataManagerList dataManagerList = DataManagerList.newInstance();
-    private FormManagerList formManagerList = FormManagerList.newInstance();
+    private final DataManagerList dataManagerList = DataManagerList.newInstance();
+    private final FormManagerList formManagerList = FormManagerList.newInstance();
 
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);

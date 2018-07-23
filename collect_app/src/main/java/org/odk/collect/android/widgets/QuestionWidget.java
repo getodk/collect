@@ -84,6 +84,7 @@ public abstract class QuestionWidget
     private final View helpTextLayout;
     private final View guidanceTextLayout;
     private final View textLayout;
+    private final TextView warningText;
     private static final String GUIDANCE_EXPANDED_STATE = "expanded_state";
     private AtomicBoolean expanded;
     private Bundle state;
@@ -132,8 +133,10 @@ public abstract class QuestionWidget
 
         questionMediaLayout = createQuestionMediaLayout(prompt);
         helpTextLayout = createHelpTextLayout();
+        helpTextLayout.setId(ViewIds.generateViewId());
         guidanceTextLayout = helpTextLayout.findViewById(R.id.guidance_text_layout);
         textLayout = helpTextLayout.findViewById(R.id.text_layout);
+        warningText = helpTextLayout.findViewById(R.id.warning_text);
         helpTextView = setupHelpText(helpTextLayout.findViewById(R.id.help_text_view), prompt);
         guidanceTextView = setupGuidanceTextAndLayout(helpTextLayout.findViewById(R.id.guidance_text_view), prompt);
 
@@ -485,6 +488,11 @@ public abstract class QuestionWidget
 
     public void resetAudioButtonImage() {
         getQuestionMediaLayout().resetAudioButtonBitmap();
+    }
+
+    public void showWarning(String warningBody) {
+        warningText.setVisibility(View.VISIBLE);
+        warningText.setText(warningBody);
     }
 
     @Override

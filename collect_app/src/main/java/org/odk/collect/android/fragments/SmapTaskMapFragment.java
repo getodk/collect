@@ -309,7 +309,7 @@ public class SmapTaskMapFragment extends Fragment
 
             @Override
             public void onClick(View v) {
-                mHelper.showLayersDialog(getActivity());
+                mHelper.showLayersDialog();
 
             }
         });

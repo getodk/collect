@@ -40,7 +40,9 @@ import org.odk.collect.android.activities.CaptureSelfieActivity;
 import org.odk.collect.android.activities.CaptureSelfieActivityNewApi;
 import org.odk.collect.android.activities.CaptureSelfieVideoActivity;
 import org.odk.collect.android.activities.CaptureSelfieVideoActivityNewApi;
+import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaManager;
@@ -57,6 +59,7 @@ import timber.log.Timber;
 
 import static android.os.Build.MODEL;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
+import static org.odk.collect.android.utilities.PermissionUtils.requestCameraPermission;
 
 /**
  * Widget that allows user to take pictures, sounds or video and add them to the
@@ -196,7 +199,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
         MediaManager
                 .INSTANCE
                 .markOriginalFileOrDelete(getFormEntryPrompt().getIndex().toString(),
-                getInstanceFolder() + File.separator + binaryName);
+                        getInstanceFolder() + File.separator + binaryName);
         binaryName = null;
     }
 
@@ -218,23 +221,40 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
         }
     }
 
+    /**
+     * Set this widget with the actual file returned by OnActivityResult.
+     * Both of Uri and File are supported.
+     * If the file is local, a Uri is enough for the copy task below.
+     * If the chose file is from cloud(such as Google Drive),
+     * The retrieve and copy task is already executed in the previous step,
+     * so a File object would be presented.
+     *
+     * @param object Uri or File of the chosen file.
+     * @see org.odk.collect.android.activities.FormEntryActivity#onActivityResult(int, int, Intent)
+     */
     @Override
-    public void setBinaryData(Object binaryuri) {
-        if (binaryuri == null || !(binaryuri instanceof Uri)) {
-            Timber.w("AudioWidget's setBinaryData must receive a Uri object.");
+    public void setBinaryData(Object object) {
+        File newVideo = null;
+        // get the file path and create a copy in the instance folder
+        if (object instanceof Uri) {
+            String sourcePath = getSourcePathFromUri((Uri) object);
+            String destinationPath = getDestinationPathFromSourcePath(sourcePath);
+            File source = fileUtil.getFileAtPath(sourcePath);
+            newVideo = fileUtil.getFileAtPath(destinationPath);
+            fileUtil.copyFile(source, newVideo);
+        } else if (object instanceof File) {
+            newVideo = (File) object;
+        } else {
+            Timber.w("VideoWidget's setBinaryData must receive a File or Uri object.");
             return;
         }
 
-        // get the file path and create a copy in the instance folder
-        Uri uri = (Uri) binaryuri;
 
-        String sourcePath = getSourcePathFromUri(uri);
-        String destinationPath = getDestinationPathFromSourcePath(sourcePath);
+        if (newVideo == null) {
+            Timber.e("setBinaryData FAILED");
+            return;
+        }
 
-        File source = fileUtil.getFileAtPath(sourcePath);
-        File newVideo = fileUtil.getFileAtPath(destinationPath);
-
-        fileUtil.copyFile(source, newVideo);
 
         if (newVideo.exists()) {
             // Add the copy to the content provier
@@ -269,10 +289,11 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
         // a bug in the Nexus 7 on 4.3 not returning the mediaUri in the data
         // of the intent - uri in this case is a file
         if (NEXUS7.equals(MODEL) && Build.VERSION.SDK_INT == 18) {
-            File fileToDelete = new File(uri.getPath());
-            int delCount = fileToDelete.delete() ? 1 : 0;
-
-            Timber.i("Deleting original capture of file: %s count: %d", uri.toString(), delCount);
+            if (object instanceof File) {
+                File fileToDelete = (File) object;
+                int delCount = fileToDelete.delete() ? 1 : 0;
+                Timber.i("Deleting original capture of file: %s count: %d", binaryName, delCount);
+            }
         }
     }
 
@@ -314,7 +335,16 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
     public void onButtonClick(int id) {
         switch (id) {
             case R.id.capture_video:
-                captureVideo();
+                requestCameraPermission((FormEntryActivity) getContext(), new PermissionListener() {
+                    @Override
+                    public void granted() {
+                        captureVideo();
+                    }
+
+                    @Override
+                    public void denied() {
+                    }
+                });
                 break;
             case R.id.choose_video:
                 chooseVideo();
