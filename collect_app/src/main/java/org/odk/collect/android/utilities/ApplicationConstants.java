@@ -54,6 +54,7 @@ public class ApplicationConstants {
         public static final String FORM_MODE = "formMode";
         public static final String SUCCESS_KEY = "SUCCESSFUL";
         public static final String ERROR_REASON = "ERROR_MSG";
+        public static final String PROGRESS_STAGE = "PROGRESS_STAGE";
         public static final String FORM_ID = "FORM_ID";
     }
 

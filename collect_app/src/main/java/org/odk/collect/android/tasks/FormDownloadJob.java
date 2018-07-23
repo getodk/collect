@@ -55,15 +55,21 @@ import timber.log.Timber;
 public class FormDownloadJob extends Job {
 
     public static final String TAG = "FORM_DOWNLOAD_TAG";
-    private static final String ACTION = "org.odk.collect.FORM_DOWNLOAD.COMPLETE";
+    private static final String ACTION = "org.odk.collect.FORM_DOWNLOAD.PROGRESS";
     private String formId;
+
+    public static final int PROGRESS_REQUEST_RECEIVED = 1;
+    public static final int PROGRESS_REQUEST_SATISFIED = 2;
 
     @NonNull
     @Override
     protected Result onRunJob(@NonNull Params params) {
         Bundle bundle = params.getTransientExtras();
+
         if (bundle.containsKey(ApplicationConstants.BundleKeys.FORM_ID)) {
             formId = bundle.getString(ApplicationConstants.BundleKeys.FORM_ID);
+
+            sendDownloadServiceBroadcastResult(getContext(), PROGRESS_REQUEST_RECEIVED, formId, false, null);
 
             if (!TextUtils.isEmpty(formId)) {
                 Timber.i("STARTED RUNNING JOB -> Download Form %s", formId);
@@ -79,19 +85,19 @@ public class FormDownloadJob extends Job {
                     formDownloader.downloadForms(formDetailsArrayList);
 
                     Timber.i("FINISHED DOWNLOADING FORM : %s", formId);
-                    sendDownloadServiceBroadcastResult(getContext(), formId, true, null);
+                    sendDownloadServiceBroadcastResult(getContext(), PROGRESS_REQUEST_SATISFIED, formId, true, null);
                 } else {
                     Timber.e("DOWNLOAD FORM FAILED BECAUSE FORM DOES NOT EXIST ON THE SERVER");
-                    sendDownloadServiceBroadcastResult(getContext(), formId, false, "Requested form could not be found");
+                    sendDownloadServiceBroadcastResult(getContext(), PROGRESS_REQUEST_SATISFIED, formId, false, "Requested form could not be found");
                 }
             } else {
-                sendDownloadServiceBroadcastResult(getContext(), formId, false, "Null OR Empty " + ApplicationConstants.BundleKeys.FORM_ID);
+                sendDownloadServiceBroadcastResult(getContext(), PROGRESS_REQUEST_SATISFIED, formId ,false, "Null OR Empty " + ApplicationConstants.BundleKeys.FORM_ID);
             }
 
             return Result.SUCCESS;
         } else {
             Timber.e("DOWNLOAD FORM FAILED BECAUSE BUNDLE DOES NOT CONTAIN FORM_ID");
-            sendDownloadServiceBroadcastResult(getContext(), formId, false, "Bundle does not contain the " + ApplicationConstants.BundleKeys.FORM_ID);
+            sendDownloadServiceBroadcastResult(getContext(), PROGRESS_REQUEST_RECEIVED, formId, false, "Bundle does not contain the " + ApplicationConstants.BundleKeys.FORM_ID);
             return Result.FAILURE;
         }
     }
@@ -108,12 +114,14 @@ public class FormDownloadJob extends Job {
      *  the error occurred
      *
      * @param context Android context which should not be null for accessing {@link Context#sendBroadcast(Intent)}
+     * @param progressStage This is either {@link #PROGRESS_REQUEST_RECEIVED} OR {@link #PROGRESS_REQUEST_SATISFIED} signifying that the request has either been received by ODK Collect or satisfied
      * @param formId The FORM ID for which the form download result is being communicated
      * @param success Is the form download a success
      * @param errorReason Reason why the form download was a failure
      */
-    private void sendDownloadServiceBroadcastResult(@NonNull Context context, @Nullable String formId, boolean success, @Nullable String errorReason) {
+    private void sendDownloadServiceBroadcastResult(@NonNull Context context, int progressStage, @Nullable String formId, boolean success, @Nullable String errorReason) {
         Intent intent = new Intent(ACTION);
+        intent.putExtra(ApplicationConstants.BundleKeys.PROGRESS_STAGE, progressStage);
         intent.putExtra(ApplicationConstants.BundleKeys.SUCCESS_KEY, success);
 
         if (!success && errorReason != null) {
