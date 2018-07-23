@@ -390,7 +390,7 @@ public class SmsService {
                 default:
                     return new SimpleDateFormat(context.getString(R.string.sms_fatal_error), Locale.getDefault()).format(date);
             }
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             Timber.e(e);
         }
 
