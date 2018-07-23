@@ -20,6 +20,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
+import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.UserRecoverableAuthException;
@@ -196,6 +197,13 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                         cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMITTED);
                         Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
                         messagesByInstanceId.put(id, DEFAULT_SUCCESSFUL_TEXT);
+
+                        Collect.getInstance()
+                                .getDefaultTracker()
+                                .send(new HitBuilders.EventBuilder()
+                                        .setCategory("Submission")
+                                        .setAction("HTTP-Sheets")
+                                        .build());
                     } catch (UploadException e) {
                         Timber.e(e);
                         messagesByInstanceId.put(id, e.getMessage() != null ? e.getMessage() : e.getCause().getMessage());

@@ -54,6 +54,7 @@ public class SmsNotificationReceiver extends BroadcastReceiver {
         notificationManager = NotificationManagerCompat.from(context);
 
         sendBundledNotification();
+        deleteIfSubmissionCompleted();
     }
 
     void sendBundledNotification() {
@@ -100,6 +101,16 @@ public class SmsNotificationReceiver extends BroadcastReceiver {
                 .setGroup(SMS_NOTIFICATION_GROUP)
                 .setGroupSummary(true)
                 .build();
+    }
+
+    /**
+     * Once the submission is completed, it's deleted here since this is the final point
+     * at which it's data is needed.
+     */
+    private void deleteIfSubmissionCompleted() {
+        if (smsSubmission.isSubmissionComplete()) {
+            submissionManagerContract.forgetSubmission(smsSubmission.getInstanceId());
+        }
     }
 
     private String getContentText() {

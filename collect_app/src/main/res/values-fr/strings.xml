@@ -48,7 +48,7 @@
   <string name="discard_answer">Enlever la réponse</string>
   <string name="discard_group">Enlever le groupe</string>
   <string name="download">Télécharger la sélection</string>
-  <string name="download_forms_result">Résultat du téléchargement</string>
+  <string name="download_forms_result">Résultats du téléchargement</string>
   <string name="downloading_data">Connexion au serveur…</string>
   <string name="do_not_change">Annuler</string>
   <string name="do_not_exit">Annuler</string>
@@ -153,6 +153,7 @@
   <string name="file_fetch_failed">Erreur: %2$s (%3$s) à %1$s</string>
   <string name="fetching_manifest">%s. Recherche du Manifest …</string>
   <string name="success">Succès</string>
+  <string name="failures">Échecs</string>
   <string name="no_forms_uploaded">Désolé, pas de formulaires téléchargés.</string>
   <string name="upload_results">Résultats du Téléchargement</string>
   <string name="xform_parse_error">Erreur d\'analyse de l\'XForm %1$s: l\'élément %2$s manque ou est invalide.</string>
@@ -268,6 +269,9 @@
   <string name="go_shared">Partagé avec moi</string>
   <string name="modified_on_date_at_time">\'Modifié\' EEE, MMM dd, yyyy \'à\' HH:mm</string>
   <string name="aggregate_preferences">Paramètres d\'ODK Aggregate</string>
+  <string name="sms_submission_preferences">Paramètres pour soumissions SMS</string>
+  <string name="submission_transport">Transport de soumissions (avancé)</string>
+  <string name="submission_transport_types_title">Envoyer soumissions par</string>
   <string name="other_preferences">Autres paramètres de la plate-forme</string>
   <string name="google_preferences">Paramettres de Google Sheets</string>
   <string name="google_sheets_url_hint">Les formulaires doivent définir une URL de soumission. Si ce n\'est pas le cas, cette URL sera utilisée.</string>
@@ -276,7 +280,8 @@
   <string name="google_set_account">Vous avez choisi Google Sheets comme serveur. Merci de sélectionner un compte Google correspondant dans les paramètres généraux avant de continuer.</string>
   <string name="media_upload_error">Le téléversement du fichier média inexistant a échoué : %1$s</string>
   <string name="odk_auth_auth_fail">Erreur d\'authentification d\'envoi automatique ODK, assurez-vous que vos paramètres sont corrects</string>
-  <string name="odk_auto_note">Notification d\'envoi automatique ODK</string>
+  <string name="odk_auto_note">Résultats d\'envoi automatique ODK</string>
+  <string name="odk_auto_download_notification_title">Résultats de téléchargement automatique ODK</string>
   <string name="notification_error">Erreur d\'affichage du texte de notification</string>
   <string name="delete_after_send">Supprimer après l\'envoi</string>
   <string name="delete_after_send_summary">Suppression des médias et formulaire finalisés après l\'envoi au serveur</string>
@@ -372,6 +377,7 @@
   <string name="parser_exception">Exception XPathParser: \\"%s\\"</string>
   <string name="selected_answer">Sélectionné: %s</string>
   <string name="version_number">Version: %s</string>
+  <string name="id_number">ID: %s</string>
   <string name="odk_website">Visiter le site web de Open Data Kit</string>
   <string name="odk_website_summary">Open Data Kit (ODK) est utilisé pour collecter des données dans des environnements difficiles.</string>
   <string name="odk_forum">Rejoindre le Forum ODK</string>
@@ -548,7 +554,7 @@
   <string name="coptic_month_11">Epip</string>
   <string name="coptic_month_12">Mesori</string>
   <string name="coptic_month_13">Pi Kogi Enavot</string>
-  <string name="multiple_media_folders_detected_notification">Plusieurs répertoires média détectés, retirez-en un puis réessayer svp</string>
+  <string name="multiple_media_folders_detected_notification">Plusieurs répertoires média détectés, retirez-en un puis réessayez svp</string>
   <string name="islamic_month_1">Muharram</string>
   <string name="islamic_month_2">Safar</string>
   <string name="islamic_month_3">Rabi\' al-awwal</string>
@@ -565,7 +571,7 @@
   <string name="moving_backwards_disabled_title">mouvement en recul désactivé</string>
   <string name="moving_backwards_disabled_message">Paramétrer le terminal à empêcher les utilisateurs de contourner ce paramètre ? \n\nLes modifications sont:\n\u2022 Désactiver Modifier formulaire sauvegardé\n\u2022 Désactiver sauvegarder le formulaire\n\u2022 Désactiver Aller à la ligne de saisie\n\u2022 Définir le traitement de contrainte au moment de balayage vers l\'avant</string>
   <string name="moving_backwards_enabled_title">Le recul est activé</string>
-  <string name="moving_backwards_enabled_message">Vous pourrez vouloir consulter les paramètres suivants :\n\n\u2022 Modifier le formulaire sauvegardé\n\u2022 Sauvegarder le formulaire\n\u2022 Aller à la ligne de saisie\n\u2022 Traitement des contraints</string>
+  <string name="moving_backwards_enabled_message">Vous pourrez vouloir consulter les paramètres suivants :\n\n\u2022 Modifier le formulaire sauvegardé\n\u2022 Sauvegarder le formulaire\n\u2022 Aller à la ligne de saisie\n\u2022 Traitement des contraintes</string>
   <string name="yes">Oui</string>
   <string name="no">Non</string>
   <string name="newer_version_of_a_form_info">Ceci est une version mise à jour d\'un formulaire dont vous disposez déjà !</string>
@@ -595,4 +601,15 @@
   <string name="instance_upload_cancelled">Instance de téléchargement annulée</string>
   <string name="hide_old_form_versions_setting_title">Cacher les anciennes versions de formulaires</string>
   <string name="hide_old_form_versions_setting_summary">Seule la version la plus récente apparaîtra dans Remplir un formulaire</string>
+  <string name="sms_pref_dialog_title">Numéro de téléphone de la destination</string>
+  <string name="sms_pref_title">Numéro de téléphone de la destination</string>
+  <!--Sms submission-->
+  <string name="sms_no_message">Ce formulaire n\'a aucune question avec \"tag\" SMS</string>
+  <string name="sms_submissions_notif_title">Soumissions SMS</string>
+  <string name="transport_type_internet">Wifi/cellulaire (recommandé)</string>
+  <string name="transport_type_sms">SMS</string>
+  <string name="seconds">Secondes</string>
+  <string name="rank_items">Choisir l\'ordre des éléments</string>
+  <string name="image_not_saved">L\'image n\'a pas pu être enregistrée à cause
+d\'un problème sur l\'instance du fichier.</string>
 </resources>

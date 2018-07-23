@@ -153,9 +153,11 @@
   <string name="file_fetch_failed">エラー: %2$s (%3$s) at %1$s</string>
   <string name="fetching_manifest">%s。 マニフェストの取得中 </string>
   <string name="success">成功しました</string>
+  <string name="failures">失敗</string>
   <string name="no_forms_uploaded">申し訳ありません、アップロードしたフォームはありません。</string>
   <string name="upload_results">アップロード結果</string>
   <string name="xform_parse_error">%1$s の XForm 解析エラー: %2$s が不足しているか正しくありません。 </string>
+  <string name="choose_file">ファイルを選択</string>
   <string name="choose_sound">サウンドを選択</string>
   <string name="choose_video">ビデオを選択</string>
   <string name="choose_image">画像を選択</string>
@@ -240,6 +242,7 @@
   <string name="ext_search_return_error">検索ハンドラーはタイプ \'%s\' のオブジェクトを返しました。</string>
   <string name="ext_import_generic_error">%1$s からデータをインポートできませんでした。理由: %2$s</string>
   <string name="ext_import_progress_message">\'%1$s\' からデータをプリロード中。しばらくお待ちください… %2$s</string>
+  <string name="ext_import_cancelled_message">データの読み込みがキャンセルされました!</string>
   <string name="ext_import_finalizing_message">プリロードされたデータの確定中…</string>
   <string name="ext_import_completed_message">データの読み込みが完了しました!</string>
   <string name="ext_not_initialized_error">外部データマネージャーが初期化されていません。</string>
@@ -274,7 +277,8 @@
   <string name="google_set_account">サーバーとして Google スプレッドシートを選択しています。続行する前に、全般設定で対応する Google アカウントを選択してください</string>
   <string name="media_upload_error">メディアファイルが存在しないため、アップロードできませんでした: %1$s</string>
   <string name="odk_auth_auth_fail">ODK 自動送信の認証に失敗しました。設定が正しいことを確認してください</string>
-  <string name="odk_auto_note">ODK 自動送信通知</string>
+  <string name="odk_auto_note">ODK 自動送信結果</string>
+  <string name="odk_auto_download_notification_title">ODK 自動ダウンロード結果</string>
   <string name="notification_error">通知テキストの表示中にエラー</string>
   <string name="delete_after_send">送信後に削除</string>
   <string name="delete_after_send_summary">サーバに送信した後、確定されたフォームやメディアを削除します</string>
@@ -334,6 +338,7 @@
   <string name="geo_clear_warning">機能は既に作成済です。機能をクリアしますか?</string>
   <string name="geo_exit_warning">変更を破棄して ODK の戻りますか?</string>
   <string name="polygon_validator">ポリゴンを作成するには、少なくとも 3 点指定する必要があります</string>
+  <string name="polyline_validator">ポリラインを作成するには、少なくとも2点指定する必要があります</string>
   <string name="clear">クリア</string>
   <string name="polyline_polygon_text">名前を付けて GeoTrace を保存</string>
   <string name="manual_mode">手動モード</string>
@@ -369,6 +374,7 @@
   <string name="parser_exception">XPathParser 例外: \"%s\"</string>
   <string name="selected_answer">選択済: %s</string>
   <string name="version_number">バージョン: %s</string>
+  <string name="id_number">ID: %s</string>
   <string name="odk_website">ODK ウェブサイトを訪問</string>
   <string name="odk_website_summary">オープンデータキット (ODK) は、課題のある環境での社会的利益のためのデータを収集するために使用されます。</string>
   <string name="odk_forum">ODK フォーラムに参加</string>
@@ -480,6 +486,8 @@
   <string name="autosend_selector_title">自動送信</string>
   <string name="off">オフ</string>
   <string name="guidance_no">いいえ</string>
+  <string name="guidance_yes">はい - 常に表示</string>
+  <string name="guidance_yes_collapsed">はい - 折りたたみ</string>
   <string name="wifi_autosend">Wifi のみ</string>
   <string name="cellular_autosend">データ通信のみ</string>
   <string name="wifi_cellular_autosend">Wifi またはデータ通信</string>
@@ -563,8 +571,34 @@
   <string name="moving_backwards_enabled_message">次の設定を確認することができます:\n\n\u2022 保存したフォームの編集\n\u2022 フォームの保存\n\u2022 プロンプトに移動\n\u2022 制約処理</string>
   <string name="yes">はい</string>
   <string name="no">いいえ</string>
+  <string name="newer_version_of_a_form_info">これはお持ちのフォームの更新です</string>
   <string name="svg_file_does_not_exist">SVG ファイルが存在しません!</string>
   <string name="start_video_capture_instruction">画面をタップすると記録を開始します</string>
   <string name="stop_video_capture_instruction">記録を開始しました。もう一度タップすると停止します</string>
   <string name="no_columns_to_upload">アップロードするフォームにカラムが見つかりません。</string>
+  <string name="storage_runtime_permission_denied_title">ストレージのアクセス許可</string>
+  <string name="storage_runtime_permission_denied_desc">これらのアクセス許可がないと、Collect はフォームにアクセスしたり、回答を保存することができません。 アクセス許可を付与する準備ができたら、アプリをもう一度開いてください。</string>
+  <string name="form_update_category">フォームの更新</string>
+  <string name="periodic_form_updates_check_title">定期的なフォームの更新チェック</string>
+  <string name="never">しない</string>
+  <string name="every_fifteen_minutes">15 分ごと</string>
+  <string name="every_one_hour">1 時間ごと</string>
+  <string name="every_six_hours">6 時間ごと</string>
+  <string name="every_24_hours">24 時間ごと</string>
+  <string name="form_updates_available">フォームの更新が利用可能です</string>
+  <string name="automatic_download">自動ダウンロード</string>
+  <string name="automatic_download_summary">更新されたバージョンのフォームを自動的にダウンロードします</string>
+  <string name="guidance_hint_title">質問のガイダンスを表示する</string>
+  <string name="app_theme">テーマ</string>
+  <string name="theme_light">ライトテーマ</string>
+  <string name="theme_dark">ダークテーマ</string>
+  <string name="cannot_create_directory">ディレクトリーを作成できません: %s</string>
+  <string name="not_a_directory">%s は存在しますが、ディレクトリーではありません</string>
+  <string name="location_metadata">利用可能なサテライト: %1$d/24\n\n経過した時間: %2$s</string>
+  <string name="instance_upload_cancelled">インスタンスのアップロードがキャンセルされました</string>
+  <string name="hide_old_form_versions_setting_title">古いフォームのバージョンを非表示</string>
+  <string name="hide_old_form_versions_setting_summary">ブランクフォームに最新バージョンのみが表示されます</string>
+  <!--Sms submission-->
+  <string name="seconds">秒</string>
+  <string name="image_not_saved">対応するインスタンスファイルに問題があるため、画像を保存できません。</string>
 </resources>

@@ -41,7 +41,6 @@
   <string name="discard_answer">प्रतिसाद काढा.</string>
   <string name="discard_group">गट काढा</string>
   <string name="download">निवडलेले आणा</string>
-  <string name="download_forms_result">परिणाम डाउनलोड करा</string>
   <string name="downloading_data">सर्व्हरशी कनेक्ट करीत आहे</string>
   <string name="do_not_change">रद्द करा</string>
   <string name="do_not_exit">रद्द करा</string>
@@ -263,7 +262,6 @@
   <string name="no_google_account">कोणतेही गूगल खाते निवडलेले नाही!</string>
   <string name="google_set_account">आपण गूगल पत्रक आपल्या सर्व्हर म्हणून निवडले आहे, कृपया सुरू ठेवण्यापूर्वी सामान्य सेटिंग्जमध्ये संबंधित गूगल खाते निवडा</string>
   <string name="odk_auth_auth_fail">ओडीके ऑटोसॅन्ड प्रमाणीकरण अयशस्वी, कृपया आपली सेटिंग्ज योग्य असल्याची खात्री करा.</string>
-  <string name="odk_auto_note">ओडीके ऑटोसॅन्ड सूचना.</string>
   <string name="notification_error">सूचना मजकूर प्रदर्शित करताना त्रुटी</string>
   <string name="delete_after_send">पाठवानंतर हटवा</string>
   <string name="delete_after_send_summary">सर्व्हरवर पाठविल्यानंतर अंतिम स्वरूप आणि मीडिया हटविते</string>
@@ -467,4 +465,5 @@
   <string name="use_device_language">डिव्हाइस भाषा वापरा</string>
   <string name="not_supported_offline_layer_format">निवडलेली ऑफलाइन स्तर फाइल PBF स्वरूपन वापरते जी समर्थित नाही!</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <!--Sms submission-->
 </resources>

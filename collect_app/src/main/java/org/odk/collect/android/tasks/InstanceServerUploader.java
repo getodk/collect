@@ -20,6 +20,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 
+import com.google.android.gms.analytics.HitBuilders;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
@@ -355,8 +357,16 @@ public class InstanceServerUploader extends InstanceUploader {
             outcome.messagesByInstanceId.put(id, Collect.getInstance().getString(R.string.success));
         }
 
-        contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMITTED);
+        contentValues.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMITTED);
         Collect.getInstance().getContentResolver().update(toUpdate, contentValues, null, null);
+
+        Collect.getInstance()
+                .getDefaultTracker()
+                .send(new HitBuilders.EventBuilder()
+                        .setCategory("Submission")
+                        .setAction("HTTP")
+                        .build());
+
         return true;
     }
 

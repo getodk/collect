@@ -38,7 +38,6 @@
   <string name="discard_answer">Futa majibu</string>
   <string name="discard_group">Ondoa kikundi</string>
   <string name="download">Pata iliyochaguliwa</string>
-  <string name="download_forms_result">Pata matokeo</string>
   <string name="downloading_data">inawasiliana na server</string>
   <string name="do_not_change">Futa</string>
   <string name="do_not_exit">Futa</string>
@@ -236,4 +235,5 @@
   <string name="select_date">Changua tarehe</string>
   <string name="select_time">Chagua wakati</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <!--Sms submission-->
 </resources>

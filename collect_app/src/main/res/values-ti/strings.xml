@@ -25,4 +25,5 @@
   <string name="ethiopian_month_12">ነሓሰ</string>
   <string name="ethiopian_month_13">ጳጐሜን</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <!--Sms submission-->
 </resources>

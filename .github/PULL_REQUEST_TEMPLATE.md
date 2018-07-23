@@ -19,4 +19,5 @@ https://github.com/opendatakit/collect/blob/master/CONTRIBUTING.md
 
 #### Before submitting this PR, please make sure you have:
 - [ ] run `./gradlew pmd checkstyle lintDebug spotbugsDebug` and confirmed all checks still pass.
+- [ ] verified that any code or assets from external sources are properly credited in comments and/or in the [about file](https://github.com/opendatakit/collect/blob/master/collect_app/src/main/assets/open_source_licenses.html).
 - [ ] verified that any new UI elements use theme colors. [UI Components Style guidelines](https://github.com/opendatakit/collect/blob/master/CONTRIBUTING.md#ui-components-style-guidelines)

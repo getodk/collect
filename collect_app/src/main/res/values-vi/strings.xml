@@ -39,7 +39,6 @@
   <string name="discard_answer">Xoá nội dung trả lời</string>
   <string name="discard_group">Xoá nhóm</string>
   <string name="download">Tải lựa chọn</string>
-  <string name="download_forms_result">Tải kết quả</string>
   <string name="downloading_data">Kết nối máy chủ</string>
   <string name="do_not_change">Huỷ</string>
   <string name="do_not_exit">Huỷ</string>
@@ -203,4 +202,5 @@
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <!--Sms submission-->
 </resources>
