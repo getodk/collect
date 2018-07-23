@@ -32,6 +32,7 @@ import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
+import timber.log.Timber;
 
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_TRANSPORT_TYPE;
 import static org.odk.collect.android.provider.InstanceProviderAPI.STATUS_SUBMISSION_FAILED;
@@ -141,6 +142,7 @@ public class InstanceUploaderAdapter extends CursorAdapter {
         compositeDisposable.add(eventBus.register(SmsRxEvent.class)
                 .filter(event -> event.getInstanceId().equals(String.valueOf(instanceId)))
                 .subscribeOn(Schedulers.io())
+                .doOnError(Timber::e)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(event -> {
                     viewHolder.progressBar.setProgressPercent((int) event.getProgress().getPercentage(), true);
