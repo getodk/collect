@@ -26,4 +26,9 @@ limitations under the License.
         android:icon="@drawable/ic_face"
         android:key="user_and_device_identity"
         android:title="@string/user_and_device_identity_title" />
+    <!-- smap add section for fieldTask specific preferences -->
+    <Preference
+        android:icon="@drawable/ic_assignment"
+        android:key="smap_preferences"
+        android:title="@string/app_name" />
 </PreferenceScreen>

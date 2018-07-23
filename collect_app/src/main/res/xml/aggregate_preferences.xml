@@ -27,6 +27,7 @@
             android:key="password"
             android:title="@string/password" />
     </PreferenceCategory>
+    <!-- smap hide sms options
     <PreferenceCategory
         android:title="@string/submission_transport">
         <ListPreference
@@ -45,4 +46,5 @@
             android:key="sms_gateway"
             android:title="@string/sms_pref_title" />
     </org.odk.collect.android.preferences.ExtendedPreferenceCategory>
+    -->
 </PreferenceScreen>

@@ -120,7 +120,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         passwordPreference.getEditText().setFilters(
                 new InputFilter[]{new ControlCharacterFilter()});
 
-        setupTransportPreferences();
+        // setupTransportPreferences(); smap disable for now
     }
 
     public void setupTransportPreferences() {
@@ -192,7 +192,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                 new ControlCharacterFilter(), new WhitespaceFilter()
         });
         initAccountPreferences();
-        setupTransportPreferences();
+        // setupTransportPreferences();     smap disable for now
     }
 
     public void addOtherPreferences() {
