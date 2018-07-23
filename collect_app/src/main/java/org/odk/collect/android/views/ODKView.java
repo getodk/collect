@@ -21,6 +21,7 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -52,9 +53,9 @@ import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.ViewIds;
-import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.WidgetFactory;
+import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -75,9 +76,9 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
 @SuppressLint("ViewConstructor")
 public class ODKView extends ScrollView implements OnLongClickListener {
 
-    private LinearLayout view;
-    private LinearLayout.LayoutParams layout;
-    private ArrayList<QuestionWidget> widgets;
+    private final LinearLayout view;
+    private final LinearLayout.LayoutParams layout;
+    private final ArrayList<QuestionWidget> widgets;
 
     public static final String FIELD_LIST = "field-list";
 
@@ -318,7 +319,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
     }
 
     public void setFocus(Context context) {
-        if (widgets.size() > 0) {
+        if (!widgets.isEmpty()) {
             widgets.get(0).setFocus(context);
         }
     }
@@ -484,7 +485,19 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                 scrollTo(0, qw.getTop());
 
                 ValueAnimator va = new ValueAnimator();
-                va.setIntValues(getResources().getColor(R.color.red), getDrawingCacheBackgroundColor());
+                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
+                    va.setIntValues(getResources().getColor(R.color.red), getDrawingCacheBackgroundColor());
+                } else {
+                    // Avoid fading to black on certain devices and Android versions that may not support transparency
+                    TypedValue typedValue = new TypedValue();
+                    getContext().getTheme().resolveAttribute(android.R.attr.windowBackground, typedValue, true);
+                    if (typedValue.type >= TypedValue.TYPE_FIRST_COLOR_INT && typedValue.type <= TypedValue.TYPE_LAST_COLOR_INT) {
+                        va.setIntValues(getResources().getColor(R.color.red), typedValue.data);
+                    } else {
+                        va.setIntValues(getResources().getColor(R.color.red), getDrawingCacheBackgroundColor());
+                    }
+                }
+
                 va.setEvaluator(new ArgbEvaluator());
                 va.addUpdateListener(valueAnimator -> qw.setBackgroundColor((int) valueAnimator.getAnimatedValue()));
                 va.setDuration(2500);

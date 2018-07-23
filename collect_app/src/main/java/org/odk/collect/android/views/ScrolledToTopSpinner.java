@@ -27,7 +27,7 @@ import android.util.AttributeSet;
 
 public class ScrolledToTopSpinner extends AppCompatSpinner {
 
-    private boolean spinnerClicked = false;
+    private boolean spinnerClicked;
 
     public ScrolledToTopSpinner(Context context, AttributeSet attrs,
                                 int defStyle, int mode) {

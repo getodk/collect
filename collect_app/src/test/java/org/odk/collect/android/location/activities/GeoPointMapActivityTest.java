@@ -34,7 +34,7 @@ import static org.robolectric.Shadows.shadowOf;
 
 @Config(constants = BuildConfig.class)
 @RunWith(RobolectricTestRunner.class)
-public class GeoPointMapActivityTest {
+public class GeoPointMapActivityTest extends BaseGeoActivityTest {
 
     @Rule
     public MockitoRule rule = MockitoJUnit.rule();
@@ -52,6 +52,7 @@ public class GeoPointMapActivityTest {
      */
     @Before
     public void setUp() throws Exception {
+        super.setUp();
         activityController = Robolectric.buildActivity(GeoPointMapActivity.class);
         activity = activityController.get();
         shadowActivity = shadowOf(activity);

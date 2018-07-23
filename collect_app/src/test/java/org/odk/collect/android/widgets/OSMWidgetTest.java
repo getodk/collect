@@ -33,11 +33,7 @@ public class OSMWidgetTest extends BinaryWidgetTest<OSMWidget, StringData> {
     FormDef formDef;
     @Mock
     QuestionDef questionDef;
-    private String fileName = null;
-
-    public OSMWidgetTest() {
-        super();
-    }
+    private String fileName;
 
     @NonNull
     @Override

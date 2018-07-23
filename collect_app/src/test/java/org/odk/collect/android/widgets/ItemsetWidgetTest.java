@@ -86,7 +86,6 @@ public class ItemsetWidgetTest extends QuestionWidgetTest<ItemsetWidget, StringD
     @Mock
     Cursor cursor;
 
-    private CursorMocker cursorMocker;
     private Map<String, String> choices;
 
     @NonNull
@@ -114,7 +113,7 @@ public class ItemsetWidgetTest extends QuestionWidgetTest<ItemsetWidget, StringD
     public void setUp() throws Exception {
         super.setUp();
         choices = createChoices();
-        cursorMocker = new CursorMocker(choices, cursor);
+        CursorMocker cursorMocker = new CursorMocker(choices, cursor);
 
         when(parseTool.parseXPath(any(String.class))).thenReturn(expression);
 
@@ -172,7 +171,7 @@ public class ItemsetWidgetTest extends QuestionWidgetTest<ItemsetWidget, StringD
 
     public static class CursorMocker {
         private int cursorIndex = -1;
-        private Cursor cursor;
+        private final Cursor cursor;
 
         CursorMocker(final Map<String, String> choices, Cursor cursor) {
             this.cursor = cursor;

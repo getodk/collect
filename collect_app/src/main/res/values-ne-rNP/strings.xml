@@ -46,7 +46,6 @@
   <string name="discard_answer">जवाफ हटाउनुहोस् </string>
   <string name="discard_group">ग्रुप हटाउनुहोस्</string>
   <string name="download">छानिएका/nपाउनुहोस्</string>
-  <string name="download_forms_result">डाउनलोड नतिजा</string>
   <string name="downloading_data">सर्भरसँग कनेक्ट हुँदैछ</string>
   <string name="do_not_change">फिर्ता जानुहोस्</string>
   <string name="do_not_exit">फिर्ता जानुहोस्</string>
@@ -268,7 +267,6 @@
   <string name="no_google_account">एउटा गुगल खाता छान्नुहोस् ! </string>
   <string name="google_set_account">तपाईंले गुगल गुगल सिट्सलाई आफ्नो सर्भरको रूपमा छान्नुभयो , अघि बढ्नु पूर्व कृपया जनरल सेटिङ्समा त्यहि अनुरूपको गुगल खाता छान्नुहोस्</string>
   <string name="odk_auth_auth_fail">ODK स्वत: प्रेषण प्रमाणीकरण असफल , कृपया आफ्नो सेटिङ्स सही छ छैन चेक गर्नुहोस्</string>
-  <string name="odk_auto_note">ODK स्वत: प्रेषण सूचना</string>
   <string name="notification_error">सूचना देखाउन गल्ती भयो </string>
   <string name="delete_after_send">पठाए पछि डिलिट गर्नुहोस् </string>
   <string name="delete_after_send_summary">अन्तिम रुप दिइएको फारम र मिडिया सर्भरमा पठाए पछि डिलिट गर्छ </string>
@@ -381,7 +379,6 @@
   <string name="share_qrcode">QR कोड शेयर</string>
   <string name="take_picture_instruction">फोटो लिन स्क्रीन ट्याप गर्नुहोस्</string>
   <string name="error_front_camera_unavailable">यस यन्त्रमा फ्रन्ट क्यामेरा छैन</string>
-  <string name="request_permission">यसलाई प्रयोग गर्नको लागि क्यामेराको अनुमति चाहिन्छ । </string>
   <string name="camera_error">यस यन्त्रले Camera2 API सपोर्ट गर्देन ।</string>
   <string name="user_settings">प्रयोगकर्ता सेटिङ्स</string>
   <string name="main_menu_settings">मूल मेनु सेटिङ्स</string>
@@ -401,4 +398,5 @@
   <string name="yes">हो</string>
   <string name="no">होइन</string>
   <string name="stop_video_capture_instruction">रेकर्डिङ सुरु भयो। रोक्न फेरि छुनुहोस् ।</string>
+  <!--Sms submission-->
 </resources>

@@ -9,14 +9,19 @@
   the specific language governing permissions and limitations under the License.
 -->
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- ID used by zxing library -->
     <com.journeyapps.barcodescanner.BarcodeView
+        tools:ignore="UnusedIds"
         android:id="@+id/zxing_barcode_surface"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <!-- ID used by zxing library -->
     <com.journeyapps.barcodescanner.ViewfinderView
+        tools:ignore="UnusedIds"
         android:id="@+id/zxing_viewfinder_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -26,7 +31,6 @@
         app:zxing_viewfinder_mask="@color/zxing_custom_viewfinder_mask" />
 
     <TextView
-        android:id="@+id/zxing_status_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top|center_horizontal"

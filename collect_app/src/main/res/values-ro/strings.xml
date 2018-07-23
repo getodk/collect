@@ -39,7 +39,6 @@
   <string name="discard_answer">Eliminați răspunsul</string>
   <string name="discard_group">Eliminați grupul</string>
   <string name="download">Luați cele selectate</string>
-  <string name="download_forms_result">Descărcați rezultatele</string>
   <string name="downloading_data">Conectare la server</string>
   <string name="do_not_change">Anulați</string>
   <string name="do_not_exit">Anulați</string>
@@ -311,4 +310,5 @@
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
   <string name="yes">Da</string>
   <string name="no">Nu</string>
+  <!--Sms submission-->
 </resources>

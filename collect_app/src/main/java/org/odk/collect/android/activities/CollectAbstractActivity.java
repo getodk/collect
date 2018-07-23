@@ -16,12 +16,16 @@
 
 package org.odk.collect.android.activities;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.injection.config.AppComponent;
 import org.odk.collect.android.R;
+import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.ThemeUtils;
 
 import static org.odk.collect.android.utilities.PermissionUtils.checkIfStoragePermissionsGranted;
@@ -61,6 +65,10 @@ public abstract class CollectAbstractActivity extends AppCompatActivity {
         }
     }
 
+    public AppComponent getComponent() {
+        return Collect.getInstance().getComponent();
+    }
+
     @Override
     protected void onPostResume() {
         super.onPostResume();
@@ -75,5 +83,10 @@ public abstract class CollectAbstractActivity extends AppCompatActivity {
 
     public boolean isInstanceStateSaved() {
         return isInstanceStateSaved;
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(new LocaleHelper().updateLocale(base));
     }
 }

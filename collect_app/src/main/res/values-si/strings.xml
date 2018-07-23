@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <string name="show_password">මුර පදය පෙන්වන්න</string>
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Geo string added in feature-geofeatures branch-->
+  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <string name="every_six_hours">සෑම පැය 6 කට වරක්</string>
+  <string name="every_24_hours">සෑම පැය24 කට වරක්</string>
+  <!--Sms submission-->
+</resources>

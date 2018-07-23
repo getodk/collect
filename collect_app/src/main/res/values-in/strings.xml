@@ -42,7 +42,6 @@
   <string name="discard_answer">Hapus jawaban</string>
   <string name="discard_group">Hapus grup</string>
   <string name="download">Ambil</string>
-  <string name="download_forms_result">Hasil unduh</string>
   <string name="downloading_data">Menghubungkan ke Server</string>
   <string name="do_not_change">Batal</string>
   <string name="do_not_exit">Batal</string>
@@ -264,7 +263,6 @@
   <string name="no_google_account">Tidak ada Akun Google yang dipilih!</string>
   <string name="google_set_account">Google Sheet telah dipilih sebagai server kamu, silahkan tentukan akun Google pada Pengaturan Umum sebelum melanjutkan</string>
   <string name="odk_auth_auth_fail">ODK pengiriman otomatis gagal berotentikasi, pastikan pengaturannya benar</string>
-  <string name="odk_auto_note">Notifikasi ODK Kirim otomatis</string>
   <string name="notification_error">Gagal menampilkan teks notifikasi</string>
   <string name="delete_after_send">Hapus setelah mengirim</string>
   <string name="delete_after_send_summary">Menghapus media dan formulir yang sempurna setelah mengirim ke server  </string>
@@ -451,7 +449,6 @@
   <string name="share_qrcode">Bagikan QR code</string>
   <string name="take_picture_instruction">Ketuk layar untuk ambil gambar</string>
   <string name="error_front_camera_unavailable">Kamera depan tidak tersedia dalam alat ini</string>
-  <string name="request_permission">Applikasi ini butuh izin penggunaan camera.</string>
   <string name="camera_error">Perangkat ini tidak mendukung Camera2 API.</string>
   <string name="invalid_range_widget">Widget ini memiliki pamater tidak valid!</string>
   <string name="form_entry_setting">Pengaturan Pengisian Formulir</string>
@@ -524,4 +521,5 @@
   <string name="yes">Ya</string>
   <string name="no">Tidak</string>
   <string name="svg_file_does_not_exist">Berkas SVG tidak ada!</string>
+  <!--Sms submission-->
 </resources>

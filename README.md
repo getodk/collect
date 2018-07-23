@@ -117,7 +117,7 @@ If you're ready to contribute code, see [the contribution guide](CONTRIBUTING.md
 ## Contributing translations
 If you know a language other than English, consider contributing translations through [Transifex](https://www.transifex.com/opendatakit/collect/). 
 
-Translations are updated right before the first beta for a release and before the release itself. To update translations, download the zip from https://www.transifex.com/opendatakit/collect/strings/. The contents of each folder then need to be moved to the Android project folders. A quick script like [the one in this gist](https://gist.github.com/lognaturel/9974fab4e7579fac034511cd4944176b) can help.
+Translations are updated right before the first beta for a release and before the release itself. To update translations, download the zip from https://www.transifex.com/opendatakit/collect/strings/. The contents of each folder then need to be moved to the Android project folders. A quick script like [the one in this gist](https://gist.github.com/lognaturel/9974fab4e7579fac034511cd4944176b) can help. We currently copy everything from Transifex to minimize manual intervention. Sometimes translation files will only get comment changes. When new languages are updated in Transifex, they need to be added to the script above. Additionally, `ApplicationConstants.TRANSLATIONS_AVAILABLE` needs to be updated. This array provides the choices for the language preference in general settings. Ideally the list could be dynamically generated.
 
 ## Contributing testing
 All releases are verified on the following devices (ordered by Android version):

@@ -72,8 +72,11 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
             try {
                 if (mediaPlayer.isPlaying()) {
                     updateTimer();
+                    seekHandler.postDelayed(this, 100);
+                } else {
+                    seekBar.setProgress(mediaPlayer.getDuration());
+                    seekHandler.removeCallbacks(updateTimeTask);
                 }
-                seekHandler.postDelayed(this, 100);
             } catch (IllegalStateException e) {
                 seekHandler.removeCallbacks(updateTimeTask);
                 Timber.i(e, "Attempting to update timer when player is stopped");
@@ -199,6 +202,11 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
                         formEntryPrompt.getIndex());
 
         playButton.setImageResource(R.drawable.ic_pause_24dp);
+
+        if (seekBar.getProgress() == mediaPlayer.getDuration()) {
+            seekBar.setProgress(0);
+        }
+
         mediaPlayer.start();
         updateProgressBar();
     }

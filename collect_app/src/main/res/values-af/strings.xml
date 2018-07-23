@@ -39,7 +39,6 @@
   <string name="discard_answer">Verwyder antwoord</string>
   <string name="discard_group">Verwyder groep</string>
   <string name="download">Haal geselekteerdes</string>
-  <string name="download_forms_result">Aflaai Resultaat</string>
   <string name="downloading_data">Besig om aan server te konnekteer</string>
   <string name="do_not_change">Kanselleer</string>
   <string name="do_not_exit">Kanselleer</string>
@@ -258,4 +257,5 @@
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <!--Sms submission-->
 </resources>

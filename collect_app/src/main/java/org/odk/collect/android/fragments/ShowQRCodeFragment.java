@@ -44,6 +44,7 @@ import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.ActionListener;
+import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.utilities.CompressionUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
@@ -71,6 +72,7 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PASSWORD;
+import static org.odk.collect.android.utilities.PermissionUtils.requestCameraPermission;
 import static org.odk.collect.android.utilities.QRCodeUtils.QR_CODE_FILEPATH;
 
 
@@ -83,7 +85,7 @@ public class ShowQRCodeFragment extends Fragment {
 
     @BindView(R.id.ivQRcode)
     ImageView ivQRCode;
-    @BindView(R.id.progressBar)
+    @BindView(R.id.circularProgressBar)
     ProgressBar progressBar;
     @BindView(R.id.tvPasswordWarning)
     TextView tvPasswordWarning;
@@ -152,13 +154,22 @@ public class ShowQRCodeFragment extends Fragment {
 
     @OnClick(R.id.btnScan)
     void scanButtonClicked() {
-        IntentIntegrator.forFragment(this)
-                .setCaptureActivity(ScannerWithFlashlightActivity.class)
-                .setBeepEnabled(true)
-                .setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES)
-                .setOrientationLocked(false)
-                .setPrompt(getString(R.string.qrcode_scanner_prompt))
-                .initiateScan();
+        requestCameraPermission(getActivity(), new PermissionListener() {
+            @Override
+            public void granted() {
+                IntentIntegrator.forFragment(ShowQRCodeFragment.this)
+                        .setCaptureActivity(ScannerWithFlashlightActivity.class)
+                        .setBeepEnabled(true)
+                        .setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES)
+                        .setOrientationLocked(false)
+                        .setPrompt(getString(R.string.qrcode_scanner_prompt))
+                        .initiateScan();
+            }
+
+            @Override
+            public void denied() {
+            }
+        });
     }
 
     @OnClick(R.id.btnSelect)
@@ -229,10 +240,7 @@ public class ShowQRCodeFragment extends Fragment {
                 } catch (FormatException | NotFoundException | ChecksumException e) {
                     Timber.i(e);
                     ToastUtils.showLongToast("QR Code not found in the selected image");
-                } catch (IOException e) {
-                    Timber.e(e);
-                    ToastUtils.showLongToast("Unable to read the settings");
-                } catch (DataFormatException e) {
+                } catch (DataFormatException | IOException e) {
                     Timber.e(e);
                     ToastUtils.showShortToast(getString(R.string.invalid_qrcode));
                 }
@@ -247,6 +255,7 @@ public class ShowQRCodeFragment extends Fragment {
         SharedPreferencesUtils.savePreferencesFromString(content, new ActionListener() {
             @Override
             public void onSuccess() {
+                Collect.getInstance().initProperties();
                 ToastUtils.showLongToast(Collect.getInstance().getString(R.string.successfully_imported_settings));
                 getActivity().finish();
                 final LocaleHelper localeHelper = new LocaleHelper();

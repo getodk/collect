@@ -51,6 +51,8 @@ import java.text.DecimalFormat;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.utilities.PermissionUtils.checkIfLocationPermissionsGranted;
+
 /**
  * Version of the GeoPointMapActivity that uses the new OSMDDroid
  *
@@ -65,7 +67,7 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
     //private GoogleMap map;
     private MapView map;
 
-    private Handler handler = new Handler();
+    private final Handler handler = new Handler();
     private Marker marker;
 
     private GeoPoint latLng;
@@ -82,7 +84,7 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
     private boolean isDragged;
     private ImageButton showLocationButton;
 
-    private int locationCount = 0;
+    private int locationCount;
 
     private MapHelper helper;
 
@@ -98,12 +100,18 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
     private boolean draggable;
     private boolean intentDraggable;
     private boolean locationFromIntent;
-    private int locationCountNum = 0;
+    private int locationCountNum;
     private boolean foundFirstLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (!checkIfLocationPermissionsGranted(this)) {
+            finish();
+            return;
+        }
+
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         if (savedInstanceState != null) {
@@ -194,7 +202,7 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
         layersButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                helper.showLayersDialog(GeoPointOsmMapActivity.this);
+                helper.showLayersDialog();
 
             }
         });

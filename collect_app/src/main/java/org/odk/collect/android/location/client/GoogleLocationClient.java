@@ -52,7 +52,7 @@ class GoogleLocationClient
     private LocationClientListener locationClientListener;
 
     @Nullable
-    private LocationListener locationListener = null;
+    private LocationListener locationListener;
 
     private long updateInterval = DEFAULT_UPDATE_INTERVAL;
     private long fastestUpdateInterval = DEFAULT_FASTEST_UPDATE_INTERVAL;

@@ -72,7 +72,7 @@ public abstract class SelectImageMapWidget extends SelectWidget {
     private CustomWebView webView;
     private TextView selectedAreasLabel;
 
-    private boolean isSingleSelect;
+    private final boolean isSingleSelect;
     private String imageMapFilePath;
     protected List<Selection> selections = new ArrayList<>();
 

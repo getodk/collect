@@ -59,10 +59,12 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+import static org.odk.collect.android.utilities.PermissionUtils.checkIfLocationPermissionsGranted;
+
 public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements IRegisterReceiver,
         LocationListener, LocationClient.LocationClientListener {
 
-    private ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+    private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture schedulerHandler;
     public int zoomLevel = 3;
     public boolean gpsStatus = true;
@@ -83,7 +85,7 @@ public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements I
     private View traceSettingsView;
     private View polygonPolylineView;
     private Polyline polyline;
-    private ArrayList<Marker> mapMarkers = new ArrayList<Marker>();
+    private final ArrayList<Marker> mapMarkers = new ArrayList<Marker>();
     private Integer traceMode; // 0 manual, 1 is automatic
     private Spinner timeUnits;
     private Spinner timeDelay;
@@ -103,6 +105,12 @@ public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements I
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (!checkIfLocationPermissionsGranted(this)) {
+            finish();
+            return;
+        }
+
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         setContentView(R.layout.geotrace_osm_layout);
@@ -137,7 +145,7 @@ public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements I
 
             @Override
             public void onClick(View v) {
-                helper.showLayersDialog(GeoTraceOsmMapActivity.this);
+                helper.showLayersDialog();
 
             }
         });
@@ -171,14 +179,14 @@ public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements I
             @Override
             public void onClick(View v) {
 
-                if (mapMarkers.size() != 0) {
+                if (!mapMarkers.isEmpty()) {
                     alertDialog.show();
                 } else {
                     saveGeoTrace();
                 }
             }
         });
-        if (mapMarkers == null || mapMarkers.size() == 0) {
+        if (mapMarkers.isEmpty()) {
             clearButton.setEnabled(false);
         }
         manualCaptureButton = findViewById(R.id.manual_button);
@@ -227,7 +235,7 @@ public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements I
             @Override
             public void onClick(final View v) {
                 playButton.setVisibility(View.VISIBLE);
-                if (mapMarkers != null && mapMarkers.size() > 0) {
+                if (!mapMarkers.isEmpty()) {
                     clearButton.setEnabled(true);
                 }
                 pauseButton.setVisibility(View.GONE);
@@ -449,9 +457,9 @@ public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements I
 
     }
 
-    private Handler handler = new Handler(Looper.getMainLooper());
+    private final Handler handler = new Handler(Looper.getMainLooper());
 
-    private Runnable centerAroundFix = new Runnable() {
+    private final Runnable centerAroundFix = new Runnable() {
         public void run() {
             handler.post(new Runnable() {
                 public void run() {
@@ -685,7 +693,7 @@ public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements I
         setResult(RESULT_OK, i);
     }
 
-    private Marker.OnMarkerClickListener nullMarkerListener = new Marker.OnMarkerClickListener() {
+    private final Marker.OnMarkerClickListener nullMarkerListener = new Marker.OnMarkerClickListener() {
 
         @Override
         public boolean onMarkerClick(Marker arg0, MapView arg1) {
@@ -711,7 +719,7 @@ public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements I
     }
 
 
-    private Marker.OnMarkerDragListener dragListener = new Marker.OnMarkerDragListener() {
+    private final Marker.OnMarkerDragListener dragListener = new Marker.OnMarkerDragListener() {
         @Override
         public void onMarkerDragStart(Marker marker) {
 
@@ -825,7 +833,7 @@ public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements I
             zoomLocationButton.setTextColor(Color.parseColor("#FF979797"));
         }
         //If feature enable zoom to button else disable
-        if (mapMarkers.size() != 0) {
+        if (!mapMarkers.isEmpty()) {
             zoomPointButton.setEnabled(true);
             zoomPointButton.setBackgroundColor(Color.parseColor("#50cccccc"));
             zoomPointButton.setTextColor(themeUtils.getPrimaryTextColor());

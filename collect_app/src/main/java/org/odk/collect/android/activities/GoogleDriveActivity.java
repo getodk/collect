@@ -49,6 +49,7 @@ import org.odk.collect.android.exception.MultipleFoldersFoundException;
 import org.odk.collect.android.listeners.GoogleDriveFormDownloadListener;
 import org.odk.collect.android.listeners.TaskListener;
 import org.odk.collect.android.logic.DriveListItem;
+import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.gdrive.DriveHelper;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
@@ -58,7 +59,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -90,10 +90,10 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     private Button backButton;
     private Button downloadButton;
     private Stack<String> currentPath = new Stack<>();
-    private Stack<String> folderIdStack = new Stack<>();
+    private final Stack<String> folderIdStack = new Stack<>();
     private String alertMsg;
     private boolean alertShowing;
-    private String rootId = null;
+    private String rootId;
     private boolean myDrive;
     private FileArrayAdapter adapter;
     private RetrieveDriveFileContentsAsyncTask retrieveDriveFileContentsAsyncTask;
@@ -326,15 +326,12 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     }
 
     private void sortList() {
-        Collections.sort(filteredList, new Comparator<DriveListItem>() {
-            @Override
-            public int compare(DriveListItem lhs, DriveListItem rhs) {
-                if (lhs.getType() != rhs.getType()) {
-                    return lhs.getType() == DriveListItem.DIR ? -1 : 1;
-                } else {
-                    int compareName = lhs.getName().compareToIgnoreCase(rhs.getName());
-                    return getSortingOrder().equals(SORT_BY_NAME_ASC) ? compareName : -compareName;
-                }
+        Collections.sort(filteredList, (lhs, rhs) -> {
+            if (lhs.getType() != rhs.getType()) {
+                return lhs.getType() == DriveListItem.DIR ? -1 : 1;
+            } else {
+                int compareName = lhs.getName().compareToIgnoreCase(rhs.getName());
+                return getSortingOrder().equals(SORT_BY_NAME_ASC) ? compareName : -compareName;
             }
         });
     }
@@ -376,12 +373,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
 
                 gudBuilder.setTitle(getString(R.string.no_google_account));
                 gudBuilder.setMessage(getString(R.string.google_set_account));
-                gudBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                    }
-                });
+                gudBuilder.setPositiveButton(R.string.ok, (dialog, which) -> finish());
                 gudBuilder.setCancelable(false);
                 return gudBuilder.create();
         }
@@ -412,7 +404,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
         alertDialog.setIcon(android.R.drawable.ic_dialog_info);
         alertShowing = true;
         alertMsg = message;
-        alertDialog.show();
+        DialogUtils.showDialog(alertDialog, this);
     }
 
     @Override
@@ -457,7 +449,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     @Override
     public void taskComplete(HashMap<String, Object> results) {
         rootButton.setEnabled(true);
-        downloadButton.setEnabled(toDownload.size() > 0);
+        downloadButton.setEnabled(!toDownload.isEmpty());
         setProgressBarIndeterminateVisibility(false);
 
         if (results == null) {
@@ -633,7 +625,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
             } else {
                 toDownload.add(item);
             }
-            downloadButton.setEnabled(toDownload.size() > 0);
+            downloadButton.setEnabled(!toDownload.isEmpty());
         }
     }
 
@@ -654,12 +646,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
                     GoogleDriveActivity.this.startActivityForResult(e.getIntent(), AUTHORIZATION_REQUEST_CODE);
                 } catch (IOException e) {
                     Timber.e(e);
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            createAlertDialog(getString(R.string.google_auth_io_exception_msg));
-                        }
-                    });
+                    runOnUiThread(() -> createAlertDialog(getString(R.string.google_auth_io_exception_msg)));
                 }
                 if (rootId == null) {
                     Timber.e("Unable to fetch drive contents");

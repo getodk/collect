@@ -48,7 +48,6 @@
   <string name="discard_answer">Poista vastaus</string>
   <string name="discard_group">Poista ryhmä</string>
   <string name="download">Hae valittu</string>
-  <string name="download_forms_result">Lataa tulos</string>
   <string name="downloading_data">Yhdistetään palvelimeen</string>
   <string name="do_not_change">Peruuta</string>
   <string name="do_not_exit">Peruuta</string>
@@ -276,7 +275,6 @@
   <string name="google_set_account">Palvelimesi on Google Sheets, valitse vastaava Google-tili yleisasetuksissa ennen jatkamista</string>
   <string name="media_upload_error">Palvelimelle ei voida siirtää tiedostoa, jota ei ole olemassa: %1$s</string>
   <string name="odk_auth_auth_fail">Automaattisen ODK-lähetyksen vahvistus epäonnistui, varmista että asetuksesi ovat oikein</string>
-  <string name="odk_auto_note">Automaattisen ODK-lähetyksen ilmoitus</string>
   <string name="notification_error">Virhe näyttäessä ilmoitustekstiä</string>
   <string name="delete_after_send">Poista lähettämisen jälkeen</string>
   <string name="delete_after_send_summary">Poistaa valmiiksi merkityt lomakkeet ja mediatiedostot kun ne on lähetetty palvelimelle</string>
@@ -336,7 +334,7 @@
   <string name="geo_clear_warning">Ominaisuus on jo luotu. Haluatko tyhjentää ominaisuuden?</string>
   <string name="geo_exit_warning">Hylätäänkö muutokset ja palataan ODK:hon?</string>
   <string name="polygon_validator">Monikulmion luomiseen tarvitaan vähintään 3 pistettä</string>
-  <string name="polyline_validator">Polylinen luomiseen tarvitaan vähintään 2 pistettä</string>
+  <string name="polyline_validator">Polyline-kuvion luomiseen tarvitaan vähintään 2 pistettä</string>
   <string name="clear">Tyhjennä</string>
   <string name="polyline_polygon_text">Tallenna GeoTrace nimellä</string>
   <string name="manual_mode">Manuaalinen tila</string>
@@ -372,6 +370,7 @@
   <string name="parser_exception">XPathParser-virhe: \"%s\"</string>
   <string name="selected_answer">Valittu: %s</string>
   <string name="version_number">Versio: %s</string>
+  <string name="id_number">ID: %s</string>
   <string name="odk_website">Käy ODK:n verkkosivulla</string>
   <string name="odk_website_summary">Open Data Kit (ODK) -sovellusta käytetään vaativissa olosuhteissa keräämään dataa yhteisen hyvän edistämiseksi.</string>
   <string name="odk_forum">Liity ODK-foorumiin</string>
@@ -471,7 +470,6 @@
   <string name="share_qrcode">Jaa QR-koodi</string>
   <string name="take_picture_instruction">Napsauta näyttöä ottaaksesi kuvan</string>
   <string name="error_front_camera_unavailable">Etukamera ei ole käytettävissä tällä laitteella</string>
-  <string name="request_permission">Tämä sovellus tarvitsee luvan kameran käyttöön.</string>
   <string name="camera_error">Tämä laite ei tue Camera2 API:a (ohjelmarajapintaa).</string>
   <string name="invalid_range_widget">Tällä widgetillä on väärät asetukset!</string>
   <string name="form_entry_setting">Lomakesyöttöasetukset</string>
@@ -584,11 +582,8 @@
   <string name="every_six_hours">Kuuden tunnin välein</string>
   <string name="every_24_hours">Vuorokauden välein</string>
   <string name="form_updates_available">Lomakepäivityksiä saatavilla</string>
-  <string name="new_form_versions_downloaded">Uudet lomakeversiot haettu</string>
   <string name="automatic_download">Automaattinen haku</string>
   <string name="automatic_download_summary">Hae automaattisesti lomakkeiden päivitettyjä versioita</string>
-  <string name="forms_downloaded">Haetut lomakkeet:</string>
-  <string name="forms_sent">Lähetetyt lomakkeet:</string>
   <string name="guidance_hint_title">Näytä kysymysopastus</string>
   <string name="app_theme">Teema</string>
   <string name="theme_light">Vaalea teema</string>
@@ -599,4 +594,7 @@
   <string name="instance_upload_cancelled">Instanssin siirtäminen peruttu</string>
   <string name="hide_old_form_versions_setting_title">Piilota vanhat lomakeversiot</string>
   <string name="hide_old_form_versions_setting_summary">Vain uusin versio tulee näkymään \"Täytä tyhjä lomake\" -näkymässä.</string>
+  <!--Sms submission-->
+  <string name="seconds">Sekunteja</string>
+  <string name="image_not_saved">Kuvaa ei voida tallentaa vastauskerran tiedoston ongelman vuoksi.</string>
 </resources>

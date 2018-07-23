@@ -1,0 +1,1170 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head><!-- ODK Aggregate upload time: 2018-05-15T02:43:30.391+0000 on https://opendatakit.appspot.com -->
+    <h:title>All widgets</h:title>
+    <model>
+      <itext>
+        <translation default="true()" lang="default">
+          <text id="/all-widgets/select_one_widgets/grid_widget/a:label">
+            <value>A</value>
+            <value form="image">jr://images/a.jpg</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget/b:label">
+            <value>B</value>
+            <value form="image">jr://images/b.jpg</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget/c:label">
+            <value>C</value>
+            <value form="image">jr://images/c.jpg</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget/d:label">
+            <value>D</value>
+            <value form="image">jr://images/d.jpg</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_compact/a:label">
+            <value>A</value>
+            <value form="image">jr://images/a.jpg</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_compact/b:label">
+            <value>B</value>
+            <value form="image">jr://images/b.jpg</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_compact/c:label">
+            <value>C</value>
+            <value form="image">jr://images/c.jpg</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_compact/d:label">
+            <value>D</value>
+            <value form="image">jr://images/d.jpg</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_compact2/a:label">
+            <value>A</value>
+            <value form="image">jr://images/a.jpg</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_compact2/b:label">
+            <value>B</value>
+            <value form="image">jr://images/b.jpg</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_compact2/c:label">
+            <value>C</value>
+            <value form="image">jr://images/c.jpg</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_compact2/d:label">
+            <value>D</value>
+            <value form="image">jr://images/d.jpg</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_quickcompact/a:label">
+            <value>A</value>
+            <value form="image">jr://images/a.jpg</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_quickcompact/b:label">
+            <value>B</value>
+            <value form="image">jr://images/b.jpg</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_quickcompact/c:label">
+            <value>C</value>
+            <value form="image">jr://images/c.jpg</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_quickcompact/d:label">
+            <value>D</value>
+            <value form="image">jr://images/d.jpg</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_quickcompact2/a:label">
+            <value>A</value>
+            <value form="image">jr://images/a.jpg</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_quickcompact2/b:label">
+            <value>B</value>
+            <value form="image">jr://images/b.jpg</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_quickcompact2/c:label">
+            <value>C</value>
+            <value form="image">jr://images/c.jpg</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_quickcompact2/d:label">
+            <value>D</value>
+            <value form="image">jr://images/d.jpg</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/select_one_image_map:label">
+            <value>Image select one widget</value>
+            <value form="image">jr://images/body.svg</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/grid_multi_widget_compact/a:label">
+            <value>A</value>
+            <value form="image">jr://images/a.jpg</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/grid_multi_widget_compact/b:label">
+            <value>B</value>
+            <value form="image">jr://images/b.jpg</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/grid_multi_widget_compact/c:label">
+            <value>C</value>
+            <value form="image">jr://images/c.jpg</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/grid_multi_widget_compact/d:label">
+            <value>D</value>
+            <value form="image">jr://images/d.jpg</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/grid_multi_widget_compact2/a:label">
+            <value>A</value>
+            <value form="image">jr://images/a.jpg</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/grid_multi_widget_compact2/b:label">
+            <value>B</value>
+            <value form="image">jr://images/b.jpg</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/grid_multi_widget_compact2/c:label">
+            <value>C</value>
+            <value form="image">jr://images/c.jpg</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/grid_multi_widget_compact2/d:label">
+            <value>D</value>
+            <value form="image">jr://images/d.jpg</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/select_multi_image_map:label">
+            <value>Image select multiple widget</value>
+            <value form="image">jr://images/body.svg</value>
+          </text>
+        </translation>
+        <translation lang="French (fr)">
+          <text id="/all-widgets/select_one_widgets/select_one_image_map:label">
+            <value form="image">jr://images/body.svg</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/select_multi_image_map:label">
+            <value form="image">jr://images/body.svg</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget/a:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget/b:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget/c:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget/d:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_compact/a:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_compact/b:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_compact/c:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_compact/d:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_compact2/a:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_compact2/b:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_compact2/c:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_compact2/d:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_quickcompact/a:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_quickcompact/b:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_quickcompact/c:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_quickcompact/d:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_quickcompact2/a:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_quickcompact2/b:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_quickcompact2/c:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_one_widgets/grid_widget_quickcompact2/d:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/grid_multi_widget_compact/a:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/grid_multi_widget_compact/b:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/grid_multi_widget_compact/c:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/grid_multi_widget_compact/d:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/grid_multi_widget_compact2/a:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/grid_multi_widget_compact2/b:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/grid_multi_widget_compact2/c:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/all-widgets/select_multi_widgets/grid_multi_widget_compact2/d:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+        </translation>
+      </itext>
+      <instance>
+        <all-widgets id="all-widgets" version="2018051401">
+          <intro/>
+          <text_widgets>
+            <string_widget/>
+            <string_number_widget/>
+            <url_widget>http://opendatakit.org/</url_widget>
+            <ex_string_widget/>
+            <ex_printer_widget/>
+          </text_widgets>
+          <number_widgets>
+            <integer_widget/>
+            <integer_thousands_sep_widget/>
+            <ex_integer_widget/>
+            <decimal_widget/>
+            <ex_decimal_widget/>
+            <bearing_widget/>
+          </number_widgets>
+          <range_widgets>
+            <range_integer_widget/>
+            <range_decimal_widget/>
+            <range_integer_widget_vertical/>
+            <range_integer_widget_picker/>
+          </range_widgets>
+          <image_widgets>
+            <image_widget/>
+            <image_widget_no_choose/>
+            <selfie_image_widget/>
+            <draw_image_widget/>
+            <annotate_image_widget/>
+            <signature_widget/>
+            <webview_image_widget/>
+            <aligned_image_widget/>
+          </image_widgets>
+          <media_widgets>
+            <barcode_widget/>
+            <audio_widget/>
+            <video_widget/>
+            <selfie_video_widget/>
+            <file_widget/>
+          </media_widgets>
+          <date_time_widgets>
+            <date_widget/>
+            <date_widget_nocalendar/>
+            <date_widget_month_year/>
+            <date_widget_year/>
+            <time_widget/>
+            <date_time_widget/>
+            <date_time_widget_nocalendar/>
+            <ethiopian_date_widget/>
+            <coptic_date_widget/>
+            <islamic_date_widget/>
+          </date_time_widgets>
+          <geopoint_widgets>
+            <geopoint_widget/>
+            <geopoint_widget_placementmap/>
+            <geopoint_widget_maps/>
+            <geotrace_widget/>
+            <geoshape_widget/>
+            <osm_road/>
+            <osm_building/>
+          </geopoint_widgets>
+          <select_one_widgets>
+            <select_one_widget/>
+            <spinner_widget/>
+            <select_one_autoadvance_widget/>
+            <select_one_search_widget/>
+            <select_one_autocomplete_widget/>
+            <grid_widget/>
+            <grid_widget_compact/>
+            <grid_widget_compact2/>
+            <grid_widget_quickcompact/>
+            <grid_widget_quickcompact2/>
+            <select_one_image_map/>
+          </select_one_widgets>
+          <select_multi_widgets>
+            <select_multi_widget/>
+            <grid_multi_widget_compact/>
+            <grid_multi_widget_compact2/>
+            <spinner_multi_widget/>
+            <select_multi_image_map/>
+          </select_multi_widgets>
+          <table_list_test>
+            <table_list_test_label/>
+            <table_list_test_label_2/>
+            <table_list_1/>
+            <table_list_2/>
+            <list_widget/>
+            <list_multi_widget/>
+          </table_list_test>
+          <my_trigger/>
+          <meta>
+            <instanceID/>
+          </meta>
+        </all-widgets>
+      </instance>
+      <bind nodeset="/all-widgets/intro" readonly="true()" type="string"/>
+      <bind nodeset="/all-widgets/text_widgets/string_widget" type="string"/>
+      <bind nodeset="/all-widgets/text_widgets/string_number_widget" type="string"/>
+      <bind nodeset="/all-widgets/text_widgets/url_widget" type="string"/>
+      <bind nodeset="/all-widgets/text_widgets/ex_string_widget" type="string"/>
+      <bind calculate="concat('123456789','&lt;br&gt;','QRCODE','&lt;br&gt;','Text')" nodeset="/all-widgets/text_widgets/ex_printer_widget" type="string"/>
+      <bind nodeset="/all-widgets/number_widgets/integer_widget" type="int"/>
+      <bind nodeset="/all-widgets/number_widgets/integer_thousands_sep_widget" type="int"/>
+      <bind nodeset="/all-widgets/number_widgets/ex_integer_widget" type="int"/>
+      <bind nodeset="/all-widgets/number_widgets/decimal_widget" type="decimal"/>
+      <bind nodeset="/all-widgets/number_widgets/ex_decimal_widget" type="decimal"/>
+      <bind nodeset="/all-widgets/number_widgets/bearing_widget" type="decimal"/>
+      <bind nodeset="/all-widgets/range_widgets/range_integer_widget" type="int"/>
+      <bind nodeset="/all-widgets/range_widgets/range_decimal_widget" type="decimal"/>
+      <bind nodeset="/all-widgets/range_widgets/range_integer_widget_vertical" type="int"/>
+      <bind nodeset="/all-widgets/range_widgets/range_integer_widget_picker" type="int"/>
+      <bind nodeset="/all-widgets/image_widgets/image_widget" type="binary"/>
+      <bind nodeset="/all-widgets/image_widgets/image_widget_no_choose" type="binary"/>
+      <bind nodeset="/all-widgets/image_widgets/selfie_image_widget" type="binary"/>
+      <bind nodeset="/all-widgets/image_widgets/draw_image_widget" type="binary"/>
+      <bind nodeset="/all-widgets/image_widgets/annotate_image_widget" type="binary"/>
+      <bind nodeset="/all-widgets/image_widgets/signature_widget" type="binary"/>
+      <bind nodeset="/all-widgets/image_widgets/webview_image_widget" type="binary"/>
+      <bind nodeset="/all-widgets/image_widgets/aligned_image_widget" type="binary"/>
+      <bind nodeset="/all-widgets/media_widgets/barcode_widget" type="barcode"/>
+      <bind nodeset="/all-widgets/media_widgets/audio_widget" type="binary"/>
+      <bind nodeset="/all-widgets/media_widgets/video_widget" type="binary"/>
+      <bind nodeset="/all-widgets/media_widgets/selfie_video_widget" type="binary"/>
+      <bind nodeset="/all-widgets/media_widgets/file_widget" type="binary"/>
+      <bind nodeset="/all-widgets/date_time_widgets/date_widget" type="date"/>
+      <bind nodeset="/all-widgets/date_time_widgets/date_widget_nocalendar" type="date"/>
+      <bind nodeset="/all-widgets/date_time_widgets/date_widget_month_year" type="date"/>
+      <bind nodeset="/all-widgets/date_time_widgets/date_widget_year" type="date"/>
+      <bind nodeset="/all-widgets/date_time_widgets/time_widget" type="time"/>
+      <bind nodeset="/all-widgets/date_time_widgets/date_time_widget" type="dateTime"/>
+      <bind nodeset="/all-widgets/date_time_widgets/date_time_widget_nocalendar" type="dateTime"/>
+      <bind nodeset="/all-widgets/date_time_widgets/ethiopian_date_widget" type="date"/>
+      <bind nodeset="/all-widgets/date_time_widgets/coptic_date_widget" type="date"/>
+      <bind nodeset="/all-widgets/date_time_widgets/islamic_date_widget" type="date"/>
+      <bind nodeset="/all-widgets/geopoint_widgets/geopoint_widget" type="geopoint"/>
+      <bind nodeset="/all-widgets/geopoint_widgets/geopoint_widget_placementmap" type="geopoint"/>
+      <bind nodeset="/all-widgets/geopoint_widgets/geopoint_widget_maps" type="geopoint"/>
+      <bind nodeset="/all-widgets/geopoint_widgets/geotrace_widget" type="geotrace"/>
+      <bind nodeset="/all-widgets/geopoint_widgets/geoshape_widget" type="geoshape"/>
+      <bind nodeset="/all-widgets/geopoint_widgets/osm_road" type="binary"/>
+      <bind nodeset="/all-widgets/geopoint_widgets/osm_building" type="binary"/>
+      <bind nodeset="/all-widgets/select_one_widgets/select_one_widget" type="select1"/>
+      <bind nodeset="/all-widgets/select_one_widgets/spinner_widget" type="select1"/>
+      <bind nodeset="/all-widgets/select_one_widgets/select_one_autoadvance_widget" type="select1"/>
+      <bind nodeset="/all-widgets/select_one_widgets/select_one_search_widget" type="select1"/>
+      <bind nodeset="/all-widgets/select_one_widgets/select_one_autocomplete_widget" type="select1"/>
+      <bind nodeset="/all-widgets/select_one_widgets/grid_widget" type="select1"/>
+      <bind nodeset="/all-widgets/select_one_widgets/grid_widget_compact" type="select1"/>
+      <bind nodeset="/all-widgets/select_one_widgets/grid_widget_compact2" type="select1"/>
+      <bind nodeset="/all-widgets/select_one_widgets/grid_widget_quickcompact" type="select1"/>
+      <bind nodeset="/all-widgets/select_one_widgets/grid_widget_quickcompact2" type="select1"/>
+      <bind nodeset="/all-widgets/select_one_widgets/select_one_image_map" type="select1"/>
+      <bind nodeset="/all-widgets/select_multi_widgets/select_multi_widget" type="select"/>
+      <bind nodeset="/all-widgets/select_multi_widgets/grid_multi_widget_compact" type="select"/>
+      <bind nodeset="/all-widgets/select_multi_widgets/grid_multi_widget_compact2" type="select"/>
+      <bind nodeset="/all-widgets/select_multi_widgets/spinner_multi_widget" type="select"/>
+      <bind nodeset="/all-widgets/select_multi_widgets/select_multi_image_map" type="select"/>
+      <bind nodeset="/all-widgets/table_list_test/table_list_test_label" type="select1"/>
+      <bind nodeset="/all-widgets/table_list_test/table_list_test_label_2" type="select"/>
+      <bind nodeset="/all-widgets/table_list_test/table_list_1" type="select1"/>
+      <bind nodeset="/all-widgets/table_list_test/table_list_2" type="select"/>
+      <bind nodeset="/all-widgets/table_list_test/list_widget" type="select1"/>
+      <bind nodeset="/all-widgets/table_list_test/list_multi_widget" type="select"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/all-widgets/meta/instanceID" readonly="true()" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <input ref="/all-widgets/intro">
+      <label>Welcome to ODK Collect! This form showcases the different available question types (_widgets_).</label>
+      <hint>This is a sample for introductory and debugging purposes. It is updated periodically so check "Get Blank Form" to get the latest! 
+
+Version 2018051401 adds:
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;- File widget
+
+Version 2018032801 adds:
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;- Appearance new-front (selfie) for video type
+
+Version 2018022001 adds:
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;- Appearance image-map for select\_one and select\_multiple types
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;- Appearance new for image, audio, video types
+
+Version 2017121301 added:
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;- Appearance thousands-sep for numeric types
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;- Range questions
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;- Ethiopian, coptic and islamic calendars</hint>
+    </input>
+    <group ref="/all-widgets/text_widgets">
+      <label>Text widgets</label>
+      <input ref="/all-widgets/text_widgets/string_widget">
+        <label>String widget</label>
+      </input>
+      <input appearance="numbers" ref="/all-widgets/text_widgets/string_number_widget">
+        <label>String number widget</label>
+        <hint>text type with numbers appearance</hint>
+      </input>
+      <input appearance="url" ref="/all-widgets/text_widgets/url_widget">
+        <label>URL widget</label>
+        <hint>text type with url appearance and default value of http://opendatakit.org/</hint>
+      </input>
+      <input appearance="ex:change.uw.android.BREATHCOUNT" ref="/all-widgets/text_widgets/ex_string_widget">
+        <label>Ex string widget</label>
+        <hint>text type with ex:change.uw.android.BREATHCOUNT appearance (can use other external apps)</hint>
+      </input>
+      <input appearance="printer:org.opendatakit.sensors.ZebraPrinter" ref="/all-widgets/text_widgets/ex_printer_widget">
+        <label>Ex printer widget</label>
+        <hint>text type with printer:org.opendatakit.sensors.ZebraPrinter</hint>
+      </input>
+    </group>
+    <group ref="/all-widgets/number_widgets">
+      <label>Numerical widgets</label>
+      <input ref="/all-widgets/number_widgets/integer_widget">
+        <label>Integer widget</label>
+        <hint>integer type with no appearance</hint>
+      </input>
+      <input appearance="thousands-sep" ref="/all-widgets/number_widgets/integer_thousands_sep_widget">
+        <label>Integer widget with thousands separators</label>
+        <hint>integer type with thousands-sep appearance. This appearance can also be applied to decimal and string numbers widgets</hint>
+      </input>
+      <input appearance="ex:change.uw.android.BREATHCOUNT" ref="/all-widgets/number_widgets/ex_integer_widget">
+        <label>Ex integer widget</label>
+        <hint>integer type with ex:change.uw.android.BREATHCOUNT appearance (can use other external apps)</hint>
+      </input>
+      <input ref="/all-widgets/number_widgets/decimal_widget">
+        <label>Decimal widget</label>
+        <hint>decimal type with no appearance</hint>
+      </input>
+      <input appearance="ex:change.uw.android.BREATHCOUNT" ref="/all-widgets/number_widgets/ex_decimal_widget">
+        <label>Ex decimal widget</label>
+        <hint>decimal type with ex:change.uw.android.BREATHCOUNT appearance (can use other external apps)</hint>
+      </input>
+      <input appearance="bearing" ref="/all-widgets/number_widgets/bearing_widget">
+        <label>Bearing widget</label>
+        <hint>decimal type with bearing appearance</hint>
+      </input>
+    </group>
+    <group ref="/all-widgets/range_widgets">
+      <label>Range widgets</label>
+      <range end="10" ref="/all-widgets/range_widgets/range_integer_widget" start="1" step="1">
+        <label>Range integer widget</label>
+        <hint>range integer widget with no appearance</hint>
+      </range>
+      <range end="5.5" ref="/all-widgets/range_widgets/range_decimal_widget" start="1.5" step="0.5">
+        <label>Range decimal widget</label>
+        <hint>range decimal widget with no appearance</hint>
+      </range>
+      <range appearance="vertical" end="10" ref="/all-widgets/range_widgets/range_integer_widget_vertical" start="1" step="1">
+        <label>Range vertical integer widget</label>
+        <hint>range integer widget with vertical appearance. This appearance can also be applied to a decimal range.</hint>
+      </range>
+      <range appearance="picker" end="10" ref="/all-widgets/range_widgets/range_integer_widget_picker" start="1" step="1">
+        <label>Range picker integer widget</label>
+        <hint>range integer widget with picker appearance. This appearance can also be applied to a decimal range.</hint>
+      </range>
+    </group>
+    <group ref="/all-widgets/image_widgets">
+      <label>Image widgets</label>
+      <upload mediatype="image/*" ref="/all-widgets/image_widgets/image_widget">
+        <label>Image widget</label>
+        <hint>image type with no appearance</hint>
+      </upload>
+      <upload appearance="new" mediatype="image/*" ref="/all-widgets/image_widgets/image_widget_no_choose">
+        <label>Image widget without Choose button</label>
+        <hint>image type with new appearance (can also be added with annotate appearance and on audio and video types)</hint>
+      </upload>
+      <upload appearance="selfie" mediatype="image/*" ref="/all-widgets/image_widgets/selfie_image_widget">
+        <label>Selfie widget</label>
+        <hint>image type with selfie appearance</hint>
+      </upload>
+      <upload appearance="draw" mediatype="image/*" ref="/all-widgets/image_widgets/draw_image_widget">
+        <label>Draw widget</label>
+        <hint>image type with draw appearance</hint>
+      </upload>
+      <upload appearance="annotate" mediatype="image/*" ref="/all-widgets/image_widgets/annotate_image_widget">
+        <label>Annotate widget</label>
+        <hint>image type with annotate appearance</hint>
+      </upload>
+      <upload appearance="signature" mediatype="image/*" ref="/all-widgets/image_widgets/signature_widget">
+        <label>Signature widget</label>
+        <hint>image type with signature appearance</hint>
+      </upload>
+      <upload appearance="web" mediatype="image/*" ref="/all-widgets/image_widgets/webview_image_widget">
+        <label>Web view image widget</label>
+        <hint>image type with web appearance</hint>
+      </upload>
+      <upload appearance="align:1 1 1" mediatype="image/*" ref="/all-widgets/image_widgets/aligned_image_widget">
+        <label>Align image widget</label>
+        <hint>image type with align:1 1 1 appearance, requires external aligned image app</hint>
+      </upload>
+    </group>
+    <group ref="/all-widgets/media_widgets">
+      <label>Media widgets</label>
+      <input ref="/all-widgets/media_widgets/barcode_widget">
+        <label>Barcode widget</label>
+        <hint>barcode type with no appearance</hint>
+      </input>
+      <upload mediatype="audio/*" ref="/all-widgets/media_widgets/audio_widget">
+        <label>Audio widget</label>
+        <hint>audio type with no appearance</hint>
+      </upload>
+      <upload mediatype="video/*" ref="/all-widgets/media_widgets/video_widget">
+        <label>Video widget</label>
+        <hint>video type with no appearance</hint>
+      </upload>
+      <upload appearance="new-front" mediatype="video/*" ref="/all-widgets/media_widgets/selfie_video_widget">
+        <label>Selfie video widget</label>
+        <hint>video type with new-front appearance</hint>
+      </upload>
+      <upload mediatype="text/plain,application/pdf,application/vnd.ms-excel,application/msword,text/richtext,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/zip,application/x-zip,application/x-zip-compressed" ref="/all-widgets/media_widgets/file_widget">
+        <label>File widget</label>
+        <hint>file type with no appearance &lt;br/&gt; WARNING: any kind of file could be uploaded including files that contain viruses or other malware. Be sure to take proper precautions when downloading files from server.</hint>
+      </upload>
+    </group>
+    <group ref="/all-widgets/date_time_widgets">
+      <label>Date and time widgets</label>
+      <input ref="/all-widgets/date_time_widgets/date_widget">
+        <label>Date widget</label>
+        <hint>date type with no appearance</hint>
+      </input>
+      <input appearance="no-calendar" ref="/all-widgets/date_time_widgets/date_widget_nocalendar">
+        <label>Date Widget</label>
+        <hint>date type with no-calendar appearance</hint>
+      </input>
+      <input appearance="month-year" ref="/all-widgets/date_time_widgets/date_widget_month_year">
+        <label>Date widget</label>
+        <hint>date type with month-year appearance</hint>
+      </input>
+      <input appearance="year" ref="/all-widgets/date_time_widgets/date_widget_year">
+        <label>Date widget</label>
+        <hint>date type with year appearance</hint>
+      </input>
+      <input ref="/all-widgets/date_time_widgets/time_widget">
+        <label>Time widget</label>
+        <hint>time type with no appearance</hint>
+      </input>
+      <input ref="/all-widgets/date_time_widgets/date_time_widget">
+        <label>Date time widget</label>
+        <hint>dateTime type with no appearance</hint>
+      </input>
+      <input appearance="no-calendar" ref="/all-widgets/date_time_widgets/date_time_widget_nocalendar">
+        <label>Date time widget</label>
+        <hint>dateTime type with no-calendar appearance</hint>
+      </input>
+      <input appearance="ethiopian" ref="/all-widgets/date_time_widgets/ethiopian_date_widget">
+        <label>Ethiopian date widget</label>
+        <hint>date type ethiopian appearance</hint>
+      </input>
+      <input appearance="coptic" ref="/all-widgets/date_time_widgets/coptic_date_widget">
+        <label>Coptic date widget</label>
+        <hint>date type coptic appearance</hint>
+      </input>
+      <input appearance="islamic" ref="/all-widgets/date_time_widgets/islamic_date_widget">
+        <label>Islamic date widget</label>
+        <hint>date type islamic appearance</hint>
+      </input>
+    </group>
+    <group ref="/all-widgets/geopoint_widgets">
+      <label>GPS widgets</label>
+      <input ref="/all-widgets/geopoint_widgets/geopoint_widget">
+        <label>Geopoint widget</label>
+        <hint>geopoint type with no appearance</hint>
+      </input>
+      <input appearance="placement-map" ref="/all-widgets/geopoint_widgets/geopoint_widget_placementmap">
+        <label>Geopoint widget</label>
+        <hint>geopoint type with placement-map appearance</hint>
+      </input>
+      <input appearance="maps" ref="/all-widgets/geopoint_widgets/geopoint_widget_maps">
+        <label>Geopoint widget</label>
+        <hint>geopoint type with maps appearance</hint>
+      </input>
+      <input ref="/all-widgets/geopoint_widgets/geotrace_widget">
+        <label>Geotrace widget</label>
+        <hint>geotrace type with no appearance</hint>
+      </input>
+      <input ref="/all-widgets/geopoint_widgets/geoshape_widget">
+        <label>Geoshape widget</label>
+        <hint>geoshape type with no appearance</hint>
+      </input>
+      <upload mediatype="osm/*" ref="/all-widgets/geopoint_widgets/osm_road">
+        <label>OSM integration</label>
+        <hint>osm type</hint>
+      </upload>
+      <upload mediatype="osm/*" ref="/all-widgets/geopoint_widgets/osm_building">
+        <label>OSM integration</label>
+        <hint>osm osm_building type</hint>
+        <tag key="">
+          <label>Nom en Francais</label>
+        </tag>
+        <tag key="">
+          <label>House Number</label>
+        </tag>
+        <tag key="">
+          <label>Street Name</label>
+        </tag>
+        <tag key="">
+          <label>City</label>
+        </tag>
+        <tag key="">
+          <label>Zip Code</label>
+        </tag>
+        <tag key="">
+          <label>Building</label>
+        </tag>
+        <tag key="">
+          <label>Building Type</label>
+        </tag>
+      </upload>
+    </group>
+    <group ref="/all-widgets/select_one_widgets">
+      <label>Select one widgets</label>
+      <select1 ref="/all-widgets/select_one_widgets/select_one_widget">
+        <label>Select one widget</label>
+        <hint>select_one type with no appearance, 4 text choices</hint>
+        <item>
+          <label>A</label>
+          <value>a</value>
+        </item>
+        <item>
+          <label>B</label>
+          <value>b</value>
+        </item>
+        <item>
+          <label>C</label>
+          <value>c</value>
+        </item>
+        <item>
+          <label>D</label>
+          <value>d</value>
+        </item>
+      </select1>
+      <select1 appearance="minimal" ref="/all-widgets/select_one_widgets/spinner_widget">
+        <label>Spinner widget</label>
+        <hint>select_one type with minimal appearance, 4 text choices</hint>
+        <item>
+          <label>A</label>
+          <value>a</value>
+        </item>
+        <item>
+          <label>B</label>
+          <value>b</value>
+        </item>
+        <item>
+          <label>C</label>
+          <value>c</value>
+        </item>
+        <item>
+          <label>D</label>
+          <value>d</value>
+        </item>
+      </select1>
+      <select1 appearance="quick" ref="/all-widgets/select_one_widgets/select_one_autoadvance_widget">
+        <label>Select one autoadvance widget</label>
+        <hint>select_one type with quick appearance, 4 text choices</hint>
+        <item>
+          <label>A</label>
+          <value>a</value>
+        </item>
+        <item>
+          <label>B</label>
+          <value>b</value>
+        </item>
+        <item>
+          <label>C</label>
+          <value>c</value>
+        </item>
+        <item>
+          <label>D</label>
+          <value>d</value>
+        </item>
+      </select1>
+      <select1 appearance="search" ref="/all-widgets/select_one_widgets/select_one_search_widget">
+        <label>Select one search widget</label>
+        <hint>select_one type with search appearance, 4 text choices</hint>
+        <item>
+          <label>A</label>
+          <value>a</value>
+        </item>
+        <item>
+          <label>B</label>
+          <value>b</value>
+        </item>
+        <item>
+          <label>C</label>
+          <value>c</value>
+        </item>
+        <item>
+          <label>D</label>
+          <value>d</value>
+        </item>
+      </select1>
+      <select1 appearance="autocomplete" ref="/all-widgets/select_one_widgets/select_one_autocomplete_widget">
+        <label>Select one search widget</label>
+        <hint>select_one type with autocomplete appearance, 4 text choices</hint>
+        <item>
+          <label>A</label>
+          <value>a</value>
+        </item>
+        <item>
+          <label>B</label>
+          <value>b</value>
+        </item>
+        <item>
+          <label>C</label>
+          <value>c</value>
+        </item>
+        <item>
+          <label>D</label>
+          <value>d</value>
+        </item>
+      </select1>
+      <select1 ref="/all-widgets/select_one_widgets/grid_widget">
+        <label>Grid select one widget</label>
+        <hint>select_one type with no appearance, 4 image choices (a.jpg, b.jpg, c.jpg, d.jpg)</hint>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_one_widgets/grid_widget/a:label')"/>
+          <value>a</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_one_widgets/grid_widget/b:label')"/>
+          <value>b</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_one_widgets/grid_widget/c:label')"/>
+          <value>c</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_one_widgets/grid_widget/d:label')"/>
+          <value>d</value>
+        </item>
+      </select1>
+      <select1 appearance="compact" ref="/all-widgets/select_one_widgets/grid_widget_compact">
+        <label>Grid select one widget</label>
+        <hint>select_one type with compact appearance, 4 image choices (a.jpg, b.jpg, c.jpg, d.jpg)</hint>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_one_widgets/grid_widget_compact/a:label')"/>
+          <value>a</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_one_widgets/grid_widget_compact/b:label')"/>
+          <value>b</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_one_widgets/grid_widget_compact/c:label')"/>
+          <value>c</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_one_widgets/grid_widget_compact/d:label')"/>
+          <value>d</value>
+        </item>
+      </select1>
+      <select1 appearance="compact-2" ref="/all-widgets/select_one_widgets/grid_widget_compact2">
+        <label>Grid select one widget</label>
+        <hint>select_one type with compact-2 appearance, 4 image choices (a.jpg, b.jpg, c.jpg, d.jpg)</hint>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_one_widgets/grid_widget_compact2/a:label')"/>
+          <value>a</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_one_widgets/grid_widget_compact2/b:label')"/>
+          <value>b</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_one_widgets/grid_widget_compact2/c:label')"/>
+          <value>c</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_one_widgets/grid_widget_compact2/d:label')"/>
+          <value>d</value>
+        </item>
+      </select1>
+      <select1 appearance="quickcompact" ref="/all-widgets/select_one_widgets/grid_widget_quickcompact">
+        <label>Grid select one widget</label>
+        <hint>select_one type with quickcompact appearance, 4 image choices (a.jpg, b.jpg, c.jpg, d.jpg)</hint>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_one_widgets/grid_widget_quickcompact/a:label')"/>
+          <value>a</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_one_widgets/grid_widget_quickcompact/b:label')"/>
+          <value>b</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_one_widgets/grid_widget_quickcompact/c:label')"/>
+          <value>c</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_one_widgets/grid_widget_quickcompact/d:label')"/>
+          <value>d</value>
+        </item>
+      </select1>
+      <select1 appearance="quickcompact-2" ref="/all-widgets/select_one_widgets/grid_widget_quickcompact2">
+        <label>Grid select one widget</label>
+        <hint>select_one type with quickcompact-2 appearance, 4 image choices (a.jpg, b.jpg, c.jpg, d.jpg)</hint>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_one_widgets/grid_widget_quickcompact2/a:label')"/>
+          <value>a</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_one_widgets/grid_widget_quickcompact2/b:label')"/>
+          <value>b</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_one_widgets/grid_widget_quickcompact2/c:label')"/>
+          <value>c</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_one_widgets/grid_widget_quickcompact2/d:label')"/>
+          <value>d</value>
+        </item>
+      </select1>
+      <select1 appearance="image-map" ref="/all-widgets/select_one_widgets/select_one_image_map">
+        <label ref="jr:itext('/all-widgets/select_one_widgets/select_one_image_map:label')"/>
+        <hint>select_one with type image-map appearance and image body.svg</hint>
+        <item>
+          <label>Head</label>
+          <value>head</value>
+        </item>
+        <item>
+          <label>Neck</label>
+          <value>neck</value>
+        </item>
+        <item>
+          <label>Lungs</label>
+          <value>lungs</value>
+        </item>
+        <item>
+          <label>Left proximal arm</label>
+          <value>left_proximal_arm</value>
+        </item>
+        <item>
+          <label>Left distal arm</label>
+          <value>left_distal_arm</value>
+        </item>
+        <item>
+          <label>Right proximal arm</label>
+          <value>right_proximal_arm</value>
+        </item>
+        <item>
+          <label>Right distal arm</label>
+          <value>right_distal_arm</value>
+        </item>
+        <item>
+          <label>Left proximal leg</label>
+          <value>left_proximal_leg</value>
+        </item>
+        <item>
+          <label>Left distal leg</label>
+          <value>left_distal_leg</value>
+        </item>
+        <item>
+          <label>Right proximal leg</label>
+          <value>right_proximal_leg</value>
+        </item>
+        <item>
+          <label>Right distal leg</label>
+          <value>right_distal_leg</value>
+        </item>
+      </select1>
+    </group>
+    <group ref="/all-widgets/select_multi_widgets">
+      <label>This section contains "Select Multi Widgets"</label>
+      <select ref="/all-widgets/select_multi_widgets/select_multi_widget">
+        <label>Multi select widget</label>
+        <hint>select_multiple type with no appearance, 4 text choices</hint>
+        <item>
+          <label>A</label>
+          <value>a</value>
+        </item>
+        <item>
+          <label>B</label>
+          <value>b</value>
+        </item>
+        <item>
+          <label>C</label>
+          <value>c</value>
+        </item>
+        <item>
+          <label>D</label>
+          <value>d</value>
+        </item>
+      </select>
+      <select appearance="compact" ref="/all-widgets/select_multi_widgets/grid_multi_widget_compact">
+        <label>Grid select multiple widget</label>
+        <hint>select_multiple type with compact appearance, 4 image choices</hint>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_multi_widgets/grid_multi_widget_compact/a:label')"/>
+          <value>a</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_multi_widgets/grid_multi_widget_compact/b:label')"/>
+          <value>b</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_multi_widgets/grid_multi_widget_compact/c:label')"/>
+          <value>c</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_multi_widgets/grid_multi_widget_compact/d:label')"/>
+          <value>d</value>
+        </item>
+      </select>
+      <select appearance="compact-2" ref="/all-widgets/select_multi_widgets/grid_multi_widget_compact2">
+        <label>Grid select multiple widget</label>
+        <hint>select_multiple type with compact-2 appearance, 4 image choices</hint>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_multi_widgets/grid_multi_widget_compact2/a:label')"/>
+          <value>a</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_multi_widgets/grid_multi_widget_compact2/b:label')"/>
+          <value>b</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_multi_widgets/grid_multi_widget_compact2/c:label')"/>
+          <value>c</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/all-widgets/select_multi_widgets/grid_multi_widget_compact2/d:label')"/>
+          <value>d</value>
+        </item>
+      </select>
+      <select appearance="minimal" ref="/all-widgets/select_multi_widgets/spinner_multi_widget">
+        <label>Spinner widget: select multiple</label>
+        <hint>select_multiple type with minimal appearance, 4 image choices</hint>
+        <item>
+          <label>A</label>
+          <value>a</value>
+        </item>
+        <item>
+          <label>B</label>
+          <value>b</value>
+        </item>
+        <item>
+          <label>C</label>
+          <value>c</value>
+        </item>
+        <item>
+          <label>D</label>
+          <value>d</value>
+        </item>
+      </select>
+      <select appearance="image-map" ref="/all-widgets/select_multi_widgets/select_multi_image_map">
+        <label ref="jr:itext('/all-widgets/select_multi_widgets/select_multi_image_map:label')"/>
+        <hint>select_multiple type with image-map appearance and image body.svg</hint>
+        <item>
+          <label>Head</label>
+          <value>head</value>
+        </item>
+        <item>
+          <label>Neck</label>
+          <value>neck</value>
+        </item>
+        <item>
+          <label>Lungs</label>
+          <value>lungs</value>
+        </item>
+        <item>
+          <label>Left proximal arm</label>
+          <value>left_proximal_arm</value>
+        </item>
+        <item>
+          <label>Left distal arm</label>
+          <value>left_distal_arm</value>
+        </item>
+        <item>
+          <label>Right proximal arm</label>
+          <value>right_proximal_arm</value>
+        </item>
+        <item>
+          <label>Right distal arm</label>
+          <value>right_distal_arm</value>
+        </item>
+        <item>
+          <label>Left proximal leg</label>
+          <value>left_proximal_leg</value>
+        </item>
+        <item>
+          <label>Left distal leg</label>
+          <value>left_distal_leg</value>
+        </item>
+        <item>
+          <label>Right proximal leg</label>
+          <value>right_proximal_leg</value>
+        </item>
+        <item>
+          <label>Right distal leg</label>
+          <value>right_distal_leg</value>
+        </item>
+      </select>
+    </group>
+    <group appearance="field-list" ref="/all-widgets/table_list_test">
+      <label>List group</label>
+      <select1 appearance="label" ref="/all-widgets/table_list_test/table_list_test_label">
+        <label>Label widget</label>
+        <hint>Show only the labels of these options and not the inputs (type=select_one yes_no, appearance=label)</hint>
+        <item>
+          <label>Yes</label>
+          <value>yes</value>
+        </item>
+        <item>
+          <label>No</label>
+          <value>no</value>
+        </item>
+        <item>
+          <label>Don't Know</label>
+          <value>dk</value>
+        </item>
+        <item>
+          <label>Not Applicable</label>
+          <value>na</value>
+        </item>
+      </select1>
+      <select appearance="label" ref="/all-widgets/table_list_test/table_list_test_label_2">
+        <label>Label multi widget</label>
+        <hint>Show only the labels of these options and not the inputs (type=select_multiple yes_no, appearance=label)</hint>
+        <item>
+          <label>Yes</label>
+          <value>yes</value>
+        </item>
+        <item>
+          <label>No</label>
+          <value>no</value>
+        </item>
+        <item>
+          <label>Don't Know</label>
+          <value>dk</value>
+        </item>
+        <item>
+          <label>Not Applicable</label>
+          <value>na</value>
+        </item>
+      </select>
+      <select1 appearance="list-nolabel" ref="/all-widgets/table_list_test/table_list_1">
+        <label>List widget</label>
+        <hint>Show only the inputs of these options and not the labels (type=select_one yes_no, appearance=list-nolabel)</hint>
+        <item>
+          <label>Yes</label>
+          <value>yes</value>
+        </item>
+        <item>
+          <label>No</label>
+          <value>no</value>
+        </item>
+        <item>
+          <label>Don't Know</label>
+          <value>dk</value>
+        </item>
+        <item>
+          <label>Not Applicable</label>
+          <value>na</value>
+        </item>
+      </select1>
+      <select appearance="list-nolabel" ref="/all-widgets/table_list_test/table_list_2">
+        <label>List multi widget</label>
+        <hint>Show only the inputs of these options and not the labels (type=select_multiple yes_no, appearance=list-nolabel)</hint>
+        <item>
+          <label>Yes</label>
+          <value>yes</value>
+        </item>
+        <item>
+          <label>No</label>
+          <value>no</value>
+        </item>
+        <item>
+          <label>Don't Know</label>
+          <value>dk</value>
+        </item>
+        <item>
+          <label>Not Applicable</label>
+          <value>na</value>
+        </item>
+      </select>
+      <select1 appearance="list" ref="/all-widgets/table_list_test/list_widget">
+        <label>List widget</label>
+        <hint>This is a normal list widget with (type = select_one, appearance = list)</hint>
+        <item>
+          <label>Yes</label>
+          <value>yes</value>
+        </item>
+        <item>
+          <label>No</label>
+          <value>no</value>
+        </item>
+        <item>
+          <label>Don't Know</label>
+          <value>dk</value>
+        </item>
+        <item>
+          <label>Not Applicable</label>
+          <value>na</value>
+        </item>
+      </select1>
+      <select appearance="list" ref="/all-widgets/table_list_test/list_multi_widget">
+        <label>List multi widget</label>
+        <hint>This is a normal list widget with (type = select_multiple, appearance = list)</hint>
+        <item>
+          <label>Yes</label>
+          <value>yes</value>
+        </item>
+        <item>
+          <label>No</label>
+          <value>no</value>
+        </item>
+        <item>
+          <label>Don't Know</label>
+          <value>dk</value>
+        </item>
+        <item>
+          <label>Not Applicable</label>
+          <value>na</value>
+        </item>
+      </select>
+    </group>
+    <trigger ref="/all-widgets/my_trigger">
+      <label>Trigger widget</label>
+      <hint>Prompts for confirmation. Useful to combine with required or relevant. (type=trigger)</hint>
+    </trigger>
+  </h:body>
+</h:html>

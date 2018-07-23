@@ -28,6 +28,7 @@ import org.odk.collect.android.utilities.SharedPreferencesUtils;
 import java.util.HashMap;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_EDIT_SAVED;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_COMPLETED_DEFAULT;
 
@@ -65,7 +66,7 @@ public class SharedPreferencesTest {
         GeneralSharedPreferences generalSharedPreferences = GeneralSharedPreferences.getInstance();
         for (String key : SharedPreferencesUtils.getAllGeneralKeys()) {
             if (key.equals(KEY_COMPLETED_DEFAULT)) {
-                assertEquals(generalSharedPreferences.get(key), false);
+                assertFalse((boolean) generalSharedPreferences.get(key));
             } else {
                 assertEquals(generalSharedPreferences.get(key), defaultValues.get(key));
             }
@@ -80,7 +81,7 @@ public class SharedPreferencesTest {
         AdminSharedPreferences adminSharedPreferences = AdminSharedPreferences.getInstance();
         for (String key : SharedPreferencesUtils.getAllAdminKeys()) {
             if (key.equals(KEY_EDIT_SAVED)) {
-                assertEquals(adminSharedPreferences.get(key), false);
+                assertFalse((boolean) adminSharedPreferences.get(key));
             } else {
                 assertEquals(adminSharedPreferences.get(key), adminSharedPreferences.getDefault(key));
             }
