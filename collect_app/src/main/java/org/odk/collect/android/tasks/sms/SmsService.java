@@ -366,6 +366,11 @@ public class SmsService {
     }
 
     public static String getDisplaySubtext(int resultCode, Date date, SmsProgress progress, Context context) {
+        if (date == null) {
+            Timber.e("date is null");
+            return context.getString(R.string.error_occured);
+        }
+
         try {
             switch (resultCode) {
                 case RESULT_ERROR_NO_SERVICE:
@@ -390,7 +395,7 @@ public class SmsService {
                 default:
                     return new SimpleDateFormat(context.getString(R.string.sms_fatal_error), Locale.getDefault()).format(date);
             }
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
             Timber.e(e);
         }
 
