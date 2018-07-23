@@ -76,10 +76,14 @@ public class WebCredentialsUtils {
      */
     public @Nullable HttpCredentialsInterface getCredentials(@NonNull URI url) {
         String serverUrl = getServerFromPreferences();
-        if (serverUrl != null && serverUrl.equalsIgnoreCase(url.toString())) {
+
+        String host = url.getHost();
+        String urlString = url.toString();
+        urlString = url.toString().substring(0, urlString.indexOf(host) + host.length());
+
+        if (serverUrl != null && serverUrl.equalsIgnoreCase(urlString)) {
             return new HttpCredentials(getUserNameFromPreferences(), getPasswordFromPreferences());
         } else {
-            String host = url.getHost();
             return hostCredentials.get(host);
         }
     }
