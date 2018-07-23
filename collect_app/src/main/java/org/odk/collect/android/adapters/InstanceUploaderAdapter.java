@@ -142,13 +142,16 @@ public class InstanceUploaderAdapter extends CursorAdapter {
         compositeDisposable.add(eventBus.register(SmsRxEvent.class)
                 .filter(event -> event.getInstanceId().equals(String.valueOf(instanceId)))
                 .subscribeOn(Schedulers.io())
-                .doOnError(Timber::e)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(event -> {
-                    viewHolder.progressBar.setProgressPercent((int) event.getProgress().getPercentage(), true);
-                    setSmsSubmissionStateIcons(event.getResultCode(), viewHolder);
-                    setDisplaySubTextView(event, viewHolder);
-                    setupCloseButton(viewHolder, event.getResultCode());
+                    try {
+                        viewHolder.progressBar.setProgressPercent((int) event.getProgress().getPercentage(), true);
+                        setSmsSubmissionStateIcons(event.getResultCode(), viewHolder);
+                        setDisplaySubTextView(event, viewHolder);
+                        setupCloseButton(viewHolder, event.getResultCode());
+                    } catch (Exception e) {
+                        Timber.e(e);
+                    }
                 }));
     }
 
