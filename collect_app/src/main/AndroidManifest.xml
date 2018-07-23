@@ -282,8 +282,7 @@ the specific language governing permissions and limitations under the License.
 
         <!-- External apps can request form downloads -->
         <service
-            android:name=".services.FormDownloadService"
-            android:exported="true" />
+            android:name=".services.FormDownloadService"/>
 
         <receiver
             android:name=".tasks.sms.SmsSentBroadcastReceiver"
@@ -301,5 +300,15 @@ the specific language governing permissions and limitations under the License.
                 <action android:name="org.odk.collect.android.COLLECT_SMS_NOTIFICATION_ACTION" />
             </intent-filter>
         </receiver>
+        <receiver
+            android:name=".services.FormDownloadRequestReceiver"
+            android:enabled="true"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="org.odk.collect.android.FORM_DOWNLOAD" />
+            </intent-filter>
+        </receiver>
     </application>
+
 </manifest>
