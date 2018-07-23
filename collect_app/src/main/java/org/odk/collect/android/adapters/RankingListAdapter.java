@@ -19,7 +19,6 @@ package org.odk.collect.android.adapters;
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.LayoutInflater;
@@ -89,23 +88,25 @@ public class RankingListAdapter extends Adapter<ItemViewHolder> {
 
         final Context context;
         final TextView textView;
+        final ThemeUtils themeUtils;
 
         ItemViewHolder(Context context, View itemView) {
             super(itemView);
             this.context = context;
             textView = itemView.findViewById(R.id.rank_item_text);
             textView.setTextSize(Collect.getQuestionFontsize());
+            themeUtils = new ThemeUtils(context);
         }
 
         public void onItemSelected() {
             GradientDrawable border = new GradientDrawable();
-            border.setColor(new ThemeUtils(context).getRankItemColor());
-            border.setStroke(10, ContextCompat.getColor(Collect.getInstance(), R.color.tintColor));
+            border.setColor(themeUtils.getRankItemColor());
+            border.setStroke(10, themeUtils.getAccentColor());
             itemView.setBackground(border);
         }
 
         public void onItemClear() {
-            itemView.setBackgroundColor(new ThemeUtils(context).getRankItemColor());
+            itemView.setBackgroundColor(themeUtils.getRankItemColor());
         }
     }
 }
