@@ -57,6 +57,7 @@ public class FormDownloadJob extends Job {
     public static final String TAG = "FORM_DOWNLOAD_TAG";
     private static final String ACTION = "org.odk.collect.FORM_DOWNLOAD.PROGRESS";
     private String formId;
+    private String transactionId;
 
     public static final int PROGRESS_REQUEST_RECEIVED = 1;
     public static final int PROGRESS_REQUEST_SATISFIED = 2;
@@ -65,6 +66,7 @@ public class FormDownloadJob extends Job {
     @Override
     protected Result onRunJob(@NonNull Params params) {
         Bundle bundle = params.getTransientExtras();
+        transactionId = bundle.getString(ApplicationConstants.BundleKeys.TRANSACTION_ID);
 
         if (bundle.containsKey(ApplicationConstants.BundleKeys.FORM_ID)) {
             formId = bundle.getString(ApplicationConstants.BundleKeys.FORM_ID);
@@ -123,6 +125,7 @@ public class FormDownloadJob extends Job {
         Intent intent = new Intent(ACTION);
         intent.putExtra(ApplicationConstants.BundleKeys.PROGRESS_STAGE, progressStage);
         intent.putExtra(ApplicationConstants.BundleKeys.SUCCESS_KEY, success);
+        intent.putExtra(ApplicationConstants.BundleKeys.TRANSACTION_ID, transactionId);
 
         if (!success && errorReason != null) {
             intent.putExtra(ApplicationConstants.BundleKeys.ERROR_REASON, errorReason);

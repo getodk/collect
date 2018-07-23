@@ -56,6 +56,7 @@ public class ApplicationConstants {
         public static final String ERROR_REASON = "ERROR_MSG";
         public static final String PROGRESS_STAGE = "PROGRESS_STAGE";
         public static final String FORM_ID = "FORM_ID";
+        public static final String TRANSACTION_ID = "TRANSACTION_ID";
     }
 
     public abstract static class FormModes {
