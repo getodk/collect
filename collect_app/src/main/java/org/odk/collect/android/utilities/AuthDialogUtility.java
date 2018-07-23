@@ -75,10 +75,9 @@ public class AuthDialogUtility {
                 String passwordValue = password.getText().toString();
 
                 if (finalOverriddenUrl == null) {
-                    webCredentialsUtils.saveCredentials(userNameValue, passwordValue);
-                    webCredentialsUtils.setWebCredentialsFromPreferences();
+                    webCredentialsUtils.saveCredentialsPreferences(userNameValue, passwordValue);
                 } else {
-                    webCredentialsUtils.setWebCredentials(finalOverriddenUrl, username.getText().toString(), password.getText().toString());
+                    webCredentialsUtils.saveCredentials(finalOverriddenUrl, username.getText().toString(), password.getText().toString());
                 }
 
                 resultListener.updatedCredentials();

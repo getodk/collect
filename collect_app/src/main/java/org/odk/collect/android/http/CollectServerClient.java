@@ -21,6 +21,7 @@ import android.support.annotation.Nullable;
 import org.kxml2.io.KXmlParser;
 import org.kxml2.kdom.Document;
 import org.odk.collect.android.utilities.DocumentFetchResult;
+import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.xmlpull.v1.XmlPullParser;
 import java.io.IOException;
 import java.io.InputStream;
@@ -55,33 +56,6 @@ public class CollectServerClient {
         this.httpInterface = httpInterface;
     }
 
-    /**
-     * Remove all credentials for accessing the specified host.
-     *
-     * @param host host to clear the credentials
-     */
-    public void clearHostCredentials(String host) {
-        httpInterface.clearHostCredentials(host);
-    }
-
-    /**
-     * Clears the cookie store
-     */
-    public void clearCookieStore() {
-        httpInterface.clearCookieStore();
-    }
-
-    /**
-     * Add credentials to a specified host
-     *
-     * @param username - The users name
-     * @param password - The password
-     * @param host - The host to add credentials to
-     */
-    public void addCredentials(String username, String password,
-                                      String host) {
-        httpInterface.addCredentials(username, password, host);
-    }
 
     /**
      * Common method for returning a parsed xml document given a url and the
@@ -168,7 +142,7 @@ public class CollectServerClient {
             throw new Exception("Invalid server URL (no hostname): " + downloadUrl);
         }
 
-        return httpInterface.get(uri, contentType);
+        return httpInterface.get(uri, contentType, WebCredentialsUtils.getInstance().getCredentials(uri));
     }
 
 

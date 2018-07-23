@@ -6,7 +6,6 @@ import org.odk.collect.android.receivers.NetworkReceiver;
 import org.odk.collect.android.tasks.InstanceServerUploader;
 import org.odk.collect.android.utilities.DownloadFormListUtils;
 import org.odk.collect.android.utilities.FormDownloader;
-import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import javax.inject.Singleton;
 
@@ -26,6 +25,4 @@ public interface HttpComponent {
     void inject(NetworkReceiver networkReceiver);
 
     void inject(DownloadFormListUtils downloadFormListUtils);
-
-    void inject(WebCredentialsUtils webCredentialsUtils);
 }

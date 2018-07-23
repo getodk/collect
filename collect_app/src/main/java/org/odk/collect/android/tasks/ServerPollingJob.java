@@ -41,7 +41,6 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.DownloadFormListUtils;
 import org.odk.collect.android.utilities.FormDownloader;
 import org.odk.collect.android.utilities.IconUtils;
-import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -81,7 +80,6 @@ public class ServerPollingJob extends Job {
 
             if (formList != null && !formList.containsKey(DL_ERROR_MSG)) {
                 if (formList.containsKey(DL_AUTH_REQUIRED)) {
-                    WebCredentialsUtils.getInstance().setWebCredentialsFromPreferences();
                     formList = downloadFormListTask.downloadFormList(true);
 
                     if (formList == null || formList.containsKey(DL_AUTH_REQUIRED) || formList.containsKey(DL_ERROR_MSG)) {

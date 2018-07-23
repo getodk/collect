@@ -3,6 +3,7 @@ package org.odk.collect.android.http.mock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import org.odk.collect.android.http.HttpCredentialsInterface;
 import org.odk.collect.android.http.HttpGetResult;
 import org.odk.collect.android.http.HttpHeadResult;
 import org.odk.collect.android.http.HttpInterface;
@@ -24,7 +25,7 @@ public class MockHttpClientConnection implements HttpInterface {
 
     @NonNull
     @Override
-    public HttpGetResult get(@NonNull URI uri, @Nullable String contentType) throws Exception {
+    public HttpGetResult get(@NonNull URI uri, @Nullable String contentType, @Nullable HttpCredentialsInterface credentials) throws Exception {
         if (getHttpShouldReturnNull) {
             return null;
         }
@@ -46,32 +47,17 @@ public class MockHttpClientConnection implements HttpInterface {
         return new HttpGetResult(is, headers, "test-hash", HttpURLConnection.HTTP_OK);
     }
 
+    @NonNull
     @Override
-    public @NonNull HttpHeadResult head(@NonNull URI uri) {
+    public HttpHeadResult head(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws Exception {
         return new HttpHeadResult(0, new HashMap<String, String>());
     }
 
-
+    @NonNull
     @Override
-    public ResponseMessageParser uploadSubmissionFile(@NonNull List<File> fileList, @NonNull File submissionFile, @NonNull URI uri) throws IOException {
+    public ResponseMessageParser uploadSubmissionFile(@NonNull List<File> fileList, @NonNull File submissionFile, @NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws IOException {
         return null;
     }
-
-    @Override
-    public void clearCookieStore() {
-
-    }
-
-    @Override
-    public void clearHostCredentials(String host) {
-
-    }
-
-    @Override
-    public void addCredentials(String username, String password, String host) {
-
-    }
-
 
     /**
      * Configuration methods for testing

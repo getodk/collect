@@ -148,7 +148,10 @@ public class HttpClientConnection implements HttpInterface {
 
     @Override
     public @NonNull
-    HttpGetResult get(@NonNull URI uri, @Nullable final String contentType) throws Exception {
+    HttpGetResult get(@NonNull URI uri, @Nullable final String contentType, @Nullable HttpCredentialsInterface credentials) throws Exception {
+        addCredentialsForHost(uri, credentials);
+        getCookieStore().clear();
+
         HttpContext localContext = getHttpContext();
         HttpClient httpclient = createHttpClient(CONNECTION_TIMEOUT);
 
@@ -229,7 +232,10 @@ public class HttpClientConnection implements HttpInterface {
 
 
     @Override
-    public HttpHeadResult head(@NonNull URI uri) throws Exception {
+    public HttpHeadResult head(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws Exception {
+        addCredentialsForHost(uri, credentials);
+        getCookieStore().clear();
+
         HttpContext localContext = getHttpContext();
         HttpClient httpclient = createHttpClient(CONNECTION_TIMEOUT);
         HttpHead httpHead = createOpenRosaHttpHead(uri);
@@ -289,9 +295,14 @@ public class HttpClientConnection implements HttpInterface {
     }
 
     @Override
-    public ResponseMessageParser uploadSubmissionFile(@NonNull List<File> fileList, @NonNull File submissionFile, @NonNull URI uri) throws IOException {
-        // get shared HttpContext so that authentication and cookies are retained.
+    public ResponseMessageParser uploadSubmissionFile(@NonNull List<File> fileList,
+                                                      @NonNull File submissionFile,
+                                                      @NonNull URI uri,
+                                                      @Nullable HttpCredentialsInterface credentials) throws IOException {
+        addCredentialsForHost(uri, credentials);
+        getCookieStore().clear();
 
+        // get shared HttpContext so that authentication and cookies are retained.
         HttpContext localContext = getHttpContext();
         HttpClient httpclient = createHttpClient(UPLOAD_CONNECTION_TIMEOUT);
 
@@ -410,9 +421,10 @@ public class HttpClientConnection implements HttpInterface {
         return messageParser;
     }
 
-    @Override
-    public void clearCookieStore() {
-        getCookieStore().clear();
+    private void addCredentialsForHost(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) {
+        if (credentials != null) {
+            addCredentials(credentials.getUsername(), credentials.getPassword(), uri.getHost());
+        }
     }
 
     private synchronized HttpContext getHttpContext() {
@@ -519,8 +531,8 @@ public class HttpClientConnection implements HttpInterface {
      * username is not null or blank then add a (username, password) credential
      * for accessing this host.
      */
-    @Override
-    public void addCredentials(String username, String password, String host) {
+
+    public synchronized void addCredentials(String username, String password, String host) {
         // to ensure that this is the only authentication available for this
         // host...
         clearHostCredentials(host);
@@ -538,7 +550,6 @@ public class HttpClientConnection implements HttpInterface {
             credsProvider.setCredentials(a, c);
         }
     }
-
 
     private static HttpGet createOpenRosaHttpGet(URI uri) {
         HttpGet req = new HttpGet();

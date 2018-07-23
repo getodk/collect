@@ -57,7 +57,6 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -642,8 +641,6 @@ public class MainMenuActivity extends CollectAbstractActivity {
             for (Entry<String, ?> entry : entries.entrySet()) {
                 GeneralSharedPreferences.getInstance().save(entry.getKey(), entry.getValue());
             }
-
-            WebCredentialsUtils.getInstance().setWebCredentialsFromPreferences();
 
             AdminSharedPreferences.getInstance().clear();
 

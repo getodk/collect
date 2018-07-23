@@ -37,7 +37,7 @@ public interface HttpInterface {
      * @throws Exception a multitude of Exceptions such as IOException can be thrown
      */
     @NonNull
-    HttpGetResult get(@NonNull URI uri, @Nullable String contentType) throws Exception;
+    HttpGetResult get(@NonNull URI uri, @Nullable String contentType, @Nullable HttpCredentialsInterface credentials) throws Exception;
 
     /**
      * Performs a HTTP Head request.
@@ -47,7 +47,7 @@ public interface HttpInterface {
      * @throws Exception a multitude of Exceptions such as IOException can be thrown
      */
     @NonNull
-    HttpHeadResult head(@NonNull URI uri) throws Exception;
+    HttpHeadResult head(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws Exception;
 
     /**
      * Uploads files to a Server.
@@ -58,27 +58,10 @@ public interface HttpInterface {
      * @return ResponseMessageParser object that contains the response XML
      * @throws IOException can be thrown if files do not exist
      */
-    ResponseMessageParser uploadSubmissionFile(@NonNull List<File> fileList, @NonNull File submissionFile, @NonNull URI uri) throws IOException;
-
-    /**
-     * Clears the Cookie Stores
-     */
-    void clearCookieStore();
-
-    /**
-     * Clears the host credentials.
-     *
-     * @param host to clear the credentials of
-     */
-    void clearHostCredentials(String host);
-
-    /**
-     * Adds username and password to a particular host.
-     *
-     * @param username the user name
-     * @param password the password
-     * @param host the host to add the username / password to
-     */
-    void addCredentials(String username, String password, String host);
+    @NonNull
+    ResponseMessageParser uploadSubmissionFile(@NonNull List<File> fileList,
+                                               @NonNull File submissionFile,
+                                               @NonNull URI uri,
+                                               @Nullable HttpCredentialsInterface credentials) throws IOException;
 
 }

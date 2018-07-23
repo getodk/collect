@@ -53,7 +53,6 @@ import org.odk.collect.android.preferences.FormMetadataMigrator;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.PRNGFixes;
-import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.io.File;
 import java.util.Locale;
@@ -254,7 +253,6 @@ public class Collect extends Application implements HasActivityInjector {
 
         initProperties();
 
-        WebCredentialsUtils.getInstance().setWebCredentialsFromPreferences();
         if (BuildConfig.BUILD_TYPE.equals("odkCollectRelease")) {
             Timber.plant(new CrashReportingTree());
         } else {

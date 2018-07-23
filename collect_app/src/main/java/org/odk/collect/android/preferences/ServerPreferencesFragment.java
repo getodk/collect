@@ -19,7 +19,6 @@ package org.odk.collect.android.preferences;
 import android.accounts.AccountManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
@@ -47,7 +46,6 @@ import org.odk.collect.android.preferences.filters.WhitespaceFilter;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.Validator;
-import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
 import java.util.ArrayList;
@@ -69,7 +67,6 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     protected EditTextPreference usernamePreference;
     protected EditTextPreference passwordPreference;
     protected ExtendedEditTextPreference smsGatewayPreference;
-    protected boolean credentialsHaveChanged;
     protected EditTextPreference submissionUrlPreference;
     protected EditTextPreference formListUrlPreference;
     private ListPopupWindow listPopupWindow;
@@ -274,15 +271,6 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-
-        if (credentialsHaveChanged) {
-            WebCredentialsUtils.getInstance().setWebCredentialsFromPreferences();
-        }
-    }
-
-    @Override
     public boolean onTouch(View v, MotionEvent event) {
         final int DRAWABLE_RIGHT = 2;
         if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -343,10 +331,6 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                     }
 
                     preference.setSummary(username);
-                    clearCachedCrendentials();
-
-                    // To ensure we update current credentials in CredentialsProvider
-                    credentialsHaveChanged = true;
 
                     return true;
 
@@ -360,10 +344,6 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                     }
 
                     maskPasswordSummary(pw);
-                    clearCachedCrendentials();
-
-                    // To ensure we update current credentials in CredentialsProvider
-                    credentialsHaveChanged = true;
                     break;
 
                 case PreferenceKeys.KEY_GOOGLE_SHEETS_URL:
@@ -407,14 +387,6 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         passwordPreference.setSummary(password != null && password.length() > 0
                 ? "********"
                 : "");
-    }
-
-    private void clearCachedCrendentials() {
-        String server = (String) GeneralSharedPreferences
-                .getInstance().get(PreferenceKeys.KEY_SERVER_URL);
-        Uri u = Uri.parse(server);
-        collectServerClient.clearHostCredentials(u.getHost());
-        collectServerClient.clearCookieStore();
     }
 
     protected void setDefaultAggregatePaths() {

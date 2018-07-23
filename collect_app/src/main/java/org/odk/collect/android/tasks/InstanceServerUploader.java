@@ -34,6 +34,7 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.http.CollectServerClient.Outcome;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ResponseMessageParser;
+import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -186,7 +187,7 @@ public class InstanceServerUploader extends InstanceUploader {
             }
 
             try {
-                HttpHeadResult headResult = httpInterface.head(uri);
+                HttpHeadResult headResult = httpInterface.head(uri, WebCredentialsUtils.getInstance().getCredentials(uri));
                 Map<String, String> responseHeaders = headResult.getHeaders();
 
                 if (headResult.getStatusCode() == HttpsURLConnection.HTTP_UNAUTHORIZED) {
@@ -308,7 +309,11 @@ public class InstanceServerUploader extends InstanceUploader {
         ResponseMessageParser messageParser;
 
         try {
-            messageParser = httpInterface.uploadSubmissionFile(files, submissionFile, URI.create(submissionUri.toString()));
+            URI uri = URI.create(submissionUri.toString());
+
+            messageParser = httpInterface.uploadSubmissionFile(files, submissionFile, uri,
+                    WebCredentialsUtils.getInstance().getCredentials(uri));
+
             int responseCode = messageParser.getResponseCode();
 
             if (responseCode != HttpsURLConnection.HTTP_CREATED && responseCode != HttpsURLConnection.HTTP_ACCEPTED) {
