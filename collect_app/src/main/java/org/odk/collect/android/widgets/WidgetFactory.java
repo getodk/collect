@@ -168,8 +168,9 @@ public class WidgetFactory {
                 questionWidget = new VideoWidget(context, fep);
                 break;
             case Constants.CONTROL_SELECT_ONE:
-                // SurveyCTO-revised support for dynamic select content (from .csv files)
-                // consider traditional ODK appearance to be first word in appearance string
+                // search() appearance/function (not part of XForms spec) added by SurveyCTO gets
+                // considered in each widget by calls to ExternalDataUtil.getSearchXPathExpression.
+                // This means normal appearances should be put before search().
                 if (appearance.startsWith("compact") || appearance.startsWith("quickcompact")) {
                     int numColumns = -1;
                     try {
@@ -208,8 +209,9 @@ public class WidgetFactory {
                 }
                 break;
             case Constants.CONTROL_SELECT_MULTI:
-                // SurveyCTO-revised support for dynamic select content (from .csv files)
-                // consider traditional ODK appearance to be first word in appearance string
+                // search() appearance/function (not part of XForms spec) added by SurveyCTO gets
+                // considered in each widget by calls to ExternalDataUtil.getSearchXPathExpression.
+                // This means normal appearances should be put before search().
                 if (appearance.startsWith("compact")) {
                     int numColumns = -1;
                     try {
