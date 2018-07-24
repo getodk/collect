@@ -71,7 +71,7 @@ public class FormDownloadJob extends Job {
         if (bundle.containsKey(ApplicationConstants.BundleKeys.FORM_ID)) {
             formId = bundle.getString(ApplicationConstants.BundleKeys.FORM_ID);
 
-            sendDownloadServiceBroadcastResult(getContext(), PROGRESS_REQUEST_RECEIVED, formId, false, null);
+            sendDownloadServiceBroadcastResult(getContext(), PROGRESS_REQUEST_RECEIVED, formId, true, null);
 
             if (!TextUtils.isEmpty(formId)) {
                 Timber.i("STARTED RUNNING JOB -> Download Form %s", formId);

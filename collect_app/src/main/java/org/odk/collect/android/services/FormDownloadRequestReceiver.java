@@ -11,7 +11,7 @@ public class FormDownloadRequestReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Intent serviceIntent =  new Intent(context, FormDownloadService.class);
-        if (serviceIntent.hasExtra(ApplicationConstants.BundleKeys.FORM_ID) && serviceIntent.hasExtra(ApplicationConstants.BundleKeys.TRANSACTION_ID)) {
+        if (intent.hasExtra(ApplicationConstants.BundleKeys.FORM_ID) && intent.hasExtra(ApplicationConstants.BundleKeys.TRANSACTION_ID)) {
             serviceIntent.putExtra(ApplicationConstants.BundleKeys.FORM_ID, intent.getStringExtra(ApplicationConstants.BundleKeys.FORM_ID));
             serviceIntent.putExtra(ApplicationConstants.BundleKeys.TRANSACTION_ID, intent.getStringExtra(ApplicationConstants.BundleKeys.TRANSACTION_ID));
 
