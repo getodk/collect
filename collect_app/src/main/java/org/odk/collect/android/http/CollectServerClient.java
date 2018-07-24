@@ -49,10 +49,10 @@ public class CollectServerClient {
 
     protected static CollectServerClient instance;
 
-    protected HttpInterface httpInterface;
+    protected OpenRosaHttpInterface httpInterface;
 
     @Inject
-    public CollectServerClient(HttpInterface httpInterface) {
+    public CollectServerClient(OpenRosaHttpInterface httpInterface) {
         this.httpInterface = httpInterface;
     }
 

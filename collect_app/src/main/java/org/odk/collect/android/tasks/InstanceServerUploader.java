@@ -26,8 +26,8 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.http.HttpHeadResult;
+import org.odk.collect.android.http.OpenRosaHttpInterface;
 import org.odk.collect.android.http.injection.DaggerHttpComponent;
-import org.odk.collect.android.http.HttpInterface;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI;
@@ -65,7 +65,8 @@ public class InstanceServerUploader extends InstanceUploader {
 
     private static final String FAIL = "Error: ";
 
-    @Inject HttpInterface httpInterface;
+    @Inject
+    OpenRosaHttpInterface httpInterface;
 
     public InstanceServerUploader() {
         DaggerHttpComponent.builder().build().inject(this);

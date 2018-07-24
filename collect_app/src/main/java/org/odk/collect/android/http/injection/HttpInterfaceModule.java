@@ -2,7 +2,7 @@ package org.odk.collect.android.http.injection;
 
 import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.http.HttpClientConnection;
-import org.odk.collect.android.http.HttpInterface;
+import org.odk.collect.android.http.OpenRosaHttpInterface;
 
 import javax.inject.Singleton;
 
@@ -14,13 +14,13 @@ public class HttpInterfaceModule {
 
     @Provides
     @Singleton
-    public HttpInterface provideHttpInterface() {
+    public OpenRosaHttpInterface provideHttpInterface() {
         return new HttpClientConnection();
     }
 
     @Provides
     @Singleton
-    public CollectServerClient provideCollectServerClient(HttpInterface httpInterface) {
+    public CollectServerClient provideCollectServerClient(OpenRosaHttpInterface httpInterface) {
         return new CollectServerClient(httpInterface);
     }
 

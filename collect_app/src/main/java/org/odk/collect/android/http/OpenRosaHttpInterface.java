@@ -26,7 +26,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 
-public interface HttpInterface {
+public interface OpenRosaHttpInterface {
 
     /**
      * Creates a http connection and sets up an input stream.

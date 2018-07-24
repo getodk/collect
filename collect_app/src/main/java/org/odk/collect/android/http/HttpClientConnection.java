@@ -86,7 +86,7 @@ import java.util.zip.GZIPInputStream;
 
 import timber.log.Timber;
 
-public class HttpClientConnection implements HttpInterface {
+public class HttpClientConnection implements OpenRosaHttpInterface {
 
     private static final String USER_AGENT_HEADER = "User-Agent";
     private static final String OPEN_ROSA_VERSION_HEADER = "X-OpenRosa-Version";
