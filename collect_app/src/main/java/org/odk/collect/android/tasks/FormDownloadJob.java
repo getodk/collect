@@ -18,6 +18,7 @@ package org.odk.collect.android.tasks;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -25,10 +26,14 @@ import android.text.TextUtils;
 
 import com.evernote.android.job.Job;
 
+import org.odk.collect.android.R;
 import org.odk.collect.android.logic.FormDetails;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DownloadFormListUtils;
 import org.odk.collect.android.utilities.FormDownloader;
+import org.odk.collect.android.utilities.WebUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -75,22 +80,47 @@ public class FormDownloadJob extends Job {
 
             if (!TextUtils.isEmpty(formId)) {
                 Timber.i("STARTED RUNNING JOB -> Download Form %s", formId);
-                HashMap<String, FormDetails> formDetailsHashMap = DownloadFormListUtils.downloadFormList(false);
 
-                if (formDetailsHashMap.containsKey(formId)) {
-                    FormDetails formDetails = formDetailsHashMap.get(formId);
+                int downloadRetries = 0;
+                while (downloadRetries < 2) {
+                    HashMap<String, FormDetails> formDetailsHashMap = DownloadFormListUtils.downloadFormList(false);
 
-                    ArrayList<FormDetails> formDetailsArrayList = new ArrayList<>();
-                    formDetailsArrayList.add(formDetails);
+                    if (formDetailsHashMap.containsKey(formId)) {
+                        FormDetails formDetails = formDetailsHashMap.get(formId);
 
-                    FormDownloader formDownloader = new FormDownloader();
-                    formDownloader.downloadForms(formDetailsArrayList);
+                        ArrayList<FormDetails> formDetailsArrayList = new ArrayList<>();
+                        formDetailsArrayList.add(formDetails);
 
-                    Timber.i("FINISHED DOWNLOADING FORM : %s", formId);
-                    sendDownloadServiceBroadcastResult(getContext(), PROGRESS_REQUEST_SATISFIED, formId, true, null);
-                } else {
-                    Timber.e("DOWNLOAD FORM FAILED BECAUSE FORM DOES NOT EXIST ON THE SERVER");
-                    sendDownloadServiceBroadcastResult(getContext(), PROGRESS_REQUEST_SATISFIED, formId, false, "Requested form could not be found");
+                        FormDownloader formDownloader = new FormDownloader();
+                        HashMap<FormDetails, String> downloadedForms = formDownloader.downloadForms(formDetailsArrayList);
+
+                        if (downloadedForms.size() > 0 ) {
+                            for(String message: downloadedForms.values()) {
+                                if (!message.equals(getContext().getString(R.string.success))) {
+                                    sendDownloadServiceBroadcastResult(getContext(), PROGRESS_REQUEST_SATISFIED, formId, false, message);
+                                    break;
+                                }
+                            }
+
+                            Timber.i("FINISHED DOWNLOADING FORM : %s", formId);
+                            sendDownloadServiceBroadcastResult(getContext(), PROGRESS_REQUEST_SATISFIED, formId, true, null);
+                        } else {
+                            sendDownloadServiceBroadcastResult(getContext(), PROGRESS_REQUEST_SATISFIED, formId, false, "An error occurred downloading the form");
+                        }
+                        break;
+                    } else if (formDetailsHashMap.containsKey("dlauthrequired")) {
+                        if (downloadRetries == 2) {
+                            sendDownloadServiceBroadcastResult(getContext(), PROGRESS_REQUEST_SATISFIED, formId, false, "ODK Collect could not authenticate");
+                        } else {
+                            reauthenticateAutomatically();
+                        }
+                    } else {
+                        Timber.e("DOWNLOAD FORM FAILED BECAUSE FORM DOES NOT EXIST ON THE SERVER");
+                        sendDownloadServiceBroadcastResult(getContext(), PROGRESS_REQUEST_SATISFIED, formId, false, "Requested form could not be found");
+                        break;
+                    }
+
+                    downloadRetries++;
                 }
             } else {
                 sendDownloadServiceBroadcastResult(getContext(), PROGRESS_REQUEST_SATISFIED, formId ,false, "Null OR Empty " + ApplicationConstants.BundleKeys.FORM_ID);
@@ -136,5 +166,18 @@ public class FormDownloadJob extends Job {
         }
 
         context.sendBroadcast(intent);
+    }
+
+    private void reauthenticateAutomatically() {
+        String username = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_USERNAME);
+        String password = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_PASSWORD);
+        String serverUrl = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_SERVER_URL);
+
+        if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password) || TextUtils.isEmpty(serverUrl)) {
+            return;
+        }
+
+        String host = Uri.parse(serverUrl).getHost();
+        WebUtils.addCredentials(username, password, host);
     }
 }
