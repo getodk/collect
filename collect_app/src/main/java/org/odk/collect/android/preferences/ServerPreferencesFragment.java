@@ -139,7 +139,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         if (transportSetting.equals(getString(R.string.transport_type_value_internet))) {
             smsGatewayPreference.setEnabled(false);
             smsPreferenceCategory.setEnabled(false);
-        } else if (transportSetting.equals(getString(R.string.transport_type_value_sms))) {
+        } else {
             smsGatewayPreference.setEnabled(true);
             smsPreferenceCategory.setEnabled(true);
         }
@@ -160,10 +160,10 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                         smsGatewayPreference.setEnabled(false);
                         smsPreferenceCategory.setEnabled(false);
                         transportPreference.setSummary(R.string.transport_type_internet);
-                    } else if (newValue.equals(getString(R.string.transport_type_value_sms))) {
+                    } else {
                         smsGatewayPreference.setEnabled(true);
                         smsPreferenceCategory.setEnabled(true);
-                        transportPreference.setSummary(R.string.transport_type_sms);
+                        transportPreference.setSummary(newValue.equals(getString(R.string.transport_type_value_sms)) ? R.string.transport_type_sms : R.string.transport_type_both);
                     }
                 }
             }
