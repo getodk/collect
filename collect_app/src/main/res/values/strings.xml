@@ -129,6 +129,8 @@
     <string name="send_data">Send Finalized Form</string>
     <string name="send_data_button">Send Finalized Form (%s)</string>
     <string name="send_selected_data">Send Selected</string>
+    <string name="send_selected_data_internet">Send (Internet)</string>
+    <string name="send_selected_data_sms">Send (SMS)</string>
     <string name="view_sent_forms">View Sent Form</string>
     <string name="view_sent_forms_button">View Sent Form (%s)</string>
     <string name="server_auth_credentials">Invalid username or password for server: %s</string>
@@ -640,6 +642,7 @@
     <string name="sms_submissions_notif_description">Several forms are currently being submitted.</string>
     <string name="transport_type_internet">Wifi/Cellular (recommended)</string>
     <string name="transport_type_sms">SMS</string>
+    <string name="transport_type_both">Select on send</string>
     <string name="seconds">Seconds</string>
     <string name="rank_items">Rank items</string>
     <string name="image_not_saved">The image can not be saved because of a problem with the corresponding instance file.</string>
