@@ -228,7 +228,6 @@ public class InstanceUploaderList extends InstanceListActivity implements
             smsUploadButton.setEnabled(areCheckedItems());
         });
 
-
         instanceSyncTask = new InstanceSyncTask();
         instanceSyncTask.setDiskSyncListener(this);
         instanceSyncTask.execute();
@@ -311,7 +310,6 @@ public class InstanceUploaderList extends InstanceListActivity implements
                 } else {
                     PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(this);
                 }
-
             } else {
                 // otherwise, do the normal aggregate/other thing.
                 Intent i = new Intent(this, InstanceUploaderActivity.class);
