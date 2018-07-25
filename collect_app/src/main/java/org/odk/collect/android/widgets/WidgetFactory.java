@@ -16,9 +16,19 @@ package org.odk.collect.android.widgets;
 
 import android.content.Context;
 
-import org.javarosa.core.model.Constants;
-import org.javarosa.form.api.FormEntryPrompt;
+import com.google.android.gms.analytics.HitBuilders;
 
+import org.javarosa.core.model.Constants;
+import org.javarosa.core.model.ItemsetBinding;
+import org.javarosa.core.model.QuestionDef;
+import org.javarosa.form.api.FormEntryPrompt;
+import org.javarosa.xpath.expr.XPathExpression;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.utilities.FileUtils;
+
+import java.io.ByteArrayInputStream;
+import java.util.List;
 import java.util.Locale;
 
 import timber.log.Timber;
@@ -168,8 +178,9 @@ public class WidgetFactory {
                 questionWidget = new VideoWidget(context, fep);
                 break;
             case Constants.CONTROL_SELECT_ONE:
-                // SurveyCTO-revised support for dynamic select content (from .csv files)
-                // consider traditional ODK appearance to be first word in appearance string
+                // search() appearance/function (not part of XForms spec) added by SurveyCTO gets
+                // considered in each widget by calls to ExternalDataUtil.getSearchXPathExpression.
+                // This means normal appearances should be put before search().
                 if (appearance.startsWith("compact") || appearance.startsWith("quickcompact")) {
                     int numColumns = -1;
                     try {
@@ -206,10 +217,14 @@ public class WidgetFactory {
                 } else {
                     questionWidget = new SelectOneWidget(context, fep, false);
                 }
+
+                logChoiceFilterAnalytics(fep.getQuestion());
+
                 break;
             case Constants.CONTROL_SELECT_MULTI:
-                // SurveyCTO-revised support for dynamic select content (from .csv files)
-                // consider traditional ODK appearance to be first word in appearance string
+                // search() appearance/function (not part of XForms spec) added by SurveyCTO gets
+                // considered in each widget by calls to ExternalDataUtil.getSearchXPathExpression.
+                // This means normal appearances should be put before search().
                 if (appearance.startsWith("compact")) {
                     int numColumns = -1;
                     try {
@@ -259,12 +274,60 @@ public class WidgetFactory {
                         questionWidget = new StringWidget(context, fep, readOnlyOverride);
                         break;
                 }
+
+                logChoiceFilterAnalytics(fep.getQuestion());
+
                 break;
             default:
                 questionWidget = new StringWidget(context, fep, readOnlyOverride);
                 break;
         }
         return questionWidget;
+    }
+
+    /**
+     * Log analytics event each time a question with a choice filter is accessed, identifying
+     * choice filters with relative expressions. This will inform communication around the fix
+     * for a long-standing bug in JavaRosa: https://github.com/opendatakit/javarosa/issues/293
+     */
+    private static void logChoiceFilterAnalytics(QuestionDef question) {
+        ItemsetBinding itemsetBinding = question.getDynamicChoices();
+
+        if (itemsetBinding != null && itemsetBinding.nodesetRef != null) {
+            if (itemsetBinding.nodesetRef.hasPredicates()) {
+                for (int level = 0; level < itemsetBinding.nodesetRef.size(); level++) {
+                    List<XPathExpression> predicates = itemsetBinding.nodesetRef.getPredicate(level);
+
+                    if (predicates != null) {
+                        // Log a hash of the form title and id joined by a space. This
+                        // will allow us to know a rough count of unique forms that use
+                        // current() in a predicate without compromising user privacy.
+                        String formIdentifier = "";
+                        FormController formController = Collect.getInstance().getFormController();
+                        if (formController != null) {
+                            String formID = formController.getFormDef().getMainInstance()
+                                    .getRoot().getAttributeValue("", "id");
+                            formIdentifier = formController.getFormTitle() + " " + formID;
+                        }
+
+                        String formIdentifierHash = FileUtils.getMd5Hash(
+                                new ByteArrayInputStream(formIdentifier.getBytes()));
+
+                        for (XPathExpression predicate : predicates) {
+                            String actionName = predicate.toString().contains("current") ?
+                                    "CurrentPredicate" : "NonCurrentPredicate";
+
+                            Collect.getInstance().getDefaultTracker()
+                                    .send(new HitBuilders.EventBuilder()
+                                    .setCategory("Itemset")
+                                    .setAction(actionName)
+                                    .setLabel(formIdentifierHash)
+                                    .build());
+                        }
+                    }
+                }
+            }
+        }
     }
 
 }
