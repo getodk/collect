@@ -194,6 +194,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
             smsUploadButton.setVisibility(View.VISIBLE);
         } else {
             smsUploadButton.setVisibility(View.GONE);
+            uploadButton.setText(R.string.send_selected_data);
         }
     }
 
