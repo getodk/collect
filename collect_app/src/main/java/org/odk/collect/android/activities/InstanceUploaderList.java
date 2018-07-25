@@ -56,6 +56,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import timber.log.Timber;
 
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PROTOCOL;
@@ -79,7 +82,12 @@ public class InstanceUploaderList extends InstanceListActivity implements
 
     private static final int INSTANCE_UPLOADER = 0;
 
-    private Button uploadButton;
+    @BindView(R.id.upload_button)
+    Button uploadButton;
+    @BindView(R.id.sms_upload_button)
+    Button smsUploadButton;
+    @BindView(R.id.toggle_button)
+    Button toggleSelsButton;
 
     private InstancesDao instancesDao;
 
@@ -112,6 +120,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
         // set title
         setTitle(getString(R.string.send_data));
         setContentView(R.layout.instance_uploader_list);
+        ButterKnife.bind(this);
         getComponent().inject(this);
 
         if (savedInstanceState != null) {
@@ -132,55 +141,73 @@ public class InstanceUploaderList extends InstanceListActivity implements
         });
     }
 
-    private void init() {
-        instancesDao = new InstancesDao();
-        uploadButton = findViewById(R.id.upload_button);
-        uploadButton.setOnClickListener(new View.OnClickListener() {
+    /**
+     * Determines how an upload should be handled by checking the transport being used.
+     * If the transport is set to SMS or Internet then either is used respectively else it's
+     * "Both" so the button IDs drive the decision.
+     *
+     * @param button that triggers an upload
+     */
+    @OnClick({R.id.upload_button, R.id.sms_upload_button})
+    public void onUploadButtonsClicked(Button button) {
+        String transport = (String) GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE);
+        if (transport.equalsIgnoreCase(getString(R.string.transport_type_value_internet)) || button.getId() == R.id.upload_button) {
 
-            @Override
-            public void onClick(View v) {
+            ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(
+                    Context.CONNECTIVITY_SERVICE);
+            NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
 
-                String transport = (String) GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE);
-                if (!transport.equalsIgnoreCase(getString(R.string.transport_type_value_sms))) {
-
-                    ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(
-                            Context.CONNECTIVITY_SERVICE);
-                    NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
-
-                    if (NetworkReceiver.running) {
-                        ToastUtils.showShortToast(R.string.send_in_progress);
-                        return;
-                    } else if (ni == null || !ni.isConnected()) {
-                        logger.logAction(this, "uploadButton", "noConnection");
-                        ToastUtils.showShortToast(R.string.no_connection);
-                        return;
-
-                    }
-                }
-
-                int checkedItemCount = getCheckedCount();
-                logger.logAction(this, "uploadButton", Integer.toString(checkedItemCount));
-
-                if (checkedItemCount > 0) {
-                    // items selected
-                    uploadSelectedFiles();
-                    setAllToCheckedState(listView, false);
-                    toggleButtonLabel(findViewById(R.id.toggle_button), listView);
-                    uploadButton.setEnabled(false);
-                } else {
-                    // no items selected
-                    ToastUtils.showLongToast(R.string.noselect_error);
-                }
+            if (NetworkReceiver.running) {
+                ToastUtils.showShortToast(R.string.send_in_progress);
+                return;
+            } else if (ni == null || !ni.isConnected()) {
+                logger.logAction(this, "uploadButton", "noConnection");
+                ToastUtils.showShortToast(R.string.no_connection);
+                return;
             }
-        });
+        }
 
-        final Button toggleSelsButton = findViewById(R.id.toggle_button);
+        int checkedItemCount = getCheckedCount();
+        logger.logAction(this, "uploadButton", Integer.toString(checkedItemCount));
+
+        if (checkedItemCount > 0) {
+            // items selected
+            uploadSelectedFiles(button.getId());
+            setAllToCheckedState(listView, false);
+            toggleButtonLabel(findViewById(R.id.toggle_button), listView);
+            uploadButton.setEnabled(false);
+            smsUploadButton.setEnabled(false);
+        } else {
+            // no items selected
+            ToastUtils.showLongToast(R.string.noselect_error);
+        }
+    }
+
+    /**
+     * Changes the default upload button text if "Both" transport is
+     * enabled and sets SMS upload button visibility
+     */
+    private void setupUploadButtons() {
+        String transport = (String) GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE);
+        if (transport.equalsIgnoreCase(getString(R.string.transport_type_value_both))) {
+            uploadButton.setText(R.string.send_selected_data_internet);
+            smsUploadButton.setVisibility(View.VISIBLE);
+        } else {
+            smsUploadButton.setVisibility(View.GONE);
+        }
+    }
+
+    private void init() {
+        setupUploadButtons();
+        instancesDao = new InstancesDao();
+
         toggleSelsButton.setLongClickable(true);
         toggleSelsButton.setOnClickListener(v -> {
             ListView lv = listView;
             boolean allChecked = toggleChecked(lv);
             toggleButtonLabel(toggleSelsButton, lv);
             uploadButton.setEnabled(allChecked);
+            smsUploadButton.setEnabled(allChecked);
             if (allChecked) {
                 for (int i = 0; i < lv.getCount(); i++) {
                     selectedInstances.add(lv.getItemIdAtPosition(i));
@@ -195,7 +222,10 @@ public class InstanceUploaderList extends InstanceListActivity implements
 
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         listView.setItemsCanFocus(false);
-        listView.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> uploadButton.setEnabled(areCheckedItems()));
+        listView.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+            uploadButton.setEnabled(areCheckedItems());
+            smsUploadButton.setEnabled(areCheckedItems());
+        });
 
 
         instanceSyncTask = new InstanceSyncTask();
@@ -227,6 +257,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
         filter.setPriority(1);
 
         registerReceiver(smsForegroundReceiver, filter);
+        setupUploadButtons();
     }
 
     @Override
@@ -258,11 +289,11 @@ public class InstanceUploaderList extends InstanceListActivity implements
         super.onStop();
     }
 
-    private void uploadSelectedFiles() {
+    private void uploadSelectedFiles(int buttonId) {
         long[] instanceIds = listView.getCheckedItemIds();
         String transport = (String) GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE);
 
-        if (transport.equalsIgnoreCase(getString(R.string.transport_type_value_sms))) {
+        if (transport.equalsIgnoreCase(getString(R.string.transport_type_value_sms)) || buttonId == R.id.sms_upload_button) {
             smsService.submitForms(instanceIds);
         } else {
 
@@ -327,6 +358,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
         }
 
         uploadButton.setEnabled(areCheckedItems());
+        smsUploadButton.setEnabled(areCheckedItems());
         Button toggleSelectionsButton = findViewById(R.id.toggle_button);
         toggleButtonLabel(toggleSelectionsButton, listView);
     }
