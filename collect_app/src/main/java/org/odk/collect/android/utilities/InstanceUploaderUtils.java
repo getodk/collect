@@ -58,7 +58,7 @@ public class InstanceUploaderUtils {
     }
 
     private static String localizeDefaultAggregateSuccessfulText(String text) {
-        if (text.equals(DEFAULT_SUCCESSFUL_TEXT)) {
+        if (text != null && text.equals(DEFAULT_SUCCESSFUL_TEXT)) {
             text = Collect.getInstance().getString(R.string.success);
         }
         return text;
