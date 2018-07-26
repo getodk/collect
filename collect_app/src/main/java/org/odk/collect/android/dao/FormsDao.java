@@ -111,6 +111,24 @@ public class FormsDao {
         return encrypted;
     }
 
+    public boolean doesFormContainDangerousPreloadParams(Uri uri) {
+        String containsDangerousPreloadParams = null;
+
+        Cursor cursor = Collect.getInstance().getContentResolver().query(uri, null, null, null, null);
+        if (cursor != null) {
+            try {
+                if (cursor.moveToFirst()) {
+                    int containsDangerousPreloadParamsColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.CONTAINS_DANGEROUS_PRELOAD_PARAMS);
+                    containsDangerousPreloadParams = cursor.getString(containsDangerousPreloadParamsColumnIndex);
+                }
+            } catch (Exception e) {
+                return false;
+            } finally {
+                cursor.close();
+            }
+        }
+        return containsDangerousPreloadParams != null && Boolean.valueOf(containsDangerousPreloadParams);
+    }
 
     public String getFormMediaPath(String formId, String formVersion) {
         String formMediaPath = null;

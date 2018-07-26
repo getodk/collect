@@ -30,6 +30,7 @@ import static android.provider.BaseColumns._ID;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_DELETE;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_SEND;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.CONTAINS_DANGEROUS_PRELOAD_PARAMS;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DATE;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DESCRIPTION;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DISPLAY_NAME;
@@ -51,7 +52,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "forms.db";
     public static final String FORMS_TABLE_NAME = "forms";
 
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 7;
 
     // These exist in database versions 2 and 3, but not in 4...
     private static final String TEMP_FORMS_TABLE_NAME = "forms_v4";
@@ -82,6 +83,8 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
                 success &= upgradeToVersion5(db);
             case 5:
                 success &= upgradeToVersion6(db);
+            case 6:
+                success &= upgradeToVersion7(db);
                 break;
             default:
                 Timber.i("Unknown version %s", oldVersion);
@@ -295,6 +298,22 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
         return success;
     }
 
+    private boolean upgradeToVersion7(SQLiteDatabase db) {
+        boolean success = true;
+        try {
+            CustomSQLiteQueryBuilder
+                    .begin(db)
+                    .alter()
+                    .table(FORMS_TABLE_NAME)
+                    .addColumn(CONTAINS_DANGEROUS_PRELOAD_PARAMS, "text")
+                    .end();
+        } catch (SQLiteException e) {
+            Timber.e(e);
+            success = false;
+        }
+        return success;
+    }
+
     private void createFormsTable(SQLiteDatabase db, String tableName) {
         db.execSQL("CREATE TABLE " + tableName + " ("
                 + _ID + " integer primary key, "
@@ -313,6 +332,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
                 + JRCACHE_FILE_PATH + " text not null, "
                 + AUTO_SEND + " text, "
                 + AUTO_DELETE + " text, "
-                + LAST_DETECTED_FORM_VERSION_HASH + " text);");
+                + LAST_DETECTED_FORM_VERSION_HASH + " text, "
+                + CONTAINS_DANGEROUS_PRELOAD_PARAMS + " text);");
     }
 }

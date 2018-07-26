@@ -312,6 +312,7 @@ public class FormDownloader {
         v.put(FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY,   formInfo.get(FileUtils.BASE64_RSA_PUBLIC_KEY));
         v.put(FormsProviderAPI.FormsColumns.AUTO_DELETE,             formInfo.get(FileUtils.AUTO_DELETE));
         v.put(FormsProviderAPI.FormsColumns.AUTO_SEND,             formInfo.get(FileUtils.AUTO_SEND));
+        v.put(FormsProviderAPI.FormsColumns.CONTAINS_DANGEROUS_PRELOAD_PARAMS, formInfo.get(FileUtils.CONTAINS_DANGEROUS_PRELOAD_PARAMS));
         Uri uri = formsDao.saveForm(v);
         Collect.getInstance().getActivityLogger().logAction(this, "insert",
                 formFile.getAbsolutePath());

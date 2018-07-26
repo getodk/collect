@@ -44,6 +44,7 @@ import org.odk.collect.android.utilities.VersionHidingCursorAdapter;
 import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
+import static org.odk.collect.android.utilities.PermissionUtils.requestReadPhoneStatePermission;
 import static org.odk.collect.android.utilities.PermissionUtils.requestStoragePermissions;
 
 /**
@@ -133,15 +134,33 @@ public class FormChooserList extends FormListActivity implements
             if (Intent.ACTION_PICK.equals(action)) {
                 // caller is waiting on a picked form
                 setResult(RESULT_OK, new Intent().setData(formUri));
+                finish();
             } else {
-                // caller wants to view/edit a form, so launch formentryactivity
-                Intent intent = new Intent(Intent.ACTION_EDIT, formUri);
-                intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
-                startActivity(intent);
+                if (new FormsDao().doesFormContainDangerousPreloadParams(formUri)) {
+                    requestReadPhoneStatePermission(this, new PermissionListener() {
+                        @Override
+                        public void granted() {
+                            Collect.getInstance().initProperties();
+                            launchForm(formUri);
+                        }
+
+                        @Override
+                        public void denied() {
+                        }
+                    }, true);
+                } else {
+                    launchForm(formUri);
+                }
             }
-            
-            finish();
         }
+    }
+
+    private void launchForm(Uri formUri) {
+        // caller wants to view/edit a form, so launch formentryactivity
+        Intent intent = new Intent(Intent.ACTION_EDIT, formUri);
+        intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
+        startActivity(intent);
+        finish();
     }
 
     @Override

@@ -51,6 +51,11 @@ import java.util.Locale;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.logic.PropertyManager.PROPMGR_DEVICE_ID;
+import static org.odk.collect.android.logic.PropertyManager.PROPMGR_PHONE_NUMBER;
+import static org.odk.collect.android.logic.PropertyManager.PROPMGR_SIM_SERIAL;
+import static org.odk.collect.android.logic.PropertyManager.PROPMGR_SUBSCRIBER_ID;
+
 /**
  * Static methods used for common file operations.
  *
@@ -67,6 +72,8 @@ public class FileUtils {
     public static final String BASE64_RSA_PUBLIC_KEY = "base64RsaPublicKey";
     public static final String AUTO_DELETE = "autoDelete";
     public static final String AUTO_SEND = "autoSend";
+    public static final String CONTAINS_DANGEROUS_PRELOAD_PARAMS = "containsDangerousPreloadParams";
+
     static int bufSize = 16 * 1024; // May be set by unit test
 
     private FileUtils() {
@@ -323,6 +330,8 @@ public class FileUtils {
         }
 
         final Element model = getChildElement(head, "model");
+        fields.put(CONTAINS_DANGEROUS_PRELOAD_PARAMS, Boolean.toString(containsDangerousPreloadParams(model)));
+
         Element cur = getChildElement(model, "instance");
 
         final int idx = cur.getChildCount();
@@ -371,6 +380,26 @@ public class FileUtils {
         }
 
         return fields;
+    }
+
+    private static boolean containsDangerousPreloadParams(Element model) {
+        if (model != null) {
+            for (int i = 0; i < model.getChildCount(); i++) {
+                Element child = (Element) model.getChild(i);
+                if (child.getName().equals("bind")) {
+                    for (int j = 0; j < child.getAttributeCount(); j ++) {
+                        String preloadParamsValue = child.getAttributeValue(child.getAttributeNamespace(j), "preloadParams");
+                        if (preloadParamsValue != null && (preloadParamsValue.equals(PROPMGR_DEVICE_ID)
+                                || preloadParamsValue.equals(PROPMGR_SUBSCRIBER_ID)
+                                || preloadParamsValue.equals(PROPMGR_SIM_SERIAL)
+                                || preloadParamsValue.equals(PROPMGR_PHONE_NUMBER))) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     // needed because element.getelement fails when there are attributes
