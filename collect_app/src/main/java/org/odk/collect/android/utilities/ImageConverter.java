@@ -149,9 +149,13 @@ public class ImageConverter {
     }
 
     private static void rotateBitmap(Bitmap image, int degrees, String imagePath) {
-        Matrix matrix = new Matrix();
-        matrix.postRotate(degrees);
-        image = Bitmap.createBitmap(image, 0, 0, image.getWidth(), image.getHeight(), matrix, true);
+        try {
+            Matrix matrix = new Matrix();
+            matrix.postRotate(degrees);
+            image = Bitmap.createBitmap(image, 0, 0, image.getWidth(), image.getHeight(), matrix, true);
+        } catch (OutOfMemoryError e) {
+            Timber.w(e);
+        }
         FileUtils.saveBitmapToFile(image, imagePath);
     }
 }
