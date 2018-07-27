@@ -28,6 +28,7 @@ import android.provider.MediaStore;
 import android.provider.MediaStore.Audio;
 import android.provider.MediaStore.Images;
 import android.provider.MediaStore.Video;
+import android.text.TextUtils;
 
 import org.apache.commons.io.IOUtils;
 import org.odk.collect.android.application.Collect;
@@ -38,11 +39,12 @@ import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import timber.log.Timber;
-
 /**
  * Consolidate all interactions with media providers here.
  * <p>
