@@ -929,21 +929,15 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
 
     /**
-     * Using contentResolver to get a file's extension by the uri returned from OnActivityResult.
+     * Converting file uri into string for getting file extension
      *
      * @param fileUri Whose name we want to get
      * @return The file's extension
-     * @see #onActivityResult(int, int, Intent)
-     * @see #saveChosenFile(Uri)
-     * @see android.content.ContentResolver
      */
     private String getFileExtensionFromUri(Uri fileUri) {
-        try (Cursor returnCursor =
-                     getContentResolver().query(fileUri, null, null, null, null)) {
-            int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-            returnCursor.moveToFirst();
-            String filename = returnCursor.getString(nameIndex);
-            // If the file's name contains extension , we cut it down for latter use (copy a new file).
+        try {
+            String filename = fileUri.toString();
+
             if (filename.lastIndexOf('.') != -1) {
                 return filename.substring(filename.lastIndexOf('.'));
             } else {
@@ -952,8 +946,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 return "";
             }
         }
+        catch (Exception e)
+        {
+            Timber.e(e);
+            return "";
+        }
     }
-
     private QuestionWidget getWidgetWaitingForBinaryData() {
         QuestionWidget questionWidget = null;
         for (QuestionWidget qw : ((ODKView) currentView).getWidgets()) {
