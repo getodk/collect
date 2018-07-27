@@ -34,12 +34,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.apache.commons.io.FilenameUtils;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.DrawActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaManager;
@@ -149,6 +151,10 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
 
             File f = new File(getInstanceFolder() + File.separator + binaryName);
 
+            if (!f.exists() && (this instanceof SignatureWidget || this instanceof AnnotateWidget)) {
+                f = addDefaultImageIfExists(f);
+            }
+
             Bitmap bmp = null;
             if (f.exists()) {
                 bmp = FileUtils.getBitmapScaledToDisplay(f, screenHeight, screenWidth);
@@ -170,6 +176,19 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
 
         answerLayout.addView(imageView);
         }
+    }
+
+    private File addDefaultImageIfExists(File f) {
+        FormController formController = Collect.getInstance().getFormController();
+        if (formController != null) {
+            File defaultFile = new File(formController.getMediaFolder() + File.separator + binaryName);
+            if (defaultFile.exists()) {
+                binaryName = System.currentTimeMillis() + "." + FilenameUtils.getExtension(defaultFile.getName());
+                FileUtils.copyFile(defaultFile, new File(getInstanceFolder() + File.separator + binaryName));
+                f = new File(getInstanceFolder() + File.separator + binaryName);
+            }
+        }
+        return f;
     }
 
     protected void setUpLayout() {
