@@ -523,6 +523,7 @@
     <string name="invalid_email_address">Invalid email address!</string>
     <string name="sort_by">Sort by</string>
     <string name="server">Server</string>
+    <string name="submission_transport_admin_setting">Submission transport</string>
     <string name="select_value">Select value</string>
     <string name="edit_value">Edit value</string>
     <string name="no_value_selected">No value selected</string>
@@ -619,9 +620,6 @@
     <string name="instance_upload_cancelled">Instance upload canceled</string>
     <string name="hide_old_form_versions_setting_title">Hide old form versions</string>
     <string name="hide_old_form_versions_setting_summary">Only the newest version will appear in Fill Blank Form</string>
-<<<<<<< HEAD
-    <string name="seconds">Seconds</string>
-=======
     <string name="sms_pref_dialog_title">Destination phone number</string>
     <string name="sms_pref_title">Destination phone number</string>
     <string name="sms_invalid_phone_number">Invalid phone number!</string>
@@ -646,5 +644,4 @@
     <string name="seconds">Seconds</string>
     <string name="rank_items">Rank items</string>
     <string name="image_not_saved">The image can not be saved because of a problem with the corresponding instance file.</string>
->>>>>>> upstream/master
 </resources>
