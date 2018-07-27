@@ -622,6 +622,16 @@ public class MediaUtils {
                 || uri.getAuthority().startsWith("com.google.android.apps.photos.content");
     }
 
+
+    /**
+     * @param uri The Uri to check
+     * @return Whether the Uri authority is Google Drive.
+     */
+    private static boolean isGoogleDriveDocument(Uri uri) {
+        return uri.getAuthority().startsWith("com.google.android.apps.docs.storage")
+                || uri.getAuthority().startsWith("com.google.android.apps.photos.content");
+    }
+
     /**
      * Get the value of the data column for this Uri. This is useful for
      * MediaStore Uris, and other file-based ContentProviders.
@@ -630,29 +640,41 @@ public class MediaUtils {
      * @param uri           The Uri to query.
      * @param selection     (Optional) Filter used in the query.
      * @param selectionArgs (Optional) Selection arguments used in the query.
-     * @return The value of the _data column, which is typically a file path.
-     * @author paulburke
      */
-    public static String getDataColumn(Context context, Uri uri,
-                                       String selection, String[] selectionArgs) {
 
-        Cursor cursor = null;
-        final String column = "_data";
-        final String[] projection = {column};
-
-        try {
-            cursor = context.getContentResolver().query(uri, projection,
-                    selection, selectionArgs, null);
-            if (cursor != null && cursor.moveToFirst()) {
-
-                final int column_index = cursor.getColumnIndexOrThrow(column);
-                return cursor.getString(column_index);
-            }
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
+    public static String getDataColumn(Context context, Uri contentUri,String selection, String[] selectionArgs) {
+        //copy file and send new file path
+        File TEMP_DIR_PATH = context.getFilesDir();
+        String fileName = getFileName(contentUri);
+        if (!TextUtils.isEmpty(fileName)) {
+            File copyFile = new File(TEMP_DIR_PATH + File.separator + fileName);
+            copy(context, contentUri, copyFile);
+            return copyFile.getAbsolutePath();
         }
         return null;
+    }
+
+    public static String getFileName(Uri uri) {
+        if (uri == null) return null;
+        String fileName = null;
+        String path = uri.getPath();
+        int cut = path.lastIndexOf('/');
+        if (cut != -1) {
+            fileName = path.substring(cut + 1);
+        }
+        return fileName;
+    }
+
+    public static void copy(Context context, Uri srcUri, File dstFile) {
+        try {
+            InputStream inputStream = context.getContentResolver().openInputStream(srcUri);
+            if (inputStream == null) return;
+            OutputStream outputStream = new FileOutputStream(dstFile);
+            IOUtils.copy(inputStream, outputStream);
+            inputStream.close();
+            outputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
