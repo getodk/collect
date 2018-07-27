@@ -20,6 +20,7 @@
             android:title="@string/password" />
     </PreferenceCategory>
     <PreferenceCategory
+        android:key="submission_transport_preference"
         android:title="@string/submission_transport">
         <ListPreference
             android:dialogTitle="@string/submission_transport_types_title"
@@ -29,7 +30,7 @@
             android:title="@string/submission_transport_types_title" />
     </PreferenceCategory>
     <org.odk.collect.android.preferences.ExtendedPreferenceCategory
-        android:key="@string/sms_submission_preference_key"
+        android:key="sms_preference"
         android:title="@string/sms_submission_preferences">
         <org.odk.collect.android.preferences.ExtendedEditTextPreference
             android:dialogTitle="@string/sms_pref_dialog_title"
