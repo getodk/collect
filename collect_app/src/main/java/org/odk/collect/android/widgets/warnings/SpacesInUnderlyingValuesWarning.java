@@ -102,7 +102,7 @@ public class SpacesInUnderlyingValuesWarning {
         public void check(List<SelectChoice> items) {
             invalidValues = FluentIterable
                     .from(items)
-                    .filter(item -> item.getValue() != null && item.getValue().contains(" "))
+                    .filter(item -> item.getValue() != null && item.getValue().trim().contains(" "))    // smap add trim
                     .toList();
             checked = true;
         }
