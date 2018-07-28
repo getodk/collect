@@ -42,6 +42,7 @@ import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.preferences.Transport;
 import org.odk.collect.android.receivers.NetworkReceiver;
 import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.tasks.sms.SmsNotificationReceiver;
@@ -188,8 +189,8 @@ public class InstanceUploaderList extends InstanceListActivity implements
      * enabled and sets SMS upload button visibility
      */
     private void setupUploadButtons() {
-        String transport = (String) GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE);
-        if (transport.equalsIgnoreCase(getString(R.string.transport_type_value_both))) {
+        Transport transport = Transport.fromPreference((String) GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE));
+        if (transport.equals(Transport.Both)) {
             uploadButton.setText(R.string.send_selected_data_internet);
             smsUploadButton.setVisibility(View.VISIBLE);
         } else {
@@ -291,9 +292,9 @@ public class InstanceUploaderList extends InstanceListActivity implements
 
     private void uploadSelectedFiles(int buttonId) {
         long[] instanceIds = listView.getCheckedItemIds();
-        String transport = (String) GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE);
+        Transport transport = Transport.fromPreference((String) GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE));
 
-        if (transport.equalsIgnoreCase(getString(R.string.transport_type_value_sms)) || buttonId == R.id.sms_upload_button) {
+        if (transport.equals(Transport.Sms) || buttonId == R.id.sms_upload_button) {
             smsService.submitForms(instanceIds);
         } else {
 

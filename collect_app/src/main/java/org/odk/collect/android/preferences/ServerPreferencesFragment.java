@@ -134,15 +134,11 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         smsGatewayPreference.getEditText().setFilters(
                 new InputFilter[]{new ControlCharacterFilter()});
 
-        String transportSetting = (String) GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE);
+        Transport transport = Transport.fromPreference((String) GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE));
 
-        if (transportSetting.equals(getString(R.string.transport_type_value_internet))) {
-            smsGatewayPreference.setEnabled(false);
-            smsPreferenceCategory.setEnabled(false);
-        } else {
-            smsGatewayPreference.setEnabled(true);
-            smsPreferenceCategory.setEnabled(true);
-        }
+        boolean smsEnabled = !transport.equals(Transport.Internet);
+        smsGatewayPreference.setEnabled(smsEnabled);
+        smsPreferenceCategory.setEnabled(smsEnabled);
     }
 
     private Preference.OnPreferenceChangeListener createTransportChangeListener() {
@@ -155,15 +151,18 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                 if (!newValue.equals(oldValue)) {
                     pref.setValue(stringValue);
 
-                    if (newValue.equals(getString(R.string.transport_type_value_internet))) {
-                        smsGatewayPreference.setEnabled(true);
-                        smsGatewayPreference.setEnabled(false);
-                        smsPreferenceCategory.setEnabled(false);
+                    Transport transport = Transport.fromPreference((String) newValue);
+
+                    boolean smsEnabled = !transport.equals(Transport.Internet);
+                    smsGatewayPreference.setEnabled(smsEnabled);
+                    smsPreferenceCategory.setEnabled(smsEnabled);
+
+                    if (transport.equals(Transport.Internet)) {
                         transportPreference.setSummary(R.string.transport_type_internet);
+                    } else if (transport.equals(Transport.Sms)) {
+                        transportPreference.setSummary(R.string.transport_type_sms);
                     } else {
-                        smsGatewayPreference.setEnabled(true);
-                        smsPreferenceCategory.setEnabled(true);
-                        transportPreference.setSummary(newValue.equals(getString(R.string.transport_type_value_sms)) ? R.string.transport_type_sms : R.string.transport_type_both);
+                        transportPreference.setSummary(R.string.transport_type_both);
                     }
                 }
             }
@@ -218,12 +217,9 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         accountsManager.disableAutoChooseAccount();
 
         selectedGoogleAccountPreference.setSummary(accountsManager.getSelectedAccount());
-        selectedGoogleAccountPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                accountsManager.chooseAccount();
-                return true;
-            }
+        selectedGoogleAccountPreference.setOnPreferenceClickListener(preference -> {
+            accountsManager.chooseAccount();
+            return true;
         });
     }
 
