@@ -41,7 +41,7 @@ android.applicationVariants.all { variant ->
         effort = 'max'       // Search better
 
         // Reporting only high priority problems {Possible reportLevels: 'high', 'medium', 'low'}
-        reportLevel = 'high'
+        reportLevel = 'medium'
 
         excludeFilter = new File("$configDir/findbugs-filter.xml")
         classes = fileTree("build/intermediates/classes/${variant.flavorName}/${variant.buildType.name}/")
