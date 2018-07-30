@@ -375,7 +375,7 @@
   <string name="sms_no_message">Ta obrazec nima nobenega vprašanja s SMS oznako</string>
   <string name="sms_encrypted_message">Šifriranih obrazcev ni moč predložiti kot SMS sporočilo.</string>
   <string name="sms_last_submission_on_date_at_time">\'Zadnji poskus predložitve na\' EEE, MMM dd, yyyy \'ob\' HH:mm</string>
-  <plurals name="sms_sending">
+  <plurals name="sms_sending" tools:ignore="ImpliedQuantity">
     <item quantity="one">Oddajam obrazec kot eno samo sporočilo. </item>
     <item quantity="two">Oddajam obrazec, pošiljam sporočilo številka %1$d! od %2$d</item>
     <item quantity="few">Oddajam obrazec, pošiljam sporočilo številka %1$d! od %2$d</item>
