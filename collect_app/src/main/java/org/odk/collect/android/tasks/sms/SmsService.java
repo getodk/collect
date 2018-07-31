@@ -153,7 +153,6 @@ public class SmsService {
         try {
             text = getFileContents(smsFile);
         } catch (IOException e) {
-
             SmsRxEvent event = new SmsRxEvent(instanceId, RESULT_FILE_ERROR);
             updateInstanceStatusFailedText(instanceId, event);
             rxEventBus.post(event);
@@ -321,7 +320,7 @@ public class SmsService {
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(InstanceProviderAPI.InstanceColumns.DISPLAY_SUBTEXT, getDisplaySubtext(RESULT_OK, date, progress, context));
-        contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMITTED);
+        contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMITTED_SMS);
 
         Collect.getInstance()
                 .getDefaultTracker()
