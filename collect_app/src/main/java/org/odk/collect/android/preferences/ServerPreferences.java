@@ -82,6 +82,7 @@ public class ServerPreferences extends ServerPreferencesFragment {
                 if (!newValue.equals(oldValue)) {
                     removeTypeSettings();
                     initProtocolPrefs();
+                    removeDisabledPrefs();
                 }
             }
             return true;

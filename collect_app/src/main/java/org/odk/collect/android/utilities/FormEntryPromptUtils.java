@@ -101,7 +101,13 @@ public class FormEntryPromptUtils {
 
         if (data != null && data.getValue() != null && fep.getDataType() == DATATYPE_TEXT
                 && fep.getQuestion().getAdditionalAttribute(null, "query") != null) { // ItemsetWidget
-            return new ItemsetDao().getItemLabel(fep.getAnswerValue().getDisplayText(), formController.getMediaFolder().getAbsolutePath(), formController.getLanguage());
+
+            String language = "";
+            if (formController.getLanguages() != null && formController.getLanguages().length > 0) {
+                language = formController.getLanguage();
+            }
+
+            return new ItemsetDao().getItemLabel(fep.getAnswerValue().getDisplayText(), formController.getMediaFolder().getAbsolutePath(), language);
         }
 
         return fep.getAnswerText();

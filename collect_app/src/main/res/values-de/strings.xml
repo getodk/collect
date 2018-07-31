@@ -269,6 +269,9 @@
   <string name="go_shared">Shared with Me</string>
   <string name="modified_on_date_at_time">\'Geändert am\' EEE, dd.MM.yyyy \'um\' HH:mm</string>
   <string name="aggregate_preferences">ODK-Aggregate-Einstellungen</string>
+  <string name="sms_submission_preferences">SMS-Einsendungseinstellungen</string>
+  <string name="submission_transport">Einsendungsübertragung (erweitert)</string>
+  <string name="submission_transport_types_title">Einsendung über</string>
   <string name="other_preferences">Andere Plattform-Einstellungen</string>
   <string name="google_preferences">Google-Sheets-Einstellungen</string>
   <string name="google_sheets_url_hint">Formulare müssen eine Speicherort-URL setzen. Wenn nicht, wird diese URL verwendet.</string>
@@ -578,8 +581,12 @@
   <string name="no_columns_to_upload">Keine Spalten zum Hochladen im Formular gefunden.</string>
   <string name="storage_runtime_permission_denied_title">Speicher-Berechtigungen</string>
   <string name="storage_runtime_permission_denied_desc">Ohne diese Berechtigungen kann Collect nicht auf Formulare zugreifen und Antworten speichern. Starten Sie die App erneut, wenn sie bereit dazu sind die Berechtigung zu erteilen.</string>
+  <string name="location_runtime_permissions_denied_title">Standort-Berechtigungen</string>
+  <string name="location_runtime_permissions_denied_desc">Ohne diese Berechtigungen kann Collect Ihren Standort nicht erfassen. Bitte versuchen Sie es erneut, wenn Sie bereit dazu sind die Berechtigungen zu erteilen.</string>
   <string name="camera_runtime_permission_denied_title">Kamera-Berechtigung</string>
   <string name="camera_runtime_permission_denied_desc">Ohne diese Berechtigung kann Collect nicht auf die Kamera zugreifen. Bitte versuchen Sie es erneut, wenn Sie dazu bereit sind die Berechtigung zu erteilen.</string>
+  <string name="record_audio_runtime_permission_denied_title">Audioaufzeichnungsberechtigung</string>
+  <string name="record_audio_runtime_permission_denied_desc">Ohne diese Berechtigungen kann Collect nicht auf das Mikrofon zugreifen. Bitte versuchen Sie es erneut, wenn Sie bereit dazu sind die Berechtigungen zu erteilen.</string>
   <string name="form_update_category">Formular-Update</string>
   <string name="periodic_form_updates_check_title">Periodischer Formular-Update-Check</string>
   <string name="never">Nie</string>
@@ -604,8 +611,23 @@
   <string name="sms_pref_title">Ziel-Telefonnummer</string>
   <string name="sms_invalid_phone_number">Ungültige Telefonnummer!</string>
   <!--Sms submission-->
+  <string name="sms_no_reception">\'Fehlgeschlagen am\' EEE, MMM dd, yyyy \'um\' HH:mm \'wegen fehlendem Empfang.\'</string>
+  <string name="sms_fatal_error">\'Fehlgeschlagen am\' EEE, MMM dd, yyyy \'um\' HH:mm</string>
+  <string name="sms_airplane_mode">\'Fehlgeschlagen am\' EEE, MMM dd, yyyy \'um\' HH:mm \'wegen aktiviertem Flugzeugmodus.\'</string>
+  <string name="sms_no_message">Dieses Formular hat keine Fragen mit SMS-Tags.</string>
+  <string name="sms_encrypted_message">Verschlüsselte Formulare können nicht per SMS eingesendet werden.</string>
+  <string name="sms_last_submission_on_date_at_time">\'Letzter Einsendeversuch am\' EEE, MMM dd, yyyy \'um\' HH:mm</string>
+  <plurals name="sms_sending">
+    <item quantity="one">Formular als einzelne Nachricht einsenden.</item>
+    <item quantity="other">Formulareinsendung, sende Nachricht %1$d! von %2$d</item>
+  </plurals>
+  <string name="sms_sent_on_date_at_time">\'Als SMS versendet am\' EEE, MMM dd, yyyy \'um\' HH:mm</string>
+  <string name="sms_submission_queued">Eingereiht zur Einsendung.</string>
+  <string name="sms_submissions_notif_title">SMS-Einsendungen</string>
+  <string name="sms_submissions_notif_description">Mehrere Formulare werden gerade versendet.</string>
   <string name="transport_type_internet">WLAN/Mobilfunk (empfohlen)</string>
   <string name="transport_type_sms">SMS</string>
   <string name="seconds">Sekunden</string>
+  <string name="rank_items">Rangfolge festlegen</string>
   <string name="image_not_saved">Das Bild kann nicht gespeichert werden, wegen eines Problems mit der zugehörigen Instanz-Datei.</string>
 </resources>

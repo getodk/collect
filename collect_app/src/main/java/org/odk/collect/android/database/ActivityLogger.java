@@ -95,7 +95,7 @@ public final class ActivityLogger {
     private static final String PARAM2 = "param2";
 
     private static final String DATABASE_CREATE =
-            "create table " + DATABASE_TABLE + " ("
+            "CREATE TABLE IF NOT EXISTS " + DATABASE_TABLE + " ("
                     + ID + " integer primary key autoincrement, "
                     + TIMESTAMP + " integer not null, "
                     + DEVICEID + " text not null, "
