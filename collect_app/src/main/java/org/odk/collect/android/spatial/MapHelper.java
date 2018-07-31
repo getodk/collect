@@ -194,13 +194,15 @@ public class MapHelper {
         return false;
     }
 
-    public static String[] getOfflineLayerList() {
+    private static String[] getOfflineLayerList() {
         File[] files = new File(Collect.OFFLINE_LAYERS).listFiles();
         ArrayList<String> results = new ArrayList<>();
         results.add(NO_FOLDER_KEY);
-        for (File f : files) {
-            if (f.isDirectory() && !f.isHidden()) {
-                results.add(f.getName());
+        if (files != null) {
+            for (File f : files) {
+                if (f.isDirectory() && !f.isHidden()) {
+                    results.add(f.getName());
+                }
             }
         }
         return results.toArray(new String[0]);

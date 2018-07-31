@@ -938,8 +938,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * @see android.content.ContentResolver
      */
     private String getFileExtensionFromUri(Uri fileUri) {
-        try (Cursor returnCursor =
-                     getContentResolver().query(fileUri, null, null, null, null)) {
+        Cursor returnCursor =
+                getContentResolver().query(fileUri, null, null, null, null);
+        try {
+            if (returnCursor == null) {
+                return "";
+            }
             int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
             returnCursor.moveToFirst();
             String filename = returnCursor.getString(nameIndex);
@@ -950,6 +954,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 // I found some mp3 files' name don't contain extension, but can be played as Audio
                 // So I write so, but I still there are some way to get its extension
                 return "";
+            }
+        } finally {
+            if (returnCursor != null) {
+                returnCursor.close();
             }
         }
     }

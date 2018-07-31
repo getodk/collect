@@ -88,7 +88,7 @@ public abstract class InstanceUploader extends AsyncTask<Long, Integer, CollectS
                             results =
                                     new InstancesDao().getInstancesCursor(selection.toString(),
                                             selectionArgs);
-                            if (results.getCount() > 0) {
+                            if (results != null && results.getCount() > 0) {
                                 List<Long> toDelete = new ArrayList<>();
                                 results.moveToPosition(-1);
 

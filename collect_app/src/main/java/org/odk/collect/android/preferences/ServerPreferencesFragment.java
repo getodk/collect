@@ -56,6 +56,7 @@ import javax.inject.Inject;
 import static android.app.Activity.RESULT_OK;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FORMLIST_URL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SMS_GATEWAY;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SMS_PREFERENCE;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_TRANSPORT_TYPE;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_URL;
 import static org.odk.collect.android.utilities.gdrive.GoogleAccountsManager.REQUEST_ACCOUNT_PICKER;
@@ -136,7 +137,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         transportPreference.setOnPreferenceChangeListener(createTransportChangeListener());
         transportPreference.setSummary(transportPreference.getEntry());
 
-        smsPreferenceCategory = (ExtendedPreferenceCategory) findPreference(getString(R.string.sms_submission_preference_key));
+        smsPreferenceCategory = (ExtendedPreferenceCategory) findPreference(KEY_SMS_PREFERENCE);
 
         smsGatewayPreference = (ExtendedEditTextPreference) findPreference(KEY_SMS_GATEWAY);
 
