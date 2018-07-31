@@ -158,9 +158,6 @@
         <Bug pattern="SF_SWITCH_NO_DEFAULT" />
     </Match>
     <Match>
-        <Bug pattern="UC_USELESS_OBJECT" />
-    </Match>
-    <Match>
         <Bug pattern="URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD" />
     </Match>
     <Match>
