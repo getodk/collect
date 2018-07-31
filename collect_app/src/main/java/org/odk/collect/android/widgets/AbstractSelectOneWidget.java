@@ -24,10 +24,10 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 
@@ -103,10 +103,9 @@ public abstract class AbstractSelectOneWidget extends SelectTextWidget
     }
 
     public int getCheckedId() {
-        for (int i = 0; i < buttons.size(); ++i) {
-            RadioButton button = buttons.get(i);
+        for (RadioButton button : buttons) {
             if (button.isChecked()) {
-                return i;
+                return (int) button.getTag();
             }
         }
         return -1;
@@ -134,7 +133,7 @@ public abstract class AbstractSelectOneWidget extends SelectTextWidget
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        for (RadioButton button : this.buttons) {
+        for (RadioButton button : buttons) {
             button.cancelLongPress();
         }
     }
@@ -156,6 +155,7 @@ public abstract class AbstractSelectOneWidget extends SelectTextWidget
         radioButton.setId(ViewIds.generateViewId());
         radioButton.setEnabled(!getFormEntryPrompt().isReadOnly());
         radioButton.setFocusable(!getFormEntryPrompt().isReadOnly());
+        radioButton.setOnClickListener(this);
 
         //adapt radioButton text as per language direction
         if (isRTL()) {
@@ -180,23 +180,26 @@ public abstract class AbstractSelectOneWidget extends SelectTextWidget
 
         if (items != null) {
             for (int i = 0; i < items.size(); i++) {
-                @SuppressLint("InflateParams")
-                RelativeLayout thisParentLayout = (RelativeLayout) inflater.inflate(R.layout.quick_select_layout, null);
-
-                RadioButton radioButton = createRadioButton(i);
-                radioButton.setOnClickListener(this);
-
-                ImageView rightArrow = (ImageView) thisParentLayout.getChildAt(1);
-                rightArrow.setImageDrawable(autoAdvance ? AppCompatResources.getDrawable(getContext(), R.drawable.expander_ic_right) : null);
-
-                buttons.add(radioButton);
-
-                LinearLayout questionLayout = (LinearLayout) thisParentLayout.getChildAt(0);
-                questionLayout.addView(createMediaLayout(i, radioButton));
-                answerLayout.addView(thisParentLayout);
+                answerLayout.addView(createRadioButtonLayout(inflater, i));
             }
             addAnswerView(answerLayout);
         }
+    }
+
+    protected RelativeLayout createRadioButtonLayout(LayoutInflater inflater, int index) {
+        @SuppressLint("InflateParams")
+        RelativeLayout thisParentLayout = (RelativeLayout) inflater.inflate(R.layout.quick_select_layout, null);
+
+        RadioButton radioButton = createRadioButton(index);
+
+        ImageView rightArrow = (ImageView) thisParentLayout.getChildAt(1);
+        rightArrow.setImageDrawable(autoAdvance ? AppCompatResources.getDrawable(getContext(), R.drawable.expander_ic_right) : null);
+
+        buttons.add(radioButton);
+
+        ((ViewGroup) thisParentLayout.getChildAt(0)).addView(createMediaLayout(index, radioButton));
+
+        return thisParentLayout;
     }
 
     public List<RadioButton> getButtons() {

@@ -13,6 +13,6 @@ public class ListWidgetTest extends GeneralSelectOneWidgetTest<ListWidget> {
     @NonNull
     @Override
     public ListWidget createWidget() {
-        return new ListWidget(RuntimeEnvironment.application, formEntryPrompt, false);
+        return new ListWidget(RuntimeEnvironment.application, formEntryPrompt, false, false);
     }
 }

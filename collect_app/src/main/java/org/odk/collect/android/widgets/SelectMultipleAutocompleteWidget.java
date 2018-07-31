@@ -18,6 +18,7 @@ package org.odk.collect.android.widgets;
 
 import android.content.Context;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.listeners.AudioPlayListener;
@@ -36,6 +37,8 @@ public class SelectMultipleAutocompleteWidget extends SelectMultiWidget implemen
         for (int i = 0; i < checkBoxes.size(); i++) {
             if (tagList == null || tagList.contains(i)) {
                 answerLayout.addView(checkBoxes.get(i));
+                answerLayout.setDividerDrawable(getResources().getDrawable(themeUtils.getDivider()));
+                answerLayout.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
             }
         }
     }
