@@ -47,8 +47,6 @@ public class CollectServerClient {
 
     private static final String HTTP_CONTENT_TYPE_TEXT_XML = "text/xml";
 
-    protected static CollectServerClient instance;
-
     protected OpenRosaHttpInterface httpInterface;
 
     @Inject
@@ -153,7 +151,6 @@ public class CollectServerClient {
 
     public static class Outcome {
         public Uri authRequestingServer;
-        public boolean invalidOAuth;
         public HashMap<String, String> messagesByInstanceId = new HashMap<>();
     }
 
