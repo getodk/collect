@@ -135,7 +135,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         smsGatewayPreference.getEditText().setFilters(
                 new InputFilter[]{new ControlCharacterFilter()});
 
-        Transport transport = Transport.fromPreference((String) GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE));
+        Transport transport = Transport.fromPreference(GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE));
 
         boolean smsEnabled = !transport.equals(Transport.Internet);
         smsGatewayPreference.setEnabled(smsEnabled);
@@ -152,7 +152,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                 if (!newValue.equals(oldValue)) {
                     pref.setValue(stringValue);
 
-                    Transport transport = Transport.fromPreference((String) newValue);
+                    Transport transport = Transport.fromPreference(newValue);
 
                     boolean smsEnabled = !transport.equals(Transport.Internet);
                     smsGatewayPreference.setEnabled(smsEnabled);

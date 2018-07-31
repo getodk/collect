@@ -15,9 +15,9 @@ public enum Transport {
         return value;
     }
 
-    public static Transport fromPreference(String text) {
+    public static Transport fromPreference(Object text) {
         for (Transport transport : values()) {
-            if (transport.value.equalsIgnoreCase(text)) {
+            if (transport.value.equalsIgnoreCase((String) text)) {
                 return transport;
             }
         }
