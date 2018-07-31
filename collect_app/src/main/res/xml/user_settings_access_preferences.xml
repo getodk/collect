@@ -4,6 +4,11 @@
         <CheckBoxPreference
             android:key="change_server"
             android:title="@string/server" />
+        <org.odk.collect.android.preferences.ExtendedCheckboxPreference
+            android:key="change_submission_transport"
+            android:title="@string/submission_transport_admin_setting"
+            android:dependency="change_server"
+            />
         <CheckBoxPreference
             android:key="change_form_metadata"
             android:title="@string/form_metadata" />

@@ -30,7 +30,7 @@ public class ItemsetDbAdapter {
     private static final String KEY_PATH = "path";
 
     private static final String CREATE_ITEMSET_TABLE =
-            "create table " + ITEMSET_TABLE + " (_id integer primary key autoincrement, "
+            "CREATE TABLE IF NOT EXISTS " + ITEMSET_TABLE + " (_id integer primary key autoincrement, "
                     + KEY_ITEMSET_HASH + " text, "
                     + KEY_PATH + " text "
                     + ");";

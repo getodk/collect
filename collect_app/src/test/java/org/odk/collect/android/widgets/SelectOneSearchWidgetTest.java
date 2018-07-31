@@ -13,6 +13,6 @@ public class SelectOneSearchWidgetTest extends GeneralSelectOneWidgetTest<Select
     @NonNull
     @Override
     public SelectOneSearchWidget createWidget() {
-        return new SelectOneSearchWidget(RuntimeEnvironment.application, formEntryPrompt);
+        return new SelectOneSearchWidget(RuntimeEnvironment.application, formEntryPrompt, false);
     }
 }

@@ -26,6 +26,7 @@ the License.
     <color name="lightPrimaryTextColor">@android:color/black</color>
     <color name="lightIconColor">@android:color/black</color>
     <color name="lightRankItemColor">#EEEEEE</color>
-    <color name="tintColor">#2196F3</color>
+    <color name="lightAccentColor">#2196F3</color>
+
     <color name="displaySubtextColor">#4CAF50</color>
 </resources>

@@ -146,7 +146,7 @@ public abstract class SelectImageMapWidget extends SelectWidget {
         }
     }
 
-    private void selectArea(String areaId) {
+    protected void selectArea(String areaId) {
         SelectChoice selectChoice = null;
         for (SelectChoice sc : items) {
             if (areaId.equalsIgnoreCase(sc.getValue())) {

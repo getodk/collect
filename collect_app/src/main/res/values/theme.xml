@@ -13,19 +13,14 @@
         <item name="android:scrollbarSize">1.75mm</item>
         <item name="android:scrollbarAlwaysDrawVerticalTrack">true</item>
         <item name="android:fadeScrollbars">false</item>
-        <item name="colorAccent">@color/tintColor</item>
         <item name="android:fontFamily">@string/font_family_regular</item>
         <item name="android:panelBackground">@android:color/white</item>
-        <item name="alertDialogTheme">@style/AlertDialogTheme.Dark</item>
         <item name="searchViewStyle">@style/SearchViewTheme.Dark</item>
         <item name="iconColor">@color/darkIconColor</item>
         <item name="rankItemColor">@color/darkRankItemColor</item>
         <item name="android:textDirection" tools:targetApi="17">locale</item>
         <item name="warningColor">@color/red</item>
-    </style>
-
-    <style name="AlertDialogTheme.Dark" parent="Theme.AppCompat.Dialog.Alert">
-        <item name="colorAccent">@color/tintColor</item>
+        <item name="divider">@android:drawable/divider_horizontal_dark</item>
     </style>
 
     <style name="AppTheme.SettingsTheme.Dark" parent="BaseDarkAppTheme">
@@ -53,7 +48,7 @@
         <item name="android:scrollbarSize">1.75mm</item>
         <item name="android:scrollbarAlwaysDrawVerticalTrack">true</item>
         <item name="android:fadeScrollbars">false</item>
-        <item name="colorAccent">@color/tintColor</item>
+        <item name="colorAccent">@color/lightAccentColor</item>
         <item name="android:fontFamily">@string/font_family_regular</item>
         <item name="android:panelBackground">@android:color/white</item>
         <item name="alertDialogTheme">@style/AlertDialogTheme.Light</item>
@@ -62,10 +57,11 @@
         <item name="rankItemColor">@color/lightRankItemColor</item>
         <item name="android:textDirection" tools:targetApi="17">locale</item>
         <item name="warningColor">@color/red</item>
+        <item name="divider">@android:drawable/divider_horizontal_bright</item>
     </style>
 
     <style name="AlertDialogTheme.Light" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="colorAccent">@color/tintColor</item>
+        <item name="colorAccent">@color/lightAccentColor</item>
     </style>
 
     <style name="AppTheme.SettingsTheme.Light" parent="BaseLightAppTheme">

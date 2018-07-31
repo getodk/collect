@@ -48,6 +48,8 @@ public final class PreferenceKeys {
     public static final String KEY_PROTOCOL                 = "protocol";
     public static final String KEY_SMS_GATEWAY              = "sms_gateway";
     public static final String KEY_SUBMISSION_TRANSPORT_TYPE = "submission_transport_type";
+    public static final String KEY_TRANSPORT_PREFERENCE      = "submission_transport_preference";
+    public static final String KEY_SMS_PREFERENCE            = "sms_preference";
 
     // user_interface_preferences.xml
     public static final String KEY_APP_THEME                = "appTheme";
