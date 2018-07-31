@@ -73,7 +73,7 @@ public class InstancesDao {
     }
 
     public Cursor getUnsentInstancesCursor() {
-        String selection = InstanceProviderAPI.InstanceColumns.STATUS + "!=? or "
+        String selection = InstanceProviderAPI.InstanceColumns.STATUS + "!=? and "
                 + InstanceProviderAPI.InstanceColumns.STATUS + "!=?";
         String[] selectionArgs = {InstanceProviderAPI.STATUS_SUBMITTED, InstanceProviderAPI.STATUS_SUBMITTED_SMS};
         String sortOrder = InstanceProviderAPI.InstanceColumns.STATUS + " DESC, " + InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC";
@@ -82,7 +82,7 @@ public class InstancesDao {
     }
 
     private CursorLoader getUnsentInstancesCursorLoader(String sortOrder) {
-        String selection = InstanceProviderAPI.InstanceColumns.STATUS + "!=? or "
+        String selection = InstanceProviderAPI.InstanceColumns.STATUS + "!=? and "
                 + InstanceProviderAPI.InstanceColumns.STATUS + "!=?";
         String[] selectionArgs = {InstanceProviderAPI.STATUS_SUBMITTED, InstanceProviderAPI.STATUS_SUBMITTED_SMS};
 
@@ -95,8 +95,8 @@ public class InstancesDao {
             cursorLoader = getUnsentInstancesCursorLoader(sortOrder);
         } else {
             String selection =
-                    InstanceProviderAPI.InstanceColumns.STATUS + "!=? or "
-                            + InstanceProviderAPI.InstanceColumns.STATUS + "!=?"
+                    "(" + InstanceProviderAPI.InstanceColumns.STATUS + "!=? and "
+                            + InstanceProviderAPI.InstanceColumns.STATUS + "!=?) and"
                             + InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " LIKE ?";
             String[] selectionArgs = {
                     InstanceProviderAPI.STATUS_SUBMITTED,
