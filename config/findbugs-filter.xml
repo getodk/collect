@@ -128,9 +128,6 @@
         <Bug pattern="SIC_INNER_SHOULD_BE_STATIC" />
     </Match>
     <Match>
-        <Bug pattern="UUF_UNUSED_FIELD" />
-    </Match>
-    <Match>
         <Bug pattern="WMI_WRONG_MAP_ITERATOR" />
     </Match>
 
