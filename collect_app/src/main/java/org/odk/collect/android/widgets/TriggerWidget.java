@@ -102,7 +102,6 @@ public class TriggerWidget extends QuestionWidget {
         triggerButton.setChecked(false);
     }
 
-
     @Override
     public IAnswerData getAnswer() {
         String s = stringAnswer.getText().toString();
@@ -116,7 +115,6 @@ public class TriggerWidget extends QuestionWidget {
         triggerButton.setOnLongClickListener(l);
         stringAnswer.setOnLongClickListener(l);
     }
-
 
     @Override
     public void cancelLongPress() {

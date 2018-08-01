@@ -32,7 +32,6 @@ import static org.junit.Assert.assertTrue;
 import static org.odk.collect.android.utilities.QRCodeUtils.MD5_CACHE_PATH;
 import static org.odk.collect.android.utilities.QRCodeUtils.QR_CODE_FILEPATH;
 
-
 @RunWith(RobolectricTestRunner.class)
 public class QRCodeUtilsTest {
 

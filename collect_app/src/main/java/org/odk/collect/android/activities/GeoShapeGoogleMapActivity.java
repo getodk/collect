@@ -83,7 +83,6 @@ public class GeoShapeGoogleMapActivity extends CollectAbstractActivity implement
     private Button zoomLocationButton;
     private boolean foundFirstLocation;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -167,7 +166,6 @@ public class GeoShapeGoogleMapActivity extends CollectAbstractActivity implement
                 returnLocation();
             }
         });
-
 
         Intent intent = getIntent();
         if (intent != null && intent.getExtras() != null) {
@@ -341,9 +339,7 @@ public class GeoShapeGoogleMapActivity extends CollectAbstractActivity implement
                 map.animateCamera(cu);
             }
         }, 100);
-
     }
-
 
     private void clearFeatures() {
         map.clear();

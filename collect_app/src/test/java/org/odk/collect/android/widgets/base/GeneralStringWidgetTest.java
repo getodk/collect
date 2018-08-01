@@ -43,7 +43,6 @@ public abstract class GeneralStringWidgetTest<W extends StringWidget, A extends 
         assertEquals(widget.getAnswerText(), answer.getDisplayText());
     }
 
-
     @Test
     public void getAnswerShouldReturnNewAnswerWhenTextFieldIsUpdated() {
         // Make sure it starts null:

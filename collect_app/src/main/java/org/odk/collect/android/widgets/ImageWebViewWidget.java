@@ -216,7 +216,6 @@ public class ImageWebViewWidget extends QuestionWidget implements FileWidget {
         }
     }
 
-
     @Override
     public void setBinaryData(Object newImageObj) {
         // you are replacing an answer. delete the previous image using the

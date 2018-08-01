@@ -143,7 +143,6 @@ public class InstancesDaoTest {
         assertEquals(InstanceProviderAPI.STATUS_INCOMPLETE, instances.get(0).getStatus());
     }
 
-
     @Test
     public void updateInstanceTest() {
         Cursor cursor = instancesDao.getInstancesCursorForFilePath(Collect.INSTANCES_PATH + "/Biggest N of Set_2017-02-20_14-24-46/Biggest N of Set_2017-02-20_14-24-46.xml");

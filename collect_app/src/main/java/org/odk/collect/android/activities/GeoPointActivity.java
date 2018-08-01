@@ -109,7 +109,6 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
         setupLocationDialog();
     }
 
-
     @Override
     protected void onStart() {
         super.onStart();

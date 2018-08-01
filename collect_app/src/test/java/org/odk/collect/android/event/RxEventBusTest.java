@@ -1,6 +1,5 @@
 package org.odk.collect.android.event;
 
-
 import org.junit.Test;
 import org.odk.collect.android.events.RxEvent;
 import org.odk.collect.android.events.RxEventBus;

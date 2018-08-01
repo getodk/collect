@@ -54,7 +54,6 @@ public class CustomSQLiteQueryBuilderTestCase {
         assertEquals("testTableName", new CustomSQLiteQueryBuilder().to("testTableName").getQuery().toString());
     }
 
-
     @Test
     public void dropIfExistsTest() {
         assertEquals("DROP TABLE IF EXISTS testTableName ", new CustomSQLiteQueryBuilder().dropIfExists("testTableName").getQuery().toString());

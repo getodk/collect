@@ -217,7 +217,6 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
         return (networkInfo != null && networkInfo.isConnected());
     }
 
-
     @Override
     protected void onStart() {
         super.onStart();
