@@ -67,7 +67,7 @@ public class PropertyManager implements IPropertyManager {
         return "Property Manager";
     }
 
-    private class IdAndPrefix {
+    private static class IdAndPrefix {
         String id;
         String prefix;
 
