@@ -42,6 +42,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.filters.ControlCharacterFilter;
 import org.odk.collect.android.preferences.filters.WhitespaceFilter;
 import org.odk.collect.android.utilities.AuthDialogUtility;
+import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.Validator;
@@ -222,7 +223,11 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         selectedGoogleAccountPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                accountsManager.chooseAccount();
+                if (PlayServicesUtil.isGooglePlayServicesAvailable(getActivity())) {
+                    accountsManager.chooseAccount();
+                } else {
+                    PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(getActivity());
+                }
                 return true;
             }
         });
