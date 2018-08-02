@@ -146,9 +146,6 @@
         <Bug pattern="SF_SWITCH_FALLTHROUGH" />
     </Match>
     <Match>
-        <Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE" />
-    </Match>
-    <Match>
         <Bug pattern="REC_CATCH_EXCEPTION" />
     </Match>
 
