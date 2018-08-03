@@ -32,6 +32,7 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ArrayUtils;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
+import org.odk.collect.android.utilities.WebUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -68,6 +69,11 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
     private HashMap<String, String> uploadedInstances;
     private String url;
 
+    private String username, password;
+    private static final String KEY_USERNAME = "USERNAME";
+    private static final String KEY_PASSWORD = "PASSWORD";
+    private static final String KEY_URL = "URL";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,13 +99,31 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
         long[] selectedInstanceIDs = null;
         if (savedInstanceState != null && savedInstanceState.containsKey(TO_SEND)) {
             selectedInstanceIDs = savedInstanceState.getLongArray(TO_SEND);
+
+            // Add optional authentication params
+            if (savedInstanceState.containsKey(KEY_URL) && savedInstanceState.containsKey(KEY_USERNAME) && savedInstanceState.containsKey(KEY_PASSWORD)) {
+                url = savedInstanceState.getString(KEY_URL);
+                username = savedInstanceState.getString(KEY_USERNAME);
+                password = savedInstanceState.getString(KEY_PASSWORD);
+            }
         } else {
             // get instances to upload...
             Intent intent = getIntent();
+            Bundle bundle = intent.getExtras();
             selectedInstanceIDs = intent.getLongArrayExtra(FormEntryActivity.KEY_INSTANCES);
+
+            if (bundle != null && bundle.containsKey(KEY_URL) && bundle.containsKey(KEY_USERNAME) && bundle.containsKey(KEY_PASSWORD)) {
+                url = intent.getStringExtra(KEY_URL);
+                username = intent.getStringExtra(KEY_USERNAME);
+                password = intent.getStringExtra(KEY_PASSWORD);
+            }
         }
 
         instancesToSend = ArrayUtils.toObject(selectedInstanceIDs);
+
+        if (username != null && password != null && url != null) {
+            WebUtils.addCredentials(username, password, url);
+        }
 
         // at this point, we don't expect this to be empty...
         if (instancesToSend.length == 0) {
@@ -143,6 +167,12 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
         outState.putString(ALERT_MSG, alertMsg);
         outState.putString(AUTH_URI, url);
         outState.putLongArray(TO_SEND, ArrayUtils.toPrimitive(instancesToSend));
+
+        if (url != null && username != null && password != null) {
+            outState.putString(KEY_URL, url);
+            outState.putString(KEY_USERNAME, username);
+            outState.putString(KEY_PASSWORD, password);
+        }
     }
 
     @Override
