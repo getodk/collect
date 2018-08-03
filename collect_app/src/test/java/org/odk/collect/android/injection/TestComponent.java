@@ -4,7 +4,6 @@ package org.odk.collect.android.injection;
 import android.app.Application;
 
 import org.odk.collect.android.injection.config.AppComponent;
-import org.odk.collect.android.injection.config.AppModule;
 import org.odk.collect.android.injection.config.scopes.PerApplication;
 import org.odk.collect.android.preferences.FormMetadataMigratorTest;
 import org.odk.collect.android.sms.SmsSenderJobTest;
@@ -19,7 +18,6 @@ import dagger.android.support.AndroidSupportInjectionModule;
 @PerApplication
 @Component(modules = {
         AndroidSupportInjectionModule.class,
-        AppModule.class,
         TestModule.class
 })
 public interface TestComponent extends AppComponent {
