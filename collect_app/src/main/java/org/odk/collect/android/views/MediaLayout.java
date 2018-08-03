@@ -134,7 +134,7 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
      */
     public void resetTextFormatting() {
         // first set it to defaults
-        viewText.setTextColor(new ThemeUtils(getContext()).getPrimaryTextColor(getContext()));
+        viewText.setTextColor(new ThemeUtils(getContext()).getPrimaryTextColor());
         // then set the text to our original (brings back any html formatting)
         viewText.setText(originalText);
     }

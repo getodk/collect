@@ -6,13 +6,12 @@ import android.telephony.SmsManager;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.events.RxEventBus;
-import org.odk.collect.android.injection.DaggerTestComponent;
 import org.odk.collect.android.injection.TestComponent;
 import org.odk.collect.android.logic.FormInfo;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.sms.base.BaseSmsTest;
 import org.odk.collect.android.sms.base.SampleData;
 import org.odk.collect.android.tasks.sms.SmsSender;
@@ -39,31 +38,32 @@ import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
 public class SmsServiceTest extends BaseSmsTest {
+
     @Inject
     SmsSubmissionManagerContract submissionManager;
     @Inject
     SmsManager smsManager;
-    private StubSmsService smsService;
     @Inject
     InstancesDao instancesDao;
     @Inject
     FormsDao formsDao;
     @Inject
     RxEventBus eventBus;
+    @Inject
+    GeneralSharedPreferences generalSharedPreferences;
+
+    private StubSmsService smsService;
+
+    @Override
+    protected void injectDependencies(TestComponent testComponent) {
+        testComponent.inject(this);
+    }
 
     @Before
     public void setUp() {
-
-        /*
-         * Setting up dagger to utilize test dependencies across the app.
-         */
-        TestComponent testComponent = DaggerTestComponent.builder().application(RuntimeEnvironment.application).build();
-        ((Collect) RuntimeEnvironment.application).setComponent(testComponent);
-        testComponent.inject(this);
-
         setDefaultGateway();
 
-        smsService = new StubSmsService(smsManager, submissionManager, instancesDao, RuntimeEnvironment.application, eventBus, formsDao);
+        smsService = new StubSmsService(smsManager, submissionManager, instancesDao, RuntimeEnvironment.application, eventBus, formsDao, generalSharedPreferences);
     }
 
     @Test
@@ -103,8 +103,8 @@ public class SmsServiceTest extends BaseSmsTest {
 
     class StubSmsService extends SmsService {
 
-        StubSmsService(SmsManager smsManager, SmsSubmissionManagerContract smsSubmissionManager, InstancesDao instancesDao, Context context, RxEventBus rxEventBus, FormsDao formsDao) {
-            super(smsManager, smsSubmissionManager, instancesDao, context, rxEventBus, formsDao);
+        StubSmsService(SmsManager smsManager, SmsSubmissionManagerContract smsSubmissionManager, InstancesDao instancesDao, Context context, RxEventBus rxEventBus, FormsDao formsDao, GeneralSharedPreferences generalSharedPreferences) {
+            super(smsManager, smsSubmissionManager, instancesDao, context, rxEventBus, formsDao, generalSharedPreferences);
         }
 
         /**

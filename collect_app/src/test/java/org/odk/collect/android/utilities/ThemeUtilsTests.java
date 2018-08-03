@@ -1,5 +1,6 @@
 package org.odk.collect.android.utilities;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 
@@ -32,12 +33,13 @@ public class ThemeUtilsTests extends DaggerTest {
 
     private final int[] attrs;
     private MainMenuActivity mainMenuActivity;
-
-    @Inject
-    ThemeUtils themeUtils;
+    private ThemeUtils themeUtils;
 
     @Inject
     GeneralSharedPreferences generalSharedPreferences;
+
+    @Inject
+    Context context;
 
     public ThemeUtilsTests() {
         attrs = new int[]{
@@ -57,6 +59,7 @@ public class ThemeUtilsTests extends DaggerTest {
     @Before
     public void setUp() {
         mainMenuActivity = Robolectric.setupActivity(MainMenuActivity.class);
+        themeUtils = new ThemeUtils(context);
     }
 
     @Test

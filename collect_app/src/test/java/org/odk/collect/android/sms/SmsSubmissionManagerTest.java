@@ -5,6 +5,7 @@ import android.content.Context;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.injection.TestComponent;
 import org.odk.collect.android.sms.base.BaseSmsTest;
 import org.odk.collect.android.sms.base.SampleData;
 import org.odk.collect.android.tasks.sms.SmsSubmissionManager;
@@ -124,5 +125,10 @@ public class SmsSubmissionManagerTest extends BaseSmsTest {
         message = model.getNextUnsentMessage();
 
         assertTrue(message.isSending());
+    }
+
+    @Override
+    protected void injectDependencies(TestComponent testComponent) {
+        // ignored
     }
 }

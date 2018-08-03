@@ -76,6 +76,7 @@ public abstract class QuestionWidget
         implements Widget, AudioPlayListener {
 
     private static final String GUIDANCE_EXPANDED_STATE = "expanded_state";
+    protected final ThemeUtils themeUtils;
     private final int questionFontSize;
     private final FormEntryPrompt formEntryPrompt;
     private final MediaLayout questionMediaLayout;
@@ -85,7 +86,6 @@ public abstract class QuestionWidget
     private final View guidanceTextLayout;
     private final View textLayout;
     private final TextView warningText;
-    private final ThemeUtils themeUtils;
     private MediaPlayer player;
     private AtomicBoolean expanded;
     private Bundle state;

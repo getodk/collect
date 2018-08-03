@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.odk.collect.android.DaggerTest;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.tasks.sms.SmsSubmissionManager;
 import org.odk.collect.android.tasks.sms.models.SmsSubmission;
@@ -16,7 +17,7 @@ import java.lang.reflect.Type;
 
 import static org.odk.collect.android.tasks.sms.SmsSubmissionManager.KEY_SUBMISSION;
 
-public abstract class BaseSmsTest {
+public abstract class BaseSmsTest extends DaggerTest {
     public static final String GATEWAY = "1918-344-4545";
 
     /**

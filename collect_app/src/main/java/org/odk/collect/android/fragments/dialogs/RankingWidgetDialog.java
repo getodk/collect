@@ -122,7 +122,7 @@ public class RankingWidgetDialog extends DialogFragment {
             FrameLayout positionLayout = (FrameLayout) LayoutInflater.from(getContext()).inflate(R.layout.ranking_item, positionsLayout, false);
             TextView textView = positionLayout.findViewById(R.id.rank_item_text);
             textView.setText(String.valueOf(values.indexOf(value) + 1));
-            textView.setTextSize(Collect.getQuestionFontsize());
+            textView.setTextSize(Collect.getInstance().getQuestionFontsize());
 
             positionsLayout.addView(positionLayout);
         }

@@ -50,6 +50,8 @@ public class InstanceUploaderAdapter extends CursorAdapter {
     SmsSubmissionManagerContract submissionManager;
     @Inject
     SmsService smsService;
+    @Inject
+    GeneralSharedPreferences generalSharedPreferences;
 
     private final Context context;
     private final CompositeDisposable compositeDisposable;
@@ -90,7 +92,7 @@ public class InstanceUploaderAdapter extends CursorAdapter {
 
         SmsSubmission model = submissionManager.getSubmissionModel(String.valueOf(instanceId));
 
-        boolean smsTransportEnabled = ((String) GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE)).equalsIgnoreCase(context.getString(R.string.transport_type_value_sms));
+        boolean smsTransportEnabled = ((String) generalSharedPreferences.get(KEY_SUBMISSION_TRANSPORT_TYPE)).equalsIgnoreCase(context.getString(R.string.transport_type_value_sms));
 
         boolean isSmsSubmission = model != null && smsTransportEnabled;
 

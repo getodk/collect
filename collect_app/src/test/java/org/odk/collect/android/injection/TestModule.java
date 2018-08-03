@@ -17,6 +17,7 @@ import org.opendatakit.httpclientandroidlib.client.CredentialsProvider;
 import org.opendatakit.httpclientandroidlib.impl.client.BasicCookieStore;
 
 import dagger.Module;
+import dagger.Provides;
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
