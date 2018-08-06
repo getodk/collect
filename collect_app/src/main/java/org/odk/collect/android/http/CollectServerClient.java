@@ -23,7 +23,6 @@ import org.kxml2.kdom.Document;
 import org.odk.collect.android.utilities.DocumentFetchResult;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.xmlpull.v1.XmlPullParser;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
