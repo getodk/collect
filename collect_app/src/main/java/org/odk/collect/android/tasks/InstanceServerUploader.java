@@ -94,7 +94,6 @@ public class InstanceServerUploader extends InstanceUploader {
         String deviceId = new PropertyManager(Collect.getInstance().getApplicationContext())
                 .getSingularProperty(PropertyManager.withUri(PropertyManager.PROPMGR_DEVICE_ID));
 
-
         Map<Uri, Uri> uriRemap = new HashMap<>();
 
         Cursor c = null;
@@ -349,7 +348,6 @@ public class InstanceServerUploader extends InstanceUploader {
             return true;
         }
 
-
         // If response from server is valid use that else use default messaging
         if (messageParser.isValid()) {
             outcome.messagesByInstanceId.put(id, messageParser.getMessageResponse());
@@ -412,7 +410,6 @@ public class InstanceServerUploader extends InstanceUploader {
 
         return files;
     }
-
 
     @Override
     protected Outcome doInBackground(Long... values) {

@@ -51,9 +51,6 @@ import org.odk.collect.android.tasks.sms.models.SmsSubmission;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.ToastUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.inject.Inject;
 
 import timber.log.Timber;
@@ -196,7 +193,6 @@ public class InstanceUploaderList extends InstanceListActivity implements
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         listView.setItemsCanFocus(false);
         listView.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> uploadButton.setEnabled(areCheckedItems()));
-
 
         instanceSyncTask = new InstanceSyncTask();
         instanceSyncTask.setDiskSyncListener(this);
@@ -357,11 +353,6 @@ public class InstanceUploaderList extends InstanceListActivity implements
     }
 
     private void setupAdapter() {
-        List<Long> checkedInstances = new ArrayList();
-        for (long a : listView.getCheckedItemIds()) {
-            checkedInstances.add(a);
-        }
-
         listAdapter = new InstanceUploaderAdapter(this, null);
         listView.setAdapter(listAdapter);
         checkPreviouslyCheckedItems();

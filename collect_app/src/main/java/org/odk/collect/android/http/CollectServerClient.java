@@ -54,7 +54,6 @@ public class CollectServerClient {
         this.httpInterface = httpInterface;
     }
 
-
     /**
      * Common method for returning a parsed xml document given a url and the
      * http context and client objects involved in the web connection.
@@ -115,7 +114,6 @@ public class CollectServerClient {
         return new DocumentFetchResult(doc, inputStreamResult.isOpenRosaResponse(), inputStreamResult.getHash());
     }
 
-
     /**
      * Creates a http connection and sets up an input stream.
      *
@@ -143,11 +141,9 @@ public class CollectServerClient {
         return httpInterface.get(uri, contentType, WebCredentialsUtils.getInstance().getCredentials(uri));
     }
 
-
     public static String getPlainTextMimeType() {
         return "text/plain";
     }
-
 
     public static class Outcome {
         public Uri authRequestingServer;

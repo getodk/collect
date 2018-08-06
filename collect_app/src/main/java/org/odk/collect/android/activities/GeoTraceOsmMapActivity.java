@@ -202,7 +202,6 @@ public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements I
         beenPaused = false;
         traceMode = 1;
 
-
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
@@ -270,7 +269,6 @@ public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements I
             myLocationOverlay.runOnFirstFix(centerAroundFix);
         }
 
-
         Button polygonSaveButton = polygonPolylineView.findViewById(R.id.polygon_save);
         polygonSaveButton.setOnClickListener(new View.OnClickListener() {
 
@@ -284,7 +282,6 @@ public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements I
                     alertDialog.dismiss();
                     ToastUtils.showShortToastInMiddle(getString(R.string.polygon_validator));
                 }
-
 
             }
         });
@@ -327,7 +324,6 @@ public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements I
                 zoomDialog.dismiss();
             }
         });
-
 
         mapView.invalidate();
 
@@ -453,8 +449,6 @@ public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements I
         mapView.getOverlays().add(myLocationOverlay);
         myLocationOverlay.setEnabled(true);
         myLocationOverlay.enableMyLocation();
-
-
     }
 
     private final Handler handler = new Handler(Looper.getMainLooper());
@@ -470,7 +464,6 @@ public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements I
             });
         }
     };
-
 
     private void zoomToMyLocation() {
         if (myLocationOverlay.getMyLocation() != null) {
@@ -532,7 +525,6 @@ public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements I
         }
     }
 
-
     private void buildDialogs() {
 
         builder = new AlertDialog.Builder(this);
@@ -565,9 +557,7 @@ public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements I
                     }
                 });
 
-
         alert = builder.create();
-
 
         polylineAlertBuilder = new AlertDialog.Builder(this);
         polylineAlertBuilder.setTitle(getString(R.string.polyline_polygon_text));
@@ -589,10 +579,7 @@ public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements I
                 });
 
         alertDialog = polylineAlertBuilder.create();
-
-
     }
-
 
     private void reset_trace_settings() {
         playCheck = false;
@@ -615,8 +602,6 @@ public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements I
         playButton.setVisibility(View.GONE);
         clearButton.setEnabled(false);
         pauseButton.setVisibility(View.VISIBLE);
-
-
     }
 
     private void setupManualMode() {
@@ -718,7 +703,6 @@ public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements I
         mapView.invalidate();
     }
 
-
     private final Marker.OnMarkerDragListener dragListener = new Marker.OnMarkerDragListener() {
         @Override
         public void onMarkerDragStart(Marker marker) {
@@ -801,7 +785,6 @@ public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements I
         mapView.invalidate();
 
     }
-
 
     public void showZoomDialog() {
         if (zoomDialog == null) {

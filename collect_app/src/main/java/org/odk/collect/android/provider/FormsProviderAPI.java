@@ -37,7 +37,6 @@ public final class FormsProviderAPI {
         private FormsColumns() {
         }
 
-
         public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/forms");
         public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.odk.form";
         public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.odk.form";
@@ -62,10 +61,7 @@ public final class FormsProviderAPI {
         public static final String JRCACHE_FILE_PATH = "jrcacheFilePath";
         public static final String FORM_MEDIA_PATH = "formMediaPath";
 
-
         // this is null on create, and can only be set on an update.
         public static final String LANGUAGE = "language";
-
-
     }
 }

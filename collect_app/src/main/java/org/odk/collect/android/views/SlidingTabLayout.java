@@ -15,7 +15,6 @@ package org.odk.collect.android.views;
  * limitations under the License.
  */
 
-
 import android.content.Context;
 import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;

@@ -74,7 +74,6 @@ public class ResponseMessageParser {
         return message;
     }
 
-
     public int getResponseCode() {
         return responseCode;
     }

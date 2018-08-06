@@ -212,5 +212,4 @@ public class DecimalWidgetTest extends QuestionWidgetTest<DecimalWidget, Decimal
         assertThat(decimalWidget.getAnswerText(), is(equalTo(fifteenDigitString)));
     }
 
-
 }

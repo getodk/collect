@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 package org.odk.collect.android.http;
 
 import java.util.Map;

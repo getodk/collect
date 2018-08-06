@@ -53,7 +53,6 @@ import java.util.zip.DataFormatException;
 import io.reactivex.Observable;
 import timber.log.Timber;
 
-
 public class QRCodeUtils {
     public static final String QR_CODE_FILEPATH = Collect.SETTINGS + File.separator + "collect-settings.png";
     private static final int QR_CODE_SIDE_LENGTH = 400; // in pixels

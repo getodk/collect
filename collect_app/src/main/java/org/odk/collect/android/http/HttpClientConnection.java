@@ -145,7 +145,6 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
         }
     }
 
-
     @Override
     public @NonNull
     HttpGetResult get(@NonNull URI uri, @Nullable final String contentType, @Nullable HttpCredentialsInterface credentials) throws Exception {
@@ -230,7 +229,6 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
         return new HttpGetResult(downloadStream, responseHeaders, hash, statusCode);
     }
 
-
     @Override
     public HttpHeadResult head(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws Exception {
         addCredentialsForHost(uri, credentials);
@@ -312,7 +310,6 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
         }
 
         ResponseMessageParser messageParser = null;
-
 
         boolean first = true;
         int fileIndex = 0;
@@ -618,7 +615,6 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
         setOpenRosaHeaders(req);
         return req;
     }
-
 
     public static class AgingCredentialsProvider implements CredentialsProvider {
 

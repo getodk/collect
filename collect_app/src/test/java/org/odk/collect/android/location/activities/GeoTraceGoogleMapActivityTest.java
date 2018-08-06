@@ -93,7 +93,6 @@ public class GeoTraceGoogleMapActivityTest extends BaseGeoActivityTest {
         verify(locationClient).stop();
     }
 
-
     @Test
     public void activityShouldShowErrorDialogOnClientError() {
         activityController.create();

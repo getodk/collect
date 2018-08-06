@@ -415,7 +415,6 @@ public class FormDownloader {
                     os.flush();
                     success = true;
 
-
             } catch (Exception e) {
                 Timber.e(e.toString());
                 // silently retry unless this is the last attempt,

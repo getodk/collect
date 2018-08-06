@@ -62,7 +62,6 @@ import static org.odk.collect.android.utilities.PermissionUtils.checkIfLocationP
  * @author jonnordling@gmail.com
  */
 
-
 public class GeoShapeOsmMapActivity extends CollectAbstractActivity implements IRegisterReceiver {
     private MapView map;
     private final ArrayList<Marker> mapMarkers = new ArrayList<Marker>();
@@ -146,12 +145,10 @@ public class GeoShapeOsmMapActivity extends CollectAbstractActivity implements I
             }
         });
 
-
         GpsMyLocationProvider imlp = new GpsMyLocationProvider(this.getBaseContext());
         imlp.setLocationUpdateMinDistance(1000);
         imlp.setLocationUpdateMinTime(60000);
         myLocationOverlay = new MyLocationNewOverlay(map);
-
 
         Intent intent = getIntent();
         if (intent != null && intent.getExtras() != null) {
@@ -237,7 +234,6 @@ public class GeoShapeOsmMapActivity extends CollectAbstractActivity implements I
         super.onStop();
     }
 
-
     private void overlayIntentPolygon(String str) {
         clearButton.setEnabled(true);
         clearButtonTest = true;
@@ -265,7 +261,6 @@ public class GeoShapeOsmMapActivity extends CollectAbstractActivity implements I
         update_polygon();
         map.getOverlays().remove(overlayEvents);
     }
-
 
     private final Handler handler = new Handler(Looper.getMainLooper());
 
@@ -333,7 +328,6 @@ public class GeoShapeOsmMapActivity extends CollectAbstractActivity implements I
             gpsStatus = false;
         }
     }
-
 
     private void overlayPointPathListener() {
         overlayEvents = new MapEventsOverlay(receive);
@@ -498,7 +492,6 @@ public class GeoShapeOsmMapActivity extends CollectAbstractActivity implements I
 
         }
     };
-
 
     private final Marker.OnMarkerClickListener nullMarkerListener = new Marker.OnMarkerClickListener() {
 

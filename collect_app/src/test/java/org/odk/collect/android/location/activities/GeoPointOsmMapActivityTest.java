@@ -104,6 +104,4 @@ public class GeoPointOsmMapActivityTest extends BaseGeoActivityTest {
                 activity.getResultString(secondLocation));
 
     }
-
-    
 }

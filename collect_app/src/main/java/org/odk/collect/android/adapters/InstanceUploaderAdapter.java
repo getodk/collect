@@ -198,8 +198,6 @@ public class InstanceUploaderAdapter extends CursorAdapter {
         TextView displayName;
         @BindView(R.id.display_subtext)
         TextView displaySubtext;
-        @BindView(R.id.update_info)
-        TextView updateInfo;
         @BindView(R.id.checkbox)
         CheckBox checkbox;
         @BindView(R.id.progress_bar)

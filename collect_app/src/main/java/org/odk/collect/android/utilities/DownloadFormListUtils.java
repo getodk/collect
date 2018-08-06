@@ -17,6 +17,7 @@
 package org.odk.collect.android.utilities;
 
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.preference.PreferenceManager;
 
 import org.javarosa.xform.parse.XFormParser;
@@ -284,7 +285,8 @@ public class DownloadFormListUtils {
     }
 
     private static boolean isThisFormAlreadyDownloaded(String formId) {
-        return new FormsDao().getFormsCursorForFormId(formId).getCount() > 0;
+        Cursor cursor = new FormsDao().getFormsCursorForFormId(formId);
+        return cursor == null || cursor.getCount() > 0;
     }
 
     private ManifestFile getManifestFile(String manifestUrl) {

@@ -219,7 +219,6 @@ public class Collect extends Application implements HasActivityInjector {
         MultiDex.install(this);
     }
 
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -293,7 +292,6 @@ public class Collect extends Application implements HasActivityInjector {
         }
         return tracker;
     }
-
 
     private static class CrashReportingTree extends Timber.Tree {
         @Override
