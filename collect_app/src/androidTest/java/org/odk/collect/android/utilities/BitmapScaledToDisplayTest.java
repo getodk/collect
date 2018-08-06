@@ -11,7 +11,6 @@ import java.io.File;
 
 import static org.junit.Assert.assertEquals;
 
-
 @RunWith(AndroidJUnit4.class)
 public class BitmapScaledToDisplayTest {
 

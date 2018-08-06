@@ -142,7 +142,6 @@ public class FormsProvider extends ContentProvider {
             throw new IllegalArgumentException("Unknown URI " + uri);
         }
 
-
         if (!checkIfStoragePermissionsGranted(getContext())) {
             return null;
         }

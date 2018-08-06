@@ -1,6 +1,5 @@
 package org.odk.collect.android.injection.config.scopes;
 
-
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 

@@ -67,7 +67,6 @@ import timber.log.Timber;
  */
 public class FormController {
 
-
     public static final boolean STEP_INTO_GROUP = true;
     public static final boolean STEP_OVER_GROUP = false;
 
@@ -254,7 +253,6 @@ public class FormController {
         return formEntryController.getModel().getEvent();
     }
 
-
     /**
      * returns the event for the given FormIndex.
      */
@@ -262,14 +260,12 @@ public class FormController {
         return formEntryController.getModel().getEvent(index);
     }
 
-
     /**
      * @return current FormIndex.
      */
     public FormIndex getFormIndex() {
         return formEntryController.getModel().getFormIndex();
     }
-
 
     /**
      * Return the langauges supported by the currently loaded form.
@@ -280,14 +276,12 @@ public class FormController {
         return formEntryController.getModel().getLanguages();
     }
 
-
     /**
      * @return A String containing the title of the current form.
      */
     public String getFormTitle() {
         return formEntryController.getModel().getFormTitle();
     }
-
 
     /**
      * @return the currently selected language.
@@ -331,14 +325,12 @@ public class FormController {
         return formEntryController.getModel().getCaptionPrompt(index);
     }
 
-
     /**
      * Return the caption for the current FormIndex. This is usually used for a repeat prompt.
      */
     public FormEntryCaption getCaptionPrompt() {
         return formEntryController.getModel().getCaptionPrompt();
     }
-
 
     /**
      * This fires off the jr:preload actions and events to save values like the
@@ -348,14 +340,12 @@ public class FormController {
         return formEntryController.getModel().getForm().postProcessInstance();
     }
 
-
     /**
      * TODO: We need a good description of what this does, exactly, and why.
      */
     private FormInstance getInstance() {
         return formEntryController.getModel().getForm().getInstance();
     }
-
 
     /**
      * A convenience method for determining if the current FormIndex is in a group that is/should
@@ -480,7 +470,6 @@ public class FormController {
         return FormEntryController.ANSWER_OK;
     }
 
-
     /**
      * saveAnswer attempts to save the current answer into the data model without doing any
      * constraint checking. Only use this if you know what you're doing. For normal form filling
@@ -497,7 +486,6 @@ public class FormController {
         }
     }
 
-
     /**
      * Navigates forward in the form.
      *
@@ -512,7 +500,6 @@ public class FormController {
             return formEntryController.stepToNextEvent();
         }
     }
-
 
     /**
      * If using a view like HierarchyView that doesn't support multi-question per screen, step over
@@ -634,7 +621,6 @@ public class FormController {
         }
     }
 
-
     /**
      * Move the current form index to the index of the first enclosing repeat
      * or to the start of the form.
@@ -669,7 +655,6 @@ public class FormController {
         }
         return getEvent();
     }
-
 
     public static class FailedConstraint {
         public final FormIndex index;
@@ -708,7 +693,6 @@ public class FormController {
         }
         return null;
     }
-
 
     /**
      * Navigates backward in the form.
@@ -769,7 +753,6 @@ public class FormController {
 
     }
 
-
     /**
      * Jumps to a given FormIndex.
      *
@@ -779,14 +762,12 @@ public class FormController {
         return formEntryController.jumpToIndex(index);
     }
 
-
     /**
      * Creates a new repeated instance of the group referenced by the current FormIndex.
      */
     public void newRepeat() {
         formEntryController.newRepeat();
     }
-
 
     /**
      * If the current FormIndex is within a repeated group, will find the innermost repeat, delete
@@ -799,14 +780,12 @@ public class FormController {
         formEntryController.jumpToIndex(fi);
     }
 
-
     /**
      * Sets the current language.
      */
     public void setLanguage(String language) {
         formEntryController.setLanguage(language);
     }
-
 
     /**
      * Returns an array of question promps.
@@ -876,7 +855,6 @@ public class FormController {
     public FormEntryPrompt getQuestionPrompt(FormIndex index) {
         return formEntryController.getModel().getQuestionPrompt(index);
     }
-
 
     public FormEntryPrompt getQuestionPrompt() {
         return formEntryController.getModel().getQuestionPrompt();
@@ -954,7 +932,6 @@ public class FormController {
         return groups;
     }
 
-
     /**
      * This is used to enable/disable the "Delete Repeat" menu option.
      */
@@ -970,7 +947,6 @@ public class FormController {
         }
         return false;
     }
-
 
     /**
      * The count of the closest group that repeats or -1.
@@ -988,7 +964,6 @@ public class FormController {
         return -1;
     }
 
-
     /**
      * The name of the closest group that repeats or null.
      */
@@ -1005,7 +980,6 @@ public class FormController {
         return null;
     }
 
-
     /**
      * The closest group the prompt belongs to.
      *
@@ -1020,7 +994,6 @@ public class FormController {
         }
     }
 
-
     /**
      * The repeat count of closest group the prompt belongs to.
      */
@@ -1031,7 +1004,6 @@ public class FormController {
         return -1;
 
     }
-
 
     /**
      * The text of closest group the prompt belongs to.

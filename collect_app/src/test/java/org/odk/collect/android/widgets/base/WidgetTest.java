@@ -1,6 +1,5 @@
 package org.odk.collect.android.widgets.base;
 
-
 import org.javarosa.core.model.IFormElement;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;

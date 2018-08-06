@@ -94,7 +94,6 @@ public class SmsSubmission {
         return resultCode;
     }
 
-
     public int getJobId() {
         return jobId;
     }

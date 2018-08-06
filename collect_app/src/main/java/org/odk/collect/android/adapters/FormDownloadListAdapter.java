@@ -22,7 +22,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
@@ -55,7 +54,6 @@ public class FormDownloadListAdapter extends ArrayAdapter {
         TextView text1;
         TextView text2;
         TextView updateInfo;
-        CheckBox checkBox;
     }
 
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
@@ -69,7 +67,6 @@ public class FormDownloadListAdapter extends ArrayAdapter {
             holder.text1 = row.findViewById(R.id.text1);
             holder.text2 = row.findViewById(R.id.text2);
             holder.updateInfo = row.findViewById(R.id.update_info);
-            holder.checkBox = row.findViewById(R.id.checkbox);
             row.setTag(holder);
         } else {
             holder = (ViewHolder) row.getTag();

@@ -138,7 +138,6 @@ public class SpinnerWidget extends QuestionWidget implements MultiChoiceWidget {
         addAnswerView(view);
     }
 
-
     @Override
     public IAnswerData getAnswer() {
         clearFocus();

@@ -155,7 +155,6 @@ public abstract class InstanceUploader extends AsyncTask<Long, Integer, Instance
 
     static class Outcome {
         Uri authRequestingServer;
-        boolean invalidOAuth;
         HashMap<String, String> messagesByInstanceId = new HashMap<>();
     }
 }

@@ -62,7 +62,6 @@ public class ViewFormHierarchyActivity extends FormHierarchyActivity {
         jumpEndButton.setVisibility(View.GONE);
     }
 
-
     @Override
     public void onElementClick(HierarchyElement element) {
         int position = formList.indexOf(element);

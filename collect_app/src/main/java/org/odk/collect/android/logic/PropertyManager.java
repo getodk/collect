@@ -43,7 +43,6 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_US
  */
 public class PropertyManager implements IPropertyManager {
 
-
     public static final String PROPMGR_DEVICE_ID        = "deviceid";
     public static final String PROPMGR_SUBSCRIBER_ID    = "subscriberid";
     public static final String PROPMGR_SIM_SERIAL       = "simserial";

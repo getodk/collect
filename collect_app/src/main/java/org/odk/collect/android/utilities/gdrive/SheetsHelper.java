@@ -186,7 +186,6 @@ public class SheetsHelper {
         return spreadsheet;
     }
 
-
     /**
      * This class only makes API calls using the sheets API and does not contain any business logic
      *
