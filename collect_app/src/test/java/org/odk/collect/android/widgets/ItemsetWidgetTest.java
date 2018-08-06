@@ -139,7 +139,6 @@ public class ItemsetWidgetTest extends QuestionWidgetTest<ItemsetWidget, StringD
 
         when(adapter.query(anyString(), anyString(), any(String[].class))).thenReturn(cursorMocker.getCursor());
 
-
         when(formEntryPrompt.getQuestion()).thenReturn(questionDef);
         when(questionDef.getAdditionalAttribute(null, "query")).thenReturn("instance('cities')/root/item[state=/data/state]");
     }

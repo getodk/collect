@@ -33,7 +33,6 @@ import java.io.InputStream;
 
 import timber.log.Timber;
 
-
 public class OsmMBTileModuleProvider extends MapTileFileStorageProviderBase {
 
     protected OsmMBTileSource tileSource;

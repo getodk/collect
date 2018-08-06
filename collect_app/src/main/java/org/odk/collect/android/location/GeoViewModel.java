@@ -9,7 +9,6 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 
-
 @PerViewModel
 public class GeoViewModel extends RxMVVMViewModel {
 

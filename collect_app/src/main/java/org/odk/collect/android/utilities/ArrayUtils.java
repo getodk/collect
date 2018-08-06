@@ -1,6 +1,5 @@
 package org.odk.collect.android.utilities;
 
-
 public class ArrayUtils {
 
     /**
@@ -12,7 +11,6 @@ public class ArrayUtils {
      * An empty immutable {@code long} array.
      */
     private static final long[] EMPTY_LONG_ARRAY = new long[0];
-
 
     private ArrayUtils() {
 

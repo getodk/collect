@@ -33,7 +33,6 @@ public abstract class RangeWidgetTest<W extends RangeWidget, A extends IAnswerDa
         when(formEntryPrompt.getQuestion()).thenReturn(rangeQuestion);
         when(rangeQuestion.getAppearanceAttr()).thenReturn("picker");
 
-
         when(rangeQuestion.getRangeStart()).thenReturn(rangeStart);
         when(rangeQuestion.getRangeEnd()).thenReturn(rangeEnd);
         when(rangeQuestion.getRangeStep()).thenReturn(rangeStep);

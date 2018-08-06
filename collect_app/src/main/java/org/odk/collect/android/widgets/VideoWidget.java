@@ -249,12 +249,10 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
             return;
         }
 
-
         if (newVideo == null) {
             Timber.e("setBinaryData FAILED");
             return;
         }
-
 
         if (newVideo.exists()) {
             // Add the copy to the content provier

@@ -14,7 +14,6 @@ import java.io.File;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-
 public abstract class FileWidgetTest<W extends FileWidget> extends BinaryWidgetTest<W, StringData> {
 
     @Mock

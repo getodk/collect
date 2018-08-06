@@ -12,13 +12,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-
 package org.odk.collect.android.exception;
 
 /**
  * Created by shobhit on 23/3/17.
  */
-
 
 public class MultipleFoldersFoundException extends Exception {
     public MultipleFoldersFoundException(String message) {

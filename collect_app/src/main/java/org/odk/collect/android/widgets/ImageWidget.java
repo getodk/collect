@@ -79,7 +79,6 @@ public class ImageWidget extends BaseImageWidget {
         hideButtonsIfNeeded(appearance);
         errorTextView.setVisibility(View.GONE);
 
-
         if (selfie) {
             boolean isFrontCameraAvailable;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
