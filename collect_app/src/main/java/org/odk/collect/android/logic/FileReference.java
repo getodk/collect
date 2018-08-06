@@ -20,47 +20,39 @@ public class FileReference implements Reference {
     String localPart;
     String referencePart;
 
-
     public FileReference(String localPart, String referencePart) {
         this.localPart = localPart;
         this.referencePart = referencePart;
     }
 
-
     private String getInternalURI() {
         return "/" + localPart + referencePart;
     }
-
-
+    
     @Override
     public boolean doesBinaryExist() {
         return new File(getInternalURI()).exists();
     }
-
 
     @Override
     public InputStream getStream() throws IOException {
         return new FileInputStream(getInternalURI());
     }
 
-
     @Override
     public String getURI() {
         return "jr://file" + referencePart;
     }
-
 
     @Override
     public boolean isReadOnly() {
         return false;
     }
 
-
     @Override
     public OutputStream getOutputStream() throws IOException {
         return new FileOutputStream(getInternalURI());
     }
-
 
     @Override
     public void remove() {
@@ -68,12 +60,10 @@ public class FileReference implements Reference {
         new File(getInternalURI()).delete();
     }
 
-
     @Override
     public String getLocalURI() {
         return getInternalURI();
     }
-
 
     @Override
     public Reference[] probeAlternativeReferences() {

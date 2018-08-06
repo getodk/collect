@@ -314,7 +314,6 @@ public class AndroidLocationClientTest {
 
         assertSame(androidLocationClient.getLastLocation(), networkLocation);
 
-
         // Balanced Accuracy: -------------------------------------------------------------- //
 
         androidLocationClient.setPriority(PRIORITY_BALANCED_POWER_ACCURACY);
@@ -328,7 +327,6 @@ public class AndroidLocationClientTest {
         when(locationManager.getProviders(true))
                 .thenReturn(ImmutableList.of(GPS_PROVIDER));
         assertSame(androidLocationClient.getLastLocation(), gpsLocation);
-
 
         // Low Power Accuracy: -------------------------------------------------------------- //
 
@@ -344,7 +342,6 @@ public class AndroidLocationClientTest {
         when(locationManager.getProviders(true))
                 .thenReturn(ImmutableList.of(PASSIVE_PROVIDER));
         assertSame(androidLocationClient.getLastLocation(), passiveLocation);
-
 
         // No Power: -------------------------------------------------------------- //
         androidLocationClient.setPriority(PRIORITY_NO_POWER);

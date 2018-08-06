@@ -73,7 +73,6 @@ public class ListMultiWidget extends QuestionWidget implements MultiChoiceWidget
     private final ArrayList<CheckBox> checkBoxes;
     private View center;
 
-
     @SuppressWarnings("unchecked")
     public ListMultiWidget(Context context, FormEntryPrompt prompt, boolean displayLabel) {
         super(context, prompt);
@@ -268,7 +267,6 @@ public class ListMultiWidget extends QuestionWidget implements MultiChoiceWidget
 
     }
 
-
     @Override
     public void clearAnswer() {
         for (int i = 0; i < checkBoxes.size(); i++) {
@@ -278,7 +276,6 @@ public class ListMultiWidget extends QuestionWidget implements MultiChoiceWidget
             }
         }
     }
-
 
     @Override
     public IAnswerData getAnswer() {

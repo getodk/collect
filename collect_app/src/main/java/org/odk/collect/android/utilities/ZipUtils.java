@@ -18,7 +18,6 @@
 
 package org.odk.collect.android.utilities;
 
-
 import org.apache.commons.io.IOUtils;
 
 import java.io.File;

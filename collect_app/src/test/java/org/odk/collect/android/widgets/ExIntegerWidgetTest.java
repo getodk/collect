@@ -32,7 +32,6 @@ public class ExIntegerWidgetTest extends GeneralExStringWidgetTest<ExIntegerWidg
         when(formEntryPrompt.getAppearanceHint()).thenReturn("");
     }
 
-
     private int randomInteger() {
         return Math.abs(random.nextInt()) % 1_000_000_000;
     }

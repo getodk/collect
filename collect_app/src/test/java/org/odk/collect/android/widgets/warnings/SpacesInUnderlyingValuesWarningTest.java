@@ -24,7 +24,6 @@ public class SpacesInUnderlyingValuesWarningTest {
     @Mock
     WarningRenderer renderer;
 
-
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
@@ -48,6 +47,4 @@ public class SpacesInUnderlyingValuesWarningTest {
 
         verify(renderer, never()).render(any());
     }
-
-
 }

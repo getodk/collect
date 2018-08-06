@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.utilities.gdrive;
 
-
 import android.Manifest;
 import android.accounts.Account;
 import android.app.Activity;

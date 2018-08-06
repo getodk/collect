@@ -64,7 +64,6 @@ public final class InstanceProviderAPI {
         public static final String DELETED_DATE = "deletedDate";
         //public static final String DISPLAY_SUB_SUBTEXT = "displaySubSubtext";
 
-
         //        public static final String DEFAULT_SORT_ORDER = "modified DESC";
         //        public static final String TITLE = "title";
         //        public static final String NOTE = "note";
