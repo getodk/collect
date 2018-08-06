@@ -29,8 +29,8 @@ import static junit.framework.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class SNITest {
 
-    public static final String SNI_URI = "https://sni.velox.ch/";
-    public static final String SUCCESS_SENTINEL = "sent the following TLS server name indication extension";
+    private static final String SNI_URI = "https://sni.velox.ch/";
+    private static final String SUCCESS_SENTINEL = "sent the following TLS server name indication extension";
 
     @Test
     public void testThatHttpClientSupportsSNI() throws Exception {

@@ -7,11 +7,16 @@ import android.telephony.SmsManager;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.events.RxEventBus;
+import org.odk.collect.android.http.CollectServerClient;
+import org.odk.collect.android.http.HttpClientConnection;
+import org.odk.collect.android.http.OpenRosaHttpInterface;
 import org.odk.collect.android.injection.ViewModelBuilder;
 import org.odk.collect.android.injection.config.architecture.ViewModelFactoryModule;
 import org.odk.collect.android.injection.config.scopes.PerApplication;
 import org.odk.collect.android.tasks.sms.SmsSubmissionManager;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
+
+import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
@@ -52,6 +57,18 @@ public class AppModule {
     @Provides
     RxEventBus provideRxEventBus() {
         return new RxEventBus();
+    }
+
+    @Provides
+    @Singleton
+    public OpenRosaHttpInterface provideHttpInterface() {
+        return new HttpClientConnection();
+    }
+
+    @Provides
+    @Singleton
+    public CollectServerClient provideCollectServerClient(OpenRosaHttpInterface httpInterface) {
+        return new CollectServerClient(httpInterface);
     }
 
 }

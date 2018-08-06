@@ -54,6 +54,7 @@ public class CollectServerClient {
         this.httpInterface = httpInterface;
     }
 
+
     /**
      * Common method for returning a parsed xml document given a url and the
      * http context and client objects involved in the web connection.
@@ -62,51 +63,22 @@ public class CollectServerClient {
 
         // parse response
         Document doc;
-
         HttpGetResult inputStreamResult;
+
         try {
             inputStreamResult = getHttpInputStream(urlString, HTTP_CONTENT_TYPE_TEXT_XML);
 
-            InputStream is = inputStreamResult.getInputStream();
-            InputStreamReader isr = null;
-            try {
-                isr = new InputStreamReader(is, "UTF-8");
+            try (InputStream resultInputStream = inputStreamResult.getInputStream();
+                 InputStreamReader streamReader = new InputStreamReader(resultInputStream, "UTF-8")) {
+
                 doc = new Document();
                 KXmlParser parser = new KXmlParser();
-                parser.setInput(isr);
+                parser.setInput(streamReader);
                 parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
                 doc.parse(parser);
-                isr.close();
-                isr = null;
-            } finally {
-                if (isr != null) {
-                    try {
-                        // ensure stream is consumed...
-                        final long count = 1024L;
-                        while (isr.skip(count) == count) {
-                            // skipping to the end of the http entity
-                        }
-
-                        isr.close();
-
-                    } catch (IOException e) {
-                        // no-op
-                        Timber.e(e, "Error closing input stream reader");
-                    }
-                }
-
-                if (is != null) {
-                    try {
-                        is.close();
-                    } catch (IOException e) {
-                        Timber.e(e, "Error closing inputstream");
-                        // no-op
-                    }
-                }
             }
         } catch (Exception e) {
-            String error = "Parsing failed with " + e.getMessage()
-                    + " while accessing " + urlString;
+            String error = "Parsing failed with " + e.getMessage() + " while accessing " + urlString;
             Timber.e(error);
             return new DocumentFetchResult(error, 0);
         }

@@ -230,7 +230,7 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
     }
 
     @Override
-    public HttpHeadResult head(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws Exception {
+    public @NonNull HttpHeadResult head(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws Exception {
         addCredentialsForHost(uri, credentials);
         getCookieStore().clear();
 
@@ -293,7 +293,7 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
     }
 
     @Override
-    public ResponseMessageParser uploadSubmissionFile(@NonNull List<File> fileList,
+    public @NonNull ResponseMessageParser uploadSubmissionFile(@NonNull List<File> fileList,
                                                       @NonNull File submissionFile,
                                                       @NonNull URI uri,
                                                       @Nullable HttpCredentialsInterface credentials) throws IOException {

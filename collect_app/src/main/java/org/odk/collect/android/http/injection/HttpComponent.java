@@ -1,6 +1,7 @@
 package org.odk.collect.android.http.injection;
 
 import org.odk.collect.android.http.CollectServerClient;
+import org.odk.collect.android.injection.config.AppModule;
 import org.odk.collect.android.preferences.ServerPreferencesFragment;
 import org.odk.collect.android.receivers.NetworkReceiver;
 import org.odk.collect.android.tasks.InstanceServerUploader;
@@ -11,7 +12,7 @@ import javax.inject.Singleton;
 
 import dagger.Component;
 
-@Component(modules = HttpInterfaceModule.class)
+@Component(modules = AppModule.class)
 @Singleton
 public interface HttpComponent {
     void inject(InstanceServerUploader uploader);
