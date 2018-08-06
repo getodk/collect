@@ -50,7 +50,7 @@ public class InstanceProvider extends ContentProvider {
     private static final int INSTANCE_ID = 2;
 
     private static final UriMatcher URI_MATCHER;
-    
+
     private InstancesDatabaseHelper getDbHelper() {
         InstancesDatabaseHelper databaseHelper = null;
         // wrapper to test and reset/set the dbHelper based upon the attachment state of the device.
@@ -195,6 +195,9 @@ public class InstanceProvider extends ContentProvider {
             } else if (InstanceProviderAPI.STATUS_SUBMITTED.equalsIgnoreCase(state)) {
                 return new SimpleDateFormat(getContext().getString(R.string.sent_on_date_at_time),
                         Locale.getDefault()).format(date);
+            } else if (InstanceProviderAPI.STATUS_SUBMITTED_SMS.equalsIgnoreCase(state)) {
+                return new SimpleDateFormat(getContext().getString(R.string.sms_sent_on_date_at_time),
+                        Locale.getDefault()).format(date);
             } else if (InstanceProviderAPI.STATUS_SUBMISSION_FAILED.equalsIgnoreCase(state)) {
                 return new SimpleDateFormat(
                         getContext().getString(R.string.sending_failed_on_date_at_time),
@@ -302,14 +305,14 @@ public class InstanceProvider extends ContentProvider {
 
                     //We are going to update the status, if the form is submitted
                     //We will not delete the record in table but we will delete the file
-                    if (status != null && status.equals(InstanceProviderAPI.STATUS_SUBMITTED)) {
+                    if (status != null && (status.equals(InstanceProviderAPI.STATUS_SUBMITTED) || status.equals(InstanceProviderAPI.STATUS_SUBMITTED_SMS))) {
                         ContentValues cv = new ContentValues();
                         cv.put(InstanceColumns.DELETED_DATE, System.currentTimeMillis());
                         count = Collect.getInstance().getContentResolver().update(uri, cv, null, null);
                     } else {
                         String[] newWhereArgs;
                         if (whereArgs == null || whereArgs.length == 0) {
-                            newWhereArgs = new String[] {instanceId};
+                            newWhereArgs = new String[]{instanceId};
                         } else {
                             newWhereArgs = new String[(whereArgs.length + 1)];
                             newWhereArgs[0] = instanceId;
@@ -383,7 +386,7 @@ public class InstanceProvider extends ContentProvider {
 
                     String[] newWhereArgs;
                     if (whereArgs == null || whereArgs.length == 0) {
-                        newWhereArgs = new String[] {instanceId};
+                        newWhereArgs = new String[]{instanceId};
                     } else {
                         newWhereArgs = new String[(whereArgs.length + 1)];
                         newWhereArgs[0] = instanceId;

@@ -123,7 +123,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                                 instanceCursor.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
                         String instanceStatus = instanceCursor.getString(
                                 instanceCursor.getColumnIndex(InstanceColumns.STATUS));
-                        if (candidateInstances.contains(instanceFilename) || instanceStatus.equals(InstanceProviderAPI.STATUS_SUBMITTED)) {
+                        if (candidateInstances.contains(instanceFilename) || (instanceStatus.equals(InstanceProviderAPI.STATUS_SUBMITTED) || instanceStatus.equals(InstanceProviderAPI.STATUS_SUBMITTED_SMS))) {
                             candidateInstances.remove(instanceFilename);
                         } else {
                             filesToRemove.add(instanceFilename);

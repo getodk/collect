@@ -36,6 +36,7 @@ import io.reactivex.schedulers.Schedulers;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_TRANSPORT_TYPE;
 import static org.odk.collect.android.provider.InstanceProviderAPI.STATUS_SUBMISSION_FAILED;
 import static org.odk.collect.android.provider.InstanceProviderAPI.STATUS_SUBMITTED;
+import static org.odk.collect.android.provider.InstanceProviderAPI.STATUS_SUBMITTED_SMS;
 import static org.odk.collect.android.tasks.sms.SmsService.RESULT_MESSAGE_READY;
 import static org.odk.collect.android.tasks.sms.SmsService.RESULT_OK_OTHERS_PENDING;
 import static org.odk.collect.android.tasks.sms.SmsService.RESULT_QUEUED;
@@ -107,6 +108,7 @@ public class InstanceUploaderAdapter extends CursorAdapter {
                 break;
 
             case STATUS_SUBMITTED:
+            case STATUS_SUBMITTED_SMS:
                 viewHolder.statusIcon.setImageResource(R.drawable.check);
                 break;
 
