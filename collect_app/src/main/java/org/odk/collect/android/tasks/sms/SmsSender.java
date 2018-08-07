@@ -37,6 +37,8 @@ public class SmsSender {
     SmsSubmissionManagerContract submissionManager;
     @Inject
     RxEventBus eventBus;
+    @Inject
+    SmsService smsService;
 
     public SmsSender(Context context, String instanceId) {
         this.context = context;
@@ -50,11 +52,6 @@ public class SmsSender {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
 
         String gateway = settings.getString(PreferenceKeys.KEY_SMS_GATEWAY, null);
-
-        if (!PhoneNumberUtils.isGlobalPhoneNumber(gateway)) {
-            eventBus.post(new SmsRxEvent(instanceId, SmsService.RESULT_INVALID_GATEWAY));
-            return false;
-        }
 
         SmsSubmission model = submissionManager.getSubmissionModel(instanceId);
 
@@ -71,6 +68,14 @@ public class SmsSender {
             sentIntents.add(sentPendingIntent);
 
             messages.add(message.getText());
+
+            if (!PhoneNumberUtils.isGlobalPhoneNumber(gateway)) {
+                SmsRxEvent event = new SmsRxEvent(instanceId, SmsService.RESULT_INVALID_GATEWAY);
+                eventBus.post(event);
+                smsService.updateInstanceStatusFailedText(instanceId,event);
+                submissionManager.updateMessageStatus(SmsService.RESULT_INVALID_GATEWAY,instanceId,message.getId());
+                return false;
+            }
 
             submissionManager.markMessageAsSending(instanceId, message.getId());
         }
