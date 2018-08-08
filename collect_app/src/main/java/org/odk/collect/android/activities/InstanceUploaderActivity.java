@@ -113,7 +113,7 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
                 url = intent.getStringExtra(ApplicationConstants.BundleKeys.URL);
 
                 // Remove the trailing //
-                while (url.endsWith("/")) {
+                while (url != null && url.endsWith("/")) {
                     url = url.substring(0, url.length() - 1);
                 }
 
