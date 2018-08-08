@@ -211,6 +211,7 @@ public class SheetsHelper {
             sheets.spreadsheets().values()
                     .append(spreadsheetId, sheetName, row)
                     .setIncludeValuesInResponse(true)
+                    .setInsertDataOption("INSERT_ROWS")
                     .setValueInputOption("USER_ENTERED").execute();
         }
 
