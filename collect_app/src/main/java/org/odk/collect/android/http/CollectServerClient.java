@@ -44,7 +44,7 @@ import timber.log.Timber;
  */
 public class CollectServerClient {
 
-    private static final String HTTP_CONTENT_TYPE_TEXT_XML = "text/xml";
+    public static final String HTTP_CONTENT_TYPE_TEXT_XML = "text/xml";
 
     protected OpenRosaHttpInterface httpInterface;
 

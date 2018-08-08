@@ -7,7 +7,7 @@ import android.telephony.SmsManager;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.events.RxEventBus;
-import org.odk.collect.android.http.TestableCollectServerClient;
+import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.http.mock.MockHttpClientConnection;
 import org.odk.collect.android.injection.config.scopes.PerApplication;
 import org.odk.collect.android.tasks.sms.SmsSubmissionManager;
@@ -67,8 +67,8 @@ public class TestModule {
     }
 
     @Provides
-    TestableCollectServerClient provideTestCollectServerClient(MockHttpClientConnection httpClientConnection) {
-        return new TestableCollectServerClient(httpClientConnection);
+    CollectServerClient provideTestCollectServerClient(MockHttpClientConnection httpClientConnection) {
+        return new CollectServerClient(httpClientConnection);
     }
 
 }

@@ -21,14 +21,9 @@ import java.util.Map;
 
 public class MockHttpClientConnection implements OpenRosaHttpInterface {
 
-    private boolean getHttpShouldReturnNull;
-
     @NonNull
     @Override
     public HttpGetResult get(@NonNull URI uri, @Nullable String contentType, @Nullable HttpCredentialsInterface credentials) throws Exception {
-        if (getHttpShouldReturnNull) {
-            return null;
-        }
 
         String xml =
         "<forms>" +
@@ -57,12 +52,5 @@ public class MockHttpClientConnection implements OpenRosaHttpInterface {
     @Override
     public ResponseMessageParser uploadSubmissionFile(@NonNull List<File> fileList, @NonNull File submissionFile, @NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws IOException {
         return null;
-    }
-
-    /**
-     * Configuration methods for testing
-     */
-    public void setGetHttpShouldReturnNull(boolean shouldReturnNull) {
-        this.getHttpShouldReturnNull = shouldReturnNull;
     }
 }
