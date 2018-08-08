@@ -1,5 +1,4 @@
 /*
- * Copyright (C) 2009 University of Washington
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -114,6 +113,12 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
 
             if (bundle != null && bundle.containsKey(KEY_URL) && bundle.containsKey(KEY_USERNAME) && bundle.containsKey(KEY_PASSWORD)) {
                 url = intent.getStringExtra(KEY_URL);
+
+                // Remove the trailing //
+                while (url.endsWith("/")) {
+                    url = url.substring(0, url.length() - 1);
+                }
+
                 username = intent.getStringExtra(KEY_USERNAME);
                 password = intent.getStringExtra(KEY_PASSWORD);
             }
@@ -122,7 +127,11 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
         instancesToSend = ArrayUtils.toObject(selectedInstanceIDs);
 
         if (username != null && password != null && url != null) {
-            WebUtils.addCredentials(username, password, url);
+            String host = Uri.parse(url).getHost();
+
+            if (host != null) {
+                WebUtils.addCredentials(username, password, host);
+            }
         }
 
         // at this point, we don't expect this to be empty...
@@ -139,6 +148,11 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
             // setup dialog and upload task
             showDialog(PROGRESS_DIALOG);
             instanceServerUploader = new InstanceServerUploader();
+
+            // URL, username & password should always be available in case we are to override the default settings
+            if (url != null && username != null && password != null) {
+                instanceServerUploader.setCompleteDestinationUrl(url + Collect.getInstance().getString(R.string.default_odk_submission));
+            }
 
             // register this activity with the new uploader task
             instanceServerUploader.setUploaderListener(this);
@@ -183,6 +197,15 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
     @Override
     protected void onStop() {
         Collect.getInstance().getActivityLogger().logOnStop(this);
+
+        // Clear out optional credentials -> url, username && password from the Credentials manager
+        if (url != null && username != null && password != null) {
+            String host = Uri.parse(url).getHost();
+
+            if (host != null) {
+                WebUtils.clearHostCredentials(host);
+            }
+        }
         super.onStop();
     }
 
@@ -246,6 +269,7 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
         if (!isInstanceStateSaved()) {
             createUploadInstancesResultDialog(message.trim());
         } else {
+            // Clean up
             finish();
         }
     }

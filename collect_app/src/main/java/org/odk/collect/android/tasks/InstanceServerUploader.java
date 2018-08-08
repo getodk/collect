@@ -118,6 +118,8 @@ public class InstanceServerUploader extends InstanceUploader {
     private static final String FAIL = "Error: ";
     private static final String URL_PATH_SEP = "/";
 
+    private String completeDestinationUrl;
+
     /**
      * Uploads to urlString the submission identified by id with filepath of instance
      *
@@ -550,9 +552,9 @@ public class InstanceServerUploader extends InstanceUploader {
                     String id = c.getString(c.getColumnIndex(InstanceColumns._ID));
                     Uri toUpdate = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, id);
 
-                    // Use the app's configured URL unless the form included a submission URL
+                    // Use the provided submission url OR the submission URL included in the form OR the app's configured URL in that order of priority/precedence
                     int subIdx = c.getColumnIndex(InstanceColumns.SUBMISSION_URI);
-                    String urlString = c.isNull(subIdx)
+                    String urlString = completeDestinationUrl != null ? completeDestinationUrl : c.isNull(subIdx)
                             ? getServerSubmissionURL() : c.getString(subIdx).trim();
 
                     // add the deviceID to the request...
@@ -625,5 +627,9 @@ public class InstanceServerUploader extends InstanceUploader {
             return "";
         }
         return fileName.substring(dotIndex + 1).toLowerCase(Locale.ROOT);
+    }
+
+    public void setCompleteDestinationUrl(String completeDestinationUrl) {
+        this.completeDestinationUrl = completeDestinationUrl;
     }
 }
