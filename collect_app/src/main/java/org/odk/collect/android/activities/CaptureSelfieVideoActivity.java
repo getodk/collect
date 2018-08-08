@@ -188,7 +188,6 @@ public class CaptureSelfieVideoActivity extends Activity {
         super.onPause();
     }
 
-
     @Override
     protected void onResume() {
         super.onResume();

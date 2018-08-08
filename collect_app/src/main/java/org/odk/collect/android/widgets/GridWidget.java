@@ -189,7 +189,6 @@ public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
 
                             ImageView imageView = (ImageView) imageViews[i];
 
-
                             if (numColumns > 0) {
                                 int resizeHeight = (b.getHeight() * resizeWidth) / b.getWidth();
                                 b = Bitmap.createScaledBitmap(b, resizeWidth, resizeHeight, false);
@@ -338,7 +337,6 @@ public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
         addAnswerView(gridview);
     }
 
-
     @Override
     public IAnswerData getAnswer() {
         for (int i = 0; i < choices.length; ++i) {
@@ -349,7 +347,6 @@ public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
         }
         return null;
     }
-
 
     @Override
     public void clearAnswer() {

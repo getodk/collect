@@ -18,7 +18,6 @@ import org.odk.collect.android.logic.FormDetails;
 
 import java.util.HashMap;
 
-
 /**
  * @author Carl Hartung (carlhartung@gmail.com)
  */

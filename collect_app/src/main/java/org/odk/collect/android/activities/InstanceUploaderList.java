@@ -194,7 +194,6 @@ public class InstanceUploaderList extends InstanceListActivity implements
         listView.setItemsCanFocus(false);
         listView.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> uploadButton.setEnabled(areCheckedItems()));
 
-
         instanceSyncTask = new InstanceSyncTask();
         instanceSyncTask.setDiskSyncListener(this);
         instanceSyncTask.execute();

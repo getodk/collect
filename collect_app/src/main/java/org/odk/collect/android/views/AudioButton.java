@@ -105,7 +105,6 @@ public class AudioButton extends AppCompatImageButton {
             mediaPlayer = player;
         }
 
-
         public void playAudio(Context c) {
             Collect.getInstance().getActivityLogger().logInstanceAction(this,
                     "onClick.playAudioPrompt", selectionDesignator, index);

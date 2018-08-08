@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 
 import java.util.List;
 
-
 /**
  * An abstract base LocationClient class that provides some shared functionality for determining
  * whether or not certain Location providers are available.

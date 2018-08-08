@@ -347,7 +347,6 @@ public class GridMultiWidget extends QuestionWidget implements MultiChoiceWidget
         SpacesInUnderlyingValuesWarning.forQuestionWidget(this).renderWarningIfNecessary(items);
     }
 
-
     @Override
     public IAnswerData getAnswer() {
         List<Selection> vc = new ArrayList<>();
@@ -365,7 +364,6 @@ public class GridMultiWidget extends QuestionWidget implements MultiChoiceWidget
             return new SelectMultiData(vc);
         }
     }
-
 
     @Override
     public void clearAnswer() {

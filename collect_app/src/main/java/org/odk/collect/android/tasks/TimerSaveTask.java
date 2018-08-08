@@ -54,6 +54,4 @@ public class TimerSaveTask extends AsyncTask<TimerLogger.Event, Void, Void> {
         }
         return null;
     }
-
-
 }

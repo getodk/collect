@@ -532,7 +532,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         formLoaderTask.execute(formPath);
     }
 
-
     public Bundle getState() {
         return state;
     }
@@ -649,7 +648,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 return;
             }
         }
-
 
         switch (requestCode) {
 
@@ -884,7 +882,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
     }
 
-
     private void saveChosenImage(Uri selectedImage) {
         // Copy file to sdcard
         File instanceFile = getFormController().getInstanceFile();
@@ -926,7 +923,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             Timber.w(getString(R.string.image_not_saved));
         }
     }
-
 
     /**
      * Using contentResolver to get a file's extension by the uri returned from OnActivityResult.
