@@ -139,15 +139,8 @@ public class GeoPointMapActivity extends CollectAbstractActivity implements OnMa
         ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMapAsync(googleMap -> {
             setupMap(googleMap);
             locationClient.setListener(this);
+            locationClient.start();
         });
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Collect.getInstance().getActivityLogger().logOnStart(this);
-
-        locationClient.start();
     }
 
     @Override
