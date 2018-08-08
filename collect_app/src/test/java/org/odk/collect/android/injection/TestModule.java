@@ -7,6 +7,8 @@ import android.telephony.SmsManager;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.events.RxEventBus;
+import org.odk.collect.android.http.TestableCollectServerClient;
+import org.odk.collect.android.http.mock.MockHttpClientConnection;
 import org.odk.collect.android.injection.config.scopes.PerApplication;
 import org.odk.collect.android.tasks.sms.SmsSubmissionManager;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
@@ -57,6 +59,16 @@ public class TestModule {
     @Provides
     RxEventBus provideRxEventBus() {
         return new RxEventBus();
+    }
+
+    @Provides
+    MockHttpClientConnection provideMockHttpClientConnection() {
+        return new MockHttpClientConnection();
+    }
+
+    @Provides
+    TestableCollectServerClient provideTestCollectServerClient(MockHttpClientConnection httpClientConnection) {
+        return new TestableCollectServerClient(httpClientConnection);
     }
 
 }

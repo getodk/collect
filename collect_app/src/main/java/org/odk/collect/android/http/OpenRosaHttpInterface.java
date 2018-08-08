@@ -40,9 +40,9 @@ public interface OpenRosaHttpInterface {
     HttpGetResult get(@NonNull URI uri, @Nullable String contentType, @Nullable HttpCredentialsInterface credentials) throws Exception;
 
     /**
-     * Performs a HTTP Head request.
+     * Performs a Http Head request.
      *
-     * @param uri of which to perform a HTTP head
+     * @param uri of which to perform a Http head
      * @return HttpHeadResult containing status code and headers
      * @throws Exception a multitude of Exceptions such as IOException can be thrown
      */

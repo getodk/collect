@@ -3,22 +3,30 @@ package org.odk.collect.android.http;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-import org.odk.collect.android.http.mock.MockHttpClientConnection;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.injection.DaggerTestComponent;
+import org.odk.collect.android.injection.TestComponent;
 import org.odk.collect.android.utilities.DocumentFetchResult;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.RuntimeEnvironment;
+
+import javax.inject.Inject;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
 import static junit.framework.Assert.assertTrue;
 
-@RunWith(JUnit4.class)
+@RunWith(RobolectricTestRunner.class)
 public class CollectServerClientTest {
 
-    private TestableCollectServerClient collectServerClient;
+    @Inject
+    TestableCollectServerClient collectServerClient;
 
     @Before
     public void setup() {
-        collectServerClient = new TestableCollectServerClient(new MockHttpClientConnection());
+        TestComponent testComponent = DaggerTestComponent.builder().application(RuntimeEnvironment.application).build();
+        ((Collect) RuntimeEnvironment.application).setComponent(testComponent);
+        testComponent.inject(this);
     }
 
     @Test
