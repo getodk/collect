@@ -562,6 +562,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
     }
 
+    @Nullable
     private FormController getFormController() {
         return Collect.getInstance().getFormController();
     }
@@ -2107,8 +2108,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
     }
 
+    @Nullable
     private String getAbsoluteInstancePath() {
-        return getFormController().getInstanceFile().getAbsolutePath();
+        FormController formController = getFormController();
+        return formController != null ? formController.getAbsoluteInstancePath() : null;
     }
 
     /**

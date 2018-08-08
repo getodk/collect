@@ -158,6 +158,11 @@ public class FormController {
         this.instanceFile = instanceFile;
     }
 
+    @Nullable
+    public String getAbsoluteInstancePath() {
+        return instanceFile != null ? instanceFile.getAbsolutePath() : null;
+    }
+
     public void setIndexWaitingForData(FormIndex index) {
         indexWaitingForData = index;
     }
