@@ -55,6 +55,9 @@ public class ApplicationConstants {
         public static final String SUCCESS_KEY = "SUCCESSFUL";
         public static final String ERROR_REASON = "ERROR_MSG";
         public static final String FORM_ID = "FORM_ID";
+        public static final String USERNAME = "USERNAME";
+        public static final String PASSWORD = "PASSWORD";
+        public static final String URL = "URL";
     }
 
     public abstract static class FormModes {

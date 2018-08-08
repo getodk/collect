@@ -66,12 +66,10 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
 
     // maintain a list of what we've sent, in case we're interrupted by auth requests
     private HashMap<String, String> uploadedInstances;
-    private String url;
 
-    private String username, password;
-    private static final String KEY_USERNAME = "USERNAME";
-    private static final String KEY_PASSWORD = "PASSWORD";
-    private static final String KEY_URL = "URL";
+    private String url;
+    private String username;
+    private String password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,10 +98,10 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
             selectedInstanceIDs = savedInstanceState.getLongArray(TO_SEND);
 
             // Add optional authentication params
-            if (savedInstanceState.containsKey(KEY_URL) && savedInstanceState.containsKey(KEY_USERNAME) && savedInstanceState.containsKey(KEY_PASSWORD)) {
-                url = savedInstanceState.getString(KEY_URL);
-                username = savedInstanceState.getString(KEY_USERNAME);
-                password = savedInstanceState.getString(KEY_PASSWORD);
+            if (savedInstanceState.containsKey(ApplicationConstants.BundleKeys.URL) && savedInstanceState.containsKey(ApplicationConstants.BundleKeys.USERNAME) && savedInstanceState.containsKey(ApplicationConstants.BundleKeys.PASSWORD)) {
+                url = savedInstanceState.getString(ApplicationConstants.BundleKeys.URL);
+                username = savedInstanceState.getString(ApplicationConstants.BundleKeys.USERNAME);
+                password = savedInstanceState.getString(ApplicationConstants.BundleKeys.PASSWORD);
             }
         } else {
             // get instances to upload...
@@ -111,16 +109,16 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
             Bundle bundle = intent.getExtras();
             selectedInstanceIDs = intent.getLongArrayExtra(FormEntryActivity.KEY_INSTANCES);
 
-            if (bundle != null && bundle.containsKey(KEY_URL) && bundle.containsKey(KEY_USERNAME) && bundle.containsKey(KEY_PASSWORD)) {
-                url = intent.getStringExtra(KEY_URL);
+            if (bundle != null && bundle.containsKey(ApplicationConstants.BundleKeys.URL) && bundle.containsKey(ApplicationConstants.BundleKeys.USERNAME) && bundle.containsKey(ApplicationConstants.BundleKeys.PASSWORD)) {
+                url = intent.getStringExtra(ApplicationConstants.BundleKeys.URL);
 
                 // Remove the trailing //
                 while (url.endsWith("/")) {
                     url = url.substring(0, url.length() - 1);
                 }
 
-                username = intent.getStringExtra(KEY_USERNAME);
-                password = intent.getStringExtra(KEY_PASSWORD);
+                username = intent.getStringExtra(ApplicationConstants.BundleKeys.USERNAME);
+                password = intent.getStringExtra(ApplicationConstants.BundleKeys.PASSWORD);
             }
         }
 
@@ -183,9 +181,9 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
         outState.putLongArray(TO_SEND, ArrayUtils.toPrimitive(instancesToSend));
 
         if (url != null && username != null && password != null) {
-            outState.putString(KEY_URL, url);
-            outState.putString(KEY_USERNAME, username);
-            outState.putString(KEY_PASSWORD, password);
+            outState.putString(ApplicationConstants.BundleKeys.URL, url);
+            outState.putString(ApplicationConstants.BundleKeys.USERNAME, username);
+            outState.putString(ApplicationConstants.BundleKeys.PASSWORD, password);
         }
     }
 
