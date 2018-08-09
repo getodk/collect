@@ -86,6 +86,7 @@ public class CollectServerClient {
         }
 
         if (uri.getHost() == null) {
+            Timber.e("Invalid server URL (no hostname): %s", downloadUrl);
             throw new Exception("Invalid server URL (no hostname): " + downloadUrl);
         }
 
