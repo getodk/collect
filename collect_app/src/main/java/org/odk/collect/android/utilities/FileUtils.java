@@ -488,12 +488,10 @@ public class FileUtils {
     }
 
     public static byte[] read(File file) {
-        byte[] bytes = {};
-        try {
-            bytes = new byte[(int) file.length()];
-            InputStream is = new FileInputStream(file);
+        byte[] bytes = new byte[(int) file.length()];
+        try (InputStream is = new FileInputStream(file)) {
             is.read(bytes);
-            is.close();
+            return bytes;
         } catch (IOException e) {
             Timber.e(e);
         }

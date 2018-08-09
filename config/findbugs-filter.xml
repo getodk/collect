@@ -91,9 +91,6 @@
     <Match>
         <Bug pattern="OBL_UNSATISFIED_OBLIGATION" />
     </Match>
-    <Match>
-        <Bug pattern="OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE" />
-    </Match>
 
     <!-- Malicious code vulnerability -->
     <Match>
@@ -129,9 +126,6 @@
     </Match>
     <Match>
         <Bug pattern="INT_BAD_REM_BY_1" />
-    </Match>
-    <Match>
-        <Bug pattern="DLS_DEAD_LOCAL_STORE" />
     </Match>
     <Match>
         <Bug pattern="NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE" />
