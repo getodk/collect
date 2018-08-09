@@ -189,7 +189,6 @@ public class LabelWidget extends QuestionWidget {
             }
         }
 
-
         buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
 
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
@@ -200,12 +199,10 @@ public class LabelWidget extends QuestionWidget {
         SpacesInUnderlyingValuesWarning.forQuestionWidget(this).renderWarningIfNecessary(items);
     }
 
-
     @Override
     public void clearAnswer() {
         // Do nothing, no answers to clear
     }
-
 
     @Override
     public IAnswerData getAnswer() {

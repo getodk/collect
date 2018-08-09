@@ -1,6 +1,5 @@
 package org.odk.collect.android.utilities;
 
-
 import android.os.Build;
 import android.view.View;
 

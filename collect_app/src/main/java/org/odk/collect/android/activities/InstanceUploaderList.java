@@ -52,9 +52,6 @@ import org.odk.collect.android.tasks.sms.models.SmsSubmission;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.ToastUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -389,11 +386,6 @@ public class InstanceUploaderList extends InstanceListActivity implements
     }
 
     private void setupAdapter() {
-        List<Long> checkedInstances = new ArrayList();
-        for (long a : listView.getCheckedItemIds()) {
-            checkedInstances.add(a);
-        }
-
         listAdapter = new InstanceUploaderAdapter(this, null);
         listView.setAdapter(listAdapter);
         checkPreviouslyCheckedItems();

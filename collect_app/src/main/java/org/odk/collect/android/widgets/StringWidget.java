@@ -128,7 +128,6 @@ public class StringWidget extends QuestionWidget {
         return answerText.getText().toString();
     }
 
-
     @Override
     public void setFocus(Context context) {
         if (!readOnly) {
@@ -147,18 +146,15 @@ public class StringWidget extends QuestionWidget {
         }
     }
 
-
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         return !event.isAltPressed() && super.onKeyDown(keyCode, event);
     }
 
-
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
         answerText.setOnLongClickListener(l);
     }
-
 
     @Override
     public void cancelLongPress() {

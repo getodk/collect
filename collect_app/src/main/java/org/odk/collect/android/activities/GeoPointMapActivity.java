@@ -139,15 +139,8 @@ public class GeoPointMapActivity extends CollectAbstractActivity implements OnMa
         ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMapAsync(googleMap -> {
             setupMap(googleMap);
             locationClient.setListener(this);
+            locationClient.start();
         });
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Collect.getInstance().getActivityLogger().logOnStart(this);
-
-        locationClient.start();
     }
 
     @Override
@@ -183,7 +176,6 @@ public class GeoPointMapActivity extends CollectAbstractActivity implements OnMa
         finish();
     }
 
-
     public String getResultString(Location location) {
         return String.format("%s %s %s %s", location.getLatitude(), location.getLongitude(), location.getAltitude(), location.getAccuracy());
     }
@@ -207,7 +199,6 @@ public class GeoPointMapActivity extends CollectAbstractActivity implements OnMa
 
         markerOptions = new MarkerOptions();
         helper = new MapHelper(this, map);
-
 
         ImageButton acceptLocation = findViewById(R.id.accept_location);
 

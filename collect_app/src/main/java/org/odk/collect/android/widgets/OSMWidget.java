@@ -124,7 +124,6 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
         params.setMargins(35, 30, 30, 35);
         osmFileNameTextView.setLayoutParams(params);
 
-
         // finish complex layout
         LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);

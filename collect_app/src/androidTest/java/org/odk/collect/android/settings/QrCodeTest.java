@@ -47,7 +47,6 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SELECTED_GO
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SHOW_SPLASH;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
 
-
 @RunWith(AndroidJUnit4.class)
 public class QrCodeTest {
 
