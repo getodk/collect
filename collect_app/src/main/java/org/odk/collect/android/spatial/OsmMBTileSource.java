@@ -44,7 +44,6 @@ public class OsmMBTileSource extends BitmapTileSourceBase {
     public static final String COL_TILES_TILE_DATA = "tile_data";
 
     protected SQLiteDatabase database;
-    protected File archive;
 
     // Reasonable defaults ..
     public static final int MIN_ZOOM = 8;
@@ -59,11 +58,9 @@ public class OsmMBTileSource extends BitmapTileSourceBase {
     protected OsmMBTileSource(int minZoom,
                               int maxZoom,
                               int tileSizePixels,
-                              File file,
                               SQLiteDatabase db) {
         super("MBTiles", minZoom, maxZoom, tileSizePixels, ".png");
 
-        archive = file;
         database = db;
     }
 
@@ -105,7 +102,7 @@ public class OsmMBTileSource extends BitmapTileSourceBase {
         value = getInt(db, "SELECT MAX(zoom_level) FROM tiles;");
         int maxZoomLevel = value > -1 ? value : MAX_ZOOM;
 
-        return new OsmMBTileSource(minZoomLevel, maxZoomLevel, tileSize, file, db);
+        return new OsmMBTileSource(minZoomLevel, maxZoomLevel, tileSize, db);
     }
 
     protected static int getInt(SQLiteDatabase db, String sql) {

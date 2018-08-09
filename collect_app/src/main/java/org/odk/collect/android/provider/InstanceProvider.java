@@ -52,20 +52,14 @@ public class InstanceProvider extends ContentProvider {
     private static final UriMatcher URI_MATCHER;
     
     private InstancesDatabaseHelper getDbHelper() {
-        InstancesDatabaseHelper databaseHelper = null;
         // wrapper to test and reset/set the dbHelper based upon the attachment state of the device.
         try {
             Collect.createODKDirs();
         } catch (RuntimeException e) {
-            databaseHelper = null;
             return null;
         }
 
-        if (databaseHelper != null) {
-            return databaseHelper;
-        }
-        databaseHelper = new InstancesDatabaseHelper();
-        return databaseHelper;
+        return new InstancesDatabaseHelper();
     }
 
     @Override

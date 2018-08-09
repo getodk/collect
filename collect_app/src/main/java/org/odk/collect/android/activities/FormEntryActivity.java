@@ -2935,7 +2935,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     /**
      * Used whenever we need to show empty view and be able to recognize it from the code
      */
-    class EmptyView extends View {
+    static class EmptyView extends View {
 
         EmptyView(Context context) {
             super(context);

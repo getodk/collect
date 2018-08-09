@@ -192,7 +192,7 @@ public class SheetsHelper {
      * @author Shobhit Agarwal
      */
 
-    public class SheetsService {
+    public static class SheetsService {
         private final Sheets sheets;
 
         SheetsService(Sheets sheets) {
