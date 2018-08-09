@@ -1,17 +1,3 @@
-/*
- * Copyright (C) 2011 University of Washington
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
- * in compliance with the License. You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License
- * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
- * or implied. See the License for the specific language governing permissions and limitations under
- * the License.
- */
-
 package org.odk.collect.android.http;
 
 import android.net.Uri;
@@ -35,13 +21,6 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-/**
- * Common utility methods for managing the credentials associated with the
- * request context and constructing http context, client and request with the
- * proper parameters and OpenRosa headers.
- *
- * @author mitchellsundt@gmail.com
- */
 public class CollectServerClient {
 
     public static final String HTTP_CONTENT_TYPE_TEXT_XML = "text/xml";
@@ -53,10 +32,11 @@ public class CollectServerClient {
         this.httpInterface = httpInterface;
     }
 
-
     /**
-     * Common method for returning a parsed xml document given a url and the
-     * http context and client objects involved in the web connection.
+     * Gets an XML document for a given url
+     *
+     * @param urlString - url of the XML document
+     * @return DocumentFetchResult - an object that contains the results of the "get" operation
      */
     public DocumentFetchResult getXmlDocument(String urlString) {
 
@@ -86,7 +66,7 @@ public class CollectServerClient {
     }
 
     /**
-     * Creates a http connection and sets up an input stream.
+     * Creates a Http connection and input stream
      *
      * @param downloadUrl uri of the stream
      * @param contentType check the returned Mime Type to ensure it matches. "text/xml" causes a Hash to be calculated
