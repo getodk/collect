@@ -131,8 +131,5 @@
     <Match>
         <Bug pattern="SF_SWITCH_FALLTHROUGH" />
     </Match>
-    <Match>
-        <Bug pattern="REC_CATCH_EXCEPTION" />
-    </Match>
 
 </FindBugsFilter>

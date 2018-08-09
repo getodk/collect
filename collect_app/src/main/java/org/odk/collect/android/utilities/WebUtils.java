@@ -47,6 +47,7 @@ import org.opendatakit.httpclientandroidlib.impl.client.BasicAuthCache;
 import org.opendatakit.httpclientandroidlib.impl.client.HttpClientBuilder;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -337,62 +338,55 @@ public final class WebUtils {
                 return new DocumentFetchResult(error, 0);
             }
             // parse response
-            Document doc = null;
+            Document doc;
             String hash;
+            InputStream is = null;
+            InputStreamReader isr = null;
             try {
-                InputStream is = null;
-                InputStreamReader isr = null;
-                try {
-                    byte[] bytes = IOUtils.toByteArray(entity.getContent());
-                    is = new ByteArrayInputStream(bytes);
-                    hash = FileUtils.getMd5Hash(new ByteArrayInputStream(bytes));
-                    Header contentEncoding = entity.getContentEncoding();
-                    if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase(
-                            WebUtils.GZIP_CONTENT_ENCODING)) {
-                        is = new GZIPInputStream(is);
-                    }
-                    isr = new InputStreamReader(is, "UTF-8");
-                    doc = new Document();
-                    KXmlParser parser = new KXmlParser();
-                    parser.setInput(isr);
-                    parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES,
-                            true);
-                    doc.parse(parser);
-                    isr.close();
-                    isr = null;
-                } finally {
-                    if (isr != null) {
-                        try {
-                            // ensure stream is consumed...
-                            final long count = 1024L;
-                            while (isr.skip(count) == count) {
-                                // skipping to the end of the http entity
-                            }
-                        } catch (Exception e) {
-                            // no-op
-                            Timber.e(e);
-                        }
-                        try {
-                            isr.close();
-                        } catch (IOException e) {
-                            // no-op
-                            Timber.e(e, "Error closing input stream reader");
-                        }
-                    }
-                    if (is != null) {
-                        try {
-                            is.close();
-                        } catch (IOException e) {
-                            Timber.e(e, "Error closing inputstream");
-                            // no-op
-                        }
-                    }
+                byte[] bytes = IOUtils.toByteArray(entity.getContent());
+                is = new ByteArrayInputStream(bytes);
+                hash = FileUtils.getMd5Hash(new ByteArrayInputStream(bytes));
+                Header contentEncoding = entity.getContentEncoding();
+                if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase(
+                        WebUtils.GZIP_CONTENT_ENCODING)) {
+                    is = new GZIPInputStream(is);
                 }
-            } catch (Exception e) {
+                isr = new InputStreamReader(is, "UTF-8");
+                doc = new Document();
+                KXmlParser parser = new KXmlParser();
+                parser.setInput(isr);
+                parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES,
+                        true);
+                doc.parse(parser);
+                isr.close();
+                isr = null;
+            } catch (XmlPullParserException e) {
                 String error = "Parsing failed with " + e.getMessage()
                         + "while accessing " + u.toString();
                 Timber.e(error);
                 return new DocumentFetchResult(error, 0);
+            } finally {
+                if (isr != null) {
+                    // ensure stream is consumed...
+                    final long count = 1024L;
+                    while (isr.skip(count) == count) {
+                        // skipping to the end of the http entity
+                    }
+                    try {
+                        isr.close();
+                    } catch (IOException e) {
+                        // no-op
+                        Timber.e(e, "Error closing input stream reader");
+                    }
+                }
+                if (is != null) {
+                    try {
+                        is.close();
+                    } catch (IOException e) {
+                        Timber.e(e, "Error closing inputstream");
+                        // no-op
+                    }
+                }
             }
 
             boolean isOR = false;
@@ -419,7 +413,7 @@ public final class WebUtils {
                 }
             }
             return new DocumentFetchResult(doc, isOR, hash);
-        } catch (Exception e) {
+        } catch (IOException e) {
             String cause;
             Throwable c = e;
             while (c.getCause() != null) {
