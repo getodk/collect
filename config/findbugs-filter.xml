@@ -134,9 +134,6 @@
         <Bug pattern="DLS_DEAD_LOCAL_STORE" />
     </Match>
     <Match>
-        <Bug pattern="DMI_THREAD_PASSED_WHERE_RUNNABLE_EXPECTED" />
-    </Match>
-    <Match>
         <Bug pattern="NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE" />
     </Match>
     <Match>
