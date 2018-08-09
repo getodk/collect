@@ -94,9 +94,6 @@ public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
     View[] imageViews;
     AudioHandler[] audioHandlers;
 
-    // Whether to advance immediately after the image is clicked
-    boolean quickAdvance;
-
     @Nullable
     private AdvanceToNextListener listener;
 
@@ -133,7 +130,6 @@ public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
         for (int i = 0; i < items.size(); i++) {
             imageViews[i] = new ImageView(getContext());
         }
-        this.quickAdvance = quickAdvance;
 
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         int screenWidth = metrics.widthPixels;
