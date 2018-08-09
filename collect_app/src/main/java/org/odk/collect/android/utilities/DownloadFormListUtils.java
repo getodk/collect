@@ -18,7 +18,9 @@ package org.odk.collect.android.utilities;
 
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 
 import org.javarosa.xform.parse.XFormParser;
 import org.kxml2.kdom.Element;
@@ -56,16 +58,29 @@ public class DownloadFormListUtils {
     }
 
     public static HashMap<String, FormDetails> downloadFormList(boolean alwaysCheckMediaFiles) {
+        return downloadFormList(null, null, null, alwaysCheckMediaFiles);
+    }
+
+    public static HashMap<String, FormDetails> downloadFormList(@Nullable String url, @Nullable String username
+            , @Nullable String password, boolean alwaysCheckMediaFiles) {
         SharedPreferences settings =
                 PreferenceManager.getDefaultSharedPreferences(
                         Collect.getInstance().getBaseContext());
-        String downloadListUrl =
+
+        // Remove trailing '/'
+        while (url != null && url.endsWith("/")) {
+            url = url.substring(0, url.length() - 1);
+        }
+
+        String downloadListUrl = (url != null && username != null && password != null) ? url :
                 settings.getString(PreferenceKeys.KEY_SERVER_URL,
                         Collect.getInstance().getString(R.string.default_server_url));
         // NOTE: /formlist must not be translated! It is the well-known path on the server.
         String formListUrl = Collect.getInstance().getApplicationContext().getString(
                 R.string.default_odk_formlist);
-        String downloadPath = settings.getString(PreferenceKeys.KEY_FORMLIST_URL, formListUrl);
+
+        // When a url is supplied, we will use the default formList url
+        String downloadPath = (url != null && username != null && password != null) ? formListUrl : settings.getString(PreferenceKeys.KEY_FORMLIST_URL, formListUrl);
         downloadListUrl += downloadPath;
 
         // We populate this with available forms from the specified server.
@@ -73,11 +88,21 @@ public class DownloadFormListUtils {
         HashMap<String, FormDetails> formList = new HashMap<String, FormDetails>();
 
         // get shared HttpContext so that authentication and cookies are retained.
+        if (url != null && username != null && password != null) {
+            String host = Uri.parse(url).getHost();
+
+            if (host != null) {
+                WebUtils.addCredentials(username, password, host);
+            }
+        }
+
         HttpContext localContext = Collect.getInstance().getHttpContext();
         HttpClient httpclient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
 
         DocumentFetchResult result =
                 WebUtils.getXmlDocument(downloadListUrl, localContext, httpclient);
+
+        clearTemporaryCredentials(url);
 
         // If we can't get the document, return the error, cancel the task
         if (result.errorMessage != null) {
@@ -430,5 +455,15 @@ public class DownloadFormListUtils {
             }
         }
         return false;
+    }
+
+    private static void clearTemporaryCredentials(@Nullable String url) {
+        if (url != null) {
+            String host = Uri.parse(url).getHost();
+
+            if (host != null) {
+                WebUtils.clearHostCredentials(host);
+            }
+        }
     }
 }

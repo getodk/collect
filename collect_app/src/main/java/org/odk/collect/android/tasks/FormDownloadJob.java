@@ -63,6 +63,9 @@ public class FormDownloadJob extends Job {
     private static final String ACTION = "org.odk.collect.FORM_DOWNLOAD.PROGRESS";
     private String formId;
     private String transactionId;
+    private String url;
+    private String username;
+    private String password;
 
     public static final int PROGRESS_REQUEST_RECEIVED = 1;
     public static final int PROGRESS_REQUEST_SATISFIED = 2;
@@ -76,14 +79,20 @@ public class FormDownloadJob extends Job {
         if (bundle.containsKey(ApplicationConstants.BundleKeys.FORM_ID)) {
             formId = bundle.getString(ApplicationConstants.BundleKeys.FORM_ID);
 
+            if (bundle.containsKey(ApplicationConstants.BundleKeys.URL) && bundle.containsKey(ApplicationConstants.BundleKeys.USERNAME) && bundle.containsKey(ApplicationConstants.BundleKeys.PASSWORD)) {
+                url = bundle.getString(ApplicationConstants.BundleKeys.URL);
+                username = bundle.getString(ApplicationConstants.BundleKeys.USERNAME);
+                password = bundle.getString(ApplicationConstants.BundleKeys.PASSWORD);
+            }
+
             sendDownloadServiceBroadcastResult(getContext(), PROGRESS_REQUEST_RECEIVED, formId, true, null);
 
             if (!TextUtils.isEmpty(formId)) {
                 Timber.i("STARTED RUNNING JOB -> Download Form %s", formId);
 
                 int downloadRetries = 0;
-                while (downloadRetries < 2) {
-                    HashMap<String, FormDetails> formDetailsHashMap = DownloadFormListUtils.downloadFormList(false);
+                while (downloadRetries < 3) {
+                    HashMap<String, FormDetails> formDetailsHashMap = DownloadFormListUtils.downloadFormList(url, username, password, false);
 
                     if (formDetailsHashMap.containsKey(formId)) {
                         FormDetails formDetails = formDetailsHashMap.get(formId);
@@ -94,7 +103,7 @@ public class FormDownloadJob extends Job {
                         FormDownloader formDownloader = new FormDownloader();
                         HashMap<FormDetails, String> downloadedForms = formDownloader.downloadForms(formDetailsArrayList);
 
-                        if (downloadedForms.size() > 0 ) {
+                        if (downloadedForms.size() > 0) {
                             for(String message: downloadedForms.values()) {
                                 if (!message.equals(getContext().getString(R.string.success))) {
                                     sendDownloadServiceBroadcastResult(getContext(), PROGRESS_REQUEST_SATISFIED, formId, false, message);
@@ -109,10 +118,11 @@ public class FormDownloadJob extends Job {
                         }
                         break;
                     } else if (formDetailsHashMap.containsKey("dlauthrequired")) {
+                        // Retry once with available credentials
                         if (downloadRetries == 2) {
                             sendDownloadServiceBroadcastResult(getContext(), PROGRESS_REQUEST_SATISFIED, formId, false, "ODK Collect could not authenticate");
                         } else {
-                            reauthenticateAutomatically();
+                            reauthenticateAutomatically(url, username, password);
                         }
                     } else {
                         Timber.e("DOWNLOAD FORM FAILED BECAUSE FORM DOES NOT EXIST ON THE SERVER");
@@ -168,16 +178,21 @@ public class FormDownloadJob extends Job {
         context.sendBroadcast(intent);
     }
 
-    private void reauthenticateAutomatically() {
-        String username = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_USERNAME);
-        String password = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_PASSWORD);
-        String serverUrl = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_SERVER_URL);
+    private void reauthenticateAutomatically(@Nullable String serverUrl, @Nullable String username, @Nullable String password) {
+        if (url == null || username == null || password == null) {
+            username = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_USERNAME);
+            password = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_PASSWORD);
+            serverUrl = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_SERVER_URL);
+        }
 
         if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password) || TextUtils.isEmpty(serverUrl)) {
             return;
         }
 
         String host = Uri.parse(serverUrl).getHost();
-        WebUtils.addCredentials(username, password, host);
+
+        if (host != null) {
+            WebUtils.addCredentials(username, password, host);
+        }
     }
 }

@@ -49,20 +49,6 @@ public class FormDownloadService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Timber.i("RECEIVED FORM DOWNLOAD REQUEST IN SERVICE");
 
-        String formId = intent.getStringExtra(ApplicationConstants.BundleKeys.FORM_ID);
-        String transactionId = intent.getStringExtra(ApplicationConstants.BundleKeys.TRANSACTION_ID);
-
-        Bundle jobBundle = new Bundle();
-        jobBundle.putString(ApplicationConstants.BundleKeys.FORM_ID, formId);
-        jobBundle.putString(ApplicationConstants.BundleKeys.TRANSACTION_ID, transactionId);
-
-        // Start new Job immediately
-        new JobRequest.Builder(FormDownloadJob.TAG)
-                .startNow()
-                .setTransientExtras(jobBundle)
-                .build()
-                .schedule();
     }
 }

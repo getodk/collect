@@ -301,7 +301,7 @@ the specific language governing permissions and limitations under the License.
             </intent-filter>
         </receiver>
         <receiver
-            android:name=".services.FormDownloadRequestReceiver"
+            android:name=".receivers.FormDownloadRequestReceiver"
             android:enabled="true"
             android:exported="true">
 
