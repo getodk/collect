@@ -87,11 +87,6 @@
         <Bug pattern="RV_RETURN_VALUE_IGNORED" />
     </Match>
 
-    <!-- Experimental -->
-    <Match>
-        <Bug pattern="OBL_UNSATISFIED_OBLIGATION" />
-    </Match>
-
     <!-- Malicious code vulnerability -->
     <Match>
         <Bug pattern="EI_EXPOSE_REP" />

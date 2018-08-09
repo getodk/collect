@@ -55,7 +55,6 @@ import org.odk.collect.android.utilities.gdrive.DriveHelper;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -820,8 +819,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
 
         private void downloadFile(@NonNull String fileId, String fileName) throws IOException {
             File file = new File(Collect.FORMS_PATH + File.separator + fileName);
-            FileOutputStream fileOutputStream = new FileOutputStream(file);
-            driveHelper.downloadFile(fileId, fileOutputStream);
+            driveHelper.downloadFile(fileId, file);
         }
 
         @Override
