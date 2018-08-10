@@ -23,7 +23,7 @@ public class TileSourceFactory {
         usgsTopo = new OnlineTileSourceBase(
                 context.getString(R.string.openmap_usgs_topo),
                 0, 18, 256, "",
-                new String[] { "https://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer/tile/" }) {
+                new String[] {"https://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer/tile/" }) {
             @Override
             public String getTileURLString(MapTile tile) {
                 return getBaseUrl() + tile.getZoomLevel() + "/" + tile.getY() + "/" + tile.getX();

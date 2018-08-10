@@ -31,12 +31,12 @@ public class FormMetadataMigrator {
         Timber.i("migrate called, %s",
                 (migrationAlreadyDone ? "migration already done" : "will migrate"));
 
-        if (! migrationAlreadyDone) {
+        if (!migrationAlreadyDone) {
             SharedPreferences.Editor editor = sharedPreferences.edit();
 
             for (String[] pair : SOURCE_TARGET_VALUE_PAIRS) {
                 String migratingValue = sharedPreferences.getString(pair[0], "").trim();
-                if (! migratingValue.isEmpty()) {
+                if (!migratingValue.isEmpty()) {
                     Timber.i("Copying %s from %s to %s", migratingValue, pair[0], pair[1]);
                     editor.putString(pair[1], migratingValue);
                 }
