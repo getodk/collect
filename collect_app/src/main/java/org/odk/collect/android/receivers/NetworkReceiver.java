@@ -86,9 +86,9 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
             sendnetwork = true;
         }
 
-        return (currentNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI
+        return currentNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI
                 && sendwifi || currentNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE
-                && sendnetwork);
+                && sendnetwork;
     }
 
     /**

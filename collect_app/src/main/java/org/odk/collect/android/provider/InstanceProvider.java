@@ -305,7 +305,7 @@ public class InstanceProvider extends ContentProvider {
                         if (whereArgs == null || whereArgs.length == 0) {
                             newWhereArgs = new String[] {instanceId};
                         } else {
-                            newWhereArgs = new String[(whereArgs.length + 1)];
+                            newWhereArgs = new String[whereArgs.length + 1];
                             newWhereArgs[0] = instanceId;
                             System.arraycopy(whereArgs, 0, newWhereArgs, 1, whereArgs.length);
                         }
@@ -379,7 +379,7 @@ public class InstanceProvider extends ContentProvider {
                     if (whereArgs == null || whereArgs.length == 0) {
                         newWhereArgs = new String[] {instanceId};
                     } else {
-                        newWhereArgs = new String[(whereArgs.length + 1)];
+                        newWhereArgs = new String[whereArgs.length + 1];
                         newWhereArgs[0] = instanceId;
                         System.arraycopy(whereArgs, 0, newWhereArgs, 1, whereArgs.length);
                     }

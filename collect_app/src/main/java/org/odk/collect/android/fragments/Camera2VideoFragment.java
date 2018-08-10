@@ -503,7 +503,7 @@ public class Camera2VideoFragment extends Fragment
         mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
         mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         if (nextVideoAbsolutePath == null || nextVideoAbsolutePath.isEmpty()) {
-            nextVideoAbsolutePath = CameraUtils.getVideoFilePath((getActivity()));
+            nextVideoAbsolutePath = CameraUtils.getVideoFilePath(getActivity());
         }
         mediaRecorder.setOutputFile(nextVideoAbsolutePath);
         mediaRecorder.setVideoEncodingBitRate(10000000);

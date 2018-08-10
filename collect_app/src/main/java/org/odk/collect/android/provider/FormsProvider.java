@@ -534,7 +534,7 @@ public class FormsProvider extends ContentProvider {
         if (whereArgs == null || whereArgs.length == 0) {
             newWhereArgs = new String[] {formId};
         } else {
-            newWhereArgs = new String[(whereArgs.length + 1)];
+            newWhereArgs = new String[whereArgs.length + 1];
             newWhereArgs[0] = formId;
             System.arraycopy(whereArgs, 0, newWhereArgs, 1, whereArgs.length);
         }

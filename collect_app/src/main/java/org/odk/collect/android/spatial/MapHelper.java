@@ -300,7 +300,7 @@ public class MapHelper {
         return directory.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String filename) {
-                return (filename.toLowerCase(Locale.US).endsWith(".mbtiles"));
+                return filename.toLowerCase(Locale.US).endsWith(".mbtiles");
             }
         });
     }
