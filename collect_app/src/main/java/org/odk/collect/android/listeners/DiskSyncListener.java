@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.listeners;
 
-
 import android.support.annotation.NonNull;
 
 /**

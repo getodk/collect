@@ -104,7 +104,6 @@ public class GoogleMapsMapBoxOfflineTileProvider implements TileProvider, Closea
     // Public Methods
     // ------------------------------------------------------------------------
 
-
     public int getMinimumZoom() {
         return this.minimumZoom;
     }
@@ -112,7 +111,6 @@ public class GoogleMapsMapBoxOfflineTileProvider implements TileProvider, Closea
     public int getMaximumZoom() {
         return this.maximumZoom;
     }
-
 
     public LatLngBounds getBounds() {
         return this.bounds;

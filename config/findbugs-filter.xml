@@ -84,9 +84,6 @@
         <Bug pattern="NP_NULL_PARAM_DEREF" />
     </Match>
     <Match>
-        <Bug pattern="RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE" />
-    </Match>
-    <Match>
         <Bug pattern="RV_RETURN_VALUE_IGNORED" />
     </Match>
 
@@ -122,9 +119,6 @@
         <Bug pattern="SBSC_USE_STRINGBUFFER_CONCATENATION" />
     </Match>
     <Match>
-        <Bug pattern="SIC_INNER_SHOULD_BE_STATIC" />
-    </Match>
-    <Match>
         <Bug pattern="WMI_WRONG_MAP_ITERATOR" />
     </Match>
 
@@ -149,16 +143,7 @@
         <Bug pattern="SF_SWITCH_NO_DEFAULT" />
     </Match>
     <Match>
-        <Bug pattern="URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD" />
-    </Match>
-    <Match>
         <Bug pattern="SF_SWITCH_FALLTHROUGH" />
-    </Match>
-    <Match>
-        <Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NULL_VALUE" />
-    </Match>
-    <Match>
-        <Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE" />
     </Match>
     <Match>
         <Bug pattern="REC_CATCH_EXCEPTION" />

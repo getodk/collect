@@ -72,6 +72,4 @@ public class ResponseMessageParser {
 
         return message;
     }
-
-
 }

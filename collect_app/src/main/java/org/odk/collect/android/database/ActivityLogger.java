@@ -181,7 +181,6 @@ public final class ActivityLogger {
         return cachedXPathValue;
     }
 
-
     private void log(String object, String context, String action, String instancePath,
             FormIndex index, String param1, String param2) {
         if (!isOpen()) {

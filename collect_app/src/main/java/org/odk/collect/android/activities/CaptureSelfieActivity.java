@@ -76,7 +76,6 @@ public class CaptureSelfieActivity extends CollectAbstractActivity {
         }
     };
 
-
     @Override
     protected void onPause() {
         camera = null;

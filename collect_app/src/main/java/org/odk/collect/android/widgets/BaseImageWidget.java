@@ -214,7 +214,6 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
                 Timber.i("setting view path to: %s", uri.toString());
                 i.setDataAndType(uri, "image/*");
 
-
                 try {
                     getContext().startActivity(i);
                 } catch (ActivityNotFoundException e) {

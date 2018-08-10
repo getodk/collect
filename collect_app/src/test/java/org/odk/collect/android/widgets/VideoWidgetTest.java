@@ -1,6 +1,5 @@
 package org.odk.collect.android.widgets;
 
-
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -54,7 +53,6 @@ public class VideoWidgetTest extends FileWidgetTest<VideoWidget> {
     public Object createBinaryData(StringData answerData) {
         return uri;
     }
-
 
     @Before
     public void setUp() throws Exception {

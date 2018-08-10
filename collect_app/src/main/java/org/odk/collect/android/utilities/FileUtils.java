@@ -536,7 +536,6 @@ public class FileUtils {
         }
     }
 
-
     /**
      * With the FileProvider you have to manually grant and revoke read/write permissions to files you
      * are sharing. With this approach the access only lasts as long as the target activity on Api versions

@@ -105,7 +105,6 @@ public class Form {
             return this;
         }
 
-
         public Builder formFilePath(String formFilePath) {
             this.formFilePath = formFilePath;
             return this;
@@ -115,7 +114,6 @@ public class Form {
             this.submissionUri = submissionUri;
             return this;
         }
-
 
         public Builder base64RSAPublicKey(String base64RSAPublicKey) {
             this.base64RSAPublicKey = base64RSAPublicKey;
