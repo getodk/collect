@@ -211,9 +211,11 @@ public class MapHelper {
     public static String[] getOfflineLayerListWithTags() {
         File[] files = new File(Collect.OFFLINE_LAYERS).listFiles();
         ArrayList<String> layerNames = new ArrayList<>();
-        for (File f : files) {
-            if (f.isDirectory() && !f.isHidden()) {
-                layerNames.add(f.getName() + OFFLINE_LAYER_TAG);
+        if (files != null) {
+            for (File f : files) {
+                if (f.isDirectory() && !f.isHidden()) {
+                    layerNames.add(f.getName() + OFFLINE_LAYER_TAG);
+                }
             }
         }
         return layerNames.toArray(new String[0]);
