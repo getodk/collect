@@ -523,8 +523,6 @@ public class Camera2VideoFragment extends Fragment
         mediaRecorder.prepare();
     }
 
-
-
     private void startRecordingVideo() {
         if (null == cameraDevice || !textureView.isAvailable() || null == previewSize) {
             return;
