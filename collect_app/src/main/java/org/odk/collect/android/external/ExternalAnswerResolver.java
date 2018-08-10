@@ -18,7 +18,6 @@
 
 package org.odk.collect.android.external;
 
-
 import org.javarosa.core.model.Constants;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.QuestionDef;

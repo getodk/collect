@@ -165,11 +165,6 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
             return;
         }
 
-        if (newAudio == null) {
-            Timber.e("setBinaryData FAILED");
-            return;
-        }
-
         if (newAudio.exists()) {
             // Add the copy to the content provier
             ContentValues values = new ContentValues(6);

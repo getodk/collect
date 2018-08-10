@@ -76,7 +76,7 @@ public class FormDownloader {
         return e.getNamespace().equalsIgnoreCase(NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_MANIFEST);
     }
 
-    private class TaskCancelledException extends Exception {
+    private static class TaskCancelledException extends Exception {
         private final File file;
 
         TaskCancelledException(File file) {

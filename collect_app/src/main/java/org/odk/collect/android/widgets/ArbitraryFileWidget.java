@@ -115,11 +115,6 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget {
             return;
         }
 
-        if (newFile == null) {
-            Timber.e("setBinaryData FAILED");
-            return;
-        }
-
         if (newFile.exists()) {
             // when replacing an answer remove the current one.
             if (binaryName != null && !binaryName.equals(newFile.getName())) {

@@ -206,7 +206,6 @@ public class ListWidget extends QuestionWidget implements MultiChoiceWidget, OnC
                                 LayoutParams.WRAP_CONTENT);
                 headerParams.gravity = Gravity.CENTER_HORIZONTAL;
 
-
                 LinearLayout.LayoutParams buttonParams =
                         new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
                                 LayoutParams.WRAP_CONTENT);
@@ -240,7 +239,6 @@ public class ListWidget extends QuestionWidget implements MultiChoiceWidget, OnC
             }
         }
 
-
         buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
 
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
@@ -248,7 +246,6 @@ public class ListWidget extends QuestionWidget implements MultiChoiceWidget, OnC
         params.addRule(RelativeLayout.RIGHT_OF, center.getId());
         addView(buttonLayout, params);
     }
-
 
     @Override
     public void clearAnswer() {
@@ -259,7 +256,6 @@ public class ListWidget extends QuestionWidget implements MultiChoiceWidget, OnC
             }
         }
     }
-
 
     @Override
     public IAnswerData getAnswer() {
@@ -282,7 +278,6 @@ public class ListWidget extends QuestionWidget implements MultiChoiceWidget, OnC
         return -1;
     }
 
-
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (!isChecked) {
@@ -303,14 +298,12 @@ public class ListWidget extends QuestionWidget implements MultiChoiceWidget, OnC
         }
     }
 
-
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
         for (RadioButton r : buttons) {
             r.setOnLongClickListener(l);
         }
     }
-
 
     @Override
     public void cancelLongPress() {

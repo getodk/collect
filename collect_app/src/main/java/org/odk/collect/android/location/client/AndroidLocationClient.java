@@ -143,7 +143,6 @@ class AndroidLocationClient
         Timber.e("Can't set updateInterval on AndroidLocationClient. You should check canSetUpdateIntervals before calling this method.");
     }
 
-
     // LocationListener:
 
     @Override

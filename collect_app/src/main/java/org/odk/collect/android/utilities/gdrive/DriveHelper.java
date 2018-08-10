@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.utilities.gdrive;
 
-
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -270,14 +269,13 @@ public class DriveHelper {
         driveService.fetchFilesForCurrentPage(request, files);
     }
 
-
     /**
      * This class only makes API calls using the drives API and does not contain any business logic
      *
      * @author Shobhit Agarwal
      */
 
-    public class DriveService {
+    public static class DriveService {
         private final Drive drive;
 
         DriveService(Drive drive) {

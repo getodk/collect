@@ -54,20 +54,14 @@ public class FormsProvider extends ContentProvider {
     private static final UriMatcher URI_MATCHER;
 
     private FormsDatabaseHelper getDbHelper() {
-        FormsDatabaseHelper databaseHelper = null;
         // wrapper to test and reset/set the dbHelper based upon the attachment state of the device.
         try {
             Collect.createODKDirs();
         } catch (RuntimeException e) {
-            databaseHelper = null;
             return null;
         }
 
-        if (databaseHelper != null) {
-            return databaseHelper;
-        }
-        databaseHelper = new FormsDatabaseHelper();
-        return databaseHelper;
+        return new FormsDatabaseHelper();
     }
 
     @Override
@@ -141,7 +135,6 @@ public class FormsProvider extends ContentProvider {
         if (URI_MATCHER.match(uri) != FORMS) {
             throw new IllegalArgumentException("Unknown URI " + uri);
         }
-
 
         if (!checkIfStoragePermissionsGranted(getContext())) {
             return null;

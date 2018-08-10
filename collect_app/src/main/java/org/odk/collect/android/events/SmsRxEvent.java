@@ -21,7 +21,6 @@ public class SmsRxEvent extends RxEvent {
         lastUpdated = new Date();
     }
 
-
     public String getInstanceId() {
         return instanceId;
     }

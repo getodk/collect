@@ -32,7 +32,6 @@ import android.widget.ProgressBar;
 import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.SnackbarUtils;
 
-
 public abstract class FileManagerFragment extends AppListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private static final int LOADER_ID = 0x01;
     protected Button deleteButton;

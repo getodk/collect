@@ -65,14 +65,12 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
     public static final int SAVED_AND_EXIT = 504;
     public static final int ENCRYPTION_ERROR = 505;
 
-
     public SaveToDiskTask(Uri uri, boolean saveAndExit, boolean markCompleted, String updatedName) {
         this.uri = uri;
         save = saveAndExit;
         this.markCompleted = markCompleted;
         instanceName = updatedName;
     }
-
 
     /**
      * Initialize {@link FormEntryController} with {@link org.javarosa.core.model.FormDef} from binary or from XML. If
@@ -264,7 +262,6 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
         FormController formController = Collect.getInstance().getFormController();
 
         publishProgress(Collect.getInstance().getString(R.string.survey_saving_collecting_message));
-
 
         ByteArrayPayload payload = formController.getFilledInFormXml();
         // write out xml
