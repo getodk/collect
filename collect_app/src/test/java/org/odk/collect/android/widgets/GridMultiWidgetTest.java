@@ -52,7 +52,7 @@ public class GridMultiWidgetTest extends GeneralSelectMultiWidgetTest<GridMultiW
         // Make sure at least one item is selected, so we're not just retesting the
         // null answer case:
         if (!atLeastOneSelected) {
-            int randomIndex = (Math.abs(random.nextInt()) % widget.selected.length);
+            int randomIndex = Math.abs(random.nextInt()) % widget.selected.length;
 
             widget.selected[randomIndex] = true;
             SelectChoice selectChoice = selectChoices.get(randomIndex);

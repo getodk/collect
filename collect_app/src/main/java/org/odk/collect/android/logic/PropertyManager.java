@@ -66,7 +66,7 @@ public class PropertyManager implements IPropertyManager {
         return "Property Manager";
     }
 
-    private class IdAndPrefix {
+    private static class IdAndPrefix {
         String id;
         String prefix;
 
@@ -104,7 +104,7 @@ public class PropertyManager implements IPropertyManager {
         String scheme = null;
 
         if (deviceId != null) {
-            if ((deviceId.contains("*") || deviceId.contains("000000000000000"))) {
+            if (deviceId.contains("*") || deviceId.contains("000000000000000")) {
                 deviceId = Settings.Secure.getString(context.getContentResolver(), androidIdName);
                 scheme = androidIdName;
             } else {

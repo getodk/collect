@@ -36,7 +36,7 @@ public class FileUtil {
 
         while (!done) {
             final String line = reader.readLine();
-            done = (line == null);
+            done = line == null;
 
             if (line != null) {
                 stringBuilder.append(line);

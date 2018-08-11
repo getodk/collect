@@ -253,7 +253,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
         ConnectivityManager connMgr =
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        return (networkInfo != null && networkInfo.isConnected());
+        return networkInfo != null && networkInfo.isConnected();
     }
 
     @Override

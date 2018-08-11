@@ -17,6 +17,7 @@ limitations under the License.
  */
 
 import android.app.Activity;
+import android.content.Context;
 import android.hardware.Camera;
 import android.view.Surface;
 
@@ -102,5 +103,11 @@ public class CameraUtils {
         } catch (IOException e) {
             Timber.e(e);
         }
+    }
+
+    public static String getVideoFilePath(Context context) {
+        final File dir = context.getExternalFilesDir(null);
+        return (dir == null ? "" : (dir.getAbsolutePath() + "/"))
+                + System.currentTimeMillis() + ".mp4";
     }
 }
