@@ -463,6 +463,8 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                         }).create();
 
                 showDialog(alertDialog, getActivity());
+            } else {
+                continueOnBackPressed();
             }
         } else {
             continueOnBackPressed();
