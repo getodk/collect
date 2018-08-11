@@ -491,7 +491,6 @@ public class FileUtils {
         byte[] bytes = new byte[(int) file.length()];
         try (InputStream is = new FileInputStream(file)) {
             is.read(bytes);
-            return bytes;
         } catch (IOException e) {
             Timber.e(e);
         }
