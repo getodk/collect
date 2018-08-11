@@ -72,8 +72,8 @@ public class SmsSender {
             if (!PhoneNumberUtils.isGlobalPhoneNumber(gateway)) {
                 SmsRxEvent event = new SmsRxEvent(instanceId, SmsService.RESULT_INVALID_GATEWAY);
                 eventBus.post(event);
-                smsService.updateInstanceStatusFailedText(instanceId,event);
-                submissionManager.updateMessageStatus(SmsService.RESULT_INVALID_GATEWAY,instanceId,message.getId());
+                smsService.updateInstanceStatusFailedText(instanceId, event);
+                submissionManager.updateMessageStatus(SmsService.RESULT_INVALID_GATEWAY, instanceId, message.getId());
                 return false;
             }
 

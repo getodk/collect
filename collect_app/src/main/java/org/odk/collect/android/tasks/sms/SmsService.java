@@ -389,6 +389,9 @@ public class SmsService {
                 case RESULT_SUBMISSION_CANCELED:
                     return new SimpleDateFormat(context.getString(R.string.sms_last_submission_on_date_at_time),
                             Locale.getDefault()).format(date);
+                case RESULT_INVALID_GATEWAY:
+                    return new SimpleDateFormat(context.getString(R.string.sms_no_number),
+                            Locale.getDefault()).format(date);
                 case RESULT_ENCRYPTED:
                     return context.getString(R.string.sms_encrypted_message);
 
