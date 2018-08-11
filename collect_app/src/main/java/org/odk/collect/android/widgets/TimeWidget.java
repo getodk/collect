@@ -127,7 +127,7 @@ public class TimeWidget extends QuestionWidget implements ButtonWidget, TimePick
         if (getFormEntryPrompt().getAnswerValue() == null) {
             clearAnswer();
         } else {
-            Date date = ((Date) getFormEntryPrompt().getAnswerValue().getValue());
+            Date date = (Date) getFormEntryPrompt().getAnswerValue().getValue();
 
             DateTime dateTime = new DateTime(date);
             updateTime(dateTime, true);

@@ -29,7 +29,7 @@ public class FormMetadataMigrator {
     public static void migrate(SharedPreferences sharedPreferences) {
         boolean migrationAlreadyDone = sharedPreferences.getBoolean(KEY_METADATA_MIGRATED, false);
         Timber.i("migrate called, %s",
-                (migrationAlreadyDone ? "migration already done" : "will migrate"));
+                migrationAlreadyDone ? "migration already done" : "will migrate");
 
         if (!migrationAlreadyDone) {
             SharedPreferences.Editor editor = sharedPreferences.edit();

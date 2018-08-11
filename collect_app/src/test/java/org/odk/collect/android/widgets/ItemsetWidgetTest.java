@@ -148,7 +148,7 @@ public class ItemsetWidgetTest extends QuestionWidgetTest<ItemsetWidget, StringD
         ItemsetWidget widget = getWidget();
         assertNull(widget.getAnswer());
 
-        int randomIndex = (Math.abs(random.nextInt()) % widget.getChoiceCount());
+        int randomIndex = Math.abs(random.nextInt()) % widget.getChoiceCount();
         widget.setChoiceSelected(randomIndex, true);
 
         String selectedChoice = choices.get(Integer.toString(randomIndex));

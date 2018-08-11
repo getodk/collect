@@ -1261,7 +1261,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     public CharSequence filter(CharSequence source, int start,
                                                int end, Spanned dest, int dstart, int dend) {
                         for (int i = start; i < end; i++) {
-                            if (Character.getType((source.charAt(i))) == Character.CONTROL) {
+                            if (Character.getType(source.charAt(i)) == Character.CONTROL) {
                                 return "";
                             }
                         }
@@ -1381,8 +1381,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                             .getGroupsForCurrentIndex();
                     odkView = new ODKView(this, prompts, groups, advancingPage);
                     Timber.i("Created view for group %s %s",
-                            (groups.length > 0 ? groups[groups.length - 1].getLongText() : "[top]"),
-                            (prompts.length > 0 ? prompts[0].getQuestionText() : "[no question]"));
+                            groups.length > 0 ? groups[groups.length - 1].getLongText() : "[top]",
+                            prompts.length > 0 ? prompts[0].getQuestionText() : "[no question]");
                 } catch (RuntimeException e) {
                     Timber.e(e);
                     // this is badness to avoid a crash.

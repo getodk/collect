@@ -250,6 +250,7 @@
         <module name="InterfaceIsType" />
         <!--<module name="MethodLength" />-->
         <module name="WhitespaceAfter" />
+        <module name="UnnecessaryParentheses" />
         <module name="RedundantModifier" />
         <module name="HideUtilityClassConstructor" />
     </module>
