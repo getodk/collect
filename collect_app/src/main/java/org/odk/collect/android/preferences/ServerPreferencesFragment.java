@@ -341,7 +341,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                     }
 
                     preference.setSummary(username);
-                    clearCachedCrendentials();
+                    clearCachedCredentials();
 
                     // To ensure we update current credentials in CredentialsProvider
                     credentialsHaveChanged = true;
@@ -358,7 +358,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                     }
 
                     maskPasswordSummary(pw);
-                    clearCachedCrendentials();
+                    clearCachedCredentials();
 
                     // To ensure we update current credentials in CredentialsProvider
                     credentialsHaveChanged = true;
@@ -407,7 +407,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                 : "");
     }
 
-    private void clearCachedCrendentials() {
+    private void clearCachedCredentials() {
         String server = (String) GeneralSharedPreferences
                 .getInstance().get(PreferenceKeys.KEY_SERVER_URL);
         Uri u = Uri.parse(server);
