@@ -68,12 +68,14 @@ public final class InstancesDaoHelper {
     }
 
     public static Uri getLastInstanceUri(String path) {
-        try (Cursor c = new InstancesDao().getInstancesCursorForFilePath(path)) {
-            if (c != null && c.getCount() > 0) {
-                // should only be one...
-                c.moveToFirst();
-                String id = c.getString(c.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID));
-                return Uri.withAppendedPath(InstanceProviderAPI.InstanceColumns.CONTENT_URI, id);
+        if (path != null) {
+            try (Cursor c = new InstancesDao().getInstancesCursorForFilePath(path)) {
+                if (c != null && c.getCount() > 0) {
+                    // should only be one...
+                    c.moveToFirst();
+                    String id = c.getString(c.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID));
+                    return Uri.withAppendedPath(InstanceProviderAPI.InstanceColumns.CONTENT_URI, id);
+                }
             }
         }
         return null;
@@ -81,9 +83,11 @@ public final class InstancesDaoHelper {
 
     public static boolean isInstanceAvailable(String path) {
         boolean isAvailable = false;
-        try (Cursor c = new InstancesDao().getInstancesCursorForFilePath(path)) {
-            if (c != null) {
-                isAvailable = c.getCount() > 0;
+        if (path != null) {
+            try (Cursor c = new InstancesDao().getInstancesCursorForFilePath(path)) {
+                if (c != null) {
+                    isAvailable = c.getCount() > 0;
+                }
             }
         }
         return isAvailable;
