@@ -515,7 +515,7 @@ public class GeoTraceGoogleMapActivity extends CollectAbstractActivity implement
         Long timeDelay;
         TimeUnit timeUnitsValue;
         if (units.equals(getString(R.string.minutes))) {
-            timeDelay = Long.parseLong(delay) * (60);
+            timeDelay = Long.parseLong(delay) * 60;
             timeUnitsValue = TimeUnit.SECONDS;
 
         } else {

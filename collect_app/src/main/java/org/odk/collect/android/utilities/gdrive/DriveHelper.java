@@ -275,7 +275,7 @@ public class DriveHelper {
      * @author Shobhit Agarwal
      */
 
-    public class DriveService {
+    public static class DriveService {
         private final Drive drive;
 
         DriveService(Drive drive) {

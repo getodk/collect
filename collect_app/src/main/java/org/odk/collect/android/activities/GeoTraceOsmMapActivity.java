@@ -617,7 +617,7 @@ public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements I
         Long timeDelay;
         TimeUnit timeUnitsValue;
         if (units.equals(getString(R.string.minutes))) {
-            timeDelay = Long.parseLong(delay) * (60); //Convert minutes to seconds
+            timeDelay = Long.parseLong(delay) * 60; //Convert minutes to seconds
             timeUnitsValue = TimeUnit.SECONDS;
         } else {
             //in Seconds

@@ -43,6 +43,8 @@ import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.http.injection.DaggerHttpComponent;
 import org.odk.collect.android.preferences.filters.ControlCharacterFilter;
 import org.odk.collect.android.preferences.filters.WhitespaceFilter;
+import org.odk.collect.android.utilities.AuthDialogUtility;
+import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.Validator;
@@ -146,15 +148,11 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         smsGatewayPreference.getEditText().setFilters(
                 new InputFilter[]{new ControlCharacterFilter()});
 
-        String transportSetting = (String) GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE);
+        Transport transport = Transport.fromPreference(GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE));
 
-        if (transportSetting.equals(getString(R.string.transport_type_value_internet))) {
-            smsGatewayPreference.setEnabled(false);
-            smsPreferenceCategory.setEnabled(false);
-        } else if (transportSetting.equals(getString(R.string.transport_type_value_sms))) {
-            smsGatewayPreference.setEnabled(true);
-            smsPreferenceCategory.setEnabled(true);
-        }
+        boolean smsEnabled = !transport.equals(Transport.Internet);
+        smsGatewayPreference.setEnabled(smsEnabled);
+        smsPreferenceCategory.setEnabled(smsEnabled);
     }
 
     private Preference.OnPreferenceChangeListener createTransportChangeListener() {
@@ -167,15 +165,18 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                 if (!newValue.equals(oldValue)) {
                     pref.setValue(stringValue);
 
-                    if (newValue.equals(getString(R.string.transport_type_value_internet))) {
-                        smsGatewayPreference.setEnabled(true);
-                        smsGatewayPreference.setEnabled(false);
-                        smsPreferenceCategory.setEnabled(false);
+                    Transport transport = Transport.fromPreference(newValue);
+
+                    boolean smsEnabled = !transport.equals(Transport.Internet);
+                    smsGatewayPreference.setEnabled(smsEnabled);
+                    smsPreferenceCategory.setEnabled(smsEnabled);
+
+                    if (transport.equals(Transport.Internet)) {
                         transportPreference.setSummary(R.string.transport_type_internet);
-                    } else if (newValue.equals(getString(R.string.transport_type_value_sms))) {
-                        smsGatewayPreference.setEnabled(true);
-                        smsPreferenceCategory.setEnabled(true);
+                    } else if (transport.equals(Transport.Sms)) {
                         transportPreference.setSummary(R.string.transport_type_sms);
+                    } else {
+                        transportPreference.setSummary(R.string.transport_type_both);
                     }
                 }
             }
@@ -230,12 +231,13 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         accountsManager.disableAutoChooseAccount();
 
         selectedGoogleAccountPreference.setSummary(accountsManager.getSelectedAccount());
-        selectedGoogleAccountPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
+        selectedGoogleAccountPreference.setOnPreferenceClickListener(preference -> {
+            if (PlayServicesUtil.isGooglePlayServicesAvailable(getActivity())) {
                 accountsManager.chooseAccount();
-                return true;
+            } else {
+                PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(getActivity());
             }
+            return true;
         });
     }
 
