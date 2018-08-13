@@ -87,14 +87,6 @@
         <Bug pattern="RV_RETURN_VALUE_IGNORED" />
     </Match>
 
-    <!-- Experimental -->
-    <Match>
-        <Bug pattern="OBL_UNSATISFIED_OBLIGATION" />
-    </Match>
-    <Match>
-        <Bug pattern="OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE" />
-    </Match>
-
     <!-- Malicious code vulnerability -->
     <Match>
         <Bug pattern="EI_EXPOSE_REP" />
@@ -131,12 +123,6 @@
         <Bug pattern="INT_BAD_REM_BY_1" />
     </Match>
     <Match>
-        <Bug pattern="DLS_DEAD_LOCAL_STORE" />
-    </Match>
-    <Match>
-        <Bug pattern="DMI_THREAD_PASSED_WHERE_RUNNABLE_EXPECTED" />
-    </Match>
-    <Match>
         <Bug pattern="NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE" />
     </Match>
     <Match>
@@ -144,9 +130,6 @@
     </Match>
     <Match>
         <Bug pattern="SF_SWITCH_FALLTHROUGH" />
-    </Match>
-    <Match>
-        <Bug pattern="REC_CATCH_EXCEPTION" />
     </Match>
 
 </FindBugsFilter>

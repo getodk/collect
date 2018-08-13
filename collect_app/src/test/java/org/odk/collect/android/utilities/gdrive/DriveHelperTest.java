@@ -12,7 +12,6 @@ import org.mockito.Mock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 import static junit.framework.Assert.assertEquals;
@@ -22,7 +21,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.clearInvocations;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -68,10 +66,10 @@ public class DriveHelperTest {
     @Test
     public void downloadFileTest() throws IOException {
         String fileId = "some_file_id";
-        FileOutputStream fileOutputStream = mock(FileOutputStream.class);
+        java.io.File file = new java.io.File(fileId);
 
-        driveHelper.downloadFile(fileId, fileOutputStream);
-        verify(mockedDriveService, times(1)).downloadFile(fileId, fileOutputStream);
+        driveHelper.downloadFile(fileId, file);
+        verify(mockedDriveService, times(1)).downloadFile(fileId, file);
     }
 
     @Test
