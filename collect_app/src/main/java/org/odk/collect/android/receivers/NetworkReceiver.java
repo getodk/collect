@@ -17,8 +17,6 @@ import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
-import org.odk.collect.android.http.CollectServerClient;
-import org.odk.collect.android.http.injection.DaggerHttpComponent;
 import org.odk.collect.android.tasks.ServerPollingJob;
 import org.odk.collect.android.utilities.IconUtils;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
@@ -36,8 +34,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import javax.inject.Inject;
-
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_SEND;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORMS_UPLOADED_NOTIFICATION;
 
@@ -48,12 +44,6 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
     InstanceServerUploader instanceServerUploader;
 
     InstanceGoogleSheetsUploader instanceGoogleSheetsUploader;
-
-    @Inject CollectServerClient collectServerClient;
-
-    public NetworkReceiver() {
-        DaggerHttpComponent.builder().build().inject(this);
-    }
 
     @Override
     public void onReceive(Context context, Intent intent) {
