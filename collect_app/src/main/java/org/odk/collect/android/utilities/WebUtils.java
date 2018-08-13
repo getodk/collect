@@ -282,7 +282,7 @@ public final class WebUtils {
             Timber.i(e, "Error converting URL %s to uri", urlString);
             return new DocumentFetchResult(e.getLocalizedMessage()
                     // + app.getString(R.string.while_accessing) + urlString);
-                    + ("while accessing") + urlString, 0);
+                    + "while accessing" + urlString, 0);
         }
 
         if (u.getHost() == null) {

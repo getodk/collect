@@ -41,7 +41,7 @@ public class TimerLogger {
         DELETE_REPEAT       // Delete a repeat group
     }
 
-    public class Event {
+    public static class Event {
 
         long start;
         EventTypes eventType;

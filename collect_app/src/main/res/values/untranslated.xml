@@ -16,6 +16,7 @@ the specific language governing permissions and limitations under the License. -
     <string name="default_odk_submission" translatable="false">/submission</string>
     <string name="transport_type_value_internet" translatable="false">internet</string>
     <string name="transport_type_value_sms" translatable="false">sms</string>
+    <string name="transport_type_value_both" translatable="false">both</string>
     <string name="app_url" translatable="false">http://opendatakit.org</string>
     <string name="never_value" translatable="false">never</string>
     <string name="every_fifteen_minutes_value" translatable="false">every_fifteen_minutes</string>

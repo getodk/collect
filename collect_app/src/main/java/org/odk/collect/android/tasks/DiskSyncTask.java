@@ -228,7 +228,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
         Cursor c = null;
         try {
             c = formsDao.getFormsCursorForFormFilePath(formDefFile.getAbsolutePath());
-            return (c == null || c.getCount() > 0);
+            return c == null || c.getCount() > 0;
         } finally {
             if (c != null) {
                 c.close();
