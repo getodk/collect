@@ -420,7 +420,6 @@
   <string name="sort_by_status_asc">По статусу, финализированные сначала</string>
   <string name="sort_by_status_desc">По статусу, \"в работе\" сначала</string>
   <string name="sort_the_list">Сортировать список</string>
-  <string name="request_permissions_google_account">ODK Collect требуется доступ к вашему аккаунту Google, чтобы получать бланки опросников и отправлять выполненые опросы.</string>
   <string name="filter_the_list">Фильтровать список</string>
   <string name="language">Язык</string>
   <string name="google_auth_io_exception_msg">Не удалось вызвать API. Если была запущена локальная сборка, пожалуйста, обратитесь к документации проекта.</string>
