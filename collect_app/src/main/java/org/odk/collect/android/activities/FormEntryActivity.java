@@ -20,6 +20,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -200,7 +202,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     private static final int PROGRESS_DIALOG = 1;
     private static final int SAVING_DIALOG = 2;
-    private static final int SAVING_IMAGE_DIALOG = 3;
 
     private boolean autoSaved;
     private boolean allowMovingBackwards;
@@ -749,13 +750,25 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             case RequestCodes.IMAGE_CHOOSER:
                 /*
                  * We have a saved image somewhere, but we really want it to be in:
-                 * /sdcard/odk/instances/[current instnace]/something.jpg so we move
+                 * /sdcard/odk/instances/[current instance]/something.jpg so we move
                  * it there before inserting it into the content provider. Once the
                  * android image capture bug gets fixed, (read, we move on from
                  * Android 1.6) we want to handle images the audio and video
                  */
 
-                showDialog(SAVING_IMAGE_DIALOG);
+                //for API 16 and lower
+                int orientation = this.getResources().getConfiguration().orientation;
+                if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                } else {
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                }
+
+                progressDialog = new ProgressDialog(this);
+                progressDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+                progressDialog.setMessage(getString(R.string.please_wait));
+                progressDialog.setCancelable(false);
+                progressDialog.show();
                 Runnable runnable = () -> saveChosenImage(intent.getData());
                 new Thread(runnable).start();
 
@@ -860,6 +873,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     }
                     saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                     refreshCurrentView();
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
                 });
             } else {
                 runOnUiThread(new Runnable() {
@@ -898,23 +912,24 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     FileUtils.copyFile(chosenImage, newImage);
                     ImageConverter.execute(newImage.getPath(), getWidgetWaitingForBinaryData(), this);
                     runOnUiThread(() -> {
-                        dismissDialog(SAVING_IMAGE_DIALOG);
+                        progressDialog.dismiss();
                         if (getCurrentViewIfODKView() != null) {
                             getCurrentViewIfODKView().setBinaryData(newImage);
                         }
                         saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                         refreshCurrentView();
+                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
                     });
                 } else {
                     runOnUiThread(() -> {
-                        dismissDialog(SAVING_IMAGE_DIALOG);
+                        progressDialog.dismiss();
                         Timber.e("Could not receive chosen image");
                         ToastUtils.showShortToastInMiddle(R.string.error_occured);
                     });
                 }
             } catch (GDriveConnectionException e) {
                 runOnUiThread(() -> {
-                    dismissDialog(SAVING_IMAGE_DIALOG);
+                    progressDialog.dismiss();
                     Timber.e("Could not receive chosen image due to connection problem");
                     ToastUtils.showLongToastInMiddle(R.string.gdrive_connection_exception);
                 });
@@ -2295,14 +2310,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         cancelSaveToDiskTask();
                     }
                 });
-                return progressDialog;
-
-            case SAVING_IMAGE_DIALOG:
-                progressDialog = new ProgressDialog(this);
-                progressDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-                progressDialog.setMessage(getString(R.string.please_wait));
-                progressDialog.setCancelable(false);
-
                 return progressDialog;
         }
         return null;
