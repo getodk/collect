@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2009 University of Washington
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -98,7 +99,9 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
             selectedInstanceIDs = savedInstanceState.getLongArray(TO_SEND);
 
             // Add optional authentication params
-            if (savedInstanceState.containsKey(ApplicationConstants.BundleKeys.URL) && savedInstanceState.containsKey(ApplicationConstants.BundleKeys.USERNAME) && savedInstanceState.containsKey(ApplicationConstants.BundleKeys.PASSWORD)) {
+            if (savedInstanceState.containsKey(ApplicationConstants.BundleKeys.URL)
+                    && savedInstanceState.containsKey(ApplicationConstants.BundleKeys.USERNAME)
+                    && savedInstanceState.containsKey(ApplicationConstants.BundleKeys.PASSWORD)) {
                 url = savedInstanceState.getString(ApplicationConstants.BundleKeys.URL);
                 username = savedInstanceState.getString(ApplicationConstants.BundleKeys.USERNAME);
                 password = savedInstanceState.getString(ApplicationConstants.BundleKeys.PASSWORD);
@@ -109,7 +112,9 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
             Bundle bundle = intent.getExtras();
             selectedInstanceIDs = intent.getLongArrayExtra(FormEntryActivity.KEY_INSTANCES);
 
-            if (bundle != null && bundle.containsKey(ApplicationConstants.BundleKeys.URL) && bundle.containsKey(ApplicationConstants.BundleKeys.USERNAME) && bundle.containsKey(ApplicationConstants.BundleKeys.PASSWORD)) {
+            if (bundle != null && bundle.containsKey(ApplicationConstants.BundleKeys.URL)
+                    && bundle.containsKey(ApplicationConstants.BundleKeys.USERNAME)
+                    && bundle.containsKey(ApplicationConstants.BundleKeys.PASSWORD)) {
                 url = intent.getStringExtra(ApplicationConstants.BundleKeys.URL);
 
                 // Remove the trailing //
@@ -147,7 +152,8 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
             showDialog(PROGRESS_DIALOG);
             instanceServerUploader = new InstanceServerUploader();
 
-            // URL, username & password should always be available in case we are to override the default settings
+            // The 3 details - custom URL, username & password passed through the intent should be available if we are to override the default settings
+            // If one of them lacks (in this case it's a null) then we do not override the form or device settings during submission
             if (url != null && username != null && password != null) {
                 instanceServerUploader.setCompleteDestinationUrl(url + Collect.getInstance().getString(R.string.default_odk_submission));
             }
