@@ -4,6 +4,10 @@
     <!--Dark Theme-->
     <style name="DarkAppTheme" parent="BaseDarkAppTheme.Collect" />
 
+    <style name="FormEntryActivityDarkTheme" parent="DarkAppTheme">
+        <item name="android:textDirection" tools:targetApi="17">firstStrong</item>
+    </style>
+
     <style name="BaseDarkAppTheme.Collect" parent="BaseDarkAppTheme" />
 
     <style name="BaseDarkAppTheme" parent="Theme.AppCompat.NoActionBar">
@@ -38,6 +42,10 @@
 
     <!--Light Theme-->
     <style name="LightAppTheme" parent="BaseLightAppTheme.Collect" />
+
+    <style name="FormEntryActivityLightTheme" parent="LightAppTheme">
+        <item name="android:textDirection" tools:targetApi="17">firstStrong</item>
+    </style>
 
     <style name="BaseLightAppTheme.Collect" parent="BaseLightAppTheme" />
 
