@@ -51,10 +51,7 @@ public class PreferencesActivity extends CollectAbstractActivity {
         Collect.getInstance().initProperties();
     }
 
-    /**
-     * If the onBackPressedListener is set then onBackPressed
-     * is delegated to it.
-     */
+    // If the onBackPressedListener is set then onBackPressed is delegated to it.
     @Override
     public void onBackPressed() {
         if (onBackPressedListener != null) {

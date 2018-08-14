@@ -17,8 +17,8 @@
 package org.odk.collect.android.preferences;
 
 import android.accounts.AccountManager;
+import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -82,9 +82,9 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     private ExtendedPreferenceCategory smsPreferenceCategory;
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        ((PreferencesActivity) context).setOnBackPressedListener(this);
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        ((PreferencesActivity) activity).setOnBackPressedListener(this);
     }
 
     public void addAggregatePreferences() {
