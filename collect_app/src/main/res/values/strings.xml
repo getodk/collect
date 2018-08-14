@@ -628,6 +628,7 @@
 
     <!-- Sms submission -->
     <string name="sms_no_reception">\'Failed on\' EEE, MMM dd, yyyy \'at\' HH:mm \'due to no reception\'</string>
+    <string name="sms_no_number">\'Failed on\' EEE, MMM dd, yyyy \'at\' HH:mm \'due to no phone number.\'</string>
     <string name="sms_fatal_error">\'Failed on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
     <string name="sms_airplane_mode">\'Failed on\' EEE, MMM dd, yyyy \'at\' HH:mm \'due to Airplane Mode being on.\'</string>
     <string name="sms_no_message">This form has no questions with SMS tags.</string>
