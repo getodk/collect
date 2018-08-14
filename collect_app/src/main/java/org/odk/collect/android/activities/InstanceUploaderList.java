@@ -149,7 +149,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
     @OnClick({R.id.upload_button, R.id.sms_upload_button})
     public void onUploadButtonsClicked(Button button) {
         Transport transport = Transport.fromPreference(GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE));
-        if (transport.equals(Transport.Internet) || button.getId() == R.id.upload_button) {
+        if (!transport.equals(Transport.Sms) && button.getId() == R.id.upload_button) {
 
             ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(
                     Context.CONNECTIVITY_SERVICE);
