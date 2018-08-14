@@ -552,7 +552,12 @@ public class InstanceServerUploader extends InstanceUploader {
                     String id = c.getString(c.getColumnIndex(InstanceColumns._ID));
                     Uri toUpdate = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, id);
 
-                    // Use the provided submission url OR the submission URL included in the form OR the app's configured URL in that order of priority/precedence
+                    /*
+                     Submission url precedence/priority:
+                      * Intent submission url
+                      * Form submission URL
+                      * The configured URL in the app settings
+                    */
                     int subIdx = c.getColumnIndex(InstanceColumns.SUBMISSION_URI);
                     String urlString = completeDestinationUrl != null ? completeDestinationUrl : c.isNull(subIdx)
                             ? getServerSubmissionURL() : c.getString(subIdx).trim();
