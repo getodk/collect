@@ -139,7 +139,6 @@ public class ItemsetWidgetTest extends QuestionWidgetTest<ItemsetWidget, StringD
 
         when(adapter.query(anyString(), anyString(), any(String[].class))).thenReturn(cursorMocker.getCursor());
 
-
         when(formEntryPrompt.getQuestion()).thenReturn(questionDef);
         when(questionDef.getAdditionalAttribute(null, "query")).thenReturn("instance('cities')/root/item[state=/data/state]");
     }
@@ -149,7 +148,7 @@ public class ItemsetWidgetTest extends QuestionWidgetTest<ItemsetWidget, StringD
         ItemsetWidget widget = getWidget();
         assertNull(widget.getAnswer());
 
-        int randomIndex = (Math.abs(random.nextInt()) % widget.getChoiceCount());
+        int randomIndex = Math.abs(random.nextInt()) % widget.getChoiceCount();
         widget.setChoiceSelected(randomIndex, true);
 
         String selectedChoice = choices.get(Integer.toString(randomIndex));

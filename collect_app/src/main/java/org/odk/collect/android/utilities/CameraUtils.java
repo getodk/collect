@@ -100,12 +100,9 @@ public class CameraUtils {
 
     public static void savePhoto(String path, byte[] data) {
         File tempFile = new File(path);
-        FileOutputStream fos;
-        try {
-            fos = new FileOutputStream(tempFile);
+        try (FileOutputStream fos = new FileOutputStream(tempFile)) {
             fos.write(data);
             fos.flush();
-            fos.close();
         } catch (IOException e) {
             Timber.e(e);
         }
@@ -141,5 +138,11 @@ public class CameraUtils {
             }
         }
         return false; // No front-facing camera found
+    }
+  
+    public static String getVideoFilePath(Context context) {
+        final File dir = context.getExternalFilesDir(null);
+        return (dir == null ? "" : (dir.getAbsolutePath() + "/"))
+                + System.currentTimeMillis() + ".mp4";
     }
 }

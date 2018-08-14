@@ -75,7 +75,7 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Timber.i("onCreate: %s", ((savedInstanceState == null) ? "creating" : "re-initializing"));
+        Timber.i("onCreate: %s", savedInstanceState == null ? "creating" : "re-initializing");
 
         // if we start this activity, the following must be true:
         // 1) Google Sheets is selected in preferences
@@ -214,9 +214,8 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
         ConnectivityManager connMgr =
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        return (networkInfo != null && networkInfo.isConnected());
+        return networkInfo != null && networkInfo.isConnected();
     }
-
 
     @Override
     protected void onStart() {

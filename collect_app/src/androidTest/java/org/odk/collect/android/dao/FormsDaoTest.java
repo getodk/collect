@@ -141,7 +141,6 @@ public class FormsDaoTest {
         assertEquals("Biggest N of Set", forms.get(6).getDisplayName());
         assertEquals("Added on Wed, Feb 22, 2017 at 15:21", forms.get(6).getDisplaySubtext());
 
-
         String selection = FormsProviderAPI.FormsColumns.DISPLAY_NAME + "=?";
         String[] selectionArgs = {"Miramare"};
 

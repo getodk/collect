@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.utilities.gdrive;
 
-
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -77,12 +76,8 @@ public class DriveHelper {
         return null;
     }
 
-    public void downloadFile(@NonNull String fileId, @NonNull FileOutputStream fileOutputStream) throws IOException {
-        try {
-            driveService.downloadFile(fileId, fileOutputStream);
-        } finally {
-            fileOutputStream.close();
-        }
+    public void downloadFile(@NonNull String fileId, @NonNull File file) throws IOException {
+        driveService.downloadFile(fileId, file);
     }
 
     public String createOrGetIDOfFolderWithName(String jrFormId)
@@ -270,14 +265,13 @@ public class DriveHelper {
         driveService.fetchFilesForCurrentPage(request, files);
     }
 
-
     /**
      * This class only makes API calls using the drives API and does not contain any business logic
      *
      * @author Shobhit Agarwal
      */
 
-    public class DriveService {
+    public static class DriveService {
         private final Drive drive;
 
         DriveService(Drive drive) {
@@ -299,10 +293,12 @@ public class DriveHelper {
                     .setFields(fields);
         }
 
-        public void downloadFile(String fileId, FileOutputStream fileOutputStream) throws IOException {
-            drive.files()
-                    .get(fileId)
-                    .executeMediaAndDownloadTo(fileOutputStream);
+        public void downloadFile(String fileId, File file) throws IOException {
+            try (FileOutputStream fileOutputStream = new FileOutputStream(file)) {
+                drive.files()
+                        .get(fileId)
+                        .executeMediaAndDownloadTo(fileOutputStream);
+            }
         }
 
         String uploadFile(com.google.api.services.drive.model.File metadata, FileContent fileContent, String fields) throws IOException {

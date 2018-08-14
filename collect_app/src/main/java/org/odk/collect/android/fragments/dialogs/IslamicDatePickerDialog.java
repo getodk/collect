@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 package org.odk.collect.android.fragments.dialogs;
 
 import org.javarosa.core.model.FormIndex;

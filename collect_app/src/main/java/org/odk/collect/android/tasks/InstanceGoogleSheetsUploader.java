@@ -233,7 +233,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         insertRow(element, parentKey, key, instanceFile, sheetTitle);
 
         int repeatIndex = 0;
-        for (int i = 0 ; i < element.getNumChildren(); i++) {
+        for (int i = 0; i < element.getNumChildren(); i++) {
             TreeElement child = element.getChildAt(i);
             if (child.isRepeatable() && child.getMultiplicity() != TreeReference.INDEX_TEMPLATE) {
                 insertRows(child, key, getKeyBasedOnParentKey(key, child.getName(), repeatIndex++), instanceFile, getElementTitle(child));
@@ -320,7 +320,6 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         }
     }
 
-
     // Ignore rows with all empty answers added by a user and extra repeatable groups added
     // by Javarosa https://github.com/opendatakit/javarosa/issues/266
     private boolean shouldRowBeInserted(HashMap<String, String> answers) {
@@ -378,7 +377,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     }
 
     private boolean hasRepeatableGroups(TreeElement element) {
-        for (int i = 0 ; i < element.getNumChildren(); i++) {
+        for (int i = 0; i < element.getNumChildren(); i++) {
             TreeElement childElement = element.getChildAt(i);
             if (childElement.isRepeatable()) {
                 return true;
@@ -404,7 +403,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
     private Set<String> getSheetTitles(TreeElement element) {
         Set<String> sheetTitles = new HashSet<>();
-        for (int i = 0 ; i < element.getNumChildren(); i++) {
+        for (int i = 0; i < element.getNumChildren(); i++) {
             TreeElement childElement = element.getChildAt(i);
             if (childElement.isRepeatable()) {
                 sheetTitles.add(getElementTitle(childElement));

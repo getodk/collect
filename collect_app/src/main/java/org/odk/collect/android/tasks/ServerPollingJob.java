@@ -195,7 +195,7 @@ public class ServerPollingJob extends Job {
         ConnectivityManager connMgr =
                 (ConnectivityManager) Collect.getInstance().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        return (networkInfo != null && networkInfo.isConnected());
+        return networkInfo != null && networkInfo.isConnected();
     }
 
     public static void pollServerIfNeeded() {

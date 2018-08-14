@@ -47,13 +47,11 @@ public class ResetDialogPreference extends DialogPreference implements CompoundB
     private CheckBox layers;
     private CheckBox cache;
     private CheckBox osmDroid;
-    private final Context context;
     private ProgressDialog progressDialog;
 
     public ResetDialogPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
         setDialogLayoutResource(R.layout.reset_dialog_layout);
-        this.context = context;
     }
 
     @Override
@@ -124,8 +122,8 @@ public class ResetDialogPreference extends DialogPreference implements CompoundB
 
     private void showProgressDialog() {
         progressDialog = ProgressDialog.show(getContext(),
-                context.getString(R.string.please_wait),
-                context.getString(R.string.reset_in_progress),
+                getContext().getString(R.string.please_wait),
+                getContext().getString(R.string.reset_in_progress),
                 true);
     }
 
@@ -197,19 +195,17 @@ public class ResetDialogPreference extends DialogPreference implements CompoundB
             }
         }
         if (!((AdminPreferencesActivity) getContext()).isInstanceStateSaved()) {
-            ((AdminPreferencesActivity) getContext()).runOnUiThread(new Thread(new Runnable() {
-                public void run() {
-                    if (resetActions.contains(RESET_PREFERENCES)) {
-                        ((AdminPreferencesActivity) getContext()).recreate();
-                    }
-                    ResetSettingsResultDialog resetSettingsResultDialog = ResetSettingsResultDialog.newInstance(String.valueOf(resultMessage));
-                    try {
-                        resetSettingsResultDialog.show(((AdminPreferencesActivity) getContext()).getSupportFragmentManager(), RESET_SETTINGS_RESULT_DIALOG_TAG);
-                    } catch (ClassCastException e) {
-                        Timber.i(e);
-                    }
+            ((AdminPreferencesActivity) getContext()).runOnUiThread(() -> {
+                if (resetActions.contains(RESET_PREFERENCES)) {
+                    ((AdminPreferencesActivity) getContext()).recreate();
                 }
-            }));
+                ResetSettingsResultDialog resetSettingsResultDialog = ResetSettingsResultDialog.newInstance(String.valueOf(resultMessage));
+                try {
+                    resetSettingsResultDialog.show(((AdminPreferencesActivity) getContext()).getSupportFragmentManager(), RESET_SETTINGS_RESULT_DIALOG_TAG);
+                } catch (ClassCastException e) {
+                    Timber.i(e);
+                }
+            });
         }
     }
 

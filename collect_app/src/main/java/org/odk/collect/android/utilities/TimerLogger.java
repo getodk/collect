@@ -41,7 +41,7 @@ public class TimerLogger {
         DELETE_REPEAT       // Delete a repeat group
     }
 
-    public class Event {
+    public static class Event {
 
         long start;
         EventTypes eventType;
@@ -161,7 +161,6 @@ public class TimerLogger {
     private long surveyOpenElapsedTime;
     private final boolean timerEnabled;              // Set true of the timer logger is enabled
 
-
     public TimerLogger(File instanceFile, FormController formController) {
 
         /*
@@ -179,7 +178,6 @@ public class TimerLogger {
             events = new ArrayList<>();
         }
     }
-
 
     public void setPath(String instancePath) {
         if (timerEnabled) {

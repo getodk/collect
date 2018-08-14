@@ -18,7 +18,6 @@ import java.io.File;
 
 import static org.mockito.Mockito.when;
 
-
 /**
  * @author James Knight
  */
