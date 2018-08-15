@@ -15,6 +15,7 @@
 package org.odk.collect.android.activities;
 
 import android.app.Dialog;
+import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
@@ -28,6 +29,9 @@ import android.provider.MediaStore.Images;
 import android.provider.OpenableColumns;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
@@ -86,6 +90,7 @@ import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
+import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
@@ -200,7 +205,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     private static final int PROGRESS_DIALOG = 1;
     private static final int SAVING_DIALOG = 2;
-    private static final int SAVING_IMAGE_DIALOG = 3;
 
     private boolean autoSaved;
     private boolean allowMovingBackwards;
@@ -756,7 +760,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                  * Android 1.6) we want to handle images the audio and video
                  */
 
-                showDialog(SAVING_IMAGE_DIALOG);
+                ProgressDialogFragment progressDialog = ProgressDialogFragment.newInstance(getString(R.string.please_wait));
+                progressDialog.show(getSupportFragmentManager(), ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
+
                 Runnable runnable = () -> saveChosenImage(intent.getData());
                 new Thread(runnable).start();
 
@@ -900,7 +906,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     FileUtils.copyFile(chosenImage, newImage);
                     ImageConverter.execute(newImage.getPath(), getWidgetWaitingForBinaryData(), this);
                     runOnUiThread(() -> {
-                        dismissDialog(SAVING_IMAGE_DIALOG);
+                        Fragment prev = getSupportFragmentManager().findFragmentByTag(ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
+                        if (prev != null) {
+                            DialogFragment df = (DialogFragment) prev;
+                            df.dismiss();
+                        }
                         if (getCurrentViewIfODKView() != null) {
                             getCurrentViewIfODKView().setBinaryData(newImage);
                         }
@@ -909,14 +919,22 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     });
                 } else {
                     runOnUiThread(() -> {
-                        dismissDialog(SAVING_IMAGE_DIALOG);
+                        Fragment prev = getSupportFragmentManager().findFragmentByTag(ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
+                        if (prev != null) {
+                            DialogFragment df = (DialogFragment) prev;
+                            df.dismiss();
+                        }
                         Timber.e("Could not receive chosen image");
                         ToastUtils.showShortToastInMiddle(R.string.error_occured);
                     });
                 }
             } catch (GDriveConnectionException e) {
                 runOnUiThread(() -> {
-                    dismissDialog(SAVING_IMAGE_DIALOG);
+                    Fragment prev = getSupportFragmentManager().findFragmentByTag(ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
+                    if (prev != null) {
+                        DialogFragment df = (DialogFragment) prev;
+                        df.dismiss();
+                    }
                     Timber.e("Could not receive chosen image due to connection problem");
                     ToastUtils.showLongToastInMiddle(R.string.gdrive_connection_exception);
                 });
@@ -2298,13 +2316,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 });
                 return progressDialog;
 
-            case SAVING_IMAGE_DIALOG:
-                progressDialog = new ProgressDialog(this);
-                progressDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-                progressDialog.setMessage(getString(R.string.please_wait));
-                progressDialog.setCancelable(false);
-
-                return progressDialog;
         }
         return null;
     }
