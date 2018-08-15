@@ -13,8 +13,7 @@ import org.odk.collect.android.R;
 import timber.log.Timber;
 
 
-public class ProgressDialogFragment extends DialogFragment
-{
+public class ProgressDialogFragment extends DialogFragment {
     public static final String COLLECT_PROGRESS_DIALOG_TAG = "collectProgressDialogTag";
 
     private static final String MESSAGE = "message";
