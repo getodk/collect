@@ -5,6 +5,7 @@ import org.odk.collect.android.injection.config.AppModule;
 import org.odk.collect.android.preferences.ServerPreferencesFragment;
 import org.odk.collect.android.receivers.NetworkReceiver;
 import org.odk.collect.android.tasks.InstanceServerUploader;
+import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.DownloadFormListUtils;
 import org.odk.collect.android.utilities.FormDownloader;
 
@@ -26,4 +27,6 @@ public interface HttpComponent {
     void inject(NetworkReceiver networkReceiver);
 
     void inject(DownloadFormListUtils downloadFormListUtils);
+
+    void inject(AuthDialogUtility authDialogUtility);
 }

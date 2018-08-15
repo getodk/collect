@@ -8,6 +8,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.http.HttpClientConnection;
 import org.odk.collect.android.http.HttpGetResult;
+import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -34,7 +35,7 @@ public class SNITest {
 
     @Test
     public void testThatHttpClientSupportsSNI() throws Exception {
-        CollectServerClient serverClient = new CollectServerClient(new HttpClientConnection());
+        CollectServerClient serverClient = new CollectServerClient(new HttpClientConnection(), new WebCredentialsUtils());
         HttpGetResult inputStreamResult = serverClient.getHttpInputStream(SNI_URI, null);
         assertHttpSuccess(inputStreamResult.getStatusCode());
         assertPageContent(inputStreamResult.getInputStream());

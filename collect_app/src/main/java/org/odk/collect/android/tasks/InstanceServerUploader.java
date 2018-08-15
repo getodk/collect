@@ -68,6 +68,9 @@ public class InstanceServerUploader extends InstanceUploader {
     @Inject
     OpenRosaHttpInterface httpInterface;
 
+    @Inject
+    WebCredentialsUtils webCredentialsUtils;
+
     public InstanceServerUploader() {
         DaggerHttpComponent.builder().build().inject(this);
     }
@@ -189,7 +192,7 @@ public class InstanceServerUploader extends InstanceUploader {
             }
 
             try {
-                HttpHeadResult headResult = httpInterface.head(uri, WebCredentialsUtils.getInstance().getCredentials(uri));
+                HttpHeadResult headResult = httpInterface.head(uri, webCredentialsUtils.getCredentials(uri));
                 Map<String, String> responseHeaders = headResult.getHeaders();
 
                 if (headResult.getStatusCode() == HttpsURLConnection.HTTP_UNAUTHORIZED) {
@@ -314,7 +317,7 @@ public class InstanceServerUploader extends InstanceUploader {
             URI uri = URI.create(submissionUri.toString());
 
             messageParser = httpInterface.uploadSubmissionFile(files, submissionFile, uri,
-                    WebCredentialsUtils.getInstance().getCredentials(uri));
+                    webCredentialsUtils.getCredentials(uri));
 
             int responseCode = messageParser.getResponseCode();
 

@@ -8,6 +8,7 @@ import org.odk.collect.android.http.mock.MockHttpClientConnection;
 import org.odk.collect.android.injection.DaggerTestComponent;
 import org.odk.collect.android.injection.TestComponent;
 import org.odk.collect.android.utilities.DocumentFetchResult;
+import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 
@@ -48,7 +49,7 @@ public class CollectServerClientTest {
             fail("Exception Thrown mocking MockHttpClientConnection.get()");
         }
 
-        CollectServerClient collectServer = new CollectServerClient(clientConnection);
+        CollectServerClient collectServer = new CollectServerClient(clientConnection, new WebCredentialsUtils());
         DocumentFetchResult fetchResult = collectServer.getXmlDocument(urlString);
         assertEquals(fetchResult.errorMessage, "Parsing failed with null while accessing " + urlString);
     }

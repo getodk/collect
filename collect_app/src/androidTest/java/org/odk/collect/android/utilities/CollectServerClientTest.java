@@ -21,7 +21,7 @@ public class CollectServerClientTest extends MockedServerTest {
     public void setUp() throws Exception {
         // server hangs without a response queued:
         server.enqueue(new MockResponse());
-        collectServerClient = new CollectServerClient(new HttpClientConnection());
+        collectServerClient = new CollectServerClient(new HttpClientConnection(), new WebCredentialsUtils());
     }
 
         @Test

@@ -15,6 +15,7 @@ import org.odk.collect.android.injection.config.architecture.ViewModelFactoryMod
 import org.odk.collect.android.injection.config.scopes.PerApplication;
 import org.odk.collect.android.tasks.sms.SmsSubmissionManager;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
+import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import javax.inject.Singleton;
 
@@ -67,8 +68,14 @@ public class AppModule {
 
     @Provides
     @Singleton
-    public CollectServerClient provideCollectServerClient(OpenRosaHttpInterface httpInterface) {
-        return new CollectServerClient(httpInterface);
+    public CollectServerClient provideCollectServerClient(OpenRosaHttpInterface httpInterface, WebCredentialsUtils webCredentialsUtils) {
+        return new CollectServerClient(httpInterface, webCredentialsUtils);
+    }
+
+    @Provides
+    @Singleton
+    public WebCredentialsUtils provideWebCredentials() {
+        return new WebCredentialsUtils();
     }
 
 }

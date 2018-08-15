@@ -13,25 +13,12 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.inject.Singleton;
+
+@Singleton
 public class WebCredentialsUtils {
 
-    private static WebCredentialsUtils instance;
-
-    private final Map<String, HttpCredentialsInterface> hostCredentials = new HashMap<>();
-
-    private WebCredentialsUtils() {}
-
-    /**
-     * A factory method to return a new WebCredentialsUtils object.
-     *
-     * @return an instance of WebCredentialsUtils
-     */
-    public static synchronized WebCredentialsUtils getInstance() {
-        if (instance == null) {
-            instance = new WebCredentialsUtils();
-        }
-        return instance;
-    }
+    private static final Map<String, HttpCredentialsInterface> HOST_CREDENTIALS = new HashMap<>();
 
     public void saveCredentials(@NonNull String url, @NonNull String username, @NonNull String password) {
         if (username.isEmpty()) {
@@ -39,7 +26,7 @@ public class WebCredentialsUtils {
         }
 
         String host = Uri.parse(url).getHost();
-        hostCredentials.put(host, new HttpCredentials(username, password));
+        HOST_CREDENTIALS.put(host, new HttpCredentials(username, password));
     }
 
     public void saveCredentialsPreferences(String userName, String password) {
@@ -84,7 +71,7 @@ public class WebCredentialsUtils {
         if (serverUrl != null && serverUrl.equalsIgnoreCase(urlString)) {
             return new HttpCredentials(getUserNameFromPreferences(), getPasswordFromPreferences());
         } else {
-            return hostCredentials.get(host);
+            return HOST_CREDENTIALS.get(host);
         }
     }
 

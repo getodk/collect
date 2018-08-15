@@ -25,6 +25,9 @@ import android.widget.EditText;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.http.injection.DaggerHttpComponent;
+
+import javax.inject.Inject;
 
 /**
  * Used to present auth dialog and update credentials in the system as needed.
@@ -35,12 +38,14 @@ public class AuthDialogUtility {
     private EditText username;
     private EditText password;
 
-    private WebCredentialsUtils webCredentialsUtils;
+    @Inject WebCredentialsUtils webCredentialsUtils;
+
+    public AuthDialogUtility() {
+        DaggerHttpComponent.builder().build().inject(this);
+    }
 
     public AlertDialog createDialog(final Context context,
                                     final AuthDialogUtilityResultListener resultListener, String url) {
-
-        webCredentialsUtils = WebCredentialsUtils.getInstance();
 
         final View dialogView = LayoutInflater.from(context)
                 .inflate(R.layout.server_auth_dialog, null);

@@ -12,6 +12,7 @@ import org.odk.collect.android.http.mock.MockHttpClientConnection;
 import org.odk.collect.android.injection.config.scopes.PerApplication;
 import org.odk.collect.android.tasks.sms.SmsSubmissionManager;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
+import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import dagger.Module;
 import dagger.Provides;
@@ -68,7 +69,7 @@ public class TestModule {
 
     @Provides
     CollectServerClient provideTestCollectServerClient(MockHttpClientConnection httpClientConnection) {
-        return new CollectServerClient(httpClientConnection);
+        return new CollectServerClient(httpClientConnection, new WebCredentialsUtils());
     }
 
 }

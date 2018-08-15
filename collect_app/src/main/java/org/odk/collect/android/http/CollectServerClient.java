@@ -26,10 +26,12 @@ public class CollectServerClient {
     public static final String HTTP_CONTENT_TYPE_TEXT_XML = "text/xml";
 
     protected OpenRosaHttpInterface httpInterface;
+    private final WebCredentialsUtils webCredentialsUtils;
 
     @Inject
-    public CollectServerClient(OpenRosaHttpInterface httpInterface) {
+    public CollectServerClient(OpenRosaHttpInterface httpInterface, WebCredentialsUtils webCredentialsUtils) {
         this.httpInterface = httpInterface;
+        this.webCredentialsUtils = webCredentialsUtils;
     }
 
     /**
@@ -90,7 +92,7 @@ public class CollectServerClient {
             throw new Exception("Invalid server URL (no hostname): " + downloadUrl);
         }
 
-        return httpInterface.get(uri, contentType, WebCredentialsUtils.getInstance().getCredentials(uri));
+        return httpInterface.get(uri, contentType, webCredentialsUtils.getCredentials(uri));
     }
 
     public static String getPlainTextMimeType() {
