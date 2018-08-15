@@ -170,7 +170,26 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
     }
 
     public String getSelectedAccount() {
-        return (String) preferences.get(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
+        Account[] googleAccounts = credential.getAllAccounts();
+        String account = (String) preferences.get(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
+
+        if (account == null) {
+            return null;
+        }
+
+        if (googleAccounts != null && googleAccounts.length > 0) {
+            for (Account googleAccount : googleAccounts) {
+                if (googleAccount.name.equals(account)) {
+                    return account;
+                }
+            }
+
+            preferences.save(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT, null);
+
+            return null;
+        }
+
+        return null;
     }
 
     public void showAccountPickerDialog() {
@@ -193,7 +212,7 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
         }
     }
 
-    public Account getAccountPickerCurrentAccount() {
+    private Account getAccountPickerCurrentAccount() {
         String selectedAccountName = getSelectedAccount();
         if (selectedAccountName == null || selectedAccountName.isEmpty()) {
             Account[] googleAccounts = credential.getAllAccounts();
