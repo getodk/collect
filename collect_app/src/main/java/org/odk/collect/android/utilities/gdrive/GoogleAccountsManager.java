@@ -38,6 +38,7 @@ import com.google.api.services.drive.DriveScopes;
 import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
@@ -46,6 +47,8 @@ import java.util.List;
 
 import pub.devrel.easypermissions.EasyPermissions;
 import timber.log.Timber;
+
+import static android.text.TextUtils.isEmpty;
 
 public class GoogleAccountsManager implements EasyPermissions.PermissionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
@@ -145,7 +148,7 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
     public void chooseAccount() {
         if (checkAccountPermission()) {
             String accountName = getSelectedAccount();
-            if (autoChooseAccount && !accountName.isEmpty()) {
+            if (autoChooseAccount && !isEmpty(accountName)) {
                 selectAccount(accountName);
             } else {
                 showAccountPickerDialog();
@@ -214,7 +217,7 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
 
     private Account getAccountPickerCurrentAccount() {
         String selectedAccountName = getSelectedAccount();
-        if (selectedAccountName == null || selectedAccountName.isEmpty()) {
+        if (isEmpty(selectedAccountName)) {
             Account[] googleAccounts = credential.getAllAccounts();
             if (googleAccounts != null && googleAccounts.length > 0) {
                 selectedAccountName = googleAccounts[0].name;
