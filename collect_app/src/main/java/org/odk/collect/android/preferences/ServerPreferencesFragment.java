@@ -457,10 +457,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                         .setTitle(getString(R.string.sms_invalid_phone_number))
                         .setMessage(R.string.sms_invalid_phone_number_description)
                         .setPositiveButton(getString(R.string.ok), (dialog, which) -> dialog.dismiss())
-                        .setNegativeButton(getString(R.string.exit), (dialog, id) -> {
-                            dialog.dismiss();
-                            continueOnBackPressed();
-                        }).create();
+                        .create();
 
                 showDialog(alertDialog, getActivity());
             } else {
