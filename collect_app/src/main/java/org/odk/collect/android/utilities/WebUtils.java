@@ -325,7 +325,7 @@ public final class WebUtils {
                 return new DocumentFetchResult(error, 0);
             }
 
-            if (!entity.getContentType().getValue().toLowerCase(Locale.ENGLISH)
+            if (entity.getContentType() != null && !entity.getContentType().getValue().toLowerCase(Locale.ENGLISH)
                     .contains(WebUtils.HTTP_CONTENT_TYPE_TEXT_XML)) {
                 WebUtils.discardEntityBytes(response);
                 String error = "ContentType: "
