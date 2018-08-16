@@ -1,5 +1,6 @@
 package org.odk.collect.android.utilities.gdrive;
 
+import android.accounts.Account;
 import android.content.Intent;
 
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
@@ -12,9 +13,11 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.ServerPreferencesFragment;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.reflect.Whitebox;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -23,6 +26,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -66,13 +70,21 @@ public class GoogleAccountsManagerTest {
     }
 
     private void stubCredential() {
-        doAnswer(new Answer() {
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                currentAccount = invocation.getArgument(0);
-                return null;
-            }
+        doAnswer(invocation -> {
+            currentAccount = invocation.getArgument(0);
+            return null;
         }).when(mockedCredential).setSelectedAccountName(anyString());
+
+        doAnswer(invocation -> {
+            Account account = mock(Account.class);
+            when(account.name).thenReturn(EXPECTED_ACCOUNT);
+
+            return new Account[]{account};
+        }).when(mockedCredential).getAllAccounts();
+    }
+
+    private void stubFragment(){
+        Whitebox.setInternalState(googleAccountsManager,"fragment",new ServerPreferencesFragment());
     }
 
     private void stubPreferences() {
@@ -95,6 +107,7 @@ public class GoogleAccountsManagerTest {
 
         stubCredential();
         stubPreferences();
+        stubFragment();
     }
 
     @Test
