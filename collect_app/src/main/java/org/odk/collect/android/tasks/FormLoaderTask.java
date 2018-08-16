@@ -74,7 +74,6 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
     private String errorMsg;
     private String instancePath;
     private final String xpath;
-    private final String waitingXPath;
     private boolean pendingActivityResult;
     private int requestCode;
     private int resultCode;
@@ -106,10 +105,9 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
     FECWrapper data;
 
-    public FormLoaderTask(String instancePath, String xpath, String waitingXPath) {
+    public FormLoaderTask(String instancePath, String xpath) {
         this.instancePath = instancePath;
         this.xpath = xpath;
-        this.waitingXPath = waitingXPath;
     }
 
     /**
@@ -209,10 +207,6 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             // position...
             FormIndex idx = fc.getIndexFromXPath(xpath);
             fc.jumpToIndex(idx);
-        }
-        if (waitingXPath != null) {
-            FormIndex idx = fc.getIndexFromXPath(waitingXPath);
-            fc.setIndexWaitingForData(idx);
         }
         data = new FECWrapper(fc, usedSavepoint);
         return data;
@@ -491,29 +485,6 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             data.free();
             data = null;
         }
-    }
-
-    public boolean hasPendingActivityResult() {
-        return pendingActivityResult;
-    }
-
-    public int getRequestCode() {
-        return requestCode;
-    }
-
-    public int getResultCode() {
-        return resultCode;
-    }
-
-    public Intent getIntent() {
-        return intent;
-    }
-
-    public void setActivityResult(int requestCode, int resultCode, Intent intent) {
-        this.pendingActivityResult = true;
-        this.requestCode = requestCode;
-        this.resultCode = resultCode;
-        this.intent = intent;
     }
 
     private void readCSV(File csv, String formHash, String pathHash) {

@@ -178,7 +178,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     public static final String KEY_INSTANCEPATH = "instancepath";
     public static final String KEY_XPATH = "xpath";
-    public static final String KEY_XPATH_WAITING_FOR_DATA = "xpathwaiting";
 
     // Tracks whether we are autosaving
     public static final String KEY_AUTO_SAVED = "autosaved";
@@ -228,7 +227,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private boolean doSwipe = true;
     private String instancePath;
     private String startingXPath;
-    private String waitingXPath;
     private boolean newForm = true;
     private boolean onResumeWasCalledWithoutPermissions;
 
@@ -324,11 +322,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 startingXPath = savedInstanceState.getString(KEY_XPATH);
                 Timber.i("startingXPath is: %s", startingXPath);
             }
-            if (savedInstanceState.containsKey(KEY_XPATH_WAITING_FOR_DATA)) {
-                waitingXPath = savedInstanceState
-                        .getString(KEY_XPATH_WAITING_FOR_DATA);
-                Timber.i("waitingXPath is: %s", waitingXPath);
-            }
             if (savedInstanceState.containsKey(NEWFORM)) {
                 newForm = savedInstanceState.getBoolean(NEWFORM, true);
             }
@@ -367,8 +360,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     Timber.w("Reloading form and restoring state.");
                     // we need to launch the form loader to load the form
                     // controller...
-                    formLoaderTask = new FormLoaderTask(instancePath,
-                            startingXPath, waitingXPath);
+                    formLoaderTask = new FormLoaderTask(instancePath, startingXPath);
                     Collect.getInstance().getActivityLogger()
                             .logAction(this, "formReloaded", formPath);
                     // TODO: this doesn' work (dialog does not get removed):
@@ -511,7 +503,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             return;
         }
 
-        formLoaderTask = new FormLoaderTask(instancePath, null, null);
+        formLoaderTask = new FormLoaderTask(instancePath, null);
         Collect.getInstance().getActivityLogger()
                 .logAction(this, "formLoaded", formPath);
         showDialog(PROGRESS_DIALOG);
@@ -563,13 +555,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             if (formController.getInstanceFile() != null) {
                 outState.putString(KEY_INSTANCEPATH, getAbsoluteInstancePath());
             }
-            outState.putString(KEY_XPATH,
-                    formController.getXPath(formController.getFormIndex()));
-            FormIndex waiting = formController.getIndexWaitingForData();
-            if (waiting != null) {
-                outState.putString(KEY_XPATH_WAITING_FOR_DATA,
-                        formController.getXPath(waiting));
-            }
+            outState.putString(KEY_XPATH, formController.getXPath(formController.getFormIndex()));
             // save the instance to a temp path...
             nonblockingCreateSavePointData();
         }
@@ -587,27 +573,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
     }
 
-    public void saveToFormLoaderTask(int requestCode, int resultCode, Intent intent) {
-        // we must be in the midst of a reload of the FormController.
-        // try to save this callback data to the FormLoaderTask
-        if (formLoaderTask != null
-                && formLoaderTask.getStatus() != AsyncTask.Status.FINISHED) {
-            formLoaderTask.setActivityResult(requestCode, resultCode, intent);
-        } else {
-            Timber.e("Got an activityResult without any pending form loader");
-        }
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-        FormController formController = getFormController();
-
-        if (formController == null) {
-            saveToFormLoaderTask(requestCode, resultCode, intent);
-            return;
-        }
-
         if (resultCode == RESULT_CANCELED) {
             // request was canceled...
             return;
@@ -2173,12 +2141,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         final FormController formController = task.getFormController();
         if (formController != null) {
-            int requestCode = task.getRequestCode(); // these are bogus if
-            // pendingActivityResult is
-            // false
-            int resultCode = task.getResultCode();
-            Intent intent = task.getIntent();
-
             formLoaderTask.setFormLoaderListener(null);
             FormLoaderTask t = formLoaderTask;
             formLoaderTask = null;
@@ -2205,16 +2167,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     formController.setLanguage(defaultLanguage);
                 }
                 Timber.i("Done in %.3f seconds.", (System.currentTimeMillis() - start) / 1000F);
-            }
-
-            boolean pendingActivityResult = task.hasPendingActivityResult();
-
-            if (pendingActivityResult) {
-                // set the current view to whatever group we were at...
-                refreshCurrentView();
-                // process the pending activity request...
-                onActivityResult(requestCode, resultCode, intent);
-                return;
             }
 
             // it can be a normal flow for a pending activity result to restore from

@@ -133,7 +133,6 @@ public class FormController {
     @Nullable
     private File instanceFile;
     private final FormEntryController formEntryController;
-    private FormIndex indexWaitingForData;
 
     public FormController(File mediaFolder, FormEntryController fec, File instanceFile) {
         this.mediaFolder = mediaFolder;
@@ -161,14 +160,6 @@ public class FormController {
     @Nullable
     public String getAbsoluteInstancePath() {
         return instanceFile != null ? instanceFile.getAbsolutePath() : null;
-    }
-
-    public void setIndexWaitingForData(FormIndex index) {
-        indexWaitingForData = index;
-    }
-
-    public FormIndex getIndexWaitingForData() {
-        return indexWaitingForData;
     }
 
     public TimerLogger getTimerLogger() {

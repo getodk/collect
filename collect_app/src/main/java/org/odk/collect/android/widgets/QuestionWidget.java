@@ -710,12 +710,6 @@ public abstract class QuestionWidget
     }
 
     public void onActivityResultReceived(int requestCode, int resultCode, Intent data) {
-        FormController formController = getFormController();
-        if (formController == null) {
-            ((FormEntryActivity) getContext()).saveToFormLoaderTask(requestCode, resultCode, data);
-            return;
-        }
-
         if (resultCode == RESULT_CANCELED || resultCode != RESULT_OK) {
             // request was canceled...
             return;
