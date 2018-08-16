@@ -14,6 +14,7 @@
   <string name="cancel">Anullo</string>
   <string name="cancel_loading_form">Anullo</string>
   <string name="cancel_location">Anullo</string>
+  <string name="canceling">Duke anuluar</string>
   <string name="cannot_edit_completed_form">Ky formular nuk mund të modifikohet pasi është shënuar \'i plotësuar\'. Mund të jetë i enkriptuar.</string>
   <string name="capture_audio">Regjistro audio</string>
   <string name="capture_image">Bëj foto</string>
