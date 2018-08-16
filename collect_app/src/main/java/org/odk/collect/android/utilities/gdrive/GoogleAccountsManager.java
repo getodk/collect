@@ -208,7 +208,9 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
                 .setMessage(R.string.missing_google_account_dialog_desc)
                 .setPositiveButton(context.getString(R.string.ok), (dialog, which) -> {
                     dialog.dismiss();
-                    activity.finish();
+                    if (activity != null) {
+                        activity.finish();
+                    }
                 })
                 .create();
 
