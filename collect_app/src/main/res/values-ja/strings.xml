@@ -141,7 +141,7 @@
   <string name="change_protocol">プラットフォーム</string>
   <string name="change_submission_url">提出パス (URLに追加されます)</string>
   <string name="formlist_url">フォーム一覧のパス</string>
-  <string name="submission_url">提出パス</string>
+  <string name="submission_url">送信パス</string>
   <string name="font_size">文字フォントサイズ</string>
   <string name="change_font_size">文字フォントサイズ</string>
   <string name="access_error">%s のアクセス中にエラー:</string>
@@ -269,6 +269,9 @@
   <string name="go_shared">私と共有</string>
   <string name="modified_on_date_at_time">yyyy/MM/dd HH:mm \'に変更しました\'</string>
   <string name="aggregate_preferences">ODK Aggregate 設定</string>
+  <string name="sms_submission_preferences">SMS 送信設定</string>
+  <string name="submission_transport">送信トランスポート (詳細)</string>
+  <string name="submission_transport_types_title">送信…</string>
   <string name="other_preferences">その他のプラットフォーム設定</string>
   <string name="google_preferences">Google スプレッドシート設定</string>
   <string name="google_sheets_url_hint">フォームは送信 URL を設定する必要があります。 そうしない場合に、この URL が使用されます。</string>
@@ -509,6 +512,7 @@
   <string name="invalid_email_address">メールアドレスが無効です!</string>
   <string name="sort_by">並び順</string>
   <string name="server">サーバー</string>
+  <string name="submission_transport_admin_setting">送信トランスポート</string>
   <string name="select_value">値を選択</string>
   <string name="edit_value">値を編集</string>
   <string name="no_value_selected">値が選択されていません</string>
@@ -578,6 +582,12 @@
   <string name="no_columns_to_upload">アップロードするフォームにカラムが見つかりません。</string>
   <string name="storage_runtime_permission_denied_title">ストレージのアクセス許可</string>
   <string name="storage_runtime_permission_denied_desc">これらのアクセス許可がないと、Collect はフォームにアクセスしたり、回答を保存することができません。 アクセス許可を付与する準備ができたら、アプリをもう一度開いてください。</string>
+  <string name="location_runtime_permissions_denied_title">位置情報アクセス許可</string>
+  <string name="location_runtime_permissions_denied_desc">これらのアクセス許可がないと、Collect はあなたの場所を記録できません。 付与する準備ができたら、もう一度お試しください。</string>
+  <string name="camera_runtime_permission_denied_title">カメラアクセス許可</string>
+  <string name="camera_runtime_permission_denied_desc">このアクセス許可がないと、Collect はカメラにアクセスできません。 付与する準備ができたら、もう一度お試しください。</string>
+  <string name="record_audio_runtime_permission_denied_title">オーディオ録音アクセス許可</string>
+  <string name="record_audio_runtime_permission_denied_desc">このアクセス許可がないと、Collect はマイクにアクセスできません。 付与する準備ができたら、もう一度お試しください。</string>
   <string name="form_update_category">フォームの更新</string>
   <string name="periodic_form_updates_check_title">定期的なフォームの更新チェック</string>
   <string name="never">しない</string>
@@ -598,7 +608,26 @@
   <string name="instance_upload_cancelled">インスタンスのアップロードがキャンセルされました</string>
   <string name="hide_old_form_versions_setting_title">古いフォームのバージョンを非表示</string>
   <string name="hide_old_form_versions_setting_summary">ブランクフォームに最新バージョンのみが表示されます</string>
+  <string name="sms_pref_dialog_title">相手先電話番号</string>
+  <string name="sms_pref_title">相手先電話番号</string>
+  <string name="sms_invalid_phone_number">電話番号が正しくありません</string>
   <!--Sms submission-->
+  <string name="sms_no_reception">yyyy/MM/dd E HH:mm \'に受信者がいないため失敗しました\'</string>
+  <string name="sms_fatal_error">yyyy/MM/dd E HH:mm \'に失敗しました\'</string>
+  <string name="sms_airplane_mode">yyyy/MM/dd E HH:mm \'に機内モードがオンのため失敗しました\'</string>
+  <string name="sms_no_message">このフォームは SMS タグの質問がありません。</string>
+  <string name="sms_encrypted_message">暗号化されたフォームは SMS として送信できません。</string>
+  <string name="sms_last_submission_on_date_at_time">\'最終の送信試行\' yyyy/MM/dd E HH:mm</string>
+  <plurals name="sms_sending">
+    <item quantity="other">フォームを送信中 %1$d / %2$d のメッセージを送信中</item>
+  </plurals>
+  <string name="sms_sent_on_date_at_time">yyyy/MM/dd E HH:mm \'に SMS として送信しました\'</string>
+  <string name="sms_submission_queued">送信キューにいれました。</string>
+  <string name="sms_submissions_notif_title">SMS 送信</string>
+  <string name="sms_submissions_notif_description">いくつかのフォームを現在送信しています。</string>
+  <string name="transport_type_internet">Wifi/データ通信 (推奨)</string>
+  <string name="transport_type_sms">SMS</string>
   <string name="seconds">秒</string>
+  <string name="rank_items">ランキングアイテム</string>
   <string name="image_not_saved">対応するインスタンスファイルに問題があるため、画像を保存できません。</string>
 </resources>
