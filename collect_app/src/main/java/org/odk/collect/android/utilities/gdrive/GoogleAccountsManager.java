@@ -17,6 +17,7 @@ package org.odk.collect.android.utilities.gdrive;
 import android.Manifest;
 import android.accounts.Account;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
@@ -38,6 +39,7 @@ import com.google.api.services.drive.DriveScopes;
 import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.ServerPreferencesFragment;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
@@ -48,6 +50,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 import timber.log.Timber;
 
 import static android.text.TextUtils.isEmpty;
+import static org.odk.collect.android.utilities.DialogUtils.showDialog;
 
 public class GoogleAccountsManager implements EasyPermissions.PermissionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
@@ -150,7 +153,11 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
             if (autoChooseAccount && !isEmpty(accountName)) {
                 selectAccount(accountName);
             } else {
-                showAccountPickerDialog();
+                if (fragment != null && fragment instanceof ServerPreferencesFragment) {
+                    showAccountPickerDialog();
+                } else if (activity != null) {
+                    showSettingsDialog();
+                }
             }
         } else {
             requestAccountPermission();
@@ -192,6 +199,20 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
         }
 
         return null;
+    }
+
+    private void showSettingsDialog() {
+        AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
+                .setIcon(android.R.drawable.ic_dialog_info)
+                .setTitle(R.string.missing_google_account_dialog_title)
+                .setMessage(R.string.missing_google_account_dialog_desc)
+                .setPositiveButton(context.getString(R.string.ok), (dialog, which) -> {
+                    dialog.dismiss();
+                    activity.finish();
+                })
+                .create();
+
+        showDialog(alertDialog, getActivity());
     }
 
     public void showAccountPickerDialog() {
