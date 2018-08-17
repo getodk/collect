@@ -81,7 +81,10 @@ public class GoogleAccountsManagerTest {
         Account account = mock(Account.class);
         Whitebox.setInternalState(account, "name", name);
         doReturn(new Account[]{account}).when(mockedCredential).getAllAccounts();
+    }
 
+    private void removeAccounts() {
+        doReturn(new Account[]{}).when(mockedCredential).getAllAccounts();
     }
 
     private void stubFragment() {
@@ -117,6 +120,19 @@ public class GoogleAccountsManagerTest {
     public void getGoogleAccountNameIfAccountNameIsSavedTest() {
         stubSavedAccount(EXPECTED_ACCOUNT);
         assertEquals(EXPECTED_ACCOUNT, googleAccountsManager.getSelectedAccount());
+    }
+
+    @Test
+    public void returnNullWhenAccountIsDeleted() {
+        //asserting that account exists.
+        stubSavedAccount(EXPECTED_ACCOUNT);
+        assertEquals(EXPECTED_ACCOUNT, googleAccountsManager.getSelectedAccount());
+
+        //removing the account simulates the deletion of the account via Google account settings.
+        removeAccounts();
+
+        assertNull(googleAccountsManager.getSelectedAccount());
+        assertNull(savedAccount);
     }
 
     @Test
