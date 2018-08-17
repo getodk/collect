@@ -49,7 +49,6 @@ import java.util.List;
 import pub.devrel.easypermissions.EasyPermissions;
 import timber.log.Timber;
 
-import static android.text.TextUtils.isEmpty;
 import static org.odk.collect.android.utilities.DialogUtils.showDialog;
 
 public class GoogleAccountsManager implements EasyPermissions.PermissionCallbacks,
@@ -150,7 +149,7 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
     public void chooseAccount() {
         if (checkAccountPermission()) {
             String accountName = getSelectedAccount();
-            if (autoChooseAccount && !isEmpty(accountName)) {
+            if (autoChooseAccount && accountName != null && !accountName.isEmpty()) {
                 selectAccount(accountName);
             } else {
                 if (fragment != null && fragment instanceof ServerPreferencesFragment) {
@@ -239,7 +238,7 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
 
     private Account getAccountPickerCurrentAccount() {
         String selectedAccountName = getSelectedAccount();
-        if (isEmpty(selectedAccountName)) {
+        if (selectedAccountName == null || selectedAccountName.isEmpty()) {
             Account[] googleAccounts = credential.getAllAccounts();
             if (googleAccounts != null && googleAccounts.length > 0) {
                 selectedAccountName = googleAccounts[0].name;
