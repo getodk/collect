@@ -9,8 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.preferences.ServerPreferencesFragment;
@@ -62,6 +60,7 @@ public class GoogleAccountsManagerTest {
 
     private void stubSavedAccount(String accountName) {
         when(mockPreferences.get(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT)).thenReturn(accountName);
+        stubAccount(accountName);
     }
 
     private void stubAccountPermission(boolean permission) {
@@ -75,27 +74,26 @@ public class GoogleAccountsManagerTest {
             return null;
         }).when(mockedCredential).setSelectedAccountName(anyString());
 
-        doAnswer(invocation -> {
-            Account account = mock(Account.class);
-            when(account.name).thenReturn(EXPECTED_ACCOUNT);
-
-            return new Account[]{account};
-        }).when(mockedCredential).getAllAccounts();
+        stubAccount(EXPECTED_ACCOUNT);
     }
 
-    private void stubFragment(){
-        Whitebox.setInternalState(googleAccountsManager,"fragment",new ServerPreferencesFragment());
+    private void stubAccount(String name) {
+        Account account = mock(Account.class);
+        Whitebox.setInternalState(account, "name", name);
+        doReturn(new Account[]{account}).when(mockedCredential).getAllAccounts();
+
+    }
+
+    private void stubFragment() {
+        Whitebox.setInternalState(googleAccountsManager, "fragment", new ServerPreferencesFragment());
     }
 
     private void stubPreferences() {
-        doAnswer(new Answer() {
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                if (invocation.getArgument(0).equals(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT)) {
-                    savedAccount = invocation.getArgument(1);
-                }
-                return null;
+        doAnswer(invocation -> {
+            if (invocation.getArgument(0).equals(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT)) {
+                savedAccount = invocation.getArgument(1);
             }
+            return null;
         }).when(mockPreferences).save(anyString(), anyString());
     }
 
