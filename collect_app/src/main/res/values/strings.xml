@@ -649,4 +649,5 @@
     <string name="rank_items">Rank items</string>
     <string name="image_not_saved">The image can not be saved because of a problem with the corresponding instance file.</string>
     <string name="loading_form_failed">An error occurred while loading the form. Please try again.</string>
+    <string name="sms_invalid_phone_number_description">Set a destination phone number for SMS submissions or change your transport type.</string>
 </resources>
