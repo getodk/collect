@@ -440,7 +440,6 @@
   <string name="sort_by_status_asc">Por status, primero los finalizados</string>
   <string name="sort_by_status_desc">Por Status, primero los no finalizados</string>
   <string name="sort_the_list">Ordenar la lista</string>
-  <string name="request_permissions_google_account">ODK Collect necesita acceder a tu cuenta de Google para obtener formularios en blanco y enviar formularios terminados.</string>
   <string name="filter_the_list">Filtrar la lista</string>
   <string name="language">Idioma</string>
   <string name="google_auth_io_exception_msg">No es posible hacer  llamado al API. Si usted esta ejecutando en un ambiente local, por favor revise readme del proyecto</string>

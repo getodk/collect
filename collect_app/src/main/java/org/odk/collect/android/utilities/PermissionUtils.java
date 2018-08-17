@@ -190,13 +190,79 @@ public class PermissionUtils {
                 .check();
     }
 
+    public static void requestGetAccountsPermission(@NonNull Activity activity, @NonNull PermissionListener action) {
+        com.karumi.dexter.listener.single.PermissionListener permissionListener = new com.karumi.dexter.listener.single.PermissionListener() {
+            @Override
+            public void onPermissionGranted(PermissionGrantedResponse response) {
+                action.granted();
+            }
+
+            @Override
+            public void onPermissionDenied(PermissionDeniedResponse response) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.Theme_AppCompat_Light_Dialog);
+
+                builder.setTitle(R.string.get_accounts_runtime_permission_denied_title)
+                        .setMessage(R.string.get_accounts_runtime_permission_denied_desc)
+                        .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> action.denied())
+                        .setCancelable(false)
+                        .setIcon(R.drawable.ic_get_accounts)
+                        .show();
+            }
+
+            @Override
+            public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+                token.continuePermissionRequest();
+            }
+        };
+
+        Dexter.withActivity(activity)
+                .withPermission(
+                        Manifest.permission.GET_ACCOUNTS
+                ).withListener(permissionListener)
+                .withErrorListener(error -> Timber.i(error.name()))
+                .check();
+    }
+
+    public static void requestSendSMSPermission(@NonNull Activity activity, @NonNull PermissionListener action) {
+        com.karumi.dexter.listener.single.PermissionListener permissionListener = new com.karumi.dexter.listener.single.PermissionListener() {
+            @Override
+            public void onPermissionGranted(PermissionGrantedResponse response) {
+                action.granted();
+            }
+
+            @Override
+            public void onPermissionDenied(PermissionDeniedResponse response) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.Theme_AppCompat_Light_Dialog);
+
+                builder.setTitle(R.string.send_sms_runtime_permission_denied_title)
+                        .setMessage(R.string.send_sms_runtime_permission_denied_desc)
+                        .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> action.denied())
+                        .setCancelable(false)
+                        .setIcon(R.drawable.ic_sms)
+                        .show();
+            }
+
+            @Override
+            public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+                token.continuePermissionRequest();
+            }
+        };
+
+        Dexter.withActivity(activity)
+                .withPermission(
+                        Manifest.permission.SEND_SMS
+                ).withListener(permissionListener)
+                .withErrorListener(error -> Timber.i(error.name()))
+                .check();
+    }
+
     public static boolean checkIfStoragePermissionsGranted(Context context) {
         int read = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE);
         int write = ContextCompat.checkSelfPermission(context, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
         return read == PackageManager.PERMISSION_GRANTED && write == PackageManager.PERMISSION_GRANTED;
     }
-  
+
     public static boolean checkIfCameraPermissionGranted(Context context) {
         return ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
     }
@@ -207,6 +273,10 @@ public class PermissionUtils {
 
         return accessFineLocation == PackageManager.PERMISSION_GRANTED
                 && accessCoarseLocation == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public static boolean checkIfGetAccountsPermissionGranted(Context context) {
+        return ContextCompat.checkSelfPermission(context, Manifest.permission.GET_ACCOUNTS) == PackageManager.PERMISSION_GRANTED;
     }
 
     /**
