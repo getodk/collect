@@ -45,6 +45,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import timber.log.Timber;
+
 /**
  * Consolidate all interactions with media providers here.
  * <p>
@@ -68,7 +69,7 @@ public class MediaUtils {
         ep = ep.replaceAll("_", "!_");
         ep = ep.replaceAll("%", "!%");
         return ep;
-    }
+}
 
     public static final Uri getImageUriFromMediaProvider(String imageFile) {
         String selection = Images.ImageColumns.DATA + "=?";
@@ -634,7 +635,7 @@ public class MediaUtils {
      * @return The value of the _data column, which is typically a file path.
      */
 
-    public static String getDataColumn(Context context, Uri contentUri,String selection, String[] selectionArgs) {
+    public static String getDataColumn(Context context, Uri contentUri, String selection, String[] selectionArgs) {
         //copy file and send new file path
         File tempDirectoryPath = context.getFilesDir();
         String fileName = getFileName(contentUri);
