@@ -623,25 +623,6 @@ public class MediaUtils {
         return uri.getAuthority().startsWith("com.google.android.apps.docs.storage")
                 || uri.getAuthority().startsWith("com.google.android.apps.photos.content");
     }
-
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is Google Photos.
-     */
-    public static boolean isGooglePhotosUri(Uri uri) {
-        return "com.google.android.apps.photos.content".equals(uri
-                .getAuthority());
-    }
-
-    /**
-     * @param uri The Uri to check
-     * @return Whether the Uri authority is Google Drive.
-     */
-    private static boolean isGoogleDriveDocument(Uri uri) {
-        return uri.getAuthority().startsWith("com.google.android.apps.docs.storage")
-                || uri.getAuthority().startsWith("com.google.android.apps.photos.content");
-    }
-
     /**
      * Get the value of the data column for this Uri. This is useful for
      * MediaStore Uris, and other file-based ContentProviders.
