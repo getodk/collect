@@ -50,7 +50,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
 public class BearingWidget extends QuestionWidget implements BinaryWidget {
     private final Button getBearingButton;
     private final boolean isSensorAvailable;
-    private final EditText answer;
+    protected final EditText answer;
     private final Drawable textBackground;
 
     public BearingWidget(Context context, FormEntryPrompt prompt) {
@@ -77,12 +77,17 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
         String s = prompt.getAnswerText();
         if (s != null && !s.equals("")) {
             getBearingButton.setText(getContext().getString(R.string.replace_bearing));
-            if (!isSensorAvailable && answer != null) {
-                answer.setText(s);
-            }
+            setAnswer(s);
             setBinaryData(s);
         }
         addAnswerView(answerLayout);
+    }
+
+    public void setAnswer(String s) {
+        if (!isSensorAvailable && answer != null) {
+            answer.setText(s);
+        }
+
     }
 
     @Override
@@ -124,7 +129,7 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
         answer.cancelLongPress();
     }
 
-    private boolean checkForRequiredSensors() {
+    public boolean checkForRequiredSensors() {
 
         boolean isAccelerometerSensorAvailable = false;
         boolean isMagneticFieldSensorAvailable = false;

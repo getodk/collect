@@ -1,10 +1,12 @@
 package org.odk.collect.android.widgets;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 import net.bytebuddy.utility.RandomString;
 
 import org.javarosa.core.model.data.StringData;
+import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
 import org.odk.collect.android.widgets.base.BinaryWidgetTest;
 import org.robolectric.RuntimeEnvironment;
@@ -16,10 +18,29 @@ public class BearingWidgetTest extends BinaryWidgetTest<BearingWidget, StringDat
 
     private String barcodeData;
 
+    public class MockBearingWidget extends BearingWidget {
+
+        public MockBearingWidget(Context context, FormEntryPrompt prompt) {
+            super(context, prompt);
+        }
+
+        @Override
+        public boolean checkForRequiredSensors() {
+            return false;
+        }
+
+        @Override
+        public void setAnswer(String s) {
+            if (answer != null) {
+                answer.setText(s);
+            }
+        }
+    }
+
     @NonNull
     @Override
     public BearingWidget createWidget() {
-        return new BearingWidget(RuntimeEnvironment.application, formEntryPrompt);
+        return new MockBearingWidget(RuntimeEnvironment.application, formEntryPrompt);
     }
 
     @Override
