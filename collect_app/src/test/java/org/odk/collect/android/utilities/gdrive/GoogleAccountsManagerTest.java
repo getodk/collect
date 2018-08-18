@@ -1,17 +1,22 @@
 package org.odk.collect.android.utilities.gdrive;
 
 import android.accounts.Account;
+import android.app.Activity;
 import android.content.Intent;
 
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.karumi.dexter.listener.single.PermissionListener;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.preferences.ServerPreferencesFragment;
+import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -22,20 +27,20 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
+import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 /**
  * @author Shobhit Agarwal
  */
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({GoogleAccountCredential.class, ThemeUtils.class})
+@PrepareForTest({GoogleAccountCredential.class, ThemeUtils.class, PermissionUtils.class})
 public class GoogleAccountsManagerTest {
 
     @Mock
@@ -46,6 +51,12 @@ public class GoogleAccountsManagerTest {
     private Intent mockIntent;
     @Mock
     private ThemeUtils mockThemeUtils;
+    @Mock
+    private ServerPreferencesFragment fragment;
+    @Mock
+    private Activity activity;
+    @Mock
+    PermissionListener permissionListener;
 
     private TestGoogleAccountSelectionListener listener;
     private GoogleAccountsManager googleAccountsManager;
@@ -61,11 +72,6 @@ public class GoogleAccountsManagerTest {
     private void stubSavedAccount(String accountName) {
         when(mockPreferences.get(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT)).thenReturn(accountName);
         stubAccount(accountName);
-    }
-
-    private void stubAccountPermission(boolean permission) {
-        doReturn(permission).when(googleAccountsManager).checkAccountPermission();
-        doNothing().when(googleAccountsManager).requestAccountPermission();
     }
 
     private void stubCredential() {
@@ -84,11 +90,18 @@ public class GoogleAccountsManagerTest {
     }
 
     private void removeAccounts() {
-        doReturn(new Account[]{}).when(mockedCredential).getAllAccounts();
+        doReturn(null).when(mockedCredential).getAllAccounts();
     }
 
-    private void stubFragment() {
-        Whitebox.setInternalState(googleAccountsManager, "fragment", new ServerPreferencesFragment());
+    private void mockPermissionUtils() throws Exception {
+        mockStatic(PermissionUtils.class, new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                Whitebox.invokeMethod(googleAccountsManager, "chooseAccount");
+                return null;
+            }
+        });
+
     }
 
     private void stubPreferences() {
@@ -101,14 +114,14 @@ public class GoogleAccountsManagerTest {
     }
 
     @Before
-    public void setup() {
-        googleAccountsManager = spy(new GoogleAccountsManager(mockedCredential, mockPreferences, mockIntent, mockThemeUtils));
+    public void setup() throws Exception {
+        googleAccountsManager = spy(new GoogleAccountsManager(mockedCredential, mockPreferences, mockIntent, mockThemeUtils, activity, fragment));
         listener = new TestGoogleAccountSelectionListener();
         googleAccountsManager.setListener(listener);
 
         stubCredential();
         stubPreferences();
-        stubFragment();
+        mockPermissionUtils();
     }
 
     @Test
@@ -131,7 +144,7 @@ public class GoogleAccountsManagerTest {
         //removing the account simulates the deletion of the account via Google account settings.
         removeAccounts();
 
-        assertNull(googleAccountsManager.getSelectedAccount());
+        assertEquals(googleAccountsManager.getSelectedAccount(), "");
         assertNull(savedAccount);
     }
 
@@ -144,10 +157,9 @@ public class GoogleAccountsManagerTest {
 
     @Test
     public void displayAccountPickerDialogWhenAutoChooseDisabledTest() {
-        stubAccountPermission(true);
         stubSavedAccount(EXPECTED_ACCOUNT);
         googleAccountsManager.disableAutoChooseAccount();
-        googleAccountsManager.chooseAccount();
+        googleAccountsManager.chooseAccountAndRequestPermissionIfNeeded();
 
         assertNull(listener.getAccountName());
         assertNull(currentAccount);
@@ -157,9 +169,8 @@ public class GoogleAccountsManagerTest {
 
     @Test
     public void autoSelectAccountInAutoChooseWhenAccountIsAvailableTest() {
-        stubAccountPermission(true);
         stubSavedAccount(EXPECTED_ACCOUNT);
-        googleAccountsManager.chooseAccount();
+        googleAccountsManager.chooseAccountAndRequestPermissionIfNeeded();
 
         assertEquals(EXPECTED_ACCOUNT, listener.getAccountName());
         assertEquals(EXPECTED_ACCOUNT, currentAccount);
@@ -169,9 +180,8 @@ public class GoogleAccountsManagerTest {
 
     @Test
     public void displayAccountPickerDialogInAutoChooseWhenNoAccountIsNotAvailableTest() {
-        stubAccountPermission(true);
         stubSavedAccount("");
-        googleAccountsManager.chooseAccount();
+        googleAccountsManager.chooseAccountAndRequestPermissionIfNeeded();
 
         assertNull(listener.getAccountName());
         assertNull(currentAccount);
@@ -180,23 +190,9 @@ public class GoogleAccountsManagerTest {
     }
 
     @Test
-    public void shouldRequestForPermissionIfPermissionNotGivenTest() {
-        stubAccountPermission(false);
-        stubSavedAccount(EXPECTED_ACCOUNT);
-        googleAccountsManager.chooseAccount();
-
-        assertNull(listener.getAccountName());
-        assertNull(currentAccount);
-        verify(googleAccountsManager, times(0)).selectAccount(EXPECTED_ACCOUNT);
-        verify(googleAccountsManager, times(0)).showAccountPickerDialog();
-        verify(googleAccountsManager, times(1)).requestAccountPermission();
-    }
-
-    @Test
     public void accountNameShouldBeSetProperlyIfPermissionsGivenAndAutoSelectEnabledTest() {
-        stubAccountPermission(true);
         stubSavedAccount(EXPECTED_ACCOUNT);
-        googleAccountsManager.chooseAccount();
+        googleAccountsManager.chooseAccountAndRequestPermissionIfNeeded();
 
         assertEquals(EXPECTED_ACCOUNT, listener.getAccountName());
         assertEquals(EXPECTED_ACCOUNT, currentAccount);
