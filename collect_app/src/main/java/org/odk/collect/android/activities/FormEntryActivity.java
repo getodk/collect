@@ -944,9 +944,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 // So I write so, but I still there are some way to get its extension
                 return "";
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             Timber.e(e);
             return "";
         }
