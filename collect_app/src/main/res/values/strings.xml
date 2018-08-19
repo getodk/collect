@@ -654,4 +654,6 @@
     <string name="image_not_saved">The image can not be saved because of a problem with the corresponding instance file.</string>
     <string name="loading_form_failed">An error occurred while loading the form. Please try again.</string>
     <string name="sms_invalid_phone_number_description">Set a destination phone number for SMS submissions or change your transport type.</string>
+    <string name="google_invalid_account_title">Google account missing!</string>
+    <string name="google_invalid_account_description">Please select a Google account or change your transport type.</string>
 </resources>
