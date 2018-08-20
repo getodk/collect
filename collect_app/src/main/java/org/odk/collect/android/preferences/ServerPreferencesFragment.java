@@ -57,6 +57,7 @@ import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FORMLIST_URL;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PROTOCOL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SMS_GATEWAY;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SMS_PREFERENCE;
@@ -464,8 +465,9 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
 
     private void runGoogleAccountValidation() {
         String account = (String) GeneralSharedPreferences.getInstance().get(KEY_SELECTED_GOOGLE_ACCOUNT);
+        String protocol = (String) GeneralSharedPreferences.getInstance().get(KEY_PROTOCOL);
 
-        if (TextUtils.isEmpty(account)) {
+        if (TextUtils.isEmpty(account) && protocol.equals(getString(R.string.protocol_google_sheets))) {
 
             AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
                     .setIcon(android.R.drawable.ic_dialog_info)
