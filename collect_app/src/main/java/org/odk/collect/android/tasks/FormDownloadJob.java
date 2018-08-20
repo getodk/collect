@@ -68,7 +68,8 @@ public class FormDownloadJob extends Job {
     private String password;
 
     public static final int PROGRESS_REQUEST_RECEIVED = 1;
-    public static final int PROGRESS_REQUEST_SATISFIED = 2;
+    public static final int PROGRESS_REQUEST_BEING_PROCESSED = 2;
+    public static final int PROGRESS_REQUEST_SATISFIED = 3;
 
     @NonNull
     @Override
@@ -85,7 +86,7 @@ public class FormDownloadJob extends Job {
                 password = bundle.getString(ApplicationConstants.BundleKeys.PASSWORD);
             }
 
-            sendDownloadServiceBroadcastResult(getContext(), PROGRESS_REQUEST_RECEIVED, formId, true, null);
+            sendDownloadServiceBroadcastResult(getContext(), PROGRESS_REQUEST_BEING_PROCESSED, formId, true, null);
 
             if (!TextUtils.isEmpty(formId)) {
                 Timber.i("STARTED RUNNING JOB -> Download Form %s", formId);
@@ -139,9 +140,22 @@ public class FormDownloadJob extends Job {
             return Result.SUCCESS;
         } else {
             Timber.e("DOWNLOAD FORM FAILED BECAUSE BUNDLE DOES NOT CONTAIN FORM_ID");
-            sendDownloadServiceBroadcastResult(getContext(), PROGRESS_REQUEST_RECEIVED, formId, false, "Bundle does not contain the " + ApplicationConstants.BundleKeys.FORM_ID);
+            sendDownloadServiceBroadcastResult(getContext(), PROGRESS_REQUEST_BEING_PROCESSED, formId, false, "Bundle does not contain the " + ApplicationConstants.BundleKeys.FORM_ID);
             return Result.FAILURE;
         }
+    }
+
+    /**
+     * See {@link #sendDownloadServiceBroadcastResult(Context, String, int, String, boolean, String)}
+     *
+     * @param context
+     * @param progressStage
+     * @param formId
+     * @param success
+     * @param errorReason
+     */
+    private void sendDownloadServiceBroadcastResult(@NonNull Context context, int progressStage, @Nullable String formId, boolean success, @Nullable String errorReason) {
+        sendDownloadServiceBroadcastResult(context, transactionId, progressStage, formId, success, errorReason);
     }
 
     /**
@@ -151,6 +165,8 @@ public class FormDownloadJob extends Job {
      * The broadcast contains the following extras:
      *
      *  - {@link ApplicationConstants.BundleKeys#SUCCESS_KEY}(Boolean) - Mandatory extra. Was the form download successful
+     *  - {@link ApplicationConstants.BundleKeys#PROGRESS_STAGE}(Integer) - Mandatory extra. At which stage of the download is this: This can either be {@link FormDownloadJob#PROGRESS_REQUEST_RECEIVED} or {@link FormDownloadJob#PROGRESS_REQUEST_SATISFIED}
+     *  - {@link ApplicationConstants.BundleKeys#TRANSACTION_ID}(String) - Mandatory. This uniquely identifies the download request
      *  - {@link ApplicationConstants.BundleKeys#ERROR_REASON}(String) - Optional. In case of an error, why did the error occur
      *  - {@link ApplicationConstants.BundleKeys#FORM_ID}(Integer) - Optional. Some errors might be because the form id was not passed. This is the FORM_ID for which
      *  the error occurred
@@ -161,7 +177,7 @@ public class FormDownloadJob extends Job {
      * @param success Is the form download a success
      * @param errorReason Reason why the form download was a failure
      */
-    private void sendDownloadServiceBroadcastResult(@NonNull Context context, int progressStage, @Nullable String formId, boolean success, @Nullable String errorReason) {
+    public static void sendDownloadServiceBroadcastResult(@NonNull Context context, String transactionId, int progressStage, @Nullable String formId, boolean success, @Nullable String errorReason) {
         Intent intent = new Intent(ACTION);
         intent.putExtra(ApplicationConstants.BundleKeys.PROGRESS_STAGE, progressStage);
         intent.putExtra(ApplicationConstants.BundleKeys.SUCCESS_KEY, success);
