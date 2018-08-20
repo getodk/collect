@@ -117,8 +117,6 @@
   <string name="send_data">Lähetä valmis lomake</string>
   <string name="send_data_button">Lähetä valmis lomake (%s)</string>
   <string name="send_selected_data">Lähetä valitut</string>
-  <string name="send_selected_data_internet">Lähetä (Internet)</string>
-  <string name="send_selected_data_sms">Lähetä (SMS)</string>
   <string name="view_sent_forms">Tarkastele lähetettyä lomaketta</string>
   <string name="view_sent_forms_button">Tarkastele lähetettyä lomaketta (%s)</string>
   <string name="server_auth_credentials">Väärä käyttäjätunnus tai salasana palvelimelle: %s</string>
@@ -514,7 +512,6 @@
   <string name="invalid_email_address">Virheellinen sähköpostiosoite!</string>
   <string name="sort_by">Lajitteluperuste</string>
   <string name="server">Palvelin</string>
-  <string name="submission_transport_admin_setting">Lähetyksen välitys</string>
   <string name="select_value">Valitse arvo</string>
   <string name="edit_value">Muokkaa arvoa</string>
   <string name="no_value_selected">Ei valittua arvoa</string>
@@ -615,7 +612,6 @@
   <string name="sms_invalid_phone_number">Väärä puhelinnumero!</string>
   <!--Sms submission-->
   <string name="sms_no_reception">\'Epäonnistui\' EEE dd MMM yyyy \'kello\' HH:mm \'koska ei ollut kenttää\'</string>
-  <string name="sms_no_number">\'Epäonnistui\' EEE dd MMM yyyy \'kello\' HH:mm \'koska ei ollut puhelinnumeroa.\'</string>
   <string name="sms_fatal_error">\'Epäonnistui\' EEE dd MMM yyyy \'kello\' HH:mm</string>
   <string name="sms_airplane_mode">\'Epäonnistui\' EEE dd MMM yyyy \'kello\' HH:mm \'koska lentokenttämoodi oli päällä.\'</string>
   <string name="sms_no_message">Tässä kyselyssä ei ole kysymyksiä, joilla olisi SMS-tägiä.</string>
@@ -631,7 +627,6 @@
   <string name="sms_submissions_notif_description">Useita lomakkeita parhaillaan lähetettävänä.</string>
   <string name="transport_type_internet">Wifi/mobiilidata (suositeltu)</string>
   <string name="transport_type_sms">SMS-tekstiviesti</string>
-  <string name="transport_type_both">Valitse lähettäessä</string>
   <string name="seconds">Sekunteja</string>
   <string name="rank_items">Järjestä</string>
   <string name="image_not_saved">Kuvaa ei voida tallentaa vastauskerran tiedoston ongelman vuoksi.</string>

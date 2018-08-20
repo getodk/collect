@@ -117,8 +117,6 @@
   <string name="send_data">Enviar Formulario Finalizado</string>
   <string name="send_data_button">Enviar Formulario Finalizado (%s)</string>
   <string name="send_selected_data">Enviar seleccionado</string>
-  <string name="send_selected_data_internet">Enviar (Internet)</string>
-  <string name="send_selected_data_sms">Enviar (SMS)</string>
   <string name="view_sent_forms">Ver Formularios Enviados</string>
   <string name="view_sent_forms_button">Ver Formularios Enviados (%s)</string>
   <string name="server_auth_credentials">Usuario o contraseña inválidos para el servidor: %s</string>
@@ -516,7 +514,6 @@
   <string name="invalid_email_address">Email inválido</string>
   <string name="sort_by">Ordenar por</string>
   <string name="server">Servidor</string>
-  <string name="submission_transport_admin_setting">Transporte de Envío</string>
   <string name="select_value">Seleccionar valor</string>
   <string name="edit_value">Editar valor</string>
   <string name="no_value_selected">Ningún valor seleccionado</string>
@@ -617,7 +614,6 @@
   <string name="sms_invalid_phone_number">Número de teléfono inválido!</string>
   <!--Sms submission-->
   <string name="sms_no_reception">\'Fallo en\' EEE, MMM dd, yyyy \' \' HH:mm \'debido a no recepción\'</string>
-  <string name="sms_no_number">\'Fallo en\' EEE, MMM dd, yyyy \'at\' HH:mm \': Falta número telefónico\'</string>
   <string name="sms_fatal_error">\'Fallo en\' EEE, MMM dd, yyyy \' \' HH:mm</string>
   <string name="sms_airplane_mode">\'Fallo en\' EEE, MMM dd, yyyy \' \' HH:mm \'debido a  que el Modo Avión esta activado\'</string>
   <string name="sms_no_message">Este formulario no tiene etiquetas SMS</string>
@@ -633,7 +629,6 @@
   <string name="sms_submissions_notif_description">Varios formularios están siendo enviados actualmente.</string>
   <string name="transport_type_internet">Wifi/Datos (recomendado)</string>
   <string name="transport_type_sms">SMS</string>
-  <string name="transport_type_both">Seleccionar al Enviar</string>
   <string name="seconds">Segundos</string>
   <string name="rank_items">Ranking de Items</string>
   <string name="image_not_saved">La imagen no se puede guardar debido a un problema con el archivo de instancia correspondiente.</string>

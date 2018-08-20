@@ -117,8 +117,6 @@
   <string name="send_data">Надіслати завершену анкету</string>
   <string name="send_data_button">Надіслати завершену анкету (%s)</string>
   <string name="send_selected_data">Надіслати обране</string>
-  <string name="send_selected_data_internet">Надіслати (Інтернет)</string>
-  <string name="send_selected_data_sms">Надіслати (Повідомлення)</string>
   <string name="view_sent_forms">Переглянути надіслану анкету</string>
   <string name="view_sent_forms_button">Переглянути надіслану анкету (%s)</string>
   <string name="server_auth_credentials">Неправильні ім\'я користувача або пароль до сервера: %s</string>
@@ -514,7 +512,6 @@
   <string name="invalid_email_address">Некоректна електронна адреса!</string>
   <string name="sort_by">Сортувати за</string>
   <string name="server">Сервер</string>
-  <string name="submission_transport_admin_setting">Транспортування відправлень</string>
   <string name="select_value">Обрати заначення</string>
   <string name="edit_value">Редагувати значення</string>
   <string name="no_value_selected">Значення не обране</string>
@@ -615,7 +612,6 @@
   <string name="sms_invalid_phone_number">Некоректний номер!</string>
   <!--Sms submission-->
   <string name="sms_no_reception">\'Не вдалося\' EEE, MMM dd, yyyy \'в\' HH:mm \'через відсутність отримувача\'</string>
-  <string name="sms_no_number">\'Не вдалося\' EEE, MMM dd, yyyy \'в\' HH:mm \'через не вказаний номер телефону\'</string>
   <string name="sms_fatal_error">\'Не вдалося\' EEE, MMM dd, yyyy \'в\' HH:mm</string>
   <string name="sms_airplane_mode">\'Не вдалося\' EEE, MMM dd, yyyy \'в\' HH:mm \'через ввімкнений Режим Без Зв/\'язку\'</string>
   <string name="sms_no_message">Ця анкета не має питань з позначками повідомлень.</string>
@@ -633,7 +629,6 @@
   <string name="sms_submissions_notif_description">Декілька анкет наразі надсилаються.</string>
   <string name="transport_type_internet">Wifi/Мобільна мережа (рекомендовано)</string>
   <string name="transport_type_sms">Повідомлення</string>
-  <string name="transport_type_both">Обрати та надіслати</string>
   <string name="seconds">Секунди</string>
   <string name="rank_items">Засоби оцінки</string>
   <string name="image_not_saved">Зображення не може бути збережене через проблеми з файлом відповідної анкети.</string>

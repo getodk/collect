@@ -117,8 +117,6 @@
   <string name="send_data">Odeslat dokončený dotazník</string>
   <string name="send_data_button">Odeslat dokončený dotazník (%s)</string>
   <string name="send_selected_data">Odeslat vybrané</string>
-  <string name="send_selected_data_internet">Odeslat (Internet)</string>
-  <string name="send_selected_data_sms">Odeslat (SMS)</string>
   <string name="view_sent_forms">Zobrazit odeslaný formulář </string>
   <string name="view_sent_forms_button">Zobrazit odeslaný formulář (%s)</string>
   <string name="server_auth_credentials">Neplatné uživatelské jméno nebo heslo pro server: %s</string>
@@ -514,7 +512,6 @@
   <string name="invalid_email_address">Neplatná emailová adresa!</string>
   <string name="sort_by">Seřazeno podle</string>
   <string name="server">Server</string>
-  <string name="submission_transport_admin_setting">Přenos odeslání</string>
   <string name="select_value">Vybrat hodnotu</string>
   <string name="edit_value">Upravit hodnotu</string>
   <string name="no_value_selected">Žádná hodnota nebyla vybrána</string>
@@ -632,7 +629,6 @@
   <string name="sms_submissions_notif_description">Právě se odesílá několik formulářů</string>
   <string name="transport_type_internet">Wifi / GSM (doporučeno)</string>
   <string name="transport_type_sms">SMS</string>
-  <string name="transport_type_both">Vybrat možnost odeslání</string>
   <string name="seconds">Vteřin</string>
   <string name="rank_items">Pořadí položek</string>
   <string name="image_not_saved">Obraz nelze uložit z důvodu problému s odpovídajícím instančním souborem.</string>
