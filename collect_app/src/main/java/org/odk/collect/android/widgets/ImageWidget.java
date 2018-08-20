@@ -29,6 +29,7 @@ import org.odk.collect.android.activities.CaptureSelfieActivityNewApi;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.PermissionListener;
+import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import java.io.File;
 import java.util.Locale;
@@ -80,19 +81,11 @@ public class ImageWidget extends BaseImageWidget {
         errorTextView.setVisibility(View.GONE);
 
         if (selfie) {
-            boolean isFrontCameraAvailable;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                isFrontCameraAvailable = CaptureSelfieActivityNewApi.isFrontCameraAvailable();
-            } else {
-                isFrontCameraAvailable = CaptureSelfieActivity.isFrontCameraAvailable();
-            }
-
-            if (!isFrontCameraAvailable) {
+            if (!CameraUtils.isFrontCameraAvailable()) {
                 captureButton.setEnabled(false);
                 errorTextView.setText(R.string.error_front_camera_unavailable);
                 errorTextView.setVisibility(View.VISIBLE);
             }
-
         }
     }
 

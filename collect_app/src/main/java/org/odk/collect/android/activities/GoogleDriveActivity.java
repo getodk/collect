@@ -55,7 +55,6 @@ import org.odk.collect.android.utilities.gdrive.DriveHelper;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -217,7 +216,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
      */
     private void getResultsFromApi() {
         if (!accountsManager.isGoogleAccountSelected()) {
-            accountsManager.chooseAccount();
+            accountsManager.chooseAccountAndRequestPermissionIfNeeded();
         } else {
             if (isDeviceOnline()) {
                 toDownload.clear();
@@ -235,13 +234,6 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
             currentPath.clear();
             currentPath.add((String) rootButton.getText());
         }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        accountsManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     /**
@@ -820,8 +812,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
 
         private void downloadFile(@NonNull String fileId, String fileName) throws IOException {
             File file = new File(Collect.FORMS_PATH + File.separator + fileName);
-            FileOutputStream fileOutputStream = new FileOutputStream(file);
-            driveHelper.downloadFile(fileId, fileOutputStream);
+            driveHelper.downloadFile(fileId, file);
         }
 
         @Override
