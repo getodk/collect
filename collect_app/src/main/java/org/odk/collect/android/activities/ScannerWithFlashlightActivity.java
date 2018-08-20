@@ -52,7 +52,7 @@ public class ScannerWithFlashlightActivity extends CollectAbstractActivity imple
 
         // if the device does not have flashlight in its camera,
         // then remove the switch flashlight button...
-        if (!hasFlash()) {
+        if (!hasFlash() || frontCameraUsed()) {
             switchFlashlightButton.setVisibility(View.GONE);
         }
 
@@ -98,6 +98,11 @@ public class ScannerWithFlashlightActivity extends CollectAbstractActivity imple
     private boolean hasFlash() {
         return getApplicationContext().getPackageManager()
                 .hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
+    }
+
+    private boolean frontCameraUsed() {
+        Bundle bundle = getIntent().getExtras();
+        return bundle != null && bundle.getBoolean("front");
     }
 
     public void switchFlashlight(View view) {
