@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.support.test.runner.AndroidJUnit4;
 import android.text.format.Formatter;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.tasks.sms.SmsService;
@@ -36,6 +37,7 @@ public class SmsSubmissionMemoryTest extends BaseFormEntryActivityTest {
     private static final int SUBMISSION_POOL_SIZE = 1000;
     private static final double STATUS_REPORT_PERCENT = .15 * SUBMISSION_POOL_SIZE;
 
+    @Ignore("This test isn't part of the suite so it should be run manually.")
     @Test
     public void testMemoryConsumption() {
         SmsSubmissionManager manager = new SmsSubmissionManager(activityTestRule.getActivity());
