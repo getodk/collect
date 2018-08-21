@@ -120,6 +120,10 @@ public final class WebUtils {
         }
     }
 
+    public static void clearCookies() {
+        Collect.getInstance().getCookieStore().clear();
+    }
+
     /**
      * Remove all credentials for accessing the specified host and, if the
      * username is not null or blank then add a (username, password) credential

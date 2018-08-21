@@ -133,6 +133,9 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
             String host = Uri.parse(url).getHost();
 
             if (host != null) {
+                // Clear cookies in case Collect was used recently and still has previous
+                // cookies from the previous request
+                WebUtils.clearCookies();
                 WebUtils.addCredentials(username, password, host);
             }
         }
@@ -207,6 +210,7 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
             String host = Uri.parse(url).getHost();
 
             if (host != null) {
+                WebUtils.clearCookies();
                 WebUtils.clearHostCredentials(host);
             }
         }
@@ -317,7 +321,13 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
                 Collect.getInstance().getActivityLogger().logAction(this,
                         "onCreateDialog.AUTH_DIALOG", "show");
 
-                return new AuthDialogUtility().createDialog(this, this, this.url);
+                AuthDialogUtility authDialogUtility = new AuthDialogUtility();
+                if (username != null && password != null && url != null) {
+                    authDialogUtility.setCustomUsername(username);
+                    authDialogUtility.setCustomPassword(password);
+                }
+
+                return authDialogUtility.createDialog(this, this, this.url);
         }
 
         return null;
@@ -376,6 +386,9 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
 
         // register this activity with the new uploader task
         instanceServerUploader.setUploaderListener(this);
+        if (url != null && username != null && password != null) {
+            instanceServerUploader.setCompleteDestinationUrl(url + Collect.getInstance().getString(R.string.default_odk_submission));
+        }
         instanceServerUploader.execute(instancesToSend);
     }
 
