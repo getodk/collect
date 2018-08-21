@@ -46,6 +46,10 @@ public class ProgressDialogFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        super.onCreateDialog(savedInstanceState);
+
+        setRetainInstance(true);
+
         setCancelable(false);
 
         ProgressDialog dialog = new ProgressDialog(getActivity(), getTheme());
@@ -57,4 +61,13 @@ public class ProgressDialogFragment extends DialogFragment {
         return dialog;
     }
 
+
+    @Override
+    public void onDestroyView() {
+        Dialog dialog = getDialog();
+        if (dialog != null && getRetainInstance()) {
+            dialog.setDismissMessage(null);
+        }
+        super.onDestroyView();
+    }
 }
