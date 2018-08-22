@@ -14,13 +14,16 @@
 
 package org.odk.collect.android.activities;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -127,6 +130,7 @@ import org.odk.collect.android.widgets.RangeWidget;
 import org.odk.collect.android.widgets.StringWidget;
 
 import java.io.File;
+import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -182,6 +186,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     public static final String KEY_ERROR = "error";
     private static final String KEY_SAVE_NAME = "saveName";
 
+    private static final String TAG_IMAGE_UPLOADING_FRAGMENT = "image_uploading_fragment";
+
     // Identifies the gp of the form used to launch form entry
     public static final String KEY_FORMPATH = "formpath";
 
@@ -208,6 +214,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     // Random ID
     private static final int DELETE_REPEAT = 654321;
+
+    private android.app.Fragment imageUploadingFragment;
 
     private String formPath;
     private String saveName;
@@ -759,9 +767,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                 ProgressDialogFragment progressDialog = ProgressDialogFragment.newInstance(getString(R.string.please_wait));
                 progressDialog.show(getSupportFragmentManager(), ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
-
+/*
                 Runnable runnable = () -> saveChosenImage(intent.getData());
-                new Thread(runnable).start();
+                new Thread(runnable).start();*/
+
+
+
+                new ImageUploadingTask().execute(intent.getData());
 
                 break;
             case RequestCodes.AUDIO_CAPTURE:
@@ -888,7 +900,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
 
-    private void saveChosenImage(Uri selectedImage) {
+    /*private void saveChosenImage(Uri selectedImage) {
         // Copy file to sdcard
         File instanceFile = getFormController().getInstanceFile();
         if (instanceFile != null) {
@@ -942,7 +954,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
     }
 
-
+*/
     /**
      * Using contentResolver to get a file's extension by the uri returned from OnActivityResult.
      *
@@ -2942,6 +2954,59 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         EmptyView(Context context) {
             super(context);
+        }
+    }
+
+
+    class ImageUploadingTask extends AsyncTask<Uri, Void, File> {
+
+        @Override
+        protected File doInBackground(Uri... uris) {
+            File instanceFile = getFormController().getInstanceFile();
+            if (instanceFile != null) {
+                String instanceFolder1 = instanceFile.getParent();
+                String destImagePath = instanceFolder1 + File.separator + System.currentTimeMillis() + ".jpg";
+
+                File chosenImage;
+                try {
+                    chosenImage = MediaUtils.getFileFromUri(getBaseContext(), uris[0], Images.Media.DATA);
+                    if (chosenImage != null) {
+                        final File newImage = new File(destImagePath);
+                        FileUtils.copyFile(chosenImage, newImage);
+                        ImageConverter.execute(newImage.getPath(), getWidgetWaitingForBinaryData(), getBaseContext());
+                        return newImage;
+                    } else {
+                            Timber.e("Could not receive chosen image");
+                            ToastUtils.showShortToastInMiddle(R.string.error_occured);
+                            return null;
+                    }
+                } catch (GDriveConnectionException e) {
+
+                        Timber.e("Could not receive chosen image due to connection problem");
+                        ToastUtils.showLongToastInMiddle(R.string.gdrive_connection_exception);
+                        return null;
+                }
+            } else {
+                ToastUtils.showLongToast(R.string.image_not_saved);
+                Timber.w(getString(R.string.image_not_saved));
+                return null;
+            }
+
+        }
+
+        @Override
+        protected void onPostExecute(File result) {
+            Fragment prev = getSupportFragmentManager().findFragmentByTag(ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
+            if (prev != null) {
+                DialogFragment df = (DialogFragment) prev;
+                df.dismiss();
+            }
+
+            if (getCurrentViewIfODKView() != null) {
+                getCurrentViewIfODKView().setBinaryData(result);
+            }
+            saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+            refreshCurrentView();
         }
     }
 }
