@@ -5,14 +5,11 @@ import android.app.Activity;
 import android.content.Intent;
 
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.karumi.dexter.listener.single.PermissionListener;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.preferences.ServerPreferencesFragment;
@@ -55,8 +52,6 @@ public class GoogleAccountsManagerTest {
     private ServerPreferencesFragment fragment;
     @Mock
     private Activity activity;
-    @Mock
-    PermissionListener permissionListener;
 
     private TestGoogleAccountSelectionListener listener;
     private GoogleAccountsManager googleAccountsManager;
@@ -79,8 +74,6 @@ public class GoogleAccountsManagerTest {
             currentAccount = invocation.getArgument(0);
             return null;
         }).when(mockedCredential).setSelectedAccountName(anyString());
-
-        stubAccount(EXPECTED_ACCOUNT);
     }
 
     private void stubAccount(String name) {
@@ -93,15 +86,11 @@ public class GoogleAccountsManagerTest {
         doReturn(null).when(mockedCredential).getAllAccounts();
     }
 
-    private void mockPermissionUtils() throws Exception {
-        mockStatic(PermissionUtils.class, new Answer() {
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                Whitebox.invokeMethod(googleAccountsManager, "chooseAccount");
-                return null;
-            }
+    private void mockPermissionUtils() {
+        mockStatic(PermissionUtils.class, invocation -> {
+            Whitebox.invokeMethod(googleAccountsManager, "chooseAccount");
+            return null;
         });
-
     }
 
     private void stubPreferences() {
@@ -114,7 +103,7 @@ public class GoogleAccountsManagerTest {
     }
 
     @Before
-    public void setup() throws Exception {
+    public void setup() {
         googleAccountsManager = spy(new GoogleAccountsManager(mockedCredential, mockPreferences, mockIntent, mockThemeUtils, activity, fragment));
         listener = new TestGoogleAccountSelectionListener();
         googleAccountsManager.setListener(listener);

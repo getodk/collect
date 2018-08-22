@@ -146,7 +146,7 @@ public class GoogleAccountsManager implements GoogleApiClient.OnConnectionFailed
 
     private void chooseAccount() {
         String accountName = getSelectedAccount();
-        if (autoChooseAccount && accountName != null && !accountName.isEmpty()) {
+        if (autoChooseAccount && !accountName.isEmpty()) {
             selectAccount(accountName);
         } else {
             if (fragment != null && fragment instanceof ServerPreferencesFragment) {
@@ -157,6 +157,7 @@ public class GoogleAccountsManager implements GoogleApiClient.OnConnectionFailed
         }
     }
 
+    @NonNull
     public String getSelectedAccount() {
         Account[] googleAccounts = credential.getAllAccounts();
         String account = (String) preferences.get(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
@@ -212,7 +213,7 @@ public class GoogleAccountsManager implements GoogleApiClient.OnConnectionFailed
 
     private Account getAccountPickerCurrentAccount() {
         String selectedAccountName = getSelectedAccount();
-        if (selectedAccountName == null || selectedAccountName.isEmpty()) {
+        if (selectedAccountName.isEmpty()) {
             Account[] googleAccounts = credential.getAllAccounts();
             if (googleAccounts != null && googleAccounts.length > 0) {
                 selectedAccountName = googleAccounts[0].name;
