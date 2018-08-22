@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
@@ -23,7 +22,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -31,8 +29,6 @@ import android.provider.MediaStore.Images;
 import android.provider.OpenableColumns;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
@@ -88,6 +84,7 @@ import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
 import org.odk.collect.android.exception.GDriveConnectionException;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataManager;
+import org.odk.collect.android.fragments.ImageUploadingFragment;
 import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
@@ -130,7 +127,6 @@ import org.odk.collect.android.widgets.RangeWidget;
 import org.odk.collect.android.widgets.StringWidget;
 
 import java.io.File;
-import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -173,7 +169,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private static final boolean EXIT = true;
     private static final boolean DO_NOT_EXIT = false;
     private static final boolean EVALUATE_CONSTRAINTS = true;
-    private static final boolean DO_NOT_EVALUATE_CONSTRAINTS = false;
+    public static final boolean DO_NOT_EVALUATE_CONSTRAINTS = false;
 
     // Extra returned from gp activity
     public static final String LOCATION_RESULT = "LOCATION_RESULT";
@@ -215,8 +211,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     // Random ID
     private static final int DELETE_REPEAT = 654321;
 
-    private android.app.Fragment imageUploadingFragment;
-
     private String formPath;
     private String saveName;
 
@@ -253,6 +247,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private String waitingXPath;
     private boolean newForm = true;
     private boolean onResumeWasCalledWithoutPermissions;
+
+    ImageUploadingFragment imageUploadingFragment;
 
     public void allowSwiping(boolean doSwipe) {
         this.doSwipe = doSwipe;
@@ -300,6 +296,17 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             beenSwiped = true;
             showPreviousView();
         });
+
+        if (savedInstanceState == null) {
+
+            imageUploadingFragment = new ImageUploadingFragment();
+            getFragmentManager().beginTransaction().add(imageUploadingFragment, TAG_IMAGE_UPLOADING_FRAGMENT).commit();
+        }
+        else {
+            FragmentManager fm = getFragmentManager();
+            imageUploadingFragment = (ImageUploadingFragment) fm.findFragmentByTag(TAG_IMAGE_UPLOADING_FRAGMENT);
+
+        }
 
         requestStoragePermissions(this, new PermissionListener() {
             @Override
@@ -572,7 +579,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
     }
 
-    private FormController getFormController() {
+    public FormController getFormController() {
         return Collect.getInstance().getFormController();
     }
 
@@ -772,8 +779,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 new Thread(runnable).start();*/
 
 
+                imageUploadingFragment.beginImageUploadingTask(intent.getData());
 
-                new ImageUploadingTask().execute(intent.getData());
+//                new ImageUploadingTask().execute(intent.getData());
 
                 break;
             case RequestCodes.AUDIO_CAPTURE:
@@ -989,7 +997,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
     }
 
-    private QuestionWidget getWidgetWaitingForBinaryData() {
+    public QuestionWidget getWidgetWaitingForBinaryData() {
         QuestionWidget questionWidget = null;
         for (QuestionWidget qw : ((ODKView) currentView).getWidgets()) {
             if (qw.isWaitingForData()) {
@@ -1131,7 +1139,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * @return false if any error occurs while saving (constraint violated,
      * etc...), true otherwise.
      */
-    private boolean saveAnswersForCurrentScreen(boolean evaluateConstraints) {
+    public boolean saveAnswersForCurrentScreen(boolean evaluateConstraints) {
         FormController formController = getFormController();
         // only try to save if the current event is a question or a field-list group
         // and current view is an ODKView (occasionally we show blank views that do not have any
@@ -2927,7 +2935,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * to access currentView as an ODKView object to avoid inconsistency
      **/
     @Nullable
-    private ODKView getCurrentViewIfODKView() {
+    public ODKView getCurrentViewIfODKView() {
         if (currentView instanceof ODKView) {
             return (ODKView) currentView;
         }
@@ -2958,55 +2966,5 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
 
-    class ImageUploadingTask extends AsyncTask<Uri, Void, File> {
-
-        @Override
-        protected File doInBackground(Uri... uris) {
-            File instanceFile = getFormController().getInstanceFile();
-            if (instanceFile != null) {
-                String instanceFolder1 = instanceFile.getParent();
-                String destImagePath = instanceFolder1 + File.separator + System.currentTimeMillis() + ".jpg";
-
-                File chosenImage;
-                try {
-                    chosenImage = MediaUtils.getFileFromUri(getBaseContext(), uris[0], Images.Media.DATA);
-                    if (chosenImage != null) {
-                        final File newImage = new File(destImagePath);
-                        FileUtils.copyFile(chosenImage, newImage);
-                        ImageConverter.execute(newImage.getPath(), getWidgetWaitingForBinaryData(), getBaseContext());
-                        return newImage;
-                    } else {
-                            Timber.e("Could not receive chosen image");
-                            ToastUtils.showShortToastInMiddle(R.string.error_occured);
-                            return null;
-                    }
-                } catch (GDriveConnectionException e) {
-
-                        Timber.e("Could not receive chosen image due to connection problem");
-                        ToastUtils.showLongToastInMiddle(R.string.gdrive_connection_exception);
-                        return null;
-                }
-            } else {
-                ToastUtils.showLongToast(R.string.image_not_saved);
-                Timber.w(getString(R.string.image_not_saved));
-                return null;
-            }
-
-        }
-
-        @Override
-        protected void onPostExecute(File result) {
-            Fragment prev = getSupportFragmentManager().findFragmentByTag(ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
-            if (prev != null) {
-                DialogFragment df = (DialogFragment) prev;
-                df.dismiss();
-            }
-
-            if (getCurrentViewIfODKView() != null) {
-                getCurrentViewIfODKView().setBinaryData(result);
-            }
-            saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-            refreshCurrentView();
-        }
-    }
 }
+
