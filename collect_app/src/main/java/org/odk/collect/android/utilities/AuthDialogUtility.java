@@ -38,6 +38,9 @@ public class AuthDialogUtility {
     private EditText username;
     private EditText password;
 
+    private String customUsername;
+    private String customPassword;
+
     public AlertDialog createDialog(final Context context,
                                     final AuthDialogUtilityResultListener resultListener, String url) {
 
@@ -57,8 +60,9 @@ public class AuthDialogUtility {
         username = dialogView.findViewById(R.id.username_edit);
         password = dialogView.findViewById(R.id.password_edit);
 
-        username.setText(overriddenUrl != null ? null : getUserNameFromPreferences());
-        password.setText(overriddenUrl != null ? null : getPasswordFromPreferences());
+        // The custom username\password take precedence
+        username.setText(customUsername != null ? customUsername : overriddenUrl != null ? null : getUserNameFromPreferences());
+        password.setText(customPassword != null ? customPassword : overriddenUrl != null ? null : getPasswordFromPreferences());
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(context.getString(R.string.server_requires_auth));
@@ -73,7 +77,11 @@ public class AuthDialogUtility {
                 String userNameValue = username.getText().toString();
                 String passwordValue = password.getText().toString();
 
-                if (finalOverriddenUrl == null) {
+
+                // If custom username, password were passed, then we should not save the resulting credentials used
+                if (customUsername != null && customPassword != null) {
+                    setWebCredentials(finalOverriddenUrl != null ? finalOverriddenUrl : getServerFromPreferences());
+                } else if (finalOverriddenUrl == null) {
                     saveCredentials(userNameValue, passwordValue);
                     setWebCredentialsFromPreferences();
                 } else {
@@ -117,6 +125,14 @@ public class AuthDialogUtility {
 
         String host = Uri.parse(url).getHost();
         WebUtils.addCredentials(username.getText().toString(), password.getText().toString(), host);
+    }
+
+    public void setCustomUsername(String customUsername) {
+        this.customUsername = customUsername;
+    }
+
+    public void setCustomPassword(String customPassword) {
+        this.customPassword = customPassword;
     }
 
     private static String getServerFromPreferences() {

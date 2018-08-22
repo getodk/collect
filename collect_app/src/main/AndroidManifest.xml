@@ -161,7 +161,13 @@ the specific language governing permissions and limitations under the License.
                 <data android:mimeType="vnd.android.cursor.dir/vnd.odk.form" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.FormDownloadList" />
+        <activity android:name=".activities.FormDownloadList">
+            <intent-filter>
+                <action android:name="org.odk.collect.android.FORM_DOWNLOAD" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="vnd.android.cursor.dir/vnd.odk.form" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".activities.FileManagerTabs"
             android:configChanges="orientation|screenSize" />

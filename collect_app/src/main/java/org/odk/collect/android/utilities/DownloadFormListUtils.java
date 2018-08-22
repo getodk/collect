@@ -92,6 +92,7 @@ public class DownloadFormListUtils {
             String host = Uri.parse(url).getHost();
 
             if (host != null) {
+                WebUtils.clearCookies();
                 WebUtils.addCredentials(username, password, host);
             }
         }
@@ -462,6 +463,7 @@ public class DownloadFormListUtils {
             String host = Uri.parse(url).getHost();
 
             if (host != null) {
+                WebUtils.clearCookies();
                 WebUtils.clearHostCredentials(host);
             }
         }
