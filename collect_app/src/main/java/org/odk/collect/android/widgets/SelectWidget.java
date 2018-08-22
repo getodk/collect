@@ -18,6 +18,7 @@ package org.odk.collect.android.widgets;
 
 import android.content.Context;
 import android.media.MediaPlayer;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -28,6 +29,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.external.ExternalSelectChoice;
+import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.views.MediaLayout;
 
 import java.util.ArrayList;
@@ -126,7 +128,7 @@ public abstract class SelectWidget extends QuestionWidget {
         }
     }
 
-    protected MediaLayout createMediaLayout(int index, TextView textView) {
+    protected View createMediaLayout(int index, TextView textView) {
         String audioURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), FormEntryCaption.TEXT_FORM_AUDIO);
 
         String imageURI;
@@ -139,6 +141,22 @@ public abstract class SelectWidget extends QuestionWidget {
 
         String videoURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), "video");
         String bigImageURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), "big-image");
+
+        // Use a simple layout if the MediaLayout is not needed for a better performance
+        if (audioURI == null && imageURI == null && videoURI == null) {
+            LinearLayout simpleLayout = new LinearLayout(getContext());
+            simpleLayout.setOrientation(LinearLayout.VERTICAL);
+            simpleLayout.addView(textView);
+
+            if (index != items.size() - 1) {
+                View divider = new View(getContext());
+                divider.setBackgroundResource(new ThemeUtils(getContext()).getDivider());
+
+                simpleLayout.addView(divider);
+            }
+
+            return simpleLayout;
+        }
 
         MediaLayout mediaLayout = new MediaLayout(getContext());
         mediaLayout.setAVT(getFormEntryPrompt().getIndex(), "." + Integer.toString(index), textView, audioURI,
