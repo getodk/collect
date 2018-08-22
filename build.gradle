@@ -7,10 +7,11 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.1.2'
-        classpath 'com.google.gms:google-services:3.2.0'
+        classpath 'com.google.gms:google-services:4.0.1'
         classpath 'org.ow2.asm:asm:6.0' // https://github.com/jacoco/jacoco/issues/639#issuecomment-355424756
         classpath 'org.jacoco:org.jacoco.core:0.8.0'
         classpath 'io.fabric.tools:gradle:1.25.2'
+        classpath 'com.google.firebase:firebase-plugins:1.1.5'
     }
 }
 
@@ -36,7 +37,6 @@ configurations.all {
 ext {
     // Play Services is a big download so it should only be upgraded if necessary and after
     // community discussion and a warning period.
-    playServicesVersion = '10.0.1'
 
     supportLibraryVersion = '27.1.1'
     leakyCanaryVersion = '1.5.4'
