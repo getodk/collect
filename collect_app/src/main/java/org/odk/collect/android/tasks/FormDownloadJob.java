@@ -102,6 +102,17 @@ public class FormDownloadJob extends Job {
                         formDetailsArrayList.add(formDetails);
 
                         FormDownloader formDownloader = new FormDownloader();
+
+                        if (url != null && username != null && password != null) {
+                            String host = Uri.parse(url)
+                                    .getHost();
+
+                            if (host != null) {
+                                WebUtils.clearCookies();
+                                WebUtils.addCredentials(username, password, host);
+                            }
+                        }
+
                         HashMap<FormDetails, String> downloadedForms = formDownloader.downloadForms(formDetailsArrayList);
 
                         if (downloadedForms.size() > 0) {
@@ -137,6 +148,7 @@ public class FormDownloadJob extends Job {
                 sendDownloadServiceBroadcastResult(getContext(), PROGRESS_REQUEST_SATISFIED, formId ,false, "Null OR Empty " + ApplicationConstants.BundleKeys.FORM_ID);
             }
 
+            cleanUpWebCredentialsAndCookies();
             return Result.SUCCESS;
         } else {
             Timber.e("DOWNLOAD FORM FAILED BECAUSE BUNDLE DOES NOT CONTAIN FORM_ID");
@@ -195,7 +207,7 @@ public class FormDownloadJob extends Job {
     }
 
     private void reauthenticateAutomatically(@Nullable String serverUrl, @Nullable String username, @Nullable String password) {
-        if (url == null || username == null || password == null) {
+        if (serverUrl == null || username == null || password == null) {
             username = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_USERNAME);
             password = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_PASSWORD);
             serverUrl = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_SERVER_URL);
@@ -208,7 +220,27 @@ public class FormDownloadJob extends Job {
         String host = Uri.parse(serverUrl).getHost();
 
         if (host != null) {
+            WebUtils.clearCookies();
             WebUtils.addCredentials(username, password, host);
+        }
+    }
+
+    @Override
+    protected void onCancel() {
+        super.onCancel();
+
+        cleanUpWebCredentialsAndCookies();
+    }
+
+    private void cleanUpWebCredentialsAndCookies() {
+        if (url != null && username != null && password != null) {
+            String host = Uri.parse(url)
+                    .getHost();
+
+            if (host != null) {
+                WebUtils.clearCookies();
+                WebUtils.clearHostCredentials(host);
+            }
         }
     }
 }
