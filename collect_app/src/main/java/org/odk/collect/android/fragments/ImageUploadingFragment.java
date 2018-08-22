@@ -9,7 +9,7 @@ import android.support.annotation.Nullable;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.tasks.ImageUploadingTask;
 
-public class ImageUploadingFragment extends Fragment{
+public class ImageUploadingFragment extends Fragment {
 
     private ImageUploadingTask imageUploadingTask;
     private FormEntryActivity formEntryActivity;

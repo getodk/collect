@@ -298,14 +298,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         });
 
         if (savedInstanceState == null) {
-
             imageUploadingFragment = new ImageUploadingFragment();
             getFragmentManager().beginTransaction().add(imageUploadingFragment, TAG_IMAGE_UPLOADING_FRAGMENT).commit();
-        }
-        else {
+        } else {
             FragmentManager fm = getFragmentManager();
             imageUploadingFragment = (ImageUploadingFragment) fm.findFragmentByTag(TAG_IMAGE_UPLOADING_FRAGMENT);
-
         }
 
         requestStoragePermissions(this, new PermissionListener() {
@@ -774,14 +771,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                 ProgressDialogFragment progressDialog = ProgressDialogFragment.newInstance(getString(R.string.please_wait));
                 progressDialog.show(getSupportFragmentManager(), ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
-/*
-                Runnable runnable = () -> saveChosenImage(intent.getData());
-                new Thread(runnable).start();*/
-
 
                 imageUploadingFragment.beginImageUploadingTask(intent.getData());
-
-//                new ImageUploadingTask().execute(intent.getData());
 
                 break;
             case RequestCodes.AUDIO_CAPTURE:
@@ -907,62 +898,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
     }
 
-
-    /*private void saveChosenImage(Uri selectedImage) {
-        // Copy file to sdcard
-        File instanceFile = getFormController().getInstanceFile();
-        if (instanceFile != null) {
-            String instanceFolder1 = instanceFile.getParent();
-            String destImagePath = instanceFolder1 + File.separator + System.currentTimeMillis() + ".jpg";
-
-            File chosenImage;
-            try {
-                chosenImage = MediaUtils.getFileFromUri(this, selectedImage, Images.Media.DATA);
-                if (chosenImage != null) {
-                    final File newImage = new File(destImagePath);
-                    FileUtils.copyFile(chosenImage, newImage);
-                    ImageConverter.execute(newImage.getPath(), getWidgetWaitingForBinaryData(), this);
-                    runOnUiThread(() -> {
-                        Fragment prev = getSupportFragmentManager().findFragmentByTag(ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
-                        if (prev != null) {
-                            DialogFragment df = (DialogFragment) prev;
-                            df.dismiss();
-                        }
-                        if (getCurrentViewIfODKView() != null) {
-                            getCurrentViewIfODKView().setBinaryData(newImage);
-                        }
-                        saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                        refreshCurrentView();
-                    });
-                } else {
-                    runOnUiThread(() -> {
-                        Fragment prev = getSupportFragmentManager().findFragmentByTag(ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
-                        if (prev != null) {
-                            DialogFragment df = (DialogFragment) prev;
-                            df.dismiss();
-                        }
-                        Timber.e("Could not receive chosen image");
-                        ToastUtils.showShortToastInMiddle(R.string.error_occured);
-                    });
-                }
-            } catch (GDriveConnectionException e) {
-                runOnUiThread(() -> {
-                    Fragment prev = getSupportFragmentManager().findFragmentByTag(ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
-                    if (prev != null) {
-                        DialogFragment df = (DialogFragment) prev;
-                        df.dismiss();
-                    }
-                    Timber.e("Could not receive chosen image due to connection problem");
-                    ToastUtils.showLongToastInMiddle(R.string.gdrive_connection_exception);
-                });
-            }
-        } else {
-            ToastUtils.showLongToast(R.string.image_not_saved);
-            Timber.w(getString(R.string.image_not_saved));
-        }
-    }
-
-*/
     /**
      * Using contentResolver to get a file's extension by the uri returned from OnActivityResult.
      *
