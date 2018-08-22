@@ -65,7 +65,7 @@ public class WebViewActivity extends CollectAbstractActivity {
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 progressBar.setVisibility(View.GONE);
-                getSupportActionBar().setTitle("Open Source Licenses");
+                getSupportActionBar().setTitle(view.getTitle());
             }
 
             @Override
