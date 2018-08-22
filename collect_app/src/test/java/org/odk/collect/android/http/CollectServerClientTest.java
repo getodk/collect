@@ -4,30 +4,29 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.http.mock.MockHttpClientConnection;
 import org.odk.collect.android.injection.DaggerTestComponent;
 import org.odk.collect.android.injection.TestComponent;
 import org.odk.collect.android.utilities.DocumentFetchResult;
-import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 
-import java.net.URL;
-
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
 import static junit.framework.Assert.assertTrue;
-import static junit.framework.Assert.fail;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
 
 @RunWith(RobolectricTestRunner.class)
 public class CollectServerClientTest {
 
+    static final String URL_STRING = "http://testurl";
+
     @Inject
-    CollectServerClient collectServerClient;
+    @Named("StubbedData") CollectServerClient collectServerClient;
+
+    @Inject
+    @Named("NullGet") CollectServerClient collectServerClientError;
 
     @Before
     public void setup() {
@@ -38,25 +37,13 @@ public class CollectServerClientTest {
 
     @Test
     public void testGetXMLDocumentErrorResponse() {
-        final String urlString = "http://testurl";
-
-        MockHttpClientConnection clientConnection = mock(MockHttpClientConnection.class);
-
-        try {
-            URL url = new URL(urlString);
-            doReturn(null).when(clientConnection).get(url.toURI(), CollectServerClient.HTTP_CONTENT_TYPE_TEXT_XML, null);
-        } catch (Exception e) {
-            fail("Exception Thrown mocking MockHttpClientConnection.get()");
-        }
-
-        CollectServerClient collectServer = new CollectServerClient(clientConnection, new WebCredentialsUtils());
-        DocumentFetchResult fetchResult = collectServer.getXmlDocument(urlString);
-        assertEquals(fetchResult.errorMessage, "Parsing failed with null while accessing " + urlString);
+        DocumentFetchResult fetchResult = collectServerClientError.getXmlDocument(URL_STRING);
+        assertEquals(fetchResult.errorMessage, "Parsing failed with null while accessing " + URL_STRING);
     }
 
     @Test
     public void testGetXMLDocument() {
-        DocumentFetchResult fetchResult = collectServerClient.getXmlDocument("http://testurl");
+        DocumentFetchResult fetchResult = collectServerClient.getXmlDocument(URL_STRING);
         assertNull(fetchResult.errorMessage);
         assertEquals(fetchResult.responseCode, 0);
         assertTrue(fetchResult.isOpenRosaResponse);

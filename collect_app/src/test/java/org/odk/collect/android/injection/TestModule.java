@@ -9,10 +9,13 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.http.mock.MockHttpClientConnection;
+import org.odk.collect.android.http.mock.MockHttpClientConnectionError;
 import org.odk.collect.android.injection.config.scopes.PerApplication;
 import org.odk.collect.android.tasks.sms.SmsSubmissionManager;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
+
+import javax.inject.Named;
 
 import dagger.Module;
 import dagger.Provides;
@@ -68,7 +71,19 @@ public class TestModule {
     }
 
     @Provides
+    MockHttpClientConnectionError provideMockHttpClientConnectionError() {
+        return new MockHttpClientConnectionError();
+    }
+
+    @Provides
+    @Named("StubbedData")
     CollectServerClient provideTestCollectServerClient(MockHttpClientConnection httpClientConnection) {
+        return new CollectServerClient(httpClientConnection, new WebCredentialsUtils());
+    }
+
+    @Provides
+    @Named("NullGet")
+    CollectServerClient provideTestCollectServerClientError(MockHttpClientConnectionError httpClientConnection) {
         return new CollectServerClient(httpClientConnection, new WebCredentialsUtils());
     }
 

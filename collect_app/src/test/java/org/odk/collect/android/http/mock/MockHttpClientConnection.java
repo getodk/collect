@@ -21,8 +21,8 @@ import java.util.Map;
 
 public class MockHttpClientConnection implements OpenRosaHttpInterface {
 
-    @NonNull
     @Override
+    @NonNull
     public HttpGetResult get(@NonNull URI uri, @Nullable String contentType, @Nullable HttpCredentialsInterface credentials) throws Exception {
 
         String xml =
