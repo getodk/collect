@@ -896,6 +896,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             });
         }
     }
+
     /**
      * Using contentResolver to get a file's extension by the uri returned from OnActivityResult.
      *
@@ -2905,7 +2906,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             super(context);
         }
     }
-
 
 }
 

@@ -35,7 +35,6 @@ public class ImageUploadingTask extends AsyncTask<Uri, Void, File> {
         this.formEntryActivity = null;
     }
 
-
     @Override
     protected File doInBackground(Uri... uris) {
         File instanceFile = formEntryActivity.getFormController().getInstanceFile();

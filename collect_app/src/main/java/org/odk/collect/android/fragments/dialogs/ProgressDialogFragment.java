@@ -1,6 +1,5 @@
 package org.odk.collect.android.fragments.dialogs;
 
-
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -11,7 +10,6 @@ import android.view.Window;
 import org.odk.collect.android.R;
 
 import timber.log.Timber;
-
 
 public class ProgressDialogFragment extends DialogFragment {
     public static final String COLLECT_PROGRESS_DIALOG_TAG = "collectProgressDialogTag";
@@ -60,7 +58,6 @@ public class ProgressDialogFragment extends DialogFragment {
         dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         return dialog;
     }
-
 
     @Override
     public void onDestroyView() {
