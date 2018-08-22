@@ -211,9 +211,11 @@ public class MapHelper {
     public static String[] getOfflineLayerListWithTags() {
         File[] files = new File(Collect.OFFLINE_LAYERS).listFiles();
         ArrayList<String> layerNames = new ArrayList<>();
-        for (File f : files) {
-            if (f.isDirectory() && !f.isHidden()) {
-                layerNames.add(f.getName() + OFFLINE_LAYER_TAG);
+        if (files != null) {
+            for (File f : files) {
+                if (f.isDirectory() && !f.isHidden()) {
+                    layerNames.add(f.getName() + OFFLINE_LAYER_TAG);
+                }
             }
         }
         return layerNames.toArray(new String[0]);
@@ -298,7 +300,7 @@ public class MapHelper {
         return directory.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String filename) {
-                return (filename.toLowerCase(Locale.US).endsWith(".mbtiles"));
+                return filename.toLowerCase(Locale.US).endsWith(".mbtiles");
             }
         });
     }

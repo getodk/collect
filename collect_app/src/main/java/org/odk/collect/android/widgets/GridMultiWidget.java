@@ -97,9 +97,6 @@ public class GridMultiWidget extends QuestionWidget implements MultiChoiceWidget
     // need to remember the last click position for audio treatment
     int lastClickPosition;
 
-    // The number of columns in the grid, can be user defined (<= 0 if unspecified)
-    int numColumns;
-
     int resizeWidth;
 
     @SuppressWarnings("unchecked")
@@ -126,7 +123,6 @@ public class GridMultiWidget extends QuestionWidget implements MultiChoiceWidget
         // they are chosen automatically
         int maxColumnWidth = -1;
         int maxCellHeight = -1;
-        this.numColumns = numColumns;
         for (int i = 0; i < items.size(); i++) {
             imageViews[i] = new ImageView(getContext());
         }
@@ -136,8 +132,8 @@ public class GridMultiWidget extends QuestionWidget implements MultiChoiceWidget
         int screenHeight = metrics.heightPixels;
 
         if (numColumns > 0) {
-            resizeWidth = ((screenWidth - 2 * HORIZONTAL_PADDING - SCROLL_WIDTH
-                    - (IMAGE_PADDING + SPACING) * (numColumns + 1)) / numColumns);
+            resizeWidth = (screenWidth - 2 * HORIZONTAL_PADDING - SCROLL_WIDTH
+                    - (IMAGE_PADDING + SPACING) * (numColumns + 1)) / numColumns;
         }
 
         if (prompt.isReadOnly()) {
@@ -351,7 +347,6 @@ public class GridMultiWidget extends QuestionWidget implements MultiChoiceWidget
         SpacesInUnderlyingValuesWarning.forQuestionWidget(this).renderWarningIfNecessary(items);
     }
 
-
     @Override
     public IAnswerData getAnswer() {
         List<Selection> vc = new ArrayList<>();
@@ -369,7 +364,6 @@ public class GridMultiWidget extends QuestionWidget implements MultiChoiceWidget
             return new SelectMultiData(vc);
         }
     }
-
 
     @Override
     public void clearAnswer() {

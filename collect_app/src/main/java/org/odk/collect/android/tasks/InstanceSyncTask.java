@@ -35,6 +35,7 @@ import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.utilities.EncryptionUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,6 +46,7 @@ import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import timber.log.Timber;
 
@@ -211,7 +213,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
             Document document = builder.parse(new File(instancePath));
             Element element = document.getDocumentElement();
             instanceFormId = element.getAttribute("id");
-        } catch (Exception e) {
+        } catch (IOException | ParserConfigurationException | SAXException e) {
             Timber.w("Unable to read form id from %s", instancePath);
         }
         return instanceFormId;
@@ -225,7 +227,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
             Document document = builder.parse(new File(instancePath));
             Element element = document.getDocumentElement();
             instanceId = element.getAttribute("instanceID");
-        } catch (Exception e) {
+        } catch (IOException | ParserConfigurationException | SAXException e) {
             Timber.w("Unable to read form instanceID from %s", instancePath);
         }
         return instanceId;

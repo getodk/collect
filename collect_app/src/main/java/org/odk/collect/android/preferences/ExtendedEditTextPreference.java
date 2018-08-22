@@ -32,7 +32,6 @@ public class ExtendedEditTextPreference extends EditTextPreference {
     private boolean colorsInitialized;
     private boolean isEnabled;
 
-
     public ExtendedEditTextPreference(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }

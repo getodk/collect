@@ -23,14 +23,12 @@ public class DocumentFetchResult {
     public final boolean isOpenRosaResponse;
     private String hash;
 
-
     public DocumentFetchResult(String msg, int response) {
         responseCode = response;
         errorMessage = msg;
         doc = null;
         isOpenRosaResponse = false;
     }
-
 
     public DocumentFetchResult(Document doc, boolean isOpenRosaResponse, String hash) {
         responseCode = 0;

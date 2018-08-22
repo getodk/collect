@@ -25,7 +25,6 @@ import org.osmdroid.tileprovider.modules.MapTileModuleProviderBase;
 import java.io.File;
 import java.util.Collections;
 
-
 /**
  * This class is a simplification of the the MapTileProviderArray: it only
  * allows a single provider.

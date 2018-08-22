@@ -17,6 +17,8 @@
 package org.odk.collect.android.preferences;
 
 import android.accounts.AccountManager;
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -24,7 +26,6 @@ import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
 import android.support.v7.content.res.AppCompatResources;
 import android.telephony.PhoneNumberUtils;
 import android.text.InputFilter;
@@ -39,9 +40,11 @@ import com.google.gson.reflect.TypeToken;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.OnBackPressedListener;
 import org.odk.collect.android.preferences.filters.ControlCharacterFilter;
 import org.odk.collect.android.preferences.filters.WhitespaceFilter;
 import org.odk.collect.android.utilities.AuthDialogUtility;
+import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.Validator;
@@ -57,10 +60,11 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SMS_GATEWAY
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SMS_PREFERENCE;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_TRANSPORT_TYPE;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_URL;
+import static org.odk.collect.android.utilities.DialogUtils.showDialog;
 import static org.odk.collect.android.utilities.gdrive.GoogleAccountsManager.REQUEST_ACCOUNT_PICKER;
 
 public class ServerPreferencesFragment extends BasePreferenceFragment implements View.OnTouchListener,
-        GoogleAccountsManager.GoogleAccountSelectionListener {
+        GoogleAccountsManager.GoogleAccountSelectionListener, OnBackPressedListener {
     private static final String KNOWN_URL_LIST = "knownUrlList";
     protected EditTextPreference serverUrlPreference;
     protected EditTextPreference usernamePreference;
@@ -75,6 +79,12 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     private GoogleAccountsManager accountsManager;
     private ListPreference transportPreference;
     private ExtendedPreferenceCategory smsPreferenceCategory;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        ((PreferencesActivity) activity).setOnBackPressedListener(this);
+    }
 
     public void addAggregatePreferences() {
         addPreferencesFromResource(R.xml.aggregate_preferences);
@@ -135,15 +145,11 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         smsGatewayPreference.getEditText().setFilters(
                 new InputFilter[]{new ControlCharacterFilter()});
 
-        String transportSetting = (String) GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE);
+        Transport transport = Transport.fromPreference(GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE));
 
-        if (transportSetting.equals(getString(R.string.transport_type_value_internet))) {
-            smsGatewayPreference.setEnabled(false);
-            smsPreferenceCategory.setEnabled(false);
-        } else if (transportSetting.equals(getString(R.string.transport_type_value_sms))) {
-            smsGatewayPreference.setEnabled(true);
-            smsPreferenceCategory.setEnabled(true);
-        }
+        boolean smsEnabled = !transport.equals(Transport.Internet);
+        smsGatewayPreference.setEnabled(smsEnabled);
+        smsPreferenceCategory.setEnabled(smsEnabled);
     }
 
     private Preference.OnPreferenceChangeListener createTransportChangeListener() {
@@ -156,15 +162,18 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                 if (!newValue.equals(oldValue)) {
                     pref.setValue(stringValue);
 
-                    if (newValue.equals(getString(R.string.transport_type_value_internet))) {
-                        smsGatewayPreference.setEnabled(true);
-                        smsGatewayPreference.setEnabled(false);
-                        smsPreferenceCategory.setEnabled(false);
+                    Transport transport = Transport.fromPreference(newValue);
+
+                    boolean smsEnabled = !transport.equals(Transport.Internet);
+                    smsGatewayPreference.setEnabled(smsEnabled);
+                    smsPreferenceCategory.setEnabled(smsEnabled);
+
+                    if (transport.equals(Transport.Internet)) {
                         transportPreference.setSummary(R.string.transport_type_internet);
-                    } else if (newValue.equals(getString(R.string.transport_type_value_sms))) {
-                        smsGatewayPreference.setEnabled(true);
-                        smsPreferenceCategory.setEnabled(true);
+                    } else if (transport.equals(Transport.Sms)) {
                         transportPreference.setSummary(R.string.transport_type_sms);
+                    } else {
+                        transportPreference.setSummary(R.string.transport_type_both);
                     }
                 }
             }
@@ -219,20 +228,14 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         accountsManager.disableAutoChooseAccount();
 
         selectedGoogleAccountPreference.setSummary(accountsManager.getSelectedAccount());
-        selectedGoogleAccountPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                accountsManager.chooseAccount();
-                return true;
+        selectedGoogleAccountPreference.setOnPreferenceClickListener(preference -> {
+            if (PlayServicesUtil.isGooglePlayServicesAvailable(getActivity())) {
+                accountsManager.chooseAccountAndRequestPermissionIfNeeded();
+            } else {
+                PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(getActivity());
             }
+            return true;
         });
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        accountsManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     private void addUrlToPreferencesList(String url, SharedPreferences prefs) {
@@ -330,7 +333,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                     }
 
                     preference.setSummary(username);
-                    clearCachedCrendentials();
+                    clearCachedCredentials();
 
                     // To ensure we update current credentials in CredentialsProvider
                     credentialsHaveChanged = true;
@@ -347,7 +350,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                     }
 
                     maskPasswordSummary(pw);
-                    clearCachedCrendentials();
+                    clearCachedCredentials();
 
                     // To ensure we update current credentials in CredentialsProvider
                     credentialsHaveChanged = true;
@@ -396,7 +399,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                 : "");
     }
 
-    private void clearCachedCrendentials() {
+    private void clearCachedCredentials() {
         String server = (String) GeneralSharedPreferences
                 .getInstance().get(PreferenceKeys.KEY_SERVER_URL);
         Uri u = Uri.parse(server);
@@ -426,5 +429,44 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     @Override
     public void onGoogleAccountSelected(String accountName) {
         selectedGoogleAccountPreference.setSummary(accountName);
+    }
+
+    /**
+     * Shows a dialog if SMS submission is enabled but the phone number isn't set.
+     */
+    private void runSmsPhoneNumberValidation() {
+        Transport transport = Transport.fromPreference(GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE));
+
+        if (!transport.equals(Transport.Internet)) {
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+            String gateway = settings.getString(KEY_SMS_GATEWAY, null);
+
+            if (!PhoneNumberUtils.isGlobalPhoneNumber(gateway)) {
+
+                AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
+                        .setIcon(android.R.drawable.ic_dialog_info)
+                        .setTitle(getString(R.string.sms_invalid_phone_number))
+                        .setMessage(R.string.sms_invalid_phone_number_description)
+                        .setPositiveButton(getString(R.string.ok), (dialog, which) -> dialog.dismiss())
+                        .create();
+
+                showDialog(alertDialog, getActivity());
+            } else {
+                continueOnBackPressed();
+            }
+        } else {
+            continueOnBackPressed();
+        }
+    }
+
+    private void continueOnBackPressed() {
+        ((PreferencesActivity) getActivity()).setOnBackPressedListener(null);
+        getActivity().onBackPressed();
+    }
+
+    @Override
+    public void doBack() {
+        runSmsPhoneNumberValidation();
     }
 }

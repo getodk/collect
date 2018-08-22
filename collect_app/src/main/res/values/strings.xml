@@ -129,6 +129,8 @@
     <string name="send_data">Send Finalized Form</string>
     <string name="send_data_button">Send Finalized Form (%s)</string>
     <string name="send_selected_data">Send Selected</string>
+    <string name="send_selected_data_internet">Send (Internet)</string>
+    <string name="send_selected_data_sms">Send (SMS)</string>
     <string name="view_sent_forms">View Sent Form</string>
     <string name="view_sent_forms_button">View Sent Form (%s)</string>
     <string name="server_auth_credentials">Invalid username or password for server: %s</string>
@@ -287,6 +289,7 @@
     <string name="google_set_account">You have selected Google Sheets as your server, please select a corresponding Google account in the General Settings before continuing</string>
     <string name="media_upload_error">Failed to upload media file that does not exist: %1$s</string>
     <string name="odk_auth_auth_fail">ODK auto send authentication failure, please make sure your settings are correct</string>
+    <string name="odk_permissions_fail">ODK auto send permission failure, please make sure your have granted all required permissions</string>
     <string name="odk_auto_note">ODK auto-send results</string>
     <string name="odk_auto_download_notification_title">ODK auto-download results</string>
     <string name="notification_error">Error displaying notification text</string>
@@ -447,7 +450,6 @@
     <string name="sort_by_status_asc">Status, finalized first</string>
     <string name="sort_by_status_desc">Status, unfinalized first</string>
     <string name="sort_the_list">Sort the list</string>
-    <string name="request_permissions_google_account">ODK Collect needs access to your Google account to get blank forms and submit filled forms.</string>
     <string name="filter_the_list">Filter the list</string>
     <string name="language">Language</string>
     <string name="google_auth_io_exception_msg">Unable to make API calls. If you are running a local build, please review the project readme.</string>
@@ -600,6 +602,10 @@
     <string name="camera_runtime_permission_denied_desc">Without this permission Collect can\'t access the camera. Please try again when you are ready to grant it.</string>
     <string name="record_audio_runtime_permission_denied_title">Record audio permission</string>
     <string name="record_audio_runtime_permission_denied_desc">Without this permission Collect can\'t access the microphone. Please try again when you are ready to grant it.</string>
+    <string name="get_accounts_runtime_permission_denied_title">Get accounts permission</string>
+    <string name="get_accounts_runtime_permission_denied_desc">Without this permission Collect can\'t access accounts. Please try again when you are ready to grant it.</string>
+    <string name="send_sms_runtime_permission_denied_title">Send SMS permission</string>
+    <string name="send_sms_runtime_permission_denied_desc">Without this permission Collect can\'t send SMS messages. Please try again when you are ready to grant it.</string>
     <string name="form_update_category">Form update</string>
     <string name="periodic_form_updates_check_title">Periodic form updates check</string>
     <string name="never">Never</string>
@@ -626,6 +632,7 @@
 
     <!-- Sms submission -->
     <string name="sms_no_reception">\'Failed on\' EEE, MMM dd, yyyy \'at\' HH:mm \'due to no reception\'</string>
+    <string name="sms_no_number">\'Failed on\' EEE, MMM dd, yyyy \'at\' HH:mm \'due to no phone number.\'</string>
     <string name="sms_fatal_error">\'Failed on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
     <string name="sms_airplane_mode">\'Failed on\' EEE, MMM dd, yyyy \'at\' HH:mm \'due to Airplane Mode being on.\'</string>
     <string name="sms_no_message">This form has no questions with SMS tags.</string>
@@ -641,7 +648,10 @@
     <string name="sms_submissions_notif_description">Several forms are currently being submitted.</string>
     <string name="transport_type_internet">Wifi/Cellular (recommended)</string>
     <string name="transport_type_sms">SMS</string>
+    <string name="transport_type_both">Select on send</string>
     <string name="seconds">Seconds</string>
     <string name="rank_items">Rank items</string>
     <string name="image_not_saved">The image can not be saved because of a problem with the corresponding instance file.</string>
+    <string name="loading_form_failed">An error occurred while loading the form. Please try again.</string>
+    <string name="sms_invalid_phone_number_description">Set a destination phone number for SMS submissions or change your transport type.</string>
 </resources>

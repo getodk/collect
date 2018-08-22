@@ -76,7 +76,6 @@ public class CaptureSelfieActivity extends CollectAbstractActivity {
         }
     };
 
-
     @Override
     protected void onPause() {
         camera = null;
@@ -107,17 +106,5 @@ public class CaptureSelfieActivity extends CollectAbstractActivity {
                 }
             });
         }
-    }
-
-    public static boolean isFrontCameraAvailable() {
-        //https://developer.android.com/guide/topics/media/camera.html#check-camera-features
-        for (int camNo = 0; camNo < Camera.getNumberOfCameras(); camNo++) {
-            Camera.CameraInfo camInfo = new Camera.CameraInfo();
-            Camera.getCameraInfo(camNo, camInfo);
-            if (camInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
-                return true;
-            }
-        }
-        return false; // No front-facing camera found
     }
 }

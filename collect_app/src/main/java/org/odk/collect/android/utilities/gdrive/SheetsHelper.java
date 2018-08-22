@@ -186,14 +186,13 @@ public class SheetsHelper {
         return spreadsheet;
     }
 
-
     /**
      * This class only makes API calls using the sheets API and does not contain any business logic
      *
      * @author Shobhit Agarwal
      */
 
-    public class SheetsService {
+    public static class SheetsService {
         private final Sheets sheets;
 
         SheetsService(Sheets sheets) {
@@ -212,6 +211,7 @@ public class SheetsHelper {
             sheets.spreadsheets().values()
                     .append(spreadsheetId, sheetName, row)
                     .setIncludeValuesInResponse(true)
+                    .setInsertDataOption("INSERT_ROWS")
                     .setValueInputOption("USER_ENTERED").execute();
         }
 
