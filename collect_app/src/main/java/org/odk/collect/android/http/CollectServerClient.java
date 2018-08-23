@@ -11,6 +11,7 @@ import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.xmlpull.v1.XmlPullParser;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -48,6 +49,13 @@ public class CollectServerClient {
 
         try {
             inputStreamResult = getHttpInputStream(urlString, HTTP_CONTENT_TYPE_TEXT_XML);
+
+            if (inputStreamResult.getStatusCode() != HttpURLConnection.HTTP_OK) {
+                String error = "getXmlDocument failed while accessing "
+                        + urlString + " with status code: " + inputStreamResult.getStatusCode();
+                Timber.e(error);
+                return new DocumentFetchResult(error, inputStreamResult.getStatusCode());
+            }
 
             try (InputStream resultInputStream = inputStreamResult.getInputStream();
                  InputStreamReader streamReader = new InputStreamReader(resultInputStream, "UTF-8")) {

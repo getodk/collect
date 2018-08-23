@@ -178,7 +178,8 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
                     Collect.getInstance().getString(R.string.file_fetch_failed, uri.toString(),
                             response.getStatusLine().getReasonPhrase(), String.valueOf(statusCode));
             Timber.e(errMsg);
-            throw new Exception(errMsg);
+
+            return new HttpGetResult(null, new HashMap<String, String>(), "", statusCode);
         }
 
         HttpEntity entity = response.getEntity();

@@ -33,6 +33,7 @@ import org.odk.collect.android.logic.MediaFile;
 import org.odk.collect.android.preferences.PreferenceKeys;
 
 import java.io.File;
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -81,7 +82,7 @@ public class DownloadFormListUtils {
 
         // If we can't get the document, return the error, cancel the task
         if (result.errorMessage != null) {
-            if (result.responseCode == 401) {
+            if (result.responseCode == HttpURLConnection.HTTP_UNAUTHORIZED) {
                 formList.put(DL_AUTH_REQUIRED, new FormDetails(result.errorMessage));
             } else {
                 formList.put(DL_ERROR_MSG, new FormDetails(result.errorMessage));
