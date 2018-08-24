@@ -445,7 +445,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                     authDialogUtility.setCustomPassword(password);
                 }
 
-                return authDialogUtility.createDialog(this, this, null);
+                return authDialogUtility.createDialog(this, this, url);
             case CANCELLATION_DIALOG:
                 cancelDialog = new ProgressDialog(this);
                 cancelDialog.setTitle(getString(R.string.canceling));
