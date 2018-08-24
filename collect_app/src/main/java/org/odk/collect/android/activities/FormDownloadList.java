@@ -335,6 +335,11 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
         if (ni == null || !ni.isConnected()) {
             ToastUtils.showShortToast(R.string.no_connection);
+
+            if (isDownloadOnlyMode) {
+                setReturnResult(false, getString(R.string.no_connection), formResult);
+                finish();
+            }
         } else {
 
             formNamesAndURLs = new HashMap<String, FormDetails>();
