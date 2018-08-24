@@ -51,12 +51,12 @@ public class GeoShapeActivity extends CollectAbstractActivity implements IRegist
     private int shapeId = -1;  // will be a positive featureId once map is ready
     private ImageButton gpsButton;
     private ImageButton clearButton;
-
     private MapHelper helper;
     private AlertDialog zoomDialog;
     private View zoomDialogView;
     private Button zoomPointButton;
     private Button zoomLocationButton;
+    private String originalValue = "";
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,7 +93,7 @@ public class GeoShapeActivity extends CollectAbstractActivity implements IRegist
     }
 
     @Override public void onBackPressed() {
-        if (!map.getPointsOfShape(shapeId).isEmpty()) {
+        if (!formatPoints(map.getPointsOfShape(shapeId)).equals(originalValue)) {
             showBackDialog();
         } else {
             finish();
@@ -133,7 +133,8 @@ public class GeoShapeActivity extends CollectAbstractActivity implements IRegist
         List<MapPoint> points = new ArrayList<>();
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra(GeoShapeWidget.SHAPE_LOCATION)) {
-            points = parsePoints(intent.getStringExtra(GeoShapeWidget.SHAPE_LOCATION));
+            originalValue = intent.getStringExtra(GeoShapeWidget.SHAPE_LOCATION);
+            points = parsePoints(originalValue);
         }
         shapeId = map.addDraggableShape(points);
         gpsButton.setEnabled(!points.isEmpty());
