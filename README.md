@@ -106,7 +106,7 @@ implementation (project(path: ':javarosa-master')) {
 	```gradle
 	compile files('/path/to/javarosa/build/libs/opendatakit-javarosa-x.y.z-SNAPSHOT.jar')
 	```
-
+ 
 ## Contributing code
 Any and all contributions to the project are welcome. ODK Collect is used across the world primarily by organizations with a social purpose so you can have real impact!
 
