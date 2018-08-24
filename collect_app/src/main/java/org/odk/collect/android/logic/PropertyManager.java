@@ -24,17 +24,23 @@ import android.telephony.TelephonyManager;
 
 import org.javarosa.core.services.IPropertyManager;
 import org.javarosa.core.services.properties.IPropertyRules;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
+import org.odk.collect.android.events.RxEventBus;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import timber.log.Timber;
 
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_EMAIL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_PHONENUMBER;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_USERNAME;
+import static org.odk.collect.android.utilities.PermissionUtils.checkIfReadPhoneStatePermissionGranted;
 
 /**
  * Returns device properties and metadata to JavaRosa
@@ -62,6 +68,9 @@ public class PropertyManager implements IPropertyManager {
 
     private final Map<String, String> properties = new HashMap<>();
 
+    @Inject
+    RxEventBus eventBus;
+
     public String getName() {
         return "Property Manager";
     }
@@ -78,6 +87,8 @@ public class PropertyManager implements IPropertyManager {
 
     public PropertyManager(Context context) {
         Timber.i("calling constructor");
+
+        Collect.getInstance().getComponent().inject(this);
 
         try {
             // Device-defined properties
@@ -160,8 +171,26 @@ public class PropertyManager implements IPropertyManager {
 
     @Override
     public String getSingularProperty(String propertyName) {
+        if (!checkIfReadPhoneStatePermissionGranted(Collect.getInstance()) && isPropertyDangerous(propertyName)) {
+            eventBus.post(new ReadPhoneStatePermissionRxEvent());
+        }
+
         // for now, all property names are in english...
         return properties.get(propertyName.toLowerCase(Locale.ENGLISH));
+    }
+
+    /**
+     * Dangerous properties are those which require reading phone state:
+     * https://developer.android.com/reference/android/Manifest.permission#READ_PHONE_STATE
+     * @param propertyName The name of the property
+     * @return True if the given property is dangerous, false otherwise.
+     */
+    private boolean isPropertyDangerous(String propertyName) {
+        return propertyName != null
+                && (propertyName.equalsIgnoreCase(PROPMGR_DEVICE_ID)
+                || propertyName.equalsIgnoreCase(PROPMGR_SUBSCRIBER_ID)
+                || propertyName.equalsIgnoreCase(PROPMGR_SIM_SERIAL)
+                || propertyName.equalsIgnoreCase(PROPMGR_PHONE_NUMBER));
     }
 
     @Override

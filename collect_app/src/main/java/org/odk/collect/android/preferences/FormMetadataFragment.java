@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.view.View;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.Validator;
@@ -22,6 +23,7 @@ import static org.odk.collect.android.logic.PropertyManager.PROPMGR_USERNAME;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_EMAIL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_PHONENUMBER;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_USERNAME;
+import static org.odk.collect.android.utilities.PermissionUtils.requestReadPhoneStatePermission;
 
 public class FormMetadataFragment extends BasePreferenceFragment {
     @Override
@@ -29,6 +31,21 @@ public class FormMetadataFragment extends BasePreferenceFragment {
 
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.form_metadata_preferences);
+
+        requestReadPhoneStatePermission(getActivity(), new PermissionListener() {
+            @Override
+            public void granted() {
+                initPrefs();
+            }
+
+            @Override
+            public void denied() {
+            }
+        }, true);
+        initPrefs();
+    }
+
+    private void initPrefs() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         PropertyManager pm = new PropertyManager(getActivity());
         initPrefFromProp(pm, prefs, PROPMGR_USERNAME, KEY_METADATA_USERNAME);

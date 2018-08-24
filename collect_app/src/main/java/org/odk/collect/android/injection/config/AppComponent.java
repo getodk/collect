@@ -2,12 +2,14 @@ package org.odk.collect.android.injection.config;
 
 import android.app.Application;
 
+import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.InstanceUploaderList;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.fragments.DataManagerList;
 import org.odk.collect.android.injection.ActivityBuilder;
 import org.odk.collect.android.injection.config.scopes.PerApplication;
+import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.tasks.sms.SmsSentBroadcastReceiver;
 import org.odk.collect.android.tasks.sms.SmsNotificationReceiver;
 import org.odk.collect.android.tasks.sms.SmsSender;
@@ -55,4 +57,8 @@ public interface AppComponent {
     void inject(InstanceUploaderAdapter instanceUploaderAdapter);
 
     void inject(DataManagerList dataManagerList);
+
+    void inject(PropertyManager propertyManager);
+
+    void inject(FormEntryActivity formEntryActivity);
 }
