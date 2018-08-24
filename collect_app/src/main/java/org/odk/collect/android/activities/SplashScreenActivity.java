@@ -19,10 +19,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -35,6 +33,8 @@ import android.widget.LinearLayout;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.PermissionListener;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 
 import java.io.File;
@@ -42,36 +42,56 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import timber.log.Timber;
+
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SPLASH_PATH;
+import static org.odk.collect.android.utilities.PermissionUtils.requestStoragePermissions;
+
 public class SplashScreenActivity extends Activity {
 
-    private static final int mSplashTimeout = 2000; // milliseconds
+    private static final int SPLASH_TIMEOUT = 2000; // milliseconds
     private static final boolean EXIT = true;
 
-    private int mImageMaxWidth;
-    private AlertDialog mAlertDialog;
-
+    private int imageMaxWidth;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // must be at the beginning of any activity that can be called from an external intent
-        try {
-            Collect.createODKDirs();
-        } catch (RuntimeException e) {
-            createErrorDialog(e.getMessage(), EXIT);
-            return;
-        }
-
-        DisplayMetrics displayMetrics = getApplicationContext().getResources().getDisplayMetrics();
-        mImageMaxWidth = displayMetrics.widthPixels;
         // this splash screen should be a blank slate
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        requestStoragePermissions(this, new PermissionListener() {
+            @Override
+            public void granted() {
+                // must be at the beginning of any activity that can be called from an external intent
+                try {
+                    Collect.createODKDirs();
+                    Collect.getInstance().getActivityLogger().open();
+                } catch (RuntimeException e) {
+                    createErrorDialog(e.getMessage(), EXIT);
+                    return;
+                }
+
+                init();
+            }
+
+            @Override
+            public void denied() {
+                // The activity has to finish because ODK Collect cannot function without these permissions.
+                finish();
+            }
+        });
+    }
+
+    private void init() {
+        DisplayMetrics displayMetrics = getApplicationContext().getResources().getDisplayMetrics();
+        imageMaxWidth = displayMetrics.widthPixels;
+
         setContentView(R.layout.splash_screen);
 
         // get the shared preferences object
-        SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        Editor editor = mSharedPreferences.edit();
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
 
         // get the package info object with version number
         PackageInfo packageInfo = null;
@@ -79,18 +99,17 @@ public class SplashScreenActivity extends Activity {
             packageInfo =
                     getPackageManager().getPackageInfo(getPackageName(),
                             PackageManager.GET_META_DATA);
-        } catch (NameNotFoundException e) {
+        } catch (PackageManager.NameNotFoundException e) {
+            Timber.e(e, "Unable to get package info");
         }
 
-        boolean firstRun = mSharedPreferences.getBoolean(PreferenceKeys.KEY_FIRST_RUN, true);
+        boolean firstRun = sharedPreferences.getBoolean(PreferenceKeys.KEY_FIRST_RUN, true);
         boolean showSplash =
-                mSharedPreferences.getBoolean(PreferenceKeys.KEY_SHOW_SPLASH, false);
-        String splashPath =
-                mSharedPreferences.getString(PreferenceKeys.KEY_SPLASH_PATH,
-                        getString(R.string.default_splash_path));
+                sharedPreferences.getBoolean(PreferenceKeys.KEY_SHOW_SPLASH, false);
+        String splashPath = (String) GeneralSharedPreferences.getInstance().get(KEY_SPLASH_PATH);
 
         // if you've increased version code, then update the version number and set firstRun to true
-        if (mSharedPreferences.getLong(PreferenceKeys.KEY_LAST_VERSION, 0)
+        if (sharedPreferences.getLong(PreferenceKeys.KEY_LAST_VERSION, 0)
                 < packageInfo.versionCode) {
             editor.putLong(PreferenceKeys.KEY_LAST_VERSION, packageInfo.versionCode);
             editor.apply();
@@ -106,17 +125,12 @@ public class SplashScreenActivity extends Activity {
         } else {
             endSplashScreen();
         }
-
     }
-
 
     private void endSplashScreen() {
-
-        // launch new activity and close splash screen
-        startActivity(new Intent(SplashScreenActivity.this, MainMenuActivity.class));
+        startActivity(new Intent(this, MainMenuActivity.class));
         finish();
     }
-
 
     // decodes image and scales it to reduce memory consumption
     private Bitmap decodeFile(File f) {
@@ -132,14 +146,15 @@ public class SplashScreenActivity extends Activity {
                 fis.close();
             } catch (IOException e) {
                 // TODO Auto-generated catch block
+                Timber.e(e, "Unable to close file input stream");
             }
 
             int scale = 1;
-            if (o.outHeight > mImageMaxWidth || o.outWidth > mImageMaxWidth) {
+            if (o.outHeight > imageMaxWidth || o.outWidth > imageMaxWidth) {
                 scale =
                         (int) Math.pow(
                                 2,
-                                (int) Math.round(Math.log(mImageMaxWidth
+                                (int) Math.round(Math.log(imageMaxWidth
                                         / (double) Math.max(o.outHeight, o.outWidth))
                                         / Math.log(0.5)));
             }
@@ -153,18 +168,19 @@ public class SplashScreenActivity extends Activity {
                 fis.close();
             } catch (IOException e) {
                 // TODO Auto-generated catch block
+                Timber.e(e, "Unable to close file input stream");
             }
         } catch (FileNotFoundException e) {
+            Timber.d(e);
         }
         return b;
     }
 
-
     private void startSplashScreen(String path) {
 
         // add items to the splash screen here. makes things less distracting.
-        ImageView iv = (ImageView) findViewById(R.id.splash);
-        LinearLayout ll = (LinearLayout) findViewById(R.id.splash_default);
+        ImageView iv = findViewById(R.id.splash);
+        LinearLayout ll = findViewById(R.id.splash_default);
 
         File f = new File(path);
         if (f.exists()) {
@@ -175,18 +191,18 @@ public class SplashScreenActivity extends Activity {
 
         // create a thread that counts up to the timeout
         Thread t = new Thread() {
-            int count = 0;
-
+            int count;
 
             @Override
             public void run() {
                 try {
                     super.run();
-                    while (count < mSplashTimeout) {
+                    while (count < SPLASH_TIMEOUT) {
                         sleep(100);
                         count += 100;
                     }
                 } catch (Exception e) {
+                    Timber.e(e);
                 } finally {
                     endSplashScreen();
                 }
@@ -195,12 +211,11 @@ public class SplashScreenActivity extends Activity {
         t.start();
     }
 
-
     private void createErrorDialog(String errorMsg, final boolean shouldExit) {
         Collect.getInstance().getActivityLogger().logAction(this, "createErrorDialog", "show");
-        mAlertDialog = new AlertDialog.Builder(this).create();
-        mAlertDialog.setIcon(android.R.drawable.ic_dialog_info);
-        mAlertDialog.setMessage(errorMsg);
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setIcon(android.R.drawable.ic_dialog_info);
+        alertDialog.setMessage(errorMsg);
         DialogInterface.OnClickListener errorListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int i) {
@@ -215,9 +230,9 @@ public class SplashScreenActivity extends Activity {
                 }
             }
         };
-        mAlertDialog.setCancelable(false);
-        mAlertDialog.setButton(getString(R.string.ok), errorListener);
-        mAlertDialog.show();
+        alertDialog.setCancelable(false);
+        alertDialog.setButton(getString(R.string.ok), errorListener);
+        alertDialog.show();
     }
 
     @Override
@@ -231,5 +246,4 @@ public class SplashScreenActivity extends Activity {
         Collect.getInstance().getActivityLogger().logOnStop(this);
         super.onStop();
     }
-
 }

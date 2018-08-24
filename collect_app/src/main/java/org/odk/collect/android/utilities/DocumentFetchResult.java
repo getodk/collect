@@ -21,7 +21,7 @@ public class DocumentFetchResult {
     public final int responseCode;
     public final Document doc;
     public final boolean isOpenRosaResponse;
-
+    private String hash;
 
     public DocumentFetchResult(String msg, int response) {
         responseCode = response;
@@ -30,11 +30,15 @@ public class DocumentFetchResult {
         isOpenRosaResponse = false;
     }
 
-
-    public DocumentFetchResult(Document doc, boolean isOpenRosaResponse) {
+    public DocumentFetchResult(Document doc, boolean isOpenRosaResponse, String hash) {
         responseCode = 0;
         errorMessage = null;
         this.doc = doc;
         this.isOpenRosaResponse = isOpenRosaResponse;
+        this.hash = hash;
+    }
+
+    public String getHash() {
+        return hash;
     }
 }

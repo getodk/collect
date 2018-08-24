@@ -14,60 +14,66 @@ limitations under the License.
 
 package org.odk.collect.android.fragments;
 
+import android.database.Cursor;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.utilities.SnackbarUtils;
 
-
-public abstract class FileManagerFragment extends AppListFragment {
-    protected Button mDeleteButton;
-    protected Button mToggleButton;
+public abstract class FileManagerFragment extends AppListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
+    private static final int LOADER_ID = 0x01;
+    protected Button deleteButton;
+    protected Button toggleButton;
+    protected LinearLayout llParent;
+    protected ProgressBar progressBar;
+    protected boolean canHideProgressBar;
+    private boolean progressBarVisible;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.tab_layout, container, false);
-        mDeleteButton = (Button) rootView.findViewById(R.id.delete_button);
-        mDeleteButton.setText(getString(R.string.delete_file));
-        mToggleButton = (Button) rootView.findViewById(R.id.toggle_button);
+        deleteButton = rootView.findViewById(R.id.delete_button);
+        deleteButton.setText(getString(R.string.delete_file));
+        toggleButton = rootView.findViewById(R.id.toggle_button);
+        llParent = rootView.findViewById(R.id.llParent);
+        progressBar = getActivity().findViewById(R.id.progressBar);
 
         setHasOptionsMenu(true);
-        mSearchBoxLayout = (LinearLayout) rootView.findViewById(R.id.searchBoxLayout);
-        setupSearchBox(rootView);
         return rootView;
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         getListView().setItemsCanFocus(false);
-        mDeleteButton.setEnabled(false);
+        deleteButton.setEnabled(false);
 
-        if (getListView().getCount() == 0) {
-            mToggleButton.setEnabled(false);
-        }
-        mSortingOptions = new String[]{
+        sortingOptions = new String[]{
                 getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc),
                 getString(R.string.sort_by_date_asc), getString(R.string.sort_by_date_desc)
         };
+        getLoaderManager().initLoader(LOADER_ID, null, this);
         super.onViewCreated(view, savedInstanceState);
     }
 
     @Override
     public void onViewStateRestored(@Nullable Bundle bundle) {
         super.onViewStateRestored(bundle);
-        mDeleteButton.setEnabled(areCheckedItems());
+        deleteButton.setEnabled(areCheckedItems());
     }
 
     @Override
@@ -76,36 +82,72 @@ public abstract class FileManagerFragment extends AppListFragment {
         logger.logAction(this, "onListItemClick", Long.toString(rowId));
 
         if (getListView().isItemChecked(position)) {
-            mSelectedInstances.add(getListView().getItemIdAtPosition(position));
+            selectedInstances.add(getListView().getItemIdAtPosition(position));
         } else {
-            mSelectedInstances.remove(getListView().getItemIdAtPosition(position));
+            selectedInstances.remove(getListView().getItemIdAtPosition(position));
         }
 
-        toggleButtonLabel(mToggleButton, getListView());
-        mDeleteButton.setEnabled(areCheckedItems());
-    }
-
-    private void setupSearchBox(View view) {
-        mInputSearch = (EditText) view.findViewById(R.id.inputSearch);
-        mInputSearch.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                updateAdapter();
-            }
-        });
+        toggleButtonLabel(toggleButton, getListView());
+        deleteButton.setEnabled(areCheckedItems());
     }
 
     @Override
     protected void updateAdapter() {
+        getLoaderManager().restartLoader(LOADER_ID, null, this);
+    }
+
+    @NonNull
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        showProgressBar();
+        return getCursorLoader();
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
+        hideProgressBarIfAllowed();
+        listAdapter.swapCursor(cursor);
+
         checkPreviouslyCheckedItems();
-        mDeleteButton.setEnabled(areCheckedItems());
+        toggleButtonLabel(toggleButton, getListView());
+        deleteButton.setEnabled(areCheckedItems());
+
+        if (getListView().getCount() == 0) {
+            toggleButton.setEnabled(false);
+        } else {
+            toggleButton.setEnabled(true);
+        }
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
+        listAdapter.swapCursor(null);
+    }
+
+    protected abstract CursorLoader getCursorLoader();
+
+    protected void hideProgressBarIfAllowed() {
+        if (canHideProgressBar && progressBarVisible) {
+            hideProgressBar();
+        }
+    }
+
+    protected void hideProgressBarAndAllow() {
+        this.canHideProgressBar = true;
+        hideProgressBar();
+    }
+
+    private void hideProgressBar() {
+        progressBar.setVisibility(View.GONE);
+        progressBarVisible = false;
+    }
+
+    protected void showProgressBar() {
+        progressBar.setVisibility(View.VISIBLE);
+        progressBarVisible = true;
+    }
+
+    protected void showSnackbar(@NonNull String result) {
+        SnackbarUtils.showSnackbar(llParent, result);
     }
 }

@@ -14,9 +14,14 @@
 
 package org.odk.collect.android.utilities;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
+import android.net.Uri;
+import android.os.Build;
 
 import org.apache.commons.io.IOUtils;
 import org.javarosa.xform.parse.XFormParser;
@@ -41,6 +46,10 @@ import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+
+import timber.log.Timber;
 
 /**
  * Static methods used for common file operations.
@@ -48,6 +57,7 @@ import java.util.HashMap;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class FileUtils {
+
     // Used to validate and display valid form names.
     public static final String VALID_FILENAME = "[ _\\-A-Za-z0-9]*.x[ht]*ml";
     public static final String FORMID = "formid";
@@ -55,38 +65,35 @@ public class FileUtils {
     public static final String TITLE = "title";
     public static final String SUBMISSIONURI = "submission";
     public static final String BASE64_RSA_PUBLIC_KEY = "base64RsaPublicKey";
-    private final static String t = "FileUtils";
+    public static final String AUTO_DELETE = "autoDelete";
+    public static final String AUTO_SEND = "autoSend";
+    static int bufSize = 16 * 1024; // May be set by unit test
 
-    public static String getMimeType(String fileUrl)
-            throws java.io.IOException {
+    private FileUtils() {
+    }
+
+    public static String getMimeType(String fileUrl) throws IOException {
         FileNameMap fileNameMap = URLConnection.getFileNameMap();
         return fileNameMap.getContentTypeFor(fileUrl);
     }
 
     public static boolean createFolder(String path) {
-        boolean made = true;
         File dir = new File(path);
-        if (!dir.exists()) {
-            made = dir.mkdirs();
-        }
-        return made;
+        return dir.exists() || dir.mkdirs();
     }
 
     public static byte[] getFileAsBytes(File file) {
-        byte[] bytes = null;
-        InputStream is = null;
-        try {
-            is = new FileInputStream(file);
+        try (InputStream is = new FileInputStream(file)) {
 
             // Get the size of the file
             long length = file.length();
             if (length > Integer.MAX_VALUE) {
-                Log.e(t, "File " + file.getName() + "is too large");
+                Timber.e("File %s is too large", file.getName());
                 return null;
             }
 
             // Create the byte array to hold the data
-            bytes = new byte[(int) length];
+            byte[] bytes = new byte[(int) length];
 
             // Read in the bytes
             int offset = 0;
@@ -97,7 +104,7 @@ public class FileUtils {
                     offset += read;
                 }
             } catch (IOException e) {
-                Log.e(t, "Cannot read " + file.getName());
+                Timber.e(e, "Cannot read file %s", file.getName());
                 return null;
             }
 
@@ -106,149 +113,122 @@ public class FileUtils {
                 try {
                     throw new IOException("Could not completely read file " + file.getName());
                 } catch (IOException e) {
+                    Timber.e(e);
                     return null;
                 }
             }
 
             return bytes;
-
-        } catch (FileNotFoundException e) {
-            Log.e(t, "Cannot find " + file.getName());
-            return null;
-
-        } finally {
-            // Close the input stream
-            try {
-                is.close();
-            } catch (IOException e) {
-                Log.e(t, "Cannot close input stream for " + file.getName());
-                return null;
-            }
+        } catch (IOException e) {
+            Timber.e(e);
         }
+        return new byte[0];
     }
 
     public static String getMd5Hash(File file) {
+        final InputStream is;
         try {
-            // CTS (6/15/2010) : stream file through digest instead of handing it the byte[]
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            int chunkSize = 256;
-
-            byte[] chunk = new byte[chunkSize];
-
-            // Get the size of the file
-            long lLength = file.length();
-
-            if (lLength > Integer.MAX_VALUE) {
-                Log.e(t, "File " + file.getName() + "is too large");
-                return null;
-            }
-
-            int length = (int) lLength;
-
-            InputStream is = null;
             is = new FileInputStream(file);
 
-            int l = 0;
-            for (l = 0; l + chunkSize < length; l += chunkSize) {
-                is.read(chunk, 0, chunkSize);
-                md.update(chunk, 0, chunkSize);
-            }
-
-            int remaining = length - l;
-            if (remaining > 0) {
-                is.read(chunk, 0, remaining);
-                md.update(chunk, 0, remaining);
-            }
-            byte[] messageDigest = md.digest();
-
-            BigInteger number = new BigInteger(1, messageDigest);
-            String md5 = number.toString(16);
-            while (md5.length() < 32) {
-                md5 = "0" + md5;
-            }
-            is.close();
-            return md5;
-
-        } catch (NoSuchAlgorithmException e) {
-            Log.e("MD5", e.getMessage());
-            return null;
-
         } catch (FileNotFoundException e) {
-            Log.e("No Cache File", e.getMessage());
+            Timber.d(e, "Cache file %s not found", file.getAbsolutePath());
             return null;
-        } catch (IOException e) {
-            Log.e("Problem reading file", e.getMessage());
-            return null;
+
         }
 
+        return getMd5Hash(is);
     }
 
+    public static String getMd5Hash(InputStream is) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            final byte[] buffer = new byte[bufSize];
 
-    public static Bitmap getBitmapScaledToDisplay(File f, int screenHeight, int screenWidth) {
-        // Determine image size of f
-        BitmapFactory.Options o = new BitmapFactory.Options();
-        o.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(f.getAbsolutePath(), o);
+            while (true) {
+                int result = is.read(buffer, 0, bufSize);
+                if (result == -1) {
+                    break;
+                }
+                md.update(buffer, 0, result);
+            }
 
-        int heightScale = o.outHeight / screenHeight;
-        int widthScale = o.outWidth / screenWidth;
+            StringBuilder md5 = new StringBuilder(new BigInteger(1, md.digest()).toString(16));
+            while (md5.length() < 32) {
+                md5.insert(0, "0");
+            }
 
-        // Powers of 2 work faster, sometimes, according to the doc.
-        // We're just doing closest size that still fills the screen.
-        int scale = Math.max(widthScale, heightScale);
+            is.close();
+            return md5.toString();
 
-        // get bitmap with scale ( < 1 is the same as 1)
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inInputShareable = true;
-        options.inPurgeable = true;
-        options.inSampleSize = scale;
-        Bitmap b = BitmapFactory.decodeFile(f.getAbsolutePath(), options);
-        if (b != null) {
-            Log.i(t,
-                    "Screen is " + screenHeight + "x" + screenWidth
-                            + ".  Image has been scaled down by "
-                            + scale + " to " + b.getHeight() + "x" + b.getWidth());
+        } catch (NoSuchAlgorithmException e) {
+            Timber.e(e);
+            return null;
+
+        } catch (IOException e) {
+            Timber.e(e, "Problem reading file.");
+            return null;
         }
-        return b;
+    }
+
+    public static Bitmap getBitmapScaledToDisplay(File file, int screenHeight, int screenWidth) {
+        return getBitmapScaledToDisplay(file, screenHeight, screenWidth, false);
     }
 
     /**
-     * With this method we do not care about efficient decoding and focus
-     * more on a precise scaling to maximize use of space on the screen
+     * Scales image according to the given display
+     *
+     * @param file           containing the image
+     * @param screenHeight   height of the display
+     * @param screenWidth    width of the display
+     * @param upscaleEnabled determines whether the image should be up-scaled or not
+     *                       if the window size is greater than the image size
+     * @return scaled bitmap
      */
-    public static Bitmap getBitmapAccuratelyScaledToDisplay(File f, int screenHeight,
-                                                            int screenWidth) {
-        // Determine image size of f
-        BitmapFactory.Options o = new BitmapFactory.Options();
-        o.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(f.getAbsolutePath(), o);
-
-        // Load full size bitmap image
+    public static Bitmap getBitmapScaledToDisplay(File file, int screenHeight, int screenWidth, boolean upscaleEnabled) {
+        // Determine image size of file
         BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inInputShareable = true;
-        options.inPurgeable = true;
-        Bitmap bitmap = BitmapFactory.decodeFile(f.getAbsolutePath(), options);
+        options.inJustDecodeBounds = true;
+        getBitmap(file.getAbsolutePath(), options);
 
-        // Figure out scale
-        double heightScale = ((double) (o.outHeight)) / screenHeight;
-        double widthScale = ((double) o.outWidth) / screenWidth;
-        double scale = Math.max(widthScale, heightScale);
+        Bitmap bitmap;
+        double scale;
+        if (upscaleEnabled) {
+            // Load full size bitmap image
+            options = new BitmapFactory.Options();
+            options.inInputShareable = true;
+            options.inPurgeable = true;
+            bitmap = getBitmap(file.getAbsolutePath(), options);
 
-        double newHeight = Math.ceil(o.outHeight / scale);
-        double newWidth = Math.ceil(o.outWidth / scale);
+            double heightScale = ((double) (options.outHeight)) / screenHeight;
+            double widthScale = ((double) options.outWidth) / screenWidth;
+            scale = Math.max(widthScale, heightScale);
 
-        bitmap = Bitmap.createScaledBitmap(bitmap, (int) newWidth, (int) newHeight, false);
+            double newHeight = Math.ceil(options.outHeight / scale);
+            double newWidth = Math.ceil(options.outWidth / scale);
 
-        if (bitmap != null) {
-            Log.i(t,
-                    "Screen is " + screenHeight + "x" + screenWidth
-                            + ".  Image has been scaled down by "
-                            + scale + " to " + bitmap.getHeight() + "x" + bitmap.getWidth());
+            bitmap = Bitmap.createScaledBitmap(bitmap, (int) newWidth, (int) newHeight, false);
+        } else {
+            int heightScale = options.outHeight / screenHeight;
+            int widthScale = options.outWidth / screenWidth;
+
+            // Powers of 2 work faster, sometimes, according to the doc.
+            // We're just doing closest size that still fills the screen.
+            scale = Math.max(widthScale, heightScale);
+
+            // get bitmap with scale ( < 1 is the same as 1)
+            options = new BitmapFactory.Options();
+            options.inInputShareable = true;
+            options.inPurgeable = true;
+            options.inSampleSize = (int) scale;
+            bitmap = getBitmap(file.getAbsolutePath(), options);
         }
 
+        if (bitmap != null) {
+            Timber.i("Screen is %dx%d.  Image has been scaled down by %f to %dx%d",
+                    screenHeight, screenWidth, scale, bitmap.getHeight(), bitmap.getWidth());
+        }
         return bitmap;
     }
-
 
     public static String copyFile(File sourceFile, File destFile) {
         if (sourceFile.exists()) {
@@ -256,17 +236,17 @@ public class FileUtils {
             if (errorMessage != null) {
                 try {
                     Thread.sleep(500);
-                    Log.e(t, "Retrying to copy the file after 500ms: "
-                            + sourceFile.getAbsolutePath());
+                    Timber.e("Retrying to copy the file after 500ms: %s",
+                            sourceFile.getAbsolutePath());
                     errorMessage = actualCopy(sourceFile, destFile);
                 } catch (InterruptedException e) {
-                    Log.e(t, e.getMessage(), e);
+                    Timber.e(e);
                 }
             }
             return errorMessage;
         } else {
             String msg = "Source file does not exist: " + sourceFile.getAbsolutePath();
-            Log.e(t, msg);
+            Timber.e(msg);
             return msg;
         }
     }
@@ -284,14 +264,14 @@ public class FileUtils {
             dst.transferFrom(src, 0, src.size());
             dst.force(true);
             return null;
-        } catch (FileNotFoundException e) {
-            Log.e(t, "FileNotFoundException while copying file", e);
-            return e.getMessage();
-        } catch (IOException e) {
-            Log.e(t, "IOException while copying file", e);
-            return e.getMessage();
         } catch (Exception e) {
-            Log.e(t, "Exception while copying file", e);
+            if (e instanceof FileNotFoundException) {
+                Timber.e(e, "FileNotFoundException while copying file");
+            } else if (e instanceof IOException) {
+                Timber.e(e, "IOException while copying file");
+            } else {
+                Timber.e(e, "Exception while copying file");
+            }
             return e.getMessage();
         } finally {
             IOUtils.closeQuietly(fileInputStream);
@@ -302,11 +282,12 @@ public class FileUtils {
     }
 
     public static HashMap<String, String> parseXML(File xmlFile) {
-        HashMap<String, String> fields = new HashMap<String, String>();
-        InputStream is;
+        final HashMap<String, String> fields = new HashMap<String, String>();
+        final InputStream is;
         try {
             is = new FileInputStream(xmlFile);
         } catch (FileNotFoundException e1) {
+            Timber.d(e1);
             throw new IllegalStateException(e1);
         }
 
@@ -314,81 +295,81 @@ public class FileUtils {
         try {
             isr = new InputStreamReader(is, "UTF-8");
         } catch (UnsupportedEncodingException uee) {
-            Log.w(t, "UTF 8 encoding unavailable, trying default encoding");
+            Timber.w(uee, "Trying default encoding as UTF 8 encoding unavailable");
             isr = new InputStreamReader(is);
         }
 
-        if (isr != null) {
-
-            Document doc;
+        final Document doc;
+        try {
+            doc = XFormParser.getXMLDocument(isr);
+        } catch (IOException e) {
+            Timber.e(e, "Unable to parse XML document %s", xmlFile.getAbsolutePath());
+            throw new IllegalStateException("Unable to parse XML document", e);
+        } finally {
             try {
-                doc = XFormParser.getXMLDocument(isr);
+                isr.close();
             } catch (IOException e) {
-                throw new IllegalStateException("Unable to parse XML document", e);
-            } finally {
-                try {
-                    isr.close();
-                } catch (IOException e) {
-                    Log.w(t, xmlFile.getAbsolutePath() + " Error closing form reader");
-                }
+                Timber.w("%s error closing from reader", xmlFile.getAbsolutePath());
             }
-
-            String xforms = "http://www.w3.org/2002/xforms";
-            String html = doc.getRootElement().getNamespace();
-
-            Element head = doc.getRootElement().getElement(html, "head");
-            Element title = head.getElement(html, "title");
-            if (title != null) {
-                fields.put(TITLE, XFormParser.getXMLText(title, true));
-            }
-
-            Element model = getChildElement(head, "model");
-            Element cur = getChildElement(model, "instance");
-
-            int idx = cur.getChildCount();
-            int i;
-            for (i = 0; i < idx; ++i) {
-                if (cur.isText(i)) {
-                    continue;
-                }
-                if (cur.getType(i) == Node.ELEMENT) {
-                    break;
-                }
-            }
-
-            if (i < idx) {
-                cur = cur.getElement(i); // this is the first data element
-                String id = cur.getAttributeValue(null, "id");
-                String xmlns = cur.getNamespace();
-
-                String version = cur.getAttributeValue(null, "version");
-                String uiVersion = cur.getAttributeValue(null, "uiVersion");
-                if (uiVersion != null) {
-                    // pre-OpenRosa 1.0 variant of spec
-                    Log.e(t, "Obsolete use of uiVersion -- IGNORED -- only using version: "
-                            + version);
-                }
-
-                fields.put(FORMID, (id == null) ? xmlns : id);
-                fields.put(VERSION, (version == null) ? null : version);
-            } else {
-                throw new IllegalStateException(xmlFile.getAbsolutePath() + " could not be parsed");
-            }
-            try {
-                Element submission = model.getElement(xforms, "submission");
-                String submissionUri = submission.getAttributeValue(null, "action");
-                fields.put(SUBMISSIONURI, (submissionUri == null) ? null : submissionUri);
-                String base64RsaPublicKey = submission.getAttributeValue(null,
-                        "base64RsaPublicKey");
-                fields.put(BASE64_RSA_PUBLIC_KEY,
-                        (base64RsaPublicKey == null || base64RsaPublicKey.trim().length() == 0)
-                                ? null : base64RsaPublicKey.trim());
-            } catch (Exception e) {
-                Log.i(t, xmlFile.getAbsolutePath() + " does not have a submission element");
-                // and that's totally fine.
-            }
-
         }
+
+        final String xforms = "http://www.w3.org/2002/xforms";
+        final String html = doc.getRootElement().getNamespace();
+
+        final Element head = doc.getRootElement().getElement(html, "head");
+        final Element title = head.getElement(html, "title");
+        if (title != null) {
+            fields.put(TITLE, XFormParser.getXMLText(title, true));
+        }
+
+        final Element model = getChildElement(head, "model");
+        Element cur = getChildElement(model, "instance");
+
+        final int idx = cur.getChildCount();
+        int i;
+        for (i = 0; i < idx; ++i) {
+            if (cur.isText(i)) {
+                continue;
+            }
+            if (cur.getType(i) == Node.ELEMENT) {
+                break;
+            }
+        }
+
+        if (i < idx) {
+            cur = cur.getElement(i); // this is the first data element
+            final String id = cur.getAttributeValue(null, "id");
+
+            final String version = cur.getAttributeValue(null, "version");
+            final String uiVersion = cur.getAttributeValue(null, "uiVersion");
+            if (uiVersion != null) {
+                // pre-OpenRosa 1.0 variant of spec
+                Timber.e("Obsolete use of uiVersion -- IGNORED -- only using version: %s",
+                        version);
+            }
+
+            fields.put(FORMID, (id == null) ? cur.getNamespace() : id);
+            fields.put(VERSION, (version == null) ? null : version);
+        } else {
+            throw new IllegalStateException(xmlFile.getAbsolutePath() + " could not be parsed");
+        }
+        try {
+            final Element submission = model.getElement(xforms, "submission");
+            final String base64RsaPublicKey = submission.getAttributeValue(null, "base64RsaPublicKey");
+            final String autoDelete = submission.getAttributeValue(null, "auto-delete");
+            final String autoSend = submission.getAttributeValue(null, "auto-send");
+
+            fields.put(SUBMISSIONURI, submission.getAttributeValue(null, "action"));
+            fields.put(BASE64_RSA_PUBLIC_KEY,
+                    (base64RsaPublicKey == null || base64RsaPublicKey.trim().length() == 0)
+                            ? null : base64RsaPublicKey.trim());
+            fields.put(AUTO_DELETE, autoDelete);
+            fields.put(AUTO_SEND, autoSend);
+        } catch (Exception e) {
+            Timber.i("XML file %s does not have a submission element", xmlFile.getAbsolutePath());
+            // and that's totally fine.
+        }
+
         return fields;
     }
 
@@ -411,16 +392,16 @@ public class FileUtils {
         if (file != null && file.exists()) {
             // remove garbage
             if (!file.delete()) {
-                Log.w(t, file.getAbsolutePath() + " will be deleted upon exit.");
+                Timber.w("%s will be deleted upon exit.", file.getAbsolutePath());
                 file.deleteOnExit();
             } else {
-                Log.w(t, file.getAbsolutePath() + " has been deleted.");
+                Timber.w("%s has been deleted.", file.getAbsolutePath());
             }
         }
     }
 
     public static String constructMediaPath(String formFilePath) {
-        String pathNoExtension = formFilePath.substring(0, formFilePath.lastIndexOf("."));
+        String pathNoExtension = formFilePath.substring(0, formFilePath.lastIndexOf('.'));
         return pathNoExtension + "-media";
     }
 
@@ -429,9 +410,8 @@ public class FileUtils {
      */
     public static void checkMediaPath(File mediaDir) {
         if (mediaDir.exists() && mediaDir.isFile()) {
-            Log.e(t,
-                    "The media folder is already there and it is a FILE!! We will need to delete "
-                            + "it and create a folder instead");
+            Timber.e("The media folder is already there and it is a FILE!! We will need to delete "
+                    + "it and create a folder instead");
             boolean deleted = mediaDir.delete();
             if (!deleted) {
                 throw new RuntimeException(
@@ -471,6 +451,117 @@ public class FileUtils {
                 org.apache.commons.io.FileUtils.moveFileToDirectory(mediaFile, formMediaPath, true);
             }
             deleteAndReport(tempMediaFolder);
+        }
+    }
+
+    public static void saveBitmapToFile(Bitmap bitmap, String path) {
+        final Bitmap.CompressFormat compressFormat = path.toLowerCase(Locale.getDefault()).endsWith(".png") ?
+                Bitmap.CompressFormat.PNG : Bitmap.CompressFormat.JPEG;
+
+        try (FileOutputStream out = new FileOutputStream(path)) {
+            bitmap.compress(compressFormat, 100, out);
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+    }
+
+    /*
+    This method is used to avoid OutOfMemoryError exception during loading an image.
+    If the exception occurs we catch it and try to load a smaller image.
+     */
+    public static Bitmap getBitmap(String path, BitmapFactory.Options originalOptions) {
+        BitmapFactory.Options newOptions = new BitmapFactory.Options();
+        newOptions.inSampleSize = originalOptions.inSampleSize;
+        if (newOptions.inSampleSize <= 0) {
+            newOptions.inSampleSize = 1;
+        }
+        Bitmap bitmap;
+        try {
+            bitmap = BitmapFactory.decodeFile(path, originalOptions);
+        } catch (OutOfMemoryError e) {
+            Timber.i(e);
+            newOptions.inSampleSize++;
+            return getBitmap(path, newOptions);
+        }
+
+        return bitmap;
+    }
+
+    public static byte[] read(File file) {
+        byte[] bytes = new byte[(int) file.length()];
+        try (InputStream is = new FileInputStream(file)) {
+            is.read(bytes);
+        } catch (IOException e) {
+            Timber.e(e);
+        }
+        return bytes;
+    }
+
+    public static void write(File file, byte[] data) {
+        try (FileOutputStream fos = new FileOutputStream(file)) {
+            fos.write(data);
+            fos.close();
+        } catch (IOException e) {
+            Timber.e(e);
+        }
+    }
+
+    /**
+     * With the FileProvider you have to manually grant and revoke read/write permissions to files you
+     * are sharing. With this approach the access only lasts as long as the target activity on Api versions
+     * above Kit Kat. Once you are below that you have to manually revoke the permissions.
+     *
+     * @param intent that needs to have the permission flags
+     * @param uri    that the permissions are being applied to
+     * @return intent that has read and write permissions
+     */
+    public static void grantFilePermissions(Intent intent, Uri uri, Context context) {
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+
+        /*
+         Workaround for Android bug.
+         grantUriPermission also needed for KITKAT,
+         see https://code.google.com/p/android/issues/detail?id=76683
+         */
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+            List<ResolveInfo> resInfoList = context.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+            for (ResolveInfo resolveInfo : resInfoList) {
+                String packageName = resolveInfo.activityInfo.packageName;
+                context.grantUriPermission(packageName, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            }
+        }
+    }
+
+    /**
+     * With the FileProvider you have to manually grant and revoke read/write permissions to files you
+     * are sharing. With this approach the access only lasts as long as the target activity on Api versions
+     * above Kit Kat. Once you are below that you have to manually revoke the permissions.
+     *
+     * @param intent that needs to have the permission flags
+     * @param uri    that the permissions are being applied to
+     * @return intent that has read and write permissions
+     */
+    public static void grantFileReadPermissions(Intent intent, Uri uri, Context context) {
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        /*
+         Workaround for Android bug.
+         grantUriPermission also needed for KITKAT,
+         see https://code.google.com/p/android/issues/detail?id=76683
+         */
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+            List<ResolveInfo> resInfoList = context.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+            for (ResolveInfo resolveInfo : resInfoList) {
+                String packageName = resolveInfo.activityInfo.packageName;
+                context.grantUriPermission(packageName, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            }
+        }
+    }
+
+    public static void revokeFileReadWritePermission(Context context, Uri uri) {
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+            context.revokeUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
         }
     }
 }

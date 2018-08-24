@@ -21,8 +21,8 @@ import java.util.TreeMap;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.odk.collect.android.preferences.FormMetadataMigrator.SOURCE_TARGET_VALUE_PAIRS;
 import static org.odk.collect.android.preferences.FormMetadataMigrator.migrate;
-import static org.odk.collect.android.preferences.FormMetadataMigrator.sourceTargetValuePairs;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_EMAIL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_MIGRATED;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_PHONENUMBER;
@@ -30,13 +30,13 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_US
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
 
-/** Tests the FormMetadataActivity */
+/** Tests the FormMetadataFragment */
 @Config(constants = BuildConfig.class)
 @RunWith(RobolectricTestRunner.class)
 public class FormMetadataMigratorTest {
 
     private SharedPreferences sharedPreferences;
-    private final PrintStream o = System.out;
+    private final PrintStream printStream = System.out;
 
     /** The keys of preferences affected by the migration */
     private final List<String> affectedKeys = Arrays.asList(
@@ -82,11 +82,11 @@ public class FormMetadataMigratorTest {
     }
 
     private void displayAffectedPreferences(String message) {
-        o.println("\n" + message);
+        printStream.println("\n" + message);
         SortedMap<String, ?> allPrefs = new TreeMap<>(sharedPreferences.getAll());
         for (Map.Entry<String, ?> es : allPrefs.entrySet()) {
             if (affectedKeys.contains(es.getKey())) {
-                o.format("%-25s %s\n", es.getKey(), es.getValue());
+                printStream.format("%-25s %s\n", es.getKey(), es.getValue());
             }
         }
     }
@@ -113,7 +113,7 @@ public class FormMetadataMigratorTest {
         assertTrue(sharedPreferences.getBoolean(KEY_METADATA_MIGRATED, false));
         assertPrefsMatchValues(sourceKeyValuePairs);
 
-        for (String[] pair : sourceTargetValuePairs) {
+        for (String[] pair : SOURCE_TARGET_VALUE_PAIRS) {
             assertEquals(sharedPreferences.getString(pair[0], ""),
                     sharedPreferences.getString(pair[1], ""));
         }

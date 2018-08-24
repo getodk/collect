@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListPreference
+        android:dialogTitle="@string/app_theme"
+        android:entries="@array/theme_entries"
+        android:entryValues="@array/theme_entry_values"
+        android:key="appTheme"
+        android:title="@string/app_theme" />
+    <ListPreference
+        android:dialogTitle="@string/language"
+        android:key="app_language"
+        android:title="@string/language" />
+    <ListPreference
+        android:dialogTitle="@string/change_font_size"
+        android:entries="@array/font_size_entries"
+        android:entryValues="@array/font_size_entry_values"
+        android:key="font_size"
+        android:title="@string/font_size" />
+    <ListPreference
+        android:dialogTitle="@string/navigation"
+        android:entries="@array/navigation_entries"
+        android:entryValues="@array/navigation_entry_values"
+        android:key="navigation"
+        android:title="@string/navigation" />
+    <CheckBoxPreference
+        android:key="showSplash"
+        android:summary="@string/show_splash_summary"
+        android:title="@string/show_splash_title" />
+    <Preference
+        android:dependency="showSplash"
+        android:key="splashPath"
+        android:layout="?android:attr/preferenceLayoutChild"
+        android:title="@string/splash_path" />
+
+    <PreferenceCategory
+        android:key="@string/map_preferences"
+        android:title="@string/map_preferences">
+        <ListPreference
+            android:dialogTitle="@string/map_sdk_selector_title"
+            android:entries="@array/map_sdk_selector_entries"
+            android:entryValues="@array/map_sdk_selector_entry_values"
+            android:key="map_sdk_behavior"
+            android:title="@string/map_sdk_behavior" />
+        <ListPreference
+            android:dialogTitle="@string/map_basemap_selector_title"
+            android:entries="@array/map_google_basemap_selector_entries"
+            android:entryValues="@array/map_google_basemap_selector_entry_values"
+            android:key="map_basemap_behavior"
+            android:title="@string/map_basemap_behavior_title" />
+    </PreferenceCategory>
+</PreferenceScreen>

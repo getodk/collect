@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
@@ -25,29 +26,39 @@ import android.os.Build;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore.Video;
-import android.util.Log;
-import android.util.TypedValue;
+import android.support.annotation.NonNull;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TableLayout;
 import android.widget.Toast;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.CaptureSelfieVideoActivity;
+import org.odk.collect.android.activities.CaptureSelfieVideoActivityNewApi;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.PreferenceKeys;
-import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.utilities.CameraUtils;
+import org.odk.collect.android.utilities.FileUtil;
+import org.odk.collect.android.utilities.MediaManager;
+import org.odk.collect.android.utilities.MediaUtil;
+import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.android.widgets.interfaces.FileWidget;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
+import timber.log.Timber;
+
+import static android.os.Build.MODEL;
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
+import static org.odk.collect.android.utilities.PermissionUtils.requestCameraPermission;
 
 /**
  * Widget that allows user to take pictures, sounds or video and add them to the
@@ -56,300 +67,75 @@ import java.util.Locale;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class VideoWidget extends QuestionWidget implements IBinaryWidget {
-    private final static String t = "MediaWidget";
-
-    private Button mCaptureButton;
-    private Button mPlayButton;
-    private Button mChooseButton;
-
-    private String mBinaryName;
-
-    private String mInstanceFolder;
+@SuppressLint("ViewConstructor")
+public class VideoWidget extends QuestionWidget implements FileWidget {
 
     public static final boolean DEFAULT_HIGH_RESOLUTION = true;
-
-    private static final String NEXUS7 = "Nexus 7";
-    private static final String DIRECTORY_PICTURES = "Pictures";
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
+
+    public static final String NEXUS7 = "Nexus 7";
+    private static final String DIRECTORY_PICTURES = "Pictures";
+
+    @NonNull
+    private MediaUtil mediaUtil;
+
+    @NonNull
+    private FileUtil fileUtil;
+
+    private Button captureButton;
+    private Button playButton;
+    private Button chooseButton;
+    private String binaryName;
     private Uri nexus7Uri;
 
+    private boolean selfie;
+
     public VideoWidget(Context context, FormEntryPrompt prompt) {
+        this(context, prompt, new FileUtil(), new MediaUtil());
+    }
+
+    public VideoWidget(Context context, FormEntryPrompt prompt, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil) {
         super(context, prompt);
 
-        mInstanceFolder = Collect.getInstance().getFormController()
-                .getInstancePath().getParent();
+        this.fileUtil = fileUtil;
+        this.mediaUtil = mediaUtil;
 
-        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
-        params.setMargins(7, 5, 7, 5);
-        // setup capture button
-        mCaptureButton = new Button(getContext());
-        mCaptureButton.setId(QuestionWidget.newUniqueId());
-        mCaptureButton.setText(getContext().getString(R.string.capture_video));
-        mCaptureButton
-                .setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-        mCaptureButton.setPadding(20, 20, 20, 20);
-        mCaptureButton.setEnabled(!prompt.isReadOnly());
-        mCaptureButton.setLayoutParams(params);
+        String appearance = getFormEntryPrompt().getAppearanceHint();
+        selfie = appearance != null && (appearance.equalsIgnoreCase("selfie") || appearance.equalsIgnoreCase("new-front"));
 
-        // launch capture intent on click
-        mCaptureButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect
-                        .getInstance());
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(VideoWidget.this, "captureButton",
-                                "click", mPrompt.getIndex());
-                Intent i = new Intent(
-                        android.provider.MediaStore.ACTION_VIDEO_CAPTURE);
+        captureButton = getSimpleButton(getContext().getString(R.string.capture_video), R.id.capture_video);
+        captureButton.setEnabled(!prompt.isReadOnly());
 
-                // Need to have this ugly code to account for
-                // a bug in the Nexus 7 on 4.3 not returning the mediaUri in the data
-                // of the intent - using the MediaStore.EXTRA_OUTPUT to get the data
-                // Have it saving to an intermediate location instead of final destination
-                // to allow the current location to catch issues with the intermediate file
-                Log.i(t, "The build of this device is " + android.os.Build.MODEL);
-                if (NEXUS7.equals(android.os.Build.MODEL) && Build.VERSION.SDK_INT == 18) {
-                    nexus7Uri = getOutputMediaFileUri(MEDIA_TYPE_VIDEO);
-                    i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, nexus7Uri);
-                } else {
-                    i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
-                            Video.Media.EXTERNAL_CONTENT_URI.toString());
-                }
+        chooseButton = getSimpleButton(getContext().getString(R.string.choose_video), R.id.choose_video);
+        chooseButton.setEnabled(!prompt.isReadOnly());
 
-                // request high resolution if configured for that...
-                boolean high_resolution = settings.getBoolean(
-                        PreferenceKeys.KEY_HIGH_RESOLUTION,
-                        VideoWidget.DEFAULT_HIGH_RESOLUTION);
-                if (high_resolution) {
-                    i.putExtra(android.provider.MediaStore.EXTRA_VIDEO_QUALITY, 1);
-                }
-                try {
-                    Collect.getInstance().getFormController()
-                            .setIndexWaitingForData(mPrompt.getIndex());
-                    ((Activity) getContext()).startActivityForResult(i,
-                            FormEntryActivity.VIDEO_CAPTURE);
-                } catch (ActivityNotFoundException e) {
-                    Toast.makeText(
-                            getContext(),
-                            getContext().getString(R.string.activity_not_found,
-                                    "capture video"), Toast.LENGTH_SHORT)
-                            .show();
-                    Collect.getInstance().getFormController()
-                            .setIndexWaitingForData(null);
-                }
-
-            }
-        });
-
-        // setup capture button
-        mChooseButton = new Button(getContext());
-        mChooseButton.setId(QuestionWidget.newUniqueId());
-        mChooseButton.setText(getContext().getString(R.string.choose_video));
-        mChooseButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-        mChooseButton.setPadding(20, 20, 20, 20);
-        mChooseButton.setEnabled(!prompt.isReadOnly());
-        mChooseButton.setLayoutParams(params);
-
-        // launch capture intent on click
-        mChooseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(VideoWidget.this, "chooseButton",
-                                "click", mPrompt.getIndex());
-                Intent i = new Intent(Intent.ACTION_GET_CONTENT);
-                i.setType("video/*");
-                // Intent i =
-                // new Intent(Intent.ACTION_PICK,
-                // android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
-                try {
-                    Collect.getInstance().getFormController()
-                            .setIndexWaitingForData(mPrompt.getIndex());
-                    ((Activity) getContext()).startActivityForResult(i,
-                            FormEntryActivity.VIDEO_CHOOSER);
-                } catch (ActivityNotFoundException e) {
-                    Toast.makeText(
-                            getContext(),
-                            getContext().getString(R.string.activity_not_found,
-                                    "choose video "), Toast.LENGTH_SHORT)
-                            .show();
-                    Collect.getInstance().getFormController()
-                            .setIndexWaitingForData(null);
-                }
-
-            }
-        });
-
-        // setup play button
-        mPlayButton = new Button(getContext());
-        mPlayButton.setId(QuestionWidget.newUniqueId());
-        mPlayButton.setText(getContext().getString(R.string.play_video));
-        mPlayButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-        mPlayButton.setPadding(20, 20, 20, 20);
-        mPlayButton.setLayoutParams(params);
-
-        // on play, launch the appropriate viewer
-        mPlayButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(VideoWidget.this, "playButton",
-                                "click", mPrompt.getIndex());
-                Intent i = new Intent("android.intent.action.VIEW");
-                File f = new File(mInstanceFolder + File.separator
-                        + mBinaryName);
-                i.setDataAndType(Uri.fromFile(f), "video/*");
-                try {
-                    getContext().startActivity(i);
-                } catch (ActivityNotFoundException e) {
-                    Toast.makeText(
-                            getContext(),
-                            getContext().getString(R.string.activity_not_found,
-                                    "video video"), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+        playButton = getSimpleButton(getContext().getString(R.string.play_video), R.id.play_video);
 
         // retrieve answer from data model and update ui
-        mBinaryName = prompt.getAnswerText();
-        if (mBinaryName != null) {
-            mPlayButton.setEnabled(true);
+        binaryName = prompt.getAnswerText();
+        if (binaryName != null) {
+            playButton.setEnabled(true);
         } else {
-            mPlayButton.setEnabled(false);
+            playButton.setEnabled(false);
         }
 
         // finish complex layout
         LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);
-        answerLayout.addView(mCaptureButton);
-        answerLayout.addView(mChooseButton);
-        answerLayout.addView(mPlayButton);
+        answerLayout.addView(captureButton);
+        answerLayout.addView(chooseButton);
+        answerLayout.addView(playButton);
         addAnswerView(answerLayout);
 
-        // and hide the capture and choose button if read-only
-        if (mPrompt.isReadOnly()) {
-            mCaptureButton.setVisibility(View.GONE);
-            mChooseButton.setVisibility(View.GONE);
+        hideButtonsIfNeeded();
+
+        if (selfie) {
+            if (!CameraUtils.isFrontCameraAvailable()) {
+                captureButton.setEnabled(false);
+                ToastUtils.showLongToast(R.string.error_front_camera_unavailable);
+            }
         }
-
-    }
-
-    private void deleteMedia() {
-        // get the file path and delete the file
-        String name = mBinaryName;
-        // clean up variables
-        mBinaryName = null;
-        // delete from media provider
-        int del = MediaUtils.deleteVideoFileFromMediaProvider(
-                mInstanceFolder + File.separator + name);
-        Log.i(t, "Deleted " + del + " rows from media content provider");
-    }
-
-    @Override
-    public void clearAnswer() {
-        // remove the file
-        deleteMedia();
-
-        // reset buttons
-        mPlayButton.setEnabled(false);
-    }
-
-    @Override
-    public IAnswerData getAnswer() {
-        if (mBinaryName != null) {
-            return new StringData(mBinaryName);
-        } else {
-            return null;
-        }
-    }
-
-    @Override
-    public void setBinaryData(Object binaryuri) {
-
-        // get the file path and create a copy in the instance folder
-        String binaryPath = MediaUtils.getPathFromUri(this.getContext(), (Uri) binaryuri,
-                Video.Media.DATA);
-        String extension = binaryPath.substring(binaryPath.lastIndexOf("."));
-        String destVideoPath = mInstanceFolder + File.separator
-                + System.currentTimeMillis() + extension;
-
-        File source = new File(binaryPath);
-        File newVideo = new File(destVideoPath);
-        FileUtils.copyFile(source, newVideo);
-
-        if (newVideo.exists()) {
-            // Add the copy to the content provier
-            ContentValues values = new ContentValues(6);
-            values.put(Video.Media.TITLE, newVideo.getName());
-            values.put(Video.Media.DISPLAY_NAME, newVideo.getName());
-            values.put(Video.Media.DATE_ADDED, System.currentTimeMillis());
-            values.put(Video.Media.DATA, newVideo.getAbsolutePath());
-
-            Uri VideoURI = getContext().getContentResolver().insert(
-                    Video.Media.EXTERNAL_CONTENT_URI, values);
-            Log.i(t, "Inserting VIDEO returned uri = " + VideoURI.toString());
-        } else {
-            Log.e(t, "Inserting Video file FAILED");
-        }
-        // you are replacing an answer. remove the media.
-        if (mBinaryName != null && !mBinaryName.equals(newVideo.getName())) {
-            deleteMedia();
-        }
-
-        mBinaryName = newVideo.getName();
-        Collect.getInstance().getFormController().setIndexWaitingForData(null);
-
-        // Need to have this ugly code to account for
-        // a bug in the Nexus 7 on 4.3 not returning the mediaUri in the data
-        // of the intent - uri in this case is a file
-        if (NEXUS7.equals(android.os.Build.MODEL) && Build.VERSION.SDK_INT == 18) {
-            Uri mediaUri = (Uri) binaryuri;
-            File fileToDelete = new File(mediaUri.getPath());
-            int delCount = fileToDelete.delete() ? 1 : 0;
-            Log.i(t, "Deleting original capture of file: " + mediaUri.toString() + " count: "
-                    + delCount);
-        }
-    }
-
-    @Override
-    public void setFocus(Context context) {
-        // Hide the soft keyboard if it's showing.
-        InputMethodManager inputManager = (InputMethodManager) context
-                .getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
-    }
-
-    @Override
-    public boolean isWaitingForBinaryData() {
-        return mPrompt.getIndex().equals(
-                Collect.getInstance().getFormController()
-                        .getIndexWaitingForData());
-    }
-
-    @Override
-    public void cancelWaitingForBinaryData() {
-        Collect.getInstance().getFormController().setIndexWaitingForData(null);
-    }
-
-    @Override
-    public void setOnLongClickListener(OnLongClickListener l) {
-        mCaptureButton.setOnLongClickListener(l);
-        mChooseButton.setOnLongClickListener(l);
-        mPlayButton.setOnLongClickListener(l);
-    }
-
-    @Override
-    public void cancelLongPress() {
-        super.cancelLongPress();
-        mCaptureButton.cancelLongPress();
-        mChooseButton.cancelLongPress();
-        mPlayButton.cancelLongPress();
     }
 
     /*
@@ -366,7 +152,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
      *  For Nexus 7 fix ...
      *  See http://developer.android.com/guide/topics/media/camera.html for more info
      */
-    private static File getOutputMediaFile(int type) {
+    public static File getOutputMediaFile(int type) {
         // To be safe, you should check that the SDCard is mounted
         // using Environment.getExternalStorageState() before doing this.
 
@@ -378,7 +164,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         // Create the storage directory if it does not exist
         if (!mediaStorageDir.exists()) {
             if (!mediaStorageDir.mkdirs()) {
-                Log.d(t, "failed to create directory");
+                Timber.d("failed to create directory");
                 return null;
             }
         }
@@ -388,11 +174,11 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
                 new Date());
         File mediaFile;
         if (type == MEDIA_TYPE_IMAGE) {
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "IMG_" + timeStamp + ".jpg");
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator
+                    + "IMG_" + timeStamp + ".jpg");
         } else if (type == MEDIA_TYPE_VIDEO) {
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "VID_" + timeStamp + ".mp4");
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator
+                    + "VID_" + timeStamp + ".mp4");
         } else {
             return null;
         }
@@ -400,4 +186,255 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         return mediaFile;
     }
 
+    @Override
+    public void deleteFile() {
+        MediaManager
+                .INSTANCE
+                .markOriginalFileOrDelete(getFormEntryPrompt().getIndex().toString(),
+                        getInstanceFolder() + File.separator + binaryName);
+        binaryName = null;
+    }
+
+    @Override
+    public void clearAnswer() {
+        // remove the file
+        deleteFile();
+
+        // reset buttons
+        playButton.setEnabled(false);
+    }
+
+    @Override
+    public IAnswerData getAnswer() {
+        if (binaryName != null) {
+            return new StringData(binaryName);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Set this widget with the actual file returned by OnActivityResult.
+     * Both of Uri and File are supported.
+     * If the file is local, a Uri is enough for the copy task below.
+     * If the chose file is from cloud(such as Google Drive),
+     * The retrieve and copy task is already executed in the previous step,
+     * so a File object would be presented.
+     *
+     * @param object Uri or File of the chosen file.
+     * @see org.odk.collect.android.activities.FormEntryActivity#onActivityResult(int, int, Intent)
+     */
+    @Override
+    public void setBinaryData(Object object) {
+        File newVideo = null;
+        // get the file path and create a copy in the instance folder
+        if (object instanceof Uri) {
+            String sourcePath = getSourcePathFromUri((Uri) object);
+            String destinationPath = getDestinationPathFromSourcePath(sourcePath);
+            File source = fileUtil.getFileAtPath(sourcePath);
+            newVideo = fileUtil.getFileAtPath(destinationPath);
+            fileUtil.copyFile(source, newVideo);
+        } else if (object instanceof File) {
+            newVideo = (File) object;
+        } else {
+            Timber.w("VideoWidget's setBinaryData must receive a File or Uri object.");
+            return;
+        }
+
+        if (newVideo.exists()) {
+            // Add the copy to the content provier
+            ContentValues values = new ContentValues(6);
+            values.put(Video.Media.TITLE, newVideo.getName());
+            values.put(Video.Media.DISPLAY_NAME, newVideo.getName());
+            values.put(Video.Media.DATE_ADDED, System.currentTimeMillis());
+            values.put(Video.Media.DATA, newVideo.getAbsolutePath());
+
+            MediaManager
+                    .INSTANCE
+                    .replaceRecentFileForQuestion(getFormEntryPrompt().getIndex().toString(), newVideo.getAbsolutePath());
+
+            Uri videoURI = getContext().getContentResolver().insert(
+                    Video.Media.EXTERNAL_CONTENT_URI, values);
+
+            if (videoURI != null) {
+                Timber.i("Inserting VIDEO returned uri = %s", videoURI.toString());
+            }
+
+        } else {
+            Timber.e("Inserting Video file FAILED");
+        }
+        // you are replacing an answer. remove the media.
+        if (binaryName != null && !binaryName.equals(newVideo.getName())) {
+            deleteFile();
+        }
+
+        binaryName = newVideo.getName();
+
+        // Need to have this ugly code to account for
+        // a bug in the Nexus 7 on 4.3 not returning the mediaUri in the data
+        // of the intent - uri in this case is a file
+        if (NEXUS7.equals(MODEL) && Build.VERSION.SDK_INT == 18) {
+            if (object instanceof File) {
+                File fileToDelete = (File) object;
+                int delCount = fileToDelete.delete() ? 1 : 0;
+                Timber.i("Deleting original capture of file: %s count: %d", binaryName, delCount);
+            }
+        }
+    }
+
+    private void hideButtonsIfNeeded() {
+        if (getFormEntryPrompt().isReadOnly()) {
+            captureButton.setVisibility(View.GONE);
+            chooseButton.setVisibility(View.GONE);
+        } else if (selfie || (getFormEntryPrompt().getAppearanceHint() != null
+                && getFormEntryPrompt().getAppearanceHint().toLowerCase(Locale.ENGLISH).contains("new"))) {
+            chooseButton.setVisibility(View.GONE);
+        }
+    }
+
+    private String getSourcePathFromUri(@NonNull Uri uri) {
+        return mediaUtil.getPathFromUri(getContext(), uri, Video.Media.DATA);
+    }
+
+    private String getDestinationPathFromSourcePath(@NonNull String sourcePath) {
+        String extension = sourcePath.substring(sourcePath.lastIndexOf('.'));
+        return getInstanceFolder() + File.separator
+                + fileUtil.getRandomFilename() + extension;
+    }
+
+    @Override
+    public void setOnLongClickListener(OnLongClickListener l) {
+        captureButton.setOnLongClickListener(l);
+        chooseButton.setOnLongClickListener(l);
+        playButton.setOnLongClickListener(l);
+    }
+
+    @Override
+    public void cancelLongPress() {
+        super.cancelLongPress();
+        captureButton.cancelLongPress();
+        chooseButton.cancelLongPress();
+        playButton.cancelLongPress();
+    }
+
+    @Override
+    public void onButtonClick(int id) {
+        switch (id) {
+            case R.id.capture_video:
+                requestCameraPermission((FormEntryActivity) getContext(), new PermissionListener() {
+                    @Override
+                    public void granted() {
+                        captureVideo();
+                    }
+
+                    @Override
+                    public void denied() {
+                    }
+                });
+                break;
+            case R.id.choose_video:
+                chooseVideo();
+                break;
+            case R.id.play_video:
+                playVideoFile();
+                break;
+        }
+    }
+
+    private void captureVideo() {
+        Collect.getInstance()
+                .getActivityLogger()
+                .logInstanceAction(this, "captureButton",
+                        "click", getFormEntryPrompt().getIndex());
+        Intent i;
+        if (selfie) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                i = new Intent(getContext(), CaptureSelfieVideoActivityNewApi.class);
+            } else {
+                i = new Intent(getContext(), CaptureSelfieVideoActivity.class);
+            }
+        } else {
+            i = new Intent(android.provider.MediaStore.ACTION_VIDEO_CAPTURE);
+            // Need to have this ugly code to account for
+            // a bug in the Nexus 7 on 4.3 not returning the mediaUri in the data
+            // of the intent - using the MediaStore.EXTRA_OUTPUT to get the data
+            // Have it saving to an intermediate location instead of final destination
+            // to allow the current location to catch issues with the intermediate file
+            Timber.i("The build of this device is %s", MODEL);
+            if (NEXUS7.equals(MODEL) && Build.VERSION.SDK_INT == 18) {
+                nexus7Uri = getOutputMediaFileUri(MEDIA_TYPE_VIDEO);
+                i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, nexus7Uri);
+            } else {
+                i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
+                        Video.Media.EXTERNAL_CONTENT_URI.toString());
+            }
+        }
+
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect
+                .getInstance());
+
+        // request high resolution if configured for that...
+        boolean highResolution = settings.getBoolean(
+                PreferenceKeys.KEY_HIGH_RESOLUTION,
+                VideoWidget.DEFAULT_HIGH_RESOLUTION);
+        if (highResolution) {
+            i.putExtra(android.provider.MediaStore.EXTRA_VIDEO_QUALITY, 1);
+        }
+        try {
+            waitForData();
+            ((Activity) getContext()).startActivityForResult(i,
+                    RequestCodes.VIDEO_CAPTURE);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(
+                    getContext(),
+                    getContext().getString(R.string.activity_not_found,
+                            getContext().getString(R.string.capture_video)), Toast.LENGTH_SHORT)
+                    .show();
+            cancelWaitingForData();
+        }
+    }
+
+    private void chooseVideo() {
+        Collect.getInstance()
+                .getActivityLogger()
+                .logInstanceAction(this, "chooseButton",
+                        "click", getFormEntryPrompt().getIndex());
+        Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+        i.setType("video/*");
+        // Intent i =
+        // new Intent(Intent.ACTION_PICK,
+        // android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
+        try {
+            waitForData();
+            ((Activity) getContext()).startActivityForResult(i,
+                    RequestCodes.VIDEO_CHOOSER);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(
+                    getContext(),
+                    getContext().getString(R.string.activity_not_found,
+                            getContext().getString(R.string.choose_video)), Toast.LENGTH_SHORT)
+                    .show();
+
+            cancelWaitingForData();
+        }
+    }
+
+    private void playVideoFile() {
+        Collect.getInstance()
+                .getActivityLogger()
+                .logInstanceAction(this, "playButton",
+                        "click", getFormEntryPrompt().getIndex());
+        Intent i = new Intent("android.intent.action.VIEW");
+        File f = new File(getInstanceFolder() + File.separator
+                + binaryName);
+        i.setDataAndType(Uri.fromFile(f), "video/*");
+        try {
+            getContext().startActivity(i);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(
+                    getContext(),
+                    getContext().getString(R.string.activity_not_found,
+                            getContext().getString(R.string.view_video)), Toast.LENGTH_SHORT).show();
+        }
+    }
 }

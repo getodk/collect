@@ -15,40 +15,56 @@
 package org.odk.collect.android.activities;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.util.Log;
+import android.support.annotation.NonNull;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.DiskSyncListener;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.listeners.PermissionListener;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesActivity;
-import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.preferences.Transport;
 import org.odk.collect.android.receivers.NetworkReceiver;
 import org.odk.collect.android.tasks.InstanceSyncTask;
+import org.odk.collect.android.tasks.sms.SmsNotificationReceiver;
+import org.odk.collect.android.tasks.sms.SmsService;
+import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
+import org.odk.collect.android.tasks.sms.models.SmsSubmission;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.ToastUtils;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.inject.Inject;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import timber.log.Timber;
+
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PROTOCOL;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_TRANSPORT_TYPE;
+import static org.odk.collect.android.tasks.sms.SmsSender.SMS_INSTANCE_ID;
+import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
+import static org.odk.collect.android.utilities.PermissionUtils.requestSendSMSPermission;
+import static org.odk.collect.android.utilities.PermissionUtils.requestStoragePermissions;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores
@@ -58,111 +74,189 @@ import java.util.List;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 
-public class InstanceUploaderList extends InstanceListActivity
-        implements OnLongClickListener, DiskSyncListener {
-    private static final String t = "InstanceUploaderList";
+public class InstanceUploaderList extends InstanceListActivity implements
+        OnLongClickListener, DiskSyncListener, AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
     private static final String SHOW_ALL_MODE = "showAllMode";
     private static final String INSTANCE_UPLOADER_LIST_SORTING_ORDER = "instanceUploaderListSortingOrder";
 
-    private static final int MENU_PREFERENCES = AppListActivity.MENU_FILTER + 1;
-    private static final int MENU_SHOW_UNSENT = MENU_PREFERENCES + 1;
-
     private static final int INSTANCE_UPLOADER = 0;
 
-    private Button mUploadButton;
+    @BindView(R.id.upload_button)
+    Button uploadButton;
+    @BindView(R.id.sms_upload_button)
+    Button smsUploadButton;
+    @BindView(R.id.toggle_button)
+    Button toggleSelsButton;
 
-    private InstancesDao mInstanceDao;
+    private InstancesDao instancesDao;
 
     private InstanceSyncTask instanceSyncTask;
 
-    private boolean mShowAllMode;
+    private boolean showAllMode;
+
+    private final BroadcastReceiver smsForegroundReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            //Stops the notification from being sent to others that are listening for this broadcast.
+            abortBroadcast();
+
+            //deletes submission since the app is in the foreground and the NotificationReceiver won't be triggered.
+            if (intent.hasExtra(SMS_INSTANCE_ID)) {
+                deleteIfSubmissionCompleted(intent.getStringExtra(SMS_INSTANCE_ID));
+            }
+        }
+    };
+
+    @Inject
+    SmsService smsService;
+    @Inject
+    SmsSubmissionManagerContract smsSubmissionManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.i(t, "onCreate");
         super.onCreate(savedInstanceState);
+        Timber.i("onCreate");
+        // set title
+        setTitle(getString(R.string.send_data));
         setContentView(R.layout.instance_uploader_list);
+        ButterKnife.bind(this);
+        getComponent().inject(this);
 
         if (savedInstanceState != null) {
-            mShowAllMode = savedInstanceState.getBoolean(SHOW_ALL_MODE);
+            showAllMode = savedInstanceState.getBoolean(SHOW_ALL_MODE);
         }
 
-        mInstanceDao = new InstancesDao();
-
-        mUploadButton = (Button) findViewById(R.id.upload_button);
-        mUploadButton.setOnClickListener(new OnClickListener() {
+        requestStoragePermissions(this, new PermissionListener() {
+            @Override
+            public void granted() {
+                init();
+            }
 
             @Override
-            public void onClick(View v) {
-                ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(
-                        Context.CONNECTIVITY_SERVICE);
-                NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
-
-                if (NetworkReceiver.running) {
-                    ToastUtils.showShortToast(R.string.send_in_progress);
-                } else if (ni == null || !ni.isConnected()) {
-                    logger.logAction(this, "uploadButton", "noConnection");
-
-                    ToastUtils.showShortToast(R.string.no_connection);
-                } else {
-                    int checkedItemCount = getCheckedCount();
-                    logger.logAction(this, "uploadButton", Integer.toString(checkedItemCount));
-
-                    if (checkedItemCount > 0) {
-                        // items selected
-                        uploadSelectedFiles();
-                        InstanceUploaderList.this.getListView().clearChoices();
-                        mUploadButton.setEnabled(false);
-                    } else {
-                        // no items selected
-                        ToastUtils.showLongToast(R.string.noselect_error);
-                    }
-                }
+            public void denied() {
+                // The activity has to finish because ODK Collect cannot function without these permissions.
+                finishAllActivities(InstanceUploaderList.this);
             }
         });
+    }
 
-        final Button toggleSelsButton = (Button) findViewById(R.id.toggle_button);
+    /**
+     * Determines how an upload should be handled by checking the transport being used.
+     * If the transport is set to SMS or Internet then either is used respectively else it's
+     * "Both" so the button IDs drive the decision.
+     *
+     * @param button that triggers an upload
+     */
+    @OnClick({R.id.upload_button, R.id.sms_upload_button})
+    public void onUploadButtonsClicked(Button button) {
+        Transport transport = Transport.fromPreference(GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE));
+        if (transport.equals(Transport.Internet) || button.getId() == R.id.upload_button) {
+
+            ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(
+                    Context.CONNECTIVITY_SERVICE);
+            NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
+
+            if (NetworkReceiver.running) {
+                ToastUtils.showShortToast(R.string.send_in_progress);
+                return;
+            } else if (ni == null || !ni.isConnected()) {
+                logger.logAction(this, "uploadButton", "noConnection");
+                ToastUtils.showShortToast(R.string.no_connection);
+                return;
+            }
+        }
+
+        int checkedItemCount = getCheckedCount();
+        logger.logAction(this, "uploadButton", Integer.toString(checkedItemCount));
+
+        if (checkedItemCount > 0) {
+            // items selected
+            uploadSelectedFiles(button.getId());
+            setAllToCheckedState(listView, false);
+            toggleButtonLabel(findViewById(R.id.toggle_button), listView);
+            uploadButton.setEnabled(false);
+            smsUploadButton.setEnabled(false);
+        } else {
+            // no items selected
+            ToastUtils.showLongToast(R.string.noselect_error);
+        }
+    }
+
+    /**
+     * Changes the default upload button text if "Both" transport is
+     * enabled and sets SMS upload button visibility
+     */
+    private void setupUploadButtons() {
+        Transport transport = Transport.fromPreference(GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE));
+        if (transport.equals(Transport.Both)) {
+            uploadButton.setText(R.string.send_selected_data_internet);
+            smsUploadButton.setVisibility(View.VISIBLE);
+        } else {
+            smsUploadButton.setVisibility(View.GONE);
+            uploadButton.setText(R.string.send_selected_data);
+        }
+    }
+
+    private void init() {
+        setupUploadButtons();
+        instancesDao = new InstancesDao();
+
         toggleSelsButton.setLongClickable(true);
-        toggleSelsButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ListView lv = getListView();
-                boolean allChecked = toggleChecked(lv);
-                toggleButtonLabel(toggleSelsButton, lv);
-                mUploadButton.setEnabled(allChecked);
+        toggleSelsButton.setOnClickListener(v -> {
+            ListView lv = listView;
+            boolean allChecked = toggleChecked(lv);
+            toggleButtonLabel(toggleSelsButton, lv);
+            uploadButton.setEnabled(allChecked);
+            smsUploadButton.setEnabled(allChecked);
+            if (allChecked) {
+                for (int i = 0; i < lv.getCount(); i++) {
+                    selectedInstances.add(lv.getItemIdAtPosition(i));
+                }
+            } else {
+                selectedInstances.clear();
             }
         });
         toggleSelsButton.setOnLongClickListener(this);
 
         setupAdapter();
 
-        getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        getListView().setItemsCanFocus(false);
-        mUploadButton.setEnabled(false);
-
-        // set title
-        setTitle(getString(R.string.send_data));
+        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        listView.setItemsCanFocus(false);
+        listView.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+            uploadButton.setEnabled(areCheckedItems());
+            smsUploadButton.setEnabled(areCheckedItems());
+        });
 
         instanceSyncTask = new InstanceSyncTask();
         instanceSyncTask.setDiskSyncListener(this);
         instanceSyncTask.execute();
 
-        mSortingOptions = new String[]{
+        sortingOptions = new String[]{
                 getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc),
                 getString(R.string.sort_by_date_asc), getString(R.string.sort_by_date_desc)
         };
+
+        getSupportLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
     @Override
     protected void onResume() {
         if (instanceSyncTask != null) {
             instanceSyncTask.setDiskSyncListener(this);
+            if (instanceSyncTask.getStatus() == AsyncTask.Status.FINISHED) {
+                syncComplete(instanceSyncTask.getStatusMessage());
+            }
+
         }
         super.onResume();
 
-        if (instanceSyncTask.getStatus() == AsyncTask.Status.FINISHED) {
-            syncComplete(instanceSyncTask.getStatusMessage());
-        }
+        IntentFilter filter = new IntentFilter(SmsNotificationReceiver.SMS_NOTIFICATION_ACTION);
+        // The default priority is 0. Positive values will be before
+        // the default, lower values will be after it.
+        filter.setPriority(1);
+
+        registerReceiver(smsForegroundReceiver, filter);
+        setupUploadButtons();
     }
 
     @Override
@@ -171,12 +265,15 @@ public class InstanceUploaderList extends InstanceListActivity
             instanceSyncTask.setDiskSyncListener(null);
         }
         super.onPause();
+
+        unregisterReceiver(smsForegroundReceiver);
     }
 
     @Override
-    public void syncComplete(String result) {
-        TextView textView = (TextView) findViewById(R.id.status_text);
-        textView.setText(result);
+    public void syncComplete(@NonNull String result) {
+        Timber.i("Disk scan complete");
+        hideProgressBarAndAllow();
+        showSnackbar(result);
     }
 
     @Override
@@ -191,59 +288,65 @@ public class InstanceUploaderList extends InstanceListActivity
         super.onStop();
     }
 
-    private void uploadSelectedFiles() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String server = prefs.getString(PreferenceKeys.KEY_PROTOCOL, null);
-        long[] instanceIds = getListView().getCheckedItemIds();
-        if (server.equalsIgnoreCase(getString(R.string.protocol_google_sheets))) {
-            // if it's Sheets, start the Sheets uploader
-            // first make sure we have a google account selected
+    private void uploadSelectedFiles(int buttonId) {
+        long[] instanceIds = listView.getCheckedItemIds();
+        Transport transport = Transport.fromPreference(GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE));
 
-            if (PlayServicesUtil.isGooglePlayServicesAvailable(this)) {
-                Intent i = new Intent(this, GoogleSheetsUploaderActivity.class);
+        if (transport.equals(Transport.Sms) || buttonId == R.id.sms_upload_button) {
+            requestSendSMSPermission(this, new PermissionListener() {
+                @Override
+                public void granted() {
+                    smsService.submitForms(instanceIds);
+                }
+
+                @Override
+                public void denied() {
+                }
+            });
+        } else {
+
+            String server = (String) GeneralSharedPreferences.getInstance().get(KEY_PROTOCOL);
+
+            if (server.equalsIgnoreCase(getString(R.string.protocol_google_sheets))) {
+                // if it's Sheets, start the Sheets uploader
+                // first make sure we have a google account selected
+
+                if (PlayServicesUtil.isGooglePlayServicesAvailable(this)) {
+                    Intent i = new Intent(this, GoogleSheetsUploaderActivity.class);
+                    i.putExtra(FormEntryActivity.KEY_INSTANCES, instanceIds);
+                    startActivityForResult(i, INSTANCE_UPLOADER);
+                } else {
+                    PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(this);
+                }
+            } else {
+                // otherwise, do the normal aggregate/other thing.
+                Intent i = new Intent(this, InstanceUploaderActivity.class);
                 i.putExtra(FormEntryActivity.KEY_INSTANCES, instanceIds);
                 startActivityForResult(i, INSTANCE_UPLOADER);
-            } else {
-                PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(this);
             }
-        } else {
-            // otherwise, do the normal aggregate/other thing.
-            Intent i = new Intent(this, InstanceUploaderActivity.class);
-            i.putExtra(FormEntryActivity.KEY_INSTANCES, instanceIds);
-            startActivityForResult(i, INSTANCE_UPLOADER);
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         logger.logAction(this, "onCreateOptionsMenu", "show");
-        super.onCreateOptionsMenu(menu);
-
-        menu
-                .add(0, MENU_PREFERENCES, 0, R.string.general_preferences)
-                .setIcon(R.drawable.ic_menu_preferences)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-
-        menu
-                .add(0, MENU_SHOW_UNSENT, 1, R.string.change_view)
-                .setIcon(R.drawable.ic_menu_manage)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-        return true;
+        getMenuInflater().inflate(R.menu.instance_uploader_menu, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case MENU_PREFERENCES:
+            case R.id.menu_preferences:
                 logger.logAction(this, "onMenuItemSelected", "MENU_PREFERENCES");
                 createPreferencesMenu();
                 return true;
-            case MENU_SHOW_UNSENT:
+            case R.id.menu_change_view:
                 logger.logAction(this, "onMenuItemSelected", "MENU_SHOW_UNSENT");
                 showSentAndUnsentChoices();
                 return true;
         }
-        return super.onMenuItemSelected(featureId, item);
+        return super.onOptionsItemSelected(item);
     }
 
     private void createPreferencesMenu() {
@@ -252,33 +355,25 @@ public class InstanceUploaderList extends InstanceListActivity
     }
 
     @Override
-    protected void onListItemClick(ListView listView, View view, int position, long rowId) {
-        super.onListItemClick(listView, view, position, rowId);
-
+    public void onItemClick(AdapterView<?> parent, View view, int position, long rowId) {
         logger.logAction(this, "onListItemClick", Long.toString(rowId));
 
-        if (getListView().isItemChecked(position)) {
-            mSelectedInstances.add(getListView().getItemIdAtPosition(position));
+        if (listView.isItemChecked(position)) {
+            selectedInstances.add(listView.getItemIdAtPosition(position));
         } else {
-            mSelectedInstances.remove(getListView().getItemIdAtPosition(position));
+            selectedInstances.remove(listView.getItemIdAtPosition(position));
         }
 
-        mUploadButton.setEnabled(areCheckedItems());
-        Button toggleSelectionsButton = (Button) findViewById(R.id.toggle_button);
-        toggleButtonLabel(toggleSelectionsButton, getListView());
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle bundle) {
-        Log.d(t, "onRestoreInstanceState");
-        super.onRestoreInstanceState(bundle);
-        mUploadButton.setEnabled(areCheckedItems());
+        uploadButton.setEnabled(areCheckedItems());
+        smsUploadButton.setEnabled(areCheckedItems());
+        Button toggleSelectionsButton = findViewById(R.id.toggle_button);
+        toggleButtonLabel(toggleSelectionsButton, listView);
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean(SHOW_ALL_MODE, mShowAllMode);
+        outState.putBoolean(SHOW_ALL_MODE, showAllMode);
     }
 
     @Override
@@ -290,28 +385,19 @@ public class InstanceUploaderList extends InstanceListActivity
             // returns with a form path, start entry
             case INSTANCE_UPLOADER:
                 if (intent.getBooleanExtra(FormEntryActivity.KEY_SUCCESS, false)) {
-                    getListView().clearChoices();
-                    if (mListAdapter.isEmpty()) {
+                    listView.clearChoices();
+                    if (listAdapter.isEmpty()) {
                         finish();
                     }
                 }
-                break;
-            default:
                 break;
         }
         super.onActivityResult(requestCode, resultCode, intent);
     }
 
     private void setupAdapter() {
-        List<Long> checkedInstances = new ArrayList();
-        for (long a : getListView().getCheckedItemIds()) {
-            checkedInstances.add(a);
-        }
-        String[] data = new String[]{InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT};
-        int[] view = new int[]{R.id.text1, R.id.text2};
-
-        mListAdapter = new SimpleCursorAdapter(this, R.layout.two_item_multiple_choice, getCursor(), data, view);
-        setListAdapter(mListAdapter);
+        listAdapter = new InstanceUploaderAdapter(this, null);
+        listView.setAdapter(listAdapter);
         checkPreviouslyCheckedItems();
     }
 
@@ -322,50 +408,31 @@ public class InstanceUploaderList extends InstanceListActivity
 
     @Override
     protected void updateAdapter() {
-        mListAdapter.changeCursor(getCursor());
-        checkPreviouslyCheckedItems();
-        mUploadButton.setEnabled(areCheckedItems());
+        getSupportLoaderManager().restartLoader(LOADER_ID, null, this);
     }
 
-    private Cursor getCursor() {
-        Cursor cursor;
-        if (mShowAllMode) {
-            cursor = mInstanceDao.getCompletedUndeletedInstancesCursor(getFilterText(), getSortingOrder());
+    @NonNull
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        showProgressBar();
+        if (showAllMode) {
+            return instancesDao.getCompletedUndeletedInstancesCursorLoader(getFilterText(), getSortingOrder());
         } else {
-            cursor = mInstanceDao.getFinalizedInstancesCursor(getFilterText(), getSortingOrder());
+            return instancesDao.getFinalizedInstancesCursorLoader(getFilterText(), getSortingOrder());
         }
-
-        return cursor;
     }
 
-    private void showUnsent() {
-        mShowAllMode = false;
-        Cursor c = mInstanceDao.getFinalizedInstancesCursor(getSortingOrder());
-        Cursor old = mListAdapter.getCursor();
-        try {
-            mListAdapter.changeCursor(getCursor());
-        } finally {
-            if (old != null) {
-                old.close();
-                this.stopManagingCursor(old);
-            }
-        }
-        getListView().invalidate();
+    @Override
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
+        hideProgressBarIfAllowed();
+        listAdapter.changeCursor(cursor);
+        checkPreviouslyCheckedItems();
+        toggleButtonLabel(findViewById(R.id.toggle_button), listView);
     }
 
-    private void showAll() {
-        mShowAllMode = true;
-        Cursor c = mInstanceDao.getAllCompletedUndeletedInstancesCursor(getSortingOrder());
-        Cursor old = mListAdapter.getCursor();
-        try {
-            mListAdapter.changeCursor(getCursor());
-        } finally {
-            if (old != null) {
-                old.close();
-                this.stopManagingCursor(old);
-            }
-        }
-        getListView().invalidate();
+    @Override
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
+        listAdapter.swapCursor(null);
     }
 
     @Override
@@ -374,11 +441,11 @@ public class InstanceUploaderList extends InstanceListActivity
         return showSentAndUnsentChoices();
     }
 
+    /*
+     * Create a dialog with options to save and exit, save, or quit without
+     * saving
+     */
     private boolean showSentAndUnsentChoices() {
-        /**
-         * Create a dialog with options to save and exit, save, or quit without
-         * saving
-         */
         String[] items = {getString(R.string.show_unsent_forms),
                 getString(R.string.show_sent_and_unsent_forms)};
 
@@ -387,35 +454,45 @@ public class InstanceUploaderList extends InstanceListActivity
         AlertDialog alertDialog = new AlertDialog.Builder(this)
                 .setIcon(android.R.drawable.ic_dialog_info)
                 .setTitle(getString(R.string.change_view))
-                .setNeutralButton(getString(R.string.cancel),
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int id) {
-                                logger.logAction(this, "changeView", "cancel");
-                                dialog.cancel();
-                            }
-                        })
-                .setItems(items, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
+                .setNeutralButton(getString(R.string.cancel), (dialog, id) -> {
+                    logger.logAction(this, "changeView", "cancel");
+                    dialog.cancel();
+                })
+                .setItems(items, (dialog, which) -> {
+                    switch (which) {
+                        case 0: // show unsent
+                            logger.logAction(this, "changeView", "showUnsent");
+                            showAllMode = false;
+                            updateAdapter();
+                            break;
 
-                            case 0: // show unsent
-                                logger.logAction(this, "changeView", "showUnsent");
-                                InstanceUploaderList.this.showUnsent();
-                                break;
+                        case 1: // show all
+                            logger.logAction(this, "changeView", "showAll");
+                            showAllMode = true;
+                            updateAdapter();
+                            break;
 
-                            case 1: // show all
-                                logger.logAction(this, "changeView", "showAll");
-                                InstanceUploaderList.this.showAll();
-                                break;
-
-                            case 2:// do nothing
-                                break;
-                        }
+                        case 2:// do nothing
+                            break;
                     }
                 }).create();
         alertDialog.show();
         return true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (listAdapter != null) {
+            ((InstanceUploaderAdapter) listAdapter).onDestroy();
+        }
+    }
+
+    private void deleteIfSubmissionCompleted(String instanceId) {
+        SmsSubmission model = smsSubmissionManager.getSubmissionModel(instanceId);
+        if (model.isSubmissionComplete()) {
+            smsSubmissionManager.forgetSubmission(model.getInstanceId());
+        }
     }
 }

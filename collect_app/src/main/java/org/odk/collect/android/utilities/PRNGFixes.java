@@ -12,7 +12,6 @@ package org.odk.collect.android.utilities;
 
 import android.os.Build;
 import android.os.Process;
-import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
@@ -28,6 +27,8 @@ import java.security.Provider;
 import java.security.SecureRandom;
 import java.security.SecureRandomSpi;
 import java.security.Security;
+
+import timber.log.Timber;
 
 /**
  * Fixes for the output of the default PRNG having low entropy.
@@ -145,7 +146,7 @@ public final class PRNGFixes {
      */
     private static class LinuxPRNGSecureRandomProvider extends Provider {
 
-        public LinuxPRNGSecureRandomProvider() {
+        LinuxPRNGSecureRandomProvider() {
             super("LinuxPRNG",
                     1.0,
                     "A Linux-specific random number provider that uses"
@@ -179,7 +180,7 @@ public final class PRNGFixes {
 
         private static final File URANDOM_FILE = new File("/dev/urandom");
 
-        private static final Object sLock = new Object();
+        private static final Object LOCK = new Object();
 
         /**
          * Input stream for reading from Linux PRNG or {@code null} if not yet
@@ -202,13 +203,13 @@ public final class PRNGFixes {
          * each instance needs to seed itself if the client does not explicitly
          * seed it.
          */
-        private boolean mSeeded;
+        private boolean seeded;
 
         @Override
         protected void engineSetSeed(byte[] bytes) {
             try {
                 OutputStream out;
-                synchronized (sLock) {
+                synchronized (LOCK) {
                     out = getUrandomOutputStream();
                 }
                 out.write(bytes);
@@ -216,23 +217,23 @@ public final class PRNGFixes {
             } catch (IOException e) {
                 // On a small fraction of devices /dev/urandom is not writable.
                 // Log and ignore.
-                Log.w(PRNGFixes.class.getSimpleName(),
-                        "Failed to mix seed into " + URANDOM_FILE);
+                Timber.w(PRNGFixes.class.getSimpleName(),
+                        "Failed to mix seed into %s", URANDOM_FILE.toString());
             } finally {
-                mSeeded = true;
+                seeded = true;
             }
         }
 
         @Override
         protected void engineNextBytes(byte[] bytes) {
-            if (!mSeeded) {
+            if (!seeded) {
                 // Mix in the device- and invocation-specific seed.
                 engineSetSeed(generateSeed());
             }
 
             try {
                 DataInputStream in;
-                synchronized (sLock) {
+                synchronized (LOCK) {
                     in = getUrandomInputStream();
                 }
                 synchronized (in) {
@@ -252,7 +253,7 @@ public final class PRNGFixes {
         }
 
         private DataInputStream getUrandomInputStream() {
-            synchronized (sLock) {
+            synchronized (LOCK) {
                 if (sUrandomIn == null) {
                     // NOTE: Consider inserting a BufferedInputStream between
                     // DataInputStream and FileInputStream if you need higher
@@ -271,7 +272,7 @@ public final class PRNGFixes {
         }
 
         private OutputStream getUrandomOutputStream() throws IOException {
-            synchronized (sLock) {
+            synchronized (LOCK) {
                 if (sUrandomOut == null) {
                     sUrandomOut = new FileOutputStream(URANDOM_FILE);
                 }

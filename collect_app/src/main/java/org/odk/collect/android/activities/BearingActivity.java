@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -29,26 +28,26 @@ import org.odk.collect.android.application.Collect;
 
 import java.util.Locale;
 
-public class BearingActivity extends Activity implements SensorEventListener {
-    private ProgressDialog mBearingDialog;
+public class BearingActivity extends CollectAbstractActivity implements SensorEventListener {
+    private ProgressDialog bearingDialog;
 
-    private SensorManager mSensorManager;
+    private SensorManager sensorManager;
     private Sensor accelerometer;
     private Sensor magnetometer;
 
-    private static float[] mAccelerometer = null;
-    private static float[] mGeomagnetic = null;
+    private static float[] mAccelerometer;
+    private static float[] mGeomagnetic;
 
-    private String mBearingDecimal = null;
+    private String bearingDecimal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle(getString(R.string.get_bearing));
 
-        mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        accelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        magnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
         setupBearingDialog();
     }
@@ -57,20 +56,20 @@ public class BearingActivity extends Activity implements SensorEventListener {
     protected void onPause() {
         super.onPause();
 
-        mSensorManager.unregisterListener(this, accelerometer);
-        mSensorManager.unregisterListener(this, magnetometer);
+        sensorManager.unregisterListener(this, accelerometer);
+        sensorManager.unregisterListener(this, magnetometer);
 
-        if (mBearingDialog != null && mBearingDialog.isShowing()) {
-            mBearingDialog.dismiss();
+        if (bearingDialog != null && bearingDialog.isShowing()) {
+            bearingDialog.dismiss();
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mSensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
-        mSensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_GAME);
-        mBearingDialog.show();
+        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
+        sensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_GAME);
+        bearingDialog.show();
     }
 
     @Override
@@ -93,7 +92,7 @@ public class BearingActivity extends Activity implements SensorEventListener {
         Collect.getInstance().getActivityLogger()
                 .logInstanceAction(this, "setupBearingDialog", "show");
         // dialog displayed while fetching bearing
-        mBearingDialog = new ProgressDialog(this);
+        bearingDialog = new ProgressDialog(this);
         DialogInterface.OnClickListener geopointButtonListener =
                 new DialogInterface.OnClickListener() {
                     @Override
@@ -107,7 +106,7 @@ public class BearingActivity extends Activity implements SensorEventListener {
                             case DialogInterface.BUTTON_NEGATIVE:
                                 Collect.getInstance().getActivityLogger()
                                         .logInstanceAction(this, "cancelBearing", "cancel");
-                                mBearingDecimal = null;
+                                bearingDecimal = null;
                                 finish();
                                 break;
                         }
@@ -115,24 +114,24 @@ public class BearingActivity extends Activity implements SensorEventListener {
                 };
 
         // back button doesn't cancel
-        mBearingDialog.setCancelable(false);
-        mBearingDialog.setIndeterminate(true);
-        mBearingDialog.setIcon(android.R.drawable.ic_dialog_info);
-        mBearingDialog.setTitle(getString(R.string.getting_bearing));
-        mBearingDialog.setMessage(getString(R.string.please_wait_long));
-        mBearingDialog.setButton(DialogInterface.BUTTON_POSITIVE,
+        bearingDialog.setCancelable(false);
+        bearingDialog.setIndeterminate(true);
+        bearingDialog.setIcon(android.R.drawable.ic_dialog_info);
+        bearingDialog.setTitle(getString(R.string.getting_bearing));
+        bearingDialog.setMessage(getString(R.string.please_wait_long));
+        bearingDialog.setButton(DialogInterface.BUTTON_POSITIVE,
                 getString(R.string.accept_bearing),
                 geopointButtonListener);
-        mBearingDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
+        bearingDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
                 getString(R.string.cancel_location),
                 geopointButtonListener);
     }
 
     private void returnBearing() {
-        if (mBearingDecimal != null) {
+        if (bearingDecimal != null) {
             Intent i = new Intent();
             i.putExtra(
-                    FormEntryActivity.BEARING_RESULT, mBearingDecimal);
+                    FormEntryActivity.BEARING_RESULT, bearingDecimal);
             setResult(RESULT_OK, i);
         }
         finish();
@@ -157,21 +156,22 @@ public class BearingActivity extends Activity implements SensorEventListener {
         }
 
         if (mAccelerometer != null && mGeomagnetic != null) {
-            float rot[] = new float[9];
-            float inclination[] = new float[9];
+            float[] rot = new float[9];
+            float[] inclination = new float[9];
             boolean success = SensorManager.getRotationMatrix(rot, inclination, mAccelerometer,
                     mGeomagnetic);
 
             if (success) {
-                float orientation[] = new float[3];
+                float[] orientation = new float[3];
                 SensorManager.getOrientation(rot, orientation);
                 // at this point, orientation contains the azimuth(direction),
                 // pitch and roll values.
                 double azimuth = 180 * orientation[0] / Math.PI;
                 // double pitch = 180 * orientation[1] / Math.PI;
                 // double roll = 180 * orientation[2] / Math.PI;
-                double degrees = normalizeDegree(azimuth);
-                mBearingDecimal = String.format(Locale.US, "%.3f", degrees);
+                double degrees = normalizeDegrees(azimuth);
+                bearingDecimal = formatDegrees(degrees);
+
                 String dir = "N";
                 if ((degrees > 0 && degrees <= 22.5) || degrees > 337.5) {
                     dir = "N";
@@ -190,19 +190,22 @@ public class BearingActivity extends Activity implements SensorEventListener {
                 } else if (degrees > 292.5 && degrees <= 337.5) {
                     dir = "NW";
                 }
-                mBearingDialog.setMessage(getString(R.string.direction, dir) +
-                        "\n" + getString(R.string.bearing, degrees));
+                bearingDialog.setMessage(getString(R.string.direction, dir)
+                        + "\n" + getString(R.string.bearing, degrees));
 
             }
         }
     }
 
-    private double normalizeDegree(double value) {
+    public static String formatDegrees(double degrees) {
+        return String.format(Locale.US, "%.3f", degrees);
+    }
+
+    public static double normalizeDegrees(double value) {
         if (value >= 0.0f && value <= 180.0f) {
             return value;
         } else {
             return 180 + (180 + value);
         }
     }
-
 }

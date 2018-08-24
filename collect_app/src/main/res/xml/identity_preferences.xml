@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceScreen
+        android:key="form_metadata"
+        android:summary="@string/form_metadata_summary"
+        android:title="@string/form_metadata" />
+    <PreferenceCategory
+        android:key="@string/analytics_preferences"
+        android:title="@string/analytics_preferences">
+        <CheckBoxPreference
+            android:key="analytics"
+            android:summary="@string/analytics_summary"
+            android:title="@string/analytics" />
+    </PreferenceCategory>
+</PreferenceScreen>

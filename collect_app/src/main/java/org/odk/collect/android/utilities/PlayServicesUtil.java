@@ -12,10 +12,13 @@ import com.google.android.gms.common.GoogleApiAvailability;
  */
 
 public class PlayServicesUtil {
-    private static int PLAY_SERVICE_ERROR_REQUEST_CODE = 1000;
+    private static final int PLAY_SERVICE_ERROR_REQUEST_CODE = 1000;
     private static int resultCode;
 
     private static GoogleApiAvailability googleApiAvailability;
+
+    private PlayServicesUtil() {
+    }
 
     /**
      * Check that Google Play services APK is installed and up to date.
@@ -32,8 +35,6 @@ public class PlayServicesUtil {
     /**
      * Display an error dialog showing that Google Play Services is missing
      * or out of date.
-     *
-     * @param context
      */
     public static void showGooglePlayServicesAvailabilityErrorDialog(Context context) {
         googleApiAvailability = GoogleApiAvailability.getInstance();

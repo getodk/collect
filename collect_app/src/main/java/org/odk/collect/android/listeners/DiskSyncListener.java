@@ -14,10 +14,11 @@
 
 package org.odk.collect.android.listeners;
 
+import android.support.annotation.NonNull;
 
 /**
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public interface DiskSyncListener {
-    void syncComplete(String result);
+    void syncComplete(@NonNull String result);
 }

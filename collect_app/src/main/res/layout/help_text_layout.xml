@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/text_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/help_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
+            android:layout_marginEnd="5dp"
+            android:visibility="gone"
+            app:srcCompat="@drawable/information_outline" />
+
+        <TextView
+            android:id="@+id/help_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/help_icon"
+            android:layout_toEndOf="@id/help_icon"
+            tools:text="Testing this out." />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/guidance_text_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/guidance_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="This is also a very long guidance that will accompany the longest hint because we are about going the extra mile." />
+    </LinearLayout>
+    <TextView
+            android:id="@+id/warning_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:textColor="?warningColor" />
+</LinearLayout>

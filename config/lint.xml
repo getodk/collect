@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<lint>
+    <!-- suppress newly failing checks -->
+    <!-- make sure classes referenced in the manifest or in a layout file are in the project -->
+    <issue id="MissingRegistered" severity="warning"/>
+    <issue id="AppCompatResource" severity="warning"/>
+    <issue id="StaticFieldLeak" severity="warning"/>
+    <issue id="UnusedIds" severity="error"/>
+    <issue id="AppLinkUrlError" severity="warning" />
+
+    <!-- require inputType attribute on all text fields -->
+    <issue id="TextFields" severity="error"/>
+
+    <issue id="GradleOverrides" severity="error"/>
+
+    <issue id="SetTextI18n" severity="error"/>
+    <issue id="HardcodedText" severity="error"/>
+    <issue id="TypographyEllipsis" severity="error"/>
+    <issue id="RtlHardcoded" severity="error"/>
+    <issue id="Deprecated" severity="error"/>
+    <issue id="DefaultLocale" severity="error"/>
+    <issue id="SuspiciousImport" severity="error"/>
+    <issue id="WifiManagerPotentialLeak" severity="error"/>
+    <issue id="InefficientWeight" severity="error"/>
+    <issue id="MergeRootFrame" severity="error"/>
+    <issue id="LogNotTimber" severity="error"/>
+    <issue id="StringFormatInTimber" severity="error"/>
+    <issue id="ApplySharedPref" severity="error"/>
+    <issue id="IconLocation" severity="error"/>
+    <issue id="UnknownIdInLayout" severity="error"/>
+    <issue id="IconDuplicates" severity="error"/>
+    <issue id="UnusedNamespace" severity="error">
+        <ignore path="res/values*"/>
+    </issue>
+    <issue id="UnusedResources" severity="error">
+        <ignore path="res/values/dimens.xml"/>
+        <ignore regexp="ga_trackingId|google_crash_reporting_api_key|project_id"/>
+    </issue>
+
+    <issue id="TimberExceptionLogging" severity="error"/>
+    <issue id="UselessLeaf" severity="warning"/>
+    <issue id="DuplicateIncludedIds" severity="error"/>
+
+    <issue id="ContentDescription" severity="ignore"/>
+    <issue id="HardwareIds" severity="ignore"/>
+</lint>

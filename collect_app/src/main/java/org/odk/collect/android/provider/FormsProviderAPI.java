@@ -37,7 +37,6 @@ public final class FormsProviderAPI {
         private FormsColumns() {
         }
 
-
         public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/forms");
         public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.odk.form";
         public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.odk.form";
@@ -50,6 +49,10 @@ public final class FormsProviderAPI {
         public static final String FORM_FILE_PATH = "formFilePath";
         public static final String SUBMISSION_URI = "submissionUri"; // can be null
         public static final String BASE64_RSA_PUBLIC_KEY = "base64RsaPublicKey"; // can be null
+        public static final String AUTO_DELETE = "autoDelete"; // can be null
+        public static final String LAST_DETECTED_FORM_VERSION_HASH = "lastDetectedFormVersionHash"; // can be null
+        // Column is called autoSubmit for legacy support but the attribute is auto-send
+        public static final String AUTO_SEND = "autoSubmit"; // can be null
 
         // these are generated for you (but you can insert something else if you want)
         public static final String DISPLAY_SUBTEXT = "displaySubtext";
@@ -58,10 +61,7 @@ public final class FormsProviderAPI {
         public static final String JRCACHE_FILE_PATH = "jrcacheFilePath";
         public static final String FORM_MEDIA_PATH = "formMediaPath";
 
-
         // this is null on create, and can only be set on an update.
         public static final String LANGUAGE = "language";
-
-
     }
 }

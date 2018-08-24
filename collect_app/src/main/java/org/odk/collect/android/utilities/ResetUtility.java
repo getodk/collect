@@ -13,17 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.odk.collect.android.utilities;
 
 import android.content.Context;
-import android.preference.PreferenceManager;
 
-import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.database.ItemsetDbAdapter;
-import org.odk.collect.android.preferences.AdminPreferencesActivity;
+import org.odk.collect.android.preferences.AdminSharedPreferences;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.osmdroid.config.Configuration;
 
 import java.io.File;
@@ -32,12 +32,12 @@ import java.util.List;
 
 public class ResetUtility {
 
-    private List<Integer> mFailedResetActions;
+    private List<Integer> failedResetActions;
 
-    public List<Integer> reset(final Context context, List<Integer> resetActions) {
+    public List<Integer> reset(Context context, List<Integer> resetActions) {
 
-        mFailedResetActions = new ArrayList<>();
-        mFailedResetActions.addAll(resetActions);
+        failedResetActions = new ArrayList<>();
+        failedResetActions.addAll(resetActions);
 
         for (int action : resetActions) {
             switch (action) {
@@ -52,56 +52,49 @@ public class ResetUtility {
                     break;
                 case ResetAction.RESET_LAYERS:
                     if (deleteFolderContents(Collect.OFFLINE_LAYERS)) {
-                        mFailedResetActions.remove(mFailedResetActions.indexOf(ResetAction.RESET_LAYERS));
+                        failedResetActions.remove(failedResetActions.indexOf(ResetAction.RESET_LAYERS));
                     }
                     break;
                 case ResetAction.RESET_CACHE:
                     if (deleteFolderContents(Collect.CACHE_PATH)) {
-                        mFailedResetActions.remove(mFailedResetActions.indexOf(ResetAction.RESET_CACHE));
+                        failedResetActions.remove(failedResetActions.indexOf(ResetAction.RESET_CACHE));
                     }
                     break;
                 case ResetAction.RESET_OSM_DROID:
                     if (deleteFolderContents(Configuration.getInstance().getOsmdroidTileCache().getPath())) {
-                        mFailedResetActions.remove(mFailedResetActions.indexOf(ResetAction.RESET_OSM_DROID));
+                        failedResetActions.remove(failedResetActions.indexOf(ResetAction.RESET_OSM_DROID));
                     }
                     break;
             }
         }
 
-        return mFailedResetActions;
+        return failedResetActions;
     }
 
     private void resetPreferences(Context context) {
-        boolean clearedDefaultPreferences = PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .edit()
-                .clear()
-                .commit();
+        GeneralSharedPreferences.getInstance().loadDefaultPreferences();
+        AdminSharedPreferences.getInstance().loadDefaultPreferences();
 
-        PreferenceManager.setDefaultValues(context, R.xml.preferences, true);
+        boolean deletedSettingsFolderContest = !new File(Collect.SETTINGS).exists()
+                || deleteFolderContents(Collect.SETTINGS);
 
-        boolean clearedAdminPreferences = context
-                .getSharedPreferences(AdminPreferencesActivity.ADMIN_PREFERENCES, 0)
-                .edit()
-                .clear()
-                .commit();
+        boolean deletedSettingsFile = !new File(Collect.ODK_ROOT + "/collect.settings").exists()
+                || (new File(Collect.ODK_ROOT + "/collect.settings").delete());
+        
+        new LocaleHelper().updateLocale(context);
 
-        boolean deletedSettingsFolderContest = !new File(Collect.SETTINGS).exists() ||
-                deleteFolderContents(Collect.SETTINGS);
-
-        boolean deletedSettingsFile = !new File(Collect.ODK_ROOT + "/collect.settings").exists() ||
-                (new File(Collect.ODK_ROOT + "/collect.settings").delete());
-
-        if (clearedDefaultPreferences && clearedAdminPreferences && deletedSettingsFolderContest && deletedSettingsFile) {
-            mFailedResetActions.remove(mFailedResetActions.indexOf(ResetAction.RESET_PREFERENCES));
+        if (deletedSettingsFolderContest && deletedSettingsFile) {
+            failedResetActions.remove(failedResetActions.indexOf(ResetAction.RESET_PREFERENCES));
         }
+
+        Collect.getInstance().initProperties();
     }
 
     private void resetInstances() {
         new InstancesDao().deleteInstancesDatabase();
 
         if (deleteFolderContents(Collect.INSTANCES_PATH)) {
-            mFailedResetActions.remove(mFailedResetActions.indexOf(ResetAction.RESET_INSTANCES));
+            failedResetActions.remove(failedResetActions.indexOf(ResetAction.RESET_INSTANCES));
         }
     }
 
@@ -111,7 +104,7 @@ public class ResetUtility {
         File itemsetDbFile = new File(Collect.METADATA_PATH + File.separator + ItemsetDbAdapter.DATABASE_NAME);
 
         if (deleteFolderContents(Collect.FORMS_PATH) && (!itemsetDbFile.exists() || itemsetDbFile.delete())) {
-            mFailedResetActions.remove(mFailedResetActions.indexOf(ResetAction.RESET_FORMS));
+            failedResetActions.remove(failedResetActions.indexOf(ResetAction.RESET_FORMS));
         }
     }
 

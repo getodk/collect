@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="CustomButtonStyle" parent="Widget.AppCompat.Button">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontFamily">@string/font_family_regular</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat</item>
+    </style>
+
+    <style name="emptyViewStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingLeft">20dp</item>
+        <item name="android:paddingRight">20dp</item>
+        <item name="android:textSize">21sp</item>
+    </style>
+
+    <style name="DarkMaterialDialogSheet" parent="Theme.Design.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppModalStyle</item>
+        <item name="android:windowAnimationStyle">@style/MaterialDialogSheetAnimation</item>
+    </style>
+
+    <style name="LightMaterialDialogSheet" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppModalStyle</item>
+        <item name="android:windowAnimationStyle">@style/MaterialDialogSheetAnimation</item>
+    </style>
+
+    <style name="AppModalStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="behavior_peekHeight">300dp</item>
+    </style>
+
+    <style name="MaterialDialogSheetAnimation">
+        <item name="android:windowEnterAnimation">@anim/popup_show</item>
+        <item name="android:windowExitAnimation">@anim/popup_hide</item>
+    </style>
+
+    <style name="MediaButtonStyle">
+        <item name="android:background">#ddd</item>
+        <item name="android:paddingBottom">12px</item>
+        <item name="android:paddingLeft">22px</item>
+        <item name="android:paddingRight">22px</item>
+        <item name="android:paddingTop">12px</item>
+        <item name="android:layout_marginLeft">6px</item>
+        <item name="android:layout_marginTop">0px</item>
+        <item name="android:layout_marginRight">6px</item>
+        <item name="android:layout_marginBottom">0px</item>
+    </style>
+
+</resources>

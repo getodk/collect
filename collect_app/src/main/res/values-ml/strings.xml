@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <string name="show_password"> സങ്കേതപദം കാണിക്കുക</string>
+  <string name="activity_not_found"> കൈകാര്യം ചെയ്യാൻ പ്രവർത്തനങ്ങളൊന്നും കണ്ടെത്തിയില്ല: %s</string>
+  <string name="add_another">ഗ്രൂപ്പ് ചേർക്കുക</string>
+  <string name="add_another_repeat">മറ്റൊരു \"1 %s\" ഗ്രൂപ്പ് കൂട്ടിച്ചേർക്കണോ?</string>
+  <string name="add_repeat">ഒരു പുതിയ \"1 %s\" ഗ്രൂപ്പ് ചേർക്കണോ?</string>
+  <string name="add_repeat_no">ചേർക്കരുത്</string>
+  <string name="audio_file_error">\"ഓഡിയോ ഫയൽവ്യക്തമാക്കിയിട്ടില്ല </string>
+  <string name="audio_file_invalid">പ്രമാണം:  %s ഒരു സാധുവായ ഓഡിയോ ഫയൽ അല്ല.</string>
+  <string name="cancel">റദ്ദാക്കുക</string>
+  <string name="cancel_loading_form">റദ്ദാക്കുക</string>
+  <string name="cancel_location">റദ്ദാക്കുക</string>
+  <string name="cannot_edit_completed_form">അന്തിമമായി അടയാളപ്പെടുത്തിക്കഴിഞ്ഞാൽ ഈ ഫോർമ് എഡിറ്റ് ചെയ്യാൻ കഴിയില്ല. ഇത് എൻക്രിപ്റ്റ് ചെയ്തതായിരിക്കാം.</string>
+  <string name="capture_audio">ശബ്ദംറെക്കോർഡ് ചെയ്യുക</string>
+  <string name="capture_image">ചിത്രം എടുക്കുക</string>
+  <string name="capture_osm">OpenMapKit സമാരംഭിക്കുക</string>
+  <string name="recapture_osm">OSM ടാഗ്ഗിംഗ് വീണ്ടും ചെയ്യുക</string>
+  <string name="capture_video"> വീഡിയോ റെക്കോർഡ് ചെയ്യുക</string>
+  <string name="change_language">ഭാഷ മാറ്റുക</string>
+  <string name="change_password">ODK സങ്കേതപദം</string>
+  <string name="change_username">ODK ഉപയോക്തൃനാമം</string>
+  <string name="clearanswer_confirm"> 1 %s  എന്നയാൾക്ക് പ്രതികരണം നീക്കംചെയ്യണോ?</string>
+  <string name="clear_answer">പ്രതികരണം നീക്കം ചെയ്യുക</string>
+  <string name="clear_answer_ask">ഈ പ്രതികരണം നീക്കംചെയ്യണോ?</string>
+  <string name="clear_answer_no">റദ്ദാക്കുക</string>
+  <string name="data">സംരക്ഷിച്ച ഫോർമുകൾ</string>
+  <string name="data_saved_error">ക്ഷമിക്കണം, ഫോർമ് സംരക്ഷിക്കുന്നത് പരാജയപ്പെട്ടു!</string>
+  <string name="data_saved_ok">ഫോർമ് വിജയകരമായി സംരക്ഷിച്ചു!</string>
+  <string name="save_point_error">വീണ്ടെടുക്കൽ പോയിന്റ് സംരക്ഷിക്കുന്നതിൽ പിശക്/പ്രമാദം: 1 %s</string>
+  <string name="default_completed">അന്തിമ സ്ഥിരമായത്</string>
+  <string name="default_completed_summary">സ്ഥിരമായി അന്തിമമായി മാർക്ക് ഫോം അടയാളപ്പെടുത്തുക</string>
+  <string name="delete_confirm">1 %s ഫോർമ് (കൾ) ഇല്ലാതാക്കണോ?</string>
+  <string name="delete_file">തിരഞ്ഞെടുത്തത് ഇല്ലാതാക്കുക</string>
+  <string name="delete_no">ഇല്ലാതാക്കരുത്</string>
+  <string name="delete_repeat">ഗ്രൂപ്പ് നീക്കംചെയ്യുക</string>
+  <string name="delete_repeat_ask">ഈ ഗ്രൂപ്പ് നീക്കംചെയ്യണോ?</string>
+  <string name="delete_repeat_confirm">ഗ്രൂപ്പ് \" %s\" ഉം അതിന്റെ എല്ലാ ഉപ-ഗ്രൂപ്പുകളും നീക്കംചെയ്യണോ?</string>
+  <string name="delete_repeat_no">റദ്ദാക്കുക</string>
+  <string name="delete_yes">ഫോർമുകൾ ഇല്ലാതാക്കുക</string>
+  <string name="discard_answer">പ്രതികരണം നീക്കം ചെയ്യുക</string>
+  <string name="discard_group">ഗ്രൂപ്പ് നീക്കംചെയ്യുക</string>
+  <string name="do_not_change">റദ്ദാക്കുക</string>
+  <string name="do_not_exit">റദ്ദാക്കുക</string>
+  <string name="entering_repeat">ഗ്രൂപ്പ് ചേർക്കുക</string>
+  <string name="leave_repeat_yes">ചേർക്കരുത്</string>
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Geo string added in feature-geofeatures branch-->
+  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <!--Sms submission-->
+</resources>

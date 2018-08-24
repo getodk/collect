@@ -1,10 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-	<style name="Collect" parent="android:Theme.Light">
-	    <item name="android:scrollbarThumbHorizontal">@drawable/thumb</item>
-	    <item name="android:scrollbarThumbVertical">@drawable/thumb</item>
-	    <item name="android:scrollbarSize">1.75mm</item>
-	    <item name="android:scrollbarAlwaysDrawVerticalTrack">true</item>
-	    <item name="android:fadeScrollbars">false</item>
-	</style>    
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!--Dark Theme-->
+    <style name="DarkAppTheme" parent="BaseDarkAppTheme.Collect" />
+
+    <style name="FormEntryActivityDarkTheme" parent="DarkAppTheme">
+        <item name="android:textDirection" tools:targetApi="17">firstStrong</item>
+    </style>
+
+    <style name="BaseDarkAppTheme.Collect" parent="BaseDarkAppTheme" />
+
+    <style name="BaseDarkAppTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="primaryTextColor">@color/darkPrimaryTextColor</item>
+        <item name="android:scrollbarThumbHorizontal">@drawable/thumb</item>
+        <item name="android:scrollbarThumbVertical">@drawable/thumb</item>
+        <item name="android:scrollbarSize">1.75mm</item>
+        <item name="android:scrollbarAlwaysDrawVerticalTrack">true</item>
+        <item name="android:fadeScrollbars">false</item>
+        <item name="android:fontFamily">@string/font_family_regular</item>
+        <item name="android:panelBackground">@android:color/white</item>
+        <item name="searchViewStyle">@style/SearchViewTheme.Dark</item>
+        <item name="iconColor">@color/darkIconColor</item>
+        <item name="rankItemColor">@color/darkRankItemColor</item>
+        <item name="android:textDirection" tools:targetApi="17">locale</item>
+        <item name="warningColor">@color/red</item>
+        <item name="divider">@android:drawable/divider_horizontal_dark</item>
+    </style>
+
+    <style name="AppTheme.SettingsTheme.Dark" parent="BaseDarkAppTheme">
+        <item name="android:textColor">?primaryTextColor</item>
+        <item name="android:textDirection" tools:targetApi="17">locale</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:listDivider">@null</item>
+        <item name="android:dividerHeight">0dp</item>
+    </style>
+
+    <style name="SearchViewTheme.Dark" parent="Widget.AppCompat.SearchView">
+        <item name="searchHintIcon">@null</item>
+    </style>
+
+
+    <!--Light Theme-->
+    <style name="LightAppTheme" parent="BaseLightAppTheme.Collect" />
+
+    <style name="FormEntryActivityLightTheme" parent="LightAppTheme">
+        <item name="android:textDirection" tools:targetApi="17">firstStrong</item>
+    </style>
+
+    <style name="BaseLightAppTheme.Collect" parent="BaseLightAppTheme" />
+
+    <style name="BaseLightAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="primaryTextColor">@color/lightPrimaryTextColor</item>
+        <item name="android:scrollbarThumbHorizontal">@drawable/thumb</item>
+        <item name="android:scrollbarThumbVertical">@drawable/thumb</item>
+        <item name="android:scrollbarSize">1.75mm</item>
+        <item name="android:scrollbarAlwaysDrawVerticalTrack">true</item>
+        <item name="android:fadeScrollbars">false</item>
+        <item name="colorAccent">@color/lightAccentColor</item>
+        <item name="android:fontFamily">@string/font_family_regular</item>
+        <item name="android:panelBackground">@android:color/white</item>
+        <item name="alertDialogTheme">@style/AlertDialogTheme.Light</item>
+        <item name="searchViewStyle">@style/SearchViewTheme.Light</item>
+        <item name="iconColor">@color/lightIconColor</item>
+        <item name="rankItemColor">@color/lightRankItemColor</item>
+        <item name="android:textDirection" tools:targetApi="17">locale</item>
+        <item name="warningColor">@color/red</item>
+        <item name="divider">@android:drawable/divider_horizontal_bright</item>
+    </style>
+
+    <style name="AlertDialogTheme.Light" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/lightAccentColor</item>
+    </style>
+
+    <style name="AppTheme.SettingsTheme.Light" parent="BaseLightAppTheme">
+        <item name="android:textColor">?primaryTextColor</item>
+        <item name="android:textDirection" tools:targetApi="17">locale</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:listDivider">@null</item>
+        <item name="android:dividerHeight">0dp</item>
+    </style>
+
+    <style name="SearchViewTheme.Light" parent="Widget.AppCompat.Light.SearchView">
+        <item name="searchHintIcon">@null</item>
+    </style>
 </resources>

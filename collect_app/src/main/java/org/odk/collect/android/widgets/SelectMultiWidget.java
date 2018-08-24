@@ -14,266 +14,138 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnCompletionListener;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 
-import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
-import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.javarosa.xpath.expr.XPathFuncExpr;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.external.ExternalDataUtil;
-import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.utilities.TextUtils;
-import org.odk.collect.android.views.MediaLayout;
+import org.odk.collect.android.utilities.ViewIds;
+import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
+import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * SelctMultiWidget handles multiple selection fields using checkboxes.
+ * SelectMultiWidget handles multiple selection fields using checkboxes.
  *
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class SelectMultiWidget extends QuestionWidget {
-    private boolean mCheckboxInit = true;
-    List<SelectChoice> mItems;
+@SuppressLint("ViewConstructor")
+public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWidget {
+    protected final List<CheckBox> checkBoxes = new ArrayList<>();
+    private boolean checkboxInit = true;
+    private final List<Selection> ve;
 
-    private ArrayList<CheckBox> mCheckboxes;
-    ArrayList<MediaLayout> playList;
-    private int playcounter = 0;
-
-
-    @SuppressWarnings("unchecked")
     public SelectMultiWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
-        mPrompt = prompt;
-        mCheckboxes = new ArrayList<CheckBox>();
-        playList = new ArrayList<MediaLayout>();
-
-        // SurveyCTO-added support for dynamic select content (from .csv files)
-        XPathFuncExpr xPathFuncExpr = ExternalDataUtil.getSearchXPathExpression(
-                prompt.getAppearanceHint());
-        if (xPathFuncExpr != null) {
-            mItems = ExternalDataUtil.populateExternalChoices(prompt, xPathFuncExpr);
-        } else {
-            mItems = prompt.getSelectChoices();
-        }
-
-        List<Selection> ve = new ArrayList<Selection>();
-        if (prompt.getAnswerValue() != null) {
-            ve = (List<Selection>) prompt.getAnswerValue().getValue();
-        }
-
-        LinearLayout answerLayout = new LinearLayout(getContext());
-        answerLayout.setOrientation(LinearLayout.VERTICAL);
-        if (mItems != null) {
-            for (int i = 0; i < mItems.size(); i++) {
-                String choiceName = prompt.getSelectChoiceText(mItems.get(i));
-                CharSequence choiceDisplayName;
-                if (choiceName != null) {
-                    choiceDisplayName = TextUtils.textToHtml(choiceName);
-                } else {
-                    choiceDisplayName = "";
-                }
-                // no checkbox group so id by answer + offset
-                CheckBox c = new CheckBox(getContext());
-                c.setTag(Integer.valueOf(i));
-                c.setId(QuestionWidget.newUniqueId());
-                c.setText(choiceDisplayName);
-                c.setMovementMethod(LinkMovementMethod.getInstance());
-                c.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-                c.setFocusable(!prompt.isReadOnly());
-                c.setEnabled(!prompt.isReadOnly());
-
-                for (int vi = 0; vi < ve.size(); vi++) {
-                    // match based on value, not key
-                    if (mItems.get(i).getValue().equals(ve.get(vi).getValue())) {
-                        c.setChecked(true);
-                        break;
-                    }
-
-                }
-                mCheckboxes.add(c);
-                // when clicked, check for readonly before toggling
-                c.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        if (!mCheckboxInit && mPrompt.isReadOnly()) {
-                            if (buttonView.isChecked()) {
-                                buttonView.setChecked(false);
-                                Collect.getInstance().getActivityLogger().logInstanceAction(this,
-                                        "onItemClick.deselect",
-                                        mItems.get((Integer) buttonView.getTag()).getValue(),
-                                        mPrompt.getIndex());
-                            } else {
-                                buttonView.setChecked(true);
-                                Collect.getInstance().getActivityLogger().logInstanceAction(this,
-                                        "onItemClick.select",
-                                        mItems.get((Integer) buttonView.getTag()).getValue(),
-                                        mPrompt.getIndex());
-                            }
-                        }
-                    }
-                });
-
-                String audioURI = null;
-                audioURI =
-                        prompt.getSpecialFormSelectChoiceText(mItems.get(i),
-                                FormEntryCaption.TEXT_FORM_AUDIO);
-
-                String imageURI;
-                if (mItems.get(i) instanceof ExternalSelectChoice) {
-                    imageURI = ((ExternalSelectChoice) mItems.get(i)).getImage();
-                } else {
-                    imageURI = prompt.getSpecialFormSelectChoiceText(mItems.get(i),
-                            FormEntryCaption.TEXT_FORM_IMAGE);
-                }
-
-                String videoURI = null;
-                videoURI = prompt.getSpecialFormSelectChoiceText(mItems.get(i), "video");
-
-                String bigImageURI = null;
-                bigImageURI = prompt.getSpecialFormSelectChoiceText(mItems.get(i), "big-image");
-
-                MediaLayout mediaLayout = new MediaLayout(getContext(), mPlayer);
-                mediaLayout.setAVT(prompt.getIndex(), "." + Integer.toString(i), c, audioURI,
-                        imageURI, videoURI, bigImageURI);
-
-                playList.add(mediaLayout);
-
-                // Last, add the dividing line between elements (except for the last element)
-                if (i != mItems.size() - 1) {
-                    ImageView divider = new ImageView(getContext());
-                    divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
-                    mediaLayout.addDivider(divider);
-                }
-                answerLayout.addView(mediaLayout);
-            }
-            addAnswerView(answerLayout);
-        }
-
-        mCheckboxInit = false;
-
+        //noinspection unchecked
+        ve = getFormEntryPrompt().getAnswerValue() == null ? new ArrayList<>() :
+                (List<Selection>) getFormEntryPrompt().getAnswerValue().getValue();
+        createLayout();
     }
-
 
     @Override
     public void clearAnswer() {
-        for (CheckBox c : mCheckboxes) {
+        for (CheckBox c : checkBoxes) {
             if (c.isChecked()) {
                 c.setChecked(false);
             }
         }
     }
 
-
     @Override
     public IAnswerData getAnswer() {
-        List<Selection> vc = new ArrayList<Selection>();
-        for (int i = 0; i < mCheckboxes.size(); ++i) {
-            CheckBox c = mCheckboxes.get(i);
+        List<Selection> vc = new ArrayList<>();
+        for (int i = 0; i < checkBoxes.size(); ++i) {
+            CheckBox c = checkBoxes.get(i);
             if (c.isChecked()) {
-                vc.add(new Selection(mItems.get(i)));
+                vc.add(new Selection(items.get(i)));
             }
         }
 
-        if (vc.size() == 0) {
-            return null;
-        } else {
-            return new SelectMultiData(vc);
-        }
-
+        return vc.isEmpty() ? null : new SelectMultiData(vc);
     }
-
-
-    @Override
-    public void setFocus(Context context) {
-        // Hide the soft keyboard if it's showing.
-        InputMethodManager inputManager =
-                (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
-    }
-
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        for (CheckBox c : mCheckboxes) {
+        for (CheckBox c : checkBoxes) {
             c.setOnLongClickListener(l);
         }
     }
 
-
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        for (CheckBox c : mCheckboxes) {
+        for (CheckBox c : checkBoxes) {
             c.cancelLongPress();
         }
     }
 
-    public void playNextSelectItem() {
-        if (!this.isShown()) {
-            return;
-        }
-        // if there's more, set up to play the next item
-        if (playcounter < playList.size()) {
-            mPlayer.setOnCompletionListener(new OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mediaPlayer) {
-                    resetQuestionTextColor();
-                    mediaPlayer.reset();
-                    playNextSelectItem();
-                }
-            });
-            // play the current item
-            playList.get(playcounter).playAudio();
-            playcounter++;
+    protected CheckBox createCheckBox(int index) {
+        final String choiceName = getFormEntryPrompt().getSelectChoiceText(items.get(index));
+        final CharSequence choiceDisplayName = choiceName == null ? "" : TextUtils.textToHtml(choiceName);
+        // no checkbox group so id by answer + offset
+        AppCompatCheckBox checkBox = new AppCompatCheckBox(getContext());
+        checkBox.setTag(index);
+        checkBox.setId(ViewIds.generateViewId());
+        checkBox.setText(choiceDisplayName);
+        checkBox.setMovementMethod(LinkMovementMethod.getInstance());
+        checkBox.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
+        checkBox.setFocusable(!getFormEntryPrompt().isReadOnly());
+        checkBox.setEnabled(!getFormEntryPrompt().isReadOnly());
 
-        } else {
-            playcounter = 0;
-            mPlayer.setOnCompletionListener(null);
-            mPlayer.reset();
-        }
-
-    }
-
-
-    @Override
-    public void playAllPromptText() {
-        // set up to play the items when the
-        // question text is finished
-        mPlayer.setOnCompletionListener(new OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mediaPlayer) {
-                resetQuestionTextColor();
-                mediaPlayer.reset();
-                playNextSelectItem();
+        for (int vi = 0; vi < ve.size(); vi++) {
+            // match based on value, not key
+            if (items.get(index).getValue().equals(ve.get(vi).getValue())) {
+                checkBox.setChecked(true);
+                break;
             }
+        }
 
+        // when clicked, check for readonly before toggling
+        checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (!checkboxInit && getFormEntryPrompt().isReadOnly()) {
+                buttonView.setChecked(!buttonView.isChecked());
+            }
         });
-        // plays the question text
-        super.playAllPromptText();
+
+        return checkBox;
+    }
+
+    protected void createLayout() {
+        readItems();
+
+        if (items != null) {
+            // check if any values have spaces
+            SpacesInUnderlyingValuesWarning.forQuestionWidget(this).renderWarningIfNecessary(items);
+
+            for (int i = 0; i < items.size(); i++) {
+                CheckBox checkBox = createCheckBox(i);
+                checkBoxes.add(checkBox);
+                answerLayout.addView(createMediaLayout(i, checkBox));
+            }
+            addAnswerView(answerLayout);
+        }
+        checkboxInit = false;
     }
 
     @Override
-    public void resetQuestionTextColor() {
-        super.resetQuestionTextColor();
-        for (MediaLayout layout : playList) {
-            layout.resetTextFormatting();
-        }
+    public int getChoiceCount() {
+        return checkBoxes.size();
+    }
+
+    @Override
+    public void setChoiceSelected(int choiceIndex, boolean isSelected) {
+        checkBoxes.get(choiceIndex).setChecked(isSelected);
     }
 
 }

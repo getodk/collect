@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 University of Washington
+ * Copyright (C) 2017 University of Washington
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -14,46 +14,73 @@
 
 package org.odk.collect.android.application;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.multidex.MultiDex;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
+import android.support.v7.app.AppCompatDelegate;
+import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
+import com.evernote.android.job.JobManager;
+import com.evernote.android.job.JobManagerCreateException;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
+import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
+
+import net.danlew.android.joda.JodaTimeAndroid;
 
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.external.ExternalDataManager;
+import org.odk.collect.android.injection.config.AppComponent;
+import org.odk.collect.android.injection.config.DaggerAppComponent;
+import org.odk.collect.android.jobs.CollectJobCreator;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
+import org.odk.collect.android.preferences.AdminSharedPreferences;
+import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.FormMetadataMigrator;
-import org.odk.collect.android.preferences.PreferenceKeys;
-import org.odk.collect.android.utilities.AgingCredentialsProvider;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.AuthDialogUtility;
+import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.PRNGFixes;
 import org.opendatakit.httpclientandroidlib.client.CookieStore;
 import org.opendatakit.httpclientandroidlib.client.CredentialsProvider;
 import org.opendatakit.httpclientandroidlib.client.protocol.HttpClientContext;
-import org.opendatakit.httpclientandroidlib.impl.client.BasicCookieStore;
 import org.opendatakit.httpclientandroidlib.protocol.BasicHttpContext;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 
 import java.io.File;
+import java.util.Locale;
+
+import javax.inject.Inject;
+
+import dagger.android.DispatchingAndroidInjector;
+import dagger.android.HasActivityInjector;
+import timber.log.Timber;
+
+import static org.odk.collect.android.logic.PropertyManager.PROPMGR_USERNAME;
+import static org.odk.collect.android.logic.PropertyManager.SCHEME_USERNAME;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_APP_LANGUAGE;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FONT_SIZE;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
 
 /**
  * The Open Data Kit Collect application.
  *
  * @author carlhartung
  */
-public class Collect extends Application {
+public class Collect extends Application implements HasActivityInjector {
 
     // Storage paths
     public static final String ODK_ROOT = Environment.getExternalStorageDirectory()
@@ -66,33 +93,42 @@ public class Collect extends Application {
     public static final String TMPDRAWFILE_PATH = CACHE_PATH + File.separator + "tmpDraw.jpg";
     public static final String LOG_PATH = ODK_ROOT + File.separator + "log";
     public static final String DEFAULT_FONTSIZE = "21";
+    public static final int DEFAULT_FONTSIZE_INT = 21;
     public static final String OFFLINE_LAYERS = ODK_ROOT + File.separator + "layers";
     public static final String SETTINGS = ODK_ROOT + File.separator + "settings";
-    private static Collect singleton = null;
 
-    static {
-        PRNGFixes.apply();
-    }
+    public static String defaultSysLanguage;
+    private static Collect singleton;
+    private static long lastClickTime;
 
-    // share all session cookies across all sessions...
-    private CookieStore cookieStore = new BasicCookieStore();
-    // retain credentials for 7 minutes...
-    private CredentialsProvider credsProvider = new AgingCredentialsProvider(7 * 60 * 1000);
-    private ActivityLogger mActivityLogger;
-    private FormController mFormController = null;
+    @Inject
+    protected CookieStore cookieStore;
+    @Inject
+    protected CredentialsProvider credsProvider;
+
+    private ActivityLogger activityLogger;
+
+    @Nullable
+    private FormController formController;
     private ExternalDataManager externalDataManager;
-    private Tracker mTracker;
+    private Tracker tracker;
+    private AppComponent applicationComponent;
+
+    @Inject
+    DispatchingAndroidInjector<Activity> androidInjector;
 
     public static Collect getInstance() {
         return singleton;
     }
 
     public static int getQuestionFontsize() {
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect
-                .getInstance());
-        String question_font = settings.getString(PreferenceKeys.KEY_FONT_SIZE,
-                Collect.DEFAULT_FONTSIZE);
-        return Integer.valueOf(question_font);
+        // For testing:
+        Collect instance = Collect.getInstance();
+        if (instance == null) {
+            return Collect.DEFAULT_FONTSIZE_INT;
+        }
+
+        return Integer.parseInt(String.valueOf(GeneralSharedPreferences.getInstance().get(KEY_FONT_SIZE)));
     }
 
     /**
@@ -115,13 +151,15 @@ public class Collect extends Application {
             File dir = new File(dirName);
             if (!dir.exists()) {
                 if (!dir.mkdirs()) {
-                    throw new RuntimeException("ODK reports :: Cannot create directory: "
-                            + dirName);
+                    String message = getInstance().getString(R.string.cannot_create_directory, dirName);
+                    Timber.w(message);
+                    throw new RuntimeException(message);
                 }
             } else {
                 if (!dir.isDirectory()) {
-                    throw new RuntimeException("ODK reports :: " + dirName
-                            + " exists, but is not a directory");
+                    String message = getInstance().getString(R.string.not_a_directory, dirName);
+                    Timber.w(message);
+                    throw new RuntimeException(message);
                 }
             }
         }
@@ -139,7 +177,7 @@ public class Collect extends Application {
         String dirPath = directory.getAbsolutePath();
         if (dirPath.startsWith(Collect.ODK_ROOT)) {
             dirPath = dirPath.substring(Collect.ODK_ROOT.length());
-            String[] parts = dirPath.split(File.separator);
+            String[] parts = dirPath.split(File.separatorChar == '\\' ? "\\\\" : File.separator);
             // [appName, instances, tableId, instanceId ]
             if (parts.length == 4 && parts[1].equals("instances")) {
                 return true;
@@ -149,15 +187,16 @@ public class Collect extends Application {
     }
 
     public ActivityLogger getActivityLogger() {
-        return mActivityLogger;
+        return activityLogger;
     }
 
+    @Nullable
     public FormController getFormController() {
-        return mFormController;
+        return formController;
     }
 
-    public void setFormController(FormController controller) {
-        mFormController = controller;
+    public void setFormController(@Nullable FormController controller) {
+        formController = controller;
     }
 
     public ExternalDataManager getExternalDataManager() {
@@ -215,33 +254,66 @@ public class Collect extends Application {
         return cookieStore;
     }
 
-    public void hideKeyboard(View view) {
-        InputMethodManager imm = (InputMethodManager) getInstance().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        singleton = this;
+
+        applicationComponent = DaggerAppComponent.builder()
+                .application(this)
+                .build();
+
+        applicationComponent.inject(this);
+
+        try {
+            JobManager
+                    .create(this)
+                    .addJobCreator(new CollectJobCreator());
+        } catch (JobManagerCreateException e) {
+            Timber.e(e);
+        }
+
+        reloadSharedPreferences();
+
+        PRNGFixes.apply();
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+        JodaTimeAndroid.init(this);
+
+        defaultSysLanguage = Locale.getDefault().getLanguage();
+        new LocaleHelper().updateLocale(this);
+
+        FormMetadataMigrator.migrate(PreferenceManager.getDefaultSharedPreferences(this));
+        AutoSendPreferenceMigrator.migrate();
+
+        initProperties();
+
+        AuthDialogUtility.setWebCredentialsFromPreferences();
+        if (BuildConfig.BUILD_TYPE.equals("odkCollectRelease")) {
+            Timber.plant(new CrashReportingTree());
+        } else {
+            Timber.plant(new Timber.DebugTree());
+        }
+
+        setupLeakCanary();
     }
 
-    public void showKeyboard(View view) {
-        view.requestFocus();
-        InputMethodManager imm = (InputMethodManager) getInstance().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(view, InputMethodManager.SHOW_FORCED);
+    protected RefWatcher setupLeakCanary() {
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            return RefWatcher.DISABLED;
+        }
+        return LeakCanary.install(this);
     }
 
     @Override
-    public void onCreate() {
-        singleton = this;
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
 
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-        FormMetadataMigrator.migrate(PreferenceManager.getDefaultSharedPreferences(this));
-        super.onCreate();
-
-        PropertyManager mgr = new PropertyManager(this);
-
-        FormController.initializeJavaRosa(mgr);
-
-        mActivityLogger = new ActivityLogger(
-                mgr.getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID));
-
-        AuthDialogUtility.setWebCredentialsFromPreferences(this);
+        //noinspection deprecation
+        defaultSysLanguage = newConfig.locale.getLanguage();
+        boolean isUsingSysLanguage = GeneralSharedPreferences.getInstance().get(KEY_APP_LANGUAGE).equals("");
+        if (!isUsingSysLanguage) {
+            new LocaleHelper().updateLocale(this);
+        }
     }
 
     /**
@@ -249,11 +321,68 @@ public class Collect extends Application {
      *
      * @return tracker
      */
-    synchronized public Tracker getDefaultTracker() {
-        if (mTracker == null) {
+    public synchronized Tracker getDefaultTracker() {
+        if (tracker == null) {
             GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
-            mTracker = analytics.newTracker(R.xml.global_tracker);
+            tracker = analytics.newTracker(R.xml.global_tracker);
         }
-        return mTracker;
+        return tracker;
+    }
+
+    private static class CrashReportingTree extends Timber.Tree {
+        @Override
+        protected void log(int priority, String tag, String message, Throwable t) {
+            if (priority == Log.VERBOSE || priority == Log.DEBUG || priority == Log.INFO) {
+                return;
+            }
+
+            Crashlytics.log(priority, tag, message);
+
+            if (t != null && priority == Log.ERROR) {
+                Crashlytics.logException(t);
+            }
+        }
+    }
+
+    public void initProperties() {
+        PropertyManager mgr = new PropertyManager(this);
+
+        // Use the server username by default if the metadata username is not defined
+        if (mgr.getSingularProperty(PROPMGR_USERNAME) == null || mgr.getSingularProperty(PROPMGR_USERNAME).isEmpty()) {
+            mgr.putProperty(PROPMGR_USERNAME, SCHEME_USERNAME, (String) GeneralSharedPreferences.getInstance().get(KEY_USERNAME));
+        }
+
+        FormController.initializeJavaRosa(mgr);
+        activityLogger = new ActivityLogger(mgr.getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID));
+    }
+
+    // This method reloads shared preferences in order to load default values for new preferences
+    private void reloadSharedPreferences() {
+        GeneralSharedPreferences.getInstance().reloadPreferences();
+        AdminSharedPreferences.getInstance().reloadPreferences();
+    }
+
+    // Preventing multiple clicks, using threshold of 1000 ms
+    public static boolean allowClick() {
+        long elapsedRealtime = SystemClock.elapsedRealtime();
+        boolean allowClick = (lastClickTime == 0 || lastClickTime == elapsedRealtime) // just for tests
+                || elapsedRealtime - lastClickTime > 1000;
+        if (allowClick) {
+            lastClickTime = elapsedRealtime;
+        }
+        return allowClick;
+    }
+
+    public AppComponent getComponent() {
+        return applicationComponent;
+    }
+
+    public void setComponent(AppComponent applicationComponent) {
+        this.applicationComponent = applicationComponent;
+    }
+
+    @Override
+    public DispatchingAndroidInjector<Activity> activityInjector() {
+        return androidInjector;
     }
 }

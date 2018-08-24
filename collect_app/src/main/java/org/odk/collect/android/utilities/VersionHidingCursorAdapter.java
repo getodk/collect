@@ -46,19 +46,24 @@ public class VersionHidingCursorAdapter extends SimpleCursorAdapter {
                     int columnIndex) {
                 String columnName = cursor.getColumnName(columnIndex);
                 if (!columnName.equals(VersionHidingCursorAdapter.this.versionColumnName)) {
-                    if (originalBinder != null) {
-                        return originalBinder.setViewValue(view, cursor, columnIndex);
-                    }
-                    return false;
+                    return originalBinder != null && originalBinder.setViewValue(view, cursor, columnIndex);
                 } else {
                     String version = cursor.getString(columnIndex);
                     TextView v = (TextView) view;
+                    v.setText("");
+                    v.setVisibility(View.GONE);
                     if (version != null) {
-                        v.setText(String.format(ctxt.getString(R.string.version_number), version));
+                        v.append(String.format(ctxt.getString(R.string.version_number), version));
+                        v.append(" ");
                         v.setVisibility(View.VISIBLE);
-                    } else {
-                        v.setText(null);
-                        v.setVisibility(View.GONE);
+                    }
+                    if (from.length > 3) {
+                        int idColumnIndex = cursor.getColumnIndex(from[3]);
+                        String id = cursor.getString(idColumnIndex);
+                        if (id != null) {
+                            v.append(String.format(ctxt.getString(R.string.id_number), id));
+                            v.setVisibility(View.VISIBLE);
+                        }
                     }
                 }
                 return true;

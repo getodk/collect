@@ -14,13 +14,17 @@
 
 package org.odk.collect.android.views;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
+import android.support.annotation.NonNull;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -41,58 +45,58 @@ import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalAppsUtils;
 import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.widgets.IBinaryWidget;
+import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.WidgetFactory;
+import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
+
+import timber.log.Timber;
+
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
  * This class is
  *
  * @author carlhartung
  */
+@SuppressLint("ViewConstructor")
 public class ODKView extends ScrollView implements OnLongClickListener {
 
-    // starter random number for view IDs
-    private final static int VIEW_ID = 12345;
+    private final LinearLayout view;
+    private final LinearLayout.LayoutParams layout;
+    private final ArrayList<QuestionWidget> widgets;
 
-    private final static String t = "ODKView";
-
-    private LinearLayout mView;
-    private LinearLayout.LayoutParams mLayout;
-    private ArrayList<QuestionWidget> widgets;
-    private Handler h = null;
-
-    public final static String FIELD_LIST = "field-list";
+    public static final String FIELD_LIST = "field-list";
 
     public ODKView(Context context, final FormEntryPrompt[] questionPrompts,
             FormEntryCaption[] groups, boolean advancingPage) {
         super(context);
 
-        widgets = new ArrayList<QuestionWidget>();
+        widgets = new ArrayList<>();
 
-        mView = new LinearLayout(getContext());
-        mView.setOrientation(LinearLayout.VERTICAL);
-        mView.setGravity(Gravity.TOP);
-        mView.setPadding(0, 7, 0, 0);
+        view = new LinearLayout(getContext());
+        view.setOrientation(LinearLayout.VERTICAL);
+        view.setGravity(Gravity.TOP);
+        view.setPadding(0, 7, 0, 0);
 
-        mLayout =
+        layout =
                 new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT);
-        mLayout.setMargins(10, 0, 10, 0);
+        layout.setMargins(10, 0, 10, 0);
 
         // display which group you are in as well as the question
 
@@ -120,15 +124,15 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                 params.setMargins(7, 5, 7, 5);
 
                 // set button formatting
-                Button mLaunchIntentButton = new Button(getContext());
-                mLaunchIntentButton.setId(QuestionWidget.newUniqueId());
-                mLaunchIntentButton.setText(buttonText);
-                mLaunchIntentButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP,
+                Button launchIntentButton = new Button(getContext());
+                launchIntentButton.setId(ViewIds.generateViewId());
+                launchIntentButton.setText(buttonText);
+                launchIntentButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP,
                         Collect.getQuestionFontsize() + 2);
-                mLaunchIntentButton.setPadding(20, 20, 20, 20);
-                mLaunchIntentButton.setLayoutParams(params);
+                launchIntentButton.setPadding(20, 20, 20, 20);
+                launchIntentButton.setLayoutParams(params);
 
-                mLaunchIntentButton.setOnClickListener(new View.OnClickListener() {
+                launchIntentButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         String intentName = ExternalAppsUtils.extractIntentName(intentString);
@@ -159,14 +163,13 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                                 }
                             }
 
-                            ((Activity) getContext()).startActivityForResult(i,
-                                    FormEntryActivity.EX_GROUP_CAPTURE);
+                            ((Activity) getContext()).startActivityForResult(i, RequestCodes.EX_GROUP_CAPTURE);
                         } catch (ExternalParamsException e) {
-                            Log.e("ExternalParamsException", e.getMessage(), e);
+                            Timber.e(e, "ExternalParamsException");
 
                             ToastUtils.showShortToast(e.getMessage());
                         } catch (ActivityNotFoundException e) {
-                            Log.e("ActivityNotFoundExcept", e.getMessage(), e);
+                            Timber.d(e, "ActivityNotFoundExcept");
 
                             ToastUtils.showShortToast(errorString);
                         }
@@ -174,22 +177,21 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                 });
 
                 View divider = new View(getContext());
-                divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
+                divider.setBackgroundResource(new ThemeUtils(getContext()).getDivider());
                 divider.setMinimumHeight(3);
-                mView.addView(divider);
+                view.addView(divider);
 
-                mView.addView(mLaunchIntentButton, mLayout);
+                view.addView(launchIntentButton, layout);
             }
         }
 
         boolean first = true;
-        int id = 0;
         for (FormEntryPrompt p : questionPrompts) {
             if (!first) {
                 View divider = new View(getContext());
-                divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
+                divider.setBackgroundResource(new ThemeUtils(getContext()).getDivider());
                 divider.setMinimumHeight(3);
-                mView.addView(divider);
+                view.addView(divider);
             } else {
                 first = false;
             }
@@ -199,24 +201,22 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                     WidgetFactory.createWidgetFromPrompt(p, getContext(), readOnlyOverride);
             qw.setLongClickable(true);
             qw.setOnLongClickListener(this);
-            qw.setId(VIEW_ID + id++);
+            qw.setId(ViewIds.generateViewId());
 
             widgets.add(qw);
-            mView.addView(qw, mLayout);
-
-
+            view.addView(qw, layout);
         }
 
-        addView(mView);
+        addView(view);
 
-        // see if there is an autoplay option. 
-        // Only execute it during forward swipes through the form 
+        // see if there is an autoplay option.
+        // Only execute it during forward swipes through the form
         if (advancingPage && widgets.size() == 1) {
             final String playOption = widgets.get(
-                    0).getPrompt().getFormElement().getAdditionalAttribute(null, "autoplay");
+                    0).getFormEntryPrompt().getFormElement().getAdditionalAttribute(null, "autoplay");
             if (playOption != null) {
-                h = new Handler();
-                h.postDelayed(new Runnable() {
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         if (playOption.equalsIgnoreCase("audio")) {
@@ -230,12 +230,21 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         }
     }
 
+    public Bundle getState() {
+        Bundle state = new Bundle();
+        for (QuestionWidget qw : getWidgets()) {
+            state.putAll(qw.getCurrentState());
+        }
+
+        return state;
+    }
+
     /**
      * http://code.google.com/p/android/issues/detail?id=8488
      */
     public void recycleDrawables() {
         this.destroyDrawingCache();
-        mView.destroyDrawingCache();
+        view.destroyDrawingCache();
         for (QuestionWidget q : widgets) {
             q.recycleDrawables();
         }
@@ -248,61 +257,71 @@ public class ODKView extends ScrollView implements OnLongClickListener {
     /**
      * @return a HashMap of answers entered by the user for this set of widgets
      */
-    public LinkedHashMap<FormIndex, IAnswerData> getAnswers() {
-        LinkedHashMap<FormIndex, IAnswerData> answers = new LinkedHashMap<FormIndex, IAnswerData>();
-        Iterator<QuestionWidget> i = widgets.iterator();
-        while (i.hasNext()) {
+    public HashMap<FormIndex, IAnswerData> getAnswers() {
+        HashMap<FormIndex, IAnswerData> answers = new LinkedHashMap<>();
+        for (QuestionWidget q : widgets) {
             /*
              * The FormEntryPrompt has the FormIndex, which is where the answer gets stored. The
              * QuestionWidget has the answer the user has entered.
              */
-            QuestionWidget q = i.next();
-            FormEntryPrompt p = q.getPrompt();
+            FormEntryPrompt p = q.getFormEntryPrompt();
             answers.put(p.getIndex(), q.getAnswer());
         }
 
         return answers;
     }
 
-
     /**
      * // * Add a TextView containing the hierarchy of groups to which the question belongs. //
      */
     private void addGroupText(FormEntryCaption[] groups) {
-        StringBuilder s = new StringBuilder("");
-        String t = "";
-        int i;
-        // list all groups in one string
-        for (FormEntryCaption g : groups) {
-            i = g.getMultiplicity() + 1;
-            t = g.getLongText();
-            if (t != null) {
-                s.append(t);
-                if (g.repeats() && i > 0) {
-                    s.append(" (" + i + ")");
+        String path = getGroupsPath(groups);
+
+        // build view
+        if (!path.isEmpty()) {
+            TextView tv = new TextView(getContext());
+            tv.setText(path);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Collect.getQuestionFontsize() - 4);
+            tv.setPadding(0, 0, 0, 5);
+            view.addView(tv, layout);
+        }
+    }
+
+    @NonNull
+    public static String getGroupsPath(FormEntryCaption[] groups) {
+        StringBuilder path = new StringBuilder("");
+        if (groups != null) {
+            String longText;
+            int multiplicity;
+            int index = 1;
+            // list all groups in one string
+            for (FormEntryCaption group : groups) {
+                multiplicity = group.getMultiplicity() + 1;
+                longText = group.getLongText();
+                if (longText != null) {
+                    path.append(longText);
+                    if (group.repeats() && multiplicity > 0) {
+                        path
+                                .append(" (")
+                                .append(multiplicity)
+                                .append(")\u200E");
+                    }
+                    if (index < groups.length) {
+                        path.append(" > ");
+                    }
+                    index++;
                 }
-                s.append(" > ");
             }
         }
 
-        // build view
-        if (s.length() > 0) {
-            TextView tv = new TextView(getContext());
-            tv.setText(s.substring(0, s.length() - 3));
-            int questionFontsize = Collect.getQuestionFontsize();
-            tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, questionFontsize - 4);
-            tv.setPadding(0, 0, 0, 5);
-            mView.addView(tv, mLayout);
-        }
+        return path.toString();
     }
 
-
     public void setFocus(Context context) {
-        if (widgets.size() > 0) {
+        if (!widgets.isEmpty()) {
             widgets.get(0).setFocus(context);
         }
     }
-
 
     /**
      * Called when another activity returns information to answer this question.
@@ -310,12 +329,14 @@ public class ODKView extends ScrollView implements OnLongClickListener {
     public void setBinaryData(Object answer) {
         boolean set = false;
         for (QuestionWidget q : widgets) {
-            if (q instanceof IBinaryWidget) {
-                if (((IBinaryWidget) q).isWaitingForBinaryData()) {
+            if (q instanceof BinaryWidget) {
+                BinaryWidget binaryWidget = (BinaryWidget) q;
+                if (binaryWidget.isWaitingForData()) {
                     try {
-                        ((IBinaryWidget) q).setBinaryData(answer);
+                        binaryWidget.setBinaryData(answer);
+                        binaryWidget.cancelWaitingForData();
                     } catch (Exception e) {
-                        Log.e(t, e.getMessage(), e);
+                        Timber.e(e);
                         ToastUtils.showLongToast(getContext().getString(R.string.error_attaching_binary_file,
                                         e.getMessage()));
                     }
@@ -326,8 +347,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         }
 
         if (!set) {
-            Log.w(t,
-                    "Attempting to return data to a widget or set of widgets not looking for data");
+            Timber.w("Attempting to return data to a widget or set of widgets not looking for data");
         }
     }
 
@@ -339,9 +359,10 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         Set<String> keys = bundle.keySet();
         for (String key : keys) {
             for (QuestionWidget questionWidget : widgets) {
-                FormEntryPrompt prompt = questionWidget.getPrompt();
+                FormEntryPrompt prompt = questionWidget.getFormEntryPrompt();
                 TreeReference treeReference =
                         (TreeReference) prompt.getFormElement().getBind().getReference();
+
                 if (treeReference.getNameLast().equals(key)) {
 
                     switch (prompt.getDataType()) {
@@ -372,17 +393,16 @@ public class ODKView extends ScrollView implements OnLongClickListener {
     public void cancelWaitingForBinaryData() {
         int count = 0;
         for (QuestionWidget q : widgets) {
-            if (q instanceof IBinaryWidget) {
-                if (((IBinaryWidget) q).isWaitingForBinaryData()) {
-                    ((IBinaryWidget) q).cancelWaitingForBinaryData();
+            if (q instanceof BinaryWidget) {
+                if (q.isWaitingForData()) {
+                    q.cancelWaitingForData();
                     ++count;
                 }
             }
         }
 
         if (count != 1) {
-            Log.w(t,
-                    "Attempting to cancel waiting for binary data to a widget or set of widgets "
+            Timber.w("Attempting to cancel waiting for binary data to a widget or set of widgets "
                             + "not looking for data");
         }
     }
@@ -403,7 +423,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
     public boolean clearAnswer() {
         // If there's only one widget, clear the answer.
         // If there are more, then force a long-press to clear the answer.
-        if (widgets.size() == 1 && !widgets.get(0).getPrompt().isReadOnly()) {
+        if (widgets.size() == 1 && !widgets.get(0).getFormEntryPrompt().isReadOnly()) {
             widgets.get(0).clearAnswer();
             return true;
         } else {
@@ -411,11 +431,9 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         }
     }
 
-
     public ArrayList<QuestionWidget> getWidgets() {
         return widgets;
     }
-
 
     @Override
     public void setOnFocusChangeListener(OnFocusChangeListener l) {
@@ -425,12 +443,10 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         }
     }
 
-
     @Override
     public boolean onLongClick(View v) {
         return false;
     }
-
 
     @Override
     public void cancelLongPress() {
@@ -444,4 +460,52 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         widgets.get(0).stopAudio();
     }
 
+    /**
+     * Releases widget resources, such as {@link android.media.MediaPlayer}s
+     */
+    public void releaseWidgetResources() {
+        for (QuestionWidget w : widgets) {
+            w.release();
+        }
+    }
+
+    public void highlightWidget(FormIndex formIndex) {
+        QuestionWidget qw = getQuestionWidget(formIndex);
+
+        if (qw != null) {
+            // postDelayed is needed because otherwise scrolling may not work as expected in case when
+            // answers are validated during form finalization.
+            new Handler().postDelayed(() -> {
+                scrollTo(0, qw.getTop());
+
+                ValueAnimator va = new ValueAnimator();
+                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
+                    va.setIntValues(getResources().getColor(R.color.red), getDrawingCacheBackgroundColor());
+                } else {
+                    // Avoid fading to black on certain devices and Android versions that may not support transparency
+                    TypedValue typedValue = new TypedValue();
+                    getContext().getTheme().resolveAttribute(android.R.attr.windowBackground, typedValue, true);
+                    if (typedValue.type >= TypedValue.TYPE_FIRST_COLOR_INT && typedValue.type <= TypedValue.TYPE_LAST_COLOR_INT) {
+                        va.setIntValues(getResources().getColor(R.color.red), typedValue.data);
+                    } else {
+                        va.setIntValues(getResources().getColor(R.color.red), getDrawingCacheBackgroundColor());
+                    }
+                }
+
+                va.setEvaluator(new ArgbEvaluator());
+                va.addUpdateListener(valueAnimator -> qw.setBackgroundColor((int) valueAnimator.getAnimatedValue()));
+                va.setDuration(2500);
+                va.start();
+            }, 100);
+        }
+    }
+
+    private QuestionWidget getQuestionWidget(FormIndex formIndex) {
+        for (QuestionWidget qw : widgets) {
+            if (formIndex.equals(qw.getFormEntryPrompt().getIndex())) {
+                return qw;
+            }
+        }
+        return null;
+    }
 }

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.odk.collect.android.logic;
 
 import android.os.Parcel;
@@ -20,23 +21,23 @@ import android.os.Parcelable;
 
 import com.google.api.client.util.DateTime;
 
+import java.util.Locale;
+
 public class DriveListItem implements Comparable<DriveListItem>, Parcelable {
-    private String name;
-    private String data;
-    private String path;
-    private String image;
-    private String driveId;
-    private String parentId;
+    private final String name;
+    private final String data;
+    private final String path;
+    private final String image;
+    private final String driveId;
+    private final String parentId;
 
-    private DateTime date;
-    private int type;
+    private final DateTime date;
+    private final int type;
 
+    private boolean selected;
 
     public static final int FILE = 1;
     public static final int DIR = 2;
-    public static final int UP = 3;
-    public static final int MY_DRIVE = 4;
-    public static final int SHARED_WITH_ME = 5;
 
     public DriveListItem(String n, String d, DateTime dt, String p, String img, int type,
             String driveId, String parentId) {
@@ -82,9 +83,17 @@ public class DriveListItem implements Comparable<DriveListItem>, Parcelable {
         return parentId;
     }
 
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
     public int compareTo(DriveListItem o) {
         if (this.name != null) {
-            return this.name.toLowerCase().compareTo(o.getName().toLowerCase());
+            return this.name.toLowerCase(Locale.US).compareTo(o.getName().toLowerCase(Locale.US));
         } else {
             throw new IllegalArgumentException();
         }

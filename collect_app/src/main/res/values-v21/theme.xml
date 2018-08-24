@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="BaseDarkAppTheme.Collect">
+        <item name="android:buttonStyle">@style/CustomButtonStyle</item>
+    </style>
+
+    <style name="BaseLightAppTheme.Collect">
+        <item name="android:buttonStyle">@style/CustomButtonStyle</item>
+    </style>
+</resources>

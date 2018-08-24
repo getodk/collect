@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.listeners;
 
+import org.javarosa.core.model.FormDef;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.tasks.ProgressNotifier;
 
@@ -21,7 +22,7 @@ import org.odk.collect.android.tasks.ProgressNotifier;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public interface FormLoaderListener extends ProgressNotifier {
-    void loadingComplete(FormLoaderTask task);
+    void loadingComplete(FormLoaderTask task, FormDef fd);
 
     void loadingError(String errorMsg);
 }

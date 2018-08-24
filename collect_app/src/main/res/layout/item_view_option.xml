@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:drawablePadding="@dimen/padding_medium"
+    android:gravity="center_vertical"
+    android:minHeight="@dimen/touch_target_size"
+    android:paddingEnd="@dimen/padding_extra_large"
+    android:paddingLeft="@dimen/padding_extra_large"
+    android:paddingRight="@dimen/padding_extra_large"
+    android:paddingStart="@dimen/padding_extra_large"
+    android:textColor="?primaryTextColor"
+    android:textSize="@dimen/text_size_small"
+    tools:drawableLeft="@drawable/ic_save"
+    tools:drawableStart="@drawable/ic_save"
+    tools:text="Save changes" />

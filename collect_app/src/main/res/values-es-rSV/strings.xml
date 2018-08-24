@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
-  <string name="altitude">Altitud</string>
+<resources>
   <string name="cannot_edit_completed_form">Este formulario no podrá ser editado una vez que se haya marcado como completado. Este puede ser encriptado.</string>
   <string name="capture_video">Grabar video</string>
   <string name="password">Contraseña</string>
@@ -9,6 +8,5 @@
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="default_google_sheets_url"></string>
   <!--Geo string added in feature-geofeatures branch-->
 </resources>

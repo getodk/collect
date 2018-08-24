@@ -1,0 +1,118 @@
+buildscript {
+    repositories {
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+    dependencies {
+        classpath 'gradle.plugin.com.github.spotbugs:spotbugs-gradle-plugin:1.6.2'
+    }
+}
+
+def configDir = "${project.rootDir}/config"
+def reportsDir = "${project.buildDir}/reports"
+
+//------------------------Checkstyle------------------------//
+
+apply plugin: 'checkstyle'
+
+checkstyle.toolVersion = '7.6.1'
+
+task checkstyle(type: Checkstyle) {
+    configFile file("$configDir/checkstyle.xml")
+
+    ignoreFailures false // Fail early
+    showViolations true
+
+    source 'src'
+    include '**/*.java'
+    exclude '**/gen/**'
+    classpath = files()
+}
+
+//------------------------Spotbugs------------------------//
+
+apply plugin: 'com.github.spotbugs'
+
+spotbugs.toolVersion = '3.1.3'
+
+android.applicationVariants.all { variant ->
+    task("spotbugs${variant.name.capitalize()}", type: com.github.spotbugs.SpotBugsTask, dependsOn: variant.javaCompiler) {
+
+        ignoreFailures false // Fail early
+        effort = 'max'       // Search better
+
+        // Reporting only high priority problems {Possible reportLevels: 'high', 'medium', 'low'}
+        reportLevel = 'medium'
+
+        excludeFilter = new File("$configDir/findbugs-filter.xml")
+        classes = fileTree("build/intermediates/classes/${variant.flavorName}/${variant.buildType.name}/")
+
+        source = variant.javaCompiler.source
+
+        classpath = variant.javaCompiler.classpath.asFileTree
+        pluginClasspath = project.configurations.spotbugsPlugins
+        spotbugsClasspath = buildscript.configurations.classpath
+
+        /**
+         * Tweak worker process max heap size
+         * 128m = OutOfMemory
+         * 256m=~31s
+         * 384m=~31s
+         * 768m=~31s
+         * */
+        setMaxHeapSize('256m')
+
+        reports {
+            html {
+                enabled = true
+                setDestination new File("$reportsDir/spotbugs/spotbugs.html")
+                stylesheet resources.text.fromFile("$configDir/xsl/plain.xsl")
+            }
+            xml {
+                enabled = false
+                setDestination new File("$reportsDir/spotbugs/spotbugs.xml")
+            }
+        }
+    }
+}
+
+//------------------------Pmd------------------------//
+
+apply plugin: 'pmd'
+
+pmd {
+    toolVersion = '6.4.0'
+}
+
+task pmd(type: Pmd) {
+    ignoreFailures = false // Fail early
+    ruleSetFiles = files("$configDir/pmd-ruleset.xml")
+    ruleSets = []
+
+    source 'src'
+    include '**/*.java'
+    exclude '**/gen/**'
+
+    reports {
+        xml.enabled = false
+        html.enabled = true
+        xml {
+            setDestination new File("$reportsDir/pmd/pmd.xml")
+        }
+        html {
+            setDestination new File("$reportsDir/pmd/pmd.html")
+        }
+    }
+}
+
+//------------------------Lint------------------------//
+
+android {
+    lintOptions {
+        abortOnError true
+        xmlReport true
+        htmlReport true
+        lintConfig file("$configDir/lint.xml")
+        htmlOutput file("$reportsDir/lint/lint-result.html")
+        xmlOutput file("$reportsDir/lint/lint-result.xml")
+    }
+}

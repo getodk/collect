@@ -14,15 +14,20 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.text.Selection;
 import android.text.method.DigitsKeyListener;
 import android.util.TypedValue;
+import android.widget.EditText;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.IntegerData;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.listeners.ThousandsSeparatorTextWatcher;
 
 import java.util.Locale;
 
@@ -31,41 +36,38 @@ import java.util.Locale;
  *
  * @author Carl Hartung (carlhartung@gmail.com)
  */
+@SuppressLint("ViewConstructor")
 public class IntegerWidget extends StringWidget {
 
-    private Integer getIntegerAnswerValue() {
-        IAnswerData dataHolder = mPrompt.getAnswerValue();
-        Integer d = null;
-        if (dataHolder != null) {
-            Object dataValue = dataHolder.getValue();
-            if (dataValue != null) {
-                if (dataValue instanceof Double) {
-                    d = Integer.valueOf(((Double) dataValue).intValue());
-                } else {
-                    d = (Integer) dataValue;
-                }
-            }
-        }
-        return d;
-    }
+    boolean useThousandSeparator;
 
-    public IntegerWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride) {
-        super(context, prompt, readOnlyOverride, true);
+    public IntegerWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride, boolean useThousandSeparator) {
+        super(context, prompt, readOnlyOverride);
 
-        mAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-        mAnswer.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
+        EditText answerText = getAnswerTextField();
+        answerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
+        answerText.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
 
         // needed to make long readonly text scroll
-        mAnswer.setHorizontallyScrolling(false);
-        mAnswer.setSingleLine(false);
+        answerText.setHorizontallyScrolling(false);
+        answerText.setSingleLine(false);
+
+        this.useThousandSeparator = useThousandSeparator;
+        if (useThousandSeparator) {
+            answerText.addTextChangedListener(new ThousandsSeparatorTextWatcher(answerText));
+        }
 
         // only allows numbers and no periods
-        mAnswer.setKeyListener(new DigitsKeyListener(true, false));
+        answerText.setKeyListener(new DigitsKeyListener(true, false));
 
         // ints can only hold 2,147,483,648. we allow 999,999,999
         InputFilter[] fa = new InputFilter[1];
         fa[0] = new InputFilter.LengthFilter(9);
-        mAnswer.setFilters(fa);
+        if (useThousandSeparator) {
+            //11 since for a nine digit number , their will be 2 separators.
+            fa[0] = new InputFilter.LengthFilter(11);
+        }
+        answerText.setFilters(fa);
 
         if (prompt.isReadOnly()) {
             setBackground(null);
@@ -76,23 +78,51 @@ public class IntegerWidget extends StringWidget {
         Integer i = getIntegerAnswerValue();
 
         if (i != null) {
-            mAnswer.setText(String.format(Locale.ENGLISH, "%d", i));
+            answerText.setText(String.format(Locale.US, "%d", i));
+            Selection.setSelection(answerText.getText(), answerText.getText().toString().length());
         }
-
-        setupChangeListener();
     }
 
+    private Integer getIntegerAnswerValue() {
+        IAnswerData dataHolder = getFormEntryPrompt().getAnswerValue();
+        Integer d = null;
+        if (dataHolder != null) {
+            Object dataValue = dataHolder.getValue();
+            if (dataValue != null) {
+                if (dataValue instanceof Double) {
+                    d = ((Double) dataValue).intValue();
+                } else {
+                    d = (Integer) dataValue;
+                }
+            }
+        }
+        return d;
+    }
+
+    @NonNull
+    @Override
+    public String getAnswerText() {
+        if (useThousandSeparator) {
+            return ThousandsSeparatorTextWatcher.getOriginalString(super.getAnswerText());
+        }
+        return super.getAnswerText();
+    }
 
     @Override
     public IAnswerData getAnswer() {
         clearFocus();
-        String s = mAnswer.getText().toString();
-        if (s == null || s.equals("")) {
+        String s = getAnswerTextField().getText().toString();
+        if (useThousandSeparator) {
+            s = ThousandsSeparatorTextWatcher.getOriginalString(s);
+        }
+
+        if (s.isEmpty()) {
             return null;
+
         } else {
             try {
                 return new IntegerData(Integer.parseInt(s));
-            } catch (Exception NumberFormatException) {
+            } catch (Exception numberFormatException) {
                 return null;
             }
         }

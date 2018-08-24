@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/form_update_category">
+        <ListPreference
+            android:dialogTitle="@string/periodic_form_updates_check_title"
+            android:entries="@array/periodic_form_updates_check_entries"
+            android:entryValues="@array/periodic_form_updates_check_entry_values"
+            android:defaultValue="@string/never_value"
+            android:key="periodic_form_updates_check"
+            android:title="@string/periodic_form_updates_check_title" />
+        <CheckBoxPreference
+            android:key="automatic_update"
+            android:summary="@string/automatic_download_summary"
+            android:title="@string/automatic_download" />
+        <CheckBoxPreference
+            android:key="hide_old_form_versions"
+            android:title="@string/hide_old_form_versions_setting_title"
+            android:summary="@string/hide_old_form_versions_setting_summary" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="form_submission"
+        android:title="@string/form_submission_category">
+        <ListPreference
+            android:dialogTitle="@string/autosend_selector_title"
+            android:entries="@array/autosend_selector_entries"
+            android:entryValues="@array/autosend_selector_entries_values"
+            android:key="autosend"
+            android:title="@string/autosend" />
+        <CheckBoxPreference
+            android:key="delete_send"
+            android:summary="@string/delete_after_send_summary"
+            android:title="@string/delete_after_send" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="form_filling"
+        android:title="@string/form_filling_category">
+        <CheckBoxPreference
+            android:key="default_completed"
+            android:summary="@string/default_completed_summary"
+            android:title="@string/default_completed" />
+        <ListPreference
+            android:dialogTitle="@string/constraint_behavior"
+            android:entries="@array/constraint_behavior_entries"
+            android:entryValues="@array/constraint_behavior_entry_values"
+            android:key="constraint_behavior"
+            android:title="@string/constraint_behavior_title" />
+        <CheckBoxPreference
+            android:key="high_resolution"
+            android:summary="@string/high_resolution_summary"
+            android:title="@string/high_resolution_title" />
+        <ListPreference
+            android:dialogTitle="@string/image_size_dialog_title"
+            android:entries="@array/image_size_entries"
+            android:entryValues="@array/image_size_entry_values"
+            android:key="image_size"
+            android:title="@string/image_size_title" />
+
+        <ListPreference
+            android:dialogTitle="@string/guidance_hint_title"
+            android:entries="@array/guidance_hint_selector_entries"
+            android:entryValues="@array/guidance_hint_selector_entries_values"
+            android:key="guidance_hint"
+            android:title="@string/guidance_hint_title" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="form_import"
+        android:title="@string/form_import_category">
+        <CheckBoxPreference
+            android:key="instance_sync"
+            android:summary="@string/instance_sync_summary"
+            android:title="@string/instance_sync" />
+    </PreferenceCategory>
+</PreferenceScreen>

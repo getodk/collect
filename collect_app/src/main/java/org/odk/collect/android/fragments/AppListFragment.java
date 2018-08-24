@@ -14,56 +14,50 @@ limitations under the License.
 
 package org.odk.collect.android.fragments;
 
-import android.content.res.Configuration;
 import android.database.Cursor;
-import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.app.ListFragment;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.view.Gravity;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.CollectAbstractActivity;
+import org.odk.collect.android.adapters.SortDialogAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ActivityLogger;
+import org.odk.collect.android.listeners.RecyclerViewClickListener;
 import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.utilities.ThemeUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import timber.log.Timber;
+
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
 
 abstract class AppListFragment extends ListFragment {
-    private static final int MENU_SORT = Menu.FIRST;
-    private static final int MENU_FILTER = MENU_SORT + 1;
 
     protected final ActivityLogger logger = Collect.getInstance().getActivityLogger();
-    protected String[] mSortingOptions;
-    View rootView;
-    private ListView mDrawerList;
-    private DrawerLayout mDrawerLayout;
-    private ActionBarDrawerToggle mDrawerToggle;
-
-    protected LinearLayout mSearchBoxLayout;
-    protected SimpleCursorAdapter mListAdapter;
-    protected LinkedHashSet<Long> mSelectedInstances = new LinkedHashSet<>();
-    protected EditText mInputSearch;
-
-    protected Integer mSelectedSortingOrder;
+    protected String[] sortingOptions;
+    protected SimpleCursorAdapter listAdapter;
+    protected LinkedHashSet<Long> selectedInstances = new LinkedHashSet<>();
+    protected View rootView;
+    private Integer selectedSortingOrder;
+    private BottomSheetDialog bottomSheetDialog;
+    private String filterText;
 
     // toggles to all checked or all unchecked
     // returns:
@@ -75,7 +69,9 @@ abstract class AppListFragment extends ListFragment {
     // if ALL items are checked, uncheck them all
     public static boolean toggleChecked(ListView lv) {
         // shortcut null case
-        if (lv == null) return false;
+        if (lv == null) {
+            return false;
+        }
 
         boolean newCheckState = lv.getCount() > lv.getCheckedItemCount();
         setAllToCheckedState(lv, newCheckState);
@@ -93,29 +89,11 @@ abstract class AppListFragment extends ListFragment {
     }
 
     // Function to toggle button label
-    public static void toggleButtonLabel(Button mToggleButton, ListView lv) {
+    public static void toggleButtonLabel(Button toggleButton, ListView lv) {
         if (lv.getCheckedItemCount() != lv.getCount()) {
-            mToggleButton.setText(R.string.select_all);
+            toggleButton.setText(R.string.select_all);
         } else {
-            mToggleButton.setText(R.string.clear_all);
-        }
-    }
-
-    //to get present drawer status
-    public Boolean getDrawerStatus() {
-        if (mDrawerLayout != null) {
-            return mDrawerLayout.isDrawerOpen(Gravity.END);
-        }
-        return false;
-    }
-
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        if (!isVisibleToUser) {
-            // close the drawer if open
-            if (mDrawerLayout != null && mDrawerLayout.isDrawerOpen(Gravity.END)) {
-                mDrawerLayout.closeDrawer(Gravity.END);
-            }
+            toggleButton.setText(R.string.clear_all);
         }
     }
 
@@ -124,66 +102,54 @@ abstract class AppListFragment extends ListFragment {
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCreateOptionsMenu", "show");
         super.onCreateOptionsMenu(menu, inflater);
 
-        menu
-                .add(0, MENU_SORT, 0, R.string.sort_the_list)
-                .setIcon(R.drawable.ic_sort)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        inflater.inflate(R.menu.list_menu, menu);
 
-        menu
-                .add(0, MENU_FILTER, 0, R.string.filter_the_list)
-                .setIcon(R.drawable.ic_search)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        final MenuItem sortItem = menu.findItem(R.id.menu_sort);
+        final MenuItem searchItem = menu.findItem(R.id.menu_filter);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setQueryHint(getResources().getString(R.string.search));
+        searchView.setMaxWidth(Integer.MAX_VALUE);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                filterText = query;
+                updateAdapter();
+                searchView.clearFocus();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterText = newText;
+                updateAdapter();
+                return false;
+            }
+        });
+
+        MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                sortItem.setVisible(false);
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                sortItem.setVisible(true);
+                return true;
+            }
+        });
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case MENU_SORT:
-                if (mDrawerLayout.isDrawerOpen(Gravity.END)) {
-                    mDrawerLayout.closeDrawer(Gravity.END);
-                } else {
-                    Collect.getInstance().hideKeyboard(mInputSearch);
-                    mDrawerLayout.openDrawer(Gravity.END);
-                }
-                return true;
-
-            case MENU_FILTER:
-                if (mSearchBoxLayout.getVisibility() == View.GONE) {
-                    showSearchBox();
-                } else {
-                    hideSearchBox();
-                }
+            case R.id.menu_sort:
+                bottomSheetDialog.show();
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        if (mDrawerToggle != null) {
-            mDrawerToggle.onConfigurationChanged(newConfig);
-        }
-    }
-
-    private void setupDrawerItems() {
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
-                android.R.layout.simple_list_item_1, mSortingOptions) {
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                TextView textView = (TextView) super.getView(position, convertView, parent);
-                textView.setPadding(50, 0, 0, 0);
-                return textView;
-            }
-        };
-        mDrawerList.setAdapter(adapter);
-        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                performSelectedSearch(position);
-                mDrawerLayout.closeDrawer(Gravity.END);
-            }
-        });
     }
 
     private void performSelectedSearch(int position) {
@@ -192,48 +158,49 @@ abstract class AppListFragment extends ListFragment {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        setupDrawer(view);
-        setupDrawerItems();
-        if (mDrawerToggle != null) {
-            mDrawerToggle.syncState();
+    public void onResume() {
+        super.onResume();
+        if (bottomSheetDialog == null) {
+            setupBottomSheet();
         }
     }
 
-    private void setupDrawer(View rootView) {
-        mDrawerList = (ListView) rootView.findViewById(R.id.sortingMenu);
-        mDrawerLayout = (DrawerLayout) rootView.findViewById(R.id.drawer_layout);
-        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        mDrawerToggle = new ActionBarDrawerToggle
-                (getActivity(), mDrawerLayout,
-                        R.string.sorting_menu_open, R.string.sorting_menu_close) {
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                getActivity().invalidateOptionsMenu();
-                mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-            }
+    private void setupBottomSheet() {
+        CollectAbstractActivity activity = (CollectAbstractActivity) getActivity();
+        if (activity == null) {
+            Timber.e("Activity is null");
+            return;
+        }
 
-            public void onDrawerClosed(View view) {
-                super.onDrawerClosed(view);
-                getActivity().invalidateOptionsMenu();
-                mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-            }
-        };
+        bottomSheetDialog = new BottomSheetDialog(activity, new ThemeUtils(getContext()).getBottomDialogTheme());
+        View sheetView = getActivity().getLayoutInflater().inflate(R.layout.bottom_sheet, null);
+        final RecyclerView recyclerView = sheetView.findViewById(R.id.recyclerView);
 
-        mDrawerToggle.setDrawerIndicatorEnabled(true);
-        mDrawerLayout.addDrawerListener(mDrawerToggle);
+        final SortDialogAdapter adapter = new SortDialogAdapter(getActivity(), recyclerView, sortingOptions, getSelectedSortingOrder(), new RecyclerViewClickListener() {
+            @Override
+            public void onItemClicked(SortDialogAdapter.ViewHolder holder, int position) {
+                holder.updateItemColor(selectedSortingOrder);
+                performSelectedSearch(position);
+                bottomSheetDialog.dismiss();
+            }
+        });
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        bottomSheetDialog.setContentView(sheetView);
     }
 
     protected void checkPreviouslyCheckedItems() {
         getListView().clearChoices();
         List<Integer> selectedPositions = new ArrayList<>();
         int listViewPosition = 0;
-        Cursor cursor = mListAdapter.getCursor();
+        Cursor cursor = listAdapter.getCursor();
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 long instanceId = cursor.getLong(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID));
-                if (mSelectedInstances.contains(instanceId)) {
+                if (selectedInstances.contains(instanceId)) {
                     selectedPositions.add(listViewPosition);
                 }
                 listViewPosition++;
@@ -245,17 +212,6 @@ abstract class AppListFragment extends ListFragment {
         }
     }
 
-    private void hideSearchBox() {
-        mInputSearch.setText("");
-        mSearchBoxLayout.setVisibility(View.GONE);
-        Collect.getInstance().hideKeyboard(mInputSearch);
-    }
-
-    private void showSearchBox() {
-        mSearchBoxLayout.setVisibility(View.VISIBLE);
-        Collect.getInstance().showKeyboard(mInputSearch);
-    }
-
     protected abstract void updateAdapter();
 
     protected abstract String getSortingOrderKey();
@@ -265,21 +221,15 @@ abstract class AppListFragment extends ListFragment {
     }
 
     /**
-     * Returns the IDs of the checked items, using the ListView of this activity.
+     * Returns the IDs of the checked items, as an array of Long
      */
-    protected long[] getCheckedIds() {
-        return getCheckedIds(getListView());
-    }
-
-    /**
-     * Returns the IDs of the checked items, using the ListView provided
-     */
-    protected long[] getCheckedIds(ListView lv) {
+    protected Long[] getCheckedIdObjects() {
         // This method could be simplified by using getCheckedItemIds, if one ensured that
         // IDs were “stable” (see the getCheckedItemIds doc).
+        ListView lv = getListView();
         int itemCount = lv.getCount();
         int checkedItemCount = lv.getCheckedItemCount();
-        long[] checkedIds = new long[checkedItemCount];
+        Long[] checkedIds = new Long[checkedItemCount];
         int resultIndex = 0;
         for (int posIdx = 0; posIdx < itemCount; posIdx++) {
             if (lv.isItemChecked(posIdx)) {
@@ -290,24 +240,12 @@ abstract class AppListFragment extends ListFragment {
         return checkedIds;
     }
 
-    /**
-     * Returns the IDs of the checked items, as an array of Long
-     */
-    protected Long[] getCheckedIdObjects() {
-        long[] checkedIds = getCheckedIds();
-        Long[] checkedIdObjects = new Long[checkedIds.length];
-        for (int i = 0; i < checkedIds.length; i++) {
-            checkedIdObjects[i] = checkedIds[i];
-        }
-        return checkedIdObjects;
-    }
-
     protected int getCheckedCount() {
         return getListView().getCheckedItemCount();
     }
 
     private void saveSelectedSortingOrder(int selectedStringOrder) {
-        mSelectedSortingOrder = selectedStringOrder;
+        selectedSortingOrder = selectedStringOrder;
         PreferenceManager.getDefaultSharedPreferences(Collect.getInstance())
                 .edit()
                 .putInt(getSortingOrderKey(), selectedStringOrder)
@@ -315,12 +253,19 @@ abstract class AppListFragment extends ListFragment {
     }
 
     protected void restoreSelectedSortingOrder() {
-        mSelectedSortingOrder = PreferenceManager
+        selectedSortingOrder = PreferenceManager
                 .getDefaultSharedPreferences(Collect.getInstance())
                 .getInt(getSortingOrderKey(), BY_NAME_ASC);
     }
 
+    protected int getSelectedSortingOrder() {
+        if (selectedSortingOrder == null) {
+            restoreSelectedSortingOrder();
+        }
+        return selectedSortingOrder;
+    }
+
     protected CharSequence getFilterText() {
-        return mInputSearch != null ? mInputSearch.getText() : "";
+        return filterText != null ? filterText : "";
     }
 }

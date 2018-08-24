@@ -17,11 +17,12 @@ package org.odk.collect.android.tasks;
 import android.content.ContentResolver;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.DeleteFormsListener;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
+
+import timber.log.Timber;
 
 /**
  * Task responsible for deleting selected forms.
@@ -30,13 +31,12 @@ import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
  * @author mitchellsundt@gmail.com
  */
 public class DeleteFormsTask extends AsyncTask<Long, Void, Integer> {
-    private static final String t = "DeleteFormsTask";
 
     private ContentResolver cr;
     private DeleteFormsListener dl;
 
-    private int successCount = 0;
-    private int toDeleteCount = 0;
+    private int successCount;
+    private int toDeleteCount;
 
     @Override
     protected Integer doInBackground(Long... params) {
@@ -64,8 +64,7 @@ public class DeleteFormsTask extends AsyncTask<Long, Void, Integer> {
                             deleteForm.toString());
                 }
             } catch (Exception ex) {
-                Log.e(t, "Exception during delete of: " + param.toString() + " exception: "
-                        + ex.toString());
+                Timber.e("Exception during delete of: %s exception: %s", param.toString(), ex.toString());
             }
         }
         successCount = deleted;

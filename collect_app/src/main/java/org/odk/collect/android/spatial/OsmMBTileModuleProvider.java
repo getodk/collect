@@ -15,10 +15,10 @@
 /**
  * @author Jon Nordling (jonnordling@gmail.com)
  */
+
 package org.odk.collect.android.spatial;
 
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.IRegisterReceiver;
@@ -29,17 +29,15 @@ import org.osmdroid.tileprovider.modules.MapTileModuleProviderBase;
 import org.osmdroid.tileprovider.tilesource.ITileSource;
 import org.osmdroid.tileprovider.util.StreamUtils;
 
-import java.io.File;
 import java.io.InputStream;
 
+import timber.log.Timber;
 
 public class OsmMBTileModuleProvider extends MapTileFileStorageProviderBase {
 
     protected OsmMBTileSource tileSource;
-    private static final String t = "MBTileModuleProvider";
 
-    public OsmMBTileModuleProvider(IRegisterReceiver receiverRegistrar,
-            File file, OsmMBTileSource tileSource) {
+    public OsmMBTileModuleProvider(IRegisterReceiver receiverRegistrar, OsmMBTileSource tileSource) {
 
         // Call the super constructor
         super(receiverRegistrar,
@@ -83,11 +81,11 @@ public class OsmMBTileModuleProvider extends MapTileFileStorageProviderBase {
 
     @Override
     public void setTileSource(ITileSource tileSource) {
-        Log.w(t, "*** Warning: someone's trying to reassign MBTileModuleProvider's tileSource!");
+        Timber.w("*** Warning: someone's trying to reassign MBTileModuleProvider's tileSource!");
         if (tileSource instanceof OsmMBTileSource) {
             this.tileSource = (OsmMBTileSource) tileSource;
         } else {
-//            logger.warn("*** Warning: and it wasn't even an MBTileSource! That's just rude!");
+        // logger.warn("*** Warning: and it wasn't even an MBTileSource! That's just rude!");
 
         }
     }
@@ -95,29 +93,28 @@ public class OsmMBTileModuleProvider extends MapTileFileStorageProviderBase {
     private class TileLoader extends MapTileModuleProviderBase.TileLoader {
 
         @Override
-        public Drawable loadTile(final MapTileRequestState pState) {
+        public Drawable loadTile(final MapTileRequestState state) {
 
             // if there's no sdcard then don't do anything
             if (!isSdCardAvailable()) {
                 return null;
             }
 
-            MapTile pTile = pState.getMapTile();
+            MapTile mapTile = state.getMapTile();
             InputStream inputStream = null;
 
             try {
-                inputStream = tileSource.getInputStream(pTile);
+                inputStream = tileSource.getInputStream(mapTile);
 
                 if (inputStream != null) {
-                    Drawable drawable = tileSource.getDrawable(inputStream);
 
                     // Note that the finally clause will be called before
                     // the value is returned!
-                    return drawable;
+                    return tileSource.getDrawable(inputStream);
                 }
 
             } catch (Throwable e) {
-                Log.e(t, "Error loading tile", e);
+                Timber.e(e, "Error loading tile");
 
             } finally {
                 if (inputStream != null) {

@@ -13,12 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.odk.collect.android;
 
 import android.content.ContentValues;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.preference.PreferenceManager;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.After;
@@ -40,8 +42,8 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 public class ResetAppStateTestCase {
@@ -70,9 +72,9 @@ public class ResetAppStateTestCase {
         resetAppState(Collections.singletonList(ResetUtility.ResetAction.RESET_PREFERENCES));
 
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
-        assertEquals(null, settings.getString(PreferenceKeys.KEY_USERNAME, null));
-        assertEquals(null, settings.getString(PreferenceKeys.KEY_PASSWORD, null));
-        assertEquals(true, settings.getBoolean(AdminKeys.KEY_VIEW_SENT, true));
+        assertEquals(settings.getString(PreferenceKeys.KEY_USERNAME, ""), "");
+        assertEquals(settings.getString(PreferenceKeys.KEY_PASSWORD, ""), "");
+        assertTrue(settings.getBoolean(AdminKeys.KEY_VIEW_SENT, true));
 
         assertEquals(0, getFormsCount());
         assertEquals(0, getInstancesCount());
@@ -118,7 +120,7 @@ public class ResetAppStateTestCase {
     }
 
     private void resetAppState(List<Integer> resetActions) {
-        List<Integer> failedResetActions = new ResetUtility().reset(Collect.getInstance(), resetActions);
+        List<Integer> failedResetActions = new ResetUtility().reset(InstrumentationRegistry.getTargetContext(), resetActions);
         assertEquals(0, failedResetActions.size());
     }
 
@@ -140,7 +142,7 @@ public class ResetAppStateTestCase {
                 .putBoolean(AdminKeys.KEY_VIEW_SENT, false)
                 .apply();
 
-        assertEquals(false, settings.getBoolean(AdminKeys.KEY_VIEW_SENT, false));
+        assertFalse(settings.getBoolean(AdminKeys.KEY_VIEW_SENT, false));
 
         assertTrue(new File(Collect.SETTINGS).exists() || new File(Collect.SETTINGS).mkdir());
         assertTrue(new File(Collect.SETTINGS + "/collect.settings").createNewFile());

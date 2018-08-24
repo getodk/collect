@@ -19,7 +19,6 @@
 package org.odk.collect.android.tasks;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import org.javarosa.core.services.transport.payload.ByteArrayPayload;
 import org.odk.collect.android.application.Collect;
@@ -28,6 +27,8 @@ import org.odk.collect.android.logic.FormController;
 
 import java.io.File;
 
+import timber.log.Timber;
+
 /**
  * Author: Meletis Margaritis
  * Date: 27/6/2013
@@ -35,12 +36,11 @@ import java.io.File;
  */
 public class SavePointTask extends AsyncTask<Void, Void, String> {
 
-    private final static String t = "SavePointTask";
-    private static final Object lock = new Object();
-    private static int lastPriorityUsed = 0;
+    private static final Object LOCK = new Object();
+    private static int lastPriorityUsed;
 
     private final SavePointListener listener;
-    private int priority;
+    private final int priority;
 
     public SavePointTask(SavePointListener listener) {
         this.listener = listener;
@@ -49,11 +49,9 @@ public class SavePointTask extends AsyncTask<Void, Void, String> {
 
     @Override
     protected String doInBackground(Void... params) {
-        synchronized (lock) {
+        synchronized (LOCK) {
             if (priority < lastPriorityUsed) {
-                Log.w(t, "Savepoint thread (p=" + priority
-                        + ") was cancelled (a) because another one is waiting (p="
-                        + lastPriorityUsed + ")");
+                Timber.w("Savepoint thread (p=%d) was cancelled (a) because another one is waiting (p=%d)", priority, lastPriorityUsed);
                 return null;
             }
 
@@ -61,26 +59,24 @@ public class SavePointTask extends AsyncTask<Void, Void, String> {
 
             try {
                 FormController formController = Collect.getInstance().getFormController();
-                File temp = SaveToDiskTask.savepointFile(formController.getInstancePath());
+                File temp = SaveToDiskTask.getSavepointFile(formController.getInstanceFile().getName());
                 ByteArrayPayload payload = formController.getFilledInFormXml();
 
                 if (priority < lastPriorityUsed) {
-                    Log.w(t, "Savepoint thread (p=" + priority
-                            + ") was cancelled (b) because another one is waiting (p="
-                            + lastPriorityUsed + ")");
+                    Timber.w("Savepoint thread (p=%d) was cancelled (b) because another one is waiting (p=%d)", priority, lastPriorityUsed);
                     return null;
                 }
 
                 // write out xml
-                SaveToDiskTask.exportXmlFile(payload, temp.getAbsolutePath());
+                SaveToDiskTask.writeFile(payload, temp.getAbsolutePath());
 
                 long end = System.currentTimeMillis();
-                Log.i(t, "Savepoint ms: " + Long.toString(end - start) + " to " + temp);
+                Timber.i("Savepoint ms: %s to %s", Long.toString(end - start), temp.toString());
 
                 return null;
             } catch (Exception e) {
                 String msg = e.getMessage();
-                Log.e(t, msg, e);
+                Timber.e(e);
                 return msg;
             }
         }

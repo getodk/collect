@@ -16,16 +16,12 @@ package org.odk.collect.android.fragments;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.util.Log;
-import android.view.LayoutInflater;
+import android.support.annotation.NonNull;
+import android.support.v4.content.CursorLoader;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.dao.FormsDao;
@@ -37,8 +33,7 @@ import org.odk.collect.android.tasks.DiskSyncTask;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.VersionHidingCursorAdapter;
 
-import java.util.ArrayList;
-import java.util.List;
+import timber.log.Timber;
 
 /**
  * Responsible for displaying and deleting all the valid forms in the forms
@@ -50,88 +45,70 @@ import java.util.List;
 public class FormManagerList extends FormListFragment implements DiskSyncListener,
         DeleteFormsListener, View.OnClickListener {
     private static final String FORM_MANAGER_LIST_SORTING_ORDER = "formManagerListSortingOrder";
-    private static final String syncMsgKey = "syncmsgkey";
-    private static String TAG = "FormManagerList";
-    BackgroundTasks mBackgroundTasks; // handled across orientation changes
-    private AlertDialog mAlertDialog;
+    BackgroundTasks backgroundTasks; // handled across orientation changes
+    private AlertDialog alertDialog;
 
     public static FormManagerList newInstance() {
         return new FormManagerList();
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
-    }
+    public void onViewCreated(@NonNull View rootView, Bundle savedInstanceState) {
 
-    @Override
-    public void onViewCreated(View rootView, Bundle savedInstanceState) {
-
-        mDeleteButton.setOnClickListener(this);
-        mToggleButton.setOnClickListener(this);
+        deleteButton.setOnClickListener(this);
+        toggleButton.setOnClickListener(this);
 
         setupAdapter();
 
-        if (mBackgroundTasks == null) {
-            mBackgroundTasks = new BackgroundTasks();
-            mBackgroundTasks.mDiskSyncTask = new DiskSyncTask();
-            mBackgroundTasks.mDiskSyncTask.setDiskSyncListener(this);
-            mBackgroundTasks.mDiskSyncTask.execute((Void[]) null);
+        if (backgroundTasks == null) {
+            backgroundTasks = new BackgroundTasks();
+            backgroundTasks.diskSyncTask = new DiskSyncTask();
+            backgroundTasks.diskSyncTask.setDiskSyncListener(this);
+            backgroundTasks.diskSyncTask.execute((Void[]) null);
         }
         super.onViewCreated(rootView, savedInstanceState);
-    }
-
-
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
     }
 
     @Override
     public void onResume() {
         // hook up to receive completion events
-        mBackgroundTasks.mDiskSyncTask.setDiskSyncListener(this);
-        if (mBackgroundTasks.mDeleteFormsTask != null) {
-            mBackgroundTasks.mDeleteFormsTask.setDeleteListener(this);
+        backgroundTasks.diskSyncTask.setDiskSyncListener(this);
+        if (backgroundTasks.deleteFormsTask != null) {
+            backgroundTasks.deleteFormsTask.setDeleteListener(this);
         }
         super.onResume();
         // async task may have completed while we were reorienting...
-        if (mBackgroundTasks.mDiskSyncTask.getStatus() == AsyncTask.Status.FINISHED) {
-            syncComplete(mBackgroundTasks.mDiskSyncTask.getStatusMessage());
+        if (backgroundTasks.diskSyncTask.getStatus() == AsyncTask.Status.FINISHED) {
+            syncComplete(backgroundTasks.diskSyncTask.getStatusMessage());
         }
-        if (mBackgroundTasks.mDeleteFormsTask != null
-                && mBackgroundTasks.mDeleteFormsTask.getStatus() == AsyncTask.Status.FINISHED) {
-            deleteComplete(mBackgroundTasks.mDeleteFormsTask.getDeleteCount());
+        if (backgroundTasks.deleteFormsTask != null
+                && backgroundTasks.deleteFormsTask.getStatus() == AsyncTask.Status.FINISHED) {
+            deleteComplete(backgroundTasks.deleteFormsTask.getDeleteCount());
         }
     }
 
     @Override
     public void onPause() {
-        mBackgroundTasks.mDiskSyncTask.setDiskSyncListener(null);
-        if (mBackgroundTasks.mDeleteFormsTask != null) {
-            mBackgroundTasks.mDeleteFormsTask.setDeleteListener(null);
+        backgroundTasks.diskSyncTask.setDiskSyncListener(null);
+        if (backgroundTasks.deleteFormsTask != null) {
+            backgroundTasks.deleteFormsTask.setDeleteListener(null);
         }
-        if (mAlertDialog != null && mAlertDialog.isShowing()) {
-            mAlertDialog.dismiss();
+        if (alertDialog != null && alertDialog.isShowing()) {
+            alertDialog.dismiss();
         }
 
         super.onPause();
     }
 
     private void setupAdapter() {
-        List<Long> checkedForms = new ArrayList<>();
-        for (long a : getListView().getCheckedItemIds()) {
-            checkedForms.add(a);
-        }
-        String[] data = new String[]{FormsColumns.DISPLAY_NAME, FormsColumns.DISPLAY_SUBTEXT, FormsColumns.JR_VERSION};
+        String[] data = new String[]{FormsColumns.DISPLAY_NAME, FormsColumns.DISPLAY_SUBTEXT, FormsColumns.JR_VERSION,
+                                        FormsColumns.JR_FORM_ID};
         int[] view = new int[]{R.id.text1, R.id.text2, R.id.text3};
 
-        mListAdapter = new VersionHidingCursorAdapter(
+        listAdapter = new VersionHidingCursorAdapter(
                 FormsColumns.JR_VERSION, getActivity(),
-                R.layout.two_item_multiple_choice, getCursor(), data, view);
-        setListAdapter(mListAdapter);
+                R.layout.two_item_multiple_choice, null, data, view);
+        setListAdapter(listAdapter);
         checkPreviouslyCheckedItems();
     }
 
@@ -141,13 +118,8 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
     }
 
     @Override
-    protected void updateAdapter() {
-        mListAdapter.changeCursor(getCursor());
-        super.updateAdapter();
-    }
-
-    private Cursor getCursor() {
-        return new FormsDao().getFormsCursor(getFilterText(), getSortingOrder());
+    protected CursorLoader getCursorLoader() {
+        return new FormsDao().getFormsCursorLoader(getFilterText(), getSortingOrder());
     }
 
     /**
@@ -155,9 +127,9 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
      */
     private void createDeleteFormsDialog() {
         logger.logAction(this, "createDeleteFormsDialog", "show");
-        mAlertDialog = new AlertDialog.Builder(getContext()).create();
-        mAlertDialog.setTitle(getString(R.string.delete_file));
-        mAlertDialog.setMessage(getString(R.string.delete_confirm,
+        alertDialog = new AlertDialog.Builder(getContext()).create();
+        alertDialog.setTitle(getString(R.string.delete_file));
+        alertDialog.setMessage(getString(R.string.delete_confirm,
                 String.valueOf(getCheckedCount())));
         DialogInterface.OnClickListener dialogYesNoListener =
                 new DialogInterface.OnClickListener() {
@@ -168,7 +140,7 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
                                 logger.logAction(this, "createDeleteFormsDialog", "delete");
                                 deleteSelectedForms();
                                 if (getListView().getCount() == getCheckedCount()) {
-                                    mToggleButton.setEnabled(false);
+                                    toggleButton.setEnabled(false);
                                 }
                                 break;
                             case DialogInterface.BUTTON_NEGATIVE: // do nothing
@@ -177,12 +149,12 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
                         }
                     }
                 };
-        mAlertDialog.setCancelable(false);
-        mAlertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.delete_yes),
+        alertDialog.setCancelable(false);
+        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.delete_yes),
                 dialogYesNoListener);
-        mAlertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.delete_no),
+        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.delete_no),
                 dialogYesNoListener);
-        mAlertDialog.show();
+        alertDialog.show();
     }
 
     /**
@@ -191,12 +163,12 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
      */
     private void deleteSelectedForms() {
         // only start if no other task is running
-        if (mBackgroundTasks.mDeleteFormsTask == null) {
-            mBackgroundTasks.mDeleteFormsTask = new DeleteFormsTask();
-            mBackgroundTasks.mDeleteFormsTask
+        if (backgroundTasks.deleteFormsTask == null) {
+            backgroundTasks.deleteFormsTask = new DeleteFormsTask();
+            backgroundTasks.deleteFormsTask
                     .setContentResolver(getActivity().getContentResolver());
-            mBackgroundTasks.mDeleteFormsTask.setDeleteListener(this);
-            mBackgroundTasks.mDeleteFormsTask.execute(getCheckedIdObjects());
+            backgroundTasks.deleteFormsTask.setDeleteListener(this);
+            backgroundTasks.deleteFormsTask.execute(getCheckedIdObjects());
         } else {
             ToastUtils.showLongToast(R.string.file_delete_in_progress);
         }
@@ -208,33 +180,33 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
     }
 
     @Override
-    public void syncComplete(String result) {
-        Log.i(TAG, "Disk scan complete");
-        TextView tv = (TextView) rootView.findViewById(R.id.status_text);
-        tv.setText(result);
+    public void syncComplete(@NonNull String result) {
+        Timber.i("Disk scan complete");
+        hideProgressBarAndAllow();
+        showSnackbar(result);
     }
 
     @Override
     public void deleteComplete(int deletedForms) {
-        Log.i(TAG, "Delete forms complete");
+        Timber.i("Delete forms complete");
         logger.logAction(this, "deleteComplete", Integer.toString(deletedForms));
-        final int toDeleteCount = mBackgroundTasks.mDeleteFormsTask.getToDeleteCount();
+        final int toDeleteCount = backgroundTasks.deleteFormsTask.getToDeleteCount();
 
         if (deletedForms == toDeleteCount) {
             // all deletes were successful
             ToastUtils.showShortToast(getString(R.string.file_deleted_ok, String.valueOf(deletedForms)));
         } else {
             // had some failures
-            Log.e(TAG, "Failed to delete " + (toDeleteCount - deletedForms) + " forms");
+            Timber.e("Failed to delete %d forms", toDeleteCount - deletedForms);
             ToastUtils.showLongToast(getString(R.string.file_deleted_error, String.valueOf(getCheckedCount()
                     - deletedForms), String.valueOf(getCheckedCount())));
         }
-        mBackgroundTasks.mDeleteFormsTask = null;
+        backgroundTasks.deleteFormsTask = null;
         getListView().clearChoices(); // doesn't unset the checkboxes
         for (int i = 0; i < getListView().getCount(); ++i) {
             getListView().setItemChecked(i, false);
         }
-        mDeleteButton.setEnabled(false);
+        deleteButton.setEnabled(false);
     }
 
     @Override
@@ -253,15 +225,22 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
             case R.id.toggle_button:
                 ListView lv = getListView();
                 boolean allChecked = toggleChecked(lv);
-                toggleButtonLabel(mToggleButton, getListView());
-                mDeleteButton.setEnabled(allChecked);
+                if (allChecked) {
+                    for (int i = 0; i < lv.getCount(); i++) {
+                        selectedInstances.add(lv.getItemIdAtPosition(i));
+                    }
+                } else {
+                    selectedInstances.clear();
+                }
+                toggleButtonLabel(toggleButton, getListView());
+                deleteButton.setEnabled(allChecked);
                 break;
         }
     }
 
     private static class BackgroundTasks {
-        DiskSyncTask mDiskSyncTask = null;
-        DeleteFormsTask mDeleteFormsTask = null;
+        DiskSyncTask diskSyncTask;
+        DeleteFormsTask deleteFormsTask;
 
         BackgroundTasks() {
         }

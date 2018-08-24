@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/found_in_settings">
+        <CheckBoxPreference
+            android:key="change_server"
+            android:title="@string/server" />
+        <org.odk.collect.android.preferences.ExtendedCheckboxPreference
+            android:key="change_submission_transport"
+            android:title="@string/submission_transport_admin_setting"
+            android:dependency="change_server"
+            />
+        <CheckBoxPreference
+            android:key="change_form_metadata"
+            android:title="@string/form_metadata" />
+        <CheckBoxPreference
+            android:key="change_autosend"
+            android:title="@string/autosend" />
+        <CheckBoxPreference
+            android:key="change_navigation"
+            android:title="@string/navigation" />
+        <CheckBoxPreference
+            android:key="change_constraint_behavior"
+            android:title="@string/constraint_behavior_title" />
+        <CheckBoxPreference
+            android:key="change_app_theme"
+            android:title="@string/app_theme" />
+        <CheckBoxPreference
+            android:key="change_font_size"
+            android:title="@string/font_size" />
+        <CheckBoxPreference
+            android:key="change_app_language"
+            android:title="@string/language" />
+        <CheckBoxPreference
+            android:key="instance_form_sync"
+            android:title="@string/instance_sync" />
+        <CheckBoxPreference
+            android:key="periodic_form_updates_check"
+            android:title="@string/periodic_form_updates_check_title" />
+        <CheckBoxPreference
+            android:key="automatic_update"
+            android:title="@string/automatic_download" />
+        <CheckBoxPreference
+            android:key="hide_old_form_versions"
+            android:title="@string/hide_old_form_versions_setting_title" />
+        <CheckBoxPreference
+            android:key="default_to_finalized"
+            android:title="@string/default_completed" />
+        <CheckBoxPreference
+            android:key="delete_after_send"
+            android:title="@string/delete_after_send" />
+        <CheckBoxPreference
+            android:key="high_resolution"
+            android:title="@string/high_resolution_title" />
+        <CheckBoxPreference
+            android:key="image_size"
+            android:title="@string/image_size_title" />
+        <CheckBoxPreference
+            android:key="show_splash_screen"
+            android:title="@string/show_splash_title" />
+        <CheckBoxPreference
+            android:key="show_map_sdk"
+            android:title="@string/show_map_sdk" />
+        <CheckBoxPreference
+            android:key="show_map_basemap"
+            android:title="@string/show_map_basemap" />
+        <CheckBoxPreference
+            android:key="analytics"
+            android:title="@string/analytics" />
+    </PreferenceCategory>
+</PreferenceScreen>

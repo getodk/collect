@@ -14,15 +14,16 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.util.Log;
-import android.util.TypedValue;
+import android.support.annotation.Nullable;
+import android.support.v7.widget.AppCompatRadioButton;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
@@ -45,11 +46,16 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.external.ExternalSelectChoice;
+import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.ViewIds;
+import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import timber.log.Timber;
 
 /**
  * ListWidget handles select-one fields using radio buttons. The radio buttons are aligned
@@ -61,30 +67,36 @@ import java.util.List;
  *
  * @author Jeff Beorse (jeff@beorse.net)
  */
-public class ListWidget extends QuestionWidget implements OnCheckedChangeListener {
-    private static final String t = "ListWidget";
+@SuppressLint("ViewConstructor")
+public class ListWidget extends QuestionWidget implements MultiChoiceWidget, OnCheckedChangeListener {
 
-    // Holds the entire question and answers. It is a horizontally aligned linear layout
-    // needed because it is created in the super() constructor via addQuestionText() call.
-    LinearLayout questionLayout;
+    @Nullable
+    private AdvanceToNextListener listener;
 
-    List<SelectChoice> mItems; // may take a while to compute
+    private final boolean autoAdvance;
+
+    List<SelectChoice> items; // may take a while to compute
 
     ArrayList<RadioButton> buttons;
     View center;
 
-    public ListWidget(Context context, FormEntryPrompt prompt, boolean displayLabel) {
+    public ListWidget(Context context, FormEntryPrompt prompt, boolean displayLabel, boolean autoAdvance) {
         super(context, prompt);
 
-        // SurveyCTO-added support for dynamic select content (from .csv files)
-        XPathFuncExpr xPathFuncExpr = ExternalDataUtil.getSearchXPathExpression(
-                prompt.getAppearanceHint());
-        if (xPathFuncExpr != null) {
-            mItems = ExternalDataUtil.populateExternalChoices(prompt, xPathFuncExpr);
-        } else {
-            mItems = prompt.getSelectChoices();
+        this.autoAdvance = autoAdvance;
+        if (context instanceof AdvanceToNextListener) {
+            listener = (AdvanceToNextListener) context;
         }
-        buttons = new ArrayList<RadioButton>();
+
+        // SurveyCTO-added support for dynamic select content (from .csv files)
+        XPathFuncExpr xpathFuncExpr = ExternalDataUtil.getSearchXPathExpression(
+                prompt.getAppearanceHint());
+        if (xpathFuncExpr != null) {
+            items = ExternalDataUtil.populateExternalChoices(prompt, xpathFuncExpr);
+        } else {
+            items = prompt.getSelectChoices();
+        }
+        buttons = new ArrayList<>();
 
         // Layout holds the horizontal list of buttons
         LinearLayout buttonLayout = new LinearLayout(context);
@@ -94,42 +106,41 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
             s = ((Selection) prompt.getAnswerValue().getValue()).getValue();
         }
 
-        if (mItems != null) {
-            for (int i = 0; i < mItems.size(); i++) {
-                RadioButton r = new RadioButton(getContext());
-
-                r.setId(QuestionWidget.newUniqueId());
-                r.setTag(Integer.valueOf(i));
+        if (items != null) {
+            for (int i = 0; i < items.size(); i++) {
+                AppCompatRadioButton r = new AppCompatRadioButton(getContext());
+                r.setId(ViewIds.generateViewId());
+                r.setTag(i);
                 r.setEnabled(!prompt.isReadOnly());
                 r.setFocusable(!prompt.isReadOnly());
 
                 buttons.add(r);
 
-                if (mItems.get(i).getValue().equals(s)) {
+                if (items.get(i).getValue().equals(s)) {
                     r.setChecked(true);
                 }
                 r.setOnCheckedChangeListener(this);
 
                 String imageURI;
-                if (mItems.get(i) instanceof ExternalSelectChoice) {
-                    imageURI = ((ExternalSelectChoice) mItems.get(i)).getImage();
+                if (items.get(i) instanceof ExternalSelectChoice) {
+                    imageURI = ((ExternalSelectChoice) items.get(i)).getImage();
                 } else {
-                    imageURI = prompt.getSpecialFormSelectChoiceText(mItems.get(i),
+                    imageURI = prompt.getSpecialFormSelectChoiceText(items.get(i),
                             FormEntryCaption.TEXT_FORM_IMAGE);
                 }
 
                 // build image view (if an image is provided)
-                ImageView mImageView = null;
-                TextView mMissingImage = null;
+                ImageView imageView = null;
+                TextView missingImage = null;
 
-                final int labelId = QuestionWidget.newUniqueId();
+                final int labelId = ViewIds.generateViewId();
 
                 // Now set up the image view
                 String errorMsg = null;
                 if (imageURI != null) {
                     try {
                         String imageFilename =
-                                ReferenceManager._().DeriveReference(imageURI).getLocalURI();
+                                ReferenceManager.instance().DeriveReference(imageURI).getLocalURI();
                         final File imageFile = new File(imageFilename);
                         if (imageFile.exists()) {
                             Bitmap b = null;
@@ -137,19 +148,17 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
                                 DisplayMetrics metrics = context.getResources().getDisplayMetrics();
                                 int screenWidth = metrics.widthPixels;
                                 int screenHeight = metrics.heightPixels;
-                                b =
-                                        FileUtils.getBitmapScaledToDisplay(imageFile, screenHeight,
-                                                screenWidth);
+                                b = FileUtils.getBitmapScaledToDisplay(imageFile, screenHeight, screenWidth);
                             } catch (OutOfMemoryError e) {
                                 errorMsg = "ERROR: " + e.getMessage();
                             }
 
                             if (b != null) {
-                                mImageView = new ImageView(getContext());
-                                mImageView.setPadding(2, 2, 2, 2);
-                                mImageView.setAdjustViewBounds(true);
-                                mImageView.setImageBitmap(b);
-                                mImageView.setId(labelId);
+                                imageView = new ImageView(getContext());
+                                imageView.setPadding(2, 2, 2, 2);
+                                imageView.setAdjustViewBounds(true);
+                                imageView.setImageBitmap(b);
+                                imageView.setId(labelId);
                             } else if (errorMsg == null) {
                                 // An error hasn't been logged and loading the image failed, so it's
                                 // likely
@@ -157,7 +166,7 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
                                 errorMsg = getContext().getString(R.string.file_invalid, imageFile);
 
                             }
-                        } else if (errorMsg == null) {
+                        } else {
                             // An error hasn't been logged. We should have an image, but the file
                             // doesn't
                             // exist.
@@ -166,25 +175,24 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
 
                         if (errorMsg != null) {
                             // errorMsg is only set when an error has occured
-                            Log.e(t, errorMsg);
-                            mMissingImage = new TextView(getContext());
-                            mMissingImage.setText(errorMsg);
+                            Timber.e(errorMsg);
+                            missingImage = new TextView(getContext());
+                            missingImage.setText(errorMsg);
 
-                            mMissingImage.setPadding(2, 2, 2, 2);
-                            mMissingImage.setId(labelId);
+                            missingImage.setPadding(2, 2, 2, 2);
+                            missingImage.setId(labelId);
                         }
+
                     } catch (InvalidReferenceException e) {
-                        Log.e(t, "image invalid reference exception");
+                        Timber.e(e, "Invalid image reference due to %s ", e.getMessage());
                     }
-                } else {
-                    // There's no imageURI listed, so just ignore it.
                 }
 
                 // build text label. Don't assign the text to the built in label to he
                 // button because it aligns horizontally, and we want the label on top
                 TextView label = new TextView(getContext());
-                label.setText(prompt.getSelectChoiceText(mItems.get(i)));
-                label.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+                label.setText(prompt.getSelectChoiceText(items.get(i)));
+                label.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
                 label.setGravity(Gravity.CENTER_HORIZONTAL);
                 if (!displayLabel) {
                     label.setVisibility(View.GONE);
@@ -198,20 +206,19 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
                                 LayoutParams.WRAP_CONTENT);
                 headerParams.gravity = Gravity.CENTER_HORIZONTAL;
 
-
                 LinearLayout.LayoutParams buttonParams =
                         new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
                                 LayoutParams.WRAP_CONTENT);
                 buttonParams.gravity = Gravity.CENTER_HORIZONTAL;
 
-                if (mImageView != null) {
-                    mImageView.setScaleType(ScaleType.CENTER);
+                if (imageView != null) {
+                    imageView.setScaleType(ScaleType.CENTER);
                     if (!displayLabel) {
-                        mImageView.setVisibility(View.GONE);
+                        imageView.setVisibility(View.GONE);
                     }
-                    answer.addView(mImageView, headerParams);
-                } else if (mMissingImage != null) {
-                    answer.addView(mMissingImage, headerParams);
+                    answer.addView(imageView, headerParams);
+                } else if (missingImage != null) {
+                    answer.addView(missingImage, headerParams);
                 } else {
                     if (displayLabel) {
                         label.setId(labelId);
@@ -232,7 +239,6 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
             }
         }
 
-
         buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
 
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
@@ -240,7 +246,6 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
         params.addRule(RelativeLayout.RIGHT_OF, center.getId());
         addView(buttonLayout, params);
     }
-
 
     @Override
     public void clearAnswer() {
@@ -252,27 +257,16 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
         }
     }
 
-
     @Override
     public IAnswerData getAnswer() {
         int i = getCheckedId();
         if (i == -1) {
             return null;
         } else {
-            SelectChoice sc = mItems.get(i);
+            SelectChoice sc = items.get(i);
             return new SelectOneData(new Selection(sc));
         }
     }
-
-
-    @Override
-    public void setFocus(Context context) {
-        // Hide the soft keyboard if it's showing.
-        InputMethodManager inputManager =
-                (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
-    }
-
 
     public int getCheckedId() {
         for (int i = 0; i < buttons.size(); ++i) {
@@ -284,7 +278,6 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
         return -1;
     }
 
-
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (!isChecked) {
@@ -293,14 +286,17 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
         }
 
         for (RadioButton button : this.buttons) {
-            if (button.isChecked() && !(buttonView == button)) {
+            if (button.isChecked() && buttonView != button) {
                 button.setChecked(false);
             }
         }
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCheckedChanged",
-                mItems.get((Integer) buttonView.getTag()).getValue(), mPrompt.getIndex());
-    }
+                items.get((Integer) buttonView.getTag()).getValue(), getFormEntryPrompt().getIndex());
 
+        if (autoAdvance && listener != null) {
+            listener.advance();
+        }
+    }
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
@@ -308,7 +304,6 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
             r.setOnLongClickListener(l);
         }
     }
-
 
     @Override
     public void cancelLongPress() {
@@ -323,12 +318,25 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
         center = new View(getContext());
         RelativeLayout.LayoutParams centerParams = new RelativeLayout.LayoutParams(0, 0);
         centerParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-        center.setId(QuestionWidget.newUniqueId());
+        center.setId(ViewIds.generateViewId());
         addView(center, centerParams);
 
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         params.addRule(RelativeLayout.LEFT_OF, center.getId());
         addView(v, params);
+    }
+
+    @Override
+    public int getChoiceCount() {
+        return buttons.size();
+    }
+
+    @Override
+    public void setChoiceSelected(int choiceIndex, boolean isSelected) {
+        RadioButton button = buttons.get(choiceIndex);
+        button.setChecked(true);
+
+        onCheckedChanged(button, true);
     }
 }

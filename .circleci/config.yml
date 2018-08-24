@@ -1,0 +1,251 @@
+version: 2
+
+references:
+
+  ## Cache
+  cache_paths: &cache_paths
+    paths:
+      - ~/work/.gradle
+      - ~/.gradle
+      - ~/.m2
+
+  cache_key: &cache_key
+    key: deps-{{ checksum "build.gradle" }}-{{ checksum "collect_app/build.gradle" }}
+
+  cache_tests_key: &cache_tests_key
+    key: test-deps-{{ checksum "build.gradle" }}-{{ checksum "collect_app/build.gradle" }}
+
+  restore_cache: &restore_cache
+    restore_cache:
+      <<: *cache_key
+
+  restore_tests_cache: &restore_tests_cache
+    restore_cache:
+      <<: *cache_tests_key
+
+  save_cache: &save_cache
+    save_cache:
+      <<: *cache_key
+      <<: *cache_paths
+
+  save_tests_cache: &save_tests_cache
+    save_cache:
+      <<: *cache_tests_key
+      <<: *cache_paths
+
+  accept_licenses : &accept_licenses
+    run:
+      name: Accept licenses
+      command: yes | sdkmanager --licenses || true
+
+  ## Workspace
+
+  workspace: &workspace
+    ~/work
+  attach_debug_workspace: &attach_debug_workspace
+    attach_workspace:
+      at: *workspace
+  persist_debug_workspace: &persist_debug_workspace
+    persist_to_workspace:
+      root: *workspace
+      paths:
+        - collect_app/build/outputs/androidTest-results
+        - collect_app/build/outputs/apk
+        - collect_app/build/outputs/code-coverage
+        - collect_app/build/test-results
+  attach_firebase_workspace: &attach_firebase_workspace
+    attach_workspace:
+      at: *workspace
+  persist_firebase_workspace: &persist_firebase_workspace
+    persist_to_workspace:
+      root: *workspace
+      paths:
+        - firebase
+
+  ## Docker image configurations
+
+  android_config: &android_config
+    working_directory: *workspace
+    docker:
+      # This needs to be in line with the configuration from gradle file.
+      # Otherwise an unnecessary platform update is performed on every build
+      - image: circleci/android:api-27-alpha
+  gcloud_config: &gcloud_config
+    working_directory: *workspace
+    docker:
+      - image: google/cloud-sdk:latest
+
+jobs:
+
+  ## Build debug APK and instrumented test APK
+
+  build_debug:
+    <<: *android_config
+    environment:
+#       Runtime configuration build tests
+#       ./gradlew clean assembleDebug
+#       Xms128 - the default on most systems is 256m but gradle spawns some java subprocesses during build that don't need 256m
+#       Xmx512m 1m30s
+#       Xmx768m 1m17s
+#       Xmx1024m ~1min
+#       Xmx1536m ~1min
+#       -XX:+HeapDumpOnOutOfMemoryError in case of an out of memory the java process will dump a heap file on the file system.
+#       The heap file can be analyzed to figure out the root cause or the memory leak.
+#       -DpreDexEnable=false disables pre-dexing step. Pre-dexing is good for local incremental builds during development,
+#       But on a build machine, the performance impact is not worthy because on a CI, every build should be clean.
+
+        GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xms128m -Xmx1024m -XX:+HeapDumpOnOutOfMemoryError" -DpreDexEnable=false'
+    steps:
+        - checkout
+        - *restore_cache
+        - *accept_licenses
+        - run:
+            name: Download dependencies
+            command: ./gradlew androidDependencies
+        - *save_cache
+#       It's faster if we build before running the quality checks, because quality checks depend on build output anyway.
+#       Also, while running gradle on daemon mode, we can even run build targets individually without impacting runtime ramp-up time.
+#       This also implies that we can also observe per-target build timings, instead of just the total execution time from a single command.
+        - run:
+            name: Assemble debug build
+            command: |
+                ./gradlew assembleDebug -PdisablePreDex
+        - run:
+            name: Assemble test build
+            command: |
+                ./gradlew assembleDebugAndroidTest -PdisablePreDex
+        - run:
+            name: Run code quality checks
+#           When running the plain lint target, it will execute by default for all flavors.
+#           This implies building the release and test flavors as well, which are out of scope for this job.
+#           Instead, using lintDebug it's running only once, for the 'debug' flavor that we are building here
+#           This means ~3x faster for the lint task.
+            command: ./gradlew pmd checkstyle lintDebug spotbugsDebug
+        - store_artifacts:
+            path: collect_app/build/reports
+            destination: reports
+#         Since the other workflow are only triggered after this job is successful, caching the build outputs for them can be the last task.
+#         Otherwise we only persist something that will never be used.
+        - *persist_debug_workspace
+
+  ## Run unit tests
+
+  test_unit:
+    <<: *android_config
+    steps:
+        - checkout
+##        - *restore_cache
+##      Depending on actual usage, we could toggle the above cache restoration (the step below includes it.)
+        - *restore_tests_cache
+        - *accept_licenses
+        - run:
+            name: Download dependencies
+            command: ./gradlew androidDependencies
+        - run:
+            name: Run unit tests
+            command: ./gradlew testDebugUnitTest
+        - *save_tests_cache
+        - *persist_debug_workspace
+        - store_artifacts:
+            path: collect_app/build/reports
+            destination: reports
+        - store_test_results:
+            path: collect_app/build/test-results
+
+  ## Run instrumented tests
+
+  test_instrumented:
+    <<: *gcloud_config
+    steps:
+      - *attach_debug_workspace
+      - run:
+          name: Authorize gcloud
+          command: |
+            if [[ "$CIRCLE_PROJECT_USERNAME" == "opendatakit" ]]; then \
+              gcloud config set project api-project-322300403941
+              echo $GCLOUD_SERVICE_KEY | base64 --decode > client-secret.json
+              gcloud auth activate-service-account --key-file client-secret.json
+            fi
+      - run:
+          name: Run integration tests
+          command: |
+            if [[ "$CIRCLE_PROJECT_USERNAME" == "opendatakit" ]]; then \
+              echo "y" | gcloud firebase test android run \
+              --type instrumentation \
+              --app collect_app/build/outputs/apk/debug/*.apk \
+              --test collect_app/build/outputs/apk/androidTest/debug/*.apk \
+              --device model=Nexus5,version=21,locale=en,orientation=portrait \
+              --results-bucket opendatakit-collect-test-results \
+              --environment-variables coverage=true,coverageFile=/sdcard/coverage.ec \
+              --directories-to-pull /sdcard --timeout 20m
+            fi
+      - run:
+          name: Copy integration test results
+          command: |
+            if [[ "$CIRCLE_PROJECT_USERNAME" == "opendatakit" ]]; then \
+              mkdir firebase
+              gsutil -m cp -r -U "`gsutil ls gs://opendatakit-collect-test-results | tail -1`*" /root/work/firebase/ | true
+            fi
+      - *persist_firebase_workspace
+      - store_test_results:
+          path: firebase/
+          destination: /firebase/
+
+  ## Submit JaCoCo coverage report
+
+  report_coverage:
+    <<: *android_config
+    steps:
+      - checkout
+      - *restore_cache
+      - run:
+          name: Download dependencies
+          command: ./gradlew androidDependencies
+      - *attach_debug_workspace
+      - *attach_firebase_workspace
+      - run:
+          name: Move Firebase coverage report
+          command: |
+            if [[ "$CIRCLE_PROJECT_USERNAME" == "opendatakit" ]]; then \
+              mkdir -p collect_app/build/outputs/code-coverage/connected && cp firebase/Nexus5-21-en-portrait/artifacts/coverage.ec collect_app/build/outputs/code-coverage/connected/coverage.ec
+            fi
+      - run:
+          name: Generate JaCoCo report
+          command: ./gradlew -PciBuild=true jacocoTestReport
+      - run:
+          name: Upload coverage report to CodeCov
+          command: bash <(curl -s https://codecov.io/bash)
+      - store_artifacts:
+          path: collect_app/build/reports/
+          destination: /reports/
+
+workflows:
+  version: 2
+  workflow:
+    jobs:
+#       This job will run on every commit on any branch
+      - build_debug
+#       Unit tests should only start after a successful build. Or vice versa?
+      - test_unit:
+#         Although the unit testing task could run in parallel with build task,
+#         in such case, it would not benefit from the previous caching in the event of
+#         any change in the .gradle script files.
+#         Hence,
+          requires:
+            - build_debug
+      # Instrumentation tests should only start after unit tests complete gracefully. Or vice versa?
+      - test_instrumented:
+          requires:
+            - test_unit
+          # We'd like to also filter by username and remove the if/fi above, but username filtering is not supported in CircleCI
+          filters:
+            branches:
+              only: master
+      - report_coverage:
+          requires:
+            - test_unit
+            - test_instrumented
+          # We'd like to also filter by username and remove the if/fi above, but username filtering is not supported in CircleCI
+          filters:
+            branches:
+              only: master

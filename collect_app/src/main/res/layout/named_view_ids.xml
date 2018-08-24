@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Widget view IDs for testing -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="UnusedResources"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <View android:id="@+id/answer_text"
+        android:layout_width="0dp"
+        android:layout_height="0dp"/>
+
+    <View android:id="@+id/simple_button"
+        android:layout_width="0dp"
+        android:layout_height="0dp"/>
+
+    <!-- AlignedImageWidget, ImageWebViewWidget, ImageWidget -->
+    <View android:id="@+id/capture_image"
+        android:layout_width="0dp"
+        android:layout_height="0dp"/>
+
+    <View android:id="@+id/choose_image"
+        android:layout_width="0dp"
+        android:layout_height="0dp"/>
+
+    <!-- AnnotateButton -->
+    <View android:id="@+id/markup_image"
+        android:layout_width="0dp"
+        android:layout_height="0dp"/>
+
+    <!-- AudioWidget -->
+    <View android:id="@+id/capture_audio"
+        android:layout_width="0dp"
+        android:layout_height="0dp"/>
+
+    <View android:id="@+id/choose_sound"
+        android:layout_width="0dp"
+        android:layout_height="0dp"/>
+
+    <!-- GeoPointWidget -->
+    <View android:id="@+id/get_point"
+        android:layout_width="0dp"
+        android:layout_height="0dp"/>
+
+    <View android:id="@+id/get_location"
+        android:layout_width="0dp"
+        android:layout_height="0dp"/>
+
+    <!-- VideoWidget -->
+    <View android:id="@+id/capture_video"
+        android:layout_width="0dp"
+        android:layout_height="0dp"/>
+
+    <View android:id="@+id/choose_video"
+        android:layout_width="0dp"
+        android:layout_height="0dp"/>
+
+    <View android:id="@+id/play_video"
+        android:layout_width="0dp"
+        android:layout_height="0dp"/>
+
+</LinearLayout>

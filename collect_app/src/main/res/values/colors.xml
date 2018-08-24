@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
 Copyright (C) 2009 University of Washington
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -15,8 +14,19 @@ License for the specific language governing permissions and limitations under
 the License.
 -->
 <resources>
+    <color name="red">#F44336</color>
 
-    <drawable name="white">#ffffffff</drawable>
-    <drawable name="black">#ff000000</drawable>
+    <!-- Dark Theme Palette -->
+    <color name="darkPrimaryTextColor">@android:color/white</color>
+    <color name="darkPopupDialogColor">#3f3f3f</color>
+    <color name="darkIconColor">@android:color/white</color>
+    <color name="darkRankItemColor">@android:color/black</color>
 
+    <!-- Light Theme Palette -->
+    <color name="lightPrimaryTextColor">@android:color/black</color>
+    <color name="lightIconColor">@android:color/black</color>
+    <color name="lightRankItemColor">#EEEEEE</color>
+    <color name="lightAccentColor">#2196F3</color>
+
+    <color name="displaySubtextColor">#4CAF50</color>
 </resources>

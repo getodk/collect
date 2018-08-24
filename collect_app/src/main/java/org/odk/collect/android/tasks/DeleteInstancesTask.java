@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2012 University of Washington
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -17,11 +17,12 @@ package org.odk.collect.android.tasks;
 import android.content.ContentResolver;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.DeleteInstancesListener;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+
+import timber.log.Timber;
 
 /**
  * Task responsible for deleting selected instances.
@@ -29,15 +30,13 @@ import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
  * @author norman86@gmail.com
  * @author mitchellsundt@gmail.com
  */
-public class DeleteInstancesTask extends AsyncTask<Long, Void, Integer> {
-
-    private static final String TAG = "DeleteInstancesTask";
+public class DeleteInstancesTask extends AsyncTask<Long, Integer, Integer> {
 
     private ContentResolver contentResolver;
     private DeleteInstancesListener deleteInstancesListener;
 
-    private int successCount = 0;
-    private int toDeleteCount = 0;
+    private int successCount;
+    private int toDeleteCount;
 
     @Override
     protected Integer doInBackground(Long... params) {
@@ -48,7 +47,6 @@ public class DeleteInstancesTask extends AsyncTask<Long, Void, Integer> {
         }
 
         toDeleteCount = params.length;
-
 
         // delete files from database and then from file system
         for (Long param : params) {
@@ -65,12 +63,25 @@ public class DeleteInstancesTask extends AsyncTask<Long, Void, Integer> {
                 if (wasDeleted > 0) {
                     Collect.getInstance().getActivityLogger().logAction(this, "delete", deleteForm.toString());
                 }
+
+                successCount++;
+                publishProgress(successCount, toDeleteCount);
+
             } catch (Exception ex) {
-                Log.e(TAG, "Exception during delete of: " + param.toString() + " exception: " + ex.toString());
+                Timber.e("Exception during delete of: %s exception: %s", param.toString(), ex.toString());
             }
         }
         successCount = deleted;
         return deleted;
+    }
+
+    @Override
+    protected void onProgressUpdate(Integer... values) {
+        synchronized (this) {
+            if (deleteInstancesListener != null) {
+                deleteInstancesListener.progressUpdate(values[0], values[1]);
+            }
+        }
     }
 
     @Override
@@ -93,7 +104,6 @@ public class DeleteInstancesTask extends AsyncTask<Long, Void, Integer> {
     public void setDeleteListener(DeleteInstancesListener listener) {
         deleteInstancesListener = listener;
     }
-
 
     public void setContentResolver(ContentResolver resolver) {
         contentResolver = resolver;

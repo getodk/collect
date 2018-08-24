@@ -20,11 +20,11 @@ package org.odk.collect.android.external;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
+import android.database.sqlite.SQLiteOpenHelper;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.database.ODKSQLiteOpenHelper;
+import org.odk.collect.android.database.DatabaseContext;
 import org.odk.collect.android.exception.ExternalDataException;
 import org.odk.collect.android.tasks.FormLoaderTask;
 
@@ -38,13 +38,14 @@ import java.util.List;
 import java.util.Map;
 
 import au.com.bytecode.opencsv.CSVReader;
+import timber.log.Timber;
 
 /**
  * Author: Meletis Margaritis
  * Date: 30/04/13
  * Time: 09:36
  */
-public class ExternalSQLiteOpenHelper extends ODKSQLiteOpenHelper {
+public class ExternalSQLiteOpenHelper extends SQLiteOpenHelper {
 
     private static final int VERSION = 1;
     private static final char DELIMITING_CHAR = ",".charAt(0);
@@ -56,7 +57,7 @@ public class ExternalSQLiteOpenHelper extends ODKSQLiteOpenHelper {
     private FormLoaderTask formLoaderTask;
 
     public ExternalSQLiteOpenHelper(File dbFile) {
-        super(dbFile.getParentFile().getAbsolutePath(), dbFile.getName(), null, VERSION);
+        super(new DatabaseContext(dbFile.getParentFile().getAbsolutePath()), dbFile.getName(), null, VERSION);
     }
 
     public void importFromCSV(File dataSetFile, ExternalDataReader externalDataReader,
@@ -81,8 +82,7 @@ public class ExternalSQLiteOpenHelper extends ODKSQLiteOpenHelper {
             // this means that the function handler needed the database through calling
             // getReadableDatabase() --> getWritableDatabase(),
             // but this is not allowed, so just return;
-            Log.e(ExternalDataUtil.LOGGER_NAME,
-                    "The function handler triggered this external data population. This is not "
+            Timber.e("The function handler triggered this external data population. This is not "
                             + "good.");
             return;
         }
@@ -97,7 +97,7 @@ public class ExternalSQLiteOpenHelper extends ODKSQLiteOpenHelper {
     }
 
     private void onCreateNamed(SQLiteDatabase db, String tableName) throws Exception {
-        Log.w(ExternalDataUtil.LOGGER_NAME, "Reading data from '" + dataSetFile);
+        Timber.w("Reading data from '%s", dataSetFile.toString());
 
         onProgress(Collect.getInstance().getString(R.string.ext_import_progress_message,
                 dataSetFile.getName(), ""));
@@ -108,6 +108,8 @@ public class ExternalSQLiteOpenHelper extends ODKSQLiteOpenHelper {
                     DELIMITING_CHAR, QUOTE_CHAR, ESCAPE_CHAR);
             String[] headerRow = reader.readNext();
 
+            headerRow[0] = removeByteOrderMark(headerRow[0]);
+
             if (!ExternalDataUtil.containsAnyData(headerRow)) {
                 throw new ExternalDataException(
                         Collect.getInstance().getString(R.string.ext_file_no_data_error));
@@ -116,7 +118,7 @@ public class ExternalSQLiteOpenHelper extends ODKSQLiteOpenHelper {
             List<String> conflictingColumns =
                     ExternalDataUtil.findMatchingColumnsAfterSafeningNames(headerRow);
 
-            if (conflictingColumns != null && conflictingColumns.size() > 0) {
+            if (conflictingColumns != null && !conflictingColumns.isEmpty()) {
                 // this means that after removing invalid characters, some column names resulted
                 // with the same name,
                 // so the create table query will fail with "duplicate column" error.
@@ -131,9 +133,11 @@ public class ExternalSQLiteOpenHelper extends ODKSQLiteOpenHelper {
 
             boolean sortColumnAlreadyPresent = false;
 
-            sb.append("CREATE TABLE ");
-            sb.append(tableName);
-            sb.append(" ( ");
+            sb
+                    .append("CREATE TABLE IF NOT EXISTS ")
+                    .append(tableName)
+                    .append(" ( ");
+
             for (int i = 0; i < headerRow.length; i++) {
                 String columnName = headerRow[i].trim();
                 if (columnName.length() == 0) {
@@ -159,8 +163,7 @@ public class ExternalSQLiteOpenHelper extends ODKSQLiteOpenHelper {
             sb.append(" );");
             String sql = sb.toString();
 
-            Log.w(ExternalDataUtil.LOGGER_NAME,
-                    "Creating database for " + dataSetFile + " with query: " + sql);
+            Timber.w("Creating database for %s with query: %s", dataSetFile, sql);
             db.execSQL(sql);
 
             // create the indexes.
@@ -172,8 +175,7 @@ public class ExternalSQLiteOpenHelper extends ODKSQLiteOpenHelper {
                     String indexSQL = "CREATE INDEX " + header + "_idx ON " + tableName + " ("
                             + ExternalDataUtil.toSafeColumnName(header, columnNamesCache) + ");";
                     createIndexesCommands.add(indexSQL);
-                    Log.w(ExternalDataUtil.LOGGER_NAME,
-                            "Will create an index on " + header + " later.");
+                    Timber.w("Will create an index on %s later.", header);
                 }
             }
 
@@ -229,8 +231,7 @@ public class ExternalSQLiteOpenHelper extends ODKSQLiteOpenHelper {
             }
 
             if (formLoaderTask.isCancelled()) {
-                Log.w(ExternalDataUtil.LOGGER_NAME,
-                        "User canceled reading data from " + dataSetFile);
+                Timber.w("User canceled reading data from %s", dataSetFile.toString());
                 onProgress(Collect.getInstance().getString(R.string.ext_import_cancelled_message));
             } else {
 
@@ -238,11 +239,11 @@ public class ExternalSQLiteOpenHelper extends ODKSQLiteOpenHelper {
 
                 // now create the indexes
                 for (String createIndexCommand : createIndexesCommands) {
-                    Log.w(ExternalDataUtil.LOGGER_NAME, createIndexCommand);
+                    Timber.w(createIndexCommand);
                     db.execSQL(createIndexCommand);
                 }
 
-                Log.w(ExternalDataUtil.LOGGER_NAME, "Read all data from " + dataSetFile);
+                Timber.w("Read all data from %s", dataSetFile.toString());
                 onProgress(Collect.getInstance().getString(R.string.ext_import_completed_message));
             }
         } finally {
@@ -250,7 +251,7 @@ public class ExternalSQLiteOpenHelper extends ODKSQLiteOpenHelper {
                 try {
                     reader.close();
                 } catch (IOException e) {
-                    Log.e(ExternalDataUtil.LOGGER_NAME, e.getMessage(), e);
+                    Timber.e(e);
                 }
             }
         }
@@ -264,5 +265,15 @@ public class ExternalSQLiteOpenHelper extends ODKSQLiteOpenHelper {
         if (formLoaderTask != null) {
             formLoaderTask.publishExternalDataLoadingProgress(message);
         }
+    }
+
+    /**
+     * Removes a Byte Order Mark (BOM) from the start of a String.
+     *
+     * @param bomCheckString is checked to see if it starts with a Byte Order Mark.
+     * @return bomCheckString without a Byte Order Mark.
+     */
+    private String removeByteOrderMark(String bomCheckString) {
+        return bomCheckString.startsWith("\uFEFF") ? bomCheckString.substring(1) : bomCheckString;
     }
 }

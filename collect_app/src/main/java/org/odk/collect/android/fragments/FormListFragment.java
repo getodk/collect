@@ -23,16 +23,13 @@ import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrde
 
 public abstract class FormListFragment extends FileManagerFragment {
     protected String getSortingOrder() {
-        if (mSelectedSortingOrder == null) {
-            restoreSelectedSortingOrder();
-        }
-        String sortOrder = FormsProviderAPI.FormsColumns.DISPLAY_NAME + " ASC";
-        switch (mSelectedSortingOrder) {
+        String sortOrder = FormsProviderAPI.FormsColumns.DISPLAY_NAME + " COLLATE NOCASE ASC";
+        switch (getSelectedSortingOrder()) {
             case BY_NAME_ASC:
-                sortOrder = FormsProviderAPI.FormsColumns.DISPLAY_NAME + " ASC";
+                sortOrder = FormsProviderAPI.FormsColumns.DISPLAY_NAME + " COLLATE NOCASE ASC";
                 break;
             case BY_NAME_DESC:
-                sortOrder = FormsProviderAPI.FormsColumns.DISPLAY_NAME + " DESC";
+                sortOrder = FormsProviderAPI.FormsColumns.DISPLAY_NAME + " COLLATE NOCASE DESC";
                 break;
             case BY_DATE_ASC:
                 sortOrder = FormsProviderAPI.FormsColumns.DATE + " ASC";

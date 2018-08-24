@@ -18,8 +18,6 @@
 
 package org.odk.collect.android.external;
 
-import android.util.Log;
-
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalDataException;
@@ -28,6 +26,8 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import timber.log.Timber;
+
 /**
  * Author: Meletis Margaritis
  * Date: 14/05/13
@@ -35,8 +35,7 @@ import java.util.Map;
  */
 public class ExternalDataManagerImpl implements ExternalDataManager {
 
-    private Map<String, ExternalSQLiteOpenHelper> dbMap =
-            new HashMap<String, ExternalSQLiteOpenHelper>();
+    private final Map<String, ExternalSQLiteOpenHelper> dbMap = new HashMap<String, ExternalSQLiteOpenHelper>();
 
     private final File mediaFolder;
 
@@ -50,27 +49,15 @@ public class ExternalDataManagerImpl implements ExternalDataManager {
         if (sqLiteOpenHelper == null) {
             if (mediaFolder == null) {
                 String msg = Collect.getInstance().getString(R.string.ext_not_initialized_error);
-                Log.e(ExternalDataUtil.LOGGER_NAME, msg);
+                Timber.e(msg);
                 if (required) {
                     throw new ExternalDataException(msg);
                 } else {
                     return null;
                 }
             } else {
-                File dbFile = new File(mediaFolder, dataSetName + ".db");
-                if (!dbFile.exists()) {
-                    String msg = Collect.getInstance().getString(
-                            R.string.ext_import_csv_missing_error, dataSetName, dataSetName);
-                    Log.e(ExternalDataUtil.LOGGER_NAME, msg);
-                    if (required) {
-                        throw new ExternalDataException(msg);
-                    } else {
-                        return null;
-                    }
-                } else {
-                    sqLiteOpenHelper = new ExternalSQLiteOpenHelper(dbFile);
-                    dbMap.put(dataSetName, sqLiteOpenHelper);
-                }
+                sqLiteOpenHelper = new ExternalSQLiteOpenHelper(new File(mediaFolder, dataSetName + ".db"));
+                dbMap.put(dataSetName, sqLiteOpenHelper);
             }
         }
         return sqLiteOpenHelper;
@@ -80,8 +67,7 @@ public class ExternalDataManagerImpl implements ExternalDataManager {
     public void close() {
         if (dbMap != null) {
             for (ExternalSQLiteOpenHelper externalSQLiteOpenHelper : dbMap.values()) {
-                Log.w(ExternalDataUtil.LOGGER_NAME,
-                        "Closing database handler:" + externalSQLiteOpenHelper.toString());
+                Timber.w("Closing database handler:%s", externalSQLiteOpenHelper.toString());
                 externalSQLiteOpenHelper.close();
             }
         }

@@ -14,28 +14,24 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.SQLException;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.util.Log;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.fragments.dialogs.SimpleDialog;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.tasks.InstanceUploaderTask;
+import org.odk.collect.android.tasks.InstanceServerUploader;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.ArrayUtils;
 import org.odk.collect.android.utilities.AuthDialogUtility;
+import org.odk.collect.android.utilities.InstanceUploaderUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -43,59 +39,53 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
+import timber.log.Timber;
+
 /**
  * Activity to upload completed forms.
  *
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class InstanceUploaderActivity extends Activity implements InstanceUploaderListener,
+public class InstanceUploaderActivity extends CollectAbstractActivity implements InstanceUploaderListener,
         AuthDialogUtility.AuthDialogUtilityResultListener {
-    private final static String TAG = "InstanceUploaderActiv";
-    private final static int PROGRESS_DIALOG = 1;
-    private final static int AUTH_DIALOG = 2;
+    private static final int PROGRESS_DIALOG = 1;
+    private static final int AUTH_DIALOG = 2;
 
-    private final static String AUTH_URI = "auth";
+    private static final String AUTH_URI = "auth";
     private static final String ALERT_MSG = "alertmsg";
-    private static final String ALERT_SHOWING = "alertshowing";
     private static final String TO_SEND = "tosend";
 
-    private ProgressDialog mProgressDialog;
-    private AlertDialog mAlertDialog;
+    private ProgressDialog progressDialog;
 
-    private String mAlertMsg;
-    private boolean mAlertShowing;
+    private String alertMsg;
 
-    private InstanceUploaderTask mInstanceUploaderTask;
+    private InstanceServerUploader instanceServerUploader;
 
     // maintain a list of what we've yet to send, in case we're interrupted by auth requests
-    private Long[] mInstancesToSend;
+    private Long[] instancesToSend;
 
     // maintain a list of what we've sent, in case we're interrupted by auth requests
-    private HashMap<String, String> mUploadedInstances;
-    private String mUrl;
+    private HashMap<String, String> uploadedInstances;
+    private String url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(TAG, "onCreate: " + ((savedInstanceState == null) ? "creating" : "re-initializing"));
+        Timber.i("onCreate: %s", savedInstanceState == null ? "creating" : "re-initializing");
 
-        mAlertMsg = getString(R.string.please_wait);
-        mAlertShowing = false;
+        alertMsg = getString(R.string.please_wait);
 
-        mUploadedInstances = new HashMap<String, String>();
+        uploadedInstances = new HashMap<String, String>();
 
         setTitle(getString(R.string.send_data));
 
         // get any simple saved state...
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(ALERT_MSG)) {
-                mAlertMsg = savedInstanceState.getString(ALERT_MSG);
-            }
-            if (savedInstanceState.containsKey(ALERT_SHOWING)) {
-                mAlertShowing = savedInstanceState.getBoolean(ALERT_SHOWING, false);
+                alertMsg = savedInstanceState.getString(ALERT_MSG);
             }
 
-            mUrl = savedInstanceState.getString(AUTH_URI);
+            url = savedInstanceState.getString(AUTH_URI);
         }
 
         // and if we are resuming, use the TO_SEND list of not-yet-sent submissions
@@ -109,32 +99,26 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
             selectedInstanceIDs = intent.getLongArrayExtra(FormEntryActivity.KEY_INSTANCES);
         }
 
-        mInstancesToSend = new Long[(selectedInstanceIDs == null) ? 0 : selectedInstanceIDs.length];
-        if (selectedInstanceIDs != null) {
-            for (int i = 0; i < selectedInstanceIDs.length; ++i) {
-                mInstancesToSend[i] = selectedInstanceIDs[i];
-            }
-        }
+        instancesToSend = ArrayUtils.toObject(selectedInstanceIDs);
 
         // at this point, we don't expect this to be empty...
-        if (mInstancesToSend.length == 0) {
-            Log.e(TAG, "onCreate: No instances to upload!");
+        if (instancesToSend.length == 0) {
+            Timber.e("onCreate: No instances to upload!");
             // drop through -- everything will process through OK
         } else {
-            Log.i(TAG, "onCreate: Beginning upload of " + mInstancesToSend.length + " instances!");
+            Timber.i("onCreate: Beginning upload of %d instances!", instancesToSend.length);
         }
 
         // get the task if we've changed orientations. If it's null it's a new upload.
-        mInstanceUploaderTask = (InstanceUploaderTask) getLastNonConfigurationInstance();
-        if (mInstanceUploaderTask == null) {
+        instanceServerUploader = (InstanceServerUploader) getLastCustomNonConfigurationInstance();
+        if (instanceServerUploader == null) {
             // setup dialog and upload task
             showDialog(PROGRESS_DIALOG);
-            mInstanceUploaderTask = new InstanceUploaderTask();
+            instanceServerUploader = new InstanceServerUploader();
 
             // register this activity with the new uploader task
-            mInstanceUploaderTask.setUploaderListener(InstanceUploaderActivity.this);
-
-            mInstanceUploaderTask.execute(mInstancesToSend);
+            instanceServerUploader.setUploaderListener(this);
+            instanceServerUploader.execute(instancesToSend);
         }
     }
 
@@ -146,46 +130,25 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 
     @Override
     protected void onResume() {
-        Log.i(TAG, "onResume: Resuming upload of " + mInstancesToSend.length + " instances!");
-        if (mInstanceUploaderTask != null) {
-            mInstanceUploaderTask.setUploaderListener(this);
-        }
-        if (mAlertShowing) {
-            createAlertDialog(mAlertMsg);
+        Timber.i("onResume: Resuming upload of %d instances!", instancesToSend.length);
+        if (instanceServerUploader != null) {
+            instanceServerUploader.setUploaderListener(this);
         }
         super.onResume();
     }
 
-
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(ALERT_MSG, mAlertMsg);
-        outState.putBoolean(ALERT_SHOWING, mAlertShowing);
-        outState.putString(AUTH_URI, mUrl);
-
-        long[] toSend = new long[mInstancesToSend.length];
-        for (int i = 0; i < mInstancesToSend.length; ++i) {
-            toSend[i] = mInstancesToSend[i];
-        }
-        outState.putLongArray(TO_SEND, toSend);
-    }
-
-
-    @Override
-    public Object onRetainNonConfigurationInstance() {
-        return mInstanceUploaderTask;
+        outState.putString(ALERT_MSG, alertMsg);
+        outState.putString(AUTH_URI, url);
+        outState.putLongArray(TO_SEND, ArrayUtils.toPrimitive(instancesToSend));
     }
 
     @Override
-    protected void onPause() {
-        Log.i(TAG, "onPause: Pausing upload of " + mInstancesToSend.length + " instances!");
-        super.onPause();
-        if (mAlertDialog != null && mAlertDialog.isShowing()) {
-            mAlertDialog.dismiss();
-        }
+    public Object onRetainCustomNonConfigurationInstance() {
+        return instanceServerUploader;
     }
-
 
     @Override
     protected void onStop() {
@@ -195,16 +158,16 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 
     @Override
     protected void onDestroy() {
-        if (mInstanceUploaderTask != null) {
-            mInstanceUploaderTask.setUploaderListener(null);
+        if (instanceServerUploader != null) {
+            instanceServerUploader.setUploaderListener(null);
         }
         super.onDestroy();
     }
 
     @Override
     public void uploadingComplete(HashMap<String, String> result) {
-        Log.i(TAG, "uploadingComplete: Processing results (" + result.size() + ") from upload of "
-                + mInstancesToSend.length + " instances!");
+        Timber.i("uploadingComplete: Processing results (%d) from upload of %d instances!",
+                result.size(), instancesToSend.length);
 
         try {
             dismissDialog(PROGRESS_DIALOG);
@@ -212,14 +175,13 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
             // tried to close a dialog not open. don't care.
         }
 
-
         Set<String> keys = result.keySet();
         Iterator<String> it = keys.iterator();
 
-        StringBuilder message = new StringBuilder();
+        String message = "";
         int count = keys.size();
         while (count > 0) {
-            String[] selectionArgs = null;
+            String[] selectionArgs;
 
             if (count > ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER) {
                 selectionArgs = new String[ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER];
@@ -233,52 +195,36 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
             int i = 0;
             while (it.hasNext() && i < selectionArgs.length) {
                 selectionArgs[i] = it.next();
-                selection.append("?");
+                selection.append('?');
 
                 if (i != selectionArgs.length - 1) {
-                    selection.append(",");
+                    selection.append(',');
                 }
                 i++;
             }
 
-            selection.append(")");
+            selection.append(')');
             count -= selectionArgs.length;
 
-            StringBuilder queryMessage = new StringBuilder();
-            Cursor results = null;
-            try {
-                results = new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs);
-                if (results.getCount() > 0) {
-                    results.moveToPosition(-1);
-                    while (results.moveToNext()) {
-                        String name =
-                                results.getString(
-                                        results.getColumnIndex(InstanceColumns.DISPLAY_NAME));
-                        String id = results.getString(results.getColumnIndex(InstanceColumns._ID));
-                        queryMessage.append(name + " - " + result.get(id) + "\n\n");
-                    }
-                }
-            } catch (SQLException e) {
-                Log.e(TAG, e.getMessage(), e);
-            } finally {
-                if (results != null)
-                    results.close();
-            }
-            message.append(queryMessage.toString());
+            message = InstanceUploaderUtils
+                    .getUploadResultMessage(new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs), result);
         }
         if (message.length() == 0) {
-            message.append(getString(R.string.no_forms_uploaded));
+            message = getString(R.string.no_forms_uploaded);
         }
-        createAlertDialog(message.toString().trim());
-    }
 
+        if (!isInstanceStateSaved()) {
+            createUploadInstancesResultDialog(message.trim());
+        } else {
+            finish();
+        }
+    }
 
     @Override
     public void progressUpdate(int progress, int total) {
-        mAlertMsg = getString(R.string.sending_items, String.valueOf(progress), String.valueOf(total));
-        mProgressDialog.setMessage(mAlertMsg);
+        alertMsg = getString(R.string.sending_items, String.valueOf(progress), String.valueOf(total));
+        progressDialog.setMessage(alertMsg);
     }
-
 
     @Override
     protected Dialog onCreateDialog(int id) {
@@ -287,7 +233,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
                 Collect.getInstance().getActivityLogger().logAction(this,
                         "onCreateDialog.PROGRESS_DIALOG", "show");
 
-                mProgressDialog = new ProgressDialog(this);
+                progressDialog = new ProgressDialog(this);
                 DialogInterface.OnClickListener loadingButtonListener =
                         new DialogInterface.OnClickListener() {
                             @Override
@@ -295,60 +241,53 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
                                 Collect.getInstance().getActivityLogger().logAction(this,
                                         "onCreateDialog.PROGRESS_DIALOG", "cancel");
                                 dialog.dismiss();
-                                mInstanceUploaderTask.cancel(true);
-                                mInstanceUploaderTask.setUploaderListener(null);
+                                instanceServerUploader.cancel(true);
+                                instanceServerUploader.setUploaderListener(null);
                                 finish();
                             }
                         };
-                mProgressDialog.setTitle(getString(R.string.uploading_data));
-                mProgressDialog.setMessage(mAlertMsg);
-                mProgressDialog.setIndeterminate(true);
-                mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                mProgressDialog.setCancelable(false);
-                mProgressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
-                return mProgressDialog;
+                progressDialog.setTitle(getString(R.string.uploading_data));
+                progressDialog.setMessage(alertMsg);
+                progressDialog.setIndeterminate(true);
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progressDialog.setCancelable(false);
+                progressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
+                return progressDialog;
             case AUTH_DIALOG:
-                Log.i(TAG, "onCreateDialog(AUTH_DIALOG): for upload of " + mInstancesToSend.length
-                        + " instances!");
+                Timber.i("onCreateDialog(AUTH_DIALOG): for upload of %d instances!",
+                        instancesToSend.length);
                 Collect.getInstance().getActivityLogger().logAction(this,
                         "onCreateDialog.AUTH_DIALOG", "show");
 
-
-                // Get the server, username, and password from the settings
-                SharedPreferences settings =
-                        PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-
-                return new AuthDialogUtility().createDialog(this, this);
+                return new AuthDialogUtility().createDialog(this, this, this.url);
         }
 
         return null;
     }
 
-
     @Override
     public void authRequest(Uri url, HashMap<String, String> doneSoFar) {
-        if (mProgressDialog.isShowing()) {
+        if (progressDialog.isShowing()) {
             // should always be showing here
-            mProgressDialog.dismiss();
+            progressDialog.dismiss();
         }
 
         // add our list of completed uploads to "completed"
         // and remove them from our toSend list.
         ArrayList<Long> workingSet = new ArrayList<Long>();
-        Collections.addAll(workingSet, mInstancesToSend);
+        Collections.addAll(workingSet, instancesToSend);
         if (doneSoFar != null) {
             Set<String> uploadedInstances = doneSoFar.keySet();
-            Iterator<String> itr = uploadedInstances.iterator();
 
-            while (itr.hasNext()) {
-                Long removeMe = Long.valueOf(itr.next());
+            for (String uploadedInstance : uploadedInstances) {
+                Long removeMe = Long.valueOf(uploadedInstance);
                 boolean removed = workingSet.remove(removeMe);
                 if (removed) {
-                    Log.i(TAG, removeMe
-                            + " was already sent, removing from queue before restarting task");
+                    Timber.i("%d was already sent, removing from queue before restarting task",
+                            removeMe);
                 }
             }
-            mUploadedInstances.putAll(doneSoFar);
+            this.uploadedInstances.putAll(doneSoFar);
         }
 
         // and reconstruct the pending set of instances to send
@@ -356,49 +295,30 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
         for (int i = 0; i < workingSet.size(); ++i) {
             updatedToSend[i] = workingSet.get(i);
         }
-        mInstancesToSend = updatedToSend;
+        instancesToSend = updatedToSend;
 
-        mUrl = url.toString();
+        this.url = url.toString();
         showDialog(AUTH_DIALOG);
     }
 
+    private void createUploadInstancesResultDialog(String message) {
+        Collect.getInstance().getActivityLogger().logAction(this, "createUploadInstancesResultDialog", "show");
 
-    private void createAlertDialog(String message) {
-        Collect.getInstance().getActivityLogger().logAction(this, "createAlertDialog", "show");
+        String dialogTitle = getString(R.string.upload_results);
+        String buttonTitle = getString(R.string.ok);
 
-        mAlertDialog = new AlertDialog.Builder(this).create();
-        mAlertDialog.setTitle(getString(R.string.upload_results));
-        mAlertDialog.setMessage(message);
-        DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int i) {
-                switch (i) {
-                    case DialogInterface.BUTTON_POSITIVE: // ok
-                        Collect.getInstance().getActivityLogger().logAction(this,
-                                "createAlertDialog", "OK");
-                        // always exit this activity since it has no interface
-                        mAlertShowing = false;
-                        finish();
-                        break;
-                }
-            }
-        };
-        mAlertDialog.setCancelable(false);
-        mAlertDialog.setButton(getString(R.string.ok), quitListener);
-        mAlertDialog.setIcon(android.R.drawable.ic_dialog_info);
-        mAlertShowing = true;
-        mAlertMsg = message;
-        mAlertDialog.show();
+        SimpleDialog simpleDialog = SimpleDialog.newInstance(dialogTitle, 0, message, buttonTitle, true);
+        simpleDialog.show(getSupportFragmentManager(), SimpleDialog.COLLECT_DIALOG_TAG);
     }
 
     @Override
     public void updatedCredentials() {
         showDialog(PROGRESS_DIALOG);
-        mInstanceUploaderTask = new InstanceUploaderTask();
+        instanceServerUploader = new InstanceServerUploader();
 
         // register this activity with the new uploader task
-        mInstanceUploaderTask.setUploaderListener(InstanceUploaderActivity.this);
-        mInstanceUploaderTask.execute(mInstancesToSend);
+        instanceServerUploader.setUploaderListener(this);
+        instanceServerUploader.execute(instancesToSend);
     }
 
     @Override

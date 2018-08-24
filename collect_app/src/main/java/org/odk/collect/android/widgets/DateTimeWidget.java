@@ -16,27 +16,14 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.Resources;
-import android.os.Build;
 import android.view.Gravity;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.CalendarView;
-import android.widget.DatePicker;
-import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
-import android.widget.TimePicker;
 
 import org.javarosa.core.model.data.DateTimeData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.utilities.DateWidgetUtils;
-
-import java.util.Calendar;
-import java.util.Date;
+import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 /**
  * Displays a DatePicker widget. DateWidget handles leap years and does not allow dates that do not
@@ -45,238 +32,124 @@ import java.util.Date;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class DateTimeWidget extends QuestionWidget {
 
-    private DatePicker mDatePicker;
-    private TimePicker mTimePicker;
-    private DatePicker.OnDateChangedListener mDateListener;
-    private boolean hideDay = false;
-    private boolean hideMonth = false;
-    private boolean showCalendar = false;
-    private HorizontalScrollView scrollView = null;
+@SuppressLint("ViewConstructor")
+public class DateTimeWidget extends QuestionWidget implements BinaryWidget {
+
+    private AbstractDateWidget dateWidget;
+    private TimeWidget timeWidget;
 
     public DateTimeWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
-        mDatePicker = new DatePicker(getContext());
-        mDatePicker.setId(QuestionWidget.newUniqueId());
-        mDatePicker.setFocusable(!prompt.isReadOnly());
-        mDatePicker.setEnabled(!prompt.isReadOnly());
-
-        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.JELLY_BEAN) {
-            DateWidgetUtils.fixCalendarViewIfJellyBean(mDatePicker.getCalendarView());
-        }
-
-        mTimePicker = new TimePicker(getContext());
-        mTimePicker.setId(QuestionWidget.newUniqueId());
-        mTimePicker.setFocusable(!prompt.isReadOnly());
-        mTimePicker.setEnabled(!prompt.isReadOnly());
-        mTimePicker.setPadding(0, 20, 0, 0);
-
-        String clockType =
-                android.provider.Settings.System.getString(context.getContentResolver(),
-                        android.provider.Settings.System.TIME_12_24);
-        if (clockType == null || clockType.equalsIgnoreCase("24")) {
-            mTimePicker.setIs24HourView(true);
-        }
-
-        hideDayFieldIfNotInFormat(prompt);
-
-        mDateListener = new DatePicker.OnDateChangedListener() {
-            @Override
-            public void onDateChanged(DatePicker view, int year, int month, int day) {
-                if (mPrompt.isReadOnly()) {
-                    setAnswer();
-                } else {
-                    // handle leap years and number of days in month
-                    // TODO
-                    // http://code.google.com/p/android/issues/detail?id=2081
-                    // in older versions of android (1.6ish) the datepicker lets you pick bad dates
-                    // in newer versions, calling updateDate() calls onDatechangedListener(),
-                    // causing an
-                    // endless loop.
-                    Calendar c = Calendar.getInstance();
-                    c.set(year, month, 1);
-                    int max = c.getActualMaximum(Calendar.DAY_OF_MONTH);
-                    if (day > max) {
-                        if (!(mDatePicker.getDayOfMonth() == day && mDatePicker.getMonth() == month
-                                && mDatePicker.getYear() == year)) {
-                            Collect.getInstance().getActivityLogger().logInstanceAction(
-                                    DateTimeWidget.this, "onDateChanged",
-                                    String.format("%1$04d-%2$02d-%3$02d", year, month, max),
-                                    mPrompt.getIndex());
-                            mDatePicker.updateDate(year, month, max);
-                        }
-                    } else {
-                        if (!(mDatePicker.getDayOfMonth() == day && mDatePicker.getMonth() == month
-                                && mDatePicker.getYear() == year)) {
-                            Collect.getInstance().getActivityLogger().logInstanceAction(
-                                    DateTimeWidget.this, "onDateChanged",
-                                    String.format("%1$04d-%2$02d-%3$02d", year, month, day),
-                                    mPrompt.getIndex());
-                            mDatePicker.updateDate(year, month, day);
-                        }
-                    }
-                }
-            }
-        };
-
-        mTimePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
-            @Override
-            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-                Collect.getInstance().getActivityLogger().logInstanceAction(DateTimeWidget.this,
-                        "onTimeChanged",
-                        String.format("%1$02d:%2$02d", hourOfDay, minute), mPrompt.getIndex());
-            }
-        });
-
         setGravity(Gravity.START);
-        LinearLayout answerLayout = new LinearLayout(getContext());
-        answerLayout.setOrientation(LinearLayout.VERTICAL);
-        if (showCalendar) {
-            scrollView = new HorizontalScrollView(context);
-            LinearLayout ll = new LinearLayout(context);
-            ll.addView(mDatePicker);
-            ll.setPadding(10, 10, 10, 10);
-            scrollView.addView(ll);
-            answerLayout.addView(scrollView);
-        } else {
-            answerLayout.addView(mDatePicker);
-        }
-        answerLayout.addView(mTimePicker);
-        addAnswerView(answerLayout);
 
-        // If there's an answer, use it.
-        setAnswer();
-    }
-
-
-    /**
-     * Shared between DateWidget and DateTimeWidget.
-     * There are extra appearance settings that do not apply for dateTime...
-     * TODO: move this into utilities or base class?
-     */
-    @SuppressLint("NewApi")
-    private void hideDayFieldIfNotInFormat(FormEntryPrompt prompt) {
         String appearance = prompt.getQuestion().getAppearanceAttr();
-        if (appearance == null) {
-            showCalendar = true;
-            this.mDatePicker.setCalendarViewShown(true);
-            CalendarView cv = this.mDatePicker.getCalendarView();
-            cv.setShowWeekNumber(false);
-            this.mDatePicker.setSpinnersShown(true);
-            hideDay = true;
-            hideMonth = false;
-        } else if ("month-year".equals(appearance)) {
-            hideDay = true;
-            this.mDatePicker.setCalendarViewShown(false);
-            this.mDatePicker.setSpinnersShown(true);
-            mTimePicker.setVisibility(GONE);
-        } else if ("year".equals(appearance)) {
-            hideMonth = true;
-            this.mDatePicker.setCalendarViewShown(false);
-            this.mDatePicker.setSpinnersShown(true);
-            mTimePicker.setVisibility(GONE);
-        } else if ("no-calendar".equals(appearance)) {
-            this.mDatePicker.setCalendarViewShown(false);
-            this.mDatePicker.setSpinnersShown(true);
+        if (appearance != null && appearance.contains("ethiopian")) {
+            dateWidget = new EthiopianDateWidget(context, prompt);
+        } else if (appearance != null && appearance.contains("coptic")) {
+            dateWidget = new CopticDateWidget(context, prompt);
+        } else if (appearance != null && appearance.contains("islamic")) {
+            dateWidget = new IslamicDateWidget(context, prompt);
         } else {
-            showCalendar = true;
-            this.mDatePicker.setCalendarViewShown(true);
-            CalendarView cv = this.mDatePicker.getCalendarView();
-            cv.setShowWeekNumber(false);
-            this.mDatePicker.setSpinnersShown(true);
-            hideDay = true;
-            hideMonth = false;
+            dateWidget = new DateWidget(context, prompt);
         }
+        timeWidget = new TimeWidget(context, prompt);
 
-        if (hideMonth || hideDay) {
-            mDatePicker.findViewById(
-                    Resources.getSystem().getIdentifier("day", "id", "android"))
-                    .setVisibility(View.GONE);
-            if (hideMonth) {
-                mDatePicker
-                        .findViewById(
-                                Resources.getSystem().getIdentifier("month", "id", "android"))
-                        .setVisibility(View.GONE);
-            }
+        dateWidget.getQuestionMediaLayout().getView_Text().setVisibility(GONE);
+        dateWidget.getHelpTextLayout().setVisibility(GONE);
+
+        timeWidget.getQuestionMediaLayout().getView_Text().setVisibility(GONE);
+        timeWidget.getHelpTextLayout().setVisibility(GONE);
+
+        LinearLayout linearLayout = new LinearLayout(getContext());
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+        linearLayout.addView(dateWidget);
+        if (!dateWidget.isDayHidden()) {
+            linearLayout.addView(timeWidget);
         }
+        addAnswerView(linearLayout);
     }
-
-    private void setAnswer() {
-
-        if (mPrompt.getAnswerValue() != null) {
-
-            DateTime ldt =
-                    new DateTime(
-                            ((Date) mPrompt.getAnswerValue().getValue()).getTime
-                                    ());
-            mDatePicker.init(ldt.getYear(), ldt.getMonthOfYear() - 1, ldt.getDayOfMonth(),
-                    mDateListener);
-            mTimePicker.setCurrentHour(ldt.getHourOfDay());
-            mTimePicker.setCurrentMinute(ldt.getMinuteOfHour());
-
-        } else {
-            // create time widget with current time as of right now
-            clearAnswer();
-        }
-    }
-
-
-    /**
-     * Resets date to today.
-     */
-    @Override
-    public void clearAnswer() {
-        DateTime ldt = new DateTime();
-        mDatePicker.init(ldt.getYear(), ldt.getMonthOfYear() - 1, ldt.getDayOfMonth(),
-                mDateListener);
-        mTimePicker.setCurrentHour(ldt.getHourOfDay());
-        mTimePicker.setCurrentMinute(ldt.getMinuteOfHour());
-    }
-
 
     @Override
     public IAnswerData getAnswer() {
-        if (showCalendar) {
-            scrollView.clearChildFocus(mDatePicker);
-        }
         clearFocus();
 
-        LocalDateTime ldt = new LocalDateTime()
-                .withYear(mDatePicker.getYear())
-                .withMonthOfYear((!showCalendar && hideMonth) ? 1 : mDatePicker.getMonth() + 1)
-                .withDayOfMonth((!showCalendar && (hideMonth || hideDay)) ? 1 : mDatePicker.getDayOfMonth())
-                .withHourOfDay((!showCalendar && (hideMonth || hideDay)) ? 0 : mTimePicker.getCurrentHour())
-                .withMinuteOfHour((!showCalendar && (hideMonth || hideDay)) ? 0 : mTimePicker.getCurrentMinute())
-                .withSecondOfMinute(0);
+        if (isNullAnswer()) {
+            return null;
+        } else {
+            if (timeWidget.isNullAnswer()) {
+                timeWidget.setTimeToCurrent();
+                timeWidget.setTimeLabel();
+            } else if (dateWidget.isNullAnswer()) {
+                dateWidget.setDateToCurrent();
+                dateWidget.setDateLabel();
+            }
 
-        ldt = skipDaylightSavingGapIfExists(ldt);
-        return new DateTimeData(ldt.toDate());
+            int year = dateWidget.getDate().getYear();
+            int month = dateWidget.getDate().getMonthOfYear();
+            int day = dateWidget.getDate().getDayOfMonth();
+            int hour = timeWidget.getHour();
+            int minute = timeWidget.getMinute();
+
+            LocalDateTime ldt = new LocalDateTime()
+                    .withYear(year)
+                    .withMonthOfYear(month)
+                    .withDayOfMonth(day)
+                    .withHourOfDay(hour)
+                    .withMinuteOfHour(minute)
+                    .withSecondOfMinute(0)
+                    .withMillisOfSecond(0);
+
+            return new DateTimeData(ldt.toDate());
+        }
     }
-
 
     @Override
-    public void setFocus(Context context) {
-        // Hide the soft keyboard if it's showing.
-        InputMethodManager inputManager =
-                (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
+    public void clearAnswer() {
+        dateWidget.clearAnswer();
+        timeWidget.clearAnswer();
     }
-
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        mDatePicker.setOnLongClickListener(l);
-        mTimePicker.setOnLongClickListener(l);
+        dateWidget.setOnLongClickListener(l);
+        timeWidget.setOnLongClickListener(l);
     }
-
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        mDatePicker.cancelLongPress();
-        mTimePicker.cancelLongPress();
+        dateWidget.cancelLongPress();
+        timeWidget.cancelLongPress();
     }
 
+    @Override
+    public void setBinaryData(Object answer) {
+        dateWidget.setBinaryData(answer);
+    }
+
+    public AbstractDateWidget getDateWidget() {
+        return dateWidget;
+    }
+
+    // Exposed for testing purposes to avoid reflection.
+    public void setDateWidget(DateWidget dateWidget) {
+        this.dateWidget = dateWidget;
+    }
+
+    // Exposed for testing purposes to avoid reflection.
+    public void setTimeWidget(TimeWidget timeWidget) {
+        this.timeWidget = timeWidget;
+    }
+
+    @Override
+    public void onButtonClick(int buttonId) {
+    }
+
+    private boolean isNullAnswer() {
+        return getFormEntryPrompt().isRequired()
+                ? dateWidget.isNullAnswer() || timeWidget.isNullAnswer()
+                : dateWidget.isNullAnswer() && timeWidget.isNullAnswer();
+    }
 }

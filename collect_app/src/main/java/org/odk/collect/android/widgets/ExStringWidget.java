@@ -14,18 +14,17 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.text.method.TextKeyListener;
 import android.text.method.TextKeyListener.Capitalize;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -35,29 +34,39 @@ import android.widget.Toast;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.javarosa.xpath.parser.XPathSyntaxException;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.external.ExternalAppsUtils;
+import org.odk.collect.android.utilities.ActivityAvailability;
+import org.odk.collect.android.utilities.DependencyProvider;
+import org.odk.collect.android.utilities.ObjectUtils;
+import org.odk.collect.android.utilities.SoftKeyboardUtils;
+import org.odk.collect.android.utilities.ViewIds;
+import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import java.util.Map;
 
+import timber.log.Timber;
+
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
  * <p>Launch an external app to supply a string value. If the app
  * does not launch, enable the text area for regular data entry.</p>
- *
+ * <p>
  * <p>The default button text is "Launch"
- *
+ * <p>
  * <p>You may override the button text and the error text that is
  * displayed when the app is missing by using jr:itext() values.
- *
+ * <p>
  * <p>To use this widget, define an appearance on the &lt;input/&gt;
  * tag that begins "ex:" and then contains the intent action to lauch.
- *
+ * <p>
  * <p>e.g.,
- *
+ * <p>
  * <pre>
  * &lt;input appearance="ex:change.uw.android.TEXTANSWER" ref="/form/passPhrase" &gt;
  * </pre>
@@ -85,15 +94,17 @@ import java.util.Map;
  *
  * @author mitchellsundt@gmail.com
  */
-public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
+@SuppressLint("ViewConstructor")
+public class ExStringWidget extends QuestionWidget implements BinaryWidget {
+    // If an extra with this key is specified, it will be parsed as a URI and used as intent data
+    private static final String URI_KEY = "uri_data";
 
-    private final String t = getClass().getName();
+    protected EditText answer;
+    private boolean hasExApp = true;
+    private final Button launchIntentButton;
+    private final Drawable textBackground;
 
-    private boolean mHasExApp = true;
-    private Button mLaunchIntentButton;
-    private Drawable mTextBackground;
-
-    protected EditText mAnswer;
+    private ActivityAvailability activityAvailability;
 
     public ExStringWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -102,197 +113,191 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
         params.setMargins(7, 5, 7, 5);
 
         // set text formatting
-        mAnswer = new EditText(context);
-        mAnswer.setId(QuestionWidget.newUniqueId());
-        mAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-        mAnswer.setLayoutParams(params);
-        mTextBackground = mAnswer.getBackground();
-        mAnswer.setBackground(null);
+        answer = new EditText(context);
+        answer.setId(ViewIds.generateViewId());
+        answer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
+        answer.setLayoutParams(params);
+        textBackground = answer.getBackground();
+        answer.setBackground(null);
+        answer.setTextColor(themeUtils.getPrimaryTextColor());
 
         // capitalize nothing
-        mAnswer.setKeyListener(new TextKeyListener(Capitalize.NONE, false));
+        answer.setKeyListener(new TextKeyListener(Capitalize.NONE, false));
 
         // needed to make long read only text scroll
-        mAnswer.setHorizontallyScrolling(false);
-        mAnswer.setSingleLine(false);
+        answer.setHorizontallyScrolling(false);
+        answer.setSingleLine(false);
 
         String s = prompt.getAnswerText();
         if (s != null) {
-            mAnswer.setText(s);
+            answer.setText(s);
         }
 
-        if (mPrompt.isReadOnly()) {
-            mAnswer.setBackground(null);
+        if (getFormEntryPrompt().isReadOnly() || hasExApp) {
+            answer.setFocusable(false);
+            answer.setEnabled(false);
         }
 
-        if (mPrompt.isReadOnly() || mHasExApp) {
-            mAnswer.setFocusable(false);
-            mAnswer.setClickable(false);
-        }
+        String v = getFormEntryPrompt().getSpecialFormQuestionText("buttonText");
+        String buttonText = (v != null) ? v : context.getString(R.string.launch_app);
 
-        String exSpec = prompt.getAppearanceHint().replaceFirst("^ex[:]", "");
-        final String intentName = ExternalAppsUtils.extractIntentName(exSpec);
-        final Map<String, String> exParams = ExternalAppsUtils.extractParameters(exSpec);
-        final String buttonText;
-        final String errorString;
-        String v = mPrompt.getSpecialFormQuestionText("buttonText");
-        buttonText = (v != null) ? v : context.getString(R.string.launch_app);
-        v = mPrompt.getSpecialFormQuestionText("noAppErrorString");
-        errorString = (v != null) ? v : context.getString(R.string.no_app);
-
-        // set button formatting
-        mLaunchIntentButton = new Button(getContext());
-        mLaunchIntentButton.setId(QuestionWidget.newUniqueId());
-        mLaunchIntentButton.setText(buttonText);
-        mLaunchIntentButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-        mLaunchIntentButton.setPadding(20, 20, 20, 20);
-        mLaunchIntentButton.setEnabled(!mPrompt.isReadOnly());
-        mLaunchIntentButton.setLayoutParams(params);
-
-        mLaunchIntentButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(intentName);
-                try {
-                    ExternalAppsUtils.populateParameters(i, exParams,
-                            mPrompt.getIndex().getReference());
-
-                    Collect.getInstance().getFormController().setIndexWaitingForData(
-                            mPrompt.getIndex());
-                    fireActivity(i);
-                } catch (ExternalParamsException e) {
-                    Log.e(t, e.getMessage(), e);
-                    onException(e.getMessage());
-                } catch (ActivityNotFoundException e) {
-                    Log.e(t, e.getMessage(), e);
-                    onException(errorString);
-                }
-            }
-
-            private void onException(String toastText) {
-                mHasExApp = false;
-                if (!mPrompt.isReadOnly()) {
-                    mAnswer.setBackground(mTextBackground);
-                    mAnswer.setFocusable(true);
-                    mAnswer.setFocusableInTouchMode(true);
-                    mAnswer.setClickable(true);
-                }
-                mLaunchIntentButton.setEnabled(false);
-                mLaunchIntentButton.setFocusable(false);
-                Collect.getInstance().getFormController().setIndexWaitingForData(null);
-                Toast.makeText(getContext(),
-                        toastText, Toast.LENGTH_SHORT)
-                        .show();
-                ExStringWidget.this.mAnswer.requestFocus();
-            }
-        });
+        launchIntentButton = getSimpleButton(buttonText);
+        launchIntentButton.setEnabled(!getFormEntryPrompt().isReadOnly());
 
         // finish complex layout
         LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);
-        answerLayout.addView(mLaunchIntentButton);
-        answerLayout.addView(mAnswer);
+        answerLayout.addView(launchIntentButton);
+        answerLayout.addView(answer);
         addAnswerView(answerLayout);
     }
 
     protected void fireActivity(Intent i) throws ActivityNotFoundException {
-        i.putExtra("value", mPrompt.getAnswerText());
+        i.putExtra("value", getFormEntryPrompt().getAnswerText());
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "launchIntent",
-                i.getAction(), mPrompt.getIndex());
+                i.getAction(), getFormEntryPrompt().getIndex());
         ((Activity) getContext()).startActivityForResult(i,
-                FormEntryActivity.EX_STRING_CAPTURE);
+                RequestCodes.EX_STRING_CAPTURE);
     }
 
     @Override
     public void clearAnswer() {
-        mAnswer.setText(null);
+        answer.setText(null);
     }
-
 
     @Override
     public IAnswerData getAnswer() {
-        String s = mAnswer.getText().toString();
-        if (s == null || s.equals("")) {
-            return null;
-        } else {
-            return new StringData(s);
-        }
+        String s = answer.getText().toString();
+        return !s.isEmpty() ? new StringData(s) : null;
     }
 
-
     /**
-     * Allows answer to be set externally in {@Link FormEntryActivity}.
+     * Allows answer to be set externally in {@link FormEntryActivity}.
      */
     @Override
     public void setBinaryData(Object answer) {
         StringData stringData = ExternalAppsUtils.asStringData(answer);
-        mAnswer.setText(stringData == null ? null : stringData.getValue().toString());
-        Collect.getInstance().getFormController().setIndexWaitingForData(null);
+        this.answer.setText(stringData == null ? null : stringData.getValue().toString());
     }
 
     @Override
     public void setFocus(Context context) {
-        // Put focus on text input field and display soft keyboard if appropriate.
-        InputMethodManager inputManager =
-                (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (mHasExApp) {
-            // hide keyboard
-            inputManager.hideSoftInputFromWindow(mAnswer.getWindowToken(), 0);
+        if (hasExApp) {
+            SoftKeyboardUtils.hideSoftKeyboard(answer);
             // focus on launch button
-            mLaunchIntentButton.requestFocus();
+            launchIntentButton.requestFocus();
         } else {
-            if (!mPrompt.isReadOnly()) {
-                mAnswer.requestFocus();
-                inputManager.showSoftInput(mAnswer, 0);
-                /*
-	             * If you do a multi-question screen after a "add another group" dialog, this won't
-	             * automatically pop up. It's an Android issue.
-	             *
-	             * That is, if I have an edit text in an activity, and pop a dialog, and in that
-	             * dialog's button's OnClick() I call edittext.requestFocus() and
-	             * showSoftInput(edittext, 0), showSoftinput() returns false. However, if the
-	             * edittext
-	             * is focused before the dialog pops up, everything works fine. great.
-	             */
+            if (!getFormEntryPrompt().isReadOnly()) {
+                SoftKeyboardUtils.showSoftKeyboard(answer);
+            /*
+             * If you do a multi-question screen after a "add another group" dialog, this won't
+             * automatically pop up. It's an Android issue.
+             *
+             * That is, if I have an edit text in an activity, and pop a dialog, and in that
+             * dialog's button's OnClick() I call edittext.requestFocus() and
+             * showSoftInput(edittext, 0), showSoftinput() returns false. However, if the
+             * edittext
+             * is focused before the dialog pops up, everything works fine. great.
+             */
             } else {
-                inputManager.hideSoftInputFromWindow(mAnswer.getWindowToken(), 0);
+                SoftKeyboardUtils.hideSoftKeyboard(answer);
             }
         }
     }
 
-
-    @Override
-    public boolean isWaitingForBinaryData() {
-        return mPrompt.getIndex().equals(
-                Collect.getInstance().getFormController().getIndexWaitingForData());
-    }
-
-    @Override
-    public void cancelWaitingForBinaryData() {
-        Collect.getInstance().getFormController().setIndexWaitingForData(null);
-    }
-
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (event.isAltPressed() == true) {
-            return false;
-        }
-        return super.onKeyDown(keyCode, event);
+        return !event.isAltPressed() && super.onKeyDown(keyCode, event);
     }
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        mAnswer.setOnLongClickListener(l);
-        mLaunchIntentButton.setOnLongClickListener(l);
+        answer.setOnLongClickListener(l);
+        launchIntentButton.setOnLongClickListener(l);
     }
-
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        mAnswer.cancelLongPress();
-        mLaunchIntentButton.cancelLongPress();
+        answer.cancelLongPress();
+        launchIntentButton.cancelLongPress();
     }
 
+    @Override
+    protected void injectDependencies(DependencyProvider dependencyProvider) {
+        DependencyProvider<ActivityAvailability> activityUtilProvider =
+                ObjectUtils.uncheckedCast(dependencyProvider);
 
+        if (activityUtilProvider == null) {
+            Timber.e("DependencyProvider doesn't provide ActivityAvailability.");
+            return;
+        }
+
+        this.activityAvailability = activityUtilProvider.provide();
+    }
+
+    @Override
+    public void onButtonClick(int buttonId) {
+        String exSpec = getFormEntryPrompt().getAppearanceHint().replaceFirst("^ex[:]", "");
+        final String intentName = ExternalAppsUtils.extractIntentName(exSpec);
+        final Map<String, String> exParams = ExternalAppsUtils.extractParameters(exSpec);
+        final String errorString;
+        String v = getFormEntryPrompt().getSpecialFormQuestionText("noAppErrorString");
+        errorString = (v != null) ? v : getContext().getString(R.string.no_app);
+
+        Intent i = new Intent(intentName);
+
+        // Use special "uri_data" key to set intent data. This must be done before checking if an
+        // activity is available to handle implicit intents.
+        if (exParams.containsKey(URI_KEY)) {
+            try {
+                String uriValue = (String) ExternalAppsUtils.getValueRepresentedBy(exParams.get(URI_KEY),
+                            getFormEntryPrompt().getIndex().getReference());
+                i.setData(Uri.parse(uriValue));
+                exParams.remove(URI_KEY);
+            } catch (XPathSyntaxException e) {
+                Timber.d(e);
+                onException(e.getMessage());
+            }
+        }
+
+        if (activityAvailability.isActivityAvailable(i)) {
+            try {
+                ExternalAppsUtils.populateParameters(i, exParams,
+                        getFormEntryPrompt().getIndex().getReference());
+
+                waitForData();
+                fireActivity(i);
+
+            } catch (ExternalParamsException | ActivityNotFoundException e) {
+                Timber.d(e);
+                onException(e.getMessage());
+            }
+        } else {
+            onException(errorString);
+        }
+    }
+
+    private void focusAnswer() {
+        SoftKeyboardUtils.showSoftKeyboard(answer);
+    }
+
+    private void onException(String toastText) {
+        hasExApp = false;
+        if (!getFormEntryPrompt().isReadOnly()) {
+            answer.setBackground(textBackground);
+            answer.setFocusable(true);
+            answer.setFocusableInTouchMode(true);
+            answer.setEnabled(true);
+        }
+        launchIntentButton.setEnabled(false);
+        launchIntentButton.setFocusable(false);
+        cancelWaitingForData();
+
+        Toast.makeText(getContext(),
+                toastText, Toast.LENGTH_SHORT)
+                .show();
+        Timber.d(toastText);
+        focusAnswer();
+    }
 }

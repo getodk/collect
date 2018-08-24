@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="Collect">
+        <attr name="primaryTextColor" format="color" />
+        <attr name="iconColor" format="color" />
+        <attr name="warningColor" format="color" />
+        <attr name="rankItemColor" format="color" />
+        <attr name="divider" format="reference" />
+    </declare-styleable>
+</resources>
