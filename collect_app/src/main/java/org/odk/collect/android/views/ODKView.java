@@ -36,7 +36,7 @@ import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
-import org.javarosa.core.model.Constants;
+import org.javarosa.core.model.DataType;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.IFormElement;
 import org.javarosa.core.model.QuestionDef;
@@ -152,10 +152,10 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                                     IAnswerData answerValue = p.getAnswerValue();
                                     Object value =
                                             answerValue == null ? null : answerValue.getValue();
-                                    switch (p.getDataType()) {
-                                        case Constants.DATATYPE_TEXT:
-                                        case Constants.DATATYPE_INTEGER:
-                                        case Constants.DATATYPE_DECIMAL:
+                                    switch (DataType.from(p.getDataType())) {
+                                        case TEXT:
+                                        case INTEGER:
+                                        case DECIMAL:
                                             i.putExtra(reference.getNameLast(),
                                                     (Serializable) value);
                                             break;
@@ -365,16 +365,16 @@ public class ODKView extends ScrollView implements OnLongClickListener {
 
                 if (treeReference.getNameLast().equals(key)) {
 
-                    switch (prompt.getDataType()) {
-                        case Constants.DATATYPE_TEXT:
+                    switch (DataType.from(prompt.getDataType())) {
+                        case TEXT:
                             formController.saveAnswer(prompt.getIndex(),
                                     ExternalAppsUtils.asStringData(bundle.get(key)));
                             break;
-                        case Constants.DATATYPE_INTEGER:
+                        case INTEGER:
                             formController.saveAnswer(prompt.getIndex(),
                                     ExternalAppsUtils.asIntegerData(bundle.get(key)));
                             break;
-                        case Constants.DATATYPE_DECIMAL:
+                        case DECIMAL:
                             formController.saveAnswer(prompt.getIndex(),
                                     ExternalAppsUtils.asDecimalData(bundle.get(key)));
                             break;

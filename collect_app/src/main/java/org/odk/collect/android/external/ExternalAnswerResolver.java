@@ -19,6 +19,7 @@
 package org.odk.collect.android.external;
 
 import org.javarosa.core.model.Constants;
+import org.javarosa.core.model.ControlType;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.SelectChoice;
@@ -75,8 +76,8 @@ public class ExternalAnswerResolver extends DefaultAnswerResolver {
 
                         Selection selection = selectChoice.selection();
 
-                        switch (questionDef.getControlType()) {
-                            case Constants.CONTROL_SELECT_ONE: {
+                        switch (ControlType.from(questionDef.getControlType())) {
+                            case SELECT_ONE: {
                                 if (selectChoiceValue.equals(textVal)) {
                                     // This means that the user selected a static selection.
                                     //
@@ -93,7 +94,7 @@ public class ExternalAnswerResolver extends DefaultAnswerResolver {
                                 }
                                 break;
                             }
-                            case Constants.CONTROL_SELECT_MULTI: {
+                            case SELECT_MULTI: {
                                 // we should search in a potential comma-separated string of
                                 // values for a match
                                 // copied from org.javarosa.xform.util.XFormAnswerDataParser
@@ -124,8 +125,8 @@ public class ExternalAnswerResolver extends DefaultAnswerResolver {
                         }
 
                     } else {
-                        switch (questionDef.getControlType()) {
-                            case Constants.CONTROL_SELECT_ONE: {
+                        switch (ControlType.from(questionDef.getControlType())) {
+                            case SELECT_ONE: {
                                 // the default implementation will search for the "textVal"
                                 // (saved answer) inside the static choices.
                                 // Since we know that there isn't such, we just wrap the textVal
@@ -139,7 +140,7 @@ public class ExternalAnswerResolver extends DefaultAnswerResolver {
                                 customSelectChoice.setIndex(index);
                                 return new SelectOneData(customSelectChoice.selection());
                             }
-                            case Constants.CONTROL_SELECT_MULTI: {
+                            case SELECT_MULTI: {
                                 // we should create multiple selections and add them to the pile
                                 List<SelectChoice> customSelectChoices = createCustomSelectChoices(
                                         textVal);
