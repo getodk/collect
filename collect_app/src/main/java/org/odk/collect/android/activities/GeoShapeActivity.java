@@ -146,8 +146,7 @@ public class GeoShapeActivity extends CollectAbstractActivity implements IRegist
         zoomLocationButton.setOnClickListener(v -> {
             MapPoint location = map.getGpsLocation();
             if (location != null) {
-                map.setCenter(location);
-                map.setZoom(15);
+                map.zoomToPoint(location, 16);
             }
             zoomDialog.dismiss();
         });

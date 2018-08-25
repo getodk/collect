@@ -57,8 +57,7 @@ public class OsmMapFragment extends Fragment implements MapFragment, MapEventsRe
     protected MyLocationNewOverlay myLocationOverlay;
     protected int nextFeatureId = 1;
     protected Map<Integer, MapFeature> features = new HashMap<>();
-
-    @VisibleForTesting protected AlertDialog gpsErrorDialog;
+    protected AlertDialog gpsErrorDialog;
 
     @Override public void addTo(@NonNull FragmentActivity activity, int containerId, @Nullable ReadyListener listener) {
         readyListener = listener;
@@ -102,23 +101,18 @@ public class OsmMapFragment extends Fragment implements MapFragment, MapEventsRe
         return false;
     }
 
-    @Override public double getZoom() {
-        return map.getZoomLevel();
-    }
-
-    @Override public double setZoom(double requestedZoom) {
-        int actualZoom = (int) Math.round(
-            clamp(requestedZoom, map.getMinZoomLevel(), map.getMaxZoomLevel()));
-        map.getController().setZoom(actualZoom);
-        return actualZoom;
-    }
-
     @Override public @NonNull MapPoint getCenter() {
         return fromGeoPoint(map.getMapCenter());
     }
 
-    @Override public void setCenter(@Nullable MapPoint center) {
+    @Override public double getZoom() {
+        return map.getZoomLevel();
+    }
+
+    @Override public void zoomToPoint(@NonNull MapPoint center, double zoom) {
         if (center != null) {
+            // setCenter() must be done last; setZoom() does not preserve the center.
+            map.getController().setZoom((int) Math.round(zoom));
             map.getController().setCenter(toGeoPoint(center));
         }
     }
@@ -140,7 +134,7 @@ public class OsmMapFragment extends Fragment implements MapFragment, MapEventsRe
         }
     }
 
-    @Override public int addDraggableShape(Iterable<MapPoint> points) {
+    @Override public int addDraggableShape(@NonNull Iterable<MapPoint> points) {
         int featureId = nextFeatureId++;
         features.put(featureId, new DraggableShape(map, points));
         return featureId;
@@ -155,7 +149,7 @@ public class OsmMapFragment extends Fragment implements MapFragment, MapEventsRe
 
     @Override public @NonNull List<MapPoint> getPointsOfShape(int featureId) {
         MapFeature feature = features.get(featureId);
-        if (feature != null && feature instanceof DraggableShape) {
+        if (feature instanceof DraggableShape) {
             return ((DraggableShape) feature).getPoints();
         }
         return new ArrayList<>();

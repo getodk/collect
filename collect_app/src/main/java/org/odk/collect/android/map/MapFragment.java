@@ -17,12 +17,11 @@ package org.odk.collect.android.map;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
-import android.view.View;
 
 import java.util.List;
 
 /**
- * Interface for Fragments that render a map view.  The plan is to have one
+ * Interface for a Fragment that renders a map view.  The plan is to have one
  * implementation for each map SDK, e.g. GoogleMapFragment, OsmMapFragment, etc.
  *
  * This is intended to be a single map API that provides all functionality needed
@@ -37,8 +36,8 @@ import java.util.List;
  *
  * Editable points, traces, and shapes are called "map features" in this API.
  * To keep the API small, features are not exposed as objects; instead, they are
- * identified by integer feature IDs.  To keep the API unified (instead of behaving
- * like three different APIs), the map always supports all three kinds of features,
+ * identified by integer feature IDs.  To keep the API unified (instead of having
+ * three distinct modes), the map always supports all three kinds of features,
  * even though the geo widgets only use one kind of feature at a time.
  */
 public interface MapFragment {
@@ -50,8 +49,8 @@ public interface MapFragment {
      */
     void addTo(@NonNull FragmentActivity activity, int containerId, @Nullable ReadyListener listener);
 
-    /** Gets the View that is displaying the map. */
-    View getView();
+    /** Gets the point currently shown at the center of the map view. */
+    @NonNull MapPoint getCenter();
 
     /**
      * Gets the current zoom level.  For maps that only support zooming by
@@ -60,21 +59,15 @@ public interface MapFragment {
     double getZoom();
 
     /**
-     * Changes the zoom level to bring it as close as possible to the given value,
-     * possibly with animation, and returns the actual zoom that will be reached.
+     * Centers the map view on the given point with a zoom level as close as
+     * possible to the given zoom level, possibly with animation.
      */
-    double setZoom(double zoom);
-
-    /** Gets the point currently shown at the center of the map view. */
-    @NonNull MapPoint getCenter();
-
-    /** Pans the map view to center on the given point, possibly with animation. */
-    void setCenter(@Nullable MapPoint center);
+    void zoomToPoint(@NonNull MapPoint center, double zoom);
 
     /**
-     * Adjusts the map's viewport and zoom level to enclose all of the given
-     * points.  A scaleFactor of 1.0 ensures that all the points will be just
-     * visible in the viewport; a scaleFactor less than 1 shrinks the view
+     * Adjusts the map's viewport to enclose all of the given points, possibly
+     * with animation.  A scaleFactor of 1.0 ensures that all the points will be
+     * just visible in the viewport; a scaleFactor less than 1 shrinks the view
      * beyond that.  For example, a scaleFactor of 0.8 causes the bounding box
      * to occupy at most 80% of the width and 80% of the height of the viewport,
      * ensuring a margin of at least 10% on all sides.
@@ -86,7 +79,7 @@ public interface MapFragment {
      * The polygon's vertices will have handles that can be dragged by the user.
      * Returns a positive integer, the featureId for the newly added polyline.
      */
-    int addDraggableShape(Iterable<MapPoint> points);
+    int addDraggableShape(@NonNull Iterable<MapPoint> points);
 
     /** Appends a vertex to the polygonal shape specified by featureId. */
     void appendPointToShape(int featureId, @NonNull MapPoint point);
@@ -105,9 +98,8 @@ public interface MapFragment {
 
     /**
      * Enables/disables GPS tracking.  While enabled, the GPS location is shown
-     * on the map, and fixes are passed to the listener (setGpsLocationListener).
-     * The activity is responsible for disabling GPS location if it doesn't want
-     * to keep getting callbacks after it has been stopped or destroyed.
+     * on the map, and the first GPS fix will trigger any pending callbacks set
+     * by runOnGpsLocationReady().
      */
     void setGpsLocationEnabled(boolean enabled);
 
@@ -118,6 +110,9 @@ public interface MapFragment {
      * Queues a callback to be invoked on the UI thread as soon as a GPS fix is
      * available.  If there already is a location fix, the callback is invoked
      * immediately; otherwise, when a fix is obtained, it will be invoked once.
+     * To begin searching for a GPS fix, call setGpsLocationEnabled(true).
+     * Activities that set callbacks should call setGpsLocationEnabled(false)
+     * in their onStop() or onDestroy() methods, to prevent invalid callbacks.
      */
     void runOnGpsLocationReady(@NonNull ReadyListener listener);
 

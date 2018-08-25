@@ -104,26 +104,17 @@ public class GoogleMapFragment extends SupportMapFragment implements
         return map;
     }
 
-    @Override public double getZoom() {
-        return map.getCameraPosition().zoom;
-    }
-
-    @Override public double setZoom(double requestedZoom) {
-        float actualZoom = (float) clamp(requestedZoom, map.getMinZoomLevel(), map.getMaxZoomLevel());
-        map.animateCamera(CameraUpdateFactory.zoomTo(actualZoom));
-        return actualZoom;
-    }
-
     @Override public @NonNull MapPoint getCenter() {
         LatLng target = map.getCameraPosition().target;
         return new MapPoint(target.latitude, target.longitude);
     }
 
-    @Override public void setCenter(@Nullable MapPoint center) {
-        if (center != null) {
-            LatLng target = new LatLng(center.lat, center.lon);
-            map.animateCamera(CameraUpdateFactory.newLatLng(target));
-        }
+    @Override public double getZoom() {
+        return map.getCameraPosition().zoom;
+    }
+
+    @Override public void zoomToPoint(@NonNull MapPoint center, double zoom) {
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(toLatLng(center), (float) zoom));
     }
 
     @Override public void zoomToBoundingBox(Iterable<MapPoint> points, double scaleFactor) {
@@ -164,7 +155,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
         return new LatLngBounds(new LatLng(south, west), new LatLng(north, east));
     }
 
-    @Override public int addDraggableShape(Iterable<MapPoint> points) {
+    @Override public int addDraggableShape(@NonNull Iterable<MapPoint> points) {
         int featureId = nextFeatureId++;
         features.put(featureId, new DraggableShape(map, points));
         return featureId;
@@ -172,7 +163,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
     @Override public void appendPointToShape(int featureId, @NonNull MapPoint point) {
         MapFeature feature = features.get(featureId);
-        if (feature != null && feature instanceof DraggableShape) {
+        if (feature instanceof DraggableShape) {
             ((DraggableShape) feature).addPoint(point);
         }
     }
