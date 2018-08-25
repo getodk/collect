@@ -70,6 +70,7 @@ import java.util.regex.Pattern;
 
 import timber.log.Timber;
 
+import static org.javarosa.core.model.DataType.GEOPOINT;
 import static org.odk.collect.android.logic.FormController.INSTANCE_ID;
 import static org.odk.collect.android.utilities.InstanceUploaderUtils.DEFAULT_SUCCESSFUL_TEXT;
 
@@ -488,7 +489,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         for (TreeElement child : getChildElements(element)) {
             final String elementTitle = getElementTitle(child);
             columnTitles.add(elementTitle);
-            if (newSheet && child.getDataType() == org.javarosa.core.model.Constants.DATATYPE_GEOPOINT) {
+            if (newSheet && child.getDataTypeEnum() == GEOPOINT) {
                 columnTitles.add(elementTitle + ALTITUDE_TITLE_POSTFIX);
                 columnTitles.add(elementTitle + ACCURACY_TITLE_POSTFIX);
             }
@@ -549,7 +550,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             if ((prior != null) && (prior.getName().equals(current.getName()))) {
                 prior = current;
             } else {
-                switch (DataType.from(current.getDataType())) {
+                switch (current.getDataTypeEnum()) {
                     case TEXT:
                     case INTEGER:
                     case DECIMAL:

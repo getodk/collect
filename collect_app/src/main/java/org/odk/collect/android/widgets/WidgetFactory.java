@@ -18,6 +18,7 @@ import android.content.Context;
 
 import com.google.android.gms.analytics.HitBuilders;
 
+import org.javarosa.core.model.Constants;
 import org.javarosa.core.model.ControlType;
 import org.javarosa.core.model.DataType;
 import org.javarosa.core.model.ItemsetBinding;
@@ -64,9 +65,9 @@ public class WidgetFactory {
         appearance = appearance.toLowerCase(Locale.ENGLISH);
 
         final QuestionWidget questionWidget;
-        switch (ControlType.from(fep.getControlType())) {
+        switch (fep.getControlTypeEnum()) {
             case INPUT:
-                switch (DataType.from(fep.getDataType())) {
+                switch (fep.getDataTypeEnum()) {
                     case DATE_TIME:
                         questionWidget = new DateTimeWidget(context, fep);
                         break;
@@ -256,7 +257,7 @@ public class WidgetFactory {
                 questionWidget = new TriggerWidget(context, fep);
                 break;
             case RANGE:
-                switch (DataType.from(fep.getDataType())) {
+                switch (fep.getDataTypeEnum()) {
                     case INTEGER:
                         questionWidget = new RangeIntegerWidget(context, fep);
                         break;

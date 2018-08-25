@@ -18,8 +18,9 @@
 
 package org.odk.collect.android.external;
 
-import org.javarosa.core.model.Constants;
-import org.javarosa.core.model.ControlType;
+import static org.javarosa.core.model.ControlType.SELECT_MULTI;
+import static org.javarosa.core.model.ControlType.SELECT_ONE;
+
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.SelectChoice;
@@ -48,10 +49,10 @@ public class ExternalAnswerResolver extends DefaultAnswerResolver {
 
     @Override
     public IAnswerData resolveAnswer(String textVal, TreeElement treeElement, FormDef formDef) {
-        QuestionDef questionDef = XFormParser.ghettoGetQuestionDef(treeElement.getDataType(),
+        QuestionDef questionDef = XFormParser.ghettoGetQuestionDef(treeElement.getDataTypeEnum(),
                 formDef, treeElement.getRef());
-        if (questionDef != null && (questionDef.getControlType() == Constants.CONTROL_SELECT_ONE
-                || questionDef.getControlType() == Constants.CONTROL_SELECT_MULTI)) {
+        if (questionDef != null && (questionDef.getControlTypeEnum() == SELECT_ONE
+                || questionDef.getControlTypeEnum() == SELECT_MULTI)) {
             boolean containsSearchExpression = false;
 
             XPathFuncExpr xpathExpression = null;
@@ -76,7 +77,7 @@ public class ExternalAnswerResolver extends DefaultAnswerResolver {
 
                         Selection selection = selectChoice.selection();
 
-                        switch (ControlType.from(questionDef.getControlType())) {
+                        switch (questionDef.getControlTypeEnum()) {
                             case SELECT_ONE: {
                                 if (selectChoiceValue.equals(textVal)) {
                                     // This means that the user selected a static selection.
@@ -86,8 +87,8 @@ public class ExternalAnswerResolver extends DefaultAnswerResolver {
                                     // (if we call super.resolveAnswer(textVal, treeElement,
                                     // formDef))
                                     // we just need to make sure, so we will override that.
-                                    if (questionDef.getControlType()
-                                            == Constants.CONTROL_SELECT_ONE) {
+                                    if (questionDef.getControlTypeEnum()
+                                            == SELECT_ONE) {
                                         // we don't need another, just return the static choice.
                                         return new SelectOneData(selection);
                                     }
@@ -125,7 +126,7 @@ public class ExternalAnswerResolver extends DefaultAnswerResolver {
                         }
 
                     } else {
-                        switch (ControlType.from(questionDef.getControlType())) {
+                        switch (questionDef.getControlTypeEnum()) {
                             case SELECT_ONE: {
                                 // the default implementation will search for the "textVal"
                                 // (saved answer) inside the static choices.

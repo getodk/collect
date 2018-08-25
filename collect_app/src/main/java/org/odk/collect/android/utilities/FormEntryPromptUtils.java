@@ -34,7 +34,8 @@ import java.text.DecimalFormatSymbols;
 import java.util.Date;
 import java.util.List;
 
-import static org.javarosa.core.model.Constants.DATATYPE_TEXT;
+import static org.javarosa.core.model.ControlType.RANK;
+import static org.javarosa.core.model.DataType.TEXT;
 
 public class FormEntryPromptUtils {
 
@@ -49,7 +50,7 @@ public class FormEntryPromptUtils {
             StringBuilder answerText = new StringBuilder();
             List<Selection> values = (List<Selection>) data.getValue();
             for (Selection value : values) {
-                if (fep.getControlType() == Constants.CONTROL_RANK) {
+                if (fep.getControlTypeEnum() == RANK) {
                     answerText
                             .append(values.indexOf(value) + 1)
                             .append(". ");
@@ -99,7 +100,7 @@ public class FormEntryPromptUtils {
             }
         }
 
-        if (data != null && data.getValue() != null && fep.getDataType() == DATATYPE_TEXT
+        if (data != null && data.getValue() != null && fep.getDataTypeEnum() == TEXT
                 && fep.getQuestion().getAdditionalAttribute(null, "query") != null) { // ItemsetWidget
 
             String language = "";

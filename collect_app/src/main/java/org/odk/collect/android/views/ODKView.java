@@ -152,7 +152,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                                     IAnswerData answerValue = p.getAnswerValue();
                                     Object value =
                                             answerValue == null ? null : answerValue.getValue();
-                                    switch (DataType.from(p.getDataType())) {
+                                    switch (p.getDataTypeEnum()) {
                                         case TEXT:
                                         case INTEGER:
                                         case DECIMAL:
@@ -365,7 +365,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
 
                 if (treeReference.getNameLast().equals(key)) {
 
-                    switch (DataType.from(prompt.getDataType())) {
+                    switch (prompt.getDataTypeEnum()) {
                         case TEXT:
                             formController.saveAnswer(prompt.getIndex(),
                                     ExternalAppsUtils.asStringData(bundle.get(key)));
