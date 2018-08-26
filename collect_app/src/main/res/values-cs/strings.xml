@@ -438,7 +438,6 @@
   <string name="sort_by_status_asc">Stav, dokončen první</string>
   <string name="sort_by_status_desc">Stav, nedokončen první</string>
   <string name="sort_the_list">Řazení seznamu</string>
-  <string name="request_permissions_google_account">ODK Collect potřebuje přístup k vašemu účtu Google, aby získal prázdné formuláře a odeslal vyplněné formuláře.</string>
   <string name="filter_the_list">Filtrovat výpis</string>
   <string name="language">Jazyk</string>
   <string name="google_auth_io_exception_msg">Nepodařilo se provést volání API. Pokud používáte místní sestavení, přečtěte si projektové readme.</string>

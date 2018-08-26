@@ -13,11 +13,11 @@ limitations under the License.
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
-    <NumberPicker
+    <org.odk.collect.android.views.CustomNumberPicker
         android:id="@+id/number_picker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:descendantFocusability="blocksDescendants"
         android:layout_gravity="center_horizontal">
-    </NumberPicker>
+    </org.odk.collect.android.views.CustomNumberPicker>
 </FrameLayout>
