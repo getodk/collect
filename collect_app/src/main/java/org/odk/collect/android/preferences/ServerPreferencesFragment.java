@@ -30,6 +30,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.content.res.AppCompatResources;
 import android.telephony.PhoneNumberUtils;
 import android.text.InputFilter;
+import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -58,6 +59,8 @@ import javax.inject.Inject;
 
 import static android.app.Activity.RESULT_OK;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FORMLIST_URL;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PROTOCOL;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SMS_GATEWAY;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SMS_PREFERENCE;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_TRANSPORT_TYPE;
@@ -194,7 +197,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
 
     public void addGooglePreferences() {
         addPreferencesFromResource(R.xml.google_preferences);
-        selectedGoogleAccountPreference = findPreference(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
+        selectedGoogleAccountPreference = findPreference(KEY_SELECTED_GOOGLE_ACCOUNT);
 
         EditTextPreference googleSheetsUrlPreference = (EditTextPreference) findPreference(
                 PreferenceKeys.KEY_GOOGLE_SHEETS_URL);
@@ -438,8 +441,27 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
 
                 showDialog(alertDialog, getActivity());
             } else {
-                continueOnBackPressed();
+                runGoogleAccountValidation();
             }
+        } else {
+            runGoogleAccountValidation();
+        }
+    }
+
+    private void runGoogleAccountValidation() {
+        String account = (String) GeneralSharedPreferences.getInstance().get(KEY_SELECTED_GOOGLE_ACCOUNT);
+        String protocol = (String) GeneralSharedPreferences.getInstance().get(KEY_PROTOCOL);
+
+        if (TextUtils.isEmpty(account) && protocol.equals(getString(R.string.protocol_google_sheets))) {
+
+            AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
+                    .setIcon(android.R.drawable.ic_dialog_info)
+                    .setTitle(R.string.google_invalid_account_title)
+                    .setMessage(R.string.google_invalid_account_description)
+                    .setPositiveButton(getString(R.string.ok), (dialog, which) -> dialog.dismiss())
+                    .create();
+
+            showDialog(alertDialog, getActivity());
         } else {
             continueOnBackPressed();
         }
