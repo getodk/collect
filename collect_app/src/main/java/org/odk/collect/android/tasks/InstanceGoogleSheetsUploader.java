@@ -29,6 +29,7 @@ import com.google.api.services.sheets.v4.model.Sheet;
 import com.google.api.services.sheets.v4.model.Spreadsheet;
 import com.google.api.services.sheets.v4.model.ValueRange;
 
+import org.javarosa.core.model.DataType;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.instance.AbstractTreeElement;
 import org.javarosa.core.model.instance.TreeElement;
@@ -69,6 +70,7 @@ import java.util.regex.Pattern;
 
 import timber.log.Timber;
 
+import static org.javarosa.core.model.DataType.GEOPOINT;
 import static org.odk.collect.android.logic.FormController.INSTANCE_ID;
 import static org.odk.collect.android.utilities.InstanceUploaderUtils.DEFAULT_SUCCESSFUL_TEXT;
 
@@ -487,7 +489,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         for (TreeElement child : getChildElements(element)) {
             final String elementTitle = getElementTitle(child);
             columnTitles.add(elementTitle);
-            if (newSheet && child.getDataType() == org.javarosa.core.model.Constants.DATATYPE_GEOPOINT) {
+            if (newSheet && child.getDataTypeEnum() == GEOPOINT) {
                 columnTitles.add(elementTitle + ALTITUDE_TITLE_POSTFIX);
                 columnTitles.add(elementTitle + ACCURACY_TITLE_POSTFIX);
             }
@@ -548,26 +550,26 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             if ((prior != null) && (prior.getName().equals(current.getName()))) {
                 prior = current;
             } else {
-                switch (current.getDataType()) {
-                    case org.javarosa.core.model.Constants.DATATYPE_TEXT:
-                    case org.javarosa.core.model.Constants.DATATYPE_INTEGER:
-                    case org.javarosa.core.model.Constants.DATATYPE_DECIMAL:
-                    case org.javarosa.core.model.Constants.DATATYPE_DATE:
-                    case org.javarosa.core.model.Constants.DATATYPE_TIME:
-                    case org.javarosa.core.model.Constants.DATATYPE_DATE_TIME:
-                    case org.javarosa.core.model.Constants.DATATYPE_CHOICE:
-                    case org.javarosa.core.model.Constants.DATATYPE_CHOICE_LIST:
-                    case org.javarosa.core.model.Constants.DATATYPE_BOOLEAN:
-                    case org.javarosa.core.model.Constants.DATATYPE_GEOPOINT:
-                    case org.javarosa.core.model.Constants.DATATYPE_BARCODE:
-                    case org.javarosa.core.model.Constants.DATATYPE_BINARY:
-                    case org.javarosa.core.model.Constants.DATATYPE_LONG:
-                    case org.javarosa.core.model.Constants.DATATYPE_GEOSHAPE:
-                    case org.javarosa.core.model.Constants.DATATYPE_GEOTRACE:
-                    case org.javarosa.core.model.Constants.DATATYPE_UNSUPPORTED:
+                switch (current.getDataTypeEnum()) {
+                    case TEXT:
+                    case INTEGER:
+                    case DECIMAL:
+                    case DATE:
+                    case TIME:
+                    case DATE_TIME:
+                    case CHOICE:
+                    case MULTIPLE_ITEMS:
+                    case BOOLEAN:
+                    case GEOPOINT:
+                    case BARCODE:
+                    case BINARY:
+                    case LONG:
+                    case GEOSHAPE:
+                    case GEOTRACE:
+                    case UNSUPPORTED:
                         elements.add(current);
                         break;
-                    case org.javarosa.core.model.Constants.DATATYPE_NULL:
+                    case NULL:
                         if (current.isRepeatable()) { // repeat group
                             elements.add(current);
                         } else if (current.getNumChildren() == 0) { // assume fields that don't have children are string fields

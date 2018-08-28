@@ -18,7 +18,9 @@
 
 package org.odk.collect.android.external;
 
-import org.javarosa.core.model.Constants;
+import static org.javarosa.core.model.ControlType.SELECT_MULTI;
+import static org.javarosa.core.model.ControlType.SELECT_ONE;
+
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.SelectChoice;
@@ -47,10 +49,10 @@ public class ExternalAnswerResolver extends DefaultAnswerResolver {
 
     @Override
     public IAnswerData resolveAnswer(String textVal, TreeElement treeElement, FormDef formDef) {
-        QuestionDef questionDef = XFormParser.ghettoGetQuestionDef(treeElement.getDataType(),
+        QuestionDef questionDef = XFormParser.ghettoGetQuestionDef(treeElement.getDataTypeEnum(),
                 formDef, treeElement.getRef());
-        if (questionDef != null && (questionDef.getControlType() == Constants.CONTROL_SELECT_ONE
-                || questionDef.getControlType() == Constants.CONTROL_SELECT_MULTI)) {
+        if (questionDef != null && (questionDef.getControlTypeEnum() == SELECT_ONE
+                || questionDef.getControlTypeEnum() == SELECT_MULTI)) {
             boolean containsSearchExpression = false;
 
             XPathFuncExpr xpathExpression = null;
@@ -75,8 +77,8 @@ public class ExternalAnswerResolver extends DefaultAnswerResolver {
 
                         Selection selection = selectChoice.selection();
 
-                        switch (questionDef.getControlType()) {
-                            case Constants.CONTROL_SELECT_ONE: {
+                        switch (questionDef.getControlTypeEnum()) {
+                            case SELECT_ONE: {
                                 if (selectChoiceValue.equals(textVal)) {
                                     // This means that the user selected a static selection.
                                     //
@@ -85,15 +87,15 @@ public class ExternalAnswerResolver extends DefaultAnswerResolver {
                                     // (if we call super.resolveAnswer(textVal, treeElement,
                                     // formDef))
                                     // we just need to make sure, so we will override that.
-                                    if (questionDef.getControlType()
-                                            == Constants.CONTROL_SELECT_ONE) {
+                                    if (questionDef.getControlTypeEnum()
+                                            == SELECT_ONE) {
                                         // we don't need another, just return the static choice.
                                         return new SelectOneData(selection);
                                     }
                                 }
                                 break;
                             }
-                            case Constants.CONTROL_SELECT_MULTI: {
+                            case SELECT_MULTI: {
                                 // we should search in a potential comma-separated string of
                                 // values for a match
                                 // copied from org.javarosa.xform.util.XFormAnswerDataParser
@@ -124,8 +126,8 @@ public class ExternalAnswerResolver extends DefaultAnswerResolver {
                         }
 
                     } else {
-                        switch (questionDef.getControlType()) {
-                            case Constants.CONTROL_SELECT_ONE: {
+                        switch (questionDef.getControlTypeEnum()) {
+                            case SELECT_ONE: {
                                 // the default implementation will search for the "textVal"
                                 // (saved answer) inside the static choices.
                                 // Since we know that there isn't such, we just wrap the textVal
@@ -139,7 +141,7 @@ public class ExternalAnswerResolver extends DefaultAnswerResolver {
                                 customSelectChoice.setIndex(index);
                                 return new SelectOneData(customSelectChoice.selection());
                             }
-                            case Constants.CONTROL_SELECT_MULTI: {
+                            case SELECT_MULTI: {
                                 // we should create multiple selections and add them to the pile
                                 List<SelectChoice> customSelectChoices = createCustomSelectChoices(
                                         textVal);

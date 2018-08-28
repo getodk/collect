@@ -19,6 +19,8 @@ import android.content.Context;
 import com.google.android.gms.analytics.HitBuilders;
 
 import org.javarosa.core.model.Constants;
+import org.javarosa.core.model.ControlType;
+import org.javarosa.core.model.DataType;
 import org.javarosa.core.model.ItemsetBinding;
 import org.javarosa.core.model.QuestionDef;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -63,13 +65,13 @@ public class WidgetFactory {
         appearance = appearance.toLowerCase(Locale.ENGLISH);
 
         final QuestionWidget questionWidget;
-        switch (fep.getControlType()) {
-            case Constants.CONTROL_INPUT:
-                switch (fep.getDataType()) {
-                    case Constants.DATATYPE_DATE_TIME:
+        switch (fep.getControlTypeEnum()) {
+            case INPUT:
+                switch (fep.getDataTypeEnum()) {
+                    case DATE_TIME:
                         questionWidget = new DateTimeWidget(context, fep);
                         break;
-                    case Constants.DATATYPE_DATE:
+                    case DATE:
                         if (appearance.contains("ethiopian")) {
                             questionWidget = new EthiopianDateWidget(context, fep);
                         } else if (appearance.contains("coptic")) {
@@ -80,10 +82,10 @@ public class WidgetFactory {
                             questionWidget = new DateWidget(context, fep);
                         }
                         break;
-                    case Constants.DATATYPE_TIME:
+                    case TIME:
                         questionWidget = new TimeWidget(context, fep);
                         break;
-                    case Constants.DATATYPE_DECIMAL:
+                    case DECIMAL:
                         if (appearance.startsWith("ex:")) {
                             questionWidget = new ExDecimalWidget(context, fep);
                         } else if (appearance.equals("bearing")) {
@@ -97,7 +99,7 @@ public class WidgetFactory {
                                     useThousandSeparator);
                         }
                         break;
-                    case Constants.DATATYPE_INTEGER:
+                    case INTEGER:
                         if (appearance.startsWith("ex:")) {
                             questionWidget = new ExIntegerWidget(context, fep);
                         } else {
@@ -109,19 +111,19 @@ public class WidgetFactory {
                                     useThousandSeparator);
                         }
                         break;
-                    case Constants.DATATYPE_GEOPOINT:
+                    case GEOPOINT:
                         questionWidget = new GeoPointWidget(context, fep);
                         break;
-                    case Constants.DATATYPE_GEOSHAPE:
+                    case GEOSHAPE:
                         questionWidget = new GeoShapeWidget(context, fep);
                         break;
-                    case Constants.DATATYPE_GEOTRACE:
+                    case GEOTRACE:
                         questionWidget = new GeoTraceWidget(context, fep);
                         break;
-                    case Constants.DATATYPE_BARCODE:
+                    case BARCODE:
                         questionWidget = new BarcodeWidget(context, fep);
                         break;
-                    case Constants.DATATYPE_TEXT:
+                    case TEXT:
                         String query = fep.getQuestion().getAdditionalAttribute(null, "query");
                         if (query != null) {
                             questionWidget = new ItemsetWidget(context, fep, appearance.startsWith("quick"));
@@ -142,7 +144,7 @@ public class WidgetFactory {
                             questionWidget = new StringWidget(context, fep, readOnlyOverride);
                         }
                         break;
-                    case Constants.DATATYPE_BOOLEAN:
+                    case BOOLEAN:
                         questionWidget = new BooleanWidget(context, fep);
                         break;
                     default:
@@ -150,10 +152,10 @@ public class WidgetFactory {
                         break;
                 }
                 break;
-            case Constants.CONTROL_FILE_CAPTURE:
+            case FILE_CAPTURE:
                 questionWidget = new ArbitraryFileWidget(context, fep);
                 break;
-            case Constants.CONTROL_IMAGE_CHOOSE:
+            case IMAGE_CHOOSE:
                 if (appearance.equals("web")) {
                     questionWidget = new ImageWebViewWidget(context, fep);
                 } else if (appearance.equals("signature")) {
@@ -168,16 +170,16 @@ public class WidgetFactory {
                     questionWidget = new ImageWidget(context, fep);
                 }
                 break;
-            case Constants.CONTROL_OSM_CAPTURE:
+            case OSM_CAPTURE:
                 questionWidget = new OSMWidget(context, fep);
                 break;
-            case Constants.CONTROL_AUDIO_CAPTURE:
+            case AUDIO_CAPTURE:
                 questionWidget = new AudioWidget(context, fep);
                 break;
-            case Constants.CONTROL_VIDEO_CAPTURE:
+            case VIDEO_CAPTURE:
                 questionWidget = new VideoWidget(context, fep);
                 break;
-            case Constants.CONTROL_SELECT_ONE:
+            case SELECT_ONE:
                 // search() appearance/function (not part of XForms spec) added by SurveyCTO gets
                 // considered in each widget by calls to ExternalDataUtil.getSearchXPathExpression.
                 // This means normal appearances should be put before search().
@@ -213,7 +215,7 @@ public class WidgetFactory {
                 logChoiceFilterAnalytics(fep.getQuestion());
 
                 break;
-            case Constants.CONTROL_SELECT_MULTI:
+            case SELECT_MULTI:
                 // search() appearance/function (not part of XForms spec) added by SurveyCTO gets
                 // considered in each widget by calls to ExternalDataUtil.getSearchXPathExpression.
                 // This means normal appearances should be put before search().
@@ -248,18 +250,18 @@ public class WidgetFactory {
                     questionWidget = new SelectMultiWidget(context, fep);
                 }
                 break;
-            case Constants.CONTROL_RANK:
+            case RANK:
                 questionWidget = new RankingWidget(context, fep);
                 break;
-            case Constants.CONTROL_TRIGGER:
+            case TRIGGER:
                 questionWidget = new TriggerWidget(context, fep);
                 break;
-            case Constants.CONTROL_RANGE:
-                switch (fep.getDataType()) {
-                    case Constants.DATATYPE_INTEGER:
+            case RANGE:
+                switch (fep.getDataTypeEnum()) {
+                    case INTEGER:
                         questionWidget = new RangeIntegerWidget(context, fep);
                         break;
-                    case Constants.DATATYPE_DECIMAL:
+                    case DECIMAL:
                         questionWidget = new RangeDecimalWidget(context, fep);
                         break;
                     default:
