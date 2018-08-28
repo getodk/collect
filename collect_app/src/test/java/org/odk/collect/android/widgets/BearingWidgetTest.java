@@ -26,11 +26,12 @@ public class BearingWidgetTest extends BinaryWidgetTest<BearingWidget, StringDat
 
         @Override
         public boolean checkForRequiredSensors() {
-            return false;
+            return true;
         }
 
         @Override
         public void setAnswer(String s) {
+            s = RandomString.make();
             if (answer != null) {
                 answer.setText(s);
             }
