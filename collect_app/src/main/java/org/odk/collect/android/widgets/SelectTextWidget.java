@@ -64,7 +64,7 @@ public abstract class SelectTextWidget extends SelectWidget {
         params.setMargins(7, 5, 7, 5);
         searchStr.setLayoutParams(params);
         setupChangeListener();
-        addAnswerView(searchStr);
+        answerLayout.addView(searchStr, 0);
 
         String searchText = null;
         if (getState() != null) {

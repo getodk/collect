@@ -126,7 +126,7 @@ public abstract class SelectWidget extends QuestionWidget {
         }
     }
 
-    protected MediaLayout createMediaLayout(int index, TextView textView) {
+    public MediaLayout createMediaLayout(int index, TextView textView) {
         String audioURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), FormEntryCaption.TEXT_FORM_AUDIO);
 
         String imageURI;
