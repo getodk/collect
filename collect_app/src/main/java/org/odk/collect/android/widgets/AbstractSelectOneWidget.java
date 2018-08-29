@@ -17,9 +17,7 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.Nullable;
-import android.support.v7.content.res.AppCompatResources;
 import android.support.v7.widget.AppCompatRadioButton;
-import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -27,10 +25,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 
+import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
 import org.javarosa.core.model.data.StringData;
@@ -40,7 +38,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.utilities.TextUtils;
-import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
 import java.util.ArrayList;
@@ -63,9 +60,15 @@ public abstract class AbstractSelectOneWidget extends SelectTextWidget
     protected String selectedValue;
 
     private final boolean autoAdvance;
+    private final boolean isReadOnly;
+    private final int fontSize;
 
     public AbstractSelectOneWidget(Context context, FormEntryPrompt prompt, boolean autoAdvance) {
         super(context, prompt);
+
+        isReadOnly = getFormEntryPrompt().isReadOnly();
+        fontSize = getAnswerFontSize();
+
         buttons = new ArrayList<>();
 
         if (prompt.getAnswerValue() != null) {
@@ -139,36 +142,24 @@ public abstract class AbstractSelectOneWidget extends SelectTextWidget
     }
 
     protected RadioButton createRadioButton(int index) {
-        String choiceName = getFormEntryPrompt().getSelectChoiceText(items.get(index));
-        CharSequence choiceDisplayName;
-        if (choiceName != null) {
-            choiceDisplayName = TextUtils.textToHtml(choiceName);
-        } else {
-            choiceDisplayName = "";
-        }
+        SelectChoice item = items.get(index);
+
+        String choiceName = getFormEntryPrompt().getSelectChoiceText(item);
 
         AppCompatRadioButton radioButton = new AppCompatRadioButton(getContext());
-        radioButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
-        radioButton.setText(choiceDisplayName);
-        radioButton.setMovementMethod(LinkMovementMethod.getInstance());
+        radioButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, fontSize);
+        radioButton.setText(choiceName != null ? TextUtils.textToHtml(choiceName) : "");
         radioButton.setTag(index);
-        radioButton.setId(ViewIds.generateViewId());
-        radioButton.setEnabled(!getFormEntryPrompt().isReadOnly());
-        radioButton.setFocusable(!getFormEntryPrompt().isReadOnly());
         radioButton.setOnClickListener(this);
-
-        //adapt radioButton text as per language direction
-        if (isRTL()) {
-            radioButton.setGravity(Gravity.END);
-        } else {
-            radioButton.setGravity(Gravity.START);
+        radioButton.setOnCheckedChangeListener(this);
+        radioButton.setGravity(isRTL() ? Gravity.END : Gravity.START);
+        if (isReadOnly) {
+            radioButton.setEnabled(false);
         }
 
-        if (items.get(index).getValue().equals(selectedValue)) {
+        if (item.getValue().equals(selectedValue)) {
             radioButton.setChecked(true);
         }
-
-        radioButton.setOnCheckedChangeListener(this);
 
         return radioButton;
     }
@@ -192,12 +183,12 @@ public abstract class AbstractSelectOneWidget extends SelectTextWidget
 
         RadioButton radioButton = createRadioButton(index);
 
-        ImageView rightArrow = (ImageView) thisParentLayout.getChildAt(1);
-        rightArrow.setImageDrawable(autoAdvance ? AppCompatResources.getDrawable(getContext(), R.drawable.expander_ic_right) : null);
-
         buttons.add(radioButton);
 
-        ((ViewGroup) thisParentLayout.getChildAt(0)).addView(createMediaLayout(index, radioButton));
+        ((ViewGroup) thisParentLayout.findViewById(R.id.container)).addView(createMediaLayout(index, radioButton));
+        if (autoAdvance) {
+            thisParentLayout.findViewById(R.id.right_arrow).setVisibility(VISIBLE);
+        }
 
         return thisParentLayout;
     }
