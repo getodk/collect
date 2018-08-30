@@ -2567,12 +2567,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     }
                 }, true);
             } else {
-                int requestCode = task.getRequestCode(); // these are bogus if
-                // pendingActivityResult is
-                // false
-                int resultCode = task.getResultCode();
-                Intent intent = task.getIntent();
-
                 formLoaderTask.setFormLoaderListener(null);
                 FormLoaderTask t = formLoaderTask;
                 formLoaderTask = null;
@@ -2607,7 +2601,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     // set the current view to whatever group we were at...
                     refreshCurrentView();
                     // process the pending activity request...
-                    onActivityResult(requestCode, resultCode, intent);
+                    onActivityResult(task.getRequestCode(), task.getResultCode(), task.getIntent());
                     return;
                 }
 

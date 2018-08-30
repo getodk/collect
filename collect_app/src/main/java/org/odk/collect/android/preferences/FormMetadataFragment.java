@@ -32,25 +32,31 @@ public class FormMetadataFragment extends BasePreferenceFragment {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.form_metadata_preferences);
 
+        initNormalPrefs();
+
         requestReadPhoneStatePermission(getActivity(), new PermissionListener() {
             @Override
             public void granted() {
-                initPrefs();
+                initDangerousPrefs();
             }
 
             @Override
             public void denied() {
             }
         }, true);
-        initPrefs();
     }
 
-    private void initPrefs() {
+    private void initNormalPrefs() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         PropertyManager pm = new PropertyManager(getActivity());
         initPrefFromProp(pm, prefs, PROPMGR_USERNAME, KEY_METADATA_USERNAME);
-        initPrefFromProp(pm, prefs, PROPMGR_PHONE_NUMBER, KEY_METADATA_PHONENUMBER);
         initPrefFromProp(pm, prefs, PROPMGR_EMAIL, KEY_METADATA_EMAIL);
+    }
+
+    private void initDangerousPrefs() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        PropertyManager pm = new PropertyManager(getActivity());
+        initPrefFromProp(pm, prefs, PROPMGR_PHONE_NUMBER, KEY_METADATA_PHONENUMBER);
         initPrefFromProp(pm, prefs, PROPMGR_DEVICE_ID, null);
         initPrefFromProp(pm, prefs, PROPMGR_SUBSCRIBER_ID, null);
         initPrefFromProp(pm, prefs, PROPMGR_SIM_SERIAL, null);
@@ -95,26 +101,23 @@ public class FormMetadataFragment extends BasePreferenceFragment {
      * Creates a change listener to update the UI, and save new values in shared preferences.
      */
     private Preference.OnPreferenceChangeListener createChangeListener(final SharedPreferences sharedPreferences, final String key) {
-        return new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                String newValueString = newValue.toString();
+        return (preference, newValue) -> {
+            String newValueString = newValue.toString();
 
-                if (KEY_METADATA_EMAIL.equals(key)) {
-                    if (!newValueString.isEmpty() && !Validator.isEmailAddressValid(newValueString)) {
-                        ToastUtils.showLongToast(R.string.invalid_email_address);
-                        return false;
-                    }
+            if (KEY_METADATA_EMAIL.equals(key)) {
+                if (!newValueString.isEmpty() && !Validator.isEmailAddressValid(newValueString)) {
+                    ToastUtils.showLongToast(R.string.invalid_email_address);
+                    return false;
                 }
-
-                EditTextPreference changedTextPref = (EditTextPreference) preference;
-                changedTextPref.setSummary(newValueString);
-                changedTextPref.setText(newValueString);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(key, newValueString);
-                editor.apply();
-                return true;
             }
+
+            EditTextPreference changedTextPref = (EditTextPreference) preference;
+            changedTextPref.setSummary(newValueString);
+            changedTextPref.setText(newValueString);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(key, newValueString);
+            editor.apply();
+            return true;
         };
     }
 }
