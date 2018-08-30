@@ -84,7 +84,7 @@ import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
 import org.odk.collect.android.exception.GDriveConnectionException;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataManager;
-import org.odk.collect.android.fragments.ImageUploadingFragment;
+import org.odk.collect.android.fragments.ImageLoadingFragment;
 import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
@@ -182,7 +182,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     public static final String KEY_ERROR = "error";
     private static final String KEY_SAVE_NAME = "saveName";
 
-    private static final String TAG_IMAGE_UPLOADING_FRAGMENT = "image_uploading_fragment";
+    private static final String TAG_IMAGE_LOADING_FRAGMENT = "image_loading_fragment";
 
     // Identifies the gp of the form used to launch form entry
     public static final String KEY_FORMPATH = "formpath";
@@ -248,7 +248,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private boolean newForm = true;
     private boolean onResumeWasCalledWithoutPermissions;
 
-    ImageUploadingFragment imageUploadingFragment;
+    ImageLoadingFragment imageLoadingFragment;
 
     public void allowSwiping(boolean doSwipe) {
         this.doSwipe = doSwipe;
@@ -298,11 +298,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         });
 
         if (savedInstanceState == null) {
-            imageUploadingFragment = new ImageUploadingFragment();
-            getFragmentManager().beginTransaction().add(imageUploadingFragment, TAG_IMAGE_UPLOADING_FRAGMENT).commit();
+            imageLoadingFragment = new ImageLoadingFragment();
+            getFragmentManager().beginTransaction().add(imageLoadingFragment, TAG_IMAGE_LOADING_FRAGMENT).commit();
         } else {
             FragmentManager fm = getFragmentManager();
-            imageUploadingFragment = (ImageUploadingFragment) fm.findFragmentByTag(TAG_IMAGE_UPLOADING_FRAGMENT);
+            imageLoadingFragment = (ImageLoadingFragment) fm.findFragmentByTag(TAG_IMAGE_LOADING_FRAGMENT);
         }
 
         requestStoragePermissions(this, new PermissionListener() {
@@ -771,7 +771,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 ProgressDialogFragment progressDialog = ProgressDialogFragment.newInstance(getString(R.string.please_wait));
                 progressDialog.show(getSupportFragmentManager(), ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
 
-                imageUploadingFragment.beginImageUploadingTask(intent.getData());
+                imageLoadingFragment.beginImageLoadingTask(intent.getData());
 
                 break;
             case RequestCodes.AUDIO_CAPTURE:

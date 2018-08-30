@@ -7,16 +7,16 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.tasks.ImageUploadingTask;
+import org.odk.collect.android.tasks.ImageLoadingTask;
 
-public class ImageUploadingFragment extends Fragment {
+public class ImageLoadingFragment extends Fragment {
 
-    private ImageUploadingTask imageUploadingTask;
+    private ImageLoadingTask imageLoadingTask;
     private FormEntryActivity formEntryActivity;
 
-    public void beginImageUploadingTask(Uri imageURi) {
-        imageUploadingTask = new ImageUploadingTask(formEntryActivity);
-        imageUploadingTask.execute(imageURi);
+    public void beginImageLoadingTask(Uri imageURi) {
+        imageLoadingTask = new ImageLoadingTask(formEntryActivity);
+        imageLoadingTask.execute(imageURi);
     }
 
     @Override
@@ -30,16 +30,16 @@ public class ImageUploadingFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.formEntryActivity = (FormEntryActivity) activity;
-        if (imageUploadingTask != null) {
-            imageUploadingTask.onAttach(formEntryActivity);
+        if (imageLoadingTask != null) {
+            imageLoadingTask.onAttach(formEntryActivity);
         }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        if (imageUploadingTask != null) {
-            imageUploadingTask.onDetach();
+        if (imageLoadingTask != null) {
+            imageLoadingTask.onDetach();
         }
     }
 }

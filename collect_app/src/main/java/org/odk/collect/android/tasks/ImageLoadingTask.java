@@ -19,11 +19,11 @@ import java.io.File;
 
 import timber.log.Timber;
 
-public class ImageUploadingTask extends AsyncTask<Uri, Void, File> {
+public class ImageLoadingTask extends AsyncTask<Uri, Void, File> {
 
     private FormEntryActivity formEntryActivity;
 
-    public ImageUploadingTask(FormEntryActivity formEntryActivity) {
+    public ImageLoadingTask(FormEntryActivity formEntryActivity) {
         onAttach(formEntryActivity);
     }
 
