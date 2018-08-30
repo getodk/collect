@@ -18,18 +18,20 @@ package org.odk.collect.android.services;
 
 import android.app.IntentService;
 import android.content.Intent;
-import android.os.Bundle;
 
-import com.evernote.android.job.JobRequest;
-
-import org.odk.collect.android.tasks.FormDownloadJob;
+import org.odk.collect.android.tasks.FormDownloadWorker;
 import org.odk.collect.android.utilities.ApplicationConstants;
 
+import androidx.work.Constraints;
+import androidx.work.Data;
+import androidx.work.NetworkType;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 import timber.log.Timber;
 
 /**
  * This service is the entry point for form download requests mainly from external apps. It then passes
- * over the task to {@link FormDownloadJob}
+ * over the task to {@link FormDownloadWorker}
  * <p>
  * How to call this service from an external app:
  * <p>
@@ -53,14 +55,19 @@ public class FormDownloadService extends IntentService {
 
         String formId = intent.getStringExtra(ApplicationConstants.BundleKeys.FORM_ID);
 
-        Bundle jobBundle = new Bundle();
-        jobBundle.putString(ApplicationConstants.BundleKeys.FORM_ID, formId);
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
 
-        // Start new Job immediately
-        new JobRequest.Builder(FormDownloadJob.TAG)
-                .startNow()
-                .setTransientExtras(jobBundle)
-                .build()
-                .schedule();
+        OneTimeWorkRequest formDownloadWork =
+                new OneTimeWorkRequest.Builder(FormDownloadWorker.class)
+                        .setConstraints(constraints)
+                        .addTag(FormDownloadWorker.TAG)
+                        .setInputData(new Data.Builder()
+                                .putString(ApplicationConstants.BundleKeys.FORM_ID, formId)
+                                .build())
+                        .build();
+
+        WorkManager.getInstance().enqueue(formDownloadWork);
     }
 }

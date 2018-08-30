@@ -21,7 +21,7 @@ import android.support.annotation.Nullable;
 import android.view.View;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.tasks.ServerPollingJob;
+import org.odk.collect.android.tasks.ServerPollingWorker;
 
 import static org.odk.collect.android.preferences.AdminKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOMATIC_UPDATE;
@@ -70,7 +70,7 @@ public class FormManagementPreferences extends BasePreferenceFragment {
                 CharSequence entry = ((ListPreference) preference).getEntries()[index];
                 preference.setSummary(entry);
                 if (key.equals(KEY_PERIODIC_FORM_UPDATES_CHECK)) {
-                    ServerPollingJob.schedulePeriodicJob((String) newValue);
+                    ServerPollingWorker.schedulePeriodicJob((String) newValue);
                     if (newValue.equals(getString(R.string.never_value))) {
                         Preference automaticUpdatePreference = findPreference(KEY_AUTOMATIC_UPDATE);
                         if (automaticUpdatePreference != null) {

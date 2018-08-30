@@ -6,10 +6,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.telephony.SmsManager;
 
-import com.evernote.android.job.Job;
-import com.evernote.android.job.JobManager;
-import com.evernote.android.job.JobRequest;
-import com.evernote.android.job.util.support.PersistableBundleCompat;
 import com.google.android.gms.analytics.HitBuilders;
 
 import org.odk.collect.android.R;
@@ -18,7 +14,7 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.events.SmsRxEvent;
-import org.odk.collect.android.jobs.SmsSenderJob;
+import org.odk.collect.android.jobs.SmsSenderWorker;
 import org.odk.collect.android.logic.FormInfo;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
@@ -38,9 +34,15 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 import javax.inject.Inject;
 
+import androidx.work.Constraints;
+import androidx.work.Data;
+import androidx.work.NetworkType;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 import timber.log.Timber;
 
 import static android.app.Activity.RESULT_OK;
@@ -170,13 +172,10 @@ public class SmsService {
             /*
              * If the background job for this instance is running then the messages won't be sent again.
              */
-            if (model.getJobId() != 0) {
-                Job job = JobManager.instance().getJob(model.getJobId());
-                if (job != null) {
-                    if (!job.isFinished()) {
-                        return false;
-                    }
-                }
+            if (model.getWorkerId() !=null) {
+
+                //should check to see if job is running.
+                WorkManager.getInstance().cancelWorkById(model.getWorkerId());
             }
 
             for (Message message : model.getMessages()) {
@@ -236,7 +235,7 @@ public class SmsService {
 
         smsSubmissionManager.forgetSubmission(instanceId);
 
-        JobManager.instance().cancel(model.getJobId());
+        WorkManager.getInstance().cancelWorkById(model.getWorkerId());
 
         SmsRxEvent event = new SmsRxEvent();
         event.setInstanceId(instanceId);
@@ -298,18 +297,25 @@ public class SmsService {
      * @param instanceId from instanceDao
      */
     protected void startSendMessagesJob(String instanceId) {
-        PersistableBundleCompat extras = new PersistableBundleCompat();
-        extras.putString(SmsSenderJob.INSTANCE_ID, instanceId);
-
-        JobRequest request = new JobRequest.Builder(SmsSenderJob.TAG)
-                .addExtras(extras)
-                .startNow()
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
                 .build();
+
+        OneTimeWorkRequest smsSenderWork =
+                new OneTimeWorkRequest.Builder(SmsSenderWorker.class)
+                        .setConstraints(constraints)
+                        .addTag(SmsSenderWorker.TAG)
+                        .setInputData(new Data.Builder()
+                                .putString(SmsSender.SMS_INSTANCE_ID, instanceId)
+                                .build())
+                        .build();
+
+        WorkManager.getInstance().enqueue(smsSenderWork);
 
         SmsSubmission model = smsSubmissionManager.getSubmissionModel(instanceId);
 
-        int jobId = request.schedule();
-        model.setJobId(jobId);
+        UUID workerId = smsSenderWork.getId();
+        model.setWorkerId(workerId);
 
         smsSubmissionManager.saveSubmission(model);
         rxEventBus.post(new SmsRxEvent(instanceId, RESULT_QUEUED));

@@ -18,12 +18,9 @@ package org.odk.collect.android.tasks;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-
-import com.evernote.android.job.Job;
 
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -33,69 +30,35 @@ import org.odk.collect.android.utilities.FormDownloader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import androidx.work.Data;
+import androidx.work.Worker;
 import timber.log.Timber;
 
 /**
  * This job manages form downloads from external sources. It therefore makes an extra step of verifying that
  * the {@link ApplicationConstants.BundleKeys#FORM_ID} passed points to a form on the forms server.
- * You need to pass {@code transientExtras} with the {@link ApplicationConstants.BundleKeys#FORM_ID}
- * to the {@link com.evernote.android.job.JobRequest.Builder}
+ * You need to pass {@code inputData} with the {@link ApplicationConstants.BundleKeys#FORM_ID}
+ * to the {@link androidx.work.OneTimeWorkRequest.Builder}
  *
  * <code>
- * new JobRequest.Builder(FormDownloadJob.TAG)
- *     .startNow()
- *     .setTransientExtras(jobBundle)
- *     .build()
- *     .schedule();
+ * OneTimeWorkRequest formDownloadWork =
+ *new OneTimeWorkRequest.Builder(FormDownloadWorker.class)
+ *.setConstraints(constraints)
+ *.setInputData(inputData)
+ *.build())
+ * WorkManager.getInstance().enqueue(formDownloadWork);
  * </code>
  *
  * @author by Ephraim Kigamba (nek.eam@gmail.com)
  */
 
-public class FormDownloadJob extends Job {
+public class FormDownloadWorker extends Worker {
 
     public static final String TAG = "FORM_DOWNLOAD_TAG";
     private static final String ACTION = "org.odk.collect.FORM_DOWNLOAD.COMPLETE";
     private String formId;
 
-    @NonNull
-    @Override
-    protected Result onRunJob(@NonNull Params params) {
-        Bundle bundle = params.getTransientExtras();
-        if (bundle.containsKey(ApplicationConstants.BundleKeys.FORM_ID)) {
-            formId = bundle.getString(ApplicationConstants.BundleKeys.FORM_ID);
-
-            if (!TextUtils.isEmpty(formId)) {
-                Timber.i("STARTED RUNNING JOB -> Download Form %s", formId);
-                HashMap<String, FormDetails> formDetailsHashMap = DownloadFormListUtils.downloadFormList(false);
-
-                if (formDetailsHashMap.containsKey(formId)) {
-                    FormDetails formDetails = formDetailsHashMap.get(formId);
-
-                    ArrayList<FormDetails> formDetailsArrayList = new ArrayList<>();
-                    formDetailsArrayList.add(formDetails);
-
-                    FormDownloader formDownloader = new FormDownloader();
-                    formDownloader.downloadForms(formDetailsArrayList);
-
-                    Timber.i("FINISHED DOWNLOADING FORM : %s", formId);
-                    sendDownloadServiceBroadcastResult(getContext(), formId, true, null);
-                } else {
-                    Timber.e("DOWNLOAD FORM FAILED BECAUSE FORM DOES NOT EXIST ON THE SERVER");
-                    sendDownloadServiceBroadcastResult(getContext(), formId, false, "Requested form could not be found");
-                }
-            } else {
-                sendDownloadServiceBroadcastResult(getContext(), formId, false, "Null OR Empty " + ApplicationConstants.BundleKeys.FORM_ID);
-            }
-
-            return Result.SUCCESS;
-        } else {
-            Timber.e("DOWNLOAD FORM FAILED BECAUSE BUNDLE DOES NOT CONTAIN FORM_ID");
-            sendDownloadServiceBroadcastResult(getContext(), formId, false, "Bundle does not contain the " + ApplicationConstants.BundleKeys.FORM_ID);
-            return Result.FAILURE;
-        }
-    }
-
+    
     /**
      * This method sends a broadcast of ACTION {@link #ACTION} communicating whether the form download task initiated
      * at {@link org.odk.collect.android.services.FormDownloadService} was successful or a failure.
@@ -125,5 +88,43 @@ public class FormDownloadJob extends Job {
         }
 
         context.sendBroadcast(intent);
+    }
+
+    @NonNull
+    @Override
+    public Result doWork() {
+        Data bundle = getInputData();
+        if (!TextUtils.isEmpty(bundle.getString(ApplicationConstants.BundleKeys.FORM_ID))) {
+            formId = bundle.getString(ApplicationConstants.BundleKeys.FORM_ID);
+
+            if (!TextUtils.isEmpty(formId)) {
+                Timber.i("STARTED RUNNING JOB -> Download Form %s", formId);
+                HashMap<String, FormDetails> formDetailsHashMap = DownloadFormListUtils.downloadFormList(false);
+
+                if (formDetailsHashMap.containsKey(formId)) {
+                    FormDetails formDetails = formDetailsHashMap.get(formId);
+
+                    ArrayList<FormDetails> formDetailsArrayList = new ArrayList<>();
+                    formDetailsArrayList.add(formDetails);
+
+                    FormDownloader formDownloader = new FormDownloader();
+                    formDownloader.downloadForms(formDetailsArrayList);
+
+                    Timber.i("FINISHED DOWNLOADING FORM : %s", formId);
+                    sendDownloadServiceBroadcastResult(getApplicationContext(), formId, true, null);
+                } else {
+                    Timber.e("DOWNLOAD FORM FAILED BECAUSE FORM DOES NOT EXIST ON THE SERVER");
+                    sendDownloadServiceBroadcastResult(getApplicationContext(), formId, false, "Requested form could not be found");
+                }
+            } else {
+                sendDownloadServiceBroadcastResult(getApplicationContext(), formId, false, "Null OR Empty " + ApplicationConstants.BundleKeys.FORM_ID);
+            }
+
+            return Result.SUCCESS;
+        } else {
+            Timber.e("DOWNLOAD FORM FAILED BECAUSE BUNDLE DOES NOT CONTAIN FORM_ID");
+            sendDownloadServiceBroadcastResult(getApplicationContext(), formId, false, "Bundle does not contain the " + ApplicationConstants.BundleKeys.FORM_ID);
+            return Result.FAILURE;
+        }
     }
 }

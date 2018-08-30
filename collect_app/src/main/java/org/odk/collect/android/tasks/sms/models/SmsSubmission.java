@@ -7,6 +7,7 @@ import org.odk.collect.android.tasks.sms.SmsService;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 /**
  * Tracks an instance's sms submission.
@@ -17,6 +18,7 @@ public class SmsSubmission {
     private List<Message> messages;
     private Date lastUpdated;
     private int jobId;
+    private UUID workerId;
     private String displayName;
 
     public Date getLastUpdated() {
@@ -110,6 +112,14 @@ public class SmsSubmission {
 
     public void setJobId(int jobId) {
         this.jobId = jobId;
+    }
+
+    public UUID getWorkerId() {
+        return workerId;
+    }
+
+    public void setWorkerId(UUID workerId) {
+        this.workerId = workerId;
     }
 
     public int getNotificationId() {

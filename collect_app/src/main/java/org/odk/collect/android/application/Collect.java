@@ -29,8 +29,7 @@ import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
-import com.evernote.android.job.JobManager;
-import com.evernote.android.job.JobManagerCreateException;
+
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.squareup.leakcanary.LeakCanary;
@@ -44,7 +43,6 @@ import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.injection.config.AppComponent;
 import org.odk.collect.android.injection.config.DaggerAppComponent;
-import org.odk.collect.android.jobs.CollectJobCreator;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
@@ -264,14 +262,6 @@ public class Collect extends Application implements HasActivityInjector {
                 .build();
 
         applicationComponent.inject(this);
-
-        try {
-            JobManager
-                    .create(this)
-                    .addJobCreator(new CollectJobCreator());
-        } catch (JobManagerCreateException e) {
-            Timber.e(e);
-        }
 
         reloadSharedPreferences();
 

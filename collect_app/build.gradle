@@ -210,7 +210,7 @@ dependencies {
         exclude group: 'org.apache.httpcomponents'
     }
 
-    implementation "com.evernote:android-job:1.2.5"
+    implementation "android.arch.work:work-runtime:CURRENT_VERSION"
     implementation "com.rarepebble:colorpicker:2.3.1"
     implementation "commons-io:commons-io:2.6"
     implementation "net.sf.kxml:kxml2:2.3.0"
@@ -269,6 +269,9 @@ dependencies {
     implementation "com.trello.rxlifecycle2:rxlifecycle-android:${rootProject.rxLifecycleVersion}"
     implementation "com.trello.rxlifecycle2:rxlifecycle-android-lifecycle:${rootProject.rxLifecycleVersion}"
 
+    implementation "android.arch.work:work-runtime:${rootProject.workManagerVersion}" // use -ktx for Kotlin
+    implementation "android.arch.work:work-firebase:${rootProject.workManagerVersion}"
+
     // Makes binding to Views easy:
     implementation "com.jakewharton:butterknife:8.8.1"
     annotationProcessor "com.jakewharton:butterknife-compiler:8.8.1"
@@ -298,6 +301,7 @@ dependencies {
     }
 
     androidTestImplementation "com.squareup.okhttp3:mockwebserver:3.9.0"
+    androidTestImplementation "android.arch.work:work-testing:${rootProject.workManagerVersion}"
 }
 
 // Must be at bottom to prevent dependency collisions

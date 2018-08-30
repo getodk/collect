@@ -18,7 +18,7 @@ import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.tasks.ServerPollingJob;
+import org.odk.collect.android.tasks.ServerPollingWorker;
 
 import java.util.Map;
 import java.util.Set;
@@ -78,7 +78,7 @@ public class GeneralSharedPreferences {
 
         if (value == null || value instanceof String) {
             if (key.equals(KEY_PERIODIC_FORM_UPDATES_CHECK) && get(KEY_PERIODIC_FORM_UPDATES_CHECK) != value) {
-                ServerPollingJob.schedulePeriodicJob((String) value);
+                ServerPollingWorker.schedulePeriodicJob((String) value);
             }
             editor.putString(key, (String) value);
         } else if (value instanceof Boolean) {

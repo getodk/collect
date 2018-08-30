@@ -24,7 +24,7 @@ import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceGoogleSheetsUploader;
 import org.odk.collect.android.tasks.InstanceServerUploader;
-import org.odk.collect.android.tasks.ServerPollingJob;
+import org.odk.collect.android.tasks.ServerPollingWorker;
 import org.odk.collect.android.utilities.IconUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WebUtils;
@@ -67,7 +67,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                 uploadForms(context, isFormAutoSendOptionEnabled(currentNetworkInfo));
             }
 
-            ServerPollingJob.pollServerIfNeeded();
+            ServerPollingWorker.pollServerIfNeeded();
         } else if (action.equals("org.odk.collect.android.FormSaved")) {
             ConnectivityManager connectivityManager = (ConnectivityManager) context
                     .getSystemService(Context.CONNECTIVITY_SERVICE);

@@ -27,10 +27,6 @@ import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 
-import com.evernote.android.job.Job;
-import com.evernote.android.job.JobManager;
-import com.evernote.android.job.JobRequest;
-
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormDownloadList;
 import org.odk.collect.android.activities.NotificationActivity;
@@ -47,18 +43,26 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
+import androidx.work.Constraints;
+import androidx.work.NetworkType;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
+import androidx.work.Worker;
 
 import static org.odk.collect.android.activities.FormDownloadList.DISPLAY_ONLY_UPDATED_FORMS;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOMATIC_UPDATE;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JR_FORM_ID;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.LAST_DETECTED_FORM_VERSION_HASH;
-import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORM_UPDATES_AVAILABLE_NOTIFICATION;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORMS_DOWNLOADED_NOTIFICATION;
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORM_UPDATES_AVAILABLE_NOTIFICATION;
 import static org.odk.collect.android.utilities.DownloadFormListUtils.DL_AUTH_REQUIRED;
 import static org.odk.collect.android.utilities.DownloadFormListUtils.DL_ERROR_MSG;
 
-public class ServerPollingJob extends Job {
+public class ServerPollingWorker extends Worker {
 
     private static final long FIFTEEN_MINUTES_PERIOD = 900000;
     private static final long ONE_HOUR_PERIOD = 3600000;
@@ -68,9 +72,9 @@ public class ServerPollingJob extends Job {
     private static final String POLL_SERVER_IMMEDIATELY_AFTER_RECEIVING_NETWORK = "pollServerImmediatelyAfterReceivingNetwork";
     public static final String TAG = "serverPollingJob";
 
-    @Override
     @NonNull
-    protected Result onRunJob(@NonNull Params params) {
+    @Override
+    public Result doWork() {
         if (!isDeviceOnline()) {
             GeneralSharedPreferences.getInstance().save(POLL_SERVER_IMMEDIATELY_AFTER_RECEIVING_NETWORK, true);
             return Result.FAILURE;
@@ -124,7 +128,7 @@ public class ServerPollingJob extends Job {
 
     public static void schedulePeriodicJob(String selectedOption) {
         if (selectedOption.equals(Collect.getInstance().getString(R.string.never_value))) {
-            JobManager.instance().cancelAllForTag(TAG);
+            WorkManager.getInstance().cancelAllWorkByTag(TAG);
             GeneralSharedPreferences.getInstance().reset(POLL_SERVER_IMMEDIATELY_AFTER_RECEIVING_NETWORK);
         } else {
             long period = FIFTEEN_MINUTES_PERIOD;
@@ -136,11 +140,17 @@ public class ServerPollingJob extends Job {
                 period = ONE_DAY_PERIOD;
             }
 
-            new JobRequest.Builder(TAG)
-                    .setPeriodic(period, 300000)
-                    .setUpdateCurrent(true)
-                    .build()
-                    .schedule();
+            Constraints constraints = new Constraints.Builder()
+                    .setRequiredNetworkType(NetworkType.CONNECTED)
+                    .build();
+
+            PeriodicWorkRequest serverPollingWork =
+                    new PeriodicWorkRequest.Builder(ServerPollingWorker.class, period, TimeUnit.MILLISECONDS)
+                            .setConstraints(constraints)
+                            .addTag(TAG)
+                            .build();
+
+            WorkManager.getInstance().enqueue(serverPollingWork);
         }
     }
 
@@ -150,17 +160,17 @@ public class ServerPollingJob extends Job {
     }
 
     private void informAboutNewAvailableForms() {
-        Intent intent = new Intent(getContext(), FormDownloadList.class);
+        Intent intent = new Intent(getApplicationContext(), FormDownloadList.class);
         intent.putExtra(DISPLAY_ONLY_UPDATED_FORMS, true);
-        PendingIntent contentIntent = PendingIntent.getActivity(getContext(), FORM_UPDATES_AVAILABLE_NOTIFICATION, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), FORM_UPDATES_AVAILABLE_NOTIFICATION, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext())
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext())
                 .setSmallIcon(IconUtils.getNotificationAppIcon())
-                .setContentTitle(getContext().getString(R.string.form_updates_available))
+                .setContentTitle(getApplicationContext().getString(R.string.form_updates_available))
                 .setAutoCancel(true)
                 .setContentIntent(contentIntent);
 
-        NotificationManager manager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager manager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
         if (manager != null) {
             manager.notify(0, builder.build());
         }
@@ -170,16 +180,16 @@ public class ServerPollingJob extends Job {
         Intent intent = new Intent(Collect.getInstance(), NotificationActivity.class);
         intent.putExtra(NotificationActivity.NOTIFICATION_TITLE, title);
         intent.putExtra(NotificationActivity.NOTIFICATION_MESSAGE, FormDownloadList.getDownloadResultMessage(result));
-        PendingIntent contentIntent = PendingIntent.getActivity(getContext(), FORMS_DOWNLOADED_NOTIFICATION, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), FORMS_DOWNLOADED_NOTIFICATION, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext())
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext())
                 .setSmallIcon(IconUtils.getNotificationAppIcon())
-                .setContentTitle(getContext().getString(R.string.odk_auto_download_notification_title))
+                .setContentTitle(getApplicationContext().getString(R.string.odk_auto_download_notification_title))
                 .setContentText(getContentText(result))
                 .setAutoCancel(true)
                 .setContentIntent(contentIntent);
 
-        NotificationManager manager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager manager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
         if (manager != null) {
             manager.notify(0, builder.build());
         }
@@ -188,7 +198,7 @@ public class ServerPollingJob extends Job {
     private void updateLastDetectedFormVersionHash(String formId, String formVersionHash) {
         ContentValues values = new ContentValues();
         values.put(LAST_DETECTED_FORM_VERSION_HASH, formVersionHash);
-        new FormsDao().updateForm(values, JR_FORM_ID + "=?", new String[] {formId});
+        new FormsDao().updateForm(values, JR_FORM_ID + "=?", new String[]{formId});
     }
 
     private boolean isDeviceOnline() {
@@ -201,10 +211,17 @@ public class ServerPollingJob extends Job {
     public static void pollServerIfNeeded() {
         if (GeneralSharedPreferences.getInstance().getBoolean(POLL_SERVER_IMMEDIATELY_AFTER_RECEIVING_NETWORK, false)
                 && !GeneralSharedPreferences.getInstance().get(KEY_PERIODIC_FORM_UPDATES_CHECK).equals(Collect.getInstance().getString(R.string.never_value))) {
-            new JobRequest.Builder(TAG)
-                    .startNow()
-                    .build()
-                    .schedule();
+            Constraints constraints = new Constraints.Builder()
+                    .setRequiredNetworkType(NetworkType.CONNECTED)
+                    .build();
+
+            OneTimeWorkRequest serverPollingWork =
+                    new OneTimeWorkRequest.Builder(ServerPollingWorker.class)
+                            .setConstraints(constraints)
+                            .addTag(TAG)
+                            .build();
+
+            WorkManager.getInstance().enqueue(serverPollingWork);
         }
     }
 
