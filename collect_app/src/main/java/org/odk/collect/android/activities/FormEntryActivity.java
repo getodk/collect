@@ -301,8 +301,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             imageLoadingFragment = new ImageLoadingFragment();
             getFragmentManager().beginTransaction().add(imageLoadingFragment, TAG_IMAGE_LOADING_FRAGMENT).commit();
         } else {
-            FragmentManager fm = getFragmentManager();
-            imageLoadingFragment = (ImageLoadingFragment) fm.findFragmentByTag(TAG_IMAGE_LOADING_FRAGMENT);
+            imageLoadingFragment = (ImageLoadingFragment) getFragmentManager().findFragmentByTag(TAG_IMAGE_LOADING_FRAGMENT);
         }
 
         requestStoragePermissions(this, new PermissionListener() {
@@ -768,8 +767,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                  * Android 1.6) we want to handle images the audio and video
                  */
 
-                ProgressDialogFragment progressDialog = ProgressDialogFragment.newInstance(getString(R.string.please_wait));
-                progressDialog.show(getSupportFragmentManager(), ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
+                ProgressDialogFragment.newInstance(getString(R.string.please_wait))
+                        .show(getSupportFragmentManager(), ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
 
                 imageLoadingFragment.beginImageLoadingTask(intent.getData());
 
