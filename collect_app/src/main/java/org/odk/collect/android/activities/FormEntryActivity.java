@@ -15,7 +15,6 @@
 package org.odk.collect.android.activities;
 
 import android.app.Dialog;
-import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
@@ -932,9 +931,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     public QuestionWidget getWidgetWaitingForBinaryData() {
         QuestionWidget questionWidget = null;
+        ODKView odkView = (ODKView) currentView;
 
-        if (currentView != null) {
-            for (QuestionWidget qw : ((ODKView) currentView).getWidgets()) {
+        if (odkView != null) {
+            for (QuestionWidget qw : odkView.getWidgets()) {
                 if (qw.isWaitingForData()) {
                     questionWidget = qw;
                 }
