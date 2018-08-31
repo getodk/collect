@@ -83,15 +83,15 @@ public class ImageLoadingTask extends AsyncTask<Uri, Void, File> {
     @Override
     protected void onPostExecute(File result) {
         Fragment prev = formEntryActivity.get().getSupportFragmentManager().findFragmentByTag(ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
-        ODKView odkView = formEntryActivity.get().getCurrentViewIfODKView();
-
         if (prev != null) {
             ((DialogFragment) prev).dismiss();
         }
 
+        ODKView odkView = formEntryActivity.get().getCurrentViewIfODKView();
         if (odkView != null) {
             odkView.setBinaryData(result);
         }
+        
         formEntryActivity.get().saveAnswersForCurrentScreen(FormEntryActivity.DO_NOT_EVALUATE_CONSTRAINTS);
         formEntryActivity.get().refreshCurrentView();
     }
