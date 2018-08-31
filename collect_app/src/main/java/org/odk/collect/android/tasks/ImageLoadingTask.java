@@ -35,7 +35,7 @@ public class ImageLoadingTask extends AsyncTask<Uri, Void, File> {
     }
 
     public void onDetach() {
-        this.formEntryActivity = null;
+        formEntryActivity = null;
     }
 
     @Override

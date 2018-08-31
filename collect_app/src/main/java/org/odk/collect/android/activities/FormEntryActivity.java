@@ -932,11 +932,17 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     public QuestionWidget getWidgetWaitingForBinaryData() {
         QuestionWidget questionWidget = null;
-        for (QuestionWidget qw : ((ODKView) currentView).getWidgets()) {
-            if (qw.isWaitingForData()) {
-                questionWidget = qw;
+
+        if (currentView != null) {
+            for (QuestionWidget qw : ((ODKView) currentView).getWidgets()) {
+                if (qw.isWaitingForData()) {
+                    questionWidget = qw;
+                }
             }
+        } else {
+            Timber.e("currentView returned null.");
         }
+
 
         return questionWidget;
     }
