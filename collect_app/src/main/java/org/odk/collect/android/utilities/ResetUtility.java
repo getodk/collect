@@ -24,15 +24,25 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.database.ItemsetDbAdapter;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.tasks.sms.SmsSubmissionManager;
 import org.osmdroid.config.Configuration;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class ResetUtility {
 
+    @Inject
+    SmsSubmissionManager smsSubmissionManager;
+
     private List<Integer> failedResetActions;
+
+    public ResetUtility() {
+        Collect.getInstance().getComponent().inject(this);
+    }
 
     public List<Integer> reset(Context context, List<Integer> resetActions) {
 
@@ -43,6 +53,9 @@ public class ResetUtility {
             switch (action) {
                 case ResetAction.RESET_PREFERENCES:
                     resetPreferences(context);
+                    break;
+                case ResetAction.RESET_SMS_SUBMISSIONS_HISTORY:
+                    resetSMSSubmissionsHistory();
                     break;
                 case ResetAction.RESET_INSTANCES:
                     resetInstances();
@@ -90,6 +103,11 @@ public class ResetUtility {
         Collect.getInstance().initProperties();
     }
 
+    private void resetSMSSubmissionsHistory() {
+        smsSubmissionManager.clearSubmissions();
+        failedResetActions.remove(failedResetActions.indexOf(ResetAction.RESET_SMS_SUBMISSIONS_HISTORY));
+    }
+
     private void resetInstances() {
         new InstancesDao().deleteInstancesDatabase();
 
@@ -132,10 +150,11 @@ public class ResetUtility {
 
     public static class ResetAction {
         public static final int RESET_PREFERENCES = 0;
-        public static final int RESET_INSTANCES = 1;
-        public static final int RESET_FORMS = 2;
-        public static final int RESET_LAYERS = 3;
-        public static final int RESET_CACHE = 4;
-        public static final int RESET_OSM_DROID = 5;
+        public static final int RESET_SMS_SUBMISSIONS_HISTORY = 1;
+        public static final int RESET_INSTANCES = 2;
+        public static final int RESET_FORMS = 3;
+        public static final int RESET_LAYERS = 4;
+        public static final int RESET_CACHE = 5;
+        public static final int RESET_OSM_DROID = 6;
     }
 }

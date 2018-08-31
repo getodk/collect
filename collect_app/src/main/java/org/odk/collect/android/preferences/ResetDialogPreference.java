@@ -39,9 +39,11 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog.RESET_SETTINGS_RESULT_DIALOG_TAG;
 import static org.odk.collect.android.utilities.ResetUtility.ResetAction.RESET_PREFERENCES;
+import static org.odk.collect.android.utilities.ResetUtility.ResetAction.RESET_SMS_SUBMISSIONS_HISTORY;
 
 public class ResetDialogPreference extends DialogPreference implements CompoundButton.OnCheckedChangeListener {
     private CheckBox preferences;
+    private CheckBox smsSubmissionsHistory;
     private CheckBox instances;
     private CheckBox forms;
     private CheckBox layers;
@@ -57,12 +59,14 @@ public class ResetDialogPreference extends DialogPreference implements CompoundB
     @Override
     public void onBindDialogView(View view) {
         preferences = view.findViewById(R.id.preferences);
+        smsSubmissionsHistory = view.findViewById(R.id.sms_submissions_history);
         instances = view.findViewById(R.id.instances);
         forms = view.findViewById(R.id.forms);
         layers = view.findViewById(R.id.layers);
         cache = view.findViewById(R.id.cache);
         osmDroid = view.findViewById(R.id.osmdroid);
         preferences.setOnCheckedChangeListener(this);
+        smsSubmissionsHistory.setOnCheckedChangeListener(this);
         instances.setOnCheckedChangeListener(this);
         forms.setOnCheckedChangeListener(this);
         layers.setOnCheckedChangeListener(this);
@@ -90,6 +94,9 @@ public class ResetDialogPreference extends DialogPreference implements CompoundB
 
         if (preferences.isChecked()) {
             resetActions.add(RESET_PREFERENCES);
+        }
+        if (smsSubmissionsHistory.isChecked()) {
+            resetActions.add(RESET_SMS_SUBMISSIONS_HISTORY);
         }
         if (instances.isChecked()) {
             resetActions.add(ResetUtility.ResetAction.RESET_INSTANCES);
@@ -141,6 +148,15 @@ public class ResetDialogPreference extends DialogPreference implements CompoundB
                                 getContext().getString(R.string.error_occured)));
                     } else {
                         resultMessage.append(String.format(getContext().getString(R.string.reset_settings_result),
+                                getContext().getString(R.string.success)));
+                    }
+                    break;
+                case RESET_SMS_SUBMISSIONS_HISTORY:
+                    if (failedResetActions.contains(action)) {
+                        resultMessage.append(String.format(getContext().getString(R.string.reset_sms_submissions_history_result),
+                                getContext().getString(R.string.error_occured)));
+                    } else {
+                        resultMessage.append(String.format(getContext().getString(R.string.reset_sms_submissions_history_result),
                                 getContext().getString(R.string.success)));
                     }
                     break;
@@ -215,7 +231,7 @@ public class ResetDialogPreference extends DialogPreference implements CompoundB
     }
 
     private void adjustResetButtonAccessibility() {
-        if (preferences.isChecked() || instances.isChecked() || forms.isChecked()
+        if (preferences.isChecked() || smsSubmissionsHistory.isChecked() || instances.isChecked() || forms.isChecked()
                 || layers.isChecked() || cache.isChecked() || osmDroid.isChecked()) {
             ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
             ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_POSITIVE)

@@ -15,6 +15,7 @@ import org.odk.collect.android.tasks.sms.models.SmsSubmission;
 import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class SmsSubmissionManager implements SmsSubmissionManagerContract {
     private static SharedPreferences preferences;
@@ -110,12 +111,20 @@ public class SmsSubmissionManager implements SmsSubmissionManagerContract {
         }.getType();
 
         String data = new Gson().toJson(model, submissionModel);
-        editor.putString(KEY_SUBMISSION + model.getInstanceId(), data);
+        savePreference(KEY_SUBMISSION + model.getInstanceId(), data);
+    }
+
+    public void savePreference(String key, String data) {
+        editor.putString(key, data);
         editor.commit();
     }
 
     public void clearSubmissions() {
         preferences.edit().clear().apply();
+    }
+
+    public Map<String, ?> getAll() {
+        return preferences.getAll();
     }
 
     public int checkNextMessageResultCode(String instanceId) {

@@ -32,6 +32,7 @@ import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.tasks.sms.SmsSubmissionManager;
 import org.odk.collect.android.utilities.ResetUtility;
 import org.osmdroid.config.Configuration;
 
@@ -44,25 +45,34 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.odk.collect.android.tasks.sms.SmsSubmissionManager.KEY_SUBMISSION;
 
 @RunWith(AndroidJUnit4.class)
 public class ResetAppStateTestCase {
 
     @Before
-    public void setUp() throws IOException {
+    public void setUp() {
         resetAppState(Arrays.asList(
-                ResetUtility.ResetAction.RESET_PREFERENCES, ResetUtility.ResetAction.RESET_INSTANCES,
-                ResetUtility.ResetAction.RESET_FORMS, ResetUtility.ResetAction.RESET_LAYERS,
-                ResetUtility.ResetAction.RESET_CACHE, ResetUtility.ResetAction.RESET_OSM_DROID
+                ResetUtility.ResetAction.RESET_PREFERENCES,
+                ResetUtility.ResetAction.RESET_SMS_SUBMISSIONS_HISTORY,
+                ResetUtility.ResetAction.RESET_INSTANCES,
+                ResetUtility.ResetAction.RESET_FORMS,
+                ResetUtility.ResetAction.RESET_LAYERS,
+                ResetUtility.ResetAction.RESET_CACHE,
+                ResetUtility.ResetAction.RESET_OSM_DROID
         ));
     }
 
     @After
-    public void tearDown() throws IOException {
+    public void tearDown() {
         resetAppState(Arrays.asList(
-                ResetUtility.ResetAction.RESET_PREFERENCES, ResetUtility.ResetAction.RESET_INSTANCES,
-                ResetUtility.ResetAction.RESET_FORMS, ResetUtility.ResetAction.RESET_LAYERS,
-                ResetUtility.ResetAction.RESET_CACHE, ResetUtility.ResetAction.RESET_OSM_DROID
+                ResetUtility.ResetAction.RESET_PREFERENCES,
+                ResetUtility.ResetAction.RESET_SMS_SUBMISSIONS_HISTORY,
+                ResetUtility.ResetAction.RESET_INSTANCES,
+                ResetUtility.ResetAction.RESET_FORMS,
+                ResetUtility.ResetAction.RESET_LAYERS,
+                ResetUtility.ResetAction.RESET_CACHE,
+                ResetUtility.ResetAction.RESET_OSM_DROID
         ));
     }
 
@@ -81,6 +91,13 @@ public class ResetAppStateTestCase {
     }
 
     @Test
+    public void resetSMSSubmissionsHistoryTest() {
+        setupTestSMSSubmissionHistory();
+        resetAppState(Collections.singletonList(ResetUtility.ResetAction.RESET_SMS_SUBMISSIONS_HISTORY));
+        assertEquals(0, new SmsSubmissionManager(InstrumentationRegistry.getTargetContext()).getAll().size());
+    }
+
+    @Test
     public void resetFormsTest() throws IOException {
         saveTestFormFiles();
         setupTestFormsDatabase();
@@ -91,7 +108,7 @@ public class ResetAppStateTestCase {
     }
 
     @Test
-    public void resetInstancesTest() throws IOException {
+    public void resetInstancesTest() {
         saveTestInstanceFiles();
         setupTestInstancesDatabase();
         resetAppState(Collections.singletonList(ResetUtility.ResetAction.RESET_INSTANCES));
@@ -147,6 +164,14 @@ public class ResetAppStateTestCase {
         assertTrue(new File(Collect.SETTINGS).exists() || new File(Collect.SETTINGS).mkdir());
         assertTrue(new File(Collect.SETTINGS + "/collect.settings").createNewFile());
         assertTrue(new File(Collect.ODK_ROOT + "/collect.settings").createNewFile());
+    }
+
+    private void setupTestSMSSubmissionHistory() {
+        SmsSubmissionManager smsSubmissionManager = new SmsSubmissionManager(InstrumentationRegistry.getTargetContext());
+        smsSubmissionManager.savePreference(KEY_SUBMISSION + "1", "displayName\":\"SMS Test\",\"instanceId\":\"1\",\"lastUpdated\":\"Jul 30, 2018 11:28:52 PM\",\"messages\":[{\"text\":\"SMS-TEST \",\"id\":612174895,\"partNumber\":1,\"resultCode\":106}],\"jobId\":6,\"notificationId\":719983413}");
+        smsSubmissionManager.savePreference(KEY_SUBMISSION + "2", "displayName\":\"SMS Test\",\"instanceId\":\"2\",\"lastUpdated\":\"Jul 30, 2018 11:29:52 PM\",\"messages\":[{\"text\":\"SMS-TEST \",\"id\":612174896,\"partNumber\":1,\"resultCode\":106}],\"jobId\":6,\"notificationId\":719983414}");
+        smsSubmissionManager.savePreference(KEY_SUBMISSION + "3", "displayName\":\"SMS Test\",\"instanceId\":\"3\",\"lastUpdated\":\"Jul 30, 2018 11:30:52 PM\",\"messages\":[{\"text\":\"SMS-TEST \",\"id\":612174897,\"partNumber\":1,\"resultCode\":106}],\"jobId\":6,\"notificationId\":719983415}");
+        assertEquals(3, smsSubmissionManager.getAll().size());
     }
 
     private void setupTestFormsDatabase() {

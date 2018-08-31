@@ -33,7 +33,12 @@ public class AppModule {
     }
 
     @Provides
-    SmsSubmissionManagerContract provideSmsSubmissionManager(Application application) {
+    SmsSubmissionManagerContract provideSmsSubmissionManagerContract(Application application) {
+        return new SmsSubmissionManager(application);
+    }
+
+    @Provides
+    SmsSubmissionManager provideSmsSubmissionManager(Application application) {
         return new SmsSubmissionManager(application);
     }
 
