@@ -8,8 +8,10 @@ import android.support.v4.app.Fragment;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.GDriveConnectionException;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
+import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.utilities.MediaUtils;
@@ -39,40 +41,41 @@ public class ImageLoadingTask extends AsyncTask<Uri, Void, File> {
     @Override
     protected File doInBackground(Uri... uris) {
 
-        File instanceFile = null;
+        File instanceFile;
+        FormController formController = Collect.getInstance().getFormController();
 
-        if (formEntryActivity.get().getFormController() != null) {
-            instanceFile = formEntryActivity.get().getFormController().getInstanceFile();
-        }
+        if (formController != null) {
+            instanceFile = formController.getInstanceFile();
+            if (instanceFile != null) {
+                String instanceFolder = instanceFile.getParent();
+                String destImagePath = instanceFolder + File.separator + System.currentTimeMillis() + ".jpg";
 
-        if (instanceFile != null) {
-            String instanceFolder1 = instanceFile.getParent();
-            String destImagePath = instanceFolder1 + File.separator + System.currentTimeMillis() + ".jpg";
+                File chosenImage;
+                try {
+                    chosenImage = MediaUtils.getFileFromUri(formEntryActivity.get(), uris[0], MediaStore.Images.Media.DATA);
+                    if (chosenImage != null) {
+                        final File newImage = new File(destImagePath);
+                        FileUtils.copyFile(chosenImage, newImage);
+                        ImageConverter.execute(newImage.getPath(), formEntryActivity.get().getWidgetWaitingForBinaryData(), formEntryActivity.get());
+                        return newImage;
+                    } else {
+                        Timber.e("Could not receive chosen image");
+                        ToastUtils.showShortToastInMiddle(R.string.error_occured);
+                        return null;
+                    }
+                } catch (GDriveConnectionException e) {
 
-            File chosenImage;
-            try {
-                chosenImage = MediaUtils.getFileFromUri(formEntryActivity.get(), uris[0], MediaStore.Images.Media.DATA);
-                if (chosenImage != null) {
-                    final File newImage = new File(destImagePath);
-                    FileUtils.copyFile(chosenImage, newImage);
-                    ImageConverter.execute(newImage.getPath(), formEntryActivity.get().getWidgetWaitingForBinaryData(), formEntryActivity.get());
-                    return newImage;
-                } else {
-                    Timber.e("Could not receive chosen image");
-                    ToastUtils.showShortToastInMiddle(R.string.error_occured);
+                    Timber.e("Could not receive chosen image due to connection problem");
+                    ToastUtils.showLongToastInMiddle(R.string.gdrive_connection_exception);
                     return null;
                 }
-            } catch (GDriveConnectionException e) {
-
-                Timber.e("Could not receive chosen image due to connection problem");
-                ToastUtils.showLongToastInMiddle(R.string.gdrive_connection_exception);
+            } else {
+                ToastUtils.showLongToast(R.string.image_not_saved);
+                Timber.w(formEntryActivity.get().getString(R.string.image_not_saved));
                 return null;
             }
-        } else {
-            ToastUtils.showLongToast(R.string.image_not_saved);
-            Timber.w(formEntryActivity.get().getString(R.string.image_not_saved));
-            return null;
         }
+        return null;
 
     }
 

@@ -576,7 +576,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     @Nullable
-    public FormController getFormController() {
+    private FormController getFormController() {
         return Collect.getInstance().getFormController();
     }
 
