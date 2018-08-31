@@ -329,7 +329,6 @@
   <string name="sort_by_date_desc">Datum, najprej najstarejši</string>
   <string name="sort_by_status_asc">Status, najprej zaključeni</string>
   <string name="sort_by_status_desc">Status, najprej ne-zaključeni</string>
-  <string name="request_permissions_google_account">ODK Collect potrebuje dostop do vašega Google računa, da lahko dobi prazne obrazce in predloži izpolnjene obrazce.</string>
   <string name="language">Jezik</string>
   <string name="form_metadata_summary">Vrednosti bodo dodane obrazcem, ki imajo uporabnisko ime, email ali telefonsko stevilko …</string>
   <string name="phone_number">Telefonska številka</string>
@@ -375,7 +374,7 @@
   <string name="sms_no_message">Ta obrazec nima nobenega vprašanja s SMS oznako</string>
   <string name="sms_encrypted_message">Šifriranih obrazcev ni moč predložiti kot SMS sporočilo.</string>
   <string name="sms_last_submission_on_date_at_time">\'Zadnji poskus predložitve na\' EEE, MMM dd, yyyy \'ob\' HH:mm</string>
-  <plurals name="sms_sending">
+  <plurals name="sms_sending" tools:ignore="ImpliedQuantity">
     <item quantity="one">Oddajam obrazec kot eno samo sporočilo. </item>
     <item quantity="two">Oddajam obrazec, pošiljam sporočilo številka %1$d! od %2$d</item>
     <item quantity="few">Oddajam obrazec, pošiljam sporočilo številka %1$d! od %2$d</item>
