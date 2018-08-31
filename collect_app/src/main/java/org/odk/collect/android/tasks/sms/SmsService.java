@@ -172,7 +172,7 @@ public class SmsService {
             /*
              * If the background job for this instance is running then the messages won't be sent again.
              */
-            if (model.getWorkerId() !=null) {
+            if (model.getWorkerId() != null) {
 
                 //should check to see if job is running.
                 WorkManager.getInstance().cancelWorkById(model.getWorkerId());
@@ -306,7 +306,7 @@ public class SmsService {
                         .setConstraints(constraints)
                         .addTag(SmsSenderWorker.TAG)
                         .setInputData(new Data.Builder()
-                                .putString(SmsSender.SMS_INSTANCE_ID, instanceId)
+                                .putString(SMS_INSTANCE_ID, instanceId)
                                 .build())
                         .build();
 
