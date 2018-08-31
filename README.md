@@ -106,7 +106,7 @@ implementation (project(path: ':javarosa-master')) {
 	```gradle
 	compile files('/path/to/javarosa/build/libs/opendatakit-javarosa-x.y.z-SNAPSHOT.jar')
 	```
- 
+
 ## Contributing code
 Any and all contributions to the project are welcome. ODK Collect is used across the world primarily by organizations with a social purpose so you can have real impact!
 
@@ -198,3 +198,6 @@ You may have a mismatch between the embedded Android SDK Java and the JDK instal
 `
 
 Note that this change might cause problems with other Java-based applications (e.g., if you uninstall Android Studio).
+
+#### gradlew Failure: `java.lang.NullPointerException (no error message).`
+If you encounter the `java.lang.NullPointerException (no error message).` when running `gradlew`, please make sure your Java version for this project is Java 8.
