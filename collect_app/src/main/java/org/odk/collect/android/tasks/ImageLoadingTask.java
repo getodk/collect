@@ -16,6 +16,7 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.android.views.ODKView;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -82,12 +83,14 @@ public class ImageLoadingTask extends AsyncTask<Uri, Void, File> {
     @Override
     protected void onPostExecute(File result) {
         Fragment prev = formEntryActivity.get().getSupportFragmentManager().findFragmentByTag(ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
+        ODKView odkView = formEntryActivity.get().getCurrentViewIfODKView();
+
         if (prev != null) {
             ((DialogFragment) prev).dismiss();
         }
 
-        if (formEntryActivity.get().getCurrentViewIfODKView() != null) {
-            formEntryActivity.get().getCurrentViewIfODKView().setBinaryData(result);
+        if (odkView != null) {
+            odkView.setBinaryData(result);
         }
         formEntryActivity.get().saveAnswersForCurrentScreen(FormEntryActivity.DO_NOT_EVALUATE_CONSTRAINTS);
         formEntryActivity.get().refreshCurrentView();
