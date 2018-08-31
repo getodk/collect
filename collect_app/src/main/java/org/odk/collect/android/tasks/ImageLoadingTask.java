@@ -96,4 +96,3 @@ public class ImageLoadingTask extends AsyncTask<Uri, Void, File> {
         formEntryActivity.get().refreshCurrentView();
     }
 }
-

@@ -942,8 +942,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         } else {
             Timber.e("currentView returned null.");
         }
-
-
         return questionWidget;
     }
 
