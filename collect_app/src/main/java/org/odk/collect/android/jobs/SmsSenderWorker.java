@@ -13,12 +13,11 @@ import androidx.work.Worker;
  */
 public class SmsSenderWorker extends Worker {
     public static final String TAG = "smsSenderJob";
-    public static final String INSTANCE_ID = "instance_id";
 
     @NonNull
     @Override
     public Result doWork() {
-        SmsSender sender = new SmsSender(getApplicationContext(), getInputData().getString(INSTANCE_ID));
+        SmsSender sender = new SmsSender(getApplicationContext(), getInputData().getString(SmsSender.SMS_INSTANCE_ID));
 
         if (sender.send()) {
             return Result.SUCCESS;

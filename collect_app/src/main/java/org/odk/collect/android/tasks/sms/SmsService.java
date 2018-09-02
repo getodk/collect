@@ -38,9 +38,7 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 
-import androidx.work.Constraints;
 import androidx.work.Data;
-import androidx.work.NetworkType;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 import timber.log.Timber;
@@ -297,20 +295,13 @@ public class SmsService {
      * @param instanceId from instanceDao
      */
     protected void startSendMessagesJob(String instanceId) {
-        Constraints constraints = new Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.CONNECTED)
-                .build();
-
         OneTimeWorkRequest smsSenderWork =
                 new OneTimeWorkRequest.Builder(SmsSenderWorker.class)
-                        .setConstraints(constraints)
                         .addTag(SmsSenderWorker.TAG)
                         .setInputData(new Data.Builder()
                                 .putString(SMS_INSTANCE_ID, instanceId)
                                 .build())
                         .build();
-
-        WorkManager.getInstance().enqueue(smsSenderWork);
 
         SmsSubmission model = smsSubmissionManager.getSubmissionModel(instanceId);
 
@@ -318,6 +309,9 @@ public class SmsService {
         model.setWorkerId(workerId);
 
         smsSubmissionManager.saveSubmission(model);
+
+        WorkManager.getInstance().enqueue(smsSenderWork);
+
         rxEventBus.post(new SmsRxEvent(instanceId, RESULT_QUEUED));
     }
 
