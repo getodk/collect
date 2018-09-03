@@ -139,7 +139,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                     GoogleAccountsManager accountsManager = new GoogleAccountsManager(Collect.getInstance());
 
                     String googleUsername = accountsManager.getSelectedAccount();
-                    if (googleUsername == null || googleUsername.isEmpty()) {
+                    if (googleUsername.isEmpty()) {
                         // just quit if there's no username
                         running = false;
                         return;
