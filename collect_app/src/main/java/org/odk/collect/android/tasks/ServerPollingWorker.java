@@ -68,9 +68,10 @@ public class ServerPollingWorker extends Worker {
     private static final long ONE_HOUR_PERIOD = 3600000;
     private static final long SIX_HOURS_PERIOD = 21600000;
     private static final long ONE_DAY_PERIOD = 86400000;
+    private static final long FLEX_INTERVAL = 30000;
 
     private static final String POLL_SERVER_IMMEDIATELY_AFTER_RECEIVING_NETWORK = "pollServerImmediatelyAfterReceivingNetwork";
-    public static final String TAG = "serverPollingJob";
+    private static final String TAG = "serverPollingJob";
 
     @NonNull
     @Override
@@ -145,7 +146,7 @@ public class ServerPollingWorker extends Worker {
                     .build();
 
             PeriodicWorkRequest serverPollingWork =
-                    new PeriodicWorkRequest.Builder(ServerPollingWorker.class, period, TimeUnit.MILLISECONDS)
+                    new PeriodicWorkRequest.Builder(ServerPollingWorker.class, period, TimeUnit.MILLISECONDS, FLEX_INTERVAL, TimeUnit.MILLISECONDS)
                             .setConstraints(constraints)
                             .addTag(TAG)
                             .build();

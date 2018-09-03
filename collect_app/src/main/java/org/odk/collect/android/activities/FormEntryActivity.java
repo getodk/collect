@@ -87,6 +87,7 @@ import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
+import org.odk.collect.android.jobs.AutoSendWorker;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.FormSavedListener;
@@ -131,6 +132,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import androidx.work.Constraints;
+import androidx.work.ExistingWorkPolicy;
+import androidx.work.NetworkType;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 import timber.log.Timber;
 
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
@@ -2862,8 +2868,18 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         super.onStop();
     }
 
-    private void sendSavedBroadcast() {
-        sendBroadcast(new Intent("org.odk.collect.android.FormSaved"));
+    void sendSavedBroadcast() {
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+
+        OneTimeWorkRequest autoSendWork =
+                new OneTimeWorkRequest.Builder(AutoSendWorker.class)
+                        .addTag(AutoSendWorker.TAG)
+                        .setConstraints(constraints)
+                        .build();
+
+        WorkManager.getInstance().beginUniqueWork(AutoSendWorker.TAG, ExistingWorkPolicy.KEEP, autoSendWork);
     }
 
     @Override

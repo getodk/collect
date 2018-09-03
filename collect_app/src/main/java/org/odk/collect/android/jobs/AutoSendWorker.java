@@ -1,8 +1,7 @@
-package org.odk.collect.android.receivers;
+package org.odk.collect.android.jobs;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -10,6 +9,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 
 import org.odk.collect.android.R;
@@ -17,15 +17,14 @@ import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
-import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceGoogleSheetsUploader;
 import org.odk.collect.android.tasks.InstanceServerUploader;
-import org.odk.collect.android.tasks.ServerPollingWorker;
 import org.odk.collect.android.utilities.IconUtils;
+import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WebUtils;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
@@ -36,47 +35,33 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import androidx.work.Worker;
+
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_SEND;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORMS_UPLOADED_NOTIFICATION;
 
-public class NetworkReceiver extends BroadcastReceiver implements InstanceUploaderListener {
+public class AutoSendWorker extends Worker implements InstanceUploaderListener {
+    public static final String TAG = "autoSendWorker";
 
-    // turning on wifi often gets two CONNECTED events. we only want to run one thread at a time
-    public static boolean running;
-    InstanceServerUploader instanceServerUploader;
-
-    InstanceGoogleSheetsUploader instanceGoogleSheetsUploader;
+    private InstanceServerUploader instanceServerUploader;
+    private InstanceGoogleSheetsUploader instanceGoogleSheetsUploader;
 
     private String resultMessage;
 
+    @NonNull
     @Override
-    public void onReceive(Context context, Intent intent) {
-        // make sure sd card is ready, if not don't try to send
+    public Result doWork() {        // make sure sd card is ready, if not don't try to send
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            return;
+            return Result.FAILURE;
         }
 
-        String action = intent.getAction();
-        ConnectivityManager manager = (ConnectivityManager) context.getSystemService(
+        ConnectivityManager manager = (ConnectivityManager) getApplicationContext().getSystemService(
                 Context.CONNECTIVITY_SERVICE);
         NetworkInfo currentNetworkInfo = manager.getActiveNetworkInfo();
 
-        if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
-            if (currentNetworkInfo != null
-                    && currentNetworkInfo.getState() == NetworkInfo.State.CONNECTED) {
-                uploadForms(context, isFormAutoSendOptionEnabled(currentNetworkInfo));
-            }
+        uploadForms(getApplicationContext(), isFormAutoSendOptionEnabled(currentNetworkInfo));
 
-            ServerPollingWorker.pollServerIfNeeded();
-        } else if (action.equals("org.odk.collect.android.FormSaved")) {
-            ConnectivityManager connectivityManager = (ConnectivityManager) context
-                    .getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
-
-            if (ni != null && ni.isConnected()) {
-                uploadForms(context, isFormAutoSendOptionEnabled(currentNetworkInfo));
-            }
-        }
+        return Result.SUCCESS;
     }
 
     private boolean isFormAutoSendOptionEnabled(NetworkInfo currentNetworkInfo) {
@@ -98,74 +83,69 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
      * @param isFormAutoSendOptionEnabled represents whether the auto-send option is enabled at the app level
      */
     private void uploadForms(Context context, boolean isFormAutoSendOptionEnabled) {
-        if (!running) {
-            running = true;
 
-            ArrayList<Long> toUpload = new ArrayList<>();
-            Cursor c = new InstancesDao().getFinalizedInstancesCursor();
+        ArrayList<Long> toUpload = new ArrayList<>();
+        Cursor c = new InstancesDao().getFinalizedInstancesCursor();
 
-            try {
-                if (c != null && c.getCount() > 0) {
-                    c.move(-1);
-                    String formId;
-                    while (c.moveToNext()) {
-                        formId = c.getString(c.getColumnIndex(InstanceColumns.JR_FORM_ID));
-                        if (isFormAutoSendEnabled(formId, isFormAutoSendOptionEnabled)) {
-                            Long l = c.getLong(c.getColumnIndex(InstanceColumns._ID));
-                            toUpload.add(l);
-                        }
+        try {
+            if (c != null && c.getCount() > 0) {
+                c.move(-1);
+                String formId;
+                while (c.moveToNext()) {
+                    formId = c.getString(c.getColumnIndex(InstanceColumns.JR_FORM_ID));
+                    if (isFormAutoSendEnabled(formId, isFormAutoSendOptionEnabled)) {
+                        Long l = c.getLong(c.getColumnIndex(InstanceColumns._ID));
+                        toUpload.add(l);
                     }
                 }
-            } finally {
-                if (c != null) {
-                    c.close();
+            }
+        } finally {
+            if (c != null) {
+                c.close();
+            }
+        }
+
+        if (toUpload.isEmpty()) {
+            return;
+        }
+
+        Long[] toSendArray = new Long[toUpload.size()];
+        toUpload.toArray(toSendArray);
+
+        GeneralSharedPreferences settings = GeneralSharedPreferences.getInstance();
+        String protocol = (String) settings.get(PreferenceKeys.KEY_PROTOCOL);
+
+        if (protocol.equals(context.getString(R.string.protocol_google_sheets))) {
+            if (PermissionUtils.checkIfGetAccountsPermissionGranted(context)) {
+                String googleUsername = (String) settings.get(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
+                if (googleUsername == null || googleUsername.isEmpty()) {
+
+                    return;
                 }
+                GoogleAccountsManager accountsManager = new GoogleAccountsManager(Collect.getInstance());
+                accountsManager.getCredential().setSelectedAccountName(googleUsername);
+                instanceGoogleSheetsUploader = new InstanceGoogleSheetsUploader(accountsManager);
+                instanceGoogleSheetsUploader.setUploaderListener(this);
+                instanceGoogleSheetsUploader.execute(toSendArray);
+            } else {
+                resultMessage = Collect.getInstance().getString(R.string.odk_permissions_fail);
+                uploadingComplete(null);
             }
+        } else if (protocol.equals(context.getString(R.string.protocol_odk_default))) {
+            // get the username, password, and server from preferences
 
-            if (toUpload.isEmpty()) {
-                running = false;
-                return;
-            }
+            String storedUsername = (String) settings.get(PreferenceKeys.KEY_USERNAME);
+            String storedPassword = (String) settings.get(PreferenceKeys.KEY_PASSWORD);
+            String server = (String) settings.get(PreferenceKeys.KEY_SERVER_URL);
+            String url = server + settings.get(PreferenceKeys.KEY_FORMLIST_URL);
 
-            Long[] toSendArray = new Long[toUpload.size()];
-            toUpload.toArray(toSendArray);
+            Uri u = Uri.parse(url);
+            WebUtils.addCredentials(storedUsername, storedPassword, u.getHost());
 
-            GeneralSharedPreferences settings = GeneralSharedPreferences.getInstance();
-            String protocol = (String) settings.get(PreferenceKeys.KEY_PROTOCOL);
+            instanceServerUploader = new InstanceServerUploader();
+            instanceServerUploader.setUploaderListener(this);
 
-            if (protocol.equals(context.getString(R.string.protocol_google_sheets))) {
-                if (PermissionUtils.checkIfGetAccountsPermissionGranted(context)) {
-                    String googleUsername = (String) settings.get(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
-                    if (googleUsername == null || googleUsername.isEmpty()) {
-                        // just quit if there's no username
-                        running = false;
-                        return;
-                    }
-                    GoogleAccountsManager accountsManager = new GoogleAccountsManager(Collect.getInstance());
-                    accountsManager.getCredential().setSelectedAccountName(googleUsername);
-                    instanceGoogleSheetsUploader = new InstanceGoogleSheetsUploader(accountsManager);
-                    instanceGoogleSheetsUploader.setUploaderListener(this);
-                    instanceGoogleSheetsUploader.execute(toSendArray);
-                } else {
-                    resultMessage = Collect.getInstance().getString(R.string.odk_permissions_fail);
-                    uploadingComplete(null);
-                }
-            } else if (protocol.equals(context.getString(R.string.protocol_odk_default))) {
-                // get the username, password, and server from preferences
-
-                String storedUsername = (String) settings.get(PreferenceKeys.KEY_USERNAME);
-                String storedPassword = (String) settings.get(PreferenceKeys.KEY_PASSWORD);
-                String server = (String) settings.get(PreferenceKeys.KEY_SERVER_URL);
-                String url = server + settings.get(PreferenceKeys.KEY_FORMLIST_URL);
-
-                Uri u = Uri.parse(url);
-                WebUtils.addCredentials(storedUsername, storedPassword, u.getHost());
-
-                instanceServerUploader = new InstanceServerUploader();
-                instanceServerUploader.setUploaderListener(this);
-
-                instanceServerUploader.execute(toSendArray);
-            }
+            instanceServerUploader.execute(toSendArray);
         }
     }
 
@@ -197,7 +177,6 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         if (instanceGoogleSheetsUploader != null) {
             instanceGoogleSheetsUploader.setUploaderListener(null);
         }
-        running = false;
 
         String message;
 
@@ -274,6 +253,5 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         if (instanceGoogleSheetsUploader != null) {
             instanceGoogleSheetsUploader.setUploaderListener(null);
         }
-        running = false;
     }
 }

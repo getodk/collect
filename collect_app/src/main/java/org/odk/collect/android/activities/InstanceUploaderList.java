@@ -38,12 +38,12 @@ import android.widget.ListView;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.jobs.AutoSendWorker;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.preferences.Transport;
-import org.odk.collect.android.receivers.NetworkReceiver;
 import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.tasks.sms.SmsNotificationReceiver;
 import org.odk.collect.android.tasks.sms.SmsService;
@@ -52,8 +52,13 @@ import org.odk.collect.android.tasks.sms.models.SmsSubmission;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.ToastUtils;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
+import androidx.work.State;
+import androidx.work.WorkManager;
+import androidx.work.WorkStatus;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -156,13 +161,19 @@ public class InstanceUploaderList extends InstanceListActivity implements
                     Context.CONNECTIVITY_SERVICE);
             NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
 
-            if (NetworkReceiver.running) {
-                ToastUtils.showShortToast(R.string.send_in_progress);
-                return;
-            } else if (ni == null || !ni.isConnected()) {
+            if (ni == null || !ni.isConnected()) {
                 logger.logAction(this, "uploadButton", "noConnection");
                 ToastUtils.showShortToast(R.string.no_connection);
                 return;
+            }
+
+            List<WorkStatus> statuses = WorkManager.getInstance().synchronous().getStatusesForUniqueWorkSync(AutoSendWorker.TAG);
+
+            for (WorkStatus status : statuses) {
+                if (status.getState().equals(State.RUNNING)) {
+                    ToastUtils.showShortToast(R.string.send_in_progress);
+                    return;
+                }
             }
         }
 
