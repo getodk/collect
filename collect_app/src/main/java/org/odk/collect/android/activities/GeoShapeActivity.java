@@ -49,7 +49,7 @@ public class GeoShapeActivity extends CollectAbstractActivity implements IRegist
 
     private MapFragment map;
     private int shapeId = -1;  // will be a positive featureId once map is ready
-    private ImageButton gpsButton;
+    private ImageButton zoomButton;
     private ImageButton clearButton;
     private MapHelper helper;
     private AlertDialog zoomDialog;
@@ -118,8 +118,8 @@ public class GeoShapeActivity extends CollectAbstractActivity implements IRegist
         }
         helper.setBasemap();
 
-        gpsButton = findViewById(R.id.gps);
-        gpsButton.setOnClickListener(v -> showZoomDialog());
+        zoomButton = findViewById(R.id.gps);
+        zoomButton.setOnClickListener(v -> showZoomDialog());
 
         clearButton = findViewById(R.id.clear);
         clearButton.setOnClickListener(v -> showClearDialog());
@@ -137,7 +137,7 @@ public class GeoShapeActivity extends CollectAbstractActivity implements IRegist
             points = parsePoints(originalValue);
         }
         shapeId = map.addDraggableShape(points);
-        gpsButton.setEnabled(!points.isEmpty());
+        zoomButton.setEnabled(!points.isEmpty());
         clearButton.setEnabled(!points.isEmpty());
 
         zoomDialogView = getLayoutInflater().inflate(R.layout.geo_zoom_dialog, null);
@@ -161,13 +161,14 @@ public class GeoShapeActivity extends CollectAbstractActivity implements IRegist
         if (!points.isEmpty()) {
             map.zoomToBoundingBox(points, 0.8);
         } else {
+            map.zoomToPoint(new MapPoint(0, -30), 2);
             map.runOnGpsLocationReady(this::onGpsLocationReady);
         }
     }
 
     @SuppressWarnings("unused")
     private void onGpsLocationReady(MapFragment map) {
-        gpsButton.setEnabled(true);
+        zoomButton.setEnabled(true);
         if (getWindow().isActive()) {
             showZoomDialog();
         }
@@ -176,6 +177,7 @@ public class GeoShapeActivity extends CollectAbstractActivity implements IRegist
     private void addVertex(MapPoint point) {
         map.appendPointToShape(shapeId, point);
         clearButton.setEnabled(true);
+        zoomButton.setEnabled(true);
     }
 
     private void clear() {
@@ -311,7 +313,7 @@ public class GeoShapeActivity extends CollectAbstractActivity implements IRegist
     }
 
     @VisibleForTesting public boolean isGpsButtonEnabled() {
-        return gpsButton != null && gpsButton.isEnabled();
+        return zoomButton != null && zoomButton.isEnabled();
     }
 
     @VisibleForTesting public boolean isZoomDialogShowing() {

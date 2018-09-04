@@ -76,6 +76,7 @@ public class OsmMapFragment extends Fragment implements MapFragment, MapEventsRe
         map = view.<MapView>findViewById(R.id.osm_map_view);
         map.setMultiTouchControls(true);
         map.setBuiltInZoomControls(true);
+        map.setMinZoomLevel(1);
         map.setTilesScaledToDpi(true);
         map.getOverlays().add(new MapEventsOverlay(this));
         myLocationOverlay = new MyLocationNewOverlay(map);
