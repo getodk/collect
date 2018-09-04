@@ -620,9 +620,6 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
 
         private long nextClearTimestamp;
 
-        /**
-         * Default constructor.
-         */
         private AgingCredentialsProvider(int expiryInterval) {
             super();
             this.credMap = new ConcurrentHashMap<>();
