@@ -471,8 +471,8 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
 
             AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
                     .setIcon(android.R.drawable.ic_dialog_info)
-                    .setTitle(R.string.google_invalid_account_title)
-                    .setMessage(R.string.google_invalid_account_description)
+                    .setTitle(R.string.missing_google_account_dialog_title)
+                    .setMessage(R.string.missing_google_account_dialog_desc)
                     .setPositiveButton(getString(R.string.ok), (dialog, which) -> dialog.dismiss())
                     .create();
 
