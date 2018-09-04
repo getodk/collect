@@ -6,8 +6,8 @@
     android:layout_height="match_parent"
     android:orientation="horizontal">
 
-    <FrameLayout
-        android:id="@+id/container"
+    <org.odk.collect.android.views.MediaLayout
+        android:id="@+id/mediaLayout"
         android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"

@@ -27,15 +27,15 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.RadioButton;
-import android.widget.RelativeLayout;
 
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.TextUtils;
+import org.odk.collect.android.views.MediaLayout;
 import org.odk.collect.android.views.ODKView;
 import org.odk.collect.android.widgets.AbstractSelectOneWidget;
 
@@ -65,7 +65,7 @@ public class SelectOneListAdapter extends RecyclerView.Adapter<SelectOneListAdap
 
     @Override
     public SelectOneListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(new FrameLayout(widget.getContext()));
+        return new ViewHolder(LayoutInflater.from(widget.getContext()).inflate(R.layout.quick_select_layout, null));
     }
 
     @Override
@@ -96,16 +96,19 @@ public class SelectOneListAdapter extends RecyclerView.Adapter<SelectOneListAdap
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        FrameLayout container;
+        ImageView autoAdvanceIcon;
+        MediaLayout mediaLayout;
 
         ViewHolder(View v) {
             super(v);
-            container = (FrameLayout) v;
+            autoAdvanceIcon = v.findViewById(R.id.auto_advance_icon);
+            autoAdvanceIcon.setVisibility(widget.isAutoAdvance() ? View.VISIBLE : View.GONE);
+            mediaLayout = v.findViewById(R.id.mediaLayout);
+            widget.initMediaLayoutSetUp(mediaLayout);
         }
 
         void bind(final int index) {
-            container.removeAllViews();
-            container.addView(createRadioButtonLayout(index));
+            widget.setUpAVT(mediaLayout, index, createRadioButton(index));
         }
     }
 
@@ -140,15 +143,6 @@ public class SelectOneListAdapter extends RecyclerView.Adapter<SelectOneListAdap
                 notifyDataSetChanged();
             }
         };
-    }
-
-    private RelativeLayout createRadioButtonLayout(int index) {
-        RelativeLayout parentLayout = (RelativeLayout) LayoutInflater.from(widget.getContext()).inflate(R.layout.quick_select_layout, null);
-
-        parentLayout.findViewById(R.id.auto_advance_icon).setVisibility(widget.isAutoAdvance() ? View.VISIBLE : View.GONE);
-        ((FrameLayout) parentLayout.findViewById(R.id.container)).addView(widget.createMediaLayout(index, createRadioButton(index)));
-
-        return parentLayout;
     }
 
     private RadioButton createRadioButton(final int index) {

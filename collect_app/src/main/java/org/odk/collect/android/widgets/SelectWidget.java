@@ -127,6 +127,25 @@ public abstract class SelectWidget extends QuestionWidget {
     }
 
     public MediaLayout createMediaLayout(int index, TextView textView) {
+        MediaLayout mediaLayout = new MediaLayout(getContext());
+
+        initMediaLayoutSetUp(mediaLayout);
+        setUpAVT(mediaLayout, index, textView);
+
+        if (index != items.size() - 1) {
+            mediaLayout.addDivider();
+        }
+
+        return mediaLayout;
+    }
+
+    public void initMediaLayoutSetUp(MediaLayout mediaLayout) {
+        mediaLayout.setAudioListener(this);
+        mediaLayout.setPlayTextColor(getPlayColor());
+        playList.add(mediaLayout);
+    }
+
+    public void setUpAVT(MediaLayout mediaLayout, int index, TextView textView) {
         String audioURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), FormEntryCaption.TEXT_FORM_AUDIO);
 
         String imageURI;
@@ -140,17 +159,7 @@ public abstract class SelectWidget extends QuestionWidget {
         String videoURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), "video");
         String bigImageURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), "big-image");
 
-        MediaLayout mediaLayout = new MediaLayout(getContext());
         mediaLayout.setAVT(getFormEntryPrompt().getIndex(), "." + Integer.toString(index), textView, audioURI,
                 imageURI, videoURI, bigImageURI, getPlayer());
-        mediaLayout.setAudioListener(this);
-        mediaLayout.setPlayTextColor(getPlayColor());
-        playList.add(mediaLayout);
-
-        if (index != items.size() - 1) {
-            mediaLayout.addDivider();
-        }
-
-        return mediaLayout;
     }
 }

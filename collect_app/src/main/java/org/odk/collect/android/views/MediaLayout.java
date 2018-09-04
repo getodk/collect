@@ -23,6 +23,7 @@ import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.support.v7.widget.AppCompatImageButton;
+import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.CheckBox;
@@ -87,6 +88,20 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
 
     public MediaLayout(Context context) {
         super(context);
+
+        View.inflate(context, R.layout.media_layout, this);
+        ButterKnife.bind(this);
+    }
+
+    public MediaLayout(Context context, AttributeSet attrs) {
+        super(context, attrs);
+
+        View.inflate(context, R.layout.media_layout, this);
+        ButterKnife.bind(this);
+    }
+
+    public MediaLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
 
         View.inflate(context, R.layout.media_layout, this);
         ButterKnife.bind(this);
@@ -235,6 +250,7 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
             }
         }
 
+        flContainer.removeAllViews();
         flContainer.addView(viewText);
     }
 
