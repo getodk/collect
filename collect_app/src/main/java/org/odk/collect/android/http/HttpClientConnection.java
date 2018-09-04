@@ -484,8 +484,8 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
             localContext.setAttribute(HttpClientContext.AUTH_CACHE, ac);
         }
         List<AuthScope> asList = buildAuthScopes(host);
-        for (AuthScope a : asList) {
-            if (a.getScheme().equalsIgnoreCase(AuthSchemes.BASIC)) {
+        for (AuthScope authScope : asList) {
+            if (authScope.getScheme().equalsIgnoreCase(AuthSchemes.BASIC)) {
                 ac.put(h, new BasicScheme());
             }
         }
@@ -494,15 +494,11 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
     private List<AuthScope> buildAuthScopes(String host) {
         List<AuthScope> asList = new ArrayList<>();
 
-        AuthScope a;
         // allow digest auth on any port...
-        a = new AuthScope(host, -1, null, AuthSchemes.DIGEST);
-        asList.add(a);
+        asList.add(new AuthScope(host, -1, null, AuthSchemes.DIGEST));
         // and allow basic auth on the standard TLS/SSL ports...
-        a = new AuthScope(host, 443, null, AuthSchemes.BASIC);
-        asList.add(a);
-        a = new AuthScope(host, 8443, null, AuthSchemes.BASIC);
-        asList.add(a);
+        asList.add(new AuthScope(host, 443, null, AuthSchemes.BASIC));
+        asList.add(new AuthScope(host, 8443, null, AuthSchemes.BASIC));
 
         return asList;
     }
@@ -567,10 +563,10 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
 
     private static void setOpenRosaHeaders(HttpRequest req) {
         req.setHeader(OPEN_ROSA_VERSION_HEADER, OPEN_ROSA_VERSION);
-        GregorianCalendar g = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
-        g.setTime(new Date());
+        GregorianCalendar gregorianCalendar = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
+        gregorianCalendar.setTime(new Date());
         req.setHeader(DATE_HEADER,
-                DateFormat.format("E, dd MMM yyyy hh:mm:ss zz", g).toString());
+                DateFormat.format("E, dd MMM yyyy hh:mm:ss zz", gregorianCalendar).toString());
     }
 
     /**

@@ -17,8 +17,6 @@ import org.odk.collect.android.tasks.sms.SmsSubmissionManager;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
 
@@ -61,19 +59,16 @@ public class AppModule {
     }
 
     @Provides
-    @Singleton
     public OpenRosaHttpInterface provideHttpInterface() {
         return new HttpClientConnection();
     }
 
     @Provides
-    @Singleton
     public CollectServerClient provideCollectServerClient(OpenRosaHttpInterface httpInterface, WebCredentialsUtils webCredentialsUtils) {
         return new CollectServerClient(httpInterface, webCredentialsUtils);
     }
 
     @Provides
-    @Singleton
     public WebCredentialsUtils provideWebCredentials() {
         return new WebCredentialsUtils();
     }

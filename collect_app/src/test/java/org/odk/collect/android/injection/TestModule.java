@@ -8,6 +8,8 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.http.CollectServerClient;
+import org.odk.collect.android.http.HttpClientConnection;
+import org.odk.collect.android.http.OpenRosaHttpInterface;
 import org.odk.collect.android.http.mock.MockHttpClientConnection;
 import org.odk.collect.android.http.mock.MockHttpClientConnectionError;
 import org.odk.collect.android.injection.config.scopes.PerApplication;
@@ -85,6 +87,16 @@ public class TestModule {
     @Named("NullGet")
     CollectServerClient provideTestCollectServerClientError(MockHttpClientConnectionError httpClientConnection) {
         return new CollectServerClient(httpClientConnection, new WebCredentialsUtils());
+    }
+
+    @Provides
+    public OpenRosaHttpInterface provideHttpInterface() {
+        return new HttpClientConnection();
+    }
+
+    @Provides
+    public WebCredentialsUtils provideWebCredentials() {
+        return new WebCredentialsUtils();
     }
 
 }

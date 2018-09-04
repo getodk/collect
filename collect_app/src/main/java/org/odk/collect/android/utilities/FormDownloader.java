@@ -26,7 +26,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.http.CollectServerClient;
-import org.odk.collect.android.http.injection.DaggerHttpComponent;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.logic.MediaFile;
@@ -59,7 +58,7 @@ public class FormDownloader {
     @Inject CollectServerClient collectServerClient;
 
     public FormDownloader() {
-        DaggerHttpComponent.builder().build().inject(this);
+        Collect.getInstance().getComponent().inject(this);
     }
 
     public void setDownloaderListener(FormDownloaderListener sl) {

@@ -26,7 +26,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.http.CollectServerClient;
-import org.odk.collect.android.http.injection.DaggerHttpComponent;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.logic.ManifestFile;
 import org.odk.collect.android.logic.MediaFile;
@@ -58,7 +57,7 @@ public class DownloadFormListUtils {
     @Inject CollectServerClient collectServerClient;
 
     public DownloadFormListUtils() {
-        DaggerHttpComponent.builder().build().inject(this);
+        Collect.getInstance().getComponent().inject(this);
     }
 
     public HashMap<String, FormDetails> downloadFormList(boolean alwaysCheckMediaFiles) {

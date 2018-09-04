@@ -25,7 +25,6 @@ import android.widget.EditText;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.http.injection.DaggerHttpComponent;
 
 import javax.inject.Inject;
 
@@ -41,7 +40,7 @@ public class AuthDialogUtility {
     @Inject WebCredentialsUtils webCredentialsUtils;
 
     public AuthDialogUtility() {
-        DaggerHttpComponent.builder().build().inject(this);
+        Collect.getInstance().getComponent().inject(this);
     }
 
     public AlertDialog createDialog(final Context context,

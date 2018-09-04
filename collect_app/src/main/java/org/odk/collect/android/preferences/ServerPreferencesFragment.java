@@ -41,8 +41,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.http.CollectServerClient;
-import org.odk.collect.android.http.injection.DaggerHttpComponent;
 import org.odk.collect.android.listeners.OnBackPressedListener;
 import org.odk.collect.android.preferences.filters.ControlCharacterFilter;
 import org.odk.collect.android.preferences.filters.WhitespaceFilter;
@@ -87,8 +87,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        DaggerHttpComponent.builder().build().inject(this);
+        Collect.getInstance().getComponent().inject(this);
     }
 
     private ListPreference transportPreference;

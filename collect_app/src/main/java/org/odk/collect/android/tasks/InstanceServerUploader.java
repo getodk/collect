@@ -27,7 +27,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.http.HttpHeadResult;
 import org.odk.collect.android.http.OpenRosaHttpInterface;
-import org.odk.collect.android.http.injection.DaggerHttpComponent;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI;
@@ -72,7 +71,7 @@ public class InstanceServerUploader extends InstanceUploader {
     WebCredentialsUtils webCredentialsUtils;
 
     public InstanceServerUploader() {
-        DaggerHttpComponent.builder().build().inject(this);
+        Collect.getInstance().getComponent().inject(this);
     }
 
     private boolean processChunk(int low, int high, Outcome outcome, Long... values) {
