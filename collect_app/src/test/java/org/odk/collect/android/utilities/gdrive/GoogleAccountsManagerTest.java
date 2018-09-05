@@ -139,7 +139,6 @@ public class GoogleAccountsManagerTest {
 
     @Test
     public void returnBlankWhenAccountNameIsNotSaved() {
-        stubSavedAccount("");
         assertEquals("", googleAccountsManager.getSelectedAccount());
         assertNull(currentAccount);
     }
@@ -169,7 +168,6 @@ public class GoogleAccountsManagerTest {
 
     @Test
     public void displayAccountPickerDialogInAutoChooseWhenNoAccountIsNotAvailableTest() {
-        stubSavedAccount("");
         googleAccountsManager.chooseAccountAndRequestPermissionIfNeeded();
 
         assertNull(listener.getAccountName());
@@ -189,7 +187,6 @@ public class GoogleAccountsManagerTest {
 
     @Test
     public void setAccountNameTest() {
-        stubSavedAccount("");
 
         assertNull(currentAccount);
         assertEquals("", googleAccountsManager.getSelectedAccount());
