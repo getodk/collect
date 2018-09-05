@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.tasks;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 
@@ -74,10 +73,6 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
     private String errorMsg;
     private String instancePath;
     private final String xpath;
-    private boolean pendingActivityResult;
-    private int requestCode;
-    private int resultCode;
-    private Intent intent;
     private ExternalDataManager externalDataManager;
     private FormDef formDef;
 
