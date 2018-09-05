@@ -121,11 +121,15 @@ public class GoogleMapFragment extends SupportMapFragment implements
         if (points != null) {
             int count = 0;
             LatLngBounds.Builder builder = new LatLngBounds.Builder();
+            LatLng latLng = null;
             for (MapPoint point : points) {
-                builder.include(toLatLng(point));
+                latLng = toLatLng(point);
+                builder.include(latLng);
                 count++;
             }
-            if (count > 0) {
+            if (count == 1) {
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
+            } else if (count > 1) {
                 final LatLngBounds bounds = expandBounds(builder.build(), 1 / scaleFactor);
                 new Handler().postDelayed(() -> {
                     map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));

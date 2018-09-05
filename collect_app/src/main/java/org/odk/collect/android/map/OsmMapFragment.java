@@ -126,9 +126,10 @@ public class OsmMapFragment extends Fragment implements MapFragment, MapEventsRe
                 geoPoints.add(toGeoPoint(point));
                 count++;
             }
-            if (count > 0) {
-                map.getController().setZoom(4);
-                map.invalidate();
+            if (count == 1) {
+                map.getController().setCenter(geoPoints.get(0));
+                map.getController().setZoom(16);
+            } else if (count > 1) {
                 map.zoomToBoundingBox(BoundingBox.fromGeoPoints(
                     geoPoints).increaseByScale((float) (1 / scaleFactor)), true);
             }
