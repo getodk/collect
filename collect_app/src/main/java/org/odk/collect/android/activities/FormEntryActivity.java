@@ -152,7 +152,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     // Defines for FormEntryActivity
     private static final boolean EXIT = true;
-    private static final boolean DO_NOT_EXIT = false;
+    public static final boolean DO_NOT_EXIT = false;
     private static final boolean EVALUATE_CONSTRAINTS = true;
     public static final boolean DO_NOT_EVALUATE_CONSTRAINTS = false;
 
@@ -576,31 +576,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-        if (resultCode == RESULT_CANCELED) {
-            // request was canceled...
-            return;
+
+        if (requestCode == RequestCodes.HIERARCHY_ACTIVITY) {
+            refreshCurrentView();
         }
-
-        switch (requestCode) {
-
-            case RequestCodes.EX_GROUP_CAPTURE:
-                try {
-                    Bundle extras = intent.getExtras();
-                    if (getCurrentViewIfODKView() != null) {
-                        getCurrentViewIfODKView().setDataForFields(extras);
-                    }
-                } catch (JavaRosaException e) {
-                    Timber.e(e);
-                    createErrorDialog(e.getCause().getMessage(), DO_NOT_EXIT);
-                }
-                break;
-            case RequestCodes.HIERARCHY_ACTIVITY:
-                // We may have jumped to a new index in hierarchy activity, so
-                // refresh
-                break;
-
-        }
-        refreshCurrentView();
     }
 
     /**
@@ -1503,7 +1482,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     /**
      * Creates and displays dialog with the given errorMsg.
      */
-    private void createErrorDialog(String errorMsg, final boolean shouldExit) {
+    public void createErrorDialog(String errorMsg, final boolean shouldExit) {
         Collect.getInstance()
                 .getActivityLogger()
                 .logInstanceAction(this, "createErrorDialog",
