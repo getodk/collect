@@ -19,15 +19,14 @@ package org.odk.collect.android.utilities;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.PreferenceKeys;
+
+import javax.inject.Inject;
 
 /**
  * Used to present auth dialog and update credentials in the system as needed.
@@ -38,6 +37,12 @@ public class AuthDialogUtility {
     private EditText username;
     private EditText password;
 
+    @Inject WebCredentialsUtils webCredentialsUtils;
+
+    public AuthDialogUtility() {
+        Collect.getInstance().getComponent().inject(this);
+    }
+
     public AlertDialog createDialog(final Context context,
                                     final AuthDialogUtilityResultListener resultListener, String url) {
 
@@ -46,7 +51,7 @@ public class AuthDialogUtility {
 
         String overriddenUrl = null;
         if (url != null) {
-            if (!url.startsWith(getServerFromPreferences())) {
+            if (!url.startsWith(webCredentialsUtils.getServerFromPreferences())) {
                 overriddenUrl = url;
                 if (overriddenUrl.contains("?deviceID=")) {
                     overriddenUrl = overriddenUrl.substring(0, overriddenUrl.indexOf("?deviceID="));
@@ -57,12 +62,12 @@ public class AuthDialogUtility {
         username = dialogView.findViewById(R.id.username_edit);
         password = dialogView.findViewById(R.id.password_edit);
 
-        username.setText(overriddenUrl != null ? null : getUserNameFromPreferences());
-        password.setText(overriddenUrl != null ? null : getPasswordFromPreferences());
+        username.setText(overriddenUrl != null ? null : webCredentialsUtils.getUserNameFromPreferences());
+        password.setText(overriddenUrl != null ? null : webCredentialsUtils.getPasswordFromPreferences());
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(context.getString(R.string.server_requires_auth));
-        builder.setMessage(context.getString(R.string.server_auth_credentials, overriddenUrl != null ? overriddenUrl : getServerFromPreferences()));
+        builder.setMessage(context.getString(R.string.server_auth_credentials, overriddenUrl != null ? overriddenUrl : webCredentialsUtils.getServerFromPreferences()));
         builder.setView(dialogView);
         String finalOverriddenUrl = overriddenUrl;
         builder.setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
@@ -74,10 +79,9 @@ public class AuthDialogUtility {
                 String passwordValue = password.getText().toString();
 
                 if (finalOverriddenUrl == null) {
-                    saveCredentials(userNameValue, passwordValue);
-                    setWebCredentialsFromPreferences();
+                    webCredentialsUtils.saveCredentialsPreferences(userNameValue, passwordValue);
                 } else {
-                    setWebCredentials(finalOverriddenUrl);
+                    webCredentialsUtils.saveCredentials(finalOverriddenUrl, username.getText().toString(), password.getText().toString());
                 }
 
                 resultListener.updatedCredentials();
@@ -96,44 +100,6 @@ public class AuthDialogUtility {
         builder.setCancelable(false);
 
         return builder.create();
-    }
-
-    public static void setWebCredentialsFromPreferences() {
-        String username = getUserNameFromPreferences();
-        String password = getPasswordFromPreferences();
-
-        if (username == null || username.isEmpty()) {
-            return;
-        }
-
-        String host = Uri.parse(getServerFromPreferences()).getHost();
-        WebUtils.addCredentials(username, password, host);
-    }
-
-    private void setWebCredentials(String url) {
-        if (username == null || username.getText().toString().isEmpty()) {
-            return;
-        }
-
-        String host = Uri.parse(url).getHost();
-        WebUtils.addCredentials(username.getText().toString(), password.getText().toString(), host);
-    }
-
-    private static String getServerFromPreferences() {
-        return (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_SERVER_URL);
-    }
-
-    private static String getPasswordFromPreferences() {
-        return (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_PASSWORD);
-    }
-
-    private static String getUserNameFromPreferences() {
-        return (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_USERNAME);
-    }
-
-    private void saveCredentials(String userName, String password) {
-        GeneralSharedPreferences.getInstance().save(PreferenceKeys.KEY_USERNAME, userName);
-        GeneralSharedPreferences.getInstance().save(PreferenceKeys.KEY_PASSWORD, password);
     }
 
     public interface AuthDialogUtilityResultListener {

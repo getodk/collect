@@ -6,12 +6,19 @@ import org.odk.collect.android.activities.InstanceUploaderList;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.fragments.DataManagerList;
+import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.injection.ActivityBuilder;
 import org.odk.collect.android.injection.config.scopes.PerApplication;
+import org.odk.collect.android.preferences.ServerPreferencesFragment;
+import org.odk.collect.android.receivers.NetworkReceiver;
+import org.odk.collect.android.tasks.InstanceServerUploader;
 import org.odk.collect.android.tasks.sms.SmsSentBroadcastReceiver;
 import org.odk.collect.android.tasks.sms.SmsNotificationReceiver;
 import org.odk.collect.android.tasks.sms.SmsSender;
 import org.odk.collect.android.tasks.sms.SmsService;
+import org.odk.collect.android.utilities.AuthDialogUtility;
+import org.odk.collect.android.utilities.DownloadFormListUtils;
+import org.odk.collect.android.utilities.FormDownloader;
 
 import dagger.BindsInstance;
 import dagger.Component;
@@ -55,4 +62,19 @@ public interface AppComponent {
     void inject(InstanceUploaderAdapter instanceUploaderAdapter);
 
     void inject(DataManagerList dataManagerList);
+
+    void inject(InstanceServerUploader uploader);
+
+    void inject(CollectServerClient collectClient);
+
+    void inject(ServerPreferencesFragment serverPreferencesFragment);
+
+    void inject(FormDownloader formDownloader);
+
+    void inject(NetworkReceiver networkReceiver);
+
+    void inject(DownloadFormListUtils downloadFormListUtils);
+
+    void inject(AuthDialogUtility authDialogUtility);
+
 }

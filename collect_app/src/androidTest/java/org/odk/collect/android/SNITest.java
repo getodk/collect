@@ -5,24 +5,21 @@ import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.opendatakit.httpclientandroidlib.HttpResponse;
-import org.opendatakit.httpclientandroidlib.HttpStatus;
-import org.opendatakit.httpclientandroidlib.client.HttpClient;
-import org.opendatakit.httpclientandroidlib.client.methods.HttpGet;
+import org.odk.collect.android.http.CollectServerClient;
+import org.odk.collect.android.http.HttpClientConnection;
+import org.odk.collect.android.http.HttpGetResult;
+import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URI;
+import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.fail;
-import static org.odk.collect.android.utilities.WebUtils.CONNECTION_TIMEOUT;
-import static org.odk.collect.android.utilities.WebUtils.createHttpClient;
-import static org.odk.collect.android.utilities.WebUtils.createOpenRosaHttpGet;
 
 /**
  * An on-device test for TLS server name indication support.
@@ -33,21 +30,20 @@ import static org.odk.collect.android.utilities.WebUtils.createOpenRosaHttpGet;
 @RunWith(AndroidJUnit4.class)
 public class SNITest {
 
-    public static final URI SNI_URI = URI.create("https://sni.velox.ch/");
-    public static final String SUCCESS_SENTINEL = "sent the following TLS server name indication extension";
+    private static final String SNI_URI = "https://sni.velox.ch/";
+    private static final String SUCCESS_SENTINEL = "sent the following TLS server name indication extension";
 
     @Test
-    public void apacheHttpClientSupportsSNI() throws IOException {
-        HttpClient client = createHttpClient(CONNECTION_TIMEOUT);
-        HttpGet req = createOpenRosaHttpGet(SNI_URI);
-        HttpResponse rsp = client.execute(req);
-        assertHttpSuccess(rsp.getStatusLine().getStatusCode());
-        assertPageContent(rsp.getEntity().getContent());
+    public void testThatHttpClientSupportsSNI() throws Exception {
+        CollectServerClient serverClient = new CollectServerClient(new HttpClientConnection(), new WebCredentialsUtils());
+        HttpGetResult inputStreamResult = serverClient.getHttpInputStream(SNI_URI, null);
+        assertHttpSuccess(inputStreamResult.getStatusCode());
+        assertPageContent(inputStreamResult.getInputStream());
     }
 
     @Test
     public void urlConnectionSupportsSNI() throws IOException {
-        HttpsURLConnection conn = (HttpsURLConnection) SNI_URI.toURL().openConnection();
+        HttpsURLConnection conn = (HttpsURLConnection) new URL(SNI_URI).openConnection();
         assertHttpSuccess(conn.getResponseCode());
         assertPageContent(conn.getInputStream());
     }
@@ -56,7 +52,7 @@ public class SNITest {
      * Confirms the request returned HTTP success (200) or fails test.
      */
     private void assertHttpSuccess(int statusCode) {
-        assertEquals(HttpStatus.SC_OK, statusCode);
+        assertEquals(HttpsURLConnection.HTTP_OK, statusCode);
     }
 
     /*
