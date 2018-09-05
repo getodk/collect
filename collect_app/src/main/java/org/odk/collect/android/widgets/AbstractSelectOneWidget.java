@@ -52,7 +52,7 @@ public abstract class AbstractSelectOneWidget extends SelectTextWidget implement
     /**
      * An estimated max number of elements for whom we don't need to resize a RecyclerView
      */
-    private static final int MAX_ITEMS_WITHOUT_SCREEN_BOUND = 30;
+    private static final int MAX_ITEMS_WITHOUT_SCREEN_BOUND = 40;
 
     @Nullable
     private AdvanceToNextListener listener;
@@ -118,10 +118,10 @@ public abstract class AbstractSelectOneWidget extends SelectTextWidget implement
             MAX_ITEMS_WITHOUT_SCREEN_BOUND elements is an estimated number.
              */
             if (adapter.getItemCount() > MAX_ITEMS_WITHOUT_SCREEN_BOUND) {
-                // Only let the RecyclerView take up 100% of the screen height in order to speed up loading if there are many items
+                // Only let the RecyclerView take up 80% of the screen height in order to speed up loading if there are many items
                 DisplayMetrics displayMetrics = new DisplayMetrics();
                 ((FormEntryActivity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-                recyclerView.getLayoutParams().height = displayMetrics.heightPixels;
+                recyclerView.getLayoutParams().height = (int) (displayMetrics.heightPixels * 0.8);
             } else {
                 recyclerView.setNestedScrollingEnabled(false);
             }
