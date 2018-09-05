@@ -466,7 +466,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
     }
 
     protected Fragment getAuxFragment() {
-        return ActivityResultHelper.getAuxFragment(((AppCompatActivity) getContext()), this::onActivityResultReceived);
+        return ActivityResultHelper.getAuxFragment((AppCompatActivity) getContext(), this::onActivityResultReceived);
     }
 
     protected void startActivityForResult(Intent intent, int requestCode, String errorString) {

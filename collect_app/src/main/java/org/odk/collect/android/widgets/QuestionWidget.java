@@ -694,7 +694,7 @@ public abstract class QuestionWidget
     }
 
     protected Fragment getAuxFragment() {
-        return ActivityResultHelper.getAuxFragment(((AppCompatActivity) getContext()), this::onActivityResultReceived);
+        return ActivityResultHelper.getAuxFragment((AppCompatActivity) getContext(), this::onActivityResultReceived);
     }
 
     protected void startActivityForResult(Intent intent, int requestCode, @StringRes int errorStringResource) {
