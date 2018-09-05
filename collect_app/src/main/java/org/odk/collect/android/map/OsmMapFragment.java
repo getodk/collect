@@ -50,6 +50,10 @@ import java.util.List;
 import java.util.Map;
 
 public class OsmMapFragment extends Fragment implements MapFragment, MapEventsReceiver {
+    public static final GeoPoint INITIAL_CENTER = new GeoPoint(0.0, -30.0);
+    public static final int INITIAL_ZOOM = 2;
+    public static final int POINT_ZOOM = 16;
+
     protected MapView map;
     protected ReadyListener readyListener;
     protected MapFragment.PointListener clickListener;
@@ -71,12 +75,15 @@ public class OsmMapFragment extends Fragment implements MapFragment, MapEventsRe
         return map;
     }
 
-    @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    @Override public View onCreateView(@NonNull LayoutInflater inflater,
+        @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.osm_map_layout, container, false);
-        map = view.<MapView>findViewById(R.id.osm_map_view);
+        map = view.findViewById(R.id.osm_map_view);
         map.setMultiTouchControls(true);
         map.setBuiltInZoomControls(true);
         map.setMinZoomLevel(1);
+        map.getController().setCenter(INITIAL_CENTER);
+        map.getController().setZoom(INITIAL_ZOOM);
         map.setTilesScaledToDpi(true);
         map.getOverlays().add(new MapEventsOverlay(this));
         myLocationOverlay = new MyLocationNewOverlay(map);
@@ -110,7 +117,11 @@ public class OsmMapFragment extends Fragment implements MapFragment, MapEventsRe
         return map.getZoomLevel();
     }
 
-    @Override public void zoomToPoint(@NonNull MapPoint center, double zoom) {
+    @Override public void zoomToPoint(@Nullable MapPoint center) {
+        zoomToPoint(center, POINT_ZOOM);
+    }
+
+    @Override public void zoomToPoint(@Nullable MapPoint center, double zoom) {
         if (center != null) {
             // setCenter() must be done last; setZoom() does not preserve the center.
             map.getController().setZoom((int) Math.round(zoom));
@@ -122,13 +133,14 @@ public class OsmMapFragment extends Fragment implements MapFragment, MapEventsRe
         if (points != null) {
             int count = 0;
             List<GeoPoint> geoPoints = new ArrayList<>();
+            MapPoint lastPoint = null;
             for (MapPoint point : points) {
+                lastPoint = point;
                 geoPoints.add(toGeoPoint(point));
                 count++;
             }
             if (count == 1) {
-                map.getController().setCenter(geoPoints.get(0));
-                map.getController().setZoom(16);
+                zoomToPoint(lastPoint);
             } else if (count > 1) {
                 // TODO(ping): Find a better solution.
                 // zoomToBoundingBox sometimes fails to zoom correctly, either
@@ -229,16 +241,6 @@ public class OsmMapFragment extends Fragment implements MapFragment, MapEventsRe
 
     @VisibleForTesting public AlertDialog getGpsErrorDialog() {
         return gpsErrorDialog;
-    }
-
-    protected void updateFeatures() {
-        for (MapFeature feature : features.values()) {
-            feature.update();
-        }
-    }
-
-    protected static double clamp(double x, double min, double max) {
-        return x < min ? min : x > max ? max : x;
     }
 
     protected static @NonNull MapPoint fromGeoPoint(@NonNull IGeoPoint geoPoint) {

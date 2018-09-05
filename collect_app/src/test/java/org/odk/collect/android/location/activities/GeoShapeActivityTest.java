@@ -49,7 +49,7 @@ public class GeoShapeActivityTest extends BaseGeoActivityTest {
     @Before public void setUp() throws Exception {
         super.setUp();
         LocationClients.setTestClient(locationClient);
-        GoogleMapFragment.callReadyListenerSynchronously = true;
+        GoogleMapFragment.testMode = true;
         controller = Robolectric.buildActivity(GeoShapeActivity.class);
         activity = controller.create().start().resume().visible().get();
         map = (GoogleMapFragment) activity.getMapFragment();

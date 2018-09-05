@@ -59,10 +59,16 @@ public interface MapFragment {
     double getZoom();
 
     /**
+     * Centers the map view on the given point, zooming in to a close-up level
+     * deemed appropriate by the implementation, possibly with animation.
+     */
+    void zoomToPoint(@Nullable MapPoint center);
+
+    /**
      * Centers the map view on the given point with a zoom level as close as
      * possible to the given zoom level, possibly with animation.
      */
-    void zoomToPoint(@NonNull MapPoint center, double zoom);
+    void zoomToPoint(@Nullable MapPoint center, double zoom);
 
     /**
      * Adjusts the map's viewport to enclose all of the given points, possibly
@@ -116,10 +122,10 @@ public interface MapFragment {
      */
     void runOnGpsLocationReady(@NonNull ReadyListener listener);
 
-    /** Registers a callback for a click on the map. */
+    /** Sets or clears the callback for a click on the map. */
     void setClickListener(@Nullable PointListener listener);
 
-    /** Registers a callback for a long press on the map. */
+    /** Sets or clears the callback for a long press on the map. */
     void setLongPressListener(@Nullable PointListener listener);
 
     interface ReadyListener {

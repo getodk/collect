@@ -15,7 +15,6 @@
 package org.odk.collect.android.activities;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -144,10 +143,7 @@ public class GeoShapeActivity extends CollectAbstractActivity implements IRegist
 
         zoomLocationButton = zoomDialogView.findViewById(R.id.zoom_location);
         zoomLocationButton.setOnClickListener(v -> {
-            MapPoint location = map.getGpsLocation();
-            if (location != null) {
-                map.zoomToPoint(location, 16);
-            }
+            map.zoomToPoint(map.getGpsLocation());
             zoomDialog.dismiss();
         });
 
@@ -161,12 +157,11 @@ public class GeoShapeActivity extends CollectAbstractActivity implements IRegist
         if (!points.isEmpty()) {
             map.zoomToBoundingBox(points, 0.8);
         } else {
-            map.zoomToPoint(new MapPoint(0, -30), 2);
             map.runOnGpsLocationReady(this::onGpsLocationReady);
         }
     }
 
-    @SuppressWarnings("unused")
+    @SuppressWarnings("unused")  // the "map" parameter is intentionally unused
     private void onGpsLocationReady(MapFragment map) {
         zoomButton.setEnabled(true);
         if (getWindow().isActive()) {
@@ -275,17 +270,10 @@ public class GeoShapeActivity extends CollectAbstractActivity implements IRegist
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(getString(R.string.zoom_to_where));
             builder.setView(zoomDialogView)
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                })
-                .setOnCancelListener(new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialog) {
-                        dialog.cancel();
-                        zoomDialog.dismiss();
-                    }
+                .setNegativeButton(R.string.cancel, (dialog, id) -> dialog.cancel())
+                .setOnCancelListener(dialog -> {
+                    dialog.cancel();
+                    zoomDialog.dismiss();
                 });
             zoomDialog = builder.create();
         }

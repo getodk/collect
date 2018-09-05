@@ -52,6 +52,10 @@ public class GoogleMapFragment extends SupportMapFragment implements
     MapFragment, LocationListener, LocationClient.LocationClientListener,
     GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener,
     GoogleMap.OnMarkerDragListener {
+    public static final LatLng INITIAL_CENTER = new LatLng(0, -30);
+    public static final float INITIAL_ZOOM = 2;
+    public static final float POINT_ZOOM = 16;
+
     protected GoogleMap map;
     protected List<MapFragment.ReadyListener> gpsLocationReadyListeners = new ArrayList<>();
     protected MapFragment.PointListener clickListener;
@@ -63,8 +67,10 @@ public class GoogleMapFragment extends SupportMapFragment implements
     protected AlertDialog gpsErrorDialog;
     protected boolean gpsLocationEnabled;
 
+    // During Robolectric tests, Google Play Services is unavailable; sadly, the
+    // "map" field will be null and many operations will need to be stubbed out.
     @SuppressFBWarnings(value = "MS_SHOULD_BE_FINAL", justification = "This flag is exposed for Robolectric tests to set")
-    @VisibleForTesting public static boolean callReadyListenerSynchronously;
+    @VisibleForTesting public static boolean testMode;
 
     @Override public void addTo(@NonNull FragmentActivity activity, int containerId, @Nullable ReadyListener listener) {
         activity.getSupportFragmentManager()
@@ -86,6 +92,8 @@ public class GoogleMapFragment extends SupportMapFragment implements
             // "go to my location" button; we have our own button for that.
             map.setMyLocationEnabled(true);
             map.getUiSettings().setMyLocationButtonEnabled(false);
+            map.setMinZoomPreference(1);
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(INITIAL_CENTER, INITIAL_ZOOM));
             if (listener != null) {
                 listener.onReady(this);
             }
@@ -93,7 +101,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
         // In Robolectric tests, getMapAsync() never gets around to calling its
         // callback; we have to invoke the ready listener directly.
-        if (callReadyListenerSynchronously) {
+        if (testMode) {
             listener.onReady(this);
         }
     }
@@ -105,30 +113,48 @@ public class GoogleMapFragment extends SupportMapFragment implements
     }
 
     @Override public @NonNull MapPoint getCenter() {
+        if (map == null) {  // during Robolectric tests, map will be null
+            return fromLatLng(INITIAL_CENTER);
+        }
         LatLng target = map.getCameraPosition().target;
         return new MapPoint(target.latitude, target.longitude);
     }
 
     @Override public double getZoom() {
+        if (map == null) {  // during Robolectric tests, map will be null
+            return INITIAL_ZOOM;
+        }
         return map.getCameraPosition().zoom;
     }
 
-    @Override public void zoomToPoint(@NonNull MapPoint center, double zoom) {
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(toLatLng(center), (float) zoom));
+    @Override public void zoomToPoint(@Nullable MapPoint center) {
+        zoomToPoint(center, POINT_ZOOM);
+    }
+
+    @Override public void zoomToPoint(@Nullable MapPoint center, double zoom) {
+        if (map == null) {  // during Robolectric tests, map will be null
+            return;
+        }
+        if (center != null) {
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(toLatLng(center), (float) zoom));
+        }
     }
 
     @Override public void zoomToBoundingBox(Iterable<MapPoint> points, double scaleFactor) {
+        if (map == null) {  // during Robolectric tests, map will be null
+            return;
+        }
         if (points != null) {
             int count = 0;
             LatLngBounds.Builder builder = new LatLngBounds.Builder();
-            LatLng latLng = null;
+            MapPoint lastPoint = null;
             for (MapPoint point : points) {
-                latLng = toLatLng(point);
-                builder.include(latLng);
+                lastPoint = point;
+                builder.include(toLatLng(point));
                 count++;
             }
             if (count == 1) {
-                map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
+                zoomToPoint(lastPoint);
             } else if (count > 1) {
                 final LatLngBounds bounds = expandBounds(builder.build(), 1 / scaleFactor);
                 new Handler().postDelayed(() -> {
@@ -188,7 +214,9 @@ public class GoogleMapFragment extends SupportMapFragment implements
     }
 
     @Override public void clearFeatures() {
-        map.clear();
+        if (map != null) {  // during Robolectric tests, map will be null
+            map.clear();
+        }
         features.clear();
     }
 
@@ -295,10 +323,6 @@ public class GoogleMapFragment extends SupportMapFragment implements
         }
     }
 
-    protected static double clamp(double x, double min, double max) {
-        return x < min ? min : x > max ? max : x;
-    }
-
     protected static @NonNull MapPoint fromLatLng(@NonNull LatLng latLng) {
         return new MapPoint(latLng.latitude, latLng.longitude);
     }
@@ -329,6 +353,9 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
         public DraggableShape(GoogleMap map, Iterable<MapPoint> points) {
             this.map = map;
+            if (map == null) {  // during Robolectric tests, map will be null
+                return;
+            }
             for (MapPoint point : points) {
                 markers.add(map.addMarker(
                     new MarkerOptions().position(toLatLng(point)).draggable(true)));
@@ -367,8 +394,10 @@ public class GoogleMapFragment extends SupportMapFragment implements
                 marker.remove();
             }
             markers.clear();
-            polygon.remove();
-            polygon = null;
+            if (polygon != null) {
+                polygon.remove();
+                polygon = null;
+            }
         }
 
         public List<MapPoint> getPoints() {
@@ -380,6 +409,9 @@ public class GoogleMapFragment extends SupportMapFragment implements
         }
 
         public void addPoint(MapPoint point) {
+            if (map == null) {  // during Robolectric tests, map will be null
+                return;
+            }
             markers.add(map.addMarker(
                 new MarkerOptions().position(toLatLng(point)).draggable(true)));
             update();
