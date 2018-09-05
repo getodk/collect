@@ -190,6 +190,7 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
             audioButton.setVisibility(VISIBLE);
             audioButton.init(index, selectionDesignator, audioURI, player);
             audioButton.setOnClickListener(this);
+            audioButton.setTag(ViewIds.generateViewId());
         }
 
         // Setup video button
