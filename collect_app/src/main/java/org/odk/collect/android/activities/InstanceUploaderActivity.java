@@ -71,6 +71,7 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
     private String url;
     private String username;
     private String password;
+    private Boolean deleteInstanceAfterUpload;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +106,10 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
                 url = savedInstanceState.getString(ApplicationConstants.BundleKeys.URL);
                 username = savedInstanceState.getString(ApplicationConstants.BundleKeys.USERNAME);
                 password = savedInstanceState.getString(ApplicationConstants.BundleKeys.PASSWORD);
+
+                if (savedInstanceState.containsKey(ApplicationConstants.BundleKeys.DELETE_INSTANCE_AFTER_SUBMISSION)) {
+                    deleteInstanceAfterUpload = savedInstanceState.getBoolean(ApplicationConstants.BundleKeys.DELETE_INSTANCE_AFTER_SUBMISSION);
+                }
             }
         } else {
             // get instances to upload...
@@ -124,6 +129,11 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
 
                 username = intent.getStringExtra(ApplicationConstants.BundleKeys.USERNAME);
                 password = intent.getStringExtra(ApplicationConstants.BundleKeys.PASSWORD);
+
+
+                if (bundle.containsKey(ApplicationConstants.BundleKeys.DELETE_INSTANCE_AFTER_SUBMISSION)) {
+                    deleteInstanceAfterUpload = bundle.getBoolean(ApplicationConstants.BundleKeys.DELETE_INSTANCE_AFTER_SUBMISSION);
+                }
             }
         }
 
@@ -159,6 +169,10 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
             // If one of them lacks (in this case it's a null) then we do not override the form or device settings during submission
             if (url != null && username != null && password != null) {
                 instanceServerUploader.setCompleteDestinationUrl(url + Collect.getInstance().getString(R.string.default_odk_submission));
+
+                if (deleteInstanceAfterUpload != null) {
+                    instanceServerUploader.setDeleteInstanceAfterSubmission(deleteInstanceAfterUpload);
+                }
             }
 
             // register this activity with the new uploader task
