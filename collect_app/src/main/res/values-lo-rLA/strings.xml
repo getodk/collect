@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="activity_not_found">ບໍ່ມີກິດຈະກຳໃຫ້ດຳເນີນການ: %s</string>
   <string name="add_another">ເພີ່ມກຸ່ມ</string>
   <string name="add_another_repeat">ຕ້ອງການເພີ່ມກຸ່ມໃໝ່ \"%s\" ​ອີກບໍ່?</string>
@@ -46,7 +46,6 @@
   <string name="enter_data">ຕື່ມຂໍ້ມູນໃສ່ແບບຟອມໃໝ່</string>
   <string name="enter_data_button">ຕື່ມຂໍ້ມູນໃສ່ແບບຟອມ​ໃໝ່</string>
   <string name="error_occured">ມີຄວາມຜິດພາດເກີດຂຶ້ນ</string>
-  <string name="error_attaching_binary_file">​ມີ​ບັນ​ຫາ​ເກີດ​ຂື້ນ​ໃນ​ລະ​ຫວ່າງ​ການ​ຄັດຕິດ​​ເອ​ກະ​ສານ​ມີ​ເດຍ: %s</string>
   <string name="fetching_file">ໄປຮັບ %1$s.\n\nຟອມ %2$s ຂອງ %3$s ຟອມ(s).</string>
   <string name="file_deleted_error">ຄຳສັ່ງລຶບແບບຟອມ %1$s %2$s ກຳລັງດຳເນີນງານ!</string>
   <string name="file_deleted_ok">ລຶບແບບຟອມ%s ສຳເລັດແລ້ວ!</string>

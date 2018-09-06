@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2012 University of Washington
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -15,8 +15,6 @@
 package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -33,7 +31,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
@@ -42,6 +39,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.PermissionListener;
+import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
@@ -267,6 +265,15 @@ public class ImageWebViewWidget extends QuestionWidget implements FileWidget {
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == ApplicationConstants.RequestCodes.IMAGE_CHOOSER) {
+            saveChosenFile(data.getData());
+        } else if (requestCode == ApplicationConstants.RequestCodes.IMAGE_CAPTURE) {
+            saveCapturedImage();
+        }
+    }
+
+    @Override
     public void onButtonClick(int buttonId) {
         switch (buttonId) {
             case R.id.capture_image:
@@ -293,8 +300,7 @@ public class ImageWebViewWidget extends QuestionWidget implements FileWidget {
                 .logInstanceAction(this, "captureButton", "click",
                         getFormEntryPrompt().getIndex());
         errorTextView.setVisibility(View.GONE);
-        Intent i = new Intent(
-                android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        Intent i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         // We give the camera an absolute filename/path where to put the
         // picture because of bug:
         // http://code.google.com/p/android/issues/detail?id=1480
@@ -305,20 +311,8 @@ public class ImageWebViewWidget extends QuestionWidget implements FileWidget {
 
         // if this gets modified, the onActivityResult in
         // FormEntyActivity will also need to be updated.
-        i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
-                Uri.fromFile(new File(Collect.TMPFILE_PATH)));
-        try {
-            waitForData();
-            ((Activity) getContext()).startActivityForResult(i,
-                    RequestCodes.IMAGE_CAPTURE);
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(
-                    getContext(),
-                    getContext().getString(R.string.activity_not_found,
-                            getContext().getString(R.string.capture_image)), Toast.LENGTH_SHORT)
-                    .show();
-            cancelWaitingForData();
-        }
+        i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(Collect.TMPFILE_PATH)));
+        startActivityForResult(i, RequestCodes.IMAGE_CAPTURE, R.string.capture_image);
     }
 
     private void chooseImage() {
@@ -329,17 +323,6 @@ public class ImageWebViewWidget extends QuestionWidget implements FileWidget {
         errorTextView.setVisibility(View.GONE);
         Intent i = new Intent(Intent.ACTION_GET_CONTENT);
         i.setType("image/*");
-
-        try {
-            waitForData();
-            ((Activity) getContext()).startActivityForResult(i,
-                    RequestCodes.IMAGE_CHOOSER);
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(
-                    getContext(),
-                    getContext().getString(R.string.activity_not_found,
-                            getContext().getString(R.string.choose_image)), Toast.LENGTH_SHORT).show();
-            cancelWaitingForData();
-        }
+        startActivityForResult(i, RequestCodes.IMAGE_CHOOSER, R.string.choose_image);
     }
 }

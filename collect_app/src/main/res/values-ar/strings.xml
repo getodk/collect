@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">عرض كلمة المرور</string>
   <string name="activity_not_found">لا يوجد مهمات للمعالجة: %s</string>
   <string name="view_image">عرض الصورة</string>
@@ -54,7 +54,6 @@
   <string name="enter_data">ملء استمارة فارغة</string>
   <string name="enter_data_button">ملء استمارة فارغة</string>
   <string name="error_occured">حدث خطأ</string>
-  <string name="error_attaching_binary_file">حدث خطأ أثناء محاولة ارفاق الملف: %s</string>
   <string name="fetching_file">الحصول على %1$s.\n\nالنموذج %2$s من %3$s نماذج</string>
   <string name="file_deleted_error">عذرا, فشل حذف %1$s من %2$s من الاستمارة/ات المحددة!</string>
   <string name="file_deleted_ok">%s تم حذف الاستمارة /ت!</string>

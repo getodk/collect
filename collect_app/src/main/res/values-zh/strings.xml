@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">显示密码</string>
   <string name="activity_not_found">没找到与 %s 对应的活动</string>
   <string name="view_image">查看图片</string>
@@ -54,7 +54,6 @@
   <string name="enter_data">填写空表表格</string>
   <string name="enter_data_button">填写空表表格</string>
   <string name="error_occured">错误</string>
-  <string name="error_attaching_binary_file">在访问媒体文件：%s时发生了错误</string>
   <string name="file_deleted_error">%2$s 中的 %1$s 个选定的表格不能被删除!</string>
   <string name="file_deleted_ok">%s 表格被成功删除!</string>
   <string name="file_delete_in_progress">正在删除表格!</string>

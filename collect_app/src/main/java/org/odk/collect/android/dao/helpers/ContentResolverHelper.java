@@ -15,8 +15,10 @@
 package org.odk.collect.android.dao.helpers;
 
 import android.content.ContentResolver;
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.provider.OpenableColumns;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.FormInfo;
@@ -67,5 +69,29 @@ public final class ContentResolverHelper {
             }
         }
         return formPath;
+    }
+
+    /**
+     * Get a file's extension by the uri
+     *
+     * @param fileUri Whose name we want to get
+     * @return The file's extension
+     * @see android.content.ContentResolver
+     */
+    public static String getFileExtensionFromUri(Context context, Uri fileUri) {
+        try (Cursor returnCursor = context.getContentResolver()
+                .query(fileUri, null, null, null, null)) {
+            int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+            returnCursor.moveToFirst();
+            String filename = returnCursor.getString(nameIndex);
+            // If the file's name contains extension , we cut it down for latter use (copy a new file).
+            if (filename.lastIndexOf('.') != -1) {
+                return filename.substring(filename.lastIndexOf('.'));
+            } else {
+                // I found some mp3 files' name don't contain extension, but can be played as Audio
+                // So I write so, but I still there are some way to get its extension
+                return "";
+            }
+        }
     }
 }

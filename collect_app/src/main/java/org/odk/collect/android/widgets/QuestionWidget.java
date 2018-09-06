@@ -14,7 +14,9 @@
 
 package org.odk.collect.android.widgets;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -22,10 +24,16 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
+import android.support.v4.app.Fragment;
+import android.support.v4.content.FileProvider;
+import android.support.v7.app.AppCompatActivity;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -38,12 +46,15 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.helpers.ContentResolverHelper;
 import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.listeners.AudioPlayListener;
@@ -51,17 +62,25 @@ import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GuidanceHint;
 import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.utilities.ActivityResultHelper;
 import org.odk.collect.android.utilities.AnimateUtils;
+import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DependencyProvider;
+import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
+import org.odk.collect.android.utilities.ImageConverter;
+import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
+import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.views.MediaLayout;
+import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 import org.odk.collect.android.widgets.interfaces.Widget;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -69,26 +88,39 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
+import io.reactivex.Single;
+import io.reactivex.SingleObserver;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
+
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
+import static org.odk.collect.android.activities.FormEntryActivity.DO_NOT_EVALUATE_CONSTRAINTS;
+import static org.odk.collect.android.activities.FormEntryActivity.SAVING_DIALOG;
 
 public abstract class QuestionWidget
         extends RelativeLayout
         implements Widget, AudioPlayListener {
 
+    private static final String GUIDANCE_EXPANDED_STATE = "expanded_state";
+
     private final int questionFontSize;
     private final FormEntryPrompt formEntryPrompt;
     private final MediaLayout questionMediaLayout;
-    private MediaPlayer player;
     private final TextView helpTextView;
     private final TextView guidanceTextView;
     private final View helpTextLayout;
     private final View guidanceTextLayout;
     private final View textLayout;
     private final TextView warningText;
-    private static final String GUIDANCE_EXPANDED_STATE = "expanded_state";
+    private final CompositeDisposable disposables = new CompositeDisposable();
+
+    protected ThemeUtils themeUtils;
+
+    private MediaPlayer player;
     private AtomicBoolean expanded;
     private Bundle state;
-    protected ThemeUtils themeUtils;
     private int playColor;
 
     public QuestionWidget(Context context, FormEntryPrompt prompt) {
@@ -144,6 +176,16 @@ public abstract class QuestionWidget
         addHelpTextLayout(getHelpTextLayout());
     }
 
+    // https://stackoverflow.com/questions/18996183/identifying-rtl-language-in-android/23203698#23203698
+    public static boolean isRTL() {
+        return isRTL(Locale.getDefault());
+    }
+
+    private static boolean isRTL(Locale locale) {
+        final int directionality = Character.getDirectionality(locale.getDisplayName().charAt(0));
+        return directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT || directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC;
+    }
+
     private TextView setupGuidanceTextAndLayout(TextView guidanceTextView, FormEntryPrompt prompt) {
 
         TextView guidance = null;
@@ -179,7 +221,7 @@ public abstract class QuestionWidget
             View icon = textLayout.findViewById(R.id.help_icon);
             icon.setVisibility(VISIBLE);
 
-            /**
+            /*
              * Added click listeners to the individual views because the TextView
              * intercepts click events when they are being passed to the parent layout.
              */
@@ -226,16 +268,6 @@ public abstract class QuestionWidget
             player.release();
             player = null;
         }
-    }
-
-    //source::https://stackoverflow.com/questions/18996183/identifying-rtl-language-in-android/23203698#23203698
-    public static boolean isRTL() {
-        return isRTL(Locale.getDefault());
-    }
-
-    private static boolean isRTL(Locale locale) {
-        final int directionality = Character.getDirectionality(locale.getDisplayName().charAt(0));
-        return directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT || directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC;
     }
 
     protected void injectDependencies(DependencyProvider dependencyProvider) {
@@ -580,7 +612,7 @@ public abstract class QuestionWidget
      * out of the box when we use internal choices instead
      */
     protected void clearNextLevelsOfCascadingSelect() {
-        FormController formController = Collect.getInstance().getFormController();
+        FormController formController = getFormController();
         if (formController == null) {
             return;
         }
@@ -601,52 +633,9 @@ public abstract class QuestionWidget
         }
     }
 
-    //region Data waiting
-
-    @Override
-    public final void waitForData() {
-        Collect collect = Collect.getInstance();
-        if (collect == null) {
-            throw new IllegalStateException("Collect application instance is null.");
-        }
-
-        FormController formController = collect.getFormController();
-        if (formController == null) {
-            return;
-        }
-
-        formController.setIndexWaitingForData(getFormEntryPrompt().getIndex());
-    }
-
-    @Override
-    public final void cancelWaitingForData() {
-        Collect collect = Collect.getInstance();
-        if (collect == null) {
-            throw new IllegalStateException("Collect application instance is null.");
-        }
-
-        FormController formController = collect.getFormController();
-        if (formController == null) {
-            return;
-        }
-
-        formController.setIndexWaitingForData(null);
-    }
-
-    @Override
-    public final boolean isWaitingForData() {
-        Collect collect = Collect.getInstance();
-        if (collect == null) {
-            throw new IllegalStateException("Collect application instance is null.");
-        }
-
-        FormController formController = collect.getFormController();
-        if (formController == null) {
-            return false;
-        }
-
-        FormIndex index = getFormEntryPrompt().getIndex();
-        return index.equals(formController.getIndexWaitingForData());
+    @Nullable
+    protected FormController getFormController() {
+        return ((Collect) getContext().getApplicationContext()).getFormController();
     }
 
     //region Accessors
@@ -702,5 +691,177 @@ public abstract class QuestionWidget
 
     public int getPlayColor() {
         return playColor;
+    }
+
+    protected Fragment getAuxFragment() {
+        return ActivityResultHelper.getAuxFragment((AppCompatActivity) getContext(), this::onActivityResultReceived);
+    }
+
+    protected void startActivityForResult(Intent intent, int requestCode, @StringRes int errorStringResource) {
+        try {
+            getAuxFragment().startActivityForResult(intent, requestCode);
+        } catch (ActivityNotFoundException e) {
+            if (errorStringResource != -1) {
+                Toast.makeText(getContext(),
+                        getContext().getString(R.string.activity_not_found, getContext().getString(errorStringResource)),
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    public void onActivityResultReceived(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_CANCELED || resultCode != RESULT_OK) {
+            // request was canceled...
+            return;
+        }
+
+        if (isResultValid(requestCode, resultCode, data)) {
+            onActivityResult(requestCode, resultCode, data);
+        }
+
+        refreshCurrentView();
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // to be overridden by widgets launching external intents
+    }
+
+    protected void saveAnswersForCurrentScreen() {
+        ((FormEntryActivity) getContext()).saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+    }
+
+    protected boolean isResultValid(int requestCode, int resultCode, Intent data) {
+        // intent is needed for all requestCodes except of DRAW_IMAGE, ANNOTATE_IMAGE, SIGNATURE_CAPTURE, IMAGE_CAPTURE and HIERARCHY_ACTIVITY
+        if (data == null &&
+                requestCode != ApplicationConstants.RequestCodes.DRAW_IMAGE &&
+                requestCode != ApplicationConstants.RequestCodes.ANNOTATE_IMAGE &&
+                requestCode != ApplicationConstants.RequestCodes.SIGNATURE_CAPTURE &&
+                requestCode != ApplicationConstants.RequestCodes.IMAGE_CAPTURE) {
+            Timber.w("The intent has a null value for requestCode: %s", requestCode);
+            ToastUtils.showLongToast(getContext().getString(R.string.null_intent_value));
+            return false;
+        }
+
+        return resultCode == RESULT_OK;
+    }
+
+    /*
+     * We saved the image to the tempfile_path, but we really want it to
+     * be in: /sdcard/odk/instances/[current instnace]/something.jpg so
+     * we move it there before inserting it into the content provider.
+     * Once the android image capture bug gets fixed, (read, we move on
+     * from Android 1.6) we want to handle images the audio and video
+     */
+    protected void saveCapturedImage() {
+        // The intent is empty, but we know we saved the image to the temp file
+        ImageConverter.execute(Collect.TMPFILE_PATH, this, getContext());
+        File fi = new File(Collect.TMPFILE_PATH);
+
+        //revoke permissions granted to this file due its possible usage in the camera app
+        Uri uri = FileProvider.getUriForFile(getContext(),
+                BuildConfig.APPLICATION_ID + ".provider",
+                fi);
+        FileUtils.revokeFileReadWritePermission(getContext(), uri);
+
+        String instanceFolder = getFormController().getInstanceFile().getParent();
+        String s = instanceFolder + File.separator + System.currentTimeMillis() + ".jpg";
+
+        File nf = new File(s);
+        if (!fi.renameTo(nf)) {
+            Timber.e("Failed to rename %s", fi.getAbsolutePath());
+        } else {
+            Timber.i("Renamed %s to %s", fi.getAbsolutePath(), nf.getAbsolutePath());
+        }
+
+        if (this instanceof BinaryWidget) {
+            ((BinaryWidget) this).setBinaryData(nf);
+        }
+        saveAnswersForCurrentScreen();
+    }
+
+    protected void saveFileAnswer(Uri media) {
+        // For audio/video capture/chooser, we get the URI from the content
+        // provider
+        // then the widget copies the file and makes a new entry in the
+        // content provider.
+        if (this instanceof BinaryWidget) {
+            ((BinaryWidget) this).setBinaryData(media);
+        }
+        saveAnswersForCurrentScreen();
+        deleteMediaFromContentProvider(media);
+    }
+
+    protected void deleteMediaFromContentProvider(Uri media) {
+        String filePath = MediaUtils.getDataColumn(getContext(), media, null, null);
+        if (filePath != null) {
+            new File(filePath).delete();
+        }
+        try {
+            getContext().getContentResolver().delete(media, null, null);
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+    }
+
+    /**
+     * Save a copy of the chosen media in Collect's own path such as
+     * "/storage/emulated/0/odk/instances/{form name}/filename",
+     * and if it's from Google Drive and not cached yet, we'll retrieve it using network.
+     * This may take a long time.
+     *
+     * @param selectedFile uri of the selected media (audio/video/image/arbitrary file)
+     */
+    protected void saveChosenFile(Uri selectedFile) {
+
+        // show dialog
+        ((FormEntryActivity) getContext()).showDialog(SAVING_DIALOG);
+
+        saveFile(getContext(), selectedFile)
+                .subscribe(new SingleObserver<File>() {
+                    @Override
+                    public void onSubscribe(Disposable disposable) {
+                        disposables.add(disposable);
+                    }
+
+                    @Override
+                    public void onSuccess(File file) {
+                        QuestionWidget widget = QuestionWidget.this;
+
+                        if (widget instanceof BinaryWidget) {
+                            if (widget instanceof BaseImageWidget || widget instanceof ImageWebViewWidget) {
+                                ImageConverter.execute(file.getPath(), widget, getContext());
+                            }
+
+                            ((BinaryWidget) widget).setBinaryData(file);
+                            saveAnswersForCurrentScreen();
+                            ((FormEntryActivity) getContext()).dismissDialog(SAVING_DIALOG);
+                            refreshCurrentView();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        ((FormEntryActivity) getContext()).dismissDialog(SAVING_DIALOG);
+                        Timber.e(e);
+                    }
+                });
+    }
+
+    private Single<File> saveFile(Context context, Uri selectedFile) {
+        return Single.fromCallable(() -> {
+            FormController formController = Collect.getInstance().getFormController();
+            String extension = ContentResolverHelper.getFileExtensionFromUri(context, selectedFile);
+            String instanceFolder = formController.getInstanceFile().getParent();
+            String destPath = instanceFolder + File.separator + System.currentTimeMillis() + extension;
+
+            File chosenFile = MediaUtils.getFileFromUri(context, selectedFile, MediaStore.Images.Media.DATA);
+            File newFile = new File(destPath);
+            Timber.d(FileUtils.copyFile(chosenFile, newFile));
+            return newFile;
+        });
+    }
+
+    protected void refreshCurrentView() {
+        ((FormEntryActivity) getContext()).refreshCurrentView();
     }
 }

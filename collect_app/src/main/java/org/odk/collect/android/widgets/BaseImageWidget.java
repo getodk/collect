@@ -16,7 +16,6 @@
 
 package org.odk.collect.android.widgets;
 
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
@@ -168,7 +167,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
                 }
             });
 
-        answerLayout.addView(imageView);
+            answerLayout.addView(imageView);
         }
     }
 
@@ -183,6 +182,45 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
         binaryName = getFormEntryPrompt().getAnswerText();
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case ApplicationConstants.RequestCodes.ALIGNED_IMAGE:
+
+                /*
+                 * We saved the image to the tempfile_path; the app returns the full
+                 * path to the saved file in the EXTRA_OUTPUT extra. Take that file
+                 * and move it into the instance folder.
+                 */
+                String path = data.getStringExtra(MediaStore.EXTRA_OUTPUT);
+                File file = new File(path);
+                String instanceFolder = getFormController().getInstanceFile().getParent();
+                String s = instanceFolder + File.separator + System.currentTimeMillis() + ".jpg";
+
+                File nf = new File(s);
+                if (!file.renameTo(nf)) {
+                    Timber.e("Failed to rename %s", file.getAbsolutePath());
+                } else {
+                    Timber.i("Renamed %s to %s", file.getAbsolutePath(), nf.getAbsolutePath());
+                }
+
+                setBinaryData(nf);
+                saveAnswersForCurrentScreen();
+                break;
+
+            case ApplicationConstants.RequestCodes.IMAGE_CHOOSER:
+                saveChosenFile(data.getData());
+                break;
+
+            case ApplicationConstants.RequestCodes.DRAW_IMAGE:
+            case ApplicationConstants.RequestCodes.ANNOTATE_IMAGE:
+            case ApplicationConstants.RequestCodes.SIGNATURE_CAPTURE:
+            case ApplicationConstants.RequestCodes.IMAGE_CAPTURE:
+                saveCapturedImage();
+                break;
+        }
+    }
+
     /**
      * Enables a subclass to add extras to the intent before launching the draw activity.
      *
@@ -192,10 +230,30 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
     public abstract Intent addExtrasToIntent(@NonNull Intent intent);
 
     /**
+     * Standard method for launching an Activity.
+     *
+     * @param intent              - The Intent to start
+     * @param resourceCode        - Code to return when Activity exits
+     * @param errorStringResource - String resource for error toast
+     */
+    protected void launchActivityForResult(Intent intent, final int resourceCode, final int errorStringResource) {
+        startActivityForResult(intent, resourceCode, errorStringResource);
+    }
+
+    /**
      * Interface for Clicking on Images
      */
     protected interface ImageClickHandler {
         void clickImage(String context);
+    }
+
+    /**
+     * Interface for choosing or capturing a new image
+     */
+    protected interface ExternalImageCaptureHandler {
+        void captureImage(Intent intent, int requestCode, int stringResource);
+
+        void chooseImage(int stringResource);
     }
 
     /**
@@ -268,15 +326,6 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
     }
 
     /**
-     * Interface for choosing or capturing a new image
-     */
-    protected interface ExternalImageCaptureHandler {
-        void captureImage(Intent intent, int requestCode, int stringResource);
-
-        void chooseImage(int stringResource);
-    }
-
-    /**
      * Class for launching the image capture or choose image activities
      */
     protected class ImageCaptureHandler implements ExternalImageCaptureHandler {
@@ -294,25 +343,6 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
             Intent i = new Intent(Intent.ACTION_GET_CONTENT);
             i.setType("image/*");
             launchActivityForResult(i, ApplicationConstants.RequestCodes.IMAGE_CHOOSER, stringResource);
-        }
-    }
-
-    /**
-     * Standard method for launching an Activity.
-     *
-     * @param intent - The Intent to start
-     * @param resourceCode - Code to return when Activity exits
-     * @param errorStringResource - String resource for error toast
-     */
-    protected void launchActivityForResult(Intent intent, final int resourceCode, final int errorStringResource) {
-        try {
-            waitForData();
-            ((Activity) getContext()).startActivityForResult(intent, resourceCode);
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(getContext(),
-                    getContext().getString(R.string.activity_not_found, getContext().getString(errorStringResource)),
-                    Toast.LENGTH_SHORT).show();
-            cancelWaitingForData();
         }
     }
 }

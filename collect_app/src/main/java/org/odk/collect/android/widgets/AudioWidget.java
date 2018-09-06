@@ -15,8 +15,6 @@
 package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -26,7 +24,6 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
@@ -230,6 +227,15 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == RequestCodes.AUDIO_CAPTURE) {
+            saveFileAnswer(data.getData());
+        } else if (requestCode == RequestCodes.AUDIO_CHOOSER) {
+            saveChosenFile(data.getData());
+        }
+    }
+
+    @Override
     public void onButtonClick(int buttonId) {
         switch (buttonId) {
             case R.id.capture_audio:
@@ -261,18 +267,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
                 android.provider.MediaStore.EXTRA_OUTPUT,
                 android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
                         .toString());
-        try {
-            waitForData();
-            ((Activity) getContext()).startActivityForResult(i,
-                    RequestCodes.AUDIO_CAPTURE);
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(
-                    getContext(),
-                    getContext().getString(R.string.activity_not_found,
-                            getContext().getString(R.string.capture_audio)), Toast.LENGTH_SHORT)
-                    .show();
-            cancelWaitingForData();
-        }
+        startActivityForResult(i, RequestCodes.AUDIO_CAPTURE, R.string.capture_audio);
     }
 
     private void chooseSound() {
@@ -282,17 +277,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
                         getFormEntryPrompt().getIndex());
         Intent i = new Intent(Intent.ACTION_GET_CONTENT);
         i.setType("audio/*");
-        try {
-            waitForData();
-            ((Activity) getContext()).startActivityForResult(i,
-                    RequestCodes.AUDIO_CHOOSER);
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(
-                    getContext(),
-                    getContext().getString(R.string.activity_not_found,
-                            getContext().getString(R.string.choose_audio)), Toast.LENGTH_SHORT).show();
-            cancelWaitingForData();
-        }
+        startActivityForResult(i, RequestCodes.AUDIO_CHOOSER, R.string.choose_audio);
     }
 
     /**

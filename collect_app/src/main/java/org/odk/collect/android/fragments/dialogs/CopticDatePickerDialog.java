@@ -22,6 +22,7 @@ import org.joda.time.chrono.CopticChronology;
 import org.odk.collect.android.R;
 import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.DateTimeUtils;
+import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import java.util.Arrays;
 
@@ -31,9 +32,9 @@ public class CopticDatePickerDialog extends CustomDatePickerDialog {
 
     private String[] monthsArray;
 
-    public static CopticDatePickerDialog newInstance(FormIndex formIndex, LocalDateTime date, DatePickerDetails datePickerDetails) {
+    public static CopticDatePickerDialog newInstance(FormIndex formIndex, LocalDateTime date, DatePickerDetails datePickerDetails, BinaryWidget binaryWidget) {
         CopticDatePickerDialog dialog = new CopticDatePickerDialog();
-        dialog.setArguments(getArgs(formIndex, date, datePickerDetails));
+        dialog.setArguments(getArgs(formIndex, date, datePickerDetails, binaryWidget));
 
         return dialog;
     }

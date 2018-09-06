@@ -70,7 +70,6 @@
     <string name="enter_data">Fill Blank Form</string>
     <string name="enter_data_button">Fill Blank Form</string>
     <string name="error_occured">Error Occurred</string>
-    <string name="error_attaching_binary_file">An error occurred while attaching the media: %s</string>
     <string name="fetching_file">Getting %1$s.\n\nForm %2$s of %3$s form(s).</string>
     <string name="file_deleted_error">Sorry, %1$s of %2$s selected form(s) failed to delete!</string>
     <string name="file_deleted_ok">%s form(s) successfully deleted!</string>
@@ -651,7 +650,6 @@
     <string name="transport_type_both">Select on send</string>
     <string name="seconds">Seconds</string>
     <string name="rank_items">Rank items</string>
-    <string name="image_not_saved">The image can not be saved because of a problem with the corresponding instance file.</string>
     <string name="loading_form_failed">An error occurred while loading the form. Please try again.</string>
     <string name="sms_invalid_phone_number_description">Set a destination phone number for SMS submissions or change your transport type.</string>
     <string name="google_invalid_account_title">Google account missing</string>

@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2011 University of Washington
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -17,7 +17,6 @@ package org.odk.collect.android.views;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -25,6 +24,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -35,6 +36,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.javarosa.core.model.Constants;
 import org.javarosa.core.model.FormIndex;
@@ -45,17 +47,18 @@ import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalAppsUtils;
 import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.utilities.ActivityResultHelper;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.WidgetFactory;
-import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -66,6 +69,9 @@ import java.util.Set;
 
 import timber.log.Timber;
 
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
+import static org.odk.collect.android.activities.FormEntryActivity.DO_NOT_EXIT;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
@@ -163,15 +169,10 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                                 }
                             }
 
-                            ((Activity) getContext()).startActivityForResult(i, RequestCodes.EX_GROUP_CAPTURE);
+                            startActivityForResult(i, RequestCodes.EX_GROUP_CAPTURE, errorString);
                         } catch (ExternalParamsException e) {
                             Timber.e(e, "ExternalParamsException");
-
                             ToastUtils.showShortToast(e.getMessage());
-                        } catch (ActivityNotFoundException e) {
-                            Timber.d(e, "ActivityNotFoundExcept");
-
-                            ToastUtils.showShortToast(errorString);
                         }
                     }
                 });
@@ -323,34 +324,6 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         }
     }
 
-    /**
-     * Called when another activity returns information to answer this question.
-     */
-    public void setBinaryData(Object answer) {
-        boolean set = false;
-        for (QuestionWidget q : widgets) {
-            if (q instanceof BinaryWidget) {
-                BinaryWidget binaryWidget = (BinaryWidget) q;
-                if (binaryWidget.isWaitingForData()) {
-                    try {
-                        binaryWidget.setBinaryData(answer);
-                        binaryWidget.cancelWaitingForData();
-                    } catch (Exception e) {
-                        Timber.e(e);
-                        ToastUtils.showLongToast(getContext().getString(R.string.error_attaching_binary_file,
-                                        e.getMessage()));
-                    }
-                    set = true;
-                    break;
-                }
-            }
-        }
-
-        if (!set) {
-            Timber.w("Attempting to return data to a widget or set of widgets not looking for data");
-        }
-    }
-
     public void setDataForFields(Bundle bundle) throws JavaRosaException {
         if (bundle == null) {
             return;
@@ -387,23 +360,6 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                     break;
                 }
             }
-        }
-    }
-
-    public void cancelWaitingForBinaryData() {
-        int count = 0;
-        for (QuestionWidget q : widgets) {
-            if (q instanceof BinaryWidget) {
-                if (q.isWaitingForData()) {
-                    q.cancelWaitingForData();
-                    ++count;
-                }
-            }
-        }
-
-        if (count != 1) {
-            Timber.w("Attempting to cancel waiting for binary data to a widget or set of widgets "
-                            + "not looking for data");
         }
     }
 
@@ -507,5 +463,38 @@ public class ODKView extends ScrollView implements OnLongClickListener {
             }
         }
         return null;
+    }
+
+    protected Fragment getAuxFragment() {
+        return ActivityResultHelper.getAuxFragment((AppCompatActivity) getContext(), this::onActivityResultReceived);
+    }
+
+    protected void startActivityForResult(Intent intent, int requestCode, String errorString) {
+        try {
+            getAuxFragment().startActivityForResult(intent, requestCode);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(getContext(),
+                    getContext().getString(R.string.activity_not_found, errorString),
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void onActivityResultReceived(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_CANCELED || resultCode != RESULT_OK) {
+            // request was canceled...
+            return;
+        }
+
+        if (requestCode == RequestCodes.EX_GROUP_CAPTURE) {
+            try {
+                Bundle extras = data.getExtras();
+                setDataForFields(extras);
+            } catch (JavaRosaException e) {
+                Timber.e(e);
+                ((FormEntryActivity) getContext()).createErrorDialog(e.getCause().getMessage(), DO_NOT_EXIT);
+            }
+        }
+
+        ((FormEntryActivity) getContext()).refreshCurrentView();
     }
 }

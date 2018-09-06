@@ -22,6 +22,7 @@ import org.joda.time.chrono.EthiopicChronology;
 import org.odk.collect.android.R;
 import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.DateTimeUtils;
+import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import java.util.Arrays;
 
@@ -35,9 +36,9 @@ public class EthiopianDatePickerDialog extends CustomDatePickerDialog {
 
     private String[] monthsArray;
 
-    public static EthiopianDatePickerDialog newInstance(FormIndex formIndex, LocalDateTime date, DatePickerDetails datePickerDetails) {
+    public static EthiopianDatePickerDialog newInstance(FormIndex formIndex, LocalDateTime date, DatePickerDetails datePickerDetails, BinaryWidget binaryWidget) {
         EthiopianDatePickerDialog dialog = new EthiopianDatePickerDialog();
-        dialog.setArguments(getArgs(formIndex, date, datePickerDetails));
+        dialog.setArguments(getArgs(formIndex, date, datePickerDetails, binaryWidget));
 
         return dialog;
     }

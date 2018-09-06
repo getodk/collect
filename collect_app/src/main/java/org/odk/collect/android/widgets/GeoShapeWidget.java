@@ -14,7 +14,6 @@
 package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -35,6 +34,7 @@ import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
+import static org.odk.collect.android.activities.FormEntryActivity.GEOSHAPE_RESULTS;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 import static org.odk.collect.android.utilities.PermissionUtils.requestLocationPermissions;
 
@@ -48,10 +48,10 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryWidget {
 
     public static final String SHAPE_LOCATION = "gp";
     public static final String GOOGLE_MAP_KEY = "google_maps";
-    public SharedPreferences sharedPreferences;
-    public String mapSDK;
     private final Button createShapeButton;
     private final TextView answerDisplay;
+    public SharedPreferences sharedPreferences;
+    public String mapSDK;
 
     public GeoShapeWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -100,7 +100,7 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryWidget {
         if (s.length() != 0) {
             i.putExtra(SHAPE_LOCATION, s);
         }
-        ((Activity) getContext()).startActivityForResult(i, RequestCodes.GEOSHAPE_CAPTURE);
+        startActivityForResult(i, RequestCodes.GEOSHAPE_CAPTURE, -1);
     }
 
     private void updateButtonLabelsAndVisibility(boolean dataAvailable) {
@@ -140,11 +140,17 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryWidget {
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        String gshr = data.getStringExtra(GEOSHAPE_RESULTS);
+        setBinaryData(gshr);
+        saveAnswersForCurrentScreen();
+    }
+
+    @Override
     public void onButtonClick(int buttonId) {
         requestLocationPermissions((FormEntryActivity) getContext(), new PermissionListener() {
             @Override
             public void granted() {
-                waitForData();
                 startGeoShapeActivity();
             }
 

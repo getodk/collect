@@ -58,7 +58,6 @@
   <string name="enter_data">Izpolni prazen obrazec</string>
   <string name="enter_data_button">Izpolni prazen obrazec</string>
   <string name="error_occured">Nastala je napaka</string>
-  <string name="error_attaching_binary_file">Napaka pri dodajanju medijske vsebine: %s</string>
   <string name="fetching_file">Pridobivam %1$s.\n\nObrazec %2$s od %3$sobrazcev.</string>
   <string name="file_deleted_error">Napaka. %1$s od %2$s izbranih obrazcev nisem uspel zbrisati.</string>
   <string name="file_deleted_ok">%s obrazcev uspešno zbrisanih!</string>

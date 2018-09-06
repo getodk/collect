@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">បង្ហាញ​ពាក្យសម្ងាត់</string>
   <string name="activity_not_found">គ្មានសកម្មភាពដើម្បីដោះស្រាយបាន : %s</string>
   <string name="view_image">បង្ហាញរូបថត</string>
@@ -58,7 +58,6 @@
   <string name="enter_data">បំពេញសំណុំបែបបទទទេ</string>
   <string name="enter_data_button">បំពេញសំណុំបែបបទទទេ</string>
   <string name="error_occured">មានបញ្ហាបានកើតឡើង</string>
-  <string name="error_attaching_binary_file">មានបញ្ហាមួយបានកើតឡើងខណៈដែលភ្ជាប់ឯកសារមេឌៀ: %s</string>
   <string name="fetching_file">កំពុង​​ទទួល​យក %1$s ។ \n\n ​សំណុំបែបបទ​ទី %2$s នៃ %3$s ។</string>
   <string name="file_deleted_error">សំុទោស សំណុំ​បែប​បទ​ %1$s នៃ %2$s ដែលបានជ្រើសរើស​មិន​អាច​លុប​បាន​ទេ!</string>
   <string name="file_deleted_ok">%s សំណុំបែបបទបានលុបដោយជោគជ័យ ! </string>

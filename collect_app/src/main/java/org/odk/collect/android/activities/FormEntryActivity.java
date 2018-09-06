@@ -24,11 +24,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore.Images;
-import android.provider.OpenableColumns;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -61,8 +58,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.common.collect.ImmutableList;
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
@@ -71,8 +66,6 @@ import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.joda.time.LocalDateTime;
-import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.IconMenuListAdapter;
 import org.odk.collect.android.adapters.model.IconMenuItem;
@@ -81,12 +74,9 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.helpers.ContentResolverHelper;
 import org.odk.collect.android.dao.helpers.FormsDaoHelper;
 import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
-import org.odk.collect.android.exception.GDriveConnectionException;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataManager;
-import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
-import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.FormSavedListener;
@@ -112,7 +102,6 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
@@ -153,8 +142,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         FormLoaderListener, FormSavedListener, AdvanceToNextListener,
         OnGestureListener, SavePointListener, NumberPickerDialog.NumberPickerListener,
         DependencyProvider<ActivityAvailability>,
-        CustomDatePickerDialog.CustomDatePickerDialogListener,
-        RankingWidgetDialog.RankingListener,
         SaveFormIndexTask.SaveFormIndexListener {
 
     // save with every swipe forward or back. Timings indicate this takes .25
@@ -165,9 +152,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     // Defines for FormEntryActivity
     private static final boolean EXIT = true;
-    private static final boolean DO_NOT_EXIT = false;
+    public static final boolean DO_NOT_EXIT = false;
     private static final boolean EVALUATE_CONSTRAINTS = true;
-    private static final boolean DO_NOT_EVALUATE_CONSTRAINTS = false;
+    public static final boolean DO_NOT_EVALUATE_CONSTRAINTS = false;
 
     // Extra returned from gp activity
     public static final String LOCATION_RESULT = "LOCATION_RESULT";
@@ -191,16 +178,15 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     public static final String KEY_INSTANCEPATH = "instancepath";
     public static final String KEY_XPATH = "xpath";
-    public static final String KEY_XPATH_WAITING_FOR_DATA = "xpathwaiting";
 
     // Tracks whether we are autosaving
     public static final String KEY_AUTO_SAVED = "autosaved";
 
     public static final String EXTRA_TESTING_PATH = "testingPath";
 
-    private static final int PROGRESS_DIALOG = 1;
-    private static final int SAVING_DIALOG = 2;
-    private static final int SAVING_IMAGE_DIALOG = 3;
+    public static final int PROGRESS_DIALOG = 1;
+    public static final int SAVING_DIALOG = 2;
+    public static final int SAVING_IMAGE_DIALOG = 3;
 
     private boolean autoSaved;
     private boolean allowMovingBackwards;
@@ -241,7 +227,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private boolean doSwipe = true;
     private String instancePath;
     private String startingXPath;
-    private String waitingXPath;
     private boolean newForm = true;
     private boolean onResumeWasCalledWithoutPermissions;
 
@@ -337,11 +322,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 startingXPath = savedInstanceState.getString(KEY_XPATH);
                 Timber.i("startingXPath is: %s", startingXPath);
             }
-            if (savedInstanceState.containsKey(KEY_XPATH_WAITING_FOR_DATA)) {
-                waitingXPath = savedInstanceState
-                        .getString(KEY_XPATH_WAITING_FOR_DATA);
-                Timber.i("waitingXPath is: %s", waitingXPath);
-            }
             if (savedInstanceState.containsKey(NEWFORM)) {
                 newForm = savedInstanceState.getBoolean(NEWFORM, true);
             }
@@ -380,8 +360,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     Timber.w("Reloading form and restoring state.");
                     // we need to launch the form loader to load the form
                     // controller...
-                    formLoaderTask = new FormLoaderTask(instancePath,
-                            startingXPath, waitingXPath);
+                    formLoaderTask = new FormLoaderTask(instancePath, startingXPath);
                     Collect.getInstance().getActivityLogger()
                             .logAction(this, "formReloaded", formPath);
                     // TODO: this doesn' work (dialog does not get removed):
@@ -524,7 +503,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             return;
         }
 
-        formLoaderTask = new FormLoaderTask(instancePath, null, null);
+        formLoaderTask = new FormLoaderTask(instancePath, null);
         Collect.getInstance().getActivityLogger()
                 .logAction(this, "formLoaded", formPath);
         showDialog(PROGRESS_DIALOG);
@@ -576,13 +555,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             if (formController.getInstanceFile() != null) {
                 outState.putString(KEY_INSTANCEPATH, getAbsoluteInstancePath());
             }
-            outState.putString(KEY_XPATH,
-                    formController.getXPath(formController.getFormIndex()));
-            FormIndex waiting = formController.getIndexWaitingForData();
-            if (waiting != null) {
-                outState.putString(KEY_XPATH_WAITING_FOR_DATA,
-                        formController.getXPath(waiting));
-            }
+            outState.putString(KEY_XPATH, formController.getXPath(formController.getFormIndex()));
             // save the instance to a temp path...
             nonblockingCreateSavePointData();
         }
@@ -603,382 +576,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-        FormController formController = getFormController();
-        if (formController == null) {
-            // we must be in the midst of a reload of the FormController.
-            // try to save this callback data to the FormLoaderTask
-            if (formLoaderTask != null
-                    && formLoaderTask.getStatus() != AsyncTask.Status.FINISHED) {
-                formLoaderTask.setActivityResult(requestCode, resultCode, intent);
-            } else {
-                Timber.e("Got an activityResult without any pending form loader");
-            }
-            return;
+
+        if (requestCode == RequestCodes.HIERARCHY_ACTIVITY) {
+            refreshCurrentView();
         }
-
-        if (resultCode == RESULT_CANCELED) {
-            // request was canceled...
-            if (requestCode != RequestCodes.HIERARCHY_ACTIVITY && getCurrentViewIfODKView() != null) {
-                getCurrentViewIfODKView().cancelWaitingForBinaryData();
-            }
-            return;
-        }
-
-        // intent is needed for all requestCodes except of DRAW_IMAGE, ANNOTATE_IMAGE, SIGNATURE_CAPTURE, IMAGE_CAPTURE and HIERARCHY_ACTIVITY
-        if (intent == null && requestCode != RequestCodes.DRAW_IMAGE && requestCode != RequestCodes.ANNOTATE_IMAGE
-                && requestCode != RequestCodes.SIGNATURE_CAPTURE && requestCode != RequestCodes.IMAGE_CAPTURE
-                && requestCode != RequestCodes.HIERARCHY_ACTIVITY) {
-            Timber.w("The intent has a null value for requestCode: " + requestCode);
-            ToastUtils.showLongToast(getString(R.string.null_intent_value));
-            return;
-        }
-
-        // For handling results returned by the Zxing Barcode scanning library
-        IntentResult barcodeScannerResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
-        if (barcodeScannerResult != null) {
-            if (barcodeScannerResult.getContents() == null) {
-                // request was canceled...
-                Timber.i("QR code scanning cancelled");
-            } else {
-                String sb = intent.getStringExtra("SCAN_RESULT");
-                if (getCurrentViewIfODKView() != null) {
-                    getCurrentViewIfODKView().setBinaryData(sb);
-                }
-                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                refreshCurrentView();
-                return;
-            }
-        }
-
-        switch (requestCode) {
-
-            case RequestCodes.OSM_CAPTURE:
-                String osmFileName = intent.getStringExtra("OSM_FILE_NAME");
-                if (getCurrentViewIfODKView() != null) {
-                    getCurrentViewIfODKView().setBinaryData(osmFileName);
-                }
-                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                break;
-            case RequestCodes.EX_STRING_CAPTURE:
-            case RequestCodes.EX_INT_CAPTURE:
-            case RequestCodes.EX_DECIMAL_CAPTURE:
-                String key = "value";
-                boolean exists = intent.getExtras().containsKey(key);
-                if (exists) {
-                    Object externalValue = intent.getExtras().get(key);
-                    if (getCurrentViewIfODKView() != null) {
-                        getCurrentViewIfODKView().setBinaryData(externalValue);
-                    }
-                    saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                }
-                break;
-            case RequestCodes.EX_GROUP_CAPTURE:
-                try {
-                    Bundle extras = intent.getExtras();
-                    if (getCurrentViewIfODKView() != null) {
-                        getCurrentViewIfODKView().setDataForFields(extras);
-                    }
-                } catch (JavaRosaException e) {
-                    Timber.e(e);
-                    createErrorDialog(e.getCause().getMessage(), DO_NOT_EXIT);
-                }
-                break;
-            case RequestCodes.DRAW_IMAGE:
-            case RequestCodes.ANNOTATE_IMAGE:
-            case RequestCodes.SIGNATURE_CAPTURE:
-            case RequestCodes.IMAGE_CAPTURE:
-                /*
-                 * We saved the image to the tempfile_path, but we really want it to
-                 * be in: /sdcard/odk/instances/[current instnace]/something.jpg so
-                 * we move it there before inserting it into the content provider.
-                 * Once the android image capture bug gets fixed, (read, we move on
-                 * from Android 1.6) we want to handle images the audio and video
-                 */
-                // The intent is empty, but we know we saved the image to the temp
-                // file
-                ImageConverter.execute(Collect.TMPFILE_PATH, getWidgetWaitingForBinaryData(), this);
-                File fi = new File(Collect.TMPFILE_PATH);
-
-                //revoke permissions granted to this file due its possible usage in
-                //the camera app
-                Uri uri = FileProvider.getUriForFile(this,
-                        BuildConfig.APPLICATION_ID + ".provider",
-                        fi);
-                FileUtils.revokeFileReadWritePermission(this, uri);
-
-                String instanceFolder = formController.getInstanceFile()
-                        .getParent();
-                String s = instanceFolder + File.separator + System.currentTimeMillis() + ".jpg";
-
-                File nf = new File(s);
-                if (!fi.renameTo(nf)) {
-                    Timber.e("Failed to rename %s", fi.getAbsolutePath());
-                } else {
-                    Timber.i("Renamed %s to %s", fi.getAbsolutePath(), nf.getAbsolutePath());
-                }
-
-                if (getCurrentViewIfODKView() != null) {
-                    getCurrentViewIfODKView().setBinaryData(nf);
-                }
-                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                break;
-            case RequestCodes.ALIGNED_IMAGE:
-                /*
-                 * We saved the image to the tempfile_path; the app returns the full
-                 * path to the saved file in the EXTRA_OUTPUT extra. Take that file
-                 * and move it into the instance folder.
-                 */
-                String path = intent
-                        .getStringExtra(android.provider.MediaStore.EXTRA_OUTPUT);
-                fi = new File(path);
-                instanceFolder = formController.getInstanceFile().getParent();
-                s = instanceFolder + File.separator + System.currentTimeMillis() + ".jpg";
-
-                nf = new File(s);
-                if (!fi.renameTo(nf)) {
-                    Timber.e("Failed to rename %s", fi.getAbsolutePath());
-                } else {
-                    Timber.i("Renamed %s to %s", fi.getAbsolutePath(), nf.getAbsolutePath());
-                }
-
-                if (getCurrentViewIfODKView() != null) {
-                    getCurrentViewIfODKView().setBinaryData(nf);
-                }
-                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                break;
-            case RequestCodes.IMAGE_CHOOSER:
-                /*
-                 * We have a saved image somewhere, but we really want it to be in:
-                 * /sdcard/odk/instances/[current instnace]/something.jpg so we move
-                 * it there before inserting it into the content provider. Once the
-                 * android image capture bug gets fixed, (read, we move on from
-                 * Android 1.6) we want to handle images the audio and video
-                 */
-
-                showDialog(SAVING_IMAGE_DIALOG);
-                Runnable runnable = () -> saveChosenImage(intent.getData());
-                new Thread(runnable).start();
-
-                break;
-            case RequestCodes.AUDIO_CAPTURE:
-            case RequestCodes.VIDEO_CAPTURE:
-                Uri mediaUri = intent.getData();
-                saveFileAnswer(mediaUri);
-                String filePath = MediaUtils.getDataColumn(this, mediaUri, null, null);
-                if (filePath != null) {
-                    new File(filePath).delete();
-                }
-                try {
-                    getContentResolver().delete(mediaUri, null, null);
-                } catch (Exception e) {
-                    Timber.e(e);
-                }
-                break;
-
-            case RequestCodes.ARBITRARY_FILE_CHOOSER:
-                // Same with VIDEO_CHOOSER.
-            case RequestCodes.AUDIO_CHOOSER:
-                // Same with VIDEO_CHOOSER.
-            case RequestCodes.VIDEO_CHOOSER:
-                /*
-                 * Start a task to save the chosen file/audio/video with a new Thread,
-                 * This could support retrieving file from Google Drive.
-                 * */
-                showDialog(SAVING_DIALOG);
-                Runnable saveFileRunnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        saveChosenFile(intent.getData());
-                    }
-                };
-                new Thread(saveFileRunnable).start();
-                break;
-            case RequestCodes.LOCATION_CAPTURE:
-                String sl = intent.getStringExtra(LOCATION_RESULT);
-                if (getCurrentViewIfODKView() != null) {
-                    getCurrentViewIfODKView().setBinaryData(sl);
-                }
-                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                break;
-            case RequestCodes.GEOSHAPE_CAPTURE:
-                String gshr = intent.getStringExtra(GEOSHAPE_RESULTS);
-                if (getCurrentViewIfODKView() != null) {
-                    getCurrentViewIfODKView().setBinaryData(gshr);
-                }
-                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                break;
-            case RequestCodes.GEOTRACE_CAPTURE:
-                String traceExtra = intent.getStringExtra(GEOTRACE_RESULTS);
-                if (getCurrentViewIfODKView() != null) {
-                    getCurrentViewIfODKView().setBinaryData(traceExtra);
-                }
-                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                break;
-            case RequestCodes.BEARING_CAPTURE:
-                String bearing = intent.getStringExtra(BEARING_RESULT);
-                if (getCurrentViewIfODKView() != null) {
-                    getCurrentViewIfODKView().setBinaryData(bearing);
-                }
-                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                break;
-            case RequestCodes.HIERARCHY_ACTIVITY:
-                // We may have jumped to a new index in hierarchy activity, so
-                // refresh
-                break;
-
-        }
-        refreshCurrentView();
-    }
-
-    /**
-     * Save a copy of the chosen media in Collect's own path such as
-     * "/storage/emulated/0/odk/instances/{form name}/filename",
-     * and if it's from Google Drive and not cached yet, we'll retrieve it using network.
-     * This may take a long time.
-     *
-     * @param selectedFile uri of the selected audio
-     * @see #getFileExtensionFromUri(Uri)
-     */
-    private void saveChosenFile(Uri selectedFile) {
-        String extension = getFileExtensionFromUri(selectedFile);
-
-        String instanceFolder = Collect.getInstance().getFormController()
-                .getInstanceFile().getParent();
-        String destPath = instanceFolder + File.separator
-                + System.currentTimeMillis() + extension;
-
-        File chosenFile;
-        try {
-            chosenFile = MediaUtils.getFileFromUri(this, selectedFile, Images.Media.DATA);
-            if (chosenFile != null) {
-                final File newFile = new File(destPath);
-                FileUtils.copyFile(chosenFile, newFile);
-                runOnUiThread(() -> {
-                    dismissDialog(SAVING_DIALOG);
-                    if (getCurrentViewIfODKView() != null) {
-                        getCurrentViewIfODKView().setBinaryData(newFile);
-                    }
-                    saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                    refreshCurrentView();
-                });
-            } else {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        dismissDialog(SAVING_DIALOG);
-                        Timber.e("Could not receive chosen file");
-                        ToastUtils.showShortToastInMiddle(R.string.error_occured);
-                    }
-                });
-            }
-        } catch (GDriveConnectionException e) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    dismissDialog(SAVING_DIALOG);
-                    Timber.e("Could not receive chosen file due to connection problem");
-                    ToastUtils.showLongToastInMiddle(R.string.gdrive_connection_exception);
-                }
-            });
-        }
-    }
-
-    private void saveChosenImage(Uri selectedImage) {
-        // Copy file to sdcard
-        File instanceFile = getFormController().getInstanceFile();
-        if (instanceFile != null) {
-            String instanceFolder1 = instanceFile.getParent();
-            String destImagePath = instanceFolder1 + File.separator + System.currentTimeMillis() + ".jpg";
-
-            File chosenImage;
-            try {
-                chosenImage = MediaUtils.getFileFromUri(this, selectedImage, Images.Media.DATA);
-                if (chosenImage != null) {
-                    final File newImage = new File(destImagePath);
-                    FileUtils.copyFile(chosenImage, newImage);
-                    ImageConverter.execute(newImage.getPath(), getWidgetWaitingForBinaryData(), this);
-                    runOnUiThread(() -> {
-                        dismissDialog(SAVING_IMAGE_DIALOG);
-                        if (getCurrentViewIfODKView() != null) {
-                            getCurrentViewIfODKView().setBinaryData(newImage);
-                        }
-                        saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                        refreshCurrentView();
-                    });
-                } else {
-                    runOnUiThread(() -> {
-                        dismissDialog(SAVING_IMAGE_DIALOG);
-                        Timber.e("Could not receive chosen image");
-                        ToastUtils.showShortToastInMiddle(R.string.error_occured);
-                    });
-                }
-            } catch (GDriveConnectionException e) {
-                runOnUiThread(() -> {
-                    dismissDialog(SAVING_IMAGE_DIALOG);
-                    Timber.e("Could not receive chosen image due to connection problem");
-                    ToastUtils.showLongToastInMiddle(R.string.gdrive_connection_exception);
-                });
-            }
-        } else {
-            ToastUtils.showLongToast(R.string.image_not_saved);
-            Timber.w(getString(R.string.image_not_saved));
-        }
-    }
-
-    /**
-     * Using contentResolver to get a file's extension by the uri returned from OnActivityResult.
-     *
-     * @param fileUri Whose name we want to get
-     * @return The file's extension
-     * @see #onActivityResult(int, int, Intent)
-     * @see #saveChosenFile(Uri)
-     * @see android.content.ContentResolver
-     */
-    private String getFileExtensionFromUri(Uri fileUri) {
-        Cursor returnCursor =
-                getContentResolver().query(fileUri, null, null, null, null);
-        try {
-            if (returnCursor == null) {
-                return "";
-            }
-            int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-            returnCursor.moveToFirst();
-            String filename = returnCursor.getString(nameIndex);
-            // If the file's name contains extension , we cut it down for latter use (copy a new file).
-            if (filename.lastIndexOf('.') != -1) {
-                return filename.substring(filename.lastIndexOf('.'));
-            } else {
-                // I found some mp3 files' name don't contain extension, but can be played as Audio
-                // So I write so, but I still there are some way to get its extension
-                return "";
-            }
-        } finally {
-            if (returnCursor != null) {
-                returnCursor.close();
-            }
-        }
-    }
-
-    private QuestionWidget getWidgetWaitingForBinaryData() {
-        QuestionWidget questionWidget = null;
-        for (QuestionWidget qw : ((ODKView) currentView).getWidgets()) {
-            if (qw.isWaitingForData()) {
-                questionWidget = qw;
-            }
-        }
-
-        return questionWidget;
-    }
-
-    private void saveFileAnswer(Uri media) {
-        // For audio/video capture/chooser, we get the URI from the content
-        // provider
-        // then the widget copies the file and makes a new entry in the
-        // content provider.
-        if (getCurrentViewIfODKView() != null) {
-            getCurrentViewIfODKView().setBinaryData(media);
-        }
-        saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
     }
 
     /**
@@ -1101,7 +702,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * @return false if any error occurs while saving (constraint violated,
      * etc...), true otherwise.
      */
-    private boolean saveAnswersForCurrentScreen(boolean evaluateConstraints) {
+    public boolean saveAnswersForCurrentScreen(boolean evaluateConstraints) {
         FormController formController = getFormController();
         // only try to save if the current event is a question or a field-list group
         // and current view is an ODKView (occasionally we show blank views that do not have any
@@ -1881,7 +1482,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     /**
      * Creates and displays dialog with the given errorMsg.
      */
-    private void createErrorDialog(String errorMsg, final boolean shouldExit) {
+    public void createErrorDialog(String errorMsg, final boolean shouldExit) {
         Collect.getInstance()
                 .getActivityLogger()
                 .logInstanceAction(this, "createErrorDialog",
@@ -2519,12 +2120,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         final FormController formController = task.getFormController();
         if (formController != null) {
-            int requestCode = task.getRequestCode(); // these are bogus if
-            // pendingActivityResult is
-            // false
-            int resultCode = task.getResultCode();
-            Intent intent = task.getIntent();
-
             formLoaderTask.setFormLoaderListener(null);
             FormLoaderTask t = formLoaderTask;
             formLoaderTask = null;
@@ -2551,16 +2146,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     formController.setLanguage(defaultLanguage);
                 }
                 Timber.i("Done in %.3f seconds.", (System.currentTimeMillis() - start) / 1000F);
-            }
-
-            boolean pendingActivityResult = task.hasPendingActivityResult();
-
-            if (pendingActivityResult) {
-                // set the current view to whatever group we were at...
-                refreshCurrentView();
-                // process the pending activity request...
-                onActivityResult(requestCode, resultCode, intent);
-                return;
             }
 
             // it can be a normal flow for a pending activity result to restore from
@@ -2888,22 +2473,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     ((RangeWidget) qw).setNumberPickerValue(value);
                 }
             }
-        }
-    }
-
-    @Override
-    public void onDateChanged(LocalDateTime date) {
-        ODKView odkView = getCurrentViewIfODKView();
-        if (odkView != null) {
-            odkView.setBinaryData(date);
-        }
-    }
-
-    @Override
-    public void onRankingChanged(List<String> values) {
-        ODKView odkView = getCurrentViewIfODKView();
-        if (odkView != null) {
-            odkView.setBinaryData(values);
         }
     }
 

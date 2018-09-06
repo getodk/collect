@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="activity_not_found">Nu s-a găsit nicio activitate care să se ocupe de : %s</string>
   <string name="add_another">Adăugați grup</string>
   <string name="add_another_repeat">Adăugați încă un grup \"%s\"?</string>
@@ -48,7 +48,6 @@
   <string name="enter_data">Completați formular necompletat</string>
   <string name="enter_data_button">Completați formular necompletat</string>
   <string name="error_occured">Eroare</string>
-  <string name="error_attaching_binary_file">A intervenit o eroare în timpul atașării fișierului media: %s</string>
   <string name="fetching_file">Preluare %1$s.\n\nFormular %2$s din %3$s formular(e).</string>
   <string name="file_deleted_error">Ne pare rău, %1$s din %2$s formular(e) selectat(e) nu au putut fi șterse!</string>
   <string name="file_deleted_ok">%s formular(e) șters(e) cu succes!</string>

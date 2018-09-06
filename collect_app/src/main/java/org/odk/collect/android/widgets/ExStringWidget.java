@@ -15,7 +15,6 @@
 package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -166,8 +165,7 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
         i.putExtra("value", getFormEntryPrompt().getAnswerText());
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "launchIntent",
                 i.getAction(), getFormEntryPrompt().getIndex());
-        ((Activity) getContext()).startActivityForResult(i,
-                RequestCodes.EX_STRING_CAPTURE);
+        startActivityForResult(i, RequestCodes.EX_STRING_CAPTURE, -1);
     }
 
     @Override
@@ -199,16 +197,16 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
         } else {
             if (!getFormEntryPrompt().isReadOnly()) {
                 SoftKeyboardUtils.showSoftKeyboard(answer);
-            /*
-             * If you do a multi-question screen after a "add another group" dialog, this won't
-             * automatically pop up. It's an Android issue.
-             *
-             * That is, if I have an edit text in an activity, and pop a dialog, and in that
-             * dialog's button's OnClick() I call edittext.requestFocus() and
-             * showSoftInput(edittext, 0), showSoftinput() returns false. However, if the
-             * edittext
-             * is focused before the dialog pops up, everything works fine. great.
-             */
+                /*
+                 * If you do a multi-question screen after a "add another group" dialog, this won't
+                 * automatically pop up. It's an Android issue.
+                 *
+                 * That is, if I have an edit text in an activity, and pop a dialog, and in that
+                 * dialog's button's OnClick() I call edittext.requestFocus() and
+                 * showSoftInput(edittext, 0), showSoftinput() returns false. However, if the
+                 * edittext
+                 * is focused before the dialog pops up, everything works fine. great.
+                 */
             } else {
                 SoftKeyboardUtils.hideSoftKeyboard(answer);
             }
@@ -231,6 +229,21 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
         super.cancelLongPress();
         answer.cancelLongPress();
         launchIntentButton.cancelLongPress();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == RequestCodes.EX_STRING_CAPTURE ||
+                requestCode == RequestCodes.EX_DECIMAL_CAPTURE ||
+                requestCode == RequestCodes.EX_INT_CAPTURE) {
+            String key = "value";
+            boolean exists = data.getExtras().containsKey(key);
+            if (exists) {
+                Object externalValue = data.getExtras().get(key);
+                setBinaryData(externalValue);
+                saveAnswersForCurrentScreen();
+            }
+        }
     }
 
     @Override
@@ -276,7 +289,6 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
                 ExternalAppsUtils.populateParameters(i, exParams,
                         getFormEntryPrompt().getIndex().getReference());
 
-                waitForData();
                 fireActivity(i);
 
             } catch (ExternalParamsException | ActivityNotFoundException e) {
@@ -302,7 +314,6 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
         }
         launchIntentButton.setEnabled(false);
         launchIntentButton.setFocusable(false);
-        cancelWaitingForData();
 
         Toast.makeText(getContext(),
                 toastText, Toast.LENGTH_SHORT)

@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.widgets;
 
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -26,6 +25,7 @@ import android.text.method.DigitsKeyListener;
 import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.ExternalAppsUtils;
 
@@ -94,8 +94,7 @@ public class ExDecimalWidget extends ExStringWidget {
         i.putExtra("value", getDoubleAnswerValue());
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "launchIntent",
                 i.getAction(), getFormEntryPrompt().getIndex());
-        ((Activity) getContext()).startActivityForResult(i,
-                RequestCodes.EX_DECIMAL_CAPTURE);
+        startActivityForResult(i, RequestCodes.EX_DECIMAL_CAPTURE, -1);
     }
 
     @Override

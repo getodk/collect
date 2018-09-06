@@ -15,7 +15,6 @@
 package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
@@ -318,6 +317,15 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == RequestCodes.VIDEO_CAPTURE) {
+            saveFileAnswer(data.getData());
+        } else if (requestCode == RequestCodes.VIDEO_CHOOSER) {
+            saveChosenFile(data.getData());
+        }
+    }
+
+    @Override
     public void onButtonClick(int id) {
         switch (id) {
             case R.id.capture_video:
@@ -380,18 +388,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
         if (highResolution) {
             i.putExtra(android.provider.MediaStore.EXTRA_VIDEO_QUALITY, 1);
         }
-        try {
-            waitForData();
-            ((Activity) getContext()).startActivityForResult(i,
-                    RequestCodes.VIDEO_CAPTURE);
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(
-                    getContext(),
-                    getContext().getString(R.string.activity_not_found,
-                            getContext().getString(R.string.capture_video)), Toast.LENGTH_SHORT)
-                    .show();
-            cancelWaitingForData();
-        }
+        startActivityForResult(i, RequestCodes.VIDEO_CAPTURE, R.string.capture_video);
     }
 
     private void chooseVideo() {
@@ -404,19 +401,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
         // Intent i =
         // new Intent(Intent.ACTION_PICK,
         // android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
-        try {
-            waitForData();
-            ((Activity) getContext()).startActivityForResult(i,
-                    RequestCodes.VIDEO_CHOOSER);
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(
-                    getContext(),
-                    getContext().getString(R.string.activity_not_found,
-                            getContext().getString(R.string.choose_video)), Toast.LENGTH_SHORT)
-                    .show();
-
-            cancelWaitingForData();
-        }
+        startActivityForResult(i, RequestCodes.VIDEO_CHOOSER, R.string.choose_video);
     }
 
     private void playVideoFile() {

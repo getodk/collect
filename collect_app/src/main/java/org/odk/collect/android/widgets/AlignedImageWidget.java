@@ -55,10 +55,10 @@ public class AlignedImageWidget extends BaseImageWidget {
 
     private static final String FILE_PATH_EXTRA = "filePath";
 
+    private final int[] iarray = new int[6];
+
     private Button captureButton;
     private Button chooseButton;
-    
-    private final int[] iarray = new int[6];
 
     public AlignedImageWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
