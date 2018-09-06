@@ -15,8 +15,6 @@
 package org.odk.collect.android.views;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.support.v7.widget.AppCompatImageButton;
 import android.util.AttributeSet;
@@ -41,8 +39,6 @@ public class AudioButton extends AppCompatImageButton {
 
     private AudioHandler handler;
     private MediaPlayer player;
-    private Bitmap bitmapPlay;
-    private Bitmap bitmapStop;
 
     public AudioButton(Context context) {
         super(context);
@@ -55,9 +51,6 @@ public class AudioButton extends AppCompatImageButton {
     }
 
     private void initView() {
-        bitmapPlay = BitmapFactory.decodeResource(getResources(), android.R.drawable.ic_lock_silent_mode_off);
-        bitmapStop = BitmapFactory.decodeResource(getResources(), android.R.drawable.ic_media_pause);
-
         resetBitmap();
     }
 
@@ -67,12 +60,12 @@ public class AudioButton extends AppCompatImageButton {
     }
 
     public void resetBitmap() {
-        setImageBitmap(bitmapPlay);
+        setImageResource(R.drawable.ic_media_sound);
     }
 
     public void playAudio() {
         handler.playAudio(getContext());
-        setImageBitmap(bitmapStop);
+        setImageResource(R.drawable.ic_media_pause);
     }
 
     public void onClick() {

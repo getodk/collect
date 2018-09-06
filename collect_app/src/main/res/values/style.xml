@@ -36,15 +36,8 @@
     </style>
 
     <style name="MediaButtonStyle">
-        <item name="android:background">#ddd</item>
-        <item name="android:paddingBottom">12px</item>
-        <item name="android:paddingLeft">22px</item>
-        <item name="android:paddingRight">22px</item>
-        <item name="android:paddingTop">12px</item>
-        <item name="android:layout_marginLeft">6px</item>
-        <item name="android:layout_marginTop">0px</item>
-        <item name="android:layout_marginRight">6px</item>
-        <item name="android:layout_marginBottom">0px</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:visibility">gone</item>
     </style>
 
 </resources>

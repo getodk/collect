@@ -18,7 +18,6 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -195,8 +194,6 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
         // Setup video button
         if (videoURI != null) {
             videoButton.setVisibility(VISIBLE);
-            Bitmap b = BitmapFactory.decodeResource(getResources(), android.R.drawable.ic_media_play);
-            videoButton.setImageBitmap(b);
             videoButton.setOnClickListener(this);
         }
 
