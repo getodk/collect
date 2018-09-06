@@ -39,10 +39,14 @@ import timber.log.Timber;
  */
 public class AudioButton extends AppCompatImageButton {
 
+    private static int lastPlayedAudioId;
+    private static FormIndex lastPlayedWidgetIndex;
+
     private AudioHandler handler;
     private MediaPlayer player;
     private Bitmap bitmapPlay;
     private Bitmap bitmapStop;
+    private FormIndex formIndex;
 
     public AudioButton(Context context) {
         super(context);
@@ -63,6 +67,7 @@ public class AudioButton extends AppCompatImageButton {
 
     public void init(FormIndex index, String selectionDesignator, String uri, MediaPlayer player) {
         this.player = player;
+        formIndex = index;
         handler = new AudioHandler(index, selectionDesignator, uri, player);
     }
 
@@ -71,6 +76,8 @@ public class AudioButton extends AppCompatImageButton {
     }
 
     public void playAudio() {
+        lastPlayedAudioId = (int) getTag();
+        lastPlayedWidgetIndex = formIndex;
         handler.playAudio(getContext());
         setImageBitmap(bitmapStop);
     }
@@ -79,6 +86,14 @@ public class AudioButton extends AppCompatImageButton {
         if (player.isPlaying()) {
             player.stop();
             resetBitmap();
+
+            /*
+            It's the case when we click on an audio button while another audio file
+            (from another audio button but from the same question) is playing.
+             */
+            if (lastPlayedAudioId != (int) getTag() && lastPlayedWidgetIndex.equals(formIndex)) {
+                playAudio();
+            }
         } else {
             playAudio();
         }
