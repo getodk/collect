@@ -15,6 +15,7 @@
 package org.odk.collect.android.activities;
 
 import android.app.AlertDialog;
+import android.arch.lifecycle.LiveData;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -167,29 +168,33 @@ public class InstanceUploaderList extends InstanceListActivity implements
                 return;
             }
 
-            List<WorkStatus> statuses = WorkManager.getInstance().synchronous().getStatusesForUniqueWorkSync(AutoSendWorker.TAG);
+            LiveData<List<WorkStatus>> statuses = WorkManager.getInstance().getStatusesForUniqueWork(AutoSendWorker.TAG);
 
-            for (WorkStatus status : statuses) {
-                if (status.getState().equals(State.RUNNING)) {
-                    ToastUtils.showShortToast(R.string.send_in_progress);
-                    return;
+            statuses.observe(this, workStatuses -> {
+                if (workStatuses != null) {
+                    for (WorkStatus status : workStatuses) {
+                        if (status.getState().equals(State.RUNNING)) {
+                            ToastUtils.showShortToast(R.string.send_in_progress);
+                            return;
+                        }
+                    }
                 }
-            }
-        }
 
-        int checkedItemCount = getCheckedCount();
-        logger.logAction(this, "uploadButton", Integer.toString(checkedItemCount));
+                int checkedItemCount = getCheckedCount();
+                logger.logAction(this, "uploadButton", Integer.toString(checkedItemCount));
 
-        if (checkedItemCount > 0) {
-            // items selected
-            uploadSelectedFiles(button.getId());
-            setAllToCheckedState(listView, false);
-            toggleButtonLabel(findViewById(R.id.toggle_button), listView);
-            uploadButton.setEnabled(false);
-            smsUploadButton.setEnabled(false);
-        } else {
-            // no items selected
-            ToastUtils.showLongToast(R.string.noselect_error);
+                if (checkedItemCount > 0) {
+                    // items selected
+                    uploadSelectedFiles(button.getId());
+                    setAllToCheckedState(listView, false);
+                    toggleButtonLabel(findViewById(R.id.toggle_button), listView);
+                    uploadButton.setEnabled(false);
+                    smsUploadButton.setEnabled(false);
+                } else {
+                    // no items selected
+                    ToastUtils.showLongToast(R.string.noselect_error);
+                }
+            });
         }
     }
 
