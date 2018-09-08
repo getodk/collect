@@ -26,7 +26,6 @@ import org.odk.collect.android.tasks.InstanceServerUploader;
 import org.odk.collect.android.utilities.IconUtils;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
-import org.odk.collect.android.utilities.WebUtils;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
 import java.util.ArrayList;
@@ -34,8 +33,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import androidx.work.Worker;
+import timber.log.Timber;
 
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_SEND;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORMS_UPLOADED_NOTIFICATION;
@@ -47,6 +49,8 @@ public class AutoSendWorker extends Worker implements InstanceUploaderListener {
     private InstanceGoogleSheetsUploader instanceGoogleSheetsUploader;
 
     private String resultMessage;
+    private CountDownLatch countDownLatch;
+    Result workResult;
 
     @NonNull
     @Override
@@ -55,13 +59,20 @@ public class AutoSendWorker extends Worker implements InstanceUploaderListener {
             return Result.FAILURE;
         }
 
+        countDownLatch = new CountDownLatch(1);
+
         ConnectivityManager manager = (ConnectivityManager) getApplicationContext().getSystemService(
                 Context.CONNECTIVITY_SERVICE);
         NetworkInfo currentNetworkInfo = manager.getActiveNetworkInfo();
 
         uploadForms(getApplicationContext(), isFormAutoSendOptionEnabled(currentNetworkInfo));
 
-        return Result.SUCCESS;
+        try {
+            countDownLatch.await(2, TimeUnit.MINUTES);
+        } catch (InterruptedException e) {
+            Timber.e(e);
+        }
+        return workResult;
     }
 
     private boolean isFormAutoSendOptionEnabled(NetworkInfo currentNetworkInfo) {
@@ -132,15 +143,6 @@ public class AutoSendWorker extends Worker implements InstanceUploaderListener {
                 uploadingComplete(null);
             }
         } else if (protocol.equals(context.getString(R.string.protocol_odk_default))) {
-            // get the username, password, and server from preferences
-
-            String storedUsername = (String) settings.get(PreferenceKeys.KEY_USERNAME);
-            String storedPassword = (String) settings.get(PreferenceKeys.KEY_PASSWORD);
-            String server = (String) settings.get(PreferenceKeys.KEY_SERVER_URL);
-            String url = server + settings.get(PreferenceKeys.KEY_FORMLIST_URL);
-
-            Uri u = Uri.parse(url);
-            WebUtils.addCredentials(storedUsername, storedPassword, u.getHost());
 
             instanceServerUploader = new InstanceServerUploader();
             instanceServerUploader.setUploaderListener(this);
@@ -181,10 +183,14 @@ public class AutoSendWorker extends Worker implements InstanceUploaderListener {
         String message;
 
         if (result == null) {
+            workResult = Result.FAILURE;
+
             message = resultMessage != null
                     ? resultMessage
                     : Collect.getInstance().getString(R.string.odk_auth_auth_fail);
         } else {
+            workResult = Result.SUCCESS;
+
             StringBuilder selection = new StringBuilder();
             Set<String> keys = result.keySet();
             Iterator<String> it = keys.iterator();
@@ -222,6 +228,8 @@ public class AutoSendWorker extends Worker implements InstanceUploaderListener {
         NotificationManager notificationManager = (NotificationManager) Collect.getInstance()
                 .getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(1328974928, builder.build());
+
+        countDownLatch.countDown();
     }
 
     private String getContentText(Map<String, String> result) {
@@ -253,5 +261,8 @@ public class AutoSendWorker extends Worker implements InstanceUploaderListener {
         if (instanceGoogleSheetsUploader != null) {
             instanceGoogleSheetsUploader.setUploaderListener(null);
         }
+
+        workResult = Result.FAILURE;
+        countDownLatch.countDown();
     }
 }

@@ -31,6 +31,8 @@ import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -107,6 +109,7 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
     private ActivityAvailability activityAvailability;
 
     public ExStringWidget(Context context, FormEntryPrompt prompt) {
+
         super(context, prompt);
 
         TableLayout.LayoutParams params = new TableLayout.LayoutParams();
@@ -150,6 +153,13 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
         answerLayout.addView(launchIntentButton);
         answerLayout.addView(answer);
         addAnswerView(answerLayout);
+
+        Collect.getInstance().getDefaultTracker()
+                .send(new HitBuilders.EventBuilder()
+                        .setCategory("WidgetType")
+                        .setAction("ExternalApp")
+                        .build());
+
     }
 
     protected void fireActivity(Intent i) throws ActivityNotFoundException {

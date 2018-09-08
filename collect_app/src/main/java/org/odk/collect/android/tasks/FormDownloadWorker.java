@@ -58,7 +58,6 @@ public class FormDownloadWorker extends Worker {
     private static final String ACTION = "org.odk.collect.FORM_DOWNLOAD.COMPLETE";
     private String formId;
 
-    
     /**
      * This method sends a broadcast of ACTION {@link #ACTION} communicating whether the form download task initiated
      * at {@link org.odk.collect.android.services.FormDownloadService} was successful or a failure.
@@ -99,7 +98,7 @@ public class FormDownloadWorker extends Worker {
 
             if (!TextUtils.isEmpty(formId)) {
                 Timber.i("STARTED RUNNING JOB -> Download Form %s", formId);
-                HashMap<String, FormDetails> formDetailsHashMap = DownloadFormListUtils.downloadFormList(false);
+                HashMap<String, FormDetails> formDetailsHashMap = new DownloadFormListUtils().downloadFormList(false);
 
                 if (formDetailsHashMap.containsKey(formId)) {
                     FormDetails formDetails = formDetailsHashMap.get(formId);
