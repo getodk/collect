@@ -2668,7 +2668,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             case SaveToDiskTask.SAVED:
                 ToastUtils.showShortToast(R.string.data_saved_ok);
                 formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_SAVE, 0, null, false, false);
-                sendSavedBroadcast();
+                enqueueFinalizedForm();
                 break;
             case SaveToDiskTask.SAVED_AND_EXIT:
                 ToastUtils.showShortToast(R.string.data_saved_ok);
@@ -2679,7 +2679,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 } else {
                     formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);         // Force writing of audit since we are exiting
                 }
-                sendSavedBroadcast();
+                enqueueFinalizedForm();
                 finishReturnInstance();
                 break;
             case SaveToDiskTask.SAVE_ERROR:
@@ -2868,7 +2868,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         super.onStop();
     }
 
-    void sendSavedBroadcast() {
+    void enqueueFinalizedForm() {
         Constraints constraints = new Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
                 .build();
@@ -2879,7 +2879,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         .setConstraints(constraints)
                         .build();
 
-        WorkManager.getInstance().beginUniqueWork(AutoSendWorker.TAG, ExistingWorkPolicy.KEEP, autoSendWork);
+        WorkManager.getInstance().beginUniqueWork(AutoSendWorker.TAG, ExistingWorkPolicy.KEEP, autoSendWork).enqueue();
     }
 
     @Override
