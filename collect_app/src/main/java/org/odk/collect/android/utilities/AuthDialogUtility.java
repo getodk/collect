@@ -77,7 +77,6 @@ public class AuthDialogUtility {
                 String userNameValue = username.getText().toString();
                 String passwordValue = password.getText().toString();
 
-
                 // If custom username, password were passed, then we should not save the resulting credentials used
                 if (customUsername != null && customPassword != null) {
                     setWebCredentials(finalOverriddenUrl != null ? finalOverriddenUrl : getServerFromPreferences());

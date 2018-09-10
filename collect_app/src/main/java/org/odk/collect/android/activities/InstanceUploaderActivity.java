@@ -100,12 +100,13 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
             selectedInstanceIDs = savedInstanceState.getLongArray(TO_SEND);
 
             // Add optional authentication params
-            if (savedInstanceState.containsKey(ApplicationConstants.BundleKeys.URL)
-                    && savedInstanceState.containsKey(ApplicationConstants.BundleKeys.USERNAME)
-                    && savedInstanceState.containsKey(ApplicationConstants.BundleKeys.PASSWORD)) {
+            if (savedInstanceState.containsKey(ApplicationConstants.BundleKeys.URL)) {
                 url = savedInstanceState.getString(ApplicationConstants.BundleKeys.URL);
-                username = savedInstanceState.getString(ApplicationConstants.BundleKeys.USERNAME);
-                password = savedInstanceState.getString(ApplicationConstants.BundleKeys.PASSWORD);
+                if (savedInstanceState.containsKey(ApplicationConstants.BundleKeys.USERNAME)
+                        && savedInstanceState.containsKey(ApplicationConstants.BundleKeys.PASSWORD)) {
+                    username = savedInstanceState.getString(ApplicationConstants.BundleKeys.USERNAME);
+                    password = savedInstanceState.getString(ApplicationConstants.BundleKeys.PASSWORD);
+                }
 
                 if (savedInstanceState.containsKey(ApplicationConstants.BundleKeys.DELETE_INSTANCE_AFTER_SUBMISSION)) {
                     deleteInstanceAfterUpload = savedInstanceState.getBoolean(ApplicationConstants.BundleKeys.DELETE_INSTANCE_AFTER_SUBMISSION);
@@ -117,9 +118,7 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
             Bundle bundle = intent.getExtras();
             selectedInstanceIDs = intent.getLongArrayExtra(FormEntryActivity.KEY_INSTANCES);
 
-            if (bundle != null && bundle.containsKey(ApplicationConstants.BundleKeys.URL)
-                    && bundle.containsKey(ApplicationConstants.BundleKeys.USERNAME)
-                    && bundle.containsKey(ApplicationConstants.BundleKeys.PASSWORD)) {
+            if (bundle != null && bundle.containsKey(ApplicationConstants.BundleKeys.URL)) {
                 url = intent.getStringExtra(ApplicationConstants.BundleKeys.URL);
 
                 // Remove the trailing //
@@ -127,9 +126,11 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
                     url = url.substring(0, url.length() - 1);
                 }
 
-                username = intent.getStringExtra(ApplicationConstants.BundleKeys.USERNAME);
-                password = intent.getStringExtra(ApplicationConstants.BundleKeys.PASSWORD);
-
+                if (bundle.containsKey(ApplicationConstants.BundleKeys.USERNAME)
+                        && bundle.containsKey(ApplicationConstants.BundleKeys.PASSWORD)) {
+                    username = intent.getStringExtra(ApplicationConstants.BundleKeys.USERNAME);
+                    password = intent.getStringExtra(ApplicationConstants.BundleKeys.PASSWORD);
+                }
 
                 if (bundle.containsKey(ApplicationConstants.BundleKeys.DELETE_INSTANCE_AFTER_SUBMISSION)) {
                     deleteInstanceAfterUpload = bundle.getBoolean(ApplicationConstants.BundleKeys.DELETE_INSTANCE_AFTER_SUBMISSION);
@@ -139,14 +140,18 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
 
         instancesToSend = ArrayUtils.toObject(selectedInstanceIDs);
 
-        if (username != null && password != null && url != null) {
+        if (url != null) {
             String host = Uri.parse(url).getHost();
-
             if (host != null) {
                 // Clear cookies in case Collect was used recently and still has previous
                 // cookies from the previous request
                 WebUtils.clearCookies();
-                WebUtils.addCredentials(username, password, host);
+
+                if (password != null && username != null) {
+                    WebUtils.addCredentials(username, password, host);
+                } else {
+                    WebUtils.clearHostCredentials(host);
+                }
             }
         }
 
@@ -165,9 +170,7 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
             showDialog(PROGRESS_DIALOG);
             instanceServerUploader = new InstanceServerUploader();
 
-            // The 3 details - custom URL, username & password passed through the intent should be available if we are to override the default settings
-            // If one of them lacks (in this case it's a null) then we do not override the form or device settings during submission
-            if (url != null && username != null && password != null) {
+            if (url != null) {
                 instanceServerUploader.setCompleteDestinationUrl(url + Collect.getInstance().getString(R.string.default_odk_submission));
 
                 if (deleteInstanceAfterUpload != null) {
@@ -203,10 +206,13 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
         outState.putString(AUTH_URI, url);
         outState.putLongArray(TO_SEND, ArrayUtils.toPrimitive(instancesToSend));
 
-        if (url != null && username != null && password != null) {
+        if (url != null) {
             outState.putString(ApplicationConstants.BundleKeys.URL, url);
-            outState.putString(ApplicationConstants.BundleKeys.USERNAME, username);
-            outState.putString(ApplicationConstants.BundleKeys.PASSWORD, password);
+
+            if (username != null && password != null) {
+                outState.putString(ApplicationConstants.BundleKeys.USERNAME, username);
+                outState.putString(ApplicationConstants.BundleKeys.PASSWORD, password);
+            }
         }
     }
 
@@ -220,7 +226,7 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
         Collect.getInstance().getActivityLogger().logOnStop(this);
 
         // Clear out optional credentials -> url, username && password from the Credentials manager
-        if (url != null && username != null && password != null) {
+        if (url != null) {
             String host = Uri.parse(url).getHost();
 
             if (host != null) {
@@ -400,7 +406,7 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
 
         // register this activity with the new uploader task
         instanceServerUploader.setUploaderListener(this);
-        if (url != null && username != null && password != null) {
+        if (url != null) {
             instanceServerUploader.setCompleteDestinationUrl(url + Collect.getInstance().getString(R.string.default_odk_submission));
         }
         instanceServerUploader.execute(instancesToSend);
