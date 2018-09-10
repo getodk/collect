@@ -47,7 +47,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
-import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
@@ -84,8 +83,10 @@ import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
 import org.odk.collect.android.exception.GDriveConnectionException;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataManager;
+import org.odk.collect.android.fragments.ImageLoadingFragment;
 import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
+import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
@@ -167,7 +168,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private static final boolean EXIT = true;
     private static final boolean DO_NOT_EXIT = false;
     private static final boolean EVALUATE_CONSTRAINTS = true;
-    private static final boolean DO_NOT_EVALUATE_CONSTRAINTS = false;
+    public static final boolean DO_NOT_EVALUATE_CONSTRAINTS = false;
 
     // Extra returned from gp activity
     public static final String LOCATION_RESULT = "LOCATION_RESULT";
@@ -179,6 +180,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     public static final String KEY_SUCCESS = "success";
     public static final String KEY_ERROR = "error";
     private static final String KEY_SAVE_NAME = "saveName";
+
+    private static final String TAG_IMAGE_LOADING_FRAGMENT = "image_loading_fragment";
 
     // Identifies the gp of the form used to launch form entry
     public static final String KEY_FORMPATH = "formpath";
@@ -200,7 +203,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     private static final int PROGRESS_DIALOG = 1;
     private static final int SAVING_DIALOG = 2;
-    private static final int SAVING_IMAGE_DIALOG = 3;
 
     private boolean autoSaved;
     private boolean allowMovingBackwards;
@@ -244,6 +246,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private String waitingXPath;
     private boolean newForm = true;
     private boolean onResumeWasCalledWithoutPermissions;
+
+    ImageLoadingFragment imageLoadingFragment;
 
     public void allowSwiping(boolean doSwipe) {
         this.doSwipe = doSwipe;
@@ -291,6 +295,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             beenSwiped = true;
             showPreviousView();
         });
+
+        if (savedInstanceState == null) {
+            imageLoadingFragment = new ImageLoadingFragment();
+            getFragmentManager().beginTransaction().add(imageLoadingFragment, TAG_IMAGE_LOADING_FRAGMENT).commit();
+        } else {
+            imageLoadingFragment = (ImageLoadingFragment) getFragmentManager().findFragmentByTag(TAG_IMAGE_LOADING_FRAGMENT);
+        }
 
         requestStoragePermissions(this, new PermissionListener() {
             @Override
@@ -755,9 +766,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                  * Android 1.6) we want to handle images the audio and video
                  */
 
-                showDialog(SAVING_IMAGE_DIALOG);
-                Runnable runnable = () -> saveChosenImage(intent.getData());
-                new Thread(runnable).start();
+                ProgressDialogFragment.newInstance(getString(R.string.please_wait))
+                        .show(getSupportFragmentManager(), ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
+
+                imageLoadingFragment.beginImageLoadingTask(intent.getData());
 
                 break;
             case RequestCodes.AUDIO_CAPTURE:
@@ -883,48 +895,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
     }
 
-    private void saveChosenImage(Uri selectedImage) {
-        // Copy file to sdcard
-        File instanceFile = getFormController().getInstanceFile();
-        if (instanceFile != null) {
-            String instanceFolder1 = instanceFile.getParent();
-            String destImagePath = instanceFolder1 + File.separator + System.currentTimeMillis() + ".jpg";
-
-            File chosenImage;
-            try {
-                chosenImage = MediaUtils.getFileFromUri(this, selectedImage, Images.Media.DATA);
-                if (chosenImage != null) {
-                    final File newImage = new File(destImagePath);
-                    FileUtils.copyFile(chosenImage, newImage);
-                    ImageConverter.execute(newImage.getPath(), getWidgetWaitingForBinaryData(), this);
-                    runOnUiThread(() -> {
-                        dismissDialog(SAVING_IMAGE_DIALOG);
-                        if (getCurrentViewIfODKView() != null) {
-                            getCurrentViewIfODKView().setBinaryData(newImage);
-                        }
-                        saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                        refreshCurrentView();
-                    });
-                } else {
-                    runOnUiThread(() -> {
-                        dismissDialog(SAVING_IMAGE_DIALOG);
-                        Timber.e("Could not receive chosen image");
-                        ToastUtils.showShortToastInMiddle(R.string.error_occured);
-                    });
-                }
-            } catch (GDriveConnectionException e) {
-                runOnUiThread(() -> {
-                    dismissDialog(SAVING_IMAGE_DIALOG);
-                    Timber.e("Could not receive chosen image due to connection problem");
-                    ToastUtils.showLongToastInMiddle(R.string.gdrive_connection_exception);
-                });
-            }
-        } else {
-            ToastUtils.showLongToast(R.string.image_not_saved);
-            Timber.w(getString(R.string.image_not_saved));
-        }
-    }
-
     /**
      * Using contentResolver to get a file's extension by the uri returned from OnActivityResult.
      *
@@ -959,14 +929,19 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
     }
 
-    private QuestionWidget getWidgetWaitingForBinaryData() {
+    public QuestionWidget getWidgetWaitingForBinaryData() {
         QuestionWidget questionWidget = null;
-        for (QuestionWidget qw : ((ODKView) currentView).getWidgets()) {
-            if (qw.isWaitingForData()) {
-                questionWidget = qw;
-            }
-        }
+        ODKView odkView = (ODKView) currentView;
 
+        if (odkView != null) {
+            for (QuestionWidget qw : odkView.getWidgets()) {
+                if (qw.isWaitingForData()) {
+                    questionWidget = qw;
+                }
+            }
+        } else {
+            Timber.e("currentView returned null.");
+        }
         return questionWidget;
     }
 
@@ -1101,7 +1076,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * @return false if any error occurs while saving (constraint violated,
      * etc...), true otherwise.
      */
-    private boolean saveAnswersForCurrentScreen(boolean evaluateConstraints) {
+    public boolean saveAnswersForCurrentScreen(boolean evaluateConstraints) {
         FormController formController = getFormController();
         // only try to save if the current event is a question or a field-list group
         // and current view is an ODKView (occasionally we show blank views that do not have any
@@ -2297,13 +2272,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 });
                 return progressDialog;
 
-            case SAVING_IMAGE_DIALOG:
-                progressDialog = new ProgressDialog(this);
-                progressDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-                progressDialog.setMessage(getString(R.string.please_wait));
-                progressDialog.setCancelable(false);
-
-                return progressDialog;
         }
         return null;
     }
@@ -2912,7 +2880,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * to access currentView as an ODKView object to avoid inconsistency
      **/
     @Nullable
-    private ODKView getCurrentViewIfODKView() {
+    public ODKView getCurrentViewIfODKView() {
         if (currentView instanceof ODKView) {
             return (ODKView) currentView;
         }
@@ -2941,4 +2909,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             super(context);
         }
     }
+
 }
+
