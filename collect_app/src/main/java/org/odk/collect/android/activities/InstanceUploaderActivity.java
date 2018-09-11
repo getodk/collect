@@ -390,7 +390,7 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
         // register this activity with the new uploader task
         instanceServerUploader.setUploaderListener(this);
         if (url != null) {
-            instanceServerUploader.setCompleteDestinationUrl(url + Collect.getInstance().getString(R.string.default_odk_submission));
+            instanceServerUploader.setCompleteDestinationUrl(url + Collect.getInstance().getString(R.string.default_odk_submission), false);
         }
         instanceServerUploader.execute(instancesToSend);
     }

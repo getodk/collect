@@ -25,7 +25,6 @@ import com.google.android.gms.analytics.HitBuilders;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
-import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.http.HttpHeadResult;
 import org.odk.collect.android.http.OpenRosaHttpInterface;
 import org.odk.collect.android.logic.PropertyManager;
@@ -479,8 +478,14 @@ public class InstanceServerUploader extends InstanceUploader {
     }
 
     public void setCompleteDestinationUrl(String completeDestinationUrl) {
+        setCompleteDestinationUrl(completeDestinationUrl, true);
+    }
+
+    public void setCompleteDestinationUrl(String completeDestinationUrl, boolean clearPreviousConfig) {
         this.completeDestinationUrl = completeDestinationUrl;
-        setTemporaryCredentials();
+        if (clearPreviousConfig) {
+            setTemporaryCredentials();
+        }
     }
 
     public void setCustomUsername(String customUsername) {
