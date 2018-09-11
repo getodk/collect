@@ -98,7 +98,7 @@ public class GoogleAccountsManager implements GoogleApiClient.OnConnectionFailed
                                  @NonNull ThemeUtils themeUtils,
                                  @NonNull Activity activity,
                                  @NonNull Fragment fragment
-                                 ) {
+    ) {
         this.credential = credential;
         this.preferences = preferences;
         this.intentChooseAccount = intentChooseAccount;
@@ -180,6 +180,12 @@ public class GoogleAccountsManager implements GoogleApiClient.OnConnectionFailed
                 .setIcon(android.R.drawable.ic_dialog_info)
                 .setTitle(R.string.missing_google_account_dialog_title)
                 .setMessage(R.string.missing_google_account_dialog_desc)
+                .setOnCancelListener(dialog -> {
+                    dialog.dismiss();
+                    if (activity != null) {
+                        activity.finish();
+                    }
+                })
                 .setPositiveButton(context.getString(R.string.ok), (dialog, which) -> {
                     dialog.dismiss();
                     if (activity != null) {
