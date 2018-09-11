@@ -34,16 +34,18 @@ public class FormMetadataFragment extends BasePreferenceFragment {
 
         initNormalPrefs();
 
-        requestReadPhoneStatePermission(getActivity(), new PermissionListener() {
-            @Override
-            public void granted() {
-                initDangerousPrefs();
-            }
+        if (savedInstanceState == null) {
+            requestReadPhoneStatePermission(getActivity(), new PermissionListener() {
+                @Override
+                public void granted() {
+                    initDangerousPrefs();
+                }
 
-            @Override
-            public void denied() {
-            }
-        }, true);
+                @Override
+                public void denied() {
+                }
+            }, true);
+        }
     }
 
     private void initNormalPrefs() {
