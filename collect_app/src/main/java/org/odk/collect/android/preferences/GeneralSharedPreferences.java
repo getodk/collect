@@ -45,6 +45,10 @@ public class GeneralSharedPreferences {
     }
 
     public Object get(String key) {
+        if (sharedPreferences == null) {
+            return null;
+        }
+
         Object defaultValue = null;
         Object value = null;
 
