@@ -407,7 +407,6 @@
   <string name="sort_by_date_desc">दिनांक, सबसे पुराना पहले</string>
   <string name="sort_by_status_desc">अवस्था, बिना फाइनल हुए शब्द</string>
   <string name="sort_the_list">सूची को सॉर्ट करें</string>
-  <string name="request_permissions_google_account">ODK कलेक्ट को रिक्त फॉर्म प्राप्त करने के लिए, और भरे गए फॉर्म सबमिट करने के लिए, आपके गूगल अकाउंट तक पहुंच की आवश्यकता है।</string>
   <string name="filter_the_list">सूची को फ़िल्टर करें</string>
   <string name="language">भाषा</string>
   <string name="google_auth_io_exception_msg">API कॉल करने में असमर्थ यदि आप स्थानीय बिल्ड चला रहे हैं, तो कृपया  परियोजना readme की समीक्षा करें।</string>

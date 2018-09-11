@@ -17,6 +17,9 @@ import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.tasks.ServerPollingJob;
+import org.odk.collect.android.utilities.IconUtils;
+import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
@@ -24,10 +27,7 @@ import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceGoogleSheetsUploader;
 import org.odk.collect.android.tasks.InstanceServerUploader;
-import org.odk.collect.android.tasks.ServerPollingJob;
-import org.odk.collect.android.utilities.IconUtils;
-import org.odk.collect.android.utilities.WebUtils;
-import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
+import org.odk.collect.android.utilities.PermissionUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,6 +45,8 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
     InstanceServerUploader instanceServerUploader;
 
     InstanceGoogleSheetsUploader instanceGoogleSheetsUploader;
+
+    private String resultMessage;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -86,9 +88,9 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
             sendnetwork = true;
         }
 
-        return (currentNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI
+        return currentNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI
                 && sendwifi || currentNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE
-                && sendnetwork);
+                && sendnetwork;
     }
 
     /**
@@ -131,28 +133,24 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
             String protocol = (String) settings.get(PreferenceKeys.KEY_PROTOCOL);
 
             if (protocol.equals(context.getString(R.string.protocol_google_sheets))) {
-                String googleUsername = (String) settings.get(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
-                if (googleUsername == null || googleUsername.isEmpty()) {
-                    // just quit if there's no username
-                    running = false;
-                    return;
+                if (PermissionUtils.checkIfGetAccountsPermissionGranted(context)) {
+                    String googleUsername = (String) settings.get(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
+                    if (googleUsername == null || googleUsername.isEmpty()) {
+                        // just quit if there's no username
+                        running = false;
+                        return;
+                    }
+                    GoogleAccountsManager accountsManager = new GoogleAccountsManager(Collect.getInstance());
+                    accountsManager.getCredential().setSelectedAccountName(googleUsername);
+                    instanceGoogleSheetsUploader = new InstanceGoogleSheetsUploader(accountsManager);
+                    instanceGoogleSheetsUploader.setUploaderListener(this);
+                    instanceGoogleSheetsUploader.execute(toSendArray);
+                } else {
+                    resultMessage = Collect.getInstance().getString(R.string.odk_permissions_fail);
+                    uploadingComplete(null);
                 }
-                GoogleAccountsManager accountsManager = new GoogleAccountsManager(Collect.getInstance());
-                accountsManager.getCredential().setSelectedAccountName(googleUsername);
-                instanceGoogleSheetsUploader = new InstanceGoogleSheetsUploader(accountsManager);
-                instanceGoogleSheetsUploader.setUploaderListener(this);
-                instanceGoogleSheetsUploader.execute(toSendArray);
             } else if (protocol.equals(context.getString(R.string.protocol_odk_default))) {
                 // get the username, password, and server from preferences
-
-                String storedUsername = (String) settings.get(PreferenceKeys.KEY_USERNAME);
-                String storedPassword = (String) settings.get(PreferenceKeys.KEY_PASSWORD);
-                String server = (String) settings.get(PreferenceKeys.KEY_SERVER_URL);
-                String url = server + settings.get(PreferenceKeys.KEY_FORMLIST_URL);
-
-                Uri u = Uri.parse(url);
-                WebUtils.addCredentials(storedUsername, storedPassword, u.getHost());
-
                 instanceServerUploader = new InstanceServerUploader();
                 instanceServerUploader.setUploaderListener(this);
 
@@ -194,7 +192,9 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         String message;
 
         if (result == null) {
-            message = Collect.getInstance().getString(R.string.odk_auth_auth_fail);
+            message = resultMessage != null
+                    ? resultMessage
+                    : Collect.getInstance().getString(R.string.odk_auth_auth_fail);
         } else {
             StringBuilder selection = new StringBuilder();
             Set<String> keys = result.keySet();
@@ -236,7 +236,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
     }
 
     private String getContentText(Map<String, String> result) {
-        return allFormsDownloadedSuccessfully(result)
+        return result != null && allFormsDownloadedSuccessfully(result)
                 ? Collect.getInstance().getString(R.string.success)
                 : Collect.getInstance().getString(R.string.failures);
     }

@@ -33,10 +33,11 @@ import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DownloadFormListUtils;
 import org.odk.collect.android.utilities.FormDownloader;
-import org.odk.collect.android.utilities.WebUtils;
-
+import org.odk.collect.android.utilities.WebCredentialsUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import javax.inject.Inject;
 
 import timber.log.Timber;
 
@@ -71,6 +72,9 @@ public class FormDownloadJob extends Job {
     public static final int PROGRESS_REQUEST_BEING_PROCESSED = 2;
     public static final int PROGRESS_REQUEST_SATISFIED = 3;
 
+    @Inject
+    WebCredentialsUtils webCredentialsUtils;
+
     @NonNull
     @Override
     protected Result onRunJob(@NonNull Params params) {
@@ -93,7 +97,7 @@ public class FormDownloadJob extends Job {
 
                 int downloadRetries = 0;
                 while (downloadRetries < 3) {
-                    HashMap<String, FormDetails> formDetailsHashMap = DownloadFormListUtils.downloadFormList(url, username, password, false);
+                    HashMap<String, FormDetails> formDetailsHashMap = new DownloadFormListUtils().downloadFormList(url, username, password, false);
 
                     if (formDetailsHashMap.containsKey(formId)) {
                         FormDetails formDetails = formDetailsHashMap.get(formId);
@@ -103,20 +107,23 @@ public class FormDownloadJob extends Job {
 
                         FormDownloader formDownloader = new FormDownloader();
 
-                        if (url != null && username != null && password != null) {
+                        if (url != null) {
                             String host = Uri.parse(url)
                                     .getHost();
 
                             if (host != null) {
-                                WebUtils.clearCookies();
-                                WebUtils.addCredentials(username, password, host);
+                                if (username != null && password != null) {
+                                    webCredentialsUtils.saveCredentials(url, username, password);
+                                } else {
+                                    webCredentialsUtils.clearCredentials(url);
+                                }
                             }
                         }
 
                         HashMap<FormDetails, String> downloadedForms = formDownloader.downloadForms(formDetailsArrayList);
 
-                        if (downloadedForms.size() > 0) {
-                            for(String message: downloadedForms.values()) {
+                        if (!downloadedForms.isEmpty()) {
+                            for (String message: downloadedForms.values()) {
                                 if (!message.equals(getContext().getString(R.string.success))) {
                                     sendDownloadServiceBroadcastResult(getContext(), PROGRESS_REQUEST_SATISFIED, formId, false, message);
                                     break;
@@ -145,7 +152,7 @@ public class FormDownloadJob extends Job {
                     downloadRetries++;
                 }
             } else {
-                sendDownloadServiceBroadcastResult(getContext(), PROGRESS_REQUEST_SATISFIED, formId ,false, "Null OR Empty " + ApplicationConstants.BundleKeys.FORM_ID);
+                sendDownloadServiceBroadcastResult(getContext(), PROGRESS_REQUEST_SATISFIED, formId, false, "Null OR Empty " + ApplicationConstants.BundleKeys.FORM_ID);
             }
 
             cleanUpWebCredentialsAndCookies();
@@ -160,11 +167,11 @@ public class FormDownloadJob extends Job {
     /**
      * See {@link #sendDownloadServiceBroadcastResult(Context, String, int, String, boolean, String)}
      *
-     * @param context
-     * @param progressStage
-     * @param formId
-     * @param success
-     * @param errorReason
+     * @param context Application {@link Context} used to send broadcast
+     * @param progressStage This can be {@link #PROGRESS_REQUEST_RECEIVED}, {@link #PROGRESS_REQUEST_BEING_PROCESSED} or {@link #PROGRESS_REQUEST_SATISFIED}
+     * @param formId This is the Xform Id
+     * @param success This indicates if the download was a success
+     * @param errorReason In case the download failed, the reason why it failed
      */
     private void sendDownloadServiceBroadcastResult(@NonNull Context context, int progressStage, @Nullable String formId, boolean success, @Nullable String errorReason) {
         sendDownloadServiceBroadcastResult(context, transactionId, progressStage, formId, success, errorReason);
@@ -213,15 +220,17 @@ public class FormDownloadJob extends Job {
             serverUrl = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_SERVER_URL);
         }
 
-        if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password) || TextUtils.isEmpty(serverUrl)) {
+        if (TextUtils.isEmpty(serverUrl)) {
             return;
         }
 
         String host = Uri.parse(serverUrl).getHost();
-
         if (host != null) {
-            WebUtils.clearCookies();
-            WebUtils.addCredentials(username, password, host);
+            if (username != null && password != null) {
+                webCredentialsUtils.saveCredentials(url, username, password);
+            } else {
+                webCredentialsUtils.clearCredentials(url);
+            }
         }
     }
 
@@ -238,8 +247,7 @@ public class FormDownloadJob extends Job {
                     .getHost();
 
             if (host != null) {
-                WebUtils.clearCookies();
-                WebUtils.clearHostCredentials(host);
+                webCredentialsUtils.clearCredentials(url);
             }
         }
     }

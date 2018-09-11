@@ -4,13 +4,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
 import com.evernote.android.job.JobRequest;
-
 import org.odk.collect.android.tasks.FormDownloadJob;
 import org.odk.collect.android.utilities.ApplicationConstants;
-
-import java.util.UUID;
 
 import timber.log.Timber;
 

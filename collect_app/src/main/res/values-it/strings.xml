@@ -407,7 +407,6 @@
   <string name="sort_by_status_asc">Per stato, prima quelli completati</string>
   <string name="sort_by_status_desc">Per stato, prima quelli non completati</string>
   <string name="sort_the_list">Ordina la lista</string>
-  <string name="request_permissions_google_account">ODK Collect richiede l\'accesso al tuo account Google per utilizzare i moduli vuoti ed inviare i moduli compilati.</string>
   <string name="filter_the_list">Filtra la lista</string>
   <string name="language">Lingua</string>
   <string name="google_auth_io_exception_msg">Impossibile effettuare la chiamata API. Se stai eseguendo una build locale, per cortesia controllare il readme del progetto.</string>

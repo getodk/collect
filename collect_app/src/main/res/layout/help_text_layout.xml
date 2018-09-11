@@ -25,7 +25,7 @@
 
         <TextView
             android:id="@+id/help_text_view"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/help_icon"
@@ -43,7 +43,7 @@
 
         <TextView
             android:id="@+id/guidance_text_view"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:text="This is also a very long guidance that will accompany the longest hint because we are about going the extra mile." />
     </LinearLayout>

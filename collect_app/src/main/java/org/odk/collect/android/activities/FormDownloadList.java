@@ -46,7 +46,6 @@ import org.odk.collect.android.tasks.DownloadFormsTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.ToastUtils;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -91,6 +90,13 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     private static final String DIALOG_SHOWING = "dialogshowing";
     private static final String FORMLIST = "formlist";
     private static final String SELECTED_FORMS = "selectedForms";
+    private static final String IS_DOWNLOAD_ONLY_MODE = "isDownloadOnlyMode";
+    private static final String FORM_IDS_TO_DOWNLOAD = "formIdsToDownload";
+    private static final String URL = "url";
+    private static final String USERNAME = "username";
+    private static final String PASSWORD = "password";
+    private static final String FORMS_FOUND = "formsFound";
+    private static final String FORM_RESULT = "formResult";
 
     public static final String FORMNAME = "formname";
     private static final String FORMDETAIL_KEY = "formdetailkey";
@@ -125,13 +131,13 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     private boolean displayOnlyUpdatedForms;
 
     // Variables for the external app intent call
-    private boolean isDownloadOnlyMode = false;
+    private boolean isDownloadOnlyMode;
     private String[] formIdsToDownload;
     private String url;
     private String username;
     private String password;
-    private ArrayList<String> formsFound = new ArrayList<>();
-    private HashMap<String, Boolean> formResult = new HashMap<>();
+    private ArrayList<String> formsFound;
+    private HashMap<String, Boolean> formResult;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -139,6 +145,9 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.remote_file_manage_list);
         setTitle(getString(R.string.get_forms));
+
+        formsFound = new ArrayList<>();
+        formResult = new HashMap<>();
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -237,6 +246,20 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             }
             if (savedInstanceState.containsKey(SELECTED_FORMS)) {
                 selectedForms = (LinkedHashSet<String>) savedInstanceState.getSerializable(SELECTED_FORMS);
+            }
+
+            if (savedInstanceState.containsKey(IS_DOWNLOAD_ONLY_MODE) && savedInstanceState.getBoolean(IS_DOWNLOAD_ONLY_MODE)) {
+                isDownloadOnlyMode = true;
+
+                formIdsToDownload = savedInstanceState.getStringArray(FORM_IDS_TO_DOWNLOAD);
+                url = savedInstanceState.getString(URL);
+                username = savedInstanceState.getString(USERNAME);
+                password = savedInstanceState.getString(PASSWORD);
+                formsFound = savedInstanceState.getStringArrayList(FORMS_FOUND);
+                formResult = (HashMap<String, Boolean>) savedInstanceState.getSerializable(FORM_RESULT);
+
+                formsFound = formsFound == null ? new ArrayList<>() : formsFound;
+                formResult = formResult == null ? new HashMap<>() : formResult;
             }
         }
 
@@ -388,6 +411,19 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         outState.putBoolean(SHOULD_EXIT, shouldExit);
         outState.putSerializable(FORMLIST, formList);
         outState.putSerializable(SELECTED_FORMS, selectedForms);
+
+        // Download mode variables
+
+        outState.putBoolean(IS_DOWNLOAD_ONLY_MODE, isDownloadOnlyMode);
+        if (isDownloadOnlyMode) {
+            // String can be stored and retrieved
+            outState.putStringArray(FORM_IDS_TO_DOWNLOAD, formIdsToDownload);
+            outState.putString(URL, url);
+            outState.putString(USERNAME, username);
+            outState.putString(PASSWORD, password);
+            outState.putStringArrayList(FORMS_FOUND, formsFound);
+            outState.putSerializable(FORM_RESULT, formResult);
+        }
     }
 
     @Override
@@ -725,7 +761,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
                 ArrayList<FormDetails> filesToDownload  = new ArrayList<>();
 
-                for(FormDetails formDetails: formNamesAndURLs.values()) {
+                for (FormDetails formDetails: formNamesAndURLs.values()) {
                     String formId = formDetails.getFormID();
 
                     if (formResult.containsKey(formId)) {
@@ -735,7 +771,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 }
 
                 //2. Select forms and start downloading
-                if (filesToDownload.size() > 0) {
+                if (!filesToDownload.isEmpty()) {
                     startFormsDownload(filesToDownload);
                 } else {
                     // None of the forms was found

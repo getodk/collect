@@ -430,9 +430,7 @@ public class GeoPointMapActivity extends CollectAbstractActivity implements OnMa
 
     private void zoomToLocation() {
         LatLng here = new LatLng(location.getLatitude(), location.getLongitude());
-        if (location != null) {
-            map.animateCamera(CameraUpdateFactory.newLatLngZoom(here, 16));
-        }
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(here, 16));
     }
 
     private void zoomToPoint() {

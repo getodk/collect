@@ -54,20 +54,14 @@ public class FormsProvider extends ContentProvider {
     private static final UriMatcher URI_MATCHER;
 
     private FormsDatabaseHelper getDbHelper() {
-        FormsDatabaseHelper databaseHelper = null;
         // wrapper to test and reset/set the dbHelper based upon the attachment state of the device.
         try {
             Collect.createODKDirs();
         } catch (RuntimeException e) {
-            databaseHelper = null;
             return null;
         }
 
-        if (databaseHelper != null) {
-            return databaseHelper;
-        }
-        databaseHelper = new FormsDatabaseHelper();
-        return databaseHelper;
+        return new FormsDatabaseHelper();
     }
 
     @Override
@@ -540,7 +534,7 @@ public class FormsProvider extends ContentProvider {
         if (whereArgs == null || whereArgs.length == 0) {
             newWhereArgs = new String[] {formId};
         } else {
-            newWhereArgs = new String[(whereArgs.length + 1)];
+            newWhereArgs = new String[whereArgs.length + 1];
             newWhereArgs[0] = formId;
             System.arraycopy(whereArgs, 0, newWhereArgs, 1, whereArgs.length);
         }

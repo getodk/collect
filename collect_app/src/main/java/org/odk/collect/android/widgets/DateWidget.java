@@ -85,9 +85,9 @@ public class DateWidget extends AbstractDateWidget implements DatePickerDialog.O
 
     // https://stackoverflow.com/questions/28618405/datepicker-crashes-on-my-device-when-clicked-with-personal-app
     private boolean isBrokenSamsungDevice() {
-        return (Build.MANUFACTURER.equalsIgnoreCase("samsung")
+        return Build.MANUFACTURER.equalsIgnoreCase("samsung")
                 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
-                && Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1);
+                && Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1;
     }
 
     // Exposed for testing purposes to avoid reflection.

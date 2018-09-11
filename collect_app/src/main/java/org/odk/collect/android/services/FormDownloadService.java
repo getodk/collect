@@ -18,14 +18,7 @@ package org.odk.collect.android.services;
 
 import android.app.IntentService;
 import android.content.Intent;
-import android.os.Bundle;
-
-import com.evernote.android.job.JobRequest;
-
 import org.odk.collect.android.tasks.FormDownloadJob;
-import org.odk.collect.android.utilities.ApplicationConstants;
-
-import timber.log.Timber;
 
 /**
  * This service is the entry point for form download requests mainly from external apps. It then passes

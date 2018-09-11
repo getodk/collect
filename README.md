@@ -105,8 +105,8 @@ implementation (project(path: ':javarosa-master')) {
 1. In Collect, add the path to the jar to the dependencies in `build.gradle`
 	```gradle
 	compile files('/path/to/javarosa/build/libs/opendatakit-javarosa-x.y.z-SNAPSHOT.jar')
-	```	
- 
+	```
+
 ## Contributing code
 Any and all contributions to the project are welcome. ODK Collect is used across the world primarily by organizations with a social purpose so you can have real impact!
 
@@ -161,6 +161,7 @@ RELEASE_KEY_PASSWORD=secure-alias-password
 To generate official signed releases, you'll need the keystore file, the keystore passwords, a configured `secrets.properties` file, and then run `./gradlew assembleRelease`. If successful, a signed release will be at `collect_app/build/outputs/apk`.
 
 ## Troubleshooting
+
 #### Error when running Robolectric tests from Android Studio on macOS: `build/intermediates/bundles/debug/AndroidManifest.xml (No such file or directory)`
 > Configure the default JUnit test runner configuration in order to work around a bug where IntelliJ / Android Studio does not set the working directory to the module being tested. This can be accomplished by editing the run configurations, Defaults -> JUnit and changing the working directory value to $MODULE_DIR$.
 
@@ -168,6 +169,10 @@ To generate official signed releases, you'll need the keystore file, the keystor
 
 #### Android Studio Error: `SDK location not found. Define location with sdk.dir in the local.properties file or with an ANDROID_HOME environment variable.`
 When cloning the project from Android Studio, click "No" when prompted to open the `build.gradle` file and then open project.
+
+#### Execution failed for task ':collect_app:transformClassesWithInstantRunForDebug'.
+
+We are unsure why this problem occurs, but it seems to happen with IntelliJ IDEA and not with Android Studio. Try turning off [Instant Run](https://developer.android.com/studio/run/#set-up-ir) and see if that helps.
 
 #### Moving to the main view if user minimizes the app
 If you build the app on your own using Android Studio `(Build -> Build APK)` and then install it (from an `.apk` file), you might notice this strange behaviour thoroughly described: [#1280](https://github.com/opendatakit/collect/issues/1280) and [#1142](https://github.com/opendatakit/collect/issues/1142).
@@ -193,3 +198,6 @@ You may have a mismatch between the embedded Android SDK Java and the JDK instal
 `
 
 Note that this change might cause problems with other Java-based applications (e.g., if you uninstall Android Studio).
+
+#### gradlew Failure: `java.lang.NullPointerException (no error message).`
+If you encounter the `java.lang.NullPointerException (no error message).` when running `gradlew`, please make sure your Java version for this project is Java 8.

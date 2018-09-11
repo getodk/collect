@@ -366,7 +366,7 @@ public class FormController {
         }
 
         GroupDef gd = (GroupDef) element; // exceptions?
-        return (ODKView.FIELD_LIST.equalsIgnoreCase(gd.getAppearanceAttr()));
+        return ODKView.FIELD_LIST.equalsIgnoreCase(gd.getAppearanceAttr());
     }
 
     private boolean repeatIsFieldList(FormIndex index) {
@@ -377,7 +377,7 @@ public class FormController {
         }
 
         GroupDef gd = (GroupDef) element; // exceptions?
-        return (ODKView.FIELD_LIST.equalsIgnoreCase(gd.getAppearanceAttr()));
+        return ODKView.FIELD_LIST.equalsIgnoreCase(gd.getAppearanceAttr());
     }
 
     /**
@@ -425,10 +425,10 @@ public class FormController {
     }
 
     public boolean currentPromptIsQuestion() {
-        return (getEvent() == FormEntryController.EVENT_QUESTION
+        return getEvent() == FormEntryController.EVENT_QUESTION
                 || ((getEvent() == FormEntryController.EVENT_GROUP
                 || getEvent() == FormEntryController.EVENT_REPEAT)
-                && indexIsInFieldList()));
+                && indexIsInFieldList());
     }
 
     public boolean isCurrentQuestionFirstInForm() {
@@ -1046,7 +1046,7 @@ public class FormController {
      */
     public boolean isSubmissionEntireForm() {
         IDataReference sub = getSubmissionDataReference();
-        return (getInstance().resolveReference(sub) == null);
+        return getInstance().resolveReference(sub) == null;
     }
 
     /**

@@ -27,17 +27,19 @@ import org.kxml2.kdom.Element;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.logic.ManifestFile;
 import org.odk.collect.android.logic.MediaFile;
 import org.odk.collect.android.preferences.PreferenceKeys;
-import org.opendatakit.httpclientandroidlib.client.HttpClient;
-import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 
 import java.io.File;
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import timber.log.Timber;
 
@@ -50,21 +52,26 @@ public class DownloadFormListUtils {
     private static final String NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_LIST =
             "http://openrosa.org/xforms/xformsList";
 
+    @Inject
+    WebCredentialsUtils webCredentialsUtils;
+
     private static boolean isXformsListNamespacedElement(Element e) {
         return e.getNamespace().equalsIgnoreCase(NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_LIST);
     }
 
-    private DownloadFormListUtils() {
+    @Inject CollectServerClient collectServerClient;
+
+    public DownloadFormListUtils() {
+        Collect.getInstance().getComponent().inject(this);
     }
 
-    public static HashMap<String, FormDetails> downloadFormList(boolean alwaysCheckMediaFiles) {
+    public HashMap<String, FormDetails> downloadFormList(boolean alwaysCheckMediaFiles) {
         return downloadFormList(null, null, null, alwaysCheckMediaFiles);
     }
 
-    public static HashMap<String, FormDetails> downloadFormList(@Nullable String url, @Nullable String username
-            , @Nullable String password, boolean alwaysCheckMediaFiles) {
-        SharedPreferences settings =
-                PreferenceManager.getDefaultSharedPreferences(
+    public HashMap<String, FormDetails> downloadFormList(@Nullable String url, @Nullable String username,
+                                                         @Nullable String password, boolean alwaysCheckMediaFiles) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(
                         Collect.getInstance().getBaseContext());
 
         // Remove trailing '/'
@@ -72,6 +79,7 @@ public class DownloadFormListUtils {
             url = url.substring(0, url.length() - 1);
         }
 
+        //Todo: Make the username/password optional for cases of anonymous logins
         String downloadListUrl = (url != null && username != null && password != null) ? url :
                 settings.getString(PreferenceKeys.KEY_SERVER_URL,
                         Collect.getInstance().getString(R.string.default_server_url));
@@ -87,27 +95,25 @@ public class DownloadFormListUtils {
         // <formname, details>
         HashMap<String, FormDetails> formList = new HashMap<String, FormDetails>();
 
-        // get shared HttpContext so that authentication and cookies are retained.
-        if (url != null && username != null && password != null) {
+        if (url != null) {
             String host = Uri.parse(url).getHost();
 
             if (host != null) {
-                WebUtils.clearCookies();
-                WebUtils.addCredentials(username, password, host);
+                if (username != null && password != null) {
+                    webCredentialsUtils.saveCredentials(url, username, password);
+                } else {
+                    webCredentialsUtils.clearCredentials(url);
+                }
             }
         }
 
-        HttpContext localContext = Collect.getInstance().getHttpContext();
-        HttpClient httpclient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
-
-        DocumentFetchResult result =
-                WebUtils.getXmlDocument(downloadListUrl, localContext, httpclient);
+        DocumentFetchResult result = collectServerClient.getXmlDocument(downloadListUrl);
 
         clearTemporaryCredentials(url);
 
         // If we can't get the document, return the error, cancel the task
         if (result.errorMessage != null) {
-            if (result.responseCode == 401) {
+            if (result.responseCode == HttpURLConnection.HTTP_UNAUTHORIZED) {
                 formList.put(DL_AUTH_REQUIRED, new FormDetails(result.errorMessage));
             } else {
                 formList.put(DL_ERROR_MSG, new FormDetails(result.errorMessage));
@@ -315,18 +321,12 @@ public class DownloadFormListUtils {
         return cursor == null || cursor.getCount() > 0;
     }
 
-    private static ManifestFile getManifestFile(String manifestUrl) {
+    private ManifestFile getManifestFile(String manifestUrl) {
         if (manifestUrl == null) {
             return null;
         }
 
-        // get shared HttpContext so that authentication and cookies are retained.
-        HttpContext localContext = Collect.getInstance().getHttpContext();
-
-        HttpClient httpclient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
-
-        DocumentFetchResult result =
-                WebUtils.getXmlDocument(manifestUrl, localContext, httpclient);
+        DocumentFetchResult result = collectServerClient.getXmlDocument(manifestUrl);
 
         if (result.errorMessage != null) {
             return null;
@@ -458,13 +458,12 @@ public class DownloadFormListUtils {
         return false;
     }
 
-    private static void clearTemporaryCredentials(@Nullable String url) {
+    private void clearTemporaryCredentials(@Nullable String url) {
         if (url != null) {
             String host = Uri.parse(url).getHost();
 
             if (host != null) {
-                WebUtils.clearCookies();
-                WebUtils.clearHostCredentials(host);
+                webCredentialsUtils.clearCredentials(url);
             }
         }
     }

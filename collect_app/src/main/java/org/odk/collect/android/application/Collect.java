@@ -51,14 +51,8 @@ import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.FormMetadataMigrator;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.PRNGFixes;
-import org.opendatakit.httpclientandroidlib.client.CookieStore;
-import org.opendatakit.httpclientandroidlib.client.CredentialsProvider;
-import org.opendatakit.httpclientandroidlib.client.protocol.HttpClientContext;
-import org.opendatakit.httpclientandroidlib.protocol.BasicHttpContext;
-import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 
 import java.io.File;
 import java.util.Locale;
@@ -100,11 +94,6 @@ public class Collect extends Application implements HasActivityInjector {
     public static String defaultSysLanguage;
     private static Collect singleton;
     private static long lastClickTime;
-
-    @Inject
-    protected CookieStore cookieStore;
-    @Inject
-    protected CredentialsProvider credsProvider;
 
     private ActivityLogger activityLogger;
 
@@ -230,30 +219,6 @@ public class Collect extends Application implements HasActivityInjector {
         MultiDex.install(this);
     }
 
-    /**
-     * Construct and return a session context with shared cookieStore and credsProvider so a user
-     * does not have to re-enter login information.
-     */
-    public synchronized HttpContext getHttpContext() {
-
-        // context holds authentication state machine, so it cannot be
-        // shared across independent activities.
-        HttpContext localContext = new BasicHttpContext();
-
-        localContext.setAttribute(HttpClientContext.COOKIE_STORE, cookieStore);
-        localContext.setAttribute(HttpClientContext.CREDS_PROVIDER, credsProvider);
-
-        return localContext;
-    }
-
-    public CredentialsProvider getCredentialsProvider() {
-        return credsProvider;
-    }
-
-    public CookieStore getCookieStore() {
-        return cookieStore;
-    }
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -287,7 +252,6 @@ public class Collect extends Application implements HasActivityInjector {
 
         initProperties();
 
-        AuthDialogUtility.setWebCredentialsFromPreferences();
         if (BuildConfig.BUILD_TYPE.equals("odkCollectRelease")) {
             Timber.plant(new CrashReportingTree());
         } else {
@@ -348,7 +312,7 @@ public class Collect extends Application implements HasActivityInjector {
         PropertyManager mgr = new PropertyManager(this);
 
         // Use the server username by default if the metadata username is not defined
-        if ((mgr.getSingularProperty(PROPMGR_USERNAME) == null || mgr.getSingularProperty(PROPMGR_USERNAME).isEmpty())) {
+        if (mgr.getSingularProperty(PROPMGR_USERNAME) == null || mgr.getSingularProperty(PROPMGR_USERNAME).isEmpty()) {
             mgr.putProperty(PROPMGR_USERNAME, SCHEME_USERNAME, (String) GeneralSharedPreferences.getInstance().get(KEY_USERNAME));
         }
 

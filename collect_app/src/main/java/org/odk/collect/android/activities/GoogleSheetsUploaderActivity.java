@@ -34,7 +34,6 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -75,7 +74,7 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Timber.i("onCreate: %s", ((savedInstanceState == null) ? "creating" : "re-initializing"));
+        Timber.i("onCreate: %s", savedInstanceState == null ? "creating" : "re-initializing");
 
         // if we start this activity, the following must be true:
         // 1) Google Sheets is selected in preferences
@@ -153,19 +152,12 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
      */
     private void getResultsFromApi() {
         if (!accountsManager.isGoogleAccountSelected()) {
-            accountsManager.chooseAccount();
+            accountsManager.chooseAccountAndRequestPermissionIfNeeded();
         } else if (!isDeviceOnline()) {
             ToastUtils.showShortToast("No network connection available.");
         } else {
             runTask();
         }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        accountsManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     /**
@@ -214,7 +206,7 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
         ConnectivityManager connMgr =
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        return (networkInfo != null && networkInfo.isConnected());
+        return networkInfo != null && networkInfo.isConnected();
     }
 
     @Override
