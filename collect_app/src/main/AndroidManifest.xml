@@ -306,15 +306,6 @@ the specific language governing permissions and limitations under the License.
                 <action android:name="org.odk.collect.android.COLLECT_SMS_NOTIFICATION_ACTION" />
             </intent-filter>
         </receiver>
-        <receiver
-            android:name=".receivers.FormDownloadRequestReceiver"
-            android:enabled="true"
-            android:exported="true">
-
-            <intent-filter>
-                <action android:name="org.odk.collect.android.FORM_DOWNLOAD" />
-            </intent-filter>
-        </receiver>
     </application>
 
 </manifest>
