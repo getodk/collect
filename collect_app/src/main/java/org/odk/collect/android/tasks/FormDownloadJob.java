@@ -67,7 +67,8 @@ public class FormDownloadJob extends Job {
 
             if (!TextUtils.isEmpty(formId)) {
                 Timber.i("STARTED RUNNING JOB -> Download Form %s", formId);
-                HashMap<String, FormDetails> formDetailsHashMap = DownloadFormListUtils.downloadFormList(false);
+                DownloadFormListUtils downloadFormListUtils = new DownloadFormListUtils();
+                HashMap<String, FormDetails> formDetailsHashMap = downloadFormListUtils.downloadFormList(false);
 
                 if (formDetailsHashMap.containsKey(formId)) {
                     FormDetails formDetails = formDetailsHashMap.get(formId);
