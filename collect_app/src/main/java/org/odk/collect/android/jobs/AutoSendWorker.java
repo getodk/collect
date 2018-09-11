@@ -71,6 +71,7 @@ public class AutoSendWorker extends Worker implements InstanceUploaderListener {
             countDownLatch.await(2, TimeUnit.MINUTES);
         } catch (InterruptedException e) {
             Timber.e(e);
+            return Result.FAILURE;
         }
         return workResult;
     }
