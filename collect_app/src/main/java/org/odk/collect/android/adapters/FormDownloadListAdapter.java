@@ -50,7 +50,7 @@ public class FormDownloadListAdapter extends ArrayAdapter {
         this.formIdsToDetails = formIdsToDetails;
     }
 
-    private class ViewHolder {
+    private static class ViewHolder {
         TextView text1;
         TextView text2;
         TextView updateInfo;

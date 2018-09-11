@@ -36,7 +36,6 @@ public class CompressionTest {
         decompressedText = "";
     }
 
-
     @Test
     public void compressText() throws IOException {
         compressedText = CompressionUtils.compress(text);
@@ -56,7 +55,6 @@ public class CompressionTest {
         decompressedText = CompressionUtils.decompress(compressedText);
         assertEquals(text, decompressedText);
     }
-
 
     @Test
     public void decompressNullText() throws IOException, DataFormatException {

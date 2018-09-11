@@ -132,8 +132,8 @@ public class GridMultiWidget extends QuestionWidget implements MultiChoiceWidget
         int screenHeight = metrics.heightPixels;
 
         if (numColumns > 0) {
-            resizeWidth = ((screenWidth - 2 * HORIZONTAL_PADDING - SCROLL_WIDTH
-                    - (IMAGE_PADDING + SPACING) * (numColumns + 1)) / numColumns);
+            resizeWidth = (screenWidth - 2 * HORIZONTAL_PADDING - SCROLL_WIDTH
+                    - (IMAGE_PADDING + SPACING) * (numColumns + 1)) / numColumns;
         }
 
         if (prompt.isReadOnly()) {
@@ -347,7 +347,6 @@ public class GridMultiWidget extends QuestionWidget implements MultiChoiceWidget
         SpacesInUnderlyingValuesWarning.forQuestionWidget(this).renderWarningIfNecessary(items);
     }
 
-
     @Override
     public IAnswerData getAnswer() {
         List<Selection> vc = new ArrayList<>();
@@ -365,7 +364,6 @@ public class GridMultiWidget extends QuestionWidget implements MultiChoiceWidget
             return new SelectMultiData(vc);
         }
     }
-
 
     @Override
     public void clearAnswer() {

@@ -196,7 +196,6 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
         }
     }
 
-
     public static class UserSettingsAccessPreferences extends BasePreferenceFragment {
 
         @Override

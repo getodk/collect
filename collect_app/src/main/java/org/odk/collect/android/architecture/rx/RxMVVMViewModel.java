@@ -1,6 +1,5 @@
 package org.odk.collect.android.architecture.rx;
 
-
 import android.support.annotation.NonNull;
 
 import com.trello.rxlifecycle2.LifecycleTransformer;
@@ -14,7 +13,6 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import io.reactivex.functions.Function;
 import io.reactivex.subjects.BehaviorSubject;
-
 
 /**
  * A {@link MVVMActivity} subclass that provides RxLifecycle

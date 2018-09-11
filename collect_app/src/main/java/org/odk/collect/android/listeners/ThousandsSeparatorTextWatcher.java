@@ -78,7 +78,7 @@ public class ThousandsSeparatorTextWatcher implements TextWatcher {
         }
 
         int count = 0;
-        for (int i = beforeDecimal.length() - 1; i >= 0 ; i--) {
+        for (int i = beforeDecimal.length() - 1; i >= 0; i--) {
             finalResult = beforeDecimal.charAt(i) + finalResult;
             count++;
             if (count == 3 && i > 0) {

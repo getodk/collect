@@ -32,7 +32,6 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ArrayUtils;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
-import org.odk.collect.android.utilities.WebUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -76,7 +75,7 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Timber.i("onCreate: %s", ((savedInstanceState == null) ? "creating" : "re-initializing"));
+        Timber.i("onCreate: %s", savedInstanceState == null ? "creating" : "re-initializing");
 
         alertMsg = getString(R.string.please_wait);
 
@@ -140,21 +139,6 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
 
         instancesToSend = ArrayUtils.toObject(selectedInstanceIDs);
 
-        if (url != null) {
-            String host = Uri.parse(url).getHost();
-            if (host != null) {
-                // Clear cookies in case Collect was used recently and still has previous
-                // cookies from the previous request
-                WebUtils.clearCookies();
-
-                if (password != null && username != null) {
-                    WebUtils.addCredentials(username, password, host);
-                } else {
-                    WebUtils.clearHostCredentials(host);
-                }
-            }
-        }
-
         // at this point, we don't expect this to be empty...
         if (instancesToSend.length == 0) {
             Timber.e("onCreate: No instances to upload!");
@@ -175,6 +159,15 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
 
                 if (deleteInstanceAfterUpload != null) {
                     instanceServerUploader.setDeleteInstanceAfterSubmission(deleteInstanceAfterUpload);
+                }
+
+                String host = Uri.parse(url).getHost();
+                if (host != null) {
+                    // We do not need to clear the cookies since they are cleared before any request is made and the Credentials provider is used
+                    if (password != null && username != null) {
+                        instanceServerUploader.setCustomUsername(username);
+                        instanceServerUploader.setCustomPassword(password);
+                    }
                 }
             }
 
@@ -224,16 +217,6 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
     @Override
     protected void onStop() {
         Collect.getInstance().getActivityLogger().logOnStop(this);
-
-        // Clear out optional credentials -> url, username && password from the Credentials manager
-        if (url != null) {
-            String host = Uri.parse(url).getHost();
-
-            if (host != null) {
-                WebUtils.clearCookies();
-                WebUtils.clearHostCredentials(host);
-            }
-        }
         super.onStop();
     }
 

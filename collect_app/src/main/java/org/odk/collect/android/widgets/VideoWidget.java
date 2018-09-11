@@ -36,14 +36,13 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.CaptureSelfieActivity;
-import org.odk.collect.android.activities.CaptureSelfieActivityNewApi;
 import org.odk.collect.android.activities.CaptureSelfieVideoActivity;
 import org.odk.collect.android.activities.CaptureSelfieVideoActivityNewApi;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtil;
@@ -132,14 +131,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
         hideButtonsIfNeeded();
 
         if (selfie) {
-            boolean isFrontCameraAvailable;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                isFrontCameraAvailable = CaptureSelfieActivityNewApi.isFrontCameraAvailable();
-            } else {
-                isFrontCameraAvailable = CaptureSelfieActivity.isFrontCameraAvailable();
-            }
-
-            if (!isFrontCameraAvailable) {
+            if (!CameraUtils.isFrontCameraAvailable()) {
                 captureButton.setEnabled(false);
                 ToastUtils.showLongToast(R.string.error_front_camera_unavailable);
             }
@@ -248,13 +240,6 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
             Timber.w("VideoWidget's setBinaryData must receive a File or Uri object.");
             return;
         }
-
-
-        if (newVideo == null) {
-            Timber.e("setBinaryData FAILED");
-            return;
-        }
-
 
         if (newVideo.exists()) {
             // Add the copy to the content provier

@@ -207,7 +207,6 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
             }
         });
 
-
         zoomDialogView = getLayoutInflater().inflate(R.layout.geo_zoom_dialog, null);
 
         zoomLocationButton = zoomDialogView.findViewById(R.id.zoom_location);
@@ -282,8 +281,6 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
                 isDragged = true;
                 draggable = false; // If data loaded, must clear first
                 locationFromIntent = true;
-
-
             }
         }
 
@@ -296,7 +293,6 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
             zoomToPoint();
         }
     }
-
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -329,7 +325,6 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
         Collect.getInstance().getActivityLogger().logOnStop(this);
         super.onStop();
     }
-
 
     private void upMyLocationOverlayLayers() {
         showLocationButton.setClickable(marker != null);
@@ -441,7 +436,6 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
                     locationCountNum++;
                 }
             }
-
 
             //if (location.getLatitude() != marker.getPosition().getLatitude() & location
             // .getLongitude() != marker.getPosition().getLongitude()) {

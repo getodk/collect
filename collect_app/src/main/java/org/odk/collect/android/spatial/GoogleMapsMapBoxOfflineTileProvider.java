@@ -71,7 +71,7 @@ public class GoogleMapsMapBoxOfflineTileProvider implements TileProvider, Closea
             String[] projection = {
                     "tile_data"
             };
-            int row = ((int) (Math.pow(2, z) - y) - 1);
+            int row = (int) (Math.pow(2, z) - y) - 1;
             String predicate = "tile_row = ? AND tile_column = ? AND zoom_level = ?";
             String[] values = {
                     String.valueOf(row), String.valueOf(x), String.valueOf(z)
@@ -104,7 +104,6 @@ public class GoogleMapsMapBoxOfflineTileProvider implements TileProvider, Closea
     // Public Methods
     // ------------------------------------------------------------------------
 
-
     public int getMinimumZoom() {
         return this.minimumZoom;
     }
@@ -112,7 +111,6 @@ public class GoogleMapsMapBoxOfflineTileProvider implements TileProvider, Closea
     public int getMaximumZoom() {
         return this.maximumZoom;
     }
-
 
     public LatLngBounds getBounds() {
         return this.bounds;

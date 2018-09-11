@@ -25,7 +25,6 @@ public class BasePreferenceFragment extends PreferenceFragment {
         initToolbar(getPreferenceScreen(), view);
         removeDisabledPrefs();
 
-
         super.onViewCreated(view, savedInstanceState);
     }
 

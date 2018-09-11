@@ -108,7 +108,7 @@
   <string name="url_error">معافی، url صحیح نہیں ہے</string>
   <string name="username">استعمال کنندہ کا نام</string>
   <string name="view_hierarchy">پرامپٹ (prompt) پر جایئں</string>
-  <string name="general_preferences">عمومی ماحول</string>
+  <string name="general_preferences">عمومی بدلیوں کی آپشن</string>
   <string name="show_splash_summary">ایپلیکیشن جب  شروع ہو، کو دکھاتا ہے</string>
   <string name="splash_path">منتخب شدہ سپلیش تصویر</string>
   <string name="default_splash_path">ODK طے شدہ</string>

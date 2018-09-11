@@ -33,7 +33,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.views.CameraPreview;
-import org.odk.collect.android.widgets.VideoWidget;
 
 import java.io.File;
 import java.io.IOException;
@@ -142,7 +141,10 @@ public class CaptureSelfieVideoActivity extends Activity {
         mediaRecorder.setProfile(CamcorderProfile.get(cameraId, CamcorderProfile.QUALITY_HIGH));
 
         // Step 4: Set output file
-        outputFile = VideoWidget.getOutputMediaFile(VideoWidget.MEDIA_TYPE_VIDEO).toString();
+
+        if (outputFile == null || outputFile.isEmpty()) {
+            outputFile = CameraUtils.getVideoFilePath(this);
+        }
         mediaRecorder.setOutputFile(outputFile);
 
         // Step 5: Set the preview output
@@ -187,7 +189,6 @@ public class CaptureSelfieVideoActivity extends Activity {
         releaseCamera();
         super.onPause();
     }
-
 
     @Override
     protected void onResume() {

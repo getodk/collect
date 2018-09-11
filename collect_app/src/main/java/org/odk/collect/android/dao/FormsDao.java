@@ -111,7 +111,6 @@ public class FormsDao {
         return encrypted;
     }
 
-
     public String getFormMediaPath(String formId, String formVersion) {
         String formMediaPath = null;
 

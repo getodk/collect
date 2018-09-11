@@ -78,6 +78,8 @@
             <property name="tokens"
                 value="CLASS_DEF, METHOD_DEF, CTOR_DEF, LITERAL_FOR, LITERAL_WHILE, STATIC_INIT, INSTANCE_INIT" />
         </module>
+        <module name="NoWhitespaceAfter" />
+        <module name="NoWhitespaceBefore" />
         <module name="WhitespaceAround">
             <property name="allowEmptyConstructors" value="true" />
             <property name="allowEmptyMethods" value="true" />
@@ -97,6 +99,8 @@
         <module name="UpperEll" />
         <module name="ModifierOrder" />
         <module name="EmptyLineSeparator">
+            <property name="allowMultipleEmptyLines" value="false"/>
+            <property name="allowMultipleEmptyLinesInsideClassMembers" value="false"/>
             <property name="allowNoEmptyLineBetweenFields" value="true" />
         </module>
         <module name="SeparatorWrap">
@@ -246,6 +250,7 @@
         <module name="InterfaceIsType" />
         <!--<module name="MethodLength" />-->
         <module name="WhitespaceAfter" />
+        <module name="UnnecessaryParentheses" />
         <module name="RedundantModifier" />
         <module name="HideUtilityClassConstructor" />
     </module>

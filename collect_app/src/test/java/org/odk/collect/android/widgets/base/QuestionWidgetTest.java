@@ -20,7 +20,6 @@ import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
-
 public abstract class QuestionWidgetTest<W extends Widget, A extends IAnswerData>
         extends WidgetTest {
 

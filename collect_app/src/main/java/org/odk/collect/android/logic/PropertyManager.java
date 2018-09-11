@@ -43,7 +43,6 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_US
  */
 public class PropertyManager implements IPropertyManager {
 
-
     public static final String PROPMGR_DEVICE_ID        = "deviceid";
     public static final String PROPMGR_SUBSCRIBER_ID    = "subscriberid";
     public static final String PROPMGR_SIM_SERIAL       = "simserial";
@@ -67,7 +66,7 @@ public class PropertyManager implements IPropertyManager {
         return "Property Manager";
     }
 
-    private class IdAndPrefix {
+    private static class IdAndPrefix {
         String id;
         String prefix;
 
@@ -105,7 +104,7 @@ public class PropertyManager implements IPropertyManager {
         String scheme = null;
 
         if (deviceId != null) {
-            if ((deviceId.contains("*") || deviceId.contains("000000000000000"))) {
+            if (deviceId.contains("*") || deviceId.contains("000000000000000")) {
                 deviceId = Settings.Secure.getString(context.getContentResolver(), androidIdName);
                 scheme = androidIdName;
             } else {
