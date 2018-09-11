@@ -164,12 +164,14 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                     finish();
                 }
 
-                if (bundle.containsKey(ApplicationConstants.BundleKeys.URL)
-                        && bundle.containsKey(ApplicationConstants.BundleKeys.USERNAME)
-                        && bundle.containsKey(ApplicationConstants.BundleKeys.PASSWORD)) {
+                if (bundle.containsKey(ApplicationConstants.BundleKeys.URL)) {
                     url = bundle.getString(ApplicationConstants.BundleKeys.URL);
-                    username = bundle.getString(ApplicationConstants.BundleKeys.USERNAME);
-                    password = bundle.getString(ApplicationConstants.BundleKeys.PASSWORD);
+
+                    if (bundle.containsKey(ApplicationConstants.BundleKeys.USERNAME)
+                            && bundle.containsKey(ApplicationConstants.BundleKeys.PASSWORD)) {
+                        username = bundle.getString(ApplicationConstants.BundleKeys.USERNAME);
+                        password = bundle.getString(ApplicationConstants.BundleKeys.PASSWORD);
+                    }
                 }
             }
         }
@@ -582,10 +584,13 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             downloadFormsTask = new DownloadFormsTask();
             downloadFormsTask.setDownloaderListener(this);
 
-            if (url != null && username != null && password != null) {
+            if (url != null) {
                 downloadFormsTask.setCustomUrl(url);
-                downloadFormsTask.setCustomUsername(username);
-                downloadFormsTask.setCustomPassword(password);
+
+                if (username != null && password != null) {
+                    downloadFormsTask.setCustomUsername(username);
+                    downloadFormsTask.setCustomPassword(password);
+                }
             }
 
             downloadFormsTask.execute(filesToDownload);
