@@ -286,10 +286,6 @@ the specific language governing permissions and limitations under the License.
         <activity android:name=".activities.CaptureSelfieVideoActivity" />
         <activity android:name=".activities.CaptureSelfieVideoActivityNewApi" />
 
-        <!-- External apps can request form downloads -->
-        <service
-            android:name=".services.FormDownloadService"/>
-
         <receiver
             android:name=".tasks.sms.SmsSentBroadcastReceiver"
             android:enabled="true"
