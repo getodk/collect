@@ -69,13 +69,16 @@ public class InstancesDaoTest {
     public void getSentInstancesCursorTest() {
         Cursor cursor = instancesDao.getSentInstancesCursor();
         List<Instance> instances = instancesDao.getInstancesFromCursor(cursor);
-        assertEquals(2, instances.size());
+        assertEquals(3, instances.size());
 
         assertEquals("Biggest N of Set", instances.get(0).getDisplayName());
         assertEquals(InstanceProviderAPI.STATUS_SUBMITTED, instances.get(0).getStatus());
 
-        assertEquals("Widgets", instances.get(1).getDisplayName());
-        assertEquals(InstanceProviderAPI.STATUS_SUBMITTED, instances.get(1).getStatus());
+        assertEquals("Sms Form", instances.get(1).getDisplayName());
+        assertEquals(InstanceProviderAPI.STATUS_SUBMITTED_SMS, instances.get(1).getStatus());
+
+        assertEquals("Widgets", instances.get(2).getDisplayName());
+        assertEquals(InstanceProviderAPI.STATUS_SUBMITTED, instances.get(2).getStatus());
     }
 
     @Test
@@ -236,6 +239,16 @@ public class InstancesDaoTest {
                 .displaySubtext("Finalized on Mon, Feb 20, 2017 at 14:24")
                 .build();
         instancesDao.saveInstance(instancesDao.getValuesFromInstanceObject(instance6));
+
+        Instance instance7 = new Instance.Builder()
+                .displayName("Sms Form")
+                .instanceFilePath(Collect.INSTANCES_PATH + "/Sms_Form_2017-02-20_14-24-46/sms_form.xml")
+                .jrFormId("sms_form")
+                .status(InstanceProviderAPI.STATUS_SUBMITTED_SMS)
+                .lastStatusChangeDate(1487597090653L)
+                .displaySubtext("Finalized on Mon, Feb 20, 2017 at 14:24")
+                .build();
+        instancesDao.saveInstance(instancesDao.getValuesFromInstanceObject(instance7));
     }
 
     @After
