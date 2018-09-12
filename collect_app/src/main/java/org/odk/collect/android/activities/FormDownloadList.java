@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -38,6 +39,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.FormDownloadListAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.http.HttpCredentialsInterface;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.FormListDownloaderListener;
 import org.odk.collect.android.logic.FormDetails;
@@ -46,6 +48,8 @@ import org.odk.collect.android.tasks.DownloadFormsTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.android.utilities.WebCredentialsUtils;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -53,6 +57,8 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Set;
+
+import javax.inject.Inject;
 
 import timber.log.Timber;
 
@@ -139,11 +145,15 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     private ArrayList<String> formsFound;
     private HashMap<String, Boolean> formResult;
 
+    @Inject
+    WebCredentialsUtils webCredentialsUtils;
+
     @SuppressWarnings("unchecked")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.remote_file_manage_list);
+        getComponent().inject(this);
         setTitle(getString(R.string.get_forms));
 
         formsFound = new ArrayList<>();
@@ -585,11 +595,10 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             downloadFormsTask.setDownloaderListener(this);
 
             if (url != null) {
-                downloadFormsTask.setCustomUrl(url);
-
                 if (username != null && password != null) {
-                    downloadFormsTask.setCustomUsername(username);
-                    downloadFormsTask.setCustomPassword(password);
+                    webCredentialsUtils.saveCredentials(url, username, password);
+                } else {
+                    webCredentialsUtils.clearCredentials(url);
                 }
             }
 
@@ -837,6 +846,8 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             downloadFormsTask.setDownloaderListener(null);
         }
 
+        cleanUpWebCredentials();
+
         if (progressDialog.isShowing()) {
             // should always be true here
             progressDialog.dismiss();
@@ -880,6 +891,8 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             downloadFormsTask = null;
         }
 
+        cleanUpWebCredentials();
+
         if (cancelDialog.isShowing()) {
             cancelDialog.dismiss();
         }
@@ -892,6 +905,17 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
     @Override
     public void updatedCredentials() {
+        // If the user updated the custom credentials using the dialog, let us update our
+        // variables holding the custom credentials
+        if (url != null) {
+            HttpCredentialsInterface httpCredentials = webCredentialsUtils.getCachedCredentials(url);
+
+            if (httpCredentials != null) {
+                username = httpCredentials.getUsername();
+                password = httpCredentials.getPassword();
+            }
+        }
+
         downloadFormList();
     }
 
@@ -911,5 +935,16 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         }
 
         setResult(RESULT_OK, intent);
+    }
+
+    private void cleanUpWebCredentials() {
+        if (url != null) {
+            String host = Uri.parse(url)
+                    .getHost();
+
+            if (host != null) {
+                webCredentialsUtils.clearCredentials(url);
+            }
+        }
     }
 }

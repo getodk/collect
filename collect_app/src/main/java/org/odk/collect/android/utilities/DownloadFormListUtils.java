@@ -80,7 +80,7 @@ public class DownloadFormListUtils {
         }
 
         //Todo: Make the username/password optional for cases of anonymous logins
-        String downloadListUrl = (url != null && username != null && password != null) ? url :
+        String downloadListUrl = url != null ? url :
                 settings.getString(PreferenceKeys.KEY_SERVER_URL,
                         Collect.getInstance().getString(R.string.default_server_url));
         // NOTE: /formlist must not be translated! It is the well-known path on the server.

@@ -14,19 +14,14 @@
 
 package org.odk.collect.android.tasks;
 
-import android.net.Uri;
 import android.os.AsyncTask;
 
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.utilities.FormDownloader;
-import org.odk.collect.android.utilities.WebCredentialsUtils;
-
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import javax.inject.Inject;
 
 /**
  * Background task for downloading a given list of forms. We assume right now that the forms are
@@ -41,25 +36,6 @@ public class DownloadFormsTask extends
 
     private DownloadFormsTaskListener stateListener;
 
-    private String customUrl;
-    private String customUsername;
-    private String customPassword;
-
-    @Inject
-    WebCredentialsUtils webCredentialsUtils;
-
-    public void setCustomUrl(String customUrl) {
-        this.customUrl = customUrl;
-    }
-
-    public void setCustomUsername(String customUsername) {
-        this.customUsername = customUsername;
-    }
-
-    public void setCustomPassword(String customPassword) {
-        this.customPassword = customPassword;
-    }
-
     @Override
     public void progressUpdate(String currentFile, String progress, String total) {
         publishProgress(currentFile, progress, total);
@@ -72,19 +48,6 @@ public class DownloadFormsTask extends
 
     @Override
     protected HashMap<FormDetails, String> doInBackground(ArrayList<FormDetails>... values) {
-        if (customUrl != null) {
-            String host = Uri.parse(customUrl)
-                    .getHost();
-
-            if (host != null) {
-                if (customUsername != null && customPassword != null) {
-                    webCredentialsUtils.saveCredentials(customUrl, customUsername, customPassword);
-                } else {
-                    webCredentialsUtils.clearCredentials(customUrl);
-                }
-            }
-        }
-
         FormDownloader formDownloader = new FormDownloader();
         formDownloader.setDownloaderListener(this);
         return formDownloader.downloadForms(values[0]);
@@ -93,8 +56,6 @@ public class DownloadFormsTask extends
     @Override
     protected void onCancelled(HashMap<FormDetails, String> formDetailsStringHashMap) {
         synchronized (this) {
-            cleanUp();
-
             if (stateListener != null) {
                 stateListener.formsDownloadingCancelled();
             }
@@ -104,8 +65,6 @@ public class DownloadFormsTask extends
     @Override
     protected void onPostExecute(HashMap<FormDetails, String> value) {
         synchronized (this) {
-            cleanUp();
-
             if (stateListener != null) {
                 stateListener.formsDownloadingComplete(value);
             }
@@ -128,17 +87,6 @@ public class DownloadFormsTask extends
     public void setDownloaderListener(DownloadFormsTaskListener sl) {
         synchronized (this) {
             stateListener = sl;
-        }
-    }
-
-    private void cleanUp() {
-        if (customUrl != null) {
-            String host = Uri.parse(customUrl)
-                    .getHost();
-
-            if (host != null) {
-                webCredentialsUtils.clearCredentials(customUrl);
-            }
         }
     }
 }
