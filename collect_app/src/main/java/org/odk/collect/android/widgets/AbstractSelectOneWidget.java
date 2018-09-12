@@ -50,7 +50,11 @@ import timber.log.Timber;
 public abstract class AbstractSelectOneWidget extends SelectTextWidget implements MultiChoiceWidget {
 
     /**
-     * An estimated max number of elements for whom we don't need to resize a RecyclerView
+     * A list of choices can have thousands of items. To increase loading and scrolling performance,
+     * a RecyclerView is used. Because it is nested inside a ScrollView, by default, all of
+     * the RecyclerView's items are loaded and there is no performance benefit over a ListView.
+     * This constant is used to bound the number of items loaded. The value 40 was chosen because
+     * it is around the maximum number of elements that can be shown on a large tablet.
      */
     private static final int MAX_ITEMS_WITHOUT_SCREEN_BOUND = 40;
 
@@ -110,13 +114,6 @@ public abstract class AbstractSelectOneWidget extends SelectTextWidget implement
             recyclerView.setAdapter(adapter);
             answerLayout.addView(recyclerView);
 
-            /*
-            It's not a very elegant solution but the only one we were able to come up with.
-            In case of many items we need to set the height of our RecyclerView in order to speed up loading.
-            Ideally we should do that only if our items take more place than our screen has.
-            Unfortunately there is no easy way to determine when it's going to happen (for how many items).
-            MAX_ITEMS_WITHOUT_SCREEN_BOUND elements is an estimated number.
-             */
             if (adapter.getItemCount() > MAX_ITEMS_WITHOUT_SCREEN_BOUND) {
                 // Only let the RecyclerView take up 80% of the screen height in order to speed up loading if there are many items
                 DisplayMetrics displayMetrics = new DisplayMetrics();

@@ -130,7 +130,7 @@ public abstract class SelectWidget extends QuestionWidget {
         MediaLayout mediaLayout = new MediaLayout(getContext());
 
         initMediaLayoutSetUp(mediaLayout);
-        setUpAVT(mediaLayout, index, textView);
+        addMediaFromChoice(mediaLayout, index, textView);
 
         if (index != items.size() - 1) {
             mediaLayout.addDivider();
@@ -145,7 +145,10 @@ public abstract class SelectWidget extends QuestionWidget {
         playList.add(mediaLayout);
     }
 
-    public void setUpAVT(MediaLayout mediaLayout, int index, TextView textView) {
+    /**
+     * Pull media from the current item and add it to the media layout.
+     */
+    public void addMediaFromChoice(MediaLayout mediaLayout, int index, TextView textView) {
         String audioURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), FormEntryCaption.TEXT_FORM_AUDIO);
 
         String imageURI;

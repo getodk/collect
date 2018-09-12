@@ -100,13 +100,6 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
         ButterKnife.bind(this);
     }
 
-    public MediaLayout(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-
-        View.inflate(context, R.layout.media_layout, this);
-        ButterKnife.bind(this);
-    }
-
     /**
      * For stubbing during unit testing
      */

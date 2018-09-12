@@ -108,7 +108,7 @@ public class SelectOneListAdapter extends RecyclerView.Adapter<SelectOneListAdap
         }
 
         void bind(final int index) {
-            widget.setUpAVT(mediaLayout, index, createRadioButton(index));
+            widget.addMediaFromChoice(mediaLayout, index, createRadioButton(index));
         }
     }
 
