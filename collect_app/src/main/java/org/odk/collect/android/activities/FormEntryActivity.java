@@ -640,6 +640,22 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     @Override
+    public void saveChosenImage(Uri uri) {
+        /*
+         * We have a saved image somewhere, but we really want it to be in:
+         * /sdcard/odk/instances/[current instnace]/something.jpg so we move
+         * it there before inserting it into the content provider. Once the
+         * android image capture bug gets fixed, (read, we move on from
+         * Android 1.6) we want to handle images the audio and video
+         */
+
+        ProgressDialogFragment.newInstance(getString(R.string.please_wait))
+                .show(getSupportFragmentManager(), ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
+
+        imageLoadingFragment.beginImageLoadingTask(uri);
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         FormController formController = getFormController();
@@ -721,21 +737,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     Timber.e(e);
                     createErrorDialog(e.getCause().getMessage(), DO_NOT_EXIT);
                 }
-                break;
-            case RequestCodes.IMAGE_CHOOSER:
-                /*
-                 * We have a saved image somewhere, but we really want it to be in:
-                 * /sdcard/odk/instances/[current instnace]/something.jpg so we move
-                 * it there before inserting it into the content provider. Once the
-                 * android image capture bug gets fixed, (read, we move on from
-                 * Android 1.6) we want to handle images the audio and video
-                 */
-
-                ProgressDialogFragment.newInstance(getString(R.string.please_wait))
-                        .show(getSupportFragmentManager(), ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
-
-                imageLoadingFragment.beginImageLoadingTask(intent.getData());
-
                 break;
             case RequestCodes.AUDIO_CAPTURE:
             case RequestCodes.VIDEO_CAPTURE:

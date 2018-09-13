@@ -330,16 +330,11 @@ public class ImageWebViewWidget extends QuestionWidget implements FileWidget {
         Intent i = new Intent(Intent.ACTION_GET_CONTENT);
         i.setType("image/*");
 
-        try {
-            waitForData();
-            ((Activity) getContext()).startActivityForResult(i,
-                    RequestCodes.IMAGE_CHOOSER);
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(
-                    getContext(),
-                    getContext().getString(R.string.activity_not_found,
-                            getContext().getString(R.string.choose_image)), Toast.LENGTH_SHORT).show();
-            cancelWaitingForData();
-        }
+        startActivityForResult(i, RequestCodes.IMAGE_CHOOSER, R.string.choose_image);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        getWidgetAnswerListener().saveChosenImage(data.getData());
     }
 }
