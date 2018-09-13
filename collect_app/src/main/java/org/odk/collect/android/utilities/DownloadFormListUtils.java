@@ -79,7 +79,6 @@ public class DownloadFormListUtils {
             url = url.substring(0, url.length() - 1);
         }
 
-        //Todo: Make the username/password optional for cases of anonymous logins
         String downloadListUrl = url != null ? url :
                 settings.getString(PreferenceKeys.KEY_SERVER_URL,
                         Collect.getInstance().getString(R.string.default_server_url));
@@ -88,7 +87,7 @@ public class DownloadFormListUtils {
                 R.string.default_odk_formlist);
 
         // When a url is supplied, we will use the default formList url
-        String downloadPath = (url != null && username != null && password != null) ? formListUrl : settings.getString(PreferenceKeys.KEY_FORMLIST_URL, formListUrl);
+        String downloadPath = (url != null) ? formListUrl : settings.getString(PreferenceKeys.KEY_FORMLIST_URL, formListUrl);
         downloadListUrl += downloadPath;
 
         // We populate this with available forms from the specified server.
