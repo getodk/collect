@@ -27,6 +27,8 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.PermissionListener;
 
+import java.io.File;
+
 import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
@@ -175,4 +177,26 @@ public class AlignedImageWidget extends BaseImageWidget {
         imageCaptureHandler.captureImage(i, RequestCodes.ALIGNED_IMAGE, R.string.aligned_image_capture);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        /*
+         * We saved the image to the tempfile_path; the app returns the full
+         * path to the saved file in the EXTRA_OUTPUT extra. Take that file
+         * and move it into the instance folder.
+         */
+        String path = data.getStringExtra(android.provider.MediaStore.EXTRA_OUTPUT);
+        File fi = new File(path);
+        String instanceFolder = getFormController().getInstanceFile().getParent();
+        String s = instanceFolder + File.separator + System.currentTimeMillis() + ".jpg";
+
+        File nf = new File(s);
+        if (!fi.renameTo(nf)) {
+            Timber.e("Failed to rename %s", fi.getAbsolutePath());
+        } else {
+            Timber.i("Renamed %s to %s", fi.getAbsolutePath(), nf.getAbsolutePath());
+        }
+
+        setBinaryData(nf);
+        getWidgetAnswerListener().saveAnswersForCurrentScreen(false);
+    }
 }

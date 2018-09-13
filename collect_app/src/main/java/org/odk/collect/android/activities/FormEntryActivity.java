@@ -764,30 +764,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 }
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
-            case RequestCodes.ALIGNED_IMAGE:
-                /*
-                 * We saved the image to the tempfile_path; the app returns the full
-                 * path to the saved file in the EXTRA_OUTPUT extra. Take that file
-                 * and move it into the instance folder.
-                 */
-                String path = intent
-                        .getStringExtra(android.provider.MediaStore.EXTRA_OUTPUT);
-                fi = new File(path);
-                instanceFolder = formController.getInstanceFile().getParent();
-                s = instanceFolder + File.separator + System.currentTimeMillis() + ".jpg";
-
-                nf = new File(s);
-                if (!fi.renameTo(nf)) {
-                    Timber.e("Failed to rename %s", fi.getAbsolutePath());
-                } else {
-                    Timber.i("Renamed %s to %s", fi.getAbsolutePath(), nf.getAbsolutePath());
-                }
-
-                if (getCurrentViewIfODKView() != null) {
-                    getCurrentViewIfODKView().setBinaryData(nf);
-                }
-                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                break;
             case RequestCodes.IMAGE_CHOOSER:
                 /*
                  * We have a saved image somewhere, but we really want it to be in:
