@@ -718,21 +718,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     createErrorDialog(e.getCause().getMessage(), DO_NOT_EXIT);
                 }
                 break;
-            case RequestCodes.AUDIO_CAPTURE:
-            case RequestCodes.VIDEO_CAPTURE:
-                Uri mediaUri = intent.getData();
-                saveFileAnswer(mediaUri);
-                String filePath = MediaUtils.getDataColumn(this, mediaUri, null, null);
-                if (filePath != null) {
-                    new File(filePath).delete();
-                }
-                try {
-                    getContentResolver().delete(mediaUri, null, null);
-                } catch (Exception e) {
-                    Timber.e(e);
-                }
-                break;
-
             case RequestCodes.ARBITRARY_FILE_CHOOSER:
                 // Same with VIDEO_CHOOSER.
             case RequestCodes.AUDIO_CHOOSER:

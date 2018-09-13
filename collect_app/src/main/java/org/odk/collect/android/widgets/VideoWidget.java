@@ -46,6 +46,7 @@ import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtil;
+import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 
@@ -394,18 +395,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
         if (highResolution) {
             i.putExtra(android.provider.MediaStore.EXTRA_VIDEO_QUALITY, 1);
         }
-        try {
-            waitForData();
-            ((Activity) getContext()).startActivityForResult(i,
-                    RequestCodes.VIDEO_CAPTURE);
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(
-                    getContext(),
-                    getContext().getString(R.string.activity_not_found,
-                            getContext().getString(R.string.capture_video)), Toast.LENGTH_SHORT)
-                    .show();
-            cancelWaitingForData();
-        }
+        startActivityForResult(i, RequestCodes.VIDEO_CAPTURE, R.string.capture_video);
     }
 
     private void chooseVideo() {
@@ -449,6 +439,27 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
                     getContext(),
                     getContext().getString(R.string.activity_not_found,
                             getContext().getString(R.string.view_video)), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case RequestCodes.VIDEO_CAPTURE:
+                Uri mediaUri = data.getData();
+                setBinaryData(mediaUri);
+                getWidgetAnswerListener().saveAnswersForCurrentScreen(false);
+
+                String filePath = MediaUtils.getDataColumn(getContext(), mediaUri, null, null);
+                if (filePath != null) {
+                    new File(filePath).delete();
+                }
+                try {
+                    getContext().getContentResolver().delete(mediaUri, null, null);
+                } catch (Exception e) {
+                    Timber.e(e);
+                }
+                break;
         }
     }
 }
