@@ -7,4 +7,6 @@ public interface WidgetAnswerListener {
     boolean saveAnswersForCurrentScreen(boolean evaluateConstraints);
 
     void saveChosenImage(Uri uri);
+
+    void saveChosenFile(Uri uri);
 }

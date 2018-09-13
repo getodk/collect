@@ -11,4 +11,6 @@ public interface FormActivityListener {
     void createErrorDialog(String message, boolean shouldExit);
 
     void saveChosenImage(Uri uri);
+
+    void saveChosenFile(Uri uri);
 }

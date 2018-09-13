@@ -43,6 +43,12 @@ public abstract class FileWidget extends QuestionWidget implements BinaryWidget 
                     Timber.e(e);
                 }
                 break;
+
+            case ApplicationConstants.RequestCodes.ARBITRARY_FILE_CHOOSER:
+            case ApplicationConstants.RequestCodes.AUDIO_CHOOSER:
+            case ApplicationConstants.RequestCodes.VIDEO_CHOOSER:
+                getWidgetAnswerListener().saveChosenFile(data.getData());
+                break;
         }
     }
 }

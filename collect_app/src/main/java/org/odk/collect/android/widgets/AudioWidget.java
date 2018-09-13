@@ -15,8 +15,6 @@
 package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -26,7 +24,6 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
@@ -270,17 +267,7 @@ public class AudioWidget extends FileWidget {
                         getFormEntryPrompt().getIndex());
         Intent i = new Intent(Intent.ACTION_GET_CONTENT);
         i.setType("audio/*");
-        try {
-            waitForData();
-            ((Activity) getContext()).startActivityForResult(i,
-                    RequestCodes.AUDIO_CHOOSER);
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(
-                    getContext(),
-                    getContext().getString(R.string.activity_not_found,
-                            getContext().getString(R.string.choose_audio)), Toast.LENGTH_SHORT).show();
-            cancelWaitingForData();
-        }
+        startActivityForResult(i, RequestCodes.AUDIO_CHOOSER, R.string.choose_audio);
     }
 
     /**

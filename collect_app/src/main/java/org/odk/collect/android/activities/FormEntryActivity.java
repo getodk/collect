@@ -718,24 +718,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     createErrorDialog(e.getCause().getMessage(), DO_NOT_EXIT);
                 }
                 break;
-            case RequestCodes.ARBITRARY_FILE_CHOOSER:
-                // Same with VIDEO_CHOOSER.
-            case RequestCodes.AUDIO_CHOOSER:
-                // Same with VIDEO_CHOOSER.
-            case RequestCodes.VIDEO_CHOOSER:
-                /*
-                 * Start a task to save the chosen file/audio/video with a new Thread,
-                 * This could support retrieving file from Google Drive.
-                 * */
-                showDialog(SAVING_DIALOG);
-                Runnable saveFileRunnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        saveChosenFile(intent.getData());
-                    }
-                };
-                new Thread(saveFileRunnable).start();
-                break;
             case RequestCodes.LOCATION_CAPTURE:
                 String sl = intent.getStringExtra(LOCATION_RESULT);
                 if (getCurrentViewIfODKView() != null) {
@@ -773,6 +755,18 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         refreshCurrentView();
     }
 
+    /*
+     * Start a task to save the chosen file/audio/video with a new Thread,
+     * This could support retrieving file from Google Drive.
+     */
+    @Override
+    public void saveChosenFile(Uri uri) {
+        showDialog(SAVING_DIALOG);
+        Runnable saveFileRunnable = () -> saveFileFromUri(uri);
+        new Thread(saveFileRunnable).start();
+
+    }
+
     /**
      * Save a copy of the chosen media in Collect's own path such as
      * "/storage/emulated/0/odk/instances/{form name}/filename",
@@ -781,7 +775,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      *
      * @param selectedFile uri of the selected audio
      */
-    private void saveChosenFile(Uri selectedFile) {
+    private void saveFileFromUri(Uri selectedFile) {
         String extension = ContentResolverHelper.getFileExtensionFromUri(selectedFile);
 
         String instanceFolder = Collect.getInstance().getFormController()
@@ -799,28 +793,22 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     dismissDialog(SAVING_DIALOG);
                     if (getCurrentViewIfODKView() != null) {
                         getCurrentViewIfODKView().setBinaryData(newFile);
+                        getCurrentViewIfODKView().saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                     }
-                    saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                     refreshCurrentView();
                 });
             } else {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        dismissDialog(SAVING_DIALOG);
-                        Timber.e("Could not receive chosen file");
-                        ToastUtils.showShortToastInMiddle(R.string.error_occured);
-                    }
+                runOnUiThread(() -> {
+                    dismissDialog(SAVING_DIALOG);
+                    Timber.e("Could not receive chosen file");
+                    ToastUtils.showShortToastInMiddle(R.string.error_occured);
                 });
             }
         } catch (GDriveConnectionException e) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    dismissDialog(SAVING_DIALOG);
-                    Timber.e("Could not receive chosen file due to connection problem");
-                    ToastUtils.showLongToastInMiddle(R.string.gdrive_connection_exception);
-                }
+            runOnUiThread(() -> {
+                dismissDialog(SAVING_DIALOG);
+                Timber.e("Could not receive chosen file due to connection problem");
+                ToastUtils.showLongToastInMiddle(R.string.gdrive_connection_exception);
             });
         }
     }

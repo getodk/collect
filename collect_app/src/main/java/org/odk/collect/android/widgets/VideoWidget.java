@@ -15,7 +15,6 @@
 package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
@@ -406,19 +405,8 @@ public class VideoWidget extends FileWidget {
         // Intent i =
         // new Intent(Intent.ACTION_PICK,
         // android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
-        try {
-            waitForData();
-            ((Activity) getContext()).startActivityForResult(i,
-                    RequestCodes.VIDEO_CHOOSER);
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(
-                    getContext(),
-                    getContext().getString(R.string.activity_not_found,
-                            getContext().getString(R.string.choose_video)), Toast.LENGTH_SHORT)
-                    .show();
 
-            cancelWaitingForData();
-        }
+        startActivityForResult(i, RequestCodes.VIDEO_CHOOSER, R.string.choose_video);
     }
 
     private void playVideoFile() {
