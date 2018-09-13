@@ -15,7 +15,6 @@
 package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -39,6 +38,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
+import static org.odk.collect.android.activities.FormEntryActivity.BEARING_RESULT;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
@@ -164,9 +164,7 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
 
         if (isSensorAvailable) {
             Intent i = new Intent(getContext(), BearingActivity.class);
-            waitForData();
-            ((Activity) getContext()).startActivityForResult(i,
-                    RequestCodes.BEARING_CAPTURE);
+            startActivityForResult(i, RequestCodes.BEARING_CAPTURE, -1);
         } else {
             getBearingButton.setEnabled(false);
             ToastUtils.showLongToast(R.string.bearing_lack_of_sensors);
@@ -175,5 +173,12 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
             answer.setFocusableInTouchMode(true);
             answer.requestFocus();
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        String bearing = data.getStringExtra(BEARING_RESULT);
+        setBinaryData(bearing);
+        getWidgetAnswerListener().saveAnswersForCurrentScreen(false);
     }
 }
