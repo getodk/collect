@@ -667,23 +667,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             return;
         }
 
-        if (resultCode == RESULT_CANCELED) {
-            // request was canceled...
-            if (requestCode != RequestCodes.HIERARCHY_ACTIVITY && getCurrentViewIfODKView() != null) {
-                getCurrentViewIfODKView().cancelWaitingForBinaryData();
-            }
-            return;
-        }
-
-        // intent is needed for all requestCodes except of DRAW_IMAGE, ANNOTATE_IMAGE, SIGNATURE_CAPTURE, IMAGE_CAPTURE and HIERARCHY_ACTIVITY
-        if (intent == null && requestCode != RequestCodes.DRAW_IMAGE && requestCode != RequestCodes.ANNOTATE_IMAGE
-                && requestCode != RequestCodes.SIGNATURE_CAPTURE && requestCode != RequestCodes.IMAGE_CAPTURE
-                && requestCode != RequestCodes.HIERARCHY_ACTIVITY) {
-            Timber.w("The intent has a null value for requestCode: " + requestCode);
-            ToastUtils.showLongToast(getString(R.string.null_intent_value));
-            return;
-        }
-
         switch (requestCode) {
             case RequestCodes.HIERARCHY_ACTIVITY:
                 // We may have jumped to a new index in hierarchy activity, so
