@@ -178,7 +178,9 @@ the specific language governing permissions and limitations under the License.
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.InstanceUploaderActivity" />
+        <activity
+            android:exported="true"
+            android:name=".activities.InstanceUploaderActivity" />
         <activity android:name=".activities.AboutActivity" />
         <activity android:name=".preferences.PreferencesActivity" />
         <activity android:name=".preferences.AdminPreferencesActivity" />
