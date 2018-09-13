@@ -15,8 +15,6 @@
 package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -33,7 +31,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
@@ -306,18 +303,7 @@ public class ImageWebViewWidget extends FileWidget {
         // FormEntyActivity will also need to be updated.
         i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
                 Uri.fromFile(new File(Collect.TMPFILE_PATH)));
-        try {
-            waitForData();
-            ((Activity) getContext()).startActivityForResult(i,
-                    RequestCodes.IMAGE_CAPTURE);
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(
-                    getContext(),
-                    getContext().getString(R.string.activity_not_found,
-                            getContext().getString(R.string.capture_image)), Toast.LENGTH_SHORT)
-                    .show();
-            cancelWaitingForData();
-        }
+        startActivityForResult(i, RequestCodes.IMAGE_CAPTURE, R.string.capture_image);
     }
 
     private void chooseImage() {
@@ -330,10 +316,5 @@ public class ImageWebViewWidget extends FileWidget {
         i.setType("image/*");
 
         startActivityForResult(i, RequestCodes.IMAGE_CHOOSER, R.string.choose_image);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        getWidgetAnswerListener().saveChosenImage(data.getData());
     }
 }
