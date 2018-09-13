@@ -594,21 +594,6 @@ public abstract class QuestionWidget
     //region Data waiting
 
     @Override
-    public final void waitForData() {
-        Collect collect = Collect.getInstance();
-        if (collect == null) {
-            throw new IllegalStateException("Collect application instance is null.");
-        }
-
-        FormController formController = collect.getFormController();
-        if (formController == null) {
-            return;
-        }
-
-        formController.setIndexWaitingForData(getFormEntryPrompt().getIndex());
-    }
-
-    @Override
     public final void cancelWaitingForData() {
         Collect collect = Collect.getInstance();
         if (collect == null) {

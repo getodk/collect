@@ -751,17 +751,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         return questionWidget;
     }
 
-    private void saveFileAnswer(Uri media) {
-        // For audio/video capture/chooser, we get the URI from the content
-        // provider
-        // then the widget copies the file and makes a new entry in the
-        // content provider.
-        if (getCurrentViewIfODKView() != null) {
-            getCurrentViewIfODKView().setBinaryData(media);
-        }
-        saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-    }
-
     /**
      * Refreshes the current view. the controller and the displayed view can get
      * out of sync due to dialogs and restarts caused by screen orientation

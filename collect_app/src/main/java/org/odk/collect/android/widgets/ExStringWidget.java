@@ -311,7 +311,6 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
         }
         launchIntentButton.setEnabled(false);
         launchIntentButton.setFocusable(false);
-        cancelWaitingForData();
 
         Toast.makeText(getContext(),
                 toastText, Toast.LENGTH_SHORT)
