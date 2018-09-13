@@ -40,13 +40,12 @@ import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtil;
-import org.odk.collect.android.widgets.interfaces.FileWidget;
 
 import java.io.File;
 
 import timber.log.Timber;
 
-public class ArbitraryFileWidget extends QuestionWidget implements FileWidget {
+public class ArbitraryFileWidget extends FileWidget {
 
     @NonNull
     private FileUtil fileUtil;

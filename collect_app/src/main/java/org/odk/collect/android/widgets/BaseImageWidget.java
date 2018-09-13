@@ -47,13 +47,12 @@ import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ViewIds;
-import org.odk.collect.android.widgets.interfaces.FileWidget;
 
 import java.io.File;
 
 import timber.log.Timber;
 
-public abstract class BaseImageWidget extends QuestionWidget implements FileWidget {
+public abstract class BaseImageWidget extends FileWidget {
     @Nullable
     protected ImageView imageView;
     protected String binaryName;

@@ -38,8 +38,6 @@ import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtil;
-import org.odk.collect.android.utilities.MediaUtils;
-import org.odk.collect.android.widgets.interfaces.FileWidget;
 
 import java.io.File;
 import java.util.Locale;
@@ -58,7 +56,7 @@ import static org.odk.collect.android.utilities.PermissionUtils.requestRecordAud
  */
 
 @SuppressLint("ViewConstructor")
-public class AudioWidget extends QuestionWidget implements FileWidget {
+public class AudioWidget extends FileWidget {
 
     @NonNull
     private FileUtil fileUtil;
@@ -282,27 +280,6 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
                     getContext().getString(R.string.activity_not_found,
                             getContext().getString(R.string.choose_audio)), Toast.LENGTH_SHORT).show();
             cancelWaitingForData();
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case RequestCodes.AUDIO_CAPTURE:
-                Uri mediaUri = data.getData();
-                setBinaryData(mediaUri);
-                getWidgetAnswerListener().saveAnswersForCurrentScreen(false);
-
-                String filePath = MediaUtils.getDataColumn(getContext(), mediaUri, null, null);
-                if (filePath != null) {
-                    new File(filePath).delete();
-                }
-                try {
-                    getContext().getContentResolver().delete(mediaUri, null, null);
-                } catch (Exception e) {
-                    Timber.e(e);
-                }
-                break;
         }
     }
 

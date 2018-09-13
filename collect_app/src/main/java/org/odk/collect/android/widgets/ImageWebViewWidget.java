@@ -44,7 +44,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.ViewIds;
-import org.odk.collect.android.widgets.interfaces.FileWidget;
 
 import java.io.File;
 import java.util.Date;
@@ -62,7 +61,7 @@ import static org.odk.collect.android.utilities.PermissionUtils.requestCameraPer
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public class ImageWebViewWidget extends QuestionWidget implements FileWidget {
+public class ImageWebViewWidget extends FileWidget {
 
     private final Button captureButton;
     private final Button chooseButton;

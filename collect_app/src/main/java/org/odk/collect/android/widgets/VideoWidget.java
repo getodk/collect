@@ -46,9 +46,7 @@ import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtil;
-import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.widgets.interfaces.FileWidget;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -70,7 +68,7 @@ import static org.odk.collect.android.utilities.PermissionUtils.requestCameraPer
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public class VideoWidget extends QuestionWidget implements FileWidget {
+public class VideoWidget extends FileWidget {
 
     public static final boolean DEFAULT_HIGH_RESOLUTION = true;
     public static final int MEDIA_TYPE_IMAGE = 1;
@@ -439,27 +437,6 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
                     getContext(),
                     getContext().getString(R.string.activity_not_found,
                             getContext().getString(R.string.view_video)), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case RequestCodes.VIDEO_CAPTURE:
-                Uri mediaUri = data.getData();
-                setBinaryData(mediaUri);
-                getWidgetAnswerListener().saveAnswersForCurrentScreen(false);
-
-                String filePath = MediaUtils.getDataColumn(getContext(), mediaUri, null, null);
-                if (filePath != null) {
-                    new File(filePath).delete();
-                }
-                try {
-                    getContext().getContentResolver().delete(mediaUri, null, null);
-                } catch (Exception e) {
-                    Timber.e(e);
-                }
-                break;
         }
     }
 }
