@@ -704,18 +704,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
 
         switch (requestCode) {
-
-            case RequestCodes.EX_GROUP_CAPTURE:
-                try {
-                    Bundle extras = intent.getExtras();
-                    if (getCurrentViewIfODKView() != null) {
-                        getCurrentViewIfODKView().setDataForFields(extras);
-                    }
-                } catch (JavaRosaException e) {
-                    Timber.e(e);
-                    createErrorDialog(e.getCause().getMessage(), DO_NOT_EXIT);
-                }
-                break;
             case RequestCodes.HIERARCHY_ACTIVITY:
                 // We may have jumped to a new index in hierarchy activity, so
                 // refresh

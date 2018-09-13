@@ -17,7 +17,6 @@ package org.odk.collect.android.views;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -26,7 +25,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -54,6 +55,7 @@ import org.odk.collect.android.external.ExternalAppsUtils;
 import org.odk.collect.android.listeners.FormActivityListener;
 import org.odk.collect.android.listeners.WidgetAnswerListener;
 import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.utilities.ActivityResultHelper;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.ViewIds;
@@ -171,7 +173,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetA
                                 }
                             }
 
-                            ((Activity) getContext()).startActivityForResult(i, RequestCodes.EX_GROUP_CAPTURE);
+                            getAuxFragment().startActivityForResult(i, RequestCodes.EX_GROUP_CAPTURE);
                         } catch (ExternalParamsException e) {
                             Timber.e(e, "ExternalParamsException");
 
@@ -236,6 +238,22 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetA
                     }
                 }, 150);
             }
+        }
+    }
+
+    protected Fragment getAuxFragment() {
+        return ActivityResultHelper.getAuxFragment(
+                (AppCompatActivity) getContext(),
+                (requestCode, resultCode, intent) -> onActivityResultReceived(intent));
+    }
+
+    private void onActivityResultReceived(Intent intent) {
+        try {
+            Bundle extras = intent.getExtras();
+            setDataForFields(extras);
+        } catch (JavaRosaException e) {
+            Timber.e(e);
+            formActivityListener.createErrorDialog(e.getCause().getMessage(), false);
         }
     }
 
