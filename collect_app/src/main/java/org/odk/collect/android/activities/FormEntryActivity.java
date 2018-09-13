@@ -707,13 +707,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         switch (requestCode) {
 
-            case RequestCodes.OSM_CAPTURE:
-                String osmFileName = intent.getStringExtra("OSM_FILE_NAME");
-                if (getCurrentViewIfODKView() != null) {
-                    getCurrentViewIfODKView().setBinaryData(osmFileName);
-                }
-                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                break;
             case RequestCodes.EX_STRING_CAPTURE:
             case RequestCodes.EX_INT_CAPTURE:
             case RequestCodes.EX_DECIMAL_CAPTURE:

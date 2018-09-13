@@ -1,7 +1,6 @@
 package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -23,9 +22,9 @@ import org.javarosa.core.model.osm.OSMTagItem;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.ViewIds;
-import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import java.util.ArrayList;
@@ -174,11 +173,7 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
 
             //launch activity if it is safe
             if (isIntentSafe) {
-                // notify that the form is waiting for data
-                waitForData();
-
-                // launch
-                ((Activity) ctx).startActivityForResult(launchIntent, RequestCodes.OSM_CAPTURE);
+                startActivityForResult(launchIntent, RequestCodes.OSM_CAPTURE, -1);
             } else {
                 errorTextView.setVisibility(View.VISIBLE);
             }
@@ -260,5 +255,12 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
             intent.putStringArrayListExtra("TAG_VALUES." + tag.key, tagValues);
         }
         intent.putStringArrayListExtra("TAG_KEYS", tagKeys);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        String osmFileName = data.getStringExtra("OSM_FILE_NAME");
+        setBinaryData(osmFileName);
+        getWidgetAnswerListener().saveAnswersForCurrentScreen(false);
     }
 }
