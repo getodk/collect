@@ -51,6 +51,7 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.listeners.AudioPlayListener;
+import org.odk.collect.android.listeners.WidgetAnswerListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GuidanceHint;
@@ -100,6 +101,8 @@ public abstract class QuestionWidget
     private Bundle state;
     protected ThemeUtils themeUtils;
     private int playColor;
+
+    private WidgetAnswerListener listener;
 
     public QuestionWidget(Context context, FormEntryPrompt prompt) {
         super(context);
@@ -719,7 +722,7 @@ public abstract class QuestionWidget
         return resultCode == RESULT_OK;
     }
 
-    public void onActivityResultReceived(int requestCode, int resultCode, Intent data) {
+    private void onActivityResultReceived(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_CANCELED || resultCode != RESULT_OK) {
             // request was canceled...
             return;
@@ -730,7 +733,20 @@ public abstract class QuestionWidget
         }
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // to be overridden by widgets launching external intents
+    }
+
+    @Nullable
+    protected FormController getFormController() {
+        return ((Collect) getContext().getApplicationContext()).getFormController();
+    }
+
+    public void setAnswerSaveListener(WidgetAnswerListener listener) {
+        this.listener = listener;
+    }
+
+    protected WidgetAnswerListener getWidgetAnswerListener() {
+        return listener;
     }
 }

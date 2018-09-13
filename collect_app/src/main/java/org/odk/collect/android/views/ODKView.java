@@ -50,6 +50,8 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalAppsUtils;
+import org.odk.collect.android.listeners.FormActivityListener;
+import org.odk.collect.android.listeners.WidgetAnswerListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -75,17 +77,19 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  * @author carlhartung
  */
 @SuppressLint("ViewConstructor")
-public class ODKView extends FrameLayout implements OnLongClickListener {
+public class ODKView extends FrameLayout implements OnLongClickListener, WidgetAnswerListener {
 
     private final LinearLayout view;
     private final LinearLayout.LayoutParams layout;
     private final ArrayList<QuestionWidget> widgets;
 
     public static final String FIELD_LIST = "field-list";
+    private final FormActivityListener formActivityListener;
 
     public ODKView(Context context, final FormEntryPrompt[] questionPrompts,
-            FormEntryCaption[] groups, boolean advancingPage) {
+                   FormEntryCaption[] groups, boolean advancingPage, FormActivityListener formActivityListener) {
         super(context);
+        this.formActivityListener = formActivityListener;
 
         inflate(getContext(), R.layout.nested_scroll_view, this); // keep in an xml file to enable the vertical scrollbar
 
@@ -205,6 +209,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
             qw.setLongClickable(true);
             qw.setOnLongClickListener(this);
             qw.setId(ViewIds.generateViewId());
+            qw.setAnswerSaveListener(this);
 
             widgets.add(qw);
             view.addView(qw, layout);
@@ -510,5 +515,40 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
             }
         }
         return null;
+    }
+
+
+    /**
+     * Attempt to save the answer(s) in the current screen to into the data
+     * model.
+     *
+     * @return false if any error occurs while saving (constraint violated,
+     * etc...), true otherwise.
+     */
+    @Override
+    public boolean saveAnswersForCurrentScreen(boolean evaluateConstraints) {
+        FormController formController = ((Collect) getContext().getApplicationContext()).getFormController();
+        // only try to save if the current event is a question or a field-list group
+        // and current view is an ODKView (occasionally we show blank views that do not have any
+        // controls to save data from)
+        if (formController != null && formController.currentPromptIsQuestion()) {
+            HashMap<FormIndex, IAnswerData> answers = getAnswers();
+            try {
+                FormController.FailedConstraint constraint = formController.saveAllScreenAnswers(answers,
+                        evaluateConstraints);
+                if (constraint != null) {
+                    formActivityListener.createConstraintToast(constraint.index, constraint.status);
+                    if (formController.indexIsInFieldList() && formController.getQuestionPrompts().length > 1) {
+                        highlightWidget(constraint.index);
+                    }
+                    return false;
+                }
+            } catch (JavaRosaException e) {
+                Timber.e(e);
+                formActivityListener.createErrorDialog(e.getCause().getMessage(), false);
+                return false;
+            }
+        }
+        return true;
     }
 }

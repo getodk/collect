@@ -90,6 +90,7 @@ import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
+import org.odk.collect.android.listeners.FormActivityListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.FormSavedListener;
 import org.odk.collect.android.listeners.PermissionListener;
@@ -163,7 +164,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         DependencyProvider<ActivityAvailability>,
         CustomDatePickerDialog.CustomDatePickerDialogListener,
         RankingWidgetDialog.RankingListener,
-        SaveFormIndexTask.SaveFormIndexListener {
+        SaveFormIndexTask.SaveFormIndexListener,
+        FormActivityListener {
 
     // save with every swipe forward or back. Timings indicate this takes .25
     // seconds.
@@ -1348,7 +1350,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     FormEntryPrompt[] prompts = formController.getQuestionPrompts();
                     FormEntryCaption[] groups = formController
                             .getGroupsForCurrentIndex();
-                    odkView = new ODKView(this, prompts, groups, advancingPage);
+                    odkView = new ODKView(this, prompts, groups, advancingPage, this);
                     Timber.i("Created view for group %s %s",
                             groups.length > 0 ? groups[groups.length - 1].getLongText() : "[top]",
                             prompts.length > 0 ? prompts[0].getQuestionText() : "[no question]");
@@ -1694,7 +1696,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     /**
      * Creates and displays a dialog displaying the violated constraint.
      */
-    private void createConstraintToast(FormIndex index, int saveStatus) {
+    @Override
+    public void createConstraintToast(FormIndex index, int saveStatus) {
         FormController formController = getFormController();
         String constraintText;
         switch (saveStatus) {
@@ -1850,7 +1853,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     /**
      * Creates and displays dialog with the given errorMsg.
      */
-    private void createErrorDialog(String errorMsg, final boolean shouldExit) {
+    @Override
+    public void createErrorDialog(String errorMsg, final boolean shouldExit) {
         Collect.getInstance()
                 .getActivityLogger()
                 .logInstanceAction(this, "createErrorDialog",
