@@ -26,6 +26,7 @@ import android.provider.MediaStore;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.FileProvider;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.ImageView;
@@ -36,11 +37,13 @@ import android.widget.Toast;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.DrawActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ViewIds;
@@ -305,5 +308,50 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
      */
     protected void launchActivityForResult(Intent intent, final int resourceCode, final int errorStringResource) {
         startActivityForResult(intent, resourceCode, errorStringResource);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case ApplicationConstants.RequestCodes.DRAW_IMAGE:
+            case ApplicationConstants.RequestCodes.ANNOTATE_IMAGE:
+            case ApplicationConstants.RequestCodes.SIGNATURE_CAPTURE:
+            case ApplicationConstants.RequestCodes.IMAGE_CAPTURE:
+                saveCapturedImage();
+                break;
+        }
+    }
+
+    /*
+     * We saved the image to the tempfile_path, but we really want it to
+     * be in: /sdcard/odk/instances/[current instnace]/something.jpg so
+     * we move it there before inserting it into the content provider.
+     * Once the android image capture bug gets fixed, (read, we move on
+     * from Android 1.6) we want to handle images the audio and video
+     */
+    private void saveCapturedImage() {
+        // The intent is empty, but we know we saved the image to the temp file
+        ImageConverter.execute(Collect.TMPFILE_PATH, this, getContext());
+        File fi = new File(Collect.TMPFILE_PATH);
+
+        // Revoke permissions granted to this file due its possible usage in the camera app
+        Uri uri = FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", fi);
+        FileUtils.revokeFileReadWritePermission(getContext(), uri);
+        saveImageToInstanceFolder(fi);
+        getWidgetAnswerListener().saveAnswersForCurrentScreen(false);
+    }
+
+    protected void saveImageToInstanceFolder(File imageFile) {
+        String instanceFolder = getFormController().getInstanceFile().getParent();
+        String s = instanceFolder + File.separator + System.currentTimeMillis() + ".jpg";
+
+        File nf = new File(s);
+        if (!imageFile.renameTo(nf)) {
+            Timber.e("Failed to rename %s", imageFile.getAbsolutePath());
+        } else {
+            Timber.i("Renamed %s to %s", imageFile.getAbsolutePath(), nf.getAbsolutePath());
+        }
+
+        setBinaryData(nf);
     }
 }

@@ -186,17 +186,7 @@ public class AlignedImageWidget extends BaseImageWidget {
          */
         String path = data.getStringExtra(android.provider.MediaStore.EXTRA_OUTPUT);
         File fi = new File(path);
-        String instanceFolder = getFormController().getInstanceFile().getParent();
-        String s = instanceFolder + File.separator + System.currentTimeMillis() + ".jpg";
-
-        File nf = new File(s);
-        if (!fi.renameTo(nf)) {
-            Timber.e("Failed to rename %s", fi.getAbsolutePath());
-        } else {
-            Timber.i("Renamed %s to %s", fi.getAbsolutePath(), nf.getAbsolutePath());
-        }
-
-        setBinaryData(nf);
+        saveImageToInstanceFolder(fi);
         getWidgetAnswerListener().saveAnswersForCurrentScreen(false);
     }
 }

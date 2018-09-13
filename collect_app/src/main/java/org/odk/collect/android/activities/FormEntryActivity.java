@@ -27,7 +27,6 @@ import android.os.Bundle;
 import android.provider.MediaStore.Images;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -70,7 +69,6 @@ import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.LocalDateTime;
-import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.IconMenuListAdapter;
 import org.odk.collect.android.adapters.model.IconMenuItem;
@@ -115,7 +113,6 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
@@ -724,45 +721,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     Timber.e(e);
                     createErrorDialog(e.getCause().getMessage(), DO_NOT_EXIT);
                 }
-                break;
-            case RequestCodes.DRAW_IMAGE:
-            case RequestCodes.ANNOTATE_IMAGE:
-            case RequestCodes.SIGNATURE_CAPTURE:
-            case RequestCodes.IMAGE_CAPTURE:
-                /*
-                 * We saved the image to the tempfile_path, but we really want it to
-                 * be in: /sdcard/odk/instances/[current instnace]/something.jpg so
-                 * we move it there before inserting it into the content provider.
-                 * Once the android image capture bug gets fixed, (read, we move on
-                 * from Android 1.6) we want to handle images the audio and video
-                 */
-                // The intent is empty, but we know we saved the image to the temp
-                // file
-                ImageConverter.execute(Collect.TMPFILE_PATH, getWidgetWaitingForBinaryData(), this);
-                File fi = new File(Collect.TMPFILE_PATH);
-
-                //revoke permissions granted to this file due its possible usage in
-                //the camera app
-                Uri uri = FileProvider.getUriForFile(this,
-                        BuildConfig.APPLICATION_ID + ".provider",
-                        fi);
-                FileUtils.revokeFileReadWritePermission(this, uri);
-
-                String instanceFolder = formController.getInstanceFile()
-                        .getParent();
-                String s = instanceFolder + File.separator + System.currentTimeMillis() + ".jpg";
-
-                File nf = new File(s);
-                if (!fi.renameTo(nf)) {
-                    Timber.e("Failed to rename %s", fi.getAbsolutePath());
-                } else {
-                    Timber.i("Renamed %s to %s", fi.getAbsolutePath(), nf.getAbsolutePath());
-                }
-
-                if (getCurrentViewIfODKView() != null) {
-                    getCurrentViewIfODKView().setBinaryData(nf);
-                }
-                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
             case RequestCodes.IMAGE_CHOOSER:
                 /*
