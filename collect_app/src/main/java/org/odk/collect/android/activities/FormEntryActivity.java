@@ -716,13 +716,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     createErrorDialog(e.getCause().getMessage(), DO_NOT_EXIT);
                 }
                 break;
-            case RequestCodes.LOCATION_CAPTURE:
-                String sl = intent.getStringExtra(LOCATION_RESULT);
-                if (getCurrentViewIfODKView() != null) {
-                    getCurrentViewIfODKView().setBinaryData(sl);
-                }
-                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                break;
             case RequestCodes.BEARING_CAPTURE:
                 String bearing = intent.getStringExtra(BEARING_RESULT);
                 if (getCurrentViewIfODKView() != null) {
