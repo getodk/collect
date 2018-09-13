@@ -60,6 +60,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import static org.odk.collect.android.utilities.PermissionUtils.checkIfLocationPermissionsGranted;
+import static org.odk.collect.android.widgets.GeoTraceWidget.GEOTRACE_RESULTS;
 
 public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements IRegisterReceiver,
         LocationListener, LocationClient.LocationClientListener {
@@ -673,7 +674,7 @@ public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements I
         String finalReturnString = generateReturnString();
         Intent i = new Intent();
         i.putExtra(
-                FormEntryActivity.GEOTRACE_RESULTS,
+                GEOTRACE_RESULTS,
                 finalReturnString);
         setResult(RESULT_OK, i);
     }

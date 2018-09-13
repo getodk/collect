@@ -180,7 +180,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     public static final String LOCATION_RESULT = "LOCATION_RESULT";
     public static final String BEARING_RESULT = "BEARING_RESULT";
     public static final String GEOSHAPE_RESULTS = "GEOSHAPE_RESULTS";
-    public static final String GEOTRACE_RESULTS = "GEOTRACE_RESULTS";
 
     public static final String KEY_INSTANCES = "instances";
     public static final String KEY_SUCCESS = "success";
@@ -733,11 +732,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
             case RequestCodes.GEOTRACE_CAPTURE:
-                String traceExtra = intent.getStringExtra(GEOTRACE_RESULTS);
-                if (getCurrentViewIfODKView() != null) {
-                    getCurrentViewIfODKView().setBinaryData(traceExtra);
-                }
-                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
             case RequestCodes.BEARING_CAPTURE:
                 String bearing = intent.getStringExtra(BEARING_RESULT);

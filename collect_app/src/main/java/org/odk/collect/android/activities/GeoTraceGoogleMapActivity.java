@@ -61,6 +61,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import static org.odk.collect.android.utilities.PermissionUtils.checkIfLocationPermissionsGranted;
+import static org.odk.collect.android.widgets.GeoTraceWidget.GEOTRACE_RESULTS;
 
 /**
  * Version of the GeoTraceMapActivity that uses the new Maps v2 API and Fragments to enable
@@ -384,7 +385,7 @@ public class GeoTraceGoogleMapActivity extends CollectAbstractActivity implement
         String finalReturnString = generateReturnString();
         Intent i = new Intent();
         i.putExtra(
-                FormEntryActivity.GEOTRACE_RESULTS,
+                GEOTRACE_RESULTS,
                 finalReturnString);
         setResult(RESULT_OK, i);
         finish();
