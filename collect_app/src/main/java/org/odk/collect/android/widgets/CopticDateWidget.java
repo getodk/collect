@@ -31,7 +31,7 @@ public class CopticDateWidget extends AbstractDateWidget {
     }
   
     protected void showDatePickerDialog() {
-        CopticDatePickerDialog copticDatePickerDialog = CopticDatePickerDialog.newInstance(getFormEntryPrompt().getIndex(), date, datePickerDetails);
+        CopticDatePickerDialog copticDatePickerDialog = CopticDatePickerDialog.newInstance(this, date, datePickerDetails);
         copticDatePickerDialog.show(((FormEntryActivity) getContext()).getSupportFragmentManager(), DATE_PICKER_DIALOG);
     }
 }

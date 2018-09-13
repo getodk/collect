@@ -16,12 +16,12 @@
 
 package org.odk.collect.android.fragments.dialogs;
 
-import org.javarosa.core.model.FormIndex;
 import org.joda.time.LocalDateTime;
 import org.joda.time.chrono.EthiopicChronology;
 import org.odk.collect.android.R;
 import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.DateTimeUtils;
+import org.odk.collect.android.widgets.AbstractDateWidget;
 
 import java.util.Arrays;
 
@@ -35,9 +35,9 @@ public class EthiopianDatePickerDialog extends CustomDatePickerDialog {
 
     private String[] monthsArray;
 
-    public static EthiopianDatePickerDialog newInstance(FormIndex formIndex, LocalDateTime date, DatePickerDetails datePickerDetails) {
+    public static EthiopianDatePickerDialog newInstance(AbstractDateWidget widget, LocalDateTime date, DatePickerDetails datePickerDetails) {
         EthiopianDatePickerDialog dialog = new EthiopianDatePickerDialog();
-        dialog.setArguments(getArgs(formIndex, date, datePickerDetails));
+        dialog.setArguments(getArgs(widget, date, datePickerDetails));
 
         return dialog;
     }

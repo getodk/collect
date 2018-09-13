@@ -30,12 +30,13 @@ import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.DateTimeUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * @author Grzegorz Orczykowski (gorczykowski@soldevelo.com)
  */
-public abstract class AbstractDateWidget extends QuestionWidget implements BinaryWidget {
+public abstract class AbstractDateWidget extends QuestionWidget implements BinaryWidget, Serializable {
 
     protected Button dateButton;
     protected TextView dateTextView;

@@ -16,12 +16,12 @@
 
 package org.odk.collect.android.fragments.dialogs;
 
-import org.javarosa.core.model.FormIndex;
 import org.joda.time.LocalDateTime;
 import org.joda.time.chrono.CopticChronology;
 import org.odk.collect.android.R;
 import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.DateTimeUtils;
+import org.odk.collect.android.widgets.AbstractDateWidget;
 
 import java.util.Arrays;
 
@@ -31,9 +31,9 @@ public class CopticDatePickerDialog extends CustomDatePickerDialog {
 
     private String[] monthsArray;
 
-    public static CopticDatePickerDialog newInstance(FormIndex formIndex, LocalDateTime date, DatePickerDetails datePickerDetails) {
+    public static CopticDatePickerDialog newInstance(AbstractDateWidget widget, LocalDateTime date, DatePickerDetails datePickerDetails) {
         CopticDatePickerDialog dialog = new CopticDatePickerDialog();
-        dialog.setArguments(getArgs(formIndex, date, datePickerDetails));
+        dialog.setArguments(getArgs(widget, date, datePickerDetails));
 
         return dialog;
     }
