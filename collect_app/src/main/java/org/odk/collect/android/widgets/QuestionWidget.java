@@ -14,7 +14,9 @@
 
 package org.odk.collect.android.widgets;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -26,6 +28,9 @@ import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -50,12 +55,15 @@ import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GuidanceHint;
 import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.utilities.ActivityResultHelper;
 import org.odk.collect.android.utilities.AnimateUtils;
+import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
+import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.views.MediaLayout;
 import org.odk.collect.android.widgets.interfaces.ButtonWidget;
@@ -69,6 +77,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import timber.log.Timber;
+
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
 
 public abstract class QuestionWidget
         extends RelativeLayout
@@ -678,5 +689,48 @@ public abstract class QuestionWidget
 
     public int getPlayColor() {
         return playColor;
+    }
+
+    protected Fragment getAuxFragment() {
+        return ActivityResultHelper.getAuxFragment((AppCompatActivity) getContext(), this::onActivityResultReceived);
+    }
+
+    protected void startActivityForResult(Intent intent, int requestCode, @StringRes int errorStringResource) {
+        try {
+            getAuxFragment().startActivityForResult(intent, requestCode);
+        } catch (ActivityNotFoundException e) {
+            if (errorStringResource != -1) {
+                String message = getContext().getString(R.string.activity_not_found, getContext().getString(errorStringResource));
+                ToastUtils.showLongToast(message);
+            }
+        }
+    }
+
+    protected boolean isResultValid(int requestCode, int resultCode, Intent data) {
+        // intent is needed for all requestCodes except of DRAW_IMAGE, ANNOTATE_IMAGE, SIGNATURE_CAPTURE, IMAGE_CAPTURE and HIERARCHY_ACTIVITY
+        if (data == null &&
+                requestCode != ApplicationConstants.RequestCodes.DRAW_IMAGE &&
+                requestCode != ApplicationConstants.RequestCodes.ANNOTATE_IMAGE &&
+                requestCode != ApplicationConstants.RequestCodes.SIGNATURE_CAPTURE &&
+                requestCode != ApplicationConstants.RequestCodes.IMAGE_CAPTURE) {
+            ToastUtils.showLongToast(getContext().getString(R.string.null_intent_value));
+            return false;
+        }
+        return resultCode == RESULT_OK;
+    }
+
+    public void onActivityResultReceived(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_CANCELED || resultCode != RESULT_OK) {
+            // request was canceled...
+            return;
+        }
+
+        if (isResultValid(requestCode, resultCode, data)) {
+            onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // to be overridden by widgets launching external intents
     }
 }
