@@ -70,6 +70,10 @@ public class InstanceServerUploader extends InstanceUploader {
     @Inject
     WebCredentialsUtils webCredentialsUtils;
 
+    private String completeDestinationUrl;
+    private String customUsername;
+    private String customPassword;
+
     public InstanceServerUploader() {
         Collect.getInstance().getComponent().inject(this);
     }
@@ -115,9 +119,14 @@ public class InstanceServerUploader extends InstanceUploader {
                     String id = c.getString(c.getColumnIndex(InstanceColumns._ID));
                     Uri toUpdate = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, id);
 
-                    // Use the app's configured URL unless the form included a submission URL
+                    /*
+                     Submission url precedence/priority:
+                      * Intent submission url
+                      * Form submission URL
+                      * The configured URL in the app settings
+                    */
                     int subIdx = c.getColumnIndex(InstanceColumns.SUBMISSION_URI);
-                    String urlString = c.isNull(subIdx)
+                    String urlString = completeDestinationUrl != null ? completeDestinationUrl : c.isNull(subIdx)
                             ? getServerSubmissionURL() : c.getString(subIdx).trim();
 
                     // add the deviceID to the request...
@@ -455,4 +464,52 @@ public class InstanceServerUploader extends InstanceUploader {
         return serverBase + submissionPath;
     }
 
+    @Override
+    protected void onPostExecute(Outcome outcome) {
+        super.onPostExecute(outcome);
+
+        // Clear temp credentials
+        clearTemporaryCredentials();
+    }
+
+    @Override
+    protected void onCancelled() {
+        clearTemporaryCredentials();
+    }
+
+    public void setCompleteDestinationUrl(String completeDestinationUrl) {
+        setCompleteDestinationUrl(completeDestinationUrl, true);
+    }
+
+    public void setCompleteDestinationUrl(String completeDestinationUrl, boolean clearPreviousConfig) {
+        this.completeDestinationUrl = completeDestinationUrl;
+        if (clearPreviousConfig) {
+            setTemporaryCredentials();
+        }
+    }
+
+    public void setCustomUsername(String customUsername) {
+        this.customUsername = customUsername;
+        setTemporaryCredentials();
+    }
+
+    public void setCustomPassword(String customPassword) {
+        this.customPassword = customPassword;
+        setTemporaryCredentials();
+    }
+
+    private void setTemporaryCredentials() {
+        if (customUsername != null && customPassword != null) {
+            webCredentialsUtils.saveCredentials(completeDestinationUrl, customUsername, customPassword);
+        } else {
+            // In the case for anonymous logins, clear the previous credentials for that host
+            webCredentialsUtils.clearCredentials(completeDestinationUrl);
+        }
+    }
+
+    private void clearTemporaryCredentials() {
+        if (customUsername != null && customPassword != null) {
+            webCredentialsUtils.clearCredentials(completeDestinationUrl);
+        }
+    }
 }
