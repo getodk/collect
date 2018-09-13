@@ -730,6 +730,7 @@ public abstract class QuestionWidget
 
         if (isResultValid(requestCode, resultCode, data)) {
             onActivityResult(requestCode, resultCode, data);
+            getWidgetAnswerListener().refreshCurrentView();
         }
     }
 

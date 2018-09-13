@@ -251,6 +251,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetA
         try {
             Bundle extras = intent.getExtras();
             setDataForFields(extras);
+            refreshCurrentView();
         } catch (JavaRosaException e) {
             Timber.e(e);
             formActivityListener.createErrorDialog(e.getCause().getMessage(), false);
@@ -579,5 +580,10 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetA
     @Override
     public void saveChosenFile(Uri uri) {
         formActivityListener.saveChosenFile(uri);
+    }
+
+    @Override
+    public void refreshCurrentView() {
+        formActivityListener.refreshCurrentView();
     }
 }

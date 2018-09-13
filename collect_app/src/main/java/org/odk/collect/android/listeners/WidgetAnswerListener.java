@@ -9,4 +9,6 @@ public interface WidgetAnswerListener {
     void saveChosenImage(Uri uri);
 
     void saveChosenFile(Uri uri);
+
+    void refreshCurrentView();
 }

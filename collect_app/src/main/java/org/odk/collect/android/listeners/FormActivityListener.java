@@ -13,4 +13,6 @@ public interface FormActivityListener {
     void saveChosenImage(Uri uri);
 
     void saveChosenFile(Uri uri);
+
+    void refreshCurrentView();
 }

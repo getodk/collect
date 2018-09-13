@@ -767,6 +767,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * out of sync due to dialogs and restarts caused by screen orientation
      * changes, so they're resynchronized here.
      */
+    @Override
     public void refreshCurrentView() {
         int event = getFormController().getEvent();
 
