@@ -7,6 +7,9 @@
         <item name="android:textAppearance">@style/TextAppearance.AppCompat</item>
     </style>
 
+    <style name="CustomImageButtonLight" parent="android:Widget.Holo.Light.ImageButton" />
+    <style name="CustomImageButtonDark" parent="android:Widget.Holo.ImageButton" />
+
     <style name="emptyViewStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>

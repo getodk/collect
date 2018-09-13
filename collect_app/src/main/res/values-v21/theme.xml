@@ -3,9 +3,11 @@
 
     <style name="BaseDarkAppTheme.Collect">
         <item name="android:buttonStyle">@style/CustomButtonStyle</item>
+        <item name="imageButtonStyle">@style/CustomImageButtonDark</item>
     </style>
 
     <style name="BaseLightAppTheme.Collect">
         <item name="android:buttonStyle">@style/CustomButtonStyle</item>
+        <item name="imageButtonStyle">@style/CustomImageButtonLight</item>
     </style>
 </resources>
