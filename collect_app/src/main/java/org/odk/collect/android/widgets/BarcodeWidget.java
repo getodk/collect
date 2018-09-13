@@ -14,13 +14,14 @@
 
 package org.odk.collect.android.widgets;
 
-import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
@@ -118,9 +119,7 @@ public class BarcodeWidget extends QuestionWidget implements BinaryWidget {
                         .logInstanceAction(this, "recordBarcode", "click",
                                 getFormEntryPrompt().getIndex());
 
-                waitForData();
-
-                IntentIntegrator intent = new IntentIntegrator((Activity) getContext())
+                IntentIntegrator intent = IntentIntegrator.forSupportFragment(getAuxFragment())
                         .setCaptureActivity(ScannerWithFlashlightActivity.class)
                         .setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES)
                         .setOrientationLocked(false)
@@ -145,6 +144,16 @@ public class BarcodeWidget extends QuestionWidget implements BinaryWidget {
             } else {
                 ToastUtils.showLongToast(R.string.error_front_camera_unavailable);
             }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult barcodeScannerResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (barcodeScannerResult != null && barcodeScannerResult.getContents() != null) {
+            String sb = data.getStringExtra("SCAN_RESULT");
+            setBinaryData(sb);
+            getWidgetAnswerListener().saveAnswersForCurrentScreen(false);
         }
     }
 }
