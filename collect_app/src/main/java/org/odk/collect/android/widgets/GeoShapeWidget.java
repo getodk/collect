@@ -14,7 +14,6 @@
 package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -48,6 +47,8 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryWidget {
 
     public static final String SHAPE_LOCATION = "gp";
     public static final String GOOGLE_MAP_KEY = "google_maps";
+    public static final String GEOSHAPE_RESULTS = "GEOSHAPE_RESULTS";
+
     public SharedPreferences sharedPreferences;
     public String mapSDK;
     private final Button createShapeButton;
@@ -100,7 +101,14 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryWidget {
         if (s.length() != 0) {
             i.putExtra(SHAPE_LOCATION, s);
         }
-        ((Activity) getContext()).startActivityForResult(i, RequestCodes.GEOSHAPE_CAPTURE);
+        startActivityForResult(i, RequestCodes.GEOSHAPE_CAPTURE, -1);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        String gshr = data.getStringExtra(GEOSHAPE_RESULTS);
+        setBinaryData(gshr);
+        getWidgetAnswerListener().saveAnswersForCurrentScreen(false);
     }
 
     private void updateButtonLabelsAndVisibility(boolean dataAvailable) {
@@ -144,7 +152,6 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryWidget {
         requestLocationPermissions((FormEntryActivity) getContext(), new PermissionListener() {
             @Override
             public void granted() {
-                waitForData();
                 startGeoShapeActivity();
             }
 

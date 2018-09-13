@@ -53,6 +53,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import static org.odk.collect.android.utilities.PermissionUtils.checkIfLocationPermissionsGranted;
+import static org.odk.collect.android.widgets.GeoShapeWidget.GEOSHAPE_RESULTS;
 
 /**
  * Version of the GeoShapeGoogleMapActivity that uses the new Maps v2 API and Fragments to enable
@@ -222,7 +223,7 @@ public class GeoShapeGoogleMapActivity extends CollectAbstractActivity implement
         String finalReturnString = generateReturnString();
         Intent i = new Intent();
         i.putExtra(
-                FormEntryActivity.GEOSHAPE_RESULTS,
+                GEOSHAPE_RESULTS,
                 finalReturnString);
         setResult(RESULT_OK, i);
         if (markerArray.size() < 4) {

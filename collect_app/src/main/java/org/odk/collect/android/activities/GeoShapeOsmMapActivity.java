@@ -54,6 +54,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.odk.collect.android.utilities.PermissionUtils.checkIfLocationPermissionsGranted;
+import static org.odk.collect.android.widgets.GeoShapeWidget.GEOSHAPE_RESULTS;
 
 /**
  * Version of the GeoPointMapActivity that uses the new Maps v2 API and Fragments to enable
@@ -408,7 +409,7 @@ public class GeoShapeOsmMapActivity extends CollectAbstractActivity implements I
         finalReturnString = generateReturnString();
         Intent i = new Intent();
         i.putExtra(
-                FormEntryActivity.GEOSHAPE_RESULTS,
+                GEOSHAPE_RESULTS,
                 finalReturnString);
         setResult(RESULT_OK, i);
         if (mapMarkers.size() < 4) {
