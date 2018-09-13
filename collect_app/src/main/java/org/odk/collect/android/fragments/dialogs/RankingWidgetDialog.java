@@ -17,7 +17,6 @@
 package org.odk.collect.android.fragments.dialogs;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog.Builder;
@@ -39,28 +38,26 @@ import org.odk.collect.android.R.string;
 import org.odk.collect.android.adapters.RankingListAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.RankingItemTouchHelperCallback;
+import org.odk.collect.android.widgets.RankingWidget;
 
 import java.io.Serializable;
 import java.util.List;
 
 public class RankingWidgetDialog extends DialogFragment {
 
+    private static final String WIDGET = "widget";
     private static final String VALUES = "values";
     private static final String FORM_INDEX = "form_index";
 
-    private RankingListener listener;
-
     private RankingListAdapter rankingListAdapter;
     private List<String> values;
+    private RankingWidget widget;
     private FormIndex formIndex;
 
-    public interface RankingListener {
-        void onRankingChanged(List<String> values);
-    }
-
-    public static RankingWidgetDialog newInstance(List<String> values, FormIndex formIndex) {
+    public static RankingWidgetDialog newInstance(RankingWidget rankingWidget, List<String> values, FormIndex formIndex) {
         RankingWidgetDialog dialog = new RankingWidgetDialog();
         Bundle bundle = new Bundle();
+        bundle.putSerializable(WIDGET, rankingWidget);
         bundle.putSerializable(VALUES, (Serializable) values);
         bundle.putSerializable(FORM_INDEX, formIndex);
         dialog.setArguments(bundle);
@@ -69,19 +66,15 @@ public class RankingWidgetDialog extends DialogFragment {
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof RankingListener) {
-            listener = (RankingListener) context;
-        }
-    }
-
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        values = (List<String>) (savedInstanceState == null
-                        ? getArguments().getSerializable(VALUES)
-                        : savedInstanceState.getSerializable(VALUES));
+
+        if (savedInstanceState == null) {
+            savedInstanceState = getArguments();
+        }
+
+        widget = (RankingWidget) savedInstanceState.getSerializable(WIDGET);
+        values = (List<String>) savedInstanceState.getSerializable(VALUES);
         formIndex = (FormIndex) (savedInstanceState == null
                         ? getArguments().getSerializable(FORM_INDEX)
                         : savedInstanceState.getSerializable(FORM_INDEX));
@@ -92,7 +85,7 @@ public class RankingWidgetDialog extends DialogFragment {
         return new Builder(getActivity())
                 .setView(setUpRankingLayout(values, formIndex))
                 .setPositiveButton(string.ok, (dialog, id) -> {
-                    listener.onRankingChanged(rankingListAdapter.getValues());
+                    widget.setBinaryData(rankingListAdapter.getValues());
                     dismiss();
                 })
                 .setNegativeButton(string.cancel, (dialog, id) -> dismiss())

@@ -36,10 +36,11 @@ import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RankingWidget extends QuestionWidget implements BinaryWidget {
+public class RankingWidget extends QuestionWidget implements BinaryWidget, Serializable {
 
     private List<SelectChoice> originalItems;
     private List<SelectChoice> savedItems;
@@ -98,9 +99,10 @@ public class RankingWidget extends QuestionWidget implements BinaryWidget {
         if (formController != null) {
             formController.setIndexWaitingForData(getFormEntryPrompt().getIndex());
         }
-        RankingWidgetDialog rankingWidgetDialog = RankingWidgetDialog.newInstance(savedItems == null
-                ? getValues(originalItems)
-                : getValues(savedItems), getFormEntryPrompt().getIndex());
+        RankingWidgetDialog rankingWidgetDialog = RankingWidgetDialog.newInstance(this,
+                savedItems == null
+                        ? getValues(originalItems)
+                        : getValues(savedItems), getFormEntryPrompt().getIndex());
         rankingWidgetDialog.show(((FormEntryActivity) getContext()).getSupportFragmentManager(), "RankingDialog");
     }
 

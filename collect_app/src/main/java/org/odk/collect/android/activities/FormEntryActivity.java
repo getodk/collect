@@ -82,7 +82,6 @@ import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.fragments.ImageLoadingFragment;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
-import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormActivityListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
@@ -155,7 +154,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         FormLoaderListener, FormSavedListener, AdvanceToNextListener,
         OnGestureListener, SavePointListener, NumberPickerDialog.NumberPickerListener,
         DependencyProvider<ActivityAvailability>,
-        RankingWidgetDialog.RankingListener,
         SaveFormIndexTask.SaveFormIndexListener,
         FormActivityListener {
 
@@ -2664,14 +2662,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     ((RangeWidget) qw).setNumberPickerValue(value);
                 }
             }
-        }
-    }
-
-    @Override
-    public void onRankingChanged(List<String> values) {
-        ODKView odkView = getCurrentViewIfODKView();
-        if (odkView != null) {
-            odkView.setBinaryData(values);
         }
     }
 
