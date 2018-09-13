@@ -35,7 +35,7 @@ configurations.all {
 }
 
 task checkAll(type: GradleBuild) {
-    tasks = ['checkCode', 'checkTest']
+    tasks = ['checkCode', 'checkTests']
 }
 
 task checkCode(type: GradleBuild) {
