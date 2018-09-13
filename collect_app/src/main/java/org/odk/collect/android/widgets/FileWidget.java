@@ -22,7 +22,7 @@ public abstract class FileWidget extends QuestionWidget implements BinaryWidget 
         super(context, prompt);
     }
 
-    abstract void deleteFile();
+    public abstract void deleteFile();
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
