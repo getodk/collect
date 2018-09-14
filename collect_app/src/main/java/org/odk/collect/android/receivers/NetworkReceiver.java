@@ -133,14 +133,16 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
             String protocol = (String) settings.get(PreferenceKeys.KEY_PROTOCOL);
 
             if (protocol.equals(context.getString(R.string.protocol_google_sheets))) {
+
                 if (PermissionUtils.checkIfGetAccountsPermissionGranted(context)) {
-                    String googleUsername = (String) settings.get(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
-                    if (googleUsername == null || googleUsername.isEmpty()) {
+                    GoogleAccountsManager accountsManager = new GoogleAccountsManager(Collect.getInstance());
+
+                    String googleUsername = accountsManager.getSelectedAccount();
+                    if (googleUsername.isEmpty()) {
                         // just quit if there's no username
                         running = false;
                         return;
                     }
-                    GoogleAccountsManager accountsManager = new GoogleAccountsManager(Collect.getInstance());
                     accountsManager.getCredential().setSelectedAccountName(googleUsername);
                     instanceGoogleSheetsUploader = new InstanceGoogleSheetsUploader(accountsManager);
                     instanceGoogleSheetsUploader.setUploaderListener(this);
