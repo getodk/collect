@@ -29,6 +29,17 @@ public class WebCredentialsUtils {
         HOST_CREDENTIALS.put(host, new HttpCredentials(username, password));
     }
 
+    public void clearCredentials(@NonNull String url) {
+        if (url.isEmpty()) {
+            return;
+        }
+
+        String host = Uri.parse(url).getHost();
+        if (host != null) {
+            HOST_CREDENTIALS.remove(host);
+        }
+    }
+
     public void saveCredentialsPreferences(String userName, String password) {
         GeneralSharedPreferences.getInstance().save(PreferenceKeys.KEY_USERNAME, userName);
         GeneralSharedPreferences.getInstance().save(PreferenceKeys.KEY_PASSWORD, password);
