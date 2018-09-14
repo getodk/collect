@@ -54,7 +54,7 @@ public class AuthDialogUtility {
 
         String overriddenUrl = null;
         if (url != null) {
-            if (!url.startsWith(webCredentialsUtils.getServerFromPreferences())) {
+            if (!url.startsWith(webCredentialsUtils.getServerUrlFromPreferences())) {
                 overriddenUrl = url;
                 if (overriddenUrl.contains("?deviceID=")) {
                     overriddenUrl = overriddenUrl.substring(0, overriddenUrl.indexOf("?deviceID="));
@@ -71,9 +71,11 @@ public class AuthDialogUtility {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(context.getString(R.string.server_requires_auth));
-        builder.setMessage(context.getString(R.string.server_auth_credentials, overriddenUrl != null ? overriddenUrl : webCredentialsUtils.getServerFromPreferences()));
+        builder.setMessage(context.getString(R.string.server_auth_credentials, overriddenUrl != null ? overriddenUrl : webCredentialsUtils.getServerUrlFromPreferences()));
         builder.setView(dialogView);
-        String finalOverriddenUrl = overriddenUrl;
+
+        String finalOverriddenUrl = (overriddenUrl == null) ? webCredentialsUtils.getServerUrlFromPreferences() : overriddenUrl;
+
         builder.setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -82,14 +84,7 @@ public class AuthDialogUtility {
                 String userNameValue = username.getText().toString();
                 String passwordValue = password.getText().toString();
 
-                // If custom username, password were passed, then we should not save the resulting credentials used
-                if (customUsername != null && customPassword != null) {
-                    webCredentialsUtils.saveCredentials(finalOverriddenUrl != null ? finalOverriddenUrl : webCredentialsUtils.getServerFromPreferences(), userNameValue, passwordValue);
-                } else if (finalOverriddenUrl == null) {
-                    webCredentialsUtils.saveCredentialsPreferences(userNameValue, passwordValue);
-                } else {
-                    webCredentialsUtils.saveCredentials(finalOverriddenUrl, userNameValue, passwordValue);
-                }
+                webCredentialsUtils.saveCredentials(finalOverriddenUrl, userNameValue, passwordValue);
 
                 resultListener.updatedCredentials();
             }
