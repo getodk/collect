@@ -40,6 +40,19 @@ public class WebCredentialsUtils {
         }
     }
 
+    public @Nullable HttpCredentialsInterface getCachedCredentials(@NonNull String url) {
+        if (url.isEmpty()) {
+            return null;
+        }
+
+        String host = Uri.parse(url).getHost();
+        if (host != null) {
+            return HOST_CREDENTIALS.get(host);
+        }
+
+        return null;
+    }
+
     public void saveCredentialsPreferences(String userName, String password) {
         GeneralSharedPreferences.getInstance().save(PreferenceKeys.KEY_USERNAME, userName);
         GeneralSharedPreferences.getInstance().save(PreferenceKeys.KEY_PASSWORD, password);
