@@ -242,6 +242,7 @@
   <string name="ext_search_return_error">Iskalnik je vrnil objekt tipa \'%s\'.</string>
   <string name="ext_import_generic_error">Ne morem uvoziti podatkov iz %1$s. Razlog %2$s</string>
   <string name="ext_import_progress_message">Nalagam podatke iz \'%1$s\'. Počakaj prosim %2$s.</string>
+  <string name="ext_import_cancelled_message">Branje podatkov prekinjeno!</string>
   <string name="ext_import_finalizing_message">Zaključujem prednaložene podatke …</string>
   <string name="ext_import_completed_message">Branje podatkov končano!</string>
   <string name="ext_not_initialized_error">ExternalDataManager ni bil inicializiran.</string>
@@ -386,4 +387,5 @@
   <string name="transport_type_internet">WiFi / mobilno omrežje (priporočeno)</string>
   <string name="transport_type_sms">SMS sporočilo</string>
   <string name="seconds">Sekunde</string>
+  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
 </resources>

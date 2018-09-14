@@ -30,7 +30,7 @@ public class ApplicationConstants {
 
     public static final String[] TRANSLATIONS_AVAILABLE = {"af", "am", "ar", "bn",
             "ca", "cs", "de", "en", "es", "et", "fa", "fi", "fr", "ha",
-            "hi", "hu", "in", "it", "ja", "ka", "km", "lo_LA", "lt", "mg", "ml", "mr",
+            "hi", "hu", "in", "it", "ja", "ka", "km", "ln", "lo_LA", "lt", "mg", "ml", "mr",
             "my", "nb", "ne_NP", "nl", "no", "pl", "ps", "pt", "ro", "ru", "si", "sl", "so",
             "sq", "sv_SE", "sw", "sw_KE", "ta", "th_TH", "ti", "tl", "tr", "uk", "ur",
             "ur_PK", "uz", "vi", "zh", "zu"};
