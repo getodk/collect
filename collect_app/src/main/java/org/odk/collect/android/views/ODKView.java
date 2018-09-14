@@ -32,6 +32,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
@@ -74,7 +75,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  * @author carlhartung
  */
 @SuppressLint("ViewConstructor")
-public class ODKView extends NestedScrollView implements OnLongClickListener {
+public class ODKView extends FrameLayout implements OnLongClickListener {
 
     private final LinearLayout view;
     private final LinearLayout.LayoutParams layout;
@@ -85,6 +86,8 @@ public class ODKView extends NestedScrollView implements OnLongClickListener {
     public ODKView(Context context, final FormEntryPrompt[] questionPrompts,
             FormEntryCaption[] groups, boolean advancingPage) {
         super(context);
+
+        inflate(getContext(), R.layout.nested_scroll_view, this); // keep in an xml file to enable the vertical scrollbar
 
         widgets = new ArrayList<>();
 
@@ -207,7 +210,7 @@ public class ODKView extends NestedScrollView implements OnLongClickListener {
             view.addView(qw, layout);
         }
 
-        addView(view);
+        ((NestedScrollView) findViewById(R.id.odk_view_container)).addView(view);
 
         // see if there is an autoplay option.
         // Only execute it during forward swipes through the form

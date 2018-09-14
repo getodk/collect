@@ -152,7 +152,7 @@ public class SelectOneListAdapter extends RecyclerView.Adapter<SelectOneListAdap
         radioButton.setTag(items.indexOf(filteredItems.get(index)));
         radioButton.setEnabled(!widget.getFormEntryPrompt().isReadOnly());
         radioButton.setGravity(isRTL() ? Gravity.END : Gravity.START);
-        radioButton.setOnLongClickListener((ODKView) widget.getParent().getParent());
+        radioButton.setOnLongClickListener((ODKView) widget.getParent().getParent().getParent());
         radioButton.setOnClickListener(this);
         radioButton.setOnCheckedChangeListener(this);
 
