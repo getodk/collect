@@ -26,7 +26,7 @@ import timber.log.Timber;
 
 public class ImageLoadingTask extends AsyncTask<Uri, Void, File> {
 
-    private WeakReference<QuestionWidget> questionWidget;
+    private final WeakReference<QuestionWidget> questionWidget;
     private WeakReference<FormEntryActivity> formEntryActivity;
 
     public ImageLoadingTask(QuestionWidget questionWidget, FormEntryActivity formEntryActivity) {
