@@ -118,6 +118,7 @@ import org.odk.collect.android.widgets.DateTimeWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.RangeWidget;
 import org.odk.collect.android.widgets.StringWidget;
+import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -631,7 +632,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     @Override
-    public void saveChosenImage(Uri uri) {
+    public void saveChosenImage(QuestionWidget questionWidget, Uri uri) {
         /*
          * We have a saved image somewhere, but we really want it to be in:
          * /sdcard/odk/instances/[current instnace]/something.jpg so we move
@@ -643,7 +644,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         ProgressDialogFragment.newInstance(getString(R.string.please_wait))
                 .show(getSupportFragmentManager(), ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
 
-        imageLoadingFragment.beginImageLoadingTask(uri);
+        imageLoadingFragment.beginImageLoadingTask(questionWidget, uri);
     }
 
     @Override
@@ -677,9 +678,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * This could support retrieving file from Google Drive.
      */
     @Override
-    public void saveChosenFile(Uri uri) {
+    public void saveChosenFile(QuestionWidget questionWidget, Uri uri) {
         showDialog(SAVING_DIALOG);
-        Runnable saveFileRunnable = () -> saveFileFromUri(uri);
+        Runnable saveFileRunnable = () -> saveFileFromUri(questionWidget, uri);
         new Thread(saveFileRunnable).start();
 
     }
@@ -690,9 +691,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * and if it's from Google Drive and not cached yet, we'll retrieve it using network.
      * This may take a long time.
      *
+     *
+     * @param questionWidget widget containing the question
      * @param selectedFile uri of the selected audio
      */
-    private void saveFileFromUri(Uri selectedFile) {
+    private void saveFileFromUri(QuestionWidget questionWidget, Uri selectedFile) {
         String extension = ContentResolverHelper.getFileExtensionFromUri(selectedFile);
 
         String instanceFolder = Collect.getInstance().getFormController()
@@ -708,10 +711,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 FileUtils.copyFile(chosenFile, newFile);
                 runOnUiThread(() -> {
                     dismissDialog(SAVING_DIALOG);
-                    if (getCurrentViewIfODKView() != null) {
-                        getCurrentViewIfODKView().setBinaryData(newFile);
-                        getCurrentViewIfODKView().saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                    }
+                    ((BinaryWidget) questionWidget).setBinaryData(newFile);
+                    questionWidget.getWidgetAnswerListener().saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                     refreshCurrentView();
                 });
             } else {
@@ -728,22 +729,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 ToastUtils.showLongToastInMiddle(R.string.gdrive_connection_exception);
             });
         }
-    }
-
-    public QuestionWidget getWidgetWaitingForBinaryData() {
-        QuestionWidget questionWidget = null;
-        ODKView odkView = (ODKView) currentView;
-
-        if (odkView != null) {
-            for (QuestionWidget qw : odkView.getWidgets()) {
-                if (qw.isWaitingForData()) {
-                    questionWidget = qw;
-                }
-            }
-        } else {
-            Timber.e("currentView returned null.");
-        }
-        return questionWidget;
     }
 
     /**

@@ -16,7 +16,8 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.views.ODKView;
+import org.odk.collect.android.widgets.QuestionWidget;
+import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -25,9 +26,11 @@ import timber.log.Timber;
 
 public class ImageLoadingTask extends AsyncTask<Uri, Void, File> {
 
+    private WeakReference<QuestionWidget> questionWidget;
     private WeakReference<FormEntryActivity> formEntryActivity;
 
-    public ImageLoadingTask(FormEntryActivity formEntryActivity) {
+    public ImageLoadingTask(QuestionWidget questionWidget, FormEntryActivity formEntryActivity) {
+        this.questionWidget = new WeakReference<>(questionWidget);
         onAttach(formEntryActivity);
     }
 
@@ -57,7 +60,7 @@ public class ImageLoadingTask extends AsyncTask<Uri, Void, File> {
                     if (chosenImage != null) {
                         final File newImage = new File(destImagePath);
                         FileUtils.copyFile(chosenImage, newImage);
-                        ImageConverter.execute(newImage.getPath(), formEntryActivity.get().getWidgetWaitingForBinaryData(), formEntryActivity.get());
+                        ImageConverter.execute(newImage.getPath(), questionWidget.get(), formEntryActivity.get());
                         return newImage;
                     } else {
                         Timber.e("Could not receive chosen image");
@@ -86,12 +89,9 @@ public class ImageLoadingTask extends AsyncTask<Uri, Void, File> {
             ((DialogFragment) prev).dismiss();
         }
 
-        ODKView odkView = formEntryActivity.get().getCurrentViewIfODKView();
-        if (odkView != null) {
-            odkView.setBinaryData(result);
-        }
-        
-        formEntryActivity.get().saveAnswersForCurrentScreen(FormEntryActivity.DO_NOT_EVALUATE_CONSTRAINTS);
+        ((BinaryWidget) questionWidget.get()).setBinaryData(result);
+
+        formEntryActivity.get().saveAnswersForCurrentScreen(false);
         formEntryActivity.get().refreshCurrentView();
     }
 }

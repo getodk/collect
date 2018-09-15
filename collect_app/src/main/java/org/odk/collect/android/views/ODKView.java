@@ -61,7 +61,6 @@ import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.WidgetFactory;
-import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -351,34 +350,6 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetA
         }
     }
 
-    /**
-     * Called when another activity returns information to answer this question.
-     */
-    public void setBinaryData(Object answer) {
-        boolean set = false;
-        for (QuestionWidget q : widgets) {
-            if (q instanceof BinaryWidget) {
-                BinaryWidget binaryWidget = (BinaryWidget) q;
-                if (binaryWidget.isWaitingForData()) {
-                    try {
-                        binaryWidget.setBinaryData(answer);
-                        binaryWidget.cancelWaitingForData();
-                    } catch (Exception e) {
-                        Timber.e(e);
-                        ToastUtils.showLongToast(getContext().getString(R.string.error_attaching_binary_file,
-                                        e.getMessage()));
-                    }
-                    set = true;
-                    break;
-                }
-            }
-        }
-
-        if (!set) {
-            Timber.w("Attempting to return data to a widget or set of widgets not looking for data");
-        }
-    }
-
     public void setDataForFields(Bundle bundle) throws JavaRosaException {
         if (bundle == null) {
             return;
@@ -556,13 +527,13 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetA
     }
 
     @Override
-    public void saveChosenImage(Uri uri) {
-        formActivityListener.saveChosenImage(uri);
+    public void saveChosenImage(QuestionWidget questionWidget, Uri uri) {
+        formActivityListener.saveChosenImage(questionWidget, uri);
     }
 
     @Override
-    public void saveChosenFile(Uri uri) {
-        formActivityListener.saveChosenFile(uri);
+    public void saveChosenFile(QuestionWidget questionWidget, Uri uri) {
+        formActivityListener.saveChosenFile(questionWidget, uri);
     }
 
     @Override

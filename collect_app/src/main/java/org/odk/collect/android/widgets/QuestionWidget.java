@@ -50,6 +50,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ActivityLogger;
+import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.listeners.WidgetAnswerListener;
 import org.odk.collect.android.logic.FormController;
@@ -591,37 +592,30 @@ public abstract class QuestionWidget
         return imageView;
     }
 
-    //region Data waiting
-
-    @Override
-    public final void cancelWaitingForData() {
-        Collect collect = Collect.getInstance();
-        if (collect == null) {
-            throw new IllegalStateException("Collect application instance is null.");
-        }
-
-        FormController formController = collect.getFormController();
+    /**
+     * It's needed only for external choices. Everything works well and
+     * out of the box when we use internal choices instead
+     */
+    protected void clearNextLevelsOfCascadingSelect() {
+        FormController formController = Collect.getInstance().getFormController();
         if (formController == null) {
             return;
         }
 
-        formController.setIndexWaitingForData(null);
-    }
-
-    @Override
-    public final boolean isWaitingForData() {
-        Collect collect = Collect.getInstance();
-        if (collect == null) {
-            throw new IllegalStateException("Collect application instance is null.");
+        if (formController.currentCaptionPromptIsQuestion()) {
+            try {
+                FormIndex startFormIndex = formController.getQuestionPrompt().getIndex();
+                formController.stepToNextScreenEvent();
+                while (formController.currentCaptionPromptIsQuestion()
+                        && formController.getQuestionPrompt().getFormElement().getAdditionalAttribute(null, "query") != null) {
+                    formController.saveAnswer(formController.getQuestionPrompt().getIndex(), null);
+                    formController.stepToNextScreenEvent();
+                }
+                formController.jumpToIndex(startFormIndex);
+            } catch (JavaRosaException e) {
+                Timber.d(e);
+            }
         }
-
-        FormController formController = collect.getFormController();
-        if (formController == null) {
-            return false;
-        }
-
-        FormIndex index = getFormEntryPrompt().getIndex();
-        return index.equals(formController.getIndexWaitingForData());
     }
 
     //region Accessors
@@ -732,7 +726,7 @@ public abstract class QuestionWidget
         this.listener = listener;
     }
 
-    protected WidgetAnswerListener getWidgetAnswerListener() {
+    public WidgetAnswerListener getWidgetAnswerListener() {
         return listener;
     }
 }

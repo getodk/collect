@@ -52,7 +52,7 @@ public abstract class FileWidget extends QuestionWidget implements BinaryWidget 
             case ApplicationConstants.RequestCodes.ARBITRARY_FILE_CHOOSER:
             case ApplicationConstants.RequestCodes.AUDIO_CHOOSER:
             case ApplicationConstants.RequestCodes.VIDEO_CHOOSER:
-                getWidgetAnswerListener().saveChosenFile(data.getData());
+                getWidgetAnswerListener().saveChosenFile(this, data.getData());
                 break;
             case ApplicationConstants.RequestCodes.DRAW_IMAGE:
             case ApplicationConstants.RequestCodes.ANNOTATE_IMAGE:
@@ -61,7 +61,7 @@ public abstract class FileWidget extends QuestionWidget implements BinaryWidget 
                 saveCapturedImage();
                 break;
             case ApplicationConstants.RequestCodes.IMAGE_CHOOSER:
-                getWidgetAnswerListener().saveChosenImage(data.getData());
+                getWidgetAnswerListener().saveChosenImage(this, data.getData());
                 break;
         }
     }

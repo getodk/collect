@@ -29,10 +29,8 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
-import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 
@@ -95,10 +93,6 @@ public class RankingWidget extends QuestionWidget implements BinaryWidget, Seria
 
     @Override
     public void onButtonClick(int buttonId) {
-        FormController formController = Collect.getInstance().getFormController();
-        if (formController != null) {
-            formController.setIndexWaitingForData(getFormEntryPrompt().getIndex());
-        }
         RankingWidgetDialog rankingWidgetDialog = RankingWidgetDialog.newInstance(this,
                 savedItems == null
                         ? getValues(originalItems)

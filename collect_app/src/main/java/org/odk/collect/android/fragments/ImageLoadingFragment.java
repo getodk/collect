@@ -8,14 +8,15 @@ import android.support.annotation.Nullable;
 
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.tasks.ImageLoadingTask;
+import org.odk.collect.android.widgets.QuestionWidget;
 
 public class ImageLoadingFragment extends Fragment {
 
     private ImageLoadingTask imageLoadingTask;
     private FormEntryActivity formEntryActivity;
 
-    public void beginImageLoadingTask(Uri imageURi) {
-        imageLoadingTask = new ImageLoadingTask(formEntryActivity);
+    public void beginImageLoadingTask(QuestionWidget questionWidget, Uri imageURi) {
+        imageLoadingTask = new ImageLoadingTask(questionWidget, formEntryActivity);
         imageLoadingTask.execute(imageURi);
     }
 

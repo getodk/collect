@@ -3,6 +3,7 @@ package org.odk.collect.android.listeners;
 import android.net.Uri;
 
 import org.javarosa.core.model.FormIndex;
+import org.odk.collect.android.widgets.QuestionWidget;
 
 public interface FormActivityListener {
 
@@ -10,9 +11,9 @@ public interface FormActivityListener {
 
     void createErrorDialog(String message, boolean shouldExit);
 
-    void saveChosenImage(Uri uri);
+    void saveChosenImage(QuestionWidget questionWidget, Uri uri);
 
-    void saveChosenFile(Uri uri);
+    void saveChosenFile(QuestionWidget questionWidget, Uri uri);
 
     void refreshCurrentView();
 }
