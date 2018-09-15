@@ -527,11 +527,6 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetA
     }
 
     @Override
-    public void saveChosenImage(QuestionWidget questionWidget, Uri uri) {
-        formActivityListener.saveChosenImage(questionWidget, uri);
-    }
-
-    @Override
     public void saveChosenFile(QuestionWidget questionWidget, Uri uri) {
         formActivityListener.saveChosenFile(questionWidget, uri);
     }

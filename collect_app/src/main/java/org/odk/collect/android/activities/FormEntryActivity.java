@@ -79,9 +79,7 @@ import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.exception.GDriveConnectionException;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataManager;
-import org.odk.collect.android.fragments.ImageLoadingFragment;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
-import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormActivityListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
@@ -108,13 +106,16 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.TimerLogger;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.views.ODKView;
+import org.odk.collect.android.widgets.BaseImageWidget;
 import org.odk.collect.android.widgets.DateTimeWidget;
+import org.odk.collect.android.widgets.ImageWebViewWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.RangeWidget;
 import org.odk.collect.android.widgets.StringWidget;
@@ -178,8 +179,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     public static final String KEY_SUCCESS = "success";
     public static final String KEY_ERROR = "error";
     private static final String KEY_SAVE_NAME = "saveName";
-
-    private static final String TAG_IMAGE_LOADING_FRAGMENT = "image_loading_fragment";
 
     // Identifies the gp of the form used to launch form entry
     public static final String KEY_FORMPATH = "formpath";
@@ -247,8 +246,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
-    ImageLoadingFragment imageLoadingFragment;
-
     public void allowSwiping(boolean doSwipe) {
         this.doSwipe = doSwipe;
     }
@@ -309,13 +306,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             beenSwiped = true;
             showPreviousView();
         });
-
-        if (savedInstanceState == null) {
-            imageLoadingFragment = new ImageLoadingFragment();
-            getFragmentManager().beginTransaction().add(imageLoadingFragment, TAG_IMAGE_LOADING_FRAGMENT).commit();
-        } else {
-            imageLoadingFragment = (ImageLoadingFragment) getFragmentManager().findFragmentByTag(TAG_IMAGE_LOADING_FRAGMENT);
-        }
 
         requestStoragePermissions(this, new PermissionListener() {
             @Override
@@ -620,22 +610,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     @Override
-    public void saveChosenImage(QuestionWidget questionWidget, Uri uri) {
-        /*
-         * We have a saved image somewhere, but we really want it to be in:
-         * /sdcard/odk/instances/[current instnace]/something.jpg so we move
-         * it there before inserting it into the content provider. Once the
-         * android image capture bug gets fixed, (read, we move on from
-         * Android 1.6) we want to handle images the audio and video
-         */
-
-        ProgressDialogFragment.newInstance(getString(R.string.please_wait))
-                .show(getSupportFragmentManager(), ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
-
-        imageLoadingFragment.beginImageLoadingTask(questionWidget, uri);
-    }
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         FormController formController = getFormController();
@@ -685,18 +659,19 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      */
     private void saveFileFromUri(QuestionWidget questionWidget, Uri selectedFile) {
         String extension = ContentResolverHelper.getFileExtensionFromUri(selectedFile);
+        String instanceFolder = getFormController().getInstanceFile().getParent();
+        String destPath = instanceFolder + File.separator + System.currentTimeMillis() + extension;
 
-        String instanceFolder = Collect.getInstance().getFormController()
-                .getInstanceFile().getParent();
-        String destPath = instanceFolder + File.separator
-                + System.currentTimeMillis() + extension;
-
-        File chosenFile;
         try {
-            chosenFile = MediaUtils.getFileFromUri(this, selectedFile, Images.Media.DATA);
+            File chosenFile = MediaUtils.getFileFromUri(this, selectedFile, Images.Media.DATA);
             if (chosenFile != null) {
                 final File newFile = new File(destPath);
                 FileUtils.copyFile(chosenFile, newFile);
+
+                if (questionWidget instanceof BaseImageWidget || questionWidget instanceof ImageWebViewWidget) {
+                    ImageConverter.execute(newFile.getPath(), questionWidget, this);
+                }
+
                 runOnUiThread(() -> {
                     dismissDialog(SAVING_DIALOG);
                     ((BinaryWidget) questionWidget).setBinaryData(newFile);
