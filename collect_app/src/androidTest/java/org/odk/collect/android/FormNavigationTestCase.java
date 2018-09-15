@@ -104,7 +104,7 @@ public class FormNavigationTestCase {
         } catch (IOException e) {
             Timber.i(e);
         }
-        FormLoaderTask formLoaderTask = new FormLoaderTask(formPath(formName), null, null);
+        FormLoaderTask formLoaderTask = new FormLoaderTask(formPath(formName), null);
         formLoaderTask.setFormLoaderListener(new FormLoaderListener() {
             @Override
             public void loadingComplete(FormLoaderTask task, FormDef fd) {

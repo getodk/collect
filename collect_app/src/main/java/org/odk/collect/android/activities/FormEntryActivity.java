@@ -192,7 +192,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     public static final String KEY_INSTANCEPATH = "instancepath";
     public static final String KEY_XPATH = "xpath";
-    public static final String KEY_XPATH_WAITING_FOR_DATA = "xpathwaiting";
 
     // Tracks whether we are autosaving
     public static final String KEY_AUTO_SAVED = "autosaved";
@@ -242,7 +241,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private boolean doSwipe = true;
     private String instancePath;
     private String startingXPath;
-    private String waitingXPath;
     private boolean newForm = true;
     private boolean onResumeWasCalledWithoutPermissions;
     private boolean readPhoneStatePermissionRequestNeeded;
@@ -364,11 +362,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 startingXPath = savedInstanceState.getString(KEY_XPATH);
                 Timber.i("startingXPath is: %s", startingXPath);
             }
-            if (savedInstanceState.containsKey(KEY_XPATH_WAITING_FOR_DATA)) {
-                waitingXPath = savedInstanceState
-                        .getString(KEY_XPATH_WAITING_FOR_DATA);
-                Timber.i("waitingXPath is: %s", waitingXPath);
-            }
             if (savedInstanceState.containsKey(NEWFORM)) {
                 newForm = savedInstanceState.getBoolean(NEWFORM, true);
             }
@@ -411,7 +404,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     // we need to launch the form loader to load the form
                     // controller...
                     formLoaderTask = new FormLoaderTask(instancePath,
-                            startingXPath, waitingXPath);
+                            startingXPath);
                     Collect.getInstance().getActivityLogger()
                             .logAction(this, "formReloaded", formPath);
                     // TODO: this doesn' work (dialog does not get removed):
@@ -554,7 +547,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             return;
         }
 
-        formLoaderTask = new FormLoaderTask(instancePath, null, null);
+        formLoaderTask = new FormLoaderTask(instancePath, null);
         Collect.getInstance().getActivityLogger()
                 .logAction(this, "formLoaded", formPath);
         showDialog(PROGRESS_DIALOG);
@@ -608,11 +601,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
             outState.putString(KEY_XPATH,
                     formController.getXPath(formController.getFormIndex()));
-            FormIndex waiting = formController.getIndexWaitingForData();
-            if (waiting != null) {
-                outState.putString(KEY_XPATH_WAITING_FOR_DATA,
-                        formController.getXPath(waiting));
-            }
             // save the instance to a temp path...
             nonblockingCreateSavePointData();
         }
