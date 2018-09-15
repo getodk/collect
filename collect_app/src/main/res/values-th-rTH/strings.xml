@@ -48,7 +48,6 @@
   <string name="enter_data">กรอกแบบสำรวจใหม่</string>
   <string name="enter_data_button">กรอกแบบสำรวจใหม่</string>
   <string name="error_occured">มีข้อผิดพลาดเกิดขึ้น</string>
-  <string name="error_attaching_binary_file">เกิดข้อผิดพลาดระหว่างแนบไฟล์มีเดีย: %s</string>
   <string name="file_deleted_error">ขออภัย ไม่สามารถลบแบบสำรวจ %1$s จาก %2$s ที่เลือกไว้ได้</string>
   <string name="file_deleted_ok">ลบแบบสำรวจ %s เรียบร้อยแล้ว</string>
   <string name="file_delete_in_progress">ขออภัย กำลังทำการลบแบบสำรวจ</string>

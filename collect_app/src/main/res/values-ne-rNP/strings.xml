@@ -55,7 +55,6 @@
   <string name="enter_data">खाली फारम भर्न</string>
   <string name="enter_data_button">खाली फारम भर्न</string>
   <string name="error_occured">गल्ती भयो </string>
-  <string name="error_attaching_binary_file">मिडिया अट्याच गर्दा  त्रुटि भयो: %s</string>
   <string name="fetching_file">%1$s.\n\nफारम प्राप्त गरिदै | %3$s फारम(हरू) मध्येको %2$s </string>
   <string name="file_deleted_error">माफ गर्नुहोस्, छानिएका %2$s मध्येको %1$s फारम(हरु) डिलिट गर्न सकिएन ! </string>
   <string name="file_deleted_ok">%s फारम (हरु) डिलिट भयो !</string>

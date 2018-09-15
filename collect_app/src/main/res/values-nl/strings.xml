@@ -56,7 +56,6 @@
   <string name="enter_data">Nieuw formulier invullen</string>
   <string name="enter_data_button">Nieuw formulier</string>
   <string name="error_occured">Fout opgetreden</string>
-  <string name="error_attaching_binary_file">Er is een fout opgetreden bij het koppelen van media: %s</string>
   <string name="file_deleted_error">Sorry, %1$s van de %2$s geselecteerde formulier(en) kon niet worden verwijderd!</string>
   <string name="file_deleted_ok">%s formulier(en) verwijderd!</string>
   <string name="file_delete_in_progress">Sorry, er is nog een verwijder opdracht actief!</string>

@@ -57,7 +57,6 @@
   <string name="enter_data">Заполнение бланка</string>
   <string name="enter_data_button">ЗАПОЛНИТЬ БЛАНК</string>
   <string name="error_occured">Произошла ошибка</string>
-  <string name="error_attaching_binary_file">Произошла ошибка при добавлении файла: %s</string>
   <string name="fetching_file">Загружаю %1$s.\n\nБланк опросника %2$s из %3$s.</string>
   <string name="file_deleted_error">Не удалось удалить %1$s бланк(а/ов) из %2$s</string>
   <string name="file_deleted_ok">Бланк опросника успешно удалён: %s шт.</string>

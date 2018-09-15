@@ -51,7 +51,6 @@
   <string name="enter_data">Isi formulir kosong</string>
   <string name="enter_data_button">Isi formulir kosong</string>
   <string name="error_occured">Terjadi kesalahan</string>
-  <string name="error_attaching_binary_file">Terjadi kesalahan saat memasukkan berkas media: %s</string>
   <string name="fetching_file">Mengambil %1$s.\n\nFormulir %2$s dari %3$s formulir(s).</string>
   <string name="file_deleted_error">Maaf, %1$s dari %2$s formulir terpilih, gagal dihapus!</string>
   <string name="file_deleted_ok">%s formulir telah berhasil dihapus!</string>

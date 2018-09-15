@@ -50,7 +50,6 @@
   <string name="enter_data">रिक्त फॉर्म भरा</string>
   <string name="enter_data_button">रिक्त फॉर्म भरा</string>
   <string name="error_occured">त्रुटी झाले</string>
-  <string name="error_attaching_binary_file">मिडिया संलग्न करताना त्रुटी आली: 1%s</string>
   <string name="fetching_file"> %1$s  मिळवत आहे. \n\nफॉर्म %2$s च्या%3$s फॉर्म(स) </string>
   <string name="file_deleted_error">क्षमस्व, %1$s पैकी फॉर्म(स) %2$s नी हटविण्यात अयशस्वी!</string>
   <string name="file_deleted_ok">%s फॉर्म(स) यशस्वीरित्या हटविले!</string>

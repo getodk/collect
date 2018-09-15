@@ -48,7 +48,6 @@
   <string name="enter_data">Fyll ut skjema</string>
   <string name="enter_data_button">Fyll ut skjema</string>
   <string name="error_occured">Det er oppstatt en feil</string>
-  <string name="error_attaching_binary_file">En feil oppstod under lagring av media: %s</string>
   <string name="fetching_file">Henter %1$s.\n\nSkjema %2$s av %3$s skjema(er).</string>
   <string name="file_deleted_error">Beklager, %1$s av %2$s utvalgte skjema(er) sletting mislyktes!</string>
   <string name="file_deleted_ok">%s skjema(er) er slettet!</string>

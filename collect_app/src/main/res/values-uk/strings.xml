@@ -58,7 +58,6 @@
   <string name="enter_data">Заповнити анкету</string>
   <string name="enter_data_button">Заповнити анкету</string>
   <string name="error_occured">Сталась помилка</string>
-  <string name="error_attaching_binary_file">При додаванні медіафайлу: %s сталась помилка</string>
   <string name="fetching_file">Отримую %1$s.\n\nанкету %2$s з %3$s анкет(и).</string>
   <string name="file_deleted_error">Вибачте, %1$s з %2$s обраних(ої) анкет(и) не вдалось видалити!</string>
   <string name="file_deleted_ok">%s анкет(у) успішно видалено!</string>

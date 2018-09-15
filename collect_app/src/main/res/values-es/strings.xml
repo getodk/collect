@@ -58,7 +58,6 @@
   <string name="enter_data">Llenar Nuevo Formulario</string>
   <string name="enter_data_button">Llenar Nuevo Formulario</string>
   <string name="error_occured">Se ha producido un error</string>
-  <string name="error_attaching_binary_file">Error detectado al conectar medio: %s</string>
   <string name="fetching_file">Obteniendo %1$s.\n\nFormulario %2$s de %3$s formulario(s).</string>
   <string name="file_deleted_error">¡%1$s de %2$s formulario(s) seleccionados no se borraron!</string>
   <string name="file_deleted_ok">¡%s formulario(s) se borraron correctamente!</string>

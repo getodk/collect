@@ -47,7 +47,6 @@
   <string name="enter_data">ባዶዉን ቅጽ ሙላ</string>
   <string name="enter_data_button">ባዶ ቅጽ መሙላት</string>
   <string name="error_occured">ስህተት ተከስቷል</string>
-  <string name="error_attaching_binary_file">ሚደያዉን በማያያዝ ላይ ስህተት ተከስቷል 1 %s</string>
   <string name="file_deleted_error">እናዝናለን፣ የተመረጠው 1 %1$s የ 2 %2$s ቅጽ (ዎች) መሰረዝ አልተሳካም!</string>
   <string name="file_deleted_ok">1 %s ቅጽ (ዎች) በተሳካ ሁኔታ ተሰርዘዋል!</string>
   <string name="file_delete_in_progress">ይቅርታ፣ ቅጽ የመሰረዝ እርምጃ አስቀድሞ በሂደት ላይ ነው!</string>
