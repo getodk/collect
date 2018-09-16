@@ -815,6 +815,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * @return false if any error occurs while saving (constraint violated,
      * etc...), true otherwise.
      */
+    @Override
     public boolean saveAnswersForCurrentScreen(boolean evaluateConstraints) {
         FormController formController = getFormController();
         // only try to save if the current event is a question or a field-list group
@@ -1439,7 +1440,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     /**
      * Creates and displays a dialog displaying the violated constraint.
      */
-    @Override
     public void createConstraintToast(FormIndex index, int saveStatus) {
         FormController formController = getFormController();
         String constraintText;

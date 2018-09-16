@@ -36,7 +36,6 @@ public abstract class FileWidget extends QuestionWidget implements BinaryWidget 
             case ApplicationConstants.RequestCodes.VIDEO_CAPTURE:
                 Uri mediaUri = data.getData();
                 setBinaryData(mediaUri);
-                getWidgetAnswerListener().saveAnswersForCurrentScreen(false);
 
                 String filePath = MediaUtils.getDataColumn(getContext(), mediaUri, null, null);
                 if (filePath != null) {
@@ -81,7 +80,6 @@ public abstract class FileWidget extends QuestionWidget implements BinaryWidget 
         Uri uri = FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", fi);
         FileUtils.revokeFileReadWritePermission(getContext(), uri);
         saveImageToInstanceFolder(fi);
-        getWidgetAnswerListener().saveAnswersForCurrentScreen(false);
     }
 
     protected void saveImageToInstanceFolder(File imageFile) {

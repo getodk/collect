@@ -197,6 +197,5 @@ public class RankingWidget extends QuestionWidget implements BinaryWidget {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         List<String> rankingResult = data.getStringArrayListExtra(RANKING_RESULT);
         setBinaryData(rankingResult);
-        getWidgetAnswerListener().saveAnswersForCurrentScreen(false);
     }
 }

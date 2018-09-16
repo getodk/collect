@@ -153,7 +153,6 @@ public class BarcodeWidget extends QuestionWidget implements BinaryWidget {
         if (barcodeScannerResult != null && barcodeScannerResult.getContents() != null) {
             String sb = data.getStringExtra("SCAN_RESULT");
             setBinaryData(sb);
-            getWidgetAnswerListener().saveAnswersForCurrentScreen(false);
         }
     }
 }

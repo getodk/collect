@@ -176,7 +176,6 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
         if (exists) {
             Object externalValue = data.getExtras().get(key);
             setBinaryData(externalValue);
-            getWidgetAnswerListener().saveAnswersForCurrentScreen(false);
         }
     }
 

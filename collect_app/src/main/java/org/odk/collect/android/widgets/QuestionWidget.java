@@ -82,6 +82,7 @@ import timber.log.Timber;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
+import static org.odk.collect.android.activities.FormEntryActivity.DO_NOT_EVALUATE_CONSTRAINTS;
 
 public abstract class QuestionWidget
         extends RelativeLayout
@@ -709,6 +710,7 @@ public abstract class QuestionWidget
 
         if (isResultValid(requestCode, resultCode, data)) {
             onActivityResult(requestCode, resultCode, data);
+            getWidgetAnswerListener().saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
             getWidgetAnswerListener().refreshCurrentView();
         }
     }

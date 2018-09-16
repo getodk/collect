@@ -339,6 +339,5 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         String sl = data.getStringExtra(LOCATION_RESULT);
         setBinaryData(sl);
-        getWidgetAnswerListener().saveAnswersForCurrentScreen(false);
     }
 }

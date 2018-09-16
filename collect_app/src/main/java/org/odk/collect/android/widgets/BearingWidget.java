@@ -179,6 +179,5 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         String bearing = data.getStringExtra(BEARING_RESULT);
         setBinaryData(bearing);
-        getWidgetAnswerListener().saveAnswersForCurrentScreen(false);
     }
 }

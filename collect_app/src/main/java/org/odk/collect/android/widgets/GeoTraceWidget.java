@@ -115,8 +115,6 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         String traceExtra = data.getStringExtra(GEOTRACE_RESULTS);
         setBinaryData(traceExtra);
-        getWidgetAnswerListener().saveAnswersForCurrentScreen(false);
-
     }
 
     private void updateButtonLabelsAndVisibility(boolean dataAvailable) {

@@ -108,7 +108,6 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryWidget {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         String gshr = data.getStringExtra(GEOSHAPE_RESULTS);
         setBinaryData(gshr);
-        getWidgetAnswerListener().saveAnswersForCurrentScreen(false);
     }
 
     private void updateButtonLabelsAndVisibility(boolean dataAvailable) {

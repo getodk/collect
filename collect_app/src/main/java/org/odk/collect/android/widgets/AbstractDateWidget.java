@@ -151,6 +151,5 @@ public abstract class AbstractDateWidget extends QuestionWidget implements Binar
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         LocalDateTime dateTime = (LocalDateTime) data.getSerializableExtra(DATE_RESULT);
         setBinaryData(dateTime);
-        getWidgetAnswerListener().saveAnswersForCurrentScreen(false);
     }
 }

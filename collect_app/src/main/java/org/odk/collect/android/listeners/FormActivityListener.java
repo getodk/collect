@@ -14,4 +14,6 @@ public interface FormActivityListener {
     void saveChosenFile(QuestionWidget questionWidget, Uri uri);
 
     void refreshCurrentView();
+
+    boolean saveAnswersForCurrentScreen(boolean evaluateConstraints);
 }

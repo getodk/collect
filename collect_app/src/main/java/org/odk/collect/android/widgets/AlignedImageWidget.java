@@ -187,6 +187,5 @@ public class AlignedImageWidget extends BaseImageWidget {
         String path = data.getStringExtra(android.provider.MediaStore.EXTRA_OUTPUT);
         File fi = new File(path);
         saveImageToInstanceFolder(fi);
-        getWidgetAnswerListener().saveAnswersForCurrentScreen(false);
     }
 }
