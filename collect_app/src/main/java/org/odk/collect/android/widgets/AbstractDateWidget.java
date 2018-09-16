@@ -17,6 +17,7 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Context;
+import android.content.Intent;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -30,14 +31,14 @@ import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.DateTimeUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
  * @author Grzegorz Orczykowski (gorczykowski@soldevelo.com)
  */
-public abstract class AbstractDateWidget extends QuestionWidget implements BinaryWidget, Serializable {
+public abstract class AbstractDateWidget extends QuestionWidget implements BinaryWidget {
 
+    public static final String DATE_RESULT = "DATE_RESULT";
     protected Button dateButton;
     protected TextView dateTextView;
 
@@ -145,4 +146,11 @@ public abstract class AbstractDateWidget extends QuestionWidget implements Binar
     }
 
     protected abstract void showDatePickerDialog();
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        LocalDateTime dateTime = (LocalDateTime) data.getSerializableExtra(DATE_RESULT);
+        setBinaryData(dateTime);
+        getWidgetAnswerListener().saveAnswersForCurrentScreen(false);
+    }
 }

@@ -21,6 +21,7 @@ import android.content.Context;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.fragments.dialogs.IslamicDatePickerDialog;
+import org.odk.collect.android.utilities.ApplicationConstants;
 
 import static org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog.DATE_PICKER_DIALOG;
 
@@ -31,7 +32,8 @@ public class IslamicDateWidget extends AbstractDateWidget {
     }
 
     protected void showDatePickerDialog() {
-        IslamicDatePickerDialog islamicDatePickerDialog = IslamicDatePickerDialog.newInstance(this, date, datePickerDetails);
+        IslamicDatePickerDialog islamicDatePickerDialog = IslamicDatePickerDialog.newInstance(date, datePickerDetails);
+        islamicDatePickerDialog.setTargetFragment(getAuxFragment(), ApplicationConstants.RequestCodes.DATE_PICKER);
         islamicDatePickerDialog.show(((FormEntryActivity) getContext()).getSupportFragmentManager(), DATE_PICKER_DIALOG);
     }
 }

@@ -21,6 +21,7 @@ import android.content.Context;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.fragments.dialogs.CopticDatePickerDialog;
+import org.odk.collect.android.utilities.ApplicationConstants;
 
 import static org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog.DATE_PICKER_DIALOG;
 
@@ -31,7 +32,8 @@ public class CopticDateWidget extends AbstractDateWidget {
     }
   
     protected void showDatePickerDialog() {
-        CopticDatePickerDialog copticDatePickerDialog = CopticDatePickerDialog.newInstance(this, date, datePickerDetails);
+        CopticDatePickerDialog copticDatePickerDialog = CopticDatePickerDialog.newInstance(date, datePickerDetails);
+        copticDatePickerDialog.setTargetFragment(getAuxFragment(), ApplicationConstants.RequestCodes.DATE_PICKER);
         copticDatePickerDialog.show(((FormEntryActivity) getContext()).getSupportFragmentManager(), DATE_PICKER_DIALOG);
     }
 }
