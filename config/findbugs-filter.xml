@@ -72,9 +72,6 @@
     <Match>
         <Bug pattern="SE_COMPARATOR_SHOULD_BE_SERIALIZABLE" />
     </Match>
-    <Match>
-        <Bug pattern="SE_BAD_FIELD" />
-    </Match>
 
     <!-- Correctness -->
     <Match>

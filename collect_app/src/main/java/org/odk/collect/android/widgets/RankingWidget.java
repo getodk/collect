@@ -17,6 +17,7 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Context;
+import android.content.Intent;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -31,15 +32,16 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
+import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RankingWidget extends QuestionWidget implements BinaryWidget, Serializable {
+public class RankingWidget extends QuestionWidget implements BinaryWidget {
 
+    public static final String RANKING_RESULT = "RANKING_RESULT";
     private List<SelectChoice> originalItems;
     private List<SelectChoice> savedItems;
     private LinearLayout widgetLayout;
@@ -93,10 +95,9 @@ public class RankingWidget extends QuestionWidget implements BinaryWidget, Seria
 
     @Override
     public void onButtonClick(int buttonId) {
-        RankingWidgetDialog rankingWidgetDialog = RankingWidgetDialog.newInstance(this,
-                savedItems == null
-                        ? getValues(originalItems)
-                        : getValues(savedItems), getFormEntryPrompt().getIndex());
+        RankingWidgetDialog rankingWidgetDialog = RankingWidgetDialog.newInstance(
+                savedItems == null ? getValues(originalItems) : getValues(savedItems), getFormEntryPrompt().getIndex());
+        rankingWidgetDialog.setTargetFragment(getAuxFragment(), ApplicationConstants.RequestCodes.RANKING_ORDER);
         rankingWidgetDialog.show(((FormEntryActivity) getContext()).getSupportFragmentManager(), "RankingDialog");
     }
 
@@ -134,8 +135,8 @@ public class RankingWidget extends QuestionWidget implements BinaryWidget, Seria
     private List<SelectChoice> getOrderedItems() {
         List<Selection> savedOrderedItems =
                 getFormEntryPrompt().getAnswerValue() == null
-                ? new ArrayList<>()
-                : (List<Selection>) getFormEntryPrompt().getAnswerValue().getValue();
+                        ? new ArrayList<>()
+                        : (List<Selection>) getFormEntryPrompt().getAnswerValue().getValue();
 
         if (savedOrderedItems.isEmpty()) {
             return originalItems;
@@ -190,5 +191,12 @@ public class RankingWidget extends QuestionWidget implements BinaryWidget, Seria
             }
         }
         return getAnswerTextView(answerText.toString());
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        List<String> rankingResult = data.getStringArrayListExtra(RANKING_RESULT);
+        setBinaryData(rankingResult);
+        getWidgetAnswerListener().saveAnswersForCurrentScreen(false);
     }
 }

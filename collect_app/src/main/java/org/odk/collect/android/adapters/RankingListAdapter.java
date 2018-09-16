@@ -40,7 +40,7 @@ import java.util.List;
 
 public class RankingListAdapter extends Adapter<ItemViewHolder> {
 
-    private final List<String> values;
+    private final ArrayList<String> values;
     private final FormIndex formIndex;
 
     public RankingListAdapter(List<String> values, FormIndex formIndex) {
@@ -82,7 +82,7 @@ public class RankingListAdapter extends Adapter<ItemViewHolder> {
         return values.size();
     }
 
-    public List<String> getValues() {
+    public ArrayList<String> getValues() {
         return values;
     }
 
