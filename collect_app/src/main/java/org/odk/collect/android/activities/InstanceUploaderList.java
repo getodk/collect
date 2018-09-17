@@ -99,6 +99,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
     private InstanceSyncTask instanceSyncTask;
 
     private boolean showAllMode;
+    private Boolean autoSendRunning;
 
     private final BroadcastReceiver smsForegroundReceiver = new BroadcastReceiver() {
         @Override
@@ -146,6 +147,23 @@ public class InstanceUploaderList extends InstanceListActivity implements
         });
     }
 
+    private void isAutoSendRunning() {
+        LiveData<List<WorkStatus>> statuses = WorkManager.getInstance().getStatusesForUniqueWork(AutoSendWorker.TAG);
+
+        statuses.observe(this, workStatuses -> {
+            if (workStatuses != null) {
+                for (WorkStatus status : workStatuses) {
+                    if (status.getState().equals(State.RUNNING)) {
+                        autoSendRunning = true;
+                        ToastUtils.showShortToast(R.string.send_in_progress);
+                        return;
+                    }
+                }
+                autoSendRunning = false;
+            }
+        });
+    }
+
     /**
      * Determines how an upload should be handled by checking the transport being used.
      * If the transport is set to SMS or Internet then either is used respectively else it's
@@ -168,33 +186,25 @@ public class InstanceUploaderList extends InstanceListActivity implements
                 return;
             }
 
-            LiveData<List<WorkStatus>> statuses = WorkManager.getInstance().getStatusesForUniqueWork(AutoSendWorker.TAG);
+            if (autoSendRunning) {
+                ToastUtils.showShortToast(R.string.send_in_progress);
+                return;
+            }
 
-            statuses.observe(this, workStatuses -> {
-                if (workStatuses != null) {
-                    for (WorkStatus status : workStatuses) {
-                        if (status.getState().equals(State.RUNNING)) {
-                            ToastUtils.showShortToast(R.string.send_in_progress);
-                            return;
-                        }
-                    }
-                }
+            int checkedItemCount = getCheckedCount();
+            logger.logAction(this, "uploadButton", Integer.toString(checkedItemCount));
 
-                int checkedItemCount = getCheckedCount();
-                logger.logAction(this, "uploadButton", Integer.toString(checkedItemCount));
-
-                if (checkedItemCount > 0) {
-                    // items selected
-                    uploadSelectedFiles(button.getId());
-                    setAllToCheckedState(listView, false);
-                    toggleButtonLabel(findViewById(R.id.toggle_button), listView);
-                    uploadButton.setEnabled(false);
-                    smsUploadButton.setEnabled(false);
-                } else {
-                    // no items selected
-                    ToastUtils.showLongToast(R.string.noselect_error);
-                }
-            });
+            if (checkedItemCount > 0) {
+                // items selected
+                uploadSelectedFiles(button.getId());
+                setAllToCheckedState(listView, false);
+                toggleButtonLabel(findViewById(R.id.toggle_button), listView);
+                uploadButton.setEnabled(false);
+                smsUploadButton.setEnabled(false);
+            } else {
+                // no items selected
+                ToastUtils.showLongToast(R.string.noselect_error);
+            }
         }
     }
 
@@ -213,8 +223,13 @@ public class InstanceUploaderList extends InstanceListActivity implements
         }
     }
 
+    private boolean isReadyForUpload() {
+        return areCheckedItems() && autoSendRunning != null;
+    }
+
     private void init() {
         setupUploadButtons();
+        isAutoSendRunning();
         instancesDao = new InstancesDao();
 
         toggleSelsButton.setLongClickable(true);
@@ -239,7 +254,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         listView.setItemsCanFocus(false);
         listView.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
-            uploadButton.setEnabled(areCheckedItems());
+            uploadButton.setEnabled(isReadyForUpload());
             smsUploadButton.setEnabled(areCheckedItems());
         });
 
@@ -380,7 +395,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
             selectedInstances.remove(listView.getItemIdAtPosition(position));
         }
 
-        uploadButton.setEnabled(areCheckedItems());
+        uploadButton.setEnabled(isReadyForUpload());
         smsUploadButton.setEnabled(areCheckedItems());
         Button toggleSelectionsButton = findViewById(R.id.toggle_button);
         toggleButtonLabel(toggleSelectionsButton, listView);
