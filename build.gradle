@@ -34,6 +34,18 @@ configurations.all {
     transitive = true
 }
 
+task checkAll(type: GradleBuild) {
+    tasks = ['checkCode', 'checkTests']
+}
+
+task checkCode(type: GradleBuild) {
+    tasks = ['pmd', 'checkstyle', 'lintDebug', 'spotbugsDebug']
+}
+
+task checkTests(type: GradleBuild) {
+    tasks = ['testDebugUnitTest', 'connectedDebugAndroidTest']
+}
+
 ext {
     // Play Services is a big download so it should only be upgraded if necessary and after
     // community discussion and a warning period.

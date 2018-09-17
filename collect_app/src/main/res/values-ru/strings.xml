@@ -47,6 +47,7 @@
   <string name="discard_answer">Удалить ответ</string>
   <string name="discard_group">Удалить группу</string>
   <string name="download">Получить выбранные</string>
+  <string name="download_forms_result">Результаты загрузки</string>
   <string name="downloading_data">Подключение к серверу…</string>
   <string name="do_not_change">Отмена</string>
   <string name="do_not_exit">Отмена</string>
@@ -54,7 +55,7 @@
   <string name="entering_repeat">Добавить группу</string>
   <string name="entering_repeat_ask">Добавить новую группу?</string>
   <string name="enter_data">Заполнить бланк</string>
-  <string name="enter_data_button">Заполнить бланк</string>
+  <string name="enter_data_button">ЗАПОЛНИТЬ БЛАНК</string>
   <string name="error_occured">Произошла ошибка</string>
   <string name="error_attaching_binary_file">Произошла ошибка при добавлении файла: %s</string>
   <string name="fetching_file">Загружаю %1$s.\n\nБланк опросника %2$s из %3$s.</string>
@@ -67,7 +68,7 @@
   <string name="forms">БЛАНКИ</string>
   <string name="getting_location">Определяется местоположение</string>
   <string name="get_barcode">Получить штрих-код</string>
-  <string name="get_forms">Скачать бланки</string>
+  <string name="get_forms">Загрузить бланки</string>
   <string name="get_location">Записать местоположение</string>
   <string name="provider_disabled_error">Включите функцию определения местоположения на вашем устройстве!</string>
   <string name="invalid_answer_error">Этот ответ неверный</string>
@@ -90,8 +91,8 @@
   <string name="no_connection">Отсутствует подключение к сети</string>
   <string name="no_items_display">Отсутствуют элементы для показа.</string>
   <string name="no_items_display_forms">Отсутствуют элементы для показа.\n\nПопробуйте получить и заполнить бланк опросника.</string>
-  <string name="no_items_display_sent_forms">Отсутствуют элементы для показа.\n\nПопробуйте отправить финализированные опросы перед просмотром.</string>
-  <string name="no_items_display_instances">Отсутствуют элементы для показа.\n\nПопробуйте финализировать сохранённые опросы перед просмотром.</string>
+  <string name="no_items_display_sent_forms">Пусто\n\nВыгрузите финализированные опросы перед просмотром</string>
+  <string name="no_items_display_instances">Пусто\n\nФинализируйте сохранённые опросы для выгрузки</string>
   <string name="ok">OK</string>
   <string name="parse_error">Не удалось прочесть структуру бланка</string>
   <string name="parse_legacy_formlist_failed">Сервер не предоставил список доступных опросников в формате совместимом с Aggregate v0.9.x.: %s</string>
@@ -110,18 +111,20 @@
   <string name="save_all_answers">Сохранть опрос</string>
   <string name="save_enter_data_description">Вы в конце опросника \"%s\"</string>
   <string name="saving_form">Выполняется сохранение …</string>
-  <string name="sending_items">Отправка %1$s опросника из %2$s</string>
-  <string name="send_data">Отправить финализированный опросы</string>
-  <string name="send_data_button">Отправить ответы (%s)</string>
-  <string name="send_selected_data">Отправить выбранные</string>
-  <string name="view_sent_forms">Просмотреть отправленные опросы</string>
+  <string name="sending_items">Выгрузка %1$s опроса из %2$s</string>
+  <string name="send_data">Выгрузить финализированные опросы</string>
+  <string name="send_data_button">Выгрузить ответы (%s)</string>
+  <string name="send_selected_data">Выгрузить выбранные</string>
+  <string name="send_selected_data_internet">Выгрузить (Интернет)</string>
+  <string name="send_selected_data_sms">Выгрузить (SMS)</string>
+  <string name="view_sent_forms">Просмотреть выгруженные опросы</string>
   <string name="view_sent_forms_button">Архив (%s)</string>
   <string name="server_auth_credentials">Неправильное имя пользователя или пароль для сервера: %s</string>
   <string name="server_requires_auth">Необходима аутентификация</string>
   <string name="server_url">Сервер</string>
   <string name="server_preferences">Настройки сервера</string>
   <string name="trigger">OK. Продолжайте.</string>
-  <string name="uploading_data">Отправка ответов</string>
+  <string name="uploading_data">Выгрузка опроса</string>
   <string name="url_error">Неверный адрес!</string>
   <string name="username">Имя пользователя</string>
   <string name="view_hierarchy">Быстрый переход</string>
@@ -136,9 +139,9 @@
   <string name="keep_changes">Сохранить ответы</string>
   <string name="change_formlist_url">Путь к списку опросников (добавляется к URL)</string>
   <string name="change_protocol">Платформа</string>
-  <string name="change_submission_url">Путь для отправки опросов (добавляется к URL)</string>
+  <string name="change_submission_url">Путь выгрузки опросов (добавляется к URL)</string>
   <string name="formlist_url">Путь к списку опросников</string>
-  <string name="submission_url">Путь для отправки опросов</string>
+  <string name="submission_url">Путь выгрузки</string>
   <string name="font_size">Размер шрифта</string>
   <string name="change_font_size">Размер шрифта</string>
   <string name="access_error">Ошибка доступа %s:</string>
@@ -149,10 +152,10 @@
   <string name="form_download_progress">%1$s. Загрузка медиа-файлов: %2$s из %3$s</string>
   <string name="file_fetch_failed">Ошибка: %2$s (%3$s) в %1$s</string>
   <string name="fetching_manifest">%s. Загрузка манифеста</string>
-  <string name="success">Успех</string>
+  <string name="success">Успешно</string>
   <string name="failures">Неудачи</string>
-  <string name="no_forms_uploaded">Опрос НЕ отправлен.</string>
-  <string name="upload_results">Загрузить результаты</string>
+  <string name="no_forms_uploaded">Опрос НЕ выгружен</string>
+  <string name="upload_results">Результаты выгрузки</string>
   <string name="xform_parse_error">Ошибка интерпретации XForm. В %1$s отсутствует элемент %2$s</string>
   <string name="choose_file">Выберите файл</string>
   <string name="choose_sound">Выберите аудио</string>
@@ -172,17 +175,17 @@
   <string name="font_size_small">Маленький</string>
   <string name="font_size_extra_small">Очень маленький</string>
   <string name="change_view">Изменить внешний вид</string>
-  <string name="show_sent_and_unsent_forms">Показывать отправленные и неотправленные опросы</string>
-  <string name="show_unsent_forms">Показывать неотправленные опросы</string>
+  <string name="show_sent_and_unsent_forms">Показывать выгруженные и невыгруженные опросы</string>
+  <string name="show_unsent_forms">Показать невыгруженные опросы</string>
   <string name="added_on_date_at_time">\'Добавлено\' EEE, dd MMM yyyy \'в\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="saved_on_date_at_time">\'Сохранено\' EEE, dd MMM yyyy \'в\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="finalized_on_date_at_time">Финализировано EEE, dd MMM yyyy \'в\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="sent_on_date_at_time">\'Отправлено\' EEE, dd MMM yyyy \'в\' HH:mm</string>
+  <string name="sent_on_date_at_time">\'Выгружено\' EEE, dd MMM yyyy \'в\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="sending_failed_on_date_at_time">\'Не удалось отправить\' EEE, dd MMM yyyy \'в\' HH:mm</string>
+  <string name="sending_failed_on_date_at_time">\'Не удалось выгрузить\' EEE, dd MMM yyyy \'в\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="deleted_on_date_at_time">\'Удалено\' EEE, dd MMM yyyy \'в\' HH:mm</string>
   <string name="version">Версия:</string>
@@ -207,7 +210,7 @@
   <string name="admin_password_incorrect">Пароль неверный!</string>
   <string name="enter_admin_password">Введите пароль администратора</string>
   <string name="change_admin_password">Изменить пароль администратора</string>
-  <string name="autosend">Автоматическая отправка</string>
+  <string name="autosend">Авто-выгрузка</string>
   <string name="found_in_main">Снимите галочку, чтобы скрыть пункт в главном меню</string>
   <string name="found_in_settings">Снимите галочку, чтобы скрыть пункт в настройках</string>
   <string name="save_preferences">Сохранить настройки</string>
@@ -259,22 +262,27 @@
   <string name="survey_saving_saving_message">Сохранение на SD карту…</string>
   <string name="survey_saving_finalizing_message">Финализация на SD-карту…</string>
   <string name="survey_saving_encrypting_message">Шифрование данных…</string>
-  <string name="high_resolution_summary">Разрешить запись видео высокого разрешения (HD)</string>
+  <string name="high_resolution_summary">Разрешить запись видео высокого разрешения</string>
   <string name="server_platform_google_sheets">Google.Диск / Google.Таблицы</string>
   <string name="google_drive">Google.Диск</string>
   <string name="go_drive">Мой диск</string>
   <string name="go_shared">Доступные мне</string>
   <string name="modified_on_date_at_time">\'Изменено\' EEE, dd MMM yyyy \'в\' HH:mm</string>
   <string name="aggregate_preferences">ODK Aggregate настройки</string>
-  <string name="submission_transport_types_title">Отправлять результаты через</string>
+  <string name="sms_submission_preferences">НАСТРОЙКИ SMS</string>
+  <string name="submission_transport">СПОСОБ ВЫГРУЗКИ</string>
+  <string name="submission_transport_types_title">Выгружать результаты через</string>
   <string name="other_preferences">Настройки других платформ</string>
   <string name="google_preferences">Настройки Google.Таблиц</string>
-  <string name="google_sheets_url_hint">В опроснике должен быть указан URL-отправки. В противном случае, будет использоваться этот URL-отправки.</string>
+  <string name="google_sheets_url_hint">В опроснике должен быть указан URL-выгрузки. Иначе, будет применён этот адрес.</string>
   <string name="drive_get_file">Получение %1$s и медиа-файлов.</string>
   <string name="no_google_account">Учётная запись Google не выбрана!</string>
   <string name="google_set_account">Вы выбрали Google.Таблицы в качестве сервера. Перед тем, как продолжить, пожалуйста, укажите соответствующую учётную запись Google в общих настройках.</string>
   <string name="media_upload_error">Не удалось загрузить медиа-файл, который не существует %1$s</string>
   <string name="odk_auth_auth_fail">Ошибка аутентификации при автоматической отправке ODK. Пожалуйста, проверьте настройки</string>
+  <string name="odk_permissions_fail">Нет разрешения на авто-выгрузку. Проверьте системные настройки приложения</string>
+  <string name="odk_auto_note">Результаты авто-выгрузки</string>
+  <string name="odk_auto_download_notification_title">Результаты авто-загрузки</string>
   <string name="notification_error">Ошибка отображения текста уведомления</string>
   <string name="delete_after_send">Удалить после отправки</string>
   <string name="delete_after_send_summary">Удаляет финализированные опросники и их медиа после отправки данных на сервер</string>
@@ -290,16 +298,16 @@
   <string name="username_error_whitespace">Не допускается использовать пробелы в начале и конце имени пользователя</string>
   <string name="google_play_services_error_occured">Не удалось получить доступ к Google.Картам. Установлен ли Google Play Services?</string>
   <string name="about_preferences">О программе</string>
-  <string name="tell_your_friends">Поделиться ODK Collect</string>
-  <string name="tell_your_friends_msg">Ваши коллеги всё ещё ведут сбор данных на бумаге? Поделитесь ODK Collect с ними.</string>
+  <string name="tell_your_friends">Рекомендуйте ODK</string>
+  <string name="tell_your_friends_msg">Ваши коллеги всё ещё ведут сбор данных на бумаге? Рекомендуйте им это решение</string>
   <string name="leave_a_review">Оставить отзыв в Play Store</string>
   <string name="leave_a_review_msg">Ваш отзыв (надеемся, положительный) делает приложение более заметным в Play Store.</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_preferences">Картография</string>
-  <string name="map_sdk_selector_title">Провайдер картографии</string>
-  <string name="map_sdk_behavior">Провайдер картографии</string>
-  <string name="google_maps_sdk">Карты Google</string>
-  <string name="openstreetmap_sdk">Карты OpenStreetMap</string>
+  <string name="map_preferences">КАРТЫ</string>
+  <string name="map_sdk_selector_title">Источник карт</string>
+  <string name="map_sdk_behavior">Источник карт</string>
+  <string name="google_maps_sdk">Google</string>
+  <string name="openstreetmap_sdk">OpenStreetMap</string>
   <string name="show_map_sdk">Показать параметры картографии</string>
   <string name="openmap_streets">Улицы OSM</string>
   <string name="openmap_usgs_topo">Национальная карта USGS: топографическая</string>
@@ -368,11 +376,11 @@
   <string name="selected_answer">Выбрано: %s</string>
   <string name="version_number">Версия: %s</string>
   <string name="id_number">ID: %s</string>
-  <string name="odk_website">Посетить вебсайт ODK</string>
-  <string name="odk_website_summary">Open Data Kit (ODK) используется для сбора данных без постоянного он-лайн доступа.</string>
-  <string name="odk_forum">Войти на форум ODK</string>
+  <string name="odk_website">Вебсайт ODK</string>
+  <string name="odk_website_summary">Open Data Kit (ODK) - приложение для сбора данных без постоянного он-лайн доступа</string>
+  <string name="odk_forum">Форум</string>
   <string name="odk_forum_summary">Зайдите на форум, чтобы получить тех. поддержку, оставить предложение, принять участие в разработке/переводе!</string>
-  <string name="all_open_source_licenses">Открытые библиотеки/лицензии</string>
+  <string name="all_open_source_licenses">Используемые компоненты</string>
   <string name="all_open_source_licenses_msg">Мы стоим на плечах гигантов!</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">З %1$s%2$s%3$s</string>
@@ -388,8 +396,8 @@
   <string name="invalid_rsa_public_key"> Неверный публичный ключ RSA.</string>
   <string name="encryption_error_message">%s Опрос НЕ был сохранён как финализированный.</string>
   <string name="analytics_preferences">Данные по использованию</string>
-  <string name="analytics">Сбор анонимных данных об использовании</string>
-  <string name="analytics_summary">Анонимные данные об использовании помогут команде ODK расставить приоритеты в исправлении ошибок и добавлении новых возможностей</string>
+  <string name="analytics">Сбор анонимной статистики</string>
+  <string name="analytics_summary">Данные об использовании приложения помогают команде планировать процесс дальнейшей разработки</string>
   <string name="select_all">Выбрать всё</string>
   <string name="clear_all">Очистить всё</string>
   <string name="reset_settings">Все настройки (внутренние настройки, сохранённые настройки)</string>
@@ -424,9 +432,9 @@
   <string name="filter_the_list">Фильтровать список</string>
   <string name="language">Язык</string>
   <string name="google_auth_io_exception_msg">Не удалось вызвать API. Если была запущена локальная сборка, пожалуйста, обратитесь к документации проекта.</string>
-  <string name="form_metadata_title">Метаданные опросника</string>
-  <string name="form_metadata">Метаданные опросника</string>
-  <string name="form_metadata_summary">Метаданные будут добавлены к ответам для идентифекации интервьюера отправляющего опросы.</string>
+  <string name="form_metadata_title">Метаданные</string>
+  <string name="form_metadata">Метаданные</string>
+  <string name="form_metadata_summary">будут добавлены к ответам для идентификации интервьюера проводящего опросы</string>
   <string name="phone_number">Номер телефона</string>
   <string name="email">Адрес эл. почты</string>
   <string name="user_defined">Пользовательские данные</string>
@@ -566,10 +574,13 @@
   <string name="storage_runtime_permission_denied_title">Доступ к накопителю</string>
   <string name="storage_runtime_permission_denied_desc">Без этих разрешений Collect не сможет получить доступ к опросам или сохранять ответы. Откройте приложение заново когда вы будет готовы предоставить доступ.</string>
   <string name="location_runtime_permissions_denied_title">Доступ к геолокации</string>
-  <string name="location_runtime_permissions_denied_desc">Без данного разрешения ODK не сможет записывать вашу геолокацию. Попробуйте снова когда будете готовы предоставить доступ.</string>
+  <string name="location_runtime_permissions_denied_desc">Без данного разрешения Collect не сможет записывать вашу геолокацию. Попробуйте снова когда будете готовы предоставить доступ.</string>
   <string name="camera_runtime_permission_denied_title">Доступ к камере</string>
+  <string name="camera_runtime_permission_denied_desc">Без данного разрешения Collect не сможет использовать видео-камеру. Попробуйте снова когда будете готовы предоставить доступ.</string>
   <string name="record_audio_runtime_permission_denied_title">Доступ к записи аудио</string>
-  <string name="record_audio_runtime_permission_denied_desc">Без данного разрешения ODK не сможет использовать микрофон. Попробуйте снова когда будете готовы предоставить доступ.</string>
+  <string name="record_audio_runtime_permission_denied_desc">Без данного разрешения Collect не сможет использовать микрофон. Попробуйте снова когда будете готовы предоставить доступ.</string>
+  <string name="get_accounts_runtime_permission_denied_desc">Без данного разрешения Collect не сможет получить доступ к учётным записям. Попробуйте снова когда будете готовы предоставить доступ.</string>
+  <string name="send_sms_runtime_permission_denied_desc">Без данного разрешения приложение не сможет отправлять SMS. Попробуйте снова когда будете готовы предоставить доступ.</string>
   <string name="form_update_category">Обновление опросника</string>
   <string name="periodic_form_updates_check_title">Переодичность проверки обновлений опросника</string>
   <string name="never">Никогда</string>
@@ -590,14 +601,24 @@
   <string name="instance_upload_cancelled">Загрузка отменена</string>
   <string name="hide_old_form_versions_setting_title">Скрыть старые версии опросника  </string>
   <string name="hide_old_form_versions_setting_summary">Только новые версии будут показаны в \"Заполнить бланк опросника\"</string>
-  <string name="sms_pref_dialog_title">Отправить на номер телефона</string>
-  <string name="sms_pref_title">Отправить на номер телефона</string>
+  <string name="sms_pref_dialog_title">Выгружать на номер телефона</string>
+  <string name="sms_pref_title">Выгружать на номер телефона</string>
   <string name="sms_invalid_phone_number">Неправильный формат тел. номера</string>
   <!--Sms submission-->
-  <string name="sms_encrypted_message">Шифрованные ответы нельзя отправить через SMS</string>
-  <string name="sms_submissions_notif_title">SMS отправка</string>
+  <string name="sms_no_number">\'Отказ\' EEE, MMM dd, yyyy \'в\' HH:mm \'— не введён телефон\'</string>
+  <string name="sms_fatal_error">\'Отказ\' EEE, MMM dd, yyyy \'в\' HH:mm</string>
+  <string name="sms_airplane_mode">\'Отказ\' EEE, MMM dd, yyyy \'в\' HH:mm \'— самолётный режим\'</string>
+  <string name="sms_encrypted_message">Шифрованные ответы нельзя выгрузить через SMS</string>
+  <string name="sms_last_submission_on_date_at_time">\'Последняя попытка выгрузки\' EEE, MMM dd, yyyy \'в\' HH:mm</string>
+  <string name="sms_sent_on_date_at_time">\'Выгруженно через SMS\' EEE, MMM dd, yyyy \'в\' HH:mm</string>
+  <string name="sms_submission_queued">В очереди на выгрузку</string>
+  <string name="sms_submissions_notif_title">SMS-выгрузка</string>
   <string name="transport_type_internet">Интернет (рекомендуется)</string>
   <string name="transport_type_sms">SMS</string>
+  <string name="transport_type_both">Выбрать при выгрузке</string>
   <string name="seconds">Секунд</string>
   <string name="image_not_saved">Изображение нельзя сохранить из-за проблемы с исходным файлом</string>
+  <string name="loading_form_failed">Ошибка загрузки. Попробуйте ещё раз.</string>
+  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
+  <string name="current_predicate_continue">Продолжить</string>
 </resources>

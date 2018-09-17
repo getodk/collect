@@ -45,7 +45,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ActivityLogger;
-import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
@@ -573,32 +572,6 @@ public abstract class QuestionWidget
         imageView.setAdjustViewBounds(true);
         imageView.setImageBitmap(bitmap);
         return imageView;
-    }
-
-    /**
-     * It's needed only for external choices. Everything works well and
-     * out of the box when we use internal choices instead
-     */
-    protected void clearNextLevelsOfCascadingSelect() {
-        FormController formController = Collect.getInstance().getFormController();
-        if (formController == null) {
-            return;
-        }
-
-        if (formController.currentCaptionPromptIsQuestion()) {
-            try {
-                FormIndex startFormIndex = formController.getQuestionPrompt().getIndex();
-                formController.stepToNextScreenEvent();
-                while (formController.currentCaptionPromptIsQuestion()
-                        && formController.getQuestionPrompt().getFormElement().getAdditionalAttribute(null, "query") != null) {
-                    formController.saveAnswer(formController.getQuestionPrompt().getIndex(), null);
-                    formController.stepToNextScreenEvent();
-                }
-                formController.jumpToIndex(startFormIndex);
-            } catch (JavaRosaException e) {
-                Timber.d(e);
-            }
-        }
     }
 
     //region Data waiting

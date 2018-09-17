@@ -2,6 +2,8 @@ package org.odk.collect.android.injection.config;
 
 import android.app.Application;
 
+import org.odk.collect.android.activities.FormDownloadList;
+import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.InstanceUploaderList;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.application.Collect;
@@ -9,6 +11,7 @@ import org.odk.collect.android.fragments.DataManagerList;
 import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.injection.ActivityBuilder;
 import org.odk.collect.android.injection.config.scopes.PerApplication;
+import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.ServerPreferencesFragment;
 import org.odk.collect.android.tasks.InstanceServerUploader;
 import org.odk.collect.android.tasks.sms.SmsSentBroadcastReceiver;
@@ -62,6 +65,10 @@ public interface AppComponent {
 
     void inject(DataManagerList dataManagerList);
 
+    void inject(PropertyManager propertyManager);
+
+    void inject(FormEntryActivity formEntryActivity);
+
     void inject(InstanceServerUploader uploader);
 
     void inject(CollectServerClient collectClient);
@@ -73,5 +80,6 @@ public interface AppComponent {
     void inject(DownloadFormListUtils downloadFormListUtils);
 
     void inject(AuthDialogUtility authDialogUtility);
-
+  
+    void inject(FormDownloadList formDownloadList);
 }

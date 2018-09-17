@@ -161,7 +161,13 @@ the specific language governing permissions and limitations under the License.
                 <data android:mimeType="vnd.android.cursor.dir/vnd.odk.form" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.FormDownloadList" />
+        <activity android:name=".activities.FormDownloadList">
+            <intent-filter>
+                <action android:name="org.odk.collect.android.FORM_DOWNLOAD" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="vnd.android.cursor.dir/vnd.odk.form" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".activities.FileManagerTabs"
             android:configChanges="orientation|screenSize" />
@@ -178,7 +184,14 @@ the specific language governing permissions and limitations under the License.
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.InstanceUploaderActivity" />
+        <activity
+            android:name=".activities.InstanceUploaderActivity">
+            <intent-filter>
+                <action android:name="org.odk.collect.android.INSTANCE_UPLOAD" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="vnd.android.cursor.dir/vnd.odk.instance" />
+            </intent-filter>
+        </activity>
         <activity android:name=".activities.AboutActivity" />
         <activity android:name=".preferences.PreferencesActivity" />
         <activity android:name=".preferences.AdminPreferencesActivity" />
@@ -270,11 +283,6 @@ the specific language governing permissions and limitations under the License.
         <activity android:name=".activities.CaptureSelfieVideoActivity" />
         <activity android:name=".activities.CaptureSelfieVideoActivityNewApi" />
 
-        <!-- External apps can request form downloads -->
-        <service
-            android:name=".services.FormDownloadService"
-            android:exported="true" />
-
         <receiver
             android:name=".tasks.sms.SmsSentBroadcastReceiver"
             android:enabled="true"
@@ -292,4 +300,5 @@ the specific language governing permissions and limitations under the License.
             </intent-filter>
         </receiver>
     </application>
+
 </manifest>

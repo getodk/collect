@@ -311,4 +311,5 @@
   <string name="yes">Da</string>
   <string name="no">Nu</string>
   <!--Sms submission-->
+  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
 </resources>

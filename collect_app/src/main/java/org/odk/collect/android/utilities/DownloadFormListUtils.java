@@ -18,7 +18,9 @@ package org.odk.collect.android.utilities;
 
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 
 import org.javarosa.xform.parse.XFormParser;
 import org.kxml2.kdom.Element;
@@ -50,6 +52,9 @@ public class DownloadFormListUtils {
     private static final String NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_LIST =
             "http://openrosa.org/xforms/xformsList";
 
+    @Inject
+    WebCredentialsUtils webCredentialsUtils;
+
     private static boolean isXformsListNamespacedElement(Element e) {
         return e.getNamespace().equalsIgnoreCase(NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_LIST);
     }
@@ -61,23 +66,49 @@ public class DownloadFormListUtils {
     }
 
     public HashMap<String, FormDetails> downloadFormList(boolean alwaysCheckMediaFiles) {
-        SharedPreferences settings =
-                PreferenceManager.getDefaultSharedPreferences(
+        return downloadFormList(null, null, null, alwaysCheckMediaFiles);
+    }
+
+    public HashMap<String, FormDetails> downloadFormList(@Nullable String url, @Nullable String username,
+                                                         @Nullable String password, boolean alwaysCheckMediaFiles) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(
                         Collect.getInstance().getBaseContext());
-        String downloadListUrl =
+
+        // Remove trailing '/'
+        while (url != null && url.endsWith("/")) {
+            url = url.substring(0, url.length() - 1);
+        }
+
+        String downloadListUrl = url != null ? url :
                 settings.getString(PreferenceKeys.KEY_SERVER_URL,
                         Collect.getInstance().getString(R.string.default_server_url));
         // NOTE: /formlist must not be translated! It is the well-known path on the server.
         String formListUrl = Collect.getInstance().getApplicationContext().getString(
                 R.string.default_odk_formlist);
-        String downloadPath = settings.getString(PreferenceKeys.KEY_FORMLIST_URL, formListUrl);
+
+        // When a url is supplied, we will use the default formList url
+        String downloadPath = (url != null) ? formListUrl : settings.getString(PreferenceKeys.KEY_FORMLIST_URL, formListUrl);
         downloadListUrl += downloadPath;
 
         // We populate this with available forms from the specified server.
         // <formname, details>
         HashMap<String, FormDetails> formList = new HashMap<String, FormDetails>();
 
+        if (url != null) {
+            String host = Uri.parse(url).getHost();
+
+            if (host != null) {
+                if (username != null && password != null) {
+                    webCredentialsUtils.saveCredentials(url, username, password);
+                } else {
+                    webCredentialsUtils.clearCredentials(url);
+                }
+            }
+        }
+
         DocumentFetchResult result = collectServerClient.getXmlDocument(downloadListUrl);
+
+        clearTemporaryCredentials(url);
 
         // If we can't get the document, return the error, cancel the task
         if (result.errorMessage != null) {
@@ -424,5 +455,15 @@ public class DownloadFormListUtils {
             }
         }
         return false;
+    }
+
+    private void clearTemporaryCredentials(@Nullable String url) {
+        if (url != null) {
+            String host = Uri.parse(url).getHost();
+
+            if (host != null) {
+                webCredentialsUtils.clearCredentials(url);
+            }
+        }
     }
 }

@@ -39,7 +39,7 @@ import android.widget.ListView;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.dao.InstancesDao;
-import org.odk.collect.android.jobs.AutoSendWorker;
+import org.odk.collect.android.workers.AutoSendWorker;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
@@ -69,6 +69,7 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PROTOCOL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_TRANSPORT_TYPE;
 import static org.odk.collect.android.tasks.sms.SmsSender.SMS_INSTANCE_ID;
 import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
+import static org.odk.collect.android.utilities.PermissionUtils.requestReadPhoneStatePermission;
 import static org.odk.collect.android.utilities.PermissionUtils.requestSendSMSPermission;
 import static org.odk.collect.android.utilities.PermissionUtils.requestStoragePermissions;
 
@@ -353,7 +354,18 @@ public class InstanceUploaderList extends InstanceListActivity implements
                 // otherwise, do the normal aggregate/other thing.
                 Intent i = new Intent(this, InstanceUploaderActivity.class);
                 i.putExtra(FormEntryActivity.KEY_INSTANCES, instanceIds);
-                startActivityForResult(i, INSTANCE_UPLOADER);
+                // Not required but without this permission a Device ID attached to a request will be empty.
+                requestReadPhoneStatePermission(this, new PermissionListener() {
+                    @Override
+                    public void granted() {
+                        startActivityForResult(i, INSTANCE_UPLOADER);
+                    }
+
+                    @Override
+                    public void denied() {
+                        startActivityForResult(i, INSTANCE_UPLOADER);
+                    }
+                }, false);
             }
         }
     }

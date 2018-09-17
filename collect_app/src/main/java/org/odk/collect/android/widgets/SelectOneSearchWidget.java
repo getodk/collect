@@ -16,14 +16,10 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.view.LayoutInflater;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
-
-import java.util.List;
 
 /**
  * SelectOneSearchWidget allows the user to enter a value in an editable text box and based on
@@ -34,31 +30,22 @@ import java.util.List;
  * @author Raghu Mittal (raghu.mittal@handsrel.com)
  */
 @SuppressLint("ViewConstructor")
-public class SelectOneSearchWidget extends AbstractSelectOneWidget implements OnCheckedChangeListener, AudioPlayListener {
+public class SelectOneSearchWidget extends AbstractSelectOneWidget implements AudioPlayListener {
     public SelectOneSearchWidget(Context context, FormEntryPrompt prompt, boolean autoAdvance) {
         super(context, prompt, autoAdvance);
         createLayout();
+        setUpSearchBox();
     }
 
     @Override
-    protected void addButtonsToLayout(List<Integer> tagList) {
-        LayoutInflater inflater = LayoutInflater.from(getContext());
-        buttons.clear();
-        for (int i = 0; i < items.size(); i++) {
-            if (tagList == null || tagList.contains(i)) {
-                answerLayout.addView(createRadioButtonLayout(inflater, i));
-            }
+    protected void doSearch(String searchStr) {
+        if (adapter != null) {
+            adapter.getFilter().filter(searchStr);
         }
     }
 
     @Override
     public void setFocus(Context context) {
         SoftKeyboardUtils.showSoftKeyboard(searchStr);
-    }
-
-    @Override
-    protected void createLayout() {
-        readItems();
-        setUpSearchBox();
     }
 }

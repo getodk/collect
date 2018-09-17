@@ -42,6 +42,7 @@ import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUT
 public abstract class InstanceUploader extends AsyncTask<Long, Integer, CollectServerClient.Outcome> {
 
     private InstanceUploaderListener stateListener;
+    private Boolean deleteInstanceAfterSubmission;
 
     @Override
     protected void onPostExecute(CollectServerClient.Outcome outcome) {
@@ -93,6 +94,13 @@ public abstract class InstanceUploader extends AsyncTask<Long, Integer, CollectS
                                 results.moveToPosition(-1);
 
                                 boolean isFormAutoDeleteOptionEnabled = (boolean) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_DELETE_AFTER_SEND);
+
+                                // The custom configuration from the third party app overrides
+                                // the app preferences set for delete after submission
+                                if (deleteInstanceAfterSubmission != null) {
+                                    isFormAutoDeleteOptionEnabled = deleteInstanceAfterSubmission;
+                                }
+
                                 String formId;
                                 while (results.moveToNext()) {
                                     formId = results.getString(results.getColumnIndex(InstanceProviderAPI.InstanceColumns.JR_FORM_ID));
@@ -152,4 +160,7 @@ public abstract class InstanceUploader extends AsyncTask<Long, Integer, CollectS
         }
     }
 
+    public void setDeleteInstanceAfterSubmission(Boolean deleteInstanceAfterSubmission) {
+        this.deleteInstanceAfterSubmission = deleteInstanceAfterSubmission;
+    }
 }

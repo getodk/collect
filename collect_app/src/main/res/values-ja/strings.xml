@@ -117,6 +117,8 @@
   <string name="send_data">確定済のフォームを送信</string>
   <string name="send_data_button">確定済のフォーム (%s) を送信</string>
   <string name="send_selected_data">選択済を送信</string>
+  <string name="send_selected_data_internet">送信 (インターネット)</string>
+  <string name="send_selected_data_sms">送信 (SMS)</string>
   <string name="view_sent_forms">送信済フォームを表示</string>
   <string name="view_sent_forms_button">送信済フォーム (%s) を表示</string>
   <string name="server_auth_credentials">サーバーのユーザー名とパスワードが正しくありません: %s</string>
@@ -280,6 +282,7 @@
   <string name="google_set_account">サーバーとして Google スプレッドシートを選択しています。続行する前に、全般設定で対応する Google アカウントを選択してください</string>
   <string name="media_upload_error">メディアファイルが存在しないため、アップロードできませんでした: %1$s</string>
   <string name="odk_auth_auth_fail">ODK 自動送信の認証に失敗しました。設定が正しいことを確認してください</string>
+  <string name="odk_permissions_fail">ODK 自動送信が失敗しました。必要なアクセス許可がすべて付与されていることを確認してください</string>
   <string name="odk_auto_note">ODK 自動送信結果</string>
   <string name="odk_auto_download_notification_title">ODK 自動ダウンロード結果</string>
   <string name="notification_error">通知テキストの表示中にエラー</string>
@@ -587,6 +590,10 @@
   <string name="camera_runtime_permission_denied_desc">このアクセス許可がないと、Collect はカメラにアクセスできません。 付与する準備ができたら、もう一度お試しください。</string>
   <string name="record_audio_runtime_permission_denied_title">オーディオ録音アクセス許可</string>
   <string name="record_audio_runtime_permission_denied_desc">このアクセス許可がないと、Collect はマイクにアクセスできません。 付与する準備ができたら、もう一度お試しください。</string>
+  <string name="get_accounts_runtime_permission_denied_title">アカウントのアクセス許可を取得</string>
+  <string name="get_accounts_runtime_permission_denied_desc">このアクセス許可がないと、Collect はアカウントにアクセスできません。 付与する準備ができたら、もう一度お試しください。</string>
+  <string name="send_sms_runtime_permission_denied_title">SMS 送信のアクセス許可</string>
+  <string name="send_sms_runtime_permission_denied_desc">このアクセス許可がないと、Collect は SMS メッセージを送信できません。 付与する準備ができたら、もう一度お試しください。</string>
   <string name="form_update_category">フォームの更新</string>
   <string name="periodic_form_updates_check_title">定期的なフォームの更新チェック</string>
   <string name="never">しない</string>
@@ -612,6 +619,7 @@
   <string name="sms_invalid_phone_number">電話番号が正しくありません</string>
   <!--Sms submission-->
   <string name="sms_no_reception">yyyy/MM/dd E HH:mm \'に受信者がいないため失敗しました\'</string>
+  <string name="sms_no_number">yyyy/MM/dd E HH:mm \'に電話番号がないため失敗しました\'</string>
   <string name="sms_fatal_error">yyyy/MM/dd E HH:mm \'に失敗しました\'</string>
   <string name="sms_airplane_mode">yyyy/MM/dd E HH:mm \'に機内モードがオンのため失敗しました\'</string>
   <string name="sms_no_message">このフォームは SMS タグの質問がありません。</string>
@@ -626,7 +634,12 @@
   <string name="sms_submissions_notif_description">いくつかのフォームを現在送信しています。</string>
   <string name="transport_type_internet">Wifi/データ通信 (推奨)</string>
   <string name="transport_type_sms">SMS</string>
+  <string name="transport_type_both">送信時に選択</string>
   <string name="seconds">秒</string>
   <string name="rank_items">ランキングアイテム</string>
   <string name="image_not_saved">対応するインスタンスファイルに問題があるため、画像を保存できません。</string>
+  <string name="loading_form_failed">フォームの読み込み時にエラーが発生しました。もう一度やり直してください。</string>
+  <string name="sms_invalid_phone_number_description">SMS 送信の宛先電話番号を設定するか、送信の種類を変更してください。</string>
+  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
+  <string name="current_predicate_continue">続行</string>
 </resources>
