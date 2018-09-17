@@ -34,7 +34,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 import androidx.work.Worker;
 import timber.log.Timber;
@@ -50,7 +49,7 @@ public class AutoSendWorker extends Worker implements InstanceUploaderListener {
 
     private String resultMessage;
     private CountDownLatch countDownLatch;
-    Result workResult;
+    private Result workResult;
 
     @NonNull
     @Override
@@ -61,14 +60,10 @@ public class AutoSendWorker extends Worker implements InstanceUploaderListener {
 
         countDownLatch = new CountDownLatch(1);
 
-        ConnectivityManager manager = (ConnectivityManager) getApplicationContext().getSystemService(
-                Context.CONNECTIVITY_SERVICE);
-        NetworkInfo currentNetworkInfo = manager.getActiveNetworkInfo();
-
-        uploadForms(getApplicationContext(), isFormAutoSendOptionEnabled(currentNetworkInfo));
+        uploadForms(getApplicationContext(), isFormAutoSendOptionEnabledForNetwork(getApplicationContext()));
 
         try {
-            countDownLatch.await(2, TimeUnit.MINUTES);
+            countDownLatch.await();
         } catch (InterruptedException e) {
             Timber.e(e);
             return Result.FAILURE;
@@ -76,7 +71,12 @@ public class AutoSendWorker extends Worker implements InstanceUploaderListener {
         return workResult;
     }
 
-    private boolean isFormAutoSendOptionEnabled(NetworkInfo currentNetworkInfo) {
+    public static boolean isFormAutoSendOptionEnabledForNetwork(Context context) {
+
+        ConnectivityManager manager = (ConnectivityManager) context.getSystemService(
+                Context.CONNECTIVITY_SERVICE);
+        NetworkInfo currentNetworkInfo = manager.getActiveNetworkInfo();
+
         // make sure autosend is enabled on the given connected interface
         String autosend = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_AUTOSEND);
         boolean sendwifi = autosend.equals("wifi_only");
@@ -118,6 +118,8 @@ public class AutoSendWorker extends Worker implements InstanceUploaderListener {
         }
 
         if (toUpload.isEmpty()) {
+            workResult = Result.FAILURE;
+            countDownLatch.countDown();
             return;
         }
 
@@ -131,7 +133,8 @@ public class AutoSendWorker extends Worker implements InstanceUploaderListener {
             if (PermissionUtils.checkIfGetAccountsPermissionGranted(context)) {
                 String googleUsername = (String) settings.get(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
                 if (googleUsername == null || googleUsername.isEmpty()) {
-
+                    workResult = Result.FAILURE;
+                    countDownLatch.countDown();
                     return;
                 }
                 GoogleAccountsManager accountsManager = new GoogleAccountsManager(Collect.getInstance());
@@ -157,7 +160,7 @@ public class AutoSendWorker extends Worker implements InstanceUploaderListener {
      *                                    <p>
      *                                    If the form explicitly sets the auto-send property, then it overrides the preferences.
      */
-    private boolean isFormAutoSendEnabled(String jrFormId, boolean isFormAutoSendOptionEnabled) {
+    public static boolean isFormAutoSendEnabled(String jrFormId, boolean isFormAutoSendOptionEnabled) {
         Cursor cursor = new FormsDao().getFormsCursorForFormId(jrFormId);
         String autoSend = null;
         if (cursor != null && cursor.moveToFirst()) {

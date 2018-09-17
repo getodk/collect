@@ -142,6 +142,8 @@ import timber.log.Timber;
 
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
 import static android.content.DialogInterface.BUTTON_POSITIVE;
+import static org.odk.collect.android.jobs.AutoSendWorker.isFormAutoSendEnabled;
+import static org.odk.collect.android.jobs.AutoSendWorker.isFormAutoSendOptionEnabledForNetwork;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_MOVING_BACKWARDS;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 import static org.odk.collect.android.utilities.PermissionUtils.checkIfStoragePermissionsGranted;
@@ -2636,7 +2638,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             case SaveToDiskTask.SAVED:
                 ToastUtils.showShortToast(R.string.data_saved_ok);
                 formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_SAVE, 0, null, false, false);
-                enqueueFinalizedForm();
+                enqueueAutosendJob();
                 break;
             case SaveToDiskTask.SAVED_AND_EXIT:
                 ToastUtils.showShortToast(R.string.data_saved_ok);
@@ -2647,7 +2649,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 } else {
                     formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);         // Force writing of audit since we are exiting
                 }
-                enqueueFinalizedForm();
+                enqueueAutosendJob();
                 finishReturnInstance();
                 break;
             case SaveToDiskTask.SAVE_ERROR:
@@ -2836,18 +2838,22 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         super.onStop();
     }
 
-    void enqueueFinalizedForm() {
-        Constraints constraints = new Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.CONNECTED)
-                .build();
+    void enqueueAutosendJob() {
+        String formId = getFormController().getFormDef().getMainInstance().getRoot().getAttributeValue("", "id");
 
-        OneTimeWorkRequest autoSendWork =
-                new OneTimeWorkRequest.Builder(AutoSendWorker.class)
-                        .addTag(AutoSendWorker.TAG)
-                        .setConstraints(constraints)
-                        .build();
+        if (isFormAutoSendEnabled(formId, isFormAutoSendOptionEnabledForNetwork(this))) {
+            Constraints constraints = new Constraints.Builder()
+                    .setRequiredNetworkType(NetworkType.CONNECTED)
+                    .build();
 
-        WorkManager.getInstance().beginUniqueWork(AutoSendWorker.TAG, ExistingWorkPolicy.KEEP, autoSendWork).enqueue();
+            OneTimeWorkRequest autoSendWork =
+                    new OneTimeWorkRequest.Builder(AutoSendWorker.class)
+                            .addTag(AutoSendWorker.TAG)
+                            .setConstraints(constraints)
+                            .build();
+
+            WorkManager.getInstance().beginUniqueWork(AutoSendWorker.TAG, ExistingWorkPolicy.KEEP, autoSendWork).enqueue();
+        }
     }
 
     @Override
@@ -2925,6 +2931,5 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             super(context);
         }
     }
-
 }
 
