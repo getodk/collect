@@ -16,4 +16,5 @@
   <string name="every_six_hours">සෑම පැය 6 කට වරක්</string>
   <string name="every_24_hours">සෑම පැය24 කට වරක්</string>
   <!--Sms submission-->
+  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
 </resources>
