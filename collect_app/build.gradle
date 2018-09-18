@@ -271,7 +271,7 @@ dependencies {
     implementation "com.trello.rxlifecycle2:rxlifecycle-android:${rootProject.rxLifecycleVersion}"
     implementation "com.trello.rxlifecycle2:rxlifecycle-android-lifecycle:${rootProject.rxLifecycleVersion}"
 
-    implementation "android.arch.work:work-runtime:${rootProject.workManagerVersion}" // use -ktx for Kotlin
+    implementation "android.arch.work:work-runtime:${rootProject.workManagerVersion}"
     implementation "android.arch.work:work-firebase:${rootProject.workManagerVersion}"
 
     // Makes binding to Views easy:

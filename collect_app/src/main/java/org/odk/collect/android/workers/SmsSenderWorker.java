@@ -7,9 +7,7 @@ import org.odk.collect.android.tasks.sms.SmsSender;
 import androidx.work.Worker;
 
 /***
- * Background job that adheres to the fire and forget architecture pattern
- * where it's sole purpose is to send an SMS message to a destination without
- * caring about it's response.
+ * Sends a SMS submission to a destination.
  */
 public class SmsSenderWorker extends Worker {
     public static final String TAG = "smsSenderJob";

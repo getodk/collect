@@ -148,7 +148,11 @@ public class InstanceUploaderList extends InstanceListActivity implements
         });
     }
 
-    private void isAutoSendRunning() {
+    /**
+     * Observes the WorkManager for updates from the AutoSendWorker. This observer runs for the lifetime
+     * of this activity.
+     */
+    private void startAutosendObserver() {
         LiveData<List<WorkStatus>> statuses = WorkManager.getInstance().getStatusesForUniqueWork(AutoSendWorker.TAG);
 
         statuses.observe(this, workStatuses -> {
@@ -156,11 +160,12 @@ public class InstanceUploaderList extends InstanceListActivity implements
                 for (WorkStatus status : workStatuses) {
                     if (status.getState().equals(State.RUNNING)) {
                         autoSendRunning = true;
-                        ToastUtils.showShortToast(R.string.send_in_progress);
                         return;
                     }
                 }
                 autoSendRunning = false;
+
+                uploadButton.setEnabled(isReadyForUpload());
             }
         });
     }
@@ -230,7 +235,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
 
     private void init() {
         setupUploadButtons();
-        isAutoSendRunning();
+        startAutosendObserver();
         instancesDao = new InstancesDao();
 
         toggleSelsButton.setLongClickable(true);
