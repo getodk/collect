@@ -73,9 +73,7 @@ public class AuthDialogUtility {
         builder.setTitle(context.getString(R.string.server_requires_auth));
         builder.setMessage(context.getString(R.string.server_auth_credentials, overriddenUrl != null ? overriddenUrl : webCredentialsUtils.getServerUrlFromPreferences()));
         builder.setView(dialogView);
-
-        String finalOverriddenUrl = (overriddenUrl == null) ? webCredentialsUtils.getServerUrlFromPreferences() : overriddenUrl;
-
+        String finalOverriddenUrl = overriddenUrl;
         builder.setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -84,7 +82,14 @@ public class AuthDialogUtility {
                 String userNameValue = username.getText().toString();
                 String passwordValue = password.getText().toString();
 
-                webCredentialsUtils.saveCredentials(finalOverriddenUrl, userNameValue, passwordValue);
+                // If custom username, password were passed, then we should not save the resulting credentials used
+                if (customUsername != null && customPassword != null) {
+                    webCredentialsUtils.saveCredentials(finalOverriddenUrl != null ? finalOverriddenUrl : webCredentialsUtils.getServerUrlFromPreferences(), userNameValue, passwordValue);
+                } else if (finalOverriddenUrl == null) {
+                    webCredentialsUtils.saveCredentialsPreferences(userNameValue, passwordValue);
+                } else {
+                    webCredentialsUtils.saveCredentials(finalOverriddenUrl, userNameValue, passwordValue);
+                }
 
                 resultListener.updatedCredentials();
             }

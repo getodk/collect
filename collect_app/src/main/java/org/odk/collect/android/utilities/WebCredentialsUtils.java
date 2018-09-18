@@ -25,19 +25,11 @@ public class WebCredentialsUtils {
             return;
         }
 
-        String serverPrefsUrl = getServerUrlFromPreferences();
-
         String host = Uri.parse(url).getHost();
-        String prefsServerHost = (serverPrefsUrl == null) ? null : Uri.parse(serverPrefsUrl).getHost();
-
-        if (prefsServerHost != null && host.equalsIgnoreCase(prefsServerHost)) {
-            saveCredentialsPreferences(username, password);
-        } else {
-            HOST_CREDENTIALS.put(host, new HttpCredentials(username, password));
-        }
+        HOST_CREDENTIALS.put(host, new HttpCredentials(username, password));
     }
 
-    private void saveCredentialsPreferences(String userName, String password) {
+    public void saveCredentialsPreferences(String userName, String password) {
         GeneralSharedPreferences.getInstance().save(PreferenceKeys.KEY_USERNAME, userName);
         GeneralSharedPreferences.getInstance().save(PreferenceKeys.KEY_PASSWORD, password);
     }
@@ -85,8 +77,14 @@ public class WebCredentialsUtils {
         String serverPrefsUrl = getServerUrlFromPreferences();
         String prefsServerHost = (serverPrefsUrl == null) ? null : Uri.parse(serverPrefsUrl).getHost();
 
+        // URL host is the same as the host in preferences
         if (prefsServerHost != null && prefsServerHost.equalsIgnoreCase(host)) {
-            return new HttpCredentials(getUserNameFromPreferences(), getPasswordFromPreferences());
+            // Use the temporary credentials if they exist, otherwise use the credentials saved to preferences
+            if (HOST_CREDENTIALS.containsKey(host)) {
+                return HOST_CREDENTIALS.get(host);
+            } else {
+                return new HttpCredentials(getUserNameFromPreferences(), getPasswordFromPreferences());
+            }
         } else {
             return HOST_CREDENTIALS.get(host);
         }
