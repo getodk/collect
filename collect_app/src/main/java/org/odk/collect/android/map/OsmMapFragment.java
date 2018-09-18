@@ -130,8 +130,16 @@ public class OsmMapFragment extends Fragment implements MapFragment, MapEventsRe
                 map.getController().setCenter(geoPoints.get(0));
                 map.getController().setZoom(16);
             } else if (count > 1) {
-                map.zoomToBoundingBox(BoundingBox.fromGeoPoints(
-                    geoPoints).increaseByScale((float) (1 / scaleFactor)), true);
+                // TODO(ping): Find a better solution.
+                // zoomToBoundingBox sometimes fails to zoom correctly, either
+                // zooming by the correct amount but leaving the bounding box
+                // off-center, or centering correctly but not zooming in enough.
+                // Adding a 100-ms delay avoids the problem most of the time, but
+                // not always; it's here because the old GeoShapeOsmMapActivity
+                // did it, not because it's known to be the best solution.
+                final BoundingBox box = BoundingBox.fromGeoPoints(geoPoints)
+                    .increaseByScale((float) (1 / scaleFactor));
+                new Handler().postDelayed(() -> map.zoomToBoundingBox(box, false), 100);
             }
         }
     }
