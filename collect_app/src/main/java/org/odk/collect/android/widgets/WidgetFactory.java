@@ -29,10 +29,7 @@ import org.javarosa.xpath.expr.XPathExpression;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.WebViewActivity;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.logic.FormController;
-import org.odk.collect.android.utilities.FileUtils;
 
-import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.Locale;
 
@@ -311,7 +308,7 @@ public class WidgetFactory {
                                     .send(new HitBuilders.EventBuilder()
                                     .setCategory("Itemset")
                                     .setAction(actionName)
-                                    .setLabel(getFormIdentifierHash())
+                                    .setLabel(Collect.getCurrentFormIdentifierHash())
                                     .build());
 
                             if (predicate.toString().contains("current")) {
@@ -323,24 +320,6 @@ public class WidgetFactory {
             }
         }
         return false;
-    }
-
-    /**
-     * Gets a unique, privacy-preserving identifier for the current form.
-     *
-     * @return hash of the form title, a space, the form ID
-     */
-    private static String getFormIdentifierHash() {
-        String formIdentifier = "";
-        FormController formController = Collect.getInstance().getFormController();
-        if (formController != null) {
-            String formID = formController.getFormDef().getMainInstance()
-                    .getRoot().getAttributeValue("", "id");
-            formIdentifier = formController.getFormTitle() + " " + formID;
-        }
-
-        return FileUtils.getMd5Hash(
-                new ByteArrayInputStream(formIdentifier.getBytes()));
     }
 
     /**
@@ -360,7 +339,7 @@ public class WidgetFactory {
                     .send(new HitBuilders.EventBuilder()
                     .setCategory("Itemset")
                     .setAction("CurrentChangeViewed")
-                    .setLabel(getFormIdentifierHash())
+                    .setLabel(Collect.getCurrentFormIdentifierHash())
                     .build());
         };
 

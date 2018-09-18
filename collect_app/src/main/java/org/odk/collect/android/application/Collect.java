@@ -51,9 +51,11 @@ import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.FormMetadataMigrator;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.PRNGFixes;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.util.Locale;
 
@@ -343,6 +345,24 @@ public class Collect extends Application implements HasActivityInjector {
 
     public void setComponent(AppComponent applicationComponent) {
         this.applicationComponent = applicationComponent;
+    }
+
+    /**
+     * Gets a unique, privacy-preserving identifier for the current form.
+     *
+     * @return md5 hash of the form title, a space, the form ID
+     */
+    public static String getCurrentFormIdentifierHash() {
+        String formIdentifier = "";
+        FormController formController = getInstance().getFormController();
+        if (formController != null) {
+            String formID = formController.getFormDef().getMainInstance()
+                    .getRoot().getAttributeValue("", "id");
+            formIdentifier = formController.getFormTitle() + " " + formID;
+        }
+
+        return FileUtils.getMd5Hash(
+                new ByteArrayInputStream(formIdentifier.getBytes()));
     }
 
     @Override
