@@ -307,15 +307,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                     }
 
                     if (Validator.isUrlValid(url)) {
-                        String prefix = url.split(":")[0].toUpperCase(Locale.ENGLISH);
-                        String urlHash = FileUtils.getMd5Hash(
-                                new ByteArrayInputStream(url.getBytes()));
-                        Collect.getInstance().getDefaultTracker()
-                                .send(new HitBuilders.EventBuilder()
-                                        .setCategory("SetServer")
-                                        .setAction(prefix)
-                                        .setLabel(urlHash)
-                                        .build());
+                        sendAnalyticsEvent(url);
 
                         preference.setSummary(newValue.toString());
                         SharedPreferences prefs = PreferenceManager
@@ -400,6 +392,38 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
             }
             return true;
         };
+    }
+
+    /**
+     * Remotely log the URL scheme, whether the URL is on one of 3 common hosts, and a URL hash.
+     * This will help inform decisions on whether or not to allow insecure server configurations
+     * (HTTP) and on which hosts to strengthen support for.
+     *
+     * @param url the URL that the server setting has just been set to
+     */
+    private void sendAnalyticsEvent(String url) {
+        String upperCaseURL = url.toUpperCase(Locale.ENGLISH);
+        String scheme = upperCaseURL.split(":")[0];
+
+        String host = "Other";
+        if (upperCaseURL.contains("APPSPOT")) {
+            host = "Appspot";
+        } else if (upperCaseURL.contains("KOBOTOOLBOX.ORG") ||
+                upperCaseURL.contains("HUMANITARIANRESPONSE.INFO")) {
+            host = "Kobo";
+        } else if (upperCaseURL.contains("ONA.IO")) {
+            host = "Ona";
+        }
+
+        String urlHash = FileUtils.getMd5Hash(
+                new ByteArrayInputStream(url.getBytes()));
+
+        Collect.getInstance().getDefaultTracker()
+                .send(new HitBuilders.EventBuilder()
+                        .setCategory("SetServer")
+                        .setAction(scheme + " " + host)
+                        .setLabel(urlHash)
+                        .build());
     }
 
     private void maskPasswordSummary(String password) {
