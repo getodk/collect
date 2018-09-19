@@ -16,17 +16,13 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.support.v7.widget.AppCompatCheckBox;
-import android.text.method.LinkMovementMethod;
-import android.util.TypedValue;
-import android.widget.CheckBox;
+import android.support.v7.widget.RecyclerView;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.utilities.TextUtils;
-import org.odk.collect.android.utilities.ViewIds;
+import org.odk.collect.android.adapters.SelectMultipleListAdapter;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 
@@ -41,9 +37,8 @@ import java.util.List;
  */
 @SuppressLint("ViewConstructor")
 public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWidget {
-    protected final List<CheckBox> checkBoxes = new ArrayList<>();
-    private boolean checkboxInit = true;
     private final List<Selection> ve;
+    SelectMultipleListAdapter adapter;
 
     public SelectMultiWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -55,97 +50,43 @@ public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWi
 
     @Override
     public void clearAnswer() {
-        for (CheckBox c : checkBoxes) {
-            if (c.isChecked()) {
-                c.setChecked(false);
-            }
-        }
+        adapter.clearAnswer();
     }
 
     @Override
     public IAnswerData getAnswer() {
-        List<Selection> vc = new ArrayList<>();
-        for (int i = 0; i < checkBoxes.size(); ++i) {
-            CheckBox c = checkBoxes.get(i);
-            if (c.isChecked()) {
-                vc.add(new Selection(items.get(i)));
-            }
-        }
-
+        List<Selection> vc = adapter.getSelectedItems();
         return vc.isEmpty() ? null : new SelectMultiData(vc);
     }
 
-    @Override
-    public void setOnLongClickListener(OnLongClickListener l) {
-        for (CheckBox c : checkBoxes) {
-            c.setOnLongClickListener(l);
-        }
-    }
-
-    @Override
-    public void cancelLongPress() {
-        super.cancelLongPress();
-        for (CheckBox c : checkBoxes) {
-            c.cancelLongPress();
-        }
-    }
-
-    protected CheckBox createCheckBox(int index) {
-        final String choiceName = getFormEntryPrompt().getSelectChoiceText(items.get(index));
-        final CharSequence choiceDisplayName = choiceName == null ? "" : TextUtils.textToHtml(choiceName);
-        // no checkbox group so id by answer + offset
-        AppCompatCheckBox checkBox = new AppCompatCheckBox(getContext());
-        checkBox.setTag(index);
-        checkBox.setId(ViewIds.generateViewId());
-        checkBox.setText(choiceDisplayName);
-        checkBox.setMovementMethod(LinkMovementMethod.getInstance());
-        checkBox.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
-        checkBox.setFocusable(!getFormEntryPrompt().isReadOnly());
-        checkBox.setEnabled(!getFormEntryPrompt().isReadOnly());
-
-        for (int vi = 0; vi < ve.size(); vi++) {
-            // match based on value, not key
-            if (items.get(index).getValue().equals(ve.get(vi).getValue())) {
-                checkBox.setChecked(true);
-                break;
-            }
-        }
-
-        // when clicked, check for readonly before toggling
-        checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (!checkboxInit && getFormEntryPrompt().isReadOnly()) {
-                buttonView.setChecked(!buttonView.isChecked());
-            }
-        });
-
-        return checkBox;
-    }
-
-    protected void createLayout() {
+    private void createLayout() {
         readItems();
+
+        adapter = new SelectMultipleListAdapter(items, ve, this);
 
         if (items != null) {
             // check if any values have spaces
             SpacesInUnderlyingValuesWarning.forQuestionWidget(this).renderWarningIfNecessary(items);
 
-            for (int i = 0; i < items.size(); i++) {
-                CheckBox checkBox = createCheckBox(i);
-                checkBoxes.add(checkBox);
-                answerLayout.addView(createMediaLayout(i, checkBox));
-            }
+            RecyclerView recyclerView = setUpRecyclerView();
+            recyclerView.setAdapter(adapter);
+            answerLayout.addView(recyclerView);
+            adjustRecyclerViewSize(adapter, recyclerView);
             addAnswerView(answerLayout);
         }
-        checkboxInit = false;
     }
 
     @Override
     public int getChoiceCount() {
-        return checkBoxes.size();
+        return adapter.getItemCount();
     }
 
     @Override
     public void setChoiceSelected(int choiceIndex, boolean isSelected) {
-        checkBoxes.get(choiceIndex).setChecked(isSelected);
+        if (isSelected) {
+            adapter.addItem(items.get(choiceIndex).selection());
+        } else {
+            adapter.removeItem(items.get(choiceIndex).selection());
+        }
     }
-
 }
