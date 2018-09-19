@@ -17,10 +17,7 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.DisplayMetrics;
 import android.widget.RadioButton;
 
 import org.javarosa.core.model.FormIndex;
@@ -30,7 +27,6 @@ import org.javarosa.core.model.data.SelectOneData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.adapters.SelectOneListAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.JavaRosaException;
@@ -49,21 +45,12 @@ import timber.log.Timber;
 @SuppressLint("ViewConstructor")
 public abstract class AbstractSelectOneWidget extends SelectTextWidget implements MultiChoiceWidget {
 
-    /**
-     * A list of choices can have thousands of items. To increase loading and scrolling performance,
-     * a RecyclerView is used. Because it is nested inside a ScrollView, by default, all of
-     * the RecyclerView's items are loaded and there is no performance benefit over a ListView.
-     * This constant is used to bound the number of items loaded. The value 40 was chosen because
-     * it is around the maximum number of elements that can be shown on a large tablet.
-     */
-    private static final int MAX_ITEMS_WITHOUT_SCREEN_BOUND = 40;
-
     @Nullable
     private AdvanceToNextListener listener;
 
     private String selectedValue;
     private final boolean autoAdvance;
-    protected SelectOneListAdapter adapter;
+    SelectOneListAdapter adapter;
 
     public AbstractSelectOneWidget(Context context, FormEntryPrompt prompt, boolean autoAdvance) {
         super(context, prompt);
@@ -107,21 +94,10 @@ public abstract class AbstractSelectOneWidget extends SelectTextWidget implement
         adapter = new SelectOneListAdapter(items, selectedValue, this);
 
         if (items != null) {
-            RecyclerView recyclerView = new RecyclerView(getContext());
-            recyclerView.setHasFixedSize(true);
-            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+            RecyclerView recyclerView = setUpRecyclerView();
             recyclerView.setAdapter(adapter);
             answerLayout.addView(recyclerView);
-
-            if (adapter.getItemCount() > MAX_ITEMS_WITHOUT_SCREEN_BOUND) {
-                // Only let the RecyclerView take up 80% of the screen height in order to speed up loading if there are many items
-                DisplayMetrics displayMetrics = new DisplayMetrics();
-                ((FormEntryActivity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-                recyclerView.getLayoutParams().height = (int) (displayMetrics.heightPixels * 0.8);
-            } else {
-                recyclerView.setNestedScrollingEnabled(false);
-            }
+            adjustRecyclerViewSize(adapter, recyclerView);
             addAnswerView(answerLayout);
         }
     }
