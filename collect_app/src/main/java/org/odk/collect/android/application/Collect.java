@@ -356,9 +356,11 @@ public class Collect extends Application implements HasActivityInjector {
         String formIdentifier = "";
         FormController formController = getInstance().getFormController();
         if (formController != null) {
-            String formID = formController.getFormDef().getMainInstance()
-                    .getRoot().getAttributeValue("", "id");
-            formIdentifier = formController.getFormTitle() + " " + formID;
+            if (formController.getFormDef() != null) {
+                String formID = formController.getFormDef().getMainInstance()
+                        .getRoot().getAttributeValue("", "id");
+                formIdentifier = formController.getFormTitle() + " " + formID;
+            }
         }
 
         return FileUtils.getMd5Hash(
