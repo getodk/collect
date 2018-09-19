@@ -57,6 +57,7 @@ import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import static android.app.Activity.RESULT_OK;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FORMLIST_URL;
@@ -305,8 +306,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                     }
 
                     if (Validator.isUrlValid(url)) {
-                        String prefix = url.split(":")[0];
-                        prefix = prefix.toUpperCase();
+                        String prefix = url.split(":")[0].toUpperCase(Locale.ENGLISH);
                         String urlHash = FileUtils.getMd5Hash(
                                 new ByteArrayInputStream(url.getBytes()));
                         Collect.getInstance().getDefaultTracker()
@@ -315,6 +315,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                                         .setAction(prefix)
                                         .setLabel(urlHash)
                                         .build());
+
                         preference.setSummary(newValue.toString());
                         SharedPreferences prefs = PreferenceManager
                                 .getDefaultSharedPreferences(getActivity().getApplicationContext());
