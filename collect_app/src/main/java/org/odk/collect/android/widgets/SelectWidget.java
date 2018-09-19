@@ -175,7 +175,7 @@ public abstract class SelectWidget extends QuestionWidget {
             // Only let the RecyclerView take up 80% of the screen height in order to speed up loading if there are many items
             DisplayMetrics displayMetrics = new DisplayMetrics();
             ((FormEntryActivity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-            recyclerView.getLayoutParams().height = (int) (displayMetrics.heightPixels * 0.8);
+            recyclerView.getLayoutParams().height = (int) (displayMetrics.heightPixels * 0.9);
         } else {
             recyclerView.setNestedScrollingEnabled(false);
         }
