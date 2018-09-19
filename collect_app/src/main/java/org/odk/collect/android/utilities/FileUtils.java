@@ -506,6 +506,14 @@ public class FileUtils {
         }
     }
 
+    public static String getFileExtension(String fileName) {
+        int dotIndex = fileName.lastIndexOf('.');
+        if (dotIndex == -1) {
+            return "";
+        }
+        return fileName.substring(dotIndex + 1).toLowerCase(Locale.ROOT);
+    }
+
     /**
      * With the FileProvider you have to manually grant and revoke read/write permissions to files you
      * are sharing. With this approach the access only lasts as long as the target activity on Api versions

@@ -282,6 +282,7 @@
   <string name="google_set_account">Palvelimesi on Google Sheets, valitse vastaava Google-tili yleisasetuksissa ennen jatkamista</string>
   <string name="media_upload_error">Palvelimelle ei voida siirtää tiedostoa, jota ei ole olemassa: %1$s</string>
   <string name="odk_auth_auth_fail">Automaattisen ODK-lähetyksen vahvistus epäonnistui, varmista että asetuksesi ovat oikein</string>
+  <string name="odk_permissions_fail">Automaattisella ODK-lähetyksellä lupavirhe, varmista että olet antanut sovellukselle kaikki tarvittavat luvat</string>
   <string name="odk_auto_note">ODK automaattisen lähetyksen tulokset</string>
   <string name="odk_auto_download_notification_title">ODK automaattisen lataamisen tulokset</string>
   <string name="notification_error">Virhe näyttäessä ilmoitustekstiä</string>
@@ -589,6 +590,12 @@
   <string name="camera_runtime_permission_denied_desc">Ilman tätä lupaa Collect ei pysty käyttämään kameraa. Ole hyvä ja yritä uudestaa kun olet valmis myöntämään sen.</string>
   <string name="record_audio_runtime_permission_denied_title">Äänen tallentamisen lupa</string>
   <string name="record_audio_runtime_permission_denied_desc">Ilman tätä lupaa Collect ei pysty käyttämään mikrofonia. Ole hyvä ja yritä uudestaa kun olet valmis myöntämään sen.</string>
+  <string name="get_accounts_runtime_permission_denied_title">Hae tililuvat</string>
+  <string name="get_accounts_runtime_permission_denied_desc">Ilman tätä lupaa Collect ei voi saada yhteyttää tileihin. Ole hyvä ja yritä uudestaan kun olet valmis myöntämään sen.</string>
+  <string name="send_sms_runtime_permission_denied_title">SMS-lähetyslupa</string>
+  <string name="send_sms_runtime_permission_denied_desc">Ilman tätä lupaa Collect ei pysty lähettämään SMS-viestejä. Ole hyvä ja yritä uudestaa kun olet valmis myöntämään sen.</string>
+  <string name="read_phone_state_runtime_permission_denied_title">Puhelimen tilan lukemisen lupa</string>
+  <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect ei soita puheluita, mutta se tarvitsee tiedot joistakin laitteesi tiedoista, kuten puhelinnumero ja laitteen ID.</string>
   <string name="form_update_category">Lomakepäivitys</string>
   <string name="periodic_form_updates_check_title">Ajastettu lomakepäivitysten tarkistus</string>
   <string name="never">Ei koskaan</string>
@@ -635,4 +642,12 @@
   <string name="rank_items">Järjestä</string>
   <string name="image_not_saved">Kuvaa ei voida tallentaa vastauskerran tiedoston ongelman vuoksi.</string>
   <string name="loading_form_failed">Lomaketta ladatessa tapahtui virhe. Ole hyvä ja yritä uudestaan.</string>
+  <string name="missing_google_account_dialog_title">Google-tiliä ei ole asetettu</string>
+  <string name="missing_google_account_dialog_desc">Lähettääksesi lomakkeita Google Sheets -palvelun kautta sinun on asetettava Google-tili palvelinasetuksissa.</string>
+  <string name="sms_invalid_phone_number_description">Aseta vastaanottopuhelinnumero SMS-lähetyksille tai vaihda siirtotapaa.</string>
+  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
+  <string name="current_predicate_warning">Tämä kysymys ei tule olemaan yhteensopiva ODK Collect -sovelluksen tulevien versioiden kanssa, koska se käyttää current() -funktiota valintasuodatuksessa. \n\nVarmista, että tämän kyselyn tehnyt henkilö lukee yksityiskohdat alla ja tekee tarvittavat muutokset.</string>
+  <string name="current_predicate_warning_title">Toimenpiteitä tarvitaan</string>
+  <string name="current_predicate_forum">Lue yksityiskohdat</string>
+  <string name="current_predicate_continue">Jatka</string>
 </resources>

@@ -9,8 +9,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.dto.Instance;
+import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.provider.InstanceProviderAPI;
-import org.odk.collect.android.tasks.InstanceUploader.Outcome;
 import org.odk.collect.android.test.MockedServerTest;
 
 import okhttp3.mockwebserver.RecordedRequest;
@@ -44,7 +44,7 @@ public class InstanceServerUploaderTest extends MockedServerTest {
         willRespondWith(headResponse(), postResponse());
 
         // when
-        Outcome o = new InstanceServerUploader().doInBackground(id);
+        CollectServerClient.Outcome o = new InstanceServerUploader().doInBackground(id);
 
         // then
         assertNull(o.authRequestingServer);

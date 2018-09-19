@@ -17,6 +17,9 @@ import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.tasks.ServerPollingJob;
+import org.odk.collect.android.utilities.IconUtils;
+import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
@@ -24,11 +27,7 @@ import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceGoogleSheetsUploader;
 import org.odk.collect.android.tasks.InstanceServerUploader;
-import org.odk.collect.android.tasks.ServerPollingJob;
-import org.odk.collect.android.utilities.IconUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
-import org.odk.collect.android.utilities.WebUtils;
-import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -134,14 +133,16 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
             String protocol = (String) settings.get(PreferenceKeys.KEY_PROTOCOL);
 
             if (protocol.equals(context.getString(R.string.protocol_google_sheets))) {
+
                 if (PermissionUtils.checkIfGetAccountsPermissionGranted(context)) {
-                    String googleUsername = (String) settings.get(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
-                    if (googleUsername == null || googleUsername.isEmpty()) {
+                    GoogleAccountsManager accountsManager = new GoogleAccountsManager(Collect.getInstance());
+
+                    String googleUsername = accountsManager.getSelectedAccount();
+                    if (googleUsername.isEmpty()) {
                         // just quit if there's no username
                         running = false;
                         return;
                     }
-                    GoogleAccountsManager accountsManager = new GoogleAccountsManager(Collect.getInstance());
                     accountsManager.getCredential().setSelectedAccountName(googleUsername);
                     instanceGoogleSheetsUploader = new InstanceGoogleSheetsUploader(accountsManager);
                     instanceGoogleSheetsUploader.setUploaderListener(this);
@@ -152,15 +153,6 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                 }
             } else if (protocol.equals(context.getString(R.string.protocol_odk_default))) {
                 // get the username, password, and server from preferences
-
-                String storedUsername = (String) settings.get(PreferenceKeys.KEY_USERNAME);
-                String storedPassword = (String) settings.get(PreferenceKeys.KEY_PASSWORD);
-                String server = (String) settings.get(PreferenceKeys.KEY_SERVER_URL);
-                String url = server + settings.get(PreferenceKeys.KEY_FORMLIST_URL);
-
-                Uri u = Uri.parse(url);
-                WebUtils.addCredentials(storedUsername, storedPassword, u.getHost());
-
                 instanceServerUploader = new InstanceServerUploader();
                 instanceServerUploader.setUploaderListener(this);
 

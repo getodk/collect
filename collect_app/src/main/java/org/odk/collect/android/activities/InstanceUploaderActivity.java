@@ -66,7 +66,11 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
 
     // maintain a list of what we've sent, in case we're interrupted by auth requests
     private HashMap<String, String> uploadedInstances;
+
     private String url;
+    private String username;
+    private String password;
+    private Boolean deleteInstanceAfterUpload;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,10 +97,44 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
         long[] selectedInstanceIDs = null;
         if (savedInstanceState != null && savedInstanceState.containsKey(TO_SEND)) {
             selectedInstanceIDs = savedInstanceState.getLongArray(TO_SEND);
+
+            // Add optional authentication params
+            if (savedInstanceState.containsKey(ApplicationConstants.BundleKeys.URL)) {
+                url = savedInstanceState.getString(ApplicationConstants.BundleKeys.URL);
+                if (savedInstanceState.containsKey(ApplicationConstants.BundleKeys.USERNAME)
+                        && savedInstanceState.containsKey(ApplicationConstants.BundleKeys.PASSWORD)) {
+                    username = savedInstanceState.getString(ApplicationConstants.BundleKeys.USERNAME);
+                    password = savedInstanceState.getString(ApplicationConstants.BundleKeys.PASSWORD);
+                }
+
+                if (savedInstanceState.containsKey(ApplicationConstants.BundleKeys.DELETE_INSTANCE_AFTER_SUBMISSION)) {
+                    deleteInstanceAfterUpload = savedInstanceState.getBoolean(ApplicationConstants.BundleKeys.DELETE_INSTANCE_AFTER_SUBMISSION);
+                }
+            }
         } else {
             // get instances to upload...
             Intent intent = getIntent();
+            Bundle bundle = intent.getExtras();
             selectedInstanceIDs = intent.getLongArrayExtra(FormEntryActivity.KEY_INSTANCES);
+
+            if (bundle != null && bundle.containsKey(ApplicationConstants.BundleKeys.URL)) {
+                url = intent.getStringExtra(ApplicationConstants.BundleKeys.URL);
+
+                // Remove the trailing //
+                while (url != null && url.endsWith("/")) {
+                    url = url.substring(0, url.length() - 1);
+                }
+
+                if (bundle.containsKey(ApplicationConstants.BundleKeys.USERNAME)
+                        && bundle.containsKey(ApplicationConstants.BundleKeys.PASSWORD)) {
+                    username = intent.getStringExtra(ApplicationConstants.BundleKeys.USERNAME);
+                    password = intent.getStringExtra(ApplicationConstants.BundleKeys.PASSWORD);
+                }
+
+                if (bundle.containsKey(ApplicationConstants.BundleKeys.DELETE_INSTANCE_AFTER_SUBMISSION)) {
+                    deleteInstanceAfterUpload = bundle.getBoolean(ApplicationConstants.BundleKeys.DELETE_INSTANCE_AFTER_SUBMISSION);
+                }
+            }
         }
 
         instancesToSend = ArrayUtils.toObject(selectedInstanceIDs);
@@ -115,6 +153,23 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
             // setup dialog and upload task
             showDialog(PROGRESS_DIALOG);
             instanceServerUploader = new InstanceServerUploader();
+
+            if (url != null) {
+                instanceServerUploader.setCompleteDestinationUrl(url + Collect.getInstance().getString(R.string.default_odk_submission));
+
+                if (deleteInstanceAfterUpload != null) {
+                    instanceServerUploader.setDeleteInstanceAfterSubmission(deleteInstanceAfterUpload);
+                }
+
+                String host = Uri.parse(url).getHost();
+                if (host != null) {
+                    // We do not need to clear the cookies since they are cleared before any request is made and the Credentials provider is used
+                    if (password != null && username != null) {
+                        instanceServerUploader.setCustomUsername(username);
+                        instanceServerUploader.setCustomPassword(password);
+                    }
+                }
+            }
 
             // register this activity with the new uploader task
             instanceServerUploader.setUploaderListener(this);
@@ -143,6 +198,15 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
         outState.putString(ALERT_MSG, alertMsg);
         outState.putString(AUTH_URI, url);
         outState.putLongArray(TO_SEND, ArrayUtils.toPrimitive(instancesToSend));
+
+        if (url != null) {
+            outState.putString(ApplicationConstants.BundleKeys.URL, url);
+
+            if (username != null && password != null) {
+                outState.putString(ApplicationConstants.BundleKeys.USERNAME, username);
+                outState.putString(ApplicationConstants.BundleKeys.PASSWORD, password);
+            }
+        }
     }
 
     @Override
@@ -216,6 +280,7 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
         if (!isInstanceStateSaved()) {
             createUploadInstancesResultDialog(message.trim());
         } else {
+            // Clean up
             finish();
         }
     }
@@ -259,7 +324,13 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
                 Collect.getInstance().getActivityLogger().logAction(this,
                         "onCreateDialog.AUTH_DIALOG", "show");
 
-                return new AuthDialogUtility().createDialog(this, this, this.url);
+                AuthDialogUtility authDialogUtility = new AuthDialogUtility();
+                if (username != null && password != null && url != null) {
+                    authDialogUtility.setCustomUsername(username);
+                    authDialogUtility.setCustomPassword(password);
+                }
+
+                return authDialogUtility.createDialog(this, this, this.url);
         }
 
         return null;
@@ -318,6 +389,9 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
 
         // register this activity with the new uploader task
         instanceServerUploader.setUploaderListener(this);
+        if (url != null) {
+            instanceServerUploader.setCompleteDestinationUrl(url + Collect.getInstance().getString(R.string.default_odk_submission), false);
+        }
         instanceServerUploader.execute(instancesToSend);
     }
 

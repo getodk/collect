@@ -7,15 +7,15 @@ import android.telephony.SmsManager;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.events.RxEventBus;
+import org.odk.collect.android.http.CollectServerClient;
+import org.odk.collect.android.http.HttpClientConnection;
+import org.odk.collect.android.http.OpenRosaHttpInterface;
 import org.odk.collect.android.injection.ViewModelBuilder;
 import org.odk.collect.android.injection.config.architecture.ViewModelFactoryModule;
 import org.odk.collect.android.injection.config.scopes.PerApplication;
 import org.odk.collect.android.tasks.sms.SmsSubmissionManager;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
-import org.odk.collect.android.utilities.AgingCredentialsProvider;
-import org.opendatakit.httpclientandroidlib.client.CookieStore;
-import org.opendatakit.httpclientandroidlib.client.CredentialsProvider;
-import org.opendatakit.httpclientandroidlib.impl.client.BasicCookieStore;
+import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import dagger.Module;
 import dagger.Provides;
@@ -58,17 +58,19 @@ public class AppModule {
         return new RxEventBus();
     }
 
-    @PerApplication
     @Provides
-    CredentialsProvider provideCredentialsProvider() {
-        // retain credentials for 7 minutes...
-        return new AgingCredentialsProvider(7 * 60 * 1000);
+    public OpenRosaHttpInterface provideHttpInterface() {
+        return new HttpClientConnection();
     }
 
-    @PerApplication
     @Provides
-    CookieStore provideCookieStore() {
-        // share all session cookies across all sessions.
-        return new BasicCookieStore();
+    public CollectServerClient provideCollectServerClient(OpenRosaHttpInterface httpInterface, WebCredentialsUtils webCredentialsUtils) {
+        return new CollectServerClient(httpInterface, webCredentialsUtils);
     }
+
+    @Provides
+    public WebCredentialsUtils provideWebCredentials() {
+        return new WebCredentialsUtils();
+    }
+
 }

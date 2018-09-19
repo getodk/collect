@@ -35,8 +35,11 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.google.android.gms.analytics.HitBuilders;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.listeners.PermissionListener;
@@ -63,6 +66,7 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PROTOCOL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_TRANSPORT_TYPE;
 import static org.odk.collect.android.tasks.sms.SmsSender.SMS_INSTANCE_ID;
 import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
+import static org.odk.collect.android.utilities.PermissionUtils.requestReadPhoneStatePermission;
 import static org.odk.collect.android.utilities.PermissionUtils.requestSendSMSPermission;
 import static org.odk.collect.android.utilities.PermissionUtils.requestStoragePermissions;
 
@@ -150,7 +154,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
     @OnClick({R.id.upload_button, R.id.sms_upload_button})
     public void onUploadButtonsClicked(Button button) {
         Transport transport = Transport.fromPreference(GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE));
-        if (transport.equals(Transport.Internet) || button.getId() == R.id.upload_button) {
+        if (!transport.equals(Transport.Sms) && button.getId() == R.id.upload_button) {
 
             ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(
                     Context.CONNECTIVITY_SERVICE);
@@ -322,7 +326,18 @@ public class InstanceUploaderList extends InstanceListActivity implements
                 // otherwise, do the normal aggregate/other thing.
                 Intent i = new Intent(this, InstanceUploaderActivity.class);
                 i.putExtra(FormEntryActivity.KEY_INSTANCES, instanceIds);
-                startActivityForResult(i, INSTANCE_UPLOADER);
+                // Not required but without this permission a Device ID attached to a request will be empty.
+                requestReadPhoneStatePermission(this, new PermissionListener() {
+                    @Override
+                    public void granted() {
+                        startActivityForResult(i, INSTANCE_UPLOADER);
+                    }
+
+                    @Override
+                    public void denied() {
+                        startActivityForResult(i, INSTANCE_UPLOADER);
+                    }
+                }, false);
             }
         }
     }
@@ -470,6 +485,11 @@ public class InstanceUploaderList extends InstanceListActivity implements
                             logger.logAction(this, "changeView", "showAll");
                             showAllMode = true;
                             updateAdapter();
+                            Collect.getInstance().getDefaultTracker()
+                                    .send(new HitBuilders.EventBuilder()
+                                            .setCategory("FilterSendForms")
+                                            .setAction("SentAndUnsent")
+                                            .build());
                             break;
 
                         case 2:// do nothing

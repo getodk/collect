@@ -71,7 +71,7 @@ android {
     defaultConfig {
         applicationId('org.odk.collect.android')
         minSdkVersion(16)
-        targetSdkVersion(22)
+        targetSdkVersion(23)
         versionCode LEGACY_BUILD_NUMBER_OFFSET + getMasterCommitCount()
         versionName getVersionName()
         testInstrumentationRunner('android.support.test.runner.AndroidJUnitRunner')
@@ -300,6 +300,7 @@ dependencies {
     }
 
     androidTestImplementation "com.squareup.okhttp3:mockwebserver:3.9.0"
+
 }
 
 // Must be at bottom to prevent dependency collisions

@@ -18,12 +18,12 @@ package org.odk.collect.android.tasks;
 
 import android.database.Cursor;
 import android.database.SQLException;
-import android.net.Uri;
 import android.os.AsyncTask;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
@@ -31,7 +31,6 @@ import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.utilities.ApplicationConstants;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -40,12 +39,13 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_DELETE;
 
-public abstract class InstanceUploader extends AsyncTask<Long, Integer, InstanceUploader.Outcome> {
+public abstract class InstanceUploader extends AsyncTask<Long, Integer, CollectServerClient.Outcome> {
 
     private InstanceUploaderListener stateListener;
+    private Boolean deleteInstanceAfterSubmission;
 
     @Override
-    protected void onPostExecute(Outcome outcome) {
+    protected void onPostExecute(CollectServerClient.Outcome outcome) {
         synchronized (this) {
             if (outcome != null && stateListener != null) {
                 if (outcome.authRequestingServer != null) {
@@ -94,6 +94,13 @@ public abstract class InstanceUploader extends AsyncTask<Long, Integer, Instance
                                 results.moveToPosition(-1);
 
                                 boolean isFormAutoDeleteOptionEnabled = (boolean) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_DELETE_AFTER_SEND);
+
+                                // The custom configuration from the third party app overrides
+                                // the app preferences set for delete after submission
+                                if (deleteInstanceAfterSubmission != null) {
+                                    isFormAutoDeleteOptionEnabled = deleteInstanceAfterSubmission;
+                                }
+
                                 String formId;
                                 while (results.moveToNext()) {
                                     formId = results.getString(results.getColumnIndex(InstanceProviderAPI.InstanceColumns.JR_FORM_ID));
@@ -153,8 +160,7 @@ public abstract class InstanceUploader extends AsyncTask<Long, Integer, Instance
         }
     }
 
-    static class Outcome {
-        Uri authRequestingServer;
-        HashMap<String, String> messagesByInstanceId = new HashMap<>();
+    public void setDeleteInstanceAfterSubmission(Boolean deleteInstanceAfterSubmission) {
+        this.deleteInstanceAfterSubmission = deleteInstanceAfterSubmission;
     }
 }

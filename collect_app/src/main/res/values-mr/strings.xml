@@ -465,4 +465,6 @@
   <string name="not_supported_offline_layer_format">निवडलेली ऑफलाइन स्तर फाइल PBF स्वरूपन वापरते जी समर्थित नाही!</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
   <!--Sms submission-->
+  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
+  <string name="current_predicate_continue">चालू ठेवा</string>
 </resources>
