@@ -37,6 +37,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListPopupWindow;
 
+import com.google.android.gms.analytics.HitBuilders;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -46,14 +47,17 @@ import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.listeners.OnBackPressedListener;
 import org.odk.collect.android.preferences.filters.ControlCharacterFilter;
 import org.odk.collect.android.preferences.filters.WhitespaceFilter;
+import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.Validator;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -303,6 +307,16 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                     }
 
                     if (Validator.isUrlValid(url)) {
+                        String prefix = url.split(":")[0].toUpperCase(Locale.ENGLISH);
+                        String urlHash = FileUtils.getMd5Hash(
+                                new ByteArrayInputStream(url.getBytes()));
+                        Collect.getInstance().getDefaultTracker()
+                                .send(new HitBuilders.EventBuilder()
+                                        .setCategory("SetServer")
+                                        .setAction(prefix)
+                                        .setLabel(urlHash)
+                                        .build());
+
                         preference.setSummary(newValue.toString());
                         SharedPreferences prefs = PreferenceManager
                                 .getDefaultSharedPreferences(getActivity().getApplicationContext());
