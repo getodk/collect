@@ -30,6 +30,7 @@ import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdate;
@@ -123,6 +124,8 @@ public class GeoTraceGoogleMapActivity extends CollectAbstractActivity implement
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         setContentView(R.layout.geotrace_google_layout);
+        TextView textView = findViewById(R.id.geotrace_instruction);
+        textView.setText("old GeoTrace Google");
 
         clearButton = findViewById(R.id.clear);
         playButton = findViewById(R.id.play);

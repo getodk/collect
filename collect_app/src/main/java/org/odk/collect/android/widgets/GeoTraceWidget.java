@@ -19,6 +19,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.AudioManager;
 import android.preference.PreferenceManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -29,6 +30,7 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.activities.GeoTraceActivity;
 import org.odk.collect.android.activities.GeoTraceGoogleMapActivity;
 import org.odk.collect.android.activities.GeoTraceOsmMapActivity;
 import org.odk.collect.android.listeners.PermissionListener;
@@ -92,7 +94,23 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
         updateButtonLabelsAndVisibility(dataAvailable);
     }
 
+    private boolean isRingerOn() {
+        return ((AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE)).getRingerMode() == AudioManager.RINGER_MODE_NORMAL;
+    }
+
     private void startGeoTraceActivity() {
+        if (!isRingerOn()) {
+            if (mapSDK.equals(GOOGLE_MAP_KEY) && !PlayServicesUtil.isGooglePlayServicesAvailable(getContext())) {
+                PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(getContext());
+                return;
+            }
+            Intent intent = new Intent(getContext(), GeoTraceActivity.class)
+                .putExtra(TRACE_LOCATION, answerDisplay.getText().toString())
+                .putExtra(PreferenceKeys.KEY_MAP_SDK, mapSDK);
+            ((Activity) getContext()).startActivityForResult(intent, RequestCodes.GEOTRACE_CAPTURE);
+            return;
+        }
+
         Intent i;
         if (mapSDK.equals(GOOGLE_MAP_KEY)) {
             if (PlayServicesUtil.isGooglePlayServicesAvailable(getContext())) {

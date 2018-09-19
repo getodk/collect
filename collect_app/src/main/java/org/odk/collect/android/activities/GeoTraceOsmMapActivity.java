@@ -35,6 +35,7 @@ import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.google.android.gms.location.LocationListener;
 
@@ -115,6 +116,8 @@ public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements I
 
         setContentView(R.layout.geotrace_osm_layout);
         setTitle(getString(R.string.geotrace_title)); // Setting title of the action
+        TextView textView = findViewById(R.id.geotrace_instruction);
+        textView.setText("old GeoTrace OSM");
 
         // For testing purposes:
         if (mapView == null) {

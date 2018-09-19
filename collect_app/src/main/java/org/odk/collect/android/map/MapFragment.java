@@ -58,6 +58,9 @@ public interface MapFragment {
      */
     double getZoom();
 
+    /** Centers the map view on the given point, leaving zoom level unchanged. */
+    void setCenter(@Nullable MapPoint center);
+
     /**
      * Centers the map view on the given point, zooming in to a close-up level
      * deemed appropriate by the implementation, possibly with animation.
@@ -81,20 +84,20 @@ public interface MapFragment {
     void zoomToBoundingBox(Iterable<MapPoint> points, double scaleFactor);
 
     /**
-     * Adds a polygonal shape to the map with the given sequence of vertices.
-     * The polygon's vertices will have handles that can be dragged by the user.
-     * Returns a positive integer, the featureId for the newly added polyline.
+     * Adds a polyline or polygon to the map with the given sequence of vertices.
+     * The vertices will have handles that can be dragged by the user.
+     * Returns a positive integer, the featureId for the newly added shape.
      */
-    int addDraggableShape(@NonNull Iterable<MapPoint> points);
+    int addDraggablePoly(@NonNull Iterable<MapPoint> points, boolean closedPolygon);
 
-    /** Appends a vertex to the polygonal shape specified by featureId. */
-    void appendPointToShape(int featureId, @NonNull MapPoint point);
+    /** Appends a vertex to the polyline or polygon specified by featureId. */
+    void appendPointToPoly(int featureId, @NonNull MapPoint point);
 
     /**
-     * Returns the vertices of the polygonal shape specified by featureId, or an
-     * empty list if the featureId does not identify an existing polygonal shape.
+     * Returns the vertices of the polyline or polygon specified by featureId, or an
+     * empty list if the featureId does not identify an existing polyline or polygon.
      */
-    @NonNull List<MapPoint> getPointsOfShape(int featureId);
+    @NonNull List<MapPoint> getPointsOfPoly(int featureId);
 
     /** Removes a specified map feature from the map. */
     void removeFeature(int featureId);
@@ -104,8 +107,9 @@ public interface MapFragment {
 
     /**
      * Enables/disables GPS tracking.  While enabled, the GPS location is shown
-     * on the map, and the first GPS fix will trigger any pending callbacks set
-     * by runOnGpsLocationReady().
+     * on the map, the first GPS fix will trigger any pending callbacks set by
+     * runOnGpsLocationReady(), and every GPS fix will invoke the callback set
+     * by setGpsLocationListener().
      */
     void setGpsLocationEnabled(boolean enabled);
 
@@ -121,6 +125,12 @@ public interface MapFragment {
      * in their onStop() or onDestroy() methods, to prevent invalid callbacks.
      */
     void runOnGpsLocationReady(@NonNull ReadyListener listener);
+
+    /**
+     * Sets or clears the callback for GPS location updates.  This callback
+     * will only be invoked while GPS is enabled with setGpsLocationEnabled().
+     */
+    void setGpsLocationListener(@Nullable PointListener listener);
 
     /** Sets or clears the callback for a click on the map. */
     void setClickListener(@Nullable PointListener listener);

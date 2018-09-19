@@ -47,7 +47,7 @@ public class GeoShapeActivity extends CollectAbstractActivity implements IRegist
     public static final String PREF_VALUE_GOOGLE_MAPS = "google_maps";
 
     private MapFragment map;
-    private int shapeId = -1;  // will be a positive featureId once map is ready
+    private int featureId = -1;  // will be a positive featureId once map is ready
     private ImageButton zoomButton;
     private ImageButton clearButton;
     private MapHelper helper;
@@ -92,7 +92,7 @@ public class GeoShapeActivity extends CollectAbstractActivity implements IRegist
     }
 
     @Override public void onBackPressed() {
-        if (!formatPoints(map.getPointsOfShape(shapeId)).equals(originalValue)) {
+        if (!formatPoints(map.getPointsOfPoly(featureId)).equals(originalValue)) {
             showBackDialog();
         } else {
             finish();
@@ -135,7 +135,7 @@ public class GeoShapeActivity extends CollectAbstractActivity implements IRegist
             originalValue = intent.getStringExtra(GeoShapeWidget.SHAPE_LOCATION);
             points = parsePoints(originalValue);
         }
-        shapeId = map.addDraggableShape(points);
+        featureId = map.addDraggablePoly(points, true);
         zoomButton.setEnabled(!points.isEmpty());
         clearButton.setEnabled(!points.isEmpty());
 
@@ -149,13 +149,13 @@ public class GeoShapeActivity extends CollectAbstractActivity implements IRegist
 
         zoomPointButton = zoomDialogView.findViewById(R.id.zoom_saved_location);
         zoomPointButton.setOnClickListener(v -> {
-            map.zoomToBoundingBox(map.getPointsOfShape(shapeId), 0.8);
+            map.zoomToBoundingBox(map.getPointsOfPoly(featureId), 0.6);
             zoomDialog.dismiss();
         });
 
         map.setGpsLocationEnabled(true);
         if (!points.isEmpty()) {
-            map.zoomToBoundingBox(points, 0.8);
+            map.zoomToBoundingBox(points, 0.6);
         } else {
             map.runOnGpsLocationReady(this::onGpsLocationReady);
         }
@@ -170,19 +170,19 @@ public class GeoShapeActivity extends CollectAbstractActivity implements IRegist
     }
 
     private void addVertex(MapPoint point) {
-        map.appendPointToShape(shapeId, point);
+        map.appendPointToPoly(featureId, point);
         clearButton.setEnabled(true);
         zoomButton.setEnabled(true);
     }
 
     private void clear() {
         map.clearFeatures();
-        shapeId = map.addDraggableShape(new ArrayList<>());
+        featureId = map.addDraggablePoly(new ArrayList<>(), true);
         clearButton.setEnabled(false);
     }
 
     private void showClearDialog() {
-        if (!map.getPointsOfShape(shapeId).isEmpty()) {
+        if (!map.getPointsOfPoly(featureId).isEmpty()) {
             new AlertDialog.Builder(this)
                 .setMessage(R.string.geo_clear_warning)
                 .setPositiveButton(R.string.clear, (dialog, id) -> clear())
@@ -201,9 +201,10 @@ public class GeoShapeActivity extends CollectAbstractActivity implements IRegist
     }
 
     private void finishWithResult() {
-        List<MapPoint> points = map.getPointsOfShape(shapeId);
-        // Allow an empty result (no points), or a polygon with at least 3 points,
-        // but no degenerate 1-point or 2-point polygons.
+        List<MapPoint> points = map.getPointsOfPoly(featureId);
+
+        // Allow an empty result (no points), or a polygon with at least
+        // 3 points, but no degenerate 1-point or 2-point polygons.
         if (!points.isEmpty() && points.size() < 3) {
             ToastUtils.showShortToastInMiddle(getString(R.string.polygon_validator));
             return;
@@ -288,7 +289,7 @@ public class GeoShapeActivity extends CollectAbstractActivity implements IRegist
             zoomLocationButton.setTextColor(Color.parseColor("#FF979797"));
         }
 
-        if (!map.getPointsOfShape(shapeId).isEmpty()) {
+        if (!map.getPointsOfPoly(featureId).isEmpty()) {
             zoomPointButton.setEnabled(true);
             zoomPointButton.setBackgroundColor(Color.parseColor("#50cccccc"));
             zoomPointButton.setTextColor(themeUtils.getPrimaryTextColor());
