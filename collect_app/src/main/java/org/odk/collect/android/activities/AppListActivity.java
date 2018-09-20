@@ -214,8 +214,7 @@ abstract class AppListActivity extends CollectAbstractActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int i = item.getItemId();
-        if (i == R.id.menu_sort) {
+        if (item.getItemId() == R.id.menu_sort) {
             bottomSheetDialog.show();
             isBottomDialogShown = true;
             return true;

@@ -276,13 +276,12 @@ public class ShowQRCodeFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int i = item.getItemId();
-        if (i == R.id.menu_item_share) {
+        if (item.getItemId() == R.id.menu_item_share) {
             if (shareIntent != null) {
                 startActivity(Intent.createChooser(shareIntent, getString(R.string.share_qrcode)));
             }
             return true;
-        } else if (i == R.id.menu_save_preferences) {
+        } else if (item.getItemId() == R.id.menu_save_preferences) {
             File writeDir = new File(Collect.SETTINGS);
             if (!writeDir.exists()) {
                 if (!writeDir.mkdirs()) {

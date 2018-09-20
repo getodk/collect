@@ -272,7 +272,6 @@ public class DataManagerList extends InstanceListFragment
             } else {
                 ToastUtils.showShortToast(R.string.noselect_error);
             }
-
         } else if (i1 == R.id.toggle_button) {
             ListView lv = getListView();
             boolean allChecked = toggleChecked(lv);
@@ -285,8 +284,6 @@ public class DataManagerList extends InstanceListFragment
             }
             toggleButtonLabel(toggleButton, getListView());
             deleteButton.setEnabled(allChecked);
-
         }
     }
-
 }

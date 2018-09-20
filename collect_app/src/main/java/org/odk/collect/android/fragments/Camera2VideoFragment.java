@@ -514,10 +514,8 @@ public class Camera2VideoFragment extends Fragment
         int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
         if (SENSOR_ORIENTATION_DEFAULT_DEGREES == sensorOrientation) {
             mediaRecorder.setOrientationHint(DEFAULT_ORIENTATIONS.get(rotation));
-
         } else if (SENSOR_ORIENTATION_INVERSE_DEGREES == sensorOrientation) {
             mediaRecorder.setOrientationHint(INVERSE_ORIENTATIONS.get(rotation));
-
         }
         mediaRecorder.prepare();
     }

@@ -242,10 +242,8 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
                 public void denied() {
                 }
             });
-
         } else if (buttonId == R.id.choose_sound) {
             chooseSound();
-
         }
     }
 

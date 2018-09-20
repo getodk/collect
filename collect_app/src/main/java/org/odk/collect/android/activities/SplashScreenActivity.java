@@ -225,7 +225,6 @@ public class SplashScreenActivity extends Activity {
                     if (shouldExit) {
                         finish();
                     }
-
                 }
             }
         };

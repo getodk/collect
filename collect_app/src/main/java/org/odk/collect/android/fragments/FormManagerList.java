@@ -210,8 +210,7 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
 
     @Override
     public void onClick(View v) {
-        int i1 = v.getId();
-        if (i1 == R.id.delete_button) {
+        if (v.getId() == R.id.delete_button) {
             logger.logAction(this, "deleteButton", Integer.toString(getCheckedCount()));
 
             if (areCheckedItems()) {
@@ -219,8 +218,7 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
             } else {
                 ToastUtils.showShortToast(R.string.noselect_error);
             }
-
-        } else if (i1 == R.id.toggle_button) {
+        } else if (v.getId() == R.id.toggle_button) {
             ListView lv = getListView();
             boolean allChecked = toggleChecked(lv);
             if (allChecked) {
@@ -232,7 +230,6 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
             }
             toggleButtonLabel(toggleButton, getListView());
             deleteButton.setEnabled(allChecked);
-
         }
     }
 

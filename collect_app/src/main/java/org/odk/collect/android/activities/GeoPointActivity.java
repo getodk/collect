@@ -217,7 +217,6 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
                                     "cancelLocation", "cancel");
                             location = null;
                             finish();
-
                         }
                     }
                 };

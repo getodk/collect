@@ -820,7 +820,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                     if (shouldExit || isDownloadOnlyMode) {
                         finish();
                     }
-
                 }
             }
         };

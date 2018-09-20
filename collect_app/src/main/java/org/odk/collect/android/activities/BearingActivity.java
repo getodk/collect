@@ -101,13 +101,11 @@ public class BearingActivity extends CollectAbstractActivity implements SensorEv
                             Collect.getInstance().getActivityLogger()
                                     .logInstanceAction(this, "acceptBearing", "OK");
                             returnBearing();
-
                         } else if (which == DialogInterface.BUTTON_NEGATIVE) {
                             Collect.getInstance().getActivityLogger()
                                     .logInstanceAction(this, "cancelBearing", "cancel");
                             bearingDecimal = null;
                             finish();
-
                         }
                     }
                 };

@@ -491,7 +491,6 @@ public class MainMenuActivity extends CollectAbstractActivity {
                     if (shouldExit) {
                         finish();
                     }
-
                 }
             }
         };

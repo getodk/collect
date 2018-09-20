@@ -502,26 +502,20 @@ public class GeoTraceOsmMapActivity extends CollectAbstractActivity implements I
 
     //This happens on click of the play button
     public void setGeoTraceMode(View view) {
-        boolean checked = ((RadioButton) view).isChecked();
-        int i = view.getId();
-        if (i == R.id.trace_manual) {
-            if (checked) {
+        if (((RadioButton) view).isChecked()) {
+            if (view.getId() == R.id.trace_manual) {
                 traceMode = 0;
                 timeUnits.setVisibility(View.GONE);
                 timeDelay.setVisibility(View.GONE);
                 timeDelay.invalidate();
                 timeUnits.invalidate();
-            }
-
-        } else if (i == R.id.trace_automatic) {
-            if (checked) {
+            } else if (view.getId() == R.id.trace_automatic) {
                 traceMode = 1;
                 timeUnits.setVisibility(View.VISIBLE);
                 timeDelay.setVisibility(View.VISIBLE);
                 timeDelay.invalidate();
                 timeUnits.invalidate();
             }
-
         }
     }
 

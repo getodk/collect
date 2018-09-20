@@ -271,7 +271,6 @@ public class InstanceChooserList extends InstanceListActivity implements
                     if (shouldExit) {
                         finish();
                     }
-
                 }
             }
         };

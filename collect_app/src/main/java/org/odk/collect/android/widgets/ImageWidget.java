@@ -128,10 +128,8 @@ public class ImageWidget extends BaseImageWidget {
                 public void denied() {
                 }
             });
-
         } else if (buttonId == R.id.choose_image) {
             imageCaptureHandler.chooseImage(R.string.choose_image);
-
         }
     }
 

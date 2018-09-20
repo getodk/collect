@@ -279,10 +279,8 @@ public class ImageWebViewWidget extends QuestionWidget implements FileWidget {
                 public void denied() {
                 }
             });
-
         } else if (buttonId == R.id.choose_image) {
             chooseImage();
-
         }
     }
 

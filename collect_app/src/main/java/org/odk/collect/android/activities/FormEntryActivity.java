@@ -1852,8 +1852,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                             });
                         }
                     }.start();
-
-
                 }
             }
         };

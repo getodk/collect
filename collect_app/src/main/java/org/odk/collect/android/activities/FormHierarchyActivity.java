@@ -385,7 +385,6 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity {
                             .logInstanceAction(this, "createErrorDialog", "OK");
                     FormController formController = Collect.getInstance().getFormController();
                     formController.jumpToIndex(currentIndex);
-
                 }
             }
         };

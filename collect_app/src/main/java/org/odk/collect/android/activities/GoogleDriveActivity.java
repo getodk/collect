@@ -385,7 +385,6 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
                             .logAction(this, "createAlertDialog", "OK");
                     alertShowing = false;
                     finish();
-
                 }
             }
         };
@@ -405,12 +404,10 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
                 String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
                 accountsManager.setSelectedAccountName(accountName);
             }
-
         } else if (requestCode == AUTHORIZATION_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 getResultsFromApi();
             }
-
         }
         if (resultCode == RESULT_CANCELED) {
             Timber.d("AUTHORIZE_DRIVE_ACCESS failed, asking to choose new account:");

@@ -229,7 +229,6 @@ public class FormChooserList extends FormListActivity implements
                     if (shouldExit) {
                         finish();
                     }
-
                 }
             }
         };

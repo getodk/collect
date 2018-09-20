@@ -49,6 +49,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
 
+import timber.log.Timber;
+
 public class MapHelper {
     private static final String OFFLINE_LAYER_TAG = " (custom, offline)";
 
@@ -252,9 +254,7 @@ public class MapHelper {
 
         } else {
             File[] spFiles = getFileFromSelectedItem(item);
-            if (spFiles == null || spFiles.length == 0) {
-                break;
-            } else {
+            if (spFiles != null && spFiles.length > 0) {
                 File spfile = spFiles[0];
 
                 if (isFileFormatSupported(spfile)) {
@@ -270,7 +270,7 @@ public class MapHelper {
                             opts.tileProvider(provider);
                             googleTileOverlay = googleMap.addTileOverlay(opts);
                         } catch (Exception e) {
-                            break;
+                            Timber.e(e);
                         }
                     } else {
                         if (osmTileOverlay != null) {
@@ -290,7 +290,6 @@ public class MapHelper {
                     ToastUtils.showLongToast(R.string.not_supported_offline_layer_format);
                 }
             }
-
         }
     }
 
