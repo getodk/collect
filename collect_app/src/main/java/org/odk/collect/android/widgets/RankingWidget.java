@@ -170,6 +170,7 @@ public class RankingWidget extends QuestionWidget implements BinaryWidget {
         widgetLayout = new LinearLayout(getContext());
         widgetLayout.setOrientation(LinearLayout.VERTICAL);
         showRankingDialogButton = getSimpleButton(getContext().getString(R.string.rank_items));
+        showRankingDialogButton.setEnabled(!getFormEntryPrompt().isReadOnly());
         widgetLayout.addView(showRankingDialogButton);
         widgetLayout.addView(setUpAnswerTextView());
 
