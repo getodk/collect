@@ -36,8 +36,11 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.google.android.gms.analytics.HitBuilders;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.workers.AutoSendWorker;
 import org.odk.collect.android.listeners.DiskSyncListener;
@@ -518,6 +521,11 @@ public class InstanceUploaderList extends InstanceListActivity implements
                             logger.logAction(this, "changeView", "showAll");
                             showAllMode = true;
                             updateAdapter();
+                            Collect.getInstance().getDefaultTracker()
+                                    .send(new HitBuilders.EventBuilder()
+                                            .setCategory("FilterSendForms")
+                                            .setAction("SentAndUnsent")
+                                            .build());
                             break;
 
                         case 2:// do nothing

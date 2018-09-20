@@ -17,29 +17,21 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Context;
-import android.widget.CompoundButton;
-import android.widget.LinearLayout;
 
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
-import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 
-import java.util.List;
-
-public class SelectMultipleAutocompleteWidget extends SelectMultiWidget implements CompoundButton.OnCheckedChangeListener, AudioPlayListener {
+public class SelectMultipleAutocompleteWidget extends SelectMultiWidget implements AudioPlayListener {
     public SelectMultipleAutocompleteWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
+        setUpSearchBox();
     }
 
     @Override
-    protected void addButtonsToLayout(List<Integer> tagList) {
-        for (int i = 0; i < checkBoxes.size(); i++) {
-            if (tagList == null || tagList.contains(i)) {
-                answerLayout.addView(checkBoxes.get(i));
-                answerLayout.setDividerDrawable(getResources().getDrawable(themeUtils.getDivider()));
-                answerLayout.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
-            }
+    protected void doSearch(String searchStr) {
+        if (adapter != null) {
+            adapter.getFilter().filter(searchStr);
         }
     }
 
@@ -48,21 +40,4 @@ public class SelectMultipleAutocompleteWidget extends SelectMultiWidget implemen
         SoftKeyboardUtils.showSoftKeyboard(searchStr);
     }
 
-    @Override
-    protected void createLayout() {
-        readItems();
-
-        if (items != null) {
-            SpacesInUnderlyingValuesWarning.forQuestionWidget(this).renderWarningIfNecessary(items);
-            for (int i = 0; i < items.size(); i++) {
-                checkBoxes.add(createCheckBox(i));
-            }
-        }
-
-        setUpSearchBox();
-    }
-
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-    }
 }

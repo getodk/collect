@@ -17,7 +17,10 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Context;
-import android.media.MediaPlayer;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -26,6 +29,9 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.xpath.expr.XPathFuncExpr;
+import org.odk.collect.android.R;
+import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.adapters.AbstractSelectListAdapter;
 import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.views.MediaLayout;
@@ -34,6 +40,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class SelectWidget extends QuestionWidget {
+
+    /**
+     * A list of choices can have thousands of items. To increase loading and scrolling performance,
+     * a RecyclerView is used. Because it is nested inside a ScrollView, by default, all of
+     * the RecyclerView's items are loaded and there is no performance benefit over a ListView.
+     * This constant is used to bound the number of items loaded. The value 40 was chosen because
+     * it is around the maximum number of elements that can be shown on a large tablet.
+     */
+    private static final int MAX_ITEMS_WITHOUT_SCREEN_BOUND = 40;
+
     protected List<SelectChoice> items;
     protected ArrayList<MediaLayout> playList;
     protected LinearLayout answerLayout;
@@ -79,14 +95,10 @@ public abstract class SelectWidget extends QuestionWidget {
     public void playAllPromptText() {
         // set up to play the items when the
         // question text is finished
-        getPlayer().setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mediaPlayer) {
-                resetQuestionTextColor();
-                mediaPlayer.reset();
-                playNextSelectItem();
-            }
-
+        getPlayer().setOnCompletionListener(mediaPlayer -> {
+            resetQuestionTextColor();
+            mediaPlayer.reset();
+            playNextSelectItem();
         });
         // plays the question text
         super.playAllPromptText();
@@ -106,13 +118,10 @@ public abstract class SelectWidget extends QuestionWidget {
         if (isShown()) {
             // if there's more, set up to play the next item
             if (playcounter < playList.size()) {
-                getPlayer().setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                    @Override
-                    public void onCompletion(MediaPlayer mediaPlayer) {
-                        resetQuestionTextColor();
-                        mediaPlayer.reset();
-                        playNextSelectItem();
-                    }
+                getPlayer().setOnCompletionListener(mediaPlayer -> {
+                    resetQuestionTextColor();
+                    mediaPlayer.reset();
+                    playNextSelectItem();
                 });
                 // play the current item
                 playList.get(playcounter).playAudio();
@@ -124,19 +133,6 @@ public abstract class SelectWidget extends QuestionWidget {
                 getPlayer().reset();
             }
         }
-    }
-
-    public MediaLayout createMediaLayout(int index, TextView textView) {
-        MediaLayout mediaLayout = new MediaLayout(getContext());
-
-        initMediaLayoutSetUp(mediaLayout);
-        addMediaFromChoice(mediaLayout, index, textView);
-
-        if (index != items.size() - 1) {
-            mediaLayout.addDivider();
-        }
-
-        return mediaLayout;
     }
 
     public void initMediaLayoutSetUp(MediaLayout mediaLayout) {
@@ -164,5 +160,23 @@ public abstract class SelectWidget extends QuestionWidget {
 
         mediaLayout.setAVT(getFormEntryPrompt().getIndex(), "." + Integer.toString(index), textView, audioURI,
                 imageURI, videoURI, bigImageURI, getPlayer());
+    }
+
+    protected RecyclerView setUpRecyclerView() {
+        RecyclerView recyclerView = (RecyclerView) LayoutInflater.from(getContext()).inflate(R.layout.recycler_view, null); // keep in an xml file to enable the vertical scrollbar
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+
+        return recyclerView;
+    }
+
+    void adjustRecyclerViewSize(AbstractSelectListAdapter adapter, RecyclerView recyclerView) {
+        if (adapter.getItemCount() > MAX_ITEMS_WITHOUT_SCREEN_BOUND) {
+            // Only let the RecyclerView take up 90% of the screen height in order to speed up loading if there are many items
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            ((FormEntryActivity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+            recyclerView.getLayoutParams().height = (int) (displayMetrics.heightPixels * 0.9);
+        } else {
+            recyclerView.setNestedScrollingEnabled(false);
+        }
     }
 }
