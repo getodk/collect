@@ -29,10 +29,7 @@ import org.javarosa.xpath.expr.XPathExpression;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.WebViewActivity;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.logic.FormController;
-import org.odk.collect.android.utilities.FileUtils;
 
-import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.Locale;
 
@@ -59,13 +56,19 @@ public class WidgetFactory {
     public static QuestionWidget createWidgetFromPrompt(FormEntryPrompt fep, Context context,
                                                         boolean readOnlyOverride) {
 
-        // get appearance hint and clean it up so it is lower case and never null...
+        // Get appearance hint and clean it up so it is lower case and never null.
         String appearance = fep.getAppearanceHint();
         if (appearance == null) {
             appearance = "";
         }
-        // for now, all appearance tags are in english...
+        // For now, all appearance tags are in English.
         appearance = appearance.toLowerCase(Locale.ENGLISH);
+
+        // The search appearance which shows a text area for filtering choices is distinct
+        // from the search() appearance/function. The two can combine but a text area should
+        // not be shown if only the appearance/function is specified.
+        boolean hasSearchAppearance = appearance.contains("search")
+                && !appearance.contains("search(") || appearance.contains("search ");
 
         final QuestionWidget questionWidget;
         switch (fep.getControlType()) {
@@ -130,6 +133,13 @@ public class WidgetFactory {
                         String query = fep.getQuestion().getAdditionalAttribute(null, "query");
                         if (query != null) {
                             questionWidget = new ItemsetWidget(context, fep, appearance.startsWith("quick"));
+
+                            Collect.getInstance().getDefaultTracker()
+                                    .send(new HitBuilders.EventBuilder()
+                                            .setCategory("ExternalData")
+                                            .setAction("External itemset")
+                                            .setLabel(Collect.getCurrentFormIdentifierHash())
+                                            .build());
                         } else if (appearance.startsWith("printer")) {
                             questionWidget = new ExPrinterWidget(context, fep);
                         } else if (appearance.startsWith("ex:")) {
@@ -201,7 +211,7 @@ public class WidgetFactory {
                     questionWidget = new GridWidget(context, fep, numColumns, appearance.contains("quick"));
                 } else if (appearance.contains("minimal")) {
                     questionWidget = new SpinnerWidget(context, fep, appearance.contains("quick"));
-                } else if (appearance.contains("search") || appearance.contains("autocomplete")) {
+                } else if (hasSearchAppearance || appearance.contains("autocomplete")) {
                     questionWidget = new SelectOneSearchWidget(context, fep, appearance.contains("quick"));
                 } else if (appearance.contains("list-nolabel")) {
                     questionWidget = new ListWidget(context, fep, false, appearance.contains("quick"));
@@ -247,7 +257,7 @@ public class WidgetFactory {
                     questionWidget = new ListMultiWidget(context, fep, true);
                 } else if (appearance.startsWith("label")) {
                     questionWidget = new LabelWidget(context, fep);
-                } else if (appearance.contains("autocomplete")) {
+                } else if (hasSearchAppearance || appearance.contains("autocomplete")) {
                     questionWidget = new SelectMultipleAutocompleteWidget(context, fep);
                 } else if (appearance.startsWith("image-map")) {
                     questionWidget = new SelectMultiImageMapWidget(context, fep);
@@ -311,7 +321,7 @@ public class WidgetFactory {
                                     .send(new HitBuilders.EventBuilder()
                                     .setCategory("Itemset")
                                     .setAction(actionName)
-                                    .setLabel(getFormIdentifierHash())
+                                    .setLabel(Collect.getCurrentFormIdentifierHash())
                                     .build());
 
                             if (predicate.toString().contains("current")) {
@@ -323,24 +333,6 @@ public class WidgetFactory {
             }
         }
         return false;
-    }
-
-    /**
-     * Gets a unique, privacy-preserving identifier for the current form.
-     *
-     * @return hash of the form title, a space, the form ID
-     */
-    private static String getFormIdentifierHash() {
-        String formIdentifier = "";
-        FormController formController = Collect.getInstance().getFormController();
-        if (formController != null) {
-            String formID = formController.getFormDef().getMainInstance()
-                    .getRoot().getAttributeValue("", "id");
-            formIdentifier = formController.getFormTitle() + " " + formID;
-        }
-
-        return FileUtils.getMd5Hash(
-                new ByteArrayInputStream(formIdentifier.getBytes()));
     }
 
     /**
@@ -360,7 +352,7 @@ public class WidgetFactory {
                     .send(new HitBuilders.EventBuilder()
                     .setCategory("Itemset")
                     .setAction("CurrentChangeViewed")
-                    .setLabel(getFormIdentifierHash())
+                    .setLabel(Collect.getCurrentFormIdentifierHash())
                     .build());
         };
 

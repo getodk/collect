@@ -479,7 +479,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
             // postDelayed is needed because otherwise scrolling may not work as expected in case when
             // answers are validated during form finalization.
             new Handler().postDelayed(() -> {
-                scrollTo(0, qw.getTop());
+                findViewById(R.id.odk_view_container).scrollTo(0, qw.getTop());
 
                 ValueAnimator va = new ValueAnimator();
                 if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {

@@ -158,6 +158,7 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
                 .send(new HitBuilders.EventBuilder()
                         .setCategory("WidgetType")
                         .setAction("ExternalApp")
+                        .setLabel(Collect.getCurrentFormIdentifierHash())
                         .build());
 
     }

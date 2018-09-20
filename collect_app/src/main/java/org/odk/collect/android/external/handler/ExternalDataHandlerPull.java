@@ -22,8 +22,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 
+import com.google.android.gms.analytics.HitBuilders;
+
 import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.xpath.expr.XPathFuncExpr;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.external.ExternalSQLiteOpenHelper;
@@ -68,6 +71,13 @@ public class ExternalDataHandlerPull extends ExternalDataHandlerBase {
 
     @Override
     public Object eval(Object[] args, EvaluationContext ec) {
+        Collect.getInstance().getDefaultTracker()
+                .send(new HitBuilders.EventBuilder()
+                        .setCategory("ExternalData")
+                        .setAction("pulldata()")
+                        .setLabel(Collect.getCurrentFormIdentifierHash())
+                        .build());
+
         if (args.length != 4) {
             Timber.e("4 arguments are needed to evaluate the %s function", HANDLER_NAME);
             return "";

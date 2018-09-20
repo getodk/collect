@@ -50,6 +50,7 @@ import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -908,7 +909,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         // If the user updated the custom credentials using the dialog, let us update our
         // variables holding the custom credentials
         if (url != null) {
-            HttpCredentialsInterface httpCredentials = webCredentialsUtils.getCachedCredentials(url);
+            HttpCredentialsInterface httpCredentials = webCredentialsUtils.getCredentials(URI.create(url));
 
             if (httpCredentials != null) {
                 username = httpCredentials.getUsername();
