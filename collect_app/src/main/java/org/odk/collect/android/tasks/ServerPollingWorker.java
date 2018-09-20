@@ -53,7 +53,6 @@ import androidx.work.Worker;
 
 import static org.odk.collect.android.activities.FormDownloadList.DISPLAY_ONLY_UPDATED_FORMS;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOMATIC_UPDATE;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JR_FORM_ID;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.LAST_DETECTED_FORM_VERSION_HASH;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORMS_DOWNLOADED_NOTIFICATION;
@@ -76,7 +75,7 @@ public class ServerPollingWorker extends Worker {
     @Override
     public Result doWork() {
         if (!isDeviceOnline()) {
-            GeneralSharedPreferences.getInstance().save(POLL_SERVER_IMMEDIATELY_AFTER_RECEIVING_NETWORK, true);
+            pollServerIfNeeded();
             return Result.FAILURE;
         } else {
             DownloadFormListUtils downloadFormListTask = new DownloadFormListUtils();
@@ -140,13 +139,8 @@ public class ServerPollingWorker extends Worker {
                 period = ONE_DAY_PERIOD;
             }
 
-            Constraints constraints = new Constraints.Builder()
-                    .setRequiredNetworkType(NetworkType.CONNECTED)
-                    .build();
-
             PeriodicWorkRequest serverPollingWork =
                     new PeriodicWorkRequest.Builder(ServerPollingWorker.class, period, TimeUnit.MILLISECONDS, FLEX_INTERVAL, TimeUnit.MILLISECONDS)
-                            .setConstraints(constraints)
                             .addTag(TAG)
                             .build();
 
@@ -209,20 +203,17 @@ public class ServerPollingWorker extends Worker {
     }
 
     public static void pollServerIfNeeded() {
-        if (GeneralSharedPreferences.getInstance().getBoolean(POLL_SERVER_IMMEDIATELY_AFTER_RECEIVING_NETWORK, false)
-                && !GeneralSharedPreferences.getInstance().get(KEY_PERIODIC_FORM_UPDATES_CHECK).equals(Collect.getInstance().getString(R.string.never_value))) {
-            Constraints constraints = new Constraints.Builder()
-                    .setRequiredNetworkType(NetworkType.CONNECTED)
-                    .build();
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
 
-            OneTimeWorkRequest serverPollingWork =
-                    new OneTimeWorkRequest.Builder(ServerPollingWorker.class)
-                            .setConstraints(constraints)
-                            .addTag(TAG)
-                            .build();
+        OneTimeWorkRequest serverPollingWork =
+                new OneTimeWorkRequest.Builder(ServerPollingWorker.class)
+                        .setConstraints(constraints)
+                        .addTag(TAG)
+                        .build();
 
-            WorkManager.getInstance().enqueue(serverPollingWork);
-        }
+        WorkManager.getInstance().enqueue(serverPollingWork);
     }
 
     private String getContentText(HashMap<FormDetails, String> result) {
