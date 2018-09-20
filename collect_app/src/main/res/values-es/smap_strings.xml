@@ -21,6 +21,7 @@
   <string name="smap_no_tasks_display"></string>
   <string name="smap_pending">: pendiente. </string>
   <string name="smap_reject_task">Rechazar Tarea</string>
+  <string name="smap_restore_task">Restablecer Tarea</string>
   <string name="smap_route_finding_inprogress">Encontrando ruta para la tarea</string>
   <string name="smap_routing_network_error">Fallo al buscar una ruta debido a error en la red</string>
   <string name="smap_route_parse_error">Fallo al buscar una ruta debido a error mientras analizaba la ruta</string>
@@ -74,5 +75,5 @@
   <string name="smap_get_media">Archivo actualizado: %s</string>
   <string name="smap_lookup">Consultando datos remotos</string>
   <string name="smap_unknown_error">Error desconocido</string>
-  <string name="smap_forbidden">No se pueden subir los datos de%s. El formulario está inactivo o fué borrado del servidor. Consulte al responsable en su Organización.</string>
+  <string name="smap_forbidden">No se pueden subir los datos de %s. El formulario está inactivo o fué borrado del servidor. Consulte al responsable en su Organización.</string>
 </resources>

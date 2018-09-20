@@ -653,6 +653,17 @@ public class Utilities {
     }
 
     /*
+     * Return true if the current task status allows it to be restored
+     */
+    public static boolean canRestore(String currentStatus) {
+        boolean valid = false;
+        if (currentStatus != null && currentStatus.equals(Utilities.STATUS_T_REJECTED)) {
+            valid = true;
+        }
+        return valid;
+    }
+
+    /*
      * Return true if the current task status allows it to be completed
      */
     public static boolean canComplete(String currentStatus) {

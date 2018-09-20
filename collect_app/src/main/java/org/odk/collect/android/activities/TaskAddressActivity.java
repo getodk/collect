@@ -138,6 +138,13 @@ public class TaskAddressActivity extends CollectAbstractActivity implements OnCl
     	        b.setOnClickListener(this);
     	        buttons.addView(b);
     		}
+            if(Utilities.canRestore(taskEntry.taskStatus)) {
+                Button b = new Button(this);
+                b.setText(R.string.smap_restore_task);
+                b.setId(R.id.restore_button);
+                b.setOnClickListener(this);
+                buttons.addView(b);
+            }
 
     	} catch (Exception e) {
   			e.printStackTrace();
@@ -194,8 +201,26 @@ public class TaskAddressActivity extends CollectAbstractActivity implements OnCl
 	    		e.printStackTrace();
 	    	}
         	finish();
-        	break;    	
- 
+        	break;
+
+            case R.id.restore_button:
+                try {
+
+                    if(Utilities.canRestore(taskEntry.taskStatus)) {
+                        Utilities.setStatusForTask(taskEntry.id, Utilities.STATUS_T_ACCEPTED);
+                        Intent intent = new Intent("org.smap.smapTask.refresh");      // Notify map and task list of change
+                        LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(intent);
+                    } else {
+                        Toast.makeText(getApplicationContext(), getString(R.string.smap_cannot_reject),
+                                Toast.LENGTH_LONG).show();
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                finish();
+                break;
+
         }
         return;
 	}

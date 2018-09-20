@@ -37,6 +37,7 @@
     <string name="smap_no_tasks_display"></string>
     <string name="smap_pending">: pending. </string>
     <string name="smap_reject_task">Reject Task</string>
+    <string name="smap_restore_task">Restore Task</string>
     <string name="smap_route_finding_inprogress">Finding route to the task</string>
     <string name="smap_routing_network_error">Failed to find a route due to networking error</string>
     <string name="smap_route_parse_error">Fail to find the route due to error while parsing the route</string>
