@@ -512,13 +512,12 @@ public class Camera2VideoFragment extends Fragment
         mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
         mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
         int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
-        switch (sensorOrientation) {
-            case SENSOR_ORIENTATION_DEFAULT_DEGREES:
-                mediaRecorder.setOrientationHint(DEFAULT_ORIENTATIONS.get(rotation));
-                break;
-            case SENSOR_ORIENTATION_INVERSE_DEGREES:
-                mediaRecorder.setOrientationHint(INVERSE_ORIENTATIONS.get(rotation));
-                break;
+        if (SENSOR_ORIENTATION_DEFAULT_DEGREES == sensorOrientation) {
+            mediaRecorder.setOrientationHint(DEFAULT_ORIENTATIONS.get(rotation));
+
+        } else if (SENSOR_ORIENTATION_INVERSE_DEGREES == sensorOrientation) {
+            mediaRecorder.setOrientationHint(INVERSE_ORIENTATIONS.get(rotation));
+
         }
         mediaRecorder.prepare();
     }

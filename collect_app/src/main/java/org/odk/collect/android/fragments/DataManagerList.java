@@ -168,19 +168,18 @@ public class DataManagerList extends InstanceListFragment
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int i) {
-                        switch (i) {
-                            case DialogInterface.BUTTON_POSITIVE: // delete
-                                logger.logAction(this,
-                                        "createDeleteInstancesDialog", "delete");
-                                deleteSelectedInstances();
-                                if (getListView().getCount() == getCheckedCount()) {
-                                    toggleButton.setEnabled(false);
-                                }
-                                break;
-                            case DialogInterface.BUTTON_NEGATIVE: // do nothing
-                                logger.logAction(this,
-                                        "createDeleteInstancesDialog", "cancel");
-                                break;
+                        if (i == DialogInterface.BUTTON_POSITIVE) {
+                            logger.logAction(this,
+                                    "createDeleteInstancesDialog", "delete");
+                            deleteSelectedInstances();
+                            if (getListView().getCount() == getCheckedCount()) {
+                                toggleButton.setEnabled(false);
+                            }
+
+                        } else if (i == DialogInterface.BUTTON_NEGATIVE) {
+                            logger.logAction(this,
+                                    "createDeleteInstancesDialog", "cancel");
+
                         }
                     }
                 };
@@ -264,30 +263,29 @@ public class DataManagerList extends InstanceListFragment
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.delete_button:
-                int checkedItemCount = getCheckedCount();
-                logger.logAction(this, "deleteButton", Integer.toString(checkedItemCount));
-                if (checkedItemCount > 0) {
-                    createDeleteInstancesDialog();
-                } else {
-                    ToastUtils.showShortToast(R.string.noselect_error);
-                }
-                break;
+        int i1 = v.getId();
+        if (i1 == R.id.delete_button) {
+            int checkedItemCount = getCheckedCount();
+            logger.logAction(this, "deleteButton", Integer.toString(checkedItemCount));
+            if (checkedItemCount > 0) {
+                createDeleteInstancesDialog();
+            } else {
+                ToastUtils.showShortToast(R.string.noselect_error);
+            }
 
-            case R.id.toggle_button:
-                ListView lv = getListView();
-                boolean allChecked = toggleChecked(lv);
-                if (allChecked) {
-                    for (int i = 0; i < lv.getCount(); i++) {
-                        selectedInstances.add(lv.getItemIdAtPosition(i));
-                    }
-                } else {
-                    selectedInstances.clear();
+        } else if (i1 == R.id.toggle_button) {
+            ListView lv = getListView();
+            boolean allChecked = toggleChecked(lv);
+            if (allChecked) {
+                for (int i = 0; i < lv.getCount(); i++) {
+                    selectedInstances.add(lv.getItemIdAtPosition(i));
                 }
-                toggleButtonLabel(toggleButton, getListView());
-                deleteButton.setEnabled(allChecked);
-                break;
+            } else {
+                selectedInstances.clear();
+            }
+            toggleButtonLabel(toggleButton, getListView());
+            deleteButton.setEnabled(allChecked);
+
         }
     }
 

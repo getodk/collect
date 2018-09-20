@@ -1795,66 +1795,65 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             public void onClick(DialogInterface dialog, int i) {
                 shownAlertDialogIsGroupRepeat = false;
                 FormController formController = getFormController();
-                switch (i) {
-                    case BUTTON_POSITIVE: // yes, repeat
-                        Collect.getInstance()
-                                .getActivityLogger()
-                                .logInstanceAction(this, "createRepeatDialog",
-                                        "addRepeat");
-                        try {
-                            formController.newRepeat();
-                        } catch (Exception e) {
-                            FormEntryActivity.this.createErrorDialog(
-                                    e.getMessage(), DO_NOT_EXIT);
-                            return;
+                if (i == BUTTON_POSITIVE) {
+                    Collect.getInstance()
+                            .getActivityLogger()
+                            .logInstanceAction(this, "createRepeatDialog",
+                                    "addRepeat");
+                    try {
+                        formController.newRepeat();
+                    } catch (Exception e) {
+                        FormEntryActivity.this.createErrorDialog(
+                                e.getMessage(), DO_NOT_EXIT);
+                        return;
+                    }
+                    if (!formController.indexIsInFieldList()) {
+                        // we are at a REPEAT event that does not have a
+                        // field-list appearance
+                        // step to the next visible field...
+                        // which could be the start of a new repeat group...
+                        showNextView();
+                    } else {
+                        // we are at a REPEAT event that has a field-list
+                        // appearance
+                        // just display this REPEAT event's group.
+                        refreshCurrentView();
+                    }
+
+                } else if (i == BUTTON_NEGATIVE) {
+                    Collect.getInstance()
+                            .getActivityLogger()
+                            .logInstanceAction(this, "createRepeatDialog",
+                                    "showNext");
+
+                    //
+                    // Make sure the error dialog will not disappear.
+                    //
+                    // When showNextView() popups an error dialog (because of a
+                    // JavaRosaException)
+                    // the issue is that the "add new repeat dialog" is referenced by
+                    // alertDialog
+                    // like the error dialog. When the "no repeat" is clicked, the error dialog
+                    // is shown. Android by default dismisses the dialogs when a button is
+                    // clicked,
+                    // so instead of closing the first dialog, it closes the second.
+                    new Thread() {
+
+                        @Override
+                        public void run() {
+                            FormEntryActivity.this.runOnUiThread(() -> {
+                                try {
+                                    Thread.sleep(500);
+                                } catch (InterruptedException e) {
+                                    //This is rare
+                                    Timber.e(e);
+                                }
+                                showNextView();
+                            });
                         }
-                        if (!formController.indexIsInFieldList()) {
-                            // we are at a REPEAT event that does not have a
-                            // field-list appearance
-                            // step to the next visible field...
-                            // which could be the start of a new repeat group...
-                            showNextView();
-                        } else {
-                            // we are at a REPEAT event that has a field-list
-                            // appearance
-                            // just display this REPEAT event's group.
-                            refreshCurrentView();
-                        }
-                        break;
-                    case BUTTON_NEGATIVE: // no, no repeat
-                        Collect.getInstance()
-                                .getActivityLogger()
-                                .logInstanceAction(this, "createRepeatDialog",
-                                        "showNext");
+                    }.start();
 
-                        //
-                        // Make sure the error dialog will not disappear.
-                        //
-                        // When showNextView() popups an error dialog (because of a
-                        // JavaRosaException)
-                        // the issue is that the "add new repeat dialog" is referenced by
-                        // alertDialog
-                        // like the error dialog. When the "no repeat" is clicked, the error dialog
-                        // is shown. Android by default dismisses the dialogs when a button is
-                        // clicked,
-                        // so instead of closing the first dialog, it closes the second.
-                        new Thread() {
 
-                            @Override
-                            public void run() {
-                                FormEntryActivity.this.runOnUiThread(() -> {
-                                    try {
-                                        Thread.sleep(500);
-                                    } catch (InterruptedException e) {
-                                        //This is rare
-                                        Timber.e(e);
-                                    }
-                                    showNextView();
-                                });
-                            }
-                        }.start();
-
-                        break;
                 }
             }
         };
@@ -1905,15 +1904,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         DialogInterface.OnClickListener errorListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int i) {
-                switch (i) {
-                    case BUTTON_POSITIVE:
-                        Collect.getInstance().getActivityLogger()
-                                .logInstanceAction(this, "createErrorDialog", "OK");
-                        if (shouldExit) {
-                            errorMessage = null;
-                            finish();
-                        }
-                        break;
+                if (i == BUTTON_POSITIVE) {
+                    Collect.getInstance().getActivityLogger()
+                            .logInstanceAction(this, "createErrorDialog", "OK");
+                    if (shouldExit) {
+                        errorMessage = null;
+                        finish();
+                    }
+
                 }
             }
         };
@@ -1946,25 +1944,23 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             @Override
             public void onClick(DialogInterface dialog, int i) {
                 FormController formController = getFormController();
-                switch (i) {
-                    case BUTTON_POSITIVE: // yes
-                        Collect.getInstance()
-                                .getActivityLogger()
-                                .logInstanceAction(this,
-                                        "createDeleteRepeatConfirmDialog", "OK");
-                        formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.DELETE_REPEAT, 0, null, false, true);
-                        formController.deleteRepeat();
-                        showNextView();
-                        break;
+                if (i == BUTTON_POSITIVE) {
+                    Collect.getInstance()
+                            .getActivityLogger()
+                            .logInstanceAction(this,
+                                    "createDeleteRepeatConfirmDialog", "OK");
+                    formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.DELETE_REPEAT, 0, null, false, true);
+                    formController.deleteRepeat();
+                    showNextView();
 
-                    case BUTTON_NEGATIVE: // no
-                        Collect.getInstance()
-                                .getActivityLogger()
-                                .logInstanceAction(this,
-                                        "createDeleteRepeatConfirmDialog", "cancel");
+                } else if (i == BUTTON_NEGATIVE) {
+                    Collect.getInstance()
+                            .getActivityLogger()
+                            .logInstanceAction(this,
+                                    "createDeleteRepeatConfirmDialog", "cancel");
 
-                        refreshCurrentView();
-                        break;
+                    refreshCurrentView();
+
                 }
             }
         };
@@ -2146,21 +2142,20 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
             @Override
             public void onClick(DialogInterface dialog, int i) {
-                switch (i) {
-                    case BUTTON_POSITIVE: // yes
-                        Collect.getInstance()
-                                .getActivityLogger()
-                                .logInstanceAction(this, "createClearDialog",
-                                        "clearAnswer", qw.getFormEntryPrompt().getIndex());
-                        clearAnswer(qw);
-                        saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                        break;
-                    case BUTTON_NEGATIVE: // no
-                        Collect.getInstance()
-                                .getActivityLogger()
-                                .logInstanceAction(this, "createClearDialog",
-                                        "cancel", qw.getFormEntryPrompt().getIndex());
-                        break;
+                if (i == BUTTON_POSITIVE) {
+                    Collect.getInstance()
+                            .getActivityLogger()
+                            .logInstanceAction(this, "createClearDialog",
+                                    "clearAnswer", qw.getFormEntryPrompt().getIndex());
+                    clearAnswer(qw);
+                    saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+
+                } else if (i == BUTTON_NEGATIVE) {
+                    Collect.getInstance()
+                            .getActivityLogger()
+                            .logInstanceAction(this, "createClearDialog",
+                                    "cancel", qw.getFormEntryPrompt().getIndex());
+
                 }
             }
         };
@@ -2247,61 +2242,59 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      */
     @Override
     protected Dialog onCreateDialog(int id) {
-        switch (id) {
-            case PROGRESS_DIALOG:
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(this, "onCreateDialog.PROGRESS_DIALOG",
-                                "show");
-                progressDialog = new ProgressDialog(this);
-                DialogInterface.OnClickListener loadingButtonListener =
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Collect.getInstance()
-                                        .getActivityLogger()
-                                        .logInstanceAction(this,
-                                                "onCreateDialog.PROGRESS_DIALOG", "cancel");
-                                dialog.dismiss();
+        if (id == PROGRESS_DIALOG) {
+            Collect.getInstance()
+                    .getActivityLogger()
+                    .logInstanceAction(this, "onCreateDialog.PROGRESS_DIALOG",
+                            "show");
+            progressDialog = new ProgressDialog(this);
+            DialogInterface.OnClickListener loadingButtonListener =
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Collect.getInstance()
+                                    .getActivityLogger()
+                                    .logInstanceAction(this,
+                                            "onCreateDialog.PROGRESS_DIALOG", "cancel");
+                            dialog.dismiss();
 
-                                if (formLoaderTask != null) {
-                                    formLoaderTask.setFormLoaderListener(null);
-                                    FormLoaderTask t = formLoaderTask;
-                                    formLoaderTask = null;
-                                    t.cancel(true);
-                                    t.destroy();
-                                }
-                                finish();
+                            if (formLoaderTask != null) {
+                                formLoaderTask.setFormLoaderListener(null);
+                                FormLoaderTask t = formLoaderTask;
+                                formLoaderTask = null;
+                                t.cancel(true);
+                                t.destroy();
                             }
-                        };
-                progressDialog.setTitle(getString(R.string.loading_form));
-                progressDialog.setMessage(getString(R.string.please_wait));
-                progressDialog.setIndeterminate(true);
-                progressDialog.setCancelable(false);
-                progressDialog.setButton(getString(R.string.cancel_loading_form),
-                        loadingButtonListener);
-                return progressDialog;
-            case SAVING_DIALOG:
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(this, "onCreateDialog.SAVING_DIALOG",
-                                "show");
-                progressDialog = new ProgressDialog(this);
-                progressDialog.setTitle(getString(R.string.saving_form));
-                progressDialog.setMessage(getString(R.string.please_wait));
-                progressDialog.setIndeterminate(true);
-                progressDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        Collect.getInstance()
-                                .getActivityLogger()
-                                .logInstanceAction(this,
-                                        "onCreateDialog.SAVING_DIALOG", "OnDismissListener");
-                        cancelSaveToDiskTask();
-                    }
-                });
-                return progressDialog;
-
+                            finish();
+                        }
+                    };
+            progressDialog.setTitle(getString(R.string.loading_form));
+            progressDialog.setMessage(getString(R.string.please_wait));
+            progressDialog.setIndeterminate(true);
+            progressDialog.setCancelable(false);
+            progressDialog.setButton(getString(R.string.cancel_loading_form),
+                    loadingButtonListener);
+            return progressDialog;
+        } else if (id == SAVING_DIALOG) {
+            Collect.getInstance()
+                    .getActivityLogger()
+                    .logInstanceAction(this, "onCreateDialog.SAVING_DIALOG",
+                            "show");
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle(getString(R.string.saving_form));
+            progressDialog.setMessage(getString(R.string.please_wait));
+            progressDialog.setIndeterminate(true);
+            progressDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    Collect.getInstance()
+                            .getActivityLogger()
+                            .logInstanceAction(this,
+                                    "onCreateDialog.SAVING_DIALOG", "OnDismissListener");
+                    cancelSaveToDiskTask();
+                }
+            });
+            return progressDialog;
         }
         return null;
     }

@@ -193,17 +193,16 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonWidget
             public boolean onTouch(View v, MotionEvent event) {
                 seekBar.getThumb().mutate().setAlpha(255);
                 int action = event.getAction();
-                switch (action) {
-                    case MotionEvent.ACTION_DOWN:
-                        v.getParent().requestDisallowInterceptTouchEvent(true);
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        v.getParent().requestDisallowInterceptTouchEvent(false);
-                        if (actualValue == null) {
-                            actualValue = rangeStart;
-                            setUpActualValueLabel();
-                        }
-                        break;
+                if (action == MotionEvent.ACTION_DOWN) {
+                    v.getParent().requestDisallowInterceptTouchEvent(true);
+
+                } else if (action == MotionEvent.ACTION_UP) {
+                    v.getParent().requestDisallowInterceptTouchEvent(false);
+                    if (actualValue == null) {
+                        actualValue = rangeStart;
+                        setUpActualValueLabel();
+                    }
+
                 }
                 v.onTouchEvent(event);
                 return true;

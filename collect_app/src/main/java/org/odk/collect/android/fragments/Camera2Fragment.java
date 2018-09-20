@@ -819,12 +819,10 @@ public class Camera2Fragment extends Fragment
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.texture: {
-                textureView.setClickable(false);
-                takePicture();
-                break;
-            }
+        int i = view.getId();
+        if (i == R.id.texture) {
+            textureView.setClickable(false);
+            takePicture();
         }
     }
 

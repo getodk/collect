@@ -97,18 +97,17 @@ public class BearingActivity extends CollectAbstractActivity implements SensorEv
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case DialogInterface.BUTTON_POSITIVE:
-                                Collect.getInstance().getActivityLogger()
-                                        .logInstanceAction(this, "acceptBearing", "OK");
-                                returnBearing();
-                                break;
-                            case DialogInterface.BUTTON_NEGATIVE:
-                                Collect.getInstance().getActivityLogger()
-                                        .logInstanceAction(this, "cancelBearing", "cancel");
-                                bearingDecimal = null;
-                                finish();
-                                break;
+                        if (which == DialogInterface.BUTTON_POSITIVE) {
+                            Collect.getInstance().getActivityLogger()
+                                    .logInstanceAction(this, "acceptBearing", "OK");
+                            returnBearing();
+
+                        } else if (which == DialogInterface.BUTTON_NEGATIVE) {
+                            Collect.getInstance().getActivityLogger()
+                                    .logInstanceAction(this, "cancelBearing", "cancel");
+                            bearingDecimal = null;
+                            finish();
+
                         }
                     }
                 };

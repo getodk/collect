@@ -31,13 +31,13 @@ public class CustomWebView extends WebView {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         requestDisallowInterceptTouchEvent(true);
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                suppressFlingGesture = true;
-                break;
-            case MotionEvent.ACTION_UP:
-                suppressFlingGesture = false;
-                break;
+        int i = event.getAction();
+        if (i == MotionEvent.ACTION_DOWN) {
+            suppressFlingGesture = true;
+
+        } else if (i == MotionEvent.ACTION_UP) {
+            suppressFlingGesture = false;
+
         }
         return super.onTouchEvent(event);
     }

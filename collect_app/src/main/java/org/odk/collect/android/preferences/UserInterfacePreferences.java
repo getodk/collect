@@ -242,16 +242,14 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
             return;
         }
 
-        switch (requestCode) {
-            case IMAGE_CHOOSER:
-                // get gp of chosen file
-                Uri selectedMedia = intent.getData();
-                String sourceMediaPath = MediaUtils.getPathFromUri(getActivity(), selectedMedia,
-                        MediaStore.Images.Media.DATA);
+        if (requestCode == IMAGE_CHOOSER) {// get gp of chosen file
+            Uri selectedMedia = intent.getData();
+            String sourceMediaPath = MediaUtils.getPathFromUri(getActivity(), selectedMedia,
+                    MediaStore.Images.Media.DATA);
 
-                // setting image path
-                setSplashPath(sourceMediaPath);
-                break;
+            // setting image path
+            setSplashPath(sourceMediaPath);
+
         }
     }
 

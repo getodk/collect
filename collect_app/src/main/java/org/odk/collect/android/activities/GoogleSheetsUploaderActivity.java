@@ -181,19 +181,18 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
             finish();
         }
 
-        switch (requestCode) {
-            case REQUEST_ACCOUNT_PICKER:
-                if (resultCode == RESULT_OK && data != null && data.getExtras() != null) {
-                    String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-                    accountsManager.setSelectedAccountName(accountName);
-                }
-                break;
-            case REQUEST_AUTHORIZATION:
-                dismissDialog(PROGRESS_DIALOG);
-                if (resultCode == RESULT_OK) {
-                    getResultsFromApi();
-                }
-                break;
+        if (requestCode == REQUEST_ACCOUNT_PICKER) {
+            if (resultCode == RESULT_OK && data != null && data.getExtras() != null) {
+                String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+                accountsManager.setSelectedAccountName(accountName);
+            }
+
+        } else if (requestCode == REQUEST_AUTHORIZATION) {
+            dismissDialog(PROGRESS_DIALOG);
+            if (resultCode == RESULT_OK) {
+                getResultsFromApi();
+            }
+
         }
     }
 
@@ -327,45 +326,44 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
 
     @Override
     protected Dialog onCreateDialog(int id) {
-        switch (id) {
-            case PROGRESS_DIALOG:
-                Collect.getInstance().getActivityLogger()
-                        .logAction(this, "onCreateDialog.PROGRESS_DIALOG", "show");
+        if (id == PROGRESS_DIALOG) {
+            Collect.getInstance().getActivityLogger()
+                    .logAction(this, "onCreateDialog.PROGRESS_DIALOG", "show");
 
-                progressDialog = new ProgressDialog(this);
-                DialogInterface.OnClickListener loadingButtonListener =
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Collect.getInstance().getActivityLogger()
-                                        .logAction(this, "onCreateDialog.PROGRESS_DIALOG",
-                                                "cancel");
-                                dialog.dismiss();
-                                instanceGoogleSheetsUploader.cancel(true);
-                                instanceGoogleSheetsUploader.setUploaderListener(null);
-                                finish();
-                            }
-                        };
-                progressDialog.setTitle(getString(R.string.uploading_data));
-                progressDialog.setMessage(alertMsg);
-                progressDialog.setIndeterminate(true);
-                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                progressDialog.setCancelable(false);
-                progressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
-                return progressDialog;
-            case GOOGLE_USER_DIALOG:
-                AlertDialog.Builder gudBuilder = new AlertDialog.Builder(this);
+            progressDialog = new ProgressDialog(this);
+            DialogInterface.OnClickListener loadingButtonListener =
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Collect.getInstance().getActivityLogger()
+                                    .logAction(this, "onCreateDialog.PROGRESS_DIALOG",
+                                            "cancel");
+                            dialog.dismiss();
+                            instanceGoogleSheetsUploader.cancel(true);
+                            instanceGoogleSheetsUploader.setUploaderListener(null);
+                            finish();
+                        }
+                    };
+            progressDialog.setTitle(getString(R.string.uploading_data));
+            progressDialog.setMessage(alertMsg);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setCancelable(false);
+            progressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
+            return progressDialog;
+        } else if (id == GOOGLE_USER_DIALOG) {
+            AlertDialog.Builder gudBuilder = new AlertDialog.Builder(this);
 
-                gudBuilder.setTitle(getString(R.string.no_google_account));
-                gudBuilder.setMessage(getString(R.string.google_set_account));
-                gudBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                    }
-                });
-                gudBuilder.setCancelable(false);
-                return gudBuilder.create();
+            gudBuilder.setTitle(getString(R.string.no_google_account));
+            gudBuilder.setMessage(getString(R.string.google_set_account));
+            gudBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                }
+            });
+            gudBuilder.setCancelable(false);
+            return gudBuilder.create();
         }
         return null;
     }
@@ -379,14 +377,13 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
         DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int i) {
-                switch (i) {
-                    case DialogInterface.BUTTON1: // ok
-                        Collect.getInstance().getActivityLogger()
-                                .logAction(this, "createAlertDialog", "OK");
-                        // always exit this activity since it has no interface
-                        alertShowing = false;
-                        finish();
-                        break;
+                if (i == DialogInterface.BUTTON1) {
+                    Collect.getInstance().getActivityLogger()
+                            .logAction(this, "createAlertDialog", "OK");
+                    // always exit this activity since it has no interface
+                    alertShowing = false;
+                    finish();
+
                 }
             }
         };

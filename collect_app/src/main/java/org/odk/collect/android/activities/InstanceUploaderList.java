@@ -351,15 +351,15 @@ public class InstanceUploaderList extends InstanceListActivity implements
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_preferences:
-                logger.logAction(this, "onMenuItemSelected", "MENU_PREFERENCES");
-                createPreferencesMenu();
-                return true;
-            case R.id.menu_change_view:
-                logger.logAction(this, "onMenuItemSelected", "MENU_SHOW_UNSENT");
-                showSentAndUnsentChoices();
-                return true;
+        int i = item.getItemId();
+        if (i == R.id.menu_preferences) {
+            logger.logAction(this, "onMenuItemSelected", "MENU_PREFERENCES");
+            createPreferencesMenu();
+            return true;
+        } else if (i == R.id.menu_change_view) {
+            logger.logAction(this, "onMenuItemSelected", "MENU_SHOW_UNSENT");
+            showSentAndUnsentChoices();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -396,16 +396,14 @@ public class InstanceUploaderList extends InstanceListActivity implements
         if (resultCode == RESULT_CANCELED) {
             return;
         }
-        switch (requestCode) {
-            // returns with a form path, start entry
-            case INSTANCE_UPLOADER:
-                if (intent.getBooleanExtra(FormEntryActivity.KEY_SUCCESS, false)) {
-                    listView.clearChoices();
-                    if (listAdapter.isEmpty()) {
-                        finish();
-                    }
+        if (requestCode == INSTANCE_UPLOADER) {
+            if (intent.getBooleanExtra(FormEntryActivity.KEY_SUCCESS, false)) {
+                listView.clearChoices();
+                if (listAdapter.isEmpty()) {
+                    finish();
                 }
-                break;
+            }
+
         }
         super.onActivityResult(requestCode, resultCode, intent);
     }

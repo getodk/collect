@@ -380,13 +380,12 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity {
         DialogInterface.OnClickListener errorListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int i) {
-                switch (i) {
-                    case DialogInterface.BUTTON_POSITIVE:
-                        Collect.getInstance().getActivityLogger()
-                                .logInstanceAction(this, "createErrorDialog", "OK");
-                        FormController formController = Collect.getInstance().getFormController();
-                        formController.jumpToIndex(currentIndex);
-                        break;
+                if (i == DialogInterface.BUTTON_POSITIVE) {
+                    Collect.getInstance().getActivityLogger()
+                            .logInstanceAction(this, "createErrorDialog", "OK");
+                    FormController formController = Collect.getInstance().getFormController();
+                    formController.jumpToIndex(currentIndex);
+
                 }
             }
         };

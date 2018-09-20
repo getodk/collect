@@ -268,22 +268,21 @@ public class ImageWebViewWidget extends QuestionWidget implements FileWidget {
 
     @Override
     public void onButtonClick(int buttonId) {
-        switch (buttonId) {
-            case R.id.capture_image:
-                requestCameraPermission((FormEntryActivity) getContext(), new PermissionListener() {
-                    @Override
-                    public void granted() {
-                        captureImage();
-                    }
+        if (buttonId == R.id.capture_image) {
+            requestCameraPermission((FormEntryActivity) getContext(), new PermissionListener() {
+                @Override
+                public void granted() {
+                    captureImage();
+                }
 
-                    @Override
-                    public void denied() {
-                    }
-                });
-                break;
-            case R.id.choose_image:
-                chooseImage();
-                break;
+                @Override
+                public void denied() {
+                }
+            });
+
+        } else if (buttonId == R.id.choose_image) {
+            chooseImage();
+
         }
     }
 

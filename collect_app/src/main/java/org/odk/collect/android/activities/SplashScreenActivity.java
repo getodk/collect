@@ -219,14 +219,13 @@ public class SplashScreenActivity extends Activity {
         DialogInterface.OnClickListener errorListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int i) {
-                switch (i) {
-                    case DialogInterface.BUTTON_POSITIVE:
-                        Collect.getInstance().getActivityLogger().logAction(this,
-                                "createErrorDialog", "OK");
-                        if (shouldExit) {
-                            finish();
-                        }
-                        break;
+                if (i == DialogInterface.BUTTON_POSITIVE) {
+                    Collect.getInstance().getActivityLogger().logAction(this,
+                            "createErrorDialog", "OK");
+                    if (shouldExit) {
+                        finish();
+                    }
+
                 }
             }
         };
