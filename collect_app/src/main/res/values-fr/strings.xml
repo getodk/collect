@@ -618,4 +618,6 @@
   <string name="rank_items">Choisir l\'ordre des éléments</string>
   <string name="image_not_saved">L\'image n\'a pas pu être enregistrée à cause
 d\'un problème sur l\'instance du fichier.</string>
+  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
+  <string name="current_predicate_continue">Continuer</string>
 </resources>

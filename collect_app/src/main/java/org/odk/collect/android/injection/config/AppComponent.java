@@ -2,6 +2,7 @@ package org.odk.collect.android.injection.config;
 
 import android.app.Application;
 
+import org.odk.collect.android.activities.FormDownloadList;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.InstanceUploaderList;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
@@ -82,4 +83,6 @@ public interface AppComponent {
     void inject(DownloadFormListUtils downloadFormListUtils);
 
     void inject(AuthDialogUtility authDialogUtility);
+  
+    void inject(FormDownloadList formDownloadList);
 }

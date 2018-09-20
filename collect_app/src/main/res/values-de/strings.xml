@@ -282,6 +282,7 @@
   <string name="google_set_account">Sie haben Google Sheets als Server ausgewählt. Bitte geben Sie unter den Einstellungen ein Google-Konto an, bevor Sie fortfahren.</string>
   <string name="media_upload_error">Nicht vorhandene Mediendatei konnte nicht hochgeladen werden: %1$s</string>
   <string name="odk_auth_auth_fail">Auto-Send-Authentifizierungsfehler, bitte überprüfen Sie Ihre Einstellungen.</string>
+  <string name="odk_permissions_fail">ODK Auto-Send Berechtigungsfehler, bitte stellen Sie sicher, dass Sie alle benötigten Berechtigungen erteilt haben</string>
   <string name="odk_auto_note">ODK Auto-Send-Ergebnisse</string>
   <string name="odk_auto_download_notification_title">ODK Auto-Download-Ergebnisse</string>
   <string name="notification_error">Fehler beim Anzeigen des Benachrichtigungstextes</string>
@@ -589,6 +590,12 @@
   <string name="camera_runtime_permission_denied_desc">Ohne diese Berechtigung kann Collect nicht auf die Kamera zugreifen. Bitte versuchen Sie es erneut, wenn Sie dazu bereit sind die Berechtigung zu erteilen.</string>
   <string name="record_audio_runtime_permission_denied_title">Audioaufzeichnungsberechtigung</string>
   <string name="record_audio_runtime_permission_denied_desc">Ohne diese Berechtigungen kann Collect nicht auf das Mikrofon zugreifen. Bitte versuchen Sie es erneut, wenn Sie bereit dazu sind die Berechtigungen zu erteilen.</string>
+  <string name="get_accounts_runtime_permission_denied_title">Kontoberechtigungen abfragen</string>
+  <string name="get_accounts_runtime_permission_denied_desc">Ohne diese Berechtigung kann Collect nicht auf die Konten zugreifen. Bitte versuchen Sie es erneut, wenn Sie dazu bereit sind die Berechtigung zu erteilen.</string>
+  <string name="send_sms_runtime_permission_denied_title">SMS-Versand-Berechtigung</string>
+  <string name="send_sms_runtime_permission_denied_desc">Ohne diese Berechtigung kann Collect keine SMS versenden. Bitte versuchen Sie es erneut, wenn Sie dazu bereit sind die Berechtigung zu erteilen.</string>
+  <string name="read_phone_state_runtime_permission_denied_title">Berechtigung Telefonstatus abrufen</string>
+  <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect macht keine Telefonanrufe aber benötigt Zugriff auf bestimmte Eigenschaften ihres Geräts, wie die Telefonnummer und Geräte-ID.</string>
   <string name="form_update_category">Formular-Update</string>
   <string name="periodic_form_updates_check_title">Periodischer Formular-Update-Check</string>
   <string name="never">Nie</string>
@@ -635,4 +642,12 @@
   <string name="rank_items">Rangfolge festlegen</string>
   <string name="image_not_saved">Das Bild kann nicht gespeichert werden, wegen eines Problems mit der zugehörigen Instanz-Datei.</string>
   <string name="loading_form_failed">Beim Laden des Formulars ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.</string>
+  <string name="missing_google_account_dialog_title">Google-Konto nicht eingestellt</string>
+  <string name="missing_google_account_dialog_desc">Um Formulare über Google Tabellen einzureichen, müssen Sie ihr Google-Konto bei den Server-Einstellungen einrichten.</string>
+  <string name="sms_invalid_phone_number_description">Ziel-Telefonnummer für SMS-Versand einstellen oder Übertragungsart ändern.</string>
+  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
+  <string name="current_predicate_warning">Diese Frage wird mit zukünftigen Versionen von ODK Collect nicht mehr kompatibel sein, weil sie current() in einem Auswahlfilter verwendet. \n\nBitte stellen Sie sicher, dass die Person, die dieses Formular erstellt hat, die Details unten liest und aktiv wird.</string>
+  <string name="current_predicate_warning_title">Aktion nötig</string>
+  <string name="current_predicate_forum">Details lesen</string>
+  <string name="current_predicate_continue">Weiter</string>
 </resources>

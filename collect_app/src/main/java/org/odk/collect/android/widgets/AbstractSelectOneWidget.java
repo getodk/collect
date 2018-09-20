@@ -17,34 +17,24 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.Nullable;
-import android.support.v7.content.res.AppCompatResources;
-import android.support.v7.widget.AppCompatRadioButton;
-import android.text.method.LinkMovementMethod;
-import android.util.TypedValue;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.ImageView;
+import android.support.v7.widget.RecyclerView;
 import android.widget.RadioButton;
-import android.widget.RelativeLayout;
 
+import org.javarosa.core.model.FormIndex;
+import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.R;
+import org.odk.collect.android.adapters.SelectOneListAdapter;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
-import org.odk.collect.android.listeners.AudioPlayListener;
-import org.odk.collect.android.utilities.TextUtils;
-import org.odk.collect.android.utilities.ViewIds;
+import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
-import java.util.ArrayList;
-import java.util.List;
+import timber.log.Timber;
 
 /**
  * SelectOneWidgets handles select-one fields using radio buttons.
@@ -53,20 +43,17 @@ import java.util.List;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public abstract class AbstractSelectOneWidget extends SelectTextWidget
-        implements OnCheckedChangeListener, AudioPlayListener, MultiChoiceWidget, View.OnClickListener {
+public abstract class AbstractSelectOneWidget extends SelectTextWidget implements MultiChoiceWidget {
 
     @Nullable
     private AdvanceToNextListener listener;
 
-    protected List<RadioButton> buttons;
-    protected String selectedValue;
-
+    private String selectedValue;
     private final boolean autoAdvance;
+    SelectOneListAdapter adapter;
 
     public AbstractSelectOneWidget(Context context, FormEntryPrompt prompt, boolean autoAdvance) {
         super(context, prompt);
-        buttons = new ArrayList<>();
 
         if (prompt.getAnswerValue() != null) {
             if (this instanceof ItemsetWidget) {
@@ -85,148 +72,83 @@ public abstract class AbstractSelectOneWidget extends SelectTextWidget
 
     @Override
     public void clearAnswer() {
-        for (RadioButton button : this.buttons) {
-            if (button.isChecked()) {
-                button.setChecked(false);
-                clearNextLevelsOfCascadingSelect();
-                break;
-            }
+        if (adapter != null) {
+            adapter.clearAnswer();
         }
     }
 
     @Override
     public IAnswerData getAnswer() {
-        int i = getCheckedId();
+        SelectChoice selectChoice =  adapter.getSelectedItem();
 
-        return i == -1 ? null :
-                (this instanceof ItemsetWidget ? new StringData(items.get(i).getValue()) : new SelectOneData(new Selection(items.get(i))));
-    }
-
-    public int getCheckedId() {
-        for (RadioButton button : buttons) {
-            if (button.isChecked()) {
-                return (int) button.getTag();
-            }
-        }
-        return -1;
-    }
-
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if (isChecked) {
-            for (RadioButton button : buttons) {
-                if (button.isChecked() && buttonView != button) {
-                    button.setChecked(false);
-                    clearNextLevelsOfCascadingSelect();
-                }
-            }
-        }
-    }
-
-    @Override
-    public void setOnLongClickListener(OnLongClickListener l) {
-        for (RadioButton r : buttons) {
-            r.setOnLongClickListener(l);
-        }
-    }
-
-    @Override
-    public void cancelLongPress() {
-        super.cancelLongPress();
-        for (RadioButton button : buttons) {
-            button.cancelLongPress();
-        }
-    }
-
-    protected RadioButton createRadioButton(int index) {
-        String choiceName = getFormEntryPrompt().getSelectChoiceText(items.get(index));
-        CharSequence choiceDisplayName;
-        if (choiceName != null) {
-            choiceDisplayName = TextUtils.textToHtml(choiceName);
-        } else {
-            choiceDisplayName = "";
-        }
-
-        AppCompatRadioButton radioButton = new AppCompatRadioButton(getContext());
-        radioButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
-        radioButton.setText(choiceDisplayName);
-        radioButton.setMovementMethod(LinkMovementMethod.getInstance());
-        radioButton.setTag(index);
-        radioButton.setId(ViewIds.generateViewId());
-        radioButton.setEnabled(!getFormEntryPrompt().isReadOnly());
-        radioButton.setFocusable(!getFormEntryPrompt().isReadOnly());
-        radioButton.setOnClickListener(this);
-
-        //adapt radioButton text as per language direction
-        if (isRTL()) {
-            radioButton.setGravity(Gravity.END);
-        } else {
-            radioButton.setGravity(Gravity.START);
-        }
-
-        if (items.get(index).getValue().equals(selectedValue)) {
-            radioButton.setChecked(true);
-        }
-
-        radioButton.setOnCheckedChangeListener(this);
-
-        return radioButton;
+        return selectChoice == null
+                ? null
+                : this instanceof ItemsetWidget
+                    ? new StringData(selectChoice.getValue())
+                    : new SelectOneData(new Selection(selectChoice));
     }
 
     protected void createLayout() {
         readItems();
 
-        LayoutInflater inflater = LayoutInflater.from(getContext());
+        adapter = new SelectOneListAdapter(items, selectedValue, this);
 
         if (items != null) {
-            for (int i = 0; i < items.size(); i++) {
-                answerLayout.addView(createRadioButtonLayout(inflater, i));
-            }
+            RecyclerView recyclerView = setUpRecyclerView();
+            recyclerView.setAdapter(adapter);
+            answerLayout.addView(recyclerView);
+            adjustRecyclerViewSize(adapter, recyclerView);
             addAnswerView(answerLayout);
         }
     }
 
-    protected RelativeLayout createRadioButtonLayout(LayoutInflater inflater, int index) {
-        @SuppressLint("InflateParams")
-        RelativeLayout thisParentLayout = (RelativeLayout) inflater.inflate(R.layout.quick_select_layout, null);
+    /**
+     * It's needed only for external choices. Everything works well and
+     * out of the box when we use internal choices instead
+     */
+    public void clearNextLevelsOfCascadingSelect() {
+        FormController formController = Collect.getInstance().getFormController();
+        if (formController == null) {
+            return;
+        }
 
-        RadioButton radioButton = createRadioButton(index);
-
-        ImageView rightArrow = (ImageView) thisParentLayout.getChildAt(1);
-        rightArrow.setImageDrawable(autoAdvance ? AppCompatResources.getDrawable(getContext(), R.drawable.expander_ic_right) : null);
-
-        buttons.add(radioButton);
-
-        ((ViewGroup) thisParentLayout.getChildAt(0)).addView(createMediaLayout(index, radioButton));
-
-        return thisParentLayout;
+        if (formController.currentCaptionPromptIsQuestion()) {
+            try {
+                FormIndex startFormIndex = formController.getQuestionPrompt().getIndex();
+                formController.stepToNextScreenEvent();
+                while (formController.currentCaptionPromptIsQuestion()
+                        && formController.getQuestionPrompt().getFormElement().getAdditionalAttribute(null, "query") != null) {
+                    formController.saveAnswer(formController.getQuestionPrompt().getIndex(), null);
+                    formController.stepToNextScreenEvent();
+                }
+                formController.jumpToIndex(startFormIndex);
+            } catch (JavaRosaException e) {
+                Timber.d(e);
+            }
+        }
     }
 
-    public List<RadioButton> getButtons() {
-        return buttons;
+    public void onClick() {
+        if (autoAdvance && listener != null) {
+            listener.advance();
+        }
+    }
+
+    public boolean isAutoAdvance() {
+        return autoAdvance;
     }
 
     @Override
     public int getChoiceCount() {
-        return buttons.size();
+        return adapter.getItemCount();
     }
 
     @Override
     public void setChoiceSelected(int choiceIndex, boolean isSelected) {
-        for (RadioButton button : buttons) {
-            button.setChecked(false);
-        }
-
-        RadioButton button = buttons.get(choiceIndex);
+        RadioButton button = new RadioButton(getContext());
+        button.setTag(choiceIndex);
         button.setChecked(isSelected);
 
-        onCheckedChanged(button, isSelected);
-    }
-
-    @Override
-    public void onClick(View view) {
-        if (autoAdvance && listener != null) {
-            listener.advance();
-        }
+        adapter.onCheckedChanged(button, isSelected);
     }
 }
