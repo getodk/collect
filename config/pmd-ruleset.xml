@@ -129,7 +129,6 @@
         <exclude name="InsufficientStringBufferDeclaration" />
         <exclude name="OptimizableToArrayCall" />
         <exclude name="SimplifyStartsWith" />
-        <exclude name="TooFewBranchesForASwitchStatement" />
         <exclude name="UseStringBufferForStringAppends" />
     </rule>
 </ruleset>
