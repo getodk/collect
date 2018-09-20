@@ -64,10 +64,6 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryWidget {
 
         createShapeButton = getSimpleButton(getContext().getString(R.string.get_shape));
 
-        if (prompt.isReadOnly()) {
-            createShapeButton.setEnabled(false);
-        }
-
         LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);
         answerLayout.addView(createShapeButton);

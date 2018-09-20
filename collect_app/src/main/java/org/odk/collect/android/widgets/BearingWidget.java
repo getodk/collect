@@ -24,7 +24,6 @@ import android.hardware.SensorManager;
 import android.text.InputType;
 import android.text.method.DigitsKeyListener;
 import android.util.TypedValue;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -66,10 +65,6 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
         answer.setBackground(null);
 
         getBearingButton = getSimpleButton(getContext().getString(R.string.get_bearing));
-        getBearingButton.setEnabled(!prompt.isReadOnly());
-        if (prompt.isReadOnly()) {
-            getBearingButton.setVisibility(View.GONE);
-        }
 
         answerLayout.addView(getBearingButton);
         answerLayout.addView(answer);

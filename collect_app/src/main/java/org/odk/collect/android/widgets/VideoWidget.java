@@ -105,10 +105,8 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
         selfie = appearance != null && (appearance.equalsIgnoreCase("selfie") || appearance.equalsIgnoreCase("new-front"));
 
         captureButton = getSimpleButton(getContext().getString(R.string.capture_video), R.id.capture_video);
-        captureButton.setEnabled(!prompt.isReadOnly());
 
         chooseButton = getSimpleButton(getContext().getString(R.string.choose_video), R.id.choose_video);
-        chooseButton.setEnabled(!prompt.isReadOnly());
 
         playButton = getSimpleButton(getContext().getString(R.string.play_video), R.id.play_video);
 
@@ -283,10 +281,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
     }
 
     private void hideButtonsIfNeeded() {
-        if (getFormEntryPrompt().isReadOnly()) {
-            captureButton.setVisibility(View.GONE);
-            chooseButton.setVisibility(View.GONE);
-        } else if (selfie || (getFormEntryPrompt().getAppearanceHint() != null
+        if (selfie || (getFormEntryPrompt().getAppearanceHint() != null
                 && getFormEntryPrompt().getAppearanceHint().toLowerCase(Locale.ENGLISH).contains("new"))) {
             chooseButton.setVisibility(View.GONE);
         }

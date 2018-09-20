@@ -68,10 +68,8 @@ public class ImageWidget extends BaseImageWidget {
                 || appearance.equalsIgnoreCase("new-front"));
 
         captureButton = getSimpleButton(getContext().getString(R.string.capture_image), R.id.capture_image);
-        captureButton.setEnabled(!getFormEntryPrompt().isReadOnly());
 
         chooseButton = getSimpleButton(getContext().getString(R.string.choose_image), R.id.choose_image);
-        chooseButton.setEnabled(!getFormEntryPrompt().isReadOnly());
 
         answerLayout.addView(captureButton);
         answerLayout.addView(chooseButton);
@@ -137,10 +135,7 @@ public class ImageWidget extends BaseImageWidget {
     }
 
     private void hideButtonsIfNeeded(String appearance) {
-        if (getFormEntryPrompt().isReadOnly()) {
-            captureButton.setVisibility(View.GONE);
-            chooseButton.setVisibility(View.GONE);
-        } else if (selfie || ((appearance != null
+        if (selfie || ((appearance != null
                 && appearance.toLowerCase(Locale.ENGLISH).contains("new")))) {
             chooseButton.setVisibility(View.GONE);
         }

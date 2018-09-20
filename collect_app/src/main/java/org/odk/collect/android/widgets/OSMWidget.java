@@ -101,7 +101,6 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
         } else {
             launchOpenMapKitButton.setText(getContext().getString(R.string.capture_osm));
         }
-        launchOpenMapKitButton.setEnabled(!prompt.isReadOnly());
 
         osmFileNameHeaderTextView = new TextView(context);
         osmFileNameHeaderTextView.setId(ViewIds.generateViewId());
@@ -133,10 +132,6 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
         answerLayout.addView(osmFileNameTextView);
         addAnswerView(answerLayout);
 
-        // Hide Launch button if read-only
-        if (prompt.isReadOnly()) {
-            launchOpenMapKitButton.setVisibility(View.GONE);
-        }
         errorTextView.setVisibility(View.GONE);
     }
 
