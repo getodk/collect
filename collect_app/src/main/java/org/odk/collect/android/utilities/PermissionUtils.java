@@ -190,6 +190,39 @@ public class PermissionUtils {
                 .check();
     }
 
+    public static void requestCameraAndRecordAudioPermissions(@NonNull Activity activity, @NonNull PermissionListener action) {
+        MultiplePermissionsListener multiplePermissionsListener = new MultiplePermissionsListener() {
+            @Override
+            public void onPermissionsChecked(MultiplePermissionsReport report) {
+                if (report.areAllPermissionsGranted()) {
+                    action.granted();
+                } else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.Theme_AppCompat_Light_Dialog);
+
+                    builder.setTitle(R.string.camera_runtime_permission_denied_title)
+                            .setMessage(R.string.camera_runtime_permission_denied_desc)
+                            .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> action.denied())
+                            .setCancelable(false)
+                            .setIcon(R.drawable.ic_photo_camera)
+                            .show();
+                }
+            }
+
+            @Override
+            public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                token.continuePermissionRequest();
+            }
+        };
+
+        Dexter.withActivity(activity)
+                .withPermissions(
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.RECORD_AUDIO
+                ).withListener(multiplePermissionsListener)
+                .withErrorListener(error -> Timber.i(error.name()))
+                .check();
+    }
+
     public static void requestGetAccountsPermission(@NonNull Activity activity, @NonNull PermissionListener action) {
         com.karumi.dexter.listener.single.PermissionListener permissionListener = new com.karumi.dexter.listener.single.PermissionListener() {
             @Override
@@ -310,6 +343,14 @@ public class PermissionUtils {
 
         return accessFineLocation == PackageManager.PERMISSION_GRANTED
                 && accessCoarseLocation == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public static boolean checkIfCameraAndRecordAudioPermissionsGranted(Context context) {
+        int cameraPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA);
+        int recordAudioPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO);
+
+        return cameraPermission == PackageManager.PERMISSION_GRANTED
+                && recordAudioPermission == PackageManager.PERMISSION_GRANTED;
     }
 
     public static boolean checkIfGetAccountsPermissionGranted(Context context) {
