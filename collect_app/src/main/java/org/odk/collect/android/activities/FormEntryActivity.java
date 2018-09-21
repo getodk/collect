@@ -82,7 +82,7 @@ import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataManager;
-import org.odk.collect.android.fragments.ImageLoadingFragment;
+import org.odk.collect.android.fragments.MediaLoadingFragment;
 import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
@@ -186,7 +186,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     public static final String KEY_ERROR = "error";
     private static final String KEY_SAVE_NAME = "saveName";
 
-    private static final String TAG_IMAGE_LOADING_FRAGMENT = "image_loading_fragment";
+    private static final String TAG_MEDIA_LOADING_FRAGMENT = "media_loading_fragment";
 
     // Identifies the gp of the form used to launch form entry
     public static final String KEY_FORMPATH = "formpath";
@@ -256,7 +256,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
-    ImageLoadingFragment imageLoadingFragment;
+    MediaLoadingFragment mediaLoadingFragment;
 
     public void allowSwiping(boolean doSwipe) {
         this.doSwipe = doSwipe;
@@ -320,10 +320,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         });
 
         if (savedInstanceState == null) {
-            imageLoadingFragment = new ImageLoadingFragment();
-            getFragmentManager().beginTransaction().add(imageLoadingFragment, TAG_IMAGE_LOADING_FRAGMENT).commit();
+            mediaLoadingFragment = new MediaLoadingFragment();
+            getFragmentManager().beginTransaction().add(mediaLoadingFragment, TAG_MEDIA_LOADING_FRAGMENT).commit();
         } else {
-            imageLoadingFragment = (ImageLoadingFragment) getFragmentManager().findFragmentByTag(TAG_IMAGE_LOADING_FRAGMENT);
+            mediaLoadingFragment = (MediaLoadingFragment) getFragmentManager().findFragmentByTag(TAG_MEDIA_LOADING_FRAGMENT);
         }
 
         requestStoragePermissions(this, new PermissionListener() {
@@ -799,7 +799,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 ProgressDialogFragment.newInstance(getString(R.string.please_wait))
                         .show(getSupportFragmentManager(), ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
 
-                imageLoadingFragment.beginImageLoadingTask(intent.getData());
+                mediaLoadingFragment.beginMediaLoadingTask(intent.getData());
 
                 break;
             case RequestCodes.AUDIO_CAPTURE:

@@ -27,11 +27,11 @@ import java.lang.ref.WeakReference;
 
 import timber.log.Timber;
 
-public class ImageLoadingTask extends AsyncTask<Uri, Void, File> {
+public class MediaLoadingTask extends AsyncTask<Uri, Void, File> {
 
     private WeakReference<FormEntryActivity> formEntryActivity;
 
-    public ImageLoadingTask(FormEntryActivity formEntryActivity) {
+    public MediaLoadingTask(FormEntryActivity formEntryActivity) {
         onAttach(formEntryActivity);
     }
 
@@ -54,18 +54,21 @@ public class ImageLoadingTask extends AsyncTask<Uri, Void, File> {
             if (instanceFile != null) {
                 String instanceFolder = instanceFile.getParent();
                 String extension = ContentResolverHelper.getFileExtensionFromUri(uris[0]);
-                String destImagePath = instanceFolder + File.separator + System.currentTimeMillis() + extension;
+                String destMediaPath = instanceFolder + File.separator + System.currentTimeMillis() + extension;
 
                 try {
                     File chosenFile = MediaUtils.getFileFromUri(formEntryActivity.get(), uris[0], MediaStore.Images.Media.DATA);
                     if (chosenFile != null) {
-                        final File newFile = new File(destImagePath);
+                        final File newFile = new File(destMediaPath);
                         FileUtils.copyFile(chosenFile, newFile);
                         QuestionWidget questionWidget = formEntryActivity.get().getWidgetWaitingForBinaryData();
+
+                        // apply image conversion if the widget is an image widget
                         if (questionWidget instanceof BaseImageWidget ||
                                 questionWidget instanceof ImageWebViewWidget) {
-                            ImageConverter.execute(newFile.getPath(), formEntryActivity.get().getWidgetWaitingForBinaryData(), formEntryActivity.get());
+                            ImageConverter.execute(newFile.getPath(), questionWidget, formEntryActivity.get());
                         }
+
                         return newFile;
                     } else {
                         Timber.e("Could not receive chosen file");
