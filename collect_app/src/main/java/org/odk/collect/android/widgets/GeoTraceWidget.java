@@ -15,7 +15,6 @@
 package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -93,7 +92,7 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
         Intent intent = new Intent(getContext(), GeoTraceActivity.class)
             .putExtra(TRACE_LOCATION, answerDisplay.getText().toString())
             .putExtra(PreferenceKeys.KEY_MAP_SDK, mapSDK);
-        ((Activity) getContext()).startActivityForResult(intent, RequestCodes.GEOTRACE_CAPTURE);
+        startActivityForResult(intent, RequestCodes.GEOTRACE_CAPTURE, -1);
     }
 
     private void updateButtonLabelsAndVisibility(boolean dataAvailable) {
@@ -135,7 +134,6 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
         requestLocationPermissions((FormEntryActivity) getContext(), new PermissionListener() {
             @Override
             public void granted() {
-                waitForData();
                 startGeoTraceActivity();
             }
 

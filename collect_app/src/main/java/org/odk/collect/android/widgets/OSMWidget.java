@@ -1,7 +1,6 @@
 package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -169,11 +168,7 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
 
             //launch activity if it is safe
             if (isIntentSafe) {
-                // notify that the form is waiting for data
-                waitForData();
-
-                // launch
-                ((Activity) ctx).startActivityForResult(launchIntent, RequestCodes.OSM_CAPTURE);
+                startActivityForResult(launchIntent, RequestCodes.OSM_CAPTURE, -1);
             } else {
                 errorTextView.setVisibility(View.VISIBLE);
             }

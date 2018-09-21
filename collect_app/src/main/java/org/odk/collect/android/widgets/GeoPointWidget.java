@@ -15,7 +15,6 @@
 package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
@@ -320,8 +319,6 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
         i.putExtra(DRAGGABLE_ONLY, draggable);
         i.putExtra(ACCURACY_THRESHOLD, accuracyThreshold);
 
-        waitForData();
-
-        ((Activity) getContext()).startActivityForResult(i, RequestCodes.LOCATION_CAPTURE);
+        startActivityForResult(i, RequestCodes.LOCATION_CAPTURE, -1);
     }
 }

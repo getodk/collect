@@ -15,7 +15,6 @@
 package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -153,9 +152,7 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
     public void onButtonClick(int buttonId) {
         if (isSensorAvailable) {
             Intent i = new Intent(getContext(), BearingActivity.class);
-            waitForData();
-            ((Activity) getContext()).startActivityForResult(i,
-                    RequestCodes.BEARING_CAPTURE);
+            startActivityForResult(i, RequestCodes.BEARING_CAPTURE, -1);
         } else {
             getBearingButton.setEnabled(false);
             ToastUtils.showLongToast(R.string.bearing_lack_of_sensors);
