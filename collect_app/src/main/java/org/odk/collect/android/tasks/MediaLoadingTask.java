@@ -80,10 +80,6 @@ public class MediaLoadingTask extends AsyncTask<Uri, Void, File> {
                     formEntryActivity.get().runOnUiThread(() -> ToastUtils.showLongToastInMiddle(R.string.gdrive_connection_exception));
                     return null;
                 }
-            } else {
-                formEntryActivity.get().runOnUiThread(() -> ToastUtils.showLongToast(R.string.image_not_saved));
-                Timber.w(formEntryActivity.get().getString(R.string.image_not_saved));
-                return null;
             }
         }
         return null;

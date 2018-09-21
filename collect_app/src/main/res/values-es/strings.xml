@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">Mostrar contraseña</string>
   <string name="activity_not_found">No se encontró actividad para manejar: %s</string>
   <string name="view_image">Ver imagen</string>
@@ -642,7 +642,6 @@
   <string name="transport_type_both">Seleccionar al Enviar</string>
   <string name="seconds">Segundos</string>
   <string name="rank_items">Ranking de Items</string>
-  <string name="image_not_saved">La imagen no se puede guardar debido a un problema con el archivo de instancia correspondiente.</string>
   <string name="loading_form_failed">Ocurrió un error al cargar el formulario. Por favor intente de nuevo.</string>
   <string name="missing_google_account_dialog_title">No se ha definido una cuenta de Google</string>
   <string name="missing_google_account_dialog_desc">Para enviar formularios vía Google Sheets debe definir una cuenta de Google en ajustes de servidor.</string>

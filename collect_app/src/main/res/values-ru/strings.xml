@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">Показать пароль</string>
   <string name="activity_not_found">Случилось что-то страшное: %s</string>
   <string name="view_image">Просмотреть изображение</string>
@@ -619,7 +619,6 @@
   <string name="transport_type_sms">SMS</string>
   <string name="transport_type_both">Выбрать при выгрузке</string>
   <string name="seconds">Секунд</string>
-  <string name="image_not_saved">Изображение нельзя сохранить из-за проблемы с исходным файлом</string>
   <string name="loading_form_failed">Ошибка загрузки. Попробуйте ещё раз.</string>
   <string name="missing_google_account_dialog_title">Учётная запись Google не установлена</string>
   <string name="missing_google_account_dialog_desc">Для отправки ответов через Google таблицы необходимо указать учётную запись через которую это будет происходить</string>
