@@ -14,7 +14,10 @@
 
 package org.odk.collect.android.widgets;
 
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -25,6 +28,7 @@ import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -37,6 +41,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -668,5 +673,21 @@ public abstract class QuestionWidget
 
     public int getPlayColor() {
         return playColor;
+    }
+
+    protected void startActivityForResult(Intent intent, int requestCode, @StringRes int errorRes) {
+        try {
+            waitForData();
+            ((Activity) getContext()).startActivityForResult(intent, requestCode);
+        } catch (ActivityNotFoundException e) {
+            if (errorRes != -1) {
+                Toast.makeText(
+                        getContext(),
+                        getContext().getString(R.string.activity_not_found,
+                                getContext().getString(errorRes)), Toast.LENGTH_SHORT)
+                        .show();
+            }
+            cancelWaitingForData();
+        }
     }
 }
