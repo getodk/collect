@@ -6,10 +6,10 @@
         <Preference
             android:key="selected_google_account"
             android:title="@string/selected_google_account_text" />
-        <EditTextPreference
+        <ListPreference
             android:dialogTitle="@string/google_sheets_url"
-            android:inputType="textNoSuggestions"
             android:key="google_sheets_url"
+            android:enabled="false"
             android:summary="@string/google_sheets_url_hint"
             android:title="@string/google_sheets_url" />
     </PreferenceCategory>
