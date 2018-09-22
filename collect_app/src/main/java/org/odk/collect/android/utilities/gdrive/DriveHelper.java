@@ -41,6 +41,8 @@ import static org.odk.collect.android.tasks.InstanceGoogleSheetsUploader.GOOGLE_
 public class DriveHelper {
 
     public static final String FOLDER_MIME_TYPE = "application/vnd.google-apps.folder";
+    private static final String SPREADSHEET_MIME_TYPE = "application/vnd.google-apps.spreadsheet";
+
     private final DriveService driveService;
 
     DriveHelper(@NonNull GoogleAccountCredential credential,
@@ -221,6 +223,22 @@ public class DriveHelper {
 
         String mimeType = folderName != null ? FOLDER_MIME_TYPE : null;
         String requestString = generateSearchQuery(folderName, parentId, mimeType);
+        String fields = "nextPageToken, files(modifiedTime, id, name, mimeType)";
+        Drive.Files.List request = buildRequest(requestString, fields);
+
+        if (request != null) {
+            driveService.fetchAllFiles(request, files);
+        }
+        return files;
+    }
+
+    /**
+     * Fetches the list of spreadsheets from the google drive for the associated google account
+     */
+    public List<com.google.api.services.drive.model.File> getAllSheetsFromDrive() throws IOException {
+        List<com.google.api.services.drive.model.File> files = new ArrayList<>();
+
+        String requestString = generateSearchQuery(null, null, SPREADSHEET_MIME_TYPE);
         String fields = "nextPageToken, files(modifiedTime, id, name, mimeType)";
         Drive.Files.List request = buildRequest(requestString, fields);
 
