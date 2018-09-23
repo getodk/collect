@@ -151,7 +151,7 @@ public class GoogleAccountsManager implements GoogleApiClient.OnConnectionFailed
         } else {
             if (fragment != null && fragment instanceof ServerPreferencesFragment) {
                 showAccountPickerDialog();
-            } else if (activity != null) {
+            } else {
                 showSettingsDialog();
             }
         }
@@ -205,8 +205,6 @@ public class GoogleAccountsManager implements GoogleApiClient.OnConnectionFailed
 
         if (fragment != null) {
             fragment.startActivityForResult(intentChooseAccount, REQUEST_ACCOUNT_PICKER);
-        } else if (activity != null) {
-            activity.startActivityForResult(intentChooseAccount, REQUEST_ACCOUNT_PICKER);
         }
     }
 

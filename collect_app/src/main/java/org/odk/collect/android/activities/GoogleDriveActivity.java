@@ -18,7 +18,6 @@
 
 package org.odk.collect.android.activities;
 
-import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -64,8 +63,6 @@ import java.util.Locale;
 import java.util.Stack;
 
 import timber.log.Timber;
-
-import static org.odk.collect.android.utilities.gdrive.GoogleAccountsManager.REQUEST_ACCOUNT_PICKER;
 
 public class GoogleDriveActivity extends FormListActivity implements View.OnClickListener,
         TaskListener, GoogleDriveFormDownloadListener, GoogleAccountsManager.GoogleAccountSelectionListener,
@@ -403,12 +400,6 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     protected void onActivityResult(final int requestCode, final int resultCode,
                                     final Intent data) {
         switch (requestCode) {
-            case REQUEST_ACCOUNT_PICKER:
-                if (resultCode == RESULT_OK && data != null && data.getExtras() != null) {
-                    String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-                    accountsManager.setSelectedAccountName(accountName);
-                }
-                break;
             case AUTHORIZATION_REQUEST_CODE:
                 if (resultCode == Activity.RESULT_OK) {
                     getResultsFromApi();

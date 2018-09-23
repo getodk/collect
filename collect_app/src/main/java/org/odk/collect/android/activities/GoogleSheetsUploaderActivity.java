@@ -20,7 +20,6 @@
 
 package org.odk.collect.android.activities;
 
-import android.accounts.AccountManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -54,7 +53,6 @@ import java.util.Set;
 import timber.log.Timber;
 
 import static org.odk.collect.android.tasks.InstanceGoogleSheetsUploader.REQUEST_AUTHORIZATION;
-import static org.odk.collect.android.utilities.gdrive.GoogleAccountsManager.REQUEST_ACCOUNT_PICKER;
 
 public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implements InstanceUploaderListener,
         GoogleAccountsManager.GoogleAccountSelectionListener {
@@ -182,12 +180,6 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
         }
 
         switch (requestCode) {
-            case REQUEST_ACCOUNT_PICKER:
-                if (resultCode == RESULT_OK && data != null && data.getExtras() != null) {
-                    String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-                    accountsManager.setSelectedAccountName(accountName);
-                }
-                break;
             case REQUEST_AUTHORIZATION:
                 dismissDialog(PROGRESS_DIALOG);
                 if (resultCode == RESULT_OK) {
