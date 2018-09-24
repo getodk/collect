@@ -5,6 +5,12 @@ import android.support.annotation.Nullable;
 import android.text.format.DateFormat;
 import android.webkit.MimeTypeMap;
 
+import com.burgstaller.okhttp.AuthenticationCacheInterceptor;
+import com.burgstaller.okhttp.CachingAuthenticatorDecorator;
+import com.burgstaller.okhttp.DispatchingAuthenticator;
+import com.burgstaller.okhttp.basic.BasicAuthenticator;
+import com.burgstaller.okhttp.digest.CachingAuthenticator;
+
 import org.apache.commons.io.IOUtils;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
@@ -26,7 +32,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
+
+import com.burgstaller.okhttp.digest.Credentials;
+import com.burgstaller.okhttp.digest.DigestAuthenticator;
 
 import okhttp3.Headers;
 import okhttp3.MediaType;
@@ -54,22 +64,20 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     @NonNull
     @Override
     public HttpGetResult get(@NonNull URI uri, @Nullable String contentType, @Nullable HttpCredentialsInterface credentials) throws Exception {
-        OkHttpClient client = createOkHttpClient();
+        OkHttpClient client = createOkHttpClient(credentials);
         Request request = getRequest(uri);
+
         Response response = client.newCall(request).execute();
         int statusCode = response.code();
 
         if (statusCode != HttpURLConnection.HTTP_OK) {
             discardEntityBytes(response);
-            if (statusCode == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                // clear the cookies -- should not be necessary?
-            }
             String errMsg = Collect
                     .getInstance()
                     .getString(R.string.file_fetch_failed, uri.toString(), response.message(), String.valueOf(statusCode));
 
             Timber.e(errMsg);
-            throw new Exception(errMsg);
+            return new HttpGetResult(null, new HashMap<String, String>(), "", statusCode);
         }
 
         ResponseBody body = response.body();
@@ -125,16 +133,13 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
         try {
             Timber.i("Issuing HEAD request to: %s", uri.toString());
 
-            OkHttpClient client = createOkHttpClient();
+            OkHttpClient client = createOkHttpClient(credentials);
             Request request = headRequest(uri);
 
             Response response = client.newCall(request).execute();
             statusCode = response.code();
 
-            if (statusCode == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                // getCookieStore().clear();
-
-            } else if (statusCode == HttpURLConnection.HTTP_NO_CONTENT) {
+            if (statusCode == HttpURLConnection.HTTP_NO_CONTENT) {
                 Headers headers = response.headers();
 
                 for (String headerName : headers.names()) {
@@ -219,7 +224,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
             MultipartBody multipartBody = multipartBuilder.build();
 
             try {
-                OkHttpClient client = createOkHttpClient();
+                OkHttpClient client = createOkHttpClient(credentials);
                 Request request = postRequest(uri, multipartBody);
                 Response response = client.newCall(request).execute();
 
@@ -229,10 +234,6 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
                         response.message());
 
                 discardEntityBytes(response);
-
-                if (response.code() == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                    // TODO: getCookieStore().clear();
-                }
 
                 if (response.code() != HttpURLConnection.HTTP_CREATED && response.code() != HttpURLConnection.HTTP_ACCEPTED) {
                     return messageParser;
@@ -251,13 +252,35 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
         return messageParser;
     }
 
-    private OkHttpClient createOkHttpClient() {
-        return new OkHttpClient.Builder()
+    private OkHttpClient createOkHttpClient(@Nullable HttpCredentialsInterface credentials) {
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+
+        addCredentials(builder, credentials);
+
+        return builder
                 .connectTimeout(CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)
                 .writeTimeout(WRITE_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)
                 .readTimeout(READ_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)
                 .followRedirects(true)
                 .build();
+    }
+
+    private void addCredentials(OkHttpClient.Builder builder, @Nullable HttpCredentialsInterface credentials) {
+        if (credentials != null) {
+            final Map<String, CachingAuthenticator> authCache = new ConcurrentHashMap<>();
+            Credentials cred = new Credentials(credentials.getUsername(), credentials.getPassword());
+
+            BasicAuthenticator basicAuthenticator = new BasicAuthenticator(cred);
+            DigestAuthenticator digestAuthenticator = new DigestAuthenticator(cred);
+
+            DispatchingAuthenticator authenticator = new DispatchingAuthenticator.Builder()
+                    .with("digest", digestAuthenticator)
+                    .with("basic", basicAuthenticator)
+                    .build();
+
+            builder.authenticator(new CachingAuthenticatorDecorator(authenticator, authCache))
+                    .addInterceptor(new AuthenticationCacheInterceptor(authCache));
+        }
     }
 
     private Request getRequest(@NonNull URI uri) throws MalformedURLException {

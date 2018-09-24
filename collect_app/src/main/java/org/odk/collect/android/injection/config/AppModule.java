@@ -8,7 +8,7 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.http.CollectServerClient;
-import org.odk.collect.android.http.HttpClientConnection;
+import org.odk.collect.android.http.OkHttpConnection;
 import org.odk.collect.android.http.OpenRosaHttpInterface;
 import org.odk.collect.android.injection.ViewModelBuilder;
 import org.odk.collect.android.injection.config.architecture.ViewModelFactoryModule;
@@ -60,7 +60,7 @@ public class AppModule {
 
     @Provides
     public OpenRosaHttpInterface provideHttpInterface() {
-        return new HttpClientConnection();
+        return new OkHttpConnection();
     }
 
     @Provides
