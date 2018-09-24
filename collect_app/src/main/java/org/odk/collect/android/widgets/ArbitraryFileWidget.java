@@ -141,6 +141,7 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget {
         widgetLayout.setOrientation(LinearLayout.VERTICAL);
 
         chooseFileButton = getSimpleButton(getContext().getString(R.string.choose_file));
+        chooseFileButton.setEnabled(!getFormEntryPrompt().isReadOnly());
 
         answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.HORIZONTAL);
