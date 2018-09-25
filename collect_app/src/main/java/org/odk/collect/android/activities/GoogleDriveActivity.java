@@ -243,7 +243,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
                 if (success) {
                     getResultsFromApi();
                 } else {
-                    accountsManager.showSettingsDialog();
+                    accountsManager.showSettingsDialog(GoogleDriveActivity.this);
                 }
             }
 

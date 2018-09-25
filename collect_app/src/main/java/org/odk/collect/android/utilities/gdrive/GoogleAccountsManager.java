@@ -17,7 +17,6 @@ package org.odk.collect.android.utilities.gdrive;
 import android.accounts.Account;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -42,12 +41,6 @@ import static org.odk.collect.android.utilities.DialogUtils.showDialog;
 
 public class GoogleAccountsManager {
 
-    public static final int REQUEST_ACCOUNT_PICKER = 1000;
-
-    @Nullable
-    private Fragment fragment;
-    @Nullable
-    private Activity activity;
     @Nullable
     private HttpTransport transport;
     @Nullable
@@ -63,17 +56,6 @@ public class GoogleAccountsManager {
     private GeneralSharedPreferences preferences;
     private ThemeUtils themeUtils;
 
-    public GoogleAccountsManager(@NonNull Activity activity) {
-        this.activity = activity;
-        initCredential(activity);
-    }
-
-    public GoogleAccountsManager(@NonNull Fragment fragment) {
-        this.fragment = fragment;
-        activity = fragment.getActivity();
-        initCredential(activity);
-    }
-
     public GoogleAccountsManager(@NonNull Context context) {
         initCredential(context);
     }
@@ -84,16 +66,12 @@ public class GoogleAccountsManager {
     public GoogleAccountsManager(@NonNull GoogleAccountCredential credential,
                                  @NonNull GeneralSharedPreferences preferences,
                                  @NonNull Intent intentChooseAccount,
-                                 @NonNull ThemeUtils themeUtils,
-                                 @NonNull Activity activity,
-                                 @NonNull Fragment fragment
+                                 @NonNull ThemeUtils themeUtils
     ) {
         this.credential = credential;
         this.preferences = preferences;
         this.intentChooseAccount = intentChooseAccount;
         this.themeUtils = themeUtils;
-        this.fragment = fragment;
-        this.activity = activity;
     }
 
     private void initCredential(@NonNull Context context) {
@@ -118,6 +96,9 @@ public class GoogleAccountsManager {
         }
     }
 
+    /**
+     * @return true if last used account is successfully selected. otherwise false
+     */
     public boolean selectLastUsedAccount() {
         String account = getSavedAccount();
         if (!account.isEmpty()) {
@@ -145,37 +126,29 @@ public class GoogleAccountsManager {
         return "";
     }
 
-    public void showSettingsDialog() {
-        AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
+    public void showSettingsDialog(@NonNull Activity activity) {
+        AlertDialog alertDialog = new AlertDialog.Builder(activity)
                 .setIcon(android.R.drawable.ic_dialog_info)
                 .setTitle(R.string.missing_google_account_dialog_title)
                 .setMessage(R.string.missing_google_account_dialog_desc)
                 .setOnCancelListener(dialog -> {
                     dialog.dismiss();
-                    if (activity != null) {
-                        activity.finish();
-                    }
+                    activity.finish();
                 })
-                .setPositiveButton(context.getString(R.string.ok), (dialog, which) -> {
+                .setPositiveButton(activity.getString(R.string.ok), (dialog, which) -> {
                     dialog.dismiss();
-                    if (activity != null) {
-                        activity.finish();
-                    }
+                    activity.finish();
                 })
                 .create();
 
-        showDialog(alertDialog, getActivity());
+        showDialog(alertDialog, activity);
     }
 
-    public void showAccountPickerDialog() {
-        Account selectedAccount = getAccountPickerCurrentAccount();
-        intentChooseAccount.putExtra("selectedAccount", selectedAccount);
+    public Intent getAccountChooserIntent() {
+        intentChooseAccount.putExtra("selectedAccount", getAccountPickerCurrentAccount());
         intentChooseAccount.putExtra("overrideTheme", themeUtils.getAccountPickerTheme());
         intentChooseAccount.putExtra("overrideCustomTheme", 0);
-
-        if (fragment != null) {
-            fragment.startActivityForResult(intentChooseAccount, REQUEST_ACCOUNT_PICKER);
-        }
+        return intentChooseAccount;
     }
 
     public void selectAccount(String accountName) {
@@ -214,11 +187,6 @@ public class GoogleAccountsManager {
             sheetsHelper = new SheetsHelper(credential, transport, jsonFactory);
         }
         return sheetsHelper;
-    }
-
-    @Nullable
-    public Activity getActivity() {
-        return activity;
     }
 
     @NonNull

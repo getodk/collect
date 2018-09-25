@@ -169,7 +169,7 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
                 if (success) {
                     getResultsFromApi();
                 } else {
-                    accountsManager.showSettingsDialog();
+                    accountsManager.showSettingsDialog(GoogleSheetsUploaderActivity.this);
                 }
             }
 

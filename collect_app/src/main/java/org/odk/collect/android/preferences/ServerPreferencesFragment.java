@@ -72,11 +72,13 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_URL;
 import static org.odk.collect.android.utilities.DialogUtils.showDialog;
 import static org.odk.collect.android.utilities.PermissionUtils.requestGetAccountsPermission;
-import static org.odk.collect.android.utilities.gdrive.GoogleAccountsManager.REQUEST_ACCOUNT_PICKER;
 
 public class ServerPreferencesFragment extends BasePreferenceFragment implements View.OnTouchListener,
         OnBackPressedListener {
+
     private static final String KNOWN_URL_LIST = "knownUrlList";
+    private static final int REQUEST_ACCOUNT_PICKER = 1000;
+
     protected EditTextPreference serverUrlPreference;
     protected EditTextPreference usernamePreference;
     protected EditTextPreference passwordPreference;
@@ -242,7 +244,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     }
 
     public void initAccountPreferences() {
-        accountsManager = new GoogleAccountsManager(this);
+        accountsManager = new GoogleAccountsManager(getActivity());
 
         selectedGoogleAccountPreference.setSummary(accountsManager.getSavedAccount());
         selectedGoogleAccountPreference.setOnPreferenceClickListener(preference -> {
@@ -259,7 +261,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         requestGetAccountsPermission(getActivity(), new PermissionListener() {
             @Override
             public void granted() {
-                accountsManager.showAccountPickerDialog();
+                startActivityForResult(accountsManager.getAccountChooserIntent(), REQUEST_ACCOUNT_PICKER);
             }
 
             @Override
