@@ -37,6 +37,7 @@ import android.preference.PreferenceManager;
 import org.odk.collect.android.R;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
+import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceGoogleSheetsUploader;
@@ -52,9 +53,9 @@ import java.util.Set;
 import timber.log.Timber;
 
 import static org.odk.collect.android.tasks.InstanceGoogleSheetsUploader.REQUEST_AUTHORIZATION;
+import static org.odk.collect.android.utilities.PermissionUtils.requestGetAccountsPermission;
 
-public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implements InstanceUploaderListener,
-        GoogleAccountsManager.GoogleAccountSelectionListener {
+public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implements InstanceUploaderListener {
     private static final int PROGRESS_DIALOG = 1;
     private static final int GOOGLE_USER_DIALOG = 3;
     private static final String ALERT_MSG = "alertmsg";
@@ -111,7 +112,6 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
         }
 
         accountsManager = new GoogleAccountsManager(this);
-        accountsManager.setListener(this);
 
         getResultsFromApi();
     }
@@ -149,12 +149,31 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
      */
     private void getResultsFromApi() {
         if (!accountsManager.isGoogleAccountSelected()) {
-            accountsManager.chooseAccountAndRequestPermissionIfNeeded();
+            selectAccount();
         } else if (!isDeviceOnline()) {
             ToastUtils.showShortToast("No network connection available.");
         } else {
             runTask();
         }
+    }
+
+    private void selectAccount() {
+        requestGetAccountsPermission(this, new PermissionListener() {
+            @Override
+            public void granted() {
+                boolean success = accountsManager.selectLastUsedAccount();
+                if (success) {
+                    getResultsFromApi();
+                } else {
+                    accountsManager.showSettingsDialog();
+                }
+            }
+
+            @Override
+            public void denied() {
+                finish();
+            }
+        });
     }
 
     /**
@@ -369,10 +388,5 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
     @Override
     public void authRequest(Uri url, HashMap<String, String> doneSoFar) {
         // in interface, but not needed
-    }
-
-    @Override
-    public void onGoogleAccountSelected(String accountName) {
-        getResultsFromApi();
     }
 }
