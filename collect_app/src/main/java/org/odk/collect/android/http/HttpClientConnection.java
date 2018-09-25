@@ -102,6 +102,8 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
     private CredentialsProvider credentialsProvider;
     private CookieStore cookieStore;
 
+    private long contentLength = 10000000;
+
     public HttpClientConnection() {
         credentialsProvider = new AgingCredentialsProvider(7 * 60 * 1000);
         cookieStore = new BasicCookieStore();
@@ -290,6 +292,11 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
             throw new Exception("Generic Exception: " + msg);
         }
 
+        Header[] headers = response.getHeaders("X-OpenRosa-Accept-Content-Length");
+        if (headers.length > 0) {
+            contentLength = Long.parseLong(headers[0].getValue());
+        }
+
         return new HttpHeadResult(statusCode, responseHeaders);
     }
 
@@ -355,7 +362,7 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
                 // we've added at least one attachment to the request...
                 if (fileIndex + 1 < fileList.size()) {
                     if ((fileIndex - lastFileIndex + 1 > 100) || (byteCount + fileList.get(fileIndex + 1).length()
-                            > 10000000L)) {
+                            > contentLength)) {
                         // the next file would exceed the 10MB threshold...
                         Timber.i("Extremely long post is being split into multiple posts");
                         try {
