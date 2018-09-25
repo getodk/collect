@@ -18,17 +18,17 @@ import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
-import org.odk.collect.android.tasks.ServerPollingJob;
-import org.odk.collect.android.utilities.IconUtils;
-import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
-import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceGoogleSheetsUploader;
 import org.odk.collect.android.tasks.InstanceServerUploader;
+import org.odk.collect.android.tasks.ServerPollingJob;
+import org.odk.collect.android.utilities.IconUtils;
+import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
+import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -151,34 +151,31 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         }
     }
 
-    private void sendInstancesToGoogleSheets(Context context, Long[] toSendArray) {
-        if (PermissionUtils.checkIfGetAccountsPermissionGranted(context)) {
-            GoogleAccountsManager accountsManager = new GoogleAccountsManager(Collect.getInstance());
+        private void sendInstancesToGoogleSheets(Context context, Long[] toSendArray) {        if (PermissionUtils.checkIfGetAccountsPermissionGranted(context)) {
+                    GoogleAccountsManager accountsManager = new GoogleAccountsManager(context);
 
-            String googleUsername = accountsManager.getSelectedAccount();
-            if (googleUsername.isEmpty()) {
-                // just quit if there's no username
-                running = false;
-                return;
-            }
-            accountsManager.getCredential().setSelectedAccountName(googleUsername);
-            instanceGoogleSheetsUploader = new InstanceGoogleSheetsUploader(accountsManager);
-            instanceGoogleSheetsUploader.setUploaderListener(this);
-            instanceGoogleSheetsUploader.execute(toSendArray);
-        } else {
-            resultMessage = Collect.getInstance().getString(R.string.odk_permissions_fail);
-            uploadingComplete(null);
-        }
-    }
+                    boolean success = accountsManager.selectLastUsedAccount();
+                    if (!success) {
+                        // just quit if there's no username
+                        running = false;
+                        return;
+                    }
 
-    /**
-     * Returns a list of longs representing the database ids of the instances that need to be
+                    instanceGoogleSheetsUploader = new InstanceGoogleSheetsUploader(accountsManager);
+                    instanceGoogleSheetsUploader.setUploaderListener(this);
+                    instanceGoogleSheetsUploader.execute(toSendArray);
+                } else {
+                    resultMessage = Collect.getInstance().getString(R.string.odk_permissions_fail);
+                    uploadingComplete(null);
+                }
+            } /**
+                * Returns a list of longs representing the database ids of the instances that need to be
      * autosent.
      */
     @NonNull
-    private List<Long> getInstancesToAutoSend(boolean isAutoSendAppSettingEnabled) {
+                private List<Long> getInstancesToAutoSend(boolean isAutoSendAppSettingEnabled) {
         List<Long> toUpload = new ArrayList<>();
-        Cursor c = new InstancesDao().getFinalizedInstancesCursor();
+                Cursor c = new InstancesDao().getFinalizedInstancesCursor();
 
         try {
             if (c != null && c.getCount() > 0) {
