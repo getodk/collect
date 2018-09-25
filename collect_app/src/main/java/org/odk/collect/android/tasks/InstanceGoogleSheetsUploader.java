@@ -14,11 +14,11 @@
 
 package org.odk.collect.android.tasks;
 
-import android.app.Activity;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.auth.GoogleAuthException;
@@ -44,14 +44,15 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.exception.BadUrlException;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
 import org.odk.collect.android.http.CollectServerClient.Outcome;
-import org.odk.collect.android.utilities.UrlUtils;
-import org.odk.collect.android.utilities.gdrive.DriveHelper;
+import org.odk.collect.android.listeners.GoogleOAuthListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.UrlUtils;
+import org.odk.collect.android.utilities.gdrive.DriveHelper;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.utilities.gdrive.SheetsHelper;
 
@@ -78,7 +79,6 @@ import static org.odk.collect.android.utilities.InstanceUploaderUtils.DEFAULT_SU
  */
 public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
-    public static final int REQUEST_AUTHORIZATION = 1001;
     public static final String GOOGLE_DRIVE_ROOT_FOLDER = "Open Data Kit";
     public static final String GOOGLE_DRIVE_SUBFOLDER = "Submissions";
     private static final String PARENT_KEY = "PARENT_KEY";
@@ -99,10 +99,17 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
     private Spreadsheet spreadsheet;
 
+    @Nullable
+    private GoogleOAuthListener listener;
+
     public InstanceGoogleSheetsUploader(GoogleAccountsManager accountsManager) {
         this.accountsManager = accountsManager;
         sheetsHelper = accountsManager.getSheetsHelper();
         driveHelper = accountsManager.getDriveHelper();
+    }
+
+    public void setOAuthListener(GoogleOAuthListener listener) {
+        this.listener = listener;
     }
 
     @Override
@@ -142,9 +149,8 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                 counter++;
             }
         } catch (UserRecoverableAuthException e) {
-            Activity activity = accountsManager.getActivity();
-            if (activity != null) {
-                activity.startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
+            if (listener != null) {
+                listener.onOAuthRequired(e.getIntent());
             }
             return null;
         } catch (IOException | GoogleAuthException e) {

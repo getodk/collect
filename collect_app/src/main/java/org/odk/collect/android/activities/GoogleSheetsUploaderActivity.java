@@ -52,12 +52,13 @@ import java.util.Set;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.tasks.InstanceGoogleSheetsUploader.REQUEST_AUTHORIZATION;
 import static org.odk.collect.android.utilities.PermissionUtils.requestGetAccountsPermission;
 
 public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implements InstanceUploaderListener {
     private static final int PROGRESS_DIALOG = 1;
     private static final int GOOGLE_USER_DIALOG = 3;
+    private static final int REQUEST_AUTHORIZATION = 1001;
+
     private static final String ALERT_MSG = "alertmsg";
     private static final String ALERT_SHOWING = "alertshowing";
     private ProgressDialog progressDialog;
@@ -120,6 +121,9 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
         instanceGoogleSheetsUploader = (InstanceGoogleSheetsUploader) getLastCustomNonConfigurationInstance();
         if (instanceGoogleSheetsUploader == null) {
             instanceGoogleSheetsUploader = new InstanceGoogleSheetsUploader(accountsManager);
+
+            instanceGoogleSheetsUploader.setOAuthListener(
+                    intent -> startActivityForResult(intent, REQUEST_AUTHORIZATION));
 
             // ensure we have a google account selected
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
