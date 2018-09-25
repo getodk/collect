@@ -37,6 +37,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.inject.Inject;
+
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_SEND;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORMS_UPLOADED_NOTIFICATION;
 
@@ -50,8 +52,13 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
 
     private String resultMessage;
 
+    @Inject
+    GoogleAccountsManager accountsManager;
+
     @Override
     public void onReceive(Context context, Intent intent) {
+        ((Collect) context.getApplicationContext()).getComponent().inject(this);
+
         // make sure sd card is ready, if not don't try to send
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             return;
@@ -152,7 +159,6 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
     }
 
         private void sendInstancesToGoogleSheets(Context context, Long[] toSendArray) {        if (PermissionUtils.checkIfGetAccountsPermissionGranted(context)) {
-                    GoogleAccountsManager accountsManager = new GoogleAccountsManager(context);
 
                     boolean success = accountsManager.selectLastUsedAccount();
                     if (!success) {

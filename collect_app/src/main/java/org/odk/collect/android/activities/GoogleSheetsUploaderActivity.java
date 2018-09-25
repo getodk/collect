@@ -50,11 +50,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
+import javax.inject.Inject;
+
 import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.PermissionUtils.requestGetAccountsPermission;
 
-public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implements InstanceUploaderListener {
+public class GoogleSheetsUploaderActivity extends InjectableActivity implements InstanceUploaderListener {
     private static final int PROGRESS_DIALOG = 1;
     private static final int GOOGLE_USER_DIALOG = 3;
     private static final int REQUEST_AUTHORIZATION = 1001;
@@ -68,7 +70,8 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
     private Long[] instancesToSend;
     private InstanceGoogleSheetsUploader instanceGoogleSheetsUploader;
 
-    private GoogleAccountsManager accountsManager;
+    @Inject
+    GoogleAccountsManager accountsManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,8 +114,6 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
         } else {
             Timber.i("onCreate: Beginning upload of %d instances!", instancesToSend.length);
         }
-
-        accountsManager = new GoogleAccountsManager(this);
 
         getResultsFromApi();
     }

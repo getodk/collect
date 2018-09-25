@@ -37,6 +37,8 @@ import org.odk.collect.android.utilities.ThemeUtils;
 
 import java.util.Collections;
 
+import javax.inject.Inject;
+
 import static org.odk.collect.android.utilities.DialogUtils.showDialog;
 
 public class GoogleAccountsManager {
@@ -54,7 +56,8 @@ public class GoogleAccountsManager {
     private GeneralSharedPreferences preferences;
     private ThemeUtils themeUtils;
 
-    public GoogleAccountsManager(@NonNull Context context) {
+    @Inject
+    public GoogleAccountsManager(Context context) {
         initCredential(context);
     }
 

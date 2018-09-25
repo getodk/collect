@@ -88,7 +88,9 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     private ListPopupWindow listPopupWindow;
     private List<String> urlList;
     private Preference selectedGoogleAccountPreference;
-    private GoogleAccountsManager accountsManager;
+
+    @Inject
+    GoogleAccountsManager accountsManager;
 
     @Inject CollectServerClient collectServerClient;
 

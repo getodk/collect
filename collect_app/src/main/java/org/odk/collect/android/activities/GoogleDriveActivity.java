@@ -63,6 +63,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Stack;
 
+import javax.inject.Inject;
+
+import dagger.android.AndroidInjection;
 import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.PermissionUtils.requestGetAccountsPermission;
@@ -102,7 +105,9 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     private List<DriveListItem> filteredList;
     private List<DriveListItem> driveList;
     private DriveHelper driveHelper;
-    private GoogleAccountsManager accountsManager;
+
+    @Inject
+    GoogleAccountsManager accountsManager;
 
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -113,6 +118,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     @Override
     public void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.drive_layout);
 
@@ -197,7 +203,6 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
                 getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc)
         };
 
-        accountsManager = new GoogleAccountsManager(this);
         driveHelper = accountsManager.getDriveHelper();
         getResultsFromApi();
     }
