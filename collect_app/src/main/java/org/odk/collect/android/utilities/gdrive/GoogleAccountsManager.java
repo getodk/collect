@@ -32,16 +32,13 @@ import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.drive.DriveScopes;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
-import org.odk.collect.android.preferences.ServerPreferencesFragment;
 import org.odk.collect.android.utilities.ThemeUtils;
 
 import java.util.Collections;
 
 import static org.odk.collect.android.utilities.DialogUtils.showDialog;
-import static org.odk.collect.android.utilities.PermissionUtils.requestGetAccountsPermission;
 
 public class GoogleAccountsManager {
 
@@ -65,7 +62,6 @@ public class GoogleAccountsManager {
     private GoogleAccountCredential credential;
     private GeneralSharedPreferences preferences;
     private ThemeUtils themeUtils;
-    private boolean autoChooseAccount = true;
 
     public GoogleAccountsManager(@NonNull Activity activity) {
         this.activity = activity;
@@ -119,34 +115,6 @@ public class GoogleAccountsManager {
         if (accountName != null) {
             preferences.save(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT, accountName);
             selectAccount(accountName);
-        }
-    }
-
-    public void chooseAccountAndRequestPermissionIfNeeded() {
-        if (activity != null) {
-            requestGetAccountsPermission(activity, new PermissionListener() {
-                @Override
-                public void granted() {
-                    chooseAccount();
-                }
-
-                @Override
-                public void denied() {
-                }
-            });
-        }
-    }
-
-    private void chooseAccount() {
-        String accountName = getSavedAccount();
-        if (autoChooseAccount && !accountName.isEmpty()) {
-            selectAccount(accountName);
-        } else {
-            if (fragment != null && fragment instanceof ServerPreferencesFragment) {
-                showAccountPickerDialog();
-            } else {
-                showSettingsDialog();
-            }
         }
     }
 
@@ -260,10 +228,6 @@ public class GoogleAccountsManager {
 
     public GoogleAccountCredential getCredential() {
         return credential;
-    }
-
-    public void disableAutoChooseAccount() {
-        autoChooseAccount = false;
     }
 
     public void setListener(@Nullable GoogleAccountSelectionListener listener) {
