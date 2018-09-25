@@ -26,7 +26,7 @@ public class DownloadFormListTaskTest extends MockedServerTest {
         // then
         RecordedRequest r = nextRequest();
         assertEquals("GET", r.getMethod());
-        assertEquals("/formList", r.getPath());
+        assertMatches(".*/formList", r.getPath());
         assertMatches("Dalvik/.* org.odk.collect.android/.*", r.getHeader("User-Agent"));
         assertEquals("1.0", r.getHeader("X-OpenRosa-Version"));
         assertEquals("gzip", r.getHeader("Accept-Encoding"));

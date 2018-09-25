@@ -49,7 +49,7 @@ public class InstanceServerUploaderTest extends MockedServerTest {
         // then
         assertNull(o.authRequestingServer);
         assertEquals(1, o.messagesByInstanceId.size());
-        assertEquals("success", o.messagesByInstanceId.get(id.toString()));
+        assertEquals("SUCCESS", o.messagesByInstanceId.get(id.toString()).toUpperCase());
 
         // and
         HEAD: {
@@ -58,7 +58,7 @@ public class InstanceServerUploaderTest extends MockedServerTest {
             assertMatches("/submission\\?deviceID=\\w+%3A\\w+", r.getPath());
             assertMatches("Dalvik/.* org.odk.collect.android/.*", r.getHeader("User-Agent"));
             assertEquals("1.0", r.getHeader("X-OpenRosa-Version"));
-            assertEquals("gzip,deflate", r.getHeader("Accept-Encoding"));
+            assertEquals("gzip", r.getHeader("Accept-Encoding"));
         }
 
         // and
@@ -68,13 +68,13 @@ public class InstanceServerUploaderTest extends MockedServerTest {
             assertMatches("/submission\\?deviceID=\\w+%3A\\w+", r.getPath());
             assertMatches("Dalvik/.* org.odk.collect.android/.*", r.getHeader("User-Agent"));
             assertEquals("1.0", r.getHeader("X-OpenRosa-Version"));
-            assertEquals("gzip,deflate", r.getHeader("Accept-Encoding"));
+            assertEquals("gzip", r.getHeader("Accept-Encoding"));
             assertMatches("multipart/form-data; boundary=.*", r.getHeader("Content-Type"));
             assertMatches(join(
                             "--.*\r",
                             "Content-Disposition: form-data; name=\"xml_submission_file\"; filename=\"tst.*\\.tmp\"\r",
-                            "Content-Type: text/xml; charset=ISO-8859-1\r",
-                            "Content-Transfer-Encoding: binary\r",
+                            "Content-Type: text/xml\r",
+                            "Content-Length: 20\r",
                             "\r",
                             "<form-content-here/>\r",
                             "--.*--\r"),
