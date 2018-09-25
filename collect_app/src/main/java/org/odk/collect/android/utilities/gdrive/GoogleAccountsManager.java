@@ -45,8 +45,6 @@ public class GoogleAccountsManager {
     private HttpTransport transport;
     @Nullable
     private JsonFactory jsonFactory;
-    @Nullable
-    private GoogleAccountSelectionListener listener;
 
     private Intent intentChooseAccount;
     private Context context;
@@ -63,10 +61,10 @@ public class GoogleAccountsManager {
     /**
      * This constructor should be used only for testing purposes
      */
-    public GoogleAccountsManager(@NonNull GoogleAccountCredential credential,
-                                 @NonNull GeneralSharedPreferences preferences,
-                                 @NonNull Intent intentChooseAccount,
-                                 @NonNull ThemeUtils themeUtils
+    GoogleAccountsManager(@NonNull GoogleAccountCredential credential,
+                          @NonNull GeneralSharedPreferences preferences,
+                          @NonNull Intent intentChooseAccount,
+                          @NonNull ThemeUtils themeUtils
     ) {
         this.credential = credential;
         this.preferences = preferences;
@@ -151,11 +149,8 @@ public class GoogleAccountsManager {
         return intentChooseAccount;
     }
 
-    public void selectAccount(String accountName) {
+    void selectAccount(String accountName) {
         credential.setSelectedAccountName(accountName);
-        if (listener != null) {
-            listener.onGoogleAccountSelected(accountName);
-        }
     }
 
     private Account getAccountPickerCurrentAccount() {
@@ -196,13 +191,5 @@ public class GoogleAccountsManager {
 
     public GoogleAccountCredential getCredential() {
         return credential;
-    }
-
-    public void setListener(@Nullable GoogleAccountSelectionListener listener) {
-        this.listener = listener;
-    }
-
-    public interface GoogleAccountSelectionListener {
-        void onGoogleAccountSelected(String accountName);
     }
 }
