@@ -20,13 +20,9 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.http.HttpTransport;
@@ -44,15 +40,12 @@ import org.odk.collect.android.utilities.ThemeUtils;
 
 import java.util.Collections;
 
-import timber.log.Timber;
-
 import static org.odk.collect.android.utilities.DialogUtils.showDialog;
 import static org.odk.collect.android.utilities.PermissionUtils.requestGetAccountsPermission;
 
-public class GoogleAccountsManager implements GoogleApiClient.OnConnectionFailedListener {
+public class GoogleAccountsManager {
 
     public static final int REQUEST_ACCOUNT_PICKER = 1000;
-    private static final int RESOLVE_CONNECTION_REQUEST_CODE = 5555;
 
     @Nullable
     private Fragment fragment;
@@ -230,19 +223,6 @@ public class GoogleAccountsManager implements GoogleApiClient.OnConnectionFailed
 
     public boolean isGoogleAccountSelected() {
         return credential.getSelectedAccountName() != null;
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        if (connectionResult.hasResolution()) {
-            try {
-                connectionResult.startResolutionForResult(activity, RESOLVE_CONNECTION_REQUEST_CODE);
-            } catch (IntentSender.SendIntentException e) {
-                Timber.e(e);
-            }
-        } else {
-            GooglePlayServicesUtil.getErrorDialog(connectionResult.getErrorCode(), activity, 0).show();
-        }
     }
 
     public DriveHelper getDriveHelper() {
