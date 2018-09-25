@@ -138,7 +138,7 @@ public class GoogleAccountsManager {
     }
 
     private void chooseAccount() {
-        String accountName = getSelectedAccount();
+        String accountName = getSavedAccount();
         if (autoChooseAccount && !accountName.isEmpty()) {
             selectAccount(accountName);
         } else {
@@ -150,8 +150,17 @@ public class GoogleAccountsManager {
         }
     }
 
+    public boolean selectLastUsedAccount() {
+        String account = getSavedAccount();
+        if (!account.isEmpty()) {
+            selectAccount(account);
+            return true;
+        }
+        return false;
+    }
+
     @NonNull
-    public String getSelectedAccount() {
+    public String getSavedAccount() {
         Account[] googleAccounts = credential.getAllAccounts();
         String account = (String) preferences.get(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
 
@@ -168,7 +177,7 @@ public class GoogleAccountsManager {
         return "";
     }
 
-    private void showSettingsDialog() {
+    public void showSettingsDialog() {
         AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
                 .setIcon(android.R.drawable.ic_dialog_info)
                 .setTitle(R.string.missing_google_account_dialog_title)
@@ -209,7 +218,7 @@ public class GoogleAccountsManager {
     }
 
     private Account getAccountPickerCurrentAccount() {
-        String selectedAccountName = getSelectedAccount();
+        String selectedAccountName = getSavedAccount();
         if (selectedAccountName.isEmpty()) {
             Account[] googleAccounts = credential.getAllAccounts();
             if (googleAccounts != null && googleAccounts.length > 0) {
