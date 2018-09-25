@@ -45,6 +45,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.listeners.OnBackPressedListener;
+import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.filters.ControlCharacterFilter;
 import org.odk.collect.android.preferences.filters.WhitespaceFilter;
 import org.odk.collect.android.utilities.FileUtils;
@@ -70,10 +71,11 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SMS_PREFERE
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_TRANSPORT_TYPE;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_URL;
 import static org.odk.collect.android.utilities.DialogUtils.showDialog;
+import static org.odk.collect.android.utilities.PermissionUtils.requestGetAccountsPermission;
 import static org.odk.collect.android.utilities.gdrive.GoogleAccountsManager.REQUEST_ACCOUNT_PICKER;
 
 public class ServerPreferencesFragment extends BasePreferenceFragment implements View.OnTouchListener,
-        GoogleAccountsManager.GoogleAccountSelectionListener, OnBackPressedListener {
+        OnBackPressedListener {
     private static final String KNOWN_URL_LIST = "knownUrlList";
     protected EditTextPreference serverUrlPreference;
     protected EditTextPreference usernamePreference;
@@ -241,17 +243,28 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
 
     public void initAccountPreferences() {
         accountsManager = new GoogleAccountsManager(this);
-        accountsManager.setListener(this);
-        accountsManager.disableAutoChooseAccount();
 
-        selectedGoogleAccountPreference.setSummary(accountsManager.getSelectedAccount());
+        selectedGoogleAccountPreference.setSummary(accountsManager.getSavedAccount());
         selectedGoogleAccountPreference.setOnPreferenceClickListener(preference -> {
             if (PlayServicesUtil.isGooglePlayServicesAvailable(getActivity())) {
-                accountsManager.chooseAccountAndRequestPermissionIfNeeded();
+                showAccountPickerDialog();
             } else {
                 PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(getActivity());
             }
             return true;
+        });
+    }
+
+    private void showAccountPickerDialog() {
+        requestGetAccountsPermission(getActivity(), new PermissionListener() {
+            @Override
+            public void granted() {
+                accountsManager.showAccountPickerDialog();
+            }
+
+            @Override
+            public void denied() {
+            }
         });
     }
 
@@ -446,14 +459,10 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                 if (resultCode == RESULT_OK && data != null && data.getExtras() != null) {
                     String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
                     accountsManager.setSelectedAccountName(accountName);
+                    selectedGoogleAccountPreference.setSummary(accountName);
                 }
                 break;
         }
-    }
-
-    @Override
-    public void onGoogleAccountSelected(String accountName) {
-        selectedGoogleAccountPreference.setSummary(accountName);
     }
 
     /**
