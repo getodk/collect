@@ -18,9 +18,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-
 import com.google.android.gms.analytics.HitBuilders;
-
 import org.javarosa.core.model.Constants;
 import org.javarosa.core.model.ItemsetBinding;
 import org.javarosa.core.model.QuestionDef;
@@ -29,10 +27,8 @@ import org.javarosa.xpath.expr.XPathExpression;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.WebViewActivity;
 import org.odk.collect.android.application.Collect;
-
 import java.util.List;
 import java.util.Locale;
-
 import timber.log.Timber;
 
 /**
@@ -277,21 +273,28 @@ public class WidgetFactory {
                 questionWidget = new TriggerWidget(context, fep);
                 break;
             case Constants.CONTROL_RANGE:
-                switch (fep.getDataType()) {
-                    case Constants.DATATYPE_INTEGER:
-                        questionWidget = new RangeIntegerWidget(context, fep);
-                        break;
-                    case Constants.DATATYPE_DECIMAL:
-                        questionWidget = new RangeDecimalWidget(context, fep);
-                        break;
+
+                //questionWidget = null;
+
+                if (appearance.startsWith("rating")) {
+                    questionWidget = new RatingWidget(context, fep);
+                } else {
+                    switch (fep.getDataType()) {
+                        case Constants.DATATYPE_INTEGER:
+                            questionWidget = new RangeIntegerWidget(context, fep);
+                            break;
+                        case Constants.DATATYPE_DECIMAL:
+                            questionWidget = new RangeDecimalWidget(context, fep);
+                            break;
+                        default:
+                            questionWidget = new StringWidget(context, fep, readOnlyOverride);
+                            break;
+                    }
+                }
+                    break;
                     default:
                         questionWidget = new StringWidget(context, fep, readOnlyOverride);
                         break;
-                }
-                break;
-            default:
-                questionWidget = new StringWidget(context, fep, readOnlyOverride);
-                break;
         }
 
         return questionWidget;
