@@ -3,7 +3,7 @@ package org.odk.collect.android.utilities;
 import org.junit.Before;
 import org.junit.Test;
 import org.odk.collect.android.http.CollectServerClient;
-import org.odk.collect.android.http.HttpClientConnection;
+import org.odk.collect.android.http.OkHttpConnection;
 import org.odk.collect.android.test.MockedServerTest;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.RecordedRequest;
@@ -21,19 +21,19 @@ public class CollectServerClientTest extends MockedServerTest {
     public void setUp() throws Exception {
         // server hangs without a response queued:
         server.enqueue(new MockResponse());
-        collectServerClient = new CollectServerClient(new HttpClientConnection(), new WebCredentialsUtils());
+        collectServerClient = new CollectServerClient(new OkHttpConnection(), new WebCredentialsUtils());
     }
 
-        @Test
-        public void httpRequests_shouldHaveUseragentHeader() throws Exception {
-            // when
-            doRequest(url("/some-path"));
+    @Test
+    public void httpRequests_shouldHaveUseragentHeader() throws Exception {
+        // when
+        doRequest(url("/some-path"));
 
-            // then
-            RecordedRequest r = nextRequest();
-            assertEquals("GET /some-path HTTP/1.1", r.getRequestLine());
-            assertTrue(r.getHeader("User-Agent").matches("Dalvik/.* org.odk.collect.android/.*"));
-        }
+        // then
+        RecordedRequest r = nextRequest();
+        assertEquals("GET /some-path HTTP/1.1", r.getRequestLine());
+        assertTrue(r.getHeader("User-Agent").matches("Dalvik/.* org.odk.collect.android/.*"));
+    }
 
     @Test
     public void getXmlDocument_request_shouldSupplyHeader_UserAgent() throws Exception {
