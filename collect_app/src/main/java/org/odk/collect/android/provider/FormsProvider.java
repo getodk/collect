@@ -226,10 +226,6 @@ public class FormsProvider extends ContentProvider {
                 Uri formUri = ContentUris.withAppendedId(FormsColumns.CONTENT_URI,
                         rowId);
                 getContext().getContentResolver().notifyChange(formUri, null);
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logActionParam(this, "insert", formUri.toString(),
-                                values.getAsString(FormsColumns.FORM_FILE_PATH));
                 return formUri;
             }
         }

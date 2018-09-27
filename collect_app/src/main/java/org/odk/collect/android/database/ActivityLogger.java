@@ -293,8 +293,4 @@ public final class ActivityLogger {
         log(t.getClass().getName(), context, action, null, null, null, null);
     }
 
-    public void logActionParam(Object t, String context, String action, String param1) {
-        log(t.getClass().getName(), context, action, null, null, param1, null);
-    }
-
 }

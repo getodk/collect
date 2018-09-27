@@ -166,8 +166,6 @@ public class InstanceProvider extends ContentProvider {
             if (rowId > 0) {
                 Uri instanceUri = ContentUris.withAppendedId(InstanceColumns.CONTENT_URI, rowId);
                 getContext().getContentResolver().notifyChange(instanceUri, null);
-                Collect.getInstance().getActivityLogger().logActionParam(this, "insert",
-                        instanceUri.toString(), values.getAsString(InstanceColumns.INSTANCE_FILE_PATH));
                 return instanceUri;
             }
         }
