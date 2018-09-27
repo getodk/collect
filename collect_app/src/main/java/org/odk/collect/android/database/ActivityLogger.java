@@ -16,7 +16,6 @@ package org.odk.collect.android.database;
 
 import android.content.ContentValues;
 import android.database.SQLException;
-import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -25,11 +24,9 @@ import com.google.android.gms.analytics.HitBuilders;
 
 import org.javarosa.core.model.FormIndex;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 
 import java.io.File;
-import java.util.Calendar;
 import java.util.LinkedList;
 
 import timber.log.Timber;
@@ -66,16 +63,6 @@ public final class ActivityLogger {
             onCreate(db);
         }
     }
-
-    /**
-     * The minimum delay, in milliseconds, for a scroll action to be considered new.
-     */
-    private static final long MIN_SCROLL_DELAY = 400L;
-    /**
-     * The maximum size of the scroll action buffer.  After it reaches this size,
-     * it will be flushed.
-     */
-    private static final int MAX_SCROLL_ACTION_BUFFER_SIZE = 8;
 
     private static final String DATABASE_TABLE = "log";
     private static final String ENABLE_LOGGING = "enabled";
@@ -143,10 +130,6 @@ public final class ActivityLogger {
         return GeneralSharedPreferences.getInstance().getBoolean(ACTIVITY_LOGGER_ANALYTICS, true);
     }
 
-    public boolean isOpen() {
-        return loggingEnabled && isOpen;
-    }
-
     public void open() throws SQLException {
         if (!loggingEnabled || isOpen) {
             return;
@@ -178,85 +161,6 @@ public final class ActivityLogger {
         cachedXPathIndex = index;
         cachedXPathValue = Collect.getInstance().getFormController().getXPath(index);
         return cachedXPathValue;
-    }
-
-    private String getInstancePath(FormController formController) {
-        File f = formController.getInstanceFile();
-        if (f == null) {
-            return "<not-yet-specified>";
-        } else {
-            return f.getAbsolutePath();
-        }
-    }
-
-    public void logScrollAction(Object t, int distance) {
-        if (!isOpen()) {
-            return;
-        }
-
-        synchronized (scrollActions) {
-            long timeStamp = Calendar.getInstance().getTimeInMillis();
-
-            // Check to see if we can add this scroll action to the previous action.
-            if (!scrollActions.isEmpty()) {
-                ContentValues lastCv = scrollActions.get(scrollActions.size() - 1);
-                long oldTimeStamp = lastCv.getAsLong(TIMESTAMP);
-                int oldDistance = Integer.parseInt(lastCv.getAsString(PARAM1));
-                if (Integer.signum(distance) == Integer.signum(oldDistance)
-                        && timeStamp - oldTimeStamp < MIN_SCROLL_DELAY) {
-                    lastCv.put(PARAM1, oldDistance + distance);
-                    lastCv.put(TIMESTAMP, timeStamp);
-                    return;
-                }
-            }
-
-            if (scrollActions.size() >= MAX_SCROLL_ACTION_BUFFER_SIZE) {
-                insertContentValues(null, null); // flush scroll list...
-            }
-
-            String idx = "";
-            String instancePath = null;
-            FormController formController = Collect.getInstance().getFormController();
-            if (formController != null) {
-                idx = getXPath(formController.getFormIndex());
-                instancePath = getInstancePath(formController);
-            }
-
-            // Add a new scroll action to the buffer.
-            ContentValues cv = new ContentValues();
-            cv.put(DEVICEID, deviceId);
-            cv.put(CLASS, t.getClass().getName());
-            cv.put(CONTEXT, "scroll");
-            cv.put(ACTION, "");
-            cv.put(PARAM1, distance);
-            cv.put(QUESTION, idx);
-            cv.put(INSTANCE_PATH, instancePath);
-            cv.put(TIMESTAMP, timeStamp);
-            cv.put(PARAM2, timeStamp);
-            scrollActions.add(cv);
-        }
-    }
-
-    private void insertContentValues(ContentValues cv, FormIndex index) {
-        synchronized (scrollActions) {
-            try {
-                while (!scrollActions.isEmpty()) {
-                    ContentValues scv = scrollActions.removeFirst();
-                    database.insert(DATABASE_TABLE, null, scv);
-                }
-
-                if (cv != null) {
-                    String idx = "";
-                    if (index != null) {
-                        idx = getXPath(index);
-                    }
-                    cv.put(QUESTION, idx);
-                    database.insert(DATABASE_TABLE, null, cv);
-                }
-            } catch (SQLiteConstraintException e) {
-                Timber.e(e);
-            }
-        }
     }
 
 }
