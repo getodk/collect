@@ -15,21 +15,16 @@
 package org.odk.collect.android.database;
 
 import android.content.ContentValues;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.google.android.gms.analytics.HitBuilders;
 
-import org.javarosa.core.model.FormIndex;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 
 import java.io.File;
 import java.util.LinkedList;
-
-import timber.log.Timber;
 
 import static org.odk.collect.android.preferences.PreferenceKeys.ACTIVITY_LOGGER_ANALYTICS;
 
@@ -107,7 +102,6 @@ public final class ActivityLogger {
         loggingEnabled = new File(Collect.LOG_PATH, ENABLE_LOGGING).exists();
 
         if (loggingEnabled) {
-            open();
 
             if (isFirstTime()) {
                 sendAnalyticsEvent();
@@ -128,39 +122,6 @@ public final class ActivityLogger {
 
     private boolean isFirstTime() {
         return GeneralSharedPreferences.getInstance().getBoolean(ACTIVITY_LOGGER_ANALYTICS, true);
-    }
-
-    public void open() throws SQLException {
-        if (!loggingEnabled || isOpen) {
-            return;
-        }
-        try {
-            DatabaseHelper databaseHelper = new DatabaseHelper();
-            database = databaseHelper.getWritableDatabase();
-            isOpen = true;
-        } catch (SQLiteException e) {
-            Timber.e(e);
-            isOpen = false;
-        }
-    }
-
-    // cached to improve logging performance...
-    // only access these through getXPath(FormIndex index);
-    private FormIndex cachedXPathIndex;
-    private String cachedXPathValue;
-
-    // DO NOT CALL THIS OUTSIDE OF synchronized(scrollActions) !!!!
-    // DO NOT CALL THIS OUTSIDE OF synchronized(scrollActions) !!!!
-    // DO NOT CALL THIS OUTSIDE OF synchronized(scrollActions) !!!!
-    // DO NOT CALL THIS OUTSIDE OF synchronized(scrollActions) !!!!
-    private String getXPath(FormIndex index) {
-        if (index == cachedXPathIndex) {
-            return cachedXPathValue;
-        }
-
-        cachedXPathIndex = index;
-        cachedXPathValue = Collect.getInstance().getFormController().getXPath(index);
-        return cachedXPathValue;
     }
 
 }
