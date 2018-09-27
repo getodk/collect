@@ -222,9 +222,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         downloadButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                // this is called in downloadSelectedFiles():
-                //    Collect.getInstance().getActivityLogger().logAction(this,
-                // "downloadSelectedFiles", ...);
                 downloadSelectedFiles();
             }
         });
@@ -249,8 +246,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         refreshButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Collect.getInstance().getActivityLogger().logAction(this, "refreshForms", "");
-
                 formList.clear();
                 updateAdapter();
                 clearChoices();
@@ -362,14 +357,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         HashMap<String, String> item = (HashMap<String, String>) o;
         FormDetails detail = formNamesAndURLs.get(item.get(FORMDETAIL_KEY));
 
-        if (detail != null) {
-            Collect.getInstance().getActivityLogger().logAction(this, "onListItemClick",
-                    detail.getDownloadUrl());
-        } else {
-            Collect.getInstance().getActivityLogger().logAction(this, "onListItemClick",
-                    "<missing form detail>");
-        }
-
         if (listView.isItemChecked(position)) {
             selectedForms.add(((HashMap<String, String>) listView.getAdapter().getItem(position)).get(FORMDETAIL_KEY));
         } else {
@@ -459,15 +446,11 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     protected Dialog onCreateDialog(int id) {
         switch (id) {
             case PROGRESS_DIALOG:
-                Collect.getInstance().getActivityLogger().logAction(this,
-                        "onCreateDialog.PROGRESS_DIALOG", "show");
                 progressDialog = new ProgressDialog(this);
                 DialogInterface.OnClickListener loadingButtonListener =
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Collect.getInstance().getActivityLogger().logAction(this,
-                                        "onCreateDialog.PROGRESS_DIALOG", "OK");
                                 // we use the same progress dialog for both
                                 // so whatever isn't null is running
                                 dialog.dismiss();
@@ -499,9 +482,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 progressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
                 return progressDialog;
             case AUTH_DIALOG:
-                Collect.getInstance().getActivityLogger().logAction(this,
-                        "onCreateDialog.AUTH_DIALOG", "show");
-
                 alertShowing = false;
 
                 AuthDialogUtility authDialogUtility = new AuthDialogUtility();
@@ -600,10 +580,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     @SuppressWarnings("unchecked")
     private void startFormsDownload(@NonNull ArrayList<FormDetails> filesToDownload) {
         int totalCount = filesToDownload.size();
-
-        Collect.getInstance().getActivityLogger().logAction(this, "downloadSelectedFiles",
-                Integer.toString(totalCount));
-
         if (totalCount > 0) {
             // show dialog box
             showDialog(PROGRESS_DIALOG);
@@ -819,7 +795,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
      * activity will exit when the user clicks "ok".
      */
     private void createAlertDialog(String title, String message, final boolean shouldExit) {
-        Collect.getInstance().getActivityLogger().logAction(this, "createAlertDialog", "show");
         alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle(title);
         alertDialog.setMessage(message);
@@ -828,8 +803,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
                     case DialogInterface.BUTTON_POSITIVE: // ok
-                        Collect.getInstance().getActivityLogger().logAction(this,
-                                "createAlertDialog", "OK");
                         // just close the dialog
                         alertShowing = false;
                         // successful download, so quit

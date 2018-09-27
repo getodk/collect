@@ -36,7 +36,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.PreferenceKeys;
@@ -317,17 +316,11 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
     protected Dialog onCreateDialog(int id) {
         switch (id) {
             case PROGRESS_DIALOG:
-                Collect.getInstance().getActivityLogger()
-                        .logAction(this, "onCreateDialog.PROGRESS_DIALOG", "show");
-
                 progressDialog = new ProgressDialog(this);
                 DialogInterface.OnClickListener loadingButtonListener =
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Collect.getInstance().getActivityLogger()
-                                        .logAction(this, "onCreateDialog.PROGRESS_DIALOG",
-                                                "cancel");
                                 dialog.dismiss();
                                 instanceGoogleSheetsUploader.cancel(true);
                                 instanceGoogleSheetsUploader.setUploaderListener(null);
@@ -359,8 +352,6 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
     }
 
     private void createAlertDialog(String message) {
-        Collect.getInstance().getActivityLogger().logAction(this, "createAlertDialog", "show");
-
         alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle(getString(R.string.upload_results));
         alertDialog.setMessage(message);
@@ -369,8 +360,6 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
                     case DialogInterface.BUTTON1: // ok
-                        Collect.getInstance().getActivityLogger()
-                                .logAction(this, "createAlertDialog", "OK");
                         // always exit this activity since it has no interface
                         alertShowing = false;
                         finish();

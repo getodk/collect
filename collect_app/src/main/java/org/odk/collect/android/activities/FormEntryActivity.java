@@ -421,8 +421,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     // controller...
                     formLoaderTask = new FormLoaderTask(instancePath,
                             startingXPath, waitingXPath);
-                    Collect.getInstance().getActivityLogger()
-                            .logAction(this, "formReloaded", formPath);
                     // TODO: this doesn' work (dialog does not get removed):
                     // showDialog(PROGRESS_DIALOG);
                     // show dialog before we execute...
@@ -463,10 +461,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
 
             instancePath = formInfo.getInstancePath();
-            Collect.getInstance()
-                    .getActivityLogger()
-                    .logAction(this, "instanceLoaded",
-                            instancePath);
 
             String jrFormId = formInfo.getFormID();
             String jrVersion = formInfo.getFormVersion();
@@ -564,8 +558,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
 
         formLoaderTask = new FormLoaderTask(instancePath, null, null);
-        Collect.getInstance().getActivityLogger()
-                .logAction(this, "formLoaded", formPath);
         showDialog(PROGRESS_DIALOG);
         // show dialog before we execute...
         formLoaderTask.execute(formPath);

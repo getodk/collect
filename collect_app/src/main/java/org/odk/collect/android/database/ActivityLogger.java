@@ -180,25 +180,6 @@ public final class ActivityLogger {
         return cachedXPathValue;
     }
 
-    private void log(String object, String context, String action, String instancePath,
-            FormIndex index, String param1, String param2) {
-        if (!isOpen()) {
-            return;
-        }
-
-        ContentValues cv = new ContentValues();
-        cv.put(DEVICEID, deviceId);
-        cv.put(CLASS, object);
-        cv.put(CONTEXT, context);
-        cv.put(ACTION, action);
-        cv.put(INSTANCE_PATH, instancePath);
-        cv.put(PARAM1, param1);
-        cv.put(PARAM2, param2);
-        cv.put(TIMESTAMP, Calendar.getInstance().getTimeInMillis());
-
-        insertContentValues(cv, index);
-    }
-
     private String getInstancePath(FormController formController) {
         File f = formController.getInstanceFile();
         if (f == null) {
@@ -276,12 +257,6 @@ public final class ActivityLogger {
                 Timber.e(e);
             }
         }
-    }
-
-    // Convenience methods
-
-    public void logAction(Object t, String context, String action) {
-        log(t.getClass().getName(), context, action, null, null, null, null);
     }
 
 }

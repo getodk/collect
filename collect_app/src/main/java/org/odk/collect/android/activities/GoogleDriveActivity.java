@@ -337,17 +337,11 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     protected Dialog onCreateDialog(int id) {
         switch (id) {
             case PROGRESS_DIALOG:
-                Collect.getInstance().getActivityLogger()
-                        .logAction(this, "onCreateDialog.PROGRESS_DIALOG", "show");
-
                 ProgressDialog progressDialog = new ProgressDialog(this);
                 DialogInterface.OnClickListener loadingButtonListener =
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Collect.getInstance().getActivityLogger()
-                                        .logAction(this, "onCreateDialog.PROGRESS_DIALOG",
-                                                "cancel");
                                 dialog.dismiss();
                                 getFileTask.cancel(true);
                                 getFileTask.setGoogleDriveFormDownloadListener(null);
@@ -373,8 +367,6 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     }
 
     private void createAlertDialog(String message) {
-        Collect.getInstance().getActivityLogger().logAction(this, "createAlertDialog", "show");
-
         AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle(getString(R.string.download_forms_result));
         alertDialog.setMessage(message);
@@ -383,8 +375,6 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
                     case DialogInterface.BUTTON1: // ok
-                        Collect.getInstance().getActivityLogger()
-                                .logAction(this, "createAlertDialog", "OK");
                         alertShowing = false;
                         finish();
                         break;

@@ -318,16 +318,11 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
     protected Dialog onCreateDialog(int id) {
         switch (id) {
             case PROGRESS_DIALOG:
-                Collect.getInstance().getActivityLogger().logAction(this,
-                        "onCreateDialog.PROGRESS_DIALOG", "show");
-
                 progressDialog = new ProgressDialog(this);
                 DialogInterface.OnClickListener loadingButtonListener =
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Collect.getInstance().getActivityLogger().logAction(this,
-                                        "onCreateDialog.PROGRESS_DIALOG", "cancel");
                                 dialog.dismiss();
                                 instanceServerUploader.cancel(true);
                                 instanceServerUploader.setUploaderListener(null);
@@ -344,8 +339,6 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
             case AUTH_DIALOG:
                 Timber.i("onCreateDialog(AUTH_DIALOG): for upload of %d instances!",
                         instancesToSend.length);
-                Collect.getInstance().getActivityLogger().logAction(this,
-                        "onCreateDialog.AUTH_DIALOG", "show");
 
                 AuthDialogUtility authDialogUtility = new AuthDialogUtility();
                 if (username != null && password != null && url != null) {
@@ -396,8 +389,6 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
     }
 
     private void createUploadInstancesResultDialog(String message) {
-        Collect.getInstance().getActivityLogger().logAction(this, "createUploadInstancesResultDialog", "show");
-
         String dialogTitle = getString(R.string.upload_results);
         String buttonTitle = getString(R.string.ok);
 
