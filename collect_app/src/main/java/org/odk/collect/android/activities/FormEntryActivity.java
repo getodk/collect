@@ -2184,7 +2184,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
 
         FormController formController = getFormController();
-        Collect.getInstance().getActivityLogger().open();
 
         if (formLoaderTask != null) {
             formLoaderTask.setFormLoaderListener(this);
