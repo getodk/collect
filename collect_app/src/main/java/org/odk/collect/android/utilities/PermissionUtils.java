@@ -59,17 +59,8 @@ public class PermissionUtils {
                 if (report.areAllPermissionsGranted()) {
                     action.granted();
                 } else {
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.Theme_AppCompat_Light_Dialog);
-
-                    builder.setTitle(R.string.storage_runtime_permission_denied_title)
-                            .setMessage(R.string.storage_runtime_permission_denied_desc)
-                            .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
-                                action.denied();
-                            })
-                            .setCancelable(false)
-                            .setIcon(R.drawable.sd)
-                            .show();
+                    showAdditionalExplanation(activity, R.string.storage_runtime_permission_denied_title,
+                            R.string.storage_runtime_permission_denied_desc, R.drawable.sd, action);
                 }
             }
 
@@ -99,14 +90,8 @@ public class PermissionUtils {
 
             @Override
             public void onPermissionDenied(PermissionDeniedResponse response) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.Theme_AppCompat_Light_Dialog);
-
-                builder.setTitle(R.string.camera_runtime_permission_denied_title)
-                        .setMessage(R.string.camera_runtime_permission_denied_desc)
-                        .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> action.denied())
-                        .setCancelable(false)
-                        .setIcon(R.drawable.ic_photo_camera)
-                        .show();
+                showAdditionalExplanation(activity, R.string.camera_runtime_permission_denied_title,
+                        R.string.camera_runtime_permission_denied_desc, R.drawable.ic_photo_camera, action);
             }
 
             @Override
@@ -130,15 +115,8 @@ public class PermissionUtils {
                 if (report.areAllPermissionsGranted()) {
                     action.granted();
                 } else {
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.Theme_AppCompat_Light_Dialog);
-
-                    builder.setTitle(R.string.location_runtime_permissions_denied_title)
-                            .setMessage(R.string.location_runtime_permissions_denied_desc)
-                            .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> action.denied())
-                            .setCancelable(false)
-                            .setIcon(R.drawable.ic_place_black)
-                            .show();
+                    showAdditionalExplanation(activity, R.string.location_runtime_permissions_denied_title,
+                            R.string.location_runtime_permissions_denied_desc, R.drawable.ic_place_black, action);
                 }
             }
 
@@ -166,14 +144,8 @@ public class PermissionUtils {
 
             @Override
             public void onPermissionDenied(PermissionDeniedResponse response) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.Theme_AppCompat_Light_Dialog);
-
-                builder.setTitle(R.string.record_audio_runtime_permission_denied_title)
-                        .setMessage(R.string.record_audio_runtime_permission_denied_desc)
-                        .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> action.denied())
-                        .setCancelable(false)
-                        .setIcon(R.drawable.ic_mic)
-                        .show();
+                showAdditionalExplanation(activity, R.string.record_audio_runtime_permission_denied_title,
+                        R.string.record_audio_runtime_permission_denied_desc, R.drawable.ic_mic, action);
             }
 
             @Override
@@ -197,14 +169,8 @@ public class PermissionUtils {
                 if (report.areAllPermissionsGranted()) {
                     action.granted();
                 } else {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.Theme_AppCompat_Light_Dialog);
-
-                    builder.setTitle(R.string.camera_runtime_permission_denied_title)
-                            .setMessage(R.string.camera_runtime_permission_denied_desc)
-                            .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> action.denied())
-                            .setCancelable(false)
-                            .setIcon(R.drawable.ic_photo_camera)
-                            .show();
+                    showAdditionalExplanation(activity, R.string.camera_runtime_permission_denied_title,
+                            R.string.camera_runtime_permission_denied_desc, R.drawable.ic_photo_camera, action);
                 }
             }
 
@@ -232,14 +198,8 @@ public class PermissionUtils {
 
             @Override
             public void onPermissionDenied(PermissionDeniedResponse response) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.Theme_AppCompat_Light_Dialog);
-
-                builder.setTitle(R.string.get_accounts_runtime_permission_denied_title)
-                        .setMessage(R.string.get_accounts_runtime_permission_denied_desc)
-                        .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> action.denied())
-                        .setCancelable(false)
-                        .setIcon(R.drawable.ic_get_accounts)
-                        .show();
+                showAdditionalExplanation(activity, R.string.get_accounts_runtime_permission_denied_title,
+                        R.string.get_accounts_runtime_permission_denied_desc, R.drawable.ic_get_accounts, action);
             }
 
             @Override
@@ -265,14 +225,8 @@ public class PermissionUtils {
 
             @Override
             public void onPermissionDenied(PermissionDeniedResponse response) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.Theme_AppCompat_Light_Dialog);
-
-                builder.setTitle(R.string.send_sms_runtime_permission_denied_title)
-                        .setMessage(R.string.send_sms_runtime_permission_denied_desc)
-                        .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> action.denied())
-                        .setCancelable(false)
-                        .setIcon(R.drawable.ic_sms)
-                        .show();
+                showAdditionalExplanation(activity, R.string.send_sms_runtime_permission_denied_title,
+                        R.string.send_sms_runtime_permission_denied_desc, R.drawable.ic_sms, action);
             }
 
             @Override
@@ -299,14 +253,8 @@ public class PermissionUtils {
             @Override
             public void onPermissionDenied(PermissionDeniedResponse response) {
                 if (displayPermissionDeniedDialog) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.Theme_AppCompat_Light_Dialog);
-
-                    builder.setTitle(R.string.read_phone_state_runtime_permission_denied_title)
-                            .setMessage(R.string.read_phone_state_runtime_permission_denied_desc)
-                            .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> action.denied())
-                            .setCancelable(false)
-                            .setIcon(R.drawable.ic_phone)
-                            .show();
+                    showAdditionalExplanation(activity, R.string.read_phone_state_runtime_permission_denied_title,
+                            R.string.read_phone_state_runtime_permission_denied_desc, R.drawable.ic_phone, action);
                 } else {
                     action.denied();
                 }
@@ -392,5 +340,19 @@ public class PermissionUtils {
         } else {
             activity.finishAffinity();
         }
+    }
+
+    private static void showAdditionalExplanation(@NonNull Activity activity, int title,
+                                                  int message, int drawable,
+                                                  @NonNull PermissionListener action) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.Theme_AppCompat_Light_Dialog);
+
+        builder.setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> action.denied())
+                .setCancelable(false)
+                .setIcon(drawable);
+
+        DialogUtils.showDialog(builder.create(), activity);
     }
 }
