@@ -30,7 +30,6 @@ import android.view.Window;
 import com.google.android.gms.location.LocationListener;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.location.client.LocationClient;
 import org.odk.collect.android.location.client.LocationClients;
 import org.odk.collect.android.utilities.GeoPointUtils;
@@ -113,8 +112,6 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
     protected void onStart() {
         super.onStart();
         locationClient.start();
-
-        Collect.getInstance().getActivityLogger().logOnStart(this);
     }
 
     @Override
@@ -146,8 +143,6 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
     @Override
     protected void onStop() {
         locationClient.stop();
-
-        Collect.getInstance().getActivityLogger().logOnStop(this);
         super.onStop();
     }
 

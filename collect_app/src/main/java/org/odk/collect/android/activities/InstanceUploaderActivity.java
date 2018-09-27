@@ -211,12 +211,6 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        Collect.getInstance().getActivityLogger().logOnStart(this);
-    }
-
-    @Override
     protected void onResume() {
         if (instancesToSend != null) {
             Timber.i("onResume: Resuming upload of %d instances!", instancesToSend.length);
@@ -247,12 +241,6 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
     @Override
     public Object onRetainCustomNonConfigurationInstance() {
         return instanceServerUploader;
-    }
-
-    @Override
-    protected void onStop() {
-        Collect.getInstance().getActivityLogger().logOnStop(this);
-        super.onStop();
     }
 
     @Override

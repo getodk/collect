@@ -508,18 +508,6 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        Collect.getInstance().getActivityLogger().logOnStart(this);
-    }
-
-    @Override
-    protected void onStop() {
-        Collect.getInstance().getActivityLogger().logOnStop(this);
-        super.onStop();
-    }
-
-    @Override
     protected void onDestroy() {
         if (retrieveDriveFileContentsAsyncTask != null) {
             if (!retrieveDriveFileContentsAsyncTask.isCancelled()) {

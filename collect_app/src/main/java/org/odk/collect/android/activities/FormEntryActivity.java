@@ -2661,18 +2661,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         next();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Collect.getInstance().getActivityLogger().logOnStart(this);
-    }
-
-    @Override
-    protected void onStop() {
-        Collect.getInstance().getActivityLogger().logOnStop(this);
-        super.onStop();
-    }
-
     private void sendSavedBroadcast() {
         sendBroadcast(new Intent("org.odk.collect.android.FormSaved"));
     }

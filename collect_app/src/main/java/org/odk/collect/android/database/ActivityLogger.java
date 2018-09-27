@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.database;
 
-import android.app.Activity;
 import android.content.ContentValues;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteConstraintException;
@@ -280,14 +279,6 @@ public final class ActivityLogger {
     }
 
     // Convenience methods
-
-    public void logOnStart(Activity a) {
-        log(a.getClass().getName(), "onStart", null, null, null, null, null);
-    }
-
-    public void logOnStop(Activity a) {
-        log(a.getClass().getName(), "onStop", null, null, null, null, null);
-    }
 
     public void logAction(Object t, String context, String action) {
         log(t.getClass().getName(), context, action, null, null, null, null);

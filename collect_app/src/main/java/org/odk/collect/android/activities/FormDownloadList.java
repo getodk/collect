@@ -347,18 +347,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         };
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Collect.getInstance().getActivityLogger().logOnStart(this);
-    }
-
-    @Override
-    protected void onStop() {
-        Collect.getInstance().getActivityLogger().logOnStop(this);
-        super.onStop();
-    }
-
     private void clearChoices() {
         listView.clearChoices();
         downloadButton.setEnabled(false);

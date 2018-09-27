@@ -164,18 +164,6 @@ public class FormChooserList extends FormListActivity implements
         super.onPause();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Collect.getInstance().getActivityLogger().logOnStart(this);
-    }
-
-    @Override
-    protected void onStop() {
-        Collect.getInstance().getActivityLogger().logOnStop(this);
-        super.onStop();
-    }
-
     /**
      * Called by DiskSyncTask when the task is finished
      */

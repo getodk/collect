@@ -150,18 +150,6 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity {
                 || (formController.indexIsInFieldList(startIndex) && formIndex.toString().startsWith(startIndex.toString()));
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Collect.getInstance().getActivityLogger().logOnStart(this);
-    }
-
-    @Override
-    protected void onStop() {
-        Collect.getInstance().getActivityLogger().logOnStop(this);
-        super.onStop();
-    }
-
     protected void goUpLevel() {
         Collect.getInstance().getFormController().stepToOuterScreenEvent();
 

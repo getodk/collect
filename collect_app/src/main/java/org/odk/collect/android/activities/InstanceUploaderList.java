@@ -280,18 +280,6 @@ public class InstanceUploaderList extends InstanceListActivity implements
         showSnackbar(result);
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        logger.logOnStart(this);
-    }
-
-    @Override
-    protected void onStop() {
-        logger.logOnStop(this);
-        super.onStop();
-    }
-
     private void uploadSelectedFiles(int buttonId) {
         long[] instanceIds = listView.getCheckedItemIds();
         Transport transport = Transport.fromPreference(GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE));

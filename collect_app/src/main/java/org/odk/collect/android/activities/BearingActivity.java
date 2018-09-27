@@ -24,7 +24,6 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 
 import java.util.Locale;
 
@@ -70,18 +69,6 @@ public class BearingActivity extends CollectAbstractActivity implements SensorEv
         sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
         sensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_GAME);
         bearingDialog.show();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Collect.getInstance().getActivityLogger().logOnStart(this);
-    }
-
-    @Override
-    protected void onStop() {
-        Collect.getInstance().getActivityLogger().logOnStop(this);
-        super.onStop();
     }
 
     /**
