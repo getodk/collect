@@ -89,8 +89,6 @@ public class BearingActivity extends CollectAbstractActivity implements SensorEv
      * searching.
      */
     private void setupBearingDialog() {
-        Collect.getInstance().getActivityLogger()
-                .logInstanceAction(this, "setupBearingDialog", "show");
         // dialog displayed while fetching bearing
         bearingDialog = new ProgressDialog(this);
         DialogInterface.OnClickListener geopointButtonListener =
@@ -99,13 +97,9 @@ public class BearingActivity extends CollectAbstractActivity implements SensorEv
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case DialogInterface.BUTTON_POSITIVE:
-                                Collect.getInstance().getActivityLogger()
-                                        .logInstanceAction(this, "acceptBearing", "OK");
                                 returnBearing();
                                 break;
                             case DialogInterface.BUTTON_NEGATIVE:
-                                Collect.getInstance().getActivityLogger()
-                                        .logInstanceAction(this, "cancelBearing", "cancel");
                                 bearingDecimal = null;
                                 finish();
                                 break;

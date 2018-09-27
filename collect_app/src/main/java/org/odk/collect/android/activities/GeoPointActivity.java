@@ -192,8 +192,6 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
      */
     @SuppressWarnings("deprecation")
     private void setupLocationDialog() {
-        Collect.getInstance().getActivityLogger().logInstanceAction(this, "setupLocationDialog",
-                "show");
         // dialog displayed while fetching gps location
         locationDialog = new ProgressDialog(this);
 
@@ -209,13 +207,9 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case DialogInterface.BUTTON_POSITIVE:
-                                Collect.getInstance().getActivityLogger().logInstanceAction(this,
-                                        "acceptLocation", "OK");
                                 returnLocation();
                                 break;
                             case DialogInterface.BUTTON_NEGATIVE:
-                                Collect.getInstance().getActivityLogger().logInstanceAction(this,
-                                        "cancelLocation", "cancel");
                                 location = null;
                                 finish();
                                 break;

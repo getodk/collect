@@ -205,8 +205,6 @@ public class GeoPointMapActivity extends CollectAbstractActivity implements OnMa
         acceptLocation.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Collect.getInstance().getActivityLogger().logInstanceAction(this, "acceptLocation",
-                        "OK");
                 returnLocation();
             }
         });

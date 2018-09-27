@@ -362,10 +362,6 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity {
      * Creates and displays dialog with the given errorMsg.
      */
     protected void createErrorDialog(String errorMsg) {
-        Collect.getInstance()
-                .getActivityLogger()
-                .logInstanceAction(this, "createErrorDialog", "show.");
-
         AlertDialog alertDialog = new AlertDialog.Builder(this).create();
 
         alertDialog.setIcon(android.R.drawable.ic_dialog_info);
@@ -376,8 +372,6 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity {
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
                     case DialogInterface.BUTTON_POSITIVE:
-                        Collect.getInstance().getActivityLogger()
-                                .logInstanceAction(this, "createErrorDialog", "OK");
                         FormController formController = Collect.getInstance().getFormController();
                         formController.jumpToIndex(currentIndex);
                         break;

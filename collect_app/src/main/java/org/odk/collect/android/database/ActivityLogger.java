@@ -297,15 +297,4 @@ public final class ActivityLogger {
         log(t.getClass().getName(), context, action, null, null, param1, null);
     }
 
-    public void logInstanceAction(Object t, String context, String action) {
-        FormIndex index = null;
-        String instancePath = null;
-        FormController formController = Collect.getInstance().getFormController();
-        if (formController != null) {
-            index = formController.getFormIndex();
-            instancePath = getInstancePath(formController);
-        }
-        log(t.getClass().getName(), context, action, instancePath, index, null, null);
-    }
-
 }

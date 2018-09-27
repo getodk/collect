@@ -99,7 +99,6 @@ abstract class AppListFragment extends ListFragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCreateOptionsMenu", "show");
         super.onCreateOptionsMenu(menu, inflater);
 
         inflater.inflate(R.menu.list_menu, menu);

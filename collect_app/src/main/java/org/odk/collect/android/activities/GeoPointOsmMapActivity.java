@@ -159,8 +159,6 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
 
             @Override
             public void onClick(View v) {
-                Collect.getInstance().getActivityLogger().logInstanceAction(this, "acceptLocation",
-                        "OK");
                 returnLocation();
             }
         });
@@ -188,8 +186,6 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
         showLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Collect.getInstance().getActivityLogger()
-                        .logInstanceAction(this, "showLocation", "onClick");
                 showZoomDialog();
             }
         });
