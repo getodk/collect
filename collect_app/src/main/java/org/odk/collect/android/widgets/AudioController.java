@@ -31,7 +31,6 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.application.Collect;
 
 import java.io.File;
 import java.io.IOException;
@@ -196,11 +195,6 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
     }
 
     private void play() {
-        Collect.getInstance()
-                .getActivityLogger()
-                .logInstanceAction(this, "play", "click",
-                        formEntryPrompt.getIndex());
-
         playButton.setImageResource(R.drawable.ic_pause_24dp);
 
         if (seekBar.getProgress() == mediaPlayer.getDuration()) {
@@ -212,11 +206,6 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
     }
 
     private void pause() {
-        Collect.getInstance()
-                .getActivityLogger()
-                .logInstanceAction(this, "pause", "click",
-                        formEntryPrompt.getIndex());
-
         playButton.setImageResource(R.drawable.ic_play_arrow_24dp);
         mediaPlayer.pause();
         seekHandler.removeCallbacks(updateTimeTask);

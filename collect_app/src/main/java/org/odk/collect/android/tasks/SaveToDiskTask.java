@@ -112,9 +112,6 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
             formController.postProcessInstance();
         }
 
-        Collect.getInstance().getActivityLogger().logInstanceAction(this, "save",
-                Boolean.toString(markCompleted));
-
         // close all open databases of external data.
         Collect.getInstance().getExternalDataManager().close();
 

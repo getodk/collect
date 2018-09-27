@@ -23,9 +23,9 @@ import org.javarosa.core.model.osm.OSMTagItem;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.ViewIds;
-import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import java.util.ArrayList;
@@ -224,9 +224,6 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
     @Override
     public void onButtonClick(int buttonId) {
         launchOpenMapKitButton.setBackgroundColor(OSM_BLUE);
-        Collect.getInstance().getActivityLogger().logInstanceAction(this,
-                "launchOpenMapKitButton",
-                "click", getFormEntryPrompt().getIndex());
         errorTextView.setVisibility(View.GONE);
         launchOpenMapKit();
     }

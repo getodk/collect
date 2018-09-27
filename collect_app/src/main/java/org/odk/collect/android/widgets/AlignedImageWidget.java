@@ -157,10 +157,6 @@ public class AlignedImageWidget extends BaseImageWidget {
     }
 
     private void captureImage() {
-        Collect collect = Collect.getInstance();
-        collect.getActivityLogger().logInstanceAction(this, "captureButton",
-                "click", getFormEntryPrompt().getIndex());
-
         errorTextView.setVisibility(View.GONE);
 
         Intent i = new Intent();

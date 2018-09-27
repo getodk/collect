@@ -95,8 +95,6 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity {
         jumpPreviousButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Collect.getInstance().getActivityLogger().logInstanceAction(this, "goUpLevelButton",
-                        "click");
                 goUpLevel();
             }
         });
@@ -105,8 +103,6 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity {
         jumpBeginningButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Collect.getInstance().getActivityLogger().logInstanceAction(this, "jumpToBeginning",
-                        "click");
                 FormController fc = Collect.getInstance().getFormController();
                 if (fc != null) {
                     fc.getTimerLogger().exitView();
@@ -121,8 +117,6 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity {
         jumpEndButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Collect.getInstance().getActivityLogger().logInstanceAction(this, "jumpToEnd",
-                        "click");
                 FormController fc = Collect.getInstance().getFormController();
                 if (fc != null) {
                     fc.getTimerLogger().exitView();

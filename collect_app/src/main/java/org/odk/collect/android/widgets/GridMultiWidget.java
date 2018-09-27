@@ -42,7 +42,6 @@ import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.utilities.FileUtils;
@@ -288,10 +287,6 @@ public class GridMultiWidget extends QuestionWidget implements MultiChoiceWidget
                     if (audioHandlers[position] != null) {
                         stopAudio();
                     }
-                    Collect.getInstance().getActivityLogger().logInstanceAction(this,
-                            "onItemClick.deselect",
-                            items.get(position).getValue(), getFormEntryPrompt().getIndex());
-
                 } else {
                     selected[position] = true;
                     if (audioHandlers[lastClickPosition] != null) {
@@ -299,9 +294,6 @@ public class GridMultiWidget extends QuestionWidget implements MultiChoiceWidget
                     }
                     imageViews[position].setBackgroundColor(Color.rgb(ORANGE_RED_VAL, ORANGE_GREEN_VAL,
                             ORANGE_BLUE_VAL));
-                    Collect.getInstance().getActivityLogger().logInstanceAction(this,
-                            "onItemClick.select",
-                            items.get(position).getValue(), getFormEntryPrompt().getIndex());
                     if (audioHandlers[position] != null) {
                         audioHandlers[position].playAudio(getContext());
                     }

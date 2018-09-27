@@ -297,10 +297,6 @@ public class ImageWebViewWidget extends QuestionWidget implements FileWidget {
     }
 
     private void captureImage() {
-        Collect.getInstance()
-                .getActivityLogger()
-                .logInstanceAction(this, "captureButton", "click",
-                        getFormEntryPrompt().getIndex());
         errorTextView.setVisibility(View.GONE);
         Intent i = new Intent(
                 android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
@@ -331,10 +327,6 @@ public class ImageWebViewWidget extends QuestionWidget implements FileWidget {
     }
 
     private void chooseImage() {
-        Collect.getInstance()
-                .getActivityLogger()
-                .logInstanceAction(this, "chooseButton", "click",
-                        getFormEntryPrompt().getIndex());
         errorTextView.setVisibility(View.GONE);
         Intent i = new Intent(Intent.ACTION_GET_CONTENT);
         i.setType("image/*");
