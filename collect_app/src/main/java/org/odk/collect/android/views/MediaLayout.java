@@ -74,8 +74,6 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
     @BindView(R.id.select_container)
     FrameLayout flContainer;
 
-    private String selectionDesignator;
-    private FormIndex index;
     private TextView viewText;
     private String videoURI;
     private AudioPlayListener audioPlayListener;
@@ -179,8 +177,6 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
     public void setAVT(FormIndex index, String selectionDesignator, TextView text,
                        String audioURI, String imageURI, String videoURI,
                        String bigImageURI, MediaPlayer player) {
-        this.index = index;
-        this.selectionDesignator = selectionDesignator;
         this.bigImageURI = bigImageURI;
         this.player = player;
         this.videoURI = videoURI;

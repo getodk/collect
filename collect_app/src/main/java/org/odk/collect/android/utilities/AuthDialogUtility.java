@@ -32,7 +32,6 @@ import javax.inject.Inject;
  * Used to present auth dialog and update credentials in the system as needed.
  */
 public class AuthDialogUtility {
-    private static final String TAG = "AuthDialogUtility";
 
     private EditText username;
     private EditText password;

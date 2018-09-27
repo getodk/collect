@@ -1603,19 +1603,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         // start InAnimation for transition...
         currentView.startAnimation(inAnimation);
 
-        String logString = "";
-        switch (from) {
-            case RIGHT:
-                logString = "next";
-                break;
-            case LEFT:
-                logString = "previous";
-                break;
-            case FADE:
-                logString = "refresh";
-                break;
-        }
-
         FormController formController = getFormController();
         if (formController.getEvent() == FormEntryController.EVENT_QUESTION
                 || formController.getEvent() == FormEntryController.EVENT_GROUP

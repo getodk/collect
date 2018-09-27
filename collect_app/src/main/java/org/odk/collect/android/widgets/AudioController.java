@@ -26,7 +26,6 @@ import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.odk.collect.android.R;
@@ -60,7 +59,6 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
     private State state;
     private Context context;
     private MediaPlayer mediaPlayer;
-    private FormEntryPrompt formEntryPrompt;
     private final Handler seekHandler = new Handler();
 
     /**
@@ -92,10 +90,9 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
         return new DateTime(millis, DateTimeZone.UTC).toString("mm:ss");
     }
 
-    void init(Context context, MediaPlayer mediaPlayer, FormEntryPrompt formEntryPrompt) {
+    void init(Context context, MediaPlayer mediaPlayer) {
         this.context = context;
         this.mediaPlayer = mediaPlayer;
-        this.formEntryPrompt = formEntryPrompt;
 
         initMediaPlayer();
     }

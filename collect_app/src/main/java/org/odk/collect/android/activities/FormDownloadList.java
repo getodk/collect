@@ -352,11 +352,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         toggleButtonLabel(toggleButton, listView);
         downloadButton.setEnabled(listView.getCheckedItemCount() > 0);
 
-        Object o = listView.getAdapter().getItem(position);
-        @SuppressWarnings("unchecked")
-        HashMap<String, String> item = (HashMap<String, String>) o;
-        FormDetails detail = formNamesAndURLs.get(item.get(FORMDETAIL_KEY));
-
         if (listView.isItemChecked(position)) {
             selectedForms.add(((HashMap<String, String>) listView.getAdapter().getItem(position)).get(FORMDETAIL_KEY));
         } else {
