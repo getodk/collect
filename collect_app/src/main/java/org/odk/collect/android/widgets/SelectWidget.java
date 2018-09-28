@@ -36,7 +36,6 @@ import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.views.MediaLayout;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public abstract class SelectWidget extends QuestionWidget {
@@ -51,15 +50,12 @@ public abstract class SelectWidget extends QuestionWidget {
     private static final int MAX_ITEMS_WITHOUT_SCREEN_BOUND = 40;
 
     protected List<SelectChoice> items;
-    protected ArrayList<MediaLayout> playList;
     protected LinearLayout answerLayout;
-    private int playcounter;
 
     public SelectWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
         answerLayout = new LinearLayout(context);
         answerLayout.setOrientation(LinearLayout.VERTICAL);
-        playList = new ArrayList<>();
     }
 
     @Override
@@ -75,35 +71,6 @@ public abstract class SelectWidget extends QuestionWidget {
     public void setOnLongClickListener(OnLongClickListener l) {
     }
 
-    @Override
-    public void resetQuestionTextColor() {
-        super.resetQuestionTextColor();
-        for (MediaLayout layout : playList) {
-            layout.resetTextFormatting();
-        }
-    }
-
-    @Override
-    public void resetAudioButtonImage() {
-        super.resetAudioButtonImage();
-        for (MediaLayout layout : playList) {
-            layout.resetAudioButtonBitmap();
-        }
-    }
-
-    @Override
-    public void playAllPromptText() {
-        // set up to play the items when the
-        // question text is finished
-        getPlayer().setOnCompletionListener(mediaPlayer -> {
-            resetQuestionTextColor();
-            mediaPlayer.reset();
-            playNextSelectItem();
-        });
-        // plays the question text
-        super.playAllPromptText();
-    }
-
     protected void readItems() {
         // SurveyCTO-added support for dynamic select content (from .csv files)
         XPathFuncExpr xpathFuncExpr = ExternalDataUtil.getSearchXPathExpression(getFormEntryPrompt().getAppearanceHint());
@@ -114,31 +81,8 @@ public abstract class SelectWidget extends QuestionWidget {
         }
     }
 
-    private void playNextSelectItem() {
-        if (isShown()) {
-            // if there's more, set up to play the next item
-            if (playcounter < playList.size()) {
-                getPlayer().setOnCompletionListener(mediaPlayer -> {
-                    resetQuestionTextColor();
-                    mediaPlayer.reset();
-                    playNextSelectItem();
-                });
-                // play the current item
-                playList.get(playcounter).playAudio();
-                playcounter++;
-
-            } else {
-                playcounter = 0;
-                getPlayer().setOnCompletionListener(null);
-                getPlayer().reset();
-            }
-        }
-    }
-
     public void initMediaLayoutSetUp(MediaLayout mediaLayout) {
-        mediaLayout.setAudioListener(this);
         mediaLayout.setPlayTextColor(getPlayColor());
-        playList.add(mediaLayout);
     }
 
     /**

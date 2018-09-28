@@ -45,7 +45,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ActivityLogger;
-import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GuidanceHint;
@@ -72,7 +71,7 @@ import timber.log.Timber;
 
 public abstract class QuestionWidget
         extends RelativeLayout
-        implements Widget, AudioPlayListener {
+        implements Widget {
 
     private final int questionFontSize;
     private final FormEntryPrompt formEntryPrompt;
@@ -265,7 +264,6 @@ public abstract class QuestionWidget
         questionMediaLayout.setId(ViewIds.generateViewId()); // assign random id
         questionMediaLayout.setAVT(prompt.getIndex(), "", questionText, audioURI, imageURI, videoURI,
                 bigImageURI);
-        questionMediaLayout.setAudioListener(this);
 
         String playColorString = prompt.getFormElement().getAdditionalAttribute(null, "playColor");
         if (playColorString != null) {
@@ -472,14 +470,6 @@ public abstract class QuestionWidget
      */
     public void playAllPromptText() {
         getQuestionMediaLayout().playAudio();
-    }
-
-    public void resetQuestionTextColor() {
-        getQuestionMediaLayout().resetTextFormatting();
-    }
-
-    public void resetAudioButtonImage() {
-        getQuestionMediaLayout().resetAudioButtonBitmap();
     }
 
     public void showWarning(String warningBody) {
