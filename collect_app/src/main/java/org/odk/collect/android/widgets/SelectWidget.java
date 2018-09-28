@@ -159,7 +159,7 @@ public abstract class SelectWidget extends QuestionWidget {
         String bigImageURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), "big-image");
 
         mediaLayout.setAVT(getFormEntryPrompt().getIndex(), "." + Integer.toString(index), textView, audioURI,
-                imageURI, videoURI, bigImageURI, getPlayer());
+                imageURI, videoURI, bigImageURI);
     }
 
     protected RecyclerView setUpRecyclerView() {

@@ -26,12 +26,22 @@ import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.events.MediaPlayerRxEvent;
+import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
 import java.io.IOException;
 
+import javax.inject.Inject;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
+
+import static org.odk.collect.android.events.MediaPlayerRxEvent.EventType.PLAYING_COMPLETED;
+import static org.odk.collect.android.events.MediaPlayerRxEvent.EventType.PLAYING_STARTED;
 
 /**
  * @author ctsims
@@ -40,30 +50,21 @@ import timber.log.Timber;
 public class AudioButton extends AppCompatImageButton {
 
     private AudioHandler handler;
-    private MediaPlayer player;
-    private Bitmap bitmapPlay;
-    private Bitmap bitmapStop;
+    private final Bitmap bitmapPlay = BitmapFactory.decodeResource(getResources(), android.R.drawable.ic_lock_silent_mode_off);
+    private final Bitmap bitmapStop = BitmapFactory.decodeResource(getResources(), android.R.drawable.ic_media_pause);
 
     public AudioButton(Context context) {
         super(context);
-        initView();
+        setImageBitmap(bitmapPlay);
     }
 
     public AudioButton(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initView();
+        setImageBitmap(bitmapPlay);
     }
 
-    private void initView() {
-        bitmapPlay = BitmapFactory.decodeResource(getResources(), android.R.drawable.ic_lock_silent_mode_off);
-        bitmapStop = BitmapFactory.decodeResource(getResources(), android.R.drawable.ic_media_pause);
-
-        resetBitmap();
-    }
-
-    public void init(FormIndex index, String selectionDesignator, String uri, MediaPlayer player) {
-        this.player = player;
-        handler = new AudioHandler(index, selectionDesignator, uri, player);
+    public void init(FormIndex index, String selectionDesignator, String uri) {
+        handler = new AudioHandler(index, selectionDesignator, uri, (int) getTag());
     }
 
     public void resetBitmap() {
@@ -75,13 +76,21 @@ public class AudioButton extends AppCompatImageButton {
         setImageBitmap(bitmapStop);
     }
 
+    public void stopAudio() {
+        handler.stopPlaying();
+        setImageBitmap(bitmapPlay);
+    }
+
     public void onClick() {
-        if (player.isPlaying()) {
-            player.stop();
-            resetBitmap();
+        if (handler.mediaPlayer.isPlaying()) {
+            stopAudio();
         } else {
             playAudio();
         }
+    }
+
+    public boolean isPlaying() {
+        return handler.mediaPlayer.isPlaying();
     }
 
     /**
@@ -92,20 +101,47 @@ public class AudioButton extends AppCompatImageButton {
      * @author mitchellsundt@gmail.com
      */
     public static class AudioHandler {
+        @Inject
+        RxEventBus eventBus;
+
         private final FormIndex index;
         private final String selectionDesignator;
         private final String uri;
-        private final MediaPlayer mediaPlayer;
+        private final MediaPlayer mediaPlayer = new MediaPlayer();
+        private final int playerTag;
 
-        public AudioHandler(FormIndex index, String selectionDesignator, String uri,
-                            MediaPlayer player) {
+        private final CompositeDisposable compositeDisposable = new CompositeDisposable();
+
+        public AudioHandler(FormIndex index, String selectionDesignator, String uri, int playerTag) {
+            Collect.getInstance().getComponent().inject(this);
+
             this.index = index;
             this.selectionDesignator = selectionDesignator;
             this.uri = uri;
-            mediaPlayer = player;
+            this.playerTag = playerTag;
+
+            mediaPlayer.setOnCompletionListener(mediaPlayer -> {
+                eventBus.post(new MediaPlayerRxEvent(PLAYING_COMPLETED, playerTag));
+            });
+
+            compositeDisposable
+                    .add(eventBus
+                            .register(MediaPlayerRxEvent.class)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(event -> {
+                                if (anotherPlayerStarted(event) && mediaPlayer.isPlaying()) {
+                                    mediaPlayer.stop();
+                                }
+                            }));
+        }
+
+        private boolean anotherPlayerStarted(MediaPlayerRxEvent event) {
+            return event.getEventType() == PLAYING_STARTED && playerTag != event.getPlayerTag();
         }
 
         public void playAudio(Context c) {
+            eventBus.post(new MediaPlayerRxEvent(PLAYING_STARTED, playerTag));
             Collect.getInstance().getActivityLogger().logInstanceAction(this,
                     "onClick.playAudioPrompt", selectionDesignator, index);
             if (uri == null) {
@@ -141,6 +177,14 @@ public class AudioButton extends AppCompatImageButton {
                 Timber.e(errorMsg);
                 ToastUtils.showLongToast(errorMsg);
             }
+        }
+
+        public void stopPlaying() {
+            mediaPlayer.stop();
+        }
+
+        public boolean isPlaying() {
+            return mediaPlayer.isPlaying();
         }
     }
 }

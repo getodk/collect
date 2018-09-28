@@ -48,6 +48,7 @@ import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.views.AudioButton.AudioHandler;
 import org.odk.collect.android.views.ExpandedHeightGridView;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
@@ -154,8 +155,7 @@ public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
             String audioURI =
                     prompt.getSpecialFormSelectChoiceText(sc, FormEntryCaption.TEXT_FORM_AUDIO);
             if (audioURI != null) {
-                audioHandlers[i] = new AudioHandler(prompt.getIndex(), sc.getValue(), audioURI,
-                        getPlayer());
+                audioHandlers[i] = new AudioHandler(prompt.getIndex(), sc.getValue(), audioURI, ViewIds.generateViewId());
             } else {
                 audioHandlers[i] = null;
             }
@@ -292,10 +292,6 @@ public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
                 // and then check the one clicked by the user. Update the
                 // background color accordingly
                 for (int i = 0; i < selected.length; i++) {
-                    // if we have an audio handler, be sure audio is stopped.
-                    if (selected[i] && (audioHandlers[i] != null)) {
-                        stopAudio();
-                    }
                     selected[i] = false;
                     imageViews[i].setBackgroundColor(0);
                 }
@@ -310,7 +306,11 @@ public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
                     listener.advance();
 
                 } else if (audioHandlers[position] != null) {
-                    audioHandlers[position].playAudio(getContext());
+                    if (audioHandlers[position].isPlaying()) {
+                        audioHandlers[position].stopPlaying();
+                    } else {
+                        audioHandlers[position].playAudio(getContext());
+                    }
                 }
             }
         });

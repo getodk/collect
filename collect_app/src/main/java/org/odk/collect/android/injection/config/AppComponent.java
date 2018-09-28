@@ -22,6 +22,8 @@ import org.odk.collect.android.tasks.sms.SmsService;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.DownloadFormListUtils;
 import org.odk.collect.android.utilities.FormDownloader;
+import org.odk.collect.android.views.AudioButton;
+import org.odk.collect.android.views.MediaLayout;
 
 import dagger.BindsInstance;
 import dagger.Component;
@@ -85,4 +87,8 @@ public interface AppComponent {
     void inject(AuthDialogUtility authDialogUtility);
   
     void inject(FormDownloadList formDownloadList);
+
+    void inject(AudioButton.AudioHandler audioHandler);
+
+    void inject(MediaLayout mediaLayout);
 }

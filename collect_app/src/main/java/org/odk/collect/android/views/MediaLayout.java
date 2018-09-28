@@ -20,7 +20,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.support.v7.widget.AppCompatImageButton;
 import android.util.AttributeSet;
@@ -38,6 +37,8 @@ import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.events.MediaPlayerRxEvent;
+import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
@@ -46,9 +47,17 @@ import org.odk.collect.android.utilities.ViewIds;
 
 import java.io.File;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
+
+import static org.odk.collect.android.events.MediaPlayerRxEvent.EventType.PLAYING_COMPLETED;
+import static org.odk.collect.android.events.MediaPlayerRxEvent.EventType.PLAYING_STARTED;
 
 /**
  * This layout is used anywhere we can have image/audio/video/text
@@ -56,6 +65,9 @@ import timber.log.Timber;
  * @author carlhartung
  */
 public class MediaLayout extends RelativeLayout implements View.OnClickListener {
+
+    @Inject
+    RxEventBus eventBus;
 
     @BindView(R.id.audioButton)
     AudioButton audioButton;
@@ -83,21 +95,49 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
     private int playTextColor = Color.BLUE;
     private CharSequence originalText;
     private String bigImageURI;
-    private MediaPlayer player;
     private ReferenceManager referenceManager = ReferenceManager.instance();
+
+    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     public MediaLayout(Context context) {
         super(context);
-
-        View.inflate(context, R.layout.media_layout, this);
-        ButterKnife.bind(this);
+        setUpMediaLayout(context);
     }
 
     public MediaLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
+        setUpMediaLayout(context);
+    }
 
+    private void setUpMediaLayout(Context context) {
         View.inflate(context, R.layout.media_layout, this);
         ButterKnife.bind(this);
+
+        Collect.getInstance().getComponent().inject(this);
+        compositeDisposable
+                .add(eventBus
+                        .register(MediaPlayerRxEvent.class)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(event -> {
+                            if ((anotherPlayerStarted(event) && audioButton.isPlaying())
+                                    || playingCompleted(event)) {
+                                audioButton.resetBitmap();
+                                resetTextFormatting();
+                            }
+                        }));
+    }
+
+    private boolean anotherPlayerStarted(MediaPlayerRxEvent event) {
+        return event.getEventType() == PLAYING_STARTED
+                && audioButton.getTag() != null
+                && (int) audioButton.getTag() != event.getPlayerTag();
+    }
+
+    private boolean playingCompleted(MediaPlayerRxEvent event) {
+        return event.getEventType() == PLAYING_COMPLETED
+                && audioButton.getTag() != null
+                && (int) audioButton.getTag() == event.getPlayerTag();
     }
 
     /**
@@ -115,21 +155,12 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
 
         audioButton.onClick();
 
-        // have to call toString() to remove the html formatting
-        // (it's a spanned thing...)
+        // have to call toString() to remove the html formatting (it's a spanned thing...)
         viewText.setText(viewText.getText().toString());
 
-        if (player.isPlaying()) {
+        if (audioButton.isPlaying()) {
             viewText.setTextColor(playTextColor);
-        } else {
-            resetTextFormatting();
         }
-
-        player.setOnCompletionListener(mediaPlayer -> {
-            resetTextFormatting();
-            mediaPlayer.reset();
-            audioButton.resetBitmap();
-        });
     }
 
     public void setPlayTextColor(int textColor) {
@@ -181,12 +212,10 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
     }
 
     public void setAVT(FormIndex index, String selectionDesignator, TextView text,
-                       String audioURI, String imageURI, String videoURI,
-                       String bigImageURI, MediaPlayer player) {
+                       String audioURI, String imageURI, String videoURI, String bigImageURI) {
         this.index = index;
         this.selectionDesignator = selectionDesignator;
         this.bigImageURI = bigImageURI;
-        this.player = player;
         this.videoURI = videoURI;
 
         viewText = text;
@@ -196,7 +225,8 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
         // Setup audio button
         if (audioURI != null) {
             audioButton.setVisibility(VISIBLE);
-            audioButton.init(index, selectionDesignator, audioURI, player);
+            audioButton.setTag(ViewIds.generateViewId());
+            audioButton.init(index, selectionDesignator, audioURI);
             audioButton.setOnClickListener(this);
         }
 
