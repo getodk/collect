@@ -29,6 +29,7 @@ import org.javarosa.xpath.expr.XPathExpression;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.WebViewActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.external.ExternalDataUtil;
 
 import java.util.List;
 import java.util.Locale;
@@ -64,11 +65,10 @@ public class WidgetFactory {
         // For now, all appearance tags are in English.
         appearance = appearance.toLowerCase(Locale.ENGLISH);
 
-        // The search appearance which shows a text area for filtering choices is distinct
-        // from the search() appearance/function. The two can combine but a text area should
-        // not be shown if only the appearance/function is specified.
-        boolean hasSearchAppearance = appearance.contains("search")
-                && !appearance.contains("search(") || appearance.contains("search ");
+        // Strip out the search() appearance/function which is handled in ExternalDataUtil so that
+        // it is not considered when matching other appearances. For example, a file named list.csv
+        // used as a parameter to search() should not be interpreted as a list appearance.
+        appearance = ExternalDataUtil.SEARCH_FUNCTION_REGEX.matcher(appearance).replaceAll("");
 
         final QuestionWidget questionWidget;
         switch (fep.getControlType()) {
@@ -211,7 +211,7 @@ public class WidgetFactory {
                     questionWidget = new GridWidget(context, fep, numColumns, appearance.contains("quick"));
                 } else if (appearance.contains("minimal")) {
                     questionWidget = new SpinnerWidget(context, fep, appearance.contains("quick"));
-                } else if (hasSearchAppearance || appearance.contains("autocomplete")) {
+                } else if (appearance.contains("search") || appearance.contains("autocomplete")) {
                     questionWidget = new SelectOneSearchWidget(context, fep, appearance.contains("quick"));
                 } else if (appearance.contains("list-nolabel")) {
                     questionWidget = new ListWidget(context, fep, false, appearance.contains("quick"));
@@ -257,7 +257,7 @@ public class WidgetFactory {
                     questionWidget = new ListMultiWidget(context, fep, true);
                 } else if (appearance.startsWith("label")) {
                     questionWidget = new LabelWidget(context, fep);
-                } else if (hasSearchAppearance || appearance.contains("autocomplete")) {
+                } else if (appearance.contains("search") || appearance.contains("autocomplete")) {
                     questionWidget = new SelectMultipleAutocompleteWidget(context, fep);
                 } else if (appearance.startsWith("image-map")) {
                     questionWidget = new SelectMultiImageMapWidget(context, fep);
