@@ -22,7 +22,7 @@ public class MediaPlayerRxEvent extends RxEvent {
     private int playerTag;
 
     public enum EventType {
-        PLAYING_STARTED, PLAYING_STOPPED, PLAYING_COMPLETED, STOP_PLAYING
+        PLAYING_STARTED, PLAYING_STOPPED, PLAYING_COMPLETED, STOP_PLAYING, RELEASE
     }
 
     public MediaPlayerRxEvent(EventType eventType) {

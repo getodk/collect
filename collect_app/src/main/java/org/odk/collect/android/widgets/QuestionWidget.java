@@ -77,7 +77,7 @@ public abstract class QuestionWidget
     private final int questionFontSize;
     private final FormEntryPrompt formEntryPrompt;
     private final MediaLayout questionMediaLayout;
-    private MediaPlayer player;
+    private final MediaPlayer player;
     private final TextView helpTextView;
     private final TextView guidanceTextView;
     private final View helpTextLayout;
@@ -215,16 +215,6 @@ public abstract class QuestionWidget
         guidanceTextView.setTextColor(themeUtils.getPrimaryTextColor());
         guidanceTextView.setMovementMethod(LinkMovementMethod.getInstance());
         return guidanceTextView;
-    }
-
-    /**
-     * Releases resources held by this widget
-     */
-    public void release() {
-        if (player != null) {
-            player.release();
-            player = null;
-        }
     }
 
     //source::https://stackoverflow.com/questions/18996183/identifying-rtl-language-in-android/23203698#23203698

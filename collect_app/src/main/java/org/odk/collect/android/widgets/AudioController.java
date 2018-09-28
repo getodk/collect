@@ -51,6 +51,7 @@ import timber.log.Timber;
 
 import static android.view.View.GONE;
 import static org.odk.collect.android.events.MediaPlayerRxEvent.EventType.PLAYING_STARTED;
+import static org.odk.collect.android.events.MediaPlayerRxEvent.EventType.RELEASE;
 import static org.odk.collect.android.events.MediaPlayerRxEvent.EventType.STOP_PLAYING;
 
 public class AudioController implements SeekBar.OnSeekBarChangeListener {
@@ -113,6 +114,8 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
                                 pause();
                             } else if (event.getEventType() == STOP_PLAYING && mediaPlayer.isPlaying()) {
                                 mediaPlayer.stop();
+                            } else if (event.getEventType() == RELEASE) {
+                                mediaPlayer.release();
                             }
                         }));
     }

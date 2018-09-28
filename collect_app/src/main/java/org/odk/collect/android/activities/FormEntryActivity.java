@@ -144,6 +144,7 @@ import timber.log.Timber;
 
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
 import static android.content.DialogInterface.BUTTON_POSITIVE;
+import static org.odk.collect.android.events.MediaPlayerRxEvent.EventType.RELEASE;
 import static org.odk.collect.android.events.MediaPlayerRxEvent.EventType.STOP_PLAYING;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_MOVING_BACKWARDS;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
@@ -1447,7 +1448,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     private void releaseOdkView() {
         if (odkView != null) {
-            odkView.releaseWidgetResources();
+            eventBus.post(new MediaPlayerRxEvent(RELEASE));
             odkView = null;
         }
     }
