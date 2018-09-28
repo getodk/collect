@@ -24,6 +24,7 @@ import org.odk.collect.android.utilities.DownloadFormListUtils;
 import org.odk.collect.android.utilities.FormDownloader;
 import org.odk.collect.android.views.AudioButton;
 import org.odk.collect.android.views.MediaLayout;
+import org.odk.collect.android.widgets.AudioController;
 
 import dagger.BindsInstance;
 import dagger.Component;
@@ -91,4 +92,6 @@ public interface AppComponent {
     void inject(AudioButton.AudioHandler audioHandler);
 
     void inject(MediaLayout mediaLayout);
+
+    void inject(AudioController audioController);
 }
