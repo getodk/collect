@@ -18,7 +18,9 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+
 import com.google.android.gms.analytics.HitBuilders;
+
 import org.javarosa.core.model.Constants;
 import org.javarosa.core.model.ItemsetBinding;
 import org.javarosa.core.model.QuestionDef;
@@ -27,8 +29,10 @@ import org.javarosa.xpath.expr.XPathExpression;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.WebViewActivity;
 import org.odk.collect.android.application.Collect;
+
 import java.util.List;
 import java.util.Locale;
+
 import timber.log.Timber;
 
 /**
@@ -274,8 +278,6 @@ public class WidgetFactory {
                 break;
             case Constants.CONTROL_RANGE:
 
-                //questionWidget = null;
-
                 if (appearance.startsWith("rating")) {
                     questionWidget = new RatingWidget(context, fep);
                 } else {
@@ -291,10 +293,10 @@ public class WidgetFactory {
                             break;
                     }
                 }
-                    break;
-                    default:
-                        questionWidget = new StringWidget(context, fep, readOnlyOverride);
-                        break;
+                break;
+            default:
+                questionWidget = new StringWidget(context, fep, readOnlyOverride);
+                break;
         }
 
         return questionWidget;
