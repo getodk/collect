@@ -113,7 +113,7 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
                             if (anotherPlayerStarted(event) && mediaPlayer.isPlaying()) {
                                 pause();
                             } else if (event.getEventType() == STOP_PLAYING && mediaPlayer.isPlaying()) {
-                                mediaPlayer.stop();
+                                pause();
                             } else if (event.getEventType() == RELEASE) {
                                 mediaPlayer.release();
                                 compositeDisposable.dispose();
@@ -163,7 +163,6 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
     void playClicked() {
         if (mediaPlayer.isPlaying()) {
             pause();
-            state = State.PAUSED;
         } else {
             eventBus.post(new MediaPlayerRxEvent(PLAYING_STARTED, tag));
             play();
@@ -217,10 +216,6 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
     @Override
     public void onStartTrackingTouch(SeekBar seekBar) {
         ((FormEntryActivity) context).allowSwiping(false);
-
-        if (state == State.PLAYING) {
-            pause();
-        }
     }
 
     /**
@@ -258,6 +253,7 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
                 .logInstanceAction(this, "pause", "click",
                         formEntryPrompt.getIndex());
 
+        state = State.PAUSED;
         playButton.setImageResource(R.drawable.ic_play_arrow_24dp);
         mediaPlayer.pause();
         seekHandler.removeCallbacks(updateTimeTask);
