@@ -57,6 +57,7 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.events.MediaPlayerRxEvent.EventType.PLAYING_COMPLETED;
 import static org.odk.collect.android.events.MediaPlayerRxEvent.EventType.PLAYING_STARTED;
+import static org.odk.collect.android.events.MediaPlayerRxEvent.EventType.RELEASE;
 
 /**
  * This layout is used anywhere we can have image/audio/video/text
@@ -122,6 +123,8 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
                                     || playingCompleted(event)) {
                                 audioButton.resetBitmap();
                                 resetTextFormatting();
+                            } else if (event.getEventType() == RELEASE) {
+                                compositeDisposable.dispose();
                             }
                         }));
     }

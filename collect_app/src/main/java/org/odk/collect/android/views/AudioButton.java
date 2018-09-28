@@ -138,6 +138,7 @@ public class AudioButton extends AppCompatImageButton {
                                     stopPlaying();
                                 } else if (event.getEventType() == RELEASE) {
                                     mediaPlayer.release();
+                                    compositeDisposable.dispose();
                                 }
                             }));
         }

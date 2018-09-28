@@ -116,6 +116,7 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
                                 mediaPlayer.stop();
                             } else if (event.getEventType() == RELEASE) {
                                 mediaPlayer.release();
+                                compositeDisposable.dispose();
                             }
                         }));
     }
