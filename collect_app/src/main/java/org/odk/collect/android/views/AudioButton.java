@@ -42,6 +42,7 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.events.MediaPlayerRxEvent.EventType.PLAYING_COMPLETED;
 import static org.odk.collect.android.events.MediaPlayerRxEvent.EventType.PLAYING_STARTED;
+import static org.odk.collect.android.events.MediaPlayerRxEvent.EventType.STOP_PLAYING;
 
 /**
  * @author ctsims
@@ -132,6 +133,8 @@ public class AudioButton extends AppCompatImageButton {
                             .subscribe(event -> {
                                 if (anotherPlayerStarted(event) && mediaPlayer.isPlaying()) {
                                     mediaPlayer.stop();
+                                } else if (event.getEventType() == STOP_PLAYING && mediaPlayer.isPlaying()) {
+                                    stopPlaying();
                                 }
                             }));
         }

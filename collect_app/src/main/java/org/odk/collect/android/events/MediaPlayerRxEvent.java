@@ -19,10 +19,14 @@ package org.odk.collect.android.events;
 public class MediaPlayerRxEvent extends RxEvent {
 
     private final EventType eventType;
-    private final int playerTag;
+    private int playerTag;
 
     public enum EventType {
-        PLAYING_STARTED, PLAYING_STOPPED, PLAYING_COMPLETED
+        PLAYING_STARTED, PLAYING_STOPPED, PLAYING_COMPLETED, STOP_PLAYING
+    }
+
+    public MediaPlayerRxEvent(EventType eventType) {
+        this.eventType = eventType;
     }
 
     public MediaPlayerRxEvent(EventType eventType, int playerTag) {

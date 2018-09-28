@@ -47,6 +47,8 @@ import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.events.MediaPlayerRxEvent;
+import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalAppsUtils;
@@ -65,8 +67,11 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
+import javax.inject.Inject;
+
 import timber.log.Timber;
 
+import static org.odk.collect.android.events.MediaPlayerRxEvent.EventType.STOP_PLAYING;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
@@ -76,6 +81,9 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  */
 @SuppressLint("ViewConstructor")
 public class ODKView extends FrameLayout implements OnLongClickListener {
+
+    @Inject
+    RxEventBus eventBus;
 
     private final LinearLayout view;
     private final LinearLayout.LayoutParams layout;
@@ -88,6 +96,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
         super(context);
 
         inflate(getContext(), R.layout.nested_scroll_view, this); // keep in an xml file to enable the vertical scrollbar
+        Collect.getInstance().getComponent().inject(this);
 
         widgets = new ArrayList<>();
 
@@ -320,6 +329,12 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
         return path.toString();
     }
 
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        eventBus.post(new MediaPlayerRxEvent(STOP_PLAYING));
+    }
+
     public void setFocus(Context context) {
         if (!widgets.isEmpty()) {
             widgets.get(0).setFocus(context);
@@ -457,10 +472,6 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
         for (QuestionWidget qw : widgets) {
             qw.cancelLongPress();
         }
-    }
-
-    public void stopAudio() {
-        widgets.get(0).stopAudio();
     }
 
     /**
