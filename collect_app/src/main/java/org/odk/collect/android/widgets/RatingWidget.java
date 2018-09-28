@@ -18,7 +18,6 @@ public class RatingWidget extends QuestionWidget {
     public RatingWidget(Context context, FormEntryPrompt prompt) {
 
         super(context, prompt);
-
         LinearLayout linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         linearLayout.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT));
@@ -35,12 +34,19 @@ public class RatingWidget extends QuestionWidget {
         ratingBar.setNumStars(maxStars);
         ratingBar.setId(ViewIds.generateViewId());
         ratingBar.setStepSize((float) 1.0);
-        ratingBar.setRating((float) 0);
+
+        String s = prompt.getAnswerText();
+        if (s != null) {
+            answer = Integer.parseInt(s);
+            ratingBar.setRating((float) answer);
+        } else {
+            ratingBar.setRating((float) 0);
+        }
 
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
-                answer = (int) v;
+               answer = (int) v;
             }
         });
 
@@ -63,6 +69,5 @@ public class RatingWidget extends QuestionWidget {
     public void clearAnswer() {
         answer = 0;
         ratingBar.setRating(0);
-
     }
 }
