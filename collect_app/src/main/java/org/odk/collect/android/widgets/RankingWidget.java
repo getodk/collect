@@ -96,11 +96,11 @@ public class RankingWidget extends QuestionWidget implements BinaryWidget {
     public void onButtonClick(int buttonId) {
         FormController formController = Collect.getInstance().getFormController();
         if (formController != null) {
-            formController.setIndexWaitingForData(formController.getFormIndex());
+            formController.setIndexWaitingForData(getFormEntryPrompt().getIndex());
         }
         RankingWidgetDialog rankingWidgetDialog = RankingWidgetDialog.newInstance(savedItems == null
                 ? getValues(originalItems)
-                : getValues(savedItems));
+                : getValues(savedItems), getFormEntryPrompt().getIndex());
         rankingWidgetDialog.show(((FormEntryActivity) getContext()).getSupportFragmentManager(), "RankingDialog");
     }
 
@@ -170,6 +170,7 @@ public class RankingWidget extends QuestionWidget implements BinaryWidget {
         widgetLayout = new LinearLayout(getContext());
         widgetLayout.setOrientation(LinearLayout.VERTICAL);
         showRankingDialogButton = getSimpleButton(getContext().getString(R.string.rank_items));
+        showRankingDialogButton.setEnabled(!getFormEntryPrompt().isReadOnly());
         widgetLayout.addView(showRankingDialogButton);
         widgetLayout.addView(setUpAnswerTextView());
 
