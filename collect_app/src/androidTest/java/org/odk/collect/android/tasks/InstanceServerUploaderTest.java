@@ -3,6 +3,7 @@ package org.odk.collect.android.tasks;
 import android.net.Uri;
 
 import java.io.File;
+import java.util.Locale;
 
 import org.junit.After;
 import org.junit.Before;
@@ -49,7 +50,7 @@ public class InstanceServerUploaderTest extends MockedServerTest {
         // then
         assertNull(o.authRequestingServer);
         assertEquals(1, o.messagesByInstanceId.size());
-        assertEquals("SUCCESS", o.messagesByInstanceId.get(id.toString()).toUpperCase());
+        assertEquals("SUCCESS", o.messagesByInstanceId.get(id.toString()).toUpperCase(Locale.ENGLISH));
 
         // and
         HEAD: {
