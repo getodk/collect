@@ -894,7 +894,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
         cleanUpWebCredentials();
 
-        if (cancelDialog.isShowing()) {
+        if (cancelDialog != null && cancelDialog.isShowing()) {
             cancelDialog.dismiss();
         }
 

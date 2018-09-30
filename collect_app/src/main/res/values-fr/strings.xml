@@ -117,6 +117,8 @@
   <string name="send_data">Envoyer un formulaire finalisé</string>
   <string name="send_data_button">Envoyer un formulaire finalisé (%s)</string>
   <string name="send_selected_data">Envoyer éléments sélectionnés</string>
+  <string name="send_selected_data_internet">Envoyer (Internet)</string>
+  <string name="send_selected_data_sms">Envoyer (SMS)</string>
   <string name="view_sent_forms">Voir un formulaire envoyé</string>
   <string name="view_sent_forms_button">Voir formulaire envoyé (%s)</string>
   <string name="server_auth_credentials">Le nom d\'utilisateur et/ou le mot de passe est incorrect pour le serveur: %s</string>
@@ -611,13 +613,20 @@
   <string name="sms_invalid_phone_number">Numéro de téléphone invalide!</string>
   <!--Sms submission-->
   <string name="sms_no_message">Ce formulaire n\'a aucune question avec \"tag\" SMS</string>
+  <string name="sms_encrypted_message">Les formulaires encryptés ne peuvent pas êtres envoyés par SMS.</string>
   <string name="sms_submissions_notif_title">Soumissions SMS</string>
+  <string name="sms_submissions_notif_description">Plusieurs formulaires sont en train d\'être envoyés.</string>
   <string name="transport_type_internet">Wifi/cellulaire (recommandé)</string>
   <string name="transport_type_sms">SMS</string>
+  <string name="transport_type_both">Choisir à l\'envoi</string>
   <string name="seconds">Secondes</string>
   <string name="rank_items">Choisir l\'ordre des éléments</string>
   <string name="image_not_saved">L\'image n\'a pas pu être enregistrée à cause
 d\'un problème sur l\'instance du fichier.</string>
+  <string name="missing_google_account_dialog_title">Compte Google non sélectionné</string>
   <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
+  <string name="current_predicate_warning">Cette question ne sera pas compatible avec les versions futures de ODK Collect parce qu\'elle emploi current() dans un filtre de choix.\n\nVeuillez vous assurer que la personne qui a créé ce formulaire lise les details ci-dessous et agisse. </string>
+  <string name="current_predicate_warning_title">Action requise</string>
+  <string name="current_predicate_forum">Lire les details</string>
   <string name="current_predicate_continue">Continuer</string>
 </resources>
