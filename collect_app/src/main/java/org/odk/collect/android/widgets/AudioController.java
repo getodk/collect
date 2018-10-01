@@ -45,9 +45,6 @@ import static android.view.View.GONE;
 
 public class AudioController implements SeekBar.OnSeekBarChangeListener {
 
-    private static final int SEEK_FORWARD_TIME = 5000; // 5 seconds
-    private static final int SEEK_BACKWARD_TIME = 5000; // 5 seconds
-
     @BindView(R.id.currentDuration)
     TextView currentDurationLabel;
     @BindView(R.id.totalDuration)
@@ -103,12 +100,16 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
 
     @OnClick(R.id.fastForwardBtn)
     void fastForwardMedia() {
-        seekTo(mediaPlayer.getCurrentPosition() + SEEK_FORWARD_TIME);
+        seekTo(mediaPlayer.getCurrentPosition() + seekMoveTime());
     }
 
     @OnClick(R.id.fastRewindBtn)
     void rewindMedia() {
-        seekTo(mediaPlayer.getCurrentPosition() - SEEK_BACKWARD_TIME);
+        seekTo(mediaPlayer.getCurrentPosition() - seekMoveTime());
+    }
+
+    private int seekMoveTime() {
+        return mediaPlayer.getDuration() / 5;
     }
 
     /**
