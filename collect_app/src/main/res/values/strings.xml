@@ -640,7 +640,7 @@
     <string name="sms_last_submission_on_date_at_time">\'Last submission attempt at\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
     <plurals name="sms_sending">
         <item quantity="one">Submitting form as a single message.</item>
-        <item quantity="other">Submitting form, sending message %1$d! of %2$d</item>
+        <item quantity="other">Submitting form, sending message %1$d of %2$d</item>
     </plurals>
     <string name="sms_sent_on_date_at_time">\'Sent as SMS on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
     <string name="sms_submission_queued">Queued for submission.</string>
