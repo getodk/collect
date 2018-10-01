@@ -38,6 +38,8 @@ import android.widget.EditText;
 import android.widget.ListPopupWindow;
 
 import com.google.android.gms.analytics.HitBuilders;
+import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
+import com.google.api.services.drive.model.File;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -61,7 +63,15 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
+import io.reactivex.Single;
+import io.reactivex.SingleOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.schedulers.Schedulers;
+import timber.log.Timber;
+
 import static android.app.Activity.RESULT_OK;
+import static org.odk.collect.android.activities.GoogleDriveActivity.AUTHORIZATION_REQUEST_CODE;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FORMLIST_URL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PROTOCOL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT;
@@ -85,6 +95,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     private List<String> urlList;
     private Preference selectedGoogleAccountPreference;
     private GoogleAccountsManager accountsManager;
+    private ListPreference googleSheetsUrlPreference;
 
     @Inject CollectServerClient collectServerClient;
 
@@ -202,21 +213,55 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         addPreferencesFromResource(R.xml.google_preferences);
         selectedGoogleAccountPreference = findPreference(KEY_SELECTED_GOOGLE_ACCOUNT);
 
-        EditTextPreference googleSheetsUrlPreference = (EditTextPreference) findPreference(
+        googleSheetsUrlPreference = (ListPreference) findPreference(
                 PreferenceKeys.KEY_GOOGLE_SHEETS_URL);
         googleSheetsUrlPreference.setOnPreferenceChangeListener(createChangeListener());
 
-        String currentGoogleSheetsURL = googleSheetsUrlPreference.getText();
+        String currentGoogleSheetsURL = googleSheetsUrlPreference.getValue();
         if (currentGoogleSheetsURL != null && currentGoogleSheetsURL.length() > 0) {
             googleSheetsUrlPreference.setSummary(currentGoogleSheetsURL + "\n\n"
                     + getString(R.string.google_sheets_url_hint));
         }
 
-        googleSheetsUrlPreference.getEditText().setFilters(new InputFilter[]{
-                new ControlCharacterFilter(), new WhitespaceFilter()
-        });
         initAccountPreferences();
         setupTransportPreferences();
+    }
+
+    private void getSheetsFromApi() {
+        Single
+                .create((SingleOnSubscribe<List<File>>) emitter -> {
+                    try {
+                        List<File> files = accountsManager.getDriveHelper().getAllSheetsFromDrive();
+                        emitter.onSuccess(files);
+                    } catch (UserRecoverableAuthIOException e) {
+                        startActivityForResult(e.getIntent(), AUTHORIZATION_REQUEST_CODE);
+                        emitter.onError(e);
+                    }
+                })
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(__ -> googleSheetsUrlPreference.setEnabled(false))
+                .subscribe(new DisposableSingleObserver<List<File>>() {
+                    @Override
+                    public void onSuccess(List<File> files) {
+                        String[] names = new String[files.size()];
+                        String[] values = new String[files.size()];
+
+                        for (int i = 0; i < files.size(); i++) {
+                            names[i] = files.get(i).getName();
+                            values[i] = "https://docs.google.com/spreadsheets/d/" + files.get(i).getId();
+                        }
+
+                        googleSheetsUrlPreference.setEntries(names);
+                        googleSheetsUrlPreference.setEntryValues(values);
+                        googleSheetsUrlPreference.setEnabled(true);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Timber.e(e);
+                    }
+                });
     }
 
     public void addOtherPreferences() {
@@ -244,7 +289,15 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         accountsManager.setListener(this);
         accountsManager.disableAutoChooseAccount();
 
-        selectedGoogleAccountPreference.setSummary(accountsManager.getSelectedAccount());
+        String account = accountsManager.getSelectedAccount();
+
+        // use the saved google account to fetch sheets from google drive
+        if (!account.isEmpty()) {
+            accountsManager.setSelectedAccountName(account);
+            getSheetsFromApi();
+        }
+
+        selectedGoogleAccountPreference.setSummary(account);
         selectedGoogleAccountPreference.setOnPreferenceClickListener(preference -> {
             if (PlayServicesUtil.isGooglePlayServicesAvailable(getActivity())) {
                 accountsManager.chooseAccountAndRequestPermissionIfNeeded();
@@ -446,6 +499,12 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                 if (resultCode == RESULT_OK && data != null && data.getExtras() != null) {
                     String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
                     accountsManager.setSelectedAccountName(accountName);
+                    getSheetsFromApi();
+                }
+                break;
+            case AUTHORIZATION_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    getSheetsFromApi();
                 }
                 break;
         }
