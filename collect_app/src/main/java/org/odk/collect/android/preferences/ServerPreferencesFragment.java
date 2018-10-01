@@ -441,13 +441,12 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case REQUEST_ACCOUNT_PICKER:
-                if (resultCode == RESULT_OK && data != null && data.getExtras() != null) {
-                    String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-                    accountsManager.setSelectedAccountName(accountName);
-                }
-                break;
+        if (requestCode == REQUEST_ACCOUNT_PICKER) {
+            if (resultCode == RESULT_OK && data != null && data.getExtras() != null) {
+                String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+                accountsManager.setSelectedAccountName(accountName);
+            }
+
         }
     }
 

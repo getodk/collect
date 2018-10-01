@@ -95,15 +95,14 @@ public class EditFormHierarchyActivity extends FormHierarchyActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        switch (keyCode) {
-            case KeyEvent.KEYCODE_BACK:
-                Collect.getInstance().getActivityLogger().logInstanceAction(this, "onKeyDown",
-                        "KEYCODE_BACK.JUMP", startIndex);
-                FormController fc = Collect.getInstance().getFormController();
-                if (fc != null) {
-                    fc.getTimerLogger().exitView();
-                    fc.jumpToIndex(startIndex);
-                }
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Collect.getInstance().getActivityLogger().logInstanceAction(this, "onKeyDown",
+                    "KEYCODE_BACK.JUMP", startIndex);
+            FormController fc = Collect.getInstance().getFormController();
+            if (fc != null) {
+                fc.getTimerLogger().exitView();
+                fc.jumpToIndex(startIndex);
+            }
         }
         return super.onKeyDown(keyCode, event);
     }

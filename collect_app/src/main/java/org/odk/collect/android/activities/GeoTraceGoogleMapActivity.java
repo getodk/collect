@@ -529,26 +529,20 @@ public class GeoTraceGoogleMapActivity extends CollectAbstractActivity implement
     }
 
     public void setGeoTraceMode(View view) {
-        boolean checked = ((RadioButton) view).isChecked();
-        switch (view.getId()) {
-            case R.id.trace_manual:
-                if (checked) {
-                    traceMode = 0;
-                    timeUnits.setVisibility(View.GONE);
-                    timeDelay.setVisibility(View.GONE);
-                    timeDelay.invalidate();
-                    timeUnits.invalidate();
-                }
-                break;
-            case R.id.trace_automatic:
-                if (checked) {
-                    traceMode = 1;
-                    timeUnits.setVisibility(View.VISIBLE);
-                    timeDelay.setVisibility(View.VISIBLE);
-                    timeDelay.invalidate();
-                    timeUnits.invalidate();
-                }
-                break;
+        if (((RadioButton) view).isChecked()) {
+            if (view.getId() == R.id.trace_manual) {
+                traceMode = 0;
+                timeUnits.setVisibility(View.GONE);
+                timeDelay.setVisibility(View.GONE);
+                timeDelay.invalidate();
+                timeUnits.invalidate();
+            } else if (view.getId() == R.id.trace_automatic) {
+                traceMode = 1;
+                timeUnits.setVisibility(View.VISIBLE);
+                timeDelay.setVisibility(View.VISIBLE);
+                timeDelay.invalidate();
+                timeUnits.invalidate();
+            }
         }
     }
 

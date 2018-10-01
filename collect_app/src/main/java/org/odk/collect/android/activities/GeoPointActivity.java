@@ -207,18 +207,16 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case DialogInterface.BUTTON_POSITIVE:
-                                Collect.getInstance().getActivityLogger().logInstanceAction(this,
-                                        "acceptLocation", "OK");
-                                returnLocation();
-                                break;
-                            case DialogInterface.BUTTON_NEGATIVE:
-                                Collect.getInstance().getActivityLogger().logInstanceAction(this,
-                                        "cancelLocation", "cancel");
-                                location = null;
-                                finish();
-                                break;
+                        if (which == DialogInterface.BUTTON_POSITIVE) {
+                            Collect.getInstance().getActivityLogger().logInstanceAction(this,
+                                    "acceptLocation", "OK");
+                            returnLocation();
+
+                        } else if (which == DialogInterface.BUTTON_NEGATIVE) {
+                            Collect.getInstance().getActivityLogger().logInstanceAction(this,
+                                    "cancelLocation", "cancel");
+                            location = null;
+                            finish();
                         }
                     }
                 };

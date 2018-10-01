@@ -483,16 +483,14 @@ public class MainMenuActivity extends CollectAbstractActivity {
         DialogInterface.OnClickListener errorListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int i) {
-                switch (i) {
-                    case DialogInterface.BUTTON_POSITIVE:
-                        Collect.getInstance()
-                                .getActivityLogger()
-                                .logAction(this, "createErrorDialog",
-                                        shouldExit ? "exitApplication" : "OK");
-                        if (shouldExit) {
-                            finish();
-                        }
-                        break;
+                if (i == DialogInterface.BUTTON_POSITIVE) {
+                    Collect.getInstance()
+                            .getActivityLogger()
+                            .logAction(this, "createErrorDialog",
+                                    shouldExit ? "exitApplication" : "OK");
+                    if (shouldExit) {
+                        finish();
+                    }
                 }
             }
         };
@@ -503,68 +501,65 @@ public class MainMenuActivity extends CollectAbstractActivity {
 
     @Override
     protected Dialog onCreateDialog(int id) {
-        switch (id) {
-            case PASSWORD_DIALOG:
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                final AlertDialog passwordDialog = builder.create();
-                passwordDialog.setTitle(getString(R.string.enter_admin_password));
-                LayoutInflater inflater = this.getLayoutInflater();
-                View dialogView = inflater.inflate(R.layout.dialogbox_layout, null);
-                passwordDialog.setView(dialogView, 20, 10, 20, 10);
-                final CheckBox checkBox = dialogView.findViewById(R.id.checkBox);
-                final EditText input = dialogView.findViewById(R.id.editText);
-                checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                        if (!checkBox.isChecked()) {
-                            input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                        } else {
-                            input.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                        }
+        if (id == PASSWORD_DIALOG) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            final AlertDialog passwordDialog = builder.create();
+            passwordDialog.setTitle(getString(R.string.enter_admin_password));
+            LayoutInflater inflater = this.getLayoutInflater();
+            View dialogView = inflater.inflate(R.layout.dialogbox_layout, null);
+            passwordDialog.setView(dialogView, 20, 10, 20, 10);
+            final CheckBox checkBox = dialogView.findViewById(R.id.checkBox);
+            final EditText input = dialogView.findViewById(R.id.editText);
+            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    if (!checkBox.isChecked()) {
+                        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    } else {
+                        input.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
                     }
-                });
-                passwordDialog.setButton(AlertDialog.BUTTON_POSITIVE,
-                        getString(R.string.ok),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,
-                                                int whichButton) {
-                                String value = input.getText().toString();
-                                String pw = adminPreferences.getString(
-                                        AdminKeys.KEY_ADMIN_PW, "");
-                                if (pw.compareTo(value) == 0) {
-                                    Intent i = new Intent(getApplicationContext(),
-                                            AdminPreferencesActivity.class);
-                                    startActivity(i);
-                                    input.setText("");
-                                    passwordDialog.dismiss();
-                                } else {
-                                    ToastUtils.showShortToast(R.string.admin_password_incorrect);
-                                    Collect.getInstance()
-                                            .getActivityLogger()
-                                            .logAction(this, "adminPasswordDialog",
-                                                    "PASSWORD_INCORRECT");
-                                }
-                            }
-                        });
-
-                passwordDialog.setButton(AlertDialog.BUTTON_NEGATIVE,
-                        getString(R.string.cancel),
-                        new DialogInterface.OnClickListener() {
-
-                            public void onClick(DialogInterface dialog, int which) {
+                }
+            });
+            passwordDialog.setButton(AlertDialog.BUTTON_POSITIVE,
+                    getString(R.string.ok),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog,
+                                            int whichButton) {
+                            String value = input.getText().toString();
+                            String pw = adminPreferences.getString(
+                                    AdminKeys.KEY_ADMIN_PW, "");
+                            if (pw.compareTo(value) == 0) {
+                                Intent i = new Intent(getApplicationContext(),
+                                        AdminPreferencesActivity.class);
+                                startActivity(i);
+                                input.setText("");
+                                passwordDialog.dismiss();
+                            } else {
+                                ToastUtils.showShortToast(R.string.admin_password_incorrect);
                                 Collect.getInstance()
                                         .getActivityLogger()
                                         .logAction(this, "adminPasswordDialog",
-                                                "cancel");
-                                input.setText("");
+                                                "PASSWORD_INCORRECT");
                             }
-                        });
+                        }
+                    });
 
-                passwordDialog.getWindow().setSoftInputMode(
-                        WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-                return passwordDialog;
+            passwordDialog.setButton(AlertDialog.BUTTON_NEGATIVE,
+                    getString(R.string.cancel),
+                    new DialogInterface.OnClickListener() {
 
+                        public void onClick(DialogInterface dialog, int which) {
+                            Collect.getInstance()
+                                    .getActivityLogger()
+                                    .logAction(this, "adminPasswordDialog",
+                                            "cancel");
+                            input.setText("");
+                        }
+                    });
+
+            passwordDialog.getWindow().setSoftInputMode(
+                    WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+            return passwordDialog;
         }
         return null;
     }

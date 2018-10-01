@@ -231,22 +231,19 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
 
     @Override
     public void onButtonClick(int buttonId) {
-        switch (buttonId) {
-            case R.id.capture_audio:
-                requestRecordAudioPermission((FormEntryActivity) getContext(), new PermissionListener() {
-                    @Override
-                    public void granted() {
-                        captureAudio();
-                    }
+        if (buttonId == R.id.capture_audio) {
+            requestRecordAudioPermission((FormEntryActivity) getContext(), new PermissionListener() {
+                @Override
+                public void granted() {
+                    captureAudio();
+                }
 
-                    @Override
-                    public void denied() {
-                    }
-                });
-                break;
-            case R.id.choose_sound:
-                chooseSound();
-                break;
+                @Override
+                public void denied() {
+                }
+            });
+        } else if (buttonId == R.id.choose_sound) {
+            chooseSound();
         }
     }
 

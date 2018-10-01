@@ -89,13 +89,11 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         boolean success = true;
-        switch (newVersion) {
-            case 4:
-                success = downgrade(db, instancesTableColumnsInVersion4);
-                break;
+        if (newVersion == 4) {
+            success = downgrade(db, instancesTableColumnsInVersion4);
 
-            default:
-                Timber.i("Unknown version " + newVersion);
+        } else {
+            Timber.i("Unknown version " + newVersion);
         }
 
         if (success) {

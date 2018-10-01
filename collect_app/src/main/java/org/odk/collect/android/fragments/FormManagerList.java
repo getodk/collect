@@ -135,17 +135,16 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int i) {
-                        switch (i) {
-                            case DialogInterface.BUTTON_POSITIVE: // delete
-                                logger.logAction(this, "createDeleteFormsDialog", "delete");
-                                deleteSelectedForms();
-                                if (getListView().getCount() == getCheckedCount()) {
-                                    toggleButton.setEnabled(false);
-                                }
-                                break;
-                            case DialogInterface.BUTTON_NEGATIVE: // do nothing
-                                logger.logAction(this, "createDeleteFormsDialog", "cancel");
-                                break;
+                        if (i == DialogInterface.BUTTON_POSITIVE) {
+                            logger.logAction(this, "createDeleteFormsDialog", "delete");
+                            deleteSelectedForms();
+                            if (getListView().getCount() == getCheckedCount()) {
+                                toggleButton.setEnabled(false);
+                            }
+
+                        } else if (i == DialogInterface.BUTTON_NEGATIVE) {
+                            logger.logAction(this, "createDeleteFormsDialog", "cancel");
+
                         }
                     }
                 };
@@ -211,30 +210,26 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.delete_button:
-                logger.logAction(this, "deleteButton", Integer.toString(getCheckedCount()));
+        if (v.getId() == R.id.delete_button) {
+            logger.logAction(this, "deleteButton", Integer.toString(getCheckedCount()));
 
-                if (areCheckedItems()) {
-                    createDeleteFormsDialog();
-                } else {
-                    ToastUtils.showShortToast(R.string.noselect_error);
+            if (areCheckedItems()) {
+                createDeleteFormsDialog();
+            } else {
+                ToastUtils.showShortToast(R.string.noselect_error);
+            }
+        } else if (v.getId() == R.id.toggle_button) {
+            ListView lv = getListView();
+            boolean allChecked = toggleChecked(lv);
+            if (allChecked) {
+                for (int i = 0; i < lv.getCount(); i++) {
+                    selectedInstances.add(lv.getItemIdAtPosition(i));
                 }
-                break;
-
-            case R.id.toggle_button:
-                ListView lv = getListView();
-                boolean allChecked = toggleChecked(lv);
-                if (allChecked) {
-                    for (int i = 0; i < lv.getCount(); i++) {
-                        selectedInstances.add(lv.getItemIdAtPosition(i));
-                    }
-                } else {
-                    selectedInstances.clear();
-                }
-                toggleButtonLabel(toggleButton, getListView());
-                deleteButton.setEnabled(allChecked);
-                break;
+            } else {
+                selectedInstances.clear();
+            }
+            toggleButtonLabel(toggleButton, getListView());
+            deleteButton.setEnabled(allChecked);
         }
     }
 

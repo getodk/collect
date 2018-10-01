@@ -23,7 +23,6 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
-import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
@@ -188,26 +187,19 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonWidget
             }
         }
 
-        seekBar.setOnTouchListener(new SeekBar.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                seekBar.getThumb().mutate().setAlpha(255);
-                int action = event.getAction();
-                switch (action) {
-                    case MotionEvent.ACTION_DOWN:
-                        v.getParent().requestDisallowInterceptTouchEvent(true);
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        v.getParent().requestDisallowInterceptTouchEvent(false);
-                        if (actualValue == null) {
-                            actualValue = rangeStart;
-                            setUpActualValueLabel();
-                        }
-                        break;
+        seekBar.setOnTouchListener((v, event) -> {
+            seekBar.getThumb().mutate().setAlpha(255);
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                v.getParent().requestDisallowInterceptTouchEvent(true);
+            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                v.getParent().requestDisallowInterceptTouchEvent(false);
+                if (actualValue == null) {
+                    actualValue = rangeStart;
+                    setUpActualValueLabel();
                 }
-                v.onTouchEvent(event);
-                return true;
             }
+            v.onTouchEvent(event);
+            return true;
         });
     }
 

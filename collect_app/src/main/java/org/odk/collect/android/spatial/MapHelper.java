@@ -49,6 +49,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
 
+import timber.log.Timber;
+
 public class MapHelper {
     private static final String OFFLINE_LAYER_TAG = " (custom, offline)";
 
@@ -235,63 +237,59 @@ public class MapHelper {
     }
 
     private void setOfflineBasemap(int item) {
-        switch (item) {
-            case 0:
-                if (googleMap != null) {
-                    if (googleTileOverlay != null) {
-                        googleTileOverlay.remove();
-                    }
-
-                } else {
-                    //OSM
-                    if (osmTileOverlay != null) {
-                        osmMap.getOverlays().remove(osmTileOverlay);
-                        osmMap.invalidate();
-                    }
+        if (item == 0) {
+            if (googleMap != null) {
+                if (googleTileOverlay != null) {
+                    googleTileOverlay.remove();
                 }
-                selectedLayer = item;
-                break;
-            default:
-                File[] spFiles = getFileFromSelectedItem(item);
-                if (spFiles == null || spFiles.length == 0) {
-                    break;
-                } else {
-                    File spfile = spFiles[0];
 
-                    if (isFileFormatSupported(spfile)) {
-                        if (googleMap != null) {
-                            try {
-                                //googleMap.clear();
-                                if (googleTileOverlay != null) {
-                                    googleTileOverlay.remove();
-                                }
-                                TileOverlayOptions opts = new TileOverlayOptions();
-                                GoogleMapsMapBoxOfflineTileProvider provider =
-                                        new GoogleMapsMapBoxOfflineTileProvider(spfile);
-                                opts.tileProvider(provider);
-                                googleTileOverlay = googleMap.addTileOverlay(opts);
-                            } catch (Exception e) {
-                                break;
+            } else {
+                //OSM
+                if (osmTileOverlay != null) {
+                    osmMap.getOverlays().remove(osmTileOverlay);
+                    osmMap.invalidate();
+                }
+            }
+            selectedLayer = item;
+
+        } else {
+            File[] spFiles = getFileFromSelectedItem(item);
+            if (spFiles != null && spFiles.length > 0) {
+                File spfile = spFiles[0];
+
+                if (isFileFormatSupported(spfile)) {
+                    if (googleMap != null) {
+                        try {
+                            //googleMap.clear();
+                            if (googleTileOverlay != null) {
+                                googleTileOverlay.remove();
                             }
-                        } else {
-                            if (osmTileOverlay != null) {
-                                osmMap.getOverlays().remove(osmTileOverlay);
-                                osmMap.invalidate();
-                            }
-                            osmMap.invalidate();
-                            OsmMBTileProvider mbprovider = new OsmMBTileProvider(
-                                    iregisterReceiver, spfile);
-                            osmTileOverlay = new TilesOverlay(mbprovider, context);
-                            osmTileOverlay.setLoadingBackgroundColor(Color.TRANSPARENT);
-                            osmMap.getOverlays().add(0, osmTileOverlay);
+                            TileOverlayOptions opts = new TileOverlayOptions();
+                            GoogleMapsMapBoxOfflineTileProvider provider =
+                                    new GoogleMapsMapBoxOfflineTileProvider(spfile);
+                            opts.tileProvider(provider);
+                            googleTileOverlay = googleMap.addTileOverlay(opts);
+                        } catch (Exception e) {
+                            Timber.e(e);
+                        }
+                    } else {
+                        if (osmTileOverlay != null) {
+                            osmMap.getOverlays().remove(osmTileOverlay);
                             osmMap.invalidate();
                         }
-                        selectedLayer = item;
-                    } else {
-                        ToastUtils.showLongToast(R.string.not_supported_offline_layer_format);
+                        osmMap.invalidate();
+                        OsmMBTileProvider mbprovider = new OsmMBTileProvider(
+                                iregisterReceiver, spfile);
+                        osmTileOverlay = new TilesOverlay(mbprovider, context);
+                        osmTileOverlay.setLoadingBackgroundColor(Color.TRANSPARENT);
+                        osmMap.getOverlays().add(0, osmTileOverlay);
+                        osmMap.invalidate();
                     }
+                    selectedLayer = item;
+                } else {
+                    ToastUtils.showLongToast(R.string.not_supported_offline_layer_format);
                 }
-                break;
+            }
         }
     }
 

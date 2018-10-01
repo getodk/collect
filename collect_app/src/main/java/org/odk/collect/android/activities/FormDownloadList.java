@@ -810,18 +810,16 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int i) {
-                switch (i) {
-                    case DialogInterface.BUTTON_POSITIVE: // ok
-                        Collect.getInstance().getActivityLogger().logAction(this,
-                                "createAlertDialog", "OK");
-                        // just close the dialog
-                        alertShowing = false;
-                        // successful download, so quit
-                        // Also quit if in download_mode only(called by another app/activity just to download)
-                        if (shouldExit || isDownloadOnlyMode) {
-                            finish();
-                        }
-                        break;
+                if (i == DialogInterface.BUTTON_POSITIVE) {
+                    Collect.getInstance().getActivityLogger().logAction(this,
+                            "createAlertDialog", "OK");
+                    // just close the dialog
+                    alertShowing = false;
+                    // successful download, so quit
+                    // Also quit if in download_mode only(called by another app/activity just to download)
+                    if (shouldExit || isDownloadOnlyMode) {
+                        finish();
+                    }
                 }
             }
         };

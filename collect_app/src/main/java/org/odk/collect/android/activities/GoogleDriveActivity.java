@@ -335,39 +335,38 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
 
     @Override
     protected Dialog onCreateDialog(int id) {
-        switch (id) {
-            case PROGRESS_DIALOG:
-                Collect.getInstance().getActivityLogger()
-                        .logAction(this, "onCreateDialog.PROGRESS_DIALOG", "show");
+        if (id == PROGRESS_DIALOG) {
+            Collect.getInstance().getActivityLogger()
+                    .logAction(this, "onCreateDialog.PROGRESS_DIALOG", "show");
 
-                ProgressDialog progressDialog = new ProgressDialog(this);
-                DialogInterface.OnClickListener loadingButtonListener =
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Collect.getInstance().getActivityLogger()
-                                        .logAction(this, "onCreateDialog.PROGRESS_DIALOG",
-                                                "cancel");
-                                dialog.dismiss();
-                                getFileTask.cancel(true);
-                                getFileTask.setGoogleDriveFormDownloadListener(null);
-                            }
-                        };
-                progressDialog.setTitle(getString(R.string.downloading_data));
-                progressDialog.setMessage(alertMsg);
-                progressDialog.setIndeterminate(true);
-                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                progressDialog.setCancelable(false);
-                progressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
-                return progressDialog;
-            case GOOGLE_USER_DIALOG:
-                AlertDialog.Builder gudBuilder = new AlertDialog.Builder(this);
+            ProgressDialog progressDialog = new ProgressDialog(this);
+            DialogInterface.OnClickListener loadingButtonListener =
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Collect.getInstance().getActivityLogger()
+                                    .logAction(this, "onCreateDialog.PROGRESS_DIALOG",
+                                            "cancel");
+                            dialog.dismiss();
+                            getFileTask.cancel(true);
+                            getFileTask.setGoogleDriveFormDownloadListener(null);
+                        }
+                    };
+            progressDialog.setTitle(getString(R.string.downloading_data));
+            progressDialog.setMessage(alertMsg);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setCancelable(false);
+            progressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
+            return progressDialog;
+        } else if (id == GOOGLE_USER_DIALOG) {
+            AlertDialog.Builder gudBuilder = new AlertDialog.Builder(this);
 
-                gudBuilder.setTitle(getString(R.string.no_google_account));
-                gudBuilder.setMessage(getString(R.string.google_set_account));
-                gudBuilder.setPositiveButton(R.string.ok, (dialog, which) -> finish());
-                gudBuilder.setCancelable(false);
-                return gudBuilder.create();
+            gudBuilder.setTitle(getString(R.string.no_google_account));
+            gudBuilder.setMessage(getString(R.string.google_set_account));
+            gudBuilder.setPositiveButton(R.string.ok, (dialog, which) -> finish());
+            gudBuilder.setCancelable(false);
+            return gudBuilder.create();
         }
         return null;
     }
@@ -381,13 +380,11 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
         DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int i) {
-                switch (i) {
-                    case DialogInterface.BUTTON1: // ok
-                        Collect.getInstance().getActivityLogger()
-                                .logAction(this, "createAlertDialog", "OK");
-                        alertShowing = false;
-                        finish();
-                        break;
+                if (i == DialogInterface.BUTTON1) {
+                    Collect.getInstance().getActivityLogger()
+                            .logAction(this, "createAlertDialog", "OK");
+                    alertShowing = false;
+                    finish();
                 }
             }
         };
@@ -402,18 +399,15 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     @Override
     protected void onActivityResult(final int requestCode, final int resultCode,
                                     final Intent data) {
-        switch (requestCode) {
-            case REQUEST_ACCOUNT_PICKER:
-                if (resultCode == RESULT_OK && data != null && data.getExtras() != null) {
-                    String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-                    accountsManager.setSelectedAccountName(accountName);
-                }
-                break;
-            case AUTHORIZATION_REQUEST_CODE:
-                if (resultCode == Activity.RESULT_OK) {
-                    getResultsFromApi();
-                }
-                break;
+        if (requestCode == REQUEST_ACCOUNT_PICKER) {
+            if (resultCode == RESULT_OK && data != null && data.getExtras() != null) {
+                String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+                accountsManager.setSelectedAccountName(accountName);
+            }
+        } else if (requestCode == AUTHORIZATION_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                getResultsFromApi();
+            }
         }
         if (resultCode == RESULT_CANCELED) {
             Timber.d("AUTHORIZE_DRIVE_ACCESS failed, asking to choose new account:");

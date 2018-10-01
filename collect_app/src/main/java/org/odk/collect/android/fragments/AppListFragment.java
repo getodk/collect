@@ -144,10 +144,9 @@ abstract class AppListFragment extends ListFragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_sort:
-                bottomSheetDialog.show();
-                return true;
+        if (item.getItemId() == R.id.menu_sort) {
+            bottomSheetDialog.show();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

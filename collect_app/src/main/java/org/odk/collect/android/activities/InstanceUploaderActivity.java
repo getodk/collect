@@ -293,44 +293,43 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
 
     @Override
     protected Dialog onCreateDialog(int id) {
-        switch (id) {
-            case PROGRESS_DIALOG:
-                Collect.getInstance().getActivityLogger().logAction(this,
-                        "onCreateDialog.PROGRESS_DIALOG", "show");
+        if (id == PROGRESS_DIALOG) {
+            Collect.getInstance().getActivityLogger().logAction(this,
+                    "onCreateDialog.PROGRESS_DIALOG", "show");
 
-                progressDialog = new ProgressDialog(this);
-                DialogInterface.OnClickListener loadingButtonListener =
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Collect.getInstance().getActivityLogger().logAction(this,
-                                        "onCreateDialog.PROGRESS_DIALOG", "cancel");
-                                dialog.dismiss();
-                                instanceServerUploader.cancel(true);
-                                instanceServerUploader.setUploaderListener(null);
-                                finish();
-                            }
-                        };
-                progressDialog.setTitle(getString(R.string.uploading_data));
-                progressDialog.setMessage(alertMsg);
-                progressDialog.setIndeterminate(true);
-                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                progressDialog.setCancelable(false);
-                progressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
-                return progressDialog;
-            case AUTH_DIALOG:
-                Timber.i("onCreateDialog(AUTH_DIALOG): for upload of %d instances!",
-                        instancesToSend.length);
-                Collect.getInstance().getActivityLogger().logAction(this,
-                        "onCreateDialog.AUTH_DIALOG", "show");
+            progressDialog = new ProgressDialog(this);
+            DialogInterface.OnClickListener loadingButtonListener =
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Collect.getInstance().getActivityLogger().logAction(this,
+                                    "onCreateDialog.PROGRESS_DIALOG", "cancel");
+                            dialog.dismiss();
+                            instanceServerUploader.cancel(true);
+                            instanceServerUploader.setUploaderListener(null);
+                            finish();
+                        }
+                    };
+            progressDialog.setTitle(getString(R.string.uploading_data));
+            progressDialog.setMessage(alertMsg);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setCancelable(false);
+            progressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
+            return progressDialog;
+        } else if (id == AUTH_DIALOG) {
+            Timber.i("onCreateDialog(AUTH_DIALOG): for upload of %d instances!",
+                    instancesToSend.length);
+            Collect.getInstance().getActivityLogger().logAction(this,
+                    "onCreateDialog.AUTH_DIALOG", "show");
 
-                AuthDialogUtility authDialogUtility = new AuthDialogUtility();
-                if (username != null && password != null && url != null) {
-                    authDialogUtility.setCustomUsername(username);
-                    authDialogUtility.setCustomPassword(password);
-                }
+            AuthDialogUtility authDialogUtility = new AuthDialogUtility();
+            if (username != null && password != null && url != null) {
+                authDialogUtility.setCustomUsername(username);
+                authDialogUtility.setCustomPassword(password);
+            }
 
-                return authDialogUtility.createDialog(this, this, this.url);
+            return authDialogUtility.createDialog(this, this, this.url);
         }
 
         return null;
