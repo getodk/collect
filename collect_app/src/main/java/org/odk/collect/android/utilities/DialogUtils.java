@@ -105,8 +105,8 @@ public final class DialogUtils {
     /**
      * Creates an error dialog on an activity
      *
-     * @param errorMsg
-     * @param shouldExit
+     * @param errorMsg The message to show on the dialog box
+     * @param shouldExit Finish the activity if Ok is clicked
      */
     public static void createErrorDialog(@NonNull Activity activity, String errorMsg, final boolean shouldExit) {
         Collect.getInstance().getActivityLogger().logAction(activity, "createErrorDialog", "show");
