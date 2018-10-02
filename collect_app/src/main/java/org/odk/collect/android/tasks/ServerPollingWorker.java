@@ -22,8 +22,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 
@@ -46,7 +44,6 @@ import java.util.concurrent.TimeUnit;
 
 import androidx.work.Constraints;
 import androidx.work.NetworkType;
-import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 import androidx.work.Worker;
@@ -67,68 +64,60 @@ public class ServerPollingWorker extends Worker {
     private static final long SIX_HOURS_PERIOD = 21600000;
     private static final long ONE_DAY_PERIOD = 86400000;
     private static final long FLEX_INTERVAL = 30000;
-
-    private static final String POLL_SERVER_IMMEDIATELY_AFTER_RECEIVING_NETWORK = "pollServerImmediatelyAfterReceivingNetwork";
     private static final String TAG = "serverPollingJob";
 
     @NonNull
     @Override
     public Result doWork() {
-        if (!isDeviceOnline()) {
-            pollServerIfNeeded();
-            return Result.FAILURE;
-        } else {
-            DownloadFormListUtils downloadFormListTask = new DownloadFormListUtils();
-            GeneralSharedPreferences.getInstance().reset(POLL_SERVER_IMMEDIATELY_AFTER_RECEIVING_NETWORK);
-            HashMap<String, FormDetails> formList = downloadFormListTask.downloadFormList(true);
 
-            if (formList != null && !formList.containsKey(DL_ERROR_MSG)) {
-                if (formList.containsKey(DL_AUTH_REQUIRED)) {
-                    formList = downloadFormListTask.downloadFormList(true);
+        DownloadFormListUtils downloadFormListTask = new DownloadFormListUtils();
+        HashMap<String, FormDetails> formList = downloadFormListTask.downloadFormList(true);
 
-                    if (formList == null || formList.containsKey(DL_AUTH_REQUIRED) || formList.containsKey(DL_ERROR_MSG)) {
-                        return Result.FAILURE;
-                    }
+        if (formList != null && !formList.containsKey(DL_ERROR_MSG)) {
+            if (formList.containsKey(DL_AUTH_REQUIRED)) {
+                formList = downloadFormListTask.downloadFormList(true);
+
+                if (formList == null || formList.containsKey(DL_AUTH_REQUIRED) || formList.containsKey(DL_ERROR_MSG)) {
+                    return Result.FAILURE;
                 }
-
-                List<FormDetails> newDetectedForms = new ArrayList<>();
-                for (FormDetails formDetails : formList.values()) {
-                    if (formDetails.isNewerFormVersionAvailable() || formDetails.areNewerMediaFilesAvailable()) {
-                        newDetectedForms.add(formDetails);
-                    }
-                }
-
-                if (!newDetectedForms.isEmpty()) {
-                    if (GeneralSharedPreferences.getInstance().getBoolean(KEY_AUTOMATIC_UPDATE, false)) {
-                        final HashMap<FormDetails, String> result = new FormDownloader().downloadForms(newDetectedForms);
-                        informAboutNewDownloadedForms(Collect.getInstance().getString(R.string.download_forms_result), result);
-                    } else {
-                        for (FormDetails formDetails : newDetectedForms) {
-                            String manifestFileHash = formDetails.getManifestFileHash() != null ? formDetails.getManifestFileHash() : "";
-                            String formVersionHash = FormDownloader.getMd5Hash(formDetails.getHash()) + manifestFileHash;
-                            if (!wasThisNewerFormVersionAlreadyDetected(formVersionHash)) {
-                                updateLastDetectedFormVersionHash(formDetails.getFormID(), formVersionHash);
-                            } else {
-                                newDetectedForms.remove(formDetails);
-                            }
-                        }
-
-                        if (!newDetectedForms.isEmpty()) {
-                            informAboutNewAvailableForms();
-                        }
-                    }
-                }
-                return Result.SUCCESS;
-            } else {
-                return Result.FAILURE;
             }
+
+            List<FormDetails> newDetectedForms = new ArrayList<>();
+            for (FormDetails formDetails : formList.values()) {
+                if (formDetails.isNewerFormVersionAvailable() || formDetails.areNewerMediaFilesAvailable()) {
+                    newDetectedForms.add(formDetails);
+                }
+            }
+
+            if (!newDetectedForms.isEmpty()) {
+                if (GeneralSharedPreferences.getInstance().getBoolean(KEY_AUTOMATIC_UPDATE, false)) {
+                    final HashMap<FormDetails, String> result = new FormDownloader().downloadForms(newDetectedForms);
+                    informAboutNewDownloadedForms(Collect.getInstance().getString(R.string.download_forms_result), result);
+                } else {
+                    for (FormDetails formDetails : newDetectedForms) {
+                        String manifestFileHash = formDetails.getManifestFileHash() != null ? formDetails.getManifestFileHash() : "";
+                        String formVersionHash = FormDownloader.getMd5Hash(formDetails.getHash()) + manifestFileHash;
+                        if (!wasThisNewerFormVersionAlreadyDetected(formVersionHash)) {
+                            updateLastDetectedFormVersionHash(formDetails.getFormID(), formVersionHash);
+                        } else {
+                            newDetectedForms.remove(formDetails);
+                        }
+                    }
+
+                    if (!newDetectedForms.isEmpty()) {
+                        informAboutNewAvailableForms();
+                    }
+                }
+            }
+            return Result.SUCCESS;
+        } else {
+            return Result.FAILURE;
         }
     }
 
     public static void schedulePeriodicJob(String selectedOption) {
         if (selectedOption.equals(Collect.getInstance().getString(R.string.never_value))) {
             WorkManager.getInstance().cancelAllWorkByTag(TAG);
-            GeneralSharedPreferences.getInstance().reset(POLL_SERVER_IMMEDIATELY_AFTER_RECEIVING_NETWORK);
         } else {
             long period = FIFTEEN_MINUTES_PERIOD;
             if (selectedOption.equals(Collect.getInstance().getString(R.string.every_one_hour_value))) {
@@ -139,9 +128,14 @@ public class ServerPollingWorker extends Worker {
                 period = ONE_DAY_PERIOD;
             }
 
+            Constraints constraints = new Constraints.Builder()
+                    .setRequiredNetworkType(NetworkType.CONNECTED)
+                    .build();
+
             PeriodicWorkRequest serverPollingWork =
                     new PeriodicWorkRequest.Builder(ServerPollingWorker.class, period, TimeUnit.MILLISECONDS, FLEX_INTERVAL, TimeUnit.MILLISECONDS)
                             .addTag(TAG)
+                            .setConstraints(constraints)
                             .build();
 
             WorkManager.getInstance().enqueue(serverPollingWork);
@@ -193,27 +187,6 @@ public class ServerPollingWorker extends Worker {
         ContentValues values = new ContentValues();
         values.put(LAST_DETECTED_FORM_VERSION_HASH, formVersionHash);
         new FormsDao().updateForm(values, JR_FORM_ID + "=?", new String[]{formId});
-    }
-
-    private boolean isDeviceOnline() {
-        ConnectivityManager connMgr =
-                (ConnectivityManager) Collect.getInstance().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        return networkInfo != null && networkInfo.isConnected();
-    }
-
-    public static void pollServerIfNeeded() {
-        Constraints constraints = new Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.CONNECTED)
-                .build();
-
-        OneTimeWorkRequest serverPollingWork =
-                new OneTimeWorkRequest.Builder(ServerPollingWorker.class)
-                        .setConstraints(constraints)
-                        .addTag(TAG)
-                        .build();
-
-        WorkManager.getInstance().enqueue(serverPollingWork);
     }
 
     private String getContentText(HashMap<FormDetails, String> result) {
