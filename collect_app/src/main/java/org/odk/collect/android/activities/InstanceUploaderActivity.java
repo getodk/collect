@@ -77,7 +77,6 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
     private String username;
     private String password;
     private Boolean deleteInstanceAfterUpload;
-    private boolean waitingForPermissions = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
