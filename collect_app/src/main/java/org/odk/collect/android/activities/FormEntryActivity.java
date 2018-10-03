@@ -62,6 +62,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import org.apache.commons.io.IOUtils;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
@@ -127,6 +128,10 @@ import org.odk.collect.android.widgets.RangeWidget;
 import org.odk.collect.android.widgets.StringWidget;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -802,8 +807,37 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                 break;
             case RequestCodes.AUDIO_CAPTURE:
-            case RequestCodes.VIDEO_CAPTURE:
+                /*
+                  Probably this approach should be used in all cases to get a file from an uri.
+                  The approach which was used before and which is still used in other places
+                  might be faulty because sometimes _data column might be not provided in an uri.
+                  e.g. https://github.com/opendatakit/collect/issues/705
+                  Let's test it here and then we can use the same code in other places if it works well.
+                 */
                 Uri mediaUri = intent.getData();
+                if (mediaUri != null) {
+                    String filePath =
+                            formController.getInstanceFile().getParent()
+                                    + File.separator
+                                    + System.currentTimeMillis()
+                                    + "."
+                                    + ContentResolverHelper.getFileExtensionFromUri(mediaUri);
+                    try {
+                        InputStream inputStream = getContentResolver().openInputStream(mediaUri);
+                        if (inputStream != null) {
+                            OutputStream outputStream = new FileOutputStream(new File(filePath));
+                            IOUtils.copy(inputStream, outputStream);
+                            inputStream.close();
+                            outputStream.close();
+                            saveFileAnswer(new File(filePath));
+                        }
+                    } catch (IOException e) {
+                        Timber.e(e);
+                    }
+                }
+                break;
+            case RequestCodes.VIDEO_CAPTURE:
+                mediaUri = intent.getData();
                 saveFileAnswer(mediaUri);
                 String filePath = MediaUtils.getDataColumn(this, mediaUri, null, null);
                 if (filePath != null) {
@@ -939,7 +973,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         return questionWidget;
     }
 
-    private void saveFileAnswer(Uri media) {
+    private void saveFileAnswer(Object media) {
         // For audio/video capture/chooser, we get the URI from the content
         // provider
         // then the widget copies the file and makes a new entry in the
