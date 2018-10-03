@@ -65,11 +65,11 @@ When you first run Collect, it is set to download forms from [https://opendataki
 
 ## Using APIs for local development
 
-To run functionality that makes API calls from your debug-signed builds, you may need to get an API key or otherwise authorize your app.
+To run functionality that makes API calls from your debug-signed builds, you may need to get an API key or otherwise authorize your app. The API keys included in the source code are the ones used for releases and they only work with release builds signed with the release keys.
 
 **Google Drive and Sheets APIs** - Follow the instructions in the "Generate the signing certificate fingerprint and register your application" section from [here](https://developers.google.com/drive/android/auth). Enable the Google Drive API [here](https://console.developers.google.com/apis/api/drive/). Enable the Google Sheets API [here](https://console.developers.google.com/apis/api/sheets.googleapis.com).
 
-**Google Maps API** - Follow the instructions [here](https://developers.google.com/maps/documentation/android-api/signup) and paste your key in the `AndroidManifest` as the value for `com.google.android.geo.API_KEY`. Please be sure not to commit your personal API key to a branch that you will submit a pull request for.
+**Google Maps API** - Getting a Google Maps API key now requires providing a credit card number. As of October 2018, there is some free API usage provided and the card will not be charged without explicit user approval. You should carefully read the terms before providing a credit card number. Once you have created a billing account, follow the instructions [here](https://developers.google.com/maps/documentation/android-api/signup) and paste your key in the `AndroidManifest` as the value for `com.google.android.geo.API_KEY`. Please be sure not to commit your personal API key to a branch that you will submit a pull request for.
 
 
 ## Debugging JavaRosa
