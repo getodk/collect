@@ -67,7 +67,8 @@ public class SplashScreenActivity extends Activity {
                     Collect.createODKDirs();
                     Collect.getInstance().getActivityLogger().open();
                 } catch (RuntimeException e) {
-                    DialogUtils.createErrorDialog(SplashScreenActivity.this, e.getMessage(), EXIT);
+                    DialogUtils.showDialog(DialogUtils.createErrorDialog(SplashScreenActivity.this,
+                            e.getMessage(), EXIT), SplashScreenActivity.this);
                     return;
                 }
 

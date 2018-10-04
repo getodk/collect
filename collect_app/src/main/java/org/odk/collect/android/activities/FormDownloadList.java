@@ -169,7 +169,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                     Collect.createODKDirs();
                     Collect.getInstance().getActivityLogger().open();
                 } catch (RuntimeException e) {
-                    DialogUtils.createErrorDialog(FormDownloadList.this, e.getMessage(), EXIT);
+                    DialogUtils.showDialog(DialogUtils.createErrorDialog(FormDownloadList.this, e.getMessage(), EXIT), FormDownloadList.this);
                     return;
                 }
 

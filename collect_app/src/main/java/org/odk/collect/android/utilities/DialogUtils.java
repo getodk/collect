@@ -108,7 +108,7 @@ public final class DialogUtils {
      * @param errorMsg The message to show on the dialog box
      * @param shouldExit Finish the activity if Ok is clicked
      */
-    public static void createErrorDialog(@NonNull Activity activity, String errorMsg, final boolean shouldExit) {
+    public static Dialog createErrorDialog(@NonNull Activity activity, String errorMsg, final boolean shouldExit) {
         Collect.getInstance().getActivityLogger().logAction(activity, "createErrorDialog", "show");
         AlertDialog alertDialog = new AlertDialog.Builder(activity).create();
         alertDialog.setIcon(android.R.drawable.ic_dialog_info);
@@ -129,6 +129,7 @@ public final class DialogUtils {
         };
         alertDialog.setCancelable(false);
         alertDialog.setButton(activity.getString(R.string.ok), errorListener);
-        alertDialog.show();
+
+        return alertDialog;
     }
 }

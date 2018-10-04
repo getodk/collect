@@ -92,7 +92,8 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
                     Collect.createODKDirs();
                     Collect.getInstance().getActivityLogger().open();
                 } catch (RuntimeException e) {
-                    DialogUtils.createErrorDialog(InstanceUploaderActivity.this, e.getMessage(), EXIT);
+                    DialogUtils.showDialog(DialogUtils.createErrorDialog(InstanceUploaderActivity.this,
+                            e.getMessage(), EXIT), InstanceUploaderActivity.this);
                     return;
                 }
 
