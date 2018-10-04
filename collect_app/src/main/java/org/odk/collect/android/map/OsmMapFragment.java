@@ -252,15 +252,14 @@ public class OsmMapFragment extends Fragment implements MapFragment,
     }
 
     @Override public @Nullable MapPoint getGpsLocation() {
-        IGeoPoint geoPoint = myLocationOverlay.getMyLocation();
-        return geoPoint == null ? null : fromGeoPoint(geoPoint);
+        return fromLocation(myLocationOverlay);
     }
 
     @Override public void onLocationChanged(Location location) {
         if (gpsLocationListener != null) {
-            IGeoPoint geoPoint = myLocationOverlay.getMyLocation();
-            if (geoPoint != null) {
-                gpsLocationListener.onPoint(fromGeoPoint(geoPoint));
+            MapPoint point = fromLocation(myLocationOverlay);
+            if (point != null) {
+                gpsLocationListener.onPoint(point);
             }
         }
     }
@@ -421,5 +420,9 @@ public class OsmMapFragment extends Fragment implements MapFragment,
             // Prevent the text bubble from appearing when a marker is clicked.
             return false;
         }
+    }
+
+    @VisibleForTesting public boolean isGpsErrorDialogShowing() {
+        return gpsErrorDialog != null && gpsErrorDialog.isShowing();
     }
 }

@@ -18,6 +18,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.VisibleForTesting;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -501,5 +502,13 @@ public class GeoTraceActivity extends CollectAbstractActivity implements IRegist
             zoomPointButton.setTextColor(Color.parseColor("#FF979797"));
         }
         zoomDialog.show();
+    }
+
+    @VisibleForTesting public ImageButton getPlayButton() {
+        return playButton;
+    }
+
+    @VisibleForTesting public MapFragment getMapFragment() {
+        return map;
     }
 }

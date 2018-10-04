@@ -266,7 +266,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
     }
 
     @Override public void onLocationChanged(Location location) {
-        lastLocationFix = new MapPoint(location.getLatitude(), location.getLongitude());
+        lastLocationFix = fromLocation(location);
         for (ReadyListener listener : gpsLocationReadyListeners) {
             listener.onReady(this);
         }
@@ -309,6 +309,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
     }
 
     @Override public void onClientStart() {
+        lastLocationFix = fromLocation(locationClient.getLastLocation());
         locationClient.requestLocationUpdates(this);
         if (!locationClient.isLocationAvailable()) {
             showGpsDisabledAlert();
@@ -332,10 +333,6 @@ public class GoogleMapFragment extends SupportMapFragment implements
                 (dialog, id) -> dialog.cancel())
             .create();
         gpsErrorDialog.show();
-    }
-
-    @VisibleForTesting public boolean isGpsErrorDialogShowing() {
-        return gpsErrorDialog != null && gpsErrorDialog.isShowing();
     }
 
     protected void updateFeatures() {
@@ -472,5 +469,9 @@ public class GoogleMapFragment extends SupportMapFragment implements
                 polyline = null;
             }
         }
+    }
+
+    @VisibleForTesting public boolean isGpsErrorDialogShowing() {
+        return gpsErrorDialog != null && gpsErrorDialog.isShowing();
     }
 }
