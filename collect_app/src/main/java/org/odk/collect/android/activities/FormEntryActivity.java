@@ -25,7 +25,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore.Images;
-import android.provider.OpenableColumns;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.FileProvider;
@@ -888,10 +887,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * This may take a long time.
      *
      * @param selectedFile uri of the selected audio
-     * @see #getFileExtensionFromUri(Uri)
      */
     private void saveChosenFile(Uri selectedFile) {
-        String extension = getFileExtensionFromUri(selectedFile);
+        String extension = ContentResolverHelper.getFileExtensionFromUri(selectedFile);
 
         String instanceFolder = Collect.getInstance().getFormController()
                 .getInstanceFile().getParent();
@@ -931,40 +929,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     ToastUtils.showLongToastInMiddle(R.string.gdrive_connection_exception);
                 }
             });
-        }
-    }
-
-    /**
-     * Using contentResolver to get a file's extension by the uri returned from OnActivityResult.
-     *
-     * @param fileUri Whose name we want to get
-     * @return The file's extension
-     * @see #onActivityResult(int, int, Intent)
-     * @see #saveChosenFile(Uri)
-     * @see android.content.ContentResolver
-     */
-    private String getFileExtensionFromUri(Uri fileUri) {
-        Cursor returnCursor =
-                getContentResolver().query(fileUri, null, null, null, null);
-        try {
-            if (returnCursor == null) {
-                return "";
-            }
-            int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-            returnCursor.moveToFirst();
-            String filename = returnCursor.getString(nameIndex);
-            // If the file's name contains extension , we cut it down for latter use (copy a new file).
-            if (filename.lastIndexOf('.') != -1) {
-                return filename.substring(filename.lastIndexOf('.'));
-            } else {
-                // I found some mp3 files' name don't contain extension, but can be played as Audio
-                // So I write so, but I still there are some way to get its extension
-                return "";
-            }
-        } finally {
-            if (returnCursor != null) {
-                returnCursor.close();
-            }
         }
     }
 
