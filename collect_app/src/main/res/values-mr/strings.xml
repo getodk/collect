@@ -304,7 +304,6 @@
   <string name="select_geotrace_mode">जिओ ट्रेस च्या माध्यम निवडा</string>
   <string name="start">प्रारंभ करा</string>
   <string name="enable_gps">जीपीएस सक्षम करा</string>
-  <string name="enable_gps_message">आपल्या डिव्हाइसमध्ये जीपीएस अक्षम केले आहे आपण ते सक्षम करू इच्छिता?</string>
   <string name="geotrace_title">जिओ ट्रेस</string>
   <string name="polygon_save">बहुभुज म्हणून जतन करा</string>
   <string name="polyline_save">पॉलीलीन म्हणून जतन करा</string>
@@ -316,7 +315,6 @@
   <string name="geo_exit_warning">बदल टाकून ओडीके कडे परत जा?</string>
   <string name="polygon_validator">बहुभुज तयार करण्यासाठी किमान 3 गुण असणे आवश्यक आहे</string>
   <string name="clear">साफ करा</string>
-  <string name="polyline_polygon_text">जिओ ट्रेस जतन हे प्रमाणे करा</string>
   <string name="manual_mode">मॅन्युअल माध्यम</string>
   <string name="automatic_mode">स्वयंचलित माध्यम</string>
   <string name="geoshape_instruction">ठिकाणाच्या ठिकाणी ठेवण्यासाठी जास्त वेळ दाबा</string>

@@ -333,7 +333,6 @@
   <string name="select_geotrace_mode">GeoTrace モードの選択</string>
   <string name="start">開始</string>
   <string name="enable_gps">GPS を有効にする</string>
-  <string name="enable_gps_message">お使いのデバイスで GPS は無効になっています。有効にしますか?</string>
   <string name="geotrace_title">GeoTrace</string>
   <string name="polygon_save">ポリゴンとして保存</string>
   <string name="polyline_save">ポリラインとして保存</string>
@@ -346,7 +345,6 @@
   <string name="polygon_validator">ポリゴンを作成するには、少なくとも 3 点指定する必要があります</string>
   <string name="polyline_validator">ポリラインを作成するには、少なくとも2点指定する必要があります</string>
   <string name="clear">クリア</string>
-  <string name="polyline_polygon_text">名前を付けて GeoTrace を保存</string>
   <string name="manual_mode">手動モード</string>
   <string name="automatic_mode">自動モード</string>
   <string name="geoshape_instruction">場所をマークするには長押ししてください。</string>

@@ -335,7 +335,6 @@
   <string name="select_geotrace_mode">Seleccione modo GeoLínea</string>
   <string name="start">Iniciar</string>
   <string name="enable_gps">Activar el GPS</string>
-  <string name="enable_gps_message">El GPS esta deshabilitado en su dispositivo. ¿Activar?</string>
   <string name="geotrace_title">GeoLínea</string>
   <string name="polygon_save">Guardar como polígono</string>
   <string name="polyline_save">Guardar como polilínea</string>
@@ -348,7 +347,6 @@
   <string name="polygon_validator">Debe tener al menos 3 puntos para crear un polígono</string>
   <string name="polyline_validator">Deben existir al menos 2 puntos para crear una Polilínea</string>
   <string name="clear">Limpiar</string>
-  <string name="polyline_polygon_text">Guardar GeoLínea como</string>
   <string name="manual_mode">Modo Manual</string>
   <string name="automatic_mode">Modo Automático </string>
   <string name="geoshape_instruction">Mantenga presionado para colocar marcas.</string>

@@ -313,7 +313,6 @@
   <string name="select_geotrace_mode">जियो ट्रेस विधि छान्नुहोस्</string>
   <string name="start">शुरू</string>
   <string name="enable_gps">GPS शुरु गर्नुहोस्</string>
-  <string name="enable_gps_message">तपाईंको यन्त्रमा GPS बन्द छ । यसलाई अन गर्न चाहनु हुन्छ ?</string>
   <string name="polygon_save">बहुभुज सुरक्षित गर्नुहोस्। </string>
   <string name="gps_enable_message">तपाईंको यन्त्रमा GPS बन्द छ । यसलाई अन गर्न चाहनु हुन्छ ?</string>
   <string name="select_offline_layer">अफलाइन तह चयन गर्नुहोस्।</string>

@@ -295,7 +295,6 @@
   <string name="select_geotrace_mode">Vali raja sisestusviis</string>
   <string name="start">Alusta</string>
   <string name="enable_gps">Luba GPS</string>
-  <string name="enable_gps_message">Teie seadmel on GPS keelatud. Kas te soovite lubada?</string>
   <string name="geotrace_title">Rada</string>
   <string name="polygon_save">Salvesta polügoonina</string>
   <string name="polyline_save">Salvesta polyline-ina</string>
@@ -307,7 +306,6 @@
   <string name="geo_exit_warning">Loobu muudatustest ja ava ODK?</string>
   <string name="polygon_validator">Polügooni loomiseks on vaja vähemalt 3 punkti</string>
   <string name="clear">Eemalda</string>
-  <string name="polyline_polygon_text">Salvesta rada kui</string>
   <string name="manual_mode">Käsitsi sisestusviis</string>
   <string name="automatic_mode">Automaatne sisestusviis</string>
   <string name="geoshape_instruction">Märke paigutamiseks hoia pikalt soovitud asukohal.</string>

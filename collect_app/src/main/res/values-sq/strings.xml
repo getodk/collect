@@ -283,7 +283,6 @@
   <string name="select_geotrace_mode">Përzgjidh mënyrën GeoTrace</string>
   <string name="start">Fillo</string>
   <string name="enable_gps">Aktivizo GPS-in</string>
-  <string name="enable_gps_message">GPS-i në telefonin tuaj është i ç\'aktivizuar. A do të donit ta aktivizonit?</string>
   <string name="geotrace_title">GeoTrace</string>
   <string name="polygon_save">Ruaj si Poligon</string>
   <string name="polyline_save">Ruaj si Polyline</string>
@@ -295,7 +294,6 @@
   <string name="geo_exit_warning">Elimino ndryshimet dhe kthehu në ODK?</string>
   <string name="polygon_validator">Duhen së paku 3 pika për të krijuar Poligonin</string>
   <string name="clear">Pastro</string>
-  <string name="polyline_polygon_text">Ruaj GeoTrace si</string>
   <string name="manual_mode">Manuale</string>
   <string name="automatic_mode">Automatike</string>
   <string name="geoshape_instruction">Shtyp për pak sekonda për të vendosur shenjë.</string>
