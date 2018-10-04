@@ -2682,7 +2682,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             case SaveToDiskTask.SAVED:
                 ToastUtils.showShortToast(R.string.data_saved_ok);
                 formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_SAVE, 0, null, false, false);
-                enqueueAutosendJob();
+                enqueueAutosendJobIfNeeded();
                 break;
             case SaveToDiskTask.SAVED_AND_EXIT:
                 ToastUtils.showShortToast(R.string.data_saved_ok);
@@ -2693,7 +2693,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 } else {
                     formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);         // Force writing of audit since we are exiting
                 }
-                enqueueAutosendJob();
+                enqueueAutosendJobIfNeeded();
                 finishReturnInstance();
                 break;
             case SaveToDiskTask.SAVE_ERROR:
@@ -2882,7 +2882,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         super.onStop();
     }
 
-    void enqueueAutosendJob() {
+    void enqueueAutosendJobIfNeeded() {
         String formId = getFormController().getFormDef().getMainInstance().getRoot().getAttributeValue("", "id");
 
         if (isFormAutoSendEnabled(formId, isFormAutoSendOptionEnabledForNetwork(this))) {
