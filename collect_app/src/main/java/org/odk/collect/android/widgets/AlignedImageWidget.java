@@ -21,6 +21,8 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.android.gms.analytics.HitBuilders;
+
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
@@ -67,6 +69,13 @@ public class AlignedImageWidget extends BaseImageWidget {
         setUpLayout();
         setUpBinary();
         addAnswerView(answerLayout);
+
+        Collect.getInstance().getDefaultTracker()
+                .send(new HitBuilders.EventBuilder()
+                        .setCategory("AlignedImageWidget")
+                        .setAction("created")
+                        .setLabel(Collect.getCurrentFormIdentifierHash())
+                        .build());
     }
 
     @Override
