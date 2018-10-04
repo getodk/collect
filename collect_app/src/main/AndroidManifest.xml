@@ -205,10 +205,7 @@ the specific language governing permissions and limitations under the License.
             android:name=".activities.GeoPointOsmMapActivity"
             android:configChanges="orientation" />
         <activity
-            android:name=".activities.GeoShapeOsmMapActivity"
-            android:configChanges="orientation" />
-        <activity
-            android:name=".activities.GeoShapeGoogleMapActivity"
+            android:name=".activities.GeoShapeActivity"
             android:configChanges="orientation" />
         <activity
             android:name=".activities.GeoTraceOsmMapActivity"
@@ -310,5 +307,4 @@ the specific language governing permissions and limitations under the License.
             </intent-filter>
         </receiver>
     </application>
-
 </manifest>
