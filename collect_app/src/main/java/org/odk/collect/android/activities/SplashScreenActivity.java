@@ -15,8 +15,6 @@
 package org.odk.collect.android.activities;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -36,6 +34,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.utilities.DialogUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -68,7 +67,8 @@ public class SplashScreenActivity extends Activity {
                     Collect.createODKDirs();
                     Collect.getInstance().getActivityLogger().open();
                 } catch (RuntimeException e) {
-                    createErrorDialog(e.getMessage(), EXIT);
+                    DialogUtils.showDialog(DialogUtils.createErrorDialog(SplashScreenActivity.this,
+                            e.getMessage(), EXIT), SplashScreenActivity.this);
                     return;
                 }
 
@@ -209,30 +209,6 @@ public class SplashScreenActivity extends Activity {
             }
         };
         t.start();
-    }
-
-    private void createErrorDialog(String errorMsg, final boolean shouldExit) {
-        Collect.getInstance().getActivityLogger().logAction(this, "createErrorDialog", "show");
-        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-        alertDialog.setIcon(android.R.drawable.ic_dialog_info);
-        alertDialog.setMessage(errorMsg);
-        DialogInterface.OnClickListener errorListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int i) {
-                switch (i) {
-                    case DialogInterface.BUTTON_POSITIVE:
-                        Collect.getInstance().getActivityLogger().logAction(this,
-                                "createErrorDialog", "OK");
-                        if (shouldExit) {
-                            finish();
-                        }
-                        break;
-                }
-            }
-        };
-        alertDialog.setCancelable(false);
-        alertDialog.setButton(getString(R.string.ok), errorListener);
-        alertDialog.show();
     }
 
     @Override
