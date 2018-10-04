@@ -94,9 +94,6 @@ public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
     View[] imageViews;
     AudioHandler[] audioHandlers;
 
-    // Whether to advance immediately after the image is clicked
-    boolean quickAdvance;
-
     @Nullable
     private AdvanceToNextListener listener;
 
@@ -133,15 +130,14 @@ public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
         for (int i = 0; i < items.size(); i++) {
             imageViews[i] = new ImageView(getContext());
         }
-        this.quickAdvance = quickAdvance;
 
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         int screenWidth = metrics.widthPixels;
         int screenHeight = metrics.heightPixels;
 
         if (numColumns > 0) {
-            resizeWidth = ((screenWidth - 2 * HORIZONTAL_PADDING - SCROLL_WIDTH
-                    - (IMAGE_PADDING + SPACING) * (numColumns + 1)) / numColumns);
+            resizeWidth = (screenWidth - 2 * HORIZONTAL_PADDING - SCROLL_WIDTH
+                    - (IMAGE_PADDING + SPACING) * (numColumns + 1)) / numColumns;
         }
 
         if (prompt.isReadOnly()) {
@@ -192,7 +188,6 @@ public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
                             }
 
                             ImageView imageView = (ImageView) imageViews[i];
-
 
                             if (numColumns > 0) {
                                 int resizeHeight = (b.getHeight() * resizeWidth) / b.getWidth();
@@ -342,7 +337,6 @@ public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
         addAnswerView(gridview);
     }
 
-
     @Override
     public IAnswerData getAnswer() {
         for (int i = 0; i < choices.length; ++i) {
@@ -353,7 +347,6 @@ public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
         }
         return null;
     }
-
 
     @Override
     public void clearAnswer() {

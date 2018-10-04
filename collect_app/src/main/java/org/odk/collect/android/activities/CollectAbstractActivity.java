@@ -40,7 +40,7 @@ public abstract class CollectAbstractActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         themeUtils = new ThemeUtils(this);
-        setTheme(themeUtils.getAppTheme());
+        setTheme(this instanceof FormEntryActivity ? themeUtils.getFormEntryActivityTheme() : themeUtils.getAppTheme());
         super.onCreate(savedInstanceState);
 
         /**

@@ -99,11 +99,9 @@ public class InstanceUploaderAdapter extends CursorAdapter {
         switch (status) {
 
             case STATUS_SUBMISSION_FAILED:
-                if (isSmsSubmission) {
-                    viewHolder.statusIcon.setImageResource(R.drawable.message_alert);
-                } else {
-                    viewHolder.statusIcon.setImageResource(R.drawable.exclamation);
-                }
+
+                viewHolder.statusIcon.setImageResource(R.drawable.exclamation);
+
                 break;
 
             case STATUS_SUBMITTED:
@@ -179,7 +177,7 @@ public class InstanceUploaderAdapter extends CursorAdapter {
                 break;
 
             default:
-                viewHolder.statusIcon.setImageResource(R.drawable.message_alert);
+                viewHolder.statusIcon.setImageResource(R.drawable.exclamation);
                 break;
         }
     }
@@ -198,8 +196,6 @@ public class InstanceUploaderAdapter extends CursorAdapter {
         TextView displayName;
         @BindView(R.id.display_subtext)
         TextView displaySubtext;
-        @BindView(R.id.update_info)
-        TextView updateInfo;
         @BindView(R.id.checkbox)
         CheckBox checkbox;
         @BindView(R.id.progress_bar)

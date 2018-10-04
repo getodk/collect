@@ -383,4 +383,6 @@
   <string name="exit">Välju</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
   <!--Sms submission-->
+  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
+  <string name="current_predicate_continue">Jätka</string>
 </resources>

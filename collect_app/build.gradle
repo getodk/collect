@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.firebase.firebase-perf'
 apply plugin: 'io.fabric'
 apply from: '../config/quality.gradle'
 apply from: '../config/jacoco.gradle'
@@ -28,7 +29,7 @@ android {
     defaultConfig {
         applicationId "org.smap.smapTask.android"
         minSdkVersion(16)
-        targetSdkVersion(22)
+        targetSdkVersion(23)
         versionCode(5061)
         versionName getVersionName()
         testInstrumentationRunner('android.support.test.runner.AndroidJUnitRunner')
@@ -89,15 +90,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
             resValue("bool", "FIREBASE_CRASHLYTICS_ENABLED", "true")
         }
-        // Release build for the original ODK Collect app
-        //odkCollectRelease {
-        //    if (secrets.getProperty('RELEASE_STORE_FILE')) {
-        //        signingConfig signingConfigs.release
-        //    }
-        //    minifyEnabled(true)
-        //    proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
-        //    resValue("bool", "FIREBASE_CRASHLYTICS_ENABLED", "true")
-        //}
         debug {
             buildConfigField("String", "SENDER_ID", "\"" + secrets['SENDER_ID'] + "\"")    // smap
             buildConfigField("String", "AWS_MOBILEHUB_USER_AGENT", "\"" + secrets['AWS_MOBILEHUB_USER_AGENT'] + "\"")
@@ -195,13 +187,14 @@ dependencies {
     implementation "com.android.support:cardview-v7:${rootProject.supportLibraryVersion}"
     implementation "com.android.support:exifinterface:${rootProject.supportLibraryVersion}"
     implementation "com.android.support:multidex:1.0.3"
-
+    
     implementation "com.google.android.gms:play-services-analytics:${rootProject.playServicesVersion}"
     implementation "com.google.android.gms:play-services-auth:${rootProject.playServicesVersion}"
     implementation "com.google.android.gms:play-services-maps:${rootProject.playServicesVersion}"
     implementation "com.google.android.gms:play-services-location:${rootProject.playServicesVersion}"
 
-    implementation "com.google.firebase:firebase-core:${rootProject.playServicesVersion}"
+    implementation "com.google.firebase:firebase-core:16.0.1"
+    implementation "com.google.firebase:firebase-perf:16.1.0"
     implementation "com.crashlytics.sdk.android:crashlytics:2.9.2"
 
     implementation("com.google.code.gson:gson:2.6.2") {
@@ -216,21 +209,20 @@ dependencies {
     }
 
 
-    implementation "com.google.android.gms:play-services-gcm:${rootProject.playServicesVersion}"    // smap
+    implementation "com.google.android.gms:play-services-gcm:${rootProject.playServicesVersion}"
 
     implementation "com.evernote:android-job:1.2.5"
     implementation "com.rarepebble:colorpicker:2.3.1"
     implementation "commons-io:commons-io:2.6"
     implementation "net.sf.kxml:kxml2:2.3.0"
     implementation "net.sf.opencsv:opencsv:2.3"
-    implementation("org.opendatakit:opendatakit-javarosa:2.11.1") {
+    implementation("org.opendatakit:opendatakit-javarosa:2.11.2") {
         exclude group: 'joda-time'
         exclude group: 'org.slf4j'
     }
     implementation "com.karumi:dexter:4.2.0"
     implementation "org.osmdroid:osmdroid-android:5.6.4"
     implementation "org.slf4j:slf4j-android:1.6.1-RC1"
-    implementation "pub.devrel:easypermissions:0.2.1"
     implementation("com.google.api-client:google-api-client-android:1.22.0") {
         exclude group: 'org.apache.httpcomponents'
     }
@@ -317,6 +309,7 @@ dependencies {
     //}
 
     androidTestImplementation "com.squareup.okhttp3:mockwebserver:3.9.0"
+
 }
 
 // Must be at bottom to prevent dependency collisions

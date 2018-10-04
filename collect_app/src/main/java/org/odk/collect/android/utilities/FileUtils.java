@@ -509,12 +509,9 @@ public class FileUtils {
     }
 
     public static byte[] read(File file) {
-        byte[] bytes = {};
-        try {
-            bytes = new byte[(int) file.length()];
-            InputStream is = new FileInputStream(file);
+        byte[] bytes = new byte[(int) file.length()];
+        try (InputStream is = new FileInputStream(file)) {
             is.read(bytes);
-            is.close();
         } catch (IOException e) {
             Timber.e(e);
         }
@@ -528,6 +525,14 @@ public class FileUtils {
         } catch (IOException e) {
             Timber.e(e);
         }
+    }
+
+    public static String getFileExtension(String fileName) {
+        int dotIndex = fileName.lastIndexOf('.');
+        if (dotIndex == -1) {
+            return "";
+        }
+        return fileName.substring(dotIndex + 1).toLowerCase(Locale.ROOT);
     }
 
     /**
@@ -556,7 +561,6 @@ public class FileUtils {
             }
         }
     }
-
 
     /**
      * With the FileProvider you have to manually grant and revoke read/write permissions to files you

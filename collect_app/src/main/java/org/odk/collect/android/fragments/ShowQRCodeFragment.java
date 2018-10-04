@@ -76,7 +76,6 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PASSWORD;
 import static org.odk.collect.android.utilities.PermissionUtils.requestCameraPermission;
 import static org.odk.collect.android.utilities.QRCodeUtils.QR_CODE_FILEPATH;
 
-
 public class ShowQRCodeFragment extends Fragment {
 
     private static final int SELECT_PHOTO = 111;
@@ -250,7 +249,6 @@ public class ShowQRCodeFragment extends Fragment {
             }
         }
     }
-
 
     private void applySettings(String content) {
         SharedPreferencesUtils.savePreferencesFromString(content, new ActionListener() {

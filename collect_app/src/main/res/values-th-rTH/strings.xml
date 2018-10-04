@@ -355,7 +355,6 @@
   <string name="deleted_form">แบบสำรวจที่ถูกลบ</string>
   <string name="instance_scan_completed">สแกนเสร็จสิ้น</string>
   <string name="sort_the_list">จัดเรียงรายการ</string>
-  <string name="request_permissions_google_account">ODK Collect ต้องการเชื่อมต่อกับบัญชี Google เพื่อนำเข้าแบบสำรวจเปล่าและส่งข้อมูลที่เก็บแล้ว</string>
   <string name="language">ภาษา</string>
   <string name="form_metadata_title">Metadata ของแบบสำรวจ</string>
   <string name="form_metadata">Form metadata</string>
@@ -373,4 +372,6 @@
   <string name="no_time_selected">ยังไม่ได้เลือกเวลา</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
   <!--Sms submission-->
+  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
+  <string name="current_predicate_continue">ดำเนินการต่อ</string>
 </resources>

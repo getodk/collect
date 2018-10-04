@@ -91,7 +91,6 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
         this.canUpdate = canUpdate; // smap
     }
 
-
     /**
      * Initialize {@link FormEntryController} with {@link org.javarosa.core.model.FormDef} from binary or from XML. If
      * given
@@ -331,7 +330,6 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
         FormController formController = Collect.getInstance().getFormController();
 
         publishProgress(Collect.getInstance().getString(R.string.survey_saving_collecting_message));
-
 
         ByteArrayPayload payload = formController.getFilledInFormXml();
         // write out xml

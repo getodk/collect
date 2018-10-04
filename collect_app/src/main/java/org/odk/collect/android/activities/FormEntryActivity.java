@@ -49,7 +49,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
-import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
@@ -83,12 +82,16 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.helpers.ContentResolverHelper;
 import org.odk.collect.android.dao.helpers.FormsDaoHelper;
 import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
+import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
+import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.exception.GDriveConnectionException;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.external.handler.SmapRemoteDataItem;
+import org.odk.collect.android.fragments.ImageLoadingFragment;
 import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
+import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
@@ -135,6 +138,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import javax.inject.Inject;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
@@ -143,6 +151,7 @@ import static org.odk.collect.android.preferences.AdminKeys.KEY_MOVING_BACKWARDS
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 import static org.odk.collect.android.utilities.PermissionUtils.checkIfStoragePermissionsGranted;
 import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
+import static org.odk.collect.android.utilities.PermissionUtils.requestReadPhoneStatePermission;
 import static org.odk.collect.android.utilities.PermissionUtils.requestStoragePermissions;
 
 /**
@@ -172,7 +181,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private static final boolean EXIT = true;
     private static final boolean DO_NOT_EXIT = false;
     private static final boolean EVALUATE_CONSTRAINTS = true;
-    private static final boolean DO_NOT_EVALUATE_CONSTRAINTS = false;
+    public static final boolean DO_NOT_EVALUATE_CONSTRAINTS = false;
 
     // Extra returned from gp activity
     public static final String LOCATION_RESULT = "LOCATION_RESULT";
@@ -197,6 +206,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     FormInfo formInfo = null;                                           // smap
     private static final String KEY_SAVE_NAME = "saveName";
 
+    private static final String TAG_IMAGE_LOADING_FRAGMENT = "image_loading_fragment";
+
     // Identifies the gp of the form used to launch form entry
     public static final String KEY_FORMPATH = "formpath";
 
@@ -214,10 +225,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     public static final String KEY_AUTO_SAVED = "autosaved";
 
     public static final String EXTRA_TESTING_PATH = "testingPath";
+    public static final String KEY_READ_PHONE_STATE_PERMISSION_REQUEST_NEEDED = "readPhoneStatePermissionRequestNeeded";
 
     private static final int PROGRESS_DIALOG = 1;
     private static final int SAVING_DIALOG = 2;
-    private static final int SAVING_IMAGE_DIALOG = 3;
 
     private boolean autoSaved;
     private boolean allowMovingBackwards;
@@ -261,6 +272,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private String waitingXPath;
     private boolean newForm = true;
     private boolean onResumeWasCalledWithoutPermissions;
+    private boolean readPhoneStatePermissionRequestNeeded;
+
+    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
+
+    ImageLoadingFragment imageLoadingFragment;
 
     public void allowSwiping(boolean doSwipe) {
         this.doSwipe = doSwipe;
@@ -279,6 +295,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     private boolean shouldOverrideAnimations;
 
+    @Inject
+    RxEventBus eventBus;
+
     /**
      * Called when the activity is first created.
      */
@@ -290,6 +309,17 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         Collect.getInstance().initRemoteServiceCaches();   // smap
 
         setContentView(R.layout.form_entry);
+
+        Collect.getInstance().getComponent().inject(this);
+
+        compositeDisposable
+                .add(eventBus
+                .register(ReadPhoneStatePermissionRxEvent.class)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(event -> {
+                    readPhoneStatePermissionRequestNeeded = true;
+                }));
 
         errorMessage = null;
 
@@ -311,6 +341,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             beenSwiped = true;
             showPreviousView();
         });
+
+        if (savedInstanceState == null) {
+            imageLoadingFragment = new ImageLoadingFragment();
+            getFragmentManager().beginTransaction().add(imageLoadingFragment, TAG_IMAGE_LOADING_FRAGMENT).commit();
+        } else {
+            imageLoadingFragment = (ImageLoadingFragment) getFragmentManager().findFragmentByTag(TAG_IMAGE_LOADING_FRAGMENT);
+        }
 
         requestStoragePermissions(this, new PermissionListener() {
             @Override
@@ -376,7 +413,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             if (savedInstanceState.containsKey(KEY_TASK)) {     // smap
                 mTaskId = savedInstanceState.getLong(KEY_TASK);
             }
-
+            if (savedInstanceState.containsKey(KEY_READ_PHONE_STATE_PERMISSION_REQUEST_NEEDED)) {
+                readPhoneStatePermissionRequestNeeded = savedInstanceState.getBoolean(KEY_READ_PHONE_STATE_PERMISSION_REQUEST_NEEDED);
+            }
         }
     }
 
@@ -597,7 +636,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         formLoaderTask.execute(formPath, mFormId);      // smap add formId
     }
 
-
     public Bundle getState() {
         return state;
     }
@@ -628,6 +666,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
     }
 
+    @Nullable
     private FormController getFormController() {
         return Collect.getInstance().getFormController();
     }
@@ -656,6 +695,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         outState.putString(KEY_SAVE_NAME, saveName);
         outState.putBoolean(KEY_AUTO_SAVED, autoSaved);
         outState.putLong(KEY_TASK, mTaskId);        // SMAP
+        outState.putBoolean(KEY_READ_PHONE_STATE_PERMISSION_REQUEST_NEEDED, readPhoneStatePermissionRequestNeeded);
 
         if (currentView instanceof ODKView) {
             outState.putAll(((ODKView) currentView).getState());
@@ -715,7 +755,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 return;
             }
         }
-
 
         switch (requestCode) {
 
@@ -822,9 +861,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                  * Android 1.6) we want to handle images the audio and video
                  */
 
-                showDialog(SAVING_IMAGE_DIALOG);
-                Runnable runnable = () -> saveChosenImage(intent.getData());
-                new Thread(runnable).start();
+                ProgressDialogFragment.newInstance(getString(R.string.please_wait))
+                        .show(getSupportFragmentManager(), ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
+
+                imageLoadingFragment.beginImageLoadingTask(intent.getData());
 
                 break;
             case RequestCodes.AUDIO_CAPTURE:
@@ -955,50 +995,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
     }
 
-
-    private void saveChosenImage(Uri selectedImage) {
-        // Copy file to sdcard
-        File instanceFile = getFormController().getInstanceFile();
-        if (instanceFile != null) {
-            String instanceFolder1 = instanceFile.getParent();
-            String destImagePath = instanceFolder1 + File.separator + System.currentTimeMillis() + ".jpg";
-
-            File chosenImage;
-            try {
-                chosenImage = MediaUtils.getFileFromUri(this, selectedImage, Images.Media.DATA);
-                if (chosenImage != null) {
-                    final File newImage = new File(destImagePath);
-                    FileUtils.copyFile(chosenImage, newImage);
-                    ImageConverter.execute(newImage.getPath(), getWidgetWaitingForBinaryData(), this);
-                    runOnUiThread(() -> {
-                        dismissDialog(SAVING_IMAGE_DIALOG);
-                        if (getCurrentViewIfODKView() != null) {
-                            getCurrentViewIfODKView().setBinaryData(newImage);
-                        }
-                        saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                        refreshCurrentView();
-                    });
-                } else {
-                    runOnUiThread(() -> {
-                        dismissDialog(SAVING_IMAGE_DIALOG);
-                        Timber.e("Could not receive chosen image");
-                        ToastUtils.showShortToastInMiddle(R.string.error_occured);
-                    });
-                }
-            } catch (GDriveConnectionException e) {
-                runOnUiThread(() -> {
-                    dismissDialog(SAVING_IMAGE_DIALOG);
-                    Timber.e("Could not receive chosen image due to connection problem");
-                    ToastUtils.showLongToastInMiddle(R.string.gdrive_connection_exception);
-                });
-            }
-        } else {
-            ToastUtils.showLongToast(R.string.image_not_saved);
-            Timber.w(getString(R.string.image_not_saved));
-        }
-    }
-
-
     /**
      * Using contentResolver to get a file's extension by the uri returned from OnActivityResult.
      *
@@ -1009,8 +1005,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * @see android.content.ContentResolver
      */
     private String getFileExtensionFromUri(Uri fileUri) {
-        try (Cursor returnCursor =
-                     getContentResolver().query(fileUri, null, null, null, null)) {
+        Cursor returnCursor =
+                getContentResolver().query(fileUri, null, null, null, null);
+        try {
+            if (returnCursor == null) {
+                return "";
+            }
             int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
             returnCursor.moveToFirst();
             String filename = returnCursor.getString(nameIndex);
@@ -1022,17 +1022,26 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 // So I write so, but I still there are some way to get its extension
                 return "";
             }
+        } finally {
+            if (returnCursor != null) {
+                returnCursor.close();
+            }
         }
     }
 
-    private QuestionWidget getWidgetWaitingForBinaryData() {
+    public QuestionWidget getWidgetWaitingForBinaryData() {
         QuestionWidget questionWidget = null;
-        for (QuestionWidget qw : ((ODKView) currentView).getWidgets()) {
-            if (qw.isWaitingForData()) {
-                questionWidget = qw;
-            }
-        }
+        ODKView odkView = (ODKView) currentView;
 
+        if (odkView != null) {
+            for (QuestionWidget qw : odkView.getWidgets()) {
+                if (qw.isWaitingForData()) {
+                    questionWidget = qw;
+                }
+            }
+        } else {
+            Timber.e("currentView returned null.");
+        }
         return questionWidget;
     }
 
@@ -1186,7 +1195,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * @return false if any error occurs while saving (constraint violated,
      * etc...), true otherwise.
      */
-    private boolean saveAnswersForCurrentScreen(boolean evaluateConstraints) {
+    public boolean saveAnswersForCurrentScreen(boolean evaluateConstraints) {
         FormController formController = getFormController();
         // only try to save if the current event is a question or a field-list group
         // and current view is an ODKView (occasionally we show blank views that do not have any
@@ -1352,7 +1361,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     public CharSequence filter(CharSequence source, int start,
                                                int end, Spanned dest, int dstart, int dend) {
                         for (int i = start; i < end; i++) {
-                            if (Character.getType((source.charAt(i))) == Character.CONTROL) {
+                            if (Character.getType(source.charAt(i)) == Character.CONTROL) {
                                 return "";
                             }
                         }
@@ -1481,8 +1490,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                             .getGroupsForCurrentIndex();
                     odkView = new ODKView(this, prompts, groups, advancingPage, formController.getCanUpdate()); // smap pass parameter indicating if view is updatable
                     Timber.i("Created view for group %s %s",
-                            (groups.length > 0 ? groups[groups.length - 1].getLongText() : "[top]"),
-                            (prompts.length > 0 ? prompts[0].getQuestionText() : "[no question]"));
+                            groups.length > 0 ? groups[groups.length - 1].getLongText() : "[top]",
+                            prompts.length > 0 ? prompts[0].getQuestionText() : "[no question]");
                 } catch (RuntimeException e) {
                     Timber.e(e);
                     // this is badness to avoid a crash.
@@ -2223,8 +2232,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
     }
 
+    @Nullable
     private String getAbsoluteInstancePath() {
-        return getFormController().getInstanceFile().getAbsolutePath();
+        FormController formController = getFormController();
+        return formController != null ? formController.getAbsoluteInstancePath() : null;
     }
 
     /**
@@ -2410,13 +2421,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 });
                 return progressDialog;
 
-            case SAVING_IMAGE_DIALOG:
-                progressDialog = new ProgressDialog(this);
-                progressDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-                progressDialog.setMessage(getString(R.string.please_wait));
-                progressDialog.setCancelable(false);
-
-                return progressDialog;
         }
         return null;
     }
@@ -2498,7 +2502,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     && formLoaderTask.getStatus() == AsyncTask.Status.FINISHED) {
                 FormController fec = formLoaderTask.getFormController();
                 if (fec != null) {
-                    loadingComplete(formLoaderTask, formLoaderTask.getFormDef());
+                    if (!readPhoneStatePermissionRequestNeeded) {
+                        loadingComplete(formLoaderTask, formLoaderTask.getFormDef());
+                    }
                 } else {
                     dismissDialog(PROGRESS_DIALOG);
                     FormLoaderTask t = formLoaderTask;
@@ -2585,6 +2591,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         if (progressBar != null) {    // smap
             progressBar.dismiss();
         }
+        compositeDisposable.dispose();
         super.onDestroy();
 
     }
@@ -2638,119 +2645,136 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         dismissDialog(PROGRESS_DIALOG);
 
         final FormController formController = task.getFormController();
-        int requestCode = task.getRequestCode(); // these are bogus if
-        // pendingActivityResult is
-        // false
-        int resultCode = task.getResultCode();
-        Intent intent = task.getIntent();
+        if (formController != null) {
+            formController.setSurveyNotes(mSurveyNotes);        // smap
+            formController.setCanUpdate(mCanUpdate);        // smap
+            if (readPhoneStatePermissionRequestNeeded) {
+                requestReadPhoneStatePermission(this, new PermissionListener() {
+                    @Override
+                    public void granted() {
+                        readPhoneStatePermissionRequestNeeded = false;
+                        Collect.getInstance().initProperties();
+                        loadForm();
+                    }
 
-        formLoaderTask.setFormLoaderListener(null);
-        FormLoaderTask t = formLoaderTask;
-        formLoaderTask = null;
-        t.cancel(true);
-        t.destroy();
-        Collect.getInstance().setFormController(formController);
-        supportInvalidateOptionsMenu();
+                    @Override
+                    public void denied() {
+                        finish();
+                    }
+                }, true);
+            } else {
+                formLoaderTask.setFormLoaderListener(null);
+                FormLoaderTask t = formLoaderTask;
+                formLoaderTask = null;
+                t.cancel(true);
+                t.destroy();
+                Collect.getInstance().setFormController(formController);
+                supportInvalidateOptionsMenu();
 
-        Collect.getInstance().setExternalDataManager(task.getExternalDataManager());
+                Collect.getInstance().setExternalDataManager(task.getExternalDataManager());
 
-        formController.setSurveyNotes(mSurveyNotes);        // smap
-        formController.setCanUpdate(mCanUpdate);        // smap
+                // Set the language if one has already been set in the past
+                String[] languageTest = formController.getLanguages();
+                if (languageTest != null) {
+                    String defaultLanguage = formController.getLanguage();
+                    String newLanguage = FormsDaoHelper.getFormLanguage(formPath);
 
-        // Set the language if one has already been set in the past
-        String[] languageTest = formController.getLanguages();
-        if (languageTest != null) {
-            String defaultLanguage = formController.getLanguage();
-            String newLanguage = FormsDaoHelper.getFormLanguage(formPath);
+                    long start = System.currentTimeMillis();
+                    Timber.i("calling formController.setLanguage");
+                    try {
+                        formController.setLanguage(newLanguage);
+                    } catch (Exception e) {
+                        // if somehow we end up with a bad language, set it to the default
+                        Timber.e("Ended up with a bad language. %s", newLanguage);
+                        formController.setLanguage(defaultLanguage);
+                    }
+                    Timber.i("Done in %.3f seconds.", (System.currentTimeMillis() - start) / 1000F);
+                }
 
-            long start = System.currentTimeMillis();
-            Timber.i("calling formController.setLanguage");
-            try {
-                formController.setLanguage(newLanguage);
-            } catch (Exception e) {
-                // if somehow we end up with a bad language, set it to the default
-                Timber.e("Ended up with a bad language. %s", newLanguage);
-                formController.setLanguage(defaultLanguage);
-            }
-            Timber.i("Done in %.3f seconds.", (System.currentTimeMillis() - start) / 1000F);
-        }
+                boolean pendingActivityResult = task.hasPendingActivityResult();
 
-        boolean pendingActivityResult = task.hasPendingActivityResult();
+                if (pendingActivityResult) {
+                    // set the current view to whatever group we were at...
+                    refreshCurrentView();
+                    // process the pending activity request...
+                    onActivityResult(task.getRequestCode(), task.getResultCode(), task.getIntent());
+                    return;
+                }
 
-        if (pendingActivityResult) {
-            // set the current view to whatever group we were at...
-            refreshCurrentView();
-            // process the pending activity request...
-            onActivityResult(requestCode, resultCode, intent);
-            return;
-        }
+                // it can be a normal flow for a pending activity result to restore from
+                // a savepoint
+                // (the call flow handled by the above if statement). For all other use
+                // cases, the
+                // user should be notified, as it means they wandered off doing other
+                // things then
+                // returned to ODK Collect and chose Edit Saved Form, but that the
+                // savepoint for that
+                // form is newer than the last saved version of their form data.
 
-        // it can be a normal flow for a pending activity result to restore from
-        // a savepoint
-        // (the call flow handled by the above if statement). For all other use
-        // cases, the
-        // user should be notified, as it means they wandered off doing other
-        // things then
-        // returned to ODK Collect and chose Edit Saved Form, but that the
-        // savepoint for that
-        // form is newer than the last saved version of their form data.
-
-        boolean hasUsedSavepoint = task.hasUsedSavepoint();
-
-        if (hasUsedSavepoint) {
-            runOnUiThread(() -> ToastUtils.showLongToast(R.string.savepoint_used));
-        }
-
-        // Set saved answer path
-        if (formController.getInstanceFile() == null) {
-
-            // Create new answer folder.
-            String time = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss",
-                    Locale.ENGLISH).format(Calendar.getInstance().getTime());
-            String file = formPath.substring(formPath.lastIndexOf('/') + 1,
-                    formPath.lastIndexOf('.'));
-            String path = Collect.INSTANCES_PATH + File.separator + file + "_"
-                    + time;
-            if (FileUtils.createFolder(path)) {
-                File instanceFile = new File(path + File.separator + file + "_" + time + ".xml");
-                formController.setInstanceFile(instanceFile);
-            }
-
-            formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_START, 0, null, false, true);
-        } else {
-            Intent reqIntent = getIntent();
-            boolean showFirst = reqIntent.getBooleanExtra("start", false);
+                boolean hasUsedSavepoint = task.hasUsedSavepoint();
 
             if (!showFirst && mUpdated > 0) {   // smap check that the instance was edited on the phone before showing hierarchy
                 // we've just loaded a saved form, so start in the hierarchy view
-
-                if (!allowMovingBackwards) {
-                    FormIndex formIndex = SaveFormIndexTask.loadFormIndexFromFile();
-                    if (formIndex != null) {
-                        formController.jumpToIndex(formIndex);
-                        refreshCurrentView();
-                        return;
-                    }
+                if (hasUsedSavepoint) {
+                    runOnUiThread(() -> ToastUtils.showLongToast(R.string.savepoint_used));
                 }
 
-                String formMode = reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
-                if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
-                    formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_RESUME, 0, null, false, true);
-                    formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.HIERARCHY, 0, null, false, true);
-                    startActivity(new Intent(this, EditFormHierarchyActivity.class));
-                    return; // so we don't show the intro screen before jumping to the hierarchy
+                // Set saved answer path
+                if (formController.getInstanceFile() == null) {
+
+                    // Create new answer folder.
+                    String time = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss",
+                            Locale.ENGLISH).format(Calendar.getInstance().getTime());
+                    String file = formPath.substring(formPath.lastIndexOf('/') + 1,
+                            formPath.lastIndexOf('.'));
+                    String path = Collect.INSTANCES_PATH + File.separator + file + "_"
+                            + time;
+                    if (FileUtils.createFolder(path)) {
+                        File instanceFile = new File(path + File.separator + file + "_" + time + ".xml");
+                        formController.setInstanceFile(instanceFile);
+                    }
+
+                    formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_START, 0, null, false, true);
                 } else {
-                    if (ApplicationConstants.FormModes.VIEW_SENT.equalsIgnoreCase(formMode)) {
-                        startActivity(new Intent(this, ViewFormHierarchyActivity.class));
-                    }
-                    finish();
-                }
-            } else {
-                formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_RESUME, 0, null, false, true);
-            }
-        }
+                    Intent reqIntent = getIntent();
+                    boolean showFirst = reqIntent.getBooleanExtra("start", false);
 
-        refreshCurrentView();
+                    if (!showFirst) {
+                        // we've just loaded a saved form, so start in the hierarchy view
+
+                        if (!allowMovingBackwards) {
+                            FormIndex formIndex = SaveFormIndexTask.loadFormIndexFromFile();
+                            if (formIndex != null) {
+                                formController.jumpToIndex(formIndex);
+                                refreshCurrentView();
+                                return;
+                            }
+                        }
+
+                        String formMode = reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
+                        if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
+                            formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_RESUME, 0, null, false, true);
+                            formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.HIERARCHY, 0, null, false, true);
+                            startActivity(new Intent(this, EditFormHierarchyActivity.class));
+                            return; // so we don't show the intro screen before jumping to the hierarchy
+                        } else {
+                            if (ApplicationConstants.FormModes.VIEW_SENT.equalsIgnoreCase(formMode)) {
+                                startActivity(new Intent(this, ViewFormHierarchyActivity.class));
+                            }
+                            finish();
+                        }
+                    } else {
+                        formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_RESUME, 0, null, false, true);
+                    }
+                }
+
+                refreshCurrentView();
+            }
+        } else {
+            Timber.e("FormController is null");
+            ToastUtils.showLongToast(R.string.loading_form_failed);
+            finish();
+        }
     }
 
     /**
@@ -3030,7 +3054,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * to access currentView as an ODKView object to avoid inconsistency
      **/
     @Nullable
-    private ODKView getCurrentViewIfODKView() {
+    public ODKView getCurrentViewIfODKView() {
         if (currentView instanceof ODKView) {
             return (ODKView) currentView;
         }
@@ -3053,7 +3077,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     /**
      * Used whenever we need to show empty view and be able to recognize it from the code
      */
-    class EmptyView extends View {
+    static class EmptyView extends View {
 
         EmptyView(Context context) {
             super(context);
@@ -3101,3 +3125,4 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     // End smap
 }
+

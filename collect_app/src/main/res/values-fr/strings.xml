@@ -436,7 +436,6 @@
   <string name="sort_by_status_asc">Statut, les finalisés en premier</string>
   <string name="sort_by_status_desc">Statut, les non finalisés en premier</string>
   <string name="sort_the_list">Trier la liste</string>
-  <string name="request_permissions_google_account">ODK Collect a besoin d\'accéder à votre compte Google pour obtenir des formulaires vierges et soumettre des formulaires complétés.</string>
   <string name="filter_the_list">Filtrer la liste</string>
   <string name="language">Langue</string>
   <string name="google_auth_io_exception_msg">Impossible de faire des appels API. Si vous exécutez une compilation locale, veuillez lire le fichier \"Readme\" du projet.</string>
@@ -581,6 +580,12 @@
   <string name="no_columns_to_upload">Aucune colonne retrouvée dans le formulaire à téléverser.</string>
   <string name="storage_runtime_permission_denied_title">Autorisations de stockage</string>
   <string name="storage_runtime_permission_denied_desc">Sans ces permissions Collect ne peut pas accéder à vos formulaires ou sauvegarder des réponses. Ré-ouvrez l\'application quand vous êtes prêt à donner les permissions requises. </string>
+  <string name="location_runtime_permissions_denied_title">Autorisations liées à la localisation</string>
+  <string name="location_runtime_permissions_denied_desc">Sans ces permissions, Collect ne peut pas enregistrer votre localisation. Veuillez réessayer lorsque vous êtes prêt à l\'accorder.</string>
+  <string name="camera_runtime_permission_denied_title">Autorisation d\'enregistrement vidéo</string>
+  <string name="camera_runtime_permission_denied_desc">Sans cette permission, Collect ne peut pas accéder à la caméra. Veuillez réessayer lorsque vous êtes prêt à l\'accorder.</string>
+  <string name="record_audio_runtime_permission_denied_title">Autorisation d\'enregistrement audio</string>
+  <string name="record_audio_runtime_permission_denied_desc">Sans cette permission, Collect ne peut pas accéder au microphone. Veuillez réessayer lorsque vous êtes prêt à l\'accorder.</string>
   <string name="form_update_category">Mise à jour d\'un fomulaire</string>
   <string name="periodic_form_updates_check_title">Vérification périodique des mises à jour des formulaires</string>
   <string name="never">Jamais</string>
@@ -603,6 +608,7 @@
   <string name="hide_old_form_versions_setting_summary">Seule la version la plus récente apparaîtra dans Remplir un formulaire</string>
   <string name="sms_pref_dialog_title">Numéro de téléphone de la destination</string>
   <string name="sms_pref_title">Numéro de téléphone de la destination</string>
+  <string name="sms_invalid_phone_number">Numéro de téléphone invalide!</string>
   <!--Sms submission-->
   <string name="sms_no_message">Ce formulaire n\'a aucune question avec \"tag\" SMS</string>
   <string name="sms_submissions_notif_title">Soumissions SMS</string>
@@ -612,4 +618,6 @@
   <string name="rank_items">Choisir l\'ordre des éléments</string>
   <string name="image_not_saved">L\'image n\'a pas pu être enregistrée à cause
 d\'un problème sur l\'instance du fichier.</string>
+  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
+  <string name="current_predicate_continue">Continuer</string>
 </resources>

@@ -356,7 +356,7 @@ public class SmsService {
      * @param instanceId of the instance being updated
      * @param event      with the specific failed status that's gonna be persisted
      */
-    private void updateInstanceStatusFailedText(String instanceId, SmsRxEvent event) {
+    public void updateInstanceStatusFailedText(String instanceId, SmsRxEvent event) {
         String where = InstanceProviderAPI.InstanceColumns._ID + "=?";
         String[] whereArgs = {instanceId};
 
@@ -368,6 +368,11 @@ public class SmsService {
     }
 
     public static String getDisplaySubtext(int resultCode, Date date, SmsProgress progress, Context context) {
+        if (date == null) {
+            Timber.e("date is null");
+            return context.getString(R.string.error_occured);
+        }
+
         try {
             switch (resultCode) {
                 case RESULT_ERROR_NO_SERVICE:
@@ -385,6 +390,9 @@ public class SmsService {
                     return context.getString(R.string.sms_no_message);
                 case RESULT_SUBMISSION_CANCELED:
                     return new SimpleDateFormat(context.getString(R.string.sms_last_submission_on_date_at_time),
+                            Locale.getDefault()).format(date);
+                case RESULT_INVALID_GATEWAY:
+                    return new SimpleDateFormat(context.getString(R.string.sms_no_number),
                             Locale.getDefault()).format(date);
                 case RESULT_ENCRYPTED:
                     return context.getString(R.string.sms_encrypted_message);

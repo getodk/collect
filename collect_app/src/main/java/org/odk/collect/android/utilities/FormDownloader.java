@@ -27,34 +27,26 @@ import org.kxml2.kdom.Element;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.logic.MediaFile;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.FormsProviderAPI;
-import org.opendatakit.httpclientandroidlib.Header;
-import org.opendatakit.httpclientandroidlib.HttpEntity;
-import org.opendatakit.httpclientandroidlib.HttpResponse;
-import org.opendatakit.httpclientandroidlib.HttpStatus;
-import org.opendatakit.httpclientandroidlib.client.HttpClient;
-import org.opendatakit.httpclientandroidlib.client.methods.HttpGet;
-import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.zip.GZIPInputStream;
+
+import javax.inject.Inject;
 
 import timber.log.Timber;
 
@@ -66,6 +58,12 @@ public class FormDownloader {
     private FormDownloaderListener stateListener;
 
     private FormsDao formsDao;
+
+    @Inject CollectServerClient collectServerClient;
+
+    public FormDownloader() {
+        Collect.getInstance().getComponent().inject(this);
+    }
 
     public void setDownloaderListener(FormDownloaderListener sl) {
         synchronized (this) {
@@ -80,7 +78,7 @@ public class FormDownloader {
         return e.getNamespace().equalsIgnoreCase(NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_MANIFEST);
     }
 
-    private class TaskCancelledException extends Exception {
+    private static class TaskCancelledException extends Exception {
         private final File file;
 
         TaskCancelledException(File file) {
@@ -451,16 +449,6 @@ public class FormDownloader {
         File tempFile = File.createTempFile(file.getName(), TEMP_DOWNLOAD_EXTENSION,
                 new File(Collect.CACHE_PATH));
 
-        URI uri;
-        try {
-            // assume the downloadUrl is escaped properly
-            URL url = new URL(downloadUrl);
-            uri = url.toURI();
-        } catch (MalformedURLException | URISyntaxException e) {
-            Timber.e(e, "Unable to get a URI for download URL : %s  due to %s : ", downloadUrl, e.getMessage());
-            throw e;
-        }
-
         // WiFi network connections can be renegotiated during a large form download sequence.
         // This will cause intermittent download failures.  Silently retry once after each
         // failure.  Only if there are two consecutive failures do we abort.
@@ -473,61 +461,14 @@ public class FormDownloader {
             }
             Timber.i("Started downloading to %s from %s", tempFile.getAbsolutePath(), downloadUrl);
 
-            // get shared HttpContext so that authentication and cookies are retained.
-            HttpContext localContext = Collect.getInstance().getHttpContext();
-
-            HttpClient httpclient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
-
-            // ---------------- Smap Start
-            // Add credentials
-            SharedPreferences sharedPreferences =
-                    PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
-
-            String username = sharedPreferences.getString(PreferenceKeys.KEY_USERNAME, null);
-            String password = sharedPreferences.getString(PreferenceKeys.KEY_PASSWORD, null);
-
-            String server =
-                    sharedPreferences.getString(PreferenceKeys.KEY_SERVER_URL, null);
-
-            if (username != null && password != null) {
-                Uri u = Uri.parse(downloadUrl);
-                WebUtils.addCredentials(username, password, u.getHost());
-            }
-            // Smap End
-            // set up request...
-            HttpGet req = WebUtils.createOpenRosaHttpGet(uri);
-            req.addHeader(WebUtils.ACCEPT_ENCODING_HEADER, WebUtils.GZIP_CONTENT_ENCODING);
-
-            HttpResponse response;
-            try {
-                response = httpclient.execute(req, localContext);
-                int statusCode = response.getStatusLine().getStatusCode();
-
-                if (statusCode != HttpStatus.SC_OK) {
-                    WebUtils.discardEntityBytes(response);
-                    if (statusCode == HttpStatus.SC_UNAUTHORIZED) {
-                        // clear the cookies -- should not be necessary?
-                        Collect.getInstance().getCookieStore().clear();
-                    }
-                    String errMsg =
-                            Collect.getInstance().getString(R.string.file_fetch_failed, downloadUrl,
-                                    response.getStatusLine().getReasonPhrase(), String.valueOf(statusCode));
-                    Timber.e(errMsg);
-                    throw new Exception(errMsg);
-                }
-
                 // write connection to file
                 InputStream is = null;
                 OutputStream os = null;
+
                 try {
-                    HttpEntity entity = response.getEntity();
-                    is = entity.getContent();
-                    Header contentEncoding = entity.getContentEncoding();
-                    if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase(
-                            WebUtils.GZIP_CONTENT_ENCODING)) {
-                        is = new GZIPInputStream(is);
-                    }
+                    is = collectServerClient.getHttpInputStream(downloadUrl, null).getInputStream();
                     os = new FileOutputStream(tempFile);
+
                     byte[] buf = new byte[4096];
                     int len;
                     while ((len = is.read(buf)) > 0 && (stateListener == null || !stateListener.isTaskCanceled())) {
@@ -535,7 +476,18 @@ public class FormDownloader {
                     }
                     os.flush();
                     success = true;
-                } finally {
+
+            } catch (Exception e) {
+                Timber.e(e.toString());
+                // silently retry unless this is the last attempt,
+                // in which case we rethrow the exception.
+
+                FileUtils.deleteAndReport(tempFile);
+
+                if (attemptCount == MAX_ATTEMPT_COUNT) {
+                    throw e;
+                }
+            } finally {
                     if (os != null) {
                         try {
                             os.close();
@@ -560,17 +512,6 @@ public class FormDownloader {
                         }
                     }
                 }
-            } catch (Exception e) {
-                Timber.e(e.toString());
-                // silently retry unless this is the last attempt,
-                // in which case we rethrow the exception.
-
-                FileUtils.deleteAndReport(tempFile);
-
-                if (attemptCount == MAX_ATTEMPT_COUNT) {
-                    throw e;
-                }
-            }
 
             if (stateListener != null && stateListener.isTaskCanceled()) {
                 FileUtils.deleteAndReport(tempFile);
@@ -657,13 +598,8 @@ public class FormDownloader {
         }
 
         List<MediaFile> files = new ArrayList<MediaFile>();
-        // get shared HttpContext so that authentication and cookies are retained.
-        HttpContext localContext = Collect.getInstance().getHttpContext();
 
-        HttpClient httpclient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
-
-        DocumentFetchResult result =
-                WebUtils.getXmlDocument(fd.getManifestUrl(), localContext, httpclient);
+        DocumentFetchResult result = collectServerClient.getXmlDocument(fd.getManifestUrl());
 
         if (result.errorMessage != null) {
             return result.errorMessage;

@@ -117,6 +117,8 @@
   <string name="send_data">Надіслати завершену анкету</string>
   <string name="send_data_button">Надіслати завершену анкету (%s)</string>
   <string name="send_selected_data">Надіслати обране</string>
+  <string name="send_selected_data_internet">Надіслати (Інтернет)</string>
+  <string name="send_selected_data_sms">Надіслати (Повідомлення)</string>
   <string name="view_sent_forms">Переглянути надіслану анкету</string>
   <string name="view_sent_forms_button">Переглянути надіслану анкету (%s)</string>
   <string name="server_auth_credentials">Неправильні ім\'я користувача або пароль до сервера: %s</string>
@@ -269,7 +271,7 @@
   <string name="go_shared">Розділене зі мною</string>
   <string name="modified_on_date_at_time">\'Зімінено в\' EEE, dd MMM, yyyy \'at\' HH:mm</string>
   <string name="aggregate_preferences">Налаштування ODK Aggregate</string>
-  <string name="sms_submission_preferences">Налаштування надсилання SMS</string>
+  <string name="sms_submission_preferences">Налаштування повідомлень</string>
   <string name="submission_transport">Транспортування відправлень (розширені)</string>
   <string name="submission_transport_types_title">Надіслати відправлення через</string>
   <string name="other_preferences">Налаштування інших платформ</string>
@@ -280,6 +282,7 @@
   <string name="google_set_account">Ви обрали своїм сервером Google Сторінки, для продовження, будь ласка, вкажіть відповідний обліковий запис Google в Загальних налаштуваннях</string>
   <string name="media_upload_error">Помилка завантаження неіснуючого медіа файлу: %1$s</string>
   <string name="odk_auth_auth_fail">Помилка авторизації під час автоматичного надсилання, будь ласка, перевірте налаштування</string>
+  <string name="odk_permissions_fail">Помилка автоматичного надсилання, будь ласка, перевірте надання всіх необхідних дозволів</string>
   <string name="odk_auto_note">Результати автонадсилання ODK</string>
   <string name="odk_auto_download_notification_title">Результати автозавантаження ODK</string>
   <string name="notification_error">Помилка відображення тексту оповіщення</string>
@@ -436,7 +439,6 @@
   <string name="sort_by_status_asc">За статусом, завершені перші</string>
   <string name="sort_by_status_desc">За статусом, незавершені перші</string>
   <string name="sort_the_list">Відсортувати список</string>
-  <string name="request_permissions_google_account">ODK Collect потрібен доступ до Вашого Облікового запису Google щоб отримувати чисті і надсилати заповнені анкети.</string>
   <string name="filter_the_list">Фільтрувати список</string>
   <string name="language">Мова</string>
   <string name="google_auth_io_exception_msg">Неможливо здійснити виклики API. Якщо ви використовуєте локальну збірку, будь ласка, звурніться до документації проекту.</string>
@@ -512,6 +514,7 @@
   <string name="invalid_email_address">Некоректна електронна адреса!</string>
   <string name="sort_by">Сортувати за</string>
   <string name="server">Сервер</string>
+  <string name="submission_transport_admin_setting">Транспортування відправлень</string>
   <string name="select_value">Обрати заначення</string>
   <string name="edit_value">Редагувати значення</string>
   <string name="no_value_selected">Значення не обране</string>
@@ -587,6 +590,12 @@
   <string name="camera_runtime_permission_denied_desc">Без цього дозволу Collect не має доступу до камери. Будь ласка, спробуйте знову коли будете готові надати його.</string>
   <string name="record_audio_runtime_permission_denied_title">Дозвіл на аудіозапис</string>
   <string name="record_audio_runtime_permission_denied_desc">Без цього дозволу Collect не має доступу до мікрофону. Будь ласка, спробуйте знову коли будете готові надати його.</string>
+  <string name="get_accounts_runtime_permission_denied_title">Отримати дозволи облікового запису</string>
+  <string name="get_accounts_runtime_permission_denied_desc">Без цього дозволу Collect не має доступу до облікових записів. Будь ласка, спробуйте знову коли будете готові надати його.</string>
+  <string name="send_sms_runtime_permission_denied_title">Дозвіл надсилати повідомлення</string>
+  <string name="send_sms_runtime_permission_denied_desc">Без цього дозволу Collect не може надсилати повідомлення. Будь ласка, спробуйте знову коли будете готові надати його.</string>
+  <string name="read_phone_state_runtime_permission_denied_title">Сатус телефону</string>
+  <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect не робить телефонних дзвінків але потребує доступу до певних властивостей вашого пристрою як то номер телефну та ID пристрою</string>
   <string name="form_update_category">Оновлення анкети</string>
   <string name="periodic_form_updates_check_title">Періодична перерівка оновлень анкет</string>
   <string name="never">Ніколи</string>
@@ -612,6 +621,7 @@
   <string name="sms_invalid_phone_number">Некоректний номер!</string>
   <!--Sms submission-->
   <string name="sms_no_reception">\'Не вдалося\' EEE, MMM dd, yyyy \'в\' HH:mm \'через відсутність отримувача\'</string>
+  <string name="sms_no_number">\'Не вдалося\' EEE, MMM dd, yyyy \'в\' HH:mm \'через не вказаний номер телефону\'</string>
   <string name="sms_fatal_error">\'Не вдалося\' EEE, MMM dd, yyyy \'в\' HH:mm</string>
   <string name="sms_airplane_mode">\'Не вдалося\' EEE, MMM dd, yyyy \'в\' HH:mm \'через ввімкнений Режим Без Зв/\'язку\'</string>
   <string name="sms_no_message">Ця анкета не має питань з позначками повідомлень.</string>
@@ -629,7 +639,17 @@
   <string name="sms_submissions_notif_description">Декілька анкет наразі надсилаються.</string>
   <string name="transport_type_internet">Wifi/Мобільна мережа (рекомендовано)</string>
   <string name="transport_type_sms">Повідомлення</string>
+  <string name="transport_type_both">Обрати та надіслати</string>
   <string name="seconds">Секунди</string>
   <string name="rank_items">Засоби оцінки</string>
   <string name="image_not_saved">Зображення не може бути збережене через проблеми з файлом відповідної анкети.</string>
+  <string name="loading_form_failed">Під час завантаження анкети виникла помилка. Будь ласка спробуйте знову.</string>
+  <string name="missing_google_account_dialog_title">Нема облікового запису Google</string>
+  <string name="missing_google_account_dialog_desc">Щоб надіслати анкету через Google Таблиці Ви повинні налаштувати обліковий запис Google в налаштуваннях сервера.</string>
+  <string name="sms_invalid_phone_number_description">Вкажіть номер телефону для надсиланнячерез повідомлення або замініть тип відправки.</string>
+  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
+  <string name="current_predicate_warning">Це питання не буде сумісне з наступними версіями ODK Collect оскільки використовує current() в фільтрі альтернатив. \n\nБудь ласка, переконайтесь, що розробник цієї анкети прочитає докладну інформацію нижче та вжиє заходів.</string>
+  <string name="current_predicate_warning_title">Необхідна дія</string>
+  <string name="current_predicate_forum">Прочитайте докладну інформацію</string>
+  <string name="current_predicate_continue">Продовжити</string>
 </resources>

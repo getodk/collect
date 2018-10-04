@@ -24,7 +24,12 @@ public class BasePreferenceFragment extends PreferenceFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
         initToolbar(getPreferenceScreen(), view);
+        removeDisabledPrefs();
 
+        super.onViewCreated(view, savedInstanceState);
+    }
+
+    void removeDisabledPrefs() {
         // removes disabled preferences if in general settings
         if (getActivity() instanceof PreferencesActivity) {
             Bundle args = getArguments();
@@ -72,9 +77,6 @@ public class BasePreferenceFragment extends PreferenceFragment {
                 del.setEnabled(true);
             }
         }
-        // end smap
-
-        super.onViewCreated(view, savedInstanceState);
     }
 
     // inflates toolbar in the preference fragments

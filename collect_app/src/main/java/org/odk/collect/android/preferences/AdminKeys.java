@@ -36,6 +36,7 @@ public final class AdminKeys {
     static final String KEY_CHANGE_ADMIN_PASSWORD               = "admin_password";
     static final String KEY_IMPORT_SETTINGS                     = "import_settings";
     private static final String KEY_CHANGE_SERVER               = "change_server";
+    private static final String KEY_CHANGE_SUBMISSION_TRANSPORT = "change_submission_transport";
     private static final String KEY_CHANGE_FORM_METADATA        = "change_form_metadata";
 
     // client
@@ -72,6 +73,8 @@ public final class AdminKeys {
     static AdminAndGeneralKeys[] adminToGeneral = new AdminAndGeneralKeys[] {
 
             ag(KEY_CHANGE_SERVER,              PreferenceKeys.KEY_PROTOCOL),
+            ag(KEY_CHANGE_SUBMISSION_TRANSPORT, PreferenceKeys.KEY_TRANSPORT_PREFERENCE),
+            ag(KEY_CHANGE_SUBMISSION_TRANSPORT, PreferenceKeys.KEY_SMS_PREFERENCE),
             ag(KEY_CHANGE_FORM_METADATA,       PreferenceKeys.KEY_FORM_METADATA),
 
             ag(KEY_PERIODIC_FORM_UPDATES_CHECK, PreferenceKeys.KEY_PERIODIC_FORM_UPDATES_CHECK),
@@ -101,16 +104,16 @@ public final class AdminKeys {
 
     /** Admin keys other than those in adminToGeneral above */
     private static Collection<String> otherKeys = Arrays.asList(
-            KEY_EDIT_SAVED       ,
-            KEY_SEND_FINALIZED   ,
-            KEY_VIEW_SENT        ,
-            KEY_GET_BLANK        ,
-            KEY_DELETE_SAVED     ,
-            KEY_SAVE_MID         ,
-            KEY_JUMP_TO          ,
-            KEY_CHANGE_LANGUAGE  ,
-            KEY_ACCESS_SETTINGS  ,
-            KEY_SAVE_AS          ,
+            KEY_EDIT_SAVED,
+            KEY_SEND_FINALIZED,
+            KEY_VIEW_SENT,
+            KEY_GET_BLANK,
+            KEY_DELETE_SAVED,
+            KEY_SAVE_MID,
+            KEY_JUMP_TO,
+            KEY_CHANGE_LANGUAGE,
+            KEY_ACCESS_SETTINGS,
+            KEY_SAVE_AS,
             KEY_MARK_AS_FINALIZED,
             KEY_CHANGE_ADMIN_PASSWORD,
             KEY_MOVING_BACKWARDS,

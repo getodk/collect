@@ -43,4 +43,5 @@
 
     <issue id="ContentDescription" severity="ignore"/>
     <issue id="HardwareIds" severity="ignore"/>
+    <issue id="MissingPermission" severity="ignore"/>
 </lint>

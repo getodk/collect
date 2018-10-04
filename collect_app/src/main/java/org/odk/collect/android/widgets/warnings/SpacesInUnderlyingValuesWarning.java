@@ -56,7 +56,6 @@ public class SpacesInUnderlyingValuesWarning {
         this.warningRenderer = warningRenderer;
     }
 
-
     public void renderWarningIfNecessary(List<SelectChoice> items) {
         valuesChecker.check(items);
 

@@ -397,7 +397,6 @@
   <string name="instance_scan_completed">पूर्ण स्कॅनिंग</string>
   <string name="instance_scan_count">%1$d  फॉर्म जोडले.</string>
   <string name="sort_the_list">सूची क्रमवारी लावा</string>
-  <string name="request_permissions_google_account">ओडीके ची संकल्पना रिक्त फॉर्म प्राप्त करण्यासाठी आणि भरलेल्या फॉर्म सबमिट करण्यासाठी आपल्या गूगल खात्यात प्रवेश करण्याची आवश्यकता आहे.</string>
   <string name="filter_the_list">सूची फिल्टर करा</string>
   <string name="language">भाषा</string>
   <string name="google_auth_io_exception_msg">API कॉल करण्यात अक्षम. आपण स्थानिक बिल्ड चालवत असल्यास, कृपया प्रोजेक्ट रीडमेचे पुनरावलोकन करा.</string>
@@ -466,4 +465,6 @@
   <string name="not_supported_offline_layer_format">निवडलेली ऑफलाइन स्तर फाइल PBF स्वरूपन वापरते जी समर्थित नाही!</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
   <!--Sms submission-->
+  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
+  <string name="current_predicate_continue">चालू ठेवा</string>
 </resources>

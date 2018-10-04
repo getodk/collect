@@ -16,14 +16,10 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.LinearLayout;
 
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
-
-import java.util.List;
 
 /**
  * SelectOneSearchWidget allows the user to enter a value in an editable text box and based on
@@ -34,20 +30,17 @@ import java.util.List;
  * @author Raghu Mittal (raghu.mittal@handsrel.com)
  */
 @SuppressLint("ViewConstructor")
-public class SelectOneSearchWidget extends AbstractSelectOneWidget implements OnCheckedChangeListener, AudioPlayListener {
-    public SelectOneSearchWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride) {   // smap add readOnlyOverride
-        super(context, prompt, false, readOnlyOverride);   // smap add readOnlyOverride
+public class SelectOneSearchWidget extends AbstractSelectOneWidget implements AudioPlayListener {
+    public SelectOneSearchWidget(Context context, FormEntryPrompt prompt, boolean autoAdvance, boolean readOnlyOverride) { // smap add readOnlyOverride
+        super(context, prompt, autoAdvance, readOnlyOverride); // smap add readOnlyOverride
         createLayout(readOnlyOverride);
+        setUpSearchBox();
     }
 
     @Override
-    protected void addButtonsToLayout(List<Integer> tagList) {
-        for (int i = 0; i < buttons.size(); i++) {
-            if (tagList == null || tagList.contains(i)) {
-                answerLayout.addView(buttons.get(i));
-                answerLayout.setDividerDrawable(getResources().getDrawable(themeUtils.getDivider()));
-                answerLayout.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
-            }
+    protected void doSearch(String searchStr) {
+        if (adapter != null) {
+            adapter.getFilter().filter(searchStr);
         }
     }
 

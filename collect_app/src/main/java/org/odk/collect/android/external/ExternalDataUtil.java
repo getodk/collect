@@ -19,6 +19,9 @@
 package org.odk.collect.android.external;
 
 import android.widget.Toast;
+
+import com.google.android.gms.analytics.HitBuilders;
+
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.core.model.instance.FormInstance;
@@ -115,6 +118,13 @@ public final class ExternalDataUtil {
             found = matcher.find();
         }
         if (found) {
+            Collect.getInstance().getDefaultTracker()
+                    .send(new HitBuilders.EventBuilder()
+                            .setCategory("ExternalData")
+                            .setAction("search()")
+                            .setLabel(Collect.getCurrentFormIdentifierHash())
+                            .build());
+
             String function = matcher.group(0);
             try {
                 XPathExpression xpathExpression = XPathParseTool.parseXPath(function);

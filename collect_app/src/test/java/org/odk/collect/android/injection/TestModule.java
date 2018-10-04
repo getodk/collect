@@ -7,13 +7,17 @@ import android.telephony.SmsManager;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.events.RxEventBus;
+import org.odk.collect.android.http.CollectServerClient;
+import org.odk.collect.android.http.HttpClientConnection;
+import org.odk.collect.android.http.OpenRosaHttpInterface;
+import org.odk.collect.android.http.mock.MockHttpClientConnection;
+import org.odk.collect.android.http.mock.MockHttpClientConnectionError;
 import org.odk.collect.android.injection.config.scopes.PerApplication;
 import org.odk.collect.android.tasks.sms.SmsSubmissionManager;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
-import org.odk.collect.android.utilities.AgingCredentialsProvider;
-import org.opendatakit.httpclientandroidlib.client.CookieStore;
-import org.opendatakit.httpclientandroidlib.client.CredentialsProvider;
-import org.opendatakit.httpclientandroidlib.impl.client.BasicCookieStore;
+import org.odk.collect.android.utilities.WebCredentialsUtils;
+
+import javax.inject.Named;
 
 import dagger.Module;
 import dagger.Provides;
@@ -63,18 +67,36 @@ public class TestModule {
         return new RxEventBus();
     }
 
-    @PerApplication
     @Provides
-    CredentialsProvider provideCredentialsProvider() {
-        // retain credentials for 7 minutes...
-        return new AgingCredentialsProvider(7 * 60 * 1000);
+    MockHttpClientConnection provideMockHttpClientConnection() {
+        return new MockHttpClientConnection();
     }
 
-    @PerApplication
     @Provides
-    CookieStore provideCookieStore() {
-        // share all session cookies across all sessions.
-        return new BasicCookieStore();
+    MockHttpClientConnectionError provideMockHttpClientConnectionError() {
+        return new MockHttpClientConnectionError();
+    }
+
+    @Provides
+    @Named("StubbedData")
+    CollectServerClient provideTestCollectServerClient(MockHttpClientConnection httpClientConnection) {
+        return new CollectServerClient(httpClientConnection, new WebCredentialsUtils());
+    }
+
+    @Provides
+    @Named("NullGet")
+    CollectServerClient provideTestCollectServerClientError(MockHttpClientConnectionError httpClientConnection) {
+        return new CollectServerClient(httpClientConnection, new WebCredentialsUtils());
+    }
+
+    @Provides
+    public OpenRosaHttpInterface provideHttpInterface() {
+        return new HttpClientConnection();
+    }
+
+    @Provides
+    public WebCredentialsUtils provideWebCredentials() {
+        return new WebCredentialsUtils();
     }
 
 }

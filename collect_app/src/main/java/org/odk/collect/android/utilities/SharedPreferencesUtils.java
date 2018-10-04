@@ -120,7 +120,6 @@ public final class SharedPreferencesUtils {
                 }
             }
 
-            AuthDialogUtility.setWebCredentialsFromPreferences();
             AutoSendPreferenceMigrator.migrate(generalPrefsJson);
 
             if (listener != null) {

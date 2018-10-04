@@ -197,7 +197,7 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
             ToastUtils.showShortToast(getString(R.string.file_deleted_ok, String.valueOf(deletedForms)));
         } else {
             // had some failures
-            Timber.e("Failed to delete %d forms", (toDeleteCount - deletedForms));
+            Timber.e("Failed to delete %d forms", toDeleteCount - deletedForms);
             ToastUtils.showLongToast(getString(R.string.file_deleted_error, String.valueOf(getCheckedCount()
                     - deletedForms), String.valueOf(getCheckedCount())));
         }

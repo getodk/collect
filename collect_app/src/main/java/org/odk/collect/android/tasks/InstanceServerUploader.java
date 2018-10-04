@@ -19,52 +19,37 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.preference.PreferenceManager;
-import android.webkit.MimeTypeMap;
 
 import com.google.android.gms.analytics.HitBuilders;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.http.HttpHeadResult;
+import org.odk.collect.android.http.OpenRosaHttpInterface;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.http.CollectServerClient.Outcome;
+import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ResponseMessageParser;
-import org.odk.collect.android.utilities.WebUtils;
-import org.opendatakit.httpclientandroidlib.Header;
-import org.opendatakit.httpclientandroidlib.HttpEntity;
-import org.opendatakit.httpclientandroidlib.HttpResponse;
-import org.opendatakit.httpclientandroidlib.HttpStatus;
-import org.opendatakit.httpclientandroidlib.NoHttpResponseException;
-import org.opendatakit.httpclientandroidlib.client.ClientProtocolException;
-import org.opendatakit.httpclientandroidlib.client.HttpClient;
-import org.opendatakit.httpclientandroidlib.client.methods.HttpHead;
-import org.opendatakit.httpclientandroidlib.client.methods.HttpPost;
-import org.opendatakit.httpclientandroidlib.conn.ConnectTimeoutException;
-import org.opendatakit.httpclientandroidlib.conn.HttpHostConnectException;
-import org.opendatakit.httpclientandroidlib.entity.ContentType;
-import org.opendatakit.httpclientandroidlib.entity.mime.MultipartEntityBuilder;
-import org.opendatakit.httpclientandroidlib.entity.mime.content.FileBody;
-import org.opendatakit.httpclientandroidlib.entity.mime.content.StringBody;
-import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
+import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.SocketException;
-import java.net.SocketTimeoutException;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.net.UnknownHostException;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
+
+import javax.inject.Inject;
+import javax.net.ssl.HttpsURLConnection;
 
 import timber.log.Timber;
 
@@ -75,76 +60,122 @@ import timber.log.Timber;
  */
 public class InstanceServerUploader extends InstanceUploader {
 
-    private enum ContentTypeMapping {
-        XML("xml",  ContentType.TEXT_XML),
-      _3GPP("3gpp", ContentType.create("audio/3gpp")),
-       _3GP("3gp",  ContentType.create("video/3gpp")),
-        AVI("avi",  ContentType.create("video/avi")),
-        AMR("amr",  ContentType.create("audio/amr")),
-        CSV("csv",  ContentType.create("text/csv")),
-        JPG("jpg",  ContentType.create("image/jpeg")),
-        MP3("mp3",  ContentType.create("audio/mp3")),
-        MP4("mp4",  ContentType.create("video/mp4")),
-        OGA("oga",  ContentType.create("audio/ogg")),
-        OGG("ogg",  ContentType.create("audio/ogg")),
-        OGV("ogv",  ContentType.create("video/ogg")),
-        WAV("wav",  ContentType.create("audio/wav")),
-       WEBM("webm", ContentType.create("video/webm")),
-        XLS("xls",  ContentType.create("application/vnd.ms-excel"));
-
-        private String extension;
-        private ContentType contentType;
-
-        ContentTypeMapping(String extension, ContentType contentType) {
-            this.extension = extension;
-            this.contentType = contentType;
-        }
-
-        public static ContentType of(String fileName) {
-            String extension = getFileExtension(fileName);
-
-            for (ContentTypeMapping m : values()) {
-                if (m.extension.equals(extension)) {
-                    return m.contentType;
-                }
-            }
-
-            return null;
-        }
-    }
-
-    // it can take up to 27 seconds to spin up Aggregate
-    private static final int CONNECTION_TIMEOUT = 60000;
-    private static final String FAIL = "Error: ";
     private static final String URL_PATH_SEP = "/";
 
+    private static final String FAIL = "Error: ";
+
+    @Inject
+    OpenRosaHttpInterface httpInterface;
+
+    @Inject
+    WebCredentialsUtils webCredentialsUtils;
+
+    private String completeDestinationUrl;
+    private String customUsername;
+    private String customPassword;
+
+    public InstanceServerUploader() {
+        Collect.getInstance().getComponent().inject(this);
+    }
+
+    private boolean processChunk(int low, int high, Outcome outcome, Long... values) {
+        if (values == null) {
+            // don't try anything if values is null
+            return false;
+        }
+
+        StringBuilder selectionBuf = new StringBuilder(InstanceColumns._ID + " IN (");
+        String[] selectionArgs = new String[high - low];
+        for (int i = 0; i < (high - low); i++) {
+            if (i > 0) {
+                selectionBuf.append(',');
+            }
+            selectionBuf.append('?');
+            selectionArgs[i] = values[i + low].toString();
+        }
+
+        selectionBuf.append(')');
+        String selection = selectionBuf.toString();
+
+        String deviceId = new PropertyManager(Collect.getInstance().getApplicationContext())
+                .getSingularProperty(PropertyManager.withUri(PropertyManager.PROPMGR_DEVICE_ID));
+
+        Map<Uri, Uri> uriRemap = new HashMap<>();
+
+        Cursor c = null;
+        try {
+            c = new InstancesDao().getInstancesCursor(selection, selectionArgs);
+
+            if (c != null && c.getCount() > 0) {
+                c.moveToPosition(-1);
+                while (c.moveToNext()) {
+                    if (isCancelled()) {
+                        return false;
+                    }
+
+                    publishProgress(c.getPosition() + 1 + low, values.length);
+                    String instance = c.getString(
+                            c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
+                    String id = c.getString(c.getColumnIndex(InstanceColumns._ID));
+                    Uri toUpdate = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, id);
+
+                    /*
+                     Submission url precedence/priority:
+                      * Intent submission url
+                      * Form submission URL
+                      * The configured URL in the app settings
+                    */
+                    int subIdx = c.getColumnIndex(InstanceColumns.SUBMISSION_URI);
+                    String urlString = completeDestinationUrl != null ? completeDestinationUrl : c.isNull(subIdx)
+                            ? getServerSubmissionURL() : c.getString(subIdx).trim();
+
+                    // add the deviceID to the request...
+                    try {
+                        urlString += "?deviceID=" + URLEncoder.encode(deviceId != null ? deviceId : "", "UTF-8");
+                    } catch (UnsupportedEncodingException e) {
+                        // unreachable...
+                        Timber.i(e, "Error encoding URL for device id : %s", deviceId);
+                    }
+
+                    Collect.getInstance().getActivityLogger().logAction(this, urlString, instance);
+
+                    if (!uploadSubmissionFile(urlString, id, instance, toUpdate, uriRemap, outcome)) {
+                        return false; // get credentials...
+                    }
+                }
+            }
+        } finally {
+            if (c != null) {
+                c.close();
+            }
+        }
+
+        return true;
+    }
+
     /**
-     * Uploads to urlString the submission identified by id with filepath of instance
+     * Uploads a submission file to a url
      *
-     * @param urlString        destination URL
-     * @param toUpdate         - Instance URL for recording status update.
-     * @param localContext     - context (e.g., credentials, cookies) for client connection
-     * @param uriRemap         - mapping of Uris to avoid redirects on subsequent invocations
+     * @param urlString - The Destination URL
+     * @param id - Form ID
+     * @param instanceFilePath - path + filename to upload
+     * @param toUpdate - Content Provider URI to update
+     * @param uriRemap - Map of uri's that are to be re-mapped to a submission URI
+     * @param outcome - An object to hold the results of the file upload
      * @return false if credentials are required and we should terminate immediately.
      */
-    private boolean uploadOneSubmission(String urlString, String id, String instanceFilePath,
-                                        Uri toUpdate,
-                                        HttpContext localContext,
-                                        Map<Uri, Uri> uriRemap,
+    private boolean uploadSubmissionFile(String urlString, String id, String instanceFilePath,
+                                         Uri toUpdate,
+                                         Map<Uri, Uri> uriRemap,
                                         Outcome outcome,
                                         String status,              // smap
                                         String location_trigger,    // smap
                                         String survey_notes) {        // smap add status
 
-        Collect.getInstance().getActivityLogger().logAction(this, urlString, instanceFilePath);
-
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());    // smap
-        File instanceFile = new File(instanceFilePath);
-        ContentValues cv = new ContentValues();
+        ContentValues contentValues = new ContentValues();
         Uri submissionUri = Uri.parse(urlString);
-        HttpClient httpclient = WebUtils.createHttpClient(CONNECTION_TIMEOUT);
 
-        ResponseMessageParser messageParser = null;
         boolean openRosaServer = false;
         if (uriRemap.containsKey(submissionUri)) {
             // we already issued a head request and got a response,
@@ -164,8 +195,8 @@ public class InstanceServerUploader extends InstanceUploader {
             if (submissionUri.getHost() == null) {
                 Timber.i("Host name may not be null");
                 outcome.messagesByInstanceId.put(id, FAIL + "Host name may not be null");
-                cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
-                Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
+                contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
+                Collect.getInstance().getContentResolver().update(toUpdate, contentValues, null, null);
                 return true;
             }
 
@@ -183,46 +214,21 @@ public class InstanceServerUploader extends InstanceUploader {
                 return false;
             }
 
-            // Issue a head request to confirm the server is an OpenRosa server and see if auth
-            // is required
-            // http://docs.opendatakit.org/openrosa-form-submission/#extended-transmission-considerations
-            HttpHead httpHead = WebUtils.createOpenRosaHttpHead(uri);
-
-            // prepare response
-            final HttpResponse response;
             try {
-                Timber.i("Issuing HEAD request for %s to: %s", id, submissionUri.toString());
+                HttpHeadResult headResult = httpInterface.head(uri, webCredentialsUtils.getCredentials(uri));
+                Map<String, String> responseHeaders = headResult.getHeaders();
 
-                response = httpclient.execute(httpHead, localContext);
-                int statusCode = response.getStatusLine().getStatusCode();
-                if (statusCode == HttpStatus.SC_UNAUTHORIZED) {
-                    // clear the cookies -- should not be necessary?
-                    Collect.getInstance().getCookieStore().clear();
-
-                    WebUtils.discardEntityBytes(response);
-                    // we need authentication, so stop and return what we've
-                    // done so far.
-                    /*
-                     * Smap Start
-                     *   just fail the request, the user will need to update userid and password in the parameters
-                     *   Smap does not at this stage support submissionURL's per survey each with a different user id and password
-                     *   The thinking is that this may be too complex and this type of function is better handled by subscribers
-                      */
-                    //outcome.authRequestingServer = u;
-                    //return false;
-                    outcome.messagesByInstanceId.put(id, FAIL
-                            + "Authentication failure.  You will need to fix the username, password or URL in the sharedPreferences screen.  ");
-                    //cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED); // smap
-                    Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
-                    return true;
-                    // Smap end
-                } else if (statusCode == 204) {
-                    Header[] locations = response.getHeaders("Location");
-                    WebUtils.discardEntityBytes(response);
-                    if (locations != null && locations.length == 1) {
+                if (headResult.getStatusCode() == HttpsURLConnection.HTTP_UNAUTHORIZED) {
+                    //outcome.authRequestingServer = submissionUri;	// smap
+                    //return false;	// smap
+                    contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS,	// smap
+                         InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
+                    Collect.getInstance().getContentResolver().update(toUpdate, contentValues, null, null);       // smap
+                    return true;       // smap
+                } else if (headResult.getStatusCode() == HttpsURLConnection.HTTP_NO_CONTENT) {
+                    if (responseHeaders.containsKey("Location")) {
                         try {
-                            Uri newURI = Uri.parse(
-                                    URLDecoder.decode(locations[0].getValue(), "utf-8"));
+                            Uri newURI = Uri.parse(URLDecoder.decode(responseHeaders.get("Location"), "utf-8"));
                             if (submissionUri.getHost().equalsIgnoreCase(newURI.getHost())) {
                                 openRosaServer = true;
                                 // trust the server to tell us a new location
@@ -249,70 +255,48 @@ public class InstanceServerUploader extends InstanceUploader {
                                                 + "Unexpected redirection attempt to a different "
                                                 + "host: "
                                                 + newURI.toString());
-                                //cv.put(InstanceColumns.STATUS,
+                                //contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS,    // smap don't set failure state
                                 //        InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                                 Collect.getInstance().getContentResolver()
-                                        .update(toUpdate, cv, null, null);
+                                        .update(toUpdate, contentValues, null, null);
                                 return true;
                             }
                         } catch (Exception e) {
                             Timber.e(e, "Exception thrown parsing URI for url %s", urlString);
                             outcome.messagesByInstanceId.put(id, FAIL + urlString + " " + e.toString());
-                            //cv.put(InstanceColumns.STATUS,
-                            //        InstanceProviderAPI.STATUS_SUBMISSION_FAILED);    // smap don't set faillure state
+                            //contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS,
+                            //        InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                             Collect.getInstance().getContentResolver()
-                                    .update(toUpdate, cv, null, null);
+                                    .update(toUpdate, contentValues, null, null);
                             return true;
                         }
                     }
-                } else {
-                    // may be a server that does not handle
-                    WebUtils.discardEntityBytes(response);
 
-                    Timber.w("Status code on Head request: %d", statusCode);
-                    if (statusCode >= HttpStatus.SC_OK
-                            && statusCode < HttpStatus.SC_MULTIPLE_CHOICES) {
+                } else {
+                    Timber.w("Status code on Head request: %d", headResult.getStatusCode());
+                    if (headResult.getStatusCode() >= HttpsURLConnection.HTTP_OK && headResult.getStatusCode() < HttpsURLConnection.HTTP_MULT_CHOICE) {
                         outcome.messagesByInstanceId.put(
                                 id,
                                 FAIL
                                         + "Invalid status code on Head request.  If you have a "
                                         + "web proxy, you may need to login to your network. ");
-                        // cv.put(InstanceColumns.STATUS,
-                        //         InstanceProviderAPI.STATUS_SUBMISSION_FAILED);  // smap
+                        // contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS,
+                        //         InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                         Collect.getInstance().getContentResolver()
-                                .update(toUpdate, cv, null, null);
+                                .update(toUpdate, contentValues, null, null);
                         return true;
                     }
                 }
-            } catch (ClientProtocolException | ConnectTimeoutException | UnknownHostException | SocketTimeoutException | NoHttpResponseException | SocketException e) {
-                if (e instanceof ClientProtocolException) {
-                    outcome.messagesByInstanceId.put(id, FAIL + "Client Protocol Exception");
-                    Timber.i(e, "Client Protocol Exception");
-                } else if (e instanceof ConnectTimeoutException) {
-                    outcome.messagesByInstanceId.put(id, FAIL + "Connection Timeout");
-                    Timber.i(e, "Connection Timeout");
-                } else if (e instanceof UnknownHostException) {
-                    outcome.messagesByInstanceId.put(id, FAIL + e.toString() + " :: Network Connection Failed");
-                    Timber.i(e, "Network Connection Failed");
-                } else if (e instanceof SocketTimeoutException) {
-                    outcome.messagesByInstanceId.put(id, FAIL + "Connection Timeout");
-                    Timber.i(e, "Connection timeout");
-                } else {
-                    outcome.messagesByInstanceId.put(id, FAIL + "Network Connection Refused");
-                    Timber.i(e, "Network Connection Refused");
-                }
-                cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
-                Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
-                return true;
             } catch (Exception e) {
                 String msg = e.getMessage();
                 if (msg == null) {
                     msg = e.toString();
                 }
-                outcome.messagesByInstanceId.put(id, FAIL + "Generic Exception: " + msg);
+
+                outcome.messagesByInstanceId.put(id, FAIL + msg);
                 Timber.e(e);
-                //cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
-                Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
+                //contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);   // smap
+                Collect.getInstance().getContentResolver().update(toUpdate, contentValues, null, null);
                 return true;
             }
         }
@@ -337,6 +321,8 @@ public class InstanceServerUploader extends InstanceUploader {
         // This means the plaintext files and the encrypted files
         // will be sent to the server and the server will have to
         // figure out what to do with them.
+
+        File instanceFile = new File(instanceFilePath);
         File submissionFile = new File(instanceFile.getParentFile(), "submission.xml");
         if (submissionFile.exists()) {
             Timber.w("submission.xml will be uploaded instead of %s", instanceFile.getAbsolutePath());
@@ -346,84 +332,40 @@ public class InstanceServerUploader extends InstanceUploader {
 
         if (!instanceFile.exists() && !submissionFile.exists()) {
             outcome.messagesByInstanceId.put(id, FAIL + "instance XML file does not exist!");
-            //cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);	// smap
-            Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
+            //contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);  // smap
+            Collect.getInstance().getContentResolver().update(toUpdate, contentValues, null, null);
             return true;
         }
 
-        // find all files in parent directory
-        File[] allFiles = instanceFile.getParentFile().listFiles();
+        List<File> files = getFilesInParentDirectory(instanceFile, submissionFile, openRosaServer);
 
-        // add media files
-        List<File> files = new ArrayList<File>();
-        if (allFiles != null) {
-            for (File f : allFiles) {
-                String fileName = f.getName();
-
-                if (fileName.startsWith(".")) {
-                    continue; // ignore invisible files
-                } else if (fileName.equals(instanceFile.getName())) {
-                    continue; // the xml file has already been added
-                } else if (fileName.equals(submissionFile.getName())) {
-                    continue; // the xml file has already been added
-                }
-
-                String extension = getFileExtension(fileName);
-
-                if (openRosaServer) {
-                    files.add(f);
-                } else if (extension.equals("jpg")) { // legacy 0.9x
-                    files.add(f);
-                } else if (extension.equals("3gpp")) { // legacy 0.9x
-                    files.add(f);
-                } else if (extension.equals("3gp")) { // legacy 0.9x
-                    files.add(f);
-                } else if (extension.equals("mp4")) { // legacy 0.9x
-                    files.add(f);
-                } else if (extension.equals("osm")) { // legacy 0.9x
-                    files.add(f);
-                } else {
-                    Timber.w("unrecognized file type %s", f.getName());
-                }
-            }
-        } else {
+        if (files == null) {
             return false;
         }
 
-        boolean first = true;
-        int j = 0;
-        int lastJ;
-        while (j < files.size() || first) {
-            lastJ = j;
-            first = false;
+        ResponseMessageParser messageParser;
 
-            MimeTypeMap m = MimeTypeMap.getSingleton();
+        try {
+            URI uri = URI.create(submissionUri.toString());
 
-            long byteCount = 0L;
+            messageParser = httpInterface.uploadSubmissionFile(files, submissionFile, uri,
+                    webCredentialsUtils.getCredentials(uri));
 
-            // mime post
-            MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+            int responseCode = messageParser.getResponseCode();
 
-            // add the submission file first...
-            FileBody fb = new FileBody(submissionFile, ContentType.TEXT_XML);
-            builder.addPart("xml_submission_file", fb);
-            Timber.i("added xml_submission_file: %s", submissionFile.getName());
-            byteCount += submissionFile.length();
-
-            for (; j < files.size(); j++) {
-                File f = files.get(j);
-
-                // we will be processing every one of these, so
-                // we only need to deal with the content type determination...
-                ContentType contentType = ContentTypeMapping.of(f.getName());
-                if (contentType == null) {
-                    String mime = m.getMimeTypeFromExtension(getFileExtension(f.getName()));
-                    if (mime != null) {
-                        contentType = ContentType.create(mime);
+            if (responseCode != HttpsURLConnection.HTTP_CREATED && responseCode != HttpsURLConnection.HTTP_ACCEPTED) {
+                if (responseCode == HttpsURLConnection.HTTP_OK) {
+                    outcome.messagesByInstanceId.put(id, FAIL + "Network login failure? Again?");
+                } else if (responseCode == HttpsURLConnection.HTTP_UNAUTHORIZED) {
+                    outcome.messagesByInstanceId.put(id, FAIL + messageParser.getReasonPhrase() + " (" + responseCode + ") at " + urlString);
+                } else {
+                    // If response from server is valid use that else use default messaging
+                    if (messageParser.isValid()) {
+                        outcome.messagesByInstanceId.put(id, FAIL + messageParser.getMessageResponse());
                     } else {
-                        Timber.w("No specific MIME type found for file: %s", f.getName());
-                        contentType = ContentType.APPLICATION_OCTET_STREAM;
+                        outcome.messagesByInstanceId.put(id, FAIL + messageParser.getReasonPhrase() + " (" + responseCode + ") at " + urlString);
                     }
+<<<<<<< HEAD
                 }
                 fb = new FileBody(f, contentType);
                 builder.addPart(f.getName(), fb);
@@ -528,8 +470,24 @@ public class InstanceServerUploader extends InstanceUploader {
                 outcome.messagesByInstanceId.put(id, FAIL + "Generic Exception: " + msg);
                 //cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);    // smap
                 Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
+=======
+
+                }
+                contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
+                Collect.getInstance().getContentResolver().update(toUpdate, contentValues, null, null);
+>>>>>>> merge_master
                 return true;
             }
+
+        } catch (IOException e) {
+            String msg = e.getMessage();
+            if (msg == null) {
+                msg = e.toString();
+            }
+            outcome.messagesByInstanceId.put(id, FAIL + "Generic Exception: " + msg);
+            contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
+            Collect.getInstance().getContentResolver().update(toUpdate, contentValues, null, null);
+            return true;
         }
 
         // If response from server is valid use that else use default messaging
@@ -540,9 +498,9 @@ public class InstanceServerUploader extends InstanceUploader {
             outcome.messagesByInstanceId.put(id, Collect.getInstance().getString(R.string.success));
         }
 
-        cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMITTED);
-        cv.put(InstanceColumns.T_TASK_STATUS, InstanceProviderAPI.STATUS_SUBMITTED);     // smap
-        Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
+        contentValues.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMITTED);
+        contentValues.put(InstanceColumns.T_TASK_STATUS, InstanceProviderAPI.STATUS_SUBMITTED);     // smap
+        Collect.getInstance().getContentResolver().update(toUpdate, contentValues, null, null);
 
         /* smap disable tracker
         Collect.getInstance()
@@ -555,22 +513,16 @@ public class InstanceServerUploader extends InstanceUploader {
         return true;
     }
 
-    private boolean processChunk(int low, int high, Outcome outcome, Long... values) {
-        if (values == null) {
-            // don't try anything if values is null
-            return false;
+    private List<File> getFilesInParentDirectory(File instanceFile, File submissionFile, boolean openRosaServer) {
+        List<File> files = new ArrayList<>();
+
+        // find all files in parent directory
+        File[] allFiles = instanceFile.getParentFile().listFiles();
+        if (allFiles == null) {
+            return null;
         }
 
-        StringBuilder selectionBuf = new StringBuilder(InstanceColumns._ID + " IN (");
-        String[] selectionArgs = new String[high - low];
-        for (int i = 0; i < (high - low); i++) {
-            if (i > 0) {
-                selectionBuf.append(',');
-            }
-            selectionBuf.append('?');
-            selectionArgs[i] = values[i + low].toString();
-        }
-
+<<<<<<< HEAD
         selectionBuf.append(')');
         String selection = selectionBuf.toString();
         Timber.i("Getting instances " + selection);
@@ -646,16 +598,42 @@ public class InstanceServerUploader extends InstanceUploader {
                         return false; // get credentials...
                     }
                 }
+=======
+        for (File f : allFiles) {
+            String fileName = f.getName();
+
+            if (fileName.startsWith(".")) {
+                continue; // ignore invisible files
+            } else if (fileName.equals(instanceFile.getName())) {
+                continue; // the xml file has already been added
+            } else if (fileName.equals(submissionFile.getName())) {
+                continue; // the xml file has already been added
+>>>>>>> merge_master
             }
-        } finally {
-            if (c != null) {
-                c.close();
+
+            String extension = FileUtils.getFileExtension(fileName);
+
+            if (openRosaServer) {
+                files.add(f);
+            } else if (extension.equals("jpg")) { // legacy 0.9x
+                files.add(f);
+            } else if (extension.equals("3gpp")) { // legacy 0.9x
+                files.add(f);
+            } else if (extension.equals("3gp")) { // legacy 0.9x
+                files.add(f);
+            } else if (extension.equals("mp4")) { // legacy 0.9x
+                files.add(f);
+            } else if (extension.equals("osm")) { // legacy 0.9x
+                files.add(f);
+            } else {
+                Timber.w("unrecognized file type %s", f.getName());
             }
         }
 
-        return true;
+        return files;
     }
 
+    @Override
     public Outcome doInBackground(Long... values) {    // smap make public
         Outcome outcome = new Outcome();
         int counter = 0;
@@ -696,11 +674,52 @@ public class InstanceServerUploader extends InstanceUploader {
         return serverBase + submissionPath;
     }
 
-    private static String getFileExtension(String fileName) {
-        int dotIndex = fileName.lastIndexOf('.');
-        if (dotIndex == -1) {
-            return "";
+    @Override
+    protected void onPostExecute(Outcome outcome) {
+        super.onPostExecute(outcome);
+
+        // Clear temp credentials
+        clearTemporaryCredentials();
+    }
+
+    @Override
+    protected void onCancelled() {
+        clearTemporaryCredentials();
+    }
+
+    public void setCompleteDestinationUrl(String completeDestinationUrl) {
+        setCompleteDestinationUrl(completeDestinationUrl, true);
+    }
+
+    public void setCompleteDestinationUrl(String completeDestinationUrl, boolean clearPreviousConfig) {
+        this.completeDestinationUrl = completeDestinationUrl;
+        if (clearPreviousConfig) {
+            setTemporaryCredentials();
         }
-        return fileName.substring(dotIndex + 1).toLowerCase(Locale.ROOT);
+    }
+
+    public void setCustomUsername(String customUsername) {
+        this.customUsername = customUsername;
+        setTemporaryCredentials();
+    }
+
+    public void setCustomPassword(String customPassword) {
+        this.customPassword = customPassword;
+        setTemporaryCredentials();
+    }
+
+    private void setTemporaryCredentials() {
+        if (customUsername != null && customPassword != null) {
+            webCredentialsUtils.saveCredentials(completeDestinationUrl, customUsername, customPassword);
+        } else {
+            // In the case for anonymous logins, clear the previous credentials for that host
+            webCredentialsUtils.clearCredentials(completeDestinationUrl);
+        }
+    }
+
+    private void clearTemporaryCredentials() {
+        if (customUsername != null && customPassword != null) {
+            webCredentialsUtils.clearCredentials(completeDestinationUrl);
+        }
     }
 }

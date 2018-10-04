@@ -13,7 +13,7 @@ public class UnderlyingValuesConcat {
                 .on(", ")
                 .join(FluentIterable
                         .from(items)
-                        .transform((item -> item.getValue()))
+                        .transform(item -> item.getValue())
                 );
     }
 }

@@ -14,10 +14,9 @@
 
 package org.odk.collect.android.utilities.gdrive;
 
-
-import android.Manifest;
 import android.accounts.Account;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
@@ -37,22 +36,22 @@ import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.drive.DriveScopes;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.ServerPreferencesFragment;
 import org.odk.collect.android.utilities.ThemeUtils;
-import org.odk.collect.android.utilities.ToastUtils;
 
 import java.util.Collections;
-import java.util.List;
 
-import pub.devrel.easypermissions.EasyPermissions;
 import timber.log.Timber;
 
-public class GoogleAccountsManager implements EasyPermissions.PermissionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+import static org.odk.collect.android.utilities.DialogUtils.showDialog;
+import static org.odk.collect.android.utilities.PermissionUtils.requestGetAccountsPermission;
+
+public class GoogleAccountsManager implements GoogleApiClient.OnConnectionFailedListener {
 
     public static final int REQUEST_ACCOUNT_PICKER = 1000;
-    private static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1002;
     private static final int RESOLVE_CONNECTION_REQUEST_CODE = 5555;
 
     @Nullable
@@ -60,11 +59,11 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
     @Nullable
     private Activity activity;
     @Nullable
-    private GoogleAccountSelectionListener listener;
-    @Nullable
     private HttpTransport transport;
     @Nullable
     private JsonFactory jsonFactory;
+    @Nullable
+    private GoogleAccountSelectionListener listener;
 
     private Intent intentChooseAccount;
     private Context context;
@@ -82,7 +81,8 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
 
     public GoogleAccountsManager(@NonNull Fragment fragment) {
         this.fragment = fragment;
-        initCredential(fragment.getActivity());
+        activity = fragment.getActivity();
+        initCredential(activity);
     }
 
     public GoogleAccountsManager(@NonNull Context context) {
@@ -95,11 +95,16 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
     public GoogleAccountsManager(@NonNull GoogleAccountCredential credential,
                                  @NonNull GeneralSharedPreferences preferences,
                                  @NonNull Intent intentChooseAccount,
-                                 @NonNull ThemeUtils themeUtils) {
+                                 @NonNull ThemeUtils themeUtils,
+                                 @NonNull Activity activity,
+                                 @NonNull Fragment fragment
+    ) {
         this.credential = credential;
         this.preferences = preferences;
         this.intentChooseAccount = intentChooseAccount;
         this.themeUtils = themeUtils;
+        this.fragment = fragment;
+        this.activity = activity;
     }
 
     private void initCredential(@NonNull Context context) {
@@ -124,54 +129,72 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
         }
     }
 
-    @Override
-    public void onPermissionsGranted(int requestCode, List<String> list) {
-        if (listener != null) {
-            listener.onGoogleAccountSelected(credential.getSelectedAccountName());
+    public void chooseAccountAndRequestPermissionIfNeeded() {
+        if (activity != null) {
+            requestGetAccountsPermission(activity, new PermissionListener() {
+                @Override
+                public void granted() {
+                    chooseAccount();
+                }
+
+                @Override
+                public void denied() {
+                }
+            });
         }
     }
 
-    @Override
-    public void onPermissionsDenied(int requestCode, List<String> list) {
-        ToastUtils.showShortToast("Permission denied");
-    }
-
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        EasyPermissions.onRequestPermissionsResult(
-                requestCode, permissions, grantResults, this);
-    }
-
-    public void chooseAccount() {
-        if (checkAccountPermission()) {
-            String accountName = getSelectedAccount();
-            if (autoChooseAccount && !accountName.isEmpty()) {
-                selectAccount(accountName);
-            } else {
-                showAccountPickerDialog();
-            }
+    private void chooseAccount() {
+        String accountName = getSelectedAccount();
+        if (autoChooseAccount && !accountName.isEmpty()) {
+            selectAccount(accountName);
         } else {
-            requestAccountPermission();
+            if (fragment != null && fragment instanceof ServerPreferencesFragment) {
+                showAccountPickerDialog();
+            } else if (activity != null) {
+                showSettingsDialog();
+            }
         }
     }
 
-    public void requestAccountPermission() {
-        EasyPermissions.requestPermissions(
-                context,
-                context.getString(R.string.request_permissions_google_account),
-                REQUEST_PERMISSION_GET_ACCOUNTS, Manifest.permission.GET_ACCOUNTS);
-    }
-
-    /**
-     * Returns true if has accounts permission otherwise false
-     */
-    public boolean checkAccountPermission() {
-        return EasyPermissions.hasPermissions(context, Manifest.permission.GET_ACCOUNTS);
-    }
-
+    @NonNull
     public String getSelectedAccount() {
-        return (String) preferences.get(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
+        Account[] googleAccounts = credential.getAllAccounts();
+        String account = (String) preferences.get(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
+
+        if (googleAccounts != null && googleAccounts.length > 0) {
+            for (Account googleAccount : googleAccounts) {
+                if (googleAccount.name.equals(account)) {
+                    return account;
+                }
+            }
+
+            preferences.reset(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
+        }
+
+        return "";
+    }
+
+    private void showSettingsDialog() {
+        AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
+                .setIcon(android.R.drawable.ic_dialog_info)
+                .setTitle(R.string.missing_google_account_dialog_title)
+                .setMessage(R.string.missing_google_account_dialog_desc)
+                .setOnCancelListener(dialog -> {
+                    dialog.dismiss();
+                    if (activity != null) {
+                        activity.finish();
+                    }
+                })
+                .setPositiveButton(context.getString(R.string.ok), (dialog, which) -> {
+                    dialog.dismiss();
+                    if (activity != null) {
+                        activity.finish();
+                    }
+                })
+                .create();
+
+        showDialog(alertDialog, getActivity());
     }
 
     public void showAccountPickerDialog() {
@@ -194,9 +217,9 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
         }
     }
 
-    public Account getAccountPickerCurrentAccount() {
+    private Account getAccountPickerCurrentAccount() {
         String selectedAccountName = getSelectedAccount();
-        if (selectedAccountName == null || selectedAccountName.isEmpty()) {
+        if (selectedAccountName.isEmpty()) {
             Account[] googleAccounts = credential.getAllAccounts();
             if (googleAccounts != null && googleAccounts.length > 0) {
                 selectedAccountName = googleAccounts[0].name;

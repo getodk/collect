@@ -117,6 +117,8 @@
   <string name="send_data">Vollständiges Formular hochladen</string>
   <string name="send_data_button">Vollständiges Formular hochladen (%s)</string>
   <string name="send_selected_data">Auswahl hochladen</string>
+  <string name="send_selected_data_internet">Senden (Internet)</string>
+  <string name="send_selected_data_sms">Senden (SMS)</string>
   <string name="view_sent_forms">Gesendete Formulare anzeigen</string>
   <string name="view_sent_forms_button">Gesendetes Formular (%s) anzeigen</string>
   <string name="server_auth_credentials">Ungültiger Benutzername oder Passwort für Server: %s</string>
@@ -269,6 +271,9 @@
   <string name="go_shared">Shared with Me</string>
   <string name="modified_on_date_at_time">\'Geändert am\' EEE, dd.MM.yyyy \'um\' HH:mm</string>
   <string name="aggregate_preferences">ODK-Aggregate-Einstellungen</string>
+  <string name="sms_submission_preferences">SMS-Einsendungseinstellungen</string>
+  <string name="submission_transport">Einsendungsübertragung (erweitert)</string>
+  <string name="submission_transport_types_title">Einsendung über</string>
   <string name="other_preferences">Andere Plattform-Einstellungen</string>
   <string name="google_preferences">Google-Sheets-Einstellungen</string>
   <string name="google_sheets_url_hint">Formulare müssen eine Speicherort-URL setzen. Wenn nicht, wird diese URL verwendet.</string>
@@ -277,6 +282,7 @@
   <string name="google_set_account">Sie haben Google Sheets als Server ausgewählt. Bitte geben Sie unter den Einstellungen ein Google-Konto an, bevor Sie fortfahren.</string>
   <string name="media_upload_error">Nicht vorhandene Mediendatei konnte nicht hochgeladen werden: %1$s</string>
   <string name="odk_auth_auth_fail">Auto-Send-Authentifizierungsfehler, bitte überprüfen Sie Ihre Einstellungen.</string>
+  <string name="odk_permissions_fail">ODK Auto-Send Berechtigungsfehler, bitte stellen Sie sicher, dass Sie alle benötigten Berechtigungen erteilt haben</string>
   <string name="odk_auto_note">ODK Auto-Send-Ergebnisse</string>
   <string name="odk_auto_download_notification_title">ODK Auto-Download-Ergebnisse</string>
   <string name="notification_error">Fehler beim Anzeigen des Benachrichtigungstextes</string>
@@ -433,7 +439,6 @@
   <string name="sort_by_status_asc">Status, vollständig zuerst</string>
   <string name="sort_by_status_desc">Status, unvollständig zuerst</string>
   <string name="sort_the_list">Die Liste sortieren</string>
-  <string name="request_permissions_google_account">ODK Collect benötigt Zugriff auf Ihr Google-Konto um leere Formulare zu laden und ausgefüllte Formulare hochzuladen.</string>
   <string name="filter_the_list">Liste filtern</string>
   <string name="language">Sprache</string>
   <string name="google_auth_io_exception_msg">API-Aufrufe nicht möglich. Wenn Sie einen lokalen Build laufen lassen, beachten Sie die Readme des Projekts.</string>
@@ -509,6 +514,7 @@
   <string name="invalid_email_address">Ungültige E-Mail-Adresse!</string>
   <string name="sort_by">Sortieren nach</string>
   <string name="server">Server</string>
+  <string name="submission_transport_admin_setting">Einsendungsübertragung</string>
   <string name="select_value">Wert auswählen</string>
   <string name="edit_value">Wert bearbeiten</string>
   <string name="no_value_selected">Kein Wert ausgewählt</string>
@@ -578,8 +584,18 @@
   <string name="no_columns_to_upload">Keine Spalten zum Hochladen im Formular gefunden.</string>
   <string name="storage_runtime_permission_denied_title">Speicher-Berechtigungen</string>
   <string name="storage_runtime_permission_denied_desc">Ohne diese Berechtigungen kann Collect nicht auf Formulare zugreifen und Antworten speichern. Starten Sie die App erneut, wenn sie bereit dazu sind die Berechtigung zu erteilen.</string>
+  <string name="location_runtime_permissions_denied_title">Standort-Berechtigungen</string>
+  <string name="location_runtime_permissions_denied_desc">Ohne diese Berechtigungen kann Collect Ihren Standort nicht erfassen. Bitte versuchen Sie es erneut, wenn Sie bereit dazu sind die Berechtigungen zu erteilen.</string>
   <string name="camera_runtime_permission_denied_title">Kamera-Berechtigung</string>
   <string name="camera_runtime_permission_denied_desc">Ohne diese Berechtigung kann Collect nicht auf die Kamera zugreifen. Bitte versuchen Sie es erneut, wenn Sie dazu bereit sind die Berechtigung zu erteilen.</string>
+  <string name="record_audio_runtime_permission_denied_title">Audioaufzeichnungsberechtigung</string>
+  <string name="record_audio_runtime_permission_denied_desc">Ohne diese Berechtigungen kann Collect nicht auf das Mikrofon zugreifen. Bitte versuchen Sie es erneut, wenn Sie bereit dazu sind die Berechtigungen zu erteilen.</string>
+  <string name="get_accounts_runtime_permission_denied_title">Kontoberechtigungen abfragen</string>
+  <string name="get_accounts_runtime_permission_denied_desc">Ohne diese Berechtigung kann Collect nicht auf die Konten zugreifen. Bitte versuchen Sie es erneut, wenn Sie dazu bereit sind die Berechtigung zu erteilen.</string>
+  <string name="send_sms_runtime_permission_denied_title">SMS-Versand-Berechtigung</string>
+  <string name="send_sms_runtime_permission_denied_desc">Ohne diese Berechtigung kann Collect keine SMS versenden. Bitte versuchen Sie es erneut, wenn Sie dazu bereit sind die Berechtigung zu erteilen.</string>
+  <string name="read_phone_state_runtime_permission_denied_title">Berechtigung Telefonstatus abrufen</string>
+  <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect macht keine Telefonanrufe aber benötigt Zugriff auf bestimmte Eigenschaften ihres Geräts, wie die Telefonnummer und Geräte-ID.</string>
   <string name="form_update_category">Formular-Update</string>
   <string name="periodic_form_updates_check_title">Periodischer Formular-Update-Check</string>
   <string name="never">Nie</string>
@@ -604,8 +620,34 @@
   <string name="sms_pref_title">Ziel-Telefonnummer</string>
   <string name="sms_invalid_phone_number">Ungültige Telefonnummer!</string>
   <!--Sms submission-->
+  <string name="sms_no_reception">\'Fehlgeschlagen am\' EEE, MMM dd, yyyy \'um\' HH:mm \'wegen fehlendem Empfang.\'</string>
+  <string name="sms_no_number">\'Fehlgeschlagen am\' EEE, dd. MMM yyyy \'um\' HH:mm \'wegen einer fehlenden Telefonnummer.\'</string>
+  <string name="sms_fatal_error">\'Fehlgeschlagen am\' EEE, MMM dd, yyyy \'um\' HH:mm</string>
+  <string name="sms_airplane_mode">\'Fehlgeschlagen am\' EEE, MMM dd, yyyy \'um\' HH:mm \'wegen aktiviertem Flugzeugmodus.\'</string>
+  <string name="sms_no_message">Dieses Formular hat keine Fragen mit SMS-Tags.</string>
+  <string name="sms_encrypted_message">Verschlüsselte Formulare können nicht per SMS eingesendet werden.</string>
+  <string name="sms_last_submission_on_date_at_time">\'Letzter Einsendeversuch am\' EEE, MMM dd, yyyy \'um\' HH:mm</string>
+  <plurals name="sms_sending">
+    <item quantity="one">Formular als einzelne Nachricht einsenden.</item>
+    <item quantity="other">Formulareinsendung, sende Nachricht %1$d! von %2$d</item>
+  </plurals>
+  <string name="sms_sent_on_date_at_time">\'Als SMS versendet am\' EEE, MMM dd, yyyy \'um\' HH:mm</string>
+  <string name="sms_submission_queued">Eingereiht zur Einsendung.</string>
+  <string name="sms_submissions_notif_title">SMS-Einsendungen</string>
+  <string name="sms_submissions_notif_description">Mehrere Formulare werden gerade versendet.</string>
   <string name="transport_type_internet">WLAN/Mobilfunk (empfohlen)</string>
   <string name="transport_type_sms">SMS</string>
+  <string name="transport_type_both">Beim Senden auswählen</string>
   <string name="seconds">Sekunden</string>
+  <string name="rank_items">Rangfolge festlegen</string>
   <string name="image_not_saved">Das Bild kann nicht gespeichert werden, wegen eines Problems mit der zugehörigen Instanz-Datei.</string>
+  <string name="loading_form_failed">Beim Laden des Formulars ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.</string>
+  <string name="missing_google_account_dialog_title">Google-Konto nicht eingestellt</string>
+  <string name="missing_google_account_dialog_desc">Um Formulare über Google Tabellen einzureichen, müssen Sie ihr Google-Konto bei den Server-Einstellungen einrichten.</string>
+  <string name="sms_invalid_phone_number_description">Ziel-Telefonnummer für SMS-Versand einstellen oder Übertragungsart ändern.</string>
+  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
+  <string name="current_predicate_warning">Diese Frage wird mit zukünftigen Versionen von ODK Collect nicht mehr kompatibel sein, weil sie current() in einem Auswahlfilter verwendet. \n\nBitte stellen Sie sicher, dass die Person, die dieses Formular erstellt hat, die Details unten liest und aktiv wird.</string>
+  <string name="current_predicate_warning_title">Aktion nötig</string>
+  <string name="current_predicate_forum">Details lesen</string>
+  <string name="current_predicate_continue">Weiter</string>
 </resources>

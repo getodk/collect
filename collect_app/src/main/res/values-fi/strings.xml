@@ -48,6 +48,7 @@
   <string name="discard_answer">Poista vastaus</string>
   <string name="discard_group">Poista ryhmä</string>
   <string name="download">Hae valittu</string>
+  <string name="download_forms_result">Hae tulokset</string>
   <string name="downloading_data">Yhdistetään palvelimeen</string>
   <string name="do_not_change">Peruuta</string>
   <string name="do_not_exit">Peruuta</string>
@@ -116,6 +117,8 @@
   <string name="send_data">Lähetä valmis lomake</string>
   <string name="send_data_button">Lähetä valmis lomake (%s)</string>
   <string name="send_selected_data">Lähetä valitut</string>
+  <string name="send_selected_data_internet">Lähetä (Internet)</string>
+  <string name="send_selected_data_sms">Lähetä (SMS)</string>
   <string name="view_sent_forms">Tarkastele lähetettyä lomaketta</string>
   <string name="view_sent_forms_button">Tarkastele lähetettyä lomaketta (%s)</string>
   <string name="server_auth_credentials">Väärä käyttäjätunnus tai salasana palvelimelle: %s</string>
@@ -152,6 +155,7 @@
   <string name="file_fetch_failed">Virhe: %2$s (%3$s) kohdassa %1$s</string>
   <string name="fetching_manifest">%s. Haetaan manifestia</string>
   <string name="success">Onnistui</string>
+  <string name="failures">Epäonnistuneet</string>
   <string name="no_forms_uploaded">Pahoittelut, lomaketta ei siirretty.</string>
   <string name="upload_results">Siirrä tulokset.</string>
   <string name="xform_parse_error">XForm jäsennysvirhe %1$s: %2$s puuttuu tai ei kelpaa.</string>
@@ -267,6 +271,9 @@
   <string name="go_shared">Minun kanssani jaetut</string>
   <string name="modified_on_date_at_time">\'Muokattu\' EEE, dd MMM yyyy \'kello\' HH:mm</string>
   <string name="aggregate_preferences">ODK Aggregate -asetukset</string>
+  <string name="sms_submission_preferences">SMS lähetysasetukset</string>
+  <string name="submission_transport">Lähetyksen välitys (lisäasetukset)</string>
+  <string name="submission_transport_types_title">Minkä kautta lähetetään</string>
   <string name="other_preferences">Muut alustan asetukset</string>
   <string name="google_preferences">Google Sheets -asetukset</string>
   <string name="google_sheets_url_hint">Lomakkeiden täytyy asettaa URL lähetystä varten. Jos ei, käytetään tätä URL:ää.</string>
@@ -275,6 +282,9 @@
   <string name="google_set_account">Palvelimesi on Google Sheets, valitse vastaava Google-tili yleisasetuksissa ennen jatkamista</string>
   <string name="media_upload_error">Palvelimelle ei voida siirtää tiedostoa, jota ei ole olemassa: %1$s</string>
   <string name="odk_auth_auth_fail">Automaattisen ODK-lähetyksen vahvistus epäonnistui, varmista että asetuksesi ovat oikein</string>
+  <string name="odk_permissions_fail">Automaattisella ODK-lähetyksellä lupavirhe, varmista että olet antanut sovellukselle kaikki tarvittavat luvat</string>
+  <string name="odk_auto_note">ODK automaattisen lähetyksen tulokset</string>
+  <string name="odk_auto_download_notification_title">ODK automaattisen lataamisen tulokset</string>
   <string name="notification_error">Virhe näyttäessä ilmoitustekstiä</string>
   <string name="delete_after_send">Poista lähettämisen jälkeen</string>
   <string name="delete_after_send_summary">Poistaa valmiiksi merkityt lomakkeet ja mediatiedostot kun ne on lähetetty palvelimelle</string>
@@ -429,7 +439,6 @@
   <string name="sort_by_status_asc">Tila, viimeistellyt ensin</string>
   <string name="sort_by_status_desc">Tila, viimeistelemättömät ensin</string>
   <string name="sort_the_list">Lajittele lista</string>
-  <string name="request_permissions_google_account">ODK Collect tarvitsee pääsyn Google-tilillesi hakeakseen tyhjiä lomakkeita ja lähettääkseen täytettyjä lomakkeita.</string>
   <string name="filter_the_list">Suodata listaa</string>
   <string name="language">Kieli</string>
   <string name="google_auth_io_exception_msg">API-kutsuja ei pystytä tekemään. Jos käytät paikallista ohjelmaversiota, katso projektin readme.</string>
@@ -505,6 +514,7 @@
   <string name="invalid_email_address">Virheellinen sähköpostiosoite!</string>
   <string name="sort_by">Lajitteluperuste</string>
   <string name="server">Palvelin</string>
+  <string name="submission_transport_admin_setting">Lähetyksen välitys</string>
   <string name="select_value">Valitse arvo</string>
   <string name="edit_value">Muokkaa arvoa</string>
   <string name="no_value_selected">Ei valittua arvoa</string>
@@ -574,6 +584,18 @@
   <string name="no_columns_to_upload">Palvelimelle siirrettävässä lomakkeessa ei ollut sarakkeita.</string>
   <string name="storage_runtime_permission_denied_title">Talletusluvat</string>
   <string name="storage_runtime_permission_denied_desc">Ilman näitä lupia Collect ei pysty lukemaan lomakemäärittelyitä tai tallentamaan vastauksia. Avaa sovellus uudestaan kun olet valmis antamaan luvat.</string>
+  <string name="location_runtime_permissions_denied_title">Sijaintitietoluvat</string>
+  <string name="location_runtime_permissions_denied_desc">Ilman näitä lupia Collect ei pysty tallentamaan sijaintiasi. Ole hyvä ja yritä uudestaan kun olet valmis myöntämään ne.</string>
+  <string name="camera_runtime_permission_denied_title">Kameralupa</string>
+  <string name="camera_runtime_permission_denied_desc">Ilman tätä lupaa Collect ei pysty käyttämään kameraa. Ole hyvä ja yritä uudestaa kun olet valmis myöntämään sen.</string>
+  <string name="record_audio_runtime_permission_denied_title">Äänen tallentamisen lupa</string>
+  <string name="record_audio_runtime_permission_denied_desc">Ilman tätä lupaa Collect ei pysty käyttämään mikrofonia. Ole hyvä ja yritä uudestaa kun olet valmis myöntämään sen.</string>
+  <string name="get_accounts_runtime_permission_denied_title">Hae tililuvat</string>
+  <string name="get_accounts_runtime_permission_denied_desc">Ilman tätä lupaa Collect ei voi saada yhteyttää tileihin. Ole hyvä ja yritä uudestaan kun olet valmis myöntämään sen.</string>
+  <string name="send_sms_runtime_permission_denied_title">SMS-lähetyslupa</string>
+  <string name="send_sms_runtime_permission_denied_desc">Ilman tätä lupaa Collect ei pysty lähettämään SMS-viestejä. Ole hyvä ja yritä uudestaa kun olet valmis myöntämään sen.</string>
+  <string name="read_phone_state_runtime_permission_denied_title">Puhelimen tilan lukemisen lupa</string>
+  <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect ei soita puheluita, mutta se tarvitsee tiedot joistakin laitteesi tiedoista, kuten puhelinnumero ja laitteen ID.</string>
   <string name="form_update_category">Lomakepäivitys</string>
   <string name="periodic_form_updates_check_title">Ajastettu lomakepäivitysten tarkistus</string>
   <string name="never">Ei koskaan</string>
@@ -594,7 +616,38 @@
   <string name="instance_upload_cancelled">Instanssin siirtäminen peruttu</string>
   <string name="hide_old_form_versions_setting_title">Piilota vanhat lomakeversiot</string>
   <string name="hide_old_form_versions_setting_summary">Vain uusin versio tulee näkymään \"Täytä tyhjä lomake\" -näkymässä.</string>
+  <string name="sms_pref_dialog_title">Kohdepuhelinnumero</string>
+  <string name="sms_pref_title">Kohdepuhelinnumero</string>
+  <string name="sms_invalid_phone_number">Väärä puhelinnumero!</string>
   <!--Sms submission-->
+  <string name="sms_no_reception">\'Epäonnistui\' EEE dd MMM yyyy \'kello\' HH:mm \'koska ei ollut kenttää\'</string>
+  <string name="sms_no_number">\'Epäonnistui\' EEE dd MMM yyyy \'kello\' HH:mm \'koska ei ollut puhelinnumeroa.\'</string>
+  <string name="sms_fatal_error">\'Epäonnistui\' EEE dd MMM yyyy \'kello\' HH:mm</string>
+  <string name="sms_airplane_mode">\'Epäonnistui\' EEE dd MMM yyyy \'kello\' HH:mm \'koska lentokenttämoodi oli päällä.\'</string>
+  <string name="sms_no_message">Tässä kyselyssä ei ole kysymyksiä, joilla olisi SMS-tägiä.</string>
+  <string name="sms_encrypted_message">Salattuja kyselyitä ei pystytä lähettämään SMS:llä.</string>
+  <string name="sms_last_submission_on_date_at_time">\'Viimeisin lähetysyritys\' EEE dd MMM yyyy \'kello\' HH:mm</string>
+  <plurals name="sms_sending">
+    <item quantity="one">Lähetetään lomaketta yhtenä viestinä.</item>
+    <item quantity="other">Lähetetään lomaketta, viesti %1$d! / %2$d</item>
+  </plurals>
+  <string name="sms_sent_on_date_at_time">\'Lähetetty SMS-viestinä\' EEE dd MMM yyyy \'kello\' HH:mm</string>
+  <string name="sms_submission_queued">Lähetysjonossa.</string>
+  <string name="sms_submissions_notif_title">SMS-lähetykset</string>
+  <string name="sms_submissions_notif_description">Useita lomakkeita parhaillaan lähetettävänä.</string>
+  <string name="transport_type_internet">Wifi/mobiilidata (suositeltu)</string>
+  <string name="transport_type_sms">SMS-tekstiviesti</string>
+  <string name="transport_type_both">Valitse lähettäessä</string>
   <string name="seconds">Sekunteja</string>
+  <string name="rank_items">Järjestä</string>
   <string name="image_not_saved">Kuvaa ei voida tallentaa vastauskerran tiedoston ongelman vuoksi.</string>
+  <string name="loading_form_failed">Lomaketta ladatessa tapahtui virhe. Ole hyvä ja yritä uudestaan.</string>
+  <string name="missing_google_account_dialog_title">Google-tiliä ei ole asetettu</string>
+  <string name="missing_google_account_dialog_desc">Lähettääksesi lomakkeita Google Sheets -palvelun kautta sinun on asetettava Google-tili palvelinasetuksissa.</string>
+  <string name="sms_invalid_phone_number_description">Aseta vastaanottopuhelinnumero SMS-lähetyksille tai vaihda siirtotapaa.</string>
+  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
+  <string name="current_predicate_warning">Tämä kysymys ei tule olemaan yhteensopiva ODK Collect -sovelluksen tulevien versioiden kanssa, koska se käyttää current() -funktiota valintasuodatuksessa. \n\nVarmista, että tämän kyselyn tehnyt henkilö lukee yksityiskohdat alla ja tekee tarvittavat muutokset.</string>
+  <string name="current_predicate_warning_title">Toimenpiteitä tarvitaan</string>
+  <string name="current_predicate_forum">Lue yksityiskohdat</string>
+  <string name="current_predicate_continue">Jatka</string>
 </resources>

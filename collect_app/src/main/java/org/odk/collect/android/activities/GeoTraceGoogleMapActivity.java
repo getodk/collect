@@ -195,7 +195,6 @@ public class GeoTraceGoogleMapActivity extends CollectAbstractActivity implement
             }
         });
 
-
         ImageButton saveButton = findViewById(R.id.geotrace_save);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -437,7 +436,6 @@ public class GeoTraceGoogleMapActivity extends CollectAbstractActivity implement
                     }
                 });
 
-
         alert = builder.create();
 
         dialogBuilder = new AlertDialog.Builder(this);
@@ -485,8 +483,6 @@ public class GeoTraceGoogleMapActivity extends CollectAbstractActivity implement
                 zoomDialog.dismiss();
             }
         });
-
-
     }
 
     private void startGeoTrace() {
@@ -503,8 +499,6 @@ public class GeoTraceGoogleMapActivity extends CollectAbstractActivity implement
         }
         playButton.setVisibility(View.GONE);
         pauseButton.setVisibility(View.VISIBLE);
-
-
     }
 
     private void setupManualMode() {
@@ -521,7 +515,7 @@ public class GeoTraceGoogleMapActivity extends CollectAbstractActivity implement
         Long timeDelay;
         TimeUnit timeUnitsValue;
         if (units.equals(getString(R.string.minutes))) {
-            timeDelay = Long.parseLong(delay) * (60);
+            timeDelay = Long.parseLong(delay) * 60;
             timeUnitsValue = TimeUnit.SECONDS;
 
         } else {
@@ -607,8 +601,6 @@ public class GeoTraceGoogleMapActivity extends CollectAbstractActivity implement
         } else {
             update_polyline();
         }
-
-
     }
 
     private void saveGeoTrace() {
@@ -620,9 +612,7 @@ public class GeoTraceGoogleMapActivity extends CollectAbstractActivity implement
         if (curLocation != null && curlatLng != null) {
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(curlatLng, 17));
         }
-
     }
-
 
     @Override
     public void onLocationChanged(Location location) {
@@ -677,10 +667,7 @@ public class GeoTraceGoogleMapActivity extends CollectAbstractActivity implement
         playButton.setEnabled(true);
         playCheck = false;
         beenPaused = false;
-
-
     }
-
 
     private void showClearDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

@@ -45,7 +45,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ActivityLogger;
-import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
@@ -269,10 +268,10 @@ public abstract class QuestionWidget
         String bigImageURI = prompt.getSpecialFormQuestionText("big-image");
 
         // Create the layout for audio, image, text
-        MediaLayout questionMediaLayout = new MediaLayout(getContext(), getPlayer());
+        MediaLayout questionMediaLayout = new MediaLayout(getContext());
         questionMediaLayout.setId(ViewIds.generateViewId()); // assign random id
         questionMediaLayout.setAVT(prompt.getIndex(), "", questionText, audioURI, imageURI, videoURI,
-                bigImageURI);
+                bigImageURI, getPlayer());
         questionMediaLayout.setAudioListener(this);
 
         String playColorString = prompt.getFormElement().getAdditionalAttribute(null, "playColor");
@@ -575,42 +574,7 @@ public abstract class QuestionWidget
         return imageView;
     }
 
-    /**
-     * It's needed only for external choices. Everything works well and
-     * out of the box when we use internal choices instead
-     */
-    protected void clearNextLevelsOfCascadingSelect() {
-        FormController formController = Collect.getInstance().getFormController();
-        if (formController == null) {
-            return;
-        }
-
-        if (formController.currentCaptionPromptIsQuestion()) {
-            try {
-                FormIndex startFormIndex = formController.getQuestionPrompt().getIndex();
-                formController.stepToNextScreenEvent();
-                while (formController.currentCaptionPromptIsQuestion()
-                        && formController.getQuestionPrompt().getFormElement().getAdditionalAttribute(null, "query") != null) {
-                    formController.saveAnswer(formController.getQuestionPrompt().getIndex(), null);
-                    formController.stepToNextScreenEvent();
-                }
-                formController.jumpToIndex(startFormIndex);
-            } catch (JavaRosaException e) {
-                Timber.d(e);
-            }
-        }
-    }
-
-    // Smap added function
-    protected boolean nochoose(FormEntryPrompt prompt) {
-        boolean nochoose = false;
-        String appearance = prompt.getQuestion().getAppearanceAttr();
-
-        if (appearance != null && (appearance.contains("nochoose") || appearance.contains("new"))) {
-            nochoose = true;
-        }
-        return nochoose;
-    }
+    //region Data waiting
 
     @Override
     public final void waitForData() {

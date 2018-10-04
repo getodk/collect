@@ -95,7 +95,7 @@ public final class ActivityLogger {
     private static final String PARAM2 = "param2";
 
     private static final String DATABASE_CREATE =
-            "create table " + DATABASE_TABLE + " ("
+            "CREATE TABLE IF NOT EXISTS " + DATABASE_TABLE + " ("
                     + ID + " integer primary key autoincrement, "
                     + TIMESTAMP + " integer not null, "
                     + DEVICEID + " text not null, "
@@ -182,7 +182,6 @@ public final class ActivityLogger {
         cachedXPathValue = Collect.getInstance().getFormController().getXPath(index);
         return cachedXPathValue;
     }
-
 
     private void log(String object, String context, String action, String instancePath,
             FormIndex index, String param1, String param2) {

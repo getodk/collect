@@ -184,7 +184,13 @@ the specific language governing permissions and limitations under the License.
                 <data android:mimeType="vnd.android.cursor.dir/vnd.odk.form" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.FormDownloadList" />
+        <activity android:name=".activities.FormDownloadList">
+            <intent-filter>
+                <action android:name="org.odk.collect.android.FORM_DOWNLOAD" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="vnd.android.cursor.dir/vnd.odk.form" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".activities.FileManagerTabs"
             android:configChanges="orientation|screenSize" />
@@ -201,30 +207,14 @@ the specific language governing permissions and limitations under the License.
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activities.InstanceUploaderActivity"
-            android:label="@string/app_name" />
-        <activity
-            android:name=".activities.AboutActivity"
-            android:label="@string/app_name" />
-        <activity
-            android:name=".preferences.PreferencesActivity"
-            android:label="@string/app_name" />
-        <activity
-            android:name=".preferences.AdminPreferencesActivity"
-            android:label="@string/app_name" />
-        <activity
-            android:name=".activities.ViewFormHierarchyActivity"
-            android:label="@string/app_name" />
-        <activity
-            android:name=".activities.EditFormHierarchyActivity"
-            android:label="@string/app_name" />
-        <activity
-            android:name="org.odk.collect.android.activities.SurveyNotesActivity"
-            android:label="@string/app_name" />
-        <activity
-            android:name=".activities.GeoPointActivity"
-            android:label="@string/app_name" />
+        <activity android:name=".activities.InstanceUploaderActivity" />
+        <activity android:name=".activities.AboutActivity" />
+        <activity android:name=".preferences.PreferencesActivity" />
+        <activity android:name=".preferences.AdminPreferencesActivity" />
+        <activity android:name=".activities.ViewFormHierarchyActivity" />
+        <activity android:name=".activities.EditFormHierarchyActivity" />
+        <activity android:name="org.odk.collect.android.activities.SurveyNotesActivity" />
+        <activity android:name=".activities.GeoPointActivity" />
         <activity
             android:name=".activities.GeoPointMapActivity"
             android:configChanges="orientation" />
@@ -384,4 +374,5 @@ the specific language governing permissions and limitations under the License.
         </receiver>
         -->
     </application>
+
 </manifest>

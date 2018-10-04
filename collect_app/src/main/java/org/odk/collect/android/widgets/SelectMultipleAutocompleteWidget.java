@@ -17,26 +17,21 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Context;
-import android.widget.CompoundButton;
 
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
-import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 
-import java.util.List;
-
-public class SelectMultipleAutocompleteWidget extends SelectMultiWidget implements CompoundButton.OnCheckedChangeListener, AudioPlayListener {
-    public SelectMultipleAutocompleteWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride) {
-        super(context, prompt, readOnlyOverride);
+public class SelectMultipleAutocompleteWidget extends SelectMultiWidget implements AudioPlayListener {
+    public SelectMultipleAutocompleteWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride) {	// smap add readOnlyOverride
+        super(context, prompt, readOnlyOverride);	// smap add readOnlyOverride
+        setUpSearchBox();
     }
 
     @Override
-    protected void addButtonsToLayout(List<Integer> tagList) {
-        for (int i = 0; i < checkBoxes.size(); i++) {
-            if (tagList == null || tagList.contains(i)) {
-                answerLayout.addView(checkBoxes.get(i));
-            }
+    protected void doSearch(String searchStr) {
+        if (adapter != null) {
+            adapter.getFilter().filter(searchStr);
         }
     }
 
@@ -45,21 +40,4 @@ public class SelectMultipleAutocompleteWidget extends SelectMultiWidget implemen
         SoftKeyboardUtils.showSoftKeyboard(searchStr);
     }
 
-    @Override
-    protected void createLayout(boolean readOnlyOverride) {
-        readItems();
-
-        if (items != null) {
-            SpacesInUnderlyingValuesWarning.forQuestionWidget(this).renderWarningIfNecessary(items);
-            for (int i = 0; i < items.size(); i++) {
-                checkBoxes.add(createCheckBox(i, readOnlyOverride));
-            }
-        }
-
-        setUpSearchBox();
-    }
-
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-    }
 }

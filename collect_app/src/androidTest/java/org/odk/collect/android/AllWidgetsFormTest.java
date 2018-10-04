@@ -273,7 +273,6 @@ public class AllWidgetsFormTest {
         onView(withText("String widget")).perform(swipeLeft());
     }
 
-
     public void testStringNumberWidget() {
         String stringNumberWidgetText = randomIntegerString();
 
@@ -682,7 +681,6 @@ public class AllWidgetsFormTest {
 
         onView(withText("Video widget")).perform(swipeLeft());
     }
-
 
     public void testSelfieVideoWidget() {
 

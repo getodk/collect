@@ -54,7 +54,6 @@ import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -647,8 +646,6 @@ public class MainMenuActivity extends CollectAbstractActivity {
             for (Entry<String, ?> entry : entries.entrySet()) {
                 GeneralSharedPreferences.getInstance().save(entry.getKey(), entry.getValue());
             }
-
-            AuthDialogUtility.setWebCredentialsFromPreferences();
 
             AdminSharedPreferences.getInstance().clear();
 

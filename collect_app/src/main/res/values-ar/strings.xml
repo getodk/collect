@@ -410,7 +410,6 @@
   <string name="sort_by_status_asc">ترتيب حسب الحالة تصاعدياً</string>
   <string name="sort_by_status_desc">ترتيب حسب الحالة تنازلياً</string>
   <string name="sort_the_list">ترتيب القائمة</string>
-  <string name="request_permissions_google_account">طلب صلاحيات حساب جوجل</string>
   <string name="filter_the_list">فرز القائمة</string>
   <string name="language">اللغة</string>
   <string name="google_auth_io_exception_msg">حدث خطاء في مزود خدمة جوجل</string>
@@ -523,4 +522,6 @@
   <string name="automatic_download">تحميل آلي</string>
   <string name="hide_old_form_versions_setting_title">إخفاء الإصدارات القديمة من الاستمارة</string>
   <!--Sms submission-->
+  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
+  <string name="current_predicate_continue">المتابعة</string>
 </resources>
