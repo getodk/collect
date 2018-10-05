@@ -86,9 +86,9 @@ public class AutoSendWorker extends Worker implements InstanceUploaderListener {
             sendnetwork = true;
         }
 
-        return currentNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI
-                && sendwifi || currentNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE
-                && sendnetwork;
+        return currentNetworkInfo != null
+                && (currentNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI && sendwifi
+                || currentNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE && sendnetwork);
     }
 
     /**
