@@ -210,6 +210,7 @@ dependencies {
         exclude group: 'org.apache.httpcomponents'
     }
 
+    implementation 'bikramsambat:bikram-sambat:1.0.0'
     implementation "com.evernote:android-job:1.2.5"
     implementation "com.rarepebble:colorpicker:2.3.1"
     implementation "commons-io:commons-io:2.6"
