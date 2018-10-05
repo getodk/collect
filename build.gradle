@@ -47,11 +47,9 @@ task checkTests(type: GradleBuild) {
 }
 
 ext {
-    // Play Services is a big download so it should only be upgraded if necessary and after
-    // community discussion and a warning period.
-
     supportLibraryVersion = '27.1.1'
     leakyCanaryVersion = '1.5.4'
     daggerVersion = '2.16'
     rxLifecycleVersion = '2.2.1'
+    workManagerVersion = "1.0.0-alpha10"
 }
