@@ -10,6 +10,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 
 import org.odk.collect.android.R;
@@ -32,6 +33,7 @@ import org.odk.collect.android.utilities.PermissionUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -63,9 +65,8 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
 
         if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)
                 || action.equals("org.odk.collect.android.FormSaved")) {
-            if (currentNetworkInfo != null
-                    && currentNetworkInfo.getState() == NetworkInfo.State.CONNECTED) {
-                uploadForms(context, networkTypeMatchesAutoSendSetting(currentNetworkInfo));
+            if (currentNetworkInfo != null && currentNetworkInfo.isConnected()) {
+                autoSendInstances(context, networkTypeMatchesAutoSendSetting(currentNetworkInfo));
 
                 // If we just got connectivity, poll the server for form updates if we are due for it
                 if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
@@ -107,30 +108,11 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
      *
      * @param isAutoSendAppSettingEnabled whether the auto-send option is enabled at the app level
      */
-    private void uploadForms(Context context, boolean isAutoSendAppSettingEnabled) {
+    private void autoSendInstances(Context context, boolean isAutoSendAppSettingEnabled) {
         if (!running) {
             running = true;
 
-            ArrayList<Long> toUpload = new ArrayList<>();
-            Cursor c = new InstancesDao().getFinalizedInstancesCursor();
-
-            try {
-                if (c != null && c.getCount() > 0) {
-                    c.move(-1);
-                    String formId;
-                    while (c.moveToNext()) {
-                        formId = c.getString(c.getColumnIndex(InstanceColumns.JR_FORM_ID));
-                        if (formShouldBeAutoSent(formId, isAutoSendAppSettingEnabled)) {
-                            Long l = c.getLong(c.getColumnIndex(InstanceColumns._ID));
-                            toUpload.add(l);
-                        }
-                    }
-                }
-            } finally {
-                if (c != null) {
-                    c.close();
-                }
-            }
+            List<Long> toUpload = getInstancesToAutoSend(isAutoSendAppSettingEnabled);
 
             if (toUpload.isEmpty()) {
                 running = false;
@@ -144,32 +126,62 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
             String protocol = (String) settings.get(PreferenceKeys.KEY_PROTOCOL);
 
             if (protocol.equals(context.getString(R.string.protocol_google_sheets))) {
-
-                if (PermissionUtils.checkIfGetAccountsPermissionGranted(context)) {
-                    GoogleAccountsManager accountsManager = new GoogleAccountsManager(Collect.getInstance());
-
-                    String googleUsername = accountsManager.getSelectedAccount();
-                    if (googleUsername.isEmpty()) {
-                        // just quit if there's no username
-                        running = false;
-                        return;
-                    }
-                    accountsManager.getCredential().setSelectedAccountName(googleUsername);
-                    instanceGoogleSheetsUploader = new InstanceGoogleSheetsUploader(accountsManager);
-                    instanceGoogleSheetsUploader.setUploaderListener(this);
-                    instanceGoogleSheetsUploader.execute(toSendArray);
-                } else {
-                    resultMessage = Collect.getInstance().getString(R.string.odk_permissions_fail);
-                    uploadingComplete(null);
-                }
+                sendInstancesToGoogleSheets(context, toSendArray);
             } else if (protocol.equals(context.getString(R.string.protocol_odk_default))) {
-                // get the username, password, and server from preferences
                 instanceServerUploader = new InstanceServerUploader();
                 instanceServerUploader.setUploaderListener(this);
-
                 instanceServerUploader.execute(toSendArray);
             }
         }
+    }
+
+    private void sendInstancesToGoogleSheets(Context context, Long[] toSendArray) {
+        if (PermissionUtils.checkIfGetAccountsPermissionGranted(context)) {
+            GoogleAccountsManager accountsManager = new GoogleAccountsManager(Collect.getInstance());
+
+            String googleUsername = accountsManager.getSelectedAccount();
+            if (googleUsername.isEmpty()) {
+                // just quit if there's no username
+                running = false;
+                return;
+            }
+            accountsManager.getCredential().setSelectedAccountName(googleUsername);
+            instanceGoogleSheetsUploader = new InstanceGoogleSheetsUploader(accountsManager);
+            instanceGoogleSheetsUploader.setUploaderListener(this);
+            instanceGoogleSheetsUploader.execute(toSendArray);
+        } else {
+            resultMessage = Collect.getInstance().getString(R.string.odk_permissions_fail);
+            uploadingComplete(null);
+        }
+    }
+
+    /**
+     * Returns a list of longs representing the database ids of the instances that need to be
+     * autosent.
+     */
+    @NonNull
+    private List<Long> getInstancesToAutoSend(boolean isAutoSendAppSettingEnabled) {
+        List<Long> toUpload = new ArrayList<>();
+        Cursor c = new InstancesDao().getFinalizedInstancesCursor();
+
+        try {
+            if (c != null && c.getCount() > 0) {
+                c.move(-1);
+                String formId;
+                while (c.moveToNext()) {
+                    formId = c.getString(c.getColumnIndex(InstanceColumns.JR_FORM_ID));
+                    if (formShouldBeAutoSent(formId, isAutoSendAppSettingEnabled)) {
+                        Long l = c.getLong(c.getColumnIndex(InstanceColumns._ID));
+                        toUpload.add(l);
+                    }
+                }
+            }
+        } finally {
+            if (c != null) {
+                c.close();
+            }
+        }
+        return toUpload;
     }
 
     /**
