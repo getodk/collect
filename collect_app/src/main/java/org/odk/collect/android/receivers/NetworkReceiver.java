@@ -61,20 +61,16 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
 
         NetworkInfo currentNetworkInfo = manager.getActiveNetworkInfo();
 
-        if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
+        if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)
+                || action.equals("org.odk.collect.android.FormSaved")) {
             if (currentNetworkInfo != null
                     && currentNetworkInfo.getState() == NetworkInfo.State.CONNECTED) {
                 uploadForms(context, networkTypeMatchesAutoSendSetting(currentNetworkInfo));
-            }
 
-            ServerPollingJob.pollServerIfNeeded();
-        } else if (action.equals("org.odk.collect.android.FormSaved")) {
-            ConnectivityManager connectivityManager = (ConnectivityManager) context
-                    .getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
-
-            if (ni != null && ni.isConnected()) {
-                uploadForms(context, networkTypeMatchesAutoSendSetting(currentNetworkInfo));
+                // If we just got connectivity, poll the server for form updates if we are due for it
+                if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
+                    ServerPollingJob.pollServerIfNeeded();
+                }
             }
         }
     }
