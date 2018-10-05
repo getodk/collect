@@ -58,12 +58,13 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         String action = intent.getAction();
         ConnectivityManager manager = (ConnectivityManager) context.getSystemService(
                 Context.CONNECTIVITY_SERVICE);
+
         NetworkInfo currentNetworkInfo = manager.getActiveNetworkInfo();
 
         if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
             if (currentNetworkInfo != null
                     && currentNetworkInfo.getState() == NetworkInfo.State.CONNECTED) {
-                uploadForms(context, isFormAutoSendOptionEnabled(currentNetworkInfo));
+                uploadForms(context, networkTypeMatchesAutoSendSetting(currentNetworkInfo));
             }
 
             ServerPollingJob.pollServerIfNeeded();
@@ -73,13 +74,23 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
             NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
 
             if (ni != null && ni.isConnected()) {
-                uploadForms(context, isFormAutoSendOptionEnabled(currentNetworkInfo));
+                uploadForms(context, networkTypeMatchesAutoSendSetting(currentNetworkInfo));
             }
         }
     }
 
-    private boolean isFormAutoSendOptionEnabled(NetworkInfo currentNetworkInfo) {
-        // make sure autosend is enabled on the given connected interface
+    /**
+     * Returns whether the currently-available connection type is included in the app-level auto-send
+     * settings.
+     *
+     * @return true if a connection is available and settings specify it should trigger auto-send,
+     * false otherwise.
+     */
+    private boolean networkTypeMatchesAutoSendSetting(NetworkInfo currentNetworkInfo) {
+        if (currentNetworkInfo == null) {
+            return false;
+        }
+
         String autosend = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_AUTOSEND);
         boolean sendwifi = autosend.equals("wifi_only");
         boolean sendnetwork = autosend.equals("cellular_only");
@@ -94,9 +105,13 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
     }
 
     /**
-     * @param isFormAutoSendOptionEnabled represents whether the auto-send option is enabled at the app level
+     * If the app-level auto-send setting is enabled, send all finalized forms that don't specify not
+     * to auto-send at the form level. If the app-level auto-send setting is disabled, send all
+     * finalized forms that specify to send at the form level.
+     *
+     * @param isAutoSendAppSettingEnabled whether the auto-send option is enabled at the app level
      */
-    private void uploadForms(Context context, boolean isFormAutoSendOptionEnabled) {
+    private void uploadForms(Context context, boolean isAutoSendAppSettingEnabled) {
         if (!running) {
             running = true;
 
@@ -109,7 +124,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                     String formId;
                     while (c.moveToNext()) {
                         formId = c.getString(c.getColumnIndex(InstanceColumns.JR_FORM_ID));
-                        if (formShouldBeAutoSent(formId, isFormAutoSendOptionEnabled)) {
+                        if (formShouldBeAutoSent(formId, isAutoSendAppSettingEnabled)) {
                             Long l = c.getLong(c.getColumnIndex(InstanceColumns._ID));
                             toUpload.add(l);
                         }
@@ -187,7 +202,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
     }
 
     @Override
-    public void uploadingComplete(HashMap<String, String> result) {
+    public void uploadingComplete(HashMap<String, String> resultMessagesByInstanceId) {
         // task is done
         if (instanceServerUploader != null) {
             instanceServerUploader.setUploaderListener(null);
@@ -199,13 +214,13 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
 
         String message;
 
-        if (result == null) {
+        if (resultMessagesByInstanceId == null) {
             message = resultMessage != null
                     ? resultMessage
                     : Collect.getInstance().getString(R.string.odk_auth_auth_fail);
         } else {
             StringBuilder selection = new StringBuilder();
-            Set<String> keys = result.keySet();
+            Set<String> keys = resultMessagesByInstanceId.keySet();
             Iterator<String> it = keys.iterator();
 
             String[] selectionArgs = new String[keys.size()];
@@ -220,7 +235,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
             }
 
             message = InstanceUploaderUtils
-                    .getUploadResultMessage(new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs), result);
+                    .getUploadResultMessage(new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs), resultMessagesByInstanceId);
         }
 
         Intent notifyIntent = new Intent(Collect.getInstance(), NotificationActivity.class);
@@ -235,7 +250,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                 .setSmallIcon(IconUtils.getNotificationAppIcon())
                 .setContentTitle(Collect.getInstance().getString(R.string.odk_auto_note))
                 .setContentIntent(pendingNotify)
-                .setContentText(getContentText(result))
+                .setContentText(getContentText(resultMessagesByInstanceId))
                 .setAutoCancel(true);
 
         NotificationManager notificationManager = (NotificationManager) Collect.getInstance()
@@ -243,18 +258,27 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         notificationManager.notify(1328974928, builder.build());
     }
 
-    private String getContentText(Map<String, String> result) {
-        return result != null && allFormsDownloadedSuccessfully(result)
+    private String getContentText(Map<String, String> resultsMessagesByInstanceId) {
+        return resultsMessagesByInstanceId != null && allFormsUploadedSuccessfully(resultsMessagesByInstanceId)
                 ? Collect.getInstance().getString(R.string.success)
                 : Collect.getInstance().getString(R.string.failures);
     }
 
-    private boolean allFormsDownloadedSuccessfully(Map<String, String> result) {
-        for (Map.Entry<String, String> item : result.entrySet()) {
-            if (!item.getValue().equals(InstanceUploaderUtils.DEFAULT_SUCCESSFUL_TEXT)) {
+    /**
+     * Uses the messages returned for each finalized form that was attempted to be sent to determine
+     * whether all forms were successfully sent.
+     *
+     * TODO: Verify that this works with localization and that there really are no other messages
+     * that can indicate success (e.g. a custom server message).
+     */
+    private boolean allFormsUploadedSuccessfully(Map<String, String> resultsMessagesByInstanceId) {
+        for (String formId : resultsMessagesByInstanceId.keySet()) {
+            String formResultMessage = resultsMessagesByInstanceId.get(formId);
+            if (!formResultMessage.equals(InstanceUploaderUtils.DEFAULT_SUCCESSFUL_TEXT)) {
                 return false;
             }
         }
+
         return true;
     }
 
