@@ -90,7 +90,6 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
                 // must be at the beginning of any activity that can be called from an external intent
                 try {
                     Collect.createODKDirs();
-                    Collect.getInstance().getActivityLogger().open();
                 } catch (RuntimeException e) {
                     DialogUtils.showDialog(DialogUtils.createErrorDialog(InstanceUploaderActivity.this,
                             e.getMessage(), EXIT), InstanceUploaderActivity.this);

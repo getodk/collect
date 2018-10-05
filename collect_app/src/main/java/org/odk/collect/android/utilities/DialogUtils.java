@@ -27,7 +27,6 @@ import android.support.annotation.NonNull;
 import android.widget.ListView;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 
 import timber.log.Timber;
 
@@ -109,7 +108,6 @@ public final class DialogUtils {
      * @param shouldExit Finish the activity if Ok is clicked
      */
     public static Dialog createErrorDialog(@NonNull Activity activity, String errorMsg, final boolean shouldExit) {
-        Collect.getInstance().getActivityLogger().logAction(activity, "createErrorDialog", "show");
         AlertDialog alertDialog = new AlertDialog.Builder(activity).create();
         alertDialog.setIcon(android.R.drawable.ic_dialog_info);
         alertDialog.setMessage(errorMsg);
@@ -118,8 +116,6 @@ public final class DialogUtils {
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
                     case DialogInterface.BUTTON_POSITIVE:
-                        Collect.getInstance().getActivityLogger().logAction(this,
-                                "createErrorDialog", "OK");
                         if (shouldExit) {
                             activity.finish();
                         }
