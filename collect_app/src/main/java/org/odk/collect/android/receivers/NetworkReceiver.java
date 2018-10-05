@@ -109,7 +109,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                     String formId;
                     while (c.moveToNext()) {
                         formId = c.getString(c.getColumnIndex(InstanceColumns.JR_FORM_ID));
-                        if (isFormAutoSendEnabled(formId, isFormAutoSendOptionEnabled)) {
+                        if (formShouldBeAutoSent(formId, isFormAutoSendOptionEnabled)) {
                             Long l = c.getLong(c.getColumnIndex(InstanceColumns._ID));
                             toUpload.add(l);
                         }
@@ -162,22 +162,28 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
     }
 
     /**
-     * @param isFormAutoSendOptionEnabled represents whether the auto-send option is enabled at the app level
-     *                                    <p>
-     *                                    If the form explicitly sets the auto-send property, then it overrides the preferences.
+     * Returns whether a form with the specified form_id should be auto-sent given the current
+     * app-level auto-send settings. Returns false if there is no form with the specified form_id.
+     *
+     * A form should be auto-sent if auto-send is on at the app level AND this form doesn't override
+     * auto-send settings OR if auto-send is on at the form-level.
+     *
+     * @param isAutoSendAppSettingEnabled whether the auto-send option is enabled at the app level
      */
-    private boolean isFormAutoSendEnabled(String jrFormId, boolean isFormAutoSendOptionEnabled) {
+    private boolean formShouldBeAutoSent(String jrFormId, boolean isAutoSendAppSettingEnabled) {
         Cursor cursor = new FormsDao().getFormsCursorForFormId(jrFormId);
-        String autoSend = null;
+        String formLevelAutoSend = null;
         if (cursor != null && cursor.moveToFirst()) {
             try {
                 int autoSendColumnIndex = cursor.getColumnIndex(AUTO_SEND);
-                autoSend = cursor.getString(autoSendColumnIndex);
+                formLevelAutoSend = cursor.getString(autoSendColumnIndex);
             } finally {
                 cursor.close();
             }
         }
-        return autoSend == null ? isFormAutoSendOptionEnabled : Boolean.valueOf(autoSend);
+
+        return formLevelAutoSend == null ? isAutoSendAppSettingEnabled
+                : Boolean.valueOf(formLevelAutoSend);
     }
 
     @Override
