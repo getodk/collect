@@ -78,6 +78,24 @@ public class InstanceServerUploader extends InstanceUploader {
         Collect.getInstance().getComponent().inject(this);
     }
 
+    @Override
+    protected Outcome doInBackground(Long... values) {
+        Outcome outcome = new Outcome();
+        int counter = 0;
+        while (counter * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER < values.length) {
+            int low = counter * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER;
+            int high = (counter + 1) * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER;
+            if (high > values.length) {
+                high = values.length;
+            }
+            if (!processChunk(low, high, outcome, values)) {
+                return outcome;
+            }
+            counter++;
+        }
+        return outcome;
+    }
+
     private boolean processChunk(int low, int high, Outcome outcome, Long... values) {
         if (values == null) {
             // don't try anything if values is null
@@ -418,24 +436,6 @@ public class InstanceServerUploader extends InstanceUploader {
         }
 
         return files;
-    }
-
-    @Override
-    protected Outcome doInBackground(Long... values) {
-        Outcome outcome = new Outcome();
-        int counter = 0;
-        while (counter * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER < values.length) {
-            int low = counter * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER;
-            int high = (counter + 1) * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER;
-            if (high > values.length) {
-                high = values.length;
-            }
-            if (!processChunk(low, high, outcome, values)) {
-                return outcome;
-            }
-            counter++;
-        }
-        return outcome;
     }
 
     private String getServerSubmissionURL() {
