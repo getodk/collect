@@ -297,7 +297,10 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
     public @NonNull ResponseMessageParser uploadSubmissionFile(@NonNull List<File> fileList,
                                                       @NonNull File submissionFile,
                                                       @NonNull URI uri,
-                                                      @Nullable HttpCredentialsInterface credentials) throws IOException {
+                                                      @Nullable HttpCredentialsInterface credentials,
+                                                      String status,              // smap
+                                                      String location_trigger,    // smap
+                                                      String survey_notes) throws IOException {   // smap add status
         addCredentialsForHost(uri, credentials);
         getCookieStore().clear();
 
@@ -372,6 +375,25 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
             }
 
             HttpPost httppost = createOpenRosaHttpPost(uri);
+            httppost.setHeader("form_status", status);                        // smap add form_status header
+            // Start Smap - Add the location trigger and comments if they exist
+            if (location_trigger != null) {
+                try {
+                    StringBody sb = new StringBody(location_trigger, ContentType.TEXT_PLAIN.withCharset(Charset.forName("UTF-8")));
+                    builder.addPart("location_trigger", sb);
+                } catch (Exception e) {
+                    e.printStackTrace(); // never happens...
+                }
+            }
+            if (survey_notes != null) {
+                try {
+                    StringBody sb = new StringBody(survey_notes, ContentType.TEXT_PLAIN.withCharset(Charset.forName("UTF-8")));
+                    builder.addPart("survey_notes", sb);
+                } catch (Exception e) {
+                    e.printStackTrace(); // never happens...
+                }
+            }
+            // End Smap
             httppost.setEntity(builder.build());
 
             // prepare response and return uploaded

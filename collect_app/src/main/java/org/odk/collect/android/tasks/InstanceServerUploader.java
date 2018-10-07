@@ -139,7 +139,14 @@ public class InstanceServerUploader extends InstanceUploader {
 
                     Collect.getInstance().getActivityLogger().logAction(this, urlString, instance);
 
-                    if (!uploadSubmissionFile(urlString, id, instance, toUpdate, uriRemap, outcome)) {
+                    // Smap start get smap specific data values to send to the server
+                    String status = c.getString(c.getColumnIndex(InstanceColumns.STATUS));    // smap get status
+                    String location_trigger = c.getString(c.getColumnIndex(InstanceColumns.T_LOCATION_TRIGGER));    // smap get location trigger
+                    String survey_notes = c.getString(c.getColumnIndex(InstanceColumns.T_SURVEY_NOTES));    // smap get survey notes
+                    // smap end
+
+                    if (!uploadSubmissionFile(urlString, id, instance, toUpdate, uriRemap, outcome,
+                            status, location_trigger, survey_notes)) {
                         return false; // get credentials...
                     }
                 }
@@ -349,7 +356,7 @@ public class InstanceServerUploader extends InstanceUploader {
             URI uri = URI.create(submissionUri.toString());
 
             messageParser = httpInterface.uploadSubmissionFile(files, submissionFile, uri,
-                    webCredentialsUtils.getCredentials(uri));
+                    webCredentialsUtils.getCredentials(uri), status, location_trigger, survey_notes);
 
             int responseCode = messageParser.getResponseCode();
 
@@ -365,117 +372,10 @@ public class InstanceServerUploader extends InstanceUploader {
                     } else {
                         outcome.messagesByInstanceId.put(id, FAIL + messageParser.getReasonPhrase() + " (" + responseCode + ") at " + urlString);
                     }
-<<<<<<< HEAD
-                }
-                fb = new FileBody(f, contentType);
-                builder.addPart(f.getName(), fb);
-                byteCount += f.length();
-                Timber.i("added file of type '%s' %s", contentType, f.getName());
-
-                // we've added at least one attachment to the request...
-                if (j + 1 < files.size()) {
-                    if ((j - lastJ + 1 > 100) || (byteCount + files.get(j + 1).length()
-                            > 10000000L)) {
-                        // the next file would exceed the 10MB threshold...
-                        Timber.i("Extremely long post is being split into multiple posts");
-                        try {
-                            StringBody sb = new StringBody("yes",
-                                    ContentType.TEXT_PLAIN.withCharset(Charset.forName("UTF-8")));
-                            builder.addPart("*isIncomplete*", sb);
-                        } catch (Exception e) {
-                            Timber.e(e);
-                        }
-                        ++j; // advance over the last attachment added...
-                        break;
-                    }
-                }
-            }
-
-            HttpPost httppost = WebUtils.createOpenRosaHttpPost(submissionUri);
-            httppost.setHeader("form_status", status);                        // smap add form_status header
-            // Start Smap - Add the location trigger and comments if they exist
-            if (location_trigger != null) {
-                try {
-                    StringBody sb = new StringBody(location_trigger, ContentType.TEXT_PLAIN.withCharset(Charset.forName("UTF-8")));
-                    builder.addPart("location_trigger", sb);
-                } catch (Exception e) {
-                    e.printStackTrace(); // never happens...
-                }
-            }
-            if (survey_notes != null) {
-                try {
-                    StringBody sb = new StringBody(survey_notes, ContentType.TEXT_PLAIN.withCharset(Charset.forName("UTF-8")));
-                    builder.addPart("survey_notes", sb);
-                } catch (Exception e) {
-                    e.printStackTrace(); // never happens...
-                }
-            }
-            // End Smap
-
-            httppost.setEntity(builder.build());
-
-            // prepare response and return uploaded
-            HttpResponse response;
-
-            try {
-                Timber.i("Issuing POST request for %s to: %s", id, submissionUri.toString());
-                response = httpclient.execute(httppost, localContext);
-                int responseCode = response.getStatusLine().getStatusCode();
-                HttpEntity httpEntity = response.getEntity();
-                messageParser = new ResponseMessageParser(httpEntity);
-                WebUtils.discardEntityBytes(response);
-                Timber.i("Response code:%d", responseCode);
-                // verify that the response was a 201 or 202.
-                // If it wasn't, the submission has failed.
-                if (responseCode != HttpStatus.SC_CREATED
-                        && responseCode != HttpStatus.SC_ACCEPTED) {
-                    if (responseCode == HttpStatus.SC_OK) {
-                        outcome.messagesByInstanceId.put(id, FAIL + "Network login failure? Again?");
-                    } else if (responseCode == HttpStatus.SC_UNAUTHORIZED) {
-                        // clear the cookies -- should not be necessary?
-                        Collect.getInstance().getCookieStore().clear();
-                        outcome.messagesByInstanceId.put(id, FAIL + response.getStatusLine().getReasonPhrase()
-                                + " (" + responseCode + ") at " + urlString);
-                    } else if (responseCode == HttpStatus.SC_FORBIDDEN) {      // smap
-                        outcome.messagesByInstanceId.put(id, FAIL
-                                + Collect.getInstance().getString(R.string.smap_forbidden, instanceFile.getName()));
-                    } else {
-                        // If response from server is valid use that else use default messaging
-                        if (messageParser.isValid()) {
-                            outcome.messagesByInstanceId.put(id, FAIL + messageParser.getMessageResponse());
-                        } else {
-                            outcome.messagesByInstanceId.put(id, FAIL + response.getStatusLine().getReasonPhrase()
-                                    + " (" + responseCode + ") at " + urlString);
-                        }
-
-                    }
-                    //cv.put(InstanceColumns.STATUS,
-                    //    InstanceProviderAPI.STATUS_SUBMISSION_FAILED); smap
-                    Collect.getInstance().getContentResolver()
-                            .update(toUpdate, cv, null, null);
-                    return true;
-                }
-            } catch (IOException e) {
-                if (e instanceof UnknownHostException || e instanceof HttpHostConnectException
-                        || e instanceof SocketException || e instanceof NoHttpResponseException
-                        || e instanceof SocketTimeoutException || e instanceof ConnectTimeoutException) {
-                    Timber.i(e);
-                } else {
-                    Timber.e(e);
-                }
-                String msg = e.getMessage();
-                if (msg == null) {
-                    msg = e.toString();
-                }
-                outcome.messagesByInstanceId.put(id, FAIL + "Generic Exception: " + msg);
-                //cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);    // smap
-                Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
-=======
 
                 }
                 contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                 Collect.getInstance().getContentResolver().update(toUpdate, contentValues, null, null);
->>>>>>> merge_master
                 return true;
             }
 
@@ -522,83 +422,6 @@ public class InstanceServerUploader extends InstanceUploader {
             return null;
         }
 
-<<<<<<< HEAD
-        selectionBuf.append(')');
-        String selection = selectionBuf.toString();
-        Timber.i("Getting instances " + selection);
-        // end smap
-
-        String deviceId = new PropertyManager(Collect.getInstance().getApplicationContext())
-                .getSingularProperty(PropertyManager.withUri(PropertyManager.PROPMGR_DEVICE_ID));
-
-        // get shared HttpContext so that authentication and cookies are retained.
-        HttpContext localContext = Collect.getInstance().getHttpContext();
-
-        Map<Uri, Uri> uriRemap = new HashMap<Uri, Uri>();
-
-        Cursor c = null;
-        try {
-            c = new InstancesDao().getInstancesCursor(selection, selectionArgs);
-
-            if (c != null && c.getCount() > 0) {
-                c.moveToPosition(-1);
-                while (c.moveToNext()) {
-                    if (isCancelled()) {
-                        return false;
-                    }
-
-                    publishProgress(c.getPosition() + 1 + low, values.length);
-                    String instance = c.getString(
-                            c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
-                    String id = c.getString(c.getColumnIndex(InstanceColumns._ID));
-                    Uri toUpdate = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, id);
-
-                    int subIdx = c.getColumnIndex(InstanceColumns.SUBMISSION_URI);
-                    String urlString = c.isNull(subIdx) ? null : c.getString(subIdx).trim();
-                    if (urlString == null) {
-                        urlString = getServerSubmissionURL();
-
-                        // ---------------- Smap Start
-                        // Add credentials pre-emptively
-
-                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
-                        String username = sharedPreferences.getString(PreferenceKeys.KEY_USERNAME, null);
-                        String password = sharedPreferences.getString(PreferenceKeys.KEY_PASSWORD, null);
-
-                        if (username != null && password != null) {
-                            Uri u = Uri.parse(urlString);
-                            WebUtils.addCredentials(username, password, u.getHost());
-                        }
-
-                        // Add updateid if this is a non repeating task
-                        boolean repeat = (c.getInt(c.getColumnIndex(InstanceColumns.T_REPEAT)) > 0);
-                        String updateid = c.getString(c.getColumnIndex(InstanceColumns.T_UPDATEID));
-                        if (!repeat && updateid != null) {
-                            urlString = urlString + "/" + updateid;
-                        }
-                        // Smap End
-                    }
-
-                    // Smap start get smap specific data values to send to the server
-                    String status = c.getString(c.getColumnIndex(InstanceColumns.STATUS));    // smap get status
-                    String location_trigger = c.getString(c.getColumnIndex(InstanceColumns.T_LOCATION_TRIGGER));    // smap get location trigger
-                    String survey_notes = c.getString(c.getColumnIndex(InstanceColumns.T_SURVEY_NOTES));    // smap get survey notes
-                    // smap end
-
-                    // add the deviceID to the request...
-                    try {
-                        urlString += "?deviceID=" + URLEncoder.encode(deviceId, "UTF-8");
-                    } catch (UnsupportedEncodingException e) {
-                        // unreachable...
-                        Timber.i(e, "Error encoding URL for device id : %s", deviceId);
-                    }
-
-                    if (!uploadOneSubmission(urlString, id, instance, toUpdate, localContext, uriRemap, outcome,
-                            status, location_trigger, survey_notes)) {    // smap add status
-                        return false; // get credentials...
-                    }
-                }
-=======
         for (File f : allFiles) {
             String fileName = f.getName();
 
@@ -608,7 +431,6 @@ public class InstanceServerUploader extends InstanceUploader {
                 continue; // the xml file has already been added
             } else if (fileName.equals(submissionFile.getName())) {
                 continue; // the xml file has already been added
->>>>>>> merge_master
             }
 
             String extension = FileUtils.getFileExtension(fileName);
@@ -675,7 +497,7 @@ public class InstanceServerUploader extends InstanceUploader {
     }
 
     @Override
-    protected void onPostExecute(Outcome outcome) {
+    public void onPostExecute(Outcome outcome) {
         super.onPostExecute(outcome);
 
         // Clear temp credentials

@@ -62,6 +62,9 @@ public interface OpenRosaHttpInterface {
     ResponseMessageParser uploadSubmissionFile(@NonNull List<File> fileList,
                                                @NonNull File submissionFile,
                                                @NonNull URI uri,
-                                               @Nullable HttpCredentialsInterface credentials) throws IOException;
+                                               @Nullable HttpCredentialsInterface credentials,
+                                               String status,              // smap
+                                               String location_trigger,    // smap
+                                               String survey_notes) throws IOException;   // smap add status
 
 }
