@@ -96,9 +96,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
         };
     }
 
-    CompoundButton setUpButton(final int index) {
-        return null;
-    }
+    abstract CompoundButton setUpButton(final int index);
 
     void adjustButton(TextView button, int index) {
         button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Collect.getQuestionFontsize());
