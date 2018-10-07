@@ -2713,8 +2713,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                 boolean hasUsedSavepoint = task.hasUsedSavepoint();
 
-            if (!showFirst && mUpdated > 0) {   // smap check that the instance was edited on the phone before showing hierarchy
-                // we've just loaded a saved form, so start in the hierarchy view
                 if (hasUsedSavepoint) {
                     runOnUiThread(() -> ToastUtils.showLongToast(R.string.savepoint_used));
                 }
@@ -2739,7 +2737,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     Intent reqIntent = getIntent();
                     boolean showFirst = reqIntent.getBooleanExtra("start", false);
 
-                    if (!showFirst) {
+                    if (!showFirst && mUpdated > 0) {   // smap check that the instance was edited on the phone before showing hierarchy
                         // we've just loaded a saved form, so start in the hierarchy view
 
                         if (!allowMovingBackwards) {
