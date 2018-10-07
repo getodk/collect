@@ -240,6 +240,7 @@ public abstract class QuestionWidget
         return directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT || directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC;
     }
 
+    @SuppressWarnings("PMD.EmptyMethodInAbstractClassShouldBeAbstract")
     protected void injectDependencies(DependencyProvider dependencyProvider) {
         //dependencies for the widget will be wired here.
     }
