@@ -307,7 +307,6 @@
   <string name="select_geotrace_mode">Välj GeoTrace-läge</string>
   <string name="start">Starta</string>
   <string name="enable_gps">Aktivera GPS</string>
-  <string name="enable_gps_message">GPS är inaktiverat på din enhet. Vill du aktivera den?</string>
   <string name="geotrace_title">GeoTrace</string>
   <string name="polygon_save">Spara som polygon</string>
   <string name="polyline_save">Spara som polyline</string>
@@ -319,7 +318,6 @@
   <string name="geo_exit_warning">Ignorera ändringar och återgå till ODK?</string>
   <string name="polygon_validator">Minst tre punkter krävs för att skapa en polygon</string>
   <string name="clear">Rensa</string>
-  <string name="polyline_polygon_text">Spara GeoTrace som</string>
   <string name="manual_mode">Manuellt läge</string>
   <string name="automatic_mode">Automatiskt läge</string>
   <string name="geoshape_instruction">Lång tryckning för att placera markör.</string>

@@ -309,7 +309,6 @@
   <string name="select_geotrace_mode">जिओ ट्रेस मोड का चयन करे </string>
   <string name="start">शुरु करे</string>
   <string name="enable_gps">जीपीएस सक्षम करें</string>
-  <string name="enable_gps_message">आपके डिवाइस में जीपीएस सक्षम नही है क्या आप इसे सक्षम करना चाहेंगे?</string>
   <string name="geotrace_title">जिओ ट्रेस</string>
   <string name="polygon_save">बहुभुज के रूप में संरक्षित करे</string>
   <string name="polyline_save">पॉलीलाइन के रूप में संरक्षित करे </string>
@@ -321,7 +320,6 @@
   <string name="geo_exit_warning">परिवर्तनों को रद्द करें और वापस ODK पर लौटें?</string>
   <string name="polygon_validator">बहुभुज बनाने के लिए कम से कम 3 पॉइंट होने चाहिए</string>
   <string name="clear">स्पष्ट</string>
-  <string name="polyline_polygon_text">जिओ ट्रेस इस तरह संरक्षित करे </string>
   <string name="manual_mode">मैन्युअल मोड</string>
   <string name="automatic_mode">स्वचालित मोड</string>
   <string name="geoshape_instruction">प्लेस मार्क के लिए लंबे समय तक दबाएं</string>

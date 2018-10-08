@@ -19,6 +19,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -33,7 +34,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.location.LocationListener;
+
 import org.odk.collect.android.R;
+import org.odk.collect.android.location.client.LocationClient;
+import org.odk.collect.android.location.client.LocationClients;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.util.BoundingBox;
@@ -49,7 +54,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class OsmMapFragment extends Fragment implements MapFragment, MapEventsReceiver {
+public class OsmMapFragment extends Fragment implements MapFragment,
+    MapEventsReceiver, LocationListener, LocationClient.LocationClientListener {
     public static final GeoPoint INITIAL_CENTER = new GeoPoint(0.0, -30.0);
     public static final int INITIAL_ZOOM = 2;
     public static final int POINT_ZOOM = 16;
@@ -58,10 +64,13 @@ public class OsmMapFragment extends Fragment implements MapFragment, MapEventsRe
     protected ReadyListener readyListener;
     protected MapFragment.PointListener clickListener;
     protected MapFragment.PointListener longPressListener;
+    protected MapFragment.PointListener gpsLocationListener;
     protected MyLocationNewOverlay myLocationOverlay;
+    protected LocationClient locationClient;
     protected int nextFeatureId = 1;
     protected Map<Integer, MapFeature> features = new HashMap<>();
     protected AlertDialog gpsErrorDialog;
+    protected boolean gpsLocationEnabled;
 
     @Override public void addTo(@NonNull FragmentActivity activity, int containerId, @Nullable ReadyListener listener) {
         readyListener = listener;
@@ -87,6 +96,8 @@ public class OsmMapFragment extends Fragment implements MapFragment, MapEventsRe
         map.setTilesScaledToDpi(true);
         map.getOverlays().add(new MapEventsOverlay(this));
         myLocationOverlay = new MyLocationNewOverlay(map);
+        locationClient = LocationClients.clientForContext(getActivity());
+        locationClient.setListener(this);
         if (readyListener != null) {
             new Handler().postDelayed(() -> readyListener.onReady(this), 100);
         }
@@ -111,6 +122,12 @@ public class OsmMapFragment extends Fragment implements MapFragment, MapEventsRe
 
     @Override public @NonNull MapPoint getCenter() {
         return fromGeoPoint(map.getMapCenter());
+    }
+
+    @Override public void setCenter(@Nullable MapPoint center) {
+        if (center != null) {
+            map.getController().setCenter(toGeoPoint(center));
+        }
     }
 
     @Override public double getZoom() {
@@ -156,23 +173,23 @@ public class OsmMapFragment extends Fragment implements MapFragment, MapEventsRe
         }
     }
 
-    @Override public int addDraggableShape(@NonNull Iterable<MapPoint> points) {
+    @Override public int addDraggablePoly(@NonNull Iterable<MapPoint> points, boolean closedPolygon) {
         int featureId = nextFeatureId++;
-        features.put(featureId, new DraggableShape(map, points));
+        features.put(featureId, new DraggablePoly(map, points, closedPolygon));
         return featureId;
     }
 
-    @Override public void appendPointToShape(int featureId, @NonNull MapPoint point) {
+    @Override public void appendPointToPoly(int featureId, @NonNull MapPoint point) {
         MapFeature feature = features.get(featureId);
-        if (feature != null && feature instanceof DraggableShape) {
-            ((DraggableShape) feature).addPoint(point);
+        if (feature != null && feature instanceof DraggablePoly) {
+            ((DraggablePoly) feature).addPoint(point);
         }
     }
 
-    @Override public @NonNull List<MapPoint> getPointsOfShape(int featureId) {
+    @Override public @NonNull List<MapPoint> getPointsOfPoly(int featureId) {
         MapFeature feature = features.get(featureId);
-        if (feature instanceof DraggableShape) {
-            return ((DraggableShape) feature).getPoints();
+        if (feature instanceof DraggablePoly) {
+            return ((DraggablePoly) feature).getPoints();
         }
         return new ArrayList<>();
     }
@@ -200,30 +217,51 @@ public class OsmMapFragment extends Fragment implements MapFragment, MapEventsRe
         longPressListener = listener;
     }
 
+    @Override public void setGpsLocationListener(@Nullable PointListener listener) {
+        gpsLocationListener = listener;
+    }
+
     @Override public void runOnGpsLocationReady(@NonNull ReadyListener listener) {
         myLocationOverlay.runOnFirstFix(() -> getActivity().runOnUiThread(() -> listener.onReady(this)));
     }
 
-    @Override public void setGpsLocationEnabled(boolean enabled) {
-        if (enabled) {
-            LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
-            if (locationManager != null && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                map.getOverlays().add(myLocationOverlay);
-                myLocationOverlay.setEnabled(true);
-                myLocationOverlay.enableMyLocation();
-            } else {
-                showGpsDisabledAlert();
+    @Override public void setGpsLocationEnabled(boolean enable) {
+        if (enable != gpsLocationEnabled) {
+            gpsLocationEnabled = enable;
+            if (locationClient == null) {
+                locationClient = LocationClients.clientForContext(getActivity());
+                locationClient.setListener(this);
             }
-        } else {
-            myLocationOverlay.setEnabled(false);
-            myLocationOverlay.disableFollowLocation();
-            myLocationOverlay.disableMyLocation();
+            if (gpsLocationEnabled) {
+                LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+                if (locationManager != null && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                    map.getOverlays().add(myLocationOverlay);
+                    myLocationOverlay.setEnabled(true);
+                    myLocationOverlay.enableMyLocation();
+                    locationClient.start();
+                } else {
+                    showGpsDisabledAlert();
+                }
+            } else {
+                locationClient.stop();
+                myLocationOverlay.setEnabled(false);
+                myLocationOverlay.disableFollowLocation();
+                myLocationOverlay.disableMyLocation();
+            }
         }
     }
 
     @Override public @Nullable MapPoint getGpsLocation() {
-        IGeoPoint geoPoint = myLocationOverlay.getMyLocation();
-        return geoPoint == null ? null : fromGeoPoint(geoPoint);
+        return fromLocation(myLocationOverlay);
+    }
+
+    @Override public void onLocationChanged(Location location) {
+        if (gpsLocationListener != null) {
+            MapPoint point = fromLocation(myLocationOverlay);
+            if (point != null) {
+                gpsLocationListener.onPoint(point);
+            }
+        }
     }
 
     protected void showGpsDisabledAlert() {
@@ -239,16 +277,42 @@ public class OsmMapFragment extends Fragment implements MapFragment, MapEventsRe
         gpsErrorDialog.show();
     }
 
+    @Override public void onClientStart() {
+        locationClient.requestLocationUpdates(this);
+    }
+
+    @Override public void onClientStartFailure() {
+        showGpsDisabledAlert();
+    }
+
+    @Override public void onClientStop() { }
+
     @VisibleForTesting public AlertDialog getGpsErrorDialog() {
         return gpsErrorDialog;
+    }
+
+    protected static @Nullable MapPoint fromLocation(@NonNull MyLocationNewOverlay overlay) {
+        GeoPoint geoPoint = overlay.getMyLocation();
+        if (geoPoint == null) {
+            return null;
+        }
+        return fromGeoPoint(geoPoint, overlay.getLastFix().getAccuracy());
     }
 
     protected static @NonNull MapPoint fromGeoPoint(@NonNull IGeoPoint geoPoint) {
         return new MapPoint(geoPoint.getLatitude(), geoPoint.getLongitude());
     }
 
+    protected static @NonNull MapPoint fromGeoPoint(@NonNull GeoPoint geoPoint) {
+        return new MapPoint(geoPoint.getLatitude(), geoPoint.getLongitude(), geoPoint.getAltitude());
+    }
+
+    protected static @NonNull MapPoint fromGeoPoint(@NonNull GeoPoint geoPoint, double sd) {
+        return new MapPoint(geoPoint.getLatitude(), geoPoint.getLongitude(), geoPoint.getAltitude(), sd);
+    }
+
     protected static @NonNull GeoPoint toGeoPoint(@NonNull MapPoint point) {
-        return new GeoPoint(point.lat, point.lon);
+        return new GeoPoint(point.lat, point.lon, point.alt);
     }
 
     /**
@@ -265,15 +329,17 @@ public class OsmMapFragment extends Fragment implements MapFragment, MapEventsRe
         void dispose();
     }
 
-    /** A polygon that can be manipulated by dragging markers at its vertices. */
-    protected static class DraggableShape implements MapFeature, Marker.OnMarkerClickListener, Marker.OnMarkerDragListener {
+    /** A polyline or polygon that can be manipulated by dragging markers at its vertices. */
+    protected static class DraggablePoly implements MapFeature, Marker.OnMarkerClickListener, Marker.OnMarkerDragListener {
         final MapView map;
         final List<Marker> markers = new ArrayList<>();
         final Polyline polyline;
+        final boolean closedPolygon;
         public static final int STROKE_WIDTH = 5;
 
-        public DraggableShape(MapView map, Iterable<MapPoint> points) {
+        public DraggablePoly(MapView map, Iterable<MapPoint> points, boolean closedPolygon) {
             this.map = map;
+            this.closedPolygon = closedPolygon;
             polyline = new Polyline();
             polyline.setColor(Color.RED);
             Paint paint = polyline.getPaint();
@@ -290,8 +356,8 @@ public class OsmMapFragment extends Fragment implements MapFragment, MapEventsRe
             for (Marker marker : markers) {
                 geoPoints.add(marker.getPosition());
             }
-            if (!markers.isEmpty()) {
-                geoPoints.add(markers.get(0).getPosition());  // close the polygon
+            if (closedPolygon && !geoPoints.isEmpty()) {
+                geoPoints.add(geoPoints.get(0));
             }
             polyline.setPoints(geoPoints);
             map.invalidate();
@@ -308,7 +374,8 @@ public class OsmMapFragment extends Fragment implements MapFragment, MapEventsRe
         public List<MapPoint> getPoints() {
             List<MapPoint> points = new ArrayList<>();
             for (Marker marker : markers) {
-                points.add(fromGeoPoint(marker.getPosition()));
+                points.add(fromGeoPoint(
+                    marker.getPosition(), Double.valueOf(marker.getSubDescription())));
             }
             return points;
         }
@@ -319,8 +386,12 @@ public class OsmMapFragment extends Fragment implements MapFragment, MapEventsRe
         }
 
         protected void addMarker(MapPoint point) {
+            // A Marker's position is a GeoPoint with latitude, longitude, and
+            // altitude fields.  We need to store the standard deviation value
+            // somewhere, so it goes in the marker's sub-description field.
             Marker marker = new Marker(map);
             marker.setPosition(toGeoPoint(point));
+            marker.setSubDescription(Double.toString(point.sd));
             marker.setDraggable(true);
             marker.setIcon(ContextCompat.getDrawable(map.getContext(), R.drawable.ic_place_black));
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
@@ -338,6 +409,10 @@ public class OsmMapFragment extends Fragment implements MapFragment, MapEventsRe
         }
 
         @Override public void onMarkerDrag(Marker marker) {
+            // When a marker is manually dragged, the position is no longer
+            // obtained from a GPS reading, so the standard deviation field
+            // is no longer meaningful; reset it to zero.
+            marker.setSubDescription("0");
             update();
         }
 
@@ -345,5 +420,9 @@ public class OsmMapFragment extends Fragment implements MapFragment, MapEventsRe
             // Prevent the text bubble from appearing when a marker is clicked.
             return false;
         }
+    }
+
+    @VisibleForTesting public boolean isGpsErrorDialogShowing() {
+        return gpsErrorDialog != null && gpsErrorDialog.isShowing();
     }
 }

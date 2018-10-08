@@ -294,7 +294,6 @@
   <string name="satellite">Satelit</string>
   <string name="start">Začni</string>
   <string name="enable_gps">Omogoči GPS</string>
-  <string name="enable_gps_message">GPS v napravi je onemogočen. Želite omogočiti?</string>
   <string name="gps_enable_message">GPS v napravi je onemogočen. Želite omogočiti?</string>
   <string name="minutes">Minute</string>
   <string name="geo_clear_warning">Funkcija je že narejena. Želite izbrisati funkcijo?</string>

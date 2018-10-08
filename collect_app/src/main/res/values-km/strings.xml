@@ -324,7 +324,6 @@
   <string name="select_geotrace_mode">ជ្រើសរើសវិធី GeoTrace</string>
   <string name="start">ចាប់ផ្តើម</string>
   <string name="enable_gps">ដំណើរ​ការ​ប្រព័ន្ធ​ចាប់​ទីតាំង</string>
-  <string name="enable_gps_message">ប្រព័ន្ធ​ចាប់​ទី​តាំង​ក្នុងឧបករណ៍​របស់​អ្នក​បានបិទ។ តើ​អ្នក​ចង់​បើក​ដំណើរ​ការ​វា​ដែរ​ឬ​ទេ?</string>
   <string name="geotrace_title">GeoTrace</string>
   <string name="polygon_save">រក្សាទុកជាពហុកោណ</string>
   <string name="polyline_save">រក្សាទុកជាពហុបន្ទាត់</string>
@@ -336,7 +335,6 @@
   <string name="geo_exit_warning">បោះបង់​ការផ្លាស់​ប្តូរ និងត្រឡប់ទៅកាន់ ODK វិញ?</string>
   <string name="polygon_validator">ត្រូវការចំនុចយ៉ាងតិច 3 ដើម្បី​បង្កើតពហុកោណ</string>
   <string name="clear">លុ​បចេញ</string>
-  <string name="polyline_polygon_text">រក្សាទុក GeoTrace ជា</string>
   <string name="manual_mode">របៀបធ្វើដោយដៃ</string>
   <string name="automatic_mode">របៀបធ្វើដោយស័្វយប្រវត្តិ</string>
   <string name="geoshape_instruction">ចុចយូរដើម្បីដាក់ស្លាកកន្លែង</string>

@@ -285,7 +285,6 @@
   <string name="select_geotrace_mode">Selectați modul GeoTrace</string>
   <string name="start">Start</string>
   <string name="enable_gps">Activați GPS</string>
-  <string name="enable_gps_message">GPS-ul este dezactivat în dispozitivul dumneavoastră. Doriți să-l activați?</string>
   <string name="geotrace_title">GeoTrace</string>
   <string name="polygon_save">Salvare ca poligon</string>
   <string name="polyline_save">Salvare ca Polyline</string>

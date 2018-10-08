@@ -333,7 +333,6 @@
   <string name="select_geotrace_mode">Valitse GeoTrace -tila</string>
   <string name="start">Aloita</string>
   <string name="enable_gps">Ota GPS käyttöön</string>
-  <string name="enable_gps_message">GPS on poistettu käytöstä laitteellasi. Haluaisitko ottaa sen käyttöön?</string>
   <string name="geotrace_title">GeoTrace</string>
   <string name="polygon_save">Tallenna monikulmiona - Polygon</string>
   <string name="polyline_save">Tallenna murtoviivana - Polyline</string>
@@ -346,7 +345,6 @@
   <string name="polygon_validator">Monikulmion luomiseen tarvitaan vähintään 3 pistettä</string>
   <string name="polyline_validator">Polyline-kuvion luomiseen tarvitaan vähintään 2 pistettä</string>
   <string name="clear">Tyhjennä</string>
-  <string name="polyline_polygon_text">Tallenna GeoTrace nimellä</string>
   <string name="manual_mode">Manuaalinen tila</string>
   <string name="automatic_mode">Automaattinen tila</string>
   <string name="geoshape_instruction">Paina pitkään asettaaksesi merkkejä.</string>

@@ -29,8 +29,7 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.activities.GeoTraceGoogleMapActivity;
-import org.odk.collect.android.activities.GeoTraceOsmMapActivity;
+import org.odk.collect.android.activities.GeoTraceActivity;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.PlayServicesUtil;
@@ -40,10 +39,8 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
 import static org.odk.collect.android.utilities.PermissionUtils.requestLocationPermissions;
 
 /**
- * GeoShapeTrace is the widget that allows the user to get Collect multiple GPS points based on the
- * locations.
- * <p>
- * Date
+ * GeoTraceWidget allows the user to collect a trace of GPS points as the
+ * device moves along a path.
  *
  * @author Jon Nordling (jonnordling@gmail.com)
  */
@@ -93,22 +90,14 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
     }
 
     private void startGeoTraceActivity() {
-        Intent i;
-        if (mapSDK.equals(GOOGLE_MAP_KEY)) {
-            if (PlayServicesUtil.isGooglePlayServicesAvailable(getContext())) {
-                i = new Intent(getContext(), GeoTraceGoogleMapActivity.class);
-            } else {
-                PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(getContext());
-                return;
-            }
-        } else {
-            i = new Intent(getContext(), GeoTraceOsmMapActivity.class);
+        if (mapSDK.equals(GOOGLE_MAP_KEY) && !PlayServicesUtil.isGooglePlayServicesAvailable(getContext())) {
+            PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(getContext());
+            return;
         }
-        String s = answerDisplay.getText().toString();
-        if (s.length() != 0) {
-            i.putExtra(TRACE_LOCATION, s);
-        }
-        ((Activity) getContext()).startActivityForResult(i, RequestCodes.GEOTRACE_CAPTURE);
+        Intent intent = new Intent(getContext(), GeoTraceActivity.class)
+            .putExtra(TRACE_LOCATION, answerDisplay.getText().toString())
+            .putExtra(PreferenceKeys.KEY_MAP_SDK, mapSDK);
+        ((Activity) getContext()).startActivityForResult(intent, RequestCodes.GEOTRACE_CAPTURE);
     }
 
     private void updateButtonLabelsAndVisibility(boolean dataAvailable) {

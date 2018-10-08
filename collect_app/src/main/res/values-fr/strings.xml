@@ -332,7 +332,6 @@
   <string name="select_geotrace_mode">Sélectionner le mode de TracéGéo</string>
   <string name="start">Démarrer</string>
   <string name="enable_gps">Activer le GPS</string>
-  <string name="enable_gps_message">Le GPS est désactivé. Voulez vous l\'activer ?</string>
   <string name="geotrace_title">TracéGéo</string>
   <string name="polygon_save">Enregistrer comme Polygone</string>
   <string name="polyline_save">Enregistrer comme Polyligne</string>
@@ -345,7 +344,6 @@
   <string name="polygon_validator">3 points minimum sont nécessaires pour créer un Polygone</string>
   <string name="polyline_validator">Il faut au moins 2 points pour créer une ligne</string>
   <string name="clear">Effacer</string>
-  <string name="polyline_polygon_text">Enregistrer le TracéGéo sous</string>
   <string name="manual_mode">Mode Manuel</string>
   <string name="automatic_mode">Mode Automatique</string>
   <string name="geoshape_instruction">Appuyer longtemps pour placer le marqueur</string>
