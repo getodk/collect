@@ -48,18 +48,24 @@ public class ExtendedCheckboxPreference extends CheckBoxPreference {
         //Server setting was disabled since shouldDisableDependents gets set in multiple places.
         if (!checkBox.isEnabled()) {
             if (!shouldDisableDependents) {
-                ThemeUtils themeUtils = new ThemeUtils(getContext());
-
-                if (themeUtils.isDarkTheme()) {
-                    int darkEnabledSummaryColor = ContextCompat.getColor(getContext(), android.R.color.white);
-                    title.setTextColor(darkEnabledSummaryColor);
-                } else {
-                    int lightEnabledSummaryColor = -16777216;
-                    title.setTextColor(lightEnabledSummaryColor);
-                }
+                enableDependents();
             } else {
                 title.setTextColor(ContextCompat.getColor(getContext(), android.R.color.secondary_text_dark));
             }
+        } else {
+            enableDependents();
+        }
+    }
+
+    private void enableDependents() {
+        ThemeUtils themeUtils = new ThemeUtils(getContext());
+
+        if (themeUtils.isDarkTheme()) {
+            int darkEnabledSummaryColor = ContextCompat.getColor(getContext(), android.R.color.white);
+            title.setTextColor(darkEnabledSummaryColor);
+        } else {
+            int lightEnabledSummaryColor = -16777216;
+            title.setTextColor(lightEnabledSummaryColor);
         }
     }
 
