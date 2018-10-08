@@ -28,7 +28,6 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.map.GoogleMapFragment;
 import org.odk.collect.android.map.MapFragment;
 import org.odk.collect.android.map.MapPoint;
@@ -106,7 +105,6 @@ public class GeoTraceActivity extends CollectAbstractActivity implements IRegist
 
     @Override protected void onStart() {
         super.onStart();
-        Collect.getInstance().getActivityLogger().logOnStart(this);
         if (map != null) {
             map.setGpsLocationEnabled(true);
         }
@@ -114,7 +112,6 @@ public class GeoTraceActivity extends CollectAbstractActivity implements IRegist
 
     @Override protected void onStop() {
         map.setGpsLocationEnabled(false);
-        Collect.getInstance().getActivityLogger().logOnStop(this);
         super.onStop();
     }
 
