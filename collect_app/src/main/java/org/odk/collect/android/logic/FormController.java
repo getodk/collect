@@ -680,22 +680,26 @@ public class FormController {
     public FailedConstraint saveAllScreenAnswers(HashMap<FormIndex, IAnswerData> answers,
                                                  boolean evaluateConstraints) throws JavaRosaException {
         if (currentPromptIsQuestion()) {
+            // save answers
             for (FormIndex index : answers.keySet()) {
                 // Within a group, you can only save for question events
                 if (getEvent(index) == FormEntryController.EVENT_QUESTION) {
-                    int saveStatus;
-                    IAnswerData answer = answers.get(index);
-                    if (evaluateConstraints) {
-                        saveStatus = answerQuestion(index, answer);
-                        if (saveStatus != FormEntryController.ANSWER_OK) {
-                            return new FailedConstraint(index, saveStatus);
-                        }
-                    } else {
-                        saveAnswer(index, answer);
-                    }
+                    saveAnswer(index, answers.get(index));
                 } else {
                     Timber.w("Attempted to save an index referencing something other than a question: %s",
                             index.getReference().toString());
+                }
+            }
+            if (evaluateConstraints) { // check if answers are valid
+                int saveStatus;
+                for (FormIndex index : answers.keySet()) {
+                    // Within a group, you can only save for question events
+                    if (getEvent(index) == FormEntryController.EVENT_QUESTION) {
+                        saveStatus = answerQuestion(index, answers.get(index));
+                        if (saveStatus != FormEntryController.ANSWER_OK) {
+                            return new FailedConstraint(index, saveStatus);
+                        }
+                    }
                 }
             }
         }
