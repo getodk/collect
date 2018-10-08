@@ -82,16 +82,16 @@ public class InstanceServerUploader extends InstanceUploader {
     }
 
     @Override
-    protected Outcome doInBackground(Long... values) {
+    protected Outcome doInBackground(Long... instanceIdsToUpload) {
         Outcome outcome = new Outcome();
         int counter = 0;
-        while (counter * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER < values.length) {
+        while (counter * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER < instanceIdsToUpload.length) {
             int low = counter * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER;
             int high = (counter + 1) * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER;
-            if (high > values.length) {
-                high = values.length;
+            if (high > instanceIdsToUpload.length) {
+                high = instanceIdsToUpload.length;
             }
-            if (!processChunk(low, high, outcome, values)) {
+            if (!processChunk(low, high, outcome, instanceIdsToUpload)) {
                 return outcome;
             }
             counter++;
@@ -99,9 +99,9 @@ public class InstanceServerUploader extends InstanceUploader {
         return outcome;
     }
 
-    private boolean processChunk(int low, int high, Outcome outcome, Long... values) {
-        if (values == null) {
-            // don't try anything if values is null
+    private boolean processChunk(int low, int high, Outcome outcome, Long... instanceIdsToUpload) {
+        if (instanceIdsToUpload == null) {
+            // don't try anything if instanceIdsToUpload is null
             return false;
         }
 
@@ -112,7 +112,7 @@ public class InstanceServerUploader extends InstanceUploader {
                 selectionBuf.append(',');
             }
             selectionBuf.append('?');
-            selectionArgs[i] = values[i + low].toString();
+            selectionArgs[i] = instanceIdsToUpload[i + low].toString();
         }
 
         selectionBuf.append(')');
@@ -134,7 +134,7 @@ public class InstanceServerUploader extends InstanceUploader {
                         return false;
                     }
 
-                    publishProgress(c.getPosition() + 1 + low, values.length);
+                    publishProgress(c.getPosition() + 1 + low, instanceIdsToUpload.length);
                     String instance = c.getString(
                             c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
                     String id = c.getString(c.getColumnIndex(InstanceColumns._ID));
