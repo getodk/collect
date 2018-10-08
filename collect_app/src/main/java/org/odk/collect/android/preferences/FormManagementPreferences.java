@@ -23,8 +23,8 @@ import android.view.View;
 import com.google.android.gms.analytics.HitBuilders;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.tasks.ServerPollingWorker;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.tasks.ServerPollingJob;
 
 import static org.odk.collect.android.preferences.AdminKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOMATIC_UPDATE;
@@ -42,7 +42,7 @@ public class FormManagementPreferences extends BasePreferenceFragment {
         addPreferencesFromResource(R.xml.form_management_preferences);
 
         initListPref(KEY_PERIODIC_FORM_UPDATES_CHECK);
-        initPref(KEY_AUTOMATIC_UPDATE);  
+        initPref(KEY_AUTOMATIC_UPDATE);
         initListPref(KEY_CONSTRAINT_BEHAVIOR);
         initListPref(KEY_AUTOSEND);
         initListPref(KEY_IMAGE_SIZE);
@@ -74,7 +74,7 @@ public class FormManagementPreferences extends BasePreferenceFragment {
                 preference.setSummary(entry);
 
                 if (key.equals(KEY_PERIODIC_FORM_UPDATES_CHECK)) {
-                    ServerPollingJob.schedulePeriodicJob((String) newValue);
+                    ServerPollingWorker.schedulePeriodicJob((String) newValue);
 
                     Collect.getInstance().getDefaultTracker()
                             .send(new HitBuilders.EventBuilder()

@@ -1,8 +1,7 @@
-package org.odk.collect.android.receivers;
+package org.odk.collect.android.workers;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -10,6 +9,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 
 import org.odk.collect.android.R;
@@ -17,68 +17,66 @@ import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
-import org.odk.collect.android.tasks.ServerPollingJob;
-import org.odk.collect.android.utilities.IconUtils;
-import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
-import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceGoogleSheetsUploader;
 import org.odk.collect.android.tasks.InstanceServerUploader;
+import org.odk.collect.android.utilities.IconUtils;
+import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.utilities.PermissionUtils;
+import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CountDownLatch;
+
+import androidx.work.Worker;
+import timber.log.Timber;
 
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_SEND;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORMS_UPLOADED_NOTIFICATION;
 
-public class NetworkReceiver extends BroadcastReceiver implements InstanceUploaderListener {
+public class AutoSendWorker extends Worker implements InstanceUploaderListener {
+    public static final String TAG = "autoSendWorker";
 
-    // turning on wifi often gets two CONNECTED events. we only want to run one thread at a time
-    public static boolean running;
-    InstanceServerUploader instanceServerUploader;
-
-    InstanceGoogleSheetsUploader instanceGoogleSheetsUploader;
+    private InstanceServerUploader instanceServerUploader;
+    private InstanceGoogleSheetsUploader instanceGoogleSheetsUploader;
 
     private String resultMessage;
+    private CountDownLatch countDownLatch;
+    private Result workResult;
 
+    @NonNull
     @Override
-    public void onReceive(Context context, Intent intent) {
-        // make sure sd card is ready, if not don't try to send
+    public Result doWork() {        // make sure sd card is ready, if not don't try to send
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            return;
+            return Result.FAILURE;
         }
 
-        String action = intent.getAction();
+        countDownLatch = new CountDownLatch(1);
+
+        uploadForms(getApplicationContext(), isFormAutoSendOptionEnabledForNetwork(getApplicationContext()));
+
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException e) {
+            Timber.e(e);
+            return Result.FAILURE;
+        }
+        return workResult;
+    }
+
+    public static boolean isFormAutoSendOptionEnabledForNetwork(Context context) {
+
         ConnectivityManager manager = (ConnectivityManager) context.getSystemService(
                 Context.CONNECTIVITY_SERVICE);
         NetworkInfo currentNetworkInfo = manager.getActiveNetworkInfo();
 
-        if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
-            if (currentNetworkInfo != null
-                    && currentNetworkInfo.getState() == NetworkInfo.State.CONNECTED) {
-                uploadForms(context, isFormAutoSendOptionEnabled(currentNetworkInfo));
-            }
-
-            ServerPollingJob.pollServerIfNeeded();
-        } else if (action.equals("org.odk.collect.android.FormSaved")) {
-            ConnectivityManager connectivityManager = (ConnectivityManager) context
-                    .getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
-
-            if (ni != null && ni.isConnected()) {
-                uploadForms(context, isFormAutoSendOptionEnabled(currentNetworkInfo));
-            }
-        }
-    }
-
-    private boolean isFormAutoSendOptionEnabled(NetworkInfo currentNetworkInfo) {
         // make sure autosend is enabled on the given connected interface
         String autosend = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_AUTOSEND);
         boolean sendwifi = autosend.equals("wifi_only");
@@ -88,76 +86,76 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
             sendnetwork = true;
         }
 
-        return currentNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI
-                && sendwifi || currentNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE
-                && sendnetwork;
+        return currentNetworkInfo != null
+                && (currentNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI && sendwifi
+                || currentNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE && sendnetwork);
     }
 
     /**
      * @param isFormAutoSendOptionEnabled represents whether the auto-send option is enabled at the app level
      */
     private void uploadForms(Context context, boolean isFormAutoSendOptionEnabled) {
-        if (!running) {
-            running = true;
 
-            ArrayList<Long> toUpload = new ArrayList<>();
-            Cursor c = new InstancesDao().getFinalizedInstancesCursor();
+        ArrayList<Long> toUpload = new ArrayList<>();
+        Cursor c = new InstancesDao().getFinalizedInstancesCursor();
 
-            try {
-                if (c != null && c.getCount() > 0) {
-                    c.move(-1);
-                    String formId;
-                    while (c.moveToNext()) {
-                        formId = c.getString(c.getColumnIndex(InstanceColumns.JR_FORM_ID));
-                        if (isFormAutoSendEnabled(formId, isFormAutoSendOptionEnabled)) {
-                            Long l = c.getLong(c.getColumnIndex(InstanceColumns._ID));
-                            toUpload.add(l);
-                        }
+        try {
+            if (c != null && c.getCount() > 0) {
+                c.move(-1);
+                String formId;
+                while (c.moveToNext()) {
+                    formId = c.getString(c.getColumnIndex(InstanceColumns.JR_FORM_ID));
+                    if (isFormAutoSendEnabled(formId, isFormAutoSendOptionEnabled)) {
+                        Long l = c.getLong(c.getColumnIndex(InstanceColumns._ID));
+                        toUpload.add(l);
                     }
                 }
-            } finally {
-                if (c != null) {
-                    c.close();
+            }
+        } finally {
+            if (c != null) {
+                c.close();
+            }
+        }
+
+        if (toUpload.isEmpty()) {
+            workResult = Result.FAILURE;
+            countDownLatch.countDown();
+            return;
+        }
+
+        Long[] toSendArray = new Long[toUpload.size()];
+        toUpload.toArray(toSendArray);
+
+        GeneralSharedPreferences settings = GeneralSharedPreferences.getInstance();
+        String protocol = (String) settings.get(PreferenceKeys.KEY_PROTOCOL);
+
+        if (protocol.equals(context.getString(R.string.protocol_google_sheets))) {
+
+            if (PermissionUtils.checkIfGetAccountsPermissionGranted(context)) {
+                GoogleAccountsManager accountsManager = new GoogleAccountsManager(Collect.getInstance());
+
+                String googleUsername = accountsManager.getSelectedAccount();
+                if (googleUsername.isEmpty()) {
+                    // just quit if there's no username
+                    workResult = Result.FAILURE;
+                    countDownLatch.countDown();
+                    return;
                 }
+
+                accountsManager.getCredential().setSelectedAccountName(googleUsername);
+                instanceGoogleSheetsUploader = new InstanceGoogleSheetsUploader(accountsManager);
+                instanceGoogleSheetsUploader.setUploaderListener(this);
+                instanceGoogleSheetsUploader.execute(toSendArray);
+            } else {
+                resultMessage = Collect.getInstance().getString(R.string.odk_permissions_fail);
+                uploadingComplete(null);
             }
+        } else if (protocol.equals(context.getString(R.string.protocol_odk_default))) {
 
-            if (toUpload.isEmpty()) {
-                running = false;
-                return;
-            }
+            instanceServerUploader = new InstanceServerUploader();
+            instanceServerUploader.setUploaderListener(this);
 
-            Long[] toSendArray = new Long[toUpload.size()];
-            toUpload.toArray(toSendArray);
-
-            GeneralSharedPreferences settings = GeneralSharedPreferences.getInstance();
-            String protocol = (String) settings.get(PreferenceKeys.KEY_PROTOCOL);
-
-            if (protocol.equals(context.getString(R.string.protocol_google_sheets))) {
-
-                if (PermissionUtils.checkIfGetAccountsPermissionGranted(context)) {
-                    GoogleAccountsManager accountsManager = new GoogleAccountsManager(Collect.getInstance());
-
-                    String googleUsername = accountsManager.getSelectedAccount();
-                    if (googleUsername.isEmpty()) {
-                        // just quit if there's no username
-                        running = false;
-                        return;
-                    }
-                    accountsManager.getCredential().setSelectedAccountName(googleUsername);
-                    instanceGoogleSheetsUploader = new InstanceGoogleSheetsUploader(accountsManager);
-                    instanceGoogleSheetsUploader.setUploaderListener(this);
-                    instanceGoogleSheetsUploader.execute(toSendArray);
-                } else {
-                    resultMessage = Collect.getInstance().getString(R.string.odk_permissions_fail);
-                    uploadingComplete(null);
-                }
-            } else if (protocol.equals(context.getString(R.string.protocol_odk_default))) {
-                // get the username, password, and server from preferences
-                instanceServerUploader = new InstanceServerUploader();
-                instanceServerUploader.setUploaderListener(this);
-
-                instanceServerUploader.execute(toSendArray);
-            }
+            instanceServerUploader.execute(toSendArray);
         }
     }
 
@@ -166,7 +164,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
      *                                    <p>
      *                                    If the form explicitly sets the auto-send property, then it overrides the preferences.
      */
-    private boolean isFormAutoSendEnabled(String jrFormId, boolean isFormAutoSendOptionEnabled) {
+    public static boolean isFormAutoSendEnabled(String jrFormId, boolean isFormAutoSendOptionEnabled) {
         Cursor cursor = new FormsDao().getFormsCursorForFormId(jrFormId);
         String autoSend = null;
         if (cursor != null && cursor.moveToFirst()) {
@@ -189,15 +187,18 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         if (instanceGoogleSheetsUploader != null) {
             instanceGoogleSheetsUploader.setUploaderListener(null);
         }
-        running = false;
 
         String message;
 
         if (result == null) {
+            workResult = Result.FAILURE;
+
             message = resultMessage != null
                     ? resultMessage
                     : Collect.getInstance().getString(R.string.odk_auth_auth_fail);
         } else {
+            workResult = Result.SUCCESS;
+
             StringBuilder selection = new StringBuilder();
             Set<String> keys = result.keySet();
             Iterator<String> it = keys.iterator();
@@ -235,6 +236,8 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         NotificationManager notificationManager = (NotificationManager) Collect.getInstance()
                 .getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(1328974928, builder.build());
+
+        countDownLatch.countDown();
     }
 
     private String getContentText(Map<String, String> result) {
@@ -266,6 +269,8 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         if (instanceGoogleSheetsUploader != null) {
             instanceGoogleSheetsUploader.setUploaderListener(null);
         }
-        running = false;
+
+        workResult = Result.FAILURE;
+        countDownLatch.countDown();
     }
 }

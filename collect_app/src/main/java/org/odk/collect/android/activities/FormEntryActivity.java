@@ -89,6 +89,7 @@ import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
+import org.odk.collect.android.workers.AutoSendWorker;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.FormSavedListener;
@@ -133,6 +134,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import androidx.work.Constraints;
+import androidx.work.ExistingWorkPolicy;
+import androidx.work.NetworkType;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -142,6 +149,8 @@ import timber.log.Timber;
 
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
 import static android.content.DialogInterface.BUTTON_POSITIVE;
+import static org.odk.collect.android.workers.AutoSendWorker.isFormAutoSendEnabled;
+import static org.odk.collect.android.workers.AutoSendWorker.isFormAutoSendOptionEnabledForNetwork;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_MOVING_BACKWARDS;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 import static org.odk.collect.android.utilities.PermissionUtils.checkIfStoragePermissionsGranted;
@@ -2637,7 +2646,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             case SaveToDiskTask.SAVED:
                 ToastUtils.showShortToast(R.string.data_saved_ok);
                 formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_SAVE, 0, null, false, false);
-                sendSavedBroadcast();
+                enqueueAutosendJobIfNeeded();
                 break;
             case SaveToDiskTask.SAVED_AND_EXIT:
                 ToastUtils.showShortToast(R.string.data_saved_ok);
@@ -2648,7 +2657,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 } else {
                     formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);         // Force writing of audit since we are exiting
                 }
-                sendSavedBroadcast();
+                enqueueAutosendJobIfNeeded();
                 finishReturnInstance();
                 break;
             case SaveToDiskTask.SAVE_ERROR:
@@ -2837,8 +2846,22 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         super.onStop();
     }
 
-    private void sendSavedBroadcast() {
-        sendBroadcast(new Intent("org.odk.collect.android.FormSaved"));
+    void enqueueAutosendJobIfNeeded() {
+        String formId = getFormController().getFormDef().getMainInstance().getRoot().getAttributeValue("", "id");
+
+        if (isFormAutoSendEnabled(formId, isFormAutoSendOptionEnabledForNetwork(this))) {
+            Constraints constraints = new Constraints.Builder()
+                    .setRequiredNetworkType(NetworkType.CONNECTED)
+                    .build();
+
+            OneTimeWorkRequest autoSendWork =
+                    new OneTimeWorkRequest.Builder(AutoSendWorker.class)
+                            .addTag(AutoSendWorker.TAG)
+                            .setConstraints(constraints)
+                            .build();
+
+            WorkManager.getInstance().beginUniqueWork(AutoSendWorker.TAG, ExistingWorkPolicy.KEEP, autoSendWork).enqueue();
+        }
     }
 
     @Override
@@ -2916,6 +2939,5 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             super(context);
         }
     }
-
 }
 

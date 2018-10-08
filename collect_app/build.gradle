@@ -140,6 +140,7 @@ android {
         pickFirst 'META-INF/services/com.fasterxml.jackson.core.ObjectCodec'
         pickFirst 'META-INF/services/javax.ws.rs.ext.MessageBodyReader'
         pickFirst 'META-INF/services/javax.ws.rs.ext.MessageBodyWriter'
+        exclude 'META-INF/proguard/androidx-annotations.pro'
     }
 
     compileOptions {
@@ -190,7 +191,7 @@ dependencies {
     implementation "com.android.support:cardview-v7:${rootProject.supportLibraryVersion}"
     implementation "com.android.support:exifinterface:${rootProject.supportLibraryVersion}"
     implementation "com.android.support:multidex:1.0.3"
-    
+
     implementation "com.google.android.gms:play-services-analytics:16.0.1"
     implementation "com.google.android.gms:play-services-auth:16.0.0"
     implementation "com.google.android.gms:play-services-maps:15.0.1"
@@ -210,7 +211,6 @@ dependencies {
         exclude group: 'org.apache.httpcomponents'
     }
 
-    implementation "com.evernote:android-job:1.2.5"
     implementation "com.rarepebble:colorpicker:2.3.1"
     implementation "commons-io:commons-io:2.6"
     implementation "net.sf.kxml:kxml2:2.3.0"
@@ -269,6 +269,12 @@ dependencies {
     implementation "com.trello.rxlifecycle2:rxlifecycle-android:${rootProject.rxLifecycleVersion}"
     implementation "com.trello.rxlifecycle2:rxlifecycle-android-lifecycle:${rootProject.rxLifecycleVersion}"
 
+    implementation("android.arch.work:work-runtime:${rootProject.workManagerVersion}") {
+        exclude group: 'com.google.guava', module: 'listenablefuture'
+    }
+    implementation("android.arch.work:work-firebase:${rootProject.workManagerVersion}") {
+        exclude group: 'com.google.guava', module: 'listenablefuture'
+    }
     // Makes binding to Views easy:
     implementation "com.jakewharton:butterknife:8.8.1"
     annotationProcessor "com.jakewharton:butterknife-compiler:8.8.1"
@@ -302,7 +308,7 @@ dependencies {
     }
 
     androidTestImplementation "com.squareup.okhttp3:mockwebserver:3.9.0"
-
+    androidTestImplementation "android.arch.work:work-testing:${rootProject.workManagerVersion}"
 }
 
 // Must be at bottom to prevent dependency collisions
