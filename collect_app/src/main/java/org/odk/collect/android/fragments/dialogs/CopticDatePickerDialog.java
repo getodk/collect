@@ -47,7 +47,8 @@ public class CopticDatePickerDialog extends CustomDatePickerDialog {
 
     @Override
     protected void updateDays() {
-        setUpDayPicker(getCurrentCopticDate());
+        LocalDateTime localDateTime = getCurrentCopticDate();
+        setUpDayPicker(localDateTime.getDayOfMonth(), localDateTime.dayOfMonth().getMaximumValue());
     }
 
     @Override
@@ -61,9 +62,9 @@ public class CopticDatePickerDialog extends CustomDatePickerDialog {
                 .toDateTime()
                 .withChronology(CopticChronology.getInstance())
                 .toLocalDateTime();
-        setUpDayPicker(copticDate);
-        setUpMonthPicker(copticDate, monthsArray);
-        setUpYearPicker(copticDate, MIN_SUPPORTED_YEAR, MAX_SUPPORTED_YEAR);
+        setUpDayPicker(copticDate.getDayOfMonth(), copticDate.monthOfYear().getMaximumValue());
+        setUpMonthPicker(copticDate.getMonthOfYear(), monthsArray);
+        setUpYearPicker(copticDate.getYear(), MIN_SUPPORTED_YEAR, MAX_SUPPORTED_YEAR);
     }
 
     private void setUpValues() {
