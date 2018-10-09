@@ -46,6 +46,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.views.AudioButton.AudioHandler;
 import org.odk.collect.android.views.ExpandedHeightGridView;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
@@ -93,9 +94,6 @@ public class GridMultiWidget extends QuestionWidget implements MultiChoiceWidget
     // The image views for each of the icons
     View[] imageViews;
     AudioHandler[] audioHandlers;
-
-    // need to remember the last click position for audio treatment
-    int lastClickPosition;
 
     int resizeWidth;
 
@@ -150,8 +148,7 @@ public class GridMultiWidget extends QuestionWidget implements MultiChoiceWidget
             String audioURI =
                     prompt.getSpecialFormSelectChoiceText(sc, FormEntryCaption.TEXT_FORM_AUDIO);
             if (audioURI != null) {
-                audioHandlers[i] = new AudioHandler(prompt.getIndex(), sc.getValue(), audioURI,
-                        getPlayer());
+                audioHandlers[i] = new AudioHandler(prompt.getIndex(), sc.getValue(), audioURI, ViewIds.generateViewId());
             } else {
                 audioHandlers[i] = null;
             }
@@ -285,18 +282,12 @@ public class GridMultiWidget extends QuestionWidget implements MultiChoiceWidget
                 if (selected[position]) {
                     selected[position] = false;
                     imageViews[position].setBackgroundColor(0);
-                    if (audioHandlers[position] != null) {
-                        stopAudio();
-                    }
                     Collect.getInstance().getActivityLogger().logInstanceAction(this,
                             "onItemClick.deselect",
                             items.get(position).getValue(), getFormEntryPrompt().getIndex());
-
+                    audioHandlers[position].stopPlaying();
                 } else {
                     selected[position] = true;
-                    if (audioHandlers[lastClickPosition] != null) {
-                        stopAudio();
-                    }
                     imageViews[position].setBackgroundColor(Color.rgb(ORANGE_RED_VAL, ORANGE_GREEN_VAL,
                             ORANGE_BLUE_VAL));
                     Collect.getInstance().getActivityLogger().logInstanceAction(this,
@@ -305,7 +296,6 @@ public class GridMultiWidget extends QuestionWidget implements MultiChoiceWidget
                     if (audioHandlers[position] != null) {
                         audioHandlers[position].playAudio(getContext());
                     }
-                    lastClickPosition = position;
                 }
 
             }

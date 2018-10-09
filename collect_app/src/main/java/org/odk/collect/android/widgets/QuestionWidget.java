@@ -45,7 +45,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ActivityLogger;
-import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GuidanceHint;
@@ -72,12 +71,12 @@ import timber.log.Timber;
 
 public abstract class QuestionWidget
         extends RelativeLayout
-        implements Widget, AudioPlayListener {
+        implements Widget {
 
     private final int questionFontSize;
     private final FormEntryPrompt formEntryPrompt;
     private final MediaLayout questionMediaLayout;
-    private MediaPlayer player;
+    private final MediaPlayer player;
     private final TextView helpTextView;
     private final TextView guidanceTextView;
     private final View helpTextLayout;
@@ -217,16 +216,6 @@ public abstract class QuestionWidget
         return guidanceTextView;
     }
 
-    /**
-     * Releases resources held by this widget
-     */
-    public void release() {
-        if (player != null) {
-            player.release();
-            player = null;
-        }
-    }
-
     //source::https://stackoverflow.com/questions/18996183/identifying-rtl-language-in-android/23203698#23203698
     public static boolean isRTL() {
         return isRTL(Locale.getDefault());
@@ -275,8 +264,7 @@ public abstract class QuestionWidget
         MediaLayout questionMediaLayout = new MediaLayout(getContext());
         questionMediaLayout.setId(ViewIds.generateViewId()); // assign random id
         questionMediaLayout.setAVT(prompt.getIndex(), "", questionText, audioURI, imageURI, videoURI,
-                bigImageURI, getPlayer());
-        questionMediaLayout.setAudioListener(this);
+                bigImageURI);
 
         String playColorString = prompt.getFormElement().getAdditionalAttribute(null, "playColor");
         if (playColorString != null) {
@@ -485,32 +473,9 @@ public abstract class QuestionWidget
         getQuestionMediaLayout().playAudio();
     }
 
-    public void resetQuestionTextColor() {
-        getQuestionMediaLayout().resetTextFormatting();
-    }
-
-    public void resetAudioButtonImage() {
-        getQuestionMediaLayout().resetAudioButtonBitmap();
-    }
-
     public void showWarning(String warningBody) {
         warningText.setVisibility(View.VISIBLE);
         warningText.setText(warningBody);
-    }
-
-    @Override
-    protected void onWindowVisibilityChanged(int visibility) {
-        if (visibility == INVISIBLE || visibility == GONE) {
-            stopAudio();
-        }
-    }
-
-    public void stopAudio() {
-        if (player != null && player.isPlaying()) {
-            Timber.i("stopAudio " + player);
-            player.stop();
-            player.reset();
-        }
     }
 
     protected Button getSimpleButton(String text, @IdRes final int withId) {

@@ -79,6 +79,7 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.helpers.ContentResolverHelper;
 import org.odk.collect.android.dao.helpers.FormsDaoHelper;
 import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
+import org.odk.collect.android.events.MediaPlayerRxEvent;
 import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.exception.GDriveConnectionException;
@@ -142,6 +143,8 @@ import timber.log.Timber;
 
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
 import static android.content.DialogInterface.BUTTON_POSITIVE;
+import static org.odk.collect.android.events.MediaPlayerRxEvent.EventType.RELEASE;
+import static org.odk.collect.android.events.MediaPlayerRxEvent.EventType.STOP_PLAYING;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_MOVING_BACKWARDS;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 import static org.odk.collect.android.utilities.PermissionUtils.checkIfStoragePermissionsGranted;
@@ -1409,7 +1412,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     private void releaseOdkView() {
         if (odkView != null) {
-            odkView.releaseWidgetResources();
+            eventBus.post(new MediaPlayerRxEvent(RELEASE));
             odkView = null;
         }
     }
@@ -2303,11 +2306,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
             }
         }
-        if (getCurrentViewIfODKView() != null) {
-            // stop audio if it's playing
-            getCurrentViewIfODKView().stopAudio();
-        }
-
+        eventBus.post(new MediaPlayerRxEvent(STOP_PLAYING));
         super.onPause();
     }
 

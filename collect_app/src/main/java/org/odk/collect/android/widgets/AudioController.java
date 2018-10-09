@@ -32,18 +32,32 @@ import org.joda.time.DateTimeZone;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.events.MediaPlayerRxEvent;
+import org.odk.collect.android.events.RxEventBus;
+import org.odk.collect.android.utilities.ViewIds;
 
 import java.io.File;
 import java.io.IOException;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 import static android.view.View.GONE;
+import static org.odk.collect.android.events.MediaPlayerRxEvent.EventType.PLAYING_STARTED;
+import static org.odk.collect.android.events.MediaPlayerRxEvent.EventType.RELEASE;
+import static org.odk.collect.android.events.MediaPlayerRxEvent.EventType.STOP_PLAYING;
 
 public class AudioController implements SeekBar.OnSeekBarChangeListener {
+
+    @Inject
+    RxEventBus eventBus;
 
     private static final int SEEK_FORWARD_TIME = 5000; // 5 seconds
     private static final int SEEK_BACKWARD_TIME = 5000; // 5 seconds
@@ -60,9 +74,12 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
     private View view;
     private State state;
     private Context context;
-    private MediaPlayer mediaPlayer;
+    private final MediaPlayer mediaPlayer = new MediaPlayer();
     private FormEntryPrompt formEntryPrompt;
     private final Handler seekHandler = new Handler();
+    private final int tag = ViewIds.generateViewId();
+
+    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     /**
      * Background Runnable thread
@@ -84,6 +101,30 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
         }
     };
 
+    AudioController() {
+        Collect.getInstance().getComponent().inject(this);
+
+        compositeDisposable
+                .add(eventBus
+                        .register(MediaPlayerRxEvent.class)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(event -> {
+                            if (anotherPlayerStarted(event) && mediaPlayer.isPlaying()) {
+                                pause();
+                            } else if (event.getEventType() == STOP_PLAYING && mediaPlayer.isPlaying()) {
+                                pause();
+                            } else if (event.getEventType() == RELEASE) {
+                                mediaPlayer.release();
+                                compositeDisposable.dispose();
+                            }
+                        }));
+    }
+
+    private boolean anotherPlayerStarted(MediaPlayerRxEvent event) {
+        return event.getEventType() == PLAYING_STARTED && tag != event.getPlayerTag();
+    }
+
     /**
      * Converts {@param millis} to mm:ss format
      *
@@ -93,9 +134,8 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
         return new DateTime(millis, DateTimeZone.UTC).toString("mm:ss");
     }
 
-    void init(Context context, MediaPlayer mediaPlayer, FormEntryPrompt formEntryPrompt) {
+    void init(Context context, FormEntryPrompt formEntryPrompt) {
         this.context = context;
-        this.mediaPlayer = mediaPlayer;
         this.formEntryPrompt = formEntryPrompt;
 
         initMediaPlayer();
@@ -123,8 +163,8 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
     void playClicked() {
         if (mediaPlayer.isPlaying()) {
             pause();
-            state = State.PAUSED;
         } else {
+            eventBus.post(new MediaPlayerRxEvent(PLAYING_STARTED, tag));
             play();
             state = State.PLAYING;
         }
@@ -176,10 +216,6 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
     @Override
     public void onStartTrackingTouch(SeekBar seekBar) {
         ((FormEntryActivity) context).allowSwiping(false);
-
-        if (state == State.PLAYING) {
-            pause();
-        }
     }
 
     /**
@@ -217,6 +253,7 @@ public class AudioController implements SeekBar.OnSeekBarChangeListener {
                 .logInstanceAction(this, "pause", "click",
                         formEntryPrompt.getIndex());
 
+        state = State.PAUSED;
         playButton.setImageResource(R.drawable.ic_play_arrow_24dp);
         mediaPlayer.pause();
         seekHandler.removeCallbacks(updateTimeTask);
