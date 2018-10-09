@@ -49,7 +49,6 @@ public class BarcodeWidget extends QuestionWidget implements BinaryWidget {
         super(context, prompt);
 
         getBarcodeButton = getSimpleButton(getContext().getString(R.string.get_barcode));
-        getBarcodeButton.setEnabled(!prompt.isReadOnly());
 
         stringAnswer = getCenteredAnswerTextView();
 

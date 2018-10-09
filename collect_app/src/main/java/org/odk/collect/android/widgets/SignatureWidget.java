@@ -45,15 +45,10 @@ public class SignatureWidget extends BaseImageWidget {
     protected void setUpLayout() {
         super.setUpLayout();
         signButton = getSimpleButton(getContext().getString(R.string.sign_button));
-        signButton.setEnabled(!getFormEntryPrompt().isReadOnly());
 
         answerLayout.addView(signButton);
         answerLayout.addView(errorTextView);
 
-        // and hide the sign button if read-only
-        if (getFormEntryPrompt().isReadOnly()) {
-            signButton.setVisibility(View.GONE);
-        }
         errorTextView.setVisibility(View.GONE);
     }
 

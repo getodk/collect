@@ -75,12 +75,8 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonWidget
         setUpWidgetParameters();
         setUpAppearance();
 
-        if (prompt.isReadOnly()) {
-            if (isPickerAppearance) {
-                pickerButton.setEnabled(false);
-            } else {
-                seekBar.setEnabled(false);
-            }
+        if (prompt.isReadOnly() && !isPickerAppearance) {
+            seekBar.setEnabled(false);
         }
 
         addAnswerView(view);

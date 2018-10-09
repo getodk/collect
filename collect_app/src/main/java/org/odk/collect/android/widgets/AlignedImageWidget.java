@@ -92,20 +92,13 @@ public class AlignedImageWidget extends BaseImageWidget {
         }
 
         captureButton = getSimpleButton(getContext().getString(R.string.capture_image), R.id.capture_image);
-        captureButton.setEnabled(!getFormEntryPrompt().isReadOnly());
 
         chooseButton = getSimpleButton(getContext().getString(R.string.choose_image), R.id.choose_image);
-        chooseButton.setEnabled(!getFormEntryPrompt().isReadOnly());
 
         answerLayout.addView(captureButton);
         answerLayout.addView(chooseButton);
         answerLayout.addView(errorTextView);
 
-        // and hide the capture and choose button if read-only
-        if (getFormEntryPrompt().isReadOnly()) {
-            captureButton.setVisibility(View.GONE);
-            chooseButton.setVisibility(View.GONE);
-        }
         errorTextView.setVisibility(View.GONE);
     }
 

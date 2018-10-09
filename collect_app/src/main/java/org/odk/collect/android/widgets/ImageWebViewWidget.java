@@ -87,10 +87,8 @@ public class ImageWebViewWidget extends QuestionWidget implements FileWidget {
         errorTextView.setText(R.string.selected_invalid_image);
 
         captureButton = getSimpleButton(getContext().getString(R.string.capture_image), R.id.capture_image);
-        captureButton.setEnabled(!prompt.isReadOnly());
 
         chooseButton = getSimpleButton(getContext().getString(R.string.choose_image), R.id.choose_image);
-        chooseButton.setEnabled(!prompt.isReadOnly());
 
         // finish complex layout
         LinearLayout answerLayout = new LinearLayout(getContext());
@@ -99,11 +97,6 @@ public class ImageWebViewWidget extends QuestionWidget implements FileWidget {
         answerLayout.addView(chooseButton);
         answerLayout.addView(errorTextView);
 
-        // and hide the capture and choose button if read-only
-        if (prompt.isReadOnly()) {
-            captureButton.setVisibility(View.GONE);
-            chooseButton.setVisibility(View.GONE);
-        }
         errorTextView.setVisibility(View.GONE);
 
         // retrieve answer from data model and update ui

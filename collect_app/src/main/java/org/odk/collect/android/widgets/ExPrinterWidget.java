@@ -124,10 +124,6 @@ public class ExPrinterWidget extends QuestionWidget implements BinaryWidget {
         String buttonText = (v != null) ? v : context.getString(R.string.launch_printer);
         launchIntentButton = getSimpleButton(buttonText);
 
-        if (prompt.isReadOnly()) {
-            launchIntentButton.setEnabled(false);
-        }
-
         // finish complex layout
         LinearLayout printLayout = new LinearLayout(getContext());
         printLayout.setOrientation(LinearLayout.VERTICAL);
