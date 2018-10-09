@@ -25,14 +25,14 @@ public class CollectServerClientTest extends MockedServerTest {
     }
 
     @Test
-    public void httpRequests_shouldHaveUseragentHeader() throws Exception {
+    public void httpRequests_shouldHaveUserAgentHeader() throws Exception {
         // when
         doRequest(url("/some-path"));
 
         // then
-        RecordedRequest r = nextRequest();
-        assertEquals("GET /some-path HTTP/1.1", r.getRequestLine());
-        assertTrue(r.getHeader("User-Agent").matches("Dalvik/.* org.odk.collect.android/.*"));
+        RecordedRequest recordedRequest = nextRequest();
+        assertEquals("GET /some-path HTTP/1.1", recordedRequest.getRequestLine());
+        assertTrue(recordedRequest.getHeader("User-Agent").matches("Dalvik/.* org.odk.collect.android/.*"));
     }
 
     @Test
@@ -62,7 +62,7 @@ public class CollectServerClientTest extends MockedServerTest {
         collectServerClient.getXmlDocument(url("/list-forms"));
 
         // then
-        assertEquals("gzip",
+        assertEquals("gzip,deflate",
                 nextRequest().getHeader("Accept-Encoding"));
     }
 

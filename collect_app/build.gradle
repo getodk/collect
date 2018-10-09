@@ -210,7 +210,8 @@ dependencies {
         exclude group: 'org.apache.httpcomponents'
     }
 
-    implementation 'com.squareup.okhttp3:okhttp:3.11.0'
+
+    implementation "com.squareup.okhttp3:okhttp:${rootProject.okhttp3Version}"
     implementation 'com.burgstaller:okhttp-digest:1.18'
 
     implementation "com.evernote:android-job:1.2.5"
@@ -300,7 +301,7 @@ dependencies {
         exclude group: 'com.google.code.findbugs', module: 'jsr305'
     }
 
-    androidTestImplementation "com.squareup.okhttp3:mockwebserver:3.9.0"
+    androidTestImplementation "com.squareup.okhttp3:mockwebserver:${rootProject.okhttp3Version}"
 }
 
 // Must be at bottom to prevent dependency collisions

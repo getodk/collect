@@ -54,23 +54,23 @@ public class InstanceServerUploaderTest extends MockedServerTest {
 
         // and
         HEAD: {
-            RecordedRequest r = nextRequest();
-            assertEquals("HEAD", r.getMethod());
-            assertMatches("/submission\\?deviceID=\\w+%3A\\w+", r.getPath());
-            assertMatches("Dalvik/.* org.odk.collect.android/.*", r.getHeader("User-Agent"));
-            assertEquals("1.0", r.getHeader("X-OpenRosa-Version"));
-            assertEquals("gzip", r.getHeader("Accept-Encoding"));
+            RecordedRequest recordedRequest = nextRequest();
+            assertEquals("HEAD", recordedRequest.getMethod());
+            assertMatches("/submission\\?deviceID=", recordedRequest.getPath());
+            assertMatches("Dalvik/.* org.odk.collect.android/.*", recordedRequest.getHeader("User-Agent"));
+            assertEquals("1.0", recordedRequest.getHeader("X-OpenRosa-Version"));
+            assertEquals("gzip,deflate", recordedRequest.getHeader("Accept-Encoding"));
         }
 
         // and
         POST: {
-            RecordedRequest r = nextRequest();
-            assertEquals("POST", r.getMethod());
-            assertMatches("/submission\\?deviceID=\\w+%3A\\w+", r.getPath());
-            assertMatches("Dalvik/.* org.odk.collect.android/.*", r.getHeader("User-Agent"));
-            assertEquals("1.0", r.getHeader("X-OpenRosa-Version"));
-            assertEquals("gzip", r.getHeader("Accept-Encoding"));
-            assertMatches("multipart/form-data; boundary=.*", r.getHeader("Content-Type"));
+            RecordedRequest recordedRequest = nextRequest();
+            assertEquals("POST", recordedRequest.getMethod());
+            assertMatches("/submission\\?deviceID=", recordedRequest.getPath());
+            assertMatches("Dalvik/.* org.odk.collect.android/.*", recordedRequest.getHeader("User-Agent"));
+            assertEquals("1.0", recordedRequest.getHeader("X-OpenRosa-Version"));
+            assertEquals("gzip,deflate", recordedRequest.getHeader("Accept-Encoding"));
+            assertMatches("multipart/form-data; boundary=.*", recordedRequest.getHeader("Content-Type"));
             assertMatches(join(
                             "--.*\r",
                             "Content-Disposition: form-data; name=\"xml_submission_file\"; filename=\"tst.*\\.tmp\"\r",
@@ -79,7 +79,7 @@ public class InstanceServerUploaderTest extends MockedServerTest {
                             "\r",
                             "<form-content-here/>\r",
                             "--.*--\r"),
-                    r.getBody().readUtf8());
+                    recordedRequest.getBody().readUtf8());
         }
     }
 

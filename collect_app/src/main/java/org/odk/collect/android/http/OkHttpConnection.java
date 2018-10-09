@@ -46,6 +46,8 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
+import okio.GzipSource;
+import okio.InflaterSource;
 import timber.log.Timber;
 
 public class OkHttpConnection implements OpenRosaHttpInterface {
@@ -55,11 +57,14 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     private static final int WRITE_CONNECTION_TIMEOUT = 60000; // it can take up to 27 seconds to spin up an Aggregate
     private static final int READ_CONNECTION_TIMEOUT = 60000; // it can take up to 27 seconds to spin up an Aggregate
     private static final String ACCEPT_ENCODING_HEADER = "Accept-Encoding";
-    private static final String GZIP_CONTENT_ENCODING = "gzip";
+    private static final String CONTENT_ENCODING = "gzip,deflate";
     private static final String OPEN_ROSA_VERSION_HEADER = "X-OpenRosa-Version";
     private static final String OPEN_ROSA_VERSION = "1.0";
     private static final String DATE_HEADER = "Date";
     private static final String HTTP_CONTENT_TYPE_TEXT_XML = "text/xml";
+
+    private static OkHttpClient httpClient;
+    private static HttpCredentialsInterface httpCredentials;
 
     @NonNull
     @Override
@@ -253,16 +258,40 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     }
 
     private OkHttpClient createOkHttpClient(@Nullable HttpCredentialsInterface credentials) {
-        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        OkHttpClient.Builder builder;
+
+        if (httpClient != null) {
+            if (sameCredentials(credentials)) { return httpClient; }
+            builder = httpClient.newBuilder();
+        } else {
+            builder = new OkHttpClient.Builder();
+        }
 
         addCredentials(builder, credentials);
+        httpCredentials = credentials;
 
-        return builder
-                .connectTimeout(CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)
-                .writeTimeout(WRITE_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)
-                .readTimeout(READ_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)
-                .followRedirects(true)
-                .build();
+        httpClient = builder
+                    .connectTimeout(CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)
+                    .writeTimeout(WRITE_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)
+                    .readTimeout(READ_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)
+                    .followRedirects(true)
+                    .build();
+
+        return httpClient;
+    }
+
+    private boolean sameCredentials(HttpCredentialsInterface credentials) {
+        if (httpCredentials == null && credentials == null) {
+            return true;
+        } else if (httpCredentials == null && credentials != null) {
+            return false;
+        } else if (httpCredentials != null && credentials == null) {
+            return false;
+        } else if (httpCredentials.equals(credentials)) {
+            return true;
+        }
+
+        return false;
     }
 
     private void addCredentials(OkHttpClient.Builder builder, @Nullable HttpCredentialsInterface credentials) {
@@ -286,7 +315,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     private Request getRequest(@NonNull URI uri) throws MalformedURLException {
         return new Request.Builder()
                 .url(uri.toURL())
-                .addHeader(ACCEPT_ENCODING_HEADER, GZIP_CONTENT_ENCODING)
+                .addHeader(ACCEPT_ENCODING_HEADER, CONTENT_ENCODING)
                 .addHeader(USER_AGENT_HEADER, getUserAgentString())
                 .addHeader(OPEN_ROSA_VERSION_HEADER, OPEN_ROSA_VERSION)
                 .addHeader(DATE_HEADER, getHeaderDate())
@@ -297,7 +326,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     private Request headRequest(@NonNull URI uri) throws MalformedURLException {
         return new Request.Builder()
                 .url(uri.toURL())
-                .addHeader(ACCEPT_ENCODING_HEADER, GZIP_CONTENT_ENCODING)
+                .addHeader(ACCEPT_ENCODING_HEADER, CONTENT_ENCODING)
                 .addHeader(USER_AGENT_HEADER, getUserAgentString())
                 .addHeader(OPEN_ROSA_VERSION_HEADER, OPEN_ROSA_VERSION)
                 .addHeader(DATE_HEADER, getHeaderDate())
@@ -308,7 +337,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     private Request postRequest(@NonNull URI uri, RequestBody body) throws MalformedURLException {
         return new Request.Builder()
                 .url(uri.toURL())
-                .addHeader(ACCEPT_ENCODING_HEADER, GZIP_CONTENT_ENCODING)
+                .addHeader(ACCEPT_ENCODING_HEADER, CONTENT_ENCODING)
                 .addHeader(USER_AGENT_HEADER, getUserAgentString())
                 .addHeader(OPEN_ROSA_VERSION_HEADER, OPEN_ROSA_VERSION)
                 .addHeader(DATE_HEADER, getHeaderDate())
