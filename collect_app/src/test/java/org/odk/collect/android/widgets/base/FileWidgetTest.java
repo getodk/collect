@@ -66,6 +66,7 @@ public abstract class FileWidgetTest<W extends FileWidget> extends BinaryWidgetT
     /**
      * Override this to provide additional set-up prior to testing any set answer methods.
      */
+    @SuppressWarnings("PMD.EmptyMethodInAbstractClassShouldBeAbstract")
     protected void prepareForSetAnswer() {
         // Default implementation does nothing.
     }
