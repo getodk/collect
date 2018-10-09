@@ -76,6 +76,22 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         }
     }
 
+    @Override
+    public void uploadingComplete(HashMap<String, String> resultMessagesByInstanceId) {
+        // task is done
+        if (instanceServerUploader != null) {
+            instanceServerUploader.setUploaderListener(null);
+        }
+        if (instanceGoogleSheetsUploader != null) {
+            instanceGoogleSheetsUploader.setUploaderListener(null);
+        }
+        running = false;
+
+        String message = formatOverallResultMessage(resultMessagesByInstanceId);
+
+        showUploadStatusNotification(resultMessagesByInstanceId, message);
+    }
+
     /**
      * Returns whether the currently-available connection type is included in the app-level auto-send
      * settings.
@@ -207,22 +223,6 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
 
         return formLevelAutoSend == null ? isAutoSendAppSettingEnabled
                 : Boolean.valueOf(formLevelAutoSend);
-    }
-
-    @Override
-    public void uploadingComplete(HashMap<String, String> resultMessagesByInstanceId) {
-        // task is done
-        if (instanceServerUploader != null) {
-            instanceServerUploader.setUploaderListener(null);
-        }
-        if (instanceGoogleSheetsUploader != null) {
-            instanceGoogleSheetsUploader.setUploaderListener(null);
-        }
-        running = false;
-
-        String message = formatOverallResultMessage(resultMessagesByInstanceId);
-
-        showUploadStatusNotification(resultMessagesByInstanceId, message);
     }
 
     private String formatOverallResultMessage(HashMap<String, String> resultMessagesByInstanceId) {
