@@ -222,24 +222,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
 
         String message = formatOverallResultMessage(resultMessagesByInstanceId);
 
-        Intent notifyIntent = new Intent(Collect.getInstance(), NotificationActivity.class);
-        notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        notifyIntent.putExtra(NotificationActivity.NOTIFICATION_TITLE, Collect.getInstance().getString(R.string.upload_results));
-        notifyIntent.putExtra(NotificationActivity.NOTIFICATION_MESSAGE, message.trim());
-
-        PendingIntent pendingNotify = PendingIntent.getActivity(Collect.getInstance(), FORMS_UPLOADED_NOTIFICATION,
-                notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(Collect.getInstance())
-                .setSmallIcon(IconUtils.getNotificationAppIcon())
-                .setContentTitle(Collect.getInstance().getString(R.string.odk_auto_note))
-                .setContentIntent(pendingNotify)
-                .setContentText(getContentText(resultMessagesByInstanceId))
-                .setAutoCancel(true);
-
-        NotificationManager notificationManager = (NotificationManager) Collect.getInstance()
-                .getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(1328974928, builder.build());
+        showUploadStatusNotification(resultMessagesByInstanceId, message);
     }
 
     private String formatOverallResultMessage(HashMap<String, String> resultMessagesByInstanceId) {
@@ -269,6 +252,27 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
             message = InstanceUploaderUtils.getUploadResultMessage(cursor, resultMessagesByInstanceId);
         }
         return message;
+    }
+
+    private void showUploadStatusNotification(HashMap<String, String> resultMessagesByInstanceId, String message) {
+        Intent notifyIntent = new Intent(Collect.getInstance(), NotificationActivity.class);
+        notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        notifyIntent.putExtra(NotificationActivity.NOTIFICATION_TITLE, Collect.getInstance().getString(R.string.upload_results));
+        notifyIntent.putExtra(NotificationActivity.NOTIFICATION_MESSAGE, message.trim());
+
+        PendingIntent pendingNotify = PendingIntent.getActivity(Collect.getInstance(), FORMS_UPLOADED_NOTIFICATION,
+                notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(Collect.getInstance())
+                .setSmallIcon(IconUtils.getNotificationAppIcon())
+                .setContentTitle(Collect.getInstance().getString(R.string.odk_auto_note))
+                .setContentIntent(pendingNotify)
+                .setContentText(getContentText(resultMessagesByInstanceId))
+                .setAutoCancel(true);
+
+        NotificationManager notificationManager = (NotificationManager) Collect.getInstance()
+                .getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(1328974928, builder.build());
     }
 
     private String getContentText(Map<String, String> resultsMessagesByInstanceId) {
