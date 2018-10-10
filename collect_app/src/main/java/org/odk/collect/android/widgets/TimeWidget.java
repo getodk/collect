@@ -104,7 +104,6 @@ public class TimeWidget extends QuestionWidget implements ButtonWidget, TimePick
 
     private void createTimeButton() {
         timeButton = getSimpleButton(getContext().getString(R.string.select_time));
-        timeButton.setEnabled(!getFormEntryPrompt().isReadOnly());
     }
 
     private void addViews() {

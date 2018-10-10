@@ -25,7 +25,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.javarosa.core.model.SelectChoice;
-import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.xpath.expr.XPathFuncExpr;
@@ -63,15 +62,7 @@ public abstract class SelectWidget extends QuestionWidget {
     }
 
     @Override
-    public IAnswerData getAnswer() {
-        return null;
-    }
-
-    @Override
-    public void clearAnswer() {
-    }
-
-    @Override
+    @SuppressWarnings("PMD.EmptyMethodInAbstractClassShouldBeAbstract")
     public void setOnLongClickListener(OnLongClickListener l) {
     }
 

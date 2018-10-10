@@ -22,6 +22,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.support.v4.content.FileProvider;
 import android.support.v7.widget.AppCompatImageButton;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -36,6 +37,7 @@ import android.widget.TextView;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
+import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.utilities.FileUtils;
@@ -166,7 +168,10 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
         }
 
         Intent intent = new Intent("android.intent.action.VIEW");
-        intent.setDataAndType(Uri.fromFile(videoFile), "video/*");
+        Uri uri =
+                FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", videoFile);
+        FileUtils.grantFileReadPermissions(intent, uri, getContext());
+        intent.setDataAndType(uri, "video/*");
         if (intent.resolveActivity(getContext().getPackageManager()) != null) {
             getContext().startActivity(intent);
         } else {
@@ -263,7 +268,10 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
             try {
                 File bigImage = new File(referenceManager.DeriveReference(bigImageURI).getLocalURI());
                 Intent intent = new Intent("android.intent.action.VIEW");
-                intent.setDataAndType(Uri.fromFile(bigImage), "image/*");
+                Uri uri =
+                        FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", bigImage);
+                FileUtils.grantFileReadPermissions(intent, uri, getContext());
+                intent.setDataAndType(uri, "image/*");
                 getContext().startActivity(intent);
             } catch (InvalidReferenceException e) {
                 Timber.e(e, "Invalid image reference due to %s ", e.getMessage());

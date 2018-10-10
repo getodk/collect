@@ -46,7 +46,6 @@ public class UrlWidget extends QuestionWidget implements ButtonWidget {
         super(context, prompt);
 
         openUrlButton = getSimpleButton(context.getString(R.string.open_url));
-        openUrlButton.setEnabled(!prompt.isReadOnly());
 
         stringAnswer = getCenteredAnswerTextView();
 

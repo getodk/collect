@@ -110,7 +110,6 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
         viewButton = getSimpleButton(getContext().getString(R.string.get_point), R.id.get_point);
 
         getLocationButton = getSimpleButton(R.id.get_location);
-        getLocationButton.setEnabled(!prompt.isReadOnly());
 
         // finish complex layout
         // control what gets shown with setVisibility(View.GONE)
@@ -137,8 +136,6 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
         // for maps, we show the view button.
 
         if (useMapsV2 && useMaps) {
-            // show the GetLocation button
-            getLocationButton.setVisibility(View.VISIBLE);
             // hide the view button
             viewButton.setVisibility(View.GONE);
             if (readOnly) {
@@ -154,11 +151,7 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
                 }
             }
         } else {
-            // if it is read-only, hide the get-location button...
-            if (readOnly) {
-                getLocationButton.setVisibility(View.GONE);
-            } else {
-                getLocationButton.setVisibility(View.VISIBLE);
+            if (!readOnly) {
                 getLocationButton.setText(getContext().getString(
                         dataAvailable ? R.string.change_location : R.string.get_point));
             }

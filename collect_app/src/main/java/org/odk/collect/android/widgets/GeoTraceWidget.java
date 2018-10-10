@@ -69,10 +69,6 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
 
         createTraceButton = getSimpleButton(getContext().getString(R.string.get_trace));
 
-        if (prompt.isReadOnly()) {
-            createTraceButton.setEnabled(false);
-        }
-
         LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);
         answerLayout.addView(createTraceButton);

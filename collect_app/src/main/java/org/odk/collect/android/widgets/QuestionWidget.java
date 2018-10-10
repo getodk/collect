@@ -238,6 +238,7 @@ public abstract class QuestionWidget
         return directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT || directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC;
     }
 
+    @SuppressWarnings("PMD.EmptyMethodInAbstractClassShouldBeAbstract")
     protected void injectDependencies(DependencyProvider dependencyProvider) {
         //dependencies for the widget will be wired here.
     }
@@ -511,27 +512,28 @@ public abstract class QuestionWidget
     }
 
     protected Button getSimpleButton(String text, @IdRes final int withId) {
-        final QuestionWidget questionWidget = this;
         final Button button = new Button(getContext());
 
-        button.setId(withId);
-        button.setText(text);
-        button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
-        button.setPadding(20, 20, 20, 20);
+        if (getFormEntryPrompt().isReadOnly()) {
+            button.setVisibility(GONE);
+        } else {
+            button.setId(withId);
+            button.setText(text);
+            button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
+            button.setPadding(20, 20, 20, 20);
 
-        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
-        params.setMargins(7, 5, 7, 5);
+            TableLayout.LayoutParams params = new TableLayout.LayoutParams();
+            params.setMargins(7, 5, 7, 5);
 
-        button.setLayoutParams(params);
+            button.setLayoutParams(params);
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            button.setOnClickListener(v -> {
                 if (Collect.allowClick()) {
-                    ((ButtonWidget) questionWidget).onButtonClick(withId);
+                    ((ButtonWidget) this).onButtonClick(withId);
                 }
-            }
-        });
+            });
+        }
+
         return button;
     }
 
