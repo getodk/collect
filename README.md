@@ -47,7 +47,7 @@ New versions of ODK Collect are generally released on the last Sunday of a month
 
     If you prefer not to use the command line, you can use Android Studio to create a new project from version control using `https://github.com/YOUR-GITHUB-USERNAME/collect`.
 
-1. Open the project in the folder of your clone from Android Studio. To run the project, click on the green arrow at the top of the screen. The emulator is very slow so we generally recommend using a physical device when possible.
+1. Open the project in the folder of your clone from Android Studio. To run the project, click on the green arrow at the top of the screen. Older versions of the Android emulator are very slow, so make sure you're up to date with a virtual device that supports [snapshots](https://developer.android.com/studio/run/emulator#snapshots) (or use a physical device).
 
 1. Make sure you can run unit tests by running everything under `collect_app/src/test/java` in Android Studio or on the command line:
 
