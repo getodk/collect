@@ -19,6 +19,7 @@ package org.odk.collect.android.http;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import org.odk.collect.android.taskModel.TaskResponse;
 import org.odk.collect.android.utilities.ResponseMessageParser;
 
 import java.io.File;
@@ -66,5 +67,20 @@ public interface OpenRosaHttpInterface {
                                                String status,              // smap
                                                String location_trigger,    // smap
                                                String survey_notes) throws IOException;   // smap add status
+
+    /**
+     * smap
+     * Updates tasks on a Server.
+     *
+     * @param updateResponse Task data to be updated
+     * @param uri where to send the submissionFile and fileList
+     * @return ResponseMessageParser object that contains the response XML
+     * @throws IOException can be thrown if files do not exist
+     */
+    @NonNull
+    ResponseMessageParser uploadTaskStatus(@NonNull TaskResponse updateResponse,
+                                               @NonNull URI uri,
+                                               @Nullable HttpCredentialsInterface credentials
+                                             ) throws IOException;
 
 }

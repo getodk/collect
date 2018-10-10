@@ -21,10 +21,14 @@ import android.support.annotation.Nullable;
 import android.text.format.DateFormat;
 import android.webkit.MimeTypeMap;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import org.apache.commons.io.IOUtils;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.taskModel.TaskResponse;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ResponseMessageParser;
 import org.opendatakit.httpclientandroidlib.Header;
@@ -33,6 +37,7 @@ import org.opendatakit.httpclientandroidlib.HttpHost;
 import org.opendatakit.httpclientandroidlib.HttpRequest;
 import org.opendatakit.httpclientandroidlib.HttpResponse;
 import org.opendatakit.httpclientandroidlib.HttpStatus;
+import org.opendatakit.httpclientandroidlib.NameValuePair;
 import org.opendatakit.httpclientandroidlib.NoHttpResponseException;
 import org.opendatakit.httpclientandroidlib.auth.AuthScope;
 import org.opendatakit.httpclientandroidlib.auth.Credentials;
@@ -45,6 +50,7 @@ import org.opendatakit.httpclientandroidlib.client.HttpClient;
 import org.opendatakit.httpclientandroidlib.client.config.AuthSchemes;
 import org.opendatakit.httpclientandroidlib.client.config.CookieSpecs;
 import org.opendatakit.httpclientandroidlib.client.config.RequestConfig;
+import org.opendatakit.httpclientandroidlib.client.entity.UrlEncodedFormEntity;
 import org.opendatakit.httpclientandroidlib.client.methods.HttpGet;
 import org.opendatakit.httpclientandroidlib.client.methods.HttpHead;
 import org.opendatakit.httpclientandroidlib.client.methods.HttpPost;
@@ -60,6 +66,7 @@ import org.opendatakit.httpclientandroidlib.impl.auth.BasicScheme;
 import org.opendatakit.httpclientandroidlib.impl.client.BasicAuthCache;
 import org.opendatakit.httpclientandroidlib.impl.client.BasicCookieStore;
 import org.opendatakit.httpclientandroidlib.impl.client.HttpClientBuilder;
+import org.opendatakit.httpclientandroidlib.message.BasicNameValuePair;
 import org.opendatakit.httpclientandroidlib.protocol.BasicHttpContext;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 import org.opendatakit.httpclientandroidlib.util.EntityUtils;
@@ -717,4 +724,82 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
             return credMap.toString();
         }
     }
+
+    /*
+     * Begin smap
+     */
+    @Override
+    public @NonNull ResponseMessageParser uploadTaskStatus(@NonNull TaskResponse updateResponse,
+                                                               @NonNull URI uri,
+                                                               @Nullable HttpCredentialsInterface credentials
+                                                             ) throws IOException {
+        addCredentialsForHost(uri, credentials);
+        getCookieStore().clear();
+
+        // get shared HttpContext so that authentication and cookies are retained.
+        HttpContext localContext = getHttpContext();
+        HttpClient httpclient = createHttpClient(UPLOAD_CONNECTION_TIMEOUT);
+
+        // if https then enable preemptive basic auth...
+        if (uri.getScheme().equals("https")) {
+            enablePreemptiveBasicAuth(localContext, uri.getHost());
+        }
+
+        ResponseMessageParser messageParser = null;
+
+        HttpPost httppost = createOpenRosaHttpPost(uri);
+        Gson gson = new GsonBuilder().disableHtmlEscaping().setDateFormat("yyyy-MM-dd").create();
+        String resp = gson.toJson(updateResponse);
+
+        ArrayList<NameValuePair> dataToSend = new ArrayList<>();
+        dataToSend.add(new BasicNameValuePair("assignInput", resp));
+        httppost.setEntity(new UrlEncodedFormEntity(dataToSend));
+
+        // prepare response and return uploaded
+        HttpResponse response;
+
+        try {
+            Timber.i("Issuing POST request to: %s", uri.toString());
+            response = httpclient.execute(httppost, localContext);
+            int responseCode = response.getStatusLine().getStatusCode();
+            HttpEntity httpEntity = response.getEntity();
+            Timber.i("Response code:%d", responseCode);
+
+            messageParser = new ResponseMessageParser(
+                    EntityUtils.toString(httpEntity),
+                    responseCode,
+                    response.getStatusLine().getReasonPhrase());
+
+            discardEntityBytes(response);
+
+            if (responseCode == HttpStatus.SC_UNAUTHORIZED) {
+                getCookieStore().clear();
+            }
+
+            if (responseCode != HttpStatus.SC_OK) {
+                return messageParser;
+            }
+
+        } catch (IOException e) {
+            if (e instanceof UnknownHostException || e instanceof HttpHostConnectException
+                    || e instanceof SocketException || e instanceof NoHttpResponseException
+                    || e instanceof SocketTimeoutException || e instanceof ConnectTimeoutException) {
+                Timber.i(e);
+            } else {
+                Timber.e(e);
+            }
+            String msg = e.getMessage();
+            if (msg == null) {
+                msg = e.toString();
+            }
+
+            throw new IOException(msg);
+        }
+
+
+        return messageParser;
+    }
+    /*
+     * End smap
+     */
 }

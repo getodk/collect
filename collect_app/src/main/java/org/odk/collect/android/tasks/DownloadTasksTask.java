@@ -44,6 +44,8 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.database.Assignment;
 import org.odk.collect.android.database.TaskAssignment;
+import org.odk.collect.android.http.CollectServerClient;
+import org.odk.collect.android.http.OpenRosaHttpInterface;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
@@ -65,8 +67,10 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ManageForm;
 import org.odk.collect.android.utilities.ManageForm.ManageFormDetails;
 import org.odk.collect.android.utilities.ManageFormResponse;
+import org.odk.collect.android.utilities.ResponseMessageParser;
 import org.odk.collect.android.utilities.TraceUtilities;
 import org.odk.collect.android.utilities.Utilities;
+import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.utilities.WebUtils;
 import org.opendatakit.httpclientandroidlib.HttpEntity;
 import org.opendatakit.httpclientandroidlib.HttpResponse;
@@ -95,6 +99,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.TimeZone;
+
+import javax.inject.Inject;
 
 import timber.log.Timber;
 
@@ -126,6 +132,16 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 
     String username = null;
     String password = null;
+
+    @Inject
+    CollectServerClient collectServerClient;
+
+    @Inject
+    OpenRosaHttpInterface httpInterface;
+
+
+    @Inject
+    WebCredentialsUtils webCredentialsUtils;
 
     private FormsDao formsDao;
 	
@@ -336,32 +352,34 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 if(taskURL.startsWith("null")) {
                     throw new Exception(Collect.getInstance().getString(R.string.smap_no_server));
                 }
-                HttpContext localContext = Collect.getInstance().getHttpContext();
-                HttpClient client = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
+                //HttpContext localContext = Collect.getInstance().getHttpContext();
+                //HttpClient client = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
                 Uri u = Uri.parse(taskURL);
-                if(username != null && password != null) {
-                    WebUtils.addCredentials(username, password, u.getHost());
-                }
+                //if(username != null && password != null) {
+                //    WebUtils.addCredentials(username, password, u.getHost());
+                //}
 
-                URL url = new URL(taskURL);
-                URI uri = url.toURI();
-                HttpGet req = new HttpGet();
-                req.setURI(uri);
+                //URL url = new URL(taskURL);
+                //URI uri = url.toURI();
+                //HttpGet req = new HttpGet();
+                //req.setURI(uri);
 
-                HttpResponse response = client.execute(req, localContext);
-                int statusCode = response.getStatusLine().getStatusCode();
+                //HttpResponse response = client.execute(req, localContext);
+                //int statusCode = response.getStatusLine().getStatusCode();
 
                 InputStream is = null;
-                if(statusCode != HttpStatus.SC_OK) {
-                    Timber.w("Error:" + statusCode + " for URL " + taskURL);
-                    results.put(Collect.getInstance().getString(R.string.smap_get_tasks),
-                            Utilities.translateMsg(null, response.getStatusLine().getReasonPhrase()));
-                    throw new Exception(response.getStatusLine().getReasonPhrase());
-                }
+                //if(statusCode != HttpStatus.SC_OK) {
+                //    Timber.w("Error:" + statusCode + " for URL " + taskURL);
+                //    results.put(Collect.getInstance().getString(R.string.smap_get_tasks),
+                //            Utilities.translateMsg(null, response.getStatusLine().getReasonPhrase()));
+                //    throw new Exception(response.getStatusLine().getReasonPhrase());
+                //}
 
                 try {
-                    HttpEntity entity = response.getEntity();
-                    is = entity.getContent();
+                    //HttpEntity entity = response.getEntity();
+                    URI uri = URI.create(taskURL);
+                    is = httpInterface.get(uri, null, webCredentialsUtils.getCredentials(uri)).getInputStream();
+                    //is = entity.getContent();
                     // De-serialise
                     GsonBuilder gb = new GsonBuilder().registerTypeAdapter(Date.class, new DateDeserializer());
                     gson = gb.create();
@@ -589,7 +607,6 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 	 */
 	private void updateTaskStatusToServer() throws Exception {
 
-
         TaskResponse updateResponse = new TaskResponse();
         //updateResponse.forms = tr.forms;
         
@@ -650,14 +667,24 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 
             publishProgress(Collect.getInstance().getString(R.string.smap_update_task_status));
 
+            ResponseMessageParser messageParser;
+            URI uri = URI.create(taskURL);
+            try {
+                messageParser = httpInterface.uploadTaskStatus(updateResponse,  uri,
+                        webCredentialsUtils.getCredentials(uri));
+            } catch (Exception e) {
+                results.put(Collect.getInstance().getString(R.string.smap_get_tasks),
+                        e.getMessage());
+                throw new Exception(e.getMessage());
+            }
 
             // Call the service
-            HttpContext localContext = Collect.getInstance().getHttpContext();
-            HttpClient client = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
-            URI u = URI.create(taskURL);
-            if (username != null && password != null) {
-                WebUtils.addCredentials(username, password, u.getHost());
-            }
+            //HttpContext localContext = Collect.getInstance().getHttpContext();
+            //HttpClient client = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
+            //URI u = URI.create(taskURL);
+            //if (username != null && password != null) {
+            //    WebUtils.addCredentials(username, password, u.getHost());
+            //}
 
             /*
              * Use a head request as per instance uploader
@@ -665,39 +692,39 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
              *
              * There must be a more efficient way to do this!
              */
-            HttpHead httpHead = WebUtils.createOpenRosaHttpHead(u);
-            try {
-                client.execute(httpHead, localContext);
-            } catch (Exception e) {
+            //HttpHead httpHead = WebUtils.createOpenRosaHttpHead(u);
+            //try {
+            //    client.execute(httpHead, localContext);
+            //} catch (Exception e) {
+            //
+            //}
 
-            }
+            //HttpPost postRequest = new HttpPost(URI.create(u.toString()));
 
-            HttpPost postRequest = new HttpPost(URI.create(u.toString()));
+            //Gson gson = new GsonBuilder().disableHtmlEscaping().setDateFormat("yyyy-MM-dd").create();
+            //String resp = gson.toJson(updateResponse);
 
-            Gson gson = new GsonBuilder().disableHtmlEscaping().setDateFormat("yyyy-MM-dd").create();
-            String resp = gson.toJson(updateResponse);
+            //ArrayList<NameValuePair> dataToSend = new ArrayList<>();
+            //dataToSend.add(new BasicNameValuePair("assignInput", resp));
+            //postRequest.setEntity(new UrlEncodedFormEntity(dataToSend));
 
-            ArrayList<NameValuePair> dataToSend = new ArrayList<>();
-            dataToSend.add(new BasicNameValuePair("assignInput", resp));
-            postRequest.setEntity(new UrlEncodedFormEntity(dataToSend));
+            //HttpResponse response = null;
+            //int statusCode = 0;
+            //try {
+            //    response = client.execute(postRequest, localContext);
+            //    statusCode = response.getStatusLine().getStatusCode();
+            //} catch (Exception e) {
 
-            HttpResponse response = null;
-            int statusCode = 0;
-            try {
-                response = client.execute(postRequest, localContext);
-                statusCode = response.getStatusLine().getStatusCode();
-            } catch (Exception e) {
+            //}
 
-            }
-
-            if (statusCode != HttpStatus.SC_OK) {
-                Timber.e("Error:" + statusCode + " for URL " + taskURL);
-                results.put(Collect.getInstance().getString(R.string.smap_get_tasks),
-                        Utilities.translateMsg(null, response.getStatusLine().getReasonPhrase()));
-                WebUtils.discardEntityBytes(response);
-                throw new Exception(response.getStatusLine().getReasonPhrase());
-            }
-            WebUtils.discardEntityBytes(response);
+            //if (statusCode != HttpStatus.SC_OK) {
+            //    Timber.e("Error:" + statusCode + " for URL " + taskURL);
+            //    results.put(Collect.getInstance().getString(R.string.smap_get_tasks),
+            //            Utilities.translateMsg(null, response.getStatusLine().getReasonPhrase()));
+            //    WebUtils.discardEntityBytes(response);
+            //    throw new Exception(response.getStatusLine().getReasonPhrase());
+            //}
+            //WebUtils.discardEntityBytes(response);
 
             for (TaskAssignment ta : updateResponse.taskAssignments) {
                 Utilities.setTaskSynchronized((long) ta.assignment.dbId);        // Mark the task status as synchronised
