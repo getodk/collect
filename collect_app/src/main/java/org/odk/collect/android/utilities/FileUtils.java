@@ -515,9 +515,9 @@ public class FileUtils {
     }
 
     /**
-     * With the FileProvider you have to manually grant and revoke read/write permissions to files you
+     * With the FileProvider you have to manually grant read/write permissions to files you
      * are sharing. With this approach the access only lasts as long as the target activity on Api versions
-     * above Kit Kat. Once you are below that you have to manually revoke the permissions.
+     * above Kit Kat. Once you are below permissions are not revoked.
      *
      * @param intent that needs to have the permission flags
      * @param uri    that the permissions are being applied to
@@ -542,9 +542,9 @@ public class FileUtils {
     }
 
     /**
-     * With the FileProvider you have to manually grant and revoke read/write permissions to files you
+     * With the FileProvider you have to manually grant read/write permissions to files you
      * are sharing. With this approach the access only lasts as long as the target activity on Api versions
-     * above Kit Kat. Once you are below that you have to manually revoke the permissions.
+     * above Kit Kat. Once you are below permissions are not revoked.
      *
      * @param intent that needs to have the permission flags
      * @param uri    that the permissions are being applied to
@@ -564,12 +564,6 @@ public class FileUtils {
                 String packageName = resolveInfo.activityInfo.packageName;
                 context.grantUriPermission(packageName, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
             }
-        }
-    }
-
-    public static void revokeFileReadWritePermission(Context context, Uri uri) {
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
-            context.revokeUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
         }
     }
 }
