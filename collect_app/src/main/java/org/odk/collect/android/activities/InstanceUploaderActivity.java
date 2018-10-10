@@ -90,7 +90,6 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
                 // must be at the beginning of any activity that can be called from an external intent
                 try {
                     Collect.createODKDirs();
-                    Collect.getInstance().getActivityLogger().open();
                 } catch (RuntimeException e) {
                     DialogUtils.showDialog(DialogUtils.createErrorDialog(InstanceUploaderActivity.this,
                             e.getMessage(), EXIT), InstanceUploaderActivity.this);
@@ -211,12 +210,6 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        Collect.getInstance().getActivityLogger().logOnStart(this);
-    }
-
-    @Override
     protected void onResume() {
         if (instancesToSend != null) {
             Timber.i("onResume: Resuming upload of %d instances!", instancesToSend.length);
@@ -247,12 +240,6 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
     @Override
     public Object onRetainCustomNonConfigurationInstance() {
         return instanceServerUploader;
-    }
-
-    @Override
-    protected void onStop() {
-        Collect.getInstance().getActivityLogger().logOnStop(this);
-        super.onStop();
     }
 
     @Override
@@ -330,16 +317,11 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
     protected Dialog onCreateDialog(int id) {
         switch (id) {
             case PROGRESS_DIALOG:
-                Collect.getInstance().getActivityLogger().logAction(this,
-                        "onCreateDialog.PROGRESS_DIALOG", "show");
-
                 progressDialog = new ProgressDialog(this);
                 DialogInterface.OnClickListener loadingButtonListener =
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Collect.getInstance().getActivityLogger().logAction(this,
-                                        "onCreateDialog.PROGRESS_DIALOG", "cancel");
                                 dialog.dismiss();
                                 instanceServerUploader.cancel(true);
                                 instanceServerUploader.setUploaderListener(null);
@@ -356,8 +338,6 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
             case AUTH_DIALOG:
                 Timber.i("onCreateDialog(AUTH_DIALOG): for upload of %d instances!",
                         instancesToSend.length);
-                Collect.getInstance().getActivityLogger().logAction(this,
-                        "onCreateDialog.AUTH_DIALOG", "show");
 
                 AuthDialogUtility authDialogUtility = new AuthDialogUtility();
                 if (username != null && password != null && url != null) {
@@ -408,8 +388,6 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
     }
 
     private void createUploadInstancesResultDialog(String message) {
-        Collect.getInstance().getActivityLogger().logAction(this, "createUploadInstancesResultDialog", "show");
-
         String dialogTitle = getString(R.string.upload_results);
         String buttonTitle = getString(R.string.ok);
 

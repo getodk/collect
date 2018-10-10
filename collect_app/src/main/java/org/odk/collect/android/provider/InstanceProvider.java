@@ -166,8 +166,6 @@ public class InstanceProvider extends ContentProvider {
             if (rowId > 0) {
                 Uri instanceUri = ContentUris.withAppendedId(InstanceColumns.CONTENT_URI, rowId);
                 getContext().getContentResolver().notifyChange(instanceUri, null);
-                Collect.getInstance().getActivityLogger().logActionParam(this, "insert",
-                        instanceUri.toString(), values.getAsString(InstanceColumns.INSTANCE_FILE_PATH));
                 return instanceUri;
             }
         }
@@ -255,8 +253,6 @@ public class InstanceProvider extends ContentProvider {
                             do {
                                 String instanceFile = del.getString(
                                         del.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
-                                Collect.getInstance().getActivityLogger().logAction(this, "delete",
-                                        instanceFile);
                                 File instanceDir = (new File(instanceFile)).getParentFile();
                                 deleteAllFilesInDirectory(instanceDir);
                             } while (del.moveToNext());
@@ -282,8 +278,6 @@ public class InstanceProvider extends ContentProvider {
                             do {
                                 String instanceFile = c.getString(
                                         c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
-                                Collect.getInstance().getActivityLogger().logAction(this, "delete",
-                                        instanceFile);
                                 File instanceDir = (new File(instanceFile)).getParentFile();
                                 deleteAllFilesInDirectory(instanceDir);
                             } while (c.moveToNext());

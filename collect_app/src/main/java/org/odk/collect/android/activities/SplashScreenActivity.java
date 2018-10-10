@@ -65,7 +65,6 @@ public class SplashScreenActivity extends Activity {
                 // must be at the beginning of any activity that can be called from an external intent
                 try {
                     Collect.createODKDirs();
-                    Collect.getInstance().getActivityLogger().open();
                 } catch (RuntimeException e) {
                     DialogUtils.showDialog(DialogUtils.createErrorDialog(SplashScreenActivity.this,
                             e.getMessage(), EXIT), SplashScreenActivity.this);
@@ -209,17 +208,5 @@ public class SplashScreenActivity extends Activity {
             }
         };
         t.start();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Collect.getInstance().getActivityLogger().logOnStart(this);
-    }
-
-    @Override
-    protected void onStop() {
-        Collect.getInstance().getActivityLogger().logOnStop(this);
-        super.onStop();
     }
 }

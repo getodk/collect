@@ -31,7 +31,6 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.fragments.ShowQRCodeFragment;
 import org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog;
 import org.odk.collect.android.fragments.dialogs.SimpleDialog;
@@ -39,6 +38,7 @@ import org.odk.collect.android.utilities.ToastUtils;
 
 import static android.content.Context.MODE_PRIVATE;
 import static org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog.MOVING_BACKWARDS_DIALOG_TAG;
+import static org.odk.collect.android.preferences.AdminKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_CHANGE_ADMIN_PASSWORD;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_EDIT_SAVED;
@@ -46,7 +46,6 @@ import static org.odk.collect.android.preferences.AdminKeys.KEY_IMPORT_SETTINGS;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_JUMP_TO;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_MOVING_BACKWARDS;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_SAVE_MID;
-import static org.odk.collect.android.preferences.AdminKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM;
 import static org.odk.collect.android.preferences.PreferenceKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE;
 
 public class AdminPreferencesFragment extends BasePreferenceFragment implements Preference.OnPreferenceClickListener {
@@ -110,8 +109,6 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
                             ToastUtils.showShortToast(R.string.admin_password_changed);
                             editor.apply();
                             dialog.dismiss();
-                            Collect.getInstance().getActivityLogger()
-                                    .logAction(this, "AdminPasswordDialog", "CHANGED");
                         } else {
                             SharedPreferences.Editor editor = getActivity()
                                     .getSharedPreferences(ADMIN_PREFERENCES, MODE_PRIVATE).edit();
@@ -119,8 +116,6 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
                             editor.apply();
                             ToastUtils.showShortToast(R.string.admin_password_disabled);
                             dialog.dismiss();
-                            Collect.getInstance().getActivityLogger()
-                                    .logAction(this, "AdminPasswordDialog", "DISABLED");
                         }
                     }
                 });
@@ -128,7 +123,6 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        Collect.getInstance().getActivityLogger().logAction(this, "AdminPasswordDialog", "CANCELLED");
                     }
                 });
 

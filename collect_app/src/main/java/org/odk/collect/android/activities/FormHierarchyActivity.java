@@ -95,8 +95,6 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity {
         jumpPreviousButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Collect.getInstance().getActivityLogger().logInstanceAction(this, "goUpLevelButton",
-                        "click");
                 goUpLevel();
             }
         });
@@ -105,8 +103,6 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity {
         jumpBeginningButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Collect.getInstance().getActivityLogger().logInstanceAction(this, "jumpToBeginning",
-                        "click");
                 FormController fc = Collect.getInstance().getFormController();
                 if (fc != null) {
                     fc.getTimerLogger().exitView();
@@ -121,8 +117,6 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity {
         jumpEndButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Collect.getInstance().getActivityLogger().logInstanceAction(this, "jumpToEnd",
-                        "click");
                 FormController fc = Collect.getInstance().getFormController();
                 if (fc != null) {
                     fc.getTimerLogger().exitView();
@@ -154,18 +148,6 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity {
     private boolean shouldScrollToTheGivenIndex(FormIndex formIndex, FormController formController) {
         return startIndex.equals(formIndex)
                 || (formController.indexIsInFieldList(startIndex) && formIndex.toString().startsWith(startIndex.toString()));
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Collect.getInstance().getActivityLogger().logOnStart(this);
-    }
-
-    @Override
-    protected void onStop() {
-        Collect.getInstance().getActivityLogger().logOnStop(this);
-        super.onStop();
     }
 
     protected void goUpLevel() {
@@ -368,10 +350,6 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity {
      * Creates and displays dialog with the given errorMsg.
      */
     protected void createErrorDialog(String errorMsg) {
-        Collect.getInstance()
-                .getActivityLogger()
-                .logInstanceAction(this, "createErrorDialog", "show.");
-
         AlertDialog alertDialog = new AlertDialog.Builder(this).create();
 
         alertDialog.setIcon(android.R.drawable.ic_dialog_info);
@@ -382,8 +360,6 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity {
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
                     case DialogInterface.BUTTON_POSITIVE:
-                        Collect.getInstance().getActivityLogger()
-                                .logInstanceAction(this, "createErrorDialog", "OK");
                         FormController formController = Collect.getInstance().getFormController();
                         formController.jumpToIndex(currentIndex);
                         break;

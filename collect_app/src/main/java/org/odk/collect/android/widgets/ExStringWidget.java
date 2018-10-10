@@ -164,10 +164,7 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
 
     protected void fireActivity(Intent i) throws ActivityNotFoundException {
         i.putExtra("value", getFormEntryPrompt().getAnswerText());
-        Collect.getInstance().getActivityLogger().logInstanceAction(this, "launchIntent",
-                i.getAction(), getFormEntryPrompt().getIndex());
-        ((Activity) getContext()).startActivityForResult(i,
-                RequestCodes.EX_STRING_CAPTURE);
+        ((Activity) getContext()).startActivityForResult(i, RequestCodes.EX_STRING_CAPTURE);
     }
 
     @Override

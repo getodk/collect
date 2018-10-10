@@ -24,7 +24,6 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 
 import java.util.Locale;
 
@@ -72,25 +71,11 @@ public class BearingActivity extends CollectAbstractActivity implements SensorEv
         bearingDialog.show();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Collect.getInstance().getActivityLogger().logOnStart(this);
-    }
-
-    @Override
-    protected void onStop() {
-        Collect.getInstance().getActivityLogger().logOnStop(this);
-        super.onStop();
-    }
-
     /**
      * Sets up the look and actions for the progress dialog while the compass is
      * searching.
      */
     private void setupBearingDialog() {
-        Collect.getInstance().getActivityLogger()
-                .logInstanceAction(this, "setupBearingDialog", "show");
         // dialog displayed while fetching bearing
         bearingDialog = new ProgressDialog(this);
         DialogInterface.OnClickListener geopointButtonListener =
@@ -99,13 +84,9 @@ public class BearingActivity extends CollectAbstractActivity implements SensorEv
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case DialogInterface.BUTTON_POSITIVE:
-                                Collect.getInstance().getActivityLogger()
-                                        .logInstanceAction(this, "acceptBearing", "OK");
                                 returnBearing();
                                 break;
                             case DialogInterface.BUTTON_NEGATIVE:
-                                Collect.getInstance().getActivityLogger()
-                                        .logInstanceAction(this, "cancelBearing", "cancel");
                                 bearingDecimal = null;
                                 finish();
                                 break;

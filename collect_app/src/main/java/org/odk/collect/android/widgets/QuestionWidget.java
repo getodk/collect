@@ -24,7 +24,6 @@ import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
@@ -44,7 +43,6 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
@@ -642,16 +640,6 @@ public abstract class QuestionWidget
         }
 
         return formController.getInstanceFile().getParent();
-    }
-
-    @NonNull
-    public final ActivityLogger getActivityLogger() {
-        Collect collect = Collect.getInstance();
-        if (collect == null) {
-            throw new IllegalStateException("Collect application instance is null.");
-        }
-
-        return collect.getActivityLogger();
     }
 
     public int getQuestionFontSize() {

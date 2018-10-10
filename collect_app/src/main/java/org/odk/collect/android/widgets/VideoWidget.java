@@ -354,10 +354,6 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
     }
 
     private void captureVideo() {
-        Collect.getInstance()
-                .getActivityLogger()
-                .logInstanceAction(this, "captureButton",
-                        "click", getFormEntryPrompt().getIndex());
         Intent i;
         if (selfie) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -407,10 +403,6 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
     }
 
     private void chooseVideo() {
-        Collect.getInstance()
-                .getActivityLogger()
-                .logInstanceAction(this, "chooseButton",
-                        "click", getFormEntryPrompt().getIndex());
         Intent i = new Intent(Intent.ACTION_GET_CONTENT);
         i.setType("video/*");
         // Intent i =
@@ -432,10 +424,6 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
     }
 
     private void playVideoFile() {
-        Collect.getInstance()
-                .getActivityLogger()
-                .logInstanceAction(this, "playButton",
-                        "click", getFormEntryPrompt().getIndex());
         Intent intent = new Intent("android.intent.action.VIEW");
         File file = new File(getInstanceFolder() + File.separator + binaryName);
 

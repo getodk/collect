@@ -34,7 +34,6 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.BearingActivity;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
@@ -152,11 +151,6 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
 
     @Override
     public void onButtonClick(int buttonId) {
-        Collect.getInstance()
-                .getActivityLogger()
-                .logInstanceAction(this, "recordBearing", "click",
-                        getFormEntryPrompt().getIndex());
-
         if (isSensorAvailable) {
             Intent i = new Intent(getContext(), BearingActivity.class);
             waitForData();

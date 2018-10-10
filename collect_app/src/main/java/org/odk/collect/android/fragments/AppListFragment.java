@@ -35,7 +35,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.adapters.SortDialogAdapter;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.listeners.RecyclerViewClickListener;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.utilities.ThemeUtils;
@@ -50,7 +49,6 @@ import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrde
 
 abstract class AppListFragment extends ListFragment {
 
-    protected final ActivityLogger logger = Collect.getInstance().getActivityLogger();
     protected String[] sortingOptions;
     protected SimpleCursorAdapter listAdapter;
     protected LinkedHashSet<Long> selectedInstances = new LinkedHashSet<>();
@@ -99,7 +97,6 @@ abstract class AppListFragment extends ListFragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCreateOptionsMenu", "show");
         super.onCreateOptionsMenu(menu, inflater);
 
         inflater.inflate(R.menu.list_menu, menu);

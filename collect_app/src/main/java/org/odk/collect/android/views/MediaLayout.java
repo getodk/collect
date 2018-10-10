@@ -39,7 +39,6 @@ import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
@@ -77,8 +76,6 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
     @BindView(R.id.select_container)
     FrameLayout flContainer;
 
-    private String selectionDesignator;
-    private FormIndex index;
     private TextView viewText;
     private String videoURI;
     private AudioPlayListener audioPlayListener;
@@ -154,9 +151,6 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
     }
 
     public void playVideo() {
-        Collect.getInstance().getActivityLogger().logInstanceAction(this, "onClick",
-                "playVideoPrompt" + selectionDesignator, index);
-
         String videoFilename = "";
         try {
             videoFilename = referenceManager.DeriveReference(videoURI).getLocalURI();
@@ -188,8 +182,6 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
     public void setAVT(FormIndex index, String selectionDesignator, TextView text,
                        String audioURI, String imageURI, String videoURI,
                        String bigImageURI, MediaPlayer player) {
-        this.index = index;
-        this.selectionDesignator = selectionDesignator;
         this.bigImageURI = bigImageURI;
         this.player = player;
         this.videoURI = videoURI;
@@ -273,10 +265,6 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
 
     private void openImage() {
         if (bigImageURI != null) {
-            Collect.getInstance().getActivityLogger().logInstanceAction(
-                    this, "onClick",
-                    "showImagePromptBigImage" + selectionDesignator, index);
-
             try {
                 File bigImage = new File(referenceManager.DeriveReference(bigImageURI).getLocalURI());
                 Intent intent = new Intent("android.intent.action.VIEW");

@@ -156,10 +156,6 @@ public class AnnotateWidget extends BaseImageWidget {
     }
 
     private void captureImage() {
-        Collect.getInstance()
-                .getActivityLogger()
-                .logInstanceAction(this, "captureButton", "click",
-                        getFormEntryPrompt().getIndex());
         errorTextView.setVisibility(View.GONE);
         Intent intent = new Intent(
                 android.provider.MediaStore.ACTION_IMAGE_CAPTURE);

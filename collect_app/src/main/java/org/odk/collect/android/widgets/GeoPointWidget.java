@@ -35,7 +35,6 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.activities.GeoPointOsmMapActivity;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.PlayServicesUtil;
@@ -292,10 +291,6 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
     }
 
     private void startGeoPoint() {
-        Collect.getInstance()
-                .getActivityLogger()
-                .logInstanceAction(this, "recordLocation", "click",
-                        getFormEntryPrompt().getIndex());
         Intent i;
         if (useMapsV2 && useMaps) {
             if (mapSDK.equals(GOOGLE_MAP_KEY)) {
