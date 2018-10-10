@@ -101,7 +101,6 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget {
         File newFile;
         // get the file path and create a copy in the instance folder
         if (object instanceof Uri) {
-            FileUtils.revokeFileReadWritePermission(getContext(), (Uri) object);
             String sourcePath = getSourcePathFromUri((Uri) object);
             String destinationPath = getDestinationPathFromSourcePath(sourcePath);
             File source = fileUtil.getFileAtPath(sourcePath);
