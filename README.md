@@ -215,4 +215,4 @@ Note that this change might cause problems with other Java-based applications (e
 #### gradlew Failure: `java.lang.NullPointerException (no error message).`
 If you encounter the `java.lang.NullPointerException (no error message).` when running `gradlew`, please make sure your Java version for this project is Java 8.
 
-This can be configured under **File > Project Structure** in Android Studio, or by editing `~/.gradle/gradle.properties` to set `org.gradle.java.home=/path/to/jdk` for the command line.
+This can be configured under **File > Project Structure** in Android Studio, or by editing `$USER_HOME/.gradle/gradle.properties` to set `org.gradle.java.home=(path to JDK home)` for command-line use.
