@@ -617,7 +617,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
                 }
             }
             prefEdit.apply();
-            AuthDialogUtility.setWebCredentialsFromPreferences();
+            //AuthDialogUtility.setWebCredentialsFromPreferences();  // Looks like this is no longer needed
 
             // second object is admin options
             SharedPreferences.Editor adminEdit = getSharedPreferences(AdminPreferencesActivity.ADMIN_PREFERENCES,

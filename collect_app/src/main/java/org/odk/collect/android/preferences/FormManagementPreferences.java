@@ -76,12 +76,14 @@ public class FormManagementPreferences extends BasePreferenceFragment {
                 if (key.equals(KEY_PERIODIC_FORM_UPDATES_CHECK)) {
                     ServerPollingJob.schedulePeriodicJob((String) newValue);
 
+                    /* smap
                     Collect.getInstance().getDefaultTracker()
                             .send(new HitBuilders.EventBuilder()
                                     .setCategory("PreferenceChange")
                                     .setAction("Periodic form updates check")
                                     .setLabel((String) newValue)
                                     .build());
+                                    */
 
                     if (newValue.equals(getString(R.string.never_value))) {
                         Preference automaticUpdatePreference = findPreference(KEY_AUTOMATIC_UPDATE);
@@ -111,12 +113,14 @@ public class FormManagementPreferences extends BasePreferenceFragment {
                 pref.setEnabled(!formUpdateCheckPeriod.equals(getString(R.string.never_value)));
 
                 pref.setOnPreferenceChangeListener((preference, newValue) -> {
+                    /* smap
                     Collect.getInstance().getDefaultTracker()
                             .send(new HitBuilders.EventBuilder()
                                     .setCategory("PreferenceChange")
                                     .setAction("Automatic form updates")
                                     .setLabel(newValue + " " + formUpdateCheckPeriod)
                                     .build());
+                                    */
 
                     return true;
                 });

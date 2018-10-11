@@ -429,12 +429,14 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         String urlHash = FileUtils.getMd5Hash(
                 new ByteArrayInputStream(url.getBytes()));
 
+        /* smap
         Collect.getInstance().getDefaultTracker()
                 .send(new HitBuilders.EventBuilder()
                         .setCategory("SetServer")
                         .setAction(scheme + " " + host)
                         .setLabel(urlHash)
                         .build());
+                        */
     }
 
     private void maskPasswordSummary(String password) {

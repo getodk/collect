@@ -44,6 +44,7 @@ import org.odk.collect.android.utilities.PermissionUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import timber.log.Timber;
 
@@ -366,12 +367,14 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
                         .setContentText(message.toString().trim());
         mNotifyMgr.notify(NotificationActivity.NOTIFICATION_ID, mBuilder.build());
     }
-
+/*
+ * smap
     private String getContentText(Map<String, String> result) {
         return result != null && allFormsDownloadedSuccessfully(result)
                 ? Collect.getInstance().getString(R.string.success)
                 : Collect.getInstance().getString(R.string.failures);
     }
+    */
 
 
     @Override

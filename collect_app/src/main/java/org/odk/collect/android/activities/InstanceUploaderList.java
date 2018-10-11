@@ -488,11 +488,13 @@ public class InstanceUploaderList extends InstanceListActivity implements
                             logger.logAction(this, "changeView", "showAll");
                             showAllMode = true;
                             updateAdapter();
+                            /* smap
                             Collect.getInstance().getDefaultTracker()
                                     .send(new HitBuilders.EventBuilder()
                                             .setCategory("FilterSendForms")
                                             .setAction("SentAndUnsent")
                                             .build());
+                                            */
                             break;
 
                         case 2:// do nothing

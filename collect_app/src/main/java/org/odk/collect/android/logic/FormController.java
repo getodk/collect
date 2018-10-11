@@ -1148,12 +1148,14 @@ public class FormController {
             // timing element...
             v = e.getChildrenWithName(AUDIT);
             if (v.size() == 1) {
+                /*smap
                 Collect.getInstance().getDefaultTracker()
                         .send(new HitBuilders.EventBuilder()
                                 .setCategory("AuditLogging")
                                 .setAction("Enabled")
                                 .setLabel(Collect.getCurrentFormIdentifierHash())
                                 .build());
+                                */
 
                 audit = true;
                 IAnswerData answerData = new StringData();
