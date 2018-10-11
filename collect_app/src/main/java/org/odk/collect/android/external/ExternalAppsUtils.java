@@ -105,7 +105,8 @@ public class ExternalAppsUtils {
                 String paramEntryValue = paramEntry.getValue();
 
                 try {
-                    Object result = getValueRepresentedBy(paramEntry.getKey(), reference);
+                    //Object result = getValueRepresentedBy(paramEntry.getKey(), reference);    // smap
+                    Object result = getValueRepresentedBy(paramEntryValue, reference);          // smap value not key
 
                     if (result != null && result instanceof Serializable) {
                         intent.putExtra(paramEntry.getKey(), (Serializable) result);
