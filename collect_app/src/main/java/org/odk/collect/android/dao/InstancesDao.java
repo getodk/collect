@@ -292,10 +292,14 @@ public class InstancesDao {
         }
     }
 
+    /**
+     * Returns all instances available through the cursor and closes the cursor.
+     */
     public List<Instance> getInstancesFromCursor(Cursor cursor) {
         List<Instance> instances = new ArrayList<>();
         if (cursor != null) {
             try {
+                cursor.moveToPosition(-1);
                 while (cursor.moveToNext()) {
                     int displayNameColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME);
                     int submissionUriColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.SUBMISSION_URI);
