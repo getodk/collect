@@ -232,7 +232,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
                 createAlertDialog(getString(R.string.no_connection));
             }
             currentPath.clear();
-            currentPath.add((String) rootButton.getText());
+            currentPath.add(rootButton.getText().toString());
         }
     }
 
