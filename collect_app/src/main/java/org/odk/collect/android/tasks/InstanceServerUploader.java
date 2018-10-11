@@ -110,11 +110,7 @@ public class InstanceServerUploader extends InstanceUploader {
                 Timber.i(e, "Error encoding URL for device id : %s", deviceId);
             }
 
-            Uri toUpdate = Uri.withAppendedPath(InstanceColumns.CONTENT_URI,
-                    instance.getDatabaseId().toString());
-
-            if (!uploadSubmissionFile(urlString, instance.getDatabaseId().toString(),
-                    instance.getInstanceFilePath(), toUpdate, uriRemap, outcome)) {
+            if (!uploadOneSubmission(instance, urlString, uriRemap, outcome)) {
                 return outcome;
             }
         }
@@ -180,20 +176,14 @@ public class InstanceServerUploader extends InstanceUploader {
     }
 
     /**
-     * Uploads a submission file to a url
+     * Uploads all files associated with an instance to the specified URL.
      *
-     * @param urlString - The Destination URL
-     * @param id - Form ID
-     * @param instanceFilePath - path + filename to upload
-     * @param toUpdate - Content Provider URI to update
-     * @param uriRemap - Map of uri's that are to be re-mapped to a submission URI
-     * @param outcome - An object to hold the results of the file upload
      * @return false if credentials are required and we should terminate immediately.
      */
-    private boolean uploadSubmissionFile(String urlString, String id, String instanceFilePath,
-                                         Uri toUpdate,
-                                         Map<Uri, Uri> uriRemap,
-                                         Outcome outcome) {
+    private boolean uploadOneSubmission(Instance instance, String urlString, Map<Uri, Uri> uriRemap,
+                                        Outcome outcome) {
+        Uri instanceDatabaseUri = Uri.withAppendedPath(InstanceColumns.CONTENT_URI,
+                instance.getDatabaseId().toString());
 
         ContentValues contentValues = new ContentValues();
         Uri submissionUri = Uri.parse(urlString);
@@ -206,13 +196,15 @@ public class InstanceServerUploader extends InstanceUploader {
             // OpenRosa compliant server.
             openRosaServer = true;
             submissionUri = uriRemap.get(submissionUri);
-            Timber.i("Using Uri remap for submission %s. Now: %s", id, submissionUri.toString());
+            Timber.i("Using Uri remap for submission %s. Now: %s", instance.getDatabaseId(),
+                    submissionUri.toString());
         } else {
             if (submissionUri.getHost() == null) {
                 Timber.i("Host name may not be null");
-                outcome.messagesByInstanceId.put(id, FAIL + "Host name may not be null");
+                outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(),
+                        FAIL + "Host name may not be null");
                 contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
-                Collect.getInstance().getContentResolver().update(toUpdate, contentValues, null, null);
+                Collect.getInstance().getContentResolver().update(instanceDatabaseUri, contentValues, null, null);
                 return true;
             }
 
@@ -221,7 +213,7 @@ public class InstanceServerUploader extends InstanceUploader {
                 uri = URI.create(submissionUri.toString());
             } catch (IllegalArgumentException e) {
                 Timber.i(e);
-                outcome.messagesByInstanceId.put(id, Collect.getInstance().getString(R.string.url_error));
+                outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(), Collect.getInstance().getString(R.string.url_error));
                 return false;
             }
 
@@ -252,7 +244,7 @@ public class InstanceServerUploader extends InstanceUploader {
                                 // Don't follow a redirection attempt to a different host.
                                 // We can't tell if this is a spoof or not.
                                 outcome.messagesByInstanceId.put(
-                                        id,
+                                        instance.getDatabaseId().toString(),
                                         FAIL
                                                 + "Unexpected redirection attempt to a different "
                                                 + "host: "
@@ -260,16 +252,17 @@ public class InstanceServerUploader extends InstanceUploader {
                                 contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS,
                                         InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                                 Collect.getInstance().getContentResolver()
-                                        .update(toUpdate, contentValues, null, null);
+                                        .update(instanceDatabaseUri, contentValues, null, null);
                                 return true;
                             }
                         } catch (Exception e) {
                             Timber.e(e, "Exception thrown parsing URI for url %s", urlString);
-                            outcome.messagesByInstanceId.put(id, FAIL + urlString + " " + e.toString());
+                            outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(),
+                                    FAIL + urlString + " " + e.toString());
                             contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS,
                                     InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                             Collect.getInstance().getContentResolver()
-                                    .update(toUpdate, contentValues, null, null);
+                                    .update(instanceDatabaseUri, contentValues, null, null);
                             return true;
                         }
                     }
@@ -278,14 +271,14 @@ public class InstanceServerUploader extends InstanceUploader {
                     Timber.w("Status code on Head request: %d", headResult.getStatusCode());
                     if (headResult.getStatusCode() >= HttpsURLConnection.HTTP_OK && headResult.getStatusCode() < HttpsURLConnection.HTTP_MULT_CHOICE) {
                         outcome.messagesByInstanceId.put(
-                                id,
+                                instance.getDatabaseId().toString(),
                                 FAIL
                                         + "Invalid status code on Head request.  If you have a "
                                         + "web proxy, you may need to login to your network. ");
                         contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS,
                                 InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                         Collect.getInstance().getContentResolver()
-                                .update(toUpdate, contentValues, null, null);
+                                .update(instanceDatabaseUri, contentValues, null, null);
                         return true;
                     }
                 }
@@ -295,10 +288,10 @@ public class InstanceServerUploader extends InstanceUploader {
                     msg = e.toString();
                 }
 
-                outcome.messagesByInstanceId.put(id, FAIL + msg);
+                outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(), FAIL + msg);
                 Timber.e(e);
                 contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
-                Collect.getInstance().getContentResolver().update(toUpdate, contentValues, null, null);
+                Collect.getInstance().getContentResolver().update(instanceDatabaseUri, contentValues, null, null);
                 return true;
             }
         }
@@ -324,7 +317,7 @@ public class InstanceServerUploader extends InstanceUploader {
         // will be sent to the server and the server will have to
         // figure out what to do with them.
 
-        File instanceFile = new File(instanceFilePath);
+        File instanceFile = new File(instance.getInstanceFilePath());
         File submissionFile = new File(instanceFile.getParentFile(), "submission.xml");
         if (submissionFile.exists()) {
             Timber.w("submission.xml will be uploaded instead of %s", instanceFile.getAbsolutePath());
@@ -333,9 +326,9 @@ public class InstanceServerUploader extends InstanceUploader {
         }
 
         if (!instanceFile.exists() && !submissionFile.exists()) {
-            outcome.messagesByInstanceId.put(id, FAIL + "instance XML file does not exist!");
+            outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(), FAIL + "instance XML file does not exist!");
             contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
-            Collect.getInstance().getContentResolver().update(toUpdate, contentValues, null, null);
+            Collect.getInstance().getContentResolver().update(instanceDatabaseUri, contentValues, null, null);
             return true;
         }
 
@@ -357,20 +350,20 @@ public class InstanceServerUploader extends InstanceUploader {
 
             if (responseCode != HttpsURLConnection.HTTP_CREATED && responseCode != HttpsURLConnection.HTTP_ACCEPTED) {
                 if (responseCode == HttpsURLConnection.HTTP_OK) {
-                    outcome.messagesByInstanceId.put(id, FAIL + "Network login failure? Again?");
+                    outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(), FAIL + "Network login failure? Again?");
                 } else if (responseCode == HttpsURLConnection.HTTP_UNAUTHORIZED) {
-                    outcome.messagesByInstanceId.put(id, FAIL + messageParser.getReasonPhrase() + " (" + responseCode + ") at " + urlString);
+                    outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(), FAIL + messageParser.getReasonPhrase() + " (" + responseCode + ") at " + urlString);
                 } else {
                     // If response from server is valid use that else use default messaging
                     if (messageParser.isValid()) {
-                        outcome.messagesByInstanceId.put(id, FAIL + messageParser.getMessageResponse());
+                        outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(), FAIL + messageParser.getMessageResponse());
                     } else {
-                        outcome.messagesByInstanceId.put(id, FAIL + messageParser.getReasonPhrase() + " (" + responseCode + ") at " + urlString);
+                        outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(), FAIL + messageParser.getReasonPhrase() + " (" + responseCode + ") at " + urlString);
                     }
 
                 }
                 contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
-                Collect.getInstance().getContentResolver().update(toUpdate, contentValues, null, null);
+                Collect.getInstance().getContentResolver().update(instanceDatabaseUri, contentValues, null, null);
                 return true;
             }
 
@@ -379,22 +372,22 @@ public class InstanceServerUploader extends InstanceUploader {
             if (msg == null) {
                 msg = e.toString();
             }
-            outcome.messagesByInstanceId.put(id, FAIL + "Generic Exception: " + msg);
+            outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(), FAIL + "Generic Exception: " + msg);
             contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
-            Collect.getInstance().getContentResolver().update(toUpdate, contentValues, null, null);
+            Collect.getInstance().getContentResolver().update(instanceDatabaseUri, contentValues, null, null);
             return true;
         }
 
         // If response from server is valid use that else use default messaging
         if (messageParser.isValid()) {
-            outcome.messagesByInstanceId.put(id, messageParser.getMessageResponse());
+            outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(), messageParser.getMessageResponse());
         } else {
             // Default messaging
-            outcome.messagesByInstanceId.put(id, Collect.getInstance().getString(R.string.success));
+            outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(), Collect.getInstance().getString(R.string.success));
         }
 
         contentValues.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMITTED);
-        Collect.getInstance().getContentResolver().update(toUpdate, contentValues, null, null);
+        Collect.getInstance().getContentResolver().update(instanceDatabaseUri, contentValues, null, null);
 
         Collect.getInstance()
                 .getDefaultTracker()
