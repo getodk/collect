@@ -93,6 +93,8 @@ import java.util.zip.GZIPInputStream;
 
 import timber.log.Timber;
 
+import static com.google.common.io.Files.getFileExtension;
+
 public class HttpClientConnection implements OpenRosaHttpInterface {
 
     private static final String USER_AGENT_HEADER = "User-Agent";
@@ -799,6 +801,90 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
 
         return messageParser;
     }
+
+    @Override
+    public @NonNull HttpGetResult SubmitFileForResponse(@NonNull String fileName,
+                                                        @NonNull File file,
+                                                        @NonNull URI uri,
+                                                        @Nullable HttpCredentialsInterface credentials) throws IOException {
+        ResponseMessageParser messageParser = null;
+
+        addCredentialsForHost(uri, credentials);
+        getCookieStore().clear();
+
+        // get shared HttpContext so that authentication and cookies are retained.
+        HttpContext localContext = getHttpContext();
+        HttpClient httpclient = createHttpClient(UPLOAD_CONNECTION_TIMEOUT);
+
+        // if https then enable preemptive basic auth...
+        if (uri.getScheme().equals("https")) {
+            enablePreemptiveBasicAuth(localContext, uri.getHost());
+        }
+
+        MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+        MimeTypeMap m = MimeTypeMap.getSingleton();
+        String mime = m.getMimeTypeFromExtension(getFileExtension(fileName));
+        ContentType contentType = null;
+        if (mime != null) {
+            contentType = ContentType.create(mime);
+        } else {
+            Timber.w("No specific MIME type found for file: %s", fileName);
+            contentType = ContentType.APPLICATION_OCTET_STREAM;
+        }
+        FileBody fb = new FileBody(file, contentType);
+        builder.addPart(file.getName(), fb);
+
+        HttpPost httppost = createOpenRosaHttpPost(uri);
+        httppost.setEntity(builder.build());
+
+        // prepare response and return uploaded
+
+        Timber.i("Issuing POST request to: %s", uri.toString());
+        HttpResponse response = httpclient.execute(httppost, localContext);
+        int responseCode = response.getStatusLine().getStatusCode();
+        HttpEntity httpEntity = response.getEntity();
+        InputStream downloadStream = httpEntity.getContent();
+        Timber.i("Response code:%d", responseCode);
+
+        messageParser = new ResponseMessageParser(
+                EntityUtils.toString(httpEntity),
+                responseCode,
+                response.getStatusLine().getReasonPhrase());
+
+        discardEntityBytes(response);
+
+        if (responseCode == HttpStatus.SC_UNAUTHORIZED) {
+            getCookieStore().clear();
+        }
+
+        if (responseCode != HttpStatus.SC_OK) {
+            try {
+                throw new Exception(messageParser.getReasonPhrase());
+            } catch (Exception e) {
+
+            }
+        }
+
+        String hash = "";
+
+        if (HTTP_CONTENT_TYPE_TEXT_XML.equals(contentType)) {
+            byte[] bytes = IOUtils.toByteArray(downloadStream);
+            downloadStream = new ByteArrayInputStream(bytes);
+            hash = FileUtils.getMd5Hash(new ByteArrayInputStream(bytes));
+        }
+
+        Map<String, String> responseHeaders = new HashMap<>();
+        Header[] fields = response.getAllHeaders();
+        if (fields != null && fields.length >= 1) {
+            for (Header h : fields) {
+                responseHeaders.put(h.getName(), h.getValue());
+            }
+        }
+
+        return new HttpGetResult(downloadStream, responseHeaders, hash, responseCode);
+    }
+
+
     /*
      * End smap
      */

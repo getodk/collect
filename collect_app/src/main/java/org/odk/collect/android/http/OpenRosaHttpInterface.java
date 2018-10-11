@@ -83,4 +83,20 @@ public interface OpenRosaHttpInterface {
                                                @Nullable HttpCredentialsInterface credentials
                                              ) throws IOException;
 
+    /**
+     * smap
+     * Updates tasks on a Server.
+     *
+     * @param fileName Name of file to be submitted
+     * @param file file to be submitted
+     * @return ResponseMessageParser object that contains the response XML
+     * @throws IOException can be thrown if files do not exist
+     */
+    @NonNull
+    HttpGetResult SubmitFileForResponse(@NonNull String fileName,
+                                            @NonNull File file,
+                                            @NonNull URI uri,
+                                            @Nullable HttpCredentialsInterface credentials
+    ) throws IOException;
+
 }

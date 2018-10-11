@@ -139,7 +139,6 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
     @Inject
     OpenRosaHttpInterface httpInterface;
 
-
     @Inject
     WebCredentialsUtils webCredentialsUtils;
 
