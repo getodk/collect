@@ -23,7 +23,7 @@ public class MockHttpClientConnection implements OpenRosaHttpInterface {
 
     @Override
     @NonNull
-    public HttpGetResult get(@NonNull URI uri, @Nullable String contentType, @Nullable HttpCredentialsInterface credentials) throws Exception {
+    public HttpGetResult executeGetRequest(@NonNull URI uri, @Nullable String contentType, @Nullable HttpCredentialsInterface credentials) throws Exception {
 
         String xml =
         "<forms>" +
@@ -44,7 +44,7 @@ public class MockHttpClientConnection implements OpenRosaHttpInterface {
 
     @NonNull
     @Override
-    public HttpHeadResult head(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws Exception {
+    public HttpHeadResult executeHeadRequest(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws Exception {
         return new HttpHeadResult(0, new HashMap<String, String>());
     }
 
