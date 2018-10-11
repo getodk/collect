@@ -181,7 +181,6 @@ allprojects {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: '*.jar')
     implementation "com.android.support:support-v13:${rootProject.supportLibraryVersion}"
     implementation "com.android.support:customtabs:${rootProject.supportLibraryVersion}"
     implementation "com.android.support:design:${rootProject.supportLibraryVersion}"
