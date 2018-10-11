@@ -200,7 +200,7 @@ public class InstanceServerUploader extends InstanceUploader {
             }
 
             try {
-                HttpHeadResult headResult = httpInterface.head(uri, webCredentialsUtils.getCredentials(uri));
+                HttpHeadResult headResult = httpInterface.executeHeadRequest(uri, webCredentialsUtils.getCredentials(uri));
                 Map<String, String> responseHeaders = headResult.getHeaders();
 
                 if (headResult.getStatusCode() == HttpsURLConnection.HTTP_UNAUTHORIZED) {
