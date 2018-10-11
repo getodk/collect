@@ -26,6 +26,7 @@ import com.google.android.gms.analytics.HitBuilders;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.dto.Instance;
 import org.odk.collect.android.http.CollectServerClient.Outcome;
 import org.odk.collect.android.http.HttpHeadResult;
 import org.odk.collect.android.http.OpenRosaHttpInterface;
@@ -84,83 +85,79 @@ public class InstanceServerUploader extends InstanceUploader {
     @Override
     protected Outcome doInBackground(Long... instanceIdsToUpload) {
         Outcome outcome = new Outcome();
-        int counter = 0;
-        while (counter * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER < instanceIdsToUpload.length) {
-            int low = counter * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER;
-            int high = (counter + 1) * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER;
-            if (high > instanceIdsToUpload.length) {
-                high = instanceIdsToUpload.length;
-            }
-            if (!processChunk(low, high, outcome, instanceIdsToUpload)) {
-                return outcome;
-            }
-            counter++;
-        }
-        return outcome;
-    }
 
-    private boolean processChunk(int low, int high, Outcome outcome, Long... instanceIdsToUpload) {
-        if (instanceIdsToUpload == null) {
-            // don't try anything if instanceIdsToUpload is null
-            return false;
-        }
-
-        StringBuilder selectionBuf = new StringBuilder(InstanceColumns._ID + " IN (");
-        String[] selectionArgs = new String[high - low];
-        for (int i = 0; i < (high - low); i++) {
-            if (i > 0) {
-                selectionBuf.append(',');
-            }
-            selectionBuf.append('?');
-            selectionArgs[i] = instanceIdsToUpload[i + low].toString();
-        }
-
-        selectionBuf.append(')');
-        String selection = selectionBuf.toString();
+        List<Instance> instancesToUpload = getInstancesFromIds(instanceIdsToUpload);
 
         String deviceId = new PropertyManager(Collect.getInstance().getApplicationContext())
-                .getSingularProperty(PropertyManager.withUri(PropertyManager.PROPMGR_DEVICE_ID));
+                    .getSingularProperty(PropertyManager.withUri(PropertyManager.PROPMGR_DEVICE_ID));
 
         Map<Uri, Uri> uriRemap = new HashMap<>();
 
-        Cursor c = null;
-        try {
-            c = new InstancesDao().getInstancesCursor(selection, selectionArgs);
-
-            if (c != null && c.getCount() > 0) {
-                c.moveToPosition(-1);
-                while (c.moveToNext()) {
-                    if (isCancelled()) {
-                        return false;
-                    }
-
-                    publishProgress(c.getPosition() + 1 + low, instanceIdsToUpload.length);
-                    String instance = c.getString(
-                            c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
-                    String id = c.getString(c.getColumnIndex(InstanceColumns._ID));
-                    Uri toUpdate = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, id);
-                    String urlString = getURLToSubmitTo(c, completeDestinationUrl);
-
-                    // add the deviceID to the request...
-                    try {
-                        urlString += "?deviceID=" + URLEncoder.encode(deviceId != null ? deviceId : "", "UTF-8");
-                    } catch (UnsupportedEncodingException e) {
-                        // unreachable...
-                        Timber.i(e, "Error encoding URL for device id : %s", deviceId);
-                    }
-
-                    if (!uploadSubmissionFile(urlString, id, instance, toUpdate, uriRemap, outcome)) {
-                        return false; // get credentials...
-                    }
-                }
+        for (int i = 0; i < instancesToUpload.size(); i++) {
+            if (isCancelled()) {
+                return outcome;
             }
-        } finally {
-            if (c != null) {
-                c.close();
+            Instance instance = instancesToUpload.get(i);
+
+            publishProgress(i + 1, instancesToUpload.size());
+
+            String urlString = getURLToSubmitTo(instance, completeDestinationUrl);
+
+            // add deviceID to request
+            try {
+                urlString += "?deviceID=" + URLEncoder.encode(deviceId != null ? deviceId : "", "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                Timber.i(e, "Error encoding URL for device id : %s", deviceId);
+            }
+
+            Uri toUpdate = Uri.withAppendedPath(InstanceColumns.CONTENT_URI,
+                    instance.getDatabaseId().toString());
+
+            if (!uploadSubmissionFile(urlString, instance.getDatabaseId().toString(),
+                    instance.getInstanceFilePath(), toUpdate, uriRemap, outcome)) {
+                return outcome;
             }
         }
+        
+        return outcome;
+    }
 
-        return true;
+    /**
+     * Returns a list of Instance objects corresponding to the database IDs passed in.
+     */
+    private List<Instance> getInstancesFromIds(Long... instanceDatabaseIds) {
+        List<Instance> instancesToUpload = new ArrayList<>();
+        InstancesDao dao = new InstancesDao();
+
+        // Split the queries to avoid exceeding SQLITE_MAX_VARIABLE_NUMBER
+        int counter = 0;
+        while (counter * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER < instanceDatabaseIds.length) {
+            int low = counter * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER;
+            int high = (counter + 1) * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER;
+            if (high > instanceDatabaseIds.length) {
+                high = instanceDatabaseIds.length;
+            }
+
+            StringBuilder selectionBuf = new StringBuilder(InstanceColumns._ID + " IN (");
+            String[] selectionArgs = new String[high - low];
+            for (int i = 0; i < (high - low); i++) {
+                if (i > 0) {
+                    selectionBuf.append(',');
+                }
+                selectionBuf.append('?');
+                selectionArgs[i] = instanceDatabaseIds[i + low].toString();
+            }
+
+            selectionBuf.append(')');
+            String selection = selectionBuf.toString();
+
+            Cursor c = dao.getInstancesCursor(selection, selectionArgs);
+            instancesToUpload.addAll(dao.getInstancesFromCursor(c));
+
+            counter++;
+        }
+        
+        return instancesToUpload;
     }
 
     /**
@@ -172,13 +169,11 @@ public class InstanceServerUploader extends InstanceUploader {
      * URL configured at the app level.
      */
     @NonNull
-    private String getURLToSubmitTo(Cursor currentInstance, String overrideURL) {
-        int formSubmissionURLColumn = currentInstance.getColumnIndex(InstanceColumns.SUBMISSION_URI);
-
+    private String getURLToSubmitTo(Instance currentInstance, String overrideURL) {
         if (overrideURL != null) {
             return overrideURL;
-        } else if (!currentInstance.isNull(formSubmissionURLColumn)) {
-            return currentInstance.getString(formSubmissionURLColumn).trim();
+        } else if (currentInstance.getSubmissionUri() != null) {
+            return currentInstance.getSubmissionUri().trim();
         } else {
             return getServerSubmissionURL();
         }
