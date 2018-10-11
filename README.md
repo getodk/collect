@@ -47,7 +47,7 @@ New versions of ODK Collect are generally released on the last Sunday of a month
 
     If you prefer not to use the command line, you can use Android Studio to create a new project from version control using `https://github.com/YOUR-GITHUB-USERNAME/collect`.
 
-1. Open the project in the folder of your clone from Android Studio. To run the project, click on the green arrow at the top of the screen. The emulator is very slow so we generally recommend using a physical device when possible.
+1. Open the project in the folder of your clone from Android Studio. To run the project, click on the green arrow at the top of the screen.
 
 1. Make sure you can run unit tests by running everything under `collect_app/src/test/java` in Android Studio or on the command line:
 
@@ -214,3 +214,5 @@ Note that this change might cause problems with other Java-based applications (e
 
 #### gradlew Failure: `java.lang.NullPointerException (no error message).`
 If you encounter the `java.lang.NullPointerException (no error message).` when running `gradlew`, please make sure your Java version for this project is Java 8.
+
+This can be configured under **File > Project Structure** in Android Studio, or by editing `$USER_HOME/.gradle/gradle.properties` to set `org.gradle.java.home=(path to JDK home)` for command-line use.
