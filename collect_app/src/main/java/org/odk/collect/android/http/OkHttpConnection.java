@@ -117,10 +117,8 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
         Map<String, String> responseHeaders = new HashMap<>();
         Headers headers = response.headers();
 
-        if (headers.size() > 0) {
-            for (int i = 0; i < headers.size(); i++) {
-                responseHeaders.put(headers.name(i), headers.value(i));
-            }
+        for (int i = 0; i < headers.size(); i++) {
+            responseHeaders.put(headers.name(i), headers.value(i));
         }
 
         return new HttpGetResult(downloadStream, responseHeaders, hash, statusCode);
