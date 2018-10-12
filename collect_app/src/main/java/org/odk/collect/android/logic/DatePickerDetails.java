@@ -20,7 +20,7 @@ import java.io.Serializable;
 
 public class DatePickerDetails implements Serializable {
     public enum DatePickerType {
-        GREGORIAN, ETHIOPIAN, COPTIC, ISLAMIC, NEPALI
+        GREGORIAN, ETHIOPIAN, COPTIC, ISLAMIC, NEPALI, BUDDHIST
     }
 
     public enum DatePickerMode {

@@ -578,6 +578,18 @@
 
     <string name="islamic_month_11">Dhu al-Qidah</string>
     <string name="islamic_month_12">Dhu al-Hijjah</string>
+    <string name="buddhist_month_1">Chaitra</string>
+    <string name="buddhist_month_2">Vaisākha</string>
+    <string name="buddhist_month_3">Jyaiṣṭha</string>
+    <string name="buddhist_month_4">Āṣāḍha</string>
+    <string name="buddhist_month_5">Śrāvaṇa</string>
+    <string name="buddhist_month_6">Bhādrapada</string>
+    <string name="buddhist_month_7">Āśvina</string>
+    <string name="buddhist_month_8">Kārttika</string>
+    <string name="buddhist_month_9">Mārgaśirṣa</string>
+    <string name="buddhist_month_10">Pauṣa</string>
+    <string name="buddhist_month_11">Māgha</string>
+    <string name="buddhist_month_12">Phālguna</string>
     <string name="moving_backwards_title">Moving backwards</string>
     <string name="moving_backwards_disabled_title">Moving backwards disabled</string>
     <string name="moving_backwards_disabled_message">Configure the device to prevent users from bypassing this setting?\n\nThe changes are:\n\u2022 Disable Edit Saved Form\n\u2022 Disable Save Form\n\u2022 Disable Go To Prompt\n\u2022 Set Constraint processing to Validate upon forward swipe</string>
