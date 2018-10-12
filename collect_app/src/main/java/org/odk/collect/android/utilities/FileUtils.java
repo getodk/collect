@@ -22,7 +22,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
-import android.util.Log;
 
 import org.apache.commons.io.IOUtils;
 import org.javarosa.xform.parse.XFormParser;
