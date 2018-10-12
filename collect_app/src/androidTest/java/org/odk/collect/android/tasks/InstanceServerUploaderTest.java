@@ -28,8 +28,7 @@ public class InstanceServerUploaderTest extends MockedServerTest {
     private InstancesDao dao;
 
     @Rule
-    public GrantPermissionRule mRuntimePermissionRule = GrantPermissionRule .grant(android.Manifest.permission.READ_PHONE_STATE);
-
+    public GrantPermissionRule runtimepermissionrule = GrantPermissionRule .grant(android.Manifest.permission.READ_PHONE_STATE);
 
     @Before
     public void setUp() throws Exception {

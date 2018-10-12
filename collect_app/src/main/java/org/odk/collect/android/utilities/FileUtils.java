@@ -22,7 +22,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
-import android.util.Log;
 
 import org.apache.commons.io.IOUtils;
 import org.javarosa.xform.parse.XFormParser;
@@ -190,20 +189,19 @@ public class FileUtils {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         getBitmap(file.getAbsolutePath(), options);
-        Bitmap bitmap;
-        double scale;
-
         // Load full size bitmap image
         options = new BitmapFactory.Options();
         options.inInputShareable = true;
         options.inPurgeable = true;
+        Bitmap bitmap;
         bitmap = getBitmap(file.getAbsolutePath(), options);
         double heightScale = ((double) (options.outHeight)) / screenHeight;
         double widthScale = ((double) options.outWidth) / screenWidth;
+        double scale;
         scale = Math.max(widthScale, heightScale);
 
-        if (!upscaleEnabled && scale<1) {
-            scale=1;
+        if (!upscaleEnabled && scale < 1) {
+            scale = 1;
         }
 
         double newHeight = Math.ceil(options.outHeight / scale);
