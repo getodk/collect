@@ -157,8 +157,7 @@ public class AnnotateWidget extends BaseImageWidget {
 
     private void captureImage() {
         errorTextView.setVisibility(View.GONE);
-        Intent intent = new Intent(
-                android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         // We give the camera an absolute filename/path where to put the
         // picture because of bug:
         // http://code.google.com/p/android/issues/detail?id=1480
@@ -173,8 +172,8 @@ public class AnnotateWidget extends BaseImageWidget {
         // if this gets modified, the onActivityResult in
         // FormEntyActivity will also need to be updated.
         intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, uri);
-         FileUtils.grantFilePermissions(intent, uri, getContext());
+        FileUtils.grantFilePermissions(intent, uri, getContext());
 
         imageCaptureHandler.captureImage(intent, RequestCodes.IMAGE_CAPTURE, R.string.annotate_image);
-        }
+    }
 }
