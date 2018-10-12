@@ -88,10 +88,10 @@ public abstract class AbstractSelectOneWidget extends SelectTextWidget implement
                     : new SelectOneData(new Selection(selectChoice));
     }
 
-    protected void createLayout() {
+    protected void createLayout(boolean readOnlyOverride) {
         readItems();
 
-        adapter = new SelectOneListAdapter(items, selectedValue, this);
+        adapter = new SelectOneListAdapter(items, selectedValue, this, readOnlyOverride);
 
         if (items != null) {
             RecyclerView recyclerView = setUpRecyclerView();

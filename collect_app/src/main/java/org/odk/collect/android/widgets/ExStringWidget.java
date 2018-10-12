@@ -154,12 +154,14 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
         answerLayout.addView(answer);
         addAnswerView(answerLayout);
 
+        /*
         Collect.getInstance().getDefaultTracker()
                 .send(new HitBuilders.EventBuilder()
                         .setCategory("WidgetType")
                         .setAction("ExternalApp")
                         .setLabel(Collect.getCurrentFormIdentifierHash())
                         .build());
+                        */
 
     }
 

@@ -33,8 +33,8 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
 
     private final List<Selection> selectedItems;
 
-    public SelectMultipleListAdapter(List<SelectChoice> items, List<Selection> selectedItems, SelectWidget widget) {
-        super(items, widget);
+    public SelectMultipleListAdapter(List<SelectChoice> items, List<Selection> selectedItems, SelectWidget widget, boolean readOnlyOverride) {   // smap add readOnlyOverride
+        super(items, widget, readOnlyOverride);      // smap add readOnlyOverride
         this.selectedItems = selectedItems;
     }
 

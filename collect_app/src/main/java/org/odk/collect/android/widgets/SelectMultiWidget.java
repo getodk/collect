@@ -60,10 +60,10 @@ public class SelectMultiWidget extends SelectTextWidget implements MultiChoiceWi
         return vc.isEmpty() ? null : new SelectMultiData(vc);
     }
 
-    private void createLayout() {
+    private void createLayout(boolean readOnlyOverride) {    // smap add readOnlyOverride
         readItems();
 
-        adapter = new SelectMultipleListAdapter(items, ve, this);
+        adapter = new SelectMultipleListAdapter(items, ve, this, readOnlyOverride);  // smap add readOnlyOverride
 
         if (items != null) {
             // check if any values have spaces

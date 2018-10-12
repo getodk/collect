@@ -575,6 +575,16 @@ public abstract class QuestionWidget
     }
 
     //region Data waiting
+    // Smap added function
+    protected boolean nochoose(FormEntryPrompt prompt) {
+        boolean nochoose = false;
+        String appearance = prompt.getQuestion().getAppearanceAttr();
+
+        if (appearance != null && (appearance.contains("nochoose") || appearance.contains("new"))) {
+            nochoose = true;
+        }
+        return nochoose;
+    }
 
     @Override
     public final void waitForData() {

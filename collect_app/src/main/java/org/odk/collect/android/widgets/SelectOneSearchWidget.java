@@ -48,17 +48,4 @@ public class SelectOneSearchWidget extends AbstractSelectOneWidget implements Au
     public void setFocus(Context context) {
         SoftKeyboardUtils.showSoftKeyboard(searchStr);
     }
-
-    @Override
-    protected void createLayout(boolean readOnlyOverride) {     // smap add readOnlyOverride
-        readItems();
-
-        if (items != null) {
-            for (int i = 0; i < items.size(); i++) {
-                buttons.add(createRadioButton(i, readOnlyOverride));
             }
-        }
-
-        setUpSearchBox();
-    }
-}

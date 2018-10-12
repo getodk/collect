@@ -46,11 +46,13 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
     SelectWidget widget;
     List<SelectChoice> items;
     List<SelectChoice> filteredItems;
+    boolean readOnlyOverride = false;        // smap add readOnlyOverride
 
-    AbstractSelectListAdapter(List<SelectChoice> items, SelectWidget widget) {
+    AbstractSelectListAdapter(List<SelectChoice> items, SelectWidget widget, boolean readOnlyOverride) {
         this.items = items;
         this.widget = widget;
         filteredItems = items;
+        this.readOnlyOverride = readOnlyOverride;    // smap add readOnlyOverride
     }
 
     @Override
@@ -104,7 +106,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
         button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Collect.getQuestionFontsize());
         button.setText(FormEntryPromptUtils.getItemText(widget.getFormEntryPrompt(), filteredItems.get(index)));
         button.setTag(items.indexOf(filteredItems.get(index)));
-        button.setEnabled(!widget.getFormEntryPrompt().isReadOnly());
+        button.setEnabled(!widget.getFormEntryPrompt().isReadOnly() && !readOnlyOverride);    // smap add readOnlyOverride
         button.setGravity(isRTL() ? Gravity.END : Gravity.START);
         button.setOnLongClickListener((ODKView) widget.getParent().getParent().getParent());
     }

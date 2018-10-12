@@ -37,8 +37,8 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter
     private String selectedValue;
     private RadioButton selectedRadioButton;
 
-    public SelectOneListAdapter(List<SelectChoice> items, String selectedValue, AbstractSelectOneWidget widget) {
-        super(items, widget);
+    public SelectOneListAdapter(List<SelectChoice> items, String selectedValue, AbstractSelectOneWidget widget, boolean readOnlyOverride) {   // smap add readOnlyOverride
+        super(items, widget, readOnlyOverride);     // smap add readOnlyOverride
         this.selectedValue = selectedValue;
     }
 
