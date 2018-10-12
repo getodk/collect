@@ -138,12 +138,14 @@ public class WidgetFactory {
                         if (query != null) {
                             questionWidget = new ItemsetWidget(context, fep, appearance.contains("quick"), readOnlyOverride);	// smap change to contains rather than equals
 
+                            /* smap
                             Collect.getInstance().getDefaultTracker()
                                     .send(new HitBuilders.EventBuilder()
                                             .setCategory("ExternalData")
                                             .setAction("External itemset")
                                             .setLabel(Collect.getCurrentFormIdentifierHash())
                                             .build());
+                                            */
                         } else if (appearance.contains("printer")) {	// smap change to contains rather than equals
                             questionWidget = new ExPrinterWidget(context, fep);
                         } else if (appearance.contains("ex:")) {          // smap change to contains rather than equals
@@ -334,12 +336,14 @@ public class WidgetFactory {
                             String actionName = predicate.toString().contains("current") ?
                                     "CurrentPredicate" : "NonCurrentPredicate";
 
+                            /* smap
                             Collect.getInstance().getDefaultTracker()
                                     .send(new HitBuilders.EventBuilder()
                                     .setCategory("Itemset")
                                     .setAction(actionName)
                                     .setLabel(Collect.getCurrentFormIdentifierHash())
                                     .build());
+                                    */
 
                             if (predicate.toString().contains("current")) {
                                 return true;
@@ -365,12 +369,14 @@ public class WidgetFactory {
             intent.putExtra("url", "https://forum.opendatakit.org/t/15122");
             context.startActivity(intent);
 
+            /* smap
             Collect.getInstance().getDefaultTracker()
                     .send(new HitBuilders.EventBuilder()
                     .setCategory("Itemset")
                     .setAction("CurrentChangeViewed")
                     .setLabel(Collect.getCurrentFormIdentifierHash())
                     .build());
+                    */
         };
 
         builder.setPositiveButton(R.string.current_predicate_forum, forumClickListener);

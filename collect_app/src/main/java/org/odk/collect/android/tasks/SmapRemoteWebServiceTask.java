@@ -9,8 +9,10 @@ import android.preference.PreferenceManager;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.handler.SmapRemoteDataItem;
+import org.odk.collect.android.http.OpenRosaHttpInterface;
 import org.odk.collect.android.listeners.SmapRemoteListener;
 import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.utilities.WebUtils;
 import org.opendatakit.httpclientandroidlib.HttpEntity;
 import org.opendatakit.httpclientandroidlib.HttpResponse;
@@ -26,6 +28,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import javax.inject.Inject;
+
 import timber.log.Timber;
 
 import static java.lang.Thread.sleep;
@@ -36,6 +40,12 @@ import static java.lang.Thread.sleep;
 public class SmapRemoteWebServiceTask extends AsyncTask<String, Void, SmapRemoteDataItem> {
 
     private SmapRemoteListener remoteListener;
+
+    @Inject
+    OpenRosaHttpInterface httpInterface;
+
+    @Inject
+    WebCredentialsUtils webCredentialsUtils;
 
     @Override
     protected SmapRemoteDataItem doInBackground(String... params) {
@@ -70,46 +80,7 @@ public class SmapRemoteWebServiceTask extends AsyncTask<String, Void, SmapRemote
             URL url = new URL(lookupUrl);
             URI uri = url.toURI();
 
-            HttpContext localContext = Collect.getInstance().getHttpContext();
-            HttpClient httpclient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
-
-            // Add credentials
-            SharedPreferences sharedPreferences =
-                    PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
-
-            String username = sharedPreferences.getString(PreferenceKeys.KEY_USERNAME, null);
-            String password = sharedPreferences.getString(PreferenceKeys.KEY_PASSWORD, null);
-
-            if (username != null && password != null) {
-                WebUtils.addCredentials(username, password, uri.getHost());
-            }
-
-            // set up request...
-            HttpGet req = WebUtils.createOpenRosaHttpGet(uri);
-
-            response = httpclient.execute(req, localContext);
-            int statusCode = response.getStatusLine().getStatusCode();
-
-            if (statusCode != HttpStatus.SC_OK) {
-                WebUtils.discardEntityBytes(response);
-                String errMsg =
-                        Collect.getInstance().getString(R.string.file_fetch_failed, lookupUrl,
-                                response.getStatusLine().getReasonPhrase(), String.valueOf(statusCode));
-                Timber.e(errMsg);
-                throw new Exception(errMsg);
-            }
-
-            HttpEntity entity = response.getEntity();
-            is = entity.getContent();
-
-            os = new ByteArrayOutputStream();
-            byte[] buf = new byte[4096];
-            int len;
-            while ((len = is.read(buf)) > 0) {
-                os.write(buf, 0, len);
-            }
-            os.flush();
-            item.data = os.toString();
+            item.data = httpInterface.get(uri, null, webCredentialsUtils.getCredentials(uri)).getInputStream().toString();
 
         } catch (Exception e) {
             item.data = e.getLocalizedMessage();
