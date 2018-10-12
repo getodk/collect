@@ -22,6 +22,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
+import android.util.Log;
 
 import org.apache.commons.io.IOUtils;
 import org.javarosa.xform.parse.XFormParser;
@@ -189,40 +190,25 @@ public class FileUtils {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         getBitmap(file.getAbsolutePath(), options);
-
         Bitmap bitmap;
         double scale;
-        if (upscaleEnabled) {
-            // Load full size bitmap image
-            options = new BitmapFactory.Options();
-            options.inInputShareable = true;
-            options.inPurgeable = true;
-            bitmap = getBitmap(file.getAbsolutePath(), options);
 
-            double heightScale = ((double) (options.outHeight)) / screenHeight;
-            double widthScale = ((double) options.outWidth) / screenWidth;
-            scale = Math.max(widthScale, heightScale);
+        // Load full size bitmap image
+        options = new BitmapFactory.Options();
+        options.inInputShareable = true;
+        options.inPurgeable = true;
+        bitmap = getBitmap(file.getAbsolutePath(), options);
+        double heightScale = ((double) (options.outHeight)) / screenHeight;
+        double widthScale = ((double) options.outWidth) / screenWidth;
+        scale = Math.max(widthScale, heightScale);
 
-            double newHeight = Math.ceil(options.outHeight / scale);
-            double newWidth = Math.ceil(options.outWidth / scale);
-
-            bitmap = Bitmap.createScaledBitmap(bitmap, (int) newWidth, (int) newHeight, false);
-        } else {
-            int heightScale = options.outHeight / screenHeight;
-            int widthScale = options.outWidth / screenWidth;
-
-            // Powers of 2 work faster, sometimes, according to the doc.
-            // We're just doing closest size that still fills the screen.
-            scale = Math.max(widthScale, heightScale);
-
-            // get bitmap with scale ( < 1 is the same as 1)
-            options = new BitmapFactory.Options();
-            options.inInputShareable = true;
-            options.inPurgeable = true;
-            options.inSampleSize = (int) scale;
-            bitmap = getBitmap(file.getAbsolutePath(), options);
+        if (!upscaleEnabled && scale<1) {
+            scale=1;
         }
 
+        double newHeight = Math.ceil(options.outHeight / scale);
+        double newWidth = Math.ceil(options.outWidth / scale);
+        bitmap = Bitmap.createScaledBitmap(bitmap, (int) newWidth, (int) newHeight, false);
         if (bitmap != null) {
             Timber.i("Screen is %dx%d.  Image has been scaled down by %f to %dx%d",
                     screenHeight, screenWidth, scale, bitmap.getHeight(), bitmap.getWidth());

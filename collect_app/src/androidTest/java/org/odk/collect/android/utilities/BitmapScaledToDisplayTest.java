@@ -14,17 +14,13 @@ import static org.junit.Assert.assertEquals;
 @RunWith(AndroidJUnit4.class)
 public class BitmapScaledToDisplayTest {
 
-    /**
-     * These cases all have a window smaller than the image so the image should be scaled down.
-     * Note that the scaling isn't exact -- the factor is the closest power of 2 to the exact one.
-     */
     @Test
     @SuppressWarnings("ParenPad")
     public void scaleDownBitmapWhenNeeded() {
         runScaleTest(1000,   1000,    500,    500,    500,    500,    false);
         runScaleTest( 600,    800,    600,    200,    150,    200,    false);
         runScaleTest( 500,    400,    250,    200,    250,    200,    false);
-        runScaleTest(2000,    800,    300,    400,    500,    200,    false);
+        runScaleTest(2000,    800,    300,    400,    300,    120,    false);
     }
 
     @Test
