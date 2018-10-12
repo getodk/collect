@@ -260,7 +260,8 @@ public class ManageForm {
 	         if(instancePath != null && initialDataURL != null) {
 	        	 File f = new File(instancePath);
                  try {
-                     Utilities.downloadInstanceFile(f, initialDataURL, serverUrl, formId, version);
+                     Utilities smapUtilities = new Utilities();
+                     smapUtilities.downloadInstanceFile(f, initialDataURL, serverUrl, formId, version);
                  } catch (Exception e) {
                      e.printStackTrace();
                      mfResponse.isError = true;

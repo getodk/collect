@@ -29,19 +29,13 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.database.TaskAssignment;
+import org.odk.collect.android.http.OpenRosaHttpInterface;
 import org.odk.collect.android.loaders.TaskEntry;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.taskModel.InstanceXML;
-import org.odk.collect.android.tasks.DownloadFormsTask;
-import org.opendatakit.httpclientandroidlib.Header;
-import org.opendatakit.httpclientandroidlib.HttpEntity;
 import org.opendatakit.httpclientandroidlib.HttpResponse;
-import org.opendatakit.httpclientandroidlib.HttpStatus;
-import org.opendatakit.httpclientandroidlib.client.HttpClient;
-import org.opendatakit.httpclientandroidlib.client.methods.HttpGet;
-import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -61,14 +55,22 @@ import java.util.List;
 import java.util.TimeZone;
 import java.util.zip.GZIPInputStream;
 
+import javax.inject.Inject;
+
 import timber.log.Timber;
 
 public class Utilities {
 
+    @Inject
+    public OpenRosaHttpInterface httpInterface;
+
+    @Inject
+    public WebCredentialsUtils webCredentialsUtils;
+
     // Valid values for task status
     public static final String STATUS_T_ACCEPTED = "accepted";
     public static final String STATUS_T_REJECTED = "rejected";
-    public static final String STATUS_T_COMPLETE = "complete";
+    public static String STATUS_T_COMPLETE = "complete";
     public static final String STATUS_T_SUBMITTED = "submitted";
     public static final String STATUS_T_CANCELLED = "cancelled";
     public static final String STATUS_T_CLOSED = "closed";
@@ -219,7 +221,7 @@ public class Utilities {
      * @param downloadUrl the url to get the contents from.
      * @throws Exception
      */
-    public static void downloadInstanceFile(File file, String downloadUrl, String serverUrl, String formId, int version) throws Exception {
+    public void downloadInstanceFile(File file, String downloadUrl, String serverUrl, String formId, int version) throws Exception {
 
         String t = "DownloadInstanceFile";
 
@@ -236,58 +238,17 @@ public class Utilities {
             throw e;
         }
 
-        // get shared HttpContext so that authentication and cookies are retained.
-        HttpContext localContext = Collect.getInstance().getHttpContext();
+        InputStream is = httpInterface.get(uri, null, webCredentialsUtils.getCredentials(uri)).getInputStream();
 
-        HttpClient httpclient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
-
-        // Add credentials
-        SharedPreferences sharedPreferences =
-                PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
-
-        String username = sharedPreferences.getString(PreferenceKeys.KEY_USERNAME, null);
-        String password = sharedPreferences.getString(PreferenceKeys.KEY_PASSWORD, null);
-
-        if (username != null && password != null) {
-            Uri u = Uri.parse(downloadUrl);
-            WebUtils.addCredentials(username, password, u.getHost());
-        }
-
-
-        // set up request...
-        HttpGet req = WebUtils.createOpenRosaHttpGet(uri);
-        req.addHeader(WebUtils.ACCEPT_ENCODING_HEADER, WebUtils.GZIP_CONTENT_ENCODING);
 
         HttpResponse response;
         try {
-            response = httpclient.execute(req, localContext);
-            int statusCode = response.getStatusLine().getStatusCode();
-
-            if (statusCode != HttpStatus.SC_OK) {
-                WebUtils.discardEntityBytes(response);
-                if (statusCode == HttpStatus.SC_UNAUTHORIZED) {
-                    // clear the cookies -- should not be necessary?
-                    Collect.getInstance().getCookieStore().clear();
-                }
-                String errMsg =
-                        Collect.getInstance().getString(org.odk.collect.android.R.string.file_fetch_failed, downloadUrl,
-                                response.getStatusLine().getReasonPhrase(), String.valueOf(statusCode));
-                Log.e(t, errMsg);
-                throw new Exception(errMsg);
-            }
 
             // Create instance object
             Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm").create();
 
-            InputStream is = null;
             OutputStream os = null;
             try {
-                HttpEntity entity = response.getEntity();
-                is = entity.getContent();
-                Header contentEncoding = entity.getContentEncoding();
-                if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase(WebUtils.GZIP_CONTENT_ENCODING)) {
-                    is = new GZIPInputStream(is);
-                }
 
                 Reader isReader = new InputStreamReader(is);
 
@@ -485,7 +446,7 @@ public class Utilities {
     /*
      * Delete the task
      */
-    public static void deleteTask(Long id) {
+    public void deleteTask(Long id) {
 
         Uri taskUri = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, id.toString());
         final ContentResolver cr = Collect.getInstance().getContentResolver();
@@ -679,7 +640,7 @@ public class Utilities {
     /*
      * Return true if the current task status allows it to be accepted
      */
-    public static boolean canAccept(String currentStatus) {
+    public boolean canAccept(String currentStatus) {
         boolean valid = false;
         if (currentStatus != null && currentStatus.equals(STATUS_T_REJECTED)) {
             valid = true;
