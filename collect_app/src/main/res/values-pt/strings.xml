@@ -323,7 +323,6 @@ Escolher Imagem</string>
   <string name="select_geotrace_mode">Selecionar Modo GeoTrace</string>
   <string name="start">Iniciar</string>
   <string name="enable_gps">Habilitar GPS</string>
-  <string name="enable_gps_message">O GPS está desabilitado em seu aparelho. Gostaria de habilitá-lo?</string>
   <string name="geotrace_title">GeoTrace</string>
   <string name="polygon_save">Salvar como Poligono</string>
   <string name="polyline_save">Salvar como Multilinha</string>
@@ -336,7 +335,6 @@ Escolher Imagem</string>
   <string name="polygon_validator">Precisa ter pelo menos 3 pontos para criar Polígono</string>
   <string name="polyline_validator">Precisa ter pelo menos 2 pontos para criar uma Cadeia de Linhas</string>
   <string name="clear">Limpar</string>
-  <string name="polyline_polygon_text">Salvar GeoTrace Como</string>
   <string name="manual_mode">Modo manual</string>
   <string name="automatic_mode">Modo automático</string>
   <string name="geoshape_instruction">Pressione por mais tempo para colocar marcador.</string>

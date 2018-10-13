@@ -25,7 +25,6 @@ import android.text.method.DigitsKeyListener;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.IntegerData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.ExternalAppsUtils;
 
 import java.util.Locale;
@@ -81,9 +80,6 @@ public class ExIntegerWidget extends ExStringWidget {
     @Override
     protected void fireActivity(Intent i) throws ActivityNotFoundException {
         i.putExtra("value", getIntegerAnswerValue());
-        Collect.getInstance().getActivityLogger().logInstanceAction(this, "launchIntent",
-                i.getAction(), getFormEntryPrompt().getIndex());
-
         ((Activity) getContext()).startActivityForResult(i,
                 RequestCodes.EX_INT_CAPTURE);
     }

@@ -326,7 +326,6 @@
   <string name="select_geotrace_mode">Seleziona Modalità Geo-tracciatura</string>
   <string name="start">Inizia</string>
   <string name="enable_gps">Abilita GPS</string>
-  <string name="enable_gps_message">Il GPS è disabilitato nel tuo dispositivo. Vuoi abilitarlo?</string>
   <string name="geotrace_title">Geo-tracciatura</string>
   <string name="polygon_save">Salva come Poligono</string>
   <string name="polyline_save">Salva come Polilinea</string>
@@ -338,7 +337,6 @@
   <string name="geo_exit_warning">Vuoi scartare le modifiche e ritornare ad ODK?</string>
   <string name="polygon_validator">Devi avere almeno 3 punti per creare un Poligono</string>
   <string name="clear">Cancella</string>
-  <string name="polyline_polygon_text">Salva Geo-tracciatura come</string>
   <string name="manual_mode">Modalità manuale</string>
   <string name="automatic_mode">Modalità automatica</string>
   <string name="geoshape_instruction">Premi a lungo per posizionare il segno</string>

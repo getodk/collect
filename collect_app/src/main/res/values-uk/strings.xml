@@ -333,7 +333,6 @@
   <string name="select_geotrace_mode">Обрати режим ГеоМаршруту</string>
   <string name="start">Почати</string>
   <string name="enable_gps">Увімкнути GPS</string>
-  <string name="enable_gps_message">GPS на Вашому пристрої вимкнено. Бажаєте увімкнути?</string>
   <string name="geotrace_title">ГеоМаршрут</string>
   <string name="polygon_save">Зберегти як багатокутник</string>
   <string name="polyline_save">Зберегти як ламану лінію</string>
@@ -346,7 +345,6 @@
   <string name="polygon_validator">Для багатокутника необхідно мінімум 3 точки</string>
   <string name="polyline_validator">Для створення лінії необхідні принаймні дві точки</string>
   <string name="clear">Очистити</string>
-  <string name="polyline_polygon_text">Зберегти ГеоМаршрут як</string>
   <string name="manual_mode">Ручний режим</string>
   <string name="automatic_mode">Автоматичний режим</string>
   <string name="geoshape_instruction">Довге натискання для розміщення позначок.</string>

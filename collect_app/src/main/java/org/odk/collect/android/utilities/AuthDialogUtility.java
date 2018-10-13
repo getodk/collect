@@ -32,7 +32,6 @@ import javax.inject.Inject;
  * Used to present auth dialog and update credentials in the system as needed.
  */
 public class AuthDialogUtility {
-    private static final String TAG = "AuthDialogUtility";
 
     private EditText username;
     private EditText password;
@@ -77,8 +76,6 @@ public class AuthDialogUtility {
         builder.setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Collect.getInstance().getActivityLogger().logAction(this, TAG, "OK");
-
                 String userNameValue = username.getText().toString();
                 String passwordValue = password.getText().toString();
 
@@ -98,8 +95,6 @@ public class AuthDialogUtility {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Collect.getInstance().getActivityLogger().logAction(this, TAG, "Cancel");
-
                         resultListener.cancelledUpdatingCredentials();
                     }
                 });

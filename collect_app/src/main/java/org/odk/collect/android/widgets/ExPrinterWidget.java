@@ -27,7 +27,6 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 /**
@@ -124,10 +123,6 @@ public class ExPrinterWidget extends QuestionWidget implements BinaryWidget {
         String buttonText = (v != null) ? v : context.getString(R.string.launch_printer);
         launchIntentButton = getSimpleButton(buttonText);
 
-        if (prompt.isReadOnly()) {
-            launchIntentButton.setEnabled(false);
-        }
-
         // finish complex layout
         LinearLayout printLayout = new LinearLayout(getContext());
         printLayout.setOrientation(LinearLayout.VERTICAL);
@@ -139,8 +134,6 @@ public class ExPrinterWidget extends QuestionWidget implements BinaryWidget {
 
         String s = getFormEntryPrompt().getAnswerText();
 
-        Collect.getInstance().getActivityLogger().logInstanceAction(this, "launchPrinter",
-                intentName, getFormEntryPrompt().getIndex());
         Intent i = new Intent(intentName);
         getContext().startActivity(i);
 

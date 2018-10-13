@@ -25,7 +25,6 @@ import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
@@ -106,8 +105,6 @@ public class AudioButton extends AppCompatImageButton {
         }
 
         public void playAudio(Context c) {
-            Collect.getInstance().getActivityLogger().logInstanceAction(this,
-                    "onClick.playAudioPrompt", selectionDesignator, index);
             if (uri == null) {
                 // No audio file specified
                 Timber.e("No audio file was specified");

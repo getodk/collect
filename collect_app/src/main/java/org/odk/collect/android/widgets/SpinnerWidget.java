@@ -34,7 +34,6 @@ import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.views.ScrolledToTopSpinner;
@@ -114,18 +113,8 @@ public class SpinnerWidget extends QuestionWidget implements MultiChoiceWidget {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
-                if (position == items.size()) {
-                    Collect.getInstance().getActivityLogger().logInstanceAction(this,
-                            "onCheckedChanged.clearValue",
-                            "", getFormEntryPrompt().getIndex());
-                } else {
-                    Collect.getInstance().getActivityLogger().logInstanceAction(this,
-                            "onCheckedChanged",
-                            items.get(position).getValue(), getFormEntryPrompt().getIndex());
-
-                    if (autoAdvance && listener != null) {
-                        listener.advance();
-                    }
+                if (position != items.size() && autoAdvance && listener != null) {
+                    listener.advance();
                 }
             }
 

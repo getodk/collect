@@ -73,7 +73,6 @@ public class FormChooserList extends FormListActivity implements
                 // must be at the beginning of any activity that can be called from an external intent
                 try {
                     Collect.createODKDirs();
-                    Collect.getInstance().getActivityLogger().open();
                     init();
                 } catch (RuntimeException e) {
                     createErrorDialog(e.getMessage(), EXIT);
@@ -126,9 +125,6 @@ public class FormChooserList extends FormListActivity implements
             long idFormsTable = listView.getAdapter().getItemId(position);
             Uri formUri = ContentUris.withAppendedId(FormsColumns.CONTENT_URI, idFormsTable);
 
-            Collect.getInstance().getActivityLogger().logAction(this, "onListItemClick",
-                    formUri.toString());
-
             String action = getIntent().getAction();
             if (Intent.ACTION_PICK.equals(action)) {
                 // caller is waiting on a picked form
@@ -162,18 +158,6 @@ public class FormChooserList extends FormListActivity implements
             diskSyncTask.setDiskSyncListener(null);
         }
         super.onPause();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Collect.getInstance().getActivityLogger().logOnStart(this);
-    }
-
-    @Override
-    protected void onStop() {
-        Collect.getInstance().getActivityLogger().logOnStop(this);
-        super.onStop();
     }
 
     /**
@@ -214,8 +198,6 @@ public class FormChooserList extends FormListActivity implements
      */
     private void createErrorDialog(String errorMsg, final boolean shouldExit) {
 
-        Collect.getInstance().getActivityLogger().logAction(this, "createErrorDialog", "show");
-
         AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setIcon(android.R.drawable.ic_dialog_info);
         alertDialog.setMessage(errorMsg);
@@ -224,9 +206,6 @@ public class FormChooserList extends FormListActivity implements
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
                     case DialogInterface.BUTTON_POSITIVE:
-                        Collect.getInstance().getActivityLogger().logAction(this,
-                                "createErrorDialog",
-                                shouldExit ? "exitApplication" : "OK");
                         if (shouldExit) {
                             finish();
                         }

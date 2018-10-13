@@ -32,7 +32,6 @@ import android.widget.TextView;
 import com.google.android.gms.location.LocationListener;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.location.client.LocationClient;
 import org.odk.collect.android.location.client.LocationClients;
 import org.odk.collect.android.spatial.MapHelper;
@@ -159,8 +158,6 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
 
             @Override
             public void onClick(View v) {
-                Collect.getInstance().getActivityLogger().logInstanceAction(this, "acceptLocation",
-                        "OK");
                 returnLocation();
             }
         });
@@ -188,8 +185,6 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
         showLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Collect.getInstance().getActivityLogger()
-                        .logInstanceAction(this, "showLocation", "onClick");
                 showZoomDialog();
             }
         });
@@ -303,8 +298,6 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
     @Override
     protected void onStart() {
         super.onStart();
-        Collect.getInstance().getActivityLogger().logOnStart(this);
-
         locationClient.start();
     }
 
@@ -321,8 +314,6 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
     @Override
     protected void onStop() {
         locationClient.stop();
-
-        Collect.getInstance().getActivityLogger().logOnStop(this);
         super.onStop();
     }
 

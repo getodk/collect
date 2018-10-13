@@ -45,9 +45,22 @@ New versions of ODK Collect are generally released on the last Sunday of a month
 
         git clone https://github.com/YOUR-GITHUB-USERNAME/collect
 
- If you prefer not to use the command line, you can use Android Studio to create a new project from version control using `https://github.com/YOUR-GITHUB-USERNAME/collect`. 
+    If you prefer not to use the command line, you can use Android Studio to create a new project from version control using `https://github.com/YOUR-GITHUB-USERNAME/collect`.
 
-1. Open the project in the folder of your clone from Android Studio. To run the project, click on the green arrow at the top of the screen. The emulator is very slow so we generally recommend using a physical device when possible.
+1. Open the project in the folder of your clone from Android Studio. To run the project, click on the green arrow at the top of the screen.
+
+1. Make sure you can run unit tests by running everything under `collect_app/src/test/java` in Android Studio or on the command line:
+
+    ```
+    ./gradlew testDebug
+    ```
+
+1. Make sure you can run instrumented tests by running everything under `collect_app/src/androidTest/java` in Android Studio or on the command line:
+
+    ```
+    ./gradlew connectedAndroidTest
+    ```
+    **Note:** You can see the emulator setup used on CI in  `.circleci/config.yml`.
 
 ## Testing a form without a server
 When you first run Collect, it is set to download forms from [https://opendatakit.appspot.com/](https://opendatakit.appspot.com/), the demo server. You can sometimes verify your changes with those forms but it can also be helpful to put a specific test form on your device. Here are some options for that:
@@ -65,11 +78,11 @@ When you first run Collect, it is set to download forms from [https://opendataki
 
 ## Using APIs for local development
 
-To run functionality that makes API calls from your debug-signed builds, you may need to get an API key or otherwise authorize your app.
+To run functionality that makes API calls from your debug-signed builds, you may need to get an API key or otherwise authorize your app. The API keys included in the source code are the ones used for releases and they only work with release builds signed with the release keys.
 
 **Google Drive and Sheets APIs** - Follow the instructions in the "Generate the signing certificate fingerprint and register your application" section from [here](https://developers.google.com/drive/android/auth). Enable the Google Drive API [here](https://console.developers.google.com/apis/api/drive/). Enable the Google Sheets API [here](https://console.developers.google.com/apis/api/sheets.googleapis.com).
 
-**Google Maps API** - Follow the instructions [here](https://developers.google.com/maps/documentation/android-api/signup) and paste your key in the `AndroidManifest` as the value for `com.google.android.geo.API_KEY`. Please be sure not to commit your personal API key to a branch that you will submit a pull request for.
+**Google Maps API** - Getting a Google Maps API key now requires providing a credit card number. As of October 2018, there is some free API usage provided and the card will not be charged without explicit user approval. You should carefully read the terms before providing a credit card number. Once you have created a billing account, follow the instructions [here](https://developers.google.com/maps/documentation/android-api/signup) and paste your key in the `AndroidManifest` as the value for `com.google.android.geo.API_KEY`. Please be sure not to commit your personal API key to a branch that you will submit a pull request for.
 
 
 ## Debugging JavaRosa
@@ -201,3 +214,5 @@ Note that this change might cause problems with other Java-based applications (e
 
 #### gradlew Failure: `java.lang.NullPointerException (no error message).`
 If you encounter the `java.lang.NullPointerException (no error message).` when running `gradlew`, please make sure your Java version for this project is Java 8.
+
+This can be configured under **File > Project Structure** in Android Studio, or by editing `$USER_HOME/.gradle/gradle.properties` to set `org.gradle.java.home=(path to JDK home)` for command-line use.

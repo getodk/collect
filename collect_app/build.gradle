@@ -157,7 +157,7 @@ android {
             returnDefaultValues = true
             all {
                 // https://discuss.circleci.com/t/11207/24
-                // it seems any number works, but 1024 - 2048 seem reasonable 
+                // it seems any number works, but 1024 - 2048 seem reasonable
                 maxHeapSize = "2048M"
             }
         }
@@ -210,6 +210,7 @@ dependencies {
         exclude group: 'org.apache.httpcomponents'
     }
 
+    implementation 'bikramsambat:bikram-sambat:1.0.0'
     implementation "com.evernote:android-job:1.2.5"
     implementation "com.rarepebble:colorpicker:2.3.1"
     implementation "commons-io:commons-io:2.6"
@@ -272,6 +273,10 @@ dependencies {
     // Makes binding to Views easy:
     implementation "com.jakewharton:butterknife:8.8.1"
     annotationProcessor "com.jakewharton:butterknife-compiler:8.8.1"
+
+    // Annotations understood by FindBugs
+    compileOnly 'com.google.code.findbugs:annotations:3.0.1'
+    compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
 
     // Used to generate documentation screenshots.
     androidTestImplementation "tools.fastlane:screengrab:1.1.0"

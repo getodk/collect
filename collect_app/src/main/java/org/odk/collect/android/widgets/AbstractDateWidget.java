@@ -118,7 +118,6 @@ public abstract class AbstractDateWidget extends QuestionWidget implements Binar
 
     private void createDateButton() {
         dateButton = getSimpleButton(getContext().getString(R.string.select_date));
-        dateButton.setEnabled(!getFormEntryPrompt().isReadOnly());
     }
 
     private void addViews() {

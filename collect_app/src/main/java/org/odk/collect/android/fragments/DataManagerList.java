@@ -157,9 +157,6 @@ public class DataManagerList extends InstanceListFragment
      * Create the instance delete dialog
      */
     private void createDeleteInstancesDialog() {
-        logger.logAction(this, "createDeleteInstancesDialog",
-                "show");
-
         alertDialog = new AlertDialog.Builder(getContext()).create();
         alertDialog.setTitle(getString(R.string.delete_file));
         alertDialog.setMessage(getString(R.string.delete_confirm,
@@ -170,16 +167,10 @@ public class DataManagerList extends InstanceListFragment
                     public void onClick(DialogInterface dialog, int i) {
                         switch (i) {
                             case DialogInterface.BUTTON_POSITIVE: // delete
-                                logger.logAction(this,
-                                        "createDeleteInstancesDialog", "delete");
                                 deleteSelectedInstances();
                                 if (getListView().getCount() == getCheckedCount()) {
                                     toggleButton.setEnabled(false);
                                 }
-                                break;
-                            case DialogInterface.BUTTON_NEGATIVE: // do nothing
-                                logger.logAction(this,
-                                        "createDeleteInstancesDialog", "cancel");
                                 break;
                         }
                     }
@@ -237,8 +228,6 @@ public class DataManagerList extends InstanceListFragment
     @Override
     public void deleteComplete(int deletedInstances) {
         Timber.i("Delete instances complete");
-        logger.logAction(this, "deleteComplete",
-                Integer.toString(deletedInstances));
         final int toDeleteCount = deleteInstancesTask.getToDeleteCount();
 
         if (deletedInstances == toDeleteCount) {
@@ -267,7 +256,6 @@ public class DataManagerList extends InstanceListFragment
         switch (v.getId()) {
             case R.id.delete_button:
                 int checkedItemCount = getCheckedCount();
-                logger.logAction(this, "deleteButton", Integer.toString(checkedItemCount));
                 if (checkedItemCount > 0) {
                     createDeleteInstancesDialog();
                 } else {

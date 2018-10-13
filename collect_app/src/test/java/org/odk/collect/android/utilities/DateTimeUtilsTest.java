@@ -47,6 +47,9 @@ public class DateTimeUtilsTest {
     private DatePickerDetails islamic;
     private DatePickerDetails islamicMonthYear;
     private DatePickerDetails islamicYear;
+    private DatePickerDetails nepali;
+    private DatePickerDetails nepaliMonthYear;
+    private DatePickerDetails nepaliYear;
 
     @Before
     public void setUp() {
@@ -63,6 +66,9 @@ public class DateTimeUtilsTest {
         islamic = new DatePickerDetails(DatePickerDetails.DatePickerType.ISLAMIC, DatePickerDetails.DatePickerMode.SPINNERS);
         islamicMonthYear = new DatePickerDetails(DatePickerDetails.DatePickerType.ISLAMIC, DatePickerDetails.DatePickerMode.MONTH_YEAR);
         islamicYear = new DatePickerDetails(DatePickerDetails.DatePickerType.ISLAMIC, DatePickerDetails.DatePickerMode.YEAR);
+        nepali = new DatePickerDetails(DatePickerDetails.DatePickerType.NEPALI, DatePickerDetails.DatePickerMode.SPINNERS);
+        nepaliMonthYear = new DatePickerDetails(DatePickerDetails.DatePickerType.NEPALI, DatePickerDetails.DatePickerMode.MONTH_YEAR);
+        nepaliYear = new DatePickerDetails(DatePickerDetails.DatePickerType.NEPALI, DatePickerDetails.DatePickerMode.YEAR);
     }
 
     @Test
@@ -128,5 +134,16 @@ public class DateTimeUtilsTest {
         assertEquals(islamicYear, DateTimeUtils.getDatePickerDetails(appearance));
         appearance = "year islamic";
         assertEquals(islamicYear, DateTimeUtils.getDatePickerDetails(appearance));
+
+        appearance = "nepali";
+        assertEquals(nepali, DateTimeUtils.getDatePickerDetails(appearance));
+        appearance = "Nepali month-year";
+        assertEquals(nepaliMonthYear, DateTimeUtils.getDatePickerDetails(appearance));
+        appearance = "month-year nepali";
+        assertEquals(nepaliMonthYear, DateTimeUtils.getDatePickerDetails(appearance));
+        appearance = "Nepali year";
+        assertEquals(nepaliYear, DateTimeUtils.getDatePickerDetails(appearance));
+        appearance = "year nepali";
+        assertEquals(nepaliYear, DateTimeUtils.getDatePickerDetails(appearance));
     }
 }

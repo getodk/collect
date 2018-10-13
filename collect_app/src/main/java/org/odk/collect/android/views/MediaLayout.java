@@ -22,6 +22,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.support.v4.content.FileProvider;
 import android.support.v7.widget.AppCompatImageButton;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -36,8 +37,8 @@ import android.widget.TextView;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
+import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
@@ -75,8 +76,6 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
     @BindView(R.id.select_container)
     FrameLayout flContainer;
 
-    private String selectionDesignator;
-    private FormIndex index;
     private TextView viewText;
     private String videoURI;
     private AudioPlayListener audioPlayListener;
@@ -152,9 +151,6 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
     }
 
     public void playVideo() {
-        Collect.getInstance().getActivityLogger().logInstanceAction(this, "onClick",
-                "playVideoPrompt" + selectionDesignator, index);
-
         String videoFilename = "";
         try {
             videoFilename = referenceManager.DeriveReference(videoURI).getLocalURI();
@@ -172,7 +168,10 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
         }
 
         Intent intent = new Intent("android.intent.action.VIEW");
-        intent.setDataAndType(Uri.fromFile(videoFile), "video/*");
+        Uri uri =
+                FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", videoFile);
+        FileUtils.grantFileReadPermissions(intent, uri, getContext());
+        intent.setDataAndType(uri, "video/*");
         if (intent.resolveActivity(getContext().getPackageManager()) != null) {
             getContext().startActivity(intent);
         } else {
@@ -183,8 +182,6 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
     public void setAVT(FormIndex index, String selectionDesignator, TextView text,
                        String audioURI, String imageURI, String videoURI,
                        String bigImageURI, MediaPlayer player) {
-        this.index = index;
-        this.selectionDesignator = selectionDesignator;
         this.bigImageURI = bigImageURI;
         this.player = player;
         this.videoURI = videoURI;
@@ -268,14 +265,13 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
 
     private void openImage() {
         if (bigImageURI != null) {
-            Collect.getInstance().getActivityLogger().logInstanceAction(
-                    this, "onClick",
-                    "showImagePromptBigImage" + selectionDesignator, index);
-
             try {
                 File bigImage = new File(referenceManager.DeriveReference(bigImageURI).getLocalURI());
                 Intent intent = new Intent("android.intent.action.VIEW");
-                intent.setDataAndType(Uri.fromFile(bigImage), "image/*");
+                Uri uri =
+                        FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", bigImage);
+                FileUtils.grantFileReadPermissions(intent, uri, getContext());
+                intent.setDataAndType(uri, "image/*");
                 getContext().startActivity(intent);
             } catch (InvalidReferenceException e) {
                 Timber.e(e, "Invalid image reference due to %s ", e.getMessage());
