@@ -61,17 +61,16 @@ public class ImageLoadingTask extends AsyncTask<Uri, Void, File> {
                         return newImage;
                     } else {
                         Timber.e("Could not receive chosen image");
-                        ToastUtils.showShortToastInMiddle(R.string.error_occured);
+                        formEntryActivity.get().runOnUiThread(() -> ToastUtils.showShortToastInMiddle(R.string.error_occured));
                         return null;
                     }
                 } catch (GDriveConnectionException e) {
-
                     Timber.e("Could not receive chosen image due to connection problem");
-                    ToastUtils.showLongToastInMiddle(R.string.gdrive_connection_exception);
+                    formEntryActivity.get().runOnUiThread(() -> ToastUtils.showLongToastInMiddle(R.string.gdrive_connection_exception));
                     return null;
                 }
             } else {
-                ToastUtils.showLongToast(R.string.image_not_saved);
+                formEntryActivity.get().runOnUiThread(() -> ToastUtils.showLongToast(R.string.image_not_saved));
                 Timber.w(formEntryActivity.get().getString(R.string.image_not_saved));
                 return null;
             }

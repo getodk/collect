@@ -119,6 +119,7 @@ public abstract class SelectImageMapWidget extends SelectWidget {
         readItems();
 
         webView = new CustomWebView(getContext());
+
         selectedAreasLabel = getAnswerTextView();
         answerLayout.addView(webView);
         answerLayout.addView(selectedAreasLabel);
@@ -147,6 +148,7 @@ public abstract class SelectImageMapWidget extends SelectWidget {
             webView.getSettings().setUseWideViewPort(true);
             int height = (int) (getResources().getDisplayMetrics().heightPixels / 1.7); // about 60% of a screen
             webView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height));
+            webView.setOnTouchListener((v, event) -> getFormEntryPrompt().isReadOnly());
             webView.setWebViewClient(new WebViewClient() {
                 @Override
                 public void onPageFinished(WebView view, String url) {

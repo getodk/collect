@@ -61,8 +61,8 @@ public final class ExternalDataUtil {
     public static final String EXTERNAL_DATA_TABLE_NAME = "externalData";
     public static final String SORT_COLUMN_NAME = "c_sortby";
 
-    private static final Pattern SEARCH_FUNCTION_REGEX = Pattern.compile("search\\(.+\\)");
-    private static final Pattern REMOTE_SEARCH_FUNCTION_REGEX = Pattern.compile("lookup_choices\\(.+\\)");     // smap
+    public static final Pattern REMOTE_SEARCH_FUNCTION_REGEX = Pattern.compile("lookup_choices\\(.+\\)");     // smap
+    public static final Pattern SEARCH_FUNCTION_REGEX = Pattern.compile("search\\(.+\\)");
     private static final String COLUMN_SEPARATOR = ",";
     private static final String FALLBACK_COLUMN_SEPARATOR = " ";
     public static final String JR_IMAGES_PREFIX = "jr://images/";

@@ -108,12 +108,15 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
     private static final int UPLOAD_CONNECTION_TIMEOUT = 60000; // it can take up to 27 seconds to spin up an Aggregate
     private static final String HTTP_CONTENT_TYPE_TEXT_XML = "text/xml";
 
-    private CredentialsProvider credentialsProvider;
-    private CookieStore cookieStore;
+    // Retain authentication and cookies between requests. Gets mutated on each call to
+    // HttpClient.execute).
+    private HttpContext httpContext;
 
     public HttpClientConnection() {
-        credentialsProvider = new AgingCredentialsProvider(7 * 60 * 1000);
-        cookieStore = new BasicCookieStore();
+        httpContext = new BasicHttpContext();
+
+        httpContext.setAttribute(HttpClientContext.COOKIE_STORE, new BasicCookieStore());
+        httpContext.setAttribute(HttpClientContext.CREDS_PROVIDER, new AgingCredentialsProvider(7 * 60 * 1000));
     }
 
     private enum ContentTypeMapping {
@@ -158,14 +161,13 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
     public @NonNull
     HttpGetResult get(@NonNull URI uri, @Nullable final String contentType, @Nullable HttpCredentialsInterface credentials) throws Exception {
         addCredentialsForHost(uri, credentials);
-        getCookieStore().clear();
+        clearCookieStore();
 
-        HttpContext localContext = getHttpContext();
         HttpClient httpclient = createHttpClient(CONNECTION_TIMEOUT);
 
         // if https then enable preemptive basic auth...
         if (uri.getScheme().equals("https")) {
-            enablePreemptiveBasicAuth(localContext, uri.getHost());
+            enablePreemptiveBasicAuth(uri.getHost());
         }
 
         // set up request...
@@ -174,14 +176,14 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
 
         HttpResponse response;
 
-        response = httpclient.execute(req, localContext);
+        response = httpclient.execute(req, httpContext);
         int statusCode = response.getStatusLine().getStatusCode();
 
         if (statusCode != HttpStatus.SC_OK) {
             discardEntityBytes(response);
             if (statusCode == HttpStatus.SC_UNAUTHORIZED) {
                 // clear the cookies -- should not be necessary?
-                getCookieStore().clear();
+                clearCookieStore();
             }
             String errMsg =
                     Collect.getInstance().getString(R.string.file_fetch_failed, uri.toString(),
@@ -242,16 +244,15 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
     @Override
     public @NonNull HttpHeadResult head(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws Exception {
         addCredentialsForHost(uri, credentials);
-        getCookieStore().clear();
+        clearCookieStore();
 
-        HttpContext localContext = getHttpContext();
         HttpClient httpclient = createHttpClient(CONNECTION_TIMEOUT);
         HttpHead httpHead = createOpenRosaHttpHead(uri);
         Map<String, String> responseHeaders = new HashMap<>();
 
         // if https then enable preemptive basic auth...
         if (uri.getScheme() != null && uri.getScheme().equals("https")) {
-            enablePreemptiveBasicAuth(localContext, uri.getHost());
+            enablePreemptiveBasicAuth(uri.getHost());
         }
 
         final HttpResponse response;
@@ -260,11 +261,10 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
         try {
             Timber.i("Issuing HEAD request to: %s", uri.toString());
 
-            response = httpclient.execute(httpHead, localContext);
+            response = httpclient.execute(httpHead, httpContext);
             statusCode = response.getStatusLine().getStatusCode();
             if (statusCode == HttpStatus.SC_UNAUTHORIZED) {
-                getCookieStore().clear();
-
+                clearCookieStore();
             } else if (statusCode == HttpStatus.SC_NO_CONTENT) {
                 for (Header head : response.getAllHeaders()) {
                     responseHeaders.put(head.getName(), head.getValue());
@@ -311,15 +311,13 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
                                                       String location_trigger,    // smap
                                                       String survey_notes) throws IOException {   // smap add status
         addCredentialsForHost(uri, credentials);
-        getCookieStore().clear();
+        clearCookieStore();
 
-        // get shared HttpContext so that authentication and cookies are retained.
-        HttpContext localContext = getHttpContext();
         HttpClient httpclient = createHttpClient(UPLOAD_CONNECTION_TIMEOUT);
 
         // if https then enable preemptive basic auth...
         if (uri.getScheme().equals("https")) {
-            enablePreemptiveBasicAuth(localContext, uri.getHost());
+            enablePreemptiveBasicAuth(uri.getHost());
         }
 
         ResponseMessageParser messageParser = null;
@@ -410,7 +408,7 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
 
             try {
                 Timber.i("Issuing POST request to: %s", uri.toString());
-                response = httpclient.execute(httppost, localContext);
+                response = httpclient.execute(httppost, httpContext);
                 int responseCode = response.getStatusLine().getStatusCode();
                 HttpEntity httpEntity = response.getEntity();
                 Timber.i("Response code:%d", responseCode);
@@ -423,7 +421,7 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
                 discardEntityBytes(response);
 
                 if (responseCode == HttpStatus.SC_UNAUTHORIZED) {
-                    getCookieStore().clear();
+                    clearCookieStore();
                 }
 
                 if (responseCode != HttpStatus.SC_CREATED && responseCode != HttpStatus.SC_ACCEPTED) {
@@ -454,18 +452,6 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
         if (credentials != null) {
             addCredentials(credentials.getUsername(), credentials.getPassword(), uri.getHost());
         }
-    }
-
-    private synchronized HttpContext getHttpContext() {
-
-        // context holds authentication state machine, so it cannot be
-        // shared across independent activities.
-        HttpContext localContext = new BasicHttpContext();
-
-        localContext.setAttribute(HttpClientContext.COOKIE_STORE, getCookieStore());
-        localContext.setAttribute(HttpClientContext.CREDS_PROVIDER, getCredentialsProvider());
-
-        return localContext;
     }
 
     /**
@@ -505,14 +491,12 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
 
     }
 
-    private void enablePreemptiveBasicAuth(
-            HttpContext localContext, String host) {
-        AuthCache ac = (AuthCache) localContext
-                .getAttribute(HttpClientContext.AUTH_CACHE);
+    private void enablePreemptiveBasicAuth(String host) {
+        AuthCache ac = (AuthCache) httpContext.getAttribute(HttpClientContext.AUTH_CACHE);
         HttpHost h = new HttpHost(host);
         if (ac == null) {
             ac = new BasicAuthCache();
-            localContext.setAttribute(HttpClientContext.AUTH_CACHE, ac);
+            httpContext.setAttribute(HttpClientContext.AUTH_CACHE, ac);
         }
         List<AuthScope> asList = buildAuthScopes(host);
         for (AuthScope authScope : asList) {
@@ -534,12 +518,12 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
         return asList;
     }
 
-    private CookieStore getCookieStore() {
-        return cookieStore;
+    private void clearCookieStore() {
+        ((CookieStore) httpContext.getAttribute(HttpClientContext.COOKIE_STORE)).clear();
     }
 
     private CredentialsProvider getCredentialsProvider() {
-        return credentialsProvider;
+        return (CredentialsProvider) httpContext.getAttribute(HttpClientContext.CREDS_PROVIDER);
     }
 
     public void clearHostCredentials(String host) {
@@ -736,15 +720,13 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
                                                                @Nullable HttpCredentialsInterface credentials
                                                              ) throws IOException {
         addCredentialsForHost(uri, credentials);
-        getCookieStore().clear();
+        clearCookieStore();
 
-        // get shared HttpContext so that authentication and cookies are retained.
-        HttpContext localContext = getHttpContext();
         HttpClient httpclient = createHttpClient(UPLOAD_CONNECTION_TIMEOUT);
 
         // if https then enable preemptive basic auth...
         if (uri.getScheme().equals("https")) {
-            enablePreemptiveBasicAuth(localContext, uri.getHost());
+            enablePreemptiveBasicAuth(uri.getHost());
         }
 
         ResponseMessageParser messageParser = null;
@@ -762,7 +744,7 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
 
         try {
             Timber.i("Issuing POST request to: %s", uri.toString());
-            response = httpclient.execute(httppost, localContext);
+            response = httpclient.execute(httppost, httpContext);
             int responseCode = response.getStatusLine().getStatusCode();
             HttpEntity httpEntity = response.getEntity();
             Timber.i("Response code:%d", responseCode);
@@ -775,7 +757,7 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
             discardEntityBytes(response);
 
             if (responseCode == HttpStatus.SC_UNAUTHORIZED) {
-                getCookieStore().clear();
+                clearCookieStore();
             }
 
             if (responseCode != HttpStatus.SC_OK) {
@@ -810,15 +792,14 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
         ResponseMessageParser messageParser = null;
 
         addCredentialsForHost(uri, credentials);
-        getCookieStore().clear();
+        clearCookieStore();
 
         // get shared HttpContext so that authentication and cookies are retained.
-        HttpContext localContext = getHttpContext();
         HttpClient httpclient = createHttpClient(UPLOAD_CONNECTION_TIMEOUT);
 
         // if https then enable preemptive basic auth...
         if (uri.getScheme().equals("https")) {
-            enablePreemptiveBasicAuth(localContext, uri.getHost());
+            enablePreemptiveBasicAuth(uri.getHost());
         }
 
         MultipartEntityBuilder builder = MultipartEntityBuilder.create();
@@ -840,7 +821,7 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
         // prepare response and return uploaded
 
         Timber.i("Issuing POST request to: %s", uri.toString());
-        HttpResponse response = httpclient.execute(httppost, localContext);
+        HttpResponse response = httpclient.execute(httppost, httpContext);
         int responseCode = response.getStatusLine().getStatusCode();
         HttpEntity httpEntity = response.getEntity();
         InputStream downloadStream = httpEntity.getContent();
@@ -854,7 +835,7 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
         discardEntityBytes(response);
 
         if (responseCode == HttpStatus.SC_UNAUTHORIZED) {
-            getCookieStore().clear();
+            clearCookieStore();
         }
 
         if (responseCode != HttpStatus.SC_OK) {

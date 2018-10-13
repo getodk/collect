@@ -58,6 +58,7 @@ import timber.log.Timber;
 
 import static android.os.Build.MODEL;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
+import static org.odk.collect.android.utilities.PermissionUtils.requestCameraAndRecordAudioPermissions;
 import static org.odk.collect.android.utilities.PermissionUtils.requestCameraPermission;
 
 /**
@@ -320,16 +321,29 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
     public void onButtonClick(int id) {
         switch (id) {
             case R.id.capture_video:
-                requestCameraPermission((FormEntryActivity) getContext(), new PermissionListener() {
-                    @Override
-                    public void granted() {
-                        captureVideo();
-                    }
+                if (selfie) {
+                    requestCameraAndRecordAudioPermissions((FormEntryActivity) getContext(), new PermissionListener() {
+                        @Override
+                        public void granted() {
+                            captureVideo();
+                        }
 
-                    @Override
-                    public void denied() {
-                    }
-                });
+                        @Override
+                        public void denied() {
+                        }
+                    });
+                } else {
+                    requestCameraPermission((FormEntryActivity) getContext(), new PermissionListener() {
+                        @Override
+                        public void granted() {
+                            captureVideo();
+                        }
+
+                        @Override
+                        public void denied() {
+                        }
+                    });
+                }
                 break;
             case R.id.choose_video:
                 chooseVideo();
