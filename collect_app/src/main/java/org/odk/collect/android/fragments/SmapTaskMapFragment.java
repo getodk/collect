@@ -17,12 +17,14 @@ package org.odk.collect.android.fragments;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
@@ -57,6 +59,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import org.odk.collect.android.Manifest;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.AboutActivity;
 import org.odk.collect.android.activities.SmapMain;
@@ -91,6 +94,7 @@ public class SmapTaskMapFragment extends Fragment
         implements LoaderManager.LoaderCallbacks<MapEntry>, OnMapReadyCallback {
 
     private static final int PASSWORD_DIALOG = 1;
+    private static final int REQUEST_LOCATION = 100;
 
     protected final ActivityLogger logger = Collect.getInstance().getActivityLogger();
     protected String[] sortingOptions;
@@ -271,6 +275,40 @@ public class SmapTaskMapFragment extends Fragment
     public void onMapReady(GoogleMap googleMap) {
         Timber.i("######## onMapReady");
         mMap = googleMap;
+        if (ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Check Permissions Now
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+        } else {
+            mapReadyPermissionGranted();
+        }
+
+    }
+
+    public void onRequestPermissionsResult(int requestCode,
+                                           String[] permissions,
+                                           int[] grantResults) {
+        if (requestCode == REQUEST_LOCATION) {
+            if(grantResults.length == 1
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // We can now safely use the API we requested access to
+                mapReadyPermissionGranted();
+            } else {
+                // Permission was denied or request was cancelled
+            }
+        }
+    }
+
+    private void mapReadyPermissionGranted() {
+
+        if (ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
         mHelper = new MapHelper(getActivity(),mMap);
@@ -393,7 +431,6 @@ public class SmapTaskMapFragment extends Fragment
             }
         });
     }
-
 
     @Override
     public Loader<MapEntry> onCreateLoader(int id, Bundle args) {
