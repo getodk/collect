@@ -14,6 +14,7 @@ import org.odk.collect.android.injection.config.scopes.PerApplication;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.ServerPreferencesFragment;
 import org.odk.collect.android.receivers.NetworkReceiver;
+import org.odk.collect.android.tasks.DownloadTasksTask;
 import org.odk.collect.android.tasks.InstanceServerUploader;
 import org.odk.collect.android.tasks.sms.SmsSentBroadcastReceiver;
 import org.odk.collect.android.tasks.sms.SmsNotificationReceiver;
@@ -85,4 +86,6 @@ public interface AppComponent {
     void inject(AuthDialogUtility authDialogUtility);
   
     void inject(FormDownloadList formDownloadList);
+
+    void inject(DownloadTasksTask downloadTasksTask);       // smap
 }

@@ -118,9 +118,6 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
     String password = null;
 
     @Inject
-    CollectServerClient collectServerClient;
-
-    @Inject
     OpenRosaHttpInterface httpInterface;
 
     @Inject
@@ -148,6 +145,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 		}
 	}
 
+	public DownloadTasksTask(){Collect.getInstance().getComponent().inject(this);}
     /*
      * Add a custom date parser as old versions of the server will send an invalid date format
      */
@@ -525,6 +523,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 	        } catch (Exception e) {	
 	        	
 	        	Timber.e("Error:" + " for URL " + taskURL);
+                e.printStackTrace();
                 String msg = Utilities.translateMsg(e, null);
 	        	publishProgress(msg);
 	        	results.put(Collect.getInstance().getString(R.string.smap_error) + ":", msg );
