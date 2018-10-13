@@ -190,8 +190,8 @@ dependencies {
     
     implementation "com.google.android.gms:play-services-analytics:16.0.1"
     implementation "com.google.android.gms:play-services-auth:16.0.0"
-    implementation "com.google.android.gms:play-services-maps:15.0.1"
-    implementation "com.google.android.gms:play-services-location:15.0.1"
+    implementation "com.google.android.gms:play-services-maps:16.0.0"
+    implementation "com.google.android.gms:play-services-location:16.0.0"
 
     implementation "com.google.firebase:firebase-core:16.0.1"
     implementation "com.google.firebase:firebase-perf:16.1.0"
@@ -209,7 +209,7 @@ dependencies {
     }
 
 
-    implementation "com.google.android.gms:play-services-gcm:10.0.1"    // smap
+    implementation "com.google.android.gms:play-services-gcm:16.0.0"    // smap
 
     implementation "com.evernote:android-job:1.2.5"
     implementation "com.rarepebble:colorpicker:2.3.1"
