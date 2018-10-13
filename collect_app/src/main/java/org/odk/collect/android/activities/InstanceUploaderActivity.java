@@ -69,7 +69,10 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
     // maintain a list of what we've yet to send, in case we're interrupted by auth requests
     private Long[] instancesToSend;
 
+    // URL specified when authentication is requested or specified from intent extra as override
     private String url;
+
+    // Set from intent extras
     private String username;
     private String password;
     private Boolean deleteInstanceAfterUpload;
@@ -109,7 +112,7 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
 
         setTitle(getString(R.string.send_data));
 
-        // get any simple saved state...
+        // Get simple saved state
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(ALERT_MSG)) {
                 alertMsg = savedInstanceState.getString(ALERT_MSG);
@@ -155,7 +158,6 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
 
         instancesToSend = ArrayUtils.toObject(selectedInstanceIDs);
 
-        // at this point, we don't expect this to be empty...
         if (instancesToSend.length == 0) {
             Timber.e("onCreate: No instances to upload!");
             // drop through -- everything will process through OK
@@ -163,10 +165,13 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
             Timber.i("onCreate: Beginning upload of %d instances!", instancesToSend.length);
         }
 
-        // get the task if we've changed orientations. If it's null it's a new upload.
+        // Get the task if there was a configuration change but the app did not go out of memory.
+        // If the app went out of memory, the task is null but the simple state was saved so
+        // the task status is reconstructed from that state.
         instanceServerUploader = (InstanceServerUploader) getLastCustomNonConfigurationInstance();
+
         if (instanceServerUploader == null) {
-            // setup dialog and upload task
+            // set up dialog and upload task
             showDialog(PROGRESS_DIALOG);
             instanceServerUploader = new InstanceServerUploader();
 
@@ -283,6 +288,7 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
             message = getString(R.string.no_forms_uploaded);
         }
 
+        // If the activity is paused or in the process of pausing, don't show the dialog
         if (!isInstanceStateSaved()) {
             createUploadInstancesResultDialog(message.trim());
         } else {
@@ -336,18 +342,17 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
     }
 
     @Override
-    public void authRequest(Uri url, HashMap<String, String> doneSoFar) {
+    public void authRequest(Uri url, HashMap<String, String> messagesByInstanceIdDoneSoFar) {
         if (progressDialog.isShowing()) {
             // should always be showing here
             progressDialog.dismiss();
         }
 
-        // add our list of completed uploads to "completed"
-        // and remove them from our toSend list.
-        ArrayList<Long> workingSet = new ArrayList<Long>();
+        // Remove sent instances from instances to send
+        ArrayList<Long> workingSet = new ArrayList<>();
         Collections.addAll(workingSet, instancesToSend);
-        if (doneSoFar != null) {
-            Set<String> uploadedInstances = doneSoFar.keySet();
+        if (messagesByInstanceIdDoneSoFar != null) {
+            Set<String> uploadedInstances = messagesByInstanceIdDoneSoFar.keySet();
 
             for (String uploadedInstance : uploadedInstances) {
                 Long removeMe = Long.valueOf(uploadedInstance);
@@ -367,6 +372,8 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
         instancesToSend = updatedToSend;
 
         this.url = url.toString();
+
+        /** Once credentials are provided in the dialog, {@link #updatedCredentials()} is called */
         showDialog(AUTH_DIALOG);
     }
 
@@ -385,6 +392,10 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
 
         // register this activity with the new uploader task
         instanceServerUploader.setUploaderListener(this);
+        // In the case of credentials set via intent extras, the credentials are stored in the
+        // global WebCredentialsUtils but the task also needs to know what server to set to
+        // TODO: is this really needed here? When would the task not have gotten a server set in
+        // init already?
         if (url != null) {
             instanceServerUploader.setCompleteDestinationUrl(url + Collect.getInstance().getString(R.string.default_odk_submission), false);
         }
