@@ -835,6 +835,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                             null,      // manifest hash
                             !mfd.exists,        // New form version available
                             form.hasManifest,   // Are newer media files available
+                            !mfd.exists,
                             form.tasks_only,
                             mfd.formPath);
         			toDownload.add(fd);

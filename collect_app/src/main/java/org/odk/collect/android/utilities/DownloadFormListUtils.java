@@ -244,10 +244,12 @@ public class DownloadFormListUtils {
                                     R.string.parse_openrosa_formlist_failed, error)));
                     return formList;
                 }
+                boolean formNotDownloaded = true;   // smap
                 boolean isNewerFormVersionAvailable = false;
                 boolean areNewerMediaFilesAvailable = false;
                 ManifestFile manifestFile = null;
                 if (isThisFormAlreadyDownloaded(formId)) {
+                    formNotDownloaded = false;      // smap
                     isNewerFormVersionAvailable = isNewerFormVersionAvailable(FormDownloader.getMd5Hash(hash));
                     if ((!isNewerFormVersionAvailable || alwaysCheckMediaFiles) && manifestUrl != null) {
                         manifestFile = getManifestFile(manifestUrl);
@@ -262,7 +264,7 @@ public class DownloadFormListUtils {
                 formList.put(formId, new FormDetails(formName, downloadUrl, manifestUrl, formId,
                         (version != null) ? version : majorMinorVersion, hash,
                         manifestFile != null ? manifestFile.getHash() : null,
-                        isNewerFormVersionAvailable, areNewerMediaFilesAvailable, false, null));  // smap add tasks_only and form path
+                        isNewerFormVersionAvailable, areNewerMediaFilesAvailable, formNotDownloaded, false, null));  // smap add formNotDownloaded, tasks_only and form path
             }
         } else {
             // Aggregate 0.9.x mode...
@@ -306,7 +308,7 @@ public class DownloadFormListUtils {
                         return formList;
                     }
                     formList.put(formName,
-                            new FormDetails(formName, downloadUrl, null, formId, null, null, null, false, false, false, null));    // smap add tasks_only and form path
+                            new FormDetails(formName, downloadUrl, null, formId, null, null, null, false, false, true, false, null));    // smap add tasks_only and form path
 
                     formId = null;
                 }

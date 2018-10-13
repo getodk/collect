@@ -29,8 +29,9 @@ public class FormDetails implements Serializable {
     private String manifestFileHash;
     private boolean isNewerFormVersionAvailable;
     private boolean areNewerMediaFilesAvailable;
-    private boolean tasks_only;    // smap
-    private String formPath;        // smap
+    private boolean isFormNotDownloaded;    // smap
+    private boolean tasks_only;             // smap
+    private String formPath;                // smap
 
     public FormDetails(String error) {
         errorStr = error;
@@ -40,8 +41,9 @@ public class FormDetails implements Serializable {
     public FormDetails(String formName, String downloadUrl, String manifestUrl, String formID,
                        String formVersion, String hash, String manifestFileHash,
                        boolean isNewerFormVersionAvailable, boolean areNewerMediaFilesAvailable,
+                       boolean isFormNotDownloaded,
                        boolean tasks_only,
-                       String formPath) {   // smap add tasks_only
+                       String formPath) {   // smap add formNotDownloaded, tasks_only, formPath
         this.formName = formName;
         this.downloadUrl = downloadUrl;
         this.manifestUrl = manifestUrl;
@@ -51,6 +53,7 @@ public class FormDetails implements Serializable {
         this.manifestFileHash = manifestFileHash;
         this.isNewerFormVersionAvailable = isNewerFormVersionAvailable;
         this.areNewerMediaFilesAvailable = areNewerMediaFilesAvailable;
+        this.isFormNotDownloaded = isFormNotDownloaded;   // smap
         this.tasks_only = tasks_only;   // smap
         this.formPath = formPath;       // smap
     }
@@ -103,6 +106,10 @@ public class FormDetails implements Serializable {
         formVersion = version;
         errorStr = null;
         this.tasks_only = tasks_only;   // smap
+    }
+
+    public boolean isFormNotDownloaded() {
+        return isFormNotDownloaded;
     }
 
     public boolean isNewerFormVersionAvailable() {

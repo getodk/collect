@@ -144,7 +144,7 @@ public class FormDownloader {
             // get the xml file
             // if we've downloaded a duplicate, this gives us the file
             fileResult = downloadXform(fd.getFormName(), fd.getDownloadUrl() + "&deviceID=" + deviceId,
-                    fd.isNewerFormVersionAvailable(),       // smap add flag on newer form version available
+                    fd.isNewerFormVersionAvailable() || fd.isFormNotDownloaded(),       // smap add flag on newer form version available or never downloaded
                     fd.getFormPath());                      // smap
 
             if(fileResult.isNew()) {    // smap
