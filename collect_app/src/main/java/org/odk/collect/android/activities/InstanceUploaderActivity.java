@@ -17,7 +17,6 @@ package org.odk.collect.android.activities;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -119,48 +118,38 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
             url = savedInstanceState.getString(AUTH_URI);
         }
 
-        // and if we are resuming, use the TO_SEND list of not-yet-sent submissions
+        Bundle dataBundle;
+
+        // If we are resuming, use the TO_SEND list of not-yet-sent submissions
         // Otherwise, construct the list from the incoming intent value
-        long[] selectedInstanceIDs = null;
+        long[] selectedInstanceIDs;
         if (savedInstanceState != null && savedInstanceState.containsKey(TO_SEND)) {
             selectedInstanceIDs = savedInstanceState.getLongArray(TO_SEND);
-
-            // Add optional authentication params
-            if (savedInstanceState.containsKey(ApplicationConstants.BundleKeys.URL)) {
-                url = savedInstanceState.getString(ApplicationConstants.BundleKeys.URL);
-                if (savedInstanceState.containsKey(ApplicationConstants.BundleKeys.USERNAME)
-                        && savedInstanceState.containsKey(ApplicationConstants.BundleKeys.PASSWORD)) {
-                    username = savedInstanceState.getString(ApplicationConstants.BundleKeys.USERNAME);
-                    password = savedInstanceState.getString(ApplicationConstants.BundleKeys.PASSWORD);
-                }
-
-                if (savedInstanceState.containsKey(ApplicationConstants.BundleKeys.DELETE_INSTANCE_AFTER_SUBMISSION)) {
-                    deleteInstanceAfterUpload = savedInstanceState.getBoolean(ApplicationConstants.BundleKeys.DELETE_INSTANCE_AFTER_SUBMISSION);
-                }
-            }
+            dataBundle = savedInstanceState;
         } else {
-            // get instances to upload...
-            Intent intent = getIntent();
-            Bundle bundle = intent.getExtras();
-            selectedInstanceIDs = intent.getLongArrayExtra(FormEntryActivity.KEY_INSTANCES);
+            selectedInstanceIDs = getIntent().getLongArrayExtra(FormEntryActivity.KEY_INSTANCES);
+            dataBundle = getIntent().getExtras();
+        }
 
-            if (bundle != null && bundle.containsKey(ApplicationConstants.BundleKeys.URL)) {
-                url = intent.getStringExtra(ApplicationConstants.BundleKeys.URL);
+        // An external application can temporarily override destination URL, username, password
+        // and whether instances should be deleted after submission by specifying intent extras.
+        if (dataBundle != null && dataBundle.containsKey(ApplicationConstants.BundleKeys.URL)) {
+            // TODO: I think this means redirection from a URL set through an extra is not supported
+            url = dataBundle.getString(ApplicationConstants.BundleKeys.URL);
 
-                // Remove the trailing //
-                while (url != null && url.endsWith("/")) {
-                    url = url.substring(0, url.length() - 1);
-                }
+            // Remove trailing slashes (only necessary for the intent case but doesn't hurt on resume)
+            while (url != null && url.endsWith("/")) {
+                url = url.substring(0, url.length() - 1);
+            }
 
-                if (bundle.containsKey(ApplicationConstants.BundleKeys.USERNAME)
-                        && bundle.containsKey(ApplicationConstants.BundleKeys.PASSWORD)) {
-                    username = intent.getStringExtra(ApplicationConstants.BundleKeys.USERNAME);
-                    password = intent.getStringExtra(ApplicationConstants.BundleKeys.PASSWORD);
-                }
+            if (dataBundle.containsKey(ApplicationConstants.BundleKeys.USERNAME)
+                    && dataBundle.containsKey(ApplicationConstants.BundleKeys.PASSWORD)) {
+                username = dataBundle.getString(ApplicationConstants.BundleKeys.USERNAME);
+                password = dataBundle.getString(ApplicationConstants.BundleKeys.PASSWORD);
+            }
 
-                if (bundle.containsKey(ApplicationConstants.BundleKeys.DELETE_INSTANCE_AFTER_SUBMISSION)) {
-                    deleteInstanceAfterUpload = bundle.getBoolean(ApplicationConstants.BundleKeys.DELETE_INSTANCE_AFTER_SUBMISSION);
-                }
+            if (dataBundle.containsKey(ApplicationConstants.BundleKeys.DELETE_INSTANCE_AFTER_SUBMISSION)) {
+                deleteInstanceAfterUpload = dataBundle.getBoolean(ApplicationConstants.BundleKeys.DELETE_INSTANCE_AFTER_SUBMISSION);
             }
         }
 
