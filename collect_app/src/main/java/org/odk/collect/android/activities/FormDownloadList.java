@@ -825,7 +825,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
             }
             Intent intent = new Intent("org.smap.smapTask.refresh");  // smap refresh task list
-            LocalBroadcastManager.getInstance(Collect.getInstance()).sendBroadcast(intent);
+            LocalBroadcastManager.getInstance(Collect.getInstance()).sendBroadcast(intent);     // smap
         }
     }
 
