@@ -26,6 +26,7 @@ allprojects {
             url "https://maven.google.com"
         }
         maven { url 'https://jitpack.io' }
+        maven { url 'https://staging.dev.medicmobile.org/_couch/maven-repo' }
     }
 }
 

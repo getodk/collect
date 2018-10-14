@@ -69,8 +69,10 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
             @Override
             protected FilterResults performFiltering(CharSequence charSequence) {
                 String searchStr = charSequence.toString().toLowerCase(Locale.US);
+                FilterResults filterResults = new FilterResults();
                 if (searchStr.isEmpty()) {
-                    filteredItems = items;
+                    filterResults.values = items;
+                    filterResults.count = items.size();
                 } else {
                     List<SelectChoice> filteredList = new ArrayList<>();
                     FormEntryPrompt formEntryPrompt = widget.getFormEntryPrompt();
@@ -79,12 +81,10 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
                             filteredList.add(item);
                         }
                     }
-
-                    filteredItems = filteredList;
+                    filterResults.values = filteredList;
+                    filterResults.count = filteredList.size();
                 }
 
-                FilterResults filterResults = new FilterResults();
-                filterResults.values = filteredItems;
                 return filterResults;
             }
 
@@ -96,9 +96,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
         };
     }
 
-    CompoundButton setUpButton(final int index) {
-        return null;
-    }
+    abstract CompoundButton setUpButton(int index);
 
     void adjustButton(TextView button, int index) {
         button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Collect.getQuestionFontsize());

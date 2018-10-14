@@ -43,7 +43,6 @@ import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
@@ -290,8 +289,6 @@ public class ListWidget extends QuestionWidget implements MultiChoiceWidget, OnC
                 button.setChecked(false);
             }
         }
-        Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCheckedChanged",
-                items.get((Integer) buttonView.getTag()).getValue(), getFormEntryPrompt().getIndex());
 
         if (autoAdvance && listener != null) {
             listener.advance();

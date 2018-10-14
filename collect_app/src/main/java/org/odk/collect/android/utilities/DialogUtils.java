@@ -17,8 +17,10 @@
 package org.odk.collect.android.utilities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
@@ -97,5 +99,33 @@ public final class DialogUtils {
         } catch (Exception e) {
             Timber.e(e);
         }
+    }
+
+    /**
+     * Creates an error dialog on an activity
+     *
+     * @param errorMsg The message to show on the dialog box
+     * @param shouldExit Finish the activity if Ok is clicked
+     */
+    public static Dialog createErrorDialog(@NonNull Activity activity, String errorMsg, final boolean shouldExit) {
+        AlertDialog alertDialog = new AlertDialog.Builder(activity).create();
+        alertDialog.setIcon(android.R.drawable.ic_dialog_info);
+        alertDialog.setMessage(errorMsg);
+        DialogInterface.OnClickListener errorListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int i) {
+                switch (i) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        if (shouldExit) {
+                            activity.finish();
+                        }
+                        break;
+                }
+            }
+        };
+        alertDialog.setCancelable(false);
+        alertDialog.setButton(activity.getString(R.string.ok), errorListener);
+
+        return alertDialog;
     }
 }

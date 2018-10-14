@@ -26,11 +26,13 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.fragments.dialogs.SimpleDialog;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
+import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceServerUploader;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ArrayUtils;
 import org.odk.collect.android.utilities.AuthDialogUtility;
+import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
 
 import java.util.ArrayList;
@@ -40,6 +42,8 @@ import java.util.Iterator;
 import java.util.Set;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.utilities.PermissionUtils.requestStoragePermissions;
 
 /**
  * Activity to upload completed forms.
@@ -54,6 +58,8 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
     private static final String AUTH_URI = "auth";
     private static final String ALERT_MSG = "alertmsg";
     private static final String TO_SEND = "tosend";
+
+    private static final boolean EXIT = true;
 
     private ProgressDialog progressDialog;
 
@@ -77,6 +83,32 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
         super.onCreate(savedInstanceState);
         Timber.i("onCreate: %s", savedInstanceState == null ? "creating" : "re-initializing");
 
+        // This activity is accessed directly externally
+        requestStoragePermissions(this, new PermissionListener() {
+            @Override
+            public void granted() {
+                // must be at the beginning of any activity that can be called from an external intent
+                try {
+                    Collect.createODKDirs();
+                } catch (RuntimeException e) {
+                    DialogUtils.showDialog(DialogUtils.createErrorDialog(InstanceUploaderActivity.this,
+                            e.getMessage(), EXIT), InstanceUploaderActivity.this);
+                    return;
+                }
+
+                init(savedInstanceState);
+            }
+
+            @Override
+            public void denied() {
+                // The activity has to finish because ODK Collect cannot function without these permissions.
+                finish();
+            }
+        });
+
+    }
+
+    private void init(Bundle savedInstanceState) {
         alertMsg = getString(R.string.please_wait);
 
         uploadedInstances = new HashMap<String, String>();
@@ -178,14 +210,10 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        Collect.getInstance().getActivityLogger().logOnStart(this);
-    }
-
-    @Override
     protected void onResume() {
-        Timber.i("onResume: Resuming upload of %d instances!", instancesToSend.length);
+        if (instancesToSend != null) {
+            Timber.i("onResume: Resuming upload of %d instances!", instancesToSend.length);
+        }
         if (instanceServerUploader != null) {
             instanceServerUploader.setUploaderListener(this);
         }
@@ -212,12 +240,6 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
     @Override
     public Object onRetainCustomNonConfigurationInstance() {
         return instanceServerUploader;
-    }
-
-    @Override
-    protected void onStop() {
-        Collect.getInstance().getActivityLogger().logOnStop(this);
-        super.onStop();
     }
 
     @Override
@@ -295,16 +317,11 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
     protected Dialog onCreateDialog(int id) {
         switch (id) {
             case PROGRESS_DIALOG:
-                Collect.getInstance().getActivityLogger().logAction(this,
-                        "onCreateDialog.PROGRESS_DIALOG", "show");
-
                 progressDialog = new ProgressDialog(this);
                 DialogInterface.OnClickListener loadingButtonListener =
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Collect.getInstance().getActivityLogger().logAction(this,
-                                        "onCreateDialog.PROGRESS_DIALOG", "cancel");
                                 dialog.dismiss();
                                 instanceServerUploader.cancel(true);
                                 instanceServerUploader.setUploaderListener(null);
@@ -321,8 +338,6 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
             case AUTH_DIALOG:
                 Timber.i("onCreateDialog(AUTH_DIALOG): for upload of %d instances!",
                         instancesToSend.length);
-                Collect.getInstance().getActivityLogger().logAction(this,
-                        "onCreateDialog.AUTH_DIALOG", "show");
 
                 AuthDialogUtility authDialogUtility = new AuthDialogUtility();
                 if (username != null && password != null && url != null) {
@@ -373,8 +388,6 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
     }
 
     private void createUploadInstancesResultDialog(String message) {
-        Collect.getInstance().getActivityLogger().logAction(this, "createUploadInstancesResultDialog", "show");
-
         String dialogTitle = getString(R.string.upload_results);
         String buttonTitle = getString(R.string.ok);
 

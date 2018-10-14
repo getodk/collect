@@ -333,7 +333,6 @@
   <string name="select_geotrace_mode">Chagua aina ya geotrace </string>
   <string name="start">Anza</string>
   <string name="enable_gps">Wezesha GPS</string>
-  <string name="enable_gps_message">GPS kwenye kifaa chako imezimwa. Je ungependa kuiwasha?</string>
   <string name="geotrace_title">Fatilisha mstari kijografia</string>
   <string name="polygon_save">Hifadhi kama  poligoni \"Polygon\"</string>
   <string name="polyline_save">Hifadhi kama Mistari \"Polyline\"</string>
@@ -346,7 +345,6 @@
   <string name="polygon_validator">Lazima uwe na angalau  nukta 3 ili kutengeneza poligoni</string>
   <string name="polyline_validator">Ni lazima uwe angalau na pointi 2 kutengeneza Mistari </string>
   <string name="clear">Futa</string>
-  <string name="polyline_polygon_text">Hifadhi geotrace kama</string>
   <string name="manual_mode">Mfumo wa kawaida</string>
   <string name="automatic_mode">Mfumo wa moja kwa moja</string>
   <string name="geoshape_instruction">Bonyeza kwa mda kuweka alama.</string>

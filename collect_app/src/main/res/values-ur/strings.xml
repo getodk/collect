@@ -314,7 +314,6 @@
   <string name="select_geotrace_mode">جیو ٹریس موڈ منتخب کریں</string>
   <string name="start">شروع </string>
   <string name="enable_gps">جی پی ایس کو فعال  کریں</string>
-  <string name="enable_gps_message">آپ کے آلے میں جی پی ایس غیر فعال ہے. کیا آپ اسے فعال کرنا چاہتے ہیں؟ </string>
   <string name="geotrace_title">جیو ٹریس </string>
   <string name="polygon_save">قطبون کے طور پر محفوظ کریں</string>
   <string name="polyline_save">پولی لائن کے طور پر محفوظ کریں</string>
@@ -327,7 +326,6 @@
   <string name="polygon_validator">قطبون 3 بنانے کے لئے کم از کم 3 پوائنٹس لازمی ہیں</string>
   <string name="polyline_validator">پولی لائن بنانے کے لئے کم سے کم 2 پوائنٹس لازمی ہیں</string>
   <string name="clear">صاف کریں </string>
-  <string name="polyline_polygon_text">جیو ٹریس کے طور پر محفوظ کریں</string>
   <string name="manual_mode">دستی موڈ</string>
   <string name="automatic_mode">خودکار موڈ</string>
   <string name="geoshape_instruction">پوائنٹس رکھنے کے لئے طویل دبائیں.</string>

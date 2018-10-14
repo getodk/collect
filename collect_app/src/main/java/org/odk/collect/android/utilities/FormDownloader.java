@@ -92,8 +92,6 @@ public class FormDownloader {
         formsDao = new FormsDao();
         int total = toDownload.size();
         int count = 1;
-        Collect.getInstance().getActivityLogger().logAction(this, "downloadForms",
-                String.valueOf(total));
 
         final HashMap<FormDetails, String> result = new HashMap<>();
 
@@ -287,8 +285,6 @@ public class FormDownloader {
                 uri = Uri.withAppendedPath(FormsProviderAPI.FormsColumns.CONTENT_URI,
                         cursor.getString(cursor.getColumnIndex(FormsProviderAPI.FormsColumns._ID)));
                 mediaPath = cursor.getString(cursor.getColumnIndex(FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH));
-                Collect.getInstance().getActivityLogger().logAction(this, "refresh",
-                        formFilePath);
             }
         } finally {
             if (cursor != null) {
@@ -310,10 +306,7 @@ public class FormDownloader {
         v.put(FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY,   formInfo.get(FileUtils.BASE64_RSA_PUBLIC_KEY));
         v.put(FormsProviderAPI.FormsColumns.AUTO_DELETE,             formInfo.get(FileUtils.AUTO_DELETE));
         v.put(FormsProviderAPI.FormsColumns.AUTO_SEND,             formInfo.get(FileUtils.AUTO_SEND));
-        Uri uri = formsDao.saveForm(v);
-        Collect.getInstance().getActivityLogger().logAction(this, "insert",
-                formFile.getAbsolutePath());
-        return uri;
+        return formsDao.saveForm(v);
     }
 
     /**

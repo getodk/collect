@@ -287,7 +287,6 @@
   <string name="select_geotrace_mode">เลือกโหมด GeoTrace</string>
   <string name="start">เริ่มต้น</string>
   <string name="enable_gps">เปิด GPS</string>
-  <string name="enable_gps_message">GPS ถูกปิดไว้ ต้องการเปิดใช้งานหรือไม่?</string>
   <string name="geotrace_title">GeoTrace</string>
   <string name="polygon_save">บันทึกเป็น Polygon</string>
   <string name="polyline_save">บันทึกเป็น Polyline</string>
@@ -298,7 +297,6 @@
   <string name="geo_exit_warning">ยกเลิกการเปลี่ยนแปลงและกลับไปที่ ODK?</string>
   <string name="polygon_validator">ต้องมีจุดพิกัด 3 จุดขึ้นไปเพื่อสร้าง Polygon</string>
   <string name="clear">ลบ</string>
-  <string name="polyline_polygon_text">บันทึก GeoTrace เป็น</string>
   <string name="manual_mode">โหมดตั้งค่าเอง</string>
   <string name="automatic_mode">โหมดอัตโนมัติ</string>
   <string name="geoshape_instruction">กดแช่ไว้เพื่อวางเครื่องหมาย</string>

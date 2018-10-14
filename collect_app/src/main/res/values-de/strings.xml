@@ -333,7 +333,6 @@
   <string name="select_geotrace_mode">GeoTrace-Modus auswählen</string>
   <string name="start">Start</string>
   <string name="enable_gps">GPS aktivieren</string>
-  <string name="enable_gps_message">GPS ist auf ihrem Gerät deaktiviert. Möchten Sie es aktivieren?</string>
   <string name="geotrace_title">GeoTrace</string>
   <string name="polygon_save">Als Polygon speichern</string>
   <string name="polyline_save">Als Polyline speichern</string>
@@ -346,7 +345,6 @@
   <string name="polygon_validator">Min. 3 Punkte notwendig um ein Polygon zu erzeugen</string>
   <string name="polyline_validator">Min. 2 Punkte notwendig um eine Polylinie zu erzeugen</string>
   <string name="clear">Löschen</string>
-  <string name="polyline_polygon_text">GeoTrace speichern als</string>
   <string name="manual_mode">Manueller Modus</string>
   <string name="automatic_mode">Automatischer Modus</string>
   <string name="geoshape_instruction">Lange Drücken um eine Markierung zu platzieren.</string>

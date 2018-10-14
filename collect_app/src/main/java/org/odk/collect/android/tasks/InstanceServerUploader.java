@@ -25,6 +25,7 @@ import com.google.android.gms.analytics.HitBuilders;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.http.CollectServerClient.Outcome;
 import org.odk.collect.android.http.HttpHeadResult;
 import org.odk.collect.android.http.OpenRosaHttpInterface;
 import org.odk.collect.android.logic.PropertyManager;
@@ -32,7 +33,6 @@ import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.http.CollectServerClient.Outcome;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ResponseMessageParser;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
@@ -136,8 +136,6 @@ public class InstanceServerUploader extends InstanceUploader {
                         // unreachable...
                         Timber.i(e, "Error encoding URL for device id : %s", deviceId);
                     }
-
-                    Collect.getInstance().getActivityLogger().logAction(this, urlString, instance);
 
                     if (!uploadSubmissionFile(urlString, id, instance, toUpdate, uriRemap, outcome)) {
                         return false; // get credentials...

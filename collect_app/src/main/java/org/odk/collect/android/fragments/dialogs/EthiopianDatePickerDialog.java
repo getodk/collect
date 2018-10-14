@@ -51,7 +51,8 @@ public class EthiopianDatePickerDialog extends CustomDatePickerDialog {
 
     @Override
     protected void updateDays() {
-        setUpDayPicker(getCurrentEthiopianDate());
+        LocalDateTime localDateTime = getCurrentEthiopianDate();
+        setUpDayPicker(localDateTime.getDayOfMonth(), localDateTime.dayOfMonth().getMaximumValue());
     }
 
     @Override
@@ -65,9 +66,9 @@ public class EthiopianDatePickerDialog extends CustomDatePickerDialog {
                 .toDateTime()
                 .withChronology(EthiopicChronology.getInstance())
                 .toLocalDateTime();
-        setUpDayPicker(ethiopianDate);
-        setUpMonthPicker(ethiopianDate, monthsArray);
-        setUpYearPicker(ethiopianDate, MIN_SUPPORTED_YEAR, MAX_SUPPORTED_YEAR);
+        setUpDayPicker(ethiopianDate.getDayOfMonth(), ethiopianDate.dayOfMonth().getMaximumValue());
+        setUpMonthPicker(ethiopianDate.getMonthOfYear(), monthsArray);
+        setUpYearPicker(ethiopianDate.getYear(), MIN_SUPPORTED_YEAR, MAX_SUPPORTED_YEAR);
     }
 
     private void setUpValues() {

@@ -42,11 +42,13 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.http.HttpCredentialsInterface;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.FormListDownloaderListener;
+import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.tasks.DownloadFormListTask;
 import org.odk.collect.android.tasks.DownloadFormsTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.AuthDialogUtility;
+import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
@@ -65,6 +67,7 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.DownloadFormListUtils.DL_AUTH_REQUIRED;
 import static org.odk.collect.android.utilities.DownloadFormListUtils.DL_ERROR_MSG;
+import static org.odk.collect.android.utilities.PermissionUtils.requestStoragePermissions;
 
 /**
  * Responsible for displaying, adding and deleting all the valid forms in the forms directory. One
@@ -157,6 +160,30 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         getComponent().inject(this);
         setTitle(getString(R.string.get_forms));
 
+        // This activity is accessed directly externally
+        requestStoragePermissions(this, new PermissionListener() {
+            @Override
+            public void granted() {
+                // must be at the beginning of any activity that can be called from an external intent
+                try {
+                    Collect.createODKDirs();
+                } catch (RuntimeException e) {
+                    DialogUtils.showDialog(DialogUtils.createErrorDialog(FormDownloadList.this, e.getMessage(), EXIT), FormDownloadList.this);
+                    return;
+                }
+
+                init(savedInstanceState);
+            }
+
+            @Override
+            public void denied() {
+                // The activity has to finish because ODK Collect cannot function without these permissions.
+                finish();
+            }
+        });
+    }
+
+    private void init(Bundle savedInstanceState) {
         formsFound = new ArrayList<>();
         formResult = new HashMap<>();
 
@@ -194,9 +221,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         downloadButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                // this is called in downloadSelectedFiles():
-                //    Collect.getInstance().getActivityLogger().logAction(this,
-                // "downloadSelectedFiles", ...);
                 downloadSelectedFiles();
             }
         });
@@ -221,8 +245,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         refreshButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Collect.getInstance().getActivityLogger().logAction(this, "refreshForms", "");
-
                 formList.clear();
                 updateAdapter();
                 clearChoices();
@@ -319,18 +341,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         };
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Collect.getInstance().getActivityLogger().logOnStart(this);
-    }
-
-    @Override
-    protected void onStop() {
-        Collect.getInstance().getActivityLogger().logOnStop(this);
-        super.onStop();
-    }
-
     private void clearChoices() {
         listView.clearChoices();
         downloadButton.setEnabled(false);
@@ -340,19 +350,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         toggleButtonLabel(toggleButton, listView);
         downloadButton.setEnabled(listView.getCheckedItemCount() > 0);
-
-        Object o = listView.getAdapter().getItem(position);
-        @SuppressWarnings("unchecked")
-        HashMap<String, String> item = (HashMap<String, String>) o;
-        FormDetails detail = formNamesAndURLs.get(item.get(FORMDETAIL_KEY));
-
-        if (detail != null) {
-            Collect.getInstance().getActivityLogger().logAction(this, "onListItemClick",
-                    detail.getDownloadUrl());
-        } else {
-            Collect.getInstance().getActivityLogger().logAction(this, "onListItemClick",
-                    "<missing form detail>");
-        }
 
         if (listView.isItemChecked(position)) {
             selectedForms.add(((HashMap<String, String>) listView.getAdapter().getItem(position)).get(FORMDETAIL_KEY));
@@ -443,15 +440,11 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     protected Dialog onCreateDialog(int id) {
         switch (id) {
             case PROGRESS_DIALOG:
-                Collect.getInstance().getActivityLogger().logAction(this,
-                        "onCreateDialog.PROGRESS_DIALOG", "show");
                 progressDialog = new ProgressDialog(this);
                 DialogInterface.OnClickListener loadingButtonListener =
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Collect.getInstance().getActivityLogger().logAction(this,
-                                        "onCreateDialog.PROGRESS_DIALOG", "OK");
                                 // we use the same progress dialog for both
                                 // so whatever isn't null is running
                                 dialog.dismiss();
@@ -483,9 +476,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 progressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
                 return progressDialog;
             case AUTH_DIALOG:
-                Collect.getInstance().getActivityLogger().logAction(this,
-                        "onCreateDialog.AUTH_DIALOG", "show");
-
                 alertShowing = false;
 
                 AuthDialogUtility authDialogUtility = new AuthDialogUtility();
@@ -584,10 +574,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     @SuppressWarnings("unchecked")
     private void startFormsDownload(@NonNull ArrayList<FormDetails> filesToDownload) {
         int totalCount = filesToDownload.size();
-
-        Collect.getInstance().getActivityLogger().logAction(this, "downloadSelectedFiles",
-                Integer.toString(totalCount));
-
         if (totalCount > 0) {
             // show dialog box
             showDialog(PROGRESS_DIALOG);
@@ -803,7 +789,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
      * activity will exit when the user clicks "ok".
      */
     private void createAlertDialog(String title, String message, final boolean shouldExit) {
-        Collect.getInstance().getActivityLogger().logAction(this, "createAlertDialog", "show");
         alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle(title);
         alertDialog.setMessage(message);
@@ -812,8 +797,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
                     case DialogInterface.BUTTON_POSITIVE: // ok
-                        Collect.getInstance().getActivityLogger().logAction(this,
-                                "createAlertDialog", "OK");
                         // just close the dialog
                         alertShowing = false;
                         // successful download, so quit

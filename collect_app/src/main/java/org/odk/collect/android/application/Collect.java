@@ -40,7 +40,6 @@ import net.danlew.android.joda.JodaTimeAndroid;
 
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
-import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.injection.config.AppComponent;
 import org.odk.collect.android.injection.config.DaggerAppComponent;
@@ -87,7 +86,6 @@ public class Collect extends Application implements HasActivityInjector {
     public static final String METADATA_PATH = ODK_ROOT + File.separator + "metadata";
     public static final String TMPFILE_PATH = CACHE_PATH + File.separator + "tmp.jpg";
     public static final String TMPDRAWFILE_PATH = CACHE_PATH + File.separator + "tmpDraw.jpg";
-    public static final String LOG_PATH = ODK_ROOT + File.separator + "log";
     public static final String DEFAULT_FONTSIZE = "21";
     public static final int DEFAULT_FONTSIZE_INT = 21;
     public static final String OFFLINE_LAYERS = ODK_ROOT + File.separator + "layers";
@@ -96,8 +94,6 @@ public class Collect extends Application implements HasActivityInjector {
     public static String defaultSysLanguage;
     private static Collect singleton;
     private static long lastClickTime;
-
-    private ActivityLogger activityLogger;
 
     @Nullable
     private FormController formController;
@@ -175,10 +171,6 @@ public class Collect extends Application implements HasActivityInjector {
             }
         }
         return false;
-    }
-
-    public ActivityLogger getActivityLogger() {
-        return activityLogger;
     }
 
     @Nullable
@@ -319,7 +311,6 @@ public class Collect extends Application implements HasActivityInjector {
         }
 
         FormController.initializeJavaRosa(mgr);
-        activityLogger = new ActivityLogger(mgr.getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID));
     }
 
     // This method reloads shared preferences in order to load default values for new preferences

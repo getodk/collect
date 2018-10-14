@@ -68,19 +68,14 @@ public class AnnotateWidget extends BaseImageWidget {
     protected void setUpLayout() {
         super.setUpLayout();
         captureButton = getSimpleButton(getContext().getString(R.string.capture_image), R.id.capture_image);
-        captureButton.setEnabled(!getFormEntryPrompt().isReadOnly());
 
         chooseButton = getSimpleButton(getContext().getString(R.string.choose_image), R.id.choose_image);
-        chooseButton.setEnabled(!getFormEntryPrompt().isReadOnly());
 
         annotateButton = getSimpleButton(getContext().getString(R.string.markup_image), R.id.markup_image);
-        annotateButton.setEnabled(!(binaryName == null || getFormEntryPrompt().isReadOnly()));
-        annotateButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                imageClickHandler.clickImage("annotateButton");
-            }
-        });
+        if (binaryName == null) {
+            annotateButton.setEnabled(false);
+        }
+        annotateButton.setOnClickListener(v -> imageClickHandler.clickImage("annotateButton"));
 
         answerLayout.addView(captureButton);
         answerLayout.addView(chooseButton);
@@ -100,9 +95,7 @@ public class AnnotateWidget extends BaseImageWidget {
     @Override
     public void clearAnswer() {
         super.clearAnswer();
-        if (!getFormEntryPrompt().isReadOnly()) {
-            annotateButton.setEnabled(false);
-        }
+        annotateButton.setEnabled(false);
 
         // reset buttons
         captureButton.setText(getContext().getString(R.string.capture_image));
@@ -146,11 +139,7 @@ public class AnnotateWidget extends BaseImageWidget {
     }
 
     private void hideButtonsIfNeeded() {
-        if (getFormEntryPrompt().isReadOnly()) {
-            captureButton.setVisibility(View.GONE);
-            chooseButton.setVisibility(View.GONE);
-            annotateButton.setVisibility(View.GONE);
-        } else if (getFormEntryPrompt().getAppearanceHint() != null
+        if (getFormEntryPrompt().getAppearanceHint() != null
                 && getFormEntryPrompt().getAppearanceHint().toLowerCase(Locale.ENGLISH).contains("new")) {
             chooseButton.setVisibility(View.GONE);
         }
@@ -167,13 +156,8 @@ public class AnnotateWidget extends BaseImageWidget {
     }
 
     private void captureImage() {
-        Collect.getInstance()
-                .getActivityLogger()
-                .logInstanceAction(this, "captureButton", "click",
-                        getFormEntryPrompt().getIndex());
         errorTextView.setVisibility(View.GONE);
-        Intent intent = new Intent(
-                android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         // We give the camera an absolute filename/path where to put the
         // picture because of bug:
         // http://code.google.com/p/android/issues/detail?id=1480
@@ -188,8 +172,8 @@ public class AnnotateWidget extends BaseImageWidget {
         // if this gets modified, the onActivityResult in
         // FormEntyActivity will also need to be updated.
         intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, uri);
-         FileUtils.grantFilePermissions(intent, uri, getContext());
+        FileUtils.grantFilePermissions(intent, uri, getContext());
 
         imageCaptureHandler.captureImage(intent, RequestCodes.IMAGE_CAPTURE, R.string.annotate_image);
-        }
+    }
 }
