@@ -15,8 +15,10 @@
 package org.odk.collect.android.tasks;
 
 import android.content.ContentResolver;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.v4.content.LocalBroadcastManager;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.DeleteInstancesListener;
@@ -90,6 +92,8 @@ public class DeleteInstancesTask extends AsyncTask<Long, Integer, Integer> {
         if (deleteInstancesListener != null) {
             deleteInstancesListener.deleteComplete(result);
         }
+        Intent intent = new Intent("org.smap.smapTask.refresh");  // smap refresh task list
+        LocalBroadcastManager.getInstance(Collect.getInstance()).sendBroadcast(intent); // smap
         super.onPostExecute(result);
     }
 
