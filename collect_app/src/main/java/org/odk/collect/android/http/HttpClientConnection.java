@@ -601,13 +601,13 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
                     // loop until all bytes read
                 }
             } catch (Exception e) {
-                Timber.i(e);
+                //Timber.i(e);      // smap disable
             } finally {
                 if (is != null) {
                     try {
                         is.close();
                     } catch (IOException e) {
-                        Timber.d(e);
+                        // Timber.d(e); // smap disable
                     }
                 }
             }

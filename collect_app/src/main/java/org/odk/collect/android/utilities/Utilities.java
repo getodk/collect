@@ -79,6 +79,7 @@ public class Utilities {
     public static final String STATUS_SYNC_YES = "synchronized";
     public static final String STATUS_SYNC_NO = "not synchronized";
 
+    public Utilities() {Collect.getInstance().getComponent().inject(this);}
     // Get the task source
     public static String getSource() {
         SharedPreferences sharedPreferences = PreferenceManager

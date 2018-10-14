@@ -129,6 +129,14 @@ public class InstanceServerUploader extends InstanceUploader {
                     String urlString = completeDestinationUrl != null ? completeDestinationUrl : c.isNull(subIdx)
                             ? getServerSubmissionURL() : c.getString(subIdx).trim();
 
+                    // Add updateid if this is a non repeating task - start smap
+                    boolean repeat = (c.getInt(c.getColumnIndex(InstanceColumns.T_REPEAT)) > 0);
+                    String updateid = c.getString(c.getColumnIndex(InstanceColumns.T_UPDATEID));
+                    if (!repeat && updateid != null) {
+                        urlString = urlString + "/" + updateid;
+                    }
+                    // end smap - add updateid
+
                     // add the deviceID to the request...
                     try {
                         urlString += "?deviceID=" + URLEncoder.encode(deviceId != null ? deviceId : "", "UTF-8");
@@ -354,7 +362,6 @@ public class InstanceServerUploader extends InstanceUploader {
 
         try {
             URI uri = URI.create(submissionUri.toString());
-
             messageParser = httpInterface.uploadSubmissionFile(files, submissionFile, uri,
                     webCredentialsUtils.getCredentials(uri), status, location_trigger, survey_notes);
 
