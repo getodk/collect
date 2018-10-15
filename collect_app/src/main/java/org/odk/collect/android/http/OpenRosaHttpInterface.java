@@ -99,4 +99,17 @@ public interface OpenRosaHttpInterface {
                                             @Nullable HttpCredentialsInterface credentials
     ) throws IOException;
 
+    /**
+     * Creates a http connection and sets up an input stream. Thats all it does as opposed to the
+     * odk service that expects an xml form in the response
+     * smap
+     *
+     * @param uri of the stream
+     * @param contentType check the returned Mime Type to ensure it matches. "text/xml" causes a Hash to be calculated
+     * @return HttpGetResult - An object containing the Stream, Hash and Headers
+     * @throws Exception a multitude of Exceptions such as IOException can be thrown
+     */
+    @NonNull
+    String getRequest(@NonNull URI uri, @Nullable String contentType, @Nullable HttpCredentialsInterface credentials) throws Exception;
+
 }

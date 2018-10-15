@@ -35,6 +35,7 @@ import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.tasks.SmapRemoteWebServiceTask;
+import org.odk.collect.android.utilities.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -143,6 +144,7 @@ public class SmapRemoteDataHandlerSearch implements IFunctionHandler {
         String timeoutValue = "0";
         Collect app = Collect.getInstance();
         String dataSetName = XPathFuncExpr.toString(args[0]);
+        ArrayList<SelectChoice> choices = new ArrayList<>();
 
         try {
             // Get the url which doubles as the cache key
@@ -183,39 +185,37 @@ public class SmapRemoteDataHandlerSearch implements IFunctionHandler {
             // Get the cache results if they exist
             String urlString = url.toString();
             String data = app.getRemoteData(urlString);
-            ArrayList<SelectChoice> choices = null;
-            try {
-                ArrayList<SelectChoice> serverChoices =
-                        new Gson().fromJson(data, new TypeToken<ArrayList<SelectChoice>>() {
-                        }.getType());
-                // Recreate the actual choice list as their is weird constructor stuff here
-                if(serverChoices != null) {
-                    choices = new ArrayList<SelectChoice>();
-                    for (SelectChoice sc : serverChoices) {
-                        ExternalSelectChoice extChoice = new ExternalSelectChoice(sc.getLabelInnerText(), sc.getValue(), false);
-                        extChoice.setIndex(sc.getIndex());
-                        choices.add(extChoice);
+            if(data != null) {
+                try {
+                    ArrayList<SelectChoice> serverChoices =
+                            new Gson().fromJson(data, new TypeToken<ArrayList<SelectChoice>>() {
+                            }.getType());
+                    // Recreate the actual choice list as their is weird constructor stuff here
+                    if (serverChoices != null) {
+                        choices = new ArrayList<SelectChoice>();
+                        for (SelectChoice sc : serverChoices) {
+                            ExternalSelectChoice extChoice = new ExternalSelectChoice(sc.getLabelInnerText(), sc.getValue(), false);
+                            extChoice.setIndex(sc.getIndex());
+                            choices.add(extChoice);
+                        }
                     }
+                } catch (Exception e) {
+                    ToastUtils.showLongToast(data);
                 }
-            } catch (Exception e) {
-                return data;            // Assume the data contains the error message
-            }
-            if (choices == null) {
+            } else {
                 // Call a webservice to get the remote record
                 Timber.i("++++ Make the call");
                 app.startRemoteCall(urlString);
                 SmapRemoteWebServiceTask task = new SmapRemoteWebServiceTask();
                 task.setSmapRemoteListener(app.getFormEntryActivity());
                 task.execute(urlString, timeoutValue, "true");
-                return new ArrayList<SelectChoice>();
-            } else {
-                return choices;
+                //return new ArrayList<SelectChoice>();
             }
         } catch (Exception e) {
             Timber.e(e);
         }
 
-        return null;
+        return choices;
 
     }
 

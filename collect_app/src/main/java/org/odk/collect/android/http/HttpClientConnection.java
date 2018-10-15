@@ -72,6 +72,7 @@ import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 import org.opendatakit.httpclientandroidlib.util.EntityUtils;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -865,7 +866,47 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
         return new HttpGetResult(downloadStream, responseHeaders, hash, responseCode);
     }
 
+    @Override
+    public @NonNull
+    String getRequest(@NonNull URI uri, @Nullable final String contentType, @Nullable HttpCredentialsInterface credentials) throws Exception {
 
+        InputStream is;
+        ByteArrayOutputStream os;
+
+        addCredentialsForHost(uri, credentials);
+        clearCookieStore();
+
+        ResponseMessageParser messageParser = null;
+        HttpClient httpclient = createHttpClient(CONNECTION_TIMEOUT);
+
+        // if https then enable preemptive basic auth...
+        if (uri.getScheme().equals("https")) {
+            enablePreemptiveBasicAuth(uri.getHost());
+        }
+
+        // set up request...
+        HttpGet req = new HttpGet();
+        req.setURI(uri);
+        req.addHeader(ACCEPT_ENCODING_HEADER, GZIP_CONTENT_ENCODING);
+
+        // Make the call
+        HttpResponse response = httpclient.execute(req, httpContext);
+        int responseCode = response.getStatusLine().getStatusCode();
+
+        HttpEntity entity = response.getEntity();
+        is = entity.getContent();
+
+        os = new ByteArrayOutputStream();
+        byte[] buf = new byte[4096];
+        int len;
+        while ((len = is.read(buf)) > 0) {
+            os.write(buf, 0, len);
+        }
+        os.flush();
+        String data = os.toString();
+
+        return data;
+    }
     /*
      * End smap
      */

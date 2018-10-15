@@ -3,6 +3,7 @@ package org.odk.collect.android.tasks;
 
 import android.os.AsyncTask;
 
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.handler.SmapRemoteDataItem;
 import org.odk.collect.android.http.OpenRosaHttpInterface;
 import org.odk.collect.android.listeners.SmapRemoteListener;
@@ -33,6 +34,8 @@ public class SmapRemoteWebServiceTask extends AsyncTask<String, Void, SmapRemote
     @Inject
     WebCredentialsUtils webCredentialsUtils;
 
+    public SmapRemoteWebServiceTask(){
+        Collect.getInstance().getComponent().inject(this);};
     @Override
     protected SmapRemoteDataItem doInBackground(String... params) {
 
@@ -46,10 +49,6 @@ public class SmapRemoteWebServiceTask extends AsyncTask<String, Void, SmapRemote
         } catch (Exception e) {
 
         }
-
-        InputStream is = null;
-        ByteArrayOutputStream os = null;
-        HttpResponse response;
 
         SmapRemoteDataItem item = new SmapRemoteDataItem();
         item.key = params[0];
@@ -66,37 +65,15 @@ public class SmapRemoteWebServiceTask extends AsyncTask<String, Void, SmapRemote
             URL url = new URL(lookupUrl);
             URI uri = url.toURI();
 
-            item.data = httpInterface.get(uri, null, webCredentialsUtils.getCredentials(uri)).getInputStream().toString();
+            item.data = httpInterface.getRequest(uri, null, webCredentialsUtils.getCredentials(uri));
 
         } catch (Exception e) {
             item.data = e.getLocalizedMessage();
-            Timber.e(e.toString());
+            Timber.e(e);
 
         } finally {
 
-            if (os != null) { try {
-                    os.close();
-                } catch (Exception ex) {
-                    // no-op
-                }
-            }
 
-            if (is != null) {
-                try {
-                    // ensure stream is consumed...
-                    final long count = 1024L;
-                    while (is.skip(count) == count) {
-                        // skipping to the end of the http entity
-                    }
-                } catch (Exception ex) {
-                    // no-op
-                }
-                try {
-                    is.close();
-                } catch (Exception ex) {
-                    // no-op
-                }
-            }
         }
 
         return item;
