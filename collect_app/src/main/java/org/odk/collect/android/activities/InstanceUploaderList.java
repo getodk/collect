@@ -375,6 +375,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (resultCode == RESULT_CANCELED) {
+            selectedInstances.clear();
             return;
         }
         switch (requestCode) {
