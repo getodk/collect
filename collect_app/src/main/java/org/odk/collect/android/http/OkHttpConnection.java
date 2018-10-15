@@ -201,29 +201,19 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
 
             MultipartBody multipartBody = multipartBuilder.build();
 
-            try {
-                OkHttpClient client = createOkHttpClient(credentials);
-                Request request = postRequest(uri, multipartBody);
-                Response response = client.newCall(request).execute();
+            OkHttpClient client = createOkHttpClient(credentials);
+            Request request = postRequest(uri, multipartBody);
+            Response response = client.newCall(request).execute();
 
-                messageParser = new ResponseMessageParser(
-                        response.toString(),
-                        response.code(),
-                        response.message());
+            messageParser = new ResponseMessageParser(
+                    response.toString(),
+                    response.code(),
+                    response.message());
 
-                discardEntityBytes(response);
+            discardEntityBytes(response);
 
-                if (response.code() != HttpURLConnection.HTTP_CREATED && response.code() != HttpURLConnection.HTTP_ACCEPTED) {
-                    return messageParser;
-                }
-            } catch (IOException e) {
-                Timber.e(e);
-                String msg = e.getMessage();
-                if (msg == null) {
-                    msg = e.toString();
-                }
-
-                throw new IOException(msg);
+            if (response.code() != HttpURLConnection.HTTP_CREATED && response.code() != HttpURLConnection.HTTP_ACCEPTED) {
+                return messageParser;
             }
         }
 
