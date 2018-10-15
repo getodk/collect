@@ -27,6 +27,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.http.CollectServerClient.Outcome;
 import org.odk.collect.android.http.HttpHeadResult;
+import org.odk.collect.android.http.HttpPostResult;
 import org.odk.collect.android.http.OpenRosaHttpInterface;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.PreferenceKeys;
@@ -38,7 +39,6 @@ import org.odk.collect.android.utilities.ResponseMessageParser;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLDecoder;
@@ -317,27 +317,29 @@ public class InstanceServerUploader extends InstanceUploader {
             return false;
         }
 
-        ResponseMessageParser messageParser;
+        HttpPostResult postResult;
+        ResponseMessageParser messageParser = new ResponseMessageParser();
 
         try {
             URI uri = URI.create(submissionUri.toString());
 
-            messageParser = httpInterface.uploadSubmissionFile(files, submissionFile, uri,
+            postResult = httpInterface.uploadSubmissionFile(files, submissionFile, uri,
                     webCredentialsUtils.getCredentials(uri));
 
-            int responseCode = messageParser.getResponseCode();
+            int responseCode = postResult.getResponseCode();
+            messageParser.setMessageResponse(postResult.getHttpResponse());
 
             if (responseCode != HttpsURLConnection.HTTP_CREATED && responseCode != HttpsURLConnection.HTTP_ACCEPTED) {
                 if (responseCode == HttpsURLConnection.HTTP_OK) {
                     outcome.messagesByInstanceId.put(id, FAIL + "Network login failure? Again?");
                 } else if (responseCode == HttpsURLConnection.HTTP_UNAUTHORIZED) {
-                    outcome.messagesByInstanceId.put(id, FAIL + messageParser.getReasonPhrase() + " (" + responseCode + ") at " + urlString);
+                    outcome.messagesByInstanceId.put(id, FAIL + postResult.getReasonPhrase() + " (" + responseCode + ") at " + urlString);
                 } else {
                     // If response from server is valid use that else use default messaging
                     if (messageParser.isValid()) {
                         outcome.messagesByInstanceId.put(id, FAIL + messageParser.getMessageResponse());
                     } else {
-                        outcome.messagesByInstanceId.put(id, FAIL + messageParser.getReasonPhrase() + " (" + responseCode + ") at " + urlString);
+                        outcome.messagesByInstanceId.put(id, FAIL + postResult.getReasonPhrase() + " (" + responseCode + ") at " + urlString);
                     }
 
                 }
@@ -346,7 +348,7 @@ public class InstanceServerUploader extends InstanceUploader {
                 return true;
             }
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             String msg = e.getMessage();
             if (msg == null) {
                 msg = e.toString();

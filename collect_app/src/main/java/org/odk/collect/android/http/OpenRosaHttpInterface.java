@@ -19,8 +19,6 @@ package org.odk.collect.android.http;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import org.odk.collect.android.utilities.ResponseMessageParser;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -33,8 +31,9 @@ public interface OpenRosaHttpInterface {
      *
      * @param uri of the stream
      * @param contentType check the returned Mime Type to ensure it matches. "text/xml" causes a Hash to be calculated
+     * @param credentials to use for this get request
      * @return HttpGetResult - An object containing the Stream, Hash and Headers
-     * @throws Exception a multitude of Exceptions such as IOException can be thrown
+     * @throws Exception various Exceptions such as IOException can be thrown
      */
     @NonNull
     HttpGetResult executeGetRequest(@NonNull URI uri, @Nullable String contentType, @Nullable HttpCredentialsInterface credentials) throws Exception;
@@ -43,11 +42,23 @@ public interface OpenRosaHttpInterface {
      * Performs a Http Head request.
      *
      * @param uri of which to perform a Http head
+     * @param credentials to use for this head request
      * @return HttpHeadResult containing status code and headers
-     * @throws Exception a multitude of Exceptions such as IOException can be thrown
+     * @throws Exception various Exceptions such as IOException can be thrown
      */
     @NonNull
     HttpHeadResult executeHeadRequest(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws Exception;
+
+    /**
+     * Performs a Http Post Request.
+     *
+     * @param uri of which to post
+     * @param credentials to use on this post request
+     * @return HttpPostResult containing response code and response message
+     * @throws Exception various Exceptions such as IOException can be thrown
+     */
+    @NonNull
+    HttpPostResult executePostRequest(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws Exception;
 
     /**
      * Uploads files to a Server.
@@ -55,13 +66,13 @@ public interface OpenRosaHttpInterface {
      * @param fileList List of Files to be uploaded
      * @param submissionFile The main file to be uploaded (Form file)
      * @param uri where to send the submissionFile and fileList
-     * @return ResponseMessageParser object that contains the response XML
+     * @return HttpPostResult object that contains the response XML
      * @throws IOException can be thrown if files do not exist
      */
     @NonNull
-    ResponseMessageParser uploadSubmissionFile(@NonNull List<File> fileList,
-                                               @NonNull File submissionFile,
-                                               @NonNull URI uri,
-                                               @Nullable HttpCredentialsInterface credentials) throws IOException;
+    HttpPostResult uploadSubmissionFile(@NonNull List<File> fileList,
+                                        @NonNull File submissionFile,
+                                        @NonNull URI uri,
+                                        @Nullable HttpCredentialsInterface credentials) throws Exception;
 
 }

@@ -6,8 +6,8 @@ import android.support.annotation.Nullable;
 import org.odk.collect.android.http.HttpCredentialsInterface;
 import org.odk.collect.android.http.HttpGetResult;
 import org.odk.collect.android.http.HttpHeadResult;
+import org.odk.collect.android.http.HttpPostResult;
 import org.odk.collect.android.http.OpenRosaHttpInterface;
-import org.odk.collect.android.utilities.ResponseMessageParser;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -50,7 +50,7 @@ public class MockHttpClientConnection implements OpenRosaHttpInterface {
 
     @NonNull
     @Override
-    public ResponseMessageParser uploadSubmissionFile(@NonNull List<File> fileList, @NonNull File submissionFile, @NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws IOException {
+    public HttpPostResult uploadSubmissionFile(@NonNull List<File> fileList, @NonNull File submissionFile, @NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws IOException {
         return null;
     }
 }
