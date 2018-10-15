@@ -177,6 +177,8 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
 
         HttpResponse response;
 
+        Timber.i("Debug: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^: " + uri.toString());
+
         response = httpclient.execute(req, httpContext);
         int statusCode = response.getStatusLine().getStatusCode();
 
