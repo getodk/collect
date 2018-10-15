@@ -50,6 +50,15 @@ import static org.odk.collect.android.utilities.PermissionUtils.checkIfLocationP
 
 public class GeoTraceActivity extends CollectAbstractActivity implements IRegisterReceiver {
     public static final String PREF_VALUE_GOOGLE_MAPS = "google_maps";
+    public static final String MAP_CENTER_KEY = "map_center";
+    public static final String MAP_ZOOM_KEY = "map_zoom";
+    public static final String POINTS_KEY = "points";
+    public static final String BEEN_PAUSED_KEY = "been_paused";
+    public static final String MODE_ACTIVE_KEY = "mode_active";
+    public static final String TRACE_MODE_KEY = "trace_mode";
+    public static final String PLAY_CHECK_KEY = "play_check";
+    public static final String TIME_DELAY_KEY = "time_delay";
+    public static final String TIME_UNITS_KEY = "time_units";
 
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture schedulerHandler;
@@ -57,7 +66,7 @@ public class GeoTraceActivity extends CollectAbstractActivity implements IRegist
     private MapFragment map;
     private MapHelper helper;
     private int featureId = -1;  // will be a positive featureId once map is ready
-    private String originalValue = "";
+    private String originalTraceString = "";
 
     private ImageButton zoomButton;
     private ImageButton playButton;
@@ -73,7 +82,7 @@ public class GeoTraceActivity extends CollectAbstractActivity implements IRegist
 
     private boolean beenPaused;
     private boolean modeActive;
-    private Integer traceMode = 1; // 0 manual, 1 is automatic
+    private Integer traceMode = 0; // 0 manual, 1 is automatic
     private boolean playCheck;
     private Spinner timeUnits;
     private Spinner timeDelay;
@@ -83,8 +92,26 @@ public class GeoTraceActivity extends CollectAbstractActivity implements IRegist
     private Button zoomPointButton;
     private Button zoomLocationButton;
 
+    // restored from savedInstanceState
+    private MapPoint restoredMapCenter;
+    private Double restoredMapZoom;
+    private List<MapPoint> restoredPoints;
+    private int restoredTimeDelayIndex = 3;
+    private int restoredTimeUnitsIndex;
+
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            restoredMapCenter = savedInstanceState.getParcelable(MAP_CENTER_KEY);
+            restoredMapZoom = savedInstanceState.getDouble(MAP_ZOOM_KEY);
+            restoredPoints = savedInstanceState.getParcelableArrayList(POINTS_KEY);
+            beenPaused = savedInstanceState.getBoolean(BEEN_PAUSED_KEY, false);
+            modeActive = savedInstanceState.getBoolean(MODE_ACTIVE_KEY, false);
+            traceMode = savedInstanceState.getInt(TRACE_MODE_KEY, 0);
+            playCheck = savedInstanceState.getBoolean(PLAY_CHECK_KEY, false);
+            restoredTimeDelayIndex = savedInstanceState.getInt(TIME_DELAY_KEY, 3);
+            restoredTimeUnitsIndex = savedInstanceState.getInt(TIME_UNITS_KEY, 0);
+        }
 
         if (!checkIfLocationPermissionsGranted(this)) {
             finish();
@@ -94,6 +121,11 @@ public class GeoTraceActivity extends CollectAbstractActivity implements IRegist
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setTitle(getString(R.string.geotrace_title));
         setContentView(R.layout.geotrace_layout);
+        if (savedInstanceState == null) {
+            // UI initialization that should only occur on start, not on restore
+            playButton = findViewById(R.id.play);
+            playButton.setEnabled(false);
+        }
         createMapFragment().addTo(this, R.id.map_container, this::initMap);
     }
 
@@ -113,6 +145,19 @@ public class GeoTraceActivity extends CollectAbstractActivity implements IRegist
     @Override protected void onStop() {
         map.setGpsLocationEnabled(false);
         super.onStop();
+    }
+
+    @Override protected void onSaveInstanceState(Bundle state) {
+        super.onSaveInstanceState(state);
+        state.putParcelable(MAP_CENTER_KEY, map.getCenter());
+        state.putDouble(MAP_ZOOM_KEY, map.getZoom());
+        state.putParcelableArrayList(POINTS_KEY, new ArrayList<>(map.getPointsOfPoly(featureId)));
+        state.putBoolean(BEEN_PAUSED_KEY, beenPaused);
+        state.putBoolean(MODE_ACTIVE_KEY, modeActive);
+        state.putInt(TRACE_MODE_KEY, traceMode);
+        state.putBoolean(PLAY_CHECK_KEY, playCheck);
+        state.putInt(TIME_DELAY_KEY, timeDelay.getSelectedItemPosition());
+        state.putInt(TIME_UNITS_KEY, timeUnits.getSelectedItemPosition());
     }
 
     @Override protected void onDestroy() {
@@ -139,10 +184,14 @@ public class GeoTraceActivity extends CollectAbstractActivity implements IRegist
         helper.setBasemap();
 
         traceSettingsView = getLayoutInflater().inflate(R.layout.geotrace_dialog, null);
-        polygonOrPolylineView = getLayoutInflater().inflate(R.layout.polygon_polyline_dialog, null);
+        RadioGroup group = traceSettingsView.findViewById(R.id.radio_group);
+        group.check(group.getChildAt(traceMode).getId());
         timeDelay = traceSettingsView.findViewById(R.id.trace_delay);
-        timeDelay.setSelection(3);
+        timeDelay.setSelection(restoredTimeDelayIndex);
         timeUnits = traceSettingsView.findViewById(R.id.trace_scale);
+        timeUnits.setSelection(restoredTimeUnitsIndex);
+
+        polygonOrPolylineView = getLayoutInflater().inflate(R.layout.polygon_polyline_dialog, null);
 
         clearButton = findViewById(R.id.clear);
         clearButton.setOnClickListener(v -> showClearDialog());
@@ -174,7 +223,6 @@ public class GeoTraceActivity extends CollectAbstractActivity implements IRegist
         });
 
         playButton = findViewById(R.id.play);
-        playButton.setEnabled(false);
         playButton.setOnClickListener(v -> {
             if (!playCheck) {
                 if (!beenPaused) {
@@ -238,16 +286,25 @@ public class GeoTraceActivity extends CollectAbstractActivity implements IRegist
         List<MapPoint> points = new ArrayList<>();
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra(GeoTraceWidget.TRACE_LOCATION)) {
-            originalValue = intent.getStringExtra(GeoTraceWidget.TRACE_LOCATION);
-            points = parsePoints(originalValue);
+            originalTraceString = intent.getStringExtra(GeoTraceWidget.TRACE_LOCATION);
+            points = parsePoints(originalTraceString);
+        }
+        if (restoredPoints != null) {
+            points = restoredPoints;
         }
         featureId = map.addDraggablePoly(points, false);
         zoomButton.setEnabled(!points.isEmpty());
         clearButton.setEnabled(!points.isEmpty());
 
+        if (modeActive) {
+            startGeoTrace();
+        }
+
         map.setGpsLocationEnabled(true);
         map.setGpsLocationListener(this::onGpsLocation);
-        if (!points.isEmpty()) {
+        if (restoredMapCenter != null && restoredMapZoom != null) {
+            map.zoomToPoint(restoredMapCenter, restoredMapZoom);
+        } else if (!points.isEmpty()) {
             map.zoomToBoundingBox(points, 0.6);
         } else {
             map.runOnGpsLocationReady(this::onGpsLocationReady);
@@ -294,13 +351,11 @@ public class GeoTraceActivity extends CollectAbstractActivity implements IRegist
      */
     private String formatPoints(List<MapPoint> points) {
         String result = "";
-        if (points.size() > 1) {
-            for (MapPoint point : points) {
-                // TODO(ping): Remove excess precision when we're ready for the output to change.
-                result += String.format(Locale.US, "%s %s %s %s;",
-                    Double.toString(point.lat), Double.toString(point.lon),
-                    Double.toString(point.alt), Float.toString((float) point.sd));
-            }
+        for (MapPoint point : points) {
+            // TODO(ping): Remove excess precision when we're ready for the output to change.
+            result += String.format(Locale.US, "%s %s %s %s;",
+                Double.toString(point.lat), Double.toString(point.lon),
+                Double.toString(point.alt), Float.toString((float) point.sd));
         }
         return result.trim();
     }

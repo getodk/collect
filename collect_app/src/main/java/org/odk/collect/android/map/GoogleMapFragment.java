@@ -146,7 +146,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
             return;
         }
         if (center != null) {
-            map.animateCamera(CameraUpdateFactory.newLatLngZoom(toLatLng(center), (float) zoom));
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(toLatLng(center), (float) zoom));
         }
     }
 
@@ -168,7 +168,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
             } else if (count > 1) {
                 final LatLngBounds bounds = expandBounds(builder.build(), 1 / scaleFactor);
                 new Handler().postDelayed(() -> {
-                    map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));
+                    map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));
                 }, 100);
             }
         }
