@@ -786,10 +786,12 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
     }
 
     @Override
-    public @NonNull HttpGetResult SubmitFileForResponse(@NonNull String fileName,
+    public @NonNull String SubmitFileForResponse(@NonNull String fileName,
                                                         @NonNull File file,
                                                         @NonNull URI uri,
                                                         @Nullable HttpCredentialsInterface credentials) throws IOException {
+        InputStream is;
+        ByteArrayOutputStream os;
         ResponseMessageParser messageParser = null;
 
         addCredentialsForHost(uri, credentials);
@@ -824,46 +826,28 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
         Timber.i("Issuing POST request to: %s", uri.toString());
         HttpResponse response = httpclient.execute(httppost, httpContext);
         int responseCode = response.getStatusLine().getStatusCode();
-        HttpEntity httpEntity = response.getEntity();
-        InputStream downloadStream = httpEntity.getContent();
-        Timber.i("Response code:%d", responseCode);
-
-        messageParser = new ResponseMessageParser(
-                EntityUtils.toString(httpEntity),
-                responseCode,
-                response.getStatusLine().getReasonPhrase());
-
-        discardEntityBytes(response);
 
         if (responseCode == HttpStatus.SC_UNAUTHORIZED) {
             clearCookieStore();
         }
 
         if (responseCode != HttpStatus.SC_OK) {
-            try {
-                throw new Exception(messageParser.getReasonPhrase());
-            } catch (Exception e) {
-
-            }
+            return messageParser.getReasonPhrase();
         }
 
-        String hash = "";
+        HttpEntity entity = response.getEntity();
+        is = entity.getContent();
 
-        if (HTTP_CONTENT_TYPE_TEXT_XML.equals(contentType)) {
-            byte[] bytes = IOUtils.toByteArray(downloadStream);
-            downloadStream = new ByteArrayInputStream(bytes);
-            hash = FileUtils.getMd5Hash(new ByteArrayInputStream(bytes));
+        os = new ByteArrayOutputStream();
+        byte[] buf = new byte[4096];
+        int len;
+        while ((len = is.read(buf)) > 0) {
+            os.write(buf, 0, len);
         }
+        os.flush();
+        String data = os.toString();
 
-        Map<String, String> responseHeaders = new HashMap<>();
-        Header[] fields = response.getAllHeaders();
-        if (fields != null && fields.length >= 1) {
-            for (Header h : fields) {
-                responseHeaders.put(h.getName(), h.getValue());
-            }
-        }
-
-        return new HttpGetResult(downloadStream, responseHeaders, hash, responseCode);
+        return data;
     }
 
     @Override
@@ -892,6 +876,14 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
         // Make the call
         HttpResponse response = httpclient.execute(req, httpContext);
         int responseCode = response.getStatusLine().getStatusCode();
+
+        if (responseCode == HttpStatus.SC_UNAUTHORIZED) {
+            clearCookieStore();
+        }
+
+        if (responseCode != HttpStatus.SC_OK) {
+            return messageParser.getReasonPhrase();
+        }
 
         HttpEntity entity = response.getEntity();
         is = entity.getContent();

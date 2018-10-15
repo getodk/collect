@@ -93,7 +93,7 @@ public interface OpenRosaHttpInterface {
      * @throws IOException can be thrown if files do not exist
      */
     @NonNull
-    HttpGetResult SubmitFileForResponse(@NonNull String fileName,
+    String SubmitFileForResponse(@NonNull String fileName,
                                             @NonNull File file,
                                             @NonNull URI uri,
                                             @Nullable HttpCredentialsInterface credentials

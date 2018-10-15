@@ -35,6 +35,8 @@ public class SmapRemoteWebServicePostTask extends AsyncTask<String, Void, SmapRe
     @Inject
     WebCredentialsUtils webCredentialsUtils;
 
+    public SmapRemoteWebServicePostTask() {Collect.getInstance().getComponent().inject(this);}
+
     @Override
     protected SmapRemoteDataItem doInBackground(String... params) {
 
@@ -48,10 +50,6 @@ public class SmapRemoteWebServicePostTask extends AsyncTask<String, Void, SmapRe
         } catch (Exception e) {
 
         }
-
-        InputStream is = null;
-        ByteArrayOutputStream os = null;
-        HttpResponse response;
 
         SmapRemoteDataItem item = new SmapRemoteDataItem();
         item.key = params[0];
@@ -71,7 +69,7 @@ public class SmapRemoteWebServicePostTask extends AsyncTask<String, Void, SmapRe
                 URL url = new URL(lookupUrl);
                 URI uri = url.toURI();
 
-                item.data = httpInterface.SubmitFileForResponse(fileName, file, uri, webCredentialsUtils.getCredentials(uri)).toString();
+                item.data = httpInterface.SubmitFileForResponse(fileName, file, uri, webCredentialsUtils.getCredentials(uri));
 
             } else {
                 item.data = "";
@@ -81,31 +79,6 @@ public class SmapRemoteWebServicePostTask extends AsyncTask<String, Void, SmapRe
             item.data = e.getLocalizedMessage();
             Timber.e(e.toString());
 
-        } finally {
-
-            if (os != null) { try {
-                    os.close();
-                } catch (Exception ex) {
-                    // no-op
-                }
-            }
-
-            if (is != null) {
-                try {
-                    // ensure stream is consumed...
-                    final long count = 1024L;
-                    while (is.skip(count) == count) {
-                        // skipping to the end of the http entity
-                    }
-                } catch (Exception ex) {
-                    // no-op
-                }
-                try {
-                    is.close();
-                } catch (Exception ex) {
-                    // no-op
-                }
-            }
         }
 
         return item;

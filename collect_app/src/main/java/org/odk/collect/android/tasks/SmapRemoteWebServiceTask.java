@@ -36,6 +36,7 @@ public class SmapRemoteWebServiceTask extends AsyncTask<String, Void, SmapRemote
 
     public SmapRemoteWebServiceTask(){
         Collect.getInstance().getComponent().inject(this);};
+
     @Override
     protected SmapRemoteDataItem doInBackground(String... params) {
 
