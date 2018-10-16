@@ -44,8 +44,8 @@ import static org.odk.collect.android.utilities.DialogUtils.showDialog;
 import static org.odk.collect.android.utilities.PermissionUtils.requestGetAccountsPermission;
 
 public class GoogleAccountsManager {
-
     public static final int REQUEST_ACCOUNT_PICKER = 1000;
+    public static final int REQUEST_AUTHORIZATION = 1001;
 
     @Nullable
     private Fragment fragment;
