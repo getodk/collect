@@ -185,20 +185,14 @@ public class FileUtils {
      * @return scaled bitmap
      */
     public static Bitmap getBitmapScaledToDisplay(File file, int screenHeight, int screenWidth, boolean upscaleEnabled) {
-        // Determine image size of file
+        // Load the image
         BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        getBitmap(file.getAbsolutePath(), options);
-        // Load full size bitmap image
-        options = new BitmapFactory.Options();
         options.inInputShareable = true;
         options.inPurgeable = true;
-        Bitmap bitmap;
-        bitmap = getBitmap(file.getAbsolutePath(), options);
+        Bitmap bitmap = getBitmap(file.getAbsolutePath(), options);
         double heightScale = ((double) (options.outHeight)) / screenHeight;
         double widthScale = ((double) options.outWidth) / screenWidth;
-        double scale;
-        scale = Math.max(widthScale, heightScale);
+        double scale = Math.max(widthScale, heightScale);
 
         if (!upscaleEnabled && scale < 1) {
             scale = 1;
