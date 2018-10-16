@@ -443,9 +443,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             saveToDiskTask = (SaveToDiskTask) data;
         } else if (data == null) {
             if (!newForm) {
-                if (getFormController(true) != null) {
-                    refreshCurrentView();
-                } else {
+                if (getFormController(true) == null) {
                     Timber.w("Reloading form and restoring state.");
                     formLoaderTask = new FormLoaderTask(instancePath, startingXPath, waitingXPath);
                     showFormLoadingDialogFragment();
