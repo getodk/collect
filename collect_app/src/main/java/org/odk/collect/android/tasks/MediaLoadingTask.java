@@ -98,5 +98,6 @@ public class MediaLoadingTask extends AsyncTask<Uri, Void, File> {
 
         formEntryActivity.get().saveAnswersForCurrentScreen(FormEntryActivity.DO_NOT_EVALUATE_CONSTRAINTS);
         formEntryActivity.get().refreshCurrentView();
+        formEntryActivity.get().isSavingMedia = false;
     }
 }

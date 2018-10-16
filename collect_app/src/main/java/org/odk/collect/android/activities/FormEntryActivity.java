@@ -230,6 +230,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     private static final int SAVING_DIALOG = 2;
 
+    public boolean isSavingMedia;
+
     private boolean autoSaved;
     private boolean allowMovingBackwards;
 
@@ -729,7 +731,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     getCurrentViewIfODKView().setBinaryData(sb);
                 }
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                refreshCurrentView();
                 return;
             }
         }
@@ -838,6 +839,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 ProgressDialogFragment.newInstance(getString(R.string.please_wait))
                         .show(getSupportFragmentManager(), ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
 
+                isSavingMedia = true;
                 mediaLoadingFragment.beginMediaLoadingTask(intent.getData());
 
                 break;
@@ -916,9 +918,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 // We may have jumped to a new index in hierarchy activity, so
                 // refresh
                 break;
-
         }
-        refreshCurrentView();
+
+        // Now, onResume() gets called and calls refreshCurrentView() to reload the current widget.
+        // But if media is being loaded on a background thread,
+        // then the refresh will be postponed until the media fully loads
     }
 
     public QuestionWidget getWidgetWaitingForBinaryData() {
@@ -2190,7 +2194,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 startActivity(new Intent(this, MainMenuActivity.class));
                 finish();
                 return;
-            } else {
+            } else if (!isSavingMedia) {
                 refreshCurrentView();
             }
         }
