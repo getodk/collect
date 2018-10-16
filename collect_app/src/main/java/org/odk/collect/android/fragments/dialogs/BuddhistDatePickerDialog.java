@@ -62,7 +62,7 @@ public class BuddhistDatePickerDialog extends CustomDatePickerDialog {
                 .toDateTime()
                 .withChronology(BuddhistChronology.getInstance())
                 .toLocalDateTime();
-        setUpDayPicker(buddhistDate.getDayOfMonth(), buddhistDate.monthOfYear().getMaximumValue());
+        setUpDayPicker(buddhistDate.getDayOfMonth(), buddhistDate.dayOfMonth().getMaximumValue());
         setUpMonthPicker(buddhistDate.getMonthOfYear(), monthsArray);
         setUpYearPicker(buddhistDate.getYear(), MIN_SUPPORTED_YEAR, MAX_SUPPORTED_YEAR);
     }
