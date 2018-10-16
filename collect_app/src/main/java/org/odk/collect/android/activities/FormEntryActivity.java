@@ -24,7 +24,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore.Images;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -61,6 +60,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import org.apache.commons.io.IOUtils;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
@@ -79,10 +79,9 @@ import org.odk.collect.android.dao.helpers.FormsDaoHelper;
 import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
 import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
 import org.odk.collect.android.events.RxEventBus;
-import org.odk.collect.android.exception.GDriveConnectionException;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataManager;
-import org.odk.collect.android.fragments.ImageLoadingFragment;
+import org.odk.collect.android.fragments.MediaLoadingFragment;
 import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
@@ -125,6 +124,10 @@ import org.odk.collect.android.widgets.RangeWidget;
 import org.odk.collect.android.widgets.StringWidget;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -186,7 +189,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     public static final String KEY_ERROR = "error";
     private static final String KEY_SAVE_NAME = "saveName";
 
-    private static final String TAG_IMAGE_LOADING_FRAGMENT = "image_loading_fragment";
+    private static final String TAG_MEDIA_LOADING_FRAGMENT = "media_loading_fragment";
 
     // Identifies the gp of the form used to launch form entry
     public static final String KEY_FORMPATH = "formpath";
@@ -256,7 +259,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
-    ImageLoadingFragment imageLoadingFragment;
+    MediaLoadingFragment mediaLoadingFragment;
 
     public void allowSwiping(boolean doSwipe) {
         this.doSwipe = doSwipe;
@@ -320,10 +323,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         });
 
         if (savedInstanceState == null) {
-            imageLoadingFragment = new ImageLoadingFragment();
-            getFragmentManager().beginTransaction().add(imageLoadingFragment, TAG_IMAGE_LOADING_FRAGMENT).commit();
+            mediaLoadingFragment = new MediaLoadingFragment();
+            getFragmentManager().beginTransaction().add(mediaLoadingFragment, TAG_MEDIA_LOADING_FRAGMENT).commit();
         } else {
-            imageLoadingFragment = (ImageLoadingFragment) getFragmentManager().findFragmentByTag(TAG_IMAGE_LOADING_FRAGMENT);
+            mediaLoadingFragment = (MediaLoadingFragment) getFragmentManager().findFragmentByTag(TAG_MEDIA_LOADING_FRAGMENT);
         }
 
         requestStoragePermissions(this, new PermissionListener() {
@@ -769,6 +772,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 }
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
+            case RequestCodes.ARBITRARY_FILE_CHOOSER:
+            case RequestCodes.AUDIO_CHOOSER:
+            case RequestCodes.VIDEO_CHOOSER:
             case RequestCodes.IMAGE_CHOOSER:
                 /*
                  * We have a saved image somewhere, but we really want it to be in:
@@ -781,12 +787,41 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 ProgressDialogFragment.newInstance(getString(R.string.please_wait))
                         .show(getSupportFragmentManager(), ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
 
-                imageLoadingFragment.beginImageLoadingTask(intent.getData());
+                mediaLoadingFragment.beginMediaLoadingTask(intent.getData());
 
                 break;
             case RequestCodes.AUDIO_CAPTURE:
-            case RequestCodes.VIDEO_CAPTURE:
+                /*
+                  Probably this approach should be used in all cases to get a file from an uri.
+                  The approach which was used before and which is still used in other places
+                  might be faulty because sometimes _data column might be not provided in an uri.
+                  e.g. https://github.com/opendatakit/collect/issues/705
+                  Let's test it here and then we can use the same code in other places if it works well.
+                 */
                 Uri mediaUri = intent.getData();
+                if (mediaUri != null) {
+                    String filePath =
+                            formController.getInstanceFile().getParent()
+                                    + File.separator
+                                    + System.currentTimeMillis()
+                                    + "."
+                                    + ContentResolverHelper.getFileExtensionFromUri(mediaUri);
+                    try {
+                        InputStream inputStream = getContentResolver().openInputStream(mediaUri);
+                        if (inputStream != null) {
+                            OutputStream outputStream = new FileOutputStream(new File(filePath));
+                            IOUtils.copy(inputStream, outputStream);
+                            inputStream.close();
+                            outputStream.close();
+                            saveFileAnswer(new File(filePath));
+                        }
+                    } catch (IOException e) {
+                        Timber.e(e);
+                    }
+                }
+                break;
+            case RequestCodes.VIDEO_CAPTURE:
+                mediaUri = intent.getData();
                 saveFileAnswer(mediaUri);
                 String filePath = MediaUtils.getDataColumn(this, mediaUri, null, null);
                 if (filePath != null) {
@@ -797,25 +832,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 } catch (Exception e) {
                     Timber.e(e);
                 }
-                break;
-
-            case RequestCodes.ARBITRARY_FILE_CHOOSER:
-                // Same with VIDEO_CHOOSER.
-            case RequestCodes.AUDIO_CHOOSER:
-                // Same with VIDEO_CHOOSER.
-            case RequestCodes.VIDEO_CHOOSER:
-                /*
-                 * Start a task to save the chosen file/audio/video with a new Thread,
-                 * This could support retrieving file from Google Drive.
-                 * */
-                showDialog(SAVING_DIALOG);
-                Runnable saveFileRunnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        saveChosenFile(intent.getData());
-                    }
-                };
-                new Thread(saveFileRunnable).start();
                 break;
             case RequestCodes.LOCATION_CAPTURE:
                 String sl = intent.getStringExtra(LOCATION_RESULT);
@@ -854,58 +870,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         refreshCurrentView();
     }
 
-    /**
-     * Save a copy of the chosen media in Collect's own path such as
-     * "/storage/emulated/0/odk/instances/{form name}/filename",
-     * and if it's from Google Drive and not cached yet, we'll retrieve it using network.
-     * This may take a long time.
-     *
-     * @param selectedFile uri of the selected audio
-     */
-    private void saveChosenFile(Uri selectedFile) {
-        String extension = ContentResolverHelper.getFileExtensionFromUri(selectedFile);
-
-        String instanceFolder = Collect.getInstance().getFormController()
-                .getInstanceFile().getParent();
-        String destPath = instanceFolder + File.separator
-                + System.currentTimeMillis() + extension;
-
-        File chosenFile;
-        try {
-            chosenFile = MediaUtils.getFileFromUri(this, selectedFile, Images.Media.DATA);
-            if (chosenFile != null) {
-                final File newFile = new File(destPath);
-                FileUtils.copyFile(chosenFile, newFile);
-                runOnUiThread(() -> {
-                    dismissDialog(SAVING_DIALOG);
-                    if (getCurrentViewIfODKView() != null) {
-                        getCurrentViewIfODKView().setBinaryData(newFile);
-                    }
-                    saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                    refreshCurrentView();
-                });
-            } else {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        dismissDialog(SAVING_DIALOG);
-                        Timber.e("Could not receive chosen file");
-                        ToastUtils.showShortToastInMiddle(R.string.error_occured);
-                    }
-                });
-            }
-        } catch (GDriveConnectionException e) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    dismissDialog(SAVING_DIALOG);
-                    Timber.e("Could not receive chosen file due to connection problem");
-                    ToastUtils.showLongToastInMiddle(R.string.gdrive_connection_exception);
-                }
-            });
-        }
-    }
-
     public QuestionWidget getWidgetWaitingForBinaryData() {
         QuestionWidget questionWidget = null;
         ODKView odkView = (ODKView) currentView;
@@ -922,7 +886,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         return questionWidget;
     }
 
-    private void saveFileAnswer(Uri media) {
+    private void saveFileAnswer(Object media) {
         // For audio/video capture/chooser, we get the URI from the content
         // provider
         // then the widget copies the file and makes a new entry in the
