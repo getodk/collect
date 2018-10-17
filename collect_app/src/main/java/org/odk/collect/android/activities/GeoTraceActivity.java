@@ -19,6 +19,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.VisibleForTesting;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -41,6 +42,8 @@ import org.osmdroid.tileprovider.IRegisterReceiver;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -59,9 +62,12 @@ public class GeoTraceActivity extends CollectAbstractActivity implements IRegist
     public static final String PLAY_CHECK_KEY = "play_check";
     public static final String TIME_DELAY_KEY = "time_delay";
     public static final String TIME_UNITS_KEY = "time_units";
+    public static final String TIME_REMAINING="time_remaining";
 
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture schedulerHandler;
+    private long timeRemaining=0;
+    private Timer timer;
 
     private MapFragment map;
     private MapHelper helper;
@@ -111,13 +117,14 @@ public class GeoTraceActivity extends CollectAbstractActivity implements IRegist
             playCheck = savedInstanceState.getBoolean(PLAY_CHECK_KEY, false);
             restoredTimeDelayIndex = savedInstanceState.getInt(TIME_DELAY_KEY, 3);
             restoredTimeUnitsIndex = savedInstanceState.getInt(TIME_UNITS_KEY, 0);
+            timeRemaining = savedInstanceState.getLong(TIME_REMAINING);
+
         }
 
         if (!checkIfLocationPermissionsGranted(this)) {
             finish();
             return;
         }
-
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setTitle(getString(R.string.geotrace_title));
         setContentView(R.layout.geotrace_layout);
@@ -158,11 +165,16 @@ public class GeoTraceActivity extends CollectAbstractActivity implements IRegist
         state.putBoolean(PLAY_CHECK_KEY, playCheck);
         state.putInt(TIME_DELAY_KEY, timeDelay.getSelectedItemPosition());
         state.putInt(TIME_UNITS_KEY, timeUnits.getSelectedItemPosition());
-    }
+        timeRemaining=schedulerHandler.getDelay(TimeUnit.SECONDS);
+        state.putLong(TIME_REMAINING,timeRemaining)
+;    }
 
     @Override protected void onDestroy() {
         if (schedulerHandler != null && !schedulerHandler.isCancelled()) {
             schedulerHandler.cancel(true);
+        }
+        if(timer != null){
+            timer.cancel();
         }
         super.onDestroy();
     }
@@ -473,8 +485,18 @@ public class GeoTraceActivity extends CollectAbstractActivity implements IRegist
     }
 
     public void setGeoTraceScheduler(long delay, TimeUnit units) {
-        schedulerHandler = scheduler.scheduleAtFixedRate(
-            () -> runOnUiThread(() -> addVertex()), delay, delay, units);
+        if(timeRemaining!=0){
+            schedulerHandler = scheduler.schedule(
+                    () -> runOnUiThread(() -> addVertex()),timeRemaining,units);
+        }
+        timer=new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                schedulerHandler = scheduler.scheduleAtFixedRate(
+                        () -> runOnUiThread(() -> addVertex()), delay, delay, units);
+            }
+        }, timeRemaining*1000);
     }
 
     @SuppressWarnings("unused")  // the "map" parameter is intentionally unused
