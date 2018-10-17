@@ -241,7 +241,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
 
         @Override
         public void clickImage(String context) {
-            if (Collect.allowClick()) {
+            if (Collect.allowClick(this.getClass().getSimpleName())) {
                 launchDrawActivity();
             }
         }

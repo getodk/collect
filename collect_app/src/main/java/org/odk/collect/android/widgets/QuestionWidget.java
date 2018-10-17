@@ -528,7 +528,7 @@ public abstract class QuestionWidget
             button.setLayoutParams(params);
 
             button.setOnClickListener(v -> {
-                if (Collect.allowClick()) {
+                if (Collect.allowClick(this.getClass().getSimpleName())) {
                     ((ButtonWidget) this).onButtonClick(withId);
                 }
             });
