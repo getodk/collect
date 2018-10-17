@@ -297,7 +297,7 @@ public class Camera2VideoFragment extends Fragment
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.texture) {
-            if (Collect.allowClick()) { // avoid multiple quick taps that may cause various problems
+            if (Collect.allowClick(this.getClass().getSimpleName())) { // avoid multiple quick taps that may cause various problems
                 if (isRecordingVideo) {
                     textureView.setClickable(false);
                     stopRecordingVideo();

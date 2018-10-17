@@ -94,6 +94,7 @@ public class Collect extends Application implements HasActivityInjector {
     public static String defaultSysLanguage;
     private static Collect singleton;
     private static long lastClickTime;
+    private static String lastClickName;
 
     @Nullable
     private FormController formController;
@@ -319,13 +320,16 @@ public class Collect extends Application implements HasActivityInjector {
         AdminSharedPreferences.getInstance().reloadPreferences();
     }
 
-    // Preventing multiple clicks, using threshold of 1000 ms
-    public static boolean allowClick() {
+    // Debounce multiple clicks within the same activity
+    public static boolean allowClick(String activityName) {
         long elapsedRealtime = SystemClock.elapsedRealtime();
-        boolean allowClick = (lastClickTime == 0 || lastClickTime == elapsedRealtime) // just for tests
-                || elapsedRealtime - lastClickTime > 1000;
+        boolean isSameActivity = activityName.equals(lastClickName);
+        boolean isBeyondThreshold = elapsedRealtime - lastClickTime > 1000;
+        boolean isBeyondTestThreshold = lastClickTime == 0 || lastClickTime == elapsedRealtime; // just for tests
+        boolean allowClick = !isSameActivity || isBeyondThreshold || isBeyondTestThreshold;
         if (allowClick) {
             lastClickTime = elapsedRealtime;
+            lastClickName = activityName;
         }
         return allowClick;
     }

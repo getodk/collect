@@ -74,7 +74,7 @@ public class CaptureSelfieVideoActivity extends Activity {
         this.camPreview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Collect.allowClick()) {
+                if (Collect.allowClick(this.getClass().getSimpleName())) {
                     if (!recording) {
                         // initialize video camera
                         if (prepareVideoRecorder()) {
