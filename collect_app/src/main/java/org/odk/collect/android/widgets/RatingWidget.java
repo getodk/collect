@@ -46,16 +46,12 @@ public class RatingWidget extends QuestionWidget {
             imageButton.setBackground(null);
             imageButton.setOnClickListener(view -> {
                 int position = view.getId();
-                for (int i = 0; i <= position; i++) {
+                for (int i = 0; i < numberOfStarsToShow; i++) {
                     ImageButton button = (ImageButton) gridLayout.getChildAt(i);
-                    button.setImageResource(R.drawable.ic_star);
-                    answer = position + 1;
+                    button.setImageResource(i <= position ? R.drawable.ic_star : R.drawable.ic_star_border);
                 }
+                answer = position + 1;
 
-                for (int i = position + 1; i < numberOfStarsToShow; i++) {
-                    ImageButton button = (ImageButton) gridLayout.getChildAt(i);
-                    button.setImageResource(R.drawable.ic_star_border);
-                }
             });
             gridLayout.addView(imageButton);
         }
