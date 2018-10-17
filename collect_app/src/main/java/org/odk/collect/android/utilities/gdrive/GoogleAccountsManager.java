@@ -37,6 +37,7 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.preferences.ServerPreferencesFragment;
 import org.odk.collect.android.utilities.ThemeUtils;
+import org.odk.collect.android.utilities.ToastUtils;
 
 import java.util.Collections;
 
@@ -132,6 +133,7 @@ public class GoogleAccountsManager {
 
                 @Override
                 public void denied() {
+                    activity.finish();
                 }
             });
         }
