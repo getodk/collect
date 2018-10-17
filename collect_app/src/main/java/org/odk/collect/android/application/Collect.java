@@ -91,6 +91,8 @@ public class Collect extends Application implements HasActivityInjector {
     public static final String OFFLINE_LAYERS = ODK_ROOT + File.separator + "layers";
     public static final String SETTINGS = ODK_ROOT + File.separator + "settings";
 
+    public static final int CLICK_DEBOUNCE_MS = 1000;
+
     public static String defaultSysLanguage;
     private static Collect singleton;
     private static long lastClickTime;
@@ -324,7 +326,7 @@ public class Collect extends Application implements HasActivityInjector {
     public static boolean allowClick(String activityName) {
         long elapsedRealtime = SystemClock.elapsedRealtime();
         boolean isSameActivity = activityName.equals(lastClickName);
-        boolean isBeyondThreshold = elapsedRealtime - lastClickTime > 1000;
+        boolean isBeyondThreshold = elapsedRealtime - lastClickTime > CLICK_DEBOUNCE_MS;
         boolean isBeyondTestThreshold = lastClickTime == 0 || lastClickTime == elapsedRealtime; // just for tests
         boolean allowClick = !isSameActivity || isBeyondThreshold || isBeyondTestThreshold;
         if (allowClick) {
