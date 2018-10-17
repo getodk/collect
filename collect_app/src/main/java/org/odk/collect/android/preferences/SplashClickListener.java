@@ -17,7 +17,7 @@ class SplashClickListener implements Preference.OnPreferenceClickListener {
     }
 
     private void launchImageChooser() {
-        Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+        Intent i = new Intent(Intent.ACTION_PICK);
         i.setType("image/*");
         preferencesFragment.startActivityForResult(i, UserInterfacePreferences.IMAGE_CHOOSER);
     }
