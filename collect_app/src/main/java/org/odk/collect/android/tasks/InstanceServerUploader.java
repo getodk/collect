@@ -19,6 +19,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 
 import com.google.android.gms.analytics.HitBuilders;
 
@@ -70,6 +71,8 @@ public class InstanceServerUploader extends InstanceUploader {
     @Inject
     WebCredentialsUtils webCredentialsUtils;
 
+    // Custom submission URL, username and password that can be sent via intent extras by external
+    // applications
     private String completeDestinationUrl;
     private String customUsername;
     private String customPassword;
@@ -136,16 +139,7 @@ public class InstanceServerUploader extends InstanceUploader {
                             c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
                     String id = c.getString(c.getColumnIndex(InstanceColumns._ID));
                     Uri toUpdate = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, id);
-
-                    /*
-                     Submission url precedence/priority:
-                      * Intent submission url
-                      * Form submission URL
-                      * The configured URL in the app settings
-                    */
-                    int subIdx = c.getColumnIndex(InstanceColumns.SUBMISSION_URI);
-                    String urlString = completeDestinationUrl != null ? completeDestinationUrl : c.isNull(subIdx)
-                            ? getServerSubmissionURL() : c.getString(subIdx).trim();
+                    String urlString = getURLToSubmitTo(c, completeDestinationUrl);
 
                     // add the deviceID to the request...
                     try {
@@ -167,6 +161,27 @@ public class InstanceServerUploader extends InstanceUploader {
         }
 
         return true;
+    }
+
+    /**
+     * Returns the URL this instance should be submitted to with appended deviceId.
+     *
+     * If the upload was triggered by an external app and specified an override URL, use that one.
+     * Otherwise, use the submission URL configured in the form
+     * (https://opendatakit.github.io/xforms-spec/#submission-attributes). Finally, default to the
+     * URL configured at the app level.
+     */
+    @NonNull
+    private String getURLToSubmitTo(Cursor currentInstance, String overrideURL) {
+        int formSubmissionURLColumn = currentInstance.getColumnIndex(InstanceColumns.SUBMISSION_URI);
+
+        if (overrideURL != null) {
+            return overrideURL;
+        } else if (!currentInstance.isNull(formSubmissionURLColumn)) {
+            return currentInstance.getString(formSubmissionURLColumn).trim();
+        } else {
+            return getServerSubmissionURL();
+        }
     }
 
     /**
