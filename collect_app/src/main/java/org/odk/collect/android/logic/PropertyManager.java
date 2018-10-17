@@ -14,12 +14,15 @@
 
 package org.odk.collect.android.logic;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
 
 import org.javarosa.core.services.IPropertyManager;
@@ -111,7 +114,13 @@ public class PropertyManager implements IPropertyManager {
 
     private IdAndPrefix findDeviceId(Context context, TelephonyManager telephonyManager) {
         final String androidIdName = Settings.Secure.ANDROID_ID;
-        String deviceId = telephonyManager.getDeviceId();
+        String deviceId = null;
+        // start smap - this will result in deviceId not being set first time it is called
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            deviceId = telephonyManager.getDeviceId();
+        }
+        // end smap
+
         String scheme = null;
 
         if (deviceId != null) {
