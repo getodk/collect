@@ -19,6 +19,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.dto.Form;
+import org.odk.collect.android.dto.Instance;
 import org.odk.collect.android.utilities.IconUtils;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
@@ -93,7 +94,7 @@ public class AutoSendWorker extends Worker implements InstanceUploaderListener {
             return Result.FAILURE;
         }
 
-        List<Long> toUpload = getInstancesToAutoSend(GeneralSharedPreferences.isAutoSendEnabled());
+        List<Instance> toUpload = getInstancesToAutoSend(GeneralSharedPreferences.isAutoSendEnabled());
 
         if (toUpload.isEmpty()) {
             return Result.SUCCESS;
@@ -202,31 +203,21 @@ public class AutoSendWorker extends Worker implements InstanceUploaderListener {
     }
 
     /**
-     * Returns a list of longs representing the database ids of the instances that need to be
-     * auto-sent.
+     * Returns instances that need to be auto-sent.
      */
     @NonNull
-    private List<Long> getInstancesToAutoSend(boolean isAutoSendAppSettingEnabled) {
-        List<Long> toUpload = new ArrayList<>();
-        Cursor c = new InstancesDao().getFinalizedInstancesCursor();
+    private List<Instance> getInstancesToAutoSend(boolean isAutoSendAppSettingEnabled) {
+        InstancesDao dao = new InstancesDao();
+        Cursor c = dao.getFinalizedInstancesCursor();
+        List<Instance> allFinalized = dao.getInstancesFromCursor(c);
 
-        try {
-            if (c != null && c.getCount() > 0) {
-                c.move(-1);
-                String formId;
-                while (c.moveToNext()) {
-                    formId = c.getString(c.getColumnIndex(InstanceColumns.JR_FORM_ID));
-                    if (formShouldBeAutoSent(formId, isAutoSendAppSettingEnabled)) {
-                        Long l = c.getLong(c.getColumnIndex(InstanceColumns._ID));
-                        toUpload.add(l);
-                    }
-                }
-            }
-        } finally {
-            if (c != null) {
-                c.close();
+        List<Instance> toUpload = new ArrayList<>();
+        for (Instance instance : allFinalized) {
+            if (formShouldBeAutoSent(instance.getJrFormId(), isAutoSendAppSettingEnabled)) {
+                toUpload.add(instance);
             }
         }
+
         return toUpload;
     }
 
