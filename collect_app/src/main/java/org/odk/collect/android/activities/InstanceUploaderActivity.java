@@ -27,7 +27,7 @@ import org.odk.collect.android.fragments.dialogs.SimpleDialog;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.tasks.InstanceServerUploader;
+import org.odk.collect.android.tasks.InstanceServerUploaderTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ArrayUtils;
 import org.odk.collect.android.utilities.AuthDialogUtility;
@@ -64,7 +64,7 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
 
     private String alertMsg;
 
-    private InstanceServerUploader instanceServerUploader;
+    private InstanceServerUploaderTask instanceServerUploaderTask;
 
     // maintain a list of what we've yet to send, in case we're interrupted by auth requests
     private Long[] instancesToSend;
@@ -168,33 +168,33 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
         // Get the task if there was a configuration change but the app did not go out of memory.
         // If the app went out of memory, the task is null but the simple state was saved so
         // the task status is reconstructed from that state.
-        instanceServerUploader = (InstanceServerUploader) getLastCustomNonConfigurationInstance();
+        instanceServerUploaderTask = (InstanceServerUploaderTask) getLastCustomNonConfigurationInstance();
 
-        if (instanceServerUploader == null) {
+        if (instanceServerUploaderTask == null) {
             // set up dialog and upload task
             showDialog(PROGRESS_DIALOG);
-            instanceServerUploader = new InstanceServerUploader();
+            instanceServerUploaderTask = new InstanceServerUploaderTask();
 
             if (url != null) {
-                instanceServerUploader.setCompleteDestinationUrl(url + Collect.getInstance().getString(R.string.default_odk_submission));
+                instanceServerUploaderTask.setCompleteDestinationUrl(url + Collect.getInstance().getString(R.string.default_odk_submission));
 
                 if (deleteInstanceAfterUpload != null) {
-                    instanceServerUploader.setDeleteInstanceAfterSubmission(deleteInstanceAfterUpload);
+                    instanceServerUploaderTask.setDeleteInstanceAfterSubmission(deleteInstanceAfterUpload);
                 }
 
                 String host = Uri.parse(url).getHost();
                 if (host != null) {
                     // We do not need to clear the cookies since they are cleared before any request is made and the Credentials provider is used
                     if (password != null && username != null) {
-                        instanceServerUploader.setCustomUsername(username);
-                        instanceServerUploader.setCustomPassword(password);
+                        instanceServerUploaderTask.setCustomUsername(username);
+                        instanceServerUploaderTask.setCustomPassword(password);
                     }
                 }
             }
 
             // register this activity with the new uploader task
-            instanceServerUploader.setUploaderListener(this);
-            instanceServerUploader.execute(instancesToSend);
+            instanceServerUploaderTask.setUploaderListener(this);
+            instanceServerUploaderTask.execute(instancesToSend);
         }
     }
 
@@ -203,8 +203,8 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
         if (instancesToSend != null) {
             Timber.i("onResume: Resuming upload of %d instances!", instancesToSend.length);
         }
-        if (instanceServerUploader != null) {
-            instanceServerUploader.setUploaderListener(this);
+        if (instanceServerUploaderTask != null) {
+            instanceServerUploaderTask.setUploaderListener(this);
         }
         super.onResume();
     }
@@ -228,13 +228,13 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
 
     @Override
     public Object onRetainCustomNonConfigurationInstance() {
-        return instanceServerUploader;
+        return instanceServerUploaderTask;
     }
 
     @Override
     protected void onDestroy() {
-        if (instanceServerUploader != null) {
-            instanceServerUploader.setUploaderListener(null);
+        if (instanceServerUploaderTask != null) {
+            instanceServerUploaderTask.setUploaderListener(null);
         }
         super.onDestroy();
     }
@@ -313,8 +313,8 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
-                                instanceServerUploader.cancel(true);
-                                instanceServerUploader.setUploaderListener(null);
+                                instanceServerUploaderTask.cancel(true);
+                                instanceServerUploaderTask.setUploaderListener(null);
                                 finish();
                             }
                         };
@@ -388,18 +388,18 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
     @Override
     public void updatedCredentials() {
         showDialog(PROGRESS_DIALOG);
-        instanceServerUploader = new InstanceServerUploader();
+        instanceServerUploaderTask = new InstanceServerUploaderTask();
 
         // register this activity with the new uploader task
-        instanceServerUploader.setUploaderListener(this);
+        instanceServerUploaderTask.setUploaderListener(this);
         // In the case of credentials set via intent extras, the credentials are stored in the
         // global WebCredentialsUtils but the task also needs to know what server to set to
         // TODO: is this really needed here? When would the task not have gotten a server set in
         // init already?
         if (url != null) {
-            instanceServerUploader.setCompleteDestinationUrl(url + Collect.getInstance().getString(R.string.default_odk_submission), false);
+            instanceServerUploaderTask.setCompleteDestinationUrl(url + Collect.getInstance().getString(R.string.default_odk_submission), false);
         }
-        instanceServerUploader.execute(instancesToSend);
+        instanceServerUploaderTask.execute(instancesToSend);
     }
 
     @Override

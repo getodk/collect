@@ -60,7 +60,7 @@ import timber.log.Timber;
  *
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class InstanceServerUploader extends InstanceUploader {
+public class InstanceServerUploaderTask extends InstanceUploaderTask {
 
     private static final String URL_PATH_SEP = "/";
 
@@ -78,7 +78,7 @@ public class InstanceServerUploader extends InstanceUploader {
     private String customUsername;
     private String customPassword;
 
-    public InstanceServerUploader() {
+    public InstanceServerUploaderTask() {
         Collect.getInstance().getComponent().inject(this);
     }
 

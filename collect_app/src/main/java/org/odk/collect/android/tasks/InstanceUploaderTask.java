@@ -39,7 +39,7 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_DELETE;
 
-public abstract class InstanceUploader extends AsyncTask<Long, Integer, CollectServerClient.Outcome> {
+public abstract class InstanceUploaderTask extends AsyncTask<Long, Integer, CollectServerClient.Outcome> {
 
     private InstanceUploaderListener stateListener;
     private Boolean deleteInstanceAfterSubmission;

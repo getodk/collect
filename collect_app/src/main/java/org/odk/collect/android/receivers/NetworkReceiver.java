@@ -18,6 +18,7 @@ import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.tasks.InstanceServerUploaderTask;
 import org.odk.collect.android.tasks.ServerPollingJob;
 import org.odk.collect.android.utilities.IconUtils;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
@@ -26,8 +27,7 @@ import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.tasks.InstanceGoogleSheetsUploader;
-import org.odk.collect.android.tasks.InstanceServerUploader;
+import org.odk.collect.android.tasks.InstanceGoogleSheetsUploaderTask;
 import org.odk.collect.android.utilities.PermissionUtils;
 
 import java.util.ArrayList;
@@ -44,9 +44,9 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
 
     // turning on wifi often gets two CONNECTED events. we only want to run one thread at a time
     public static boolean running;
-    InstanceServerUploader instanceServerUploader;
+    InstanceServerUploaderTask instanceServerUploaderTask;
 
-    InstanceGoogleSheetsUploader instanceGoogleSheetsUploader;
+    InstanceGoogleSheetsUploaderTask instanceGoogleSheetsUploaderTask;
 
     private String resultMessage;
 
@@ -79,11 +79,11 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
     @Override
     public void uploadingComplete(HashMap<String, String> resultMessagesByInstanceId) {
         // task is done
-        if (instanceServerUploader != null) {
-            instanceServerUploader.setUploaderListener(null);
+        if (instanceServerUploaderTask != null) {
+            instanceServerUploaderTask.setUploaderListener(null);
         }
-        if (instanceGoogleSheetsUploader != null) {
-            instanceGoogleSheetsUploader.setUploaderListener(null);
+        if (instanceGoogleSheetsUploaderTask != null) {
+            instanceGoogleSheetsUploaderTask.setUploaderListener(null);
         }
         running = false;
 
@@ -144,9 +144,9 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
             if (protocol.equals(context.getString(R.string.protocol_google_sheets))) {
                 sendInstancesToGoogleSheets(context, toSendArray);
             } else if (protocol.equals(context.getString(R.string.protocol_odk_default))) {
-                instanceServerUploader = new InstanceServerUploader();
-                instanceServerUploader.setUploaderListener(this);
-                instanceServerUploader.execute(toSendArray);
+                instanceServerUploaderTask = new InstanceServerUploaderTask();
+                instanceServerUploaderTask.setUploaderListener(this);
+                instanceServerUploaderTask.execute(toSendArray);
             }
         }
     }
@@ -162,9 +162,9 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                 return;
             }
             accountsManager.getCredential().setSelectedAccountName(googleUsername);
-            instanceGoogleSheetsUploader = new InstanceGoogleSheetsUploader(accountsManager);
-            instanceGoogleSheetsUploader.setUploaderListener(this);
-            instanceGoogleSheetsUploader.execute(toSendArray);
+            instanceGoogleSheetsUploaderTask = new InstanceGoogleSheetsUploaderTask(accountsManager);
+            instanceGoogleSheetsUploaderTask.setUploaderListener(this);
+            instanceGoogleSheetsUploaderTask.execute(toSendArray);
         } else {
             resultMessage = Collect.getInstance().getString(R.string.odk_permissions_fail);
             uploadingComplete(null);
@@ -307,11 +307,11 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
     @Override
     public void authRequest(Uri url, HashMap<String, String> doneSoFar) {
         // if we get an auth request, just fail
-        if (instanceServerUploader != null) {
-            instanceServerUploader.setUploaderListener(null);
+        if (instanceServerUploaderTask != null) {
+            instanceServerUploaderTask.setUploaderListener(null);
         }
-        if (instanceGoogleSheetsUploader != null) {
-            instanceGoogleSheetsUploader.setUploaderListener(null);
+        if (instanceGoogleSheetsUploaderTask != null) {
+            instanceGoogleSheetsUploaderTask.setUploaderListener(null);
         }
         running = false;
     }

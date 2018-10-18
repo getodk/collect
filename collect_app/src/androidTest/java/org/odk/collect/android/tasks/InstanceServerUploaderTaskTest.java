@@ -22,7 +22,7 @@ import static org.odk.collect.android.test.TestUtils.cleanUpTempFiles;
 import static org.odk.collect.android.test.TestUtils.createTempFile;
 import static org.odk.collect.android.test.TestUtils.resetInstancesContentProvider;
 
-public class InstanceServerUploaderTest extends MockedServerTest {
+public class InstanceServerUploaderTaskTest extends MockedServerTest {
     private InstancesDao dao;
 
     @Before
@@ -44,7 +44,7 @@ public class InstanceServerUploaderTest extends MockedServerTest {
         willRespondWith(headResponse(), postResponse());
 
         // when
-        CollectServerClient.Outcome o = new InstanceServerUploader().doInBackground(id);
+        CollectServerClient.Outcome o = new InstanceServerUploaderTask().doInBackground(id);
 
         // then
         assertNull(o.authRequestingServer);
