@@ -106,12 +106,12 @@ public class InstanceGoogleSheetsUploaderTask extends InstanceUploaderTask {
     }
 
     @Override
-    protected Outcome doInBackground(Long... values) {
+    protected Outcome doInBackground(Long... instanceIdsToUpload) {
         final Outcome outcome = new Outcome();
         int counter = 0;
 
         try {
-            while (counter * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER < values.length) {
+            while (counter * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER < instanceIdsToUpload.length) {
                 String token = accountsManager.getCredential().getToken();
 
                 //Immediately invalidate so we get a different one if we have to try again
@@ -122,8 +122,8 @@ public class InstanceGoogleSheetsUploaderTask extends InstanceUploaderTask {
 
                 int low = counter * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER;
                 int high = (counter + 1) * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER;
-                if (high > values.length) {
-                    high = values.length;
+                if (high > instanceIdsToUpload.length) {
+                    high = instanceIdsToUpload.length;
                 }
 
                 StringBuilder selectionBuf = new StringBuilder(InstanceColumns._ID + " IN (");
@@ -133,12 +133,12 @@ public class InstanceGoogleSheetsUploaderTask extends InstanceUploaderTask {
                         selectionBuf.append(',');
                     }
                     selectionBuf.append('?');
-                    selectionArgs[i] = values[i + low].toString();
+                    selectionArgs[i] = instanceIdsToUpload[i + low].toString();
                 }
 
                 selectionBuf.append(')');
 
-                outcome.messagesByInstanceId.putAll(uploadInstances(selectionBuf.toString(), selectionArgs, low, values.length));
+                outcome.messagesByInstanceId.putAll(uploadInstances(selectionBuf.toString(), selectionArgs, low, instanceIdsToUpload.length));
                 counter++;
             }
         } catch (UserRecoverableAuthException e) {
