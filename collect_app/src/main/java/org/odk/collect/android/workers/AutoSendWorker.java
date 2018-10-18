@@ -177,7 +177,6 @@ public class AutoSendWorker extends Worker implements InstanceUploaderListener {
                 && sendnetwork;
     }
 
-
     private void sendInstancesToGoogleSheets(Context context, Long[] toSendArray) {
         if (PermissionUtils.checkIfGetAccountsPermissionGranted(context)) {
             GoogleAccountsManager accountsManager = new GoogleAccountsManager(Collect.getInstance());

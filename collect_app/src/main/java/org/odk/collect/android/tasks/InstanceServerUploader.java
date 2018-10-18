@@ -101,14 +101,7 @@ public class InstanceServerUploader extends InstanceUploader {
 
             publishProgress(i + 1, instancesToUpload.size());
 
-            String urlString = getURLToSubmitTo(instance, completeDestinationUrl);
-
-            // add deviceID to request
-            try {
-                urlString += "?deviceID=" + URLEncoder.encode(deviceId != null ? deviceId : "", "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                Timber.i(e, "Error encoding URL for device id : %s", deviceId);
-            }
+            String urlString = getURLToSubmitTo(instance, deviceId, completeDestinationUrl);
 
             if (!uploadOneSubmission(instance, urlString, uriRemap, outcome)) {
                 return outcome;
@@ -165,14 +158,25 @@ public class InstanceServerUploader extends InstanceUploader {
      * URL configured at the app level.
      */
     @NonNull
-    private String getURLToSubmitTo(Instance currentInstance, String overrideURL) {
+    private String getURLToSubmitTo(Instance currentInstance, String deviceId, String overrideURL) {
+        String urlString;
+
         if (overrideURL != null) {
-            return overrideURL;
+            urlString = overrideURL;
         } else if (currentInstance.getSubmissionUri() != null) {
-            return currentInstance.getSubmissionUri().trim();
+            urlString = currentInstance.getSubmissionUri().trim();
         } else {
-            return getServerSubmissionURL();
+            urlString = getServerSubmissionURL();
         }
+
+        // add deviceID to request
+        try {
+            urlString += "?deviceID=" + URLEncoder.encode(deviceId != null ? deviceId : "", "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            Timber.i(e, "Error encoding URL for device id : %s", deviceId);
+        }
+
+        return urlString;
     }
 
     /**
