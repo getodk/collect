@@ -14,20 +14,15 @@
 
 package org.odk.collect.android.tasks;
 
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
-import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
 
-import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.dto.Instance;
 import org.odk.collect.android.http.CollectServerClient.Outcome;
 import org.odk.collect.android.http.OpenRosaHttpInterface;
 import org.odk.collect.android.logic.PropertyManager;
-import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.upload.InstanceServerUploader;
 import org.odk.collect.android.upload.result.SubmissionUploadAuthRequested;
@@ -35,8 +30,6 @@ import org.odk.collect.android.upload.result.SubmissionUploadResult;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -44,16 +37,12 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import timber.log.Timber;
-
 /**
  * Background task for uploading completed forms.
  *
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class InstanceServerUploaderTask extends InstanceUploaderTask {
-    private static final String URL_PATH_SEP = "/";
-
     private final InstanceServerUploader uploader;
 
     @Inject
@@ -92,7 +81,7 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
 
             publishProgress(i + 1, instancesToUpload.size());
 
-            String urlString = getURLToSubmitTo(instance, deviceId, completeDestinationUrl);
+            String urlString = uploader.getURLToSubmitTo(instance, deviceId, completeDestinationUrl);
 
             SubmissionUploadResult result = uploader.uploadOneSubmission(instance, urlString, uriRemap);
 
@@ -148,60 +137,6 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
         }
         
         return instancesToUpload;
-    }
-
-    /**
-     * Returns the URL this instance should be submitted to with appended deviceId.
-     *
-     * If the upload was triggered by an external app and specified an override URL, use that one.
-     * Otherwise, use the submission URL configured in the form
-     * (https://opendatakit.github.io/xforms-spec/#submission-attributes). Finally, default to the
-     * URL configured at the app level.
-     */
-    @NonNull
-    private String getURLToSubmitTo(Instance currentInstance, String deviceId, String overrideURL) {
-        String urlString;
-
-        if (overrideURL != null) {
-            urlString = overrideURL;
-        } else if (currentInstance.getSubmissionUri() != null) {
-            urlString = currentInstance.getSubmissionUri().trim();
-        } else {
-            urlString = getServerSubmissionURL();
-        }
-
-        // add deviceID to request
-        try {
-            urlString += "?deviceID=" + URLEncoder.encode(deviceId != null ? deviceId : "", "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            Timber.i(e, "Error encoding URL for device id : %s", deviceId);
-        }
-
-        return urlString;
-    }
-
-    private String getServerSubmissionURL() {
-
-        Collect app = Collect.getInstance();
-
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(
-                Collect.getInstance());
-        String serverBase = settings.getString(PreferenceKeys.KEY_SERVER_URL,
-                app.getString(R.string.default_server_url));
-
-        if (serverBase.endsWith(URL_PATH_SEP)) {
-            serverBase = serverBase.substring(0, serverBase.length() - 1);
-        }
-
-        // NOTE: /submission must not be translated! It is the well-known path on the server.
-        String submissionPath = settings.getString(PreferenceKeys.KEY_SUBMISSION_URL,
-                app.getString(R.string.default_odk_submission));
-
-        if (!submissionPath.startsWith(URL_PATH_SEP)) {
-            submissionPath = URL_PATH_SEP + submissionPath;
-        }
-
-        return serverBase + submissionPath;
     }
 
     @Override
