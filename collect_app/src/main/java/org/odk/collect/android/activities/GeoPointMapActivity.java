@@ -91,6 +91,7 @@ public class GeoPointMapActivity extends CollectAbstractActivity implements OnMa
 
     private Button zoomPointButton;
     private Button zoomLocationButton;
+    private ImageButton clearPointButton;
 
     private boolean setClear;
     private boolean captureLocation;
@@ -225,6 +226,7 @@ public class GeoPointMapActivity extends CollectAbstractActivity implements OnMa
             captureLocation = true;
             isDragged = false;
             zoomToPoint();
+            resetTrashButton();
         });
 
         // Focuses on marked location
@@ -240,15 +242,18 @@ public class GeoPointMapActivity extends CollectAbstractActivity implements OnMa
         zoomLocationButton.setOnClickListener(v -> {
             zoomToLocation();
             zoomDialog.dismiss();
+            resetTrashButton();
         });
 
         zoomPointButton = zoomDialogView.findViewById(R.id.zoom_saved_location);
         zoomPointButton.setOnClickListener(v -> {
             zoomToPoint();
             zoomDialog.dismiss();
+            resetTrashButton();
         });
 
-        ImageButton clearPointButton = findViewById(R.id.clear);
+        clearPointButton = findViewById(R.id.clear);
+        resetTrashButton();
         clearPointButton.setOnClickListener(v -> {
             if (marker != null) {
                 marker.remove();
@@ -268,6 +273,7 @@ public class GeoPointMapActivity extends CollectAbstractActivity implements OnMa
             draggable = intentDraggable;
             locationFromIntent = false;
             overlayMyLocationLayers();
+            resetTrashButton();
         });
 
         Intent intent = getIntent();
@@ -309,6 +315,7 @@ public class GeoPointMapActivity extends CollectAbstractActivity implements OnMa
             captureLocation = true;
             foundFirstLocation = true;
             zoomToPoint();
+            resetTrashButton();
         }
 
         helper.setBasemap();
@@ -415,6 +422,7 @@ public class GeoPointMapActivity extends CollectAbstractActivity implements OnMa
         isDragged = true;
         setClear = false;
         captureLocation = true;
+        resetTrashButton();
     }
 
     private void enableShowLocation(boolean shouldEnable) {
@@ -494,6 +502,14 @@ public class GeoPointMapActivity extends CollectAbstractActivity implements OnMa
 
         errorDialog = alertDialogBuilder.create();
         errorDialog.show();
+    }
+
+    private void resetTrashButton() {
+        if (marker != null) {
+            clearPointButton.setEnabled(true);
+        } else {
+            clearPointButton.setEnabled(false);
+        }
     }
 
     @Override
