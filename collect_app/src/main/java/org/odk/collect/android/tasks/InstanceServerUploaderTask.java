@@ -81,7 +81,7 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
 
             publishProgress(i + 1, instancesToUpload.size());
 
-            String urlString = uploader.getURLToSubmitTo(instance, deviceId, completeDestinationUrl);
+            String urlString = uploader.getUrlToSubmitTo(instance, deviceId, completeDestinationUrl);
 
             SubmissionUploadResult result = uploader.uploadOneSubmission(instance, urlString, uriRemap);
 

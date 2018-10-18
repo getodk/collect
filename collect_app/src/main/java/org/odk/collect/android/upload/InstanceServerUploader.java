@@ -270,7 +270,7 @@ public class InstanceServerUploader {
      * URL configured at the app level.
      */
     @NonNull
-    public String getURLToSubmitTo(Instance currentInstance, String deviceId, String overrideURL) {
+    public String getUrlToSubmitTo(Instance currentInstance, String deviceId, String overrideURL) {
         String urlString;
 
         if (overrideURL != null) {
@@ -289,6 +289,10 @@ public class InstanceServerUploader {
         }
 
         return urlString;
+    }
+
+    @NonNull String getUrlToSubmitTo(Instance currentInstance, String deviceId) {
+        return getUrlToSubmitTo(currentInstance, deviceId, null);
     }
 
     private String getServerSubmissionURL() {
