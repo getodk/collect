@@ -170,12 +170,12 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
             public void onClick(View v) {
                 map.getOverlays().add(marker);
                 setClear = false;
-                clearPointButton.setEnabled(true);
                 latLng = new GeoPoint(location.getLatitude(), location.getLongitude());
                 marker.setPosition(latLng);
                 captureLocation = true;
                 isDragged = false;
                 zoomToPoint();
+                resetTrashButton();
             }
 
         });
