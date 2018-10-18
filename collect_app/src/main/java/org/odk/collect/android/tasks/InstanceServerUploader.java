@@ -186,10 +186,6 @@ public class InstanceServerUploader extends InstanceUploader {
      */
     private boolean uploadOneSubmission(Instance instance, String urlString, Map<Uri, Uri> uriRemap,
                                         Outcome outcome) {
-        Uri instanceDatabaseUri = Uri.withAppendedPath(InstanceColumns.CONTENT_URI,
-                instance.getDatabaseId().toString());
-
-        ContentValues contentValues = new ContentValues();
         Uri submissionUri = Uri.parse(urlString);
 
         boolean openRosaServer = false;
@@ -207,8 +203,7 @@ public class InstanceServerUploader extends InstanceUploader {
                 Timber.i("Host name may not be null");
                 outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(),
                         FAIL + "Host name may not be null");
-                contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
-                Collect.getInstance().getContentResolver().update(instanceDatabaseUri, contentValues, null, null);
+                saveFailedStatusToDatabase(instance);
                 return true;
             }
 
@@ -253,20 +248,14 @@ public class InstanceServerUploader extends InstanceUploader {
                                                 + "Unexpected redirection attempt to a different "
                                                 + "host: "
                                                 + newURI.toString());
-                                contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS,
-                                        InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
-                                Collect.getInstance().getContentResolver()
-                                        .update(instanceDatabaseUri, contentValues, null, null);
+                                saveFailedStatusToDatabase(instance);
                                 return true;
                             }
                         } catch (Exception e) {
                             Timber.e(e, "Exception thrown parsing URI for url %s", urlString);
                             outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(),
                                     FAIL + urlString + " " + e.toString());
-                            contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS,
-                                    InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
-                            Collect.getInstance().getContentResolver()
-                                    .update(instanceDatabaseUri, contentValues, null, null);
+                            saveFailedStatusToDatabase(instance);
                             return true;
                         }
                     }
@@ -279,10 +268,7 @@ public class InstanceServerUploader extends InstanceUploader {
                                 FAIL
                                         + "Invalid status code on Head request.  If you have a "
                                         + "web proxy, you may need to login to your network. ");
-                        contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS,
-                                InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
-                        Collect.getInstance().getContentResolver()
-                                .update(instanceDatabaseUri, contentValues, null, null);
+                        saveFailedStatusToDatabase(instance);
                         return true;
                     }
                 }
@@ -294,8 +280,7 @@ public class InstanceServerUploader extends InstanceUploader {
 
                 outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(), FAIL + msg);
                 Timber.e(e);
-                contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
-                Collect.getInstance().getContentResolver().update(instanceDatabaseUri, contentValues, null, null);
+                saveFailedStatusToDatabase(instance);
                 return true;
             }
         }
@@ -331,8 +316,7 @@ public class InstanceServerUploader extends InstanceUploader {
 
         if (!instanceFile.exists() && !submissionFile.exists()) {
             outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(), FAIL + "instance XML file does not exist!");
-            contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
-            Collect.getInstance().getContentResolver().update(instanceDatabaseUri, contentValues, null, null);
+            saveFailedStatusToDatabase(instance);
             return true;
         }
 
@@ -366,8 +350,7 @@ public class InstanceServerUploader extends InstanceUploader {
                     }
 
                 }
-                contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
-                Collect.getInstance().getContentResolver().update(instanceDatabaseUri, contentValues, null, null);
+                saveFailedStatusToDatabase(instance);
                 return true;
             }
 
@@ -377,8 +360,7 @@ public class InstanceServerUploader extends InstanceUploader {
                 msg = e.toString();
             }
             outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(), FAIL + "Generic Exception: " + msg);
-            contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
-            Collect.getInstance().getContentResolver().update(instanceDatabaseUri, contentValues, null, null);
+            saveFailedStatusToDatabase(instance);
             return true;
         }
 
@@ -390,8 +372,7 @@ public class InstanceServerUploader extends InstanceUploader {
             outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(), Collect.getInstance().getString(R.string.success));
         }
 
-        contentValues.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMITTED);
-        Collect.getInstance().getContentResolver().update(instanceDatabaseUri, contentValues, null, null);
+        saveSuccessStatusToDatabase(instance);
 
         Collect.getInstance()
                 .getDefaultTracker()
@@ -480,6 +461,24 @@ public class InstanceServerUploader extends InstanceUploader {
     @Override
     protected void onCancelled() {
         clearTemporaryCredentials();
+    }
+
+    private void saveSuccessStatusToDatabase(Instance instance) {
+        Uri instanceDatabaseUri = Uri.withAppendedPath(InstanceColumns.CONTENT_URI,
+                instance.getDatabaseId().toString());
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMITTED);
+        Collect.getInstance().getContentResolver().update(instanceDatabaseUri, contentValues, null, null);
+    }
+
+    private void saveFailedStatusToDatabase(Instance instance) {
+        Uri instanceDatabaseUri = Uri.withAppendedPath(InstanceColumns.CONTENT_URI,
+                instance.getDatabaseId().toString());
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
+        Collect.getInstance().getContentResolver().update(instanceDatabaseUri, contentValues, null, null);
     }
 
     public void setCompleteDestinationUrl(String completeDestinationUrl) {
