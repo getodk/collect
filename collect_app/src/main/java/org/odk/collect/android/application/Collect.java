@@ -322,16 +322,16 @@ public class Collect extends Application implements HasActivityInjector {
         AdminSharedPreferences.getInstance().reloadPreferences();
     }
 
-    // Debounce multiple clicks within the same activity
-    public static boolean allowClick(String activityName) {
+    // Debounce multiple clicks within the same screen
+    public static boolean allowClick(String className) {
         long elapsedRealtime = SystemClock.elapsedRealtime();
-        boolean isSameActivity = activityName.equals(lastClickName);
+        boolean isSameClass = className.equals(lastClickName);
         boolean isBeyondThreshold = elapsedRealtime - lastClickTime > CLICK_DEBOUNCE_MS;
         boolean isBeyondTestThreshold = lastClickTime == 0 || lastClickTime == elapsedRealtime; // just for tests
-        boolean allowClick = !isSameActivity || isBeyondThreshold || isBeyondTestThreshold;
+        boolean allowClick = !isSameClass || isBeyondThreshold || isBeyondTestThreshold;
         if (allowClick) {
             lastClickTime = elapsedRealtime;
-            lastClickName = activityName;
+            lastClickName = className;
         }
         return allowClick;
     }
