@@ -1,4 +1,4 @@
-package org.odk.collect.android.workers;
+package org.odk.collect.android.upload;
 
 import android.annotation.SuppressLint;
 import android.app.NotificationManager;
