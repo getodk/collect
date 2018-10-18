@@ -25,13 +25,11 @@ import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.upload.result.SubmissionUploadResult;
 import org.odk.collect.android.utilities.IconUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
-import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceGoogleSheetsUploaderTask;
-import org.odk.collect.android.utilities.PermissionUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -123,13 +121,26 @@ public class AutoSendWorker extends Worker {
                     showUploadStatusNotification(anyFailure, message);
                     return Result.FAILURE;
                 }
+
+                // If the submission was successful, delete the instance if either the app-level
+                // delete preference is set or the form definition requests auto-deletion.
+                // TODO: this could take some time so might be better to do in a separate thread
+                // It also feels like this could fail and if so should be
+                // communicated to the user. Maybe successful delete should also be communicated?
+                if (uploadResult.isSuccess()) {
+                    if (InstanceServerUploader.formShouldBeAutoDeleted(instance.getJrFormId(),
+                            (boolean) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_DELETE_AFTER_SEND))) {
+                        Uri deleteForm = Uri.withAppendedPath(InstanceColumns.CONTENT_URI,
+                                instance.getDatabaseId().toString());
+                        Collect.getInstance().getContentResolver().delete(deleteForm, null, null);
+                    }
+                }
             }
         }
 
         String message = formatOverallResultMessage(resultMessagesByInstanceId);
         showUploadStatusNotification(anyFailure, message);
 
-        // TODO: delete instances if auto-delete is on.
         return Result.SUCCESS;
     }
 
@@ -158,25 +169,25 @@ public class AutoSendWorker extends Worker {
                 && sendnetwork;
     }
 
-    private void sendInstancesToGoogleSheets(Context context, Long[] toSendArray) {
-        if (PermissionUtils.checkIfGetAccountsPermissionGranted(context)) {
-            GoogleAccountsManager accountsManager = new GoogleAccountsManager(Collect.getInstance());
-
-            String googleUsername = accountsManager.getSelectedAccount();
-            if (googleUsername.isEmpty()) {
-                return;
-            }
-            accountsManager.getCredential().setSelectedAccountName(googleUsername);
-            instanceGoogleSheetsUploaderTask = new InstanceGoogleSheetsUploaderTask(accountsManager);
-            // TODO: instanceServerUploaderTask is an AsyncTask so execute should be run off the main
-            // thread. This seems to work but unclear what behavior guarantees there are. We should
-            // move away from AsyncTask here. This requires a deeper rethink/refactor of the
-            // uploaders.
-            instanceGoogleSheetsUploaderTask.execute(toSendArray);
-        } else {
-            resultMessage = Collect.getInstance().getString(R.string.odk_permissions_fail);
-        }
-    }
+    //    private void sendInstancesToGoogleSheets(Context context, Long[] toSendArray) {
+    //        if (PermissionUtils.checkIfGetAccountsPermissionGranted(context)) {
+    //            GoogleAccountsManager accountsManager = new GoogleAccountsManager(Collect.getInstance());
+    //
+    //            String googleUsername = accountsManager.getSelectedAccount();
+    //            if (googleUsername.isEmpty()) {
+    //                return;
+    //            }
+    //            accountsManager.getCredential().setSelectedAccountName(googleUsername);
+    //            instanceGoogleSheetsUploaderTask = new InstanceGoogleSheetsUploaderTask(accountsManager);
+    //            // TODO: instanceServerUploaderTask is an AsyncTask so execute should be run off the main
+    //            // thread. This seems to work but unclear what behavior guarantees there are. We should
+    //            // move away from AsyncTask here. This requires a deeper rethink/refactor of the
+    //            // uploaders.
+    //            instanceGoogleSheetsUploaderTask.execute(toSendArray);
+    //        } else {
+    //            resultMessage = Collect.getInstance().getString(R.string.odk_permissions_fail);
+    //        }
+    //    }
 
     /**
      * Returns instances that need to be auto-sent.
