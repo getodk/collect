@@ -70,9 +70,6 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
     // maintain a list of what we've yet to send, in case we're interrupted by auth requests
     private Long[] instancesToSend;
 
-    // maintain a list of what we've sent, in case we're interrupted by auth requests
-    private HashMap<String, String> uploadedInstances;
-
     private String url;
     private String username;
     private String password;
@@ -110,8 +107,6 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
 
     private void init(Bundle savedInstanceState) {
         alertMsg = getString(R.string.please_wait);
-
-        uploadedInstances = new HashMap<String, String>();
 
         setTitle(getString(R.string.send_data));
 
@@ -373,7 +368,6 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
                             removeMe);
                 }
             }
-            this.uploadedInstances.putAll(doneSoFar);
         }
 
         // and reconstruct the pending set of instances to send
