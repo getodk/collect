@@ -47,8 +47,7 @@ public class FormsDao {
         return Collect.getInstance().getContentResolver().query(FormsProviderAPI.FormsColumns.CONTENT_URI, projection, selection, selectionArgs, sortOrder);
     }
 
-    private Cursor getFormsCursor(String formId, String formVersion) {
-
+    public Cursor getFormsCursor(String formId, String formVersion) {
         String[] selectionArgs;
         String selection;
 
@@ -62,7 +61,9 @@ public class FormsDao {
                     + FormsProviderAPI.FormsColumns.JR_VERSION + "=?";
         }
 
-        String order = FormsProviderAPI.FormsColumns.DATE + " DESC"; //as long as we allow to store multiple forms with the same id and version number, choose the newest one
+        // As long as we allow storing multiple forms with the same id and version number, choose
+        // the newest one
+        String order = FormsProviderAPI.FormsColumns.DATE + " DESC";
 
         return getFormsCursor(null, selection, selectionArgs, order);
     }
