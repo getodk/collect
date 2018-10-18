@@ -2,6 +2,7 @@ package org.odk.collect.android.upload;
 
 import android.content.ContentValues;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -10,6 +11,7 @@ import com.google.android.gms.analytics.HitBuilders;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dto.Instance;
 import org.odk.collect.android.http.HttpHeadResult;
 import org.odk.collect.android.http.OpenRosaHttpInterface;
@@ -37,6 +39,8 @@ import java.util.Map;
 import javax.net.ssl.HttpsURLConnection;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_DELETE;
 
 public class InstanceServerUploader {
     private static final String URL_PATH_SEP = "/";
@@ -335,5 +339,25 @@ public class InstanceServerUploader {
         ContentValues contentValues = new ContentValues();
         contentValues.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
         Collect.getInstance().getContentResolver().update(instanceDatabaseUri, contentValues, null, null);
+    }
+
+    /**
+     * Returns whether instances of the form specified should be auto-deleted after successful
+     * update.
+     *
+     * If the form explicitly sets the auto-delete property, then it overrides the preference.
+     */
+    public static boolean formShouldBeAutoDeleted(String jrFormId, boolean isAutoDeleteAppSettingEnabled) {
+        Cursor cursor = new FormsDao().getFormsCursorForFormId(jrFormId);
+        String autoDelete = null;
+        if (cursor != null && cursor.moveToFirst()) {
+            try {
+                int autoDeleteColumnIndex = cursor.getColumnIndex(AUTO_DELETE);
+                autoDelete = cursor.getString(autoDeleteColumnIndex);
+            } finally {
+                cursor.close();
+            }
+        }
+        return autoDelete == null ? isAutoDeleteAppSettingEnabled : Boolean.valueOf(autoDelete);
     }
 }
