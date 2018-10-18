@@ -35,8 +35,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static org.odk.collect.android.tasks.InstanceGoogleSheetsUploader.GOOGLE_DRIVE_ROOT_FOLDER;
-import static org.odk.collect.android.tasks.InstanceGoogleSheetsUploader.GOOGLE_DRIVE_SUBFOLDER;
+import static org.odk.collect.android.tasks.InstanceGoogleSheetsUploaderTask.GOOGLE_DRIVE_ROOT_FOLDER;
+import static org.odk.collect.android.tasks.InstanceGoogleSheetsUploaderTask.GOOGLE_DRIVE_SUBFOLDER;
 
 public class DriveHelper {
 

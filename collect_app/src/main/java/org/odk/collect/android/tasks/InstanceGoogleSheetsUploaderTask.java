@@ -76,7 +76,7 @@ import static org.odk.collect.android.utilities.InstanceUploaderUtils.DEFAULT_SU
 /**
  * @author carlhartung (chartung@nafundi.com)
  */
-public class InstanceGoogleSheetsUploader extends InstanceUploader {
+public class InstanceGoogleSheetsUploaderTask extends InstanceUploaderTask {
 
     public static final int REQUEST_AUTHORIZATION = 1001;
     public static final String GOOGLE_DRIVE_ROOT_FOLDER = "Open Data Kit";
@@ -99,7 +99,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
     private Spreadsheet spreadsheet;
 
-    public InstanceGoogleSheetsUploader(GoogleAccountsManager accountsManager) {
+    public InstanceGoogleSheetsUploaderTask(GoogleAccountsManager accountsManager) {
         this.accountsManager = accountsManager;
         sheetsHelper = accountsManager.getSheetsHelper();
         driveHelper = accountsManager.getDriveHelper();

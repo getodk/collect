@@ -26,8 +26,8 @@ import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.tasks.InstanceGoogleSheetsUploader;
-import org.odk.collect.android.tasks.InstanceServerUploader;
+import org.odk.collect.android.tasks.InstanceGoogleSheetsUploaderTask;
+import org.odk.collect.android.tasks.InstanceServerUploaderTask;
 import org.odk.collect.android.utilities.PermissionUtils;
 
 import java.util.ArrayList;
@@ -46,9 +46,9 @@ import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUT
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORMS_UPLOADED_NOTIFICATION;
 
 public class AutoSendWorker extends Worker implements InstanceUploaderListener {
-    InstanceServerUploader instanceServerUploader;
+    InstanceServerUploaderTask instanceServerUploaderTask;
 
-    InstanceGoogleSheetsUploader instanceGoogleSheetsUploader;
+    InstanceGoogleSheetsUploaderTask instanceGoogleSheetsUploaderTask;
 
     private String resultMessage;
     /**
@@ -110,12 +110,12 @@ public class AutoSendWorker extends Worker implements InstanceUploaderListener {
         if (protocol.equals(getApplicationContext().getString(R.string.protocol_google_sheets))) {
             sendInstancesToGoogleSheets(getApplicationContext(), toSendArray);
         } else if (protocol.equals(getApplicationContext().getString(R.string.protocol_odk_default))) {
-            instanceServerUploader = new InstanceServerUploader();
-            instanceServerUploader.setUploaderListener(this);
-            // TODO: instanceServerUploader is an AsyncTask so execute should be run off the main
+            instanceServerUploaderTask = new InstanceServerUploaderTask();
+            instanceServerUploaderTask.setUploaderListener(this);
+            // TODO: instanceServerUploaderTask is an AsyncTask so execute should be run off the main
             // thread. This seems to work but unclear what behavior guarantees there are. We should
             // move away from AsyncTask here.
-            instanceServerUploader.execute(toSendArray);
+            instanceServerUploaderTask.execute(toSendArray);
         }
 
         try {
@@ -130,11 +130,11 @@ public class AutoSendWorker extends Worker implements InstanceUploaderListener {
 
     @Override
     public void uploadingComplete(HashMap<String, String> resultMessagesByInstanceId) {
-        if (instanceServerUploader != null) {
-            instanceServerUploader.setUploaderListener(null);
+        if (instanceServerUploaderTask != null) {
+            instanceServerUploaderTask.setUploaderListener(null);
         }
-        if (instanceGoogleSheetsUploader != null) {
-            instanceGoogleSheetsUploader.setUploaderListener(null);
+        if (instanceGoogleSheetsUploaderTask != null) {
+            instanceGoogleSheetsUploaderTask.setUploaderListener(null);
         }
 
         String message = formatOverallResultMessage(resultMessagesByInstanceId);
@@ -188,13 +188,13 @@ public class AutoSendWorker extends Worker implements InstanceUploaderListener {
                 return;
             }
             accountsManager.getCredential().setSelectedAccountName(googleUsername);
-            instanceGoogleSheetsUploader = new InstanceGoogleSheetsUploader(accountsManager);
-            instanceGoogleSheetsUploader.setUploaderListener(this);
-            // TODO: instanceServerUploader is an AsyncTask so execute should be run off the main
+            instanceGoogleSheetsUploaderTask = new InstanceGoogleSheetsUploaderTask(accountsManager);
+            instanceGoogleSheetsUploaderTask.setUploaderListener(this);
+            // TODO: instanceServerUploaderTask is an AsyncTask so execute should be run off the main
             // thread. This seems to work but unclear what behavior guarantees there are. We should
             // move away from AsyncTask here. This requires a deeper rethink/refactor of the
             // uploaders.
-            instanceGoogleSheetsUploader.execute(toSendArray);
+            instanceGoogleSheetsUploaderTask.execute(toSendArray);
         } else {
             resultMessage = Collect.getInstance().getString(R.string.odk_permissions_fail);
             uploadingComplete(null);
@@ -360,11 +360,11 @@ public class AutoSendWorker extends Worker implements InstanceUploaderListener {
     @Override
     public void authRequest(Uri url, HashMap<String, String> doneSoFar) {
         // if we get an auth request, just fail
-        if (instanceServerUploader != null) {
-            instanceServerUploader.setUploaderListener(null);
+        if (instanceServerUploaderTask != null) {
+            instanceServerUploaderTask.setUploaderListener(null);
         }
-        if (instanceGoogleSheetsUploader != null) {
-            instanceGoogleSheetsUploader.setUploaderListener(null);
+        if (instanceGoogleSheetsUploaderTask != null) {
+            instanceGoogleSheetsUploaderTask.setUploaderListener(null);
         }
 
         // TODO: this means if there was an auth failure, there will never be a retry until another
