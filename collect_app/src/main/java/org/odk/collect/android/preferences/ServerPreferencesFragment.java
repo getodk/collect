@@ -140,6 +140,13 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                 new InputFilter[]{new ControlCharacterFilter(), new WhitespaceFilter()});
 
         usernamePreference.setOnPreferenceChangeListener(createChangeListener());
+        // smap begin hack to try and set user name default
+        String un = usernamePreference.getText();
+        if(un == null || un.equals("")) {
+            usernamePreference.setText(getString(R.string.default_username));
+            usernamePreference.setSummary(R.string.default_username);
+        }
+        // smap end
         usernamePreference.setSummary(usernamePreference.getText());
         usernamePreference.getEditText().setFilters(
                 new InputFilter[]{new ControlCharacterFilter()});
