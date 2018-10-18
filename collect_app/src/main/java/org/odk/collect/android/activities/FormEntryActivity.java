@@ -1148,12 +1148,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 InputFilter returnFilter = new InputFilter() {
                     public CharSequence filter(CharSequence source, int start,
                                                int end, Spanned dest, int dstart, int dend) {
-                        for (int i = start; i < end; i++) {
-                            if (Character.getType(source.charAt(i)) == Character.CONTROL) {
-                                return "";
-                            }
-                        }
-                        return null;
+                        String newText = source.toString().substring(start, end);
+                        String invalidCharRegex = "[\\p{Cntrl}]";
+
+                        // Replace invalid characters, only modifying the string if necessary.
+                        return newText.matches(invalidCharRegex)
+                                ? newText.replaceAll(invalidCharRegex, " ")
+                                : null;
                     }
                 };
                 saveAs.setFilters(new InputFilter[]{returnFilter});
