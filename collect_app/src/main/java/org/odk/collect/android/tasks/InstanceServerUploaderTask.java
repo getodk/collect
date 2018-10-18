@@ -14,23 +14,18 @@
 
 package org.odk.collect.android.tasks;
 
-import android.database.Cursor;
 import android.net.Uri;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.dto.Instance;
 import org.odk.collect.android.http.CollectServerClient.Outcome;
 import org.odk.collect.android.http.OpenRosaHttpInterface;
 import org.odk.collect.android.logic.PropertyManager;
-import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.upload.InstanceServerUploader;
 import org.odk.collect.android.upload.result.SubmissionUploadAuthRequested;
 import org.odk.collect.android.upload.result.SubmissionUploadResult;
-import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,8 +38,6 @@ import javax.inject.Inject;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class InstanceServerUploaderTask extends InstanceUploaderTask {
-    private final InstanceServerUploader uploader;
-
     @Inject
     OpenRosaHttpInterface httpInterface;
 
@@ -59,14 +52,14 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
 
     public InstanceServerUploaderTask() {
         Collect.getInstance().getComponent().inject(this);
-        uploader = new InstanceServerUploader(httpInterface, webCredentialsUtils);
     }
 
     @Override
     protected Outcome doInBackground(Long... instanceIdsToUpload) {
         Outcome outcome = new Outcome();
 
-        List<Instance> instancesToUpload = getInstancesFromIds(instanceIdsToUpload);
+        InstanceServerUploader uploader = new InstanceServerUploader(httpInterface, webCredentialsUtils);
+        List<Instance> instancesToUpload = uploader.getInstancesFromIds(instanceIdsToUpload);
 
         String deviceId = new PropertyManager(Collect.getInstance().getApplicationContext())
                     .getSingularProperty(PropertyManager.withUri(PropertyManager.PROPMGR_DEVICE_ID));
@@ -99,44 +92,6 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
         }
         
         return outcome;
-    }
-
-    /**
-     * Returns a list of Instance objects corresponding to the database IDs passed in.
-     */
-    private List<Instance> getInstancesFromIds(Long... instanceDatabaseIds) {
-        List<Instance> instancesToUpload = new ArrayList<>();
-        InstancesDao dao = new InstancesDao();
-
-        // Split the queries to avoid exceeding SQLITE_MAX_VARIABLE_NUMBER
-        int counter = 0;
-        while (counter * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER < instanceDatabaseIds.length) {
-            int low = counter * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER;
-            int high = (counter + 1) * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER;
-            if (high > instanceDatabaseIds.length) {
-                high = instanceDatabaseIds.length;
-            }
-
-            StringBuilder selectionBuf = new StringBuilder(InstanceColumns._ID + " IN (");
-            String[] selectionArgs = new String[high - low];
-            for (int i = 0; i < (high - low); i++) {
-                if (i > 0) {
-                    selectionBuf.append(',');
-                }
-                selectionBuf.append('?');
-                selectionArgs[i] = instanceDatabaseIds[i + low].toString();
-            }
-
-            selectionBuf.append(')');
-            String selection = selectionBuf.toString();
-
-            Cursor c = dao.getInstancesCursor(selection, selectionArgs);
-            instancesToUpload.addAll(dao.getInstancesFromCursor(c));
-
-            counter++;
-        }
-        
-        return instancesToUpload;
     }
 
     @Override
