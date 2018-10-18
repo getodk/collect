@@ -122,7 +122,7 @@ import org.odk.collect.android.widgets.DateTimeWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.RangeWidget;
 import org.odk.collect.android.widgets.StringWidget;
-import org.odk.collect.android.workers.AutoSendWorker;
+import org.odk.collect.android.upload.AutoSendWorker;
 
 import java.io.File;
 import java.io.FileOutputStream;

@@ -34,6 +34,11 @@ import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.upload.result.SubmissionUploadAuthRequested;
+import org.odk.collect.android.upload.result.SubmissionUploadFatalError;
+import org.odk.collect.android.upload.result.SubmissionUploadNonFatalError;
+import org.odk.collect.android.upload.result.SubmissionUploadResult;
+import org.odk.collect.android.upload.result.SubmissionUploadSuccess;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ResponseMessageParser;
@@ -486,86 +491,6 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
     private void clearTemporaryCredentials() {
         if (customUsername != null && customPassword != null) {
             webCredentialsUtils.clearCredentials(completeDestinationUrl);
-        }
-    }
-
-    private abstract class SubmissionUploadResult {
-        private final boolean success;
-        private final boolean fatalError;
-
-        private final Integer localizedMessageId;
-
-        @NonNull
-        private final String troubleshootingMessage;
-
-        SubmissionUploadResult(boolean success, boolean fatalError, Integer localizedMessageId,
-                                      @NonNull String troubleshootingMessage) {
-            this.success = success;
-            this.fatalError = fatalError;
-            this.localizedMessageId = localizedMessageId;
-            this.troubleshootingMessage = troubleshootingMessage;
-        }
-
-        public boolean isSuccess() {
-            return success;
-        }
-
-        public boolean isFatalError() {
-            return fatalError;
-        }
-
-        /**
-         * Returns a message to display to the user. A localized message takes precedence. If one
-         * is not available, use the troubleshooting message.
-         */
-        @NonNull
-        public String getDisplayMessage() {
-            if (localizedMessageId != null) {
-                return Collect.getInstance().getString(localizedMessageId);
-            } else {
-                return troubleshootingMessage;
-            }
-        }
-    }
-
-    public class SubmissionUploadSuccess extends SubmissionUploadResult {
-        public SubmissionUploadSuccess() {
-            super(true, false, R.string.success, "Success");
-        }
-
-        public SubmissionUploadSuccess(@NonNull String serverMessage) {
-            super(true, false, null, serverMessage);
-        }
-    }
-
-    public class SubmissionUploadFatalError extends SubmissionUploadResult {
-        public SubmissionUploadFatalError(Integer localizedMessageId, @NonNull String troubleshootingMessage) {
-            super(false, true, localizedMessageId, troubleshootingMessage);
-        }
-
-        public SubmissionUploadFatalError(@NonNull String troubleshootingMessage) {
-            this(null, troubleshootingMessage);
-        }
-    }
-
-    public class SubmissionUploadAuthRequested extends SubmissionUploadResult {
-        @NonNull
-        private final Uri authRequestingServerUri;
-
-        public SubmissionUploadAuthRequested(@NonNull Uri authRequestingServerUri) {
-            super(false, true, null, "Authorization requested");
-            this.authRequestingServerUri = authRequestingServerUri;
-        }
-
-        @NonNull
-        public Uri getAuthRequestingServerUri() {
-            return authRequestingServerUri;
-        }
-    }
-
-    public class SubmissionUploadNonFatalError extends SubmissionUploadResult {
-        public SubmissionUploadNonFatalError(@NonNull String troubleshootingMessage) {
-            super(false, false, null, troubleshootingMessage);
         }
     }
 }
