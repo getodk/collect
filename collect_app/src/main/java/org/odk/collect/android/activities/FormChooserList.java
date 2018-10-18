@@ -120,7 +120,7 @@ public class FormChooserList extends FormListActivity implements
      */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (Collect.allowClick(this.getClass().getSimpleName())) {
+        if (Collect.allowClick(getClass().getName())) {
             // get uri to form
             long idFormsTable = listView.getAdapter().getItemId(position);
             Uri formUri = ContentUris.withAppendedId(FormsColumns.CONTENT_URI, idFormsTable);
