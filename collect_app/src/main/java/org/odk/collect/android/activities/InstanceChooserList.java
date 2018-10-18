@@ -123,7 +123,7 @@ public class InstanceChooserList extends InstanceListActivity implements
      */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (Collect.allowClick(this.getClass().getSimpleName())) {
+        if (Collect.allowClick(getClass().getName())) {
             Cursor c = (Cursor) listView.getAdapter().getItem(position);
             startManagingCursor(c);
             Uri instanceUri =
