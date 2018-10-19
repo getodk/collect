@@ -17,6 +17,8 @@ package org.odk.collect.android.upload;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
@@ -31,6 +33,12 @@ import java.util.List;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_DELETE;
 
 public abstract class InstanceUploader {
+    @Nullable
+    public abstract String uploadOneSubmission(Instance instance, String destinationUrl) throws UploadException;
+
+    @NonNull
+    public abstract String getUrlToSubmitTo(Instance currentInstance, String deviceId, String overrideURL);
+
     /**
      * Returns a list of Instance objects corresponding to the database IDs passed in.
      */

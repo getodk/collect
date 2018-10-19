@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.upload;
 
+import android.database.Cursor;
 import android.support.annotation.NonNull;
 
 import com.google.android.gms.auth.GoogleAuthException;
@@ -34,6 +35,8 @@ import org.javarosa.form.api.FormEntryModel;
 import org.javarosa.xform.util.XFormUtils;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.dto.Form;
 import org.odk.collect.android.dto.Instance;
 import org.odk.collect.android.exception.BadUrlException;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
@@ -113,7 +116,20 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         }
     }
 
-    public void uploadOneSubmission(Instance instance, File instanceFile, String formFilePath, String spreadsheetUrl) throws UploadException {
+    @Override
+    public String uploadOneSubmission(Instance instance, String spreadsheetUrl) throws UploadException {
+        File instanceFile = new File(instance.getInstanceFilePath());
+
+        // Get corresponding blank form and verify there is exactly 1
+        FormsDao dao = new FormsDao();
+        Cursor formCursor = dao.getFormsCursor(instance.getJrFormId(), instance.getJrVersion());
+        List<Form> forms = dao.getFormsFromCursor(formCursor);
+        if (forms.size() != 1) {
+            throw new UploadException(Collect.getInstance().getString(R.string.not_exactly_one_blank_form_for_this_form_id));
+        }
+        Form form = forms.get(0);
+        String formFilePath = form.getFormFilePath();
+
         TreeElement instanceElement = getInstanceElement(formFilePath, instanceFile);
         setUpSpreadsheet(spreadsheetUrl);
         if (hasRepeatableGroups(instanceElement)) {
@@ -124,6 +140,20 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             key = PropertyUtils.genUUID();
         }
         insertRows(instance, instanceElement, null, key, instanceFile, spreadsheet.getSheets().get(0).getProperties().getTitle());
+
+        // Google Sheets can't provide a custom success message
+        return null;
+    }
+
+    @Override
+    @NonNull
+    public String getUrlToSubmitTo(Instance instance, String deviceId, String overrideURL) {
+        String urlString = instance.getSubmissionUri();
+
+        // if we didn't find one in the content provider, try to get from settings
+        return urlString == null
+                ? (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_GOOGLE_SHEETS_URL)
+                : urlString;
     }
 
     private void insertRows(Instance instance, TreeElement element, String parentKey, String key, File instanceFile, String sheetTitle)
@@ -551,15 +581,6 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         return sheetId == null
                 ? null
                 : spreadsheet.getSpreadsheetUrl().substring(0, spreadsheet.getSpreadsheetUrl().lastIndexOf('/') + 1) + "edit#gid=" + sheetId;
-    }
-
-    public String getUrlToSubmitTo(Instance instance) {
-        String urlString = instance.getSubmissionUri();
-
-        // if we didn't find one in the content provider, try to get from settings
-        return urlString == null
-                ? (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_GOOGLE_SHEETS_URL)
-                : urlString;
     }
 
     public boolean isLocationValid(String answer) {

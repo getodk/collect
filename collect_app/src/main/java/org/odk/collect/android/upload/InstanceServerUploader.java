@@ -49,11 +49,14 @@ public class InstanceServerUploader extends InstanceUploader {
 
     private final OpenRosaHttpInterface httpInterface;
     private final WebCredentialsUtils webCredentialsUtils;
+    private final Map<Uri, Uri> uriRemap;
 
     public InstanceServerUploader(OpenRosaHttpInterface httpInterface,
-                                  WebCredentialsUtils webCredentialsUtils) {
+                                  WebCredentialsUtils webCredentialsUtils,
+                                  Map<Uri, Uri> uriRemap) {
         this.httpInterface = httpInterface;
         this.webCredentialsUtils = webCredentialsUtils;
+        this.uriRemap = uriRemap;
     }
 
     /**
@@ -62,7 +65,8 @@ public class InstanceServerUploader extends InstanceUploader {
      *
      * Returns a custom success message if one is provided by the server.
      */
-    public String uploadOneSubmission(Instance instance, String urlString, Map<Uri, Uri> uriRemap) throws UploadException {
+    @Override
+    public String uploadOneSubmission(Instance instance, String urlString) throws UploadException {
         Uri submissionUri = Uri.parse(urlString);
 
         // Used to determine if attachments should be sent for Aggregate < 0.9x servers
@@ -264,6 +268,7 @@ public class InstanceServerUploader extends InstanceUploader {
      * (https://opendatakit.github.io/xforms-spec/#submission-attributes). Finally, default to the
      * URL configured at the app level.
      */
+    @Override
     @NonNull
     public String getUrlToSubmitTo(Instance currentInstance, String deviceId, String overrideURL) {
         String urlString;
@@ -284,10 +289,6 @@ public class InstanceServerUploader extends InstanceUploader {
         }
 
         return urlString;
-    }
-
-    @NonNull String getUrlToSubmitTo(Instance currentInstance, String deviceId) {
-        return getUrlToSubmitTo(currentInstance, deviceId, null);
     }
 
     private String getServerSubmissionURL() {

@@ -29,7 +29,6 @@ import org.odk.collect.android.upload.InstanceGoogleSheetsUploader;
 import org.odk.collect.android.upload.UploadException;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -88,11 +87,9 @@ public class InstanceGoogleSheetsUploaderTask extends InstanceUploaderTask {
                 outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(),
                         Collect.getInstance().getString(R.string.not_exactly_one_blank_form_for_this_form_id));
             } else {
-                Form form = forms.get(0);
-
                 try {
-                    uploader.uploadOneSubmission(instance, new File(instance.getInstanceFilePath()),
-                            form.getFormFilePath(), uploader.getUrlToSubmitTo(instance));
+                    String destinationUrl = uploader.getUrlToSubmitTo(instance, null, null);
+                    uploader.uploadOneSubmission(instance, destinationUrl);
 
                     uploader.saveSuccessStatusToDatabase(instance);
 

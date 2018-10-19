@@ -61,13 +61,11 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
     protected Outcome doInBackground(Long... instanceIdsToUpload) {
         Outcome outcome = new Outcome();
 
-        InstanceServerUploader uploader = new InstanceServerUploader(httpInterface, webCredentialsUtils);
+        InstanceServerUploader uploader = new InstanceServerUploader(httpInterface, webCredentialsUtils, new HashMap<>());
         List<Instance> instancesToUpload = uploader.getInstancesFromIds(instanceIdsToUpload);
 
         String deviceId = new PropertyManager(Collect.getInstance().getApplicationContext())
                     .getSingularProperty(PropertyManager.withUri(PropertyManager.PROPMGR_DEVICE_ID));
-
-        Map<Uri, Uri> uriRemap = new HashMap<>();
 
         for (int i = 0; i < instancesToUpload.size(); i++) {
             if (isCancelled()) {
@@ -77,10 +75,9 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
 
             publishProgress(i + 1, instancesToUpload.size());
 
-            String urlString = uploader.getUrlToSubmitTo(instance, deviceId, completeDestinationUrl);
-
             try {
-                String customMessage = uploader.uploadOneSubmission(instance, urlString, uriRemap);
+                String destinationUrl = uploader.getUrlToSubmitTo(instance, deviceId, completeDestinationUrl);
+                String customMessage = uploader.uploadOneSubmission(instance, destinationUrl);
                 outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(),
                         customMessage != null ? customMessage : Collect.getInstance().getString(R.string.success));
                 Collect.getInstance()
