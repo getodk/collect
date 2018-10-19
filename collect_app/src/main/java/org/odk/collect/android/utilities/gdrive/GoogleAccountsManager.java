@@ -132,7 +132,7 @@ public class GoogleAccountsManager {
 
                 @Override
                 public void denied() {
-                    activity.finish();
+                    activity.onBackPressed();
                 }
             });
         }
