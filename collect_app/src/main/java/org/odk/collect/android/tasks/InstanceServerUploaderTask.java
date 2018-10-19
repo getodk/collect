@@ -18,14 +18,15 @@ import android.net.Uri;
 
 import com.google.android.gms.analytics.HitBuilders;
 
+import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dto.Instance;
 import org.odk.collect.android.http.CollectServerClient.Outcome;
 import org.odk.collect.android.http.OpenRosaHttpInterface;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.upload.InstanceServerUploader;
-import org.odk.collect.android.upload.result.SubmissionUploadAuthRequested;
-import org.odk.collect.android.upload.result.SubmissionUploadResult;
+import org.odk.collect.android.upload.UploadAuthRequestedException;
+import org.odk.collect.android.upload.UploadException;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.util.HashMap;
@@ -78,27 +79,23 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
 
             String urlString = uploader.getUrlToSubmitTo(instance, deviceId, completeDestinationUrl);
 
-            SubmissionUploadResult result = uploader.uploadOneSubmission(instance, urlString, uriRemap);
-
-            // Don't add the instance that caused an auth request to the map because we want to
-            // retry; items in the map are not reconsidered in this submission attempt
-            if (result instanceof SubmissionUploadAuthRequested) {
-                outcome.authRequestingServer = ((SubmissionUploadAuthRequested) result).getAuthRequestingServerUri();
-            } else {
-                outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(), result.getDisplayMessage());
-            }
-
-            if (result.isFatalError()) {
-                return outcome;
-            }
-
-            if (result.isSuccess()) {
+            try {
+                String customMessage = uploader.uploadOneSubmission(instance, urlString, uriRemap);
+                outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(),
+                        customMessage != null ? customMessage : Collect.getInstance().getString(R.string.success));
                 Collect.getInstance()
                         .getDefaultTracker()
                         .send(new HitBuilders.EventBuilder()
                                 .setCategory("Submission")
                                 .setAction("HTTP")
                                 .build());
+            } catch (UploadAuthRequestedException e) {
+                outcome.authRequestingServer = e.getSubmissionUri();
+                // Don't add the instance that caused an auth request to the map because we want to
+                // retry; items in the map are not reconsidered in this submission attempt
+            } catch (UploadException e) {
+                outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(),
+                        e.getDisplayMessage());
             }
         }
         

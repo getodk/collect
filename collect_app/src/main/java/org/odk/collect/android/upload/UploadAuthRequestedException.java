@@ -12,18 +12,19 @@
  * the License.
  */
 
-package org.odk.collect.android.upload.result;
+package org.odk.collect.android.upload;
 
-/**
- * An exception that results in the cancellation of an instance upload, and the presentation of an
- * error to the user
- * */
-public class UploadException extends Exception {
-    public UploadException(String message) {
+import android.net.Uri;
+
+public class UploadAuthRequestedException extends UploadException {
+    private Uri submissionUri;
+
+    public UploadAuthRequestedException(String message, Uri submissionUri) {
         super(message);
+        this.submissionUri = submissionUri;
     }
 
-    public UploadException(Throwable cause) {
-        super(cause);
+    public Uri getSubmissionUri() {
+        return submissionUri;
     }
 }

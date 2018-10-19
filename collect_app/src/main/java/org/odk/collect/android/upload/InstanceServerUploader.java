@@ -25,11 +25,6 @@ import org.odk.collect.android.dto.Instance;
 import org.odk.collect.android.http.HttpHeadResult;
 import org.odk.collect.android.http.OpenRosaHttpInterface;
 import org.odk.collect.android.preferences.PreferenceKeys;
-import org.odk.collect.android.upload.result.SubmissionUploadAuthRequested;
-import org.odk.collect.android.upload.result.SubmissionUploadFatalError;
-import org.odk.collect.android.upload.result.SubmissionUploadNonFatalError;
-import org.odk.collect.android.upload.result.SubmissionUploadResult;
-import org.odk.collect.android.upload.result.SubmissionUploadSuccess;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ResponseMessageParser;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
@@ -63,10 +58,11 @@ public class InstanceServerUploader extends InstanceUploader {
 
     /**
      * Uploads all files associated with an instance to the specified URL. Writes fail/success
-     * status to database. Logs an analytics event in case of success.
+     * status to database.
+     *
+     * Returns a custom success message if one is provided by the server.
      */
-    public SubmissionUploadResult uploadOneSubmission(Instance instance, String urlString,
-                                                       Map<Uri, Uri> uriRemap) {
+    public String uploadOneSubmission(Instance instance, String urlString, Map<Uri, Uri> uriRemap) throws UploadException {
         Uri submissionUri = Uri.parse(urlString);
 
         // Used to determine if attachments should be sent for Aggregate < 0.9x servers
@@ -83,7 +79,7 @@ public class InstanceServerUploader extends InstanceUploader {
         } else {
             if (submissionUri.getHost() == null) {
                 saveFailedStatusToDatabase(instance);
-                return new SubmissionUploadNonFatalError(FAIL + "Host name may not be null");
+                throw new UploadException(FAIL + "Host name may not be null");
             }
 
             URI uri;
@@ -91,10 +87,8 @@ public class InstanceServerUploader extends InstanceUploader {
                 uri = URI.create(submissionUri.toString());
             } catch (IllegalArgumentException e) {
                 saveFailedStatusToDatabase(instance);
-                // TODO: should this really be fatal? Seems the next submission might not have this
-                // problem
-                return new SubmissionUploadFatalError(R.string.url_error,
-                        e.getMessage() != null ? e.getMessage() : e.toString());
+                Timber.d(e.getMessage() != null ? e.getMessage() : e.toString());
+                throw new UploadException(Collect.getInstance().getString(R.string.url_error));
             }
 
             try {
@@ -102,7 +96,7 @@ public class InstanceServerUploader extends InstanceUploader {
                 Map<String, String> responseHeaders = headResult.getHeaders();
 
                 if (headResult.getStatusCode() == HttpsURLConnection.HTTP_UNAUTHORIZED) {
-                    return new SubmissionUploadAuthRequested(submissionUri);
+                    throw new UploadAuthRequestedException(Collect.getInstance().getString(R.string.server_requires_auth), submissionUri);
                 } else if (headResult.getStatusCode() == HttpsURLConnection.HTTP_NO_CONTENT) {
                     // Redirect header received
                     if (responseHeaders.containsKey("Location")) {
@@ -123,14 +117,13 @@ public class InstanceServerUploader extends InstanceUploader {
                                 // Don't follow a redirection attempt to a different host.
                                 // We can't tell if this is a spoof or not.
                                 saveFailedStatusToDatabase(instance);
-                                return new SubmissionUploadNonFatalError(FAIL
-                                        + "Unexpected redirection attempt to a different "
-                                        + "host: "
+                                throw new UploadException(FAIL
+                                        + "Unexpected redirection attempt to a different host: "
                                         + newURI.toString());
                             }
                         } catch (Exception e) {
                             saveFailedStatusToDatabase(instance);
-                            return new SubmissionUploadNonFatalError(FAIL + urlString + " " + e.toString());
+                            throw new UploadException(FAIL + urlString + " " + e.toString());
                         }
                     }
 
@@ -139,14 +132,13 @@ public class InstanceServerUploader extends InstanceUploader {
                     if (headResult.getStatusCode() >= HttpsURLConnection.HTTP_OK
                             && headResult.getStatusCode() < HttpsURLConnection.HTTP_MULT_CHOICE) {
                         saveFailedStatusToDatabase(instance);
-                        return new SubmissionUploadNonFatalError(FAIL
-                                + "Invalid status code on Head request. If you have a "
-                                + "web proxy, you may need to login to your network. ");
+                        throw new UploadException(FAIL + "Invalid status code on Head request. If "
+                                + "you have a web proxy, you may need to login to your network.");
                     }
                 }
             } catch (Exception e) {
                 saveFailedStatusToDatabase(instance);
-                return new SubmissionUploadNonFatalError(FAIL
+                throw new UploadException(FAIL
                         + (e.getMessage() != null ? e.getMessage() : e.toString()));
             }
         }
@@ -166,14 +158,14 @@ public class InstanceServerUploader extends InstanceUploader {
 
         if (!instanceFile.exists() && !submissionFile.exists()) {
             saveFailedStatusToDatabase(instance);
-            return new SubmissionUploadNonFatalError(FAIL + "instance XML file does not exist!");
+            throw new UploadException(FAIL + "instance XML file does not exist!");
         }
 
         List<File> files = getFilesInParentDirectory(instanceFile, submissionFile, openRosaServer);
 
-        // TODO: when can this happen? Why does it cause the whole submission attempt to fail?
+        // TODO: when can this happen? It used to cause the whole submission attempt to fail. Should it?
         if (files == null) {
-            return new SubmissionUploadFatalError("Error reading files to upload");
+            throw new UploadException("Error reading files to upload");
         }
 
         ResponseMessageParser messageParser;
@@ -187,38 +179,38 @@ public class InstanceServerUploader extends InstanceUploader {
             int responseCode = messageParser.getResponseCode();
 
             if (responseCode != HttpsURLConnection.HTTP_CREATED && responseCode != HttpsURLConnection.HTTP_ACCEPTED) {
-                SubmissionUploadResult result;
+                UploadException exception;
                 if (responseCode == HttpsURLConnection.HTTP_OK) {
-                    result = new SubmissionUploadNonFatalError(FAIL + "Network login failure? Again?");
+                    exception = new UploadException(FAIL + "Network login failure? Again?");
                 } else if (responseCode == HttpsURLConnection.HTTP_UNAUTHORIZED) {
-                    result = new SubmissionUploadNonFatalError(FAIL + messageParser.getReasonPhrase()
+                    exception = new UploadException(FAIL + messageParser.getReasonPhrase()
                             + " (" + responseCode + ") at " + urlString);
                 } else {
                     if (messageParser.isValid()) {
-                        result = new SubmissionUploadNonFatalError(FAIL + messageParser.getMessageResponse());
+                        exception = new UploadException(FAIL + messageParser.getMessageResponse());
                     } else {
-                        result = new SubmissionUploadNonFatalError(FAIL + messageParser.getReasonPhrase()
+                        exception = new UploadException(FAIL + messageParser.getReasonPhrase()
                                 + " (" + responseCode + ") at " + urlString);
                     }
 
                 }
                 saveFailedStatusToDatabase(instance);
-                return result;
+                throw exception;
             }
 
         } catch (IOException e) {
             saveFailedStatusToDatabase(instance);
-            return new SubmissionUploadNonFatalError(FAIL + "Generic Exception: "
+            throw new UploadException(FAIL + "Generic Exception: "
                     + (e.getMessage() != null ? e.getMessage() : e.toString()));
         }
 
         saveSuccessStatusToDatabase(instance);
 
         if (messageParser.isValid()) {
-            return new SubmissionUploadSuccess(messageParser.getMessageResponse());
-        } else {
-            return new SubmissionUploadSuccess();
+            return messageParser.getMessageResponse();
         }
+
+        return null;
     }
 
     private List<File> getFilesInParentDirectory(File instanceFile, File submissionFile, boolean openRosaServer) {
