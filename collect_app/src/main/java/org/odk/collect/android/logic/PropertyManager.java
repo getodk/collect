@@ -116,7 +116,7 @@ public class PropertyManager implements IPropertyManager {
         final String androidIdName = Settings.Secure.ANDROID_ID;
         String deviceId = null;
         // start smap - this will result in deviceId not being set first time it is called
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
             deviceId = telephonyManager.getDeviceId();
         }
         // end smap
