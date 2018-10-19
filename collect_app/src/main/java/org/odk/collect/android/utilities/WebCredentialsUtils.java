@@ -4,6 +4,8 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.http.HttpCredentials;
 import org.odk.collect.android.http.HttpCredentialsInterface;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
@@ -56,14 +58,29 @@ public class WebCredentialsUtils {
         if (GeneralSharedPreferences.getInstance() == null) {
             return "";
         }
-        return (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_PASSWORD);
+
+        // smap start - default password
+        String password = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_PASSWORD);
+        if(password == null || password.equals("")) {
+            password = Collect.getInstance().getString(R.string.default_password);
+        }
+        // smap end
+
+        return password;    // smap default username
     }
 
     public String getUserNameFromPreferences() {
         if (GeneralSharedPreferences.getInstance() == null) {
             return "";
         }
-        return (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_USERNAME);
+        // smap start - default username
+        String username = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_USERNAME);
+        if(username == null || username.equals("")) {
+            username = Collect.getInstance().getString(R.string.default_username);
+        }
+        // smap end
+
+        return username;    // smap default username
     }
 
     /**
