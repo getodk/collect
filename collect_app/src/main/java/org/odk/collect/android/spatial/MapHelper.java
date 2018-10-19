@@ -22,7 +22,6 @@ package org.odk.collect.android.spatial;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -73,7 +72,7 @@ public class MapHelper {
     private static final String OPENMAP_STAMEN_TERRAIN = "openmap_stamen_terrain";
     private static final String OPENMAP_CARTODB_POSITRON = "openmap_cartodb_positron";
     private static final String OPENMAP_CARTODB_DARKMATTER = "openmap_cartodb_darkmatter";
-    private int selectedLayer;
+    private Integer selectedLayer;
 
     public static String[] geofileTypes = new String[]{".mbtiles", ".kml", ".kmz"};
     private static final String SLASH = File.separator;
@@ -86,7 +85,7 @@ public class MapHelper {
 
     private final Context context;
 
-    public MapHelper(Context context, GoogleMap googleMap) {
+    public MapHelper(Context context, GoogleMap googleMap, Integer selectedLayer) {
         this.context = context;
         this.googleMap = null;
         osmMap = null;
@@ -94,9 +93,10 @@ public class MapHelper {
         offilineOverlays = getOfflineLayerList();
         this.googleMap = googleMap;
         tileFactory = new org.odk.collect.android.spatial.TileSourceFactory(context);
+        this.selectedLayer = selectedLayer;
     }
 
-    public MapHelper(Context context, MapView osmMap, IRegisterReceiver iregisterReceiver) {
+    public MapHelper(Context context, MapView osmMap, IRegisterReceiver iregisterReceiver, Integer selectedLayer) {
         this.context = context;
         googleMap = null;
         this.osmMap = null;
@@ -105,19 +105,20 @@ public class MapHelper {
         this.iregisterReceiver = iregisterReceiver;
         this.osmMap = osmMap;
         tileFactory = new org.odk.collect.android.spatial.TileSourceFactory(context);
+        this.selectedLayer = selectedLayer;
     }
 
-    private static String getGoogleBasemap() {
+    private String getGoogleBasemap() {
         return sharedPreferences.getString(PreferenceKeys.KEY_MAP_BASEMAP, GOOGLE_MAP_STREETS);
     }
 
-    private static String getOsmBasemap() {
+    private String getOsmBasemap() {
         return sharedPreferences.getString(PreferenceKeys.KEY_MAP_BASEMAP, OPENMAP_STREETS);
     }
 
     public void setBasemap() {
         if (googleMap != null) {
-            String basemap = getGoogleBasemap();
+            String basemap = selectedLayer == null ? getGoogleBasemap() : offilineOverlays[selectedLayer];
             switch (basemap) {
                 case GOOGLE_MAP_STREETS:
                     googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
@@ -140,10 +141,8 @@ public class MapHelper {
             }
         } else if (osmMap != null) {
             //OSMMAP
-            String basemap = getOsmBasemap();
-
             ITileSource tileSource = null;
-
+            String basemap = selectedLayer == null ? getOsmBasemap() : offilineOverlays[selectedLayer];
             switch (basemap) {
                 case OPENMAP_USGS_TOPO:
                     tileSource = tileFactory.getUSGSTopo();
@@ -185,11 +184,11 @@ public class MapHelper {
 
     private boolean useOfflineBasemapIfAvailable(String basemap) {
         if (basemap.contains(OFFLINE_LAYER_TAG)) {
-            String originalLayerName = basemap.substring(0, basemap.indexOf(OFFLINE_LAYER_TAG));
-            if (Arrays.asList(offilineOverlays).contains(originalLayerName)) {
-                setOfflineBasemap(Arrays.asList(offilineOverlays).indexOf(originalLayerName));
-                return true;
-            }
+            basemap = basemap.substring(0, basemap.indexOf(OFFLINE_LAYER_TAG));
+        }
+        if (Arrays.asList(offilineOverlays).contains(basemap)) {
+            setOfflineBasemap(Arrays.asList(offilineOverlays).indexOf(basemap));
+            return true;
         }
         return false;
     }
@@ -222,14 +221,13 @@ public class MapHelper {
     }
 
     public void showLayersDialog() {
+        int layer = selectedLayer != null ? selectedLayer : 0;
         AlertDialog.Builder layerDialod = new AlertDialog.Builder(context);
         layerDialod.setTitle(context.getString(R.string.select_offline_layer));
         layerDialod.setSingleChoiceItems(offilineOverlays,
-                selectedLayer, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int item) {
-                        setOfflineBasemap(item);
-                        dialog.dismiss();
-                    }
+                layer, (dialog, item) -> {
+                    setOfflineBasemap(item);
+                    dialog.dismiss();
                 });
         layerDialod.show();
     }
@@ -319,5 +317,9 @@ public class MapHelper {
             }
         }
         return result;
+    }
+
+    public int getSelectedLayer() {
+        return selectedLayer;
     }
 }
