@@ -148,7 +148,6 @@ public class AutoSendWorker extends Worker {
                 String customMessage = uploader.uploadOneSubmission(instance, destinationUrl);
                 resultMessagesByInstanceId.put(instance.getDatabaseId().toString(),
                         customMessage != null ? customMessage : Collect.getInstance().getString(R.string.success));
-                uploader.saveSuccessStatusToDatabase(instance);
 
                 // If the submission was successful, delete the instance if either the app-level
                 // delete preference is set or the form definition requests auto-deletion.
@@ -173,7 +172,6 @@ public class AutoSendWorker extends Worker {
                 anyFailure = true;
                 resultMessagesByInstanceId.put(instance.getDatabaseId().toString(),
                         e.getDisplayMessage());
-                uploader.saveFailedStatusToDatabase(instance);
             }
         }
 

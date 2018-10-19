@@ -91,8 +91,6 @@ public class InstanceGoogleSheetsUploaderTask extends InstanceUploaderTask {
                     String destinationUrl = uploader.getUrlToSubmitTo(instance, null, null);
                     uploader.uploadOneSubmission(instance, destinationUrl);
 
-                    uploader.saveSuccessStatusToDatabase(instance);
-
                     outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(), DEFAULT_SUCCESSFUL_TEXT);
 
                     Collect.getInstance()
@@ -104,9 +102,7 @@ public class InstanceGoogleSheetsUploaderTask extends InstanceUploaderTask {
                 } catch (UploadException e) {
                     Timber.d(e);
                     outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(),
-                            e.getMessage() != null ? e.getMessage() : e.getCause().getMessage());
-
-                    uploader.saveFailedStatusToDatabase(instance);
+                            e.getDisplayMessage());
                 }
             }
         }
