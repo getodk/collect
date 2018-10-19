@@ -114,9 +114,6 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
     String taskURL = null;                          // Url to get tasks
     int count;                                      // Record number of deletes
 
-    String username = null;
-    String password = null;
-
     @Inject
     OpenRosaHttpInterface httpInterface;
 
@@ -182,10 +179,6 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
         source = Utilities.getSource();
         serverUrl = sharedPreferences.getString(PreferenceKeys.KEY_SERVER_URL, null);
         taskURL = serverUrl + "/surveyKPI/myassignments";
-
-        // Get the username and password
-        username = sharedPreferences.getString(PreferenceKeys.KEY_USERNAME, null);
-        password = sharedPreferences.getString(PreferenceKeys.KEY_PASSWORD, null);
 
         // Should mostly work may be better to add a lock however any error is recoverable
         if(Collect.getInstance().isDownloading()) {
@@ -735,7 +728,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                         " Address: " + ta.task.address +
                         " NFC: " + ta.task.location_trigger +
                         " Form: " + ta.task.form_id + " version: " + ta.task.form_version +
-                        "Assignee: " + assignment.assignee + "Username: " + username);
+                        "Assignee: " + assignment.assignee);
 
 
                 // Find out if this task is already on the phone
