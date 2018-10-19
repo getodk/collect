@@ -341,8 +341,16 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
         return null;
     }
 
+    /**
+     * Prompts the user for credentials for the server at the given URL. Once credentials are
+     * provided, starts a new upload task with just the instances that were not yet reached.
+     *
+     * messagesByInstanceIdAttempted makes it possible to identify the instances that were part
+     * of the latest submission attempt. The database provides generic status which could have come
+     * from an unrelated submission attempt.
+     */
     @Override
-    public void authRequest(Uri url, HashMap<String, String> messagesByInstanceIdDoneSoFar) {
+    public void authRequest(Uri url, HashMap<String, String> messagesByInstanceIdAttempted) {
         if (progressDialog.isShowing()) {
             // should always be showing here
             progressDialog.dismiss();
@@ -351,14 +359,14 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
         // Remove sent instances from instances to send
         ArrayList<Long> workingSet = new ArrayList<>();
         Collections.addAll(workingSet, instancesToSend);
-        if (messagesByInstanceIdDoneSoFar != null) {
-            Set<String> uploadedInstances = messagesByInstanceIdDoneSoFar.keySet();
+        if (messagesByInstanceIdAttempted != null) {
+            Set<String> uploadedInstances = messagesByInstanceIdAttempted.keySet();
 
             for (String uploadedInstance : uploadedInstances) {
                 Long removeMe = Long.valueOf(uploadedInstance);
                 boolean removed = workingSet.remove(removeMe);
                 if (removed) {
-                    Timber.i("%d was already sent, removing from queue before restarting task",
+                    Timber.i("%d was already attempted, removing from queue before restarting task",
                             removeMe);
                 }
             }
