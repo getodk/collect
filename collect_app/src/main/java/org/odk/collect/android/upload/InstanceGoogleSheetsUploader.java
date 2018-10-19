@@ -40,7 +40,6 @@ import org.odk.collect.android.exception.MultipleFoldersFoundException;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.tasks.FormLoaderTask;
-import org.odk.collect.android.upload.result.UploadException;
 import org.odk.collect.android.utilities.UrlUtils;
 import org.odk.collect.android.utilities.gdrive.DriveHelper;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
