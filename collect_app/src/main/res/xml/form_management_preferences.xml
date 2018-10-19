@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--
     <PreferenceCategory
         android:title="@string/form_update_category">
         <ListPreference
@@ -18,6 +19,7 @@
             android:title="@string/hide_old_form_versions_setting_title"
             android:summary="@string/hide_old_form_versions_setting_summary" />
     </PreferenceCategory>
+    -->
     <PreferenceCategory
         android:key="form_submission"
         android:title="@string/form_submission_category">
