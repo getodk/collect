@@ -23,6 +23,7 @@ package org.odk.collect.android.activities;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.arch.lifecycle.LiveData;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -40,6 +41,7 @@ import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceGoogleSheetsUploaderTask;
+import org.odk.collect.android.upload.AutoSendWorker;
 import org.odk.collect.android.utilities.ArrayUtils;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -47,8 +49,12 @@ import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
+import androidx.work.State;
+import androidx.work.WorkManager;
+import androidx.work.WorkStatus;
 import timber.log.Timber;
 
 
@@ -68,6 +74,10 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
     private InstanceGoogleSheetsUploaderTask instanceGoogleSheetsUploaderTask;
 
     private GoogleAccountsManager accountsManager;
+
+    // Default to true so the send button is disabled until the worker status is updated by the
+    // observer
+    private boolean autoSendOngoing = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +125,28 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
         accountsManager.setListener(this);
 
         getResultsFromApi();
+
+        // Start observer that sets autoSendOngoing field based on AutoSendWorker status
+        updateAutoSendStatus();
+    }
+
+    /**
+     * Updates whether an auto-send job is ongoing.
+     */
+    private void updateAutoSendStatus() {
+        LiveData<List<WorkStatus>> statuses = WorkManager.getInstance().getStatusesForUniqueWorkLiveData(AutoSendWorker.class.getName());
+
+        statuses.observe(this, workStatuses -> {
+            if (workStatuses != null) {
+                for (WorkStatus status : workStatuses) {
+                    if (status.getState().equals(State.RUNNING)) {
+                        autoSendOngoing = true;
+                        return;
+                    }
+                }
+                autoSendOngoing = false;
+            }
+        });
     }
 
     private void runTask() {
@@ -153,6 +185,8 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
             accountsManager.chooseAccountAndRequestPermissionIfNeeded();
         } else if (!isDeviceOnline()) {
             ToastUtils.showShortToast("No network connection available.");
+        } else if (autoSendOngoing) {
+            ToastUtils.showShortToast(R.string.send_in_progress);
         } else {
             runTask();
         }
