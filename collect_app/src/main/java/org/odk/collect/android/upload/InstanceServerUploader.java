@@ -95,55 +95,58 @@ public class InstanceServerUploader extends InstanceUploader {
                 throw new UploadException(Collect.getInstance().getString(R.string.url_error));
             }
 
+            HttpHeadResult headResult;
+            Map<String, String> responseHeaders;
             try {
-                HttpHeadResult headResult = httpInterface.head(uri, webCredentialsUtils.getCredentials(uri));
-                Map<String, String> responseHeaders = headResult.getHeaders();
-
-                if (headResult.getStatusCode() == HttpsURLConnection.HTTP_UNAUTHORIZED) {
-                    throw new UploadAuthRequestedException(Collect.getInstance().getString(R.string.server_requires_auth), submissionUri);
-                } else if (headResult.getStatusCode() == HttpsURLConnection.HTTP_NO_CONTENT) {
-                    // Redirect header received
-                    if (responseHeaders.containsKey("Location")) {
-                        try {
-                            Uri newURI = Uri.parse(URLDecoder.decode(responseHeaders.get("Location"), "utf-8"));
-                            // Allow redirects within same host. This could be redirecting to HTTPS.
-                            if (submissionUri.getHost().equalsIgnoreCase(newURI.getHost())) {
-                                openRosaServer = true;
-                                // Re-add params if server didn't respond with params
-                                if (newURI.getQuery() == null) {
-                                    newURI = newURI.buildUpon()
-                                            .encodedQuery(submissionUri.getEncodedQuery())
-                                            .build();
-                                }
-                                uriRemap.put(submissionUri, newURI);
-                                submissionUri = newURI;
-                            } else {
-                                // Don't follow a redirection attempt to a different host.
-                                // We can't tell if this is a spoof or not.
-                                saveFailedStatusToDatabase(instance);
-                                throw new UploadException(FAIL
-                                        + "Unexpected redirection attempt to a different host: "
-                                        + newURI.toString());
-                            }
-                        } catch (Exception e) {
-                            saveFailedStatusToDatabase(instance);
-                            throw new UploadException(FAIL + urlString + " " + e.toString());
-                        }
-                    }
-
-                } else {
-                    Timber.w("Status code on Head request: %d", headResult.getStatusCode());
-                    if (headResult.getStatusCode() >= HttpsURLConnection.HTTP_OK
-                            && headResult.getStatusCode() < HttpsURLConnection.HTTP_MULT_CHOICE) {
-                        saveFailedStatusToDatabase(instance);
-                        throw new UploadException(FAIL + "Invalid status code on Head request. If "
-                                + "you have a web proxy, you may need to login to your network.");
-                    }
-                }
+                headResult = httpInterface.head(uri, webCredentialsUtils.getCredentials(uri));
+                responseHeaders = headResult.getHeaders();
             } catch (Exception e) {
                 saveFailedStatusToDatabase(instance);
                 throw new UploadException(FAIL
                         + (e.getMessage() != null ? e.getMessage() : e.toString()));
+            }
+
+            if (headResult.getStatusCode() == HttpsURLConnection.HTTP_UNAUTHORIZED) {
+                saveFailedStatusToDatabase(instance);
+                throw new UploadAuthRequestedException(Collect.getInstance().getString(R.string.server_auth_credentials, submissionUri.getHost()),
+                        submissionUri);
+            } else if (headResult.getStatusCode() == HttpsURLConnection.HTTP_NO_CONTENT) {
+                // Redirect header received
+                if (responseHeaders.containsKey("Location")) {
+                    try {
+                        Uri newURI = Uri.parse(URLDecoder.decode(responseHeaders.get("Location"), "utf-8"));
+                        // Allow redirects within same host. This could be redirecting to HTTPS.
+                        if (submissionUri.getHost().equalsIgnoreCase(newURI.getHost())) {
+                            openRosaServer = true;
+                            // Re-add params if server didn't respond with params
+                            if (newURI.getQuery() == null) {
+                                newURI = newURI.buildUpon()
+                                        .encodedQuery(submissionUri.getEncodedQuery())
+                                        .build();
+                            }
+                            uriRemap.put(submissionUri, newURI);
+                            submissionUri = newURI;
+                        } else {
+                            // Don't follow a redirection attempt to a different host.
+                            // We can't tell if this is a spoof or not.
+                            saveFailedStatusToDatabase(instance);
+                            throw new UploadException(FAIL
+                                    + "Unexpected redirection attempt to a different host: "
+                                    + newURI.toString());
+                        }
+                    } catch (Exception e) {
+                        saveFailedStatusToDatabase(instance);
+                        throw new UploadException(FAIL + urlString + " " + e.toString());
+                    }
+                }
+            } else {
+                Timber.w("Status code on Head request: %d", headResult.getStatusCode());
+                if (headResult.getStatusCode() >= HttpsURLConnection.HTTP_OK
+                        && headResult.getStatusCode() < HttpsURLConnection.HTTP_MULT_CHOICE) {
+                    saveFailedStatusToDatabase(instance);
+                    throw new UploadException(FAIL + "Invalid status code on Head request. If "
+                            + "you have a web proxy, you may need to log in to your network.");
+                }
             }
         }
 
