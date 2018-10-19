@@ -13,6 +13,8 @@ import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 
+import com.google.android.gms.analytics.HitBuilders;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
@@ -23,14 +25,18 @@ import org.odk.collect.android.dto.Instance;
 import org.odk.collect.android.http.HttpClientConnection;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.upload.result.SubmissionUploadResult;
+import org.odk.collect.android.upload.result.UploadException;
 import org.odk.collect.android.utilities.IconUtils;
+import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceGoogleSheetsUploaderTask;
+import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -40,9 +46,11 @@ import java.util.Set;
 
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
+import timber.log.Timber;
 
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_SEND;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORMS_UPLOADED_NOTIFICATION;
+import static org.odk.collect.android.utilities.InstanceUploaderUtils.DEFAULT_SUCCESSFUL_TEXT;
 
 public class AutoSendWorker extends Worker {
     private static final int AUTO_SEND_RESULT_NOTIFICATION_ID = 1328974928;
@@ -98,7 +106,65 @@ public class AutoSendWorker extends Worker {
         boolean anyFailure = false;
 
         if (protocol.equals(getApplicationContext().getString(R.string.protocol_google_sheets))) {
-            //sendInstancesToGoogleSheets(getApplicationContext(), toSendArray);
+            if (PermissionUtils.checkIfGetAccountsPermissionGranted(getApplicationContext())) {
+                GoogleAccountsManager accountsManager = new GoogleAccountsManager(Collect.getInstance());
+                String googleUsername = accountsManager.getSelectedAccount();
+                if (googleUsername.isEmpty()) {
+                    return Result.FAILURE;
+                }
+                accountsManager.getCredential().setSelectedAccountName(googleUsername);
+                InstanceGoogleSheetsUploader uploader = new InstanceGoogleSheetsUploader(accountsManager);
+                if (!uploader.submissionsFolderExistsAndIsUnique()) {
+                    return Result.FAILURE;
+                }
+                for (Instance instance : toUpload) {
+                    String urlString = uploader.getUrlToSubmitTo(instance);
+                    // Get corresponding blank form and verify there is exactly 1
+                    FormsDao dao = new FormsDao();
+                    Cursor formCursor = dao.getFormsCursor(instance.getJrFormId(), instance.getJrVersion());
+                    List<Form> forms = dao.getFormsFromCursor(formCursor);
+                    if (forms.size() != 1) {
+                        resultMessagesByInstanceId.put(instance.getDatabaseId().toString(),
+                                Collect.getInstance().getString(R.string.not_exactly_one_blank_form_for_this_form_id));
+                    } else {
+                        Form form = forms.get(0);
+                        try {
+                            uploader.uploadOneSubmission(instance, new File(instance.getInstanceFilePath()),
+                                    form.getFormFilePath(), urlString);
+                            resultMessagesByInstanceId.put(instance.getDatabaseId().toString(),
+                                    DEFAULT_SUCCESSFUL_TEXT);
+                            uploader.saveSuccessStatusToDatabase(instance);
+                            // If the submission was successful, delete the instance if either the app-level
+                            // delete preference is set or the form definition requests auto-deletion.
+                            // TODO: this could take some time so might be better to do in a separate process,
+                            // perhaps another worker. It also feels like this could fail and if so should be
+                            // communicated to the user. Maybe successful delete should also be communicated?
+                            if (InstanceUploader.formShouldBeAutoDeleted(instance.getJrFormId(),
+                                    (boolean) GeneralSharedPreferences
+                                            .getInstance().get(PreferenceKeys.KEY_DELETE_AFTER_SEND))) {
+                                Uri deleteForm = Uri.withAppendedPath(InstanceColumns.CONTENT_URI,
+                                        instance.getDatabaseId().toString());
+                                Collect.getInstance().getContentResolver().delete(deleteForm, null, null);
+                            }
+
+                            Collect.getInstance()
+                                    .getDefaultTracker()
+                                    .send(new HitBuilders.EventBuilder()
+                                            .setCategory("Submission")
+                                            .setAction("HTTP-Sheets auto")
+                                            .build());
+                        } catch (UploadException e) {
+                            Timber.d(e);
+                            anyFailure = true;
+                            resultMessagesByInstanceId.put(instance.getDatabaseId().toString(),
+                                    e.getMessage() != null ? e.getMessage() : e.getCause().getMessage());
+                            uploader.saveFailedStatusToDatabase(instance);
+                        }
+                    }
+                }
+            } else {
+                resultMessage = Collect.getInstance().getString(R.string.odk_permissions_fail);
+            }
         } else if (protocol.equals(getApplicationContext().getString(R.string.protocol_odk_default))) {
             InstanceServerUploader uploader = new InstanceServerUploader(new HttpClientConnection(),
                     new WebCredentialsUtils());
@@ -168,26 +234,6 @@ public class AutoSendWorker extends Worker {
                 && sendwifi || currentNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE
                 && sendnetwork;
     }
-
-    //    private void sendInstancesToGoogleSheets(Context context, Long[] toSendArray) {
-    //        if (PermissionUtils.checkIfGetAccountsPermissionGranted(context)) {
-    //            GoogleAccountsManager accountsManager = new GoogleAccountsManager(Collect.getInstance());
-    //
-    //            String googleUsername = accountsManager.getSelectedAccount();
-    //            if (googleUsername.isEmpty()) {
-    //                return;
-    //            }
-    //            accountsManager.getCredential().setSelectedAccountName(googleUsername);
-    //            instanceGoogleSheetsUploaderTask = new InstanceGoogleSheetsUploaderTask(accountsManager);
-    //            // TODO: instanceServerUploaderTask is an AsyncTask so execute should be run off the main
-    //            // thread. This seems to work but unclear what behavior guarantees there are. We should
-    //            // move away from AsyncTask here. This requires a deeper rethink/refactor of the
-    //            // uploaders.
-    //            instanceGoogleSheetsUploaderTask.execute(toSendArray);
-    //        } else {
-    //            resultMessage = Collect.getInstance().getString(R.string.odk_permissions_fail);
-    //        }
-    //    }
 
     /**
      * Returns instances that need to be auto-sent.
