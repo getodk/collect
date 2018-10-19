@@ -33,6 +33,12 @@ import java.util.List;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_DELETE;
 
 public abstract class InstanceUploader {
+    /**
+     * Uploads the specified instance to the specified destination URL. It may return a custom
+     * success message on completion or null if none is available. Errors result in an UploadException.
+     *
+     * Updates the database status for the instance.
+     */
     @Nullable
     public abstract String uploadOneSubmission(Instance instance, String destinationUrl) throws UploadException;
 
@@ -77,7 +83,7 @@ public abstract class InstanceUploader {
         return instancesToUpload;
     }
 
-    public void saveSuccessStatusToDatabase(Instance instance) {
+    void saveSuccessStatusToDatabase(Instance instance) {
         Uri instanceDatabaseUri = Uri.withAppendedPath(InstanceProviderAPI.InstanceColumns.CONTENT_URI,
                 instance.getDatabaseId().toString());
 
@@ -86,7 +92,7 @@ public abstract class InstanceUploader {
         Collect.getInstance().getContentResolver().update(instanceDatabaseUri, contentValues, null, null);
     }
 
-    public void saveFailedStatusToDatabase(Instance instance) {
+    void saveFailedStatusToDatabase(Instance instance) {
         Uri instanceDatabaseUri = Uri.withAppendedPath(InstanceProviderAPI.InstanceColumns.CONTENT_URI,
                 instance.getDatabaseId().toString());
 

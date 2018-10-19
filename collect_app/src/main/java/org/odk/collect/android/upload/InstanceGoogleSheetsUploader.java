@@ -124,23 +124,30 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         FormsDao dao = new FormsDao();
         Cursor formCursor = dao.getFormsCursor(instance.getJrFormId(), instance.getJrVersion());
         List<Form> forms = dao.getFormsFromCursor(formCursor);
-        if (forms.size() != 1) {
-            throw new UploadException(Collect.getInstance().getString(R.string.not_exactly_one_blank_form_for_this_form_id));
-        }
-        Form form = forms.get(0);
-        String formFilePath = form.getFormFilePath();
 
-        TreeElement instanceElement = getInstanceElement(formFilePath, instanceFile);
-        setUpSpreadsheet(spreadsheetUrl);
-        if (hasRepeatableGroups(instanceElement)) {
-            createSheetsIfNeeded(instanceElement);
-        }
-        String key = getInstanceID(getChildElements(instanceElement));
-        if (key == null) {
-            key = PropertyUtils.genUUID();
-        }
-        insertRows(instance, instanceElement, null, key, instanceFile, spreadsheet.getSheets().get(0).getProperties().getTitle());
+        try {
+            if (forms.size() != 1) {
+                throw new UploadException(Collect.getInstance().getString(R.string.not_exactly_one_blank_form_for_this_form_id));
+            }
+            Form form = forms.get(0);
+            String formFilePath = form.getFormFilePath();
 
+            TreeElement instanceElement = getInstanceElement(formFilePath, instanceFile);
+            setUpSpreadsheet(spreadsheetUrl);
+            if (hasRepeatableGroups(instanceElement)) {
+                createSheetsIfNeeded(instanceElement);
+            }
+            String key = getInstanceID(getChildElements(instanceElement));
+            if (key == null) {
+                key = PropertyUtils.genUUID();
+            }
+            insertRows(instance, instanceElement, null, key, instanceFile, spreadsheet.getSheets().get(0).getProperties().getTitle());
+        } catch (UploadException e) {
+            saveFailedStatusToDatabase(instance);
+            throw e;
+        }
+
+        saveSuccessStatusToDatabase(instance);
         // Google Sheets can't provide a custom success message
         return null;
     }
