@@ -202,13 +202,6 @@ public class InstanceServerUploader extends InstanceUploader {
 
         saveSuccessStatusToDatabase(instance);
 
-        Collect.getInstance()
-                .getDefaultTracker()
-                .send(new HitBuilders.EventBuilder()
-                        .setCategory("Submission")
-                        .setAction("HTTP")
-                        .build());
-
         if (messageParser.isValid()) {
             return new SubmissionUploadSuccess(messageParser.getMessageResponse());
         } else {

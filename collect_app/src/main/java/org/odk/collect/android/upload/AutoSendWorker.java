@@ -200,6 +200,13 @@ public class AutoSendWorker extends Worker {
                                 instance.getDatabaseId().toString());
                         Collect.getInstance().getContentResolver().delete(deleteForm, null, null);
                     }
+
+                    Collect.getInstance()
+                            .getDefaultTracker()
+                            .send(new HitBuilders.EventBuilder()
+                                    .setCategory("Submission")
+                                    .setAction("HTTP auto")
+                                    .build());
                 }
             }
         }

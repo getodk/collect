@@ -16,6 +16,8 @@ package org.odk.collect.android.tasks;
 
 import android.net.Uri;
 
+import com.google.android.gms.analytics.HitBuilders;
+
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dto.Instance;
 import org.odk.collect.android.http.CollectServerClient.Outcome;
@@ -88,6 +90,15 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
 
             if (result.isFatalError()) {
                 return outcome;
+            }
+
+            if (result.isSuccess()) {
+                Collect.getInstance()
+                        .getDefaultTracker()
+                        .send(new HitBuilders.EventBuilder()
+                                .setCategory("Submission")
+                                .setAction("HTTP")
+                                .build());
             }
         }
         
