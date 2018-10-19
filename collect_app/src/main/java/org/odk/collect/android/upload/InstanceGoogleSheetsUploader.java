@@ -2,6 +2,9 @@ package org.odk.collect.android.upload;
 
 import android.support.annotation.NonNull;
 
+import com.google.android.gms.auth.GoogleAuthException;
+import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.services.sheets.v4.model.Sheet;
 import com.google.api.services.sheets.v4.model.Spreadsheet;
@@ -26,6 +29,7 @@ import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.upload.result.UploadException;
 import org.odk.collect.android.utilities.UrlUtils;
 import org.odk.collect.android.utilities.gdrive.DriveHelper;
+import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.utilities.gdrive.SheetsHelper;
 
 import java.io.File;
@@ -54,14 +58,46 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     private static final String ALTITUDE_TITLE_POSTFIX = "-altitude";
     private static final String ACCURACY_TITLE_POSTFIX = "-accuracy";
 
+    private final GoogleAccountsManager accountsManager;
     private final DriveHelper driveHelper;
     private final SheetsHelper sheetsHelper;
 
     private Spreadsheet spreadsheet;
 
-    public InstanceGoogleSheetsUploader(DriveHelper driveHelper, SheetsHelper sheetsHelper) {
-        this.driveHelper = driveHelper;
-        this.sheetsHelper = sheetsHelper;
+    public InstanceGoogleSheetsUploader(GoogleAccountsManager accountsManager) {
+        this.accountsManager = accountsManager;
+        driveHelper = accountsManager.getDriveHelper();
+        sheetsHelper = accountsManager.getSheetsHelper();
+    }
+
+    public String getAuthToken() throws IOException, GoogleAuthException {
+        String token;
+        try {
+            token = accountsManager.getCredential().getToken();
+            // Immediately invalidate so we get a different one if we have to try again
+            GoogleAuthUtil.invalidateToken(accountsManager.getContext(), token);
+            return token;
+        } catch (UserRecoverableAuthException e) {
+            if (accountsManager.getActivity() != null) {
+                accountsManager.getActivity().startActivityForResult(e.getIntent(),
+                        GoogleAccountsManager.REQUEST_AUTHORIZATION);
+            }
+            return null;
+        }
+    }
+
+    /**
+     * Returns whether the submissions folder previously existed or was successfully created. False
+     * if multiple folders match or there was another exception.
+     */
+    public boolean submissionsFolderExistsAndIsUnique() {
+        try {
+            driveHelper.createOrGetIDOfSubmissionsFolder();
+            return true;
+        } catch (IOException | MultipleFoldersFoundException e) {
+            Timber.d(e, "Exception getting or creating root folder for submissions");
+            return false;
+        }
     }
 
     public void uploadOneSubmission(Instance instance, File instanceFile, String formFilePath, String spreadsheetUrl) throws UploadException {
