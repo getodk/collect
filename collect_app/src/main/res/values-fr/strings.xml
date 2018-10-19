@@ -281,8 +281,7 @@
   <string name="no_google_account">Pas de compte Google choisi!</string>
   <string name="google_set_account">Vous avez choisi Google Sheets comme serveur. Merci de sélectionner un compte Google correspondant dans les paramètres généraux avant de continuer.</string>
   <string name="media_upload_error">Le téléversement du fichier média inexistant a échoué : %1$s</string>
-  <string name="odk_auth_auth_fail">Erreur d\'authentification d\'envoi automatique ODK, assurez-vous que vos paramètres sont corrects</string>
-  <string name="odk_auto_note">Résultats d\'envoi automatique ODK</string>
+    <string name="odk_auto_note">Résultats d\'envoi automatique ODK</string>
   <string name="odk_auto_download_notification_title">Résultats de téléchargement automatique ODK</string>
   <string name="notification_error">Erreur d\'affichage du texte de notification</string>
   <string name="delete_after_send">Supprimer après l\'envoi</string>

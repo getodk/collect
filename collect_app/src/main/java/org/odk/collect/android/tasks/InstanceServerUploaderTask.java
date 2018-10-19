@@ -14,8 +14,6 @@
 
 package org.odk.collect.android.tasks;
 
-import android.net.Uri;
-
 import com.google.android.gms.analytics.HitBuilders;
 
 import org.odk.collect.android.R;
@@ -31,7 +29,6 @@ import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 

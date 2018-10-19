@@ -17,7 +17,7 @@ package org.odk.collect.android.upload;
 import android.net.Uri;
 
 public class UploadAuthRequestedException extends UploadException {
-    private Uri submissionUri;
+    private final Uri submissionUri;
 
     public UploadAuthRequestedException(String message, Uri submissionUri) {
         super(message);
