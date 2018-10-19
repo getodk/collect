@@ -36,6 +36,7 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.dto.Form;
 import org.odk.collect.android.dto.Instance;
+import org.odk.collect.android.exception.MultipleFoldersFoundException;
 import org.odk.collect.android.http.HttpClientConnection;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.utilities.IconUtils;
@@ -47,6 +48,7 @@ import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -64,8 +66,6 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
 public class AutoSendWorker extends Worker {
     private static final int AUTO_SEND_RESULT_NOTIFICATION_ID = 1328974928;
 
-    private String resultMessage;
-
     public AutoSendWorker(@NonNull Context c, @NonNull WorkerParameters parameters) {
         super(c, parameters);
     }
@@ -81,8 +81,6 @@ public class AutoSendWorker extends Worker {
      *
      * If the network type doesn't match the auto-send settings, retry next time a connection is
      * available.
-     *
-     *  TODO: this is where server polling used to happen; need to bring it back elsewhere
      */
     @NonNull
     @Override
@@ -110,7 +108,9 @@ public class AutoSendWorker extends Worker {
         GeneralSharedPreferences settings = GeneralSharedPreferences.getInstance();
         String protocol = (String) settings.get(PreferenceKeys.KEY_PROTOCOL);
 
+        InstanceUploader uploader;
         Map<String, String> resultMessagesByInstanceId = new HashMap<>();
+        String deviceId = null;
         boolean anyFailure = false;
 
         if (protocol.equals(getApplicationContext().getString(R.string.protocol_google_sheets))) {
@@ -118,87 +118,62 @@ public class AutoSendWorker extends Worker {
                 GoogleAccountsManager accountsManager = new GoogleAccountsManager(Collect.getInstance());
                 String googleUsername = accountsManager.getSelectedAccount();
                 if (googleUsername.isEmpty()) {
+                    showUploadStatusNotification(true, Collect.getInstance().getString(R.string.google_set_account));
                     return Result.FAILURE;
                 }
                 accountsManager.getCredential().setSelectedAccountName(googleUsername);
-                InstanceGoogleSheetsUploader uploader = new InstanceGoogleSheetsUploader(accountsManager);
-                if (!uploader.submissionsFolderExistsAndIsUnique()) {
+                uploader = new InstanceGoogleSheetsUploader(accountsManager);
+
+                try {
+                    accountsManager.getDriveHelper().createOrGetIDOfSubmissionsFolder();
+                } catch (IOException | MultipleFoldersFoundException e) {
+                    Timber.d(e, "Exception getting or creating root folder for submissions");
+                    showUploadStatusNotification(true, "Exception getting or creating root folder for submissions");
                     return Result.FAILURE;
                 }
-                for (Instance instance : toUpload) {
-                    try {
-                        String destinationUrl = uploader.getUrlToSubmitTo(instance, null, null);
-                        uploader.uploadOneSubmission(instance, destinationUrl);
-                        resultMessagesByInstanceId.put(instance.getDatabaseId().toString(),
-                                Collect.getInstance().getString(R.string.success));
-                        uploader.saveSuccessStatusToDatabase(instance);
-                        // If the submission was successful, delete the instance if either the app-level
-                        // delete preference is set or the form definition requests auto-deletion.
-                        // TODO: this could take some time so might be better to do in a separate process,
-                        // perhaps another worker. It also feels like this could fail and if so should be
-                        // communicated to the user. Maybe successful delete should also be communicated?
-                        if (InstanceUploader.formShouldBeAutoDeleted(instance.getJrFormId(),
-                                (boolean) GeneralSharedPreferences
-                                        .getInstance().get(PreferenceKeys.KEY_DELETE_AFTER_SEND))) {
-                            Uri deleteForm = Uri.withAppendedPath(InstanceColumns.CONTENT_URI,
-                                    instance.getDatabaseId().toString());
-                            Collect.getInstance().getContentResolver().delete(deleteForm, null, null);
-                        }
-
-                        Collect.getInstance()
-                                .getDefaultTracker()
-                                .send(new HitBuilders.EventBuilder()
-                                        .setCategory("Submission")
-                                        .setAction("HTTP-Sheets auto")
-                                        .build());
-                    } catch (UploadException e) {
-                        Timber.d(e);
-                        anyFailure = true;
-                        resultMessagesByInstanceId.put(instance.getDatabaseId().toString(),
-                                e.getDisplayMessage());
-                        uploader.saveFailedStatusToDatabase(instance);
-                    }
-                }
             } else {
-                resultMessage = Collect.getInstance().getString(R.string.odk_permissions_fail);
+                showUploadStatusNotification(true, Collect.getInstance().getString(R.string.odk_permissions_fail));
+                return Result.FAILURE;
             }
-        } else if (protocol.equals(getApplicationContext().getString(R.string.protocol_odk_default))) {
-            InstanceServerUploader uploader = new InstanceServerUploader(new HttpClientConnection(),
+        } else {
+            uploader = new InstanceServerUploader(new HttpClientConnection(),
                     new WebCredentialsUtils(), new HashMap<>());
-            String deviceId = new PropertyManager(Collect.getInstance().getApplicationContext())
+            deviceId = new PropertyManager(Collect.getInstance().getApplicationContext())
                     .getSingularProperty(PropertyManager.withUri(PropertyManager.PROPMGR_DEVICE_ID));
+        }
 
-            for (Instance instance : toUpload) {
-                try {
-                    String destinationUrl = uploader.getUrlToSubmitTo(instance, deviceId, null);
-                    String customMessage = uploader.uploadOneSubmission(instance, destinationUrl);
-                    resultMessagesByInstanceId.put(instance.getDatabaseId().toString(),
-                            customMessage != null ? customMessage : Collect.getInstance().getString(R.string.success));
+        for (Instance instance : toUpload) {
+            try {
+                String destinationUrl = uploader.getUrlToSubmitTo(instance, deviceId, null);
+                String customMessage = uploader.uploadOneSubmission(instance, destinationUrl);
+                resultMessagesByInstanceId.put(instance.getDatabaseId().toString(),
+                        customMessage != null ? customMessage : Collect.getInstance().getString(R.string.success));
+                uploader.saveSuccessStatusToDatabase(instance);
 
-                    // If the submission was successful, delete the instance if either the app-level
-                    // delete preference is set or the form definition requests auto-deletion.
-                    // TODO: this could take some time so might be better to do in a separate thread
-                    // It also feels like this could fail and if so should be
-                    // communicated to the user. Maybe successful delete should also be communicated?
-                    if (InstanceServerUploader.formShouldBeAutoDeleted(instance.getJrFormId(),
-                            (boolean) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_DELETE_AFTER_SEND))) {
-                        Uri deleteForm = Uri.withAppendedPath(InstanceColumns.CONTENT_URI,
-                                instance.getDatabaseId().toString());
-                        Collect.getInstance().getContentResolver().delete(deleteForm, null, null);
-                    }
-
-                    Collect.getInstance()
-                            .getDefaultTracker()
-                            .send(new HitBuilders.EventBuilder()
-                                    .setCategory("Submission")
-                                    .setAction("HTTP auto")
-                                    .build());
-                } catch (UploadException e) {
-                    Timber.d(e);
-                    anyFailure = true;
-                    resultMessagesByInstanceId.put(instance.getDatabaseId().toString(),
-                            e.getDisplayMessage());
+                // If the submission was successful, delete the instance if either the app-level
+                // delete preference is set or the form definition requests auto-deletion.
+                // TODO: this could take some time so might be better to do in a separate process,
+                // perhaps another worker. It also feels like this could fail and if so should be
+                // communicated to the user. Maybe successful delete should also be communicated?
+                if (InstanceUploader.formShouldBeAutoDeleted(instance.getJrFormId(),
+                        (boolean) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_DELETE_AFTER_SEND))) {
+                    Uri deleteForm = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, instance.getDatabaseId().toString());
+                    Collect.getInstance().getContentResolver().delete(deleteForm, null, null);
                 }
+
+                Collect.getInstance()
+                        .getDefaultTracker()
+                        .send(new HitBuilders.EventBuilder()
+                                .setCategory("Submission")
+                                .setAction(protocol.equals(getApplicationContext().getString(R.string.protocol_google_sheets)) ?
+                                        "HTTP-Sheets auto" : "HTTP auto")
+                                .build());
+            } catch (UploadException e) {
+                Timber.d(e);
+                anyFailure = true;
+                resultMessagesByInstanceId.put(instance.getDatabaseId().toString(),
+                        e.getDisplayMessage());
+                uploader.saveFailedStatusToDatabase(instance);
             }
         }
 
@@ -301,13 +276,9 @@ public class AutoSendWorker extends Worker {
     }
 
     private String formatOverallResultMessage(Map<String, String> resultMessagesByInstanceId) {
-        String message;
+        String message = "";
 
-        if (resultMessagesByInstanceId == null) {
-            message = resultMessage != null
-                    ? resultMessage
-                    : Collect.getInstance().getString(R.string.odk_auth_auth_fail);
-        } else {
+        if (resultMessagesByInstanceId != null) {
             StringBuilder selection = new StringBuilder();
             Set<String> keys = resultMessagesByInstanceId.keySet();
             Iterator<String> it = keys.iterator();

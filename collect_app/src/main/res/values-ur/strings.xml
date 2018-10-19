@@ -262,8 +262,7 @@
   <string name="no_google_account">کوئی گوگل اکاؤنٹ منتخب نہیں ہوا!</string>
   <string name="google_set_account">آپ نے اپنے سرور کے طور پر گوگل شیٹ کو منتخب کیا ہے، براہ کرم شمار کرنے سے قبل عام ترتیب میں اسی گوگل اکاؤنٹ کو منتخب کریں</string>
   <string name="media_upload_error"> میڈیا فائل کو اپ لوڈ کرنے میں ناکام جو کہ موجود نہیں:%1$s</string>
-  <string name="odk_auth_auth_fail">او ڈی کے آٹو خودکار تصدیق کی ناکامی ، براہ کرم یقینی بنائیں کہ آپ کی ترتیب درست ہے</string>
-  <string name="odk_permissions_fail">او ڈی کے آٹو خود اجازت کی ناکامی، براہ کرم یقینی بنائیں کہ آپ نے تمام مستحق اجازت دی ہے</string>
+    <string name="odk_permissions_fail">او ڈی کے آٹو خود اجازت کی ناکامی، براہ کرم یقینی بنائیں کہ آپ نے تمام مستحق اجازت دی ہے</string>
   <string name="odk_auto_note">او ڈی کے آٹو بھیجنے کے نتائج</string>
   <string name="odk_auto_download_notification_title">او ڈی کے آٹو ڈاؤن لوڈ کے نتائج</string>
   <string name="notification_error">نوٹیفیکیشن متن کی خرابی</string>

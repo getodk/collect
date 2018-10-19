@@ -286,7 +286,6 @@
     <string name="no_google_account">No Google Account Selected!</string>
     <string name="google_set_account">You have selected Google Sheets as your server, please select a corresponding Google account in the General Settings before continuing</string>
     <string name="media_upload_error">Failed to upload media file that does not exist: %1$s</string>
-    <string name="odk_auth_auth_fail">ODK auto send authentication failure, please make sure your settings are correct</string>
     <string name="odk_permissions_fail">ODK auto send permission failure, please make sure your have granted all required permissions</string>
     <string name="odk_auto_note">ODK auto-send results</string>
     <string name="odk_auto_download_notification_title">ODK auto-download results</string>

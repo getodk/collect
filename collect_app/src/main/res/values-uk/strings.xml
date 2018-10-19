@@ -281,8 +281,7 @@
   <string name="no_google_account">Не вибраний жоден обліковий запис Google!</string>
   <string name="google_set_account">Ви обрали своїм сервером Google Сторінки, для продовження, будь ласка, вкажіть відповідний обліковий запис Google в Загальних налаштуваннях</string>
   <string name="media_upload_error">Помилка завантаження неіснуючого медіа файлу: %1$s</string>
-  <string name="odk_auth_auth_fail">Помилка авторизації під час автоматичного надсилання, будь ласка, перевірте налаштування</string>
-  <string name="odk_permissions_fail">Помилка автоматичного надсилання, будь ласка, перевірте надання всіх необхідних дозволів</string>
+    <string name="odk_permissions_fail">Помилка автоматичного надсилання, будь ласка, перевірте надання всіх необхідних дозволів</string>
   <string name="odk_auto_note">Результати автонадсилання ODK</string>
   <string name="odk_auto_download_notification_title">Результати автозавантаження ODK</string>
   <string name="notification_error">Помилка відображення тексту оповіщення</string>
