@@ -55,7 +55,7 @@ public abstract class InstanceUploader {
         return instancesToUpload;
     }
 
-    void saveSuccessStatusToDatabase(Instance instance) {
+    public void saveSuccessStatusToDatabase(Instance instance) {
         Uri instanceDatabaseUri = Uri.withAppendedPath(InstanceProviderAPI.InstanceColumns.CONTENT_URI,
                 instance.getDatabaseId().toString());
 
@@ -64,7 +64,7 @@ public abstract class InstanceUploader {
         Collect.getInstance().getContentResolver().update(instanceDatabaseUri, contentValues, null, null);
     }
 
-    void saveFailedStatusToDatabase(Instance instance) {
+    public void saveFailedStatusToDatabase(Instance instance) {
         Uri instanceDatabaseUri = Uri.withAppendedPath(InstanceProviderAPI.InstanceColumns.CONTENT_URI,
                 instance.getDatabaseId().toString());
 
