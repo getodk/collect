@@ -67,7 +67,7 @@ public class BasePreferenceFragment extends PreferenceFragment {
             }
         }
 
-        // Delete after send
+        // smap Delete after send
         Preference del = getPreferenceScreen().findPreference(PreferenceKeys.KEY_DELETE_AFTER_SEND);
         if(del != null) {
             boolean override_delete = (Boolean) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_SMAP_OVERRIDE_DELETE);
@@ -75,6 +75,17 @@ public class BasePreferenceFragment extends PreferenceFragment {
                 del.setEnabled(false);
             } else {
                 del.setEnabled(true);
+            }
+        }
+
+        // smap image size
+        Preference image_size = getPreferenceScreen().findPreference(PreferenceKeys.KEY_IMAGE_SIZE);
+        if(image_size != null) {
+            boolean override_image_size = (Boolean) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_SMAP_OVERRIDE_IMAGE_SIZE);
+            if (override_image_size) {
+                image_size.setEnabled(false);
+            } else {
+                image_size.setEnabled(true);
             }
         }
     }
