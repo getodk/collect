@@ -54,6 +54,7 @@ import org.odk.collect.android.logic.FormInfo;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
+import org.odk.collect.android.taskModel.FormLaunchDetail;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.preferences.FormMetadataMigrator;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
@@ -67,6 +68,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Stack;
 
 import javax.inject.Inject;
 
@@ -120,8 +122,9 @@ public class Collect extends Application implements HasActivityInjector {
     private boolean tasksDownloading = false;           // smap
     // Keep a reference to form entry activity to allow cancel dialogs to be shown during remote calls
     private FormEntryActivity formEntryActivity = null; // smap
-    private HashMap<String, SmapRemoteDataItem> remoteCache = null;       // smap
-    private HashMap<String, String> remoteCalls = null;       // smap
+    private HashMap<String, SmapRemoteDataItem> remoteCache = null;         // smap
+    private HashMap<String, String> remoteCalls = null;                     // smap
+    private Stack<FormLaunchDetail> formStack = new Stack<>();              // smap
 
     @Inject
     DispatchingAndroidInjector<Activity> androidInjector;
@@ -405,6 +408,23 @@ public class Collect extends Application implements HasActivityInjector {
         return tracker;
     }
     */
+
+    /*
+     * smap
+     * Push a FormLaunchDetail to the stack
+     * this form should then be launched by SmapMain
+     */
+    public void pushToFormStack(FormLaunchDetail fld) {
+        formStack.push(fld);
+    }
+
+    /*
+     * smap
+     * Pop a FormLaunchDetails from the stack
+     */
+    public FormLaunchDetail popFromFormStack() {
+        return formStack.pop();
+    }
 
     private static class CrashReportingTree extends Timber.Tree {
         @Override

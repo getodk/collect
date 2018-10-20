@@ -2098,8 +2098,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     // but if you want save in the background, can't be current screen
-    private boolean saveDataToDisk(boolean exit, boolean complete, String updatedSaveName,
-                                   boolean current) {
+    public boolean saveDataToDisk(boolean exit, boolean complete, String updatedSaveName,
+                                   boolean current) {   // smap make public
         // save current answer
         if (current) {
             if (!saveAnswersForCurrentScreen(complete)) {

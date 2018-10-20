@@ -279,16 +279,7 @@ public class SmapTaskListFragment extends ListFragment
                 ((SmapMain) getActivity()).completeTask(entry);
             }
         } else {
-
-            Uri formUri = ContentUris.withAppendedId(FormsProviderAPI.FormsColumns.CONTENT_URI, entry.id);
-
-            // Use an explicit intent
-            Intent i = new Intent(getActivity(), org.odk.collect.android.activities.FormEntryActivity.class);
-            i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
-            i.setData(formUri);
-            startActivity(i);
-
-            //startActivity(new Intent(Intent.ACTION_EDIT, formUri));
+            ((SmapMain) getActivity()).completeForm(entry);
         }
     }
 

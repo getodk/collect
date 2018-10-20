@@ -87,6 +87,45 @@ public class ManageForm {
 		return fd;
 	}
 
+    public ManageFormDetails getFormDetailsNoVersion(String formId) {
+
+        ManageFormDetails fd = new ManageFormDetails();
+        String source = Utilities.getSource();
+        Cursor c = null;
+
+        try {
+
+            String selectionClause = FormsColumns.JR_FORM_ID + "=? AND "
+                    + FormsColumns.SOURCE + "=?";
+
+            String [] selectionArgs = new String[] { formId, source };
+            //String [] selectionArgs = new String [1];
+            //selectionArgs[0] = formId;
+            String [] proj = {FormsColumns._ID, FormsColumns.DISPLAY_NAME, FormsColumns.JR_FORM_ID,
+                    FormsColumns.SUBMISSION_URI,FormsColumns.FORM_FILE_PATH};
+
+            final ContentResolver resolver = Collect.getInstance().getContentResolver();
+            c = resolver.query(FormsColumns.CONTENT_URI, proj, selectionClause, selectionArgs, null);
+
+            if(c.getCount() > 0) {
+
+                // Form is already on the phone
+                c.moveToFirst();
+                fd.id = c.getLong(c.getColumnIndex(FormsColumns._ID));
+                fd.formName = c.getString(c.getColumnIndex(FormsColumns.DISPLAY_NAME));
+                fd.exists = true;
+
+            } else {
+                fd.exists = false;
+            }
+        } catch (Throwable e) {
+            Timber.e("ManageForm: " + e.getMessage());
+        }
+        c.close();
+
+        return fd;
+    }
+
     public void updateFormDetails(Long id, String displayName, boolean tasks_only) {
 
 

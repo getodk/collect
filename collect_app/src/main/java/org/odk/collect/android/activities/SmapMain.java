@@ -61,9 +61,11 @@ import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.services.LocationService;
 import org.odk.collect.android.services.NotificationRegistrationService;
+import org.odk.collect.android.taskModel.FormLaunchDetail;
 import org.odk.collect.android.taskModel.NfcTrigger;
 import org.odk.collect.android.tasks.DownloadTasksTask;
 import org.odk.collect.android.tasks.NdefReaderTask;
@@ -96,6 +98,8 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     private static final int PROGRESS_DIALOG = 1;
     private static final int ALERT_DIALOG = 2;
     private static final int PASSWORD_DIALOG = 3;
+    private static final int COMPLETE_FORM = 4;
+
     private AlertDialog mAlertDialog;
     private ProgressDialog mProgressDialog;
     private String mAlertMsg;
@@ -583,6 +587,13 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if(requestCode == COMPLETE_FORM) {
+            formCompleted();
+        }
+    }
+
     /*
      * Copied from Collect Main Menu Activity
      */
@@ -764,6 +775,41 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
 
     }
 
+    /*
+     * The user has selected an option to edit / complete a form
+     */
+    public void completeForm(TaskEntry entry) {
+        Uri formUri = ContentUris.withAppendedId(FormsProviderAPI.FormsColumns.CONTENT_URI, entry.id);
+
+        // Use an explicit intent
+        Intent i = new Intent(this, org.odk.collect.android.activities.FormEntryActivity.class);
+        i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
+        i.setData(formUri);
+        startActivityForResult(i, COMPLETE_FORM);
+    }
+
+    /*
+     * respond to completion of a form
+     */
+    public void formCompleted() {
+        Timber.i("Form completed");
+        FormLaunchDetail fld = Collect.getInstance().popFromFormStack();
+        TaskEntry te = new TaskEntry();
+        if(fld != null) {
+            if(fld.id > 0) {
+                // Start a form
+                te.id = fld.id;
+                completeForm(te);
+            } else if(fld.instancePath != null) {
+                // Start a task or saved instance
+                te.id = 0;
+                te.instancePath = fld.instancePath;
+                te.taskStatus = Utilities.STATUS_T_ACCEPTED;
+                te.repeat = false;
+                completeTask(te);
+            }
+        }
+    }
 
     /*
      * Duplicate the instance

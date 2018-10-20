@@ -445,16 +445,6 @@ public class Utilities {
     }
 
     /*
-     * Delete the task
-     */
-    public void deleteTask(Long id) {
-
-        Uri taskUri = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, id.toString());
-        final ContentResolver cr = Collect.getInstance().getContentResolver();
-        cr.delete(taskUri, null, null);
-    }
-
-    /*
      * Delete any tasks with the matching status
      * Only delete if the task status has been successfully synchronised with the server
      */
