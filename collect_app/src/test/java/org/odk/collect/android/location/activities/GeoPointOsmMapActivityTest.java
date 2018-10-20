@@ -10,7 +10,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
-import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.activities.GeoPointOsmMapActivity;
 import org.odk.collect.android.location.client.LocationClient;
 import org.odk.collect.android.location.client.LocationClients;
@@ -18,7 +17,6 @@ import org.odk.collect.android.spatial.MapHelper;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.android.controller.ActivityController;
-import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowActivity;
 
 import static android.app.Activity.RESULT_OK;
@@ -31,7 +29,6 @@ import static org.odk.collect.android.activities.FormEntryActivity.LOCATION_RESU
 import static org.odk.collect.android.location.activities.GeoPointActivityTest.newMockLocation;
 import static org.robolectric.Shadows.shadowOf;
 
-@Config(constants = BuildConfig.class)
 @RunWith(RobolectricTestRunner.class)
 public class GeoPointOsmMapActivityTest extends BaseGeoActivityTest {
 

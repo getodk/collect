@@ -129,11 +129,11 @@ public class DrawActivity extends CollectAbstractActivity {
                     fabActions.animate().rotation(0).setInterpolator(new AccelerateDecelerateInterpolator())
                             .setDuration(100).start();
 
-                    fabSetColor.setVisibility(View.INVISIBLE);
+                    fabSetColor.hide();
                     cardViewSetColor.setVisibility(View.INVISIBLE);
-                    fabSaveAndClose.setVisibility(View.INVISIBLE);
+                    fabSaveAndClose.hide();
                     cardViewSaveAndClose.setVisibility(View.INVISIBLE);
-                    fabClear.setVisibility(View.INVISIBLE);
+                    fabClear.hide();
                     cardViewClear.setVisibility(View.INVISIBLE);
                 }
                 view.setTag(status);
