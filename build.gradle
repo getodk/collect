@@ -27,6 +27,7 @@ allprojects {
         }
         maven { url 'https://jitpack.io' }
         maven { url 'https://staging.dev.medicmobile.org/_couch/maven-repo' }
+        google()
     }
 }
 
@@ -47,7 +48,7 @@ task checkTests(type: GradleBuild) {
 }
 
 ext {
-    supportLibraryVersion = '27.1.1'
+    supportLibraryVersion = '28.0.0'
     leakyCanaryVersion = '1.5.4'
     daggerVersion = '2.16'
     rxLifecycleVersion = '2.2.1'

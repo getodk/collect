@@ -7,10 +7,8 @@ import android.preference.PreferenceManager;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.application.Collect;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.annotation.Config;
 
 import java.io.PrintStream;
 import java.util.Arrays;
@@ -31,7 +29,6 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SELECTED_GO
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
 
 /** Tests the FormMetadataFragment */
-@Config(constants = BuildConfig.class)
 @RunWith(RobolectricTestRunner.class)
 public class FormMetadataMigratorTest {
 
