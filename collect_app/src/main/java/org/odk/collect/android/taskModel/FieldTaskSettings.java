@@ -29,4 +29,5 @@ public class FieldTaskSettings {
     public String ft_send;
     public boolean ft_send_wifi;
     public boolean ft_send_wifi_cell;
+    public String ft_image_size;
 }

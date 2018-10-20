@@ -425,7 +425,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                         editor.putBoolean(PreferenceKeys.KEY_SMAP_OVERRIDE_SYNC, false);
                     }
 
-                     /*
+                    /*
                      * Override the delete after send setting if this is set from the server
                      */
                     if(tr.settings.ft_delete != null) {
@@ -444,6 +444,24 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                         // Support legacy servers / settings
                         editor.putBoolean(PreferenceKeys.KEY_DELETE_AFTER_SEND, tr.settings.ft_delete_submitted);
                     }
+
+                    /*
+                     * Override the camera image size setting
+                     */
+                    if(tr.settings.ft_image_size != null) {
+                        if(!tr.settings.ft_image_size.equals("not set")) {
+                            editor.putString(PreferenceKeys.KEY_IMAGE_SIZE, tr.settings.ft_image_size);
+                            editor.putBoolean(PreferenceKeys.KEY_SMAP_OVERRIDE_IMAGE_SIZE, true);
+                        } else {
+                            // Leave the local settings as they are and enable for local editing
+                            editor.putBoolean(PreferenceKeys.KEY_SMAP_OVERRIDE_IMAGE_SIZE, false);
+                        }
+
+                    } else {
+                        // Leave the local settings as they are and enable for local editing
+                        editor.putBoolean(PreferenceKeys.KEY_SMAP_OVERRIDE_IMAGE_SIZE, false);
+                    }
+
 
 
                     editor.apply();
