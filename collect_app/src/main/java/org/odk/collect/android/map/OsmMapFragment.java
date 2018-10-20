@@ -94,7 +94,8 @@ public class OsmMapFragment extends Fragment implements MapFragment,
         map = view.findViewById(R.id.osm_map_view);
         map.setMultiTouchControls(true);
         map.setBuiltInZoomControls(true);
-        map.setMinZoomLevel(1);
+        map.setMinZoomLevel(2);
+        map.setMaxZoomLevel(22);
         map.getController().setCenter(INITIAL_CENTER);
         map.getController().setZoom(INITIAL_ZOOM);
         map.setTilesScaledToDpi(true);
