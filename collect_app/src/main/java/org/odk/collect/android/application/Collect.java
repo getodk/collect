@@ -39,6 +39,7 @@ import com.squareup.leakcanary.RefWatcher;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
+import org.javarosa.core.model.FormIndex;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
@@ -116,6 +117,7 @@ public class Collect extends Application implements HasActivityInjector {
     //private Tracker tracker;    // smap
     private AppComponent applicationComponent;
 
+    private FormIndex startingFormIndex;                // smap
     private Location location = null;                   // smap
     private boolean recordLocation = false;             // smap
     private FormInfo formInfo = null;                   // smap
@@ -389,6 +391,13 @@ public class Collect extends Application implements HasActivityInjector {
     public boolean inRemoteCall() {
         return remoteCalls.size() > 0;
     }
+
+    public void setFormIndex(FormIndex formIndex) {
+        startingFormIndex = formIndex;
+    }
+    public FormIndex getFormIndex() {
+        return startingFormIndex;
+    }
     // End Smap
 
 
@@ -423,7 +432,11 @@ public class Collect extends Application implements HasActivityInjector {
      * Pop a FormLaunchDetails from the stack
      */
     public FormLaunchDetail popFromFormStack() {
-        return formStack.pop();
+        if(formStack.empty()) {
+            return null;
+        } else {
+            return formStack.pop();
+        }
     }
 
     private static class CrashReportingTree extends Timber.Tree {

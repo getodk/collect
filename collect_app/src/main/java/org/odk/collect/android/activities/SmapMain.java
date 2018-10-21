@@ -743,6 +743,10 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
                     i.putExtra(FormEntryActivity.KEY_SURVEY_NOTES, surveyNotes);
                     i.putExtra(FormEntryActivity.KEY_CAN_UPDATE, canUpdate);
                     i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
+                    if(entry.formIndex != null) {
+                        i.putExtra(FormEntryActivity.KEY_FORM_INDEX, true);
+                        Collect.getInstance().setFormIndex(entry.formIndex);
+                    }
                     if (instancePath != null) {    // TODO Don't think this is needed
                         i.putExtra(FormEntryActivity.KEY_INSTANCEPATH, instancePath);
                     }
@@ -806,6 +810,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
                 te.instancePath = fld.instancePath;
                 te.taskStatus = Utilities.STATUS_T_ACCEPTED;
                 te.repeat = false;
+                te.formIndex = fld.formIndex;
                 completeTask(te);
             }
         }

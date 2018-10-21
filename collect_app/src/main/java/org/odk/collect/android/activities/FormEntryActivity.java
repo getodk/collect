@@ -196,10 +196,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     public static final String KEY_TASK = "task";                       // smap
     public static final String KEY_SURVEY_NOTES = "surveyNotes";        // smap
     public static final String KEY_CAN_UPDATE = "canUpdate";            // smap
+    public static final String KEY_FORM_INDEX = "formindex";            // smap
     private long mTaskId;                                               // smap
     private String mFormId;                                             // smap
     private String mSurveyNotes = null;                                 // smap
     private boolean mCanUpdate = true;                                  // smap
+    private boolean mFormIndex = false;                                 // smap
     private int mUpdated = 0;                                           // smap, greater than 0 if the user has already edited this instance
     ProgressDialog progressBar = null;                                  // smap
     String swipeDirection;                                              // smap
@@ -627,7 +629,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         mTaskId = intent.getLongExtra(KEY_TASK, -1);                   // smap
         mSurveyNotes = intent.getStringExtra(KEY_SURVEY_NOTES);                   // smap
         mCanUpdate = intent.getBooleanExtra(KEY_CAN_UPDATE, true);     // smap
-        mFormId = formInfo.getFormID(); // smap
+        mFormIndex = intent.getBooleanExtra(KEY_FORM_INDEX, false);     // smap
+        mFormId = formInfo.getFormID();                                             // smap
 
         Collect.getInstance().getActivityLogger()
                 .logAction(this, "formLoaded", formPath);
@@ -2766,6 +2769,17 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     }
                 }
 
+                // start smap
+                if(mFormIndex) { // Start at specified formIndex
+                    FormIndex fi = Collect.getInstance().getFormIndex();
+                    if(fi != null) {
+                        mFormIndex = false;
+                        Collect.getInstance().setFormIndex(null);
+                        formController.jumpToIndex(fi);
+                        next();
+                    }
+                }
+                // end smap
                 refreshCurrentView();
             }
         } else {

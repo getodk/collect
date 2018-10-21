@@ -1,5 +1,7 @@
 package org.odk.collect.android.loaders;
 
+import org.javarosa.core.model.FormIndex;
+
 /**
  * This class holds the per-item data in the {@link TaskLoader}.
  */
@@ -28,6 +30,7 @@ public class TaskEntry {
     public String uuid;
     public String source;
     public String locationTrigger;
+    public FormIndex formIndex;     // If this is a restart to a form that is being edited
 
 
 

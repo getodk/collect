@@ -27,6 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.Toast;
 
+import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -34,6 +35,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.ExternalAppsUtils;
+import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.taskModel.FormLaunchDetail;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.DependencyProvider;
@@ -201,7 +203,9 @@ public class SmapFormWidget extends QuestionWidget implements BinaryWidget {
     public void onButtonClick(int buttonId) {
         // 1. Save restore information in collect app
         String instancePath = Collect.getInstance().getFormController().getInstanceFile().getAbsolutePath();
-        Collect.getInstance().pushToFormStack(new FormLaunchDetail(instancePath));
+        FormIndex formIndex = Collect.getInstance().getFormController().getFormIndex();
+
+        Collect.getInstance().pushToFormStack(new FormLaunchDetail(instancePath, formIndex));
 
         // 2. Set form details to be launched in collect app
         Collect.getInstance().pushToFormStack(new FormLaunchDetail(mfd.id));
