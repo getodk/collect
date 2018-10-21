@@ -590,7 +590,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                 : spreadsheet.getSpreadsheetUrl().substring(0, spreadsheet.getSpreadsheetUrl().lastIndexOf('/') + 1) + "edit#gid=" + sheetId;
     }
 
-    public boolean isLocationValid(String answer) {
+    public static boolean isLocationValid(String answer) {
         return Pattern
                 .compile("^-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\.[0-9]+\\s[0-9]+\\.[0-9]+$")
                 .matcher(answer)
