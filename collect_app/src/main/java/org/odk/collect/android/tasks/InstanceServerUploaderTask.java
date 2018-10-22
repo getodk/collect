@@ -83,9 +83,10 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
                                 .setAction("HTTP")
                                 .build());
             } catch (UploadAuthRequestedException e) {
-                outcome.authRequestingServer = e.getSubmissionUri();
+                outcome.authRequestingServer = e.getAuthRequestingServer();
                 // Don't add the instance that caused an auth request to the map because we want to
-                // retry; items in the map are not reconsidered in this submission attempt
+                // retry. Items present in the map are considered already attempted and won't be
+                // retried.
             } catch (UploadException e) {
                 outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(),
                         e.getDisplayMessage());

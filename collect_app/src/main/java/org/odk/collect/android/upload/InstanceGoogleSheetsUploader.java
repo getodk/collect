@@ -272,7 +272,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             folderId = driveHelper.createOrGetIDOfFolderWithName(instance.getJrFormId());
         } catch (IOException | MultipleFoldersFoundException e) {
             Timber.e(e);
-            throw new UploadException(e.getMessage());
+            throw new UploadException(e);
         }
 
         String uploadedFileId;
@@ -282,7 +282,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             uploadedFileId = driveHelper.uploadFileToDrive(filePath, folderId, toUpload);
         } catch (IOException e) {
             Timber.e(e, "Exception thrown while uploading the file to drive");
-            throw new UploadException(e.getMessage());
+            throw new UploadException(e);
         }
 
         // checking if file was successfully uploaded
@@ -553,7 +553,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                 throw new UploadException(message);
             } catch (IOException | BadUrlException e) {
                 Timber.i(e);
-                throw new UploadException(e.getMessage());
+                throw new UploadException(e);
             }
         }
     }
