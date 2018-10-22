@@ -85,11 +85,8 @@ public abstract class InstanceUploaderTask extends AsyncTask<Long, Integer, Coll
                         selection.append(") and status=?");
                         selectionArgs[i] = InstanceProviderAPI.STATUS_SUBMITTED;
 
-                        Cursor results = null;
-                        try {
-                            results =
-                                    new InstancesDao().getInstancesCursor(selection.toString(),
-                                            selectionArgs);
+                        try (Cursor results = new InstancesDao().getInstancesCursor(selection.toString(),
+                                selectionArgs)) {
                             if (results != null && results.getCount() > 0) {
                                 List<Long> toDelete = new ArrayList<>();
                                 results.moveToPosition(-1);
@@ -116,10 +113,6 @@ public abstract class InstanceUploaderTask extends AsyncTask<Long, Integer, Coll
                             }
                         } catch (SQLException e) {
                             Timber.e(e);
-                        } finally {
-                            if (results != null) {
-                                results.close();
-                            }
                         }
                     }
                 }
