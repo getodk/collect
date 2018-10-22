@@ -108,16 +108,14 @@ public abstract class InstanceUploader {
      * If the form explicitly sets the auto-delete property, then it overrides the preference.
      */
     public static boolean formShouldBeAutoDeleted(String jrFormId, boolean isAutoDeleteAppSettingEnabled) {
-        Cursor cursor = new FormsDao().getFormsCursorForFormId(jrFormId);
         String autoDelete = null;
-        if (cursor != null && cursor.moveToFirst()) {
-            try {
+        try (Cursor cursor = new FormsDao().getFormsCursorForFormId(jrFormId)) {
+            if (cursor.moveToFirst()) {
                 int autoDeleteColumnIndex = cursor.getColumnIndex(AUTO_DELETE);
                 autoDelete = cursor.getString(autoDeleteColumnIndex);
-            } finally {
-                cursor.close();
             }
         }
+
         return autoDelete == null ? isAutoDeleteAppSettingEnabled : Boolean.valueOf(autoDelete);
     }
 }
