@@ -301,7 +301,7 @@ public class WidgetFactory {
 
                     if (predicates != null) {
                         for (XPathExpression predicate : predicates) {
-                            String actionName = predicate.toString().contains("current") ?
+                            String actionName = predicate.toString().contains("func-expr:current") ?
                                     "CurrentPredicate" : "NonCurrentPredicate";
 
                             Collect.getInstance().getDefaultTracker()
