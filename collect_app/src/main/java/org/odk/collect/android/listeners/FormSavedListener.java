@@ -21,5 +21,5 @@ import org.odk.collect.android.tasks.SaveResult;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public interface FormSavedListener extends ProgressNotifier {
-    void savingComplete(SaveResult saveStatus, long mTaskId);	// smap added mTaskId
+    void savingComplete(SaveResult saveStatus, long mTaskId, boolean showSavedMsg);	// smap added mTaskId and showSaveMsg
 }

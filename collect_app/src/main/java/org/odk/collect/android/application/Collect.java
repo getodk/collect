@@ -56,6 +56,7 @@ import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.taskModel.FormLaunchDetail;
+import org.odk.collect.android.taskModel.FormRestartDetails;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.preferences.FormMetadataMigrator;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
@@ -117,7 +118,6 @@ public class Collect extends Application implements HasActivityInjector {
     //private Tracker tracker;    // smap
     private AppComponent applicationComponent;
 
-    private FormIndex startingFormIndex;                // smap
     private Location location = null;                   // smap
     private boolean recordLocation = false;             // smap
     private FormInfo formInfo = null;                   // smap
@@ -127,6 +127,7 @@ public class Collect extends Application implements HasActivityInjector {
     private HashMap<String, SmapRemoteDataItem> remoteCache = null;         // smap
     private HashMap<String, String> remoteCalls = null;                     // smap
     private Stack<FormLaunchDetail> formStack = new Stack<>();              // smap
+    private FormRestartDetails mRestartDetails;                             // smap
 
     @Inject
     DispatchingAndroidInjector<Activity> androidInjector;
@@ -392,11 +393,11 @@ public class Collect extends Application implements HasActivityInjector {
         return remoteCalls.size() > 0;
     }
 
-    public void setFormIndex(FormIndex formIndex) {
-        startingFormIndex = formIndex;
+    public void setFormRestartDetails(FormRestartDetails restartDetails) {
+        mRestartDetails = restartDetails;
     }
-    public FormIndex getFormIndex() {
-        return startingFormIndex;
+    public FormRestartDetails getFormRestartDetails() {
+        return mRestartDetails;
     }
     // End Smap
 

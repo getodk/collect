@@ -173,7 +173,7 @@ public class WidgetFactory {
                             }
 
                         } else if (appearance.contains("form")) {
-                            questionWidget = new SmapFormWidget(context, fep);
+                            questionWidget = new SmapFormWidget(context, fep, readOnlyOverride);
                         } else {
                             questionWidget = new StringWidget(context, fep, readOnlyOverride);
                         }

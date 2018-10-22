@@ -37,7 +37,6 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
@@ -51,7 +50,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.fragments.SmapTaskListFragment;
 import org.odk.collect.android.fragments.SmapTaskMapFragment;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
-import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.listeners.NFCListener;
 import org.odk.collect.android.listeners.TaskDownloaderListener;
@@ -66,11 +64,11 @@ import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.services.LocationService;
 import org.odk.collect.android.services.NotificationRegistrationService;
 import org.odk.collect.android.taskModel.FormLaunchDetail;
+import org.odk.collect.android.taskModel.FormRestartDetails;
 import org.odk.collect.android.taskModel.NfcTrigger;
 import org.odk.collect.android.tasks.DownloadTasksTask;
 import org.odk.collect.android.tasks.NdefReaderTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.ManageForm;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -590,7 +588,11 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if(requestCode == COMPLETE_FORM) {
-            formCompleted();
+            String instanceId = intent.getStringExtra("instanceid");
+            String formStatus = intent.getStringExtra("status");
+            String formURI = intent.getStringExtra("uri");
+
+            formCompleted(instanceId, formStatus, formURI);
         }
     }
 
@@ -738,14 +740,17 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
 
                     //Intent i = new Intent(Intent.ACTION_EDIT, instanceUri);
 
-                    //i.putExtra(FormEntryActivity.KEY_FORMPATH, formPath);    // TODO Don't think this is needed
                     i.putExtra(FormEntryActivity.KEY_TASK, taskId);
                     i.putExtra(FormEntryActivity.KEY_SURVEY_NOTES, surveyNotes);
                     i.putExtra(FormEntryActivity.KEY_CAN_UPDATE, canUpdate);
                     i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
                     if(entry.formIndex != null) {
-                        i.putExtra(FormEntryActivity.KEY_FORM_INDEX, true);
-                        Collect.getInstance().setFormIndex(entry.formIndex);
+                        FormRestartDetails frd = new FormRestartDetails();
+                        frd.initiatingQuestion = entry.formIndex;
+                        frd.launchedFormStatus = entry.formStatus;
+                        frd.launchedFormInstanceId = entry.instanceId;
+                        frd.launchedFormURI = entry.formURI;
+                        Collect.getInstance().setFormRestartDetails(frd);
                     }
                     if (instancePath != null) {    // TODO Don't think this is needed
                         i.putExtra(FormEntryActivity.KEY_INSTANCEPATH, instancePath);
@@ -795,7 +800,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     /*
      * respond to completion of a form
      */
-    public void formCompleted() {
+    public void formCompleted(String instanceId, String formStatus, String formURI) {
         Timber.i("Form completed");
         FormLaunchDetail fld = Collect.getInstance().popFromFormStack();
         TaskEntry te = new TaskEntry();
@@ -803,6 +808,12 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
             if(fld.id > 0) {
                 // Start a form
                 te.id = fld.id;
+
+                Toast.makeText(
+                        SmapMain.this,
+                        getString(R.string.smap_starting_form, fld.formName),
+                        Toast.LENGTH_LONG).show();
+
                 completeForm(te);
             } else if(fld.instancePath != null) {
                 // Start a task or saved instance
@@ -811,6 +822,14 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
                 te.taskStatus = Utilities.STATUS_T_ACCEPTED;
                 te.repeat = false;
                 te.formIndex = fld.formIndex;
+                te.instanceId = instanceId;
+                te.formStatus = formStatus;
+                te.formURI = formURI;
+
+                Toast.makeText(
+                        SmapMain.this,
+                        getString(R.string.smap_restarting_form, fld.formName),
+                        Toast.LENGTH_LONG).show();
                 completeTask(te);
             }
         }

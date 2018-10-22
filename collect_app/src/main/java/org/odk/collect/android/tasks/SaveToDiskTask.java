@@ -70,6 +70,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
     private String mSurveyNotes;	// ---------- smap
     private boolean canUpdate = true;  // smap
     private FormInfo formInfo;  // smap
+    private boolean saveMessage;    // smap
 
     public static final int SAVED = 500;
     public static final int SAVE_ERROR = 501;
@@ -79,7 +80,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
     public static final int ENCRYPTION_ERROR = 505;
 
     public SaveToDiskTask(Uri uri, boolean saveAndExit, boolean markCompleted, String updatedName,
-        long taskId, String formPath, String surveyNotes, boolean canUpdate, FormInfo formInfo) {		// smap added assignment_id, formPath, formDetail
+        long taskId, String formPath, String surveyNotes, boolean canUpdate, FormInfo formInfo, boolean saveMessage) {		// smap added assignment_id, formPath, formDetail
         this.uri = uri;
         this.formInfo = formInfo;  // smap
         save = saveAndExit;
@@ -89,6 +90,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
         mFormPath = formPath; // smap
         mSurveyNotes = surveyNotes; // smap
         this.canUpdate = canUpdate; // smap
+        this.saveMessage = saveMessage; // smap
     }
 
     /**
@@ -509,7 +511,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
     protected void onPostExecute(SaveResult result) {
         synchronized (this) {
             if (savedListener != null && result != null) {
-                savedListener.savingComplete(result, mTaskId);		// smap added mTaskId
+                savedListener.savingComplete(result, mTaskId, saveMessage);		// smap added mTaskId and saveMessage
             }
         }
     }

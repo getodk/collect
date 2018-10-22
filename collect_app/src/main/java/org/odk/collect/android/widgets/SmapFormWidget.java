@@ -69,15 +69,38 @@ public class SmapFormWidget extends QuestionWidget implements BinaryWidget {
 
     private long formId;
 
-    public SmapFormWidget(Context context, FormEntryPrompt prompt) {
+    public SmapFormWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride) {
 
         super(context, prompt);
 
         TableLayout.LayoutParams params = new TableLayout.LayoutParams();
         params.setMargins(7, 5, 7, 5);
 
+        /*
+         * Get the details on the form to be launched
+         */
+        boolean validForm = true;
         mf = new ManageForm();
-        mfd = mf.getFormDetailsNoVersion("s1_13");
+
+        String formIdent = prompt.getQuestion().getAdditionalAttribute(null, "form_identifier");
+        String key_question = prompt.getQuestion().getAdditionalAttribute(null, "key_question");
+
+        if(formIdent == null) {
+            validForm = false;
+            Toast.makeText(getContext(),
+                    Collect.getInstance().getString(R.string.smap_form_not_specified),
+                    Toast.LENGTH_SHORT)
+                    .show();
+        } else {
+            mfd = mf.getFormDetailsNoVersion(formIdent);
+            validForm = mfd.exists;
+            if(!validForm) {
+                Toast.makeText(getContext(),
+                        Collect.getInstance().getString(R.string.smap_form_not_found, formIdent),
+                        Toast.LENGTH_SHORT)
+                        .show();
+            }
+        }
 
         // set text formatting
         answer = new EditText(context);
@@ -88,6 +111,7 @@ public class SmapFormWidget extends QuestionWidget implements BinaryWidget {
         answer.setBackground(null);
         answer.setTextColor(themeUtils.getPrimaryTextColor());
 
+        answer.getText();
         // capitalize nothing
         answer.setKeyListener(new TextKeyListener(Capitalize.NONE, false));
 
@@ -96,11 +120,17 @@ public class SmapFormWidget extends QuestionWidget implements BinaryWidget {
         answer.setSingleLine(false);
 
         String s = prompt.getAnswerText();
-        if (s != null) {
+        if(s != null && s.startsWith("::")) {
+            validForm = false;
+            Toast.makeText(getContext(),
+                    Collect.getInstance().getString(R.string.smap_form_completed, mfd.formName),
+                    Toast.LENGTH_SHORT)
+                    .show();
             answer.setText(s);
         }
 
-        if (getFormEntryPrompt().isReadOnly() || !mfd.exists) {
+
+        if (getFormEntryPrompt().isReadOnly() || readOnlyOverride || !validForm) {
             answer.setFocusable(false);
             answer.setEnabled(false);
         }
@@ -108,10 +138,12 @@ public class SmapFormWidget extends QuestionWidget implements BinaryWidget {
         String v = getFormEntryPrompt().getSpecialFormQuestionText("buttonText");
         String buttonText = (v != null) ? v : context.getString(R.string.launch_app);
 
-        buttonText += " " + mfd.formName;
+        if(validForm) {
+            buttonText += " " + mfd.formName;
+        }
 
         launchIntentButton = getSimpleButton(buttonText);
-        launchIntentButton.setEnabled(!getFormEntryPrompt().isReadOnly());
+        launchIntentButton.setEnabled(validForm);
 
         // finish complex layout
         LinearLayout answerLayout = new LinearLayout(getContext());
@@ -205,14 +237,14 @@ public class SmapFormWidget extends QuestionWidget implements BinaryWidget {
         String instancePath = Collect.getInstance().getFormController().getInstanceFile().getAbsolutePath();
         FormIndex formIndex = Collect.getInstance().getFormController().getFormIndex();
 
-        Collect.getInstance().pushToFormStack(new FormLaunchDetail(instancePath, formIndex));
+        Collect.getInstance().pushToFormStack(new FormLaunchDetail(instancePath, formIndex, (String) Collect.getInstance().getFormEntryActivity().getTitle()));
 
         // 2. Set form details to be launched in collect app
-        Collect.getInstance().pushToFormStack(new FormLaunchDetail(mfd.id));
+        Collect.getInstance().pushToFormStack(new FormLaunchDetail(mfd.id, mfd.formName));
 
         // 3. Save and exit current form
         Collect.getInstance().getFormEntryActivity().saveDataToDisk(true, false,
-                null, false);
+                null, false, false);
     }
 
     private void focusAnswer() {

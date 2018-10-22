@@ -31,6 +31,9 @@ public class TaskEntry {
     public String source;
     public String locationTrigger;
     public FormIndex formIndex;     // If this is a restart to a form that is being edited
+    public String instanceId;
+    public String formStatus;
+    public String formURI;
 
 
 

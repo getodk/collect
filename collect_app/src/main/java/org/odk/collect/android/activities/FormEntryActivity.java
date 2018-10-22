@@ -68,6 +68,7 @@ import com.google.zxing.integration.android.IntentResult;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
@@ -109,6 +110,7 @@ import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.taskModel.FormRestartDetails;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.tasks.SaveFormIndexTask;
 import org.odk.collect.android.tasks.SavePointTask;
@@ -196,12 +198,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     public static final String KEY_TASK = "task";                       // smap
     public static final String KEY_SURVEY_NOTES = "surveyNotes";        // smap
     public static final String KEY_CAN_UPDATE = "canUpdate";            // smap
-    public static final String KEY_FORM_INDEX = "formindex";            // smap
     private long mTaskId;                                               // smap
     private String mFormId;                                             // smap
     private String mSurveyNotes = null;                                 // smap
     private boolean mCanUpdate = true;                                  // smap
-    private boolean mFormIndex = false;                                 // smap
     private int mUpdated = 0;                                           // smap, greater than 0 if the user has already edited this instance
     ProgressDialog progressBar = null;                                  // smap
     String swipeDirection;                                              // smap
@@ -629,7 +629,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         mTaskId = intent.getLongExtra(KEY_TASK, -1);                   // smap
         mSurveyNotes = intent.getStringExtra(KEY_SURVEY_NOTES);                   // smap
         mCanUpdate = intent.getBooleanExtra(KEY_CAN_UPDATE, true);     // smap
-        mFormIndex = intent.getBooleanExtra(KEY_FORM_INDEX, false);     // smap
         mFormId = formInfo.getFormID();                                             // smap
 
         Collect.getInstance().getActivityLogger()
@@ -1821,7 +1820,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 List<TreeElement> attrs = p.getBindAttributes();
                 for (int i = 0; i < attrs.size(); i++) {
                     if (!autoSaved && "saveIncomplete".equals(attrs.get(i).getName())) {
-                        saveDataToDisk(false, false, null, false);
+                        saveDataToDisk(false, false, null, false, true);
                         autoSaved = true;
                     }
                 }
@@ -2097,12 +2096,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      */
     // by default, save the current screen
     private boolean saveDataToDisk(boolean exit, boolean complete, String updatedSaveName) {
-        return saveDataToDisk(exit, complete, updatedSaveName, true);
+        return saveDataToDisk(exit, complete, updatedSaveName, true, true);
     }
 
     // but if you want save in the background, can't be current screen
     public boolean saveDataToDisk(boolean exit, boolean complete, String updatedSaveName,
-                                   boolean current) {   // smap make public
+                                   boolean current,
+                                  boolean saveMessage) {   // smap make public add saveMessage
         // save current answer
         if (current) {
             if (!saveAnswersForCurrentScreen(complete)) {
@@ -2121,7 +2121,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         synchronized (saveDialogLock) {
             saveToDiskTask = new SaveToDiskTask(getIntent().getData(), exit, complete,
-                    updatedSaveName, mTaskId, formPath, surveyNotes, mCanUpdate, formInfo);    // smap added mTaskId, mFormPath, surveyNotes
+                    updatedSaveName, mTaskId, formPath, surveyNotes, mCanUpdate, formInfo, saveMessage);    // smap added mTaskId, mFormPath, surveyNotes, saveMessage
             saveToDiskTask.setFormSavedListener(this);
             autoSaved = true;
             showDialog(SAVING_DIALOG);
@@ -2186,7 +2186,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     }
                     removeTempInstance();
                     MediaManager.INSTANCE.revertChanges();
-                    finishReturnInstance();
+                    finishReturnInstance(false);
                 }
                 alertDialog.dismiss();
             }
@@ -2770,15 +2770,22 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 }
 
                 // start smap
-                if(mFormIndex) { // Start at specified formIndex
-                    FormIndex fi = Collect.getInstance().getFormIndex();
-                    if(fi != null) {
-                        mFormIndex = false;
-                        Collect.getInstance().setFormIndex(null);
-                        formController.jumpToIndex(fi);
-                        next();
+                FormRestartDetails frd = Collect.getInstance().getFormRestartDetails();
+                if(frd != null) {
+                    Collect.getInstance().setFormRestartDetails(null);
+                    formController.jumpToIndex(frd.initiatingQuestion);
+
+                    // Set answer for form launch question
+                    StringData sd = new StringData();
+                    sd.setValue(":::::" + frd.launchedFormInstanceId);
+                    try {
+                        formController.answerQuestion(frd.initiatingQuestion, sd);
+                    } catch (Exception e) {
+
                     }
+                    next();
                 }
+
                 // end smap
                 refreshCurrentView();
             }
@@ -2806,7 +2813,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * Called by SavetoDiskTask if everything saves correctly.
      */
     @Override
-    public void savingComplete(SaveResult saveResult, long taskId) {        // smap added assignment_id
+    public void savingComplete(SaveResult saveResult, long taskId, boolean showSaveMsg) {        // smap added taskId and showSaveMsg
         dismissDialog(SAVING_DIALOG);
 
         mTaskId = taskId;                // smap
@@ -2814,12 +2821,16 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         FormController formController = getFormController();
         switch (saveStatus) {
             case SaveToDiskTask.SAVED:
-                ToastUtils.showShortToast(R.string.data_saved_ok);
+                if(showSaveMsg) {
+                    ToastUtils.showShortToast(R.string.data_saved_ok);
+                }
                 formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_SAVE, 0, null, false, false);
                 sendSavedBroadcast();
                 break;
             case SaveToDiskTask.SAVED_AND_EXIT:
-                ToastUtils.showShortToast(R.string.data_saved_ok);
+                if(showSaveMsg) {
+                    ToastUtils.showShortToast(R.string.data_saved_ok);
+                }
                 formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_SAVE, 0, null, false, false);
                 if (saveResult.isComplete()) {
                     formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, false);
@@ -2828,7 +2839,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);         // Force writing of audit since we are exiting
                 }
                 sendSavedBroadcast();
-                finishReturnInstance();
+                finishReturnInstance(saveResult.isComplete());  // smap add isComplete
                 break;
             case SaveToDiskTask.SAVE_ERROR:
                 String message;
@@ -2845,7 +2856,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FINALIZE_ERROR, 0, null, false, true);
                 ToastUtils.showLongToast(String.format(getString(R.string.encryption_error_message),
                         saveResult.getSaveErrorMessage()));
-                finishReturnInstance();
+                finishReturnInstance(false);
                 break;
             case FormEntryController.ANSWER_CONSTRAINT_VIOLATED:
             case FormEntryController.ANSWER_REQUIRED_BUT_EMPTY:
@@ -2889,13 +2900,23 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * Returns the instance that was just filled out to the calling activity, if
      * requested.
      */
-    private void finishReturnInstance() {
+    private void finishReturnInstance(boolean isComplete) {     // smap add complete
         String action = getIntent().getAction();
         if (Intent.ACTION_PICK.equals(action) || Intent.ACTION_EDIT.equals(action)) {
             // caller is waiting on a picked form
             Uri uri = InstancesDaoHelper.getLastInstanceUri(getAbsoluteInstancePath());
             if (uri != null) {
                 setResult(RESULT_OK, new Intent().setData(uri));
+            }
+        } else {    // smap
+            FormController fc = getFormController();
+            if(fc != null) {
+                Intent intent = new Intent();
+                intent.putExtra("instanceid", fc.getSubmissionMetadata().instanceId);
+                intent.putExtra("uri", InstancesDaoHelper.getLastInstanceUri(getAbsoluteInstancePath()));
+                intent.putExtra("status", isComplete ? "complete" : null);
+
+                setResult(RESULT_OK, intent);
             }
         }
         finish();
