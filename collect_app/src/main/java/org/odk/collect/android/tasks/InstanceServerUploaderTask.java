@@ -19,7 +19,6 @@ import com.google.android.gms.analytics.HitBuilders;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dto.Instance;
-import org.odk.collect.android.http.CollectServerClient.Outcome;
 import org.odk.collect.android.http.OpenRosaHttpInterface;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.upload.InstanceServerUploader;
