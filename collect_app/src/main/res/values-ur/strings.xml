@@ -610,9 +610,4 @@
   <string name="missing_google_account_dialog_title">گوگل اکاؤنٹ مقرر نہیں ہے</string>
   <string name="missing_google_account_dialog_desc">گوگل شیٹس  کے ذریعے فارم جمع کرنے کے لئے آپ کو سرور کی ترتیبات میں اپناگوگل اکاؤنٹ قائم کرنا ہوگا.</string>
   <string name="sms_invalid_phone_number_description">ایس ایم ایس جمع کرانے کے لۓ ایک منزل فون نمبر مقرر کریں یا اپنے ٹرانسپورٹ کی قسم کو تبدیل کریں.</string>
-  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
-  <string name="current_predicate_warning">یہ سوال او ڈی کے کے مستقبل کے ورژن کے ساتھ مطابقت نہیں رکھتا ہے کیونکہ یہ ایک انتخاب فلٹر میں موجودہ () کا استعمال کرتا ہے. \ این \ این براہ کرم اس بات کو یقینی بنائیں کہ جو شخص اس فارم کو تشکیل دیتا ہے وہ ذیل میں تفصیلات پڑھتا ہے اور کارروائی کرتا ہے.</string>
-  <string name="current_predicate_warning_title">ایکشن کی ضرورت ہے</string>
-  <string name="current_predicate_forum">تفصیلات پڑھیں</string>
-  <string name="current_predicate_continue">جاری رہے</string>
 </resources>

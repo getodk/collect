@@ -643,9 +643,4 @@
   <string name="missing_google_account_dialog_title">Нема облікового запису Google</string>
   <string name="missing_google_account_dialog_desc">Щоб надіслати анкету через Google Таблиці Ви повинні налаштувати обліковий запис Google в налаштуваннях сервера.</string>
   <string name="sms_invalid_phone_number_description">Вкажіть номер телефону для надсиланнячерез повідомлення або замініть тип відправки.</string>
-  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
-  <string name="current_predicate_warning">Це питання не буде сумісне з наступними версіями ODK Collect оскільки використовує current() в фільтрі альтернатив. \n\nБудь ласка, переконайтесь, що розробник цієї анкети прочитає докладну інформацію нижче та вжиє заходів.</string>
-  <string name="current_predicate_warning_title">Необхідна дія</string>
-  <string name="current_predicate_forum">Прочитайте докладну інформацію</string>
-  <string name="current_predicate_continue">Продовжити</string>
 </resources>

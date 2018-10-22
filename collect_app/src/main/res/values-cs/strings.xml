@@ -643,9 +643,4 @@
   <string name="missing_google_account_dialog_title">Účet Google není nastaven</string>
   <string name="missing_google_account_dialog_desc">Chcete-li odeslat formuláře prostřednictvím tabulek Google, musíte nastavit účet Google v nastavení serveru.</string>
   <string name="sms_invalid_phone_number_description">Nastavte cílové telefonní číslo pro odesílání SMS nebo změňte typ transportu.</string>
-  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
-  <string name="current_predicate_warning">Tato otázka nebude kompatibilní s budoucími verzemi ODK Collect, protože ve filtru pro výběr používá current(). \n\n Zkontrolujte, zda osoba, která tento formulář zpracovala, si přečte níže uvedené podrobnosti a podnikne kroky.</string>
-  <string name="current_predicate_warning_title">Je vyžadována akce</string>
-  <string name="current_predicate_forum">Přečtěte si podrobnosti</string>
-  <string name="current_predicate_continue">Pokračovat</string>
 </resources>

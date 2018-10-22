@@ -385,5 +385,4 @@
   <string name="transport_type_internet">WiFi / mobilno omrežje (priporočeno)</string>
   <string name="transport_type_sms">SMS sporočilo</string>
   <string name="seconds">Sekunde</string>
-  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
 </resources>
