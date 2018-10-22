@@ -643,9 +643,4 @@
   <string name="missing_google_account_dialog_title">Google-tiliä ei ole asetettu</string>
   <string name="missing_google_account_dialog_desc">Lähettääksesi lomakkeita Google Sheets -palvelun kautta sinun on asetettava Google-tili palvelinasetuksissa.</string>
   <string name="sms_invalid_phone_number_description">Aseta vastaanottopuhelinnumero SMS-lähetyksille tai vaihda siirtotapaa.</string>
-  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
-  <string name="current_predicate_warning">Tämä kysymys ei tule olemaan yhteensopiva ODK Collect -sovelluksen tulevien versioiden kanssa, koska se käyttää current() -funktiota valintasuodatuksessa. \n\nVarmista, että tämän kyselyn tehnyt henkilö lukee yksityiskohdat alla ja tekee tarvittavat muutokset.</string>
-  <string name="current_predicate_warning_title">Toimenpiteitä tarvitaan</string>
-  <string name="current_predicate_forum">Lue yksityiskohdat</string>
-  <string name="current_predicate_continue">Jatka</string>
 </resources>

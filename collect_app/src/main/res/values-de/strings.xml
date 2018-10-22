@@ -643,9 +643,4 @@
   <string name="missing_google_account_dialog_title">Google-Konto nicht eingestellt</string>
   <string name="missing_google_account_dialog_desc">Um Formulare über Google Tabellen einzureichen, müssen Sie ihr Google-Konto bei den Server-Einstellungen einrichten.</string>
   <string name="sms_invalid_phone_number_description">Ziel-Telefonnummer für SMS-Versand einstellen oder Übertragungsart ändern.</string>
-  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
-  <string name="current_predicate_warning">Diese Frage wird mit zukünftigen Versionen von ODK Collect nicht mehr kompatibel sein, weil sie current() in einem Auswahlfilter verwendet. \n\nBitte stellen Sie sicher, dass die Person, die dieses Formular erstellt hat, die Details unten liest und aktiv wird.</string>
-  <string name="current_predicate_warning_title">Aktion nötig</string>
-  <string name="current_predicate_forum">Details lesen</string>
-  <string name="current_predicate_continue">Weiter</string>
 </resources>

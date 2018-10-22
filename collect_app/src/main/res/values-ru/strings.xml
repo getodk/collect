@@ -622,6 +622,4 @@
   <string name="missing_google_account_dialog_title">Учётная запись Google не установлена</string>
   <string name="missing_google_account_dialog_desc">Для отправки ответов через Google таблицы необходимо указать учётную запись через которую это будет происходить</string>
   <string name="sms_invalid_phone_number_description">Введите номер телефона для выгрузки или измените способ доставки.</string>
-  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
-  <string name="current_predicate_continue">Продолжить</string>
 </resources>

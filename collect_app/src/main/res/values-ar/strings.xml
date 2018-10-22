@@ -520,6 +520,4 @@
   <string name="automatic_download">تحميل آلي</string>
   <string name="hide_old_form_versions_setting_title">إخفاء الإصدارات القديمة من الاستمارة</string>
   <!--Sms submission-->
-  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
-  <string name="current_predicate_continue">المتابعة</string>
 </resources>

@@ -490,6 +490,4 @@
   <string name="transport_type_sms">SMS</string>
   <string name="seconds">Secondi</string>
   <string name="rank_items">Ordina gli elementi</string>
-  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
-  <string name="current_predicate_continue">Continua</string>
 </resources>
