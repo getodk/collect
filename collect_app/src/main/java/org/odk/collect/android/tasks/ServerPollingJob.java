@@ -16,7 +16,6 @@
 
 package org.odk.collect.android.tasks;
 
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
@@ -25,7 +24,6 @@ import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
-import android.support.v4.app.NotificationCompat;
 
 import com.evernote.android.job.Job;
 import com.evernote.android.job.JobManager;
@@ -40,7 +38,7 @@ import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.DownloadFormListUtils;
 import org.odk.collect.android.utilities.FormDownloader;
-import org.odk.collect.android.utilities.IconUtils;
+import org.odk.collect.android.utilities.NotificationUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,6 +53,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORMS_DOWNLOADED_NOTIFICATION;
 import static org.odk.collect.android.utilities.DownloadFormListUtils.DL_AUTH_REQUIRED;
 import static org.odk.collect.android.utilities.DownloadFormListUtils.DL_ERROR_MSG;
+import static org.odk.collect.android.utilities.NotificationUtils.FORM_UPDATE_NOTIFICATION_ID;
 
 public class ServerPollingJob extends Job {
 
@@ -149,16 +148,11 @@ public class ServerPollingJob extends Job {
         intent.putExtra(DISPLAY_ONLY_UPDATED_FORMS, true);
         PendingIntent contentIntent = PendingIntent.getActivity(getContext(), FORM_UPDATES_AVAILABLE_NOTIFICATION, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext())
-                .setSmallIcon(IconUtils.getNotificationAppIcon())
-                .setContentTitle(getContext().getString(R.string.form_updates_available))
-                .setAutoCancel(true)
-                .setContentIntent(contentIntent);
-
-        NotificationManager manager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        if (manager != null) {
-            manager.notify(0, builder.build());
-        }
+        NotificationUtils.showNotification(
+                contentIntent,
+                FORM_UPDATE_NOTIFICATION_ID,
+                R.string.form_updates_available,
+                null);
     }
 
     private void informAboutNewDownloadedForms(String title, HashMap<FormDetails, String> result) {
@@ -167,17 +161,10 @@ public class ServerPollingJob extends Job {
         intent.putExtra(NotificationActivity.NOTIFICATION_MESSAGE, FormDownloadList.getDownloadResultMessage(result));
         PendingIntent contentIntent = PendingIntent.getActivity(getContext(), FORMS_DOWNLOADED_NOTIFICATION, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext())
-                .setSmallIcon(IconUtils.getNotificationAppIcon())
-                .setContentTitle(getContext().getString(R.string.odk_auto_download_notification_title))
-                .setContentText(getContentText(result))
-                .setAutoCancel(true)
-                .setContentIntent(contentIntent);
-
-        NotificationManager manager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        if (manager != null) {
-            manager.notify(0, builder.build());
-        }
+        NotificationUtils.showNotification(contentIntent,
+                FORM_UPDATE_NOTIFICATION_ID,
+                R.string.odk_auto_download_notification_title,
+                getContentText(result));
     }
 
     private void updateLastDetectedFormVersionHash(String formId, String formVersionHash) {
