@@ -29,6 +29,16 @@
         <property name="message" value="Do not use Windows line endings" />
     </module>
 
+    <!-- License header -->
+    <module name="RegexpHeader">
+        <property name="headerFile" value="config/java.header" />
+        <property name="fileExtensions" value="java" />
+    </module>
+    <module name="RegexpHeader">
+        <property name="headerFile" value="config/xml.header" />
+        <property name="fileExtensions" value="xml" />
+    </module>
+
     <module name="TreeWalker">
         <!-- ODK-specific additions -->
         <module name="IllegalImport" />
