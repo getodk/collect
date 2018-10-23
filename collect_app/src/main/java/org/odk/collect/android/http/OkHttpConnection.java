@@ -268,20 +268,20 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
         return false;
     }
 
-    private void addCredentials(OkHttpClient.Builder builder, @Nullable HttpCredentialsInterface credentials, Boolean SslEnabled) {
+    private void addCredentials(OkHttpClient.Builder builder, @Nullable HttpCredentialsInterface credentials, Boolean sslEnabled) {
         if (credentials != null) {
             final Map<String, CachingAuthenticator> authCache = new ConcurrentHashMap<>();
             Credentials cred = new Credentials(credentials.getUsername(), credentials.getPassword());
 
-            DispatchingAuthenticator.Builder DABuilder = new DispatchingAuthenticator.Builder();
+            DispatchingAuthenticator.Builder daBuilder = new DispatchingAuthenticator.Builder();
 
-            if (SslEnabled) {
-                DABuilder.with("basic", new BasicAuthenticator(cred));
+            if (sslEnabled) {
+                daBuilder.with("basic", new BasicAuthenticator(cred));
             }
 
-            DABuilder.with("digest", new DigestAuthenticator(cred));
+            daBuilder.with("digest", new DigestAuthenticator(cred));
 
-            DispatchingAuthenticator authenticator = DABuilder.build();
+            DispatchingAuthenticator authenticator = daBuilder.build();
 
             builder.authenticator(new CachingAuthenticatorDecorator(authenticator, authCache))
                     .addInterceptor(new AuthenticationCacheInterceptor(authCache));
