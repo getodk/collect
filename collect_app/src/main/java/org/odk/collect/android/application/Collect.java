@@ -52,6 +52,7 @@ import org.odk.collect.android.preferences.FormMetadataMigrator;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
+import org.odk.collect.android.utilities.NotificationUtils;
 import org.odk.collect.android.utilities.PRNGFixes;
 
 import java.io.ByteArrayInputStream;
@@ -223,6 +224,8 @@ public class Collect extends Application implements HasActivityInjector {
                 .build();
 
         applicationComponent.inject(this);
+
+        NotificationUtils.createNotificationChannel(singleton);
 
         try {
             JobManager
