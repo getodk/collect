@@ -299,6 +299,7 @@
     <string name="send_in_progress">Background send running, please try again shortly</string>
     <string name="sheets_max_columns">Max number of columns is 255, your form has %s. Unable to upload to spreadsheet.</string>
     <string name="invalid_sheet_id">invalid sheet id: %1$s</string>
+    <string name="missing_submission_url">Missing submission URL</string>
     <string name="google_sheets_access_denied">Access denied. Please make sure the spreadsheet owner has granted you edit permission.</string>
     <string name="google_sheets_missing_columns">Spreadsheet is missing the following columns: %1$s</string>
     <string name="password_error_whitespace">Leading or trailing whitespace not allowed in passwords</string>
