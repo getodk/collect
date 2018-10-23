@@ -168,14 +168,12 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
         reloadLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                map.getOverlays().add(marker);
-                setClear = false;
+                changeMarker(true, marker);
                 latLng = new GeoPoint(location.getLatitude(), location.getLongitude());
                 marker.setPosition(latLng);
                 captureLocation = true;
                 isDragged = false;
                 zoomToPoint();
-                resetTrashButton();
             }
 
         });
@@ -213,7 +211,6 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
                 zoomToLocation();
                 map.invalidate();
                 zoomDialog.dismiss();
-                resetTrashButton();
             }
         });
 
@@ -225,12 +222,11 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
                 zoomToPoint();
                 map.invalidate();
                 zoomDialog.dismiss();
-                resetTrashButton();
             }
         });
 
         clearPointButton = findViewById(R.id.clear);
-        resetTrashButton();
+        clearPointButton.setEnabled(false);
         clearPointButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -241,16 +237,13 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
                     //locationStatus.setVisibility(View.VISIBLE);
                 }
                 locationStatus.setVisibility(View.VISIBLE);
-                map.getOverlays().remove(marker);
-                marker.remove(map);
-                setClear = true;
+                changeMarker(false, marker);
                 isDragged = false;
                 captureLocation = false;
                 draggable = intentDraggable;
                 locationFromIntent = false;
                 overlayMyLocationLayers();
                 map.invalidate();
-                resetTrashButton();
             }
         });
 
@@ -287,8 +280,7 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
 
         if (latLng != null) {
             marker.setPosition(latLng);
-            map.getOverlays().add(marker);
-            resetTrashButton();
+            changeMarker(true, marker);
             map.invalidate();
             captureLocation = true;
             foundFirstLocation = true;
@@ -415,7 +407,7 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
                 showLocationButton.setEnabled(true);
                 if (!captureLocation & !setClear) {
                     latLng = new GeoPoint(this.location.getLatitude(), this.location.getLongitude());
-                    map.getOverlays().add(marker);
+                    changeMarker(true, marker);
                     marker.setPosition(latLng);
                     captureLocation = true;
                     reloadLocationButton.setEnabled(true);
@@ -489,10 +481,8 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
         marker.setDraggable(true);
         latLng = geoPoint;
         isDragged = true;
-        setClear = false;
         captureLocation = true;
-        map.getOverlays().add(marker);
-        resetTrashButton();
+        changeMarker(true, marker);
         return false;
     }
 
@@ -553,12 +543,17 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
         }
     }
 
-    private void resetTrashButton() {
-        if (map.getOverlays().contains(marker)) {
+    private void changeMarker(boolean isAdd, Marker marker) {
+        if (isAdd) {
+            map.getOverlays().add(marker);
             clearPointButton.setEnabled(true);
         } else {
+            map.getOverlays().remove(marker);
+            marker.remove(map);
             clearPointButton.setEnabled(false);
         }
+
+        setClear = !isAdd;
     }
 
     private void showGPSDisabledAlertToUser() {
