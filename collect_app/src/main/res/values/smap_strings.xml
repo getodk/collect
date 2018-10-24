@@ -93,7 +93,7 @@
     <string name="smap_unknown_error">"Unknown error"</string>
     <string name="smap_forbidden">"The upload of %s was not accepted. It may have been marked as blocked or deleted on the server."</string>
     <string name="smap_form_not_specified">"The form identifier has not been specified as a parameter."</string>
-    <string name="smap_form_not_found">"The form %s was not found on this device."</string>
+    <string name="smap_form_not_found">"The form with identifier \"%s\" was not found on this device."</string>
     <string name="smap_starting_form">"Launching form \"%s\""</string>
     <string name="smap_restarting_form">"Re-launching form \"%s\""</string>
     <string name="smap_form_completed">"The form \"%s\" has already been saved as finalised"</string>

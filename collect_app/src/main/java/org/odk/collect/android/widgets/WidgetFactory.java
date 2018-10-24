@@ -172,7 +172,7 @@ public class WidgetFactory {
                                 questionWidget = new SmapChartLineWidget(context, fep, appearance);
                             }
 
-                        } else if (appearance.contains("form")) {
+                        } else if (fep.getQuestion().getAdditionalAttribute(null, "form_identifier") != null) {
                             questionWidget = new SmapFormWidget(context, fep, readOnlyOverride);
                         } else {
                             questionWidget = new StringWidget(context, fep, readOnlyOverride);

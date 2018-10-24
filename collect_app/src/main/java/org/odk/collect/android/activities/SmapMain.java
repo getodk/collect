@@ -755,7 +755,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
                     if (instancePath != null) {    // TODO Don't think this is needed
                         i.putExtra(FormEntryActivity.KEY_INSTANCEPATH, instancePath);
                     }
-                    startActivity(i);
+                    startActivityForResult(i, COMPLETE_FORM);
 
                     // If More than one instance is found pointing towards a single file path then report the error and delete the extrat
                     int instanceCount = cInstanceProvider.getCount();

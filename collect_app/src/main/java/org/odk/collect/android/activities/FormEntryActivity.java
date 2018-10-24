@@ -2915,7 +2915,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             if(fc != null) {
                 Intent intent = new Intent();
                 intent.putExtra("instanceid", fc.getSubmissionMetadata().instanceId);
-                intent.putExtra("uri", InstancesDaoHelper.getLastInstanceUri(getAbsoluteInstancePath()).toString());
+                Uri uri = InstancesDaoHelper.getLastInstanceUri(getAbsoluteInstancePath());
+                if(uri != null) {
+                    intent.putExtra("uri", uri.toString());
+                }
                 intent.putExtra("status", isComplete ? "complete" : null);
 
                 setResult(RESULT_OK, intent);
