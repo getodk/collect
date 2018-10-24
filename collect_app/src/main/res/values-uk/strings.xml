@@ -281,8 +281,7 @@
   <string name="no_google_account">Не вибраний жоден обліковий запис Google!</string>
   <string name="google_set_account">Ви обрали своїм сервером Google Сторінки, для продовження, будь ласка, вкажіть відповідний обліковий запис Google в Загальних налаштуваннях</string>
   <string name="media_upload_error">Помилка завантаження неіснуючого медіа файлу: %1$s</string>
-  <string name="odk_auth_auth_fail">Помилка авторизації під час автоматичного надсилання, будь ласка, перевірте налаштування</string>
-  <string name="odk_permissions_fail">Помилка автоматичного надсилання, будь ласка, перевірте надання всіх необхідних дозволів</string>
+    <string name="odk_permissions_fail">Помилка автоматичного надсилання, будь ласка, перевірте надання всіх необхідних дозволів</string>
   <string name="odk_auto_note">Результати автонадсилання ODK</string>
   <string name="odk_auto_download_notification_title">Результати автозавантаження ODK</string>
   <string name="notification_error">Помилка відображення тексту оповіщення</string>
@@ -640,14 +639,8 @@
   <string name="transport_type_both">Обрати та надіслати</string>
   <string name="seconds">Секунди</string>
   <string name="rank_items">Засоби оцінки</string>
-  <string name="image_not_saved">Зображення не може бути збережене через проблеми з файлом відповідної анкети.</string>
   <string name="loading_form_failed">Під час завантаження анкети виникла помилка. Будь ласка спробуйте знову.</string>
   <string name="missing_google_account_dialog_title">Нема облікового запису Google</string>
   <string name="missing_google_account_dialog_desc">Щоб надіслати анкету через Google Таблиці Ви повинні налаштувати обліковий запис Google в налаштуваннях сервера.</string>
   <string name="sms_invalid_phone_number_description">Вкажіть номер телефону для надсиланнячерез повідомлення або замініть тип відправки.</string>
-  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
-  <string name="current_predicate_warning">Це питання не буде сумісне з наступними версіями ODK Collect оскільки використовує current() в фільтрі альтернатив. \n\nБудь ласка, переконайтесь, що розробник цієї анкети прочитає докладну інформацію нижче та вжиє заходів.</string>
-  <string name="current_predicate_warning_title">Необхідна дія</string>
-  <string name="current_predicate_forum">Прочитайте докладну інформацію</string>
-  <string name="current_predicate_continue">Продовжити</string>
 </resources>

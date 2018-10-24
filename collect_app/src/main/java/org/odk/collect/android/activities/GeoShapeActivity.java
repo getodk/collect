@@ -44,6 +44,9 @@ import static org.odk.collect.android.utilities.PermissionUtils.checkIfLocationP
 /** Activity for entering or editing a polygon on a map. */
 public class GeoShapeActivity extends CollectAbstractActivity implements IRegisterReceiver {
     public static final String PREF_VALUE_GOOGLE_MAPS = "google_maps";
+    public static final String MAP_CENTER_KEY = "map_center";
+    public static final String MAP_ZOOM_KEY = "map_zoom";
+    public static final String POINTS_KEY = "points";
 
     private MapFragment map;
     private int featureId = -1;  // will be a positive featureId once map is ready
@@ -54,10 +57,20 @@ public class GeoShapeActivity extends CollectAbstractActivity implements IRegist
     private View zoomDialogView;
     private Button zoomPointButton;
     private Button zoomLocationButton;
-    private String originalValue = "";
+    private String originalShapeString = "";
+
+    // restored from savedInstanceState
+    private MapPoint restoredMapCenter;
+    private Double restoredMapZoom;
+    private List<MapPoint> restoredPoints;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            restoredMapCenter = savedInstanceState.getParcelable(MAP_CENTER_KEY);
+            restoredMapZoom = savedInstanceState.getDouble(MAP_ZOOM_KEY);
+            restoredPoints = savedInstanceState.getParcelableArrayList(POINTS_KEY);
+        }
 
         if (!checkIfLocationPermissionsGranted(this)) {
             finish();
@@ -88,8 +101,15 @@ public class GeoShapeActivity extends CollectAbstractActivity implements IRegist
         super.onStop();
     }
 
+    @Override protected void onSaveInstanceState(Bundle state) {
+        super.onSaveInstanceState(state);
+        state.putParcelable(MAP_CENTER_KEY, map.getCenter());
+        state.putDouble(MAP_ZOOM_KEY, map.getZoom());
+        state.putParcelableArrayList(POINTS_KEY, new ArrayList<>(map.getPointsOfPoly(featureId)));
+    }
+
     @Override public void onBackPressed() {
-        if (!formatPoints(map.getPointsOfPoly(featureId)).equals(originalValue)) {
+        if (!formatPoints(map.getPointsOfPoly(featureId)).equals(originalShapeString)) {
             showBackDialog();
         } else {
             finish();
@@ -129,8 +149,11 @@ public class GeoShapeActivity extends CollectAbstractActivity implements IRegist
         List<MapPoint> points = new ArrayList<>();
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra(GeoShapeWidget.SHAPE_LOCATION)) {
-            originalValue = intent.getStringExtra(GeoShapeWidget.SHAPE_LOCATION);
-            points = parsePoints(originalValue);
+            originalShapeString = intent.getStringExtra(GeoShapeWidget.SHAPE_LOCATION);
+            points = parsePoints(originalShapeString);
+        }
+        if (restoredPoints != null) {
+            points = restoredPoints;
         }
         featureId = map.addDraggablePoly(points, true);
         zoomButton.setEnabled(!points.isEmpty());
@@ -151,7 +174,9 @@ public class GeoShapeActivity extends CollectAbstractActivity implements IRegist
         });
 
         map.setGpsLocationEnabled(true);
-        if (!points.isEmpty()) {
+        if (restoredMapCenter != null && restoredMapZoom != null) {
+            map.zoomToPoint(restoredMapCenter, restoredMapZoom);
+        } else if (!points.isEmpty()) {
             map.zoomToBoundingBox(points, 0.6);
         } else {
             map.runOnGpsLocationReady(this::onGpsLocationReady);
@@ -247,18 +272,16 @@ public class GeoShapeActivity extends CollectAbstractActivity implements IRegist
      * appropriate for storing as the result of this form question.
      */
     private String formatPoints(List<MapPoint> points) {
+        // Polygons are stored with a last point that duplicates the
+        // first point.  Add this extra point if it's not already present.
+        if (points.size() > 1 && !points.get(0).equals(points.get(points.size() - 1))) {
+            points.add(points.get(0));
+        }
         String result = "";
-        if (points.size() > 1) {
-            // Polygons are stored with a last point that duplicates the
-            // first point.  Add this extra point if it's not already present.
-            if (!points.get(0).equals(points.get(points.size() - 1))) {
-                points.add(points.get(0));
-            }
-            for (MapPoint point : points) {
-                // TODO(ping): Remove excess precision when we're ready for the output to change.
-                result += String.format(Locale.US, "%s %s 0.0 0.0;",
-                    Double.toString(point.lat), Double.toString(point.lon));
-            }
+        for (MapPoint point : points) {
+            // TODO(ping): Remove excess precision when we're ready for the output to change.
+            result += String.format(Locale.US, "%s %s 0.0 0.0;",
+                Double.toString(point.lat), Double.toString(point.lon));
         }
         return result.trim();
     }

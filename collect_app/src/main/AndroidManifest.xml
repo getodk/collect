@@ -235,16 +235,6 @@ the specific language governing permissions and limitations under the License.
         <activity android:name=".activities.CaptureSelfieActivity" />
         <activity android:name=".activities.CaptureSelfieActivityNewApi" />
 
-        <receiver
-            android:name=".receivers.NetworkReceiver"
-            android:enabled="true">
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="org.odk.collect.android.FormSaved" />
-            </intent-filter>
-        </receiver>
         <!--
         Register AnalyticsReceiver and AnalyticsService to support background
         dispatching on non-Google Play devices.

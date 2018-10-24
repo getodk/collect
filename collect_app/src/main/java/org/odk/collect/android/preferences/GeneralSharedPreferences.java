@@ -129,4 +129,8 @@ public class GeneralSharedPreferences {
             save(keyValuePair.getKey(), get(keyValuePair.getKey()));
         }
     }
+
+    public static boolean isAutoSendEnabled() {
+        return !getInstance().get(PreferenceKeys.KEY_AUTOSEND).equals("off");
+    }
 }

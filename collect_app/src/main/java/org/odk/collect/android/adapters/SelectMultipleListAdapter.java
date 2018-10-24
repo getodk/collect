@@ -66,7 +66,7 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
 
         for (Selection selectedItem : selectedItems) {
             // match based on value, not key
-            if (items.get(index).getValue().equals(selectedItem.getValue())) {
+            if (filteredItems.get(index).getValue().equals(selectedItem.getValue())) {
                 checkBox.setChecked(true);
                 break;
             }

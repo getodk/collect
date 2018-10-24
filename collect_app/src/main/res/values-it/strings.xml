@@ -275,8 +275,7 @@
   <string name="no_google_account">Nessun Account Google selezionato!</string>
   <string name="google_set_account">Hai selezionato Google Sheets come tuo server. Perpiacere seleziona un corrispondente account Google nelle Impostazioni Generali prima di procedere.</string>
   <string name="media_upload_error">Errore! il file di supporto da caricare non esiste: %1$s</string>
-  <string name="odk_auth_auth_fail">Autenticazione ODK per invio automatico fallita, per favore verificare che i parametri di configurazione siano corretti.</string>
-  <string name="odk_auto_note">Invio automatico dei risultati ODK</string>
+    <string name="odk_auto_note">Invio automatico dei risultati ODK</string>
   <string name="odk_auto_download_notification_title">Download automatico dei risultati ODK</string>
   <string name="notification_error">Errore di visualizzazione nella notifica</string>
   <string name="delete_after_send">Elimina dopo invio</string>
@@ -490,6 +489,4 @@
   <string name="transport_type_sms">SMS</string>
   <string name="seconds">Secondi</string>
   <string name="rank_items">Ordina gli elementi</string>
-  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
-  <string name="current_predicate_continue">Continua</string>
 </resources>

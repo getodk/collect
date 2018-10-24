@@ -20,18 +20,18 @@ import android.content.Context;
 
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.fragments.dialogs.NepaliDatePickerDialog;
+import org.odk.collect.android.fragments.dialogs.BikramSambatDatePickerDialog;
 
 import static org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog.DATE_PICKER_DIALOG;
 
-public class NepaliDateWidget extends AbstractDateWidget {
+public class BikramSambatDateWidget extends AbstractDateWidget {
 
-    public NepaliDateWidget(Context context, FormEntryPrompt prompt) {
+    public BikramSambatDateWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
     }
 
     protected void showDatePickerDialog() {
-        NepaliDatePickerDialog nepaliDatePickerDialog = NepaliDatePickerDialog.newInstance(getFormEntryPrompt().getIndex(), date, datePickerDetails);
-        nepaliDatePickerDialog.show(((FormEntryActivity) getContext()).getSupportFragmentManager(), DATE_PICKER_DIALOG);
+        BikramSambatDatePickerDialog bikramSambatDatePickerDialog = BikramSambatDatePickerDialog.newInstance(getFormEntryPrompt().getIndex(), date, datePickerDetails);
+        bikramSambatDatePickerDialog.show(((FormEntryActivity) getContext()).getSupportFragmentManager(), DATE_PICKER_DIALOG);
     }
 }

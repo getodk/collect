@@ -278,8 +278,7 @@
   <string name="no_google_account">Google račun ni izbran!</string>
   <string name="google_set_account">Za svoj strežnik ste izbrali Googlove tabele, pred nadaljevanjem prosim izberite ustrezen Google Račun v splošnih nastavitvah</string>
   <string name="media_upload_error">Medijske datoteke %1$s ni bilo mogoče naložiti, ker ne obstaja.</string>
-  <string name="odk_auth_auth_fail">Pri ODK samodejnem pošiljanju ni uspela prijava, prosim preveri nastavitve.</string>
-  <string name="odk_auto_note">Rezultati ODK samodejnega pošiljanja</string>
+    <string name="odk_auto_note">Rezultati ODK samodejnega pošiljanja</string>
   <string name="odk_auto_download_notification_title">Rezultati ODK samodejnega prenosa</string>
   <string name="notification_error">Napaka pri prikazu obvestila</string>
   <string name="google_sheets_url">URL za nadomestno predložitev</string>
@@ -386,5 +385,4 @@
   <string name="transport_type_internet">WiFi / mobilno omrežje (priporočeno)</string>
   <string name="transport_type_sms">SMS sporočilo</string>
   <string name="seconds">Sekunde</string>
-  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
 </resources>

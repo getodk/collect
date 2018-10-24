@@ -7,22 +7,21 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.tasks.ImageLoadingTask;
+import org.odk.collect.android.tasks.MediaLoadingTask;
 
-public class ImageLoadingFragment extends Fragment {
+public class MediaLoadingFragment extends Fragment {
 
-    private ImageLoadingTask imageLoadingTask;
+    private MediaLoadingTask mediaLoadingTask;
     private FormEntryActivity formEntryActivity;
 
-    public void beginImageLoadingTask(Uri imageURi) {
-        imageLoadingTask = new ImageLoadingTask(formEntryActivity);
-        imageLoadingTask.execute(imageURi);
+    public void beginMediaLoadingTask(Uri uri) {
+        mediaLoadingTask = new MediaLoadingTask(formEntryActivity);
+        mediaLoadingTask.execute(uri);
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setRetainInstance(true);
     }
 
@@ -30,16 +29,16 @@ public class ImageLoadingFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.formEntryActivity = (FormEntryActivity) activity;
-        if (imageLoadingTask != null) {
-            imageLoadingTask.onAttach(formEntryActivity);
+        if (mediaLoadingTask != null) {
+            mediaLoadingTask.onAttach(formEntryActivity);
         }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        if (imageLoadingTask != null) {
-            imageLoadingTask.onDetach();
+        if (mediaLoadingTask != null) {
+            mediaLoadingTask.onDetach();
         }
     }
 }

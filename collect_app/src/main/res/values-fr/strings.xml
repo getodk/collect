@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">Afficher le mot de passe</string>
   <string name="activity_not_found">Aucune activité à gérer: %s</string>
   <string name="view_image">Afficher l\'image</string>
@@ -281,8 +281,7 @@
   <string name="no_google_account">Pas de compte Google choisi!</string>
   <string name="google_set_account">Vous avez choisi Google Sheets comme serveur. Merci de sélectionner un compte Google correspondant dans les paramètres généraux avant de continuer.</string>
   <string name="media_upload_error">Le téléversement du fichier média inexistant a échoué : %1$s</string>
-  <string name="odk_auth_auth_fail">Erreur d\'authentification d\'envoi automatique ODK, assurez-vous que vos paramètres sont corrects</string>
-  <string name="odk_auto_note">Résultats d\'envoi automatique ODK</string>
+    <string name="odk_auto_note">Résultats d\'envoi automatique ODK</string>
   <string name="odk_auto_download_notification_title">Résultats de téléchargement automatique ODK</string>
   <string name="notification_error">Erreur d\'affichage du texte de notification</string>
   <string name="delete_after_send">Supprimer après l\'envoi</string>
@@ -619,12 +618,5 @@
   <string name="transport_type_both">Choisir à l\'envoi</string>
   <string name="seconds">Secondes</string>
   <string name="rank_items">Choisir l\'ordre des éléments</string>
-  <string name="image_not_saved">L\'image n\'a pas pu être enregistrée à cause
-d\'un problème sur l\'instance du fichier.</string>
   <string name="missing_google_account_dialog_title">Compte Google non sélectionné</string>
-  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
-  <string name="current_predicate_warning">Cette question ne sera pas compatible avec les versions futures de ODK Collect parce qu\'elle emploi current() dans un filtre de choix.\n\nVeuillez vous assurer que la personne qui a créé ce formulaire lise les details ci-dessous et agisse. </string>
-  <string name="current_predicate_warning_title">Action requise</string>
-  <string name="current_predicate_forum">Lire les details</string>
-  <string name="current_predicate_continue">Continuer</string>
 </resources>

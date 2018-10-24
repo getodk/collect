@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">Onyesha nenosiri</string>
   <string name="activity_not_found">Hakuna shughuli ya kushughulikiwa: %s</string>
   <string name="view_image">Onesha picha</string>
@@ -281,8 +281,7 @@
   <string name="no_google_account">Hakuna akaunti ya Google Iliyochaguliwa!</string>
   <string name="google_set_account">Umechagua karatasi za Google kama seva yako, tafadhali chagua akaunti ya Google inayoshabiliana katika mpangilio wa jumla kabla ya kuendelea</string>
   <string name="media_upload_error">Imeshindwa kupakia mafaili ya midia ambayo hayapo%1$s</string>
-  <string name="odk_auth_auth_fail">Uhakiki wa utumaji wenyewe wa ODK umeshindikana, tafadhali hakikisha mipangilio yako iko sahihi</string>
-  <string name="odk_permissions_fail">Uwezo wa utumaji wenyewe wa ODK umeshindikana kwa kukosa ruhusa, tafadhali hakikisha umeipa ruhusa zote zinazohitajika</string>
+    <string name="odk_permissions_fail">Uwezo wa utumaji wenyewe wa ODK umeshindikana kwa kukosa ruhusa, tafadhali hakikisha umeipa ruhusa zote zinazohitajika</string>
   <string name="odk_auto_note">Majibu ya ODK yanajituma yenyewe</string>
   <string name="odk_auto_download_notification_title">Majibu ya ODK yaliyo jipakuwa yenyewe</string>
   <string name="notification_error">Kosa linaonesha ujumbe wa maandishi</string>
@@ -638,14 +637,8 @@
   <string name="transport_type_both">Chagua katika Kutuma</string>
   <string name="seconds">Sekunde</string>
   <string name="rank_items">Pangilia vitu</string>
-  <string name="image_not_saved">Picha haiwezi kuhifadhiwa kwa sababu ya tatizo na faili ya mfano husika</string>
   <string name="loading_form_failed">Tatizo limetokea wakati wa kupakua fomu. Tafadhali jaribu tena.</string>
   <string name="missing_google_account_dialog_title">Akaunti ya Google haijawekwa sawa</string>
   <string name="missing_google_account_dialog_desc">Kuwasilisha  fomu kupitia karatasi ya Google , unatakiwa kurekebisha  akaunti yako ya Google kwenye mpangilio wa seva. </string>
   <string name="sms_invalid_phone_number_description">Weka namba ya simu itakayotumiwa ujumbe au badilisha aina yako ya usafirishaji</string>
-  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
-  <string name="current_predicate_warning">Swali hili halitakuwa tangamanifu na matoleo mapya ya ODK Collect kwa sababu linatumia current() katika chujio la kuchagua. \n\nTafadhali hakikisha aliyetengeneza fomu hii anasoma maelezo yafuatayo na kuyafanyia kazi.</string>
-  <string name="current_predicate_warning_title">Kitendo kinahitajika</string>
-  <string name="current_predicate_forum">Soma maelezo</string>
-  <string name="current_predicate_continue">Endelea</string>
 </resources>
