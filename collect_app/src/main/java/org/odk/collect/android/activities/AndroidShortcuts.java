@@ -27,6 +27,7 @@ import android.support.v7.app.AppCompatActivity;
 import org.odk.collect.android.R;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
+import org.odk.collect.android.utilities.Utilities;
 
 import java.util.ArrayList;
 
@@ -66,7 +67,10 @@ public class AndroidShortcuts extends AppCompatActivity {
 
         Cursor c = null;
         try {
-            c = new FormsDao().getFormsCursor();
+            String selectionClause = FormsColumns.SOURCE + "=?";                // smap
+            String [] selectionArgs = new String[] {Utilities.getSource() };    // smap
+
+            c = new FormsDao().getFormsCursor(selectionClause, selectionArgs);  // smap add selection clause and args
 
             if (c.getCount() > 0) {
                 c.moveToPosition(-1);
@@ -116,7 +120,7 @@ public class AndroidShortcuts extends AppCompatActivity {
         Intent intent = new Intent();
         intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
         intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, name);
-        Parcelable iconResource = Intent.ShortcutIconResource.fromContext(this, R.drawable.notes);
+        Parcelable iconResource = Intent.ShortcutIconResource.fromContext(this, R.drawable.ic_launcher);
         intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, iconResource);
 
         // Now, return the result to the launcher

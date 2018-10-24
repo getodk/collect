@@ -7,6 +7,7 @@ OR CONDITIONS OF ANY KIND, either express or implied. See the License for
 the specific language governing permissions and limitations under the License. -->
 <resources>
     <!-- strings that should not be translated -->
+    <string name="action_name" translatable="false">FieldTask Form</string>
     <string name="app_name" translatable="false">FieldTask</string>
     <string name="app_version" translatable="false">5.70</string>
     <string name="default_username" translatable="false">gplay</string>
