@@ -8,7 +8,7 @@ Before filling this form, visit https://github.com/opendatakit/collect/issues?q=
 
 For all problem reports, please use the template below. Also include any relevant stack traces or error messages.
 
-For feature requests, please include the problem description (what problem do you have that can't currently be solved?) and a proposed solution if you have one in mind (optional). You can delete the template. 
+Feature suggestions should be described [in the forum Features category](https://forum.opendatakit.org/c/features) and discussed by the broader user community. Once there is a clear way forward, issues should be filed on the relevant repositories.
 
 -->
 
