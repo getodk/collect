@@ -128,6 +128,10 @@ android {
         }
     }
 
+    lintOptions {
+        checkReleaseBuilds false
+    }
+
     packagingOptions {
         // Pick first occurrence of any files that cause conflicts, as defined
         // in common.gradle
@@ -290,7 +294,9 @@ dependencies {
     annotationProcessor "com.jakewharton:butterknife-compiler:8.8.1"
 
     // Annotations understood by FindBugs
-    compileOnly 'com.google.code.findbugs:annotations:3.0.1'
+    compileOnly('com.google.code.findbugs:annotations:3.0.1') {
+        exclude group: 'javax.annotation'
+    }
     compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
 
     // Used to generate documentation screenshots.
