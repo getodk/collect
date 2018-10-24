@@ -104,7 +104,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     }
 
     public void addAggregatePreferences() {
-        addPreferencesFromResource(R.xml.aggregate_preferences);
+        if (!new AggregatePreferencesAdder(this).add()) return;
 
         serverUrlPreference = (EditTextPreference) findPreference(
                 PreferenceKeys.KEY_SERVER_URL);
