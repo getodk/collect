@@ -38,7 +38,7 @@ public class DateTimeUtilsTest {
     private DatePickerDetails ethiopianDatePickerDetails;
     private DatePickerDetails copticDatePickerDetails;
     private DatePickerDetails islamicDatePickerDetails;
-    private DatePickerDetails nepaliDatePickerDetails;
+    private DatePickerDetails bikramSambatDatePickerDetails;
 
     private Context context;
 
@@ -48,7 +48,7 @@ public class DateTimeUtilsTest {
         ethiopianDatePickerDetails = new DatePickerDetails(DatePickerDetails.DatePickerType.ETHIOPIAN, DatePickerDetails.DatePickerMode.SPINNERS);
         copticDatePickerDetails = new DatePickerDetails(DatePickerDetails.DatePickerType.COPTIC, DatePickerDetails.DatePickerMode.SPINNERS);
         islamicDatePickerDetails = new DatePickerDetails(DatePickerDetails.DatePickerType.ISLAMIC, DatePickerDetails.DatePickerMode.SPINNERS);
-        nepaliDatePickerDetails = new DatePickerDetails(DatePickerDetails.DatePickerType.NEPALI, DatePickerDetails.DatePickerMode.SPINNERS);
+        bikramSambatDatePickerDetails = new DatePickerDetails(DatePickerDetails.DatePickerType.BIKRAM_SAMBAT, DatePickerDetails.DatePickerMode.SPINNERS);
 
         context = Collect.getInstance();
     }
@@ -75,7 +75,7 @@ public class DateTimeUtilsTest {
         assertEquals("11 Rabī‘ ath-thānī 1412, 14:00 (Oct 20, 1991, 14:00)", DateTimeUtils.getDateTimeLabel(new Date(dateInMilliseconds), islamicDatePickerDetails, true, context));
 
         Locale.setDefault(Locale.ENGLISH);
-        assertEquals("3 कार्तिक 2048 (Oct 20, 1991)", DateTimeUtils.getDateTimeLabel(new Date(dateInMilliseconds), nepaliDatePickerDetails, false, context));
-        assertEquals("3 कार्तिक 2048, 14:00 (Oct 20, 1991, 14:00)", DateTimeUtils.getDateTimeLabel(new Date(dateInMilliseconds), nepaliDatePickerDetails, true, context));
+        assertEquals("3 कार्तिक 2048 (Oct 20, 1991)", DateTimeUtils.getDateTimeLabel(new Date(dateInMilliseconds), bikramSambatDatePickerDetails, false, context));
+        assertEquals("3 कार्तिक 2048, 14:00 (Oct 20, 1991, 14:00)", DateTimeUtils.getDateTimeLabel(new Date(dateInMilliseconds), bikramSambatDatePickerDetails, true, context));
     }
 }

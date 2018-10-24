@@ -478,6 +478,4 @@
   <string name="no">नहीं</string>
   <string name="start_video_capture_instruction">रिकॉर्डिंग प्रारंभ करने के लिए स्क्रीन को टैप करें</string>
   <!--Sms submission-->
-  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
-  <string name="current_predicate_continue">जारी रखें</string>
 </resources>

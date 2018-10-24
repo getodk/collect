@@ -20,7 +20,7 @@ import java.io.Serializable;
 
 public class DatePickerDetails implements Serializable {
     public enum DatePickerType {
-        GREGORIAN, ETHIOPIAN, COPTIC, ISLAMIC, NEPALI
+        GREGORIAN, ETHIOPIAN, COPTIC, ISLAMIC, BIKRAM_SAMBAT
     }
 
     public enum DatePickerMode {
@@ -51,8 +51,8 @@ public class DatePickerDetails implements Serializable {
         return datePickerType.equals(DatePickerType.ISLAMIC);
     }
 
-    public boolean isNepaliType() {
-        return datePickerType.equals(DatePickerType.NEPALI);
+    public boolean isBikramSambatType() {
+        return datePickerType.equals(DatePickerType.BIKRAM_SAMBAT);
     }
 
     public boolean isCalendarMode() {
