@@ -620,9 +620,4 @@
   <string name="seconds">Secondes</string>
   <string name="rank_items">Choisir l\'ordre des éléments</string>
   <string name="missing_google_account_dialog_title">Compte Google non sélectionné</string>
-  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
-  <string name="current_predicate_warning">Cette question ne sera pas compatible avec les versions futures de ODK Collect parce qu\'elle emploi current() dans un filtre de choix.\n\nVeuillez vous assurer que la personne qui a créé ce formulaire lise les details ci-dessous et agisse. </string>
-  <string name="current_predicate_warning_title">Action requise</string>
-  <string name="current_predicate_forum">Lire les details</string>
-  <string name="current_predicate_continue">Continuer</string>
 </resources>

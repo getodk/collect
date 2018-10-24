@@ -642,9 +642,4 @@
   <string name="missing_google_account_dialog_title">Akaunti ya Google haijawekwa sawa</string>
   <string name="missing_google_account_dialog_desc">Kuwasilisha  fomu kupitia karatasi ya Google , unatakiwa kurekebisha  akaunti yako ya Google kwenye mpangilio wa seva. </string>
   <string name="sms_invalid_phone_number_description">Weka namba ya simu itakayotumiwa ujumbe au badilisha aina yako ya usafirishaji</string>
-  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
-  <string name="current_predicate_warning">Swali hili halitakuwa tangamanifu na matoleo mapya ya ODK Collect kwa sababu linatumia current() katika chujio la kuchagua. \n\nTafadhali hakikisha aliyetengeneza fomu hii anasoma maelezo yafuatayo na kuyafanyia kazi.</string>
-  <string name="current_predicate_warning_title">Kitendo kinahitajika</string>
-  <string name="current_predicate_forum">Soma maelezo</string>
-  <string name="current_predicate_continue">Endelea</string>
 </resources>

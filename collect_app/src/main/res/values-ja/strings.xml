@@ -641,9 +641,4 @@
   <string name="missing_google_account_dialog_title">Google アカウントが設定されていません</string>
   <string name="missing_google_account_dialog_desc">Google スプレッドでフォームを送信するには、サーバー設定で Google アカウントを設定する必要があります。</string>
   <string name="sms_invalid_phone_number_description">SMS 送信の宛先電話番号を設定するか、送信の種類を変更してください。</string>
-  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
-  <string name="current_predicate_warning">選択フィルタで current() を使用しているため、この質問は ODK Collect の将来のバージョンと互換性がありません。 \n\nこのフォームを作成した人は、以下の詳細を読んで対応してください。</string>
-  <string name="current_predicate_warning_title">対応が必要です</string>
-  <string name="current_predicate_forum">詳細を読む</string>
-  <string name="current_predicate_continue">続行</string>
 </resources>

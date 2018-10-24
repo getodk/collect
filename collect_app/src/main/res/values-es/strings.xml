@@ -644,9 +644,4 @@
   <string name="missing_google_account_dialog_title">No se ha definido una cuenta de Google</string>
   <string name="missing_google_account_dialog_desc">Para enviar formularios vía Google Sheets debe definir una cuenta de Google en ajustes de servidor.</string>
   <string name="sms_invalid_phone_number_description">Especifique un número telefónico para el envío de SMS o cambie el tipo de transporte</string>
-  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
-  <string name="current_predicate_warning">Esta pregunta no será compatible con versiones futuras de la aplicaciónt debido a que usa current() en un choice filter. \n\nPor favor asegure que quien realizó el formulario lea los detalles abajo y tome la acción correspondiente.</string>
-  <string name="current_predicate_warning_title">Acción requerida</string>
-  <string name="current_predicate_forum">Leer detalles</string>
-  <string name="current_predicate_continue">Continuar</string>
 </resources>
