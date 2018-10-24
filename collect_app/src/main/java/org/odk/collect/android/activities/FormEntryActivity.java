@@ -457,7 +457,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     }
                     mFormId = formInfo.getFormID();
 
-                    formLoaderTask.execute(formPath, mFormId);
+                    //formLoaderTask.execute(formPath, mFormId);    smap
+                    formLoaderTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, formPath, mFormId);        // smap
                 }
                 return;
             }
@@ -635,7 +636,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 .logAction(this, "formLoaded", formPath);
         showDialog(PROGRESS_DIALOG);
         // show dialog before we execute...
-        formLoaderTask.execute(formPath, mFormId);      // smap add formId
+        //formLoaderTask.execute(formPath, mFormId);      // smap add formId
+        formLoaderTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, formPath, mFormId);      // smap add formId
     }
 
     public Bundle getState() {
@@ -2913,7 +2915,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             if(fc != null) {
                 Intent intent = new Intent();
                 intent.putExtra("instanceid", fc.getSubmissionMetadata().instanceId);
-                intent.putExtra("uri", InstancesDaoHelper.getLastInstanceUri(getAbsoluteInstancePath()));
+                intent.putExtra("uri", InstancesDaoHelper.getLastInstanceUri(getAbsoluteInstancePath()).toString());
                 intent.putExtra("status", isComplete ? "complete" : null);
 
                 setResult(RESULT_OK, intent);

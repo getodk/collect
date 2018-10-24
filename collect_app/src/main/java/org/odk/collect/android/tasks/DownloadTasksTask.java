@@ -172,7 +172,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 
     @Override
     public HashMap<String, String> doInBackground(Void... values) {
-	
+
 		results = new HashMap<String,String>();
         sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(Collect.getInstance().getBaseContext());
