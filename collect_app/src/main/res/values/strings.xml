@@ -660,4 +660,5 @@
     <string name="current_predicate_warning_title">Action needed</string>
     <string name="current_predicate_forum">Read details</string>
     <string name="current_predicate_continue">Continue</string>
+    <string name="notification_channel_name">General notifications</string>
 </resources>
