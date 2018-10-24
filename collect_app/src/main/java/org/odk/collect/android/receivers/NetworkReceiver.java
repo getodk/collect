@@ -1,6 +1,5 @@
 package org.odk.collect.android.receivers;
 
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -11,7 +10,6 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.annotation.NonNull;
-import android.support.v4.app.NotificationCompat;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.NotificationActivity;
@@ -19,7 +17,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.tasks.ServerPollingJob;
-import org.odk.collect.android.utilities.IconUtils;
+import org.odk.collect.android.utilities.NotificationUtils;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
@@ -39,6 +37,7 @@ import java.util.Set;
 
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_SEND;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORMS_UPLOADED_NOTIFICATION;
+import static org.odk.collect.android.utilities.NotificationUtils.AUTO_SEND_NOTIFICATION_ID;
 
 public class NetworkReceiver extends BroadcastReceiver implements InstanceUploaderListener {
 
@@ -263,16 +262,11 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         PendingIntent pendingNotify = PendingIntent.getActivity(Collect.getInstance(), FORMS_UPLOADED_NOTIFICATION,
                 notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(Collect.getInstance())
-                .setSmallIcon(IconUtils.getNotificationAppIcon())
-                .setContentTitle(Collect.getInstance().getString(R.string.odk_auto_note))
-                .setContentIntent(pendingNotify)
-                .setContentText(getContentText(resultMessagesByInstanceId))
-                .setAutoCancel(true);
-
-        NotificationManager notificationManager = (NotificationManager) Collect.getInstance()
-                .getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(1328974928, builder.build());
+        NotificationUtils.showNotification(
+                pendingNotify,
+                AUTO_SEND_NOTIFICATION_ID,
+                R.string.odk_auto_note,
+                getContentText(resultMessagesByInstanceId));
     }
 
     private String getContentText(Map<String, String> resultsMessagesByInstanceId) {

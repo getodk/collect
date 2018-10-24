@@ -47,9 +47,9 @@ public class DateTimeUtilsTest {
     private DatePickerDetails islamic;
     private DatePickerDetails islamicMonthYear;
     private DatePickerDetails islamicYear;
-    private DatePickerDetails nepali;
-    private DatePickerDetails nepaliMonthYear;
-    private DatePickerDetails nepaliYear;
+    private DatePickerDetails bikramSambat;
+    private DatePickerDetails bikramSambatMonthYear;
+    private DatePickerDetails bikramSambatYear;
 
     @Before
     public void setUp() {
@@ -66,9 +66,9 @@ public class DateTimeUtilsTest {
         islamic = new DatePickerDetails(DatePickerDetails.DatePickerType.ISLAMIC, DatePickerDetails.DatePickerMode.SPINNERS);
         islamicMonthYear = new DatePickerDetails(DatePickerDetails.DatePickerType.ISLAMIC, DatePickerDetails.DatePickerMode.MONTH_YEAR);
         islamicYear = new DatePickerDetails(DatePickerDetails.DatePickerType.ISLAMIC, DatePickerDetails.DatePickerMode.YEAR);
-        nepali = new DatePickerDetails(DatePickerDetails.DatePickerType.NEPALI, DatePickerDetails.DatePickerMode.SPINNERS);
-        nepaliMonthYear = new DatePickerDetails(DatePickerDetails.DatePickerType.NEPALI, DatePickerDetails.DatePickerMode.MONTH_YEAR);
-        nepaliYear = new DatePickerDetails(DatePickerDetails.DatePickerType.NEPALI, DatePickerDetails.DatePickerMode.YEAR);
+        bikramSambat = new DatePickerDetails(DatePickerDetails.DatePickerType.BIKRAM_SAMBAT, DatePickerDetails.DatePickerMode.SPINNERS);
+        bikramSambatMonthYear = new DatePickerDetails(DatePickerDetails.DatePickerType.BIKRAM_SAMBAT, DatePickerDetails.DatePickerMode.MONTH_YEAR);
+        bikramSambatYear = new DatePickerDetails(DatePickerDetails.DatePickerType.BIKRAM_SAMBAT, DatePickerDetails.DatePickerMode.YEAR);
     }
 
     @Test
@@ -135,15 +135,15 @@ public class DateTimeUtilsTest {
         appearance = "year islamic";
         assertEquals(islamicYear, DateTimeUtils.getDatePickerDetails(appearance));
 
-        appearance = "nepali";
-        assertEquals(nepali, DateTimeUtils.getDatePickerDetails(appearance));
-        appearance = "Nepali month-year";
-        assertEquals(nepaliMonthYear, DateTimeUtils.getDatePickerDetails(appearance));
-        appearance = "month-year nepali";
-        assertEquals(nepaliMonthYear, DateTimeUtils.getDatePickerDetails(appearance));
-        appearance = "Nepali year";
-        assertEquals(nepaliYear, DateTimeUtils.getDatePickerDetails(appearance));
-        appearance = "year nepali";
-        assertEquals(nepaliYear, DateTimeUtils.getDatePickerDetails(appearance));
+        appearance = "bikram-sambat";
+        assertEquals(bikramSambat, DateTimeUtils.getDatePickerDetails(appearance));
+        appearance = "Bikram-sambat month-year";
+        assertEquals(bikramSambatMonthYear, DateTimeUtils.getDatePickerDetails(appearance));
+        appearance = "month-year bikram-sambat";
+        assertEquals(bikramSambatMonthYear, DateTimeUtils.getDatePickerDetails(appearance));
+        appearance = "Bikram-sambat year";
+        assertEquals(bikramSambatYear, DateTimeUtils.getDatePickerDetails(appearance));
+        appearance = "year bikram-sambat";
+        assertEquals(bikramSambatYear, DateTimeUtils.getDatePickerDetails(appearance));
     }
 }

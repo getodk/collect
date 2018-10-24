@@ -299,6 +299,7 @@
     <string name="send_in_progress">Background send running, please try again shortly</string>
     <string name="sheets_max_columns">Max number of columns is 255, your form has %s. Unable to upload to spreadsheet.</string>
     <string name="invalid_sheet_id">invalid sheet id: %1$s</string>
+    <string name="missing_submission_url">Missing submission URL</string>
     <string name="google_sheets_access_denied">Access denied. Please make sure the spreadsheet owner has granted you edit permission.</string>
     <string name="google_sheets_missing_columns">Spreadsheet is missing the following columns: %1$s</string>
     <string name="password_error_whitespace">Leading or trailing whitespace not allowed in passwords</string>
@@ -649,9 +650,9 @@
     <string name="transport_type_both">Select on send</string>
     <string name="seconds">Seconds</string>
     <string name="rank_items">Rank items</string>
-    <string name="image_not_saved">The image can not be saved because of a problem with the corresponding instance file.</string>
     <string name="loading_form_failed">An error occurred while loading the form. Please try again.</string>
     <string name="missing_google_account_dialog_title">Google account not set</string>
     <string name="missing_google_account_dialog_desc">To submit forms via Google Sheets you have to set up your Google account in the Server settings.</string>
     <string name="sms_invalid_phone_number_description">Set a destination phone number for SMS submissions or change your transport type.</string>
+    <string name="notification_channel_name">General notifications</string>
 </resources>

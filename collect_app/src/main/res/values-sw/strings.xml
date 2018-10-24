@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">Onyesha nenosiri</string>
   <string name="activity_not_found">Hakuna shughuli ya kushughulikiwa: %s</string>
   <string name="view_image">Onesha picha</string>
@@ -638,7 +638,6 @@
   <string name="transport_type_both">Chagua katika Kutuma</string>
   <string name="seconds">Sekunde</string>
   <string name="rank_items">Pangilia vitu</string>
-  <string name="image_not_saved">Picha haiwezi kuhifadhiwa kwa sababu ya tatizo na faili ya mfano husika</string>
   <string name="loading_form_failed">Tatizo limetokea wakati wa kupakua fomu. Tafadhali jaribu tena.</string>
   <string name="missing_google_account_dialog_title">Akaunti ya Google haijawekwa sawa</string>
   <string name="missing_google_account_dialog_desc">Kuwasilisha  fomu kupitia karatasi ya Google , unatakiwa kurekebisha  akaunti yako ya Google kwenye mpangilio wa seva. </string>

@@ -607,7 +607,6 @@
   <string name="transport_type_both">بھیجنے پر منتخب کریں</string>
   <string name="seconds">سیکنڈز </string>
   <string name="rank_items">درجہ بندی کی اشیاء</string>
-  <string name="image_not_saved">اس تصویر کو اسی مثال کی فائل کے ساتھ محفوظ نہیں کیا جا سکتا.</string>
   <string name="loading_form_failed">فارم لوڈ کرتے ہوئے ایک خرابی واقع ہوئی. دوبارہ کوشش کریں.</string>
   <string name="missing_google_account_dialog_title">گوگل اکاؤنٹ مقرر نہیں ہے</string>
   <string name="missing_google_account_dialog_desc">گوگل شیٹس  کے ذریعے فارم جمع کرنے کے لئے آپ کو سرور کی ترتیبات میں اپناگوگل اکاؤنٹ قائم کرنا ہوگا.</string>

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">Afficher le mot de passe</string>
   <string name="activity_not_found">Aucune activité à gérer: %s</string>
   <string name="view_image">Afficher l\'image</string>
@@ -619,7 +619,5 @@
   <string name="transport_type_both">Choisir à l\'envoi</string>
   <string name="seconds">Secondes</string>
   <string name="rank_items">Choisir l\'ordre des éléments</string>
-  <string name="image_not_saved">L\'image n\'a pas pu être enregistrée à cause
-d\'un problème sur l\'instance du fichier.</string>
   <string name="missing_google_account_dialog_title">Compte Google non sélectionné</string>
 </resources>

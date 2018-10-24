@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">Näytä salasana</string>
   <string name="activity_not_found">Ei toimintoa tunnuksella: %s</string>
   <string name="view_image">Katso kuva</string>
@@ -638,7 +638,6 @@
   <string name="transport_type_both">Valitse lähettäessä</string>
   <string name="seconds">Sekunteja</string>
   <string name="rank_items">Järjestä</string>
-  <string name="image_not_saved">Kuvaa ei voida tallentaa vastauskerran tiedoston ongelman vuoksi.</string>
   <string name="loading_form_failed">Lomaketta ladatessa tapahtui virhe. Ole hyvä ja yritä uudestaan.</string>
   <string name="missing_google_account_dialog_title">Google-tiliä ei ole asetettu</string>
   <string name="missing_google_account_dialog_desc">Lähettääksesi lomakkeita Google Sheets -palvelun kautta sinun on asetettava Google-tili palvelinasetuksissa.</string>

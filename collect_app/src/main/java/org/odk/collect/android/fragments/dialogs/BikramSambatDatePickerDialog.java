@@ -28,14 +28,14 @@ import bikramsambat.BsException;
 import bikramsambat.BsGregorianDate;
 import timber.log.Timber;
 
-public class NepaliDatePickerDialog extends CustomDatePickerDialog {
+public class BikramSambatDatePickerDialog extends CustomDatePickerDialog {
     private static final int MIN_SUPPORTED_YEAR = 2008; //1951 in Gregorian calendar
     private static final int MAX_SUPPORTED_YEAR = 2090; //2033 in Gregorian calendar
 
     private final String[] monthsArray = BsCalendar.MONTH_NAMES.toArray(new String[BsCalendar.MONTH_NAMES.size()]);
 
-    public static NepaliDatePickerDialog newInstance(FormIndex formIndex, LocalDateTime date, DatePickerDetails datePickerDetails) {
-        NepaliDatePickerDialog dialog = new NepaliDatePickerDialog();
+    public static BikramSambatDatePickerDialog newInstance(FormIndex formIndex, LocalDateTime date, DatePickerDetails datePickerDetails) {
+        BikramSambatDatePickerDialog dialog = new BikramSambatDatePickerDialog();
         dialog.setArguments(getArgs(formIndex, date, datePickerDetails));
 
         return dialog;
