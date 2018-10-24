@@ -274,7 +274,8 @@ Escolher Imagem</string>
   <string name="no_google_account">Nenhuma conta do Google foi selecionada!</string>
   <string name="google_set_account">Você selecionou o Google Sheets com seu servidor, por favor selecione um conta Google correspondente em Configurações Gerais antes de continuar.</string>
   <string name="media_upload_error">Falhou ao fazer o upload do arquivo de media, que n´ão existe: %1$s</string>
-    <string name="odk_permissions_fail">Permissão de envio automático do ODK falhou, por favor, certifique-se que foi dada a você todas as permissões requisitadas.</string>
+  <string name="odk_auth_auth_fail">Falha na autenticação para envio automático, por favor verifique se as configurações estão corretas</string>
+  <string name="odk_permissions_fail">Permissão de envio automático do ODK falhou, por favor, certifique-se que foi dada a você todas as permissões requisitadas.</string>
   <string name="odk_auto_note">Resultados de envio automático do ODK</string>
   <string name="odk_auto_download_notification_title">Resultados de download automático do ODK</string>
   <string name="notification_error">Erro ao exibir texto de notificação.</string>
@@ -529,4 +530,6 @@ Escolher Imagem</string>
   <string name="hide_old_form_versions_setting_title">Esconder versões antigas de formulários</string>
   <string name="hide_old_form_versions_setting_summary">Somente a versão mais recente aparecerá em Formulário em Branco</string>
   <!--Sms submission-->
+  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
+  <string name="current_predicate_continue">Continuar</string>
 </resources>

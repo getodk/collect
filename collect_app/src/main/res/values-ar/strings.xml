@@ -268,7 +268,8 @@
   <string name="drive_get_file">الحصول على %1$s وملفات الوسائط.</string>
   <string name="no_google_account">لم يتم اختيار حساب جوجل!</string>
   <string name="google_set_account">لقد قمت باختيار صفحات الجوجل كخادم لك، أرجو اختيار حساب الجوجل  المتوافق عن طريق الاعدادت العامة قبل الاستمرار</string>
-    <string name="notification_error">خطأ في عرض اشعار النص</string>
+  <string name="odk_auth_auth_fail">فشل في عملية التحقق من بيانات المصادقة</string>
+  <string name="notification_error">خطأ في عرض اشعار النص</string>
   <string name="delete_after_send">حذف بعد الارسال</string>
   <string name="delete_after_send_summary">حذف الاستمارة النهائية والوسائط المتعددة بعد ارسالها الى الخادم</string>
   <string name="change_server_url">رابط الخادم</string>
@@ -519,4 +520,6 @@
   <string name="automatic_download">تحميل آلي</string>
   <string name="hide_old_form_versions_setting_title">إخفاء الإصدارات القديمة من الاستمارة</string>
   <!--Sms submission-->
+  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
+  <string name="current_predicate_continue">المتابعة</string>
 </resources>

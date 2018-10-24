@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="show_password">Mostrar contraseña</string>
   <string name="activity_not_found">No se encontró actividad para manejar: %s</string>
   <string name="view_image">Ver imagen</string>
@@ -62,7 +62,7 @@
   <string name="fetching_file">Obteniendo %1$s.\n\nFormulario %2$s de %3$s formulario(s).</string>
   <string name="file_deleted_error">¡%1$s de %2$s formulario(s) seleccionados no se borraron!</string>
   <string name="file_deleted_ok">¡%s formulario(s) se borraron correctamente!</string>
-  <string name="file_delete_in_progress">¡disculpe, una acción de borrar esta todavía en progreso!</string>
+  <string name="file_delete_in_progress">¡Disculpe, una acción de borrar esta todavía en progreso!</string>
   <string name="file_invalid">Archivo: %s es invalido.</string>
   <string name="file_missing">Archivo: %s falta.</string>
   <string name="finished_disk_scan">Exploración finalizada. Todos los formularios cargados.</string>
@@ -224,8 +224,8 @@
   <string name="buttons_navigation">Use los botones adelante/atrás</string>
   <string name="swipe_buttons_navigation">Use deslizar y botones</string>
   <string name="launch_printer">Iniciar Impresión</string>
-  <string name="no_printer">La impresora solicitado no está instalado. Por favor, instale la impresora.</string>
-  <string name="constraint_behavior">Comportamiento del proceso de restricciones</string>
+  <string name="no_printer">La impresora solicitado no está instalada. Por favor, instale la impresora.</string>
+  <string name="constraint_behavior">Manejo de las restricciones</string>
   <string name="constraint_behavior_on_swipe">Validar al desplazar hacia delante.</string>
   <string name="constraint_behavior_on_finalize">Postponer validación hasta el final</string>
   <string name="view_change_location">Ver o cambiar de localización</string>
@@ -263,10 +263,10 @@
   <string name="survey_loading_reading_csv_message">Leyendo archivos CSV…</string>
   <string name="survey_saving_validating_message">Validando respuestas…</string>
   <string name="survey_saving_collecting_message">Colectando datos…</string>
-  <string name="survey_saving_saving_message">Salvando en tarjeta SD </string>
+  <string name="survey_saving_saving_message">Guardando en tarjeta SD </string>
   <string name="survey_saving_finalizing_message">FInalizando en tarjeta SD</string>
   <string name="survey_saving_encrypting_message">Encriptando datos…</string>
-  <string name="high_resolution_summary">Activa grabación de vídeos en HD</string>
+  <string name="high_resolution_summary">Grabar vídeos en HD</string>
   <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">Mi Drive</string>
@@ -283,7 +283,8 @@
   <string name="no_google_account">!Cuenta Google no Seleccionada¡</string>
   <string name="google_set_account">Ha seleccionado Google Sheets como servidor, por favor, seleccionar la correspondiente cuenta Google en Características Generales antes de continuar</string>
   <string name="media_upload_error">Falla en subida de archivo multimedia. No existe: %1$s</string>
-    <string name="odk_permissions_fail">Falla en permiso de auto envío. Asegúrese de haber otorgado todos los permisos requeridos. </string>
+  <string name="odk_auth_auth_fail">Falla de autenticación en envío automático. Favor verificar sus ajustes en servidor</string>
+  <string name="odk_permissions_fail">Falla en permiso de auto envío. Asegúrese de haber otorgado todos los permisos requeridos. </string>
   <string name="odk_auto_note">ODK resultados de auto-envío</string>
   <string name="odk_auto_download_notification_title">ODK resultados de auto-descarga</string>
   <string name="notification_error">Error al mostrar texto de la notificación</string>
@@ -292,9 +293,10 @@
   <string name="change_server_url">URL del Servidor</string>
   <string name="google_search_browse">Busca en formularios. O selecciona  \'My Drive\' debajo para visualizar.</string>
   <string name="google_sheets_url">URL alterno para envío</string>
-  <string name="send_in_progress">Envio funcionando, reintentar en breve</string>
+  <string name="send_in_progress">Otro envío funcionando, reintentar en breve</string>
   <string name="sheets_max_columns">Máximo de columnas = 255, su formulario tiene %s. No se puede subir la hoja.</string>
   <string name="invalid_sheet_id">id de hoja inválido:  %1$s</string>
+  <string name="missing_submission_url">Falta URL para envío </string>
   <string name="google_sheets_access_denied">Acceso denegado. Por favor, asegúrese de que el propietario de la hoja de cálculo le ha concedido permisos de edición.</string>
   <string name="google_sheets_missing_columns">Faltan las siguientes columnas de la hoja: %1$s</string>
   <string name="password_error_whitespace">Espacios delante o detras no permitidos en claves</string>
@@ -336,8 +338,8 @@
   <string name="enable_gps">Activar el GPS</string>
   <string name="geotrace_title">GeoLínea</string>
   <string name="polygon_save">Guardar como polígono</string>
-  <string name="polyline_save">Guardar como polilínea</string>
-  <string name="gps_enable_message">El GPS esta deshabilitado en su dispositivo. ¿Le gustaría activarlo?</string>
+  <string name="polyline_save">Guardar como Polilínea</string>
+  <string name="gps_enable_message">GPS esta deshabilitado. ¿Activar?</string>
   <string name="select_offline_layer">Seleccione la capa sin conexión</string>
   <string name="polygon_or_polyline">Guardar GeoLínea como</string>
   <string name="minutes">Minutos</string>
@@ -627,8 +629,8 @@
   <string name="sms_encrypted_message">Formularios encriptados no pueden ser enviados vía SMS</string>
   <string name="sms_last_submission_on_date_at_time">\'Ultimo intento de envío a\' EEE, MMM dd, yyyy \' \' HH:mm</string>
   <plurals name="sms_sending">
-    <item quantity="one">Formulario enviado como un sólo mensaje</item>
-    <item quantity="other">Enviando formulario, trasmitiendo mensaje %1$d! de %2$d</item>
+    <item quantity="one">Submitting form as a single message.</item>
+    <item quantity="other">Enviando formulario, enviando mensaje %1$d de %2$d</item>
   </plurals>
   <string name="sms_sent_on_date_at_time">\'Enviado como SMS en\' EEE, MMM dd, yyyy \' \' HH:mm</string>
   <string name="sms_submission_queued">En cola para envío</string>
@@ -643,4 +645,9 @@
   <string name="missing_google_account_dialog_title">No se ha definido una cuenta de Google</string>
   <string name="missing_google_account_dialog_desc">Para enviar formularios vía Google Sheets debe definir una cuenta de Google en ajustes de servidor.</string>
   <string name="sms_invalid_phone_number_description">Especifique un número telefónico para el envío de SMS o cambie el tipo de transporte</string>
+  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
+  <string name="current_predicate_warning">Esta pregunta no será compatible con versiones futuras de la aplicaciónt debido a que usa current() en un choice filter. \n\nPor favor asegure que quien realizó el formulario lea los detalles abajo y tome la acción correspondiente.</string>
+  <string name="current_predicate_warning_title">Acción requerida</string>
+  <string name="current_predicate_forum">Leer detalles</string>
+  <string name="current_predicate_continue">Continuar</string>
 </resources>

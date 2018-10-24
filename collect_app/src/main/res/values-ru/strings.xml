@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="show_password">Показать пароль</string>
   <string name="activity_not_found">Случилось что-то страшное: %s</string>
   <string name="view_image">Просмотреть изображение</string>
@@ -23,7 +23,7 @@
   <string name="capture_image">Сделать снимок</string>
   <string name="capture_osm">Запустить OpenMapKit</string>
   <string name="capture_video">Записать видео</string>
-  <string name="change_language">Выбрать язык</string>
+  <string name="change_language">Смена языка</string>
   <string name="change_password">Пароль ODK</string>
   <string name="change_username">Имя пользователя ODK</string>
   <string name="clearanswer_confirm">Удалить ответ к \"%s\"?</string>
@@ -46,7 +46,7 @@
   <string name="delete_yes">Удалить бланки</string>
   <string name="discard_answer">Удалить ответ</string>
   <string name="discard_group">Удалить группу</string>
-  <string name="download">Получить выбранные</string>
+  <string name="download">Загрузить выбранные</string>
   <string name="download_forms_result">Результаты загрузки</string>
   <string name="downloading_data">Подключение к серверу…</string>
   <string name="do_not_change">Отмена</string>
@@ -85,7 +85,7 @@
   <string name="location_provider_accuracy">Использую %1$s. Точность %2$s м.</string>
   <string name="location_accuracy">Точность %1$s м.</string>
   <string name="main_menu">Главное меню</string>
-  <string name="main_menu_details">Data collection made easier</string>
+  <string name="main_menu_details">Data collection made easier…</string>
   <string name="manage_files">Удаление опросов / бланков</string>
   <string name="mark_finished">Пометить опрос как финализированный </string>
   <string name="noselect_error">Не было выбрано ни одного бланка</string>
@@ -129,10 +129,10 @@
   <string name="url_error">Неверный адрес!</string>
   <string name="username">Имя пользователя</string>
   <string name="view_hierarchy">Быстрый переход</string>
-  <string name="general_preferences">Общие настройки</string>
-  <string name="client">Интерфейс пользователя</string>
-  <string name="show_splash_summary">Показывается при запуске приложения</string>
-  <string name="splash_path">Выбранный логотип</string>
+  <string name="general_preferences">Настройки</string>
+  <string name="client">Интерфейс</string>
+  <string name="show_splash_summary">Показывается при запуске</string>
+  <string name="splash_path">Выбранная заставка</string>
   <string name="default_splash_path">Логотип по умолчанию</string>
   <string name="select_another_image">Выбрать другое изображение</string>
   <string name="use_odk_default">Использовать изображение по умолчанию</string>
@@ -280,7 +280,8 @@
   <string name="no_google_account">Учётная запись Google не выбрана!</string>
   <string name="google_set_account">Вы выбрали Google таблицы в качестве сервера. Перед тем, как продолжить, пожалуйста, укажите соответствующую учётную запись Google в общих настройках.</string>
   <string name="media_upload_error">Не удалось загрузить медиа-файл, который не существует %1$s</string>
-    <string name="odk_permissions_fail">Нет разрешения на авто-выгрузку. Проверьте системные настройки приложения</string>
+  <string name="odk_auth_auth_fail">Ошибка аутентификации при автоматической отправке ODK. Пожалуйста, проверьте настройки</string>
+  <string name="odk_permissions_fail">Нет разрешения на авто-выгрузку. Проверьте системные настройки приложения</string>
   <string name="odk_auto_note">Результаты авто-выгрузки</string>
   <string name="odk_auto_download_notification_title">Результаты авто-загрузки</string>
   <string name="notification_error">Ошибка отображения текста уведомления</string>
@@ -472,10 +473,10 @@
   <string name="invalid_range_widget">У этого виджета неправильные параметры!</string>
   <string name="form_entry_setting">Настройки ввода опросников</string>
   <string name="form_entry_settings_summary">Доступ к управлению бланка опросника</string>
-  <string name="user_settings">Настройки пользователя</string>
+  <string name="user_settings">Видимость настроек</string>
   <string name="user_setting_summary">Доступ к общими настройками пользователя</string>
-  <string name="main_menu_settings">Настройки главного меню</string>
-  <string name="main_menu_settings_summary">Доступ к кнопкам в главном меню</string>
+  <string name="main_menu_settings">Кнопки главного меню…</string>
+  <string name="main_menu_settings_summary"> </string>
   <string name="user_access_control">Контроль доступа пользователя</string>
   <string name="autosend_selector_title">Авто выгрузка</string>
   <string name="off">Выключено</string>
@@ -497,7 +498,7 @@
   <string name="show_splash_title">Заставка</string>
   <string name="server_settings_title">Сервер</string>
   <string name="type">Платформа</string>
-  <string name="form_entry">Снимите галку, чтобы скрыть пункт опросника</string>
+  <string name="form_entry">Снимите галочку, чтобы скрыть пункт при заполнении опросника</string>
   <string name="use_device_language">Использовать язык устройства</string>
   <string name="not_supported_offline_layer_format">Выбранный файл оффлайн-слоя использует неподдерживаемый формат PBF!</string>
   <string name="invalid_email_address">Неверный адрес почты!</string>
@@ -620,4 +621,6 @@
   <string name="missing_google_account_dialog_title">Учётная запись Google не установлена</string>
   <string name="missing_google_account_dialog_desc">Для отправки ответов через Google таблицы необходимо указать учётную запись через которую это будет происходить</string>
   <string name="sms_invalid_phone_number_description">Введите номер телефона для выгрузки или измените способ доставки.</string>
+  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
+  <string name="current_predicate_continue">Продолжить</string>
 </resources>
