@@ -34,6 +34,16 @@ public class WebCredentialsUtils {
         GeneralSharedPreferences.getInstance().save(PreferenceKeys.KEY_PASSWORD, password);
     }
 
+    /**
+     * Forgets the temporary credentials saved in memory for a particular host. This is used when an
+     * activity that does some work requiring authentication is called with intent extras specifying
+     * credentials. Once the work is done, the temporary credentials are cleared so that different
+     * ones can be used on a later request.
+     *
+     * TODO: is this necessary in all cases it's used? Maybe it's needed if we want to be able to do
+     * an authenticated call followed by an anonymous one but even then, can't we pass in null
+     * username and password if the intent extras aren't set?
+     */
     public void clearCredentials(@NonNull String url) {
         if (url.isEmpty()) {
             return;

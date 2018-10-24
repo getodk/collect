@@ -281,8 +281,7 @@
   <string name="no_google_account">Hakuna akaunti ya Google Iliyochaguliwa!</string>
   <string name="google_set_account">Umechagua karatasi za Google kama seva yako, tafadhali chagua akaunti ya Google inayoshabiliana katika mpangilio wa jumla kabla ya kuendelea</string>
   <string name="media_upload_error">Imeshindwa kupakia mafaili ya midia ambayo hayapo%1$s</string>
-  <string name="odk_auth_auth_fail">Uhakiki wa utumaji wenyewe wa ODK umeshindikana, tafadhali hakikisha mipangilio yako iko sahihi</string>
-  <string name="odk_permissions_fail">Uwezo wa utumaji wenyewe wa ODK umeshindikana kwa kukosa ruhusa, tafadhali hakikisha umeipa ruhusa zote zinazohitajika</string>
+    <string name="odk_permissions_fail">Uwezo wa utumaji wenyewe wa ODK umeshindikana kwa kukosa ruhusa, tafadhali hakikisha umeipa ruhusa zote zinazohitajika</string>
   <string name="odk_auto_note">Majibu ya ODK yanajituma yenyewe</string>
   <string name="odk_auto_download_notification_title">Majibu ya ODK yaliyo jipakuwa yenyewe</string>
   <string name="notification_error">Kosa linaonesha ujumbe wa maandishi</string>

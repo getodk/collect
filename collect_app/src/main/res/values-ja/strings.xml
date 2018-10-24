@@ -281,8 +281,7 @@
   <string name="no_google_account">Google アカウントが選択されていません!</string>
   <string name="google_set_account">サーバーとして Google スプレッドシートを選択しています。続行する前に、全般設定で対応する Google アカウントを選択してください</string>
   <string name="media_upload_error">メディアファイルが存在しないため、アップロードできませんでした: %1$s</string>
-  <string name="odk_auth_auth_fail">ODK 自動送信の認証に失敗しました。設定が正しいことを確認してください</string>
-  <string name="odk_permissions_fail">ODK 自動送信が失敗しました。必要なアクセス許可がすべて付与されていることを確認してください</string>
+    <string name="odk_permissions_fail">ODK 自動送信が失敗しました。必要なアクセス許可がすべて付与されていることを確認してください</string>
   <string name="odk_auto_note">ODK 自動送信結果</string>
   <string name="odk_auto_download_notification_title">ODK 自動ダウンロード結果</string>
   <string name="notification_error">通知テキストの表示中にエラー</string>

@@ -65,12 +65,12 @@ if (secretsFile.exists()) {
 }
 
 android {
-    compileSdkVersion(27)
+    compileSdkVersion(28)
 
     defaultConfig {
         applicationId('org.odk.collect.android')
         minSdkVersion(16)
-        targetSdkVersion(23)
+        targetSdkVersion(26)
         versionCode LEGACY_BUILD_NUMBER_OFFSET + getMasterCommitCount()
         versionName getVersionName()
         testInstrumentationRunner('android.support.test.runner.AndroidJUnitRunner')
@@ -199,6 +199,8 @@ dependencies {
     implementation "com.google.firebase:firebase-core:16.0.1"
     implementation "com.crashlytics.sdk.android:crashlytics:2.9.2"
 
+    implementation("com.google.guava:guava:26.0-android")
+
     implementation("com.google.code.gson:gson:2.6.2") {
         exclude group: 'org.apache.httpcomponents'
     }
@@ -225,12 +227,16 @@ dependencies {
     implementation "org.slf4j:slf4j-android:1.6.1-RC1"
     implementation("com.google.api-client:google-api-client-android:1.22.0") {
         exclude group: 'org.apache.httpcomponents'
+        exclude group: 'com.google.guava'
     }
     implementation("com.google.apis:google-api-services-drive:v3-rev64-1.22.0") {
         exclude group: 'org.apache.httpcomponents'
+        exclude group: 'com.google.guava'
     }
     implementation("com.google.apis:google-api-services-sheets:v4-rev463-1.22.0") {
         exclude group: 'org.apache.httpcomponents'
+        exclude group: 'com.google.guava'
+
     }
     implementation "com.jakewharton.timber:timber:4.7.0"
     implementation "com.google.zxing:core:3.3.0"
@@ -270,6 +276,15 @@ dependencies {
     implementation "com.trello.rxlifecycle2:rxlifecycle-android:${rootProject.rxLifecycleVersion}"
     implementation "com.trello.rxlifecycle2:rxlifecycle-android-lifecycle:${rootProject.rxLifecycleVersion}"
 
+    // WorkManager for specifying deferrable, asynchronous tasks
+    implementation("android.arch.work:work-runtime:${rootProject.workManagerVersion}") {
+        exclude group: 'com.google.guava', module: 'listenablefuture'
+    }
+    // Optional JobDispatcher support so devices with Play Services do better than AlarmManager
+    implementation("android.arch.work:work-firebase:${rootProject.workManagerVersion}") {
+        exclude group: 'com.google.guava', module: 'listenablefuture'
+    }
+
     // Makes binding to Views easy:
     implementation "com.jakewharton:butterknife:8.8.1"
     annotationProcessor "com.jakewharton:butterknife-compiler:8.8.1"
@@ -284,8 +299,8 @@ dependencies {
     // Testing-only dependencies
     testImplementation "junit:junit:4.12"
     testImplementation "org.mockito:mockito-core:2.8.47"
-    testImplementation "org.robolectric:robolectric:3.5.1"
-    testImplementation "org.robolectric:shadows-multidex:3.5.1"
+    testImplementation "org.robolectric:robolectric:4.0-beta-1"
+    testImplementation "org.robolectric:shadows-multidex:4.0-beta-1"
 
     // power mock (for mocking final methods which is not handled by mockito)
     testImplementation "org.powermock:powermock-module-junit4:1.6.4"
@@ -304,6 +319,7 @@ dependencies {
 
     androidTestImplementation "com.squareup.okhttp3:mockwebserver:3.9.0"
 
+    androidTestImplementation "android.arch.work:work-testing:${rootProject.workManagerVersion}"
 }
 
 // Must be at bottom to prevent dependency collisions

@@ -15,6 +15,7 @@
 package org.odk.collect.android.activities;
 
 import android.app.AlertDialog;
+import android.arch.lifecycle.LiveData;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -46,17 +47,22 @@ import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.preferences.Transport;
-import org.odk.collect.android.receivers.NetworkReceiver;
 import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.tasks.sms.SmsNotificationReceiver;
 import org.odk.collect.android.tasks.sms.SmsService;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.tasks.sms.models.SmsSubmission;
+import org.odk.collect.android.upload.AutoSendWorker;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.ToastUtils;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
+import androidx.work.State;
+import androidx.work.WorkManager;
+import androidx.work.WorkStatus;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -97,6 +103,10 @@ public class InstanceUploaderList extends InstanceListActivity implements
     private InstanceSyncTask instanceSyncTask;
 
     private boolean showAllMode;
+
+    // Default to true so the send button is disabled until the worker status is updated by the
+    // observer
+    private boolean autoSendOngoing = true;
 
     private final BroadcastReceiver smsForegroundReceiver = new BroadcastReceiver() {
         @Override
@@ -154,17 +164,19 @@ public class InstanceUploaderList extends InstanceListActivity implements
     @OnClick({R.id.upload_button, R.id.sms_upload_button})
     public void onUploadButtonsClicked(Button button) {
         Transport transport = Transport.fromPreference(GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE));
-        if (!transport.equals(Transport.Sms) && button.getId() == R.id.upload_button) {
 
+        if (!transport.equals(Transport.Sms) && button.getId() == R.id.upload_button) {
             ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(
                     Context.CONNECTIVITY_SERVICE);
             NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
 
-            if (NetworkReceiver.running) {
-                ToastUtils.showShortToast(R.string.send_in_progress);
-                return;
-            } else if (ni == null || !ni.isConnected()) {
+            if (ni == null || !ni.isConnected()) {
                 ToastUtils.showShortToast(R.string.no_connection);
+                return;
+            }
+
+            if (autoSendOngoing) {
+                ToastUtils.showShortToast(R.string.send_in_progress);
                 return;
             }
         }
@@ -239,6 +251,28 @@ public class InstanceUploaderList extends InstanceListActivity implements
         };
 
         getSupportLoaderManager().initLoader(LOADER_ID, null, this);
+
+        // Start observer that sets autoSendOngoing field based on AutoSendWorker status
+        updateAutoSendStatus();
+    }
+
+    /**
+     * Updates whether an auto-send job is ongoing.
+     */
+    private void updateAutoSendStatus() {
+        LiveData<List<WorkStatus>> statuses = WorkManager.getInstance().getStatusesForUniqueWorkLiveData(AutoSendWorker.class.getName());
+
+        statuses.observe(this, workStatuses -> {
+            if (workStatuses != null) {
+                for (WorkStatus status : workStatuses) {
+                    if (status.getState().equals(State.RUNNING)) {
+                        autoSendOngoing = true;
+                        return;
+                    }
+                }
+                autoSendOngoing = false;
+            }
+        });
     }
 
     @Override

@@ -35,10 +35,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static org.odk.collect.android.tasks.InstanceGoogleSheetsUploader.GOOGLE_DRIVE_ROOT_FOLDER;
-import static org.odk.collect.android.tasks.InstanceGoogleSheetsUploader.GOOGLE_DRIVE_SUBFOLDER;
-
 public class DriveHelper {
+    public static final String ODK_GOOGLE_DRIVE_ROOT_FOLDER_NAME = "Open Data Kit";
+    public static final String ODK_GOOGLE_DRIVE_SUBMISSION_FOLDER_NAME = "Submissions";
 
     public static final String FOLDER_MIME_TYPE = "application/vnd.google-apps.folder";
     private final DriveService driveService;
@@ -86,10 +85,10 @@ public class DriveHelper {
         return getIDOfFolderWithName(jrFormId, submissionsFolderId, true);
     }
 
-    private String createOrGetIDOfSubmissionsFolder()
+    public String createOrGetIDOfSubmissionsFolder()
             throws IOException, MultipleFoldersFoundException {
-        String rootFolderId = getIDOfFolderWithName(GOOGLE_DRIVE_ROOT_FOLDER, null, true);
-        return getIDOfFolderWithName(GOOGLE_DRIVE_SUBFOLDER, rootFolderId, true);
+        String rootFolderId = getIDOfFolderWithName(ODK_GOOGLE_DRIVE_ROOT_FOLDER_NAME, null, true);
+        return getIDOfFolderWithName(ODK_GOOGLE_DRIVE_SUBMISSION_FOLDER_NAME, rootFolderId, true);
     }
 
     /**

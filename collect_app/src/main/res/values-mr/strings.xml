@@ -261,8 +261,7 @@
   <string name="drive_get_file"> %1$s आणि मीडिया फायली मिळवत आहे</string>
   <string name="no_google_account">कोणतेही गूगल खाते निवडलेले नाही!</string>
   <string name="google_set_account">आपण गूगल पत्रक आपल्या सर्व्हर म्हणून निवडले आहे, कृपया सुरू ठेवण्यापूर्वी सामान्य सेटिंग्जमध्ये संबंधित गूगल खाते निवडा</string>
-  <string name="odk_auth_auth_fail">ओडीके ऑटोसॅन्ड प्रमाणीकरण अयशस्वी, कृपया आपली सेटिंग्ज योग्य असल्याची खात्री करा.</string>
-  <string name="notification_error">सूचना मजकूर प्रदर्शित करताना त्रुटी</string>
+    <string name="notification_error">सूचना मजकूर प्रदर्शित करताना त्रुटी</string>
   <string name="delete_after_send">पाठवानंतर हटवा</string>
   <string name="delete_after_send_summary">सर्व्हरवर पाठविल्यानंतर अंतिम स्वरूप आणि मीडिया हटविते</string>
   <string name="change_server_url">सर्व्हर युरएल</string>
