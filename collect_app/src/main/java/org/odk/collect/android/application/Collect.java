@@ -92,9 +92,12 @@ public class Collect extends Application implements HasActivityInjector {
     public static final String OFFLINE_LAYERS = ODK_ROOT + File.separator + "layers";
     public static final String SETTINGS = ODK_ROOT + File.separator + "settings";
 
+    public static final int CLICK_DEBOUNCE_MS = 1000;
+
     public static String defaultSysLanguage;
     private static Collect singleton;
     private static long lastClickTime;
+    private static String lastClickName;
 
     @Nullable
     private FormController formController;
@@ -322,13 +325,16 @@ public class Collect extends Application implements HasActivityInjector {
         AdminSharedPreferences.getInstance().reloadPreferences();
     }
 
-    // Preventing multiple clicks, using threshold of 1000 ms
-    public static boolean allowClick() {
+    // Debounce multiple clicks within the same screen
+    public static boolean allowClick(String className) {
         long elapsedRealtime = SystemClock.elapsedRealtime();
-        boolean allowClick = (lastClickTime == 0 || lastClickTime == elapsedRealtime) // just for tests
-                || elapsedRealtime - lastClickTime > 1000;
+        boolean isSameClass = className.equals(lastClickName);
+        boolean isBeyondThreshold = elapsedRealtime - lastClickTime > CLICK_DEBOUNCE_MS;
+        boolean isBeyondTestThreshold = lastClickTime == 0 || lastClickTime == elapsedRealtime; // just for tests
+        boolean allowClick = !isSameClass || isBeyondThreshold || isBeyondTestThreshold;
         if (allowClick) {
             lastClickTime = elapsedRealtime;
+            lastClickName = className;
         }
         return allowClick;
     }
