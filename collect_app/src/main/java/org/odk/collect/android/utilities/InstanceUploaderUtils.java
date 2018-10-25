@@ -22,7 +22,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public class InstanceUploaderUtils {
 
@@ -41,7 +41,7 @@ public class InstanceUploaderUtils {
      * Form name 2 - result
      */
     public static String getUploadResultMessage(Cursor instancesProcessed,
-                                                HashMap<String, String> resultMessagesByInstanceId) {
+                                                Map<String, String> resultMessagesByInstanceId) {
         StringBuilder queryMessage = new StringBuilder();
         try {
             if (instancesProcessed != null && instancesProcessed.getCount() > 0) {

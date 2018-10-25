@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">Zobrazit heslo</string>
   <string name="activity_not_found">Nenalezena žádná aktivita k řešení: %s</string>
   <string name="view_image">Zobrazit obrázek</string>
@@ -281,8 +281,7 @@
   <string name="no_google_account">Není vybrán žádný účet Google!</string>
   <string name="google_set_account">Vybrali jste Tabulky Google jako svůj server, vyberte prosím odpovídající účet Google ve Všeobecných nastaveních a pokračujte</string>
   <string name="media_upload_error">Nepodařilo se nahrát soubor médií, který neexistuje.%1$s </string>
-  <string name="odk_auth_auth_fail">selhání  automatického odesílání při ověřování ODK, ujistěte se, že vaše nastavení jsou správná</string>
-  <string name="odk_permissions_fail">automatické odeslání oprávnění ODK selhalo, ujistěte se, že jste udělili všechna požadovaná oprávnění</string>
+    <string name="odk_permissions_fail">automatické odeslání oprávnění ODK selhalo, ujistěte se, že jste udělili všechna požadovaná oprávnění</string>
   <string name="odk_auto_note">Výsledky automatického odesílání ODK</string>
   <string name="odk_auto_download_notification_title">Výsledky automatického stahování ODK</string>
   <string name="notification_error">Chyba při zobrazení oznámení</string>
@@ -640,14 +639,8 @@
   <string name="transport_type_both">Vybrat možnost odeslání</string>
   <string name="seconds">Vteřin</string>
   <string name="rank_items">Pořadí položek</string>
-  <string name="image_not_saved">Obraz nelze uložit z důvodu problému s odpovídajícím instančním souborem.</string>
   <string name="loading_form_failed">Během načítání formuláře došlo k chybě. Prosím zkuste to znovu.</string>
   <string name="missing_google_account_dialog_title">Účet Google není nastaven</string>
   <string name="missing_google_account_dialog_desc">Chcete-li odeslat formuláře prostřednictvím tabulek Google, musíte nastavit účet Google v nastavení serveru.</string>
   <string name="sms_invalid_phone_number_description">Nastavte cílové telefonní číslo pro odesílání SMS nebo změňte typ transportu.</string>
-  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
-  <string name="current_predicate_warning">Tato otázka nebude kompatibilní s budoucími verzemi ODK Collect, protože ve filtru pro výběr používá current(). \n\n Zkontrolujte, zda osoba, která tento formulář zpracovala, si přečte níže uvedené podrobnosti a podnikne kroky.</string>
-  <string name="current_predicate_warning_title">Je vyžadována akce</string>
-  <string name="current_predicate_forum">Přečtěte si podrobnosti</string>
-  <string name="current_predicate_continue">Pokračovat</string>
 </resources>

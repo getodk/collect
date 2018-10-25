@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">Показать пароль</string>
   <string name="activity_not_found">Случилось что-то страшное: %s</string>
   <string name="view_image">Просмотреть изображение</string>
@@ -280,8 +280,7 @@
   <string name="no_google_account">Учётная запись Google не выбрана!</string>
   <string name="google_set_account">Вы выбрали Google таблицы в качестве сервера. Перед тем, как продолжить, пожалуйста, укажите соответствующую учётную запись Google в общих настройках.</string>
   <string name="media_upload_error">Не удалось загрузить медиа-файл, который не существует %1$s</string>
-  <string name="odk_auth_auth_fail">Ошибка аутентификации при автоматической отправке ODK. Пожалуйста, проверьте настройки</string>
-  <string name="odk_permissions_fail">Нет разрешения на авто-выгрузку. Проверьте системные настройки приложения</string>
+    <string name="odk_permissions_fail">Нет разрешения на авто-выгрузку. Проверьте системные настройки приложения</string>
   <string name="odk_auto_note">Результаты авто-выгрузки</string>
   <string name="odk_auto_download_notification_title">Результаты авто-загрузки</string>
   <string name="notification_error">Ошибка отображения текста уведомления</string>
@@ -617,11 +616,8 @@
   <string name="transport_type_sms">SMS</string>
   <string name="transport_type_both">Выбрать при выгрузке</string>
   <string name="seconds">Секунд</string>
-  <string name="image_not_saved">Изображение нельзя сохранить из-за проблемы с исходным файлом</string>
   <string name="loading_form_failed">Ошибка загрузки. Попробуйте ещё раз.</string>
   <string name="missing_google_account_dialog_title">Учётная запись Google не установлена</string>
   <string name="missing_google_account_dialog_desc">Для отправки ответов через Google таблицы необходимо указать учётную запись через которую это будет происходить</string>
   <string name="sms_invalid_phone_number_description">Введите номер телефона для выгрузки или измените способ доставки.</string>
-  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
-  <string name="current_predicate_continue">Продолжить</string>
 </resources>

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">パスワードを表示</string>
   <string name="activity_not_found">取り扱うアクティビティがありません: %s</string>
   <string name="view_image">画像を表示</string>
@@ -281,8 +281,7 @@
   <string name="no_google_account">Google アカウントが選択されていません!</string>
   <string name="google_set_account">サーバーとして Google スプレッドシートを選択しています。続行する前に、全般設定で対応する Google アカウントを選択してください</string>
   <string name="media_upload_error">メディアファイルが存在しないため、アップロードできませんでした: %1$s</string>
-  <string name="odk_auth_auth_fail">ODK 自動送信の認証に失敗しました。設定が正しいことを確認してください</string>
-  <string name="odk_permissions_fail">ODK 自動送信が失敗しました。必要なアクセス許可がすべて付与されていることを確認してください</string>
+    <string name="odk_permissions_fail">ODK 自動送信が失敗しました。必要なアクセス許可がすべて付与されていることを確認してください</string>
   <string name="odk_auto_note">ODK 自動送信結果</string>
   <string name="odk_auto_download_notification_title">ODK 自動ダウンロード結果</string>
   <string name="notification_error">通知テキストの表示中にエラー</string>
@@ -637,14 +636,8 @@
   <string name="transport_type_both">送信時に選択</string>
   <string name="seconds">秒</string>
   <string name="rank_items">ランキングアイテム</string>
-  <string name="image_not_saved">対応するインスタンスファイルに問題があるため、画像を保存できません。</string>
   <string name="loading_form_failed">フォームの読み込み時にエラーが発生しました。もう一度やり直してください。</string>
   <string name="missing_google_account_dialog_title">Google アカウントが設定されていません</string>
   <string name="missing_google_account_dialog_desc">Google スプレッドでフォームを送信するには、サーバー設定で Google アカウントを設定する必要があります。</string>
   <string name="sms_invalid_phone_number_description">SMS 送信の宛先電話番号を設定するか、送信の種類を変更してください。</string>
-  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
-  <string name="current_predicate_warning">選択フィルタで current() を使用しているため、この質問は ODK Collect の将来のバージョンと互換性がありません。 \n\nこのフォームを作成した人は、以下の詳細を読んで対応してください。</string>
-  <string name="current_predicate_warning_title">対応が必要です</string>
-  <string name="current_predicate_forum">詳細を読む</string>
-  <string name="current_predicate_continue">続行</string>
 </resources>

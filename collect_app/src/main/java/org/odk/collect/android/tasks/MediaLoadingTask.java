@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.helpers.ContentResolverHelper;
 import org.odk.collect.android.exception.GDriveConnectionException;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 import org.odk.collect.android.logic.FormController;
@@ -17,17 +18,20 @@ import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.views.ODKView;
+import org.odk.collect.android.widgets.BaseImageWidget;
+import org.odk.collect.android.widgets.ImageWebViewWidget;
+import org.odk.collect.android.widgets.QuestionWidget;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
 
 import timber.log.Timber;
 
-public class ImageLoadingTask extends AsyncTask<Uri, Void, File> {
+public class MediaLoadingTask extends AsyncTask<Uri, Void, File> {
 
     private WeakReference<FormEntryActivity> formEntryActivity;
 
-    public ImageLoadingTask(FormEntryActivity formEntryActivity) {
+    public MediaLoadingTask(FormEntryActivity formEntryActivity) {
         onAttach(formEntryActivity);
     }
 
@@ -49,30 +53,33 @@ public class ImageLoadingTask extends AsyncTask<Uri, Void, File> {
             instanceFile = formController.getInstanceFile();
             if (instanceFile != null) {
                 String instanceFolder = instanceFile.getParent();
-                String destImagePath = instanceFolder + File.separator + System.currentTimeMillis() + ".jpg";
+                String extension = ContentResolverHelper.getFileExtensionFromUri(uris[0]);
+                String destMediaPath = instanceFolder + File.separator + System.currentTimeMillis() + extension;
 
-                File chosenImage;
                 try {
-                    chosenImage = MediaUtils.getFileFromUri(formEntryActivity.get(), uris[0], MediaStore.Images.Media.DATA);
-                    if (chosenImage != null) {
-                        final File newImage = new File(destImagePath);
-                        FileUtils.copyFile(chosenImage, newImage);
-                        ImageConverter.execute(newImage.getPath(), formEntryActivity.get().getWidgetWaitingForBinaryData(), formEntryActivity.get());
-                        return newImage;
+                    File chosenFile = MediaUtils.getFileFromUri(formEntryActivity.get(), uris[0], MediaStore.Images.Media.DATA);
+                    if (chosenFile != null) {
+                        final File newFile = new File(destMediaPath);
+                        FileUtils.copyFile(chosenFile, newFile);
+                        QuestionWidget questionWidget = formEntryActivity.get().getWidgetWaitingForBinaryData();
+
+                        // apply image conversion if the widget is an image widget
+                        if (questionWidget instanceof BaseImageWidget ||
+                                questionWidget instanceof ImageWebViewWidget) {
+                            ImageConverter.execute(newFile.getPath(), questionWidget, formEntryActivity.get());
+                        }
+
+                        return newFile;
                     } else {
-                        Timber.e("Could not receive chosen image");
+                        Timber.e("Could not receive chosen file");
                         formEntryActivity.get().runOnUiThread(() -> ToastUtils.showShortToastInMiddle(R.string.error_occured));
                         return null;
                     }
                 } catch (GDriveConnectionException e) {
-                    Timber.e("Could not receive chosen image due to connection problem");
+                    Timber.e("Could not receive chosen file due to connection problem");
                     formEntryActivity.get().runOnUiThread(() -> ToastUtils.showLongToastInMiddle(R.string.gdrive_connection_exception));
                     return null;
                 }
-            } else {
-                formEntryActivity.get().runOnUiThread(() -> ToastUtils.showLongToast(R.string.image_not_saved));
-                Timber.w(formEntryActivity.get().getString(R.string.image_not_saved));
-                return null;
             }
         }
         return null;
@@ -90,7 +97,7 @@ public class ImageLoadingTask extends AsyncTask<Uri, Void, File> {
         if (odkView != null) {
             odkView.setBinaryData(result);
         }
-        
+
         formEntryActivity.get().saveAnswersForCurrentScreen(FormEntryActivity.DO_NOT_EVALUATE_CONSTRAINTS);
         formEntryActivity.get().refreshCurrentView();
     }

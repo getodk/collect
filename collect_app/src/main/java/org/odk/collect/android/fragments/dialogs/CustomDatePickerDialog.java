@@ -119,8 +119,9 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
+        date = getDateAsGregorian(getOriginalDate());
         outState.putSerializable(FORM_INDEX, formIndex);
-        outState.putSerializable(DATE, getDateAsGregorian(getOriginalDate()));
+        outState.putSerializable(DATE, date);
         outState.putSerializable(DATE_PICKER_DETAILS, datePickerDetails);
 
         super.onSaveInstanceState(outState);

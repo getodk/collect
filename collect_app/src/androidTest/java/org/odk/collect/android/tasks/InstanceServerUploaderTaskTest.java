@@ -2,17 +2,15 @@ package org.odk.collect.android.tasks;
 
 import android.net.Uri;
 
-import java.io.File;
-import java.util.Locale;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.dto.Instance;
-import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.test.MockedServerTest;
+
+import java.io.File;
 
 import okhttp3.mockwebserver.RecordedRequest;
 
@@ -23,7 +21,7 @@ import static org.odk.collect.android.test.TestUtils.cleanUpTempFiles;
 import static org.odk.collect.android.test.TestUtils.createTempFile;
 import static org.odk.collect.android.test.TestUtils.resetInstancesContentProvider;
 
-public class InstanceServerUploaderTest extends MockedServerTest {
+public class InstanceServerUploaderTaskTest extends MockedServerTest {
     private InstancesDao dao;
 
     @Before
@@ -45,41 +43,41 @@ public class InstanceServerUploaderTest extends MockedServerTest {
         willRespondWith(headResponse(), postResponse());
 
         // when
-        CollectServerClient.Outcome o = new InstanceServerUploader().doInBackground(id);
+        InstanceUploaderTask.Outcome o = new InstanceServerUploaderTask().doInBackground(id);
 
         // then
         assertNull(o.authRequestingServer);
         assertEquals(1, o.messagesByInstanceId.size());
-        assertEquals("SUCCESS", o.messagesByInstanceId.get(id.toString()).toUpperCase(Locale.ENGLISH));
+        assertEquals("success", o.messagesByInstanceId.get(id.toString()));
 
         // and
         HEAD: {
-            RecordedRequest recordedRequest = nextRequest();
-            assertEquals("HEAD", recordedRequest.getMethod());
-            assertMatches("/submission\\?deviceID=", recordedRequest.getPath());
-            assertMatches("Dalvik/.* org.odk.collect.android/.*", recordedRequest.getHeader("User-Agent"));
-            assertEquals("1.0", recordedRequest.getHeader("X-OpenRosa-Version"));
-            assertEquals("gzip,deflate", recordedRequest.getHeader("Accept-Encoding"));
+            RecordedRequest r = nextRequest();
+            assertEquals("HEAD", r.getMethod());
+            assertMatches("/submission\\?deviceID=\\w+%3A\\w+", r.getPath());
+            assertMatches("Dalvik/.* org.odk.collect.android/.*", r.getHeader("User-Agent"));
+            assertEquals("1.0", r.getHeader("X-OpenRosa-Version"));
+            assertEquals("gzip,deflate", r.getHeader("Accept-Encoding"));
         }
 
         // and
         POST: {
-            RecordedRequest recordedRequest = nextRequest();
-            assertEquals("POST", recordedRequest.getMethod());
-            assertMatches("/submission\\?deviceID=", recordedRequest.getPath());
-            assertMatches("Dalvik/.* org.odk.collect.android/.*", recordedRequest.getHeader("User-Agent"));
-            assertEquals("1.0", recordedRequest.getHeader("X-OpenRosa-Version"));
-            assertEquals("gzip,deflate", recordedRequest.getHeader("Accept-Encoding"));
-            assertMatches("multipart/form-data; boundary=.*", recordedRequest.getHeader("Content-Type"));
+            RecordedRequest r = nextRequest();
+            assertEquals("POST", r.getMethod());
+            assertMatches("/submission\\?deviceID=\\w+%3A\\w+", r.getPath());
+            assertMatches("Dalvik/.* org.odk.collect.android/.*", r.getHeader("User-Agent"));
+            assertEquals("1.0", r.getHeader("X-OpenRosa-Version"));
+            assertEquals("gzip,deflate", r.getHeader("Accept-Encoding"));
+            assertMatches("multipart/form-data; boundary=.*", r.getHeader("Content-Type"));
             assertMatches(join(
                             "--.*\r",
                             "Content-Disposition: form-data; name=\"xml_submission_file\"; filename=\"tst.*\\.tmp\"\r",
-                            "Content-Type: text/xml\r",
-                            "Content-Length: 20\r",
+                            "Content-Type: text/xml; charset=ISO-8859-1\r",
+                            "Content-Transfer-Encoding: binary\r",
                             "\r",
                             "<form-content-here/>\r",
                             "--.*--\r"),
-                    recordedRequest.getBody().readUtf8());
+                    r.getBody().readUtf8());
         }
     }
 

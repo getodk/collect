@@ -41,6 +41,9 @@ import org.odk.collect.android.location.client.LocationClient;
 import org.odk.collect.android.location.client.LocationClients;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.events.MapEventsReceiver;
+import org.osmdroid.events.MapListener;
+import org.osmdroid.events.ScrollEvent;
+import org.osmdroid.events.ZoomEvent;
 import org.osmdroid.util.BoundingBox;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
@@ -71,6 +74,7 @@ public class OsmMapFragment extends Fragment implements MapFragment,
     protected Map<Integer, MapFeature> features = new HashMap<>();
     protected AlertDialog gpsErrorDialog;
     protected boolean gpsLocationEnabled;
+    protected IGeoPoint lastMapCenter;
 
     @Override public void addTo(@NonNull FragmentActivity activity, int containerId, @Nullable ReadyListener listener) {
         readyListener = listener;
@@ -90,11 +94,13 @@ public class OsmMapFragment extends Fragment implements MapFragment,
         map = view.findViewById(R.id.osm_map_view);
         map.setMultiTouchControls(true);
         map.setBuiltInZoomControls(true);
-        map.setMinZoomLevel(1);
+        map.setMinZoomLevel(2);
+        map.setMaxZoomLevel(22);
         map.getController().setCenter(INITIAL_CENTER);
         map.getController().setZoom(INITIAL_ZOOM);
         map.setTilesScaledToDpi(true);
         map.getOverlays().add(new MapEventsOverlay(this));
+        addMapLayoutChangeListener(map);
         myLocationOverlay = new MyLocationNewOverlay(map);
         locationClient = LocationClients.clientForContext(getActivity());
         locationClient.setListener(this);
@@ -289,6 +295,31 @@ public class OsmMapFragment extends Fragment implements MapFragment,
 
     @VisibleForTesting public AlertDialog getGpsErrorDialog() {
         return gpsErrorDialog;
+    }
+
+    /**
+     * Adds a listener that keeps track of the map center, and another
+     * listener that restores the map center when the MapView's layout changes.
+     * We have to do this because the MapView is buggy and fails to preserve its
+     * view on a layout change, causing the map viewport to jump around when the
+     * screen is resized or rotated in a way that doesn't restart the activity.
+     */
+    protected void addMapLayoutChangeListener(MapView map) {
+        lastMapCenter = map.getMapCenter();
+        map.setMapListener(new MapListener() {
+            @Override public boolean onScroll(ScrollEvent event) {
+                lastMapCenter = map.getMapCenter();
+                return false;
+            }
+
+            @Override public boolean onZoom(ZoomEvent event) {
+                lastMapCenter = map.getMapCenter();
+                return false;
+            }
+        });
+        map.addOnLayoutChangeListener(
+            (view, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) ->
+            map.getController().setCenter(lastMapCenter));
     }
 
     protected static @Nullable MapPoint fromLocation(@NonNull MyLocationNewOverlay overlay) {
