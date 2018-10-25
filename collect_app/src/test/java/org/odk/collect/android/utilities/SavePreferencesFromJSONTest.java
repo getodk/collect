@@ -18,12 +18,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PASSWORD;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SERVER_URL;
 import static org.odk.collect.android.utilities.SharedPreferencesUtils.savePreferencesFromJSON;
 
-@Config(constants = BuildConfig.class)
 @RunWith(RobolectricTestRunner.class)
 public class SavePreferencesFromJSONTest {
 
@@ -47,6 +47,7 @@ public class SavePreferencesFromJSONTest {
         ActionListener listener = mock(ActionListener.class);
         savePreferencesFromJSON(content.toString(), listener);
         verify(listener).onFailure(any());
+        verify(listener, never()).onSuccess();
         assertFalse(prefs().contains(KEY_PASSWORD));
     }
 }

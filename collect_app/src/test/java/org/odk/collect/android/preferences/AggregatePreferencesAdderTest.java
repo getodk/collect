@@ -5,19 +5,16 @@ import android.preference.PreferenceManager;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
-import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowToast;
 
 import static junit.framework.Assert.assertFalse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-@Config(constants = BuildConfig.class)
 @RunWith(RobolectricTestRunner.class)
 public class AggregatePreferencesAdderTest {
 
@@ -55,7 +52,7 @@ public class AggregatePreferencesAdderTest {
                 .apply();
     }
 
-    private static class TestPreferenceFragment extends PreferenceFragment {
+    public static class TestPreferenceFragment extends PreferenceFragment {
 
     }
 }

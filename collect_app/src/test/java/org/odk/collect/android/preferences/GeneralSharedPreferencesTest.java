@@ -4,16 +4,13 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.BuildConfig;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.annotation.Config;
 
 import java.util.HashSet;
 
 import static org.junit.Assert.assertEquals;
 import static org.odk.collect.android.preferences.PreferenceKeys.GENERAL_KEYS;
 
-@Config(constants = BuildConfig.class)
 @RunWith(RobolectricTestRunner.class)
 public class GeneralSharedPreferencesTest {
 

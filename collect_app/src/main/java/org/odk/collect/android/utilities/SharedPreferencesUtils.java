@@ -117,6 +117,8 @@ public final class SharedPreferencesUtils {
                 if (listener != null) {
                     listener.onFailure(e);
                 }
+
+                return;
             }
 
             for (String key : getAllAdminKeys()) {
