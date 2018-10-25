@@ -31,7 +31,6 @@ import org.odk.collect.android.utilities.ResponseMessageParser;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLDecoder;
@@ -178,7 +177,6 @@ public class InstanceServerUploader extends InstanceUploader {
 
         HttpPostResult postResult;
         ResponseMessageParser messageParser = new ResponseMessageParser();
-
 
         try {
             URI uri = URI.create(submissionUri.toString());
