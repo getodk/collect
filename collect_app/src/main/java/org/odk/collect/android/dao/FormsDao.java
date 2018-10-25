@@ -194,56 +194,53 @@ public class FormsDao {
     }
 
     /**
-     * Returns all forms available through the cursor and closes the cursor.
+     * Returns all forms available through the cursor.
+     * Don't close the cursor here because we might need to reuse it!
      */
     public List<Form> getFormsFromCursor(Cursor cursor) {
         List<Form> forms = new ArrayList<>();
         if (cursor != null) {
-            try {
-                cursor.moveToPosition(-1);
-                while (cursor.moveToNext()) {
-                    int idColumnIndex = cursor.getColumnIndex(BaseColumns._ID);
-                    int displayNameColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.DISPLAY_NAME);
-                    int descriptionColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.DESCRIPTION);
-                    int jrFormIdColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.JR_FORM_ID);
-                    int jrVersionColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.JR_VERSION);
-                    int formFilePathColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.FORM_FILE_PATH);
-                    int submissionUriColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.SUBMISSION_URI);
-                    int base64RSAPublicKeyColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY);
-                    int displaySubtextColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.DISPLAY_SUBTEXT);
-                    int md5HashColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.MD5_HASH);
-                    int dateColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.DATE);
-                    int jrCacheFilePathColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.JRCACHE_FILE_PATH);
-                    int formMediaPathColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH);
-                    int languageColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.LANGUAGE);
-                    int autoSendColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.AUTO_SEND);
-                    int autoDeleteColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.AUTO_DELETE);
-                    int lastDetectedFormVersionHashColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.LAST_DETECTED_FORM_VERSION_HASH);
+            cursor.moveToPosition(-1);
+            while (cursor.moveToNext()) {
+                int idColumnIndex = cursor.getColumnIndex(BaseColumns._ID);
+                int displayNameColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.DISPLAY_NAME);
+                int descriptionColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.DESCRIPTION);
+                int jrFormIdColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.JR_FORM_ID);
+                int jrVersionColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.JR_VERSION);
+                int formFilePathColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.FORM_FILE_PATH);
+                int submissionUriColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.SUBMISSION_URI);
+                int base64RSAPublicKeyColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY);
+                int displaySubtextColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.DISPLAY_SUBTEXT);
+                int md5HashColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.MD5_HASH);
+                int dateColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.DATE);
+                int jrCacheFilePathColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.JRCACHE_FILE_PATH);
+                int formMediaPathColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH);
+                int languageColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.LANGUAGE);
+                int autoSendColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.AUTO_SEND);
+                int autoDeleteColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.AUTO_DELETE);
+                int lastDetectedFormVersionHashColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.LAST_DETECTED_FORM_VERSION_HASH);
 
-                    Form form = new Form.Builder()
-                            .id(cursor.getInt(idColumnIndex))
-                            .displayName(cursor.getString(displayNameColumnIndex))
-                            .description(cursor.getString(descriptionColumnIndex))
-                            .jrFormId(cursor.getString(jrFormIdColumnIndex))
-                            .jrVersion(cursor.getString(jrVersionColumnIndex))
-                            .formFilePath(cursor.getString(formFilePathColumnIndex))
-                            .submissionUri(cursor.getString(submissionUriColumnIndex))
-                            .base64RSAPublicKey(cursor.getString(base64RSAPublicKeyColumnIndex))
-                            .displaySubtext(cursor.getString(displaySubtextColumnIndex))
-                            .md5Hash(cursor.getString(md5HashColumnIndex))
-                            .date(cursor.getLong(dateColumnIndex))
-                            .jrCacheFilePath(cursor.getString(jrCacheFilePathColumnIndex))
-                            .formMediaPath(cursor.getString(formMediaPathColumnIndex))
-                            .language(cursor.getString(languageColumnIndex))
-                            .autoSend(cursor.getString(autoSendColumnIndex))
-                            .autoDelete(cursor.getString(autoDeleteColumnIndex))
-                            .lastDetectedFormVersionHash(cursor.getString(lastDetectedFormVersionHashColumnIndex))
-                            .build();
+                Form form = new Form.Builder()
+                        .id(cursor.getInt(idColumnIndex))
+                        .displayName(cursor.getString(displayNameColumnIndex))
+                        .description(cursor.getString(descriptionColumnIndex))
+                        .jrFormId(cursor.getString(jrFormIdColumnIndex))
+                        .jrVersion(cursor.getString(jrVersionColumnIndex))
+                        .formFilePath(cursor.getString(formFilePathColumnIndex))
+                        .submissionUri(cursor.getString(submissionUriColumnIndex))
+                        .base64RSAPublicKey(cursor.getString(base64RSAPublicKeyColumnIndex))
+                        .displaySubtext(cursor.getString(displaySubtextColumnIndex))
+                        .md5Hash(cursor.getString(md5HashColumnIndex))
+                        .date(cursor.getLong(dateColumnIndex))
+                        .jrCacheFilePath(cursor.getString(jrCacheFilePathColumnIndex))
+                        .formMediaPath(cursor.getString(formMediaPathColumnIndex))
+                        .language(cursor.getString(languageColumnIndex))
+                        .autoSend(cursor.getString(autoSendColumnIndex))
+                        .autoDelete(cursor.getString(autoDeleteColumnIndex))
+                        .lastDetectedFormVersionHash(cursor.getString(lastDetectedFormVersionHashColumnIndex))
+                        .build();
 
-                    forms.add(form);
-                }
-            } finally {
-                cursor.close();
+                forms.add(form);
             }
         }
         return forms;
