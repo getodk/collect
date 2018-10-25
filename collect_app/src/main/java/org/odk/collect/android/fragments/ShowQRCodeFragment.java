@@ -256,7 +256,7 @@ public class ShowQRCodeFragment extends Fragment {
     }
 
     private void applySettings(String content) {
-        SharedPreferencesUtils.savePreferencesFromString(content, new ActionListener() {
+        SharedPreferencesUtils.savePreferencesFromJSON(content, new ActionListener() {
             @Override
             public void onSuccess() {
                 Collect.getInstance().initProperties();

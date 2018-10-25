@@ -16,6 +16,7 @@ package org.odk.collect.android.preferences;
 
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.tasks.ServerPollingJob;
@@ -69,16 +70,26 @@ public class GeneralSharedPreferences {
         } else if (defaultValue instanceof Float) {
             value = sharedPreferences.getFloat(key, (Float) defaultValue);
         }
+
         return value;
     }
 
     public void reset(String key) {
         Object defaultValue = GENERAL_KEYS.get(key);
-        save(key, defaultValue);
+        try {
+            save(key, defaultValue);
+        } catch (ValidationException ignored) {
+
+        }
     }
 
-    public GeneralSharedPreferences save(String key, Object value) {
+    public GeneralSharedPreferences save(String key, @Nullable Object value) throws ValidationException {
         Editor editor = sharedPreferences.edit();
+
+        Object defaultValue = GENERAL_KEYS.get(key);
+        if (defaultValue != null && value != null && !defaultValue.getClass().isAssignableFrom(value.getClass())) {
+            throw new ValidationException();
+        }
 
         if (value == null || value instanceof String) {
             if (key.equals(KEY_PERIODIC_FORM_UPDATES_CHECK) && get(KEY_PERIODIC_FORM_UPDATES_CHECK) != value) {
@@ -132,5 +143,8 @@ public class GeneralSharedPreferences {
 
     public static boolean isAutoSendEnabled() {
         return !getInstance().get(PreferenceKeys.KEY_AUTOSEND).equals("off");
+    }
+
+    public static class ValidationException extends RuntimeException {
     }
 }

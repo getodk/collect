@@ -91,7 +91,7 @@ public class QrCodeTest {
         assertNotEquals(resultIfAllSharedPreferencesAreDefault, result);
 
         // update shared preferences using the QrCode
-        SharedPreferencesUtils.savePreferencesFromString(result, null);
+        SharedPreferencesUtils.savePreferencesFromJSON(result, null);
 
         // assert that values have updated properly
         assertPreferenceHaveDefaultValue(keys, false);

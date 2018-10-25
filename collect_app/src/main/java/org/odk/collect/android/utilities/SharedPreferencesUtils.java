@@ -14,6 +14,8 @@
 
 package org.odk.collect.android.utilities;
 
+import android.support.annotation.Nullable;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.odk.collect.android.application.Collect;
@@ -36,6 +38,7 @@ import static org.odk.collect.android.preferences.AdminKeys.ALL_KEYS;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
 import static org.odk.collect.android.preferences.PreferenceKeys.GENERAL_KEYS;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PASSWORD;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SERVER_URL;
 
 public final class SharedPreferencesUtils {
 
@@ -95,18 +98,24 @@ public final class SharedPreferencesUtils {
         return prefs;
     }
 
-    public static void savePreferencesFromString(String content, ActionListener listener) {
+    public static void savePreferencesFromJSON(String content, @Nullable ActionListener listener) {
         try {
             JSONObject settingsJson = new JSONObject(content);
             JSONObject generalPrefsJson = settingsJson.getJSONObject("general");
             JSONObject adminPrefsJson = settingsJson.getJSONObject("admin");
 
-            for (String key : getAllGeneralKeys()) {
-                if (generalPrefsJson.has(key)) {
-                    Object value = generalPrefsJson.get(key);
-                    GeneralSharedPreferences.getInstance().save(key, value);
-                } else {
-                    GeneralSharedPreferences.getInstance().reset(key);
+            try {
+                for (String key : getAllGeneralKeys()) {
+                    if (generalPrefsJson.has(key)) {
+                        Object value = generalPrefsJson.get(key);
+                        GeneralSharedPreferences.getInstance().save(key, value);
+                    } else {
+                        GeneralSharedPreferences.getInstance().reset(key);
+                    }
+                }
+            } catch (GeneralSharedPreferences.ValidationException e) {
+                if (listener != null) {
+                    listener.onFailure(e);
                 }
             }
 
@@ -145,7 +154,7 @@ public final class SharedPreferencesUtils {
                 builder.append(line);
             }
 
-            savePreferencesFromString(builder.toString(), null);
+            savePreferencesFromJSON(builder.toString(), null);
 
             Collect.getInstance().initProperties();
             res = true;
