@@ -69,7 +69,7 @@ public class FormsDao {
     }
 
     private CursorLoader getFormsCursorLoader(String sortOrder, boolean uniqueByFormId) {
-        return getFormsCursorLoader(null, null, null, sortOrder, uniqueByFormId);
+        return getFormsCursorLoader(null, null, sortOrder, uniqueByFormId);
     }
 
     /**
@@ -85,7 +85,7 @@ public class FormsDao {
             String selection = FormsProviderAPI.FormsColumns.DISPLAY_NAME + " LIKE ?";
             String[] selectionArgs = new String[]{"%" + charSequence + "%"};
 
-            cursorLoader = getFormsCursorLoader(null, selection, selectionArgs, sortOrder, uniqueByFormId);
+            cursorLoader = getFormsCursorLoader(selection, selectionArgs, sortOrder, uniqueByFormId);
         }
         return cursorLoader;
     }
@@ -98,7 +98,7 @@ public class FormsDao {
      * Builds and returns a new CursorLoader, passing on the configuration parameters. If
      * uniqueByFormID is true, only the most recently-downloaded version of each form is included.
      */
-    private CursorLoader getFormsCursorLoader(String[] projection, String selection, String[] selectionArgs, String sortOrder, boolean uniqueByFormId) {
+    private CursorLoader getFormsCursorLoader(String selection, String[] selectionArgs, String sortOrder, boolean uniqueByFormId) {
         Uri formUri = uniqueByFormId ? FormsProviderAPI.FormsColumns.UNIQUE_FORMS_BY_FORMID_URI
                 : FormsProviderAPI.FormsColumns.CONTENT_URI;
 
