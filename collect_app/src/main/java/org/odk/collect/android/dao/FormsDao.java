@@ -68,24 +68,41 @@ public class FormsDao {
         return getFormsCursor(null, selection, selectionArgs, order);
     }
 
-    private CursorLoader getFormsCursorLoader(String sortOrder) {
-        return getFormsCursorLoader(null, null, null, sortOrder);
+    private CursorLoader getFormsCursorLoader(String sortOrder, boolean uniqueByFormId) {
+        return getFormsCursorLoader(null, null, null, sortOrder, uniqueByFormId);
     }
 
-    public CursorLoader getFormsCursorLoader(CharSequence charSequence, String sortOrder) {
+    /**
+     * Returns a loader filtered by the specified charSequence in the specified sortOrder. If
+     * uniqueByFormId is true, only the most recently-downloaded version of each form is included.
+     */
+    public CursorLoader getFormsCursorLoader(CharSequence charSequence, String sortOrder, boolean uniqueByFormId) {
         CursorLoader cursorLoader;
+
         if (charSequence.length() == 0) {
-            cursorLoader = getFormsCursorLoader(sortOrder);
+            cursorLoader = getFormsCursorLoader(sortOrder, uniqueByFormId);
         } else {
             String selection = FormsProviderAPI.FormsColumns.DISPLAY_NAME + " LIKE ?";
             String[] selectionArgs = new String[]{"%" + charSequence + "%"};
-            cursorLoader = getFormsCursorLoader(null, selection, selectionArgs, sortOrder);
+
+            cursorLoader = getFormsCursorLoader(null, selection, selectionArgs, sortOrder, uniqueByFormId);
         }
         return cursorLoader;
     }
 
-    private CursorLoader getFormsCursorLoader(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        return new CursorLoader(Collect.getInstance(), FormsProviderAPI.FormsColumns.CONTENT_URI, projection, selection, selectionArgs, sortOrder);
+    public CursorLoader getFormsCursorLoader(CharSequence charSequence, String sortOrder) {
+        return getFormsCursorLoader(charSequence, sortOrder, false);
+    }
+
+    /**
+     * Builds and returns a new CursorLoader, passing on the configuration parameters. If
+     * uniqueByFormID is true, only the most recently-downloaded version of each form is included.
+     */
+    private CursorLoader getFormsCursorLoader(String[] projection, String selection, String[] selectionArgs, String sortOrder, boolean uniqueByFormId) {
+        Uri formUri = uniqueByFormId ? FormsProviderAPI.FormsColumns.UNIQUE_FORMS_BY_FORMID_URI
+                : FormsProviderAPI.FormsColumns.CONTENT_URI;
+
+        return new CursorLoader(Collect.getInstance(), formUri, null, selection, selectionArgs, sortOrder);
     }
 
     public Cursor getFormsCursorForFormId(String formId) {
