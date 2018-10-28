@@ -313,7 +313,8 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
                                                       @Nullable HttpCredentialsInterface credentials,
                                                       String status,              // smap
                                                       String location_trigger,    // smap
-                                                      String survey_notes) throws IOException {   // smap add status
+                                                      String survey_notes,        // smap
+                                                      String assignment_id) throws IOException {   // smap
         addCredentialsForHost(uri, credentials);
         clearCookieStore();
 
@@ -400,6 +401,14 @@ public class HttpClientConnection implements OpenRosaHttpInterface {
                 try {
                     StringBody sb = new StringBody(survey_notes, ContentType.TEXT_PLAIN.withCharset(Charset.forName("UTF-8")));
                     builder.addPart("survey_notes", sb);
+                } catch (Exception e) {
+                    e.printStackTrace(); // never happens...
+                }
+            }
+            if (assignment_id != null) {
+                try {
+                    StringBody sb = new StringBody(assignment_id, ContentType.TEXT_PLAIN.withCharset(Charset.forName("UTF-8")));
+                    builder.addPart("assignment_id", sb);
                 } catch (Exception e) {
                     e.printStackTrace(); // never happens...
                 }

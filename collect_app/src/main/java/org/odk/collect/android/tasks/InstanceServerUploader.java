@@ -151,10 +151,11 @@ public class InstanceServerUploader extends InstanceUploader {
                     String status = c.getString(c.getColumnIndex(InstanceColumns.STATUS));    // smap get status
                     String location_trigger = c.getString(c.getColumnIndex(InstanceColumns.T_LOCATION_TRIGGER));    // smap get location trigger
                     String survey_notes = c.getString(c.getColumnIndex(InstanceColumns.T_SURVEY_NOTES));    // smap get survey notes
+                    String assignment_id = c.getString(c.getColumnIndex(InstanceColumns.T_ASS_ID));
                     // smap end
 
                     if (!uploadSubmissionFile(urlString, id, instance, toUpdate, uriRemap, outcome,
-                            status, location_trigger, survey_notes)) {
+                            status, location_trigger, survey_notes, assignment_id)) {       // smap add status...
                         return false; // get credentials...
                     }
                 }
@@ -182,10 +183,11 @@ public class InstanceServerUploader extends InstanceUploader {
     private boolean uploadSubmissionFile(String urlString, String id, String instanceFilePath,
                                          Uri toUpdate,
                                          Map<Uri, Uri> uriRemap,
-                                        Outcome outcome,
-                                        String status,              // smap
-                                        String location_trigger,    // smap
-                                        String survey_notes) {        // smap add status
+                                         Outcome outcome,
+                                         String status,                 // smap
+                                         String location_trigger,       // smap
+                                         String survey_notes,           // smap
+                                         String assignment_id) {        // smap add status
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());    // smap
         ContentValues contentValues = new ContentValues();
@@ -363,7 +365,7 @@ public class InstanceServerUploader extends InstanceUploader {
         try {
             URI uri = URI.create(submissionUri.toString());
             messageParser = httpInterface.uploadSubmissionFile(files, submissionFile, uri,
-                    webCredentialsUtils.getCredentials(uri), status, location_trigger, survey_notes);
+                    webCredentialsUtils.getCredentials(uri), status, location_trigger, survey_notes, assignment_id);   // smap
 
             int responseCode = messageParser.getResponseCode();
 

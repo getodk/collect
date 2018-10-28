@@ -66,7 +66,8 @@ public interface OpenRosaHttpInterface {
                                                @Nullable HttpCredentialsInterface credentials,
                                                String status,              // smap
                                                String location_trigger,    // smap
-                                               String survey_notes) throws IOException;   // smap add status
+                                               String survey_notes,         // smap
+                                               String assignment_id) throws IOException;   // smap
 
     /**
      * smap
