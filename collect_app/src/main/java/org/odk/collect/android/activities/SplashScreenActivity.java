@@ -45,7 +45,6 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SPLASH_PATH
 public class SplashScreenActivity extends Activity {
 
     private static final int SPLASH_TIMEOUT = 2000; // milliseconds
-    private static final boolean EXIT = true;
 
     private int imageMaxWidth;
 

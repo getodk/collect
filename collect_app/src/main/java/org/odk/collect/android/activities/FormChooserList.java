@@ -14,9 +14,7 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.AlertDialog;
 import android.content.ContentUris;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -53,7 +51,6 @@ public class FormChooserList extends FormListActivity implements
         DiskSyncListener, AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
     private static final String FORM_CHOOSER_LIST_SORTING_ORDER = "formChooserListSortingOrder";
 
-    private static final boolean EXIT = true;
     private DiskSyncTask diskSyncTask;
 
     @Override
@@ -166,32 +163,6 @@ public class FormChooserList extends FormListActivity implements
     @Override
     protected void updateAdapter() {
         getSupportLoaderManager().restartLoader(LOADER_ID, null, this);
-    }
-
-    /**
-     * Creates a dialog with the given message. Will exit the activity when the user preses "ok" if
-     * shouldExit is set to true.
-     */
-    private void createErrorDialog(String errorMsg, final boolean shouldExit) {
-
-        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-        alertDialog.setIcon(android.R.drawable.ic_dialog_info);
-        alertDialog.setMessage(errorMsg);
-        DialogInterface.OnClickListener errorListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int i) {
-                switch (i) {
-                    case DialogInterface.BUTTON_POSITIVE:
-                        if (shouldExit) {
-                            finish();
-                        }
-                        break;
-                }
-            }
-        };
-        alertDialog.setCancelable(false);
-        alertDialog.setButton(getString(R.string.ok), errorListener);
-        alertDialog.show();
     }
 
     @NonNull

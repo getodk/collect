@@ -54,8 +54,6 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
     private static final String ALERT_MSG = "alertmsg";
     private static final String TO_SEND = "tosend";
 
-    private static final boolean EXIT = true;
-
     private ProgressDialog progressDialog;
 
     private String alertMsg;
