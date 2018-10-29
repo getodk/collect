@@ -72,6 +72,7 @@ public abstract class CollectAbstractActivity extends AppCompatActivity {
      * This method should be overridden wherever storage permission check is required before
      * initializing the activity
      */
+    @SuppressWarnings("PMD.EmptyMethodInAbstractClassShouldBeAbstract")
     protected void init() {
     }
 
