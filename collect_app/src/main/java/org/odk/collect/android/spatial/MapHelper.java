@@ -43,20 +43,17 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.TilesOverlay;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
 
 public class MapHelper {
     private static final String OFFLINE_LAYER_TAG = " (custom, offline)";
+    private static final String SLASH = File.separator;
 
     private static SharedPreferences sharedPreferences;
-    public static String[] offilineOverlays;
+    private static String[] offilineOverlays;
     private static final String NO_FOLDER_KEY = "None";
-
-    public GoogleMap googleMap;
-    public MapView osmMap;
 
     // GOOGLE MAPS BASEMAPS
     private static final String GOOGLE_MAP_STREETS = "streets";
@@ -72,40 +69,36 @@ public class MapHelper {
     private static final String OPENMAP_STAMEN_TERRAIN = "openmap_stamen_terrain";
     private static final String OPENMAP_CARTODB_POSITRON = "openmap_cartodb_positron";
     private static final String OPENMAP_CARTODB_DARKMATTER = "openmap_cartodb_darkmatter";
-    private Integer selectedLayer;
 
-    public static String[] geofileTypes = new String[]{".mbtiles", ".kml", ".kmz"};
-    private static final String SLASH = File.separator;
-
+    private int selectedLayer;
     private TilesOverlay osmTileOverlay;
     private TileOverlay googleTileOverlay;
     private IRegisterReceiver iregisterReceiver;
 
+    private final GoogleMap googleMap;
+    private final MapView osmMap;
     private final org.odk.collect.android.spatial.TileSourceFactory tileFactory;
-
     private final Context context;
 
     public MapHelper(Context context, GoogleMap googleMap, Integer selectedLayer) {
         this.context = context;
-        this.googleMap = null;
         osmMap = null;
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         offilineOverlays = getOfflineLayerList();
         this.googleMap = googleMap;
         tileFactory = new org.odk.collect.android.spatial.TileSourceFactory(context);
-        this.selectedLayer = selectedLayer;
+        this.selectedLayer = selectedLayer == null ? 0 : selectedLayer;
     }
 
     public MapHelper(Context context, MapView osmMap, IRegisterReceiver iregisterReceiver, Integer selectedLayer) {
         this.context = context;
         googleMap = null;
-        this.osmMap = null;
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         offilineOverlays = getOfflineLayerList();
         this.iregisterReceiver = iregisterReceiver;
         this.osmMap = osmMap;
         tileFactory = new org.odk.collect.android.spatial.TileSourceFactory(context);
-        this.selectedLayer = selectedLayer;
+        this.selectedLayer = selectedLayer == null ? 0 : selectedLayer;
     }
 
     private String getGoogleBasemap() {
@@ -118,7 +111,9 @@ public class MapHelper {
 
     public void setBasemap() {
         if (googleMap != null) {
-            String basemap = selectedLayer == null ? getGoogleBasemap() : offilineOverlays[selectedLayer];
+            String basemap = selectedLayer == 0 || selectedLayer >= offilineOverlays.length
+                    ? getGoogleBasemap()
+                    : offilineOverlays[selectedLayer];
             switch (basemap) {
                 case GOOGLE_MAP_STREETS:
                     googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
@@ -142,7 +137,9 @@ public class MapHelper {
         } else if (osmMap != null) {
             //OSMMAP
             ITileSource tileSource = null;
-            String basemap = selectedLayer == null ? getOsmBasemap() : offilineOverlays[selectedLayer];
+            String basemap = selectedLayer == 0 || selectedLayer >= offilineOverlays.length
+                    ? getOsmBasemap()
+                    : offilineOverlays[selectedLayer];
             switch (basemap) {
                 case OPENMAP_USGS_TOPO:
                     tileSource = tileFactory.getUSGSTopo();
@@ -221,11 +218,10 @@ public class MapHelper {
     }
 
     public void showLayersDialog() {
-        int layer = selectedLayer != null ? selectedLayer : 0;
         AlertDialog.Builder layerDialod = new AlertDialog.Builder(context);
         layerDialod.setTitle(context.getString(R.string.select_offline_layer));
         layerDialod.setSingleChoiceItems(offilineOverlays,
-                layer, (dialog, item) -> {
+                selectedLayer, (dialog, item) -> {
                     setOfflineBasemap(item);
                     dialog.dismiss();
                 });
@@ -295,12 +291,7 @@ public class MapHelper {
 
     private File[] getFileFromSelectedItem(int item) {
         File directory = new File(Collect.OFFLINE_LAYERS + SLASH + offilineOverlays[item]);
-        return directory.listFiles(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String filename) {
-                return filename.toLowerCase(Locale.US).endsWith(".mbtiles");
-            }
-        });
+        return directory.listFiles((dir, filename) -> filename.toLowerCase(Locale.US).endsWith(".mbtiles"));
     }
 
     // osmdroid doesn't currently support pbf tiles: https://github.com/osmdroid/osmdroid/issues/101
@@ -319,6 +310,11 @@ public class MapHelper {
         return result;
     }
 
+    /**
+     * If the current basemap is an offline layer, returns the index (1-x) of the offline
+     * layer's filename in the list of all the filenames ending in ".mbtiles" in the
+     * Collect.OFFLINE_LAYERS directory, otherwise returns 0 (None).
+     */
     public int getSelectedLayer() {
         return selectedLayer;
     }
