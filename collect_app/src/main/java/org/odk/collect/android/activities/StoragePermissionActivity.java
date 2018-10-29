@@ -40,12 +40,18 @@ public class StoragePermissionActivity extends AppCompatActivity implements Perm
     public static final String EXTRA_ACTION = "extra_action";
     public static final String EXTRA_CLASS = "extra_class";
     public static final String EXTRA_URI = "extra_uri";
+    public static final String EXTRA_BUNDLE = "extras_bundle";
 
     public static void startActivity(Activity activity, Intent callingIntent, Class<?> clazz) {
         Intent intent = new Intent(activity, StoragePermissionActivity.class);
         intent.putExtra(EXTRA_ACTION, callingIntent.getAction());
         intent.putExtra(EXTRA_CLASS, clazz);
         intent.putExtra(EXTRA_URI, callingIntent.getData());
+
+        // sometimes an activity is started along with some extras, so we need to persist those too
+        if (callingIntent.getExtras() != null) {
+            intent.putExtra(EXTRA_BUNDLE, callingIntent.getExtras());
+        }
 
         activity.startActivity(intent);
     }
@@ -73,14 +79,22 @@ public class StoragePermissionActivity extends AppCompatActivity implements Perm
         }
 
         Class<?> clazz = (Class<?>) getIntent().getSerializableExtra(EXTRA_CLASS);
-        String action = getIntent().getStringExtra(EXTRA_ACTION);
-        Uri uri = getIntent().getParcelableExtra(EXTRA_URI);
 
         Intent intent = new Intent(this, clazz);
 
-        if (action != null && uri != null) {
+        String action = getIntent().getStringExtra(EXTRA_ACTION);
+        if (action != null) {
             intent.setAction(action);
+        }
+
+        Uri uri = getIntent().getParcelableExtra(EXTRA_URI);
+        if (uri != null) {
             intent.setData(uri);
+        }
+
+        Bundle bundle = getIntent().getBundleExtra(EXTRA_BUNDLE);
+        if (bundle != null) {
+            intent.putExtras(bundle);
         }
 
         startActivity(intent);
