@@ -19,18 +19,14 @@ package org.odk.collect.android.activities;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.injection.config.AppComponent;
-import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.ThemeUtils;
 
 import static org.odk.collect.android.utilities.PermissionUtils.checkIfStoragePermissionsGranted;
-import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
-import static org.odk.collect.android.utilities.PermissionUtils.isEntryPointActivity;
 
 public abstract class CollectAbstractActivity extends AppCompatActivity {
 
@@ -44,24 +40,20 @@ public abstract class CollectAbstractActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         /**
-         * If a user has revoked the storage permission then this check ensures the app doesn't quit unexpectedly and
-         * informs the user of the implications of their decision before exiting. The app can't function with these permissions
-         * so if a user wishes to grant them they just restart.
+         * If a user has revoked the storage permission then this check ensures the app doesn't quit
+         * unexpectedly and starts {@link  StoragePermissionActivity} which informs the user that
+         * the app can't function without storage permission and gives an option to re-allow it or
+         * ignore the warning which quits the app.
          *
-         * This code won't run on activities that are entry points to the app because those activities
-         * are able to handle permission checks and requests by themselves.
+         * Since all of the activities extend {@link CollectAbstractActivity}, so this also removes
+         * the overhead of checking for this permission separately in each of the activities.
+         *
+         * We also finish this activity and later re-create it from within {@link StoragePermissionActivity}
+         * if the user decides to re-allow the permission
          */
-        if (!checkIfStoragePermissionsGranted(this) && !isEntryPointActivity(this)) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog);
-
-            builder.setTitle(R.string.storage_runtime_permission_denied_title)
-                    .setMessage(R.string.storage_runtime_permission_denied_desc)
-                    .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
-                        finishAllActivities(this);
-                    })
-                    .setIcon(R.drawable.sd)
-                    .setCancelable(false)
-                    .show();
+        if (!checkIfStoragePermissionsGranted(this)) {
+            StoragePermissionActivity.startActivity(this, getIntent(), getClass());
+            finish();
         }
     }
 

@@ -18,17 +18,8 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.CollectAbstractActivity;
-import org.odk.collect.android.activities.FormChooserList;
-import org.odk.collect.android.activities.FormDownloadList;
-import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.activities.InstanceChooserList;
-import org.odk.collect.android.activities.InstanceUploaderActivity;
-import org.odk.collect.android.activities.InstanceUploaderList;
-import org.odk.collect.android.activities.SplashScreenActivity;
 import org.odk.collect.android.listeners.PermissionListener;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import timber.log.Timber;
@@ -309,33 +300,6 @@ public class PermissionUtils {
 
     public static boolean checkIfReadPhoneStatePermissionGranted(Context context) {
         return ContextCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED;
-    }
-
-    /**
-     * Checks to see if an activity is one of the entry points to the app i.e
-     * an activity that has a view action that can launch the app.
-     *
-     * @param activity that has permission requesting code.
-     * @return true if the activity is an entry point to the app.
-     */
-    public static boolean isEntryPointActivity(CollectAbstractActivity activity) {
-
-        List<Class<?>> activities = new ArrayList<>();
-        activities.add(FormEntryActivity.class);
-        activities.add(InstanceChooserList.class);
-        activities.add(FormChooserList.class);
-        activities.add(InstanceUploaderList.class);
-        activities.add(SplashScreenActivity.class);
-        activities.add(FormDownloadList.class);
-        activities.add(InstanceUploaderActivity.class);
-
-        for (Class<?> act : activities) {
-            if (activity.getClass().equals(act)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     public static void finishAllActivities(Activity activity) {
