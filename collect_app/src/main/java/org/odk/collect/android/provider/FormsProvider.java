@@ -39,6 +39,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import timber.log.Timber;
 
@@ -50,6 +51,8 @@ public class FormsProvider extends ContentProvider {
 
     private static final int FORMS = 1;
     private static final int FORM_ID = 2;
+    // Forms unique by ID, keeping only the latest one downloaded
+    private static final int UNIQUE_FORMS_BY_FORM_ID = 3;
 
     private static final UriMatcher URI_MATCHER;
 
@@ -96,23 +99,32 @@ public class FormsProvider extends ContentProvider {
         qb.setProjectionMap(sFormsProjectionMap);
         qb.setStrict(true);
 
-        switch (URI_MATCHER.match(uri)) {
-            case FORMS:
-                break;
-
-            case FORM_ID:
-                qb.appendWhere(FormsColumns._ID + "="
-                        + uri.getPathSegments().get(1));
-                break;
-
-            default:
-                throw new IllegalArgumentException("Unknown URI " + uri);
-        }
-
         Cursor c = null;
+        String groupBy = null;
         FormsDatabaseHelper formsDatabaseHelper = getDbHelper();
         if (formsDatabaseHelper != null) {
-            c = qb.query(formsDatabaseHelper.getReadableDatabase(), projection, selection, selectionArgs, null, null, sortOrder);
+            switch (URI_MATCHER.match(uri)) {
+                case FORMS:
+                    break;
+
+                case FORM_ID:
+                    qb.appendWhere(FormsColumns._ID + "="
+                            + uri.getPathSegments().get(1));
+                    break;
+
+                // Only include the latest form that was downloaded with each form_id
+                case UNIQUE_FORMS_BY_FORM_ID:
+                    Map<String, String> filteredProjectionMap = new HashMap<>(sFormsProjectionMap);
+                    filteredProjectionMap.put(FormsColumns.DATE, "MAX(" + FormsColumns.DATE + ")");
+
+                    qb.setProjectionMap(filteredProjectionMap);
+                    groupBy = FormsColumns.JR_FORM_ID;
+                    break;
+
+                default:
+                    throw new IllegalArgumentException("Unknown URI " + uri);
+            }
+            c = qb.query(formsDatabaseHelper.getReadableDatabase(), projection, selection, selectionArgs, groupBy, null, sortOrder);
 
             // Tell the cursor what uri to watch, so it knows when its source data changes
             c.setNotificationUri(getContext().getContentResolver(), uri);
@@ -125,6 +137,7 @@ public class FormsProvider extends ContentProvider {
     public String getType(@NonNull Uri uri) {
         switch (URI_MATCHER.match(uri)) {
             case FORMS:
+            case UNIQUE_FORMS_BY_FORM_ID:
                 return FormsColumns.CONTENT_TYPE;
 
             case FORM_ID:
@@ -543,6 +556,8 @@ public class FormsProvider extends ContentProvider {
         URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
         URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, "forms", FORMS);
         URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, "forms/#", FORM_ID);
+        // Only available for query and type
+        URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, "uniqueFormsByFormId", UNIQUE_FORMS_BY_FORM_ID);
 
         sFormsProjectionMap = new HashMap<>();
         sFormsProjectionMap.put(FormsColumns._ID, FormsColumns._ID);
