@@ -32,6 +32,7 @@ import android.widget.LinearLayout;
 import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.utilities.PermissionUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -59,6 +60,14 @@ public class SplashScreenActivity extends Activity {
 
         setContentView(R.layout.splash_screen);
 
+        if (PermissionUtils.checkIfStoragePermissionsGranted(this)) {
+            init();
+        } else {
+            endSplashScreen();
+        }
+    }
+
+    private void init() {
         // get the shared preferences object
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = sharedPreferences.edit();
