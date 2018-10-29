@@ -38,12 +38,17 @@ public abstract class CollectAbstractActivity extends AppCompatActivity {
         themeUtils = new ThemeUtils(this);
         setTheme(this instanceof FormEntryActivity ? themeUtils.getFormEntryActivityTheme() : themeUtils.getAppTheme());
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
 
         /**
-         * If a user has revoked the storage permission then this check ensures the app doesn't quit
-         * unexpectedly and starts {@link  StoragePermissionActivity} which informs the user that
-         * the app can't function without storage permission and gives an option to re-allow it or
-         * ignore the warning which quits the app.
+         * If the user has revoked the storage permission then this check ensures the app doesn't
+         * quit unexpectedly and starts {@link  StoragePermissionActivity} which informs the user
+         * that the app can't function without storage permission and gives an option to re-allow it
+         * or ignore the warning which quits the app.
          *
          * Since all of the activities extend {@link CollectAbstractActivity}, so this also removes
          * the overhead of checking for this permission separately in each of the activities.
@@ -54,7 +59,20 @@ public abstract class CollectAbstractActivity extends AppCompatActivity {
         if (!checkIfStoragePermissionsGranted(this)) {
             StoragePermissionActivity.startActivity(this, getIntent(), getClass());
             finish();
+        } else {
+            /*
+             * Storage permission is already given to the app.
+             * So, we can proceed with using storage related functions
+             */
+            init();
         }
+    }
+
+    /**
+     * This method should be overridden wherever storage permission check is required before
+     * initializing the activity
+     */
+    protected void init() {
     }
 
     public AppComponent getComponent() {

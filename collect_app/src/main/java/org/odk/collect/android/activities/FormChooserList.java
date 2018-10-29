@@ -62,8 +62,15 @@ public class FormChooserList extends FormListActivity implements
         setContentView(R.layout.chooser_list_layout);
 
         setTitle(getString(R.string.enter_data));
-        setupAdapter();
 
+        sortingOptions = new String[]{
+                getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc),
+                getString(R.string.sort_by_date_asc), getString(R.string.sort_by_date_desc),
+        };
+    }
+
+    @Override
+    protected void init() {
         // DiskSyncTask checks the disk for any forms not already in the content provider
         // that is, put here by dragging and dropping onto the SDCard
         diskSyncTask = (DiskSyncTask) getLastCustomNonConfigurationInstance();
@@ -73,10 +80,6 @@ public class FormChooserList extends FormListActivity implements
             diskSyncTask.setDiskSyncListener(this);
             diskSyncTask.execute((Void[]) null);
         }
-        sortingOptions = new String[]{
-                getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc),
-                getString(R.string.sort_by_date_asc), getString(R.string.sort_by_date_desc),
-        };
 
         setupAdapter();
         getSupportLoaderManager().initLoader(LOADER_ID, null, this);

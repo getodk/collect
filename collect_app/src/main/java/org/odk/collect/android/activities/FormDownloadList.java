@@ -281,6 +281,16 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
         filteredFormList.addAll(formList);
 
+        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        listView.setItemsCanFocus(false);
+
+        sortingOptions = new String[]{
+                getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc)
+        };
+    }
+
+    @Override
+    protected void init() {
         if (getLastCustomNonConfigurationInstance() instanceof DownloadFormListTask) {
             downloadFormListTask = (DownloadFormListTask) getLastCustomNonConfigurationInstance();
             if (downloadFormListTask.getStatus() == AsyncTask.Status.FINISHED) {
@@ -305,13 +315,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             // first time, so get the formlist
             downloadFormList();
         }
-
-        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        listView.setItemsCanFocus(false);
-
-        sortingOptions = new String[]{
-                getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc)
-        };
     }
 
     private void clearChoices() {

@@ -115,6 +115,7 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 import org.odk.collect.android.utilities.TimerLogger;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -296,12 +297,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         compositeDisposable
                 .add(eventBus
-                .register(ReadPhoneStatePermissionRxEvent.class)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(event -> {
-                    readPhoneStatePermissionRequestNeeded = true;
-                }));
+                        .register(ReadPhoneStatePermissionRxEvent.class)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(event -> {
+                            readPhoneStatePermissionRequestNeeded = true;
+                        }));
 
         errorMessage = null;
 
@@ -329,14 +330,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             getFragmentManager().beginTransaction().add(mediaLoadingFragment, TAG_MEDIA_LOADING_FRAGMENT).commit();
         } else {
             mediaLoadingFragment = (MediaLoadingFragment) getFragmentManager().findFragmentByTag(TAG_MEDIA_LOADING_FRAGMENT);
-        }
 
-        setupFields(savedInstanceState);
-        loadForm();
-    }
-
-    private void setupFields(Bundle savedInstanceState) {
-        if (savedInstanceState != null) {
             state = savedInstanceState;
             if (savedInstanceState.containsKey(KEY_FORMPATH)) {
                 formPath = savedInstanceState.getString(KEY_FORMPATH);
@@ -367,7 +361,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 readPhoneStatePermissionRequestNeeded = savedInstanceState.getBoolean(KEY_READ_PHONE_STATE_PERMISSION_REQUEST_NEEDED);
             }
         }
+    }
 
+    @Override
+    protected void init() {
+        loadForm();
     }
 
     private void loadForm() {
@@ -2081,6 +2079,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     @Override
     protected void onResume() {
         super.onResume();
+
+        if (!PermissionUtils.checkIfStoragePermissionsGranted(this)) {
+            return;
+        }
 
         String navigation = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_NAVIGATION);
         showNavigationButtons = navigation.contains(PreferenceKeys.NAVIGATION_BUTTONS);

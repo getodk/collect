@@ -137,8 +137,6 @@ public class InstanceUploaderList extends InstanceListActivity implements
         if (savedInstanceState != null) {
             showAllMode = savedInstanceState.getBoolean(SHOW_ALL_MODE);
         }
-
-        init();
     }
 
     /**
@@ -198,7 +196,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
         }
     }
 
-    private void init() {
+    protected void init() {
         setupUploadButtons();
         instancesDao = new InstancesDao();
 
