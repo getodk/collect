@@ -32,7 +32,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.listeners.DiskSyncListener;
-import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
@@ -42,9 +41,6 @@ import org.odk.collect.android.utilities.FormUtils;
 import org.odk.collect.android.utilities.VersionHidingCursorAdapter;
 
 import timber.log.Timber;
-
-import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
-import static org.odk.collect.android.utilities.PermissionUtils.requestStoragePermissions;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores the path to
@@ -66,29 +62,6 @@ public class FormChooserList extends FormListActivity implements
         setContentView(R.layout.chooser_list_layout);
 
         setTitle(getString(R.string.enter_data));
-
-        requestStoragePermissions(this, new PermissionListener() {
-            @Override
-            public void granted() {
-                // must be at the beginning of any activity that can be called from an external intent
-                try {
-                    Collect.createODKDirs();
-                    init();
-                } catch (RuntimeException e) {
-                    createErrorDialog(e.getMessage(), EXIT);
-                    return;
-                }
-            }
-
-            @Override
-            public void denied() {
-                // The activity has to finish because ODK Collect cannot function without these permissions.
-                finishAllActivities(FormChooserList.this);
-            }
-        });
-    }
-
-    private void init() {
         setupAdapter();
 
         // DiskSyncTask checks the disk for any forms not already in the content provider
