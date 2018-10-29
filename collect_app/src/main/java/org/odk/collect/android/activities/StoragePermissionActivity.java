@@ -103,7 +103,12 @@ public class StoragePermissionActivity extends AppCompatActivity implements Perm
 
     @Override
     public void denied() {
-        PermissionUtils.finishAllActivities(this);
+        finishAffinity();
+    }
+
+    @Override
+    public void onBackPressed() {
+        denied();
     }
 
     @OnClick({R.id.btnPermission, R.id.btnCancel})
@@ -113,7 +118,7 @@ public class StoragePermissionActivity extends AppCompatActivity implements Perm
                 PermissionUtils.requestStoragePermissions(this, this);
                 break;
             case R.id.btnCancel:
-                PermissionUtils.finishAllActivities(this);
+                denied();
                 break;
         }
     }
