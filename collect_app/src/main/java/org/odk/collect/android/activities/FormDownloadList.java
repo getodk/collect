@@ -42,13 +42,11 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.http.HttpCredentialsInterface;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.FormListDownloaderListener;
-import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.tasks.DownloadFormListTask;
 import org.odk.collect.android.tasks.DownloadFormsTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.AuthDialogUtility;
-import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
@@ -67,7 +65,6 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.DownloadFormListUtils.DL_AUTH_REQUIRED;
 import static org.odk.collect.android.utilities.DownloadFormListUtils.DL_ERROR_MSG;
-import static org.odk.collect.android.utilities.PermissionUtils.requestStoragePermissions;
 
 /**
  * Responsible for displaying, adding and deleting all the valid forms in the forms directory. One
@@ -160,30 +157,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         getComponent().inject(this);
         setTitle(getString(R.string.get_forms));
 
-        // This activity is accessed directly externally
-        requestStoragePermissions(this, new PermissionListener() {
-            @Override
-            public void granted() {
-                // must be at the beginning of any activity that can be called from an external intent
-                try {
-                    Collect.createODKDirs();
-                } catch (RuntimeException e) {
-                    DialogUtils.showDialog(DialogUtils.createErrorDialog(FormDownloadList.this, e.getMessage(), EXIT), FormDownloadList.this);
-                    return;
-                }
-
-                init(savedInstanceState);
-            }
-
-            @Override
-            public void denied() {
-                // The activity has to finish because ODK Collect cannot function without these permissions.
-                finish();
-            }
-        });
-    }
-
-    private void init(Bundle savedInstanceState) {
         formsFound = new ArrayList<>();
         formResult = new HashMap<>();
 
