@@ -25,13 +25,11 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.fragments.dialogs.SimpleDialog;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
-import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceServerUploaderTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ArrayUtils;
 import org.odk.collect.android.utilities.AuthDialogUtility;
-import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
 
 import java.util.ArrayList;
@@ -41,8 +39,6 @@ import java.util.Iterator;
 import java.util.Set;
 
 import timber.log.Timber;
-
-import static org.odk.collect.android.utilities.PermissionUtils.requestStoragePermissions;
 
 /**
  * Activity to upload completed forms.
@@ -80,34 +76,7 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Timber.i("onCreate: %s", savedInstanceState == null ? "creating" : "re-initializing");
 
-        // This activity is accessed directly externally
-        requestStoragePermissions(this, new PermissionListener() {
-            @Override
-            public void granted() {
-                // must be at the beginning of any activity that can be called from an external intent
-                try {
-                    Collect.createODKDirs();
-                } catch (RuntimeException e) {
-                    DialogUtils.showDialog(DialogUtils.createErrorDialog(InstanceUploaderActivity.this,
-                            e.getMessage(), EXIT), InstanceUploaderActivity.this);
-                    return;
-                }
-
-                init(savedInstanceState);
-            }
-
-            @Override
-            public void denied() {
-                // The activity has to finish because ODK Collect cannot function without these permissions.
-                finish();
-            }
-        });
-
-    }
-
-    private void init(Bundle savedInstanceState) {
         alertMsg = getString(R.string.please_wait);
 
         setTitle(getString(R.string.send_data));
