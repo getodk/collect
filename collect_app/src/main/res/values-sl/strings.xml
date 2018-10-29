@@ -278,7 +278,7 @@
   <string name="no_google_account">Google račun ni izbran!</string>
   <string name="google_set_account">Za svoj strežnik ste izbrali Googlove tabele, pred nadaljevanjem prosim izberite ustrezen Google Račun v splošnih nastavitvah</string>
   <string name="media_upload_error">Medijske datoteke %1$s ni bilo mogoče naložiti, ker ne obstaja.</string>
-    <string name="odk_auto_note">Rezultati ODK samodejnega pošiljanja</string>
+  <string name="odk_auto_note">Rezultati ODK samodejnega pošiljanja</string>
   <string name="odk_auto_download_notification_title">Rezultati ODK samodejnega prenosa</string>
   <string name="notification_error">Napaka pri prikazu obvestila</string>
   <string name="google_sheets_url">URL za nadomestno predložitev</string>
@@ -373,12 +373,6 @@
   <string name="sms_no_message">Ta obrazec nima nobenega vprašanja s SMS oznako</string>
   <string name="sms_encrypted_message">Šifriranih obrazcev ni moč predložiti kot SMS sporočilo.</string>
   <string name="sms_last_submission_on_date_at_time">\'Zadnji poskus predložitve na\' EEE, MMM dd, yyyy \'ob\' HH:mm</string>
-  <plurals name="sms_sending" tools:ignore="ImpliedQuantity">
-    <item quantity="one">Oddajam obrazec kot eno samo sporočilo. </item>
-    <item quantity="two">Oddajam obrazec, pošiljam sporočilo številka %1$d! od %2$d</item>
-    <item quantity="few">Oddajam obrazec, pošiljam sporočilo številka %1$d! od %2$d</item>
-    <item quantity="other">Oddajam obrazec, pošiljam sporočilo številka %1$d! od %2$d</item>
-  </plurals>
   <string name="sms_sent_on_date_at_time">\'Poslano kot SMS sporočilo na\' EEE, MMM dd, yyyy \'ob\' HH:mm</string>
   <string name="sms_submissions_notif_title">Predložitve preko SMS sporočil</string>
   <string name="sms_submissions_notif_description">Trenutno se oddaja več obrazcev.</string>

@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <string name="show_password">စကားဝှက်ပြပါ</string>
-  <string name="activity_not_found">ကိုင်တွယ်ရန် လှုပ်ရှားမှုမတွေ့ပါ: %s</string>
-  <string name="view_image">ပုံကြည့်ပါ</string>
-  <string name="annotate_image">ပုံတွင် မှတ်ချက်ရေးပါ</string>
-  <string name="aligned_image_capture">ဘက်ညီပုံရိုက်ခြင်း</string>
-  <string name="signature_capture">လက်မှတ်ပုံရိုက်ခြင်း</string>
+  <string name="show_password">စကားဝွက္ျပပါ</string>
+  <string name="activity_not_found">လုပ္ေဆာင္ရန္ အလုပ္ မေတြ့ပါ 1%s</string>
+  <string name="view_image">ပုံၾကည့္ပါ</string>
+  <string name="annotate_image">ပုံတြင္ မွတ္ခ်က္ေရးပါ</string>
+  <string name="aligned_image_capture">ဘက္ညီပုံရိုက္ျခင္း</string>
+  <string name="signature_capture">လက္မွတ္ရယူျခင္း</string>
   <string name="view_video">ဗီဒီယိုကြည့်ပါ</string>
   <string name="choose_audio">ဗီဒီယိုရွေးပါ</string>
   <string name="add_another">အုပ်စုထည့်ပါ</string>
@@ -17,8 +17,8 @@
   <string name="cancel">ပယ်ဖျက်ပါ</string>
   <string name="cancel_loading_form">ပယ်ဖျက်ပါ</string>
   <string name="cancel_location">ပယ်ဖျက်ပါ</string>
-  <string name="canceling">ပယ်ဖျက်နေသည်</string>
-  <string name="cannot_edit_completed_form">ဤပုံစံကို အပြီးသတ်ပြီးသည့်အချိန်မှစ၍ ပြုပြင်၍မရတော့ပါ။ ဤပုံစံသည် လုံခြုံရေးတင်ထားပြီးဖြစ်နိုင်သည်။</string>
+  <string name="canceling">ပယ္ဖ်က္ေနသည္</string>
+  <string name="cannot_edit_completed_form">ဤပုံစံကို အၿပီးသတ္ၿပီးသည့္အခ်ိန္မွစ၍ ျပဳျပင္၍မရေတာ့ပါ။ ဤပုံစံသည္ encrypted တင္ထားၿပီးျဖစ္နိုင္သည္။</string>
   <string name="capture_audio">အသံသွင်းပါ</string>
   <string name="capture_image">ပုံရိုက်ပါ</string>
   <string name="capture_osm">OpenMapKit ကိုဖွင့်ပါ</string>
