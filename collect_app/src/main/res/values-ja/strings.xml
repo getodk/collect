@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="show_password">パスワードを表示</string>
   <string name="activity_not_found">取り扱うアクティビティがありません: %s</string>
   <string name="view_image">画像を表示</string>
@@ -281,7 +281,7 @@
   <string name="no_google_account">Google アカウントが選択されていません!</string>
   <string name="google_set_account">サーバーとして Google スプレッドシートを選択しています。続行する前に、全般設定で対応する Google アカウントを選択してください</string>
   <string name="media_upload_error">メディアファイルが存在しないため、アップロードできませんでした: %1$s</string>
-    <string name="odk_permissions_fail">ODK 自動送信が失敗しました。必要なアクセス許可がすべて付与されていることを確認してください</string>
+  <string name="odk_permissions_fail">ODK 自動送信が失敗しました。必要なアクセス許可がすべて付与されていることを確認してください</string>
   <string name="odk_auto_note">ODK 自動送信結果</string>
   <string name="odk_auto_download_notification_title">ODK 自動ダウンロード結果</string>
   <string name="notification_error">通知テキストの表示中にエラー</string>
@@ -293,6 +293,7 @@
   <string name="send_in_progress">バックグラウンド送信が実行中です。しばらくして再度お試しください</string>
   <string name="sheets_max_columns">列の最大数は 255 ですが、フォームは %s あります。スプレッドシートにアップロードできません。</string>
   <string name="invalid_sheet_id">無効なシート ID: %1$s</string>
+  <string name="missing_submission_url">送信 URL が見つかりません</string>
   <string name="google_sheets_access_denied">アクセスが拒否されました。スプレッドシートの所有者がアクセス許可を与えていることを確認してください。</string>
   <string name="google_sheets_missing_columns">スプレッドシートの次の列が見つかりません: %1$s</string>
   <string name="password_error_whitespace">パスワードの先頭または末尾に空白は使用できません</string>
@@ -625,7 +626,7 @@
   <string name="sms_encrypted_message">暗号化されたフォームは SMS として送信できません。</string>
   <string name="sms_last_submission_on_date_at_time">\'最終の送信試行\' yyyy/MM/dd E HH:mm</string>
   <plurals name="sms_sending">
-    <item quantity="other">フォームを送信中 %1$d / %2$d のメッセージを送信中</item>
+    <item quantity="other">フォームを送信します %1$d / %2$d のメッセージを送信しています</item>
   </plurals>
   <string name="sms_sent_on_date_at_time">yyyy/MM/dd E HH:mm \'に SMS として送信しました\'</string>
   <string name="sms_submission_queued">送信キューにいれました。</string>
@@ -640,4 +641,5 @@
   <string name="missing_google_account_dialog_title">Google アカウントが設定されていません</string>
   <string name="missing_google_account_dialog_desc">Google スプレッドでフォームを送信するには、サーバー設定で Google アカウントを設定する必要があります。</string>
   <string name="sms_invalid_phone_number_description">SMS 送信の宛先電話番号を設定するか、送信の種類を変更してください。</string>
+  <string name="notification_channel_name">全般通知</string>
 </resources>

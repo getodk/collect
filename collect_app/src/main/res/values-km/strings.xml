@@ -275,7 +275,7 @@
   <string name="no_google_account">គ្មាន​គណនី​ Google បាន​ជ្រើស​រើស</string>
   <string name="google_set_account">អ្នក​បាន​ជ្រើស​សន្លឹក​ Google ជា​ម៉ាស៊ីន​មេ​របស់​អ្នក​សូម​ជ្រើស​រើស​គណនី Google ត្រូវគ្នា ដែលឋិតក្នុងការកំណត់ទូទៅមុននឹងបន្ត</string>
   <string name="media_upload_error">បរាជ័យក្នុងការផ្ទុកឯកសារមេឌៀដែលមិនមាន៖ %1$s</string>
-    <string name="notification_error">បង្ហាញសារជួនដំណឹងដែលមានបញ្ហា</string>
+  <string name="notification_error">បង្ហាញសារជួនដំណឹងដែលមានបញ្ហា</string>
   <string name="delete_after_send">លុបទម្រង់បន្ទាប់ការផ្ញើចេញ</string>
   <string name="delete_after_send_summary">លុប​សំណុំ​​បែប​​បទ​ដែល​បាន​បញ្ចប់ និង​មីឌៀ ​បន្ទាប់​ពី​ការ​ផ្ញើ​ចេញ​ទៅ​កាន់​ម៉ាស៊ីន​មេ</string>
   <string name="change_server_url">URL ម៉ាស៊ីន​បម្រើ</string>
