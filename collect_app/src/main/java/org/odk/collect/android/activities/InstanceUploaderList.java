@@ -71,10 +71,8 @@ import timber.log.Timber;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PROTOCOL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_TRANSPORT_TYPE;
 import static org.odk.collect.android.tasks.sms.SmsSender.SMS_INSTANCE_ID;
-import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
 import static org.odk.collect.android.utilities.PermissionUtils.requestReadPhoneStatePermission;
 import static org.odk.collect.android.utilities.PermissionUtils.requestSendSMSPermission;
-import static org.odk.collect.android.utilities.PermissionUtils.requestStoragePermissions;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores
@@ -140,18 +138,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
             showAllMode = savedInstanceState.getBoolean(SHOW_ALL_MODE);
         }
 
-        requestStoragePermissions(this, new PermissionListener() {
-            @Override
-            public void granted() {
-                init();
-            }
-
-            @Override
-            public void denied() {
-                // The activity has to finish because ODK Collect cannot function without these permissions.
-                finishAllActivities(InstanceUploaderList.this);
-            }
-        });
+        init();
     }
 
     /**
