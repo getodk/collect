@@ -44,6 +44,7 @@ import javax.inject.Inject;
 import timber.log.Timber;
 
 import static android.app.Activity.RESULT_OK;
+import static android.telephony.SmsManager.RESULT_ERROR_GENERIC_FAILURE;
 import static android.telephony.SmsManager.RESULT_ERROR_NO_SERVICE;
 import static android.telephony.SmsManager.RESULT_ERROR_RADIO_OFF;
 import static org.odk.collect.android.tasks.sms.SmsNotificationReceiver.SMS_NOTIFICATION_ACTION;
@@ -373,6 +374,7 @@ public class SmsService {
 
         try {
             switch (resultCode) {
+                case RESULT_ERROR_GENERIC_FAILURE:
                 case RESULT_ERROR_NO_SERVICE:
                     return new SimpleDateFormat(context.getString(R.string.sms_no_reception), Locale.getDefault()).format(date);
                 case RESULT_ERROR_RADIO_OFF:
