@@ -700,10 +700,23 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             return;
         }
 
+        /*
+         * Bug noticed on Samsung Galaxy S4: https://github.com/opendatakit/collect/pull/2538#issuecomment-434184848
+         *
+         * The activity gets recreated instead of getting resumed causing getCurrentViewIfODKView()
+         * to return null. So, we need to make sure that the widget is properly created before
+         * trying to setBinaryData to the widget
+         */
+        if (getCurrentViewIfODKView() == null) {
+            refreshCurrentView();
+        }
+
+        ODKView currentODKView = getCurrentViewIfODKView();
+
         if (resultCode == RESULT_CANCELED) {
             // request was canceled...
-            if (requestCode != RequestCodes.HIERARCHY_ACTIVITY && getCurrentViewIfODKView() != null) {
-                getCurrentViewIfODKView().cancelWaitingForBinaryData();
+            if (requestCode != RequestCodes.HIERARCHY_ACTIVITY) {
+                currentODKView.cancelWaitingForBinaryData();
             }
             return;
         }
@@ -712,7 +725,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         if (intent == null && requestCode != RequestCodes.DRAW_IMAGE && requestCode != RequestCodes.ANNOTATE_IMAGE
                 && requestCode != RequestCodes.SIGNATURE_CAPTURE && requestCode != RequestCodes.IMAGE_CAPTURE
                 && requestCode != RequestCodes.HIERARCHY_ACTIVITY) {
-            Timber.w("The intent has a null value for requestCode: " + requestCode);
+            Timber.w("The intent has a null value for requestCode: %s", requestCode);
             ToastUtils.showLongToast(getString(R.string.null_intent_value));
             return;
         }
@@ -725,9 +738,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 Timber.i("QR code scanning cancelled");
             } else {
                 String sb = intent.getStringExtra("SCAN_RESULT");
-                if (getCurrentViewIfODKView() != null) {
-                    getCurrentViewIfODKView().setBinaryData(sb);
-                }
+                currentODKView.setBinaryData(sb);
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 return;
             }
@@ -737,9 +748,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
             case RequestCodes.OSM_CAPTURE:
                 String osmFileName = intent.getStringExtra("OSM_FILE_NAME");
-                if (getCurrentViewIfODKView() != null) {
-                    getCurrentViewIfODKView().setBinaryData(osmFileName);
-                }
+                currentODKView.setBinaryData(osmFileName);
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
             case RequestCodes.EX_STRING_CAPTURE:
@@ -749,18 +758,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 boolean exists = intent.getExtras().containsKey(key);
                 if (exists) {
                     Object externalValue = intent.getExtras().get(key);
-                    if (getCurrentViewIfODKView() != null) {
-                        getCurrentViewIfODKView().setBinaryData(externalValue);
-                    }
+                    currentODKView.setBinaryData(externalValue);
                     saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 }
                 break;
             case RequestCodes.EX_GROUP_CAPTURE:
                 try {
                     Bundle extras = intent.getExtras();
-                    if (getCurrentViewIfODKView() != null) {
-                        getCurrentViewIfODKView().setDataForFields(extras);
-                    }
+                    currentODKView.setDataForFields(extras);
                 } catch (JavaRosaException e) {
                     Timber.e(e);
                     createErrorDialog(e.getCause().getMessage(), DO_NOT_EXIT);
@@ -793,9 +798,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     Timber.i("Renamed %s to %s", fi.getAbsolutePath(), nf.getAbsolutePath());
                 }
 
-                if (getCurrentViewIfODKView() != null) {
-                    getCurrentViewIfODKView().setBinaryData(nf);
-                }
+                currentODKView.setBinaryData(nf);
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
             case RequestCodes.ALIGNED_IMAGE:
@@ -817,9 +820,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     Timber.i("Renamed %s to %s", fi.getAbsolutePath(), nf.getAbsolutePath());
                 }
 
-                if (getCurrentViewIfODKView() != null) {
-                    getCurrentViewIfODKView().setBinaryData(nf);
-                }
+                currentODKView.setBinaryData(nf);
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
             case RequestCodes.ARBITRARY_FILE_CHOOSER:
@@ -886,30 +887,22 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 break;
             case RequestCodes.LOCATION_CAPTURE:
                 String sl = intent.getStringExtra(LOCATION_RESULT);
-                if (getCurrentViewIfODKView() != null) {
-                    getCurrentViewIfODKView().setBinaryData(sl);
-                }
+                currentODKView.setBinaryData(sl);
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
             case RequestCodes.GEOSHAPE_CAPTURE:
                 String gshr = intent.getStringExtra(ANSWER_KEY);
-                if (getCurrentViewIfODKView() != null) {
-                    getCurrentViewIfODKView().setBinaryData(gshr);
-                }
+                currentODKView.setBinaryData(gshr);
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
             case RequestCodes.GEOTRACE_CAPTURE:
                 String traceExtra = intent.getStringExtra(ANSWER_KEY);
-                if (getCurrentViewIfODKView() != null) {
-                    getCurrentViewIfODKView().setBinaryData(traceExtra);
-                }
+                currentODKView.setBinaryData(traceExtra);
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
             case RequestCodes.BEARING_CAPTURE:
                 String bearing = intent.getStringExtra(BEARING_RESULT);
-                if (getCurrentViewIfODKView() != null) {
-                    getCurrentViewIfODKView().setBinaryData(bearing);
-                }
+                currentODKView.setBinaryData(bearing);
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
             case RequestCodes.HIERARCHY_ACTIVITY:
