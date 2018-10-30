@@ -38,9 +38,6 @@ import org.odk.collect.android.tasks.DownloadTasksTask;
 
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.Utilities;
-import org.odk.collect.android.tasks.InstanceGoogleSheetsUploader;
-import org.odk.collect.android.tasks.InstanceServerUploader;
-import org.odk.collect.android.utilities.PermissionUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;

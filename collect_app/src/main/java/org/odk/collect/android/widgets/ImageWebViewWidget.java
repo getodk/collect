@@ -122,13 +122,6 @@ public class ImageWebViewWidget extends QuestionWidget implements FileWidget {
             answerLayout.addView(imageDisplay);
         }
         addAnswerView(answerLayout);
-
-        Collect.getInstance().getDefaultTracker()
-                .send(new HitBuilders.EventBuilder()
-                        .setCategory("ImageWebViewWidget")
-                        .setAction("created")
-                        .setLabel(Collect.getCurrentFormIdentifierHash())
-                        .build());
     }
 
     private String constructImageElement() {

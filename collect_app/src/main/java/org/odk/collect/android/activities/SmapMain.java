@@ -248,14 +248,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        Collect.getInstance().getActivityLogger().logOnStart(this);
-    }
-
-    @Override
     protected void onStop() {
-        Collect.getInstance().getActivityLogger().logOnStop(this);
         if (listener != null) {
             try {
                 unregisterReceiver(listener);
@@ -361,10 +354,6 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
                                             SmapMain.this,
                                             getString(R.string.admin_password_incorrect),
                                             Toast.LENGTH_LONG).show();
-                                    Collect.getInstance()
-                                            .getActivityLogger()
-                                            .logAction(this, "adminPasswordDialog",
-                                                    "PASSWORD_INCORRECT");
                                 }
                             }
                         });
@@ -374,10 +363,6 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
                         new DialogInterface.OnClickListener() {
 
                             public void onClick(DialogInterface dialog, int which) {
-                                Collect.getInstance()
-                                        .getActivityLogger()
-                                        .logAction(this, "adminPasswordDialog",
-                                                "cancel");
                                 input.setText("");
                                 return;
                             }

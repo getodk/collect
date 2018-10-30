@@ -91,7 +91,7 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
     }
 
     @Override
-    protected void onPostExecute(Outcome outcome) {
+    public void onPostExecute(Outcome outcome) {
         super.onPostExecute(outcome);
 
         // Clear temp credentials

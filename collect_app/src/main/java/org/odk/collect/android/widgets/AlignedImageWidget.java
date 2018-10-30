@@ -69,13 +69,6 @@ public class AlignedImageWidget extends BaseImageWidget {
         setUpLayout();
         setUpBinary();
         addAnswerView(answerLayout);
-
-        Collect.getInstance().getDefaultTracker()
-                .send(new HitBuilders.EventBuilder()
-                        .setCategory("AlignedImageWidget")
-                        .setAction("created")
-                        .setLabel(Collect.getCurrentFormIdentifierHash())
-                        .build());
     }
 
     @Override

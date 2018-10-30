@@ -131,23 +131,10 @@ public class NFCActivity extends Activity implements NFCListener {
         mNfcDialog.show();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Collect.getInstance().getActivityLogger().logOnStart(this);
-    }
-
-    @Override
-    protected void onStop() {
-        Collect.getInstance().getActivityLogger().logOnStop(this);
-        super.onStop();
-    }
-
     /**
      * Sets up the look and actions for the progress dialog while the GPS is searching.
      */
     private void setupNfcDialog() {
-        Collect.getInstance().getActivityLogger().logInstanceAction(this, "setupNFCDialog", "show");
         // dialog displayed while reading NFC
         mNfcDialog = new ProgressDialog(this);
         DialogInterface.OnClickListener nfcButtonListener =
@@ -156,7 +143,6 @@ public class NFCActivity extends Activity implements NFCListener {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case DialogInterface.BUTTON_NEGATIVE:
-                                Collect.getInstance().getActivityLogger().logInstanceAction(this, "cancelLocation", "cancel");
                                 mNfcId = null;
                                 finish();
                                 break;

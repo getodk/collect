@@ -65,7 +65,6 @@ public class SurveyNotesActivity extends CollectAbstractActivity {
     @Override
     protected void onStart() {
     	super.onStart();
-		Collect.getInstance().getActivityLogger().logOnStart(this);
 
         FormController formController = Collect.getInstance().getFormController();
         EditText editText = (EditText) findViewById(R.id.survey_notes);
@@ -102,13 +101,5 @@ public class SurveyNotesActivity extends CollectAbstractActivity {
 
         editText.setSelection(cursorLocn);
     }
-
-    @Override
-    protected void onStop() {
-		Collect.getInstance().getActivityLogger().logOnStop(this);
-    	super.onStop();
-    }
-
-
 
 }

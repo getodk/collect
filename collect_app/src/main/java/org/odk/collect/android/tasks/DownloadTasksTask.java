@@ -55,13 +55,13 @@ import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.http.CollectServerClient.Outcome;
 import org.odk.collect.android.listeners.TaskDownloaderListener;
 import org.odk.collect.android.loaders.PointEntry;
 import org.odk.collect.android.loaders.TaskEntry;
 import org.odk.collect.android.taskModel.FormLocator;
 import org.odk.collect.android.taskModel.TaskCompletionInfo;
 import org.odk.collect.android.taskModel.TaskResponse;
+import org.odk.collect.android.upload.InstanceServerUploader;
 import org.odk.collect.android.utilities.ManageForm;
 import org.odk.collect.android.utilities.ManageForm.ManageFormDetails;
 import org.odk.collect.android.utilities.ManageFormResponse;
@@ -302,7 +302,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 /*
                  * Submit any completed forms
                  */
-                Outcome submitOutcome = submitCompletedForms();
+                InstanceUploaderTask.Outcome submitOutcome = submitCompletedForms();
                 if(submitOutcome != null && submitOutcome.messagesByInstanceId != null) {
                     for (String key : submitOutcome.messagesByInstanceId.keySet()) {
                         results.put(key, submitOutcome.messagesByInstanceId.get(key));
@@ -543,7 +543,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
         }
     }
 
-    private Outcome submitCompletedForms() {
+    private InstanceUploaderTask.Outcome submitCompletedForms() {
        
         String selection = InstanceColumns.SOURCE + "=? and (" + InstanceColumns.STATUS + "=? or " + 
         		InstanceColumns.STATUS + "=?)";
@@ -584,7 +584,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 toUpload.toArray(toSendArray);
                 Timber.i("Submitting " + toUpload.size() + " finalised surveys");
 
-                Outcome o = instanceUploaderTask.doInBackground(toSendArray);	// Already running a background task so call direct
+                InstanceUploaderTask.Outcome o = instanceUploaderTask.doInBackground(toSendArray);	// Already running a background task so call direct
             	instanceUploaderTask.onPostExecute(o);
                 return o;
             } else {

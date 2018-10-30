@@ -473,10 +473,6 @@ public class FormsProvider extends ContentProvider {
             Uri formUri = ContentUris.withAppendedId(FormsColumns.CONTENT_URI,
                     rowId);
             getContext().getContentResolver().notifyChange(formUri, null);
-            Collect.getInstance()
-                    .getActivityLogger()
-                    .logActionParam(this, "insert", formUri.toString(),
-                            values.getAsString(FormsColumns.FORM_FILE_PATH));
             return formUri;
         }
 
@@ -540,8 +536,6 @@ public class FormsProvider extends ContentProvider {
                                             .getColumnIndex(FormsColumns.JRCACHE_FILE_PATH)));
                             String formFilePath = del.getString(del
                                     .getColumnIndex(FormsColumns.FORM_FILE_PATH));
-                            Collect.getInstance().getActivityLogger()
-                                    .logAction(this, "delete", formFilePath);
                             deleteFileOrDir(formFilePath);
                             deleteFileOrDir(del.getString(del
                                     .getColumnIndex(FormsColumns.FORM_MEDIA_PATH)));
@@ -569,8 +563,6 @@ public class FormsProvider extends ContentProvider {
                                     .getColumnIndex(FormsColumns.JRCACHE_FILE_PATH)));
                             String formFilePath = c.getString(c
                                     .getColumnIndex(FormsColumns.FORM_FILE_PATH));
-                            Collect.getInstance().getActivityLogger()
-                                    .logAction(this, "delete", formFilePath);
                             deleteFileOrDir(formFilePath);
                             deleteFileOrDir(c.getString(c
                                     .getColumnIndex(FormsColumns.FORM_MEDIA_PATH)));

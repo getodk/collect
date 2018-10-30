@@ -92,12 +92,6 @@ public class InstanceGoogleSheetsUploaderTask extends InstanceUploaderTask {
 
                     outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(), DEFAULT_SUCCESSFUL_TEXT);
 
-                    Collect.getInstance()
-                            .getDefaultTracker()
-                            .send(new HitBuilders.EventBuilder()
-                                    .setCategory("Submission")
-                                    .setAction("HTTP-Sheets")
-                                    .build());
                 } catch (UploadException e) {
                     Timber.d(e);
                     outcome.messagesByInstanceId.put(instance.getDatabaseId().toString(),

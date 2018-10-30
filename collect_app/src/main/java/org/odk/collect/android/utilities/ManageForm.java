@@ -246,12 +246,9 @@ public class ManageForm {
 	        				try {
 	        		            Uri deleteForm =
 	        		                Uri.withAppendedPath(FormsColumns.CONTENT_URI, formArray[i].toString());
-	        		            
-	        		            int wasDeleted = resolver.delete(deleteForm, null, null); 
-	        		            
-	        		            if (wasDeleted > 0) {
-	        		            	Collect.getInstance().getActivityLogger().logAction(this, "delete", deleteForm.toString());
-	        		            }
+
+	        		           resolver.delete(deleteForm, null, null);
+
 	        				} catch ( Exception ex ) {
 	        					Timber.e("Error deleting forms: during delete of: " + formArray[i].toString() + " exception: "  + ex.toString());
 	        					results.put("Error " + formArray[i].toString() + ": ", " during delete of form "  + " : " + ex.toString());

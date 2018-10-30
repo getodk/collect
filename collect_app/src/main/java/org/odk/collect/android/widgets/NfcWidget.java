@@ -70,11 +70,6 @@ public class NfcWidget extends QuestionWidget implements BinaryWidget {
 		mGetNfcButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Collect.getInstance()
-						.getActivityLogger()
-						.logInstanceAction(this, "recordNfc", "click",
-                                getFormEntryPrompt().getIndex());
-
 
                 Intent i = new Intent(getContext(), NFCActivity.class);
                 Collect.getInstance().getFormController()
@@ -152,11 +147,6 @@ public class NfcWidget extends QuestionWidget implements BinaryWidget {
 
     @Override
     public void onButtonClick(int buttonId) {
-
-        Collect.getInstance()
-                .getActivityLogger()
-                .logInstanceAction(this, "recordNfc", "click",
-                        getFormEntryPrompt().getIndex());
 
         Intent i = new Intent(getContext(), NFCActivity.class);
         Collect.getInstance().getFormController()

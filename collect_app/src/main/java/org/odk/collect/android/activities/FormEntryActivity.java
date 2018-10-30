@@ -87,7 +87,6 @@ import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.external.handler.SmapRemoteDataItem;
-import org.odk.collect.android.fragments.ImageLoadingFragment;
 import org.odk.collect.android.fragments.MediaLoadingFragment;
 import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
@@ -1072,10 +1071,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 startActivity(pref);
                 return true;
             case R.id.menu_comment:              // smap
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(this, "onOptionsItemSelected",
-                                "MENU_COMMENT");
                 if (formController.currentPromptIsQuestion()) {
                     saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 }
@@ -1084,10 +1079,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 startActivity(comment);
                 return true;
             case R.id.menu_clear_remote_cache:              // smap
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(this, "onOptionsItemSelected",
-                                "MENU_CLEAR_REMOTE_CACHE");
                 Collect.getInstance().clearRemoteServiceCaches();
                 return true;
         }

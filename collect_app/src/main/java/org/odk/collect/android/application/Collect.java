@@ -44,7 +44,6 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.amazonaws.mobile.AWSMobileClient;
-import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.external.handler.SmapRemoteDataItem;
 import org.odk.collect.android.injection.config.AppComponent;

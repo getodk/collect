@@ -59,7 +59,6 @@ import org.odk.collect.android.adapters.SortDialogAdapter;
 import org.odk.collect.android.adapters.TaskListArrayAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
-import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.listeners.RecyclerViewClickListener;
 import org.odk.collect.android.loaders.TaskEntry;
 import org.odk.collect.android.loaders.TaskLoader;
@@ -104,7 +103,6 @@ public class SmapTaskListFragment extends ListFragment
 
     private static final int PASSWORD_DIALOG = 1;
 
-    protected final ActivityLogger logger = Collect.getInstance().getActivityLogger();
     protected String[] sortingOptions;
     View rootView;
 
@@ -289,8 +287,6 @@ public class SmapTaskListFragment extends ListFragment
 
         super.onCreateOptionsMenu(menu, inflater);
 
-        Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCreateOptionsMenu", "show");
-
         getActivity().getMenuInflater().inflate(R.menu.smap_menu, menu);
 
 
@@ -374,24 +370,14 @@ public class SmapTaskListFragment extends ListFragment
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_about:
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logAction(this, "onOptionsItemSelected",
-                                "MENU_ABOUT");
                 Intent aboutIntent = new Intent(getActivity(), AboutActivity.class);
                 startActivity(aboutIntent);
                 return true;
             case R.id.menu_general_preferences:
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logAction(this, "onOptionsItemSelected",
-                                "MENU_PREFERENCES");
                 Intent ig = new Intent(getActivity(), PreferencesActivity.class);
                 startActivity(ig);
                 return true;
             case R.id.menu_admin_preferences:
-                Collect.getInstance().getActivityLogger()
-                        .logAction(this, "onOptionsItemSelected", "MENU_ADMIN");
                 String pw = adminPreferences.getString(
                         AdminKeys.KEY_ADMIN_PW, "");
                 if ("".equalsIgnoreCase(pw)) {
@@ -400,8 +386,6 @@ public class SmapTaskListFragment extends ListFragment
                     startActivity(i);
                 } else {
                     ((SmapMain) getActivity()).processAdminMenu();
-                    Collect.getInstance().getActivityLogger()
-                            .logAction(this, "createAdminPasswordDialog", "show");
                 }
                 return true;
             case R.id.menu_gettasks:
@@ -498,7 +482,6 @@ public class SmapTaskListFragment extends ListFragment
     // Get new forms
     private void processGetForms() {
 
-        Collect.getInstance().getActivityLogger().logAction(this, "downloadBlankForms", "click");
         Intent i = new Intent(getContext(), FormDownloadList.class);
         startActivity(i);
     }

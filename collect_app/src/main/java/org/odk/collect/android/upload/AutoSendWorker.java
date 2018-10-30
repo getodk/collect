@@ -160,13 +160,6 @@ public class AutoSendWorker extends Worker {
                     Collect.getInstance().getContentResolver().delete(deleteForm, null, null);
                 }
 
-                Collect.getInstance()
-                        .getDefaultTracker()
-                        .send(new HitBuilders.EventBuilder()
-                                .setCategory("Submission")
-                                .setAction(protocol.equals(getApplicationContext().getString(R.string.protocol_google_sheets)) ?
-                                        "HTTP-Sheets auto" : "HTTP auto")
-                                .build());
             } catch (UploadException e) {
                 Timber.d(e);
                 anyFailure = true;
