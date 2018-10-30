@@ -52,7 +52,7 @@ public class FormsProvider extends ContentProvider {
     private static final int FORMS = 1;
     private static final int FORM_ID = 2;
     // Forms unique by ID, keeping only the latest one downloaded
-    private static final int UNIQUE_FORMS_BY_FORM_ID = 3;
+    private static final int NEWEST_FORMS_BY_FORM_ID = 3;
 
     private static final UriMatcher URI_MATCHER;
 
@@ -113,7 +113,7 @@ public class FormsProvider extends ContentProvider {
                     break;
 
                 // Only include the latest form that was downloaded with each form_id
-                case UNIQUE_FORMS_BY_FORM_ID:
+                case NEWEST_FORMS_BY_FORM_ID:
                     Map<String, String> filteredProjectionMap = new HashMap<>(sFormsProjectionMap);
                     filteredProjectionMap.put(FormsColumns.DATE, "MAX(" + FormsColumns.DATE + ")");
 
@@ -137,7 +137,7 @@ public class FormsProvider extends ContentProvider {
     public String getType(@NonNull Uri uri) {
         switch (URI_MATCHER.match(uri)) {
             case FORMS:
-            case UNIQUE_FORMS_BY_FORM_ID:
+            case NEWEST_FORMS_BY_FORM_ID:
                 return FormsColumns.CONTENT_TYPE;
 
             case FORM_ID:
@@ -554,10 +554,10 @@ public class FormsProvider extends ContentProvider {
 
     static {
         URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
-        URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, "forms", FORMS);
-        URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, "forms/#", FORM_ID);
+        URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, FormsColumns.CONTENT_URI.getPath(), FORMS);
+        URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, FormsColumns.CONTENT_URI.getPath() + "/#", FORM_ID);
         // Only available for query and type
-        URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, "uniqueFormsByFormId", UNIQUE_FORMS_BY_FORM_ID);
+        URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, FormsColumns.CONTENT_NEWEST_FORMS_BY_FORMID_URI.getPath(), NEWEST_FORMS_BY_FORM_ID);
 
         sFormsProjectionMap = new HashMap<>();
         sFormsProjectionMap.put(FormsColumns._ID, FormsColumns._ID);

@@ -99,7 +99,7 @@ public class FormsDao {
      * uniqueByFormID is true, only the most recently-downloaded version of each form is included.
      */
     private CursorLoader getFormsCursorLoader(String selection, String[] selectionArgs, String sortOrder, boolean uniqueByFormId) {
-        Uri formUri = uniqueByFormId ? FormsProviderAPI.FormsColumns.UNIQUE_FORMS_BY_FORMID_URI
+        Uri formUri = uniqueByFormId ? FormsProviderAPI.FormsColumns.CONTENT_NEWEST_FORMS_BY_FORMID_URI
                 : FormsProviderAPI.FormsColumns.CONTENT_URI;
 
         return new CursorLoader(Collect.getInstance(), formUri, null, selection, selectionArgs, sortOrder);
