@@ -296,6 +296,6 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
      * @param errorStringResource - String resource for error toast
      */
     protected void launchActivityForResult(Intent intent, final int resourceCode, final int errorStringResource) {
-        startActivityForResult(intent, resourceCode, errorStringResource);
+        startActivityForResultOrShowErrorToast(intent, resourceCode, errorStringResource);
     }
 }

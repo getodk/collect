@@ -387,7 +387,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
         if (highResolution) {
             i.putExtra(android.provider.MediaStore.EXTRA_VIDEO_QUALITY, 1);
         }
-        startActivityForResult(i, RequestCodes.VIDEO_CAPTURE, R.string.capture_video);
+        startActivityForResultOrShowErrorToast(i, RequestCodes.VIDEO_CAPTURE, R.string.capture_video);
     }
 
     private void chooseVideo() {
@@ -396,7 +396,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
         // Intent i =
         // new Intent(Intent.ACTION_PICK,
         // android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(i, RequestCodes.VIDEO_CHOOSER, R.string.choose_video);
+        startActivityForResultOrShowErrorToast(i, RequestCodes.VIDEO_CHOOSER, R.string.choose_video);
     }
 
     private void playVideoFile() {

@@ -248,13 +248,13 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
                 android.provider.MediaStore.EXTRA_OUTPUT,
                 android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
                         .toString());
-        startActivityForResult(i, RequestCodes.AUDIO_CAPTURE, R.string.capture_audio);
+        startActivityForResultOrShowErrorToast(i, RequestCodes.AUDIO_CAPTURE, R.string.capture_audio);
     }
 
     private void chooseSound() {
         Intent i = new Intent(Intent.ACTION_GET_CONTENT);
         i.setType("audio/*");
-        startActivityForResult(i, RequestCodes.AUDIO_CHOOSER, R.string.choose_audio);
+        startActivityForResultOrShowErrorToast(i, RequestCodes.AUDIO_CHOOSER, R.string.choose_audio);
     }
 
     /**

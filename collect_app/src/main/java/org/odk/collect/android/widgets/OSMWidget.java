@@ -168,7 +168,7 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
 
             //launch activity if it is safe
             if (isIntentSafe) {
-                startActivityForResult(launchIntent, RequestCodes.OSM_CAPTURE, -1);
+                startActivityForResultOrDoNothing(launchIntent, RequestCodes.OSM_CAPTURE);
             } else {
                 errorTextView.setVisibility(View.VISIBLE);
             }

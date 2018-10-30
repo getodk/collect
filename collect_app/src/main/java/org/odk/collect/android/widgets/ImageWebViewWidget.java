@@ -302,13 +302,13 @@ public class ImageWebViewWidget extends QuestionWidget implements FileWidget {
         // FormEntyActivity will also need to be updated.
         i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
                 Uri.fromFile(new File(Collect.TMPFILE_PATH)));
-        startActivityForResult(i, RequestCodes.IMAGE_CAPTURE, R.string.capture_image);
+        startActivityForResultOrShowErrorToast(i, RequestCodes.IMAGE_CAPTURE, R.string.capture_image);
     }
 
     private void chooseImage() {
         errorTextView.setVisibility(View.GONE);
         Intent i = new Intent(Intent.ACTION_GET_CONTENT);
         i.setType("image/*");
-        startActivityForResult(i, RequestCodes.IMAGE_CHOOSER, R.string.choose_image);
+        startActivityForResultOrShowErrorToast(i, RequestCodes.IMAGE_CHOOSER, R.string.choose_image);
     }
 }

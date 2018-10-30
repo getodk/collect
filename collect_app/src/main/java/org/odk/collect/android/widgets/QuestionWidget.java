@@ -77,20 +77,20 @@ public abstract class QuestionWidget
         extends RelativeLayout
         implements Widget, AudioPlayListener {
 
+    private static final String GUIDANCE_EXPANDED_STATE = "expanded_state";
     private final int questionFontSize;
     private final FormEntryPrompt formEntryPrompt;
     private final MediaLayout questionMediaLayout;
-    private MediaPlayer player;
     private final TextView helpTextView;
     private final TextView guidanceTextView;
     private final View helpTextLayout;
     private final View guidanceTextLayout;
     private final View textLayout;
     private final TextView warningText;
-    private static final String GUIDANCE_EXPANDED_STATE = "expanded_state";
+    protected ThemeUtils themeUtils;
+    private MediaPlayer player;
     private AtomicBoolean expanded;
     private Bundle state;
-    protected ThemeUtils themeUtils;
     private int playColor;
 
     public QuestionWidget(Context context, FormEntryPrompt prompt) {
@@ -144,6 +144,19 @@ public abstract class QuestionWidget
 
         addQuestionMediaLayout(getQuestionMediaLayout());
         addHelpTextLayout(getHelpTextLayout());
+    }
+
+    //source::https://stackoverflow.com/questions/18996183/identifying-rtl-language-in-android/23203698#23203698
+    public static boolean isRTL() {
+        return isRTL(Locale.getDefault());
+    }
+
+    private static boolean isRTL(Locale locale) {
+        if (locale == null || locale.getDisplayName() == null || locale.getDisplayName().isEmpty()) {
+            return false;
+        }
+        final int directionality = Character.getDirectionality(locale.getDisplayName().charAt(0));
+        return directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT || directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC;
     }
 
     private TextView setupGuidanceTextAndLayout(TextView guidanceTextView, FormEntryPrompt prompt) {
@@ -228,19 +241,6 @@ public abstract class QuestionWidget
             player.release();
             player = null;
         }
-    }
-
-    //source::https://stackoverflow.com/questions/18996183/identifying-rtl-language-in-android/23203698#23203698
-    public static boolean isRTL() {
-        return isRTL(Locale.getDefault());
-    }
-
-    private static boolean isRTL(Locale locale) {
-        if (locale == null || locale.getDisplayName() == null || locale.getDisplayName().isEmpty()) {
-            return false;
-        }
-        final int directionality = Character.getDirectionality(locale.getDisplayName().charAt(0));
-        return directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT || directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC;
     }
 
     @SuppressWarnings("PMD.EmptyMethodInAbstractClassShouldBeAbstract")
@@ -675,18 +675,40 @@ public abstract class QuestionWidget
         return playColor;
     }
 
-    protected void startActivityForResult(Intent intent, int requestCode, @StringRes int errorRes) {
+    /**
+     * Attempt to launch an Activity for result using {@param intent} and {@param requestCode} and
+     * sets the current {@link FormIndex} in {@link FormController} as waiting for data.
+     * <p>
+     * If no Activity is found to run the given {@param intent} then reset current waiting form
+     * index in {@link FormController}
+     */
+    protected void startActivityForResultOrDoNothing(Intent intent, int requestCode) {
         try {
             waitForData();
             ((Activity) getContext()).startActivityForResult(intent, requestCode);
         } catch (ActivityNotFoundException e) {
-            if (errorRes != -1) {
-                Toast.makeText(
-                        getContext(),
-                        getContext().getString(R.string.activity_not_found,
-                                getContext().getString(errorRes)), Toast.LENGTH_SHORT)
-                        .show();
-            }
+            cancelWaitingForData();
+        }
+    }
+
+    /**
+     * Attempt to launch an Activity for result using {@param intent} and {@param requestCode} and
+     * sets the current {@link FormIndex} in {@link FormController} as waiting for data.
+     * <p>
+     * If no Activity is found to run the given {@param intent} then reset current waiting form
+     * index in {@link FormController} and display a {@link Toast} with the provided string
+     * resource {@param errorRes}
+     */
+    protected void startActivityForResultOrShowErrorToast(Intent intent, int requestCode, @StringRes int errorRes) {
+        try {
+            waitForData();
+            ((Activity) getContext()).startActivityForResult(intent, requestCode);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(
+                    getContext(),
+                    getContext().getString(R.string.activity_not_found,
+                            getContext().getString(errorRes)), Toast.LENGTH_SHORT)
+                    .show();
             cancelWaitingForData();
         }
     }

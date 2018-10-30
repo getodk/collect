@@ -92,7 +92,7 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
         Intent intent = new Intent(getContext(), GeoTraceActivity.class)
             .putExtra(TRACE_LOCATION, answerDisplay.getText().toString())
             .putExtra(PreferenceKeys.KEY_MAP_SDK, mapSDK);
-        startActivityForResult(intent, RequestCodes.GEOTRACE_CAPTURE, -1);
+        startActivityForResultOrDoNothing(intent, RequestCodes.GEOTRACE_CAPTURE);
     }
 
     private void updateButtonLabelsAndVisibility(boolean dataAvailable) {

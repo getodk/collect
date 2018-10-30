@@ -86,7 +86,7 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryWidget {
         Intent intent = new Intent(getContext(), GeoShapeActivity.class)
             .putExtra(SHAPE_LOCATION, answerDisplay.getText().toString())
             .putExtra(PreferenceKeys.KEY_MAP_SDK, mapSDK);
-        startActivityForResult(intent, RequestCodes.GEOSHAPE_CAPTURE, -1);
+        startActivityForResultOrDoNothing(intent, RequestCodes.GEOSHAPE_CAPTURE);
     }
 
     private void updateButtonLabelsAndVisibility(boolean dataAvailable) {

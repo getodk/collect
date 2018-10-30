@@ -152,7 +152,7 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
     public void onButtonClick(int buttonId) {
         if (isSensorAvailable) {
             Intent i = new Intent(getContext(), BearingActivity.class);
-            startActivityForResult(i, RequestCodes.BEARING_CAPTURE, -1);
+            startActivityForResultOrDoNothing(i, RequestCodes.BEARING_CAPTURE);
         } else {
             getBearingButton.setEnabled(false);
             ToastUtils.showLongToast(R.string.bearing_lack_of_sensors);

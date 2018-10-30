@@ -319,6 +319,6 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
         i.putExtra(DRAGGABLE_ONLY, draggable);
         i.putExtra(ACCURACY_THRESHOLD, accuracyThreshold);
 
-        startActivityForResult(i, RequestCodes.LOCATION_CAPTURE, -1);
+        startActivityForResultOrDoNothing(i, RequestCodes.LOCATION_CAPTURE);
     }
 }

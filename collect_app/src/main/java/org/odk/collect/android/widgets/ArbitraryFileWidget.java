@@ -165,7 +165,7 @@ public class ArbitraryFileWidget extends QuestionWidget implements FileWidget {
                 ? Intent.ACTION_OPEN_DOCUMENT : Intent.ACTION_GET_CONTENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("*/*"); // all file types
-        startActivityForResult(intent, ApplicationConstants.RequestCodes.ARBITRARY_FILE_CHOOSER, -1);
+        startActivityForResultOrDoNothing(intent, ApplicationConstants.RequestCodes.ARBITRARY_FILE_CHOOSER);
     }
 
     private String getSourcePathFromUri(@NonNull Uri uri) {
