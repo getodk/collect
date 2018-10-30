@@ -40,6 +40,7 @@ public class GeneralSharedPreferencesTest {
     }
 
     @Test(expected = GeneralSharedPreferences.ValidationException.class)
+    @SuppressWarnings("PMD.UseAssertTrueInsteadOfAssertEquals")
     public void save_validatesBooleanValues() {
         GENERAL_KEYS.put("boolean", false);
         instance.save("boolean", "blah");
@@ -52,6 +53,7 @@ public class GeneralSharedPreferencesTest {
         instance.save("string", false);
         assertEquals(instance.get("string"), "blah");
     }
+
     @Test(expected = GeneralSharedPreferences.ValidationException.class)
     public void save_validatesIntValues() {
         GENERAL_KEYS.put("int", 1);

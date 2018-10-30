@@ -86,7 +86,8 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     private Preference selectedGoogleAccountPreference;
     private GoogleAccountsManager accountsManager;
 
-    @Inject CollectServerClient collectServerClient;
+    @Inject
+    CollectServerClient collectServerClient;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -104,7 +105,9 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     }
 
     public void addAggregatePreferences() {
-        if (!new AggregatePreferencesAdder(this).add()) return;
+        if (!new AggregatePreferencesAdder(this).add()) {
+            return;
+        }
 
         serverUrlPreference = (EditTextPreference) findPreference(
                 PreferenceKeys.KEY_SERVER_URL);
