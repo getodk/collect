@@ -29,7 +29,7 @@ android {
         applicationId "org.smap.smapTask.android"
         minSdkVersion(16)
         targetSdkVersion(26)
-        versionCode(5070)
+        versionCode(5080)
         versionName getVersionName()
         testInstrumentationRunner('android.support.test.runner.AndroidJUnitRunner')
         multiDexEnabled true
@@ -53,19 +53,19 @@ android {
     productFlavors {
         standard {
             applicationId "org.smap.smapTask.android"
-            versionName "5.70"
+            versionName "5.80"
         }
         plan {
             applicationId "org.smap.smapTask.android.plan"
-            versionName "5.70-plan"
+            versionName "5.80-plan"
         }
         kontrolid {
             applicationId "org.smap.smapTask.android.kontrolid"
-            versionName "5.70-kontrolid"
+            versionName "5.80-kontrolid"
         }
         pop {
             applicationId "org.smap.smapTask.android.pop"
-            versionName "5.70-pop"
+            versionName "5.80-pop"
         }
     }
 
