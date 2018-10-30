@@ -2,8 +2,19 @@
 
 This is a living document. If you see something that could be improved, edit this document and submit a pull request following the instructions below!
 
+## Table of Contents
+* [Submitting a pull request](#submitting-a-pull-request)
+* [Making sure your pull request is accepted](#making-sure-your-pull-request-is-accepted)
+* [The review process](#the-review-process)
+* [Work in progress pull requests](#work-in-progress-pull-requests)
+* [Triage issues](#triage-issues-)
+* [Code style guidelines](#code-style-guidelines)
+* [UI Components Style guidelines](#ui-components-style-guidelines)
+* [Strings](#strings)
+* [Code from external sources](#code-from-external-sources)
+
 ## Submitting a pull request
-To contribute code to ODK Collect, you will need to open a [pull request](https://help.github.com/articles/about-pull-requests/) which will be reviewed by the community and then merged into the core project.
+To contribute code to ODK Collect, you will need to open a [pull request](https://help.github.com/articles/about-pull-requests/) which will be reviewed by the community and then merged into the core project. Generally, a pull request is submitted when a unit of work is considered complete but it can sometimes be helpful to share ideas through a work in progress (WIP) pull request ([learn more](#work-in-progress-pull-requests)).
 
 1. [Set up your development environment](https://github.com/opendatakit/collect#setting-up-your-development-environment). 
 
@@ -65,11 +76,16 @@ When a pull request is first created, @opendatakit-bot tags it as `needs review`
 
 Small fixes that target very particular bugs may occasionally be merged without a second review.
 
-## Triage Issues [![Open Source Helpers](https://www.codetriage.com/opendatakit/collect/badges/users.svg)](https://www.codetriage.com/opendatakit/collect)
+## Work in progress pull requests
+Work in progress (WIP) pull requests are useful to illustrate a proposed direction and get early feedback before committing to a solution direction. Work in progress pull requests should be clearly identified with [WIP] at the beginning of the title. The description should describe the proposed direction, why it is being considered, what alternatives might be possible and solicit specific feedback from collaborators. 
+
+A broad question like "what do you think of this?" makes it very difficult for a collaborator to engage with the pull request without coming up with a solution to the problem him or herself. Instead, please ask specific questions that make your own thinking clear and allow the reviewer to identify controversial parts of the proposed solution. For example: "here I returned a result object to represent the status after the transaction. I also considered throwing an exception in case of error but I didn't like that it made it unclear where an error happened. Which do you prefer and why?" 
+
+## Triage issues [![Open Source Helpers](https://www.codetriage.com/opendatakit/collect/badges/users.svg)](https://www.codetriage.com/opendatakit/collect)
 
 In addition to contributing code, you can help to triage issues. This can include reproducing bug reports, or asking for vital information such as version numbers or reproduction instructions. If you would like to start triaging issues, one easy way to get started is to [subscribe to opendatakit/collect on CodeTriage](https://www.codetriage.com/opendatakit/collect).
 
-## Code Style guidelines
+## Code style guidelines
 Follow the [Android style rules](http://source.android.com/source/code-style.html) and the [Google Java style guide](https://google.github.io/styleguide/javaguide.html).
 
 ## UI Components Style guidelines
