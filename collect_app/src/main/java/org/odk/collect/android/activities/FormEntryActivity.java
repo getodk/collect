@@ -2594,7 +2594,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     // Force writing of audit since we are exiting
                     formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);
                 }
-                sendSavedBroadcast();
+                sendBroadcast(new Intent("org.odk.collect.android.FormSaved"));     // smap
+
                 finishReturnInstance(saveResult.isComplete());  // smap add isComplete
                 break;
             case SaveToDiskTask.SAVE_ERROR:

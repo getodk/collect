@@ -43,6 +43,12 @@ public abstract class InstanceUploaderTask extends AsyncTask<Long, Integer, Inst
     private InstanceUploaderListener stateListener;
     private Boolean deleteInstanceAfterSubmission;
 
+    // smap add this function so that doInBackground is public for instantiations
+    @Override
+    public Outcome doInBackground(Long... instanceIdsToUpload) {
+        return null;
+    }
+
     @Override
     public void onPostExecute(Outcome outcome) {       // smap make public
         synchronized (this) {

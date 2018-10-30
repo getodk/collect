@@ -45,7 +45,7 @@ public class InstanceGoogleSheetsUploaderTask extends InstanceUploaderTask {
     }
 
     @Override
-    protected Outcome doInBackground(Long... instanceIdsToUpload) {
+    public Outcome doInBackground(Long... instanceIdsToUpload) {    // smap make public
         InstanceGoogleSheetsUploader uploader = new InstanceGoogleSheetsUploader(accountsManager);
         final Outcome outcome = new Outcome();
 

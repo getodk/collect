@@ -576,7 +576,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
             }
 
             if(toUpload.size() > 0) {
-                InstanceServerUploader instanceUploaderTask = new InstanceServerUploader();
+                InstanceUploaderTask instanceUploaderTask = new InstanceServerUploaderTask();
                 publishProgress(Collect.getInstance().getString(R.string.smap_submitting, toUpload.size()));
                 instanceUploaderTask.setUploaderListener((InstanceUploaderListener) mStateListener);
 
