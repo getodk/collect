@@ -281,7 +281,7 @@
   <string name="no_google_account">Pas de compte Google choisi!</string>
   <string name="google_set_account">Vous avez choisi Google Sheets comme serveur. Merci de sélectionner un compte Google correspondant dans les paramètres généraux avant de continuer.</string>
   <string name="media_upload_error">Le téléversement du fichier média inexistant a échoué : %1$s</string>
-  <string name="odk_auth_auth_fail">Erreur d\'authentification d\'envoi automatique ODK, assurez-vous que vos paramètres sont corrects</string>
+  <string name="odk_permissions_fail">Échec de l’autorisation d’envoi automatique ODK, veuillez vous assurer que vous avez accordé toutes les autorisations requises.</string>
   <string name="odk_auto_note">Résultats d\'envoi automatique ODK</string>
   <string name="odk_auto_download_notification_title">Résultats de téléchargement automatique ODK</string>
   <string name="notification_error">Erreur d\'affichage du texte de notification</string>
@@ -332,7 +332,6 @@
   <string name="select_geotrace_mode">Sélectionner le mode de TracéGéo</string>
   <string name="start">Démarrer</string>
   <string name="enable_gps">Activer le GPS</string>
-  <string name="enable_gps_message">Le GPS est désactivé. Voulez vous l\'activer ?</string>
   <string name="geotrace_title">TracéGéo</string>
   <string name="polygon_save">Enregistrer comme Polygone</string>
   <string name="polyline_save">Enregistrer comme Polyligne</string>
@@ -345,7 +344,6 @@
   <string name="polygon_validator">3 points minimum sont nécessaires pour créer un Polygone</string>
   <string name="polyline_validator">Il faut au moins 2 points pour créer une ligne</string>
   <string name="clear">Effacer</string>
-  <string name="polyline_polygon_text">Enregistrer le TracéGéo sous</string>
   <string name="manual_mode">Mode Manuel</string>
   <string name="automatic_mode">Mode Automatique</string>
   <string name="geoshape_instruction">Appuyer longtemps pour placer le marqueur</string>
@@ -588,6 +586,11 @@
   <string name="camera_runtime_permission_denied_desc">Sans cette permission, Collect ne peut pas accéder à la caméra. Veuillez réessayer lorsque vous êtes prêt à l\'accorder.</string>
   <string name="record_audio_runtime_permission_denied_title">Autorisation d\'enregistrement audio</string>
   <string name="record_audio_runtime_permission_denied_desc">Sans cette permission, Collect ne peut pas accéder au microphone. Veuillez réessayer lorsque vous êtes prêt à l\'accorder.</string>
+  <string name="get_accounts_runtime_permission_denied_title">Obtenir la permission des comptes</string>
+  <string name="send_sms_runtime_permission_denied_title">Envoyer la permission SMS</string>
+  <string name="send_sms_runtime_permission_denied_desc">Sans cette permission, Collect ne peut pas envoyer de SMS. Veuillez réessayer lorsque vous êtes prêt à l’accorder.</string>
+  <string name="read_phone_state_runtime_permission_denied_title">Lire la permission de l\'état du téléphone</string>
+  <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect ne passe pas d\'appels, mais il doit accéder à certaines propriétés de votre périphérique, telles que le numéro de téléphone et l\'ID de périphérique.</string>
   <string name="form_update_category">Mise à jour d\'un fomulaire</string>
   <string name="periodic_form_updates_check_title">Vérification périodique des mises à jour des formulaires</string>
   <string name="never">Jamais</string>
@@ -614,6 +617,11 @@
   <!--Sms submission-->
   <string name="sms_no_message">Ce formulaire n\'a aucune question avec \"tag\" SMS</string>
   <string name="sms_encrypted_message">Les formulaires encryptés ne peuvent pas êtres envoyés par SMS.</string>
+  <plurals name="sms_sending">
+    <item quantity="one" tools:ignore="ImpliedQuantity">Envoi du formulaire en un seul message.</item>
+    <item quantity="other">Envoi du formulaire, envoi du message %1$d de %2$d</item>
+  </plurals>
+  <string name="sms_submission_queued">En file d\'attente pour la soumission.</string>
   <string name="sms_submissions_notif_title">Soumissions SMS</string>
   <string name="sms_submissions_notif_description">Plusieurs formulaires sont en train d\'être envoyés.</string>
   <string name="transport_type_internet">Wifi/cellulaire (recommandé)</string>
@@ -621,12 +629,8 @@
   <string name="transport_type_both">Choisir à l\'envoi</string>
   <string name="seconds">Secondes</string>
   <string name="rank_items">Choisir l\'ordre des éléments</string>
-  <string name="image_not_saved">L\'image n\'a pas pu être enregistrée à cause
-d\'un problème sur l\'instance du fichier.</string>
+  <string name="loading_form_failed">Une erreur s\'est produite lors du chargement du formulaire. Veuillez réessayer.</string>
   <string name="missing_google_account_dialog_title">Compte Google non sélectionné</string>
-  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
-  <string name="current_predicate_warning">Cette question ne sera pas compatible avec les versions futures de ODK Collect parce qu\'elle emploi current() dans un filtre de choix.\n\nVeuillez vous assurer que la personne qui a créé ce formulaire lise les details ci-dessous et agisse. </string>
-  <string name="current_predicate_warning_title">Action requise</string>
-  <string name="current_predicate_forum">Lire les details</string>
-  <string name="current_predicate_continue">Continuer</string>
+  <string name="missing_google_account_dialog_desc">Pour envoyer des formulaires via Google Sheets, vous devez configurer votre compte Google dans les paramètres du serveur.</string>
+  <string name="sms_invalid_phone_number_description">Définissez un numéro de téléphone de destination pour l\'envoi de SMS ou modifiez votre type de transport.</string>
 </resources>

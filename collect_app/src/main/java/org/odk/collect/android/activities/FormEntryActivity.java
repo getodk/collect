@@ -30,7 +30,6 @@ import android.provider.MediaStore.Images;
 import android.provider.OpenableColumns;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -65,6 +64,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import org.apache.commons.io.IOUtils;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
@@ -74,7 +74,6 @@ import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.LocalDateTime;
-import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.IconMenuListAdapter;
 import org.odk.collect.android.adapters.model.IconMenuItem;
@@ -85,11 +84,11 @@ import org.odk.collect.android.dao.helpers.FormsDaoHelper;
 import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
 import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
 import org.odk.collect.android.events.RxEventBus;
-import org.odk.collect.android.exception.GDriveConnectionException;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.external.handler.SmapRemoteDataItem;
 import org.odk.collect.android.fragments.ImageLoadingFragment;
+import org.odk.collect.android.fragments.MediaLoadingFragment;
 import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
@@ -132,8 +131,13 @@ import org.odk.collect.android.widgets.DateTimeWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.RangeWidget;
 import org.odk.collect.android.widgets.StringWidget;
+import org.odk.collect.android.upload.AutoSendWorker;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -142,6 +146,11 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
+import androidx.work.Constraints;
+import androidx.work.ExistingWorkPolicy;
+import androidx.work.NetworkType;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -208,7 +217,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     FormInfo formInfo = null;                                           // smap
     private static final String KEY_SAVE_NAME = "saveName";
 
-    private static final String TAG_IMAGE_LOADING_FRAGMENT = "image_loading_fragment";
+    private static final String TAG_MEDIA_LOADING_FRAGMENT = "media_loading_fragment";
 
     // Identifies the gp of the form used to launch form entry
     public static final String KEY_FORMPATH = "formpath";
@@ -278,7 +287,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
-    ImageLoadingFragment imageLoadingFragment;
+    MediaLoadingFragment mediaLoadingFragment;
 
     public void allowSwiping(boolean doSwipe) {
         this.doSwipe = doSwipe;
@@ -345,10 +354,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         });
 
         if (savedInstanceState == null) {
-            imageLoadingFragment = new ImageLoadingFragment();
-            getFragmentManager().beginTransaction().add(imageLoadingFragment, TAG_IMAGE_LOADING_FRAGMENT).commit();
+            mediaLoadingFragment = new MediaLoadingFragment();
+            getFragmentManager().beginTransaction().add(mediaLoadingFragment, TAG_MEDIA_LOADING_FRAGMENT).commit();
         } else {
-            imageLoadingFragment = (ImageLoadingFragment) getFragmentManager().findFragmentByTag(TAG_IMAGE_LOADING_FRAGMENT);
+            mediaLoadingFragment = (MediaLoadingFragment) getFragmentManager().findFragmentByTag(TAG_MEDIA_LOADING_FRAGMENT);
         }
 
         requestStoragePermissions(this, new PermissionListener() {
@@ -447,8 +456,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     // controller...
                     formLoaderTask = new FormLoaderTask(instancePath,
                             startingXPath, waitingXPath);
-                    Collect.getInstance().getActivityLogger()
-                            .logAction(this, "formReloaded", formPath);
                     // TODO: this doesn' work (dialog does not get removed):
                     // showDialog(PROGRESS_DIALOG);
                     // show dialog before we execute...
@@ -495,10 +502,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
 
             instancePath = formInfo.getInstancePath();
-            Collect.getInstance()
-                    .getActivityLogger()
-                    .logAction(this, "instanceLoaded",
-                            instancePath);
 
             String jrFormId = formInfo.getFormID();
             String jrVersion = formInfo.getFormVersion();
@@ -632,8 +635,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         mCanUpdate = intent.getBooleanExtra(KEY_CAN_UPDATE, true);     // smap
         mFormId = formInfo.getFormID();                                             // smap
 
-        Collect.getInstance().getActivityLogger()
-                .logAction(this, "formLoaded", formPath);
         showDialog(PROGRESS_DIALOG);
         // show dialog before we execute...
         //formLoaderTask.execute(formPath, mFormId);      // smap add formId
@@ -809,13 +810,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 ImageConverter.execute(Collect.TMPFILE_PATH, getWidgetWaitingForBinaryData(), this);
                 File fi = new File(Collect.TMPFILE_PATH);
 
-                //revoke permissions granted to this file due its possible usage in
-                //the camera app
-                Uri uri = FileProvider.getUriForFile(this,
-                        BuildConfig.APPLICATION_ID + ".provider",
-                        fi);
-                FileUtils.revokeFileReadWritePermission(this, uri);
-
                 String instanceFolder = formController.getInstanceFile()
                         .getParent();
                 String s = instanceFolder + File.separator + System.currentTimeMillis() + ".jpg";
@@ -856,6 +850,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 }
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
+            case RequestCodes.ARBITRARY_FILE_CHOOSER:
+            case RequestCodes.AUDIO_CHOOSER:
+            case RequestCodes.VIDEO_CHOOSER:
             case RequestCodes.IMAGE_CHOOSER:
                 /*
                  * We have a saved image somewhere, but we really want it to be in:
@@ -868,12 +865,41 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 ProgressDialogFragment.newInstance(getString(R.string.please_wait))
                         .show(getSupportFragmentManager(), ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
 
-                imageLoadingFragment.beginImageLoadingTask(intent.getData());
+                mediaLoadingFragment.beginMediaLoadingTask(intent.getData());
 
                 break;
             case RequestCodes.AUDIO_CAPTURE:
-            case RequestCodes.VIDEO_CAPTURE:
+                /*
+                  Probably this approach should be used in all cases to get a file from an uri.
+                  The approach which was used before and which is still used in other places
+                  might be faulty because sometimes _data column might be not provided in an uri.
+                  e.g. https://github.com/opendatakit/collect/issues/705
+                  Let's test it here and then we can use the same code in other places if it works well.
+                 */
                 Uri mediaUri = intent.getData();
+                if (mediaUri != null) {
+                    String filePath =
+                            formController.getInstanceFile().getParent()
+                                    + File.separator
+                                    + System.currentTimeMillis()
+                                    + "."
+                                    + ContentResolverHelper.getFileExtensionFromUri(mediaUri);
+                    try {
+                        InputStream inputStream = getContentResolver().openInputStream(mediaUri);
+                        if (inputStream != null) {
+                            OutputStream outputStream = new FileOutputStream(new File(filePath));
+                            IOUtils.copy(inputStream, outputStream);
+                            inputStream.close();
+                            outputStream.close();
+                            saveFileAnswer(new File(filePath));
+                        }
+                    } catch (IOException e) {
+                        Timber.e(e);
+                    }
+                }
+                break;
+            case RequestCodes.VIDEO_CAPTURE:
+                mediaUri = intent.getData();
                 saveFileAnswer(mediaUri);
                 String filePath = MediaUtils.getDataColumn(this, mediaUri, null, null);
                 if (filePath != null) {
@@ -884,25 +910,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 } catch (Exception e) {
                     Timber.e(e);
                 }
-                break;
-
-            case RequestCodes.ARBITRARY_FILE_CHOOSER:
-                // Same with VIDEO_CHOOSER.
-            case RequestCodes.AUDIO_CHOOSER:
-                // Same with VIDEO_CHOOSER.
-            case RequestCodes.VIDEO_CHOOSER:
-                /*
-                 * Start a task to save the chosen file/audio/video with a new Thread,
-                 * This could support retrieving file from Google Drive.
-                 * */
-                showDialog(SAVING_DIALOG);
-                Runnable saveFileRunnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        saveChosenFile(intent.getData());
-                    }
-                };
-                new Thread(saveFileRunnable).start();
                 break;
             case RequestCodes.LOCATION_CAPTURE:
                 String sl = intent.getStringExtra(LOCATION_RESULT);
@@ -946,93 +953,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         refreshCurrentView();
     }
 
-    /**
-     * Save a copy of the chosen media in Collect's own path such as
-     * "/storage/emulated/0/odk/instances/{form name}/filename",
-     * and if it's from Google Drive and not cached yet, we'll retrieve it using network.
-     * This may take a long time.
-     *
-     * @param selectedFile uri of the selected audio
-     * @see #getFileExtensionFromUri(Uri)
-     */
-    private void saveChosenFile(Uri selectedFile) {
-        String extension = getFileExtensionFromUri(selectedFile);
-
-        String instanceFolder = Collect.getInstance().getFormController()
-                .getInstanceFile().getParent();
-        String destPath = instanceFolder + File.separator
-                + System.currentTimeMillis() + extension;
-
-        File chosenFile;
-        try {
-            chosenFile = MediaUtils.getFileFromUri(this, selectedFile, Images.Media.DATA);
-            if (chosenFile != null) {
-                final File newFile = new File(destPath);
-                FileUtils.copyFile(chosenFile, newFile);
-                runOnUiThread(() -> {
-                    dismissDialog(SAVING_DIALOG);
-                    if (getCurrentViewIfODKView() != null) {
-                        getCurrentViewIfODKView().setBinaryData(newFile);
-                    }
-                    saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                    refreshCurrentView();
-                });
-            } else {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        dismissDialog(SAVING_DIALOG);
-                        Timber.e("Could not receive chosen file");
-                        ToastUtils.showShortToastInMiddle(R.string.error_occured);
-                    }
-                });
-            }
-        } catch (GDriveConnectionException e) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    dismissDialog(SAVING_DIALOG);
-                    Timber.e("Could not receive chosen file due to connection problem");
-                    ToastUtils.showLongToastInMiddle(R.string.gdrive_connection_exception);
-                }
-            });
-        }
-    }
-
-    /**
-     * Using contentResolver to get a file's extension by the uri returned from OnActivityResult.
-     *
-     * @param fileUri Whose name we want to get
-     * @return The file's extension
-     * @see #onActivityResult(int, int, Intent)
-     * @see #saveChosenFile(Uri)
-     * @see android.content.ContentResolver
-     */
-    private String getFileExtensionFromUri(Uri fileUri) {
-        Cursor returnCursor =
-                getContentResolver().query(fileUri, null, null, null, null);
-        try {
-            if (returnCursor == null) {
-                return "";
-            }
-            int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-            returnCursor.moveToFirst();
-            String filename = returnCursor.getString(nameIndex);
-            // If the file's name contains extension , we cut it down for latter use (copy a new file).
-            if (filename.lastIndexOf('.') != -1) {
-                return filename.substring(filename.lastIndexOf('.'));
-            } else {
-                // I found some mp3 files' name don't contain extension, but can be played as Audio
-                // So I write so, but I still there are some way to get its extension
-                return "";
-            }
-        } finally {
-            if (returnCursor != null) {
-                returnCursor.close();
-            }
-        }
-    }
-
     public QuestionWidget getWidgetWaitingForBinaryData() {
         QuestionWidget questionWidget = null;
         ODKView odkView = (ODKView) currentView;
@@ -1049,7 +969,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         return questionWidget;
     }
 
-    private void saveFileAnswer(Uri media) {
+    private void saveFileAnswer(Object media) {
         // For audio/video capture/chooser, we get the URI from the content
         // provider
         // then the widget copies the file and makes a new entry in the
@@ -1085,8 +1005,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        Collect.getInstance().getActivityLogger()
-                .logInstanceAction(this, "onCreateOptionsMenu", "show");
         getMenuInflater().inflate(R.menu.form_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
@@ -1128,26 +1046,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         FormController formController = getFormController();
         switch (item.getItemId()) {
             case R.id.menu_languages:
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(this, "onOptionsItemSelected",
-                                "MENU_LANGUAGES");
                 createLanguageDialog();
                 return true;
             case R.id.menu_save:
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(this, "onOptionsItemSelected",
-                                "MENU_SAVE");
                 // don't exit
                 saveDataToDisk(DO_NOT_EXIT, InstancesDaoHelper.isInstanceComplete(false), null);
                 return true;
             case R.id.menu_goto:
                 state = null;
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(this, "onOptionsItemSelected",
-                                "MENU_HIERARCHY_VIEW");
                 if (formController != null && formController.currentPromptIsQuestion()) {
                     saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 }
@@ -1162,10 +1068,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 startActivityForResult(i, RequestCodes.HIERARCHY_ACTIVITY);
                 return true;
             case R.id.menu_preferences:
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(this, "onOptionsItemSelected",
-                                "MENU_PREFERENCES");
                 Intent pref = new Intent(this, PreferencesActivity.class);
                 startActivity(pref);
                 return true;
@@ -1246,8 +1148,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     public void onCreateContextMenu(ContextMenu menu, View v,
                                     ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        Collect.getInstance().getActivityLogger()
-                .logInstanceAction(this, "onCreateContextMenu", "show");
         FormController formController = getFormController();
 
         menu.add(0, v.getId(), 0, getString(R.string.clear_answer));
@@ -1260,10 +1160,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         if (item.getItemId() == DELETE_REPEAT) {
-            Collect.getInstance()
-                    .getActivityLogger()
-                    .logInstanceAction(this, "onContextItemSelected",
-                            "createDeleteRepeatConfirmDialog");
             createDeleteRepeatConfirmDialog();
         } else {
             /*
@@ -1286,10 +1182,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 }
 
                 if (shouldClearDialogBeShown) {
-                    Collect.getInstance()
-                            .getActivityLogger()
-                            .logInstanceAction(this, "onContextItemSelected",
-                                    "createClearDialog", qw.getFormEntryPrompt().getIndex());
                     createClearDialog(qw);
                     break;
                 }
@@ -1364,12 +1256,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 InputFilter returnFilter = new InputFilter() {
                     public CharSequence filter(CharSequence source, int start,
                                                int end, Spanned dest, int dstart, int dend) {
-                        for (int i = start; i < end; i++) {
-                            if (Character.getType(source.charAt(i)) == Character.CONTROL) {
-                                return "";
-                            }
-                        }
-                        return null;
+                        String newText = source.toString().substring(start, end);
+                        String invalidCharRegex = "[\\p{Cntrl}]";
+
+                        // Replace invalid characters, only modifying the string if necessary.
+                        return newText.matches(invalidCharRegex)
+                                ? newText.replaceAll(invalidCharRegex, " ")
+                                : null;
                     }
                 };
                 saveAs.setFilters(new InputFilter[]{returnFilter});
@@ -1459,13 +1352,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         .setOnClickListener(new OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Collect.getInstance()
-                                        .getActivityLogger()
-                                        .logInstanceAction(
-                                                this,
-                                                "createView.saveAndExit",
-                                                instanceComplete.isChecked() ? "saveAsComplete"
-                                                        : "saveIncomplete");
                                 // Form is marked as 'saved' here.
                                 if (saveAs.getText().length() < 1) {
                                     ToastUtils.showShortToast(R.string.save_as_error);
@@ -1797,21 +1683,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         // start InAnimation for transition...
         currentView.startAnimation(inAnimation);
 
-        String logString = "";
-        switch (from) {
-            case RIGHT:
-                logString = "next";
-                break;
-            case LEFT:
-                logString = "previous";
-                break;
-            case FADE:
-                logString = "refresh";
-                break;
-        }
-
-        Collect.getInstance().getActivityLogger().logInstanceAction(this, "showView", logString);
-
         FormController formController = getFormController();
         if (formController.getEvent() == FormEntryController.EVENT_QUESTION
                 || formController.getEvent() == FormEntryController.EVENT_GROUP
@@ -1850,11 +1721,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         String constraintText;
         switch (saveStatus) {
             case FormEntryController.ANSWER_CONSTRAINT_VIOLATED:
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(this,
-                                "createConstraintToast.ANSWER_CONSTRAINT_VIOLATED",
-                                "show", index);
                 constraintText = formController
                         .getQuestionPromptConstraintText(index);
                 if (constraintText == null) {
@@ -1866,11 +1732,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 }
                 break;
             case FormEntryController.ANSWER_REQUIRED_BUT_EMPTY:
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(this,
-                                "createConstraintToast.ANSWER_REQUIRED_BUT_EMPTY",
-                                "show", index);
                 constraintText = formController
                         .getQuestionPromptRequiredText(index);
                 if (constraintText == null) {
@@ -1893,9 +1754,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * repeat of the current group.
      */
     private void createRepeatDialog() {
-        Collect.getInstance().getActivityLogger()
-                .logInstanceAction(this, "createRepeatDialog", "show");
-
         // In some cases dialog might be present twice because refreshView() is being called
         // from onResume(). This ensures that we do not preset this modal dialog if it's already
         // visible. Checking for shownAlertDialogIsGroupRepeat because the same field
@@ -1912,10 +1770,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 FormController formController = getFormController();
                 switch (i) {
                     case BUTTON_POSITIVE: // yes, repeat
-                        Collect.getInstance()
-                                .getActivityLogger()
-                                .logInstanceAction(this, "createRepeatDialog",
-                                        "addRepeat");
                         try {
                             formController.newRepeat();
                         } catch (Exception e) {
@@ -1937,11 +1791,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         }
                         break;
                     case BUTTON_NEGATIVE: // no, no repeat
-                        Collect.getInstance()
-                                .getActivityLogger()
-                                .logInstanceAction(this, "createRepeatDialog",
-                                        "showNext");
-
                         //
                         // Make sure the error dialog will not disappear.
                         //
@@ -2002,10 +1851,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * Creates and displays dialog with the given errorMsg.
      */
     private void createErrorDialog(String errorMsg, final boolean shouldExit) {
-        Collect.getInstance()
-                .getActivityLogger()
-                .logInstanceAction(this, "createErrorDialog",
-                        "show." + Boolean.toString(shouldExit));
 
         if (alertDialog != null && alertDialog.isShowing()) {
             errorMsg = errorMessage + "\n\n" + errorMsg;
@@ -2022,8 +1867,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
                     case BUTTON_POSITIVE:
-                        Collect.getInstance().getActivityLogger()
-                                .logInstanceAction(this, "createErrorDialog", "OK");
                         if (shouldExit) {
                             errorMessage = null;
                             finish();
@@ -2042,10 +1885,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * Creates a confirm/cancel dialog for deleting repeats.
      */
     private void createDeleteRepeatConfirmDialog() {
-        Collect.getInstance()
-                .getActivityLogger()
-                .logInstanceAction(this, "createDeleteRepeatConfirmDialog",
-                        "show");
         FormController formController = getFormController();
 
         alertDialog = new AlertDialog.Builder(this).create();
@@ -2063,21 +1902,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 FormController formController = getFormController();
                 switch (i) {
                     case BUTTON_POSITIVE: // yes
-                        Collect.getInstance()
-                                .getActivityLogger()
-                                .logInstanceAction(this,
-                                        "createDeleteRepeatConfirmDialog", "OK");
                         formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.DELETE_REPEAT, 0, null, false, true);
                         formController.deleteRepeat();
                         showNextView();
                         break;
 
                     case BUTTON_NEGATIVE: // no
-                        Collect.getInstance()
-                                .getActivityLogger()
-                                .logInstanceAction(this,
-                                        "createDeleteRepeatConfirmDialog", "cancel");
-
                         refreshCurrentView();
                         break;
                 }
@@ -2156,9 +1986,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             items = ImmutableList.of(new IconMenuItem(R.drawable.ic_delete, R.string.do_not_save));
         }
 
-        Collect.getInstance().getActivityLogger()
-                .logInstanceAction(this, "createQuitDialog", "show");
-
         ListView listView = DialogUtils.createActionListView(this);
 
         final IconMenuListAdapter adapter = new IconMenuListAdapter(this, items);
@@ -2168,14 +1995,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 IconMenuItem item = (IconMenuItem) adapter.getItem(position);
                 if (item.getTextResId() == R.string.keep_changes) {
-                    Collect.getInstance().getActivityLogger()
-                            .logInstanceAction(this, "createQuitDialog", "saveAndExit");
-                    saveDataToDisk(EXIT, InstancesDaoHelper.isInstanceComplete(false),
-                            null);
+                    saveDataToDisk(EXIT, InstancesDaoHelper.isInstanceComplete(false), null);
                 } else {
-                    Collect.getInstance().getActivityLogger()
-                            .logInstanceAction(this, "createQuitDialog", "discardAndExit");
-
                     // close all open databases of external data.
                     ExternalDataManager manager = Collect.getInstance().getExternalDataManager();
                     if (manager != null) {
@@ -2200,11 +2021,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
-
-                                Collect.getInstance().getActivityLogger()
-                                        .logInstanceAction(this, "createQuitDialog", "cancel");
                                 dialog.cancel();
-
                             }
                         })
                 .setView(listView).create();
@@ -2247,12 +2064,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * Confirm clear answer dialog
      */
     private void createClearDialog(final QuestionWidget qw) {
-        Collect.getInstance()
-                .getActivityLogger()
-                .logInstanceAction(this, "createClearDialog", "show",
-                        qw.getFormEntryPrompt().getIndex());
         alertDialog = new AlertDialog.Builder(this).create();
-
         alertDialog.setTitle(getString(R.string.clear_answer_ask));
 
         String question = qw.getFormEntryPrompt().getLongText();
@@ -2272,18 +2084,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
                     case BUTTON_POSITIVE: // yes
-                        Collect.getInstance()
-                                .getActivityLogger()
-                                .logInstanceAction(this, "createClearDialog",
-                                        "clearAnswer", qw.getFormEntryPrompt().getIndex());
                         clearAnswer(qw);
                         saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                        break;
-                    case BUTTON_NEGATIVE: // no
-                        Collect.getInstance()
-                                .getActivityLogger()
-                                .logInstanceAction(this, "createClearDialog",
-                                        "cancel", qw.getFormEntryPrompt().getIndex());
                         break;
                 }
             }
@@ -2301,8 +2103,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * the form.
      */
     private void createLanguageDialog() {
-        Collect.getInstance().getActivityLogger()
-                .logInstanceAction(this, "createLanguageDialog", "show");
         FormController formController = getFormController();
         final String[] languages = formController.getLanguages();
         int selected = -1;
@@ -2334,13 +2134,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                                         languages[whichButton],
                                         updated);
 
-                                Collect.getInstance()
-                                        .getActivityLogger()
-                                        .logInstanceAction(
-                                                this,
-                                                "createLanguageDialog",
-                                                "changeLanguage."
-                                                        + languages[whichButton]);
                                 FormController formController = getFormController();
                                 formController.setLanguage(languages[whichButton]);
                                 dialog.dismiss();
@@ -2351,18 +2144,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                             }
                         })
                 .setTitle(getString(R.string.change_language))
-                .setNegativeButton(getString(R.string.do_not_change),
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog,
-                                                int whichButton) {
-                                Collect.getInstance()
-                                        .getActivityLogger()
-                                        .logInstanceAction(this,
-                                                "createLanguageDialog",
-                                                "cancel");
-                            }
-                        }).create();
+                .setNegativeButton(getString(R.string.do_not_change), null).create();
         alertDialog.show();
     }
 
@@ -2373,19 +2155,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     protected Dialog onCreateDialog(int id) {
         switch (id) {
             case PROGRESS_DIALOG:
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(this, "onCreateDialog.PROGRESS_DIALOG",
-                                "show");
                 progressDialog = new ProgressDialog(this);
                 DialogInterface.OnClickListener loadingButtonListener =
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Collect.getInstance()
-                                        .getActivityLogger()
-                                        .logInstanceAction(this,
-                                                "onCreateDialog.PROGRESS_DIALOG", "cancel");
                                 dialog.dismiss();
 
                                 if (formLoaderTask != null) {
@@ -2406,10 +2180,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         loadingButtonListener);
                 return progressDialog;
             case SAVING_DIALOG:
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(this, "onCreateDialog.SAVING_DIALOG",
-                                "show");
                 progressDialog = new ProgressDialog(this);
                 progressDialog.setTitle(getString(R.string.saving_form));
                 progressDialog.setMessage(getString(R.string.please_wait));
@@ -2417,10 +2187,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 progressDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
-                        Collect.getInstance()
-                                .getActivityLogger()
-                                .logInstanceAction(this,
-                                        "onCreateDialog.SAVING_DIALOG", "OnDismissListener");
                         cancelSaveToDiskTask();
                     }
                 });
@@ -2498,7 +2264,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
 
         FormController formController = getFormController();
-        Collect.getInstance().getActivityLogger().open();
         formInfo = Collect.getInstance().getFormInfo();    // smap
 
         if (formLoaderTask != null) {
@@ -2539,17 +2304,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {
             case KeyEvent.KEYCODE_BACK:
-                Collect.getInstance().getActivityLogger()
-                        .logInstanceAction(this, "onKeyDown.KEYCODE_BACK", "quit");
                 createQuitDialog();
                 return true;
             case KeyEvent.KEYCODE_DPAD_RIGHT:
                 if (event.isAltPressed() && !beenSwiped) {
                     beenSwiped = true;
-                    Collect.getInstance()
-                            .getActivityLogger()
-                            .logInstanceAction(this,
-                                    "onKeyDown.KEYCODE_DPAD_RIGHT", "showNext");
                     showNextView();
                     return true;
                 }
@@ -2557,10 +2316,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             case KeyEvent.KEYCODE_DPAD_LEFT:
                 if (event.isAltPressed() && !beenSwiped) {
                     beenSwiped = true;
-                    Collect.getInstance()
-                            .getActivityLogger()
-                            .logInstanceAction(this, "onKeyDown.KEYCODE_DPAD_LEFT",
-                                    "showPrevious");
                     showPreviousView();
                     return true;
                 }
@@ -2827,7 +2582,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     ToastUtils.showShortToast(R.string.data_saved_ok);
                 }
                 formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_SAVE, 0, null, false, false);
-                sendSavedBroadcast();
                 break;
             case SaveToDiskTask.SAVED_AND_EXIT:
                 if(showSaveMsg) {
@@ -2836,9 +2590,18 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_SAVE, 0, null, false, false);
                 if (saveResult.isComplete()) {
                     formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, false);
-                    formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_FINALIZE, 0, null, false, true);     // Force writing of audit since we are exiting
+                    // Force writing of audit since we are exiting
+                    formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_FINALIZE, 0, null, false, true);
+
+                    // Request auto-send if app-wide auto-send is enabled or the form that was just
+                    // finalized specifies that it should always be auto-sent.
+                    String formId = getFormController().getFormDef().getMainInstance().getRoot().getAttributeValue("", "id");
+                    if (AutoSendWorker.formShouldBeAutoSent(formId, GeneralSharedPreferences.isAutoSendEnabled())) {
+                        requestAutoSend();
+                    }
                 } else {
-                    formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);         // Force writing of audit since we are exiting
+                    // Force writing of audit since we are exiting
+                    formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);
                 }
                 sendSavedBroadcast();
                 finishReturnInstance(saveResult.isComplete());  // smap add isComplete
@@ -2896,6 +2659,25 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             beenSwiped = true;
             showNextView();
         }
+    }
+
+    /**
+     * Requests that unsent finalized forms be auto-sent. If no network connection is available,
+     * the work will be performed when a connection becomes available.
+     *
+     * TODO: if the user changes auto-send settings, should an auto-send job immediately be enqueued?
+     */
+    private void requestAutoSend() {
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+        OneTimeWorkRequest autoSendWork =
+                new OneTimeWorkRequest.Builder(AutoSendWorker.class)
+                        .addTag(AutoSendWorker.class.getName())
+                        .setConstraints(constraints)
+                        .build();
+        WorkManager.getInstance().beginUniqueWork(AutoSendWorker.class.getName(),
+                ExistingWorkPolicy.KEEP, autoSendWork).enqueue();
     }
 
     /**
@@ -2969,27 +2751,15 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 if (velocityX > 0) {
                     if (e1.getX() > e2.getX()) {
                         Timber.e("showNextView VelocityX is bogus! %f > %f", e1.getX(), e2.getX());
-                        Collect.getInstance().getActivityLogger()
-                                .logInstanceAction(this, "onFling", "showNext");
                         showNextView();
                     } else {
-                        Collect.getInstance()
-                                .getActivityLogger()
-                                .logInstanceAction(this, "onFling",
-                                        "showPrevious");
                         showPreviousView();
                     }
                 } else {
                     if (e1.getX() < e2.getX()) {
                         Timber.e("showPreviousView VelocityX is bogus! %f < %f", e1.getX(), e2.getX());
-                        Collect.getInstance()
-                                .getActivityLogger()
-                                .logInstanceAction(this, "onFling",
-                                        "showPrevious");
                         showPreviousView();
                     } else {
-                        Collect.getInstance().getActivityLogger()
-                                .logInstanceAction(this, "onFling", "showNext");
                         showNextView();
                     }
                 }
@@ -3028,22 +2798,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     @Override
     public void advance() {
         next();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Collect.getInstance().getActivityLogger().logOnStart(this);
-    }
-
-    @Override
-    protected void onStop() {
-        Collect.getInstance().getActivityLogger().logOnStop(this);
-        super.onStop();
-    }
-
-    private void sendSavedBroadcast() {
-        sendBroadcast(new Intent("org.odk.collect.android.FormSaved"));
     }
 
     @Override

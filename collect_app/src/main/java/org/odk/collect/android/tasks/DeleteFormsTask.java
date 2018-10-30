@@ -20,7 +20,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v4.content.LocalBroadcastManager;
 
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.DeleteFormsListener;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 
@@ -60,11 +59,6 @@ public class DeleteFormsTask extends AsyncTask<Long, Void, Integer> {
 
                 int wasDeleted = cr.delete(deleteForm, null, null);
                 deleted += wasDeleted;
-
-                if (wasDeleted > 0) {
-                    Collect.getInstance().getActivityLogger().logAction(this, "delete",
-                            deleteForm.toString());
-                }
             } catch (Exception ex) {
                 Timber.e("Exception during delete of: %s exception: %s", param.toString(), ex.toString());
             }

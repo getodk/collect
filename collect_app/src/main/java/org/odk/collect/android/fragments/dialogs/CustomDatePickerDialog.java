@@ -119,8 +119,9 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
+        date = getDateAsGregorian(getOriginalDate());
         outState.putSerializable(FORM_INDEX, formIndex);
-        outState.putSerializable(DATE, getDateAsGregorian(getOriginalDate()));
+        outState.putSerializable(DATE, date);
         outState.putSerializable(DATE_PICKER_DETAILS, datePickerDetails);
 
         super.onSaveInstanceState(outState);
@@ -187,26 +188,26 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
         gregorianDateText.setText(label);
     }
 
-    protected void setUpDayPicker(LocalDateTime date) {
+    protected void setUpDayPicker(int dayOfMonth, int daysInMonth) {
         dayPicker.setMinValue(1);
-        dayPicker.setMaxValue(date.dayOfMonth().getMaximumValue());
+        dayPicker.setMaxValue(daysInMonth);
         if (datePickerDetails.isSpinnerMode()) {
-            dayPicker.setValue(date.getDayOfMonth());
+            dayPicker.setValue(dayOfMonth);
         }
     }
 
-    protected void setUpMonthPicker(LocalDateTime date, String[] monthsArray) {
+    protected void setUpMonthPicker(int monthOfYear, String[] monthsArray) {
         monthPicker.setMaxValue(monthsArray.length - 1);
         monthPicker.setDisplayedValues(monthsArray);
         if (!datePickerDetails.isYearMode()) {
-            monthPicker.setValue(date.getMonthOfYear() - 1);
+            monthPicker.setValue(monthOfYear - 1);
         }
     }
 
-    protected void setUpYearPicker(LocalDateTime date, int minSupportedYear, int maxSupportedYear) {
+    protected void setUpYearPicker(int year, int minSupportedYear, int maxSupportedYear) {
         yearPicker.setMinValue(minSupportedYear);
         yearPicker.setMaxValue(maxSupportedYear);
-        yearPicker.setValue(date.getYear());
+        yearPicker.setValue(year);
     }
 
     public int getDay() {

@@ -63,6 +63,7 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
+import org.odk.collect.android.utilities.NotificationUtils;
 import org.odk.collect.android.utilities.PRNGFixes;
 
 import java.io.ByteArrayInputStream;
@@ -100,17 +101,17 @@ public class Collect extends Application implements HasActivityInjector {
     public static final String METADATA_PATH = ODK_ROOT + File.separator + "metadata";
     public static final String TMPFILE_PATH = CACHE_PATH + File.separator + "tmp.jpg";
     public static final String TMPDRAWFILE_PATH = CACHE_PATH + File.separator + "tmpDraw.jpg";
-    public static final String LOG_PATH = ODK_ROOT + File.separator + "log";
     public static final String DEFAULT_FONTSIZE = "21";
     public static final int DEFAULT_FONTSIZE_INT = 21;
     public static final String OFFLINE_LAYERS = ODK_ROOT + File.separator + "layers";
     public static final String SETTINGS = ODK_ROOT + File.separator + "settings";
 
+    public static final int CLICK_DEBOUNCE_MS = 1000;
+
     public static String defaultSysLanguage;
     private static Collect singleton;
     private static long lastClickTime;
-
-    private ActivityLogger activityLogger;
+    private static String lastClickName;
 
     @Nullable
     private FormController formController;
@@ -201,10 +202,6 @@ public class Collect extends Application implements HasActivityInjector {
         return false;
     }
 
-    public ActivityLogger getActivityLogger() {
-        return activityLogger;
-    }
-
     @Nullable
     public FormController getFormController() {
         return formController;
@@ -255,6 +252,8 @@ public class Collect extends Application implements HasActivityInjector {
                 .build();
 
         applicationComponent.inject(this);
+
+        NotificationUtils.createNotificationChannel(singleton);
 
         try {
             JobManager
@@ -464,7 +463,6 @@ public class Collect extends Application implements HasActivityInjector {
         }
 
         FormController.initializeJavaRosa(mgr);
-        activityLogger = new ActivityLogger(mgr.getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID));
     }
 
     // This method reloads shared preferences in order to load default values for new preferences
@@ -473,13 +471,16 @@ public class Collect extends Application implements HasActivityInjector {
         AdminSharedPreferences.getInstance().reloadPreferences();
     }
 
-    // Preventing multiple clicks, using threshold of 1000 ms
-    public static boolean allowClick() {
+    // Debounce multiple clicks within the same screen
+    public static boolean allowClick(String className) {
         long elapsedRealtime = SystemClock.elapsedRealtime();
-        boolean allowClick = (lastClickTime == 0 || lastClickTime == elapsedRealtime) // just for tests
-                || elapsedRealtime - lastClickTime > 1000;
+        boolean isSameClass = className.equals(lastClickName);
+        boolean isBeyondThreshold = elapsedRealtime - lastClickTime > CLICK_DEBOUNCE_MS;
+        boolean isBeyondTestThreshold = lastClickTime == 0 || lastClickTime == elapsedRealtime; // just for tests
+        boolean allowClick = !isSameClass || isBeyondThreshold || isBeyondTestThreshold;
         if (allowClick) {
             lastClickTime = elapsedRealtime;
+            lastClickName = className;
         }
         return allowClick;
     }

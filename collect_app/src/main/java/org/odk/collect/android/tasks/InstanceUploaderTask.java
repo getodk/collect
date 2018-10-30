@@ -18,34 +18,33 @@ package org.odk.collect.android.tasks;
 
 import android.database.Cursor;
 import android.database.SQLException;
+import android.net.Uri;
 import android.os.AsyncTask;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
-import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.upload.InstanceServerUploader;
 import org.odk.collect.android.utilities.ApplicationConstants;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_DELETE;
-
-public abstract class InstanceUploader extends AsyncTask<Long, Integer, CollectServerClient.Outcome> {
+public abstract class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploaderTask.Outcome> {
 
     private InstanceUploaderListener stateListener;
     private Boolean deleteInstanceAfterSubmission;
 
     @Override
-    public void onPostExecute(CollectServerClient.Outcome outcome) {       // smap make public
+    public void onPostExecute(Outcome outcome) {       // smap make public
         synchronized (this) {
             if (outcome != null && stateListener != null) {
                 if (outcome.authRequestingServer != null) {
@@ -53,6 +52,9 @@ public abstract class InstanceUploader extends AsyncTask<Long, Integer, CollectS
                 } else {
                     stateListener.uploadingComplete(outcome.messagesByInstanceId);
 
+                    // Delete instances that were successfully sent and that need to be deleted
+                    // either because app-level auto-delete is enabled or because the form
+                    // specifies it.
                     Set<String> keys = outcome.messagesByInstanceId.keySet();
                     Iterator<String> it = keys.iterator();
                     int count = keys.size();
@@ -84,11 +86,8 @@ public abstract class InstanceUploader extends AsyncTask<Long, Integer, CollectS
                         selection.append(") and status=?");
                         selectionArgs[i] = InstanceProviderAPI.STATUS_SUBMITTED;
 
-                        Cursor results = null;
-                        try {
-                            results =
-                                    new InstancesDao().getInstancesCursor(selection.toString(),
-                                            selectionArgs);
+                        try (Cursor results = new InstancesDao().getInstancesCursor(selection.toString(),
+                                selectionArgs)) {
                             if (results != null && results.getCount() > 0) {
                                 List<Long> toDelete = new ArrayList<>();
                                 results.moveToPosition(-1);
@@ -104,7 +103,7 @@ public abstract class InstanceUploader extends AsyncTask<Long, Integer, CollectS
                                 String formId;
                                 while (results.moveToNext()) {
                                     formId = results.getString(results.getColumnIndex(InstanceProviderAPI.InstanceColumns.JR_FORM_ID));
-                                    if (isFormAutoDeleteEnabled(formId, isFormAutoDeleteOptionEnabled)) {
+                                    if (InstanceServerUploader.formShouldBeAutoDeleted(formId, isFormAutoDeleteOptionEnabled)) {
                                         toDelete.add(results.getLong(results.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID)));
                                     }
                                 }
@@ -115,34 +114,11 @@ public abstract class InstanceUploader extends AsyncTask<Long, Integer, CollectS
                             }
                         } catch (SQLException e) {
                             Timber.e(e);
-                        } finally {
-                            if (results != null) {
-                                results.close();
-                            }
                         }
                     }
                 }
             }
         }
-    }
-
-    /**
-     * @param isFormAutoDeleteOptionEnabled represents whether the auto-delete option is enabled at the app level
-     *                                      <p>
-     *                                      If the form explicitly sets the auto-delete property, then it overrides the preferences.
-     */
-    public static boolean isFormAutoDeleteEnabled(String jrFormId, boolean isFormAutoDeleteOptionEnabled) {
-        Cursor cursor = new FormsDao().getFormsCursorForFormId(jrFormId);
-        String autoDelete = null;
-        if (cursor != null && cursor.moveToFirst()) {
-            try {
-                int autoDeleteColumnIndex = cursor.getColumnIndex(AUTO_DELETE);
-                autoDelete = cursor.getString(autoDeleteColumnIndex);
-            } finally {
-                cursor.close();
-            }
-        }
-        return autoDelete == null ? isFormAutoDeleteOptionEnabled : Boolean.valueOf(autoDelete);
     }
 
     @Override
@@ -162,5 +138,43 @@ public abstract class InstanceUploader extends AsyncTask<Long, Integer, CollectS
 
     public void setDeleteInstanceAfterSubmission(Boolean deleteInstanceAfterSubmission) {
         this.deleteInstanceAfterSubmission = deleteInstanceAfterSubmission;
+    }
+
+    /**
+     * Represents the results of a submission attempt triggered by explicit user action (as opposed
+     * to auto-send). A submission attempt can include finalized forms going to several different
+     * servers because the app-level server configuration can be overridden by the blank form.
+     *
+     * The user-facing message that describes the result of a submission attempt for each specific
+     * finalized form is written messages to {@link #messagesByInstanceId}. In the case of an
+     * authentication request from the server, {@link #authRequestingServer} is set instead.
+     */
+    static class Outcome {
+        /**
+         * The URI for the server that requested authentication when the latest finalized form was
+         * attempted to be sent. This URI may not match the server specified in the app settings or
+         * the blank form because there could have been a redirect. It is included in the Outcome so
+         * that it can be shown to the user so s/he will know where the auth request came from.
+         *
+         * When this field is set, the overall submission attempt is halted so that the user can be
+         * asked for credentials. Once credentials are provided, the submission attempt resumes.
+         */
+        Uri authRequestingServer;
+
+
+        /**
+         * Map of database IDs for finalized forms to the user-facing status message for the latest
+         * submission attempt. Currently this can be either a localized message in the case of a
+         * common status or an English message in the case of a rare status that is needed for
+         * developer troubleshooting.
+         *
+         * The keys in the map are also used to identify filled forms that were part of the ongoing
+         * submission attempt and don't need to be retried in the case of an authentication request.
+         * See {@link #authRequestingServer}.
+         *
+         * TODO: Consider mapping to something machine-readable like a message ID or status ID
+         * instead of a mix of localized and non-localized user-facing strings.
+         */
+        HashMap<String, String> messagesByInstanceId = new HashMap<>();
     }
 }

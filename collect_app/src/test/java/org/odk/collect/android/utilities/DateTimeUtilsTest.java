@@ -21,17 +21,14 @@ import org.joda.time.LocalDateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.logic.DatePickerDetails;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.annotation.Config;
 
 import java.util.TimeZone;
 
 import static org.junit.Assert.assertEquals;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class)
 public class DateTimeUtilsTest {
 
     private DatePickerDetails gregorian;
@@ -47,6 +44,9 @@ public class DateTimeUtilsTest {
     private DatePickerDetails islamic;
     private DatePickerDetails islamicMonthYear;
     private DatePickerDetails islamicYear;
+    private DatePickerDetails bikramSambat;
+    private DatePickerDetails bikramSambatMonthYear;
+    private DatePickerDetails bikramSambatYear;
 
     @Before
     public void setUp() {
@@ -63,6 +63,9 @@ public class DateTimeUtilsTest {
         islamic = new DatePickerDetails(DatePickerDetails.DatePickerType.ISLAMIC, DatePickerDetails.DatePickerMode.SPINNERS);
         islamicMonthYear = new DatePickerDetails(DatePickerDetails.DatePickerType.ISLAMIC, DatePickerDetails.DatePickerMode.MONTH_YEAR);
         islamicYear = new DatePickerDetails(DatePickerDetails.DatePickerType.ISLAMIC, DatePickerDetails.DatePickerMode.YEAR);
+        bikramSambat = new DatePickerDetails(DatePickerDetails.DatePickerType.BIKRAM_SAMBAT, DatePickerDetails.DatePickerMode.SPINNERS);
+        bikramSambatMonthYear = new DatePickerDetails(DatePickerDetails.DatePickerType.BIKRAM_SAMBAT, DatePickerDetails.DatePickerMode.MONTH_YEAR);
+        bikramSambatYear = new DatePickerDetails(DatePickerDetails.DatePickerType.BIKRAM_SAMBAT, DatePickerDetails.DatePickerMode.YEAR);
     }
 
     @Test
@@ -128,5 +131,16 @@ public class DateTimeUtilsTest {
         assertEquals(islamicYear, DateTimeUtils.getDatePickerDetails(appearance));
         appearance = "year islamic";
         assertEquals(islamicYear, DateTimeUtils.getDatePickerDetails(appearance));
+
+        appearance = "bikram-sambat";
+        assertEquals(bikramSambat, DateTimeUtils.getDatePickerDetails(appearance));
+        appearance = "Bikram-sambat month-year";
+        assertEquals(bikramSambatMonthYear, DateTimeUtils.getDatePickerDetails(appearance));
+        appearance = "month-year bikram-sambat";
+        assertEquals(bikramSambatMonthYear, DateTimeUtils.getDatePickerDetails(appearance));
+        appearance = "Bikram-sambat year";
+        assertEquals(bikramSambatYear, DateTimeUtils.getDatePickerDetails(appearance));
+        appearance = "year bikram-sambat";
+        assertEquals(bikramSambatYear, DateTimeUtils.getDatePickerDetails(appearance));
     }
 }

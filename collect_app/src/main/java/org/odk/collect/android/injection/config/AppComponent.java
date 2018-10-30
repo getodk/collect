@@ -18,6 +18,7 @@ import org.odk.collect.android.tasks.DownloadTasksTask;
 import org.odk.collect.android.tasks.InstanceServerUploader;
 import org.odk.collect.android.tasks.SmapRemoteWebServicePostTask;
 import org.odk.collect.android.tasks.SmapRemoteWebServiceTask;
+import org.odk.collect.android.tasks.InstanceServerUploaderTask;
 import org.odk.collect.android.tasks.sms.SmsSentBroadcastReceiver;
 import org.odk.collect.android.tasks.sms.SmsNotificationReceiver;
 import org.odk.collect.android.tasks.sms.SmsSender;
@@ -74,15 +75,13 @@ public interface AppComponent {
 
     void inject(FormEntryActivity formEntryActivity);
 
-    void inject(InstanceServerUploader uploader);
+    void inject(InstanceServerUploaderTask uploader);
 
     void inject(CollectServerClient collectClient);
 
     void inject(ServerPreferencesFragment serverPreferencesFragment);
 
     void inject(FormDownloader formDownloader);
-
-    void inject(NetworkReceiver networkReceiver);
 
     void inject(DownloadFormListUtils downloadFormListUtils);
 

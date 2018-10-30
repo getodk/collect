@@ -536,61 +536,54 @@ public class FileUtils {
     }
 
     /**
-     * With the FileProvider you have to manually grant and revoke read/write permissions to files you
-     * are sharing. With this approach the access only lasts as long as the target activity on Api versions
-     * above Kit Kat. Once you are below that you have to manually revoke the permissions.
+     * Grants read and write permissions to a content URI added to the specified intent.
      *
-     * @param intent that needs to have the permission flags
-     * @param uri    that the permissions are being applied to
-     * @return intent that has read and write permissions
+     * For Android > 4.4, the permissions expire when the receiving app's stack is finished. For
+     * Android <= 4.4, the permissions are granted to all applications that can respond to the
+     * intent.
+     *
+     * For true security, the permissions for Android <= 4.4 should be revoked manually but we don't
+     * revoke them because we don't have many users on lower API levels and prior to targeting API
+     * 24+, all apps always had access to the files anyway.
      */
     public static void grantFilePermissions(Intent intent, Uri uri, Context context) {
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 
-        /*
-         Workaround for Android bug.
-         grantUriPermission also needed for KITKAT,
-         see https://code.google.com/p/android/issues/detail?id=76683
-         */
+        // The preferred flag-based strategy does not work with all intent types for Android <= 4.4
+        // bug report: https://issuetracker.google.com/issues/37005552
+        // workaround: https://stackoverflow.com/a/18332000/137744
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
-            List<ResolveInfo> resInfoList = context.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+            List<ResolveInfo> resInfoList = context.getPackageManager()
+                    .queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+
             for (ResolveInfo resolveInfo : resInfoList) {
                 String packageName = resolveInfo.activityInfo.packageName;
-                context.grantUriPermission(packageName, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                context.grantUriPermission(packageName, uri,
+                        Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             }
         }
     }
 
     /**
-     * With the FileProvider you have to manually grant and revoke read/write permissions to files you
-     * are sharing. With this approach the access only lasts as long as the target activity on Api versions
-     * above Kit Kat. Once you are below that you have to manually revoke the permissions.
+     * Grants read permissions to a content URI added to the specified Intent.
      *
-     * @param intent that needs to have the permission flags
-     * @param uri    that the permissions are being applied to
-     * @return intent that has read and write permissions
+     * See {@link #grantFileReadPermissions(Intent, Uri, Context)} for details.
      */
     public static void grantFileReadPermissions(Intent intent, Uri uri, Context context) {
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
-        /*
-         Workaround for Android bug.
-         grantUriPermission also needed for KITKAT,
-         see https://code.google.com/p/android/issues/detail?id=76683
-         */
+        // The preferred flag-based strategy does not work with all intent types for Android <= 4.4
+        // bug report: https://issuetracker.google.com/issues/37005552
+        // workaround: https://stackoverflow.com/a/18332000/137744
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
-            List<ResolveInfo> resInfoList = context.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+            List<ResolveInfo> resInfoList = context.getPackageManager()
+                    .queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+
             for (ResolveInfo resolveInfo : resInfoList) {
                 String packageName = resolveInfo.activityInfo.packageName;
                 context.grantUriPermission(packageName, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
             }
-        }
-    }
-
-    public static void revokeFileReadWritePermission(Context context, Uri uri) {
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
-            context.revokeUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
         }
     }
 }

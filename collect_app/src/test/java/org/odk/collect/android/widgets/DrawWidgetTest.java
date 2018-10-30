@@ -8,11 +8,9 @@ import org.javarosa.core.model.data.StringData;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
-import org.robolectric.annotation.Config;
 
 import java.io.File;
 
@@ -21,7 +19,6 @@ import static org.mockito.Mockito.when;
 /**
  * @author James Knight
  */
-@Config(constants = BuildConfig.class)
 @RunWith(RobolectricTestRunner.class)
 public class DrawWidgetTest extends FileWidgetTest<DrawWidget> {
 

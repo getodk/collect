@@ -23,11 +23,11 @@ import org.odk.collect.android.logic.FormInfo;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI;
-import org.odk.collect.android.tasks.InstanceUploader;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.tasks.sms.models.Message;
 import org.odk.collect.android.tasks.sms.models.SmsProgress;
 import org.odk.collect.android.tasks.sms.models.SmsSubmission;
+import org.odk.collect.android.upload.InstanceServerUploader;
 import org.odk.collect.android.utilities.ArrayUtils;
 
 import java.io.File;
@@ -339,7 +339,7 @@ public class SmsService {
             String formId;
             while (cursor.moveToNext()) {
                 formId = cursor.getString(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.JR_FORM_ID));
-                if (InstanceUploader.isFormAutoDeleteEnabled(formId, isFormAutoDeleteOptionEnabled)) {
+                if (InstanceServerUploader.formShouldBeAutoDeleted(formId, isFormAutoDeleteOptionEnabled)) {
 
                     List<String> instancesToDelete = new ArrayList<>();
                     instancesToDelete.add(instanceId);
@@ -382,6 +382,8 @@ public class SmsService {
                 case RESULT_OK_OTHERS_PENDING:
                     return context.getResources().getQuantityString(R.plurals.sms_sending, (int) progress.getTotalCount(), progress.getCompletedCount(), progress.getTotalCount());
                 case RESULT_QUEUED:
+                case RESULT_SENDING:
+                case RESULT_MESSAGE_READY:
                     return context.getString(R.string.sms_submission_queued);
                 case RESULT_OK:
                     return new SimpleDateFormat(context.getString(R.string.sms_sent_on_date_at_time),

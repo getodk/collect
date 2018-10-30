@@ -24,7 +24,6 @@ import android.hardware.SensorManager;
 import android.text.InputType;
 import android.text.method.DigitsKeyListener;
 import android.util.TypedValue;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -35,7 +34,6 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.BearingActivity;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
@@ -66,10 +64,6 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
         answer.setBackground(null);
 
         getBearingButton = getSimpleButton(getContext().getString(R.string.get_bearing));
-        getBearingButton.setEnabled(!prompt.isReadOnly());
-        if (prompt.isReadOnly()) {
-            getBearingButton.setVisibility(View.GONE);
-        }
 
         answerLayout.addView(getBearingButton);
         answerLayout.addView(answer);
@@ -157,11 +151,6 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
 
     @Override
     public void onButtonClick(int buttonId) {
-        Collect.getInstance()
-                .getActivityLogger()
-                .logInstanceAction(this, "recordBearing", "click",
-                        getFormEntryPrompt().getIndex());
-
         if (isSensorAvailable) {
             Intent i = new Intent(getContext(), BearingActivity.class);
             waitForData();

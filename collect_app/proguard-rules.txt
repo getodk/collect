@@ -3,6 +3,8 @@
 -dontwarn org.joda.time.**
 -dontwarn org.osmdroid.**
 -dontwarn org.xmlpull.v1.**
+-dontwarn org.hamcrest.**
+-dontwarn com.rarepebble.**
 
 -keep class org.javarosa.**
 -keep class android.support.v7.widget.** { *; }

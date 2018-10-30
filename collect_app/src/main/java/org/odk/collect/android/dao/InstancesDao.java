@@ -292,10 +292,14 @@ public class InstancesDao {
         }
     }
 
+    /**
+     * Returns all instances available through the cursor and closes the cursor.
+     */
     public List<Instance> getInstancesFromCursor(Cursor cursor) {
         List<Instance> instances = new ArrayList<>();
         if (cursor != null) {
             try {
+                cursor.moveToPosition(-1);
                 while (cursor.moveToNext()) {
                     int displayNameColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME);
                     int submissionUriColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.SUBMISSION_URI);
@@ -307,6 +311,13 @@ public class InstancesDao {
                     int lastStatusChangeDateColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.LAST_STATUS_CHANGE_DATE);
                     int displaySubtextColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.DISPLAY_SUBTEXT);
                     int deletedDateColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.DELETED_DATE);
+                    int repeatColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.T_REPEAT);                        // smap
+                    int updateidColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.T_UPDATED);                     // smap
+                    int locationTriggerColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.T_LOCATION_TRIGGER);     // smap
+                    int surveyNotesColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.T_SURVEY_NOTES);             // smap
+                    int assignmentIdColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.T_ASS_ID);                  // smap
+
+                    int databaseIdIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID);
 
                     Instance instance = new Instance.Builder()
                             .displayName(cursor.getString(displayNameColumnIndex))
@@ -319,6 +330,12 @@ public class InstancesDao {
                             .lastStatusChangeDate(cursor.getLong(lastStatusChangeDateColumnIndex))
                             .displaySubtext(cursor.getString(displaySubtextColumnIndex))
                             .deletedDate(cursor.getLong(deletedDateColumnIndex))
+                            .databaseId(cursor.getLong(databaseIdIndex))
+                            .repeat(cursor.getInt(repeatColumnIndex) > 0)                       // smap
+                            .updateid(cursor.getString(updateidColumnIndex))                    // smap
+                            .location_trigger(cursor.getString(locationTriggerColumnIndex))     // smap
+                            .survey_notes(cursor.getString(surveyNotesColumnIndex))             // smap
+                            .assignment_id(cursor.getString(assignmentIdColumnIndex))           // smap
                             .build();
 
                     instances.add(instance);
@@ -330,6 +347,12 @@ public class InstancesDao {
         return instances;
     }
 
+    /**
+     * Returns the values of an instance as a ContentValues object for use with
+     * {@link #saveInstance(ContentValues)} or {@link #updateInstance(ContentValues, String, String[])}
+     *
+     * Does NOT include the database ID.
+     */
     public ContentValues getValuesFromInstanceObject(Instance instance) {
         ContentValues values = new ContentValues();
         values.put(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME, instance.getDisplayName());

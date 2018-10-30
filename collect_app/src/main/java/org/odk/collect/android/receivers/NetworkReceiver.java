@@ -81,12 +81,11 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
                     && currentNetworkInfo.getState() == NetworkInfo.State.CONNECTED) {
                 //uploadForms(context);    // smap
                 if (isFormAutoSendOptionEnabled(currentNetworkInfo)) {    // smap
-
                     refreshTasks(context);   // smap
                 }
             }
 
-            ServerPollingJob.pollServerIfNeeded();
+            //ServerPollingJob.pollServerIfNeeded();
         } else if (action.equals("org.odk.collect.android.FormSaved")) {
             ConnectivityManager connectivityManager = (ConnectivityManager) context
                     .getSystemService(Context.CONNECTIVITY_SERVICE);

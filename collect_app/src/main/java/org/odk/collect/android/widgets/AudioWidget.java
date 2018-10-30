@@ -33,7 +33,6 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaManager;
@@ -83,12 +82,10 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
         this.audioController = audioController;
 
         captureButton = getSimpleButton(getContext().getString(R.string.capture_audio), R.id.capture_audio);
-        captureButton.setEnabled(!prompt.isReadOnly());
 
         chooseButton = getSimpleButton(getContext().getString(R.string.choose_sound), R.id.choose_sound);
-        chooseButton.setEnabled(!prompt.isReadOnly());
 
-        audioController.init(context, getPlayer(), getFormEntryPrompt());
+        audioController.init(context, getPlayer());
 
         // finish complex layout
         LinearLayout answerLayout = new LinearLayout(getContext());
@@ -250,10 +247,6 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
     }
 
     private void captureAudio() {
-        Collect.getInstance()
-                .getActivityLogger()
-                .logInstanceAction(this, "captureButton", "click",
-                        getFormEntryPrompt().getIndex());
         Intent i = new Intent(
                 android.provider.MediaStore.Audio.Media.RECORD_SOUND_ACTION);
         i.putExtra(
@@ -275,10 +268,6 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
     }
 
     private void chooseSound() {
-        Collect.getInstance()
-                .getActivityLogger()
-                .logInstanceAction(this, "chooseButton", "click",
-                        getFormEntryPrompt().getIndex());
         Intent i = new Intent(Intent.ACTION_GET_CONTENT);
         i.setType("audio/*");
         try {

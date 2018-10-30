@@ -93,6 +93,7 @@ public abstract class SelectTextWidget extends SelectWidget {
         });
     }
 
+    @SuppressWarnings("PMD.EmptyMethodInAbstractClassShouldBeAbstract")
     protected void doSearch(String searchStr) {
     }
 }

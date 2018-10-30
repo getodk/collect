@@ -138,7 +138,7 @@ public class MapHelper {
 
                     break;
             }
-        } else {
+        } else if (osmMap != null) {
             //OSMMAP
             String basemap = getOsmBasemap();
 
@@ -152,11 +152,11 @@ public class MapHelper {
                 case OPENMAP_USGS_SAT:
                     tileSource = tileFactory.getUsgsSat();
                     break;
-                    
+
                 case OPENMAP_USGS_IMG:
                     tileSource = tileFactory.getUsgsImg();
                     break;
-                    
+
                 case OPENMAP_STAMEN_TERRAIN:
                     tileSource = tileFactory.getStamenTerrain();
                     break;

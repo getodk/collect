@@ -38,7 +38,6 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -59,7 +58,6 @@ public class BarcodeWidget extends QuestionWidget implements BinaryWidget {
         super(context, prompt);
 
         getBarcodeButton = getSimpleButton(getContext().getString(R.string.get_barcode));
-        getBarcodeButton.setEnabled(!prompt.isReadOnly());
 
         stringAnswer = getCenteredAnswerTextView();
 
@@ -123,11 +121,6 @@ public class BarcodeWidget extends QuestionWidget implements BinaryWidget {
         requestCameraPermission((FormEntryActivity) getContext(), new PermissionListener() {
             @Override
             public void granted() {
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(this, "recordBarcode", "click",
-                                getFormEntryPrompt().getIndex());
-
                 waitForData();
 
                 IntentIntegrator intent = new IntentIntegrator((Activity) getContext())

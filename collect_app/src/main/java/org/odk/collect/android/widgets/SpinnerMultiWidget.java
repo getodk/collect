@@ -96,10 +96,6 @@ public class SpinnerMultiWidget extends QuestionWidget implements ButtonWidget, 
         selectionText = getAnswerTextView();
         selectionText.setVisibility(View.GONE);
 
-        if (prompt.isReadOnly()) {
-            button.setEnabled(false);
-        }
-
         // Fill in previous answers
         List<Selection> ve = new ArrayList<>();
         if (prompt.getAnswerValue() != null) {

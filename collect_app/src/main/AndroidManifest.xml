@@ -220,16 +220,10 @@ the specific language governing permissions and limitations under the License.
             android:name=".activities.GeoPointOsmMapActivity"
             android:configChanges="orientation" />
         <activity
-            android:name=".activities.GeoShapeOsmMapActivity"
+            android:name=".activities.GeoShapeActivity"
             android:configChanges="orientation" />
         <activity
-            android:name=".activities.GeoShapeGoogleMapActivity"
-            android:configChanges="orientation" />
-        <activity
-            android:name=".activities.GeoTraceOsmMapActivity"
-            android:configChanges="orientation" />
-        <activity
-            android:name=".activities.GeoTraceGoogleMapActivity"
+            android:name=".activities.GeoTraceActivity"
             android:configChanges="orientation" />
         <activity android:name=".activities.BearingActivity" />
         <activity
@@ -274,7 +268,8 @@ the specific language governing permissions and limitations under the License.
             </intent-filter>
         </receiver>
         <!-- Smap disable analytics -->
-        <!-- Register AnalyticsReceiver and AnalyticsService to support background
+        <!--
+        Register AnalyticsReceiver and AnalyticsService to support background
         dispatching on non-Google Play devices.
         <receiver
             android:name="com.google.android.gms.analytics.AnalyticsReceiver"
@@ -372,5 +367,4 @@ the specific language governing permissions and limitations under the License.
         </receiver>
         -->
     </application>
-
 </manifest>

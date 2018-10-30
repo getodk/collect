@@ -505,7 +505,7 @@ public class FormController {
     public int stepToNextEvent(boolean stepIntoGroup) {
         if ((getEvent() == FormEntryController.EVENT_GROUP
                 || getEvent() == FormEntryController.EVENT_REPEAT)
-                && indexIsInFieldList() && !stepIntoGroup) {
+                && indexIsInFieldList() && getQuestionPrompts().length > 0 && !stepIntoGroup) {
             return stepOverGroup();
         } else {
             return formEntryController.stepToNextEvent();
@@ -609,8 +609,7 @@ public class FormController {
                             break group_skip;
                         case FormEntryController.EVENT_GROUP:
                         case FormEntryController.EVENT_REPEAT:
-                            if (indexIsInFieldList()
-                                    && getQuestionPrompts().length != 0) {
+                            if (indexIsInFieldList() && getQuestionPrompts().length != 0) {
                                 break group_skip;
                             }
                             // otherwise it's not a field-list group, so just skip it
@@ -804,7 +803,7 @@ public class FormController {
     public FormEntryPrompt[] getQuestionPrompts() throws RuntimeException {
         // For questions, there is only one.
         // For groups, there could be many, but we set that below
-        FormEntryPrompt[] questions = new FormEntryPrompt[1];
+        FormEntryPrompt[] questions = new FormEntryPrompt[0];
 
         IFormElement element = formEntryController.getModel().getForm().getChild(getFormIndex());
         if (element instanceof GroupDef) {
@@ -830,6 +829,7 @@ public class FormController {
             }
         } else {
             // We have a question, so just get the one prompt
+            questions = new FormEntryPrompt[1];
             questions[0] = getQuestionPrompt();
         }
 

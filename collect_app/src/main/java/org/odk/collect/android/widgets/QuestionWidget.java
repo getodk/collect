@@ -24,7 +24,6 @@ import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
@@ -44,7 +43,6 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
@@ -240,6 +238,7 @@ public abstract class QuestionWidget
         return directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT || directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC;
     }
 
+    @SuppressWarnings("PMD.EmptyMethodInAbstractClassShouldBeAbstract")
     protected void injectDependencies(DependencyProvider dependencyProvider) {
         //dependencies for the widget will be wired here.
     }
@@ -513,27 +512,28 @@ public abstract class QuestionWidget
     }
 
     protected Button getSimpleButton(String text, @IdRes final int withId) {
-        final QuestionWidget questionWidget = this;
         final Button button = new Button(getContext());
 
-        button.setId(withId);
-        button.setText(text);
-        button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
-        button.setPadding(20, 20, 20, 20);
+        if (getFormEntryPrompt().isReadOnly()) {
+            button.setVisibility(GONE);
+        } else {
+            button.setId(withId);
+            button.setText(text);
+            button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
+            button.setPadding(20, 20, 20, 20);
 
-        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
-        params.setMargins(7, 5, 7, 5);
+            TableLayout.LayoutParams params = new TableLayout.LayoutParams();
+            params.setMargins(7, 5, 7, 5);
 
-        button.setLayoutParams(params);
+            button.setLayoutParams(params);
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (Collect.allowClick()) {
-                    ((ButtonWidget) questionWidget).onButtonClick(withId);
+            button.setOnClickListener(v -> {
+                if (Collect.allowClick(getClass().getName())) {
+                    ((ButtonWidget) this).onButtonClick(withId);
                 }
-            }
-        });
+            });
+        }
+
         return button;
     }
 
@@ -583,7 +583,8 @@ public abstract class QuestionWidget
         boolean nochoose = false;
         String appearance = prompt.getQuestion().getAppearanceAttr();
 
-        if (appearance != null && (appearance.contains("nochoose") || appearance.contains("new"))) {
+        if (appearance != null && (appearance.toLowerCase().contains("nochoose")
+                || appearance.toLowerCase().contains("new"))) {
             nochoose = true;
         }
         return nochoose;
@@ -650,16 +651,6 @@ public abstract class QuestionWidget
         }
 
         return formController.getInstanceFile().getParent();
-    }
-
-    @NonNull
-    public final ActivityLogger getActivityLogger() {
-        Collect collect = Collect.getInstance();
-        if (collect == null) {
-            throw new IllegalStateException("Collect application instance is null.");
-        }
-
-        return collect.getActivityLogger();
     }
 
     public int getQuestionFontSize() {

@@ -48,7 +48,8 @@ public class IslamicDatePickerDialog extends CustomDatePickerDialog {
 
     @Override
     protected void updateDays() {
-        setUpDayPicker(getCurrentIslamicDate());
+        LocalDateTime localDateTime = getCurrentIslamicDate();
+        setUpDayPicker(localDateTime.getDayOfMonth(), localDateTime.dayOfMonth().getMaximumValue());
     }
 
     @Override
@@ -62,9 +63,9 @@ public class IslamicDatePickerDialog extends CustomDatePickerDialog {
                 .toDateTime()
                 .withChronology(IslamicChronology.getInstance())
                 .toLocalDateTime();
-        setUpDayPicker(islamicDate);
-        setUpMonthPicker(islamicDate, monthsArray);
-        setUpYearPicker(islamicDate, MIN_SUPPORTED_YEAR, MAX_SUPPORTED_YEAR);
+        setUpDayPicker(islamicDate.getDayOfMonth(), islamicDate.dayOfMonth().getMaximumValue());
+        setUpMonthPicker(islamicDate.getMonthOfYear(), monthsArray);
+        setUpYearPicker(islamicDate.getYear(), MIN_SUPPORTED_YEAR, MAX_SUPPORTED_YEAR);
     }
 
     private void setUpValues() {

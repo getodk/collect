@@ -262,7 +262,6 @@
   <string name="drive_get_file">Mendapatkan %1$s dan berkas media.</string>
   <string name="no_google_account">Tidak ada Akun Google yang dipilih!</string>
   <string name="google_set_account">Google Sheet telah dipilih sebagai server kamu, silahkan tentukan akun Google pada Pengaturan Umum sebelum melanjutkan</string>
-  <string name="odk_auth_auth_fail">ODK pengiriman otomatis gagal berotentikasi, pastikan pengaturannya benar</string>
   <string name="notification_error">Gagal menampilkan teks notifikasi</string>
   <string name="delete_after_send">Hapus setelah mengirim</string>
   <string name="delete_after_send_summary">Menghapus media dan formulir yang sempurna setelah mengirim ke server  </string>
@@ -307,7 +306,6 @@
   <string name="select_geotrace_mode">Pilih mode GeoTrace</string>
   <string name="start">Mulai</string>
   <string name="enable_gps">Hidupkan GPS</string>
-  <string name="enable_gps_message">GPS perangkatmu tidak aktif, apakah ingin menghidupkan?</string>
   <string name="geotrace_title">Lacak GeoTrace </string>
   <string name="polygon_save">Simpan sebagai Poligon</string>
   <string name="polyline_save">Simpan sebagai Poligaris</string>
@@ -319,7 +317,6 @@
   <string name="geo_exit_warning">Abaikan perubahan dan kembali ke ODK?</string>
   <string name="polygon_validator">Minimal harus memiliki 3 poin untuk membuat Polygon</string>
   <string name="clear">Hapus</string>
-  <string name="polyline_polygon_text">Simpan GeoTrace sebagai</string>
   <string name="manual_mode">Mode manual</string>
   <string name="automatic_mode">Mode otomatis</string>
   <string name="geoshape_instruction">Tekan agak lama untuk menandai.</string>
@@ -521,6 +518,4 @@
   <string name="no">Tidak</string>
   <string name="svg_file_does_not_exist">Berkas SVG tidak ada!</string>
   <!--Sms submission-->
-  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
-  <string name="current_predicate_continue">Lanjut</string>
 </resources>

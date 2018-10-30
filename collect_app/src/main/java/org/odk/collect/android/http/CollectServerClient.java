@@ -1,6 +1,5 @@
 package org.odk.collect.android.http;
 
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -9,6 +8,7 @@ import org.kxml2.kdom.Document;
 import org.odk.collect.android.utilities.DocumentFetchResult;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.xmlpull.v1.XmlPullParser;
+
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -16,7 +16,6 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.HashMap;
 
 import javax.inject.Inject;
 
@@ -105,11 +104,6 @@ public class CollectServerClient {
 
     public static String getPlainTextMimeType() {
         return "text/plain";
-    }
-
-    public static class Outcome {
-        public Uri authRequestingServer;
-        public HashMap<String, String> messagesByInstanceId = new HashMap<>();
     }
 
 }

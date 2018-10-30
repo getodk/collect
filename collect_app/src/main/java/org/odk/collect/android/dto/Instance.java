@@ -23,7 +23,6 @@ package org.odk.collect.android.dto;
  * Objects of this class are created using builder pattern: https://en.wikipedia.org/wiki/Builder_pattern
  */
 public class Instance {
-
     private final String displayName;
     private final String submissionUri;
     private final String canEditWhenComplete;
@@ -34,6 +33,13 @@ public class Instance {
     private final Long lastStatusChangeDate;
     private final String displaySubtext;
     private final Long deletedDate;
+    private final boolean repeat;           // smap
+    private final String updateid;          // smap
+    private final String location_trigger;  // smap
+    private final String survey_notes;      // smap
+    private final String assignment_id;     // smap
+
+    private final Long databaseId;
 
     private Instance(Builder builder) {
         displayName = builder.displayName;
@@ -46,6 +52,13 @@ public class Instance {
         lastStatusChangeDate = builder.lastStatusChangeDate;
         displaySubtext = builder.displaySubtext;
         deletedDate = builder.deletedDate;
+        repeat = builder.repeat;                        // smap
+        updateid = builder.updateid;                    // smap
+        location_trigger = builder.location_trigger;    // smap
+        survey_notes = builder.survey_notes;            // smap
+        assignment_id = builder.assignment_id;          // smap
+
+        databaseId = builder.databaseId;
     }
 
     public static class Builder {
@@ -59,6 +72,13 @@ public class Instance {
         private Long lastStatusChangeDate;
         private String displaySubtext;
         private Long deletedDate;
+        private boolean repeat;             // smap
+        private String updateid;            // smap
+        private String location_trigger;    // smap
+        private String survey_notes;        // smap
+        private String assignment_id;       // smap
+
+        private Long databaseId;
 
         public Builder displayName(String displayName) {
             this.displayName = displayName;
@@ -110,6 +130,39 @@ public class Instance {
             return this;
         }
 
+        // smap
+        public Builder repeat(boolean repeat) {
+            this.repeat = repeat;
+            return this;
+        }
+
+        // smap
+        public Builder updateid(String updateid) {
+            this.updateid = updateid;
+            return this;
+        }
+
+        // smap
+        public Builder location_trigger(String location_trigger) {
+            this.location_trigger = location_trigger;
+            return this;
+        }
+        // smap
+        public Builder survey_notes(String survey_notes) {
+            this.survey_notes = survey_notes;
+            return this;
+        }
+        // smap
+        public Builder assignment_id(String assignment_id) {
+            this.assignment_id = assignment_id;
+            return this;
+        }
+
+        public Builder databaseId(Long databaseId) {
+            this.databaseId = databaseId;
+            return this;
+        }
+
         public Instance build() {
             return new Instance(this);
         }
@@ -153,5 +206,34 @@ public class Instance {
 
     public Long getDeletedDate() {
         return deletedDate;
+    }
+
+    // smap
+    public boolean getRepeat() {
+        return repeat;
+    }
+
+    // smap
+    public String getUpdateid() {
+        return updateid;
+    }
+
+    // smap
+    public String getLocationTrigger() {
+        return location_trigger;
+    }
+
+    // smap
+    public String getSurveyNotes() {
+        return survey_notes;
+    }
+
+    // smap
+    public String getAssignmentId() {
+        return assignment_id;
+    }
+
+    public Long getDatabaseId() {
+        return databaseId;
     }
 }

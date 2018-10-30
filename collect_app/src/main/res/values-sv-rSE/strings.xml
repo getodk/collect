@@ -262,7 +262,6 @@
   <string name="drive_get_file">Hämtar %1$s och mediafiler.</string>
   <string name="no_google_account">Inget Google-konto valt!</string>
   <string name="google_set_account">Du har valt Google Sheets som din server, vänligen välj motsvarande Google-konto under allmänna inställningar innan du fortsätter</string>
-  <string name="odk_auth_auth_fail">ODK autentiseringsfel vid automatisk sändning. Kontrollera att inställningarna är korrekta.</string>
   <string name="notification_error">Fel vid visning av notifikationstext</string>
   <string name="delete_after_send">Radera efter sändning</string>
   <string name="delete_after_send_summary">Raderar avslutade formulär och media efter dessa sänts till servern</string>
@@ -307,7 +306,6 @@
   <string name="select_geotrace_mode">Välj GeoTrace-läge</string>
   <string name="start">Starta</string>
   <string name="enable_gps">Aktivera GPS</string>
-  <string name="enable_gps_message">GPS är inaktiverat på din enhet. Vill du aktivera den?</string>
   <string name="geotrace_title">GeoTrace</string>
   <string name="polygon_save">Spara som polygon</string>
   <string name="polyline_save">Spara som polyline</string>
@@ -319,7 +317,6 @@
   <string name="geo_exit_warning">Ignorera ändringar och återgå till ODK?</string>
   <string name="polygon_validator">Minst tre punkter krävs för att skapa en polygon</string>
   <string name="clear">Rensa</string>
-  <string name="polyline_polygon_text">Spara GeoTrace som</string>
   <string name="manual_mode">Manuellt läge</string>
   <string name="automatic_mode">Automatiskt läge</string>
   <string name="geoshape_instruction">Lång tryckning för att placera markör.</string>
@@ -545,6 +542,4 @@
   <string name="no">Nej</string>
   <string name="svg_file_does_not_exist">SVG-fil finns inte!</string>
   <!--Sms submission-->
-  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
-  <string name="current_predicate_continue">Fortsätt</string>
 </resources>

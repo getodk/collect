@@ -15,6 +15,7 @@
 package org.odk.collect.android.activities;
 
 import android.app.AlertDialog;
+import android.arch.lifecycle.LiveData;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -49,17 +50,22 @@ import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.preferences.Transport;
-import org.odk.collect.android.receivers.NetworkReceiver;
 import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.tasks.sms.SmsNotificationReceiver;
 import org.odk.collect.android.tasks.sms.SmsService;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.tasks.sms.models.SmsSubmission;
+import org.odk.collect.android.upload.AutoSendWorker;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.ToastUtils;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
+import androidx.work.State;
+import androidx.work.WorkManager;
+import androidx.work.WorkStatus;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -100,6 +106,10 @@ public class InstanceUploaderList extends InstanceListActivity implements
     private InstanceSyncTask instanceSyncTask;
 
     private boolean showAllMode;
+
+    // Default to true so the send button is disabled until the worker status is updated by the
+    // observer
+    private boolean autoSendOngoing = true;
 
     private final BroadcastReceiver smsForegroundReceiver = new BroadcastReceiver() {
         @Override
@@ -157,24 +167,24 @@ public class InstanceUploaderList extends InstanceListActivity implements
     @OnClick({R.id.upload_button, R.id.sms_upload_button})
     public void onUploadButtonsClicked(Button button) {
         Transport transport = Transport.fromPreference(GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE));
-        if (!transport.equals(Transport.Sms) && button.getId() == R.id.upload_button) {
 
+        if (!transport.equals(Transport.Sms) && button.getId() == R.id.upload_button) {
             ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(
                     Context.CONNECTIVITY_SERVICE);
             NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
 
-            if (NetworkReceiver.running) {
-                ToastUtils.showShortToast(R.string.send_in_progress);
-                return;
-            } else if (ni == null || !ni.isConnected()) {
-                logger.logAction(this, "uploadButton", "noConnection");
+            if (ni == null || !ni.isConnected()) {
                 ToastUtils.showShortToast(R.string.no_connection);
+                return;
+            }
+
+            if (autoSendOngoing) {
+                ToastUtils.showShortToast(R.string.send_in_progress);
                 return;
             }
         }
 
         int checkedItemCount = getCheckedCount();
-        logger.logAction(this, "uploadButton", Integer.toString(checkedItemCount));
 
         if (checkedItemCount > 0) {
             // items selected
@@ -244,6 +254,28 @@ public class InstanceUploaderList extends InstanceListActivity implements
         };
 
         getSupportLoaderManager().initLoader(LOADER_ID, null, this);
+
+        // Start observer that sets autoSendOngoing field based on AutoSendWorker status
+        updateAutoSendStatus();
+    }
+
+    /**
+     * Updates whether an auto-send job is ongoing.
+     */
+    private void updateAutoSendStatus() {
+        LiveData<List<WorkStatus>> statuses = WorkManager.getInstance().getStatusesForUniqueWorkLiveData(AutoSendWorker.class.getName());
+
+        statuses.observe(this, workStatuses -> {
+            if (workStatuses != null) {
+                for (WorkStatus status : workStatuses) {
+                    if (status.getState().equals(State.RUNNING)) {
+                        autoSendOngoing = true;
+                        return;
+                    }
+                }
+                autoSendOngoing = false;
+            }
+        });
     }
 
     @Override
@@ -281,18 +313,6 @@ public class InstanceUploaderList extends InstanceListActivity implements
         Timber.i("Disk scan complete");
         hideProgressBarAndAllow();
         showSnackbar(result);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        logger.logOnStart(this);
-    }
-
-    @Override
-    protected void onStop() {
-        logger.logOnStop(this);
-        super.onStop();
     }
 
     private void uploadSelectedFiles(int buttonId) {
@@ -347,7 +367,6 @@ public class InstanceUploaderList extends InstanceListActivity implements
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        logger.logAction(this, "onCreateOptionsMenu", "show");
         getMenuInflater().inflate(R.menu.instance_uploader_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
@@ -356,11 +375,9 @@ public class InstanceUploaderList extends InstanceListActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_preferences:
-                logger.logAction(this, "onMenuItemSelected", "MENU_PREFERENCES");
                 createPreferencesMenu();
                 return true;
             case R.id.menu_change_view:
-                logger.logAction(this, "onMenuItemSelected", "MENU_SHOW_UNSENT");
                 showSentAndUnsentChoices();
                 return true;
         }
@@ -374,8 +391,6 @@ public class InstanceUploaderList extends InstanceListActivity implements
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long rowId) {
-        logger.logAction(this, "onListItemClick", Long.toString(rowId));
-
         if (listView.isItemChecked(position)) {
             selectedInstances.add(listView.getItemIdAtPosition(position));
         } else {
@@ -397,6 +412,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (resultCode == RESULT_CANCELED) {
+            selectedInstances.clear();
             return;
         }
         switch (requestCode) {
@@ -455,7 +471,6 @@ public class InstanceUploaderList extends InstanceListActivity implements
 
     @Override
     public boolean onLongClick(View v) {
-        logger.logAction(this, "toggleButton.longClick", "");
         return showSentAndUnsentChoices();
     }
 
@@ -467,25 +482,20 @@ public class InstanceUploaderList extends InstanceListActivity implements
         String[] items = {getString(R.string.show_unsent_forms),
                 getString(R.string.show_sent_and_unsent_forms)};
 
-        logger.logAction(this, "changeView", "show");
-
         AlertDialog alertDialog = new AlertDialog.Builder(this)
                 .setIcon(android.R.drawable.ic_dialog_info)
                 .setTitle(getString(R.string.change_view))
                 .setNeutralButton(getString(R.string.cancel), (dialog, id) -> {
-                    logger.logAction(this, "changeView", "cancel");
                     dialog.cancel();
                 })
                 .setItems(items, (dialog, which) -> {
                     switch (which) {
                         case 0: // show unsent
-                            logger.logAction(this, "changeView", "showUnsent");
                             showAllMode = false;
                             updateAdapter();
                             break;
 
                         case 1: // show all
-                            logger.logAction(this, "changeView", "showAll");
                             showAllMode = true;
                             updateAdapter();
                             /* smap
