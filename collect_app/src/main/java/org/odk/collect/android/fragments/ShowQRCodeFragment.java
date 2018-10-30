@@ -48,6 +48,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.ActionListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.utilities.CompressionUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
@@ -269,7 +270,11 @@ public class ShowQRCodeFragment extends Fragment {
 
             @Override
             public void onFailure(Exception exception) {
-                ToastUtils.showLongToast(Collect.getInstance().getString(R.string.invalid_qrcode));
+                if (exception instanceof GeneralSharedPreferences.ValidationException) {
+                    ToastUtils.showLongToast(Collect.getInstance().getString(R.string.invalid_qrcode));
+                }
+
+                Timber.e(exception);
             }
         });
     }

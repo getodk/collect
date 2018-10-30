@@ -76,11 +76,7 @@ public class GeneralSharedPreferences {
 
     public void reset(String key) {
         Object defaultValue = GENERAL_KEYS.get(key);
-        try {
-            save(key, defaultValue);
-        } catch (ValidationException ignored) {
-
-        }
+        save(key, defaultValue);
     }
 
     public GeneralSharedPreferences save(String key, @Nullable Object value) throws ValidationException {
