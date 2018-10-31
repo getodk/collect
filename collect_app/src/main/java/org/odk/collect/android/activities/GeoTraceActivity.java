@@ -104,8 +104,7 @@ public class GeoTraceActivity extends CollectAbstractActivity implements IRegist
     private int restoredTimeDelayIndex = 3;
     private int restoredTimeUnitsIndex;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
+    @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
             restoredMapCenter = savedInstanceState.getParcelable(MAP_CENTER_KEY);
@@ -118,13 +117,13 @@ public class GeoTraceActivity extends CollectAbstractActivity implements IRegist
             restoredTimeDelayIndex = savedInstanceState.getInt(TIME_DELAY_KEY, 3);
             restoredTimeUnitsIndex = savedInstanceState.getInt(TIME_UNITS_KEY, 0);
             timeRemaining = savedInstanceState.getLong(TIME_REMAINING);
-
         }
 
         if (!checkIfLocationPermissionsGranted(this)) {
             finish();
             return;
         }
+
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setTitle(getString(R.string.geotrace_title));
         setContentView(R.layout.geotrace_layout);
@@ -139,11 +138,10 @@ public class GeoTraceActivity extends CollectAbstractActivity implements IRegist
     public MapFragment createMapFragment() {
         String mapSdk = getIntent().getStringExtra(PreferenceKeys.KEY_MAP_SDK);
         return (mapSdk == null || mapSdk.equals(PREF_VALUE_GOOGLE_MAPS)) ?
-                new GoogleMapFragment() : new OsmMapFragment();
+            new GoogleMapFragment() : new OsmMapFragment();
     }
 
-    @Override
-    protected void onStart() {
+    @Override protected void onStart() {
         super.onStart();
         if (map != null) {
             map.setGpsLocationEnabled(true);
@@ -327,7 +325,7 @@ public class GeoTraceActivity extends CollectAbstractActivity implements IRegist
     private void finishWithResult() {
         List<MapPoint> points = map.getPointsOfPoly(featureId);
         setResult(RESULT_OK, new Intent().putExtra(
-                FormEntryActivity.GEOTRACE_RESULTS, formatPoints(points)));
+            FormEntryActivity.GEOTRACE_RESULTS, formatPoints(points)));
         finish();
     }
 
