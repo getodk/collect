@@ -572,7 +572,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        if(requestCode == COMPLETE_FORM) {
+        if(requestCode == COMPLETE_FORM && intent != null) {
             String instanceId = intent.getStringExtra("instanceid");
             String formStatus = intent.getStringExtra("status");
             String formURI = intent.getStringExtra("uri");
