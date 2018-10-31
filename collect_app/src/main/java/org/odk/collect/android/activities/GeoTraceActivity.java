@@ -66,7 +66,6 @@ public class GeoTraceActivity extends CollectAbstractActivity implements IRegist
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture schedulerHandler;
     private long timeRemaining;
-    private Timer timer;
 
     private MapFragment map;
     private MapHelper helper;
@@ -171,9 +170,6 @@ public class GeoTraceActivity extends CollectAbstractActivity implements IRegist
     @Override protected void onDestroy() {
         if (schedulerHandler != null && !schedulerHandler.isCancelled()) {
             schedulerHandler.cancel(true);
-        }
-        if (timer != null) {
-            timer.cancel();
         }
         super.onDestroy();
     }
@@ -484,18 +480,8 @@ public class GeoTraceActivity extends CollectAbstractActivity implements IRegist
     }
 
     public void setGeoTraceScheduler(long delay, TimeUnit units) {
-        if (timeRemaining != 0) {
-            schedulerHandler = scheduler.schedule(
-                    () -> runOnUiThread(() -> addVertex()), timeRemaining, units);
-        }
-        timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                schedulerHandler = scheduler.scheduleAtFixedRate(
-                        () -> runOnUiThread(() -> addVertex()), delay, delay, units);
-            }
-        }, timeRemaining * 1000);
+        schedulerHandler = scheduler.scheduleAtFixedRate(
+                () -> runOnUiThread(() -> addVertex()), timeRemaining, delay, units);
     }
 
     @SuppressWarnings("unused")  // the "map" parameter is intentionally unused
