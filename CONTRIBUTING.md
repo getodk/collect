@@ -55,6 +55,8 @@ To contribute code to ODK Collect, you will need to open a [pull request](https:
 
 1. Document your reasoning. Your commit messages should make it clear why each change has been made.
 
+1. Point out decisions you made and what alternatives you considered. If you're unsure about a particular approach, ask a question to make your own thinking clear and help the reviewer identify controversial parts of the proposed solution. For example: "here I returned a result object to represent the status after the transaction. I also considered throwing an exception in case of error but I didn't like that it made it unclear where an error happened. Which do you prefer and why?" This is particularly important for [work in progress pull requests](#work-in-progress-pull-requests).
+
 1. If your pull request makes user-facing changes, we likely need to update documentation. [File an issue on the docs repo](https://github.com/opendatakit/docs/issues/new) describing the changes.
 
 1. Follow the guidelines below.
@@ -77,9 +79,13 @@ When a pull request is first created, @opendatakit-bot tags it as `needs review`
 Small fixes that target very particular bugs may occasionally be merged without a second review.
 
 ## Work in progress pull requests
-Work in progress (WIP) pull requests are useful to illustrate a proposed direction and get early feedback before committing to a solution direction. Work in progress pull requests should be clearly identified with [WIP] at the beginning of the title. The description should describe the proposed direction, why it is being considered, what alternatives might be possible and solicit specific feedback from collaborators. 
 
-A broad question like "what do you think of this?" makes it very difficult for a collaborator to engage with the pull request without coming up with a solution to the problem him or herself. Instead, please ask specific questions that make your own thinking clear and allow the reviewer to identify controversial parts of the proposed solution. For example: "here I returned a result object to represent the status after the transaction. I also considered throwing an exception in case of error but I didn't like that it made it unclear where an error happened. Which do you prefer and why?" 
+Work in progress (WIP) pull requests are useful to illustrate a proposed direction and get early feedback before committing to a solution direction.
+
+Work in progress pull requests:
+- Should include `[WIP]` in front of the pull request title.
+- Should specifically describe the proposed solution and feedback wanted.
+- Will not be merged until you remove `[WIP]` from the title.
 
 ## Triage issues [![Open Source Helpers](https://www.codetriage.com/opendatakit/collect/badges/users.svg)](https://www.codetriage.com/opendatakit/collect)
 
