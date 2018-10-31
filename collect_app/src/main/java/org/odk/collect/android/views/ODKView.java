@@ -495,7 +495,9 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
     }
 
     public void stopAudio() {
-        widgets.get(0).stopAudio();
+        if(widgets.size() > 0) {        // smap
+            widgets.get(0).stopAudio();
+        }
     }
 
     /**
