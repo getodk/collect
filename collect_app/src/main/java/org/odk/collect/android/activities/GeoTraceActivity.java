@@ -169,8 +169,7 @@ public class GeoTraceActivity extends CollectAbstractActivity implements IRegist
         state.putInt(TIME_DELAY_KEY, timeDelay.getSelectedItemPosition());
         state.putInt(TIME_UNITS_KEY, timeUnits.getSelectedItemPosition());
         timeRemaining = schedulerHandler.getDelay(TimeUnit.SECONDS);
-        state.putLong(TIME_REMAINING, timeRemaining)
-        ;
+        state.putLong(TIME_REMAINING, timeRemaining);
     }
 
     @Override
