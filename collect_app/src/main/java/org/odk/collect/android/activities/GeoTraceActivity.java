@@ -19,7 +19,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.VisibleForTesting;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -62,11 +61,11 @@ public class GeoTraceActivity extends CollectAbstractActivity implements IRegist
     public static final String PLAY_CHECK_KEY = "play_check";
     public static final String TIME_DELAY_KEY = "time_delay";
     public static final String TIME_UNITS_KEY = "time_units";
-    public static final String TIME_REMAINING="time_remaining";
+    public static final String TIME_REMAINING = "time_remaining";
 
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture schedulerHandler;
-    private long timeRemaining=0;
+    private long timeRemaining;
     private Timer timer;
 
     private MapFragment map;
@@ -105,7 +104,8 @@ public class GeoTraceActivity extends CollectAbstractActivity implements IRegist
     private int restoredTimeDelayIndex = 3;
     private int restoredTimeUnitsIndex;
 
-    @Override public void onCreate(Bundle savedInstanceState) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
             restoredMapCenter = savedInstanceState.getParcelable(MAP_CENTER_KEY);
@@ -139,22 +139,25 @@ public class GeoTraceActivity extends CollectAbstractActivity implements IRegist
     public MapFragment createMapFragment() {
         String mapSdk = getIntent().getStringExtra(PreferenceKeys.KEY_MAP_SDK);
         return (mapSdk == null || mapSdk.equals(PREF_VALUE_GOOGLE_MAPS)) ?
-            new GoogleMapFragment() : new OsmMapFragment();
+                new GoogleMapFragment() : new OsmMapFragment();
     }
 
-    @Override protected void onStart() {
+    @Override
+    protected void onStart() {
         super.onStart();
         if (map != null) {
             map.setGpsLocationEnabled(true);
         }
     }
 
-    @Override protected void onStop() {
+    @Override
+    protected void onStop() {
         map.setGpsLocationEnabled(false);
         super.onStop();
     }
 
-    @Override protected void onSaveInstanceState(Bundle state) {
+    @Override
+    protected void onSaveInstanceState(Bundle state) {
         super.onSaveInstanceState(state);
         state.putParcelable(MAP_CENTER_KEY, map.getCenter());
         state.putDouble(MAP_ZOOM_KEY, map.getZoom());
@@ -165,21 +168,25 @@ public class GeoTraceActivity extends CollectAbstractActivity implements IRegist
         state.putBoolean(PLAY_CHECK_KEY, playCheck);
         state.putInt(TIME_DELAY_KEY, timeDelay.getSelectedItemPosition());
         state.putInt(TIME_UNITS_KEY, timeUnits.getSelectedItemPosition());
-        timeRemaining=schedulerHandler.getDelay(TimeUnit.SECONDS);
-        state.putLong(TIME_REMAINING,timeRemaining)
-;    }
+        timeRemaining = schedulerHandler.getDelay(TimeUnit.SECONDS);
+        state.putLong(TIME_REMAINING, timeRemaining)
+        ;
+    }
 
-    @Override protected void onDestroy() {
+    @Override
+    protected void onDestroy() {
         if (schedulerHandler != null && !schedulerHandler.isCancelled()) {
             schedulerHandler.cancel(true);
         }
-        if(timer != null){
+        if (timer != null) {
             timer.cancel();
         }
         super.onDestroy();
     }
 
-    @Override public void destroy() { }
+    @Override
+    public void destroy() {
+    }
 
     public void initMap(MapFragment newMapFragment) {
         if (newMapFragment == null) {
@@ -326,7 +333,7 @@ public class GeoTraceActivity extends CollectAbstractActivity implements IRegist
     private void finishWithResult() {
         List<MapPoint> points = map.getPointsOfPoly(featureId);
         setResult(RESULT_OK, new Intent().putExtra(
-            FormEntryActivity.GEOTRACE_RESULTS, formatPoints(points)));
+                FormEntryActivity.GEOTRACE_RESULTS, formatPoints(points)));
         finish();
     }
 
@@ -366,39 +373,39 @@ public class GeoTraceActivity extends CollectAbstractActivity implements IRegist
         for (MapPoint point : points) {
             // TODO(ping): Remove excess precision when we're ready for the output to change.
             result += String.format(Locale.US, "%s %s %s %s;",
-                Double.toString(point.lat), Double.toString(point.lon),
-                Double.toString(point.alt), Float.toString((float) point.sd));
+                    Double.toString(point.lat), Double.toString(point.lon),
+                    Double.toString(point.alt), Float.toString((float) point.sd));
         }
         return result.trim();
     }
 
     private void buildDialogs() {
         traceSettingsDialog = new AlertDialog.Builder(this)
-            .setTitle(getString(R.string.select_geotrace_mode))
-            .setView(traceSettingsView)
-            .setPositiveButton(getString(R.string.start), (dialog, id) -> {
-                startGeoTrace();
-                dialog.cancel();
-                traceSettingsDialog.dismiss();
-            })
-            .setNegativeButton(R.string.cancel, (dialog, id) -> {
-                dialog.cancel();
-                traceSettingsDialog.dismiss();
-                playCheck = false;
+                .setTitle(getString(R.string.select_geotrace_mode))
+                .setView(traceSettingsView)
+                .setPositiveButton(getString(R.string.start), (dialog, id) -> {
+                    startGeoTrace();
+                    dialog.cancel();
+                    traceSettingsDialog.dismiss();
+                })
+                .setNegativeButton(R.string.cancel, (dialog, id) -> {
+                    dialog.cancel();
+                    traceSettingsDialog.dismiss();
+                    playCheck = false;
 
-            })
-            .setOnCancelListener(dialog -> playCheck = false)
-            .create();
+                })
+                .setOnCancelListener(dialog -> playCheck = false)
+                .create();
 
         polygonOrPolylineDialog = new AlertDialog.Builder(this)
-            .setTitle(getString(R.string.polygon_or_polyline))
-            .setView(polygonOrPolylineView)
-            .setNegativeButton(R.string.cancel, (dialog, id) -> dialog.cancel())
-            .setOnCancelListener(dialog -> {
-                dialog.cancel();
-                traceSettingsDialog.dismiss();
-            })
-            .create();
+                .setTitle(getString(R.string.polygon_or_polyline))
+                .setView(polygonOrPolylineView)
+                .setNegativeButton(R.string.cancel, (dialog, id) -> dialog.cancel())
+                .setOnCancelListener(dialog -> {
+                    dialog.cancel();
+                    traceSettingsDialog.dismiss();
+                })
+                .create();
 
         zoomDialogView = getLayoutInflater().inflate(R.layout.geo_zoom_dialog, null);
 
@@ -485,18 +492,18 @@ public class GeoTraceActivity extends CollectAbstractActivity implements IRegist
     }
 
     public void setGeoTraceScheduler(long delay, TimeUnit units) {
-        if(timeRemaining!=0){
+        if (timeRemaining != 0) {
             schedulerHandler = scheduler.schedule(
-                    () -> runOnUiThread(() -> addVertex()),timeRemaining,units);
+                    () -> runOnUiThread(() -> addVertex()), timeRemaining, units);
         }
-        timer=new Timer();
+        timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 schedulerHandler = scheduler.scheduleAtFixedRate(
                         () -> runOnUiThread(() -> addVertex()), delay, delay, units);
             }
-        }, timeRemaining*1000);
+        }, timeRemaining * 1000);
     }
 
     @SuppressWarnings("unused")  // the "map" parameter is intentionally unused
@@ -537,24 +544,24 @@ public class GeoTraceActivity extends CollectAbstractActivity implements IRegist
     private void showClearDialog() {
         if (!map.getPointsOfPoly(featureId).isEmpty()) {
             new AlertDialog.Builder(this)
-                .setMessage(R.string.geo_clear_warning)
-                .setPositiveButton(R.string.clear, (dialog, id) -> clear())
-                .setNegativeButton(R.string.cancel, null)
-                .show();
+                    .setMessage(R.string.geo_clear_warning)
+                    .setPositiveButton(R.string.clear, (dialog, id) -> clear())
+                    .setNegativeButton(R.string.cancel, null)
+                    .show();
         }
     }
 
     public void showZoomDialog() {
         if (zoomDialog == null) {
             zoomDialog = new AlertDialog.Builder(this)
-                .setTitle(getString(R.string.zoom_to_where))
-                .setView(zoomDialogView)
-                .setNegativeButton(R.string.cancel, (dialog, id) -> dialog.cancel())
-                .setOnCancelListener(dialog -> {
-                    dialog.cancel();
-                    zoomDialog.dismiss();
-                })
-                .create();
+                    .setTitle(getString(R.string.zoom_to_where))
+                    .setView(zoomDialogView)
+                    .setNegativeButton(R.string.cancel, (dialog, id) -> dialog.cancel())
+                    .setOnCancelListener(dialog -> {
+                        dialog.cancel();
+                        zoomDialog.dismiss();
+                    })
+                    .create();
         }
 
         if (map.getGpsLocation() != null) {
@@ -578,11 +585,13 @@ public class GeoTraceActivity extends CollectAbstractActivity implements IRegist
         zoomDialog.show();
     }
 
-    @VisibleForTesting public ImageButton getPlayButton() {
+    @VisibleForTesting
+    public ImageButton getPlayButton() {
         return playButton;
     }
 
-    @VisibleForTesting public MapFragment getMapFragment() {
+    @VisibleForTesting
+    public MapFragment getMapFragment() {
         return map;
     }
 }
