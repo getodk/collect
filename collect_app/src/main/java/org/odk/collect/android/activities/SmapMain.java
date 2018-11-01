@@ -29,6 +29,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
@@ -61,6 +62,7 @@ import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.receivers.NetworkReceiver;
 import org.odk.collect.android.services.LocationService;
 import org.odk.collect.android.services.NotificationRegistrationService;
 import org.odk.collect.android.taskModel.FormLaunchDetail;
@@ -116,6 +118,8 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     public DownloadTasksTask mDownloadTasks;
 
     private MainTaskListener listener = null;
+    private NetworkReceiver networkReceiver = null;
+
     boolean listenerRegistered = false;
     private static List<TaskEntry> mTasks = null;
     private static List<TaskEntry> mMapTasks = null;
@@ -211,6 +215,13 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
             filter.addAction("startTask");
             filter.addAction("startMapTask");
             registerReceiver(listener, filter);
+
+            networkReceiver = new NetworkReceiver();
+            filter = new IntentFilter();
+            filter.addAction("org.odk.collect.android.FormSaved");
+            filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+            registerReceiver(networkReceiver, filter);
+
             listenerRegistered = true;
         }
 
