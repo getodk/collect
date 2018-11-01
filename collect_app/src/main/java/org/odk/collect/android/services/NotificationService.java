@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.services;
 
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -37,6 +38,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.tasks.DownloadTasksTask;
+import org.odk.collect.android.utilities.NotificationUtils;
 import org.odk.collect.android.utilities.Utilities;
 
 import java.util.HashMap;
@@ -87,16 +89,10 @@ public class NotificationService extends GcmListenerService {
         }
 
         if (!automaticNofification) {
-            // Set refresh notification icon
-            NotificationCompat.Builder mBuilder =
-                    new NotificationCompat.Builder(this)
-                            .setSmallIcon(R.drawable.notification_icon)
-                            .setLargeIcon(BitmapFactory.decodeResource(Collect.getInstance().getBaseContext().getResources(),
-                                    R.drawable.ic_launcher))
-                            .setSound(uri)
-                            .setContentTitle(getString(R.string.app_name))
-                            .setContentText(getString(R.string.smap_server_changed));
-            mNotifyMgr.notify(NotificationActivity.NOTIFICATION_ID, mBuilder.build());
+            NotificationUtils.showNotification(null,
+                    NotificationActivity.NOTIFICATION_ID,
+                    R.string.app_name,
+                    getString(R.string.smap_server_changed));
         }
 
     }

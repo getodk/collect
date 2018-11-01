@@ -20,6 +20,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 
@@ -28,7 +29,7 @@ import org.odk.collect.android.application.Collect;
 
 public class NotificationUtils {
 
-    private static final String CHANNEL_ID = "collect_notification_channel";
+    private static final String CHANNEL_ID = "smap_notification_channel";   // smap changed channel id
     public static final int FORM_UPDATE_NOTIFICATION_ID = 0;
     public static final int AUTO_SEND_NOTIFICATION_ID = 1328974928;
 
@@ -55,12 +56,15 @@ public class NotificationUtils {
                                         String contentText) {
         Context context = Collect.getInstance();
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context).setContentIntent(contentIntent);
+        // smap add CHANNEL_ID
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID).setContentIntent(contentIntent);
 
         builder
                 .setContentTitle(context.getString(title))
                 .setContentText(contentText)
                 .setSmallIcon(IconUtils.getNotificationAppIcon())
+                .setLargeIcon(BitmapFactory.decodeResource(Collect.getInstance().getBaseContext().getResources(),
+                        R.drawable.ic_launcher))        // added for smap
                 .setAutoCancel(true)
                 .setChannelId(CHANNEL_ID);
 

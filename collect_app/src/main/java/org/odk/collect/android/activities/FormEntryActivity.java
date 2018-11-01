@@ -2579,6 +2579,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     ToastUtils.showShortToast(R.string.data_saved_ok);
                 }
                 formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_SAVE, 0, null, false, false);
+
+                /*
+                 * smap use the network receiver to synchronise rather than odk worker
                 if (saveResult.isComplete()) {
                     formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, false);
                     // Force writing of audit since we are exiting
@@ -2587,14 +2590,19 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     // Request auto-send if app-wide auto-send is enabled or the form that was just
                     // finalized specifies that it should always be auto-sent.
                     String formId = getFormController().getFormDef().getMainInstance().getRoot().getAttributeValue("", "id");
+
                     if (AutoSendWorker.formShouldBeAutoSent(formId, GeneralSharedPreferences.isAutoSendEnabled())) {
                         requestAutoSend();
                     }
+
                 } else {
                     // Force writing of audit since we are exiting
                     formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);
                 }
-                sendBroadcast(new Intent("org.odk.collect.android.FormSaved"));     // smap
+                */
+                formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, false);  // smap
+                formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_FINALIZE, 0, null, false, true);
+                sendBroadcast(new Intent("org.odk.collect.android.FormSaved"));     // smap - use network receiver to sync
 
                 finishReturnInstance(saveResult.isComplete());  // smap add isComplete
                 break;

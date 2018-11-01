@@ -14,8 +14,8 @@ import org.odk.collect.android.fragments.dialogs.SimpleDialog;
 public class NotificationActivity extends CollectAbstractActivity {
 
     public static final String NOTIFICATION_KEY = "message";
-    public static final int NOTIFICATION_ID = 191919191;        // smap
-    public static final int LOCATION_ID = 191919192;            // smap
+    public static final int NOTIFICATION_ID = 191919191;                // smap
+    public static final int LOCATION_ID = 191919192;                    // smap
     public static final String NOTIFICATION_TITLE = "title";
     public static final String NOTIFICATION_MESSAGE = "message";
 

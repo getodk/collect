@@ -1,5 +1,6 @@
 package org.odk.collect.android.receivers;
 
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -26,6 +27,7 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.tasks.ServerPollingJob;
 import org.odk.collect.android.utilities.IconUtils;
+import org.odk.collect.android.utilities.NotificationUtils;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
@@ -351,17 +353,11 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
         PendingIntent pendingNotify = PendingIntent.getActivity(Collect.getInstance(), 0,
                 notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+        NotificationUtils.showNotification(pendingNotify,
+                NotificationActivity.NOTIFICATION_ID,
+                R.string.app_name,
+                message.toString().trim());
 
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(mContext)
-                        .setSmallIcon(R.drawable.notification_icon)
-                        .setLargeIcon(BitmapFactory.decodeResource(Collect.getInstance().getBaseContext().getResources(),
-                                R.drawable.ic_launcher))
-                        .setSound(uri)
-                        .setContentIntent(pendingNotify)
-                        .setContentTitle(mContext.getString(R.string.app_name))
-                        .setContentText(message.toString().trim());
-        mNotifyMgr.notify(NotificationActivity.NOTIFICATION_ID, mBuilder.build());
     }
 /*
  * smap

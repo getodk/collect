@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.tasks;
 
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ContentResolver;
@@ -22,6 +23,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -65,6 +67,7 @@ import org.odk.collect.android.upload.InstanceServerUploader;
 import org.odk.collect.android.utilities.ManageForm;
 import org.odk.collect.android.utilities.ManageForm.ManageFormDetails;
 import org.odk.collect.android.utilities.ManageFormResponse;
+import org.odk.collect.android.utilities.NotificationUtils;
 import org.odk.collect.android.utilities.ResponseMessageParser;
 import org.odk.collect.android.utilities.TraceUtilities;
 import org.odk.collect.android.utilities.Utilities;
@@ -187,24 +190,12 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
             Collect.getInstance().setDownloading(true);
         }
 
-        NotificationCompat.Builder mBuilder = null;
-        Uri uri = null;
-        NotificationManager mNotifyMgr = null;
         try {
-            uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-            mNotifyMgr =
-                    (NotificationManager) Collect.getInstance().getBaseContext().getSystemService(NOTIFICATION_SERVICE);
 
-            // Set refresh notification icon
-            mBuilder =
-                    new NotificationCompat.Builder(Collect.getInstance().getBaseContext())
-                            .setSmallIcon(R.drawable.notification_icon_go)
-                            .setLargeIcon(BitmapFactory.decodeResource(Collect.getInstance().getBaseContext().getResources(),
-                                    R.drawable.ic_launcher))
-                            .setProgress(0, 0, true)
-                            .setContentTitle(Collect.getInstance().getBaseContext().getString(R.string.app_name))
-                            .setContentText(Collect.getInstance().getBaseContext().getString(R.string.smap_refresh_started));
-            mNotifyMgr.notify(NotificationActivity.NOTIFICATION_ID, mBuilder.build());
+            NotificationUtils.showNotification(null,
+                    NotificationActivity.NOTIFICATION_ID,
+                    R.string.app_name,
+                    Collect.getInstance().getBaseContext().getString(R.string.smap_refresh_started));
 
             synchronise();      // Synchronise the phone with the server
         } finally {
@@ -216,17 +207,11 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
             notifyIntent.putExtra(NotificationActivity.NOTIFICATION_KEY, message.toString().trim());
             PendingIntent pendingNotify = PendingIntent.getActivity(Collect.getInstance(), 0,
                     notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            mBuilder =
-                    new NotificationCompat.Builder(Collect.getInstance().getBaseContext())
-                            .setSmallIcon(R.drawable.notification_icon)
-                            .setLargeIcon(BitmapFactory.decodeResource(Collect.getInstance().getBaseContext().getResources(),
-                                    R.drawable.ic_launcher))
-                            .setContentTitle(Collect.getInstance().getBaseContext().getString(R.string.app_name))
-                            .setProgress(0,0,false)
-                            .setSound(uri)
-                            .setContentIntent(pendingNotify)
-                            .setContentText(message.toString().trim());
-            mNotifyMgr.notify(NotificationActivity.NOTIFICATION_ID, mBuilder.build());
+
+            NotificationUtils.showNotification(pendingNotify,
+                    NotificationActivity.NOTIFICATION_ID,
+                    R.string.app_name,
+                    message.toString().trim());
 
             Collect.getInstance().setDownloading(false);
         }

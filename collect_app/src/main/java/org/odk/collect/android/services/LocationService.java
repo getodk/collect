@@ -40,6 +40,7 @@ import org.odk.collect.android.location.client.LocationClient;
 import org.odk.collect.android.location.client.LocationClients;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.Constants;
+import org.odk.collect.android.utilities.NotificationUtils;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -112,19 +113,13 @@ public class LocationService extends Service implements LocationListener, Locati
                             locationClient.setListener(mLocationService);
                             locationClient.start();
 
-                        /*
-                         * Notify the user
-                         */
-                            Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                            NotificationCompat.Builder mBuilder =
-                                    new NotificationCompat.Builder(getApplicationContext())
-                                            .setSmallIcon(R.drawable.ic_stat_crosshairs)
-                                            .setLargeIcon(BitmapFactory.decodeResource(Collect.getInstance().getBaseContext().getResources(),
-                                                    R.drawable.ic_stat_crosshairs))
-                                            .setSound(uri)
-                                            .setContentTitle(getString(R.string.app_name))
-                                            .setContentText(getString(R.string.smap_location_tracking));
-                            mNotifyMgr.notify(NotificationActivity.LOCATION_ID, mBuilder.build());
+                            /*
+                             * Notify the user
+                             */
+                            NotificationUtils.showNotification(null,
+                                    NotificationActivity.NOTIFICATION_ID,
+                                    R.string.app_name,
+                                    getString(R.string.smap_location_tracking));
 
                         } else {
                             Log.i(TAG, "=================== Location Recording turned off");

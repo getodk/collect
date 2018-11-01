@@ -27,6 +27,6 @@ public class IconUtils {
 
     public static int getNotificationAppIcon() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ?
-                R.drawable.ic_notes_white : R.drawable.ic_notes_white_png;
+                R.drawable.notification_icon : R.drawable.ic_notes_white_png;   // smap change notification icon
     }
 }
