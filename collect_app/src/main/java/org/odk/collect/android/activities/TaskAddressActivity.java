@@ -123,6 +123,13 @@ public class TaskAddressActivity extends CollectAbstractActivity implements OnCl
             // Create the buttons
             LinearLayout buttons = (LinearLayout)findViewById(R.id.task_address_buttons);
     		//menu.setHeaderTitle(taskTitle);
+            boolean triggeredTask = false;
+            if (taskEntry.type.equals("task") &&
+                    taskEntry.locationTrigger != null &&
+                    taskEntry.locationTrigger.trim().length() > 0) {
+                triggeredTask = true;
+            }
+
     		if(Utilities.canReject(taskEntry.taskStatus)) {
 
     	        Button b = new Button(this);
@@ -131,13 +138,15 @@ public class TaskAddressActivity extends CollectAbstractActivity implements OnCl
     	        b.setOnClickListener(this);
     	        buttons.addView(b);
     		}
-    		if(Utilities.canComplete(taskEntry.taskStatus)) {
+
+    		if(!triggeredTask && Utilities.canComplete(taskEntry.taskStatus)) {
     	        Button b = new Button(this);
     	        b.setText(R.string.smap_complete_task);
     	        b.setId(R.id.complete_button);
     	        b.setOnClickListener(this);
     	        buttons.addView(b);
     		}
+
             if(Utilities.canRestore(taskEntry.taskStatus)) {
                 Button b = new Button(this);
                 b.setText(R.string.smap_restore_task);

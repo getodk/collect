@@ -120,6 +120,7 @@ public class Utilities {
                 InstanceColumns.T_ACT_FINISH,
                 InstanceColumns.T_IS_SYNC,
                 InstanceColumns.T_ASS_ID,
+                InstanceColumns.T_LOCATION_TRIGGER,
                 InstanceColumns.UUID
 
         };
@@ -154,6 +155,7 @@ public class Utilities {
             entry.actLat = c.getDouble(c.getColumnIndex(InstanceColumns.ACT_LAT));
             entry.actFinish = c.getLong(c.getColumnIndex(InstanceColumns.T_ACT_FINISH));
             entry.isSynced = c.getString(c.getColumnIndex(InstanceColumns.T_IS_SYNC));
+            entry.locationTrigger = c.getString(c.getColumnIndex(InstanceColumns.T_LOCATION_TRIGGER));
             // entry.taskId = c.getLong(c.getColumnIndex(InstanceColumns.T_TASK_ID));
             entry.uuid = c.getString(c.getColumnIndex(InstanceColumns.UUID));
 
