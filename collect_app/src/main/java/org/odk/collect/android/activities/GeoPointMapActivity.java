@@ -91,6 +91,7 @@ public class GeoPointMapActivity extends CollectAbstractActivity implements OnMa
 
     private Button zoomPointButton;
     private Button zoomLocationButton;
+    private ImageButton clearPointButton;
 
     private boolean setClear;
     private boolean captureLocation;
@@ -208,22 +209,14 @@ public class GeoPointMapActivity extends CollectAbstractActivity implements OnMa
 
         reloadLocation.setEnabled(false);
         reloadLocation.setOnClickListener(v -> {
-            if (marker != null) {
-                marker.remove();
-            }
-            latLng = null;
-            marker = null;
-            setClear = false;
+            removeMarker();
             latLng = new LatLng(location.getLatitude(), location.getLongitude());
-            markerOptions.position(latLng);
             if (marker == null) {
-                marker = map.addMarker(markerOptions);
+                addMarker();
                 if (draggable && !readOnly) {
                     marker.setDraggable(true);
                 }
             }
-            captureLocation = true;
-            isDragged = false;
             zoomToPoint();
         });
 
@@ -248,11 +241,10 @@ public class GeoPointMapActivity extends CollectAbstractActivity implements OnMa
             zoomDialog.dismiss();
         });
 
-        ImageButton clearPointButton = findViewById(R.id.clear);
+        clearPointButton = findViewById(R.id.clear);
+        clearPointButton.setEnabled(false);
         clearPointButton.setOnClickListener(v -> {
-            if (marker != null) {
-                marker.remove();
-            }
+            removeMarker();
             if (location != null) {
                 reloadLocation.setEnabled(true);
                 // locationStatus.setVisibility(View.VISIBLE);
@@ -260,11 +252,6 @@ public class GeoPointMapActivity extends CollectAbstractActivity implements OnMa
             // reloadLocation.setEnabled(true);
             locationInfo.setVisibility(View.VISIBLE);
             locationStatus.setVisibility(View.VISIBLE);
-            latLng = null;
-            marker = null;
-            setClear = true;
-            isDragged = false;
-            captureLocation = false;
             draggable = intentDraggable;
             locationFromIntent = false;
             overlayMyLocationLayers();
@@ -304,9 +291,7 @@ public class GeoPointMapActivity extends CollectAbstractActivity implements OnMa
             locationInfo.setVisibility(View.GONE);
             locationStatus.setVisibility(View.GONE);
             showLocation.setEnabled(true);
-            markerOptions.position(latLng);
-            marker = map.addMarker(markerOptions);
-            captureLocation = true;
+            addMarker();
             foundFirstLocation = true;
             zoomToPoint();
         }
@@ -359,9 +344,7 @@ public class GeoPointMapActivity extends CollectAbstractActivity implements OnMa
 
                 if (!captureLocation && !setClear) {
                     latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                    markerOptions.position(latLng);
-                    marker = map.addMarker(markerOptions);
-                    captureLocation = true;
+                    addMarker();
                     reloadLocation.setEnabled(true);
                 }
 
@@ -405,16 +388,13 @@ public class GeoPointMapActivity extends CollectAbstractActivity implements OnMa
     public void onMapLongClick(LatLng latLng) {
         this.latLng = latLng;
         if (marker == null) {
-            markerOptions.position(latLng);
-            marker = map.addMarker(markerOptions);
+            addMarker();
         } else {
             marker.setPosition(latLng);
         }
         enableShowLocation(true);
         marker.setDraggable(true);
         isDragged = true;
-        setClear = false;
-        captureLocation = true;
     }
 
     private void enableShowLocation(boolean shouldEnable) {
@@ -494,6 +474,30 @@ public class GeoPointMapActivity extends CollectAbstractActivity implements OnMa
 
         errorDialog = alertDialogBuilder.create();
         errorDialog.show();
+    }
+
+    // remove the marker and disable the trash button.
+    private void removeMarker() {
+        if (marker != null) {
+            marker.remove();
+            latLng = null;
+            marker = null;
+            isDragged = false;
+            captureLocation = false;
+            clearPointButton.setEnabled(false);
+            setClear = true;
+        }
+    }
+
+    // add the marker and enable the trash button.
+    private void addMarker() {
+        if (marker == null) {
+            markerOptions.position(latLng);
+            marker = map.addMarker(markerOptions);
+            clearPointButton.setEnabled(true);
+            captureLocation = true;
+            setClear = false;
+        }
     }
 
     @Override
