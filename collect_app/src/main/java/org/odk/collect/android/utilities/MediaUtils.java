@@ -476,12 +476,11 @@ public class MediaUtils {
                 final String[] split = docId.split(":");
                 final String type = split[0];
 
-                if ("primary".equalsIgnoreCase(type)) {
-                    return Environment.getExternalStorageDirectory() + "/"
-                            + split[1];
+                if ("primary".equalsIgnoreCase(type) || !new File("/storage/" + type).exists()) {
+                    return Environment.getExternalStorageDirectory() + "/" + split[1];
                 }
-
-                // TODO handle non-primary volumes
+                // To support paths like /storage/4A50-B543/
+                return "/storage/" + type + "/" + split[1];
             } else if (isDownloadsDocument(uri)) {
                 // DownloadsProvider
 
