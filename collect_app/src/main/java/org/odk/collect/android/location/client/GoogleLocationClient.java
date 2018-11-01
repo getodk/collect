@@ -112,6 +112,7 @@ class GoogleLocationClient
             onConnectionSuspended(0);
         }
     }
+
     @SuppressLint("MissingPermission") // Permission checks for location services handled in widgets
     public void requestLocationUpdates(@NonNull LocationListener locationListener) {
         if (!isMonitoringLocation()) {

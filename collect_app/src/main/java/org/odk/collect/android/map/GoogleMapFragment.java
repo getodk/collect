@@ -73,6 +73,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
     // "map" field will be null and many operations will need to be stubbed out.
     @SuppressFBWarnings(value = "MS_SHOULD_BE_FINAL", justification = "This flag is exposed for Robolectric tests to set")
     @VisibleForTesting public static boolean testMode;
+
     @SuppressLint("MissingPermission") // Permission checks for location services handled in widgets
     @Override public void addTo(@NonNull FragmentActivity activity, int containerId, @Nullable ReadyListener listener) {
         activity.getSupportFragmentManager()
