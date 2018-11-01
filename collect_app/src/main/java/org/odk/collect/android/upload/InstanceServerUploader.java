@@ -165,7 +165,8 @@ public class InstanceServerUploader extends InstanceUploader {
 
         if (!instanceFile.exists() && !submissionFile.exists()) {
             saveFailedStatusToDatabase(instance);
-            throw new UploadException(FAIL + "instance XML file does not exist!");
+            throw new UploadException(FAIL + "instance XML file does not exist! "
+                    + instanceFile.getAbsolutePath() + " : " + instanceFile.getParentFile());
         }
 
         List<File> files = getFilesInParentDirectory(instanceFile, submissionFile, openRosaServer);
