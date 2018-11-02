@@ -32,7 +32,7 @@ public class SavePreferencesFromJSONTest {
     }
 
     @Test
-    public void whenAggregatePreferencesAreInCorrect_callsFailureAndDoesntSaveValue() throws Exception {
+    public void whenAggregatePreferencesAreIncorrect_callsFailureAndDoesntSaveValue() throws Exception {
         JSONObject content = new JSONObject();
         JSONObject general = new JSONObject();
         content.put("general", general);
