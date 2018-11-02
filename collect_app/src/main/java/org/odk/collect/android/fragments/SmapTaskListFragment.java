@@ -15,24 +15,17 @@
 package org.odk.collect.android.fragments;
 
 import android.app.AlertDialog;
-import android.content.ContentUris;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.database.Cursor;
-import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -58,7 +51,6 @@ import org.odk.collect.android.activities.SmapMain;
 import org.odk.collect.android.adapters.SortDialogAdapter;
 import org.odk.collect.android.adapters.TaskListArrayAdapter;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.RecyclerViewClickListener;
 import org.odk.collect.android.loaders.TaskEntry;
 import org.odk.collect.android.loaders.TaskLoader;
@@ -66,23 +58,17 @@ import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
-import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.tasks.DeleteInstancesTask;
 import org.odk.collect.android.tasks.InstanceSyncTask;
-import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ThemeUtils;
 
 import java.util.LinkedHashSet;
 import java.util.List;
 
-import timber.log.Timber;
-
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_ASC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_DESC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_DESC;
-import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_STATUS_ASC;
-import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_STATUS_DESC;
 
 /**
  * Responsible for displaying tasks on the main fieldTask screen
@@ -121,10 +107,6 @@ public class SmapTaskListFragment extends ListFragment
 
     private SharedPreferences adminPreferences;
 
-    DeleteInstancesTask deleteInstancesTask = null;
-    private AlertDialog alertDialog;
-    private InstanceSyncTask instanceSyncTask;
-
     private TaskListArrayAdapter mAdapter;
 
     public static SmapTaskListFragment newInstance() {
@@ -149,8 +131,6 @@ public class SmapTaskListFragment extends ListFragment
         rootView = inflater.inflate(R.layout.smap_task_layout, container, false);
 
         setHasOptionsMenu(true);
-        //searchBoxLayout = (LinearLayout) rootView.findViewById(R.id.searchBoxLayout);
-        //setupSearchBox(rootView);
         return rootView;
     }
 

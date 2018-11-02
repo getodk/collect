@@ -157,7 +157,8 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
         // Attach the view pager to the tab strip
         slidingTabLayout.setDistributeEvenly(true);
         slidingTabLayout.setFontColor(android.R.color.white);
-        slidingTabLayout.setBackgroundColor(Color.DKGRAY);
+        //slidingTabLayout.setBackgroundColor(Color.DKGRAY);
+        slidingTabLayout.setBackgroundColor(getResources().getColor(R.color.tabBackground));
         slidingTabLayout.setViewPager(viewPager);
 
         // get notification registration token
