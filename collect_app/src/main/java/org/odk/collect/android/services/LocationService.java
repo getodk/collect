@@ -119,7 +119,7 @@ public class LocationService extends Service implements LocationListener, Locati
                             NotificationUtils.showNotification(null,
                                     NotificationActivity.NOTIFICATION_ID,
                                     R.string.app_name,
-                                    getString(R.string.smap_location_tracking));
+                                    getString(R.string.smap_location_tracking), false);     // smap add start
 
                         } else {
                             Log.i(TAG, "=================== Location Recording turned off");

@@ -53,7 +53,8 @@ public class NotificationUtils {
     public static void showNotification(PendingIntent contentIntent,
                                         int notificationId,
                                         int title,
-                                        String contentText) {
+                                        String contentText,
+                                        boolean start) {    // smap add start/end of notification
         Context context = Collect.getInstance();
 
         // smap add CHANNEL_ID
@@ -62,7 +63,7 @@ public class NotificationUtils {
         builder
                 .setContentTitle(context.getString(title))
                 .setContentText(contentText)
-                .setSmallIcon(IconUtils.getNotificationAppIcon())
+                .setSmallIcon(start ? R.drawable.notification_icon_go : IconUtils.getNotificationAppIcon())     // smap add start
                 .setLargeIcon(BitmapFactory.decodeResource(Collect.getInstance().getBaseContext().getResources(),
                         R.drawable.ic_launcher))        // added for smap
                 .setAutoCancel(true)

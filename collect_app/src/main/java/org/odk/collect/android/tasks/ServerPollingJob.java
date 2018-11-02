@@ -152,7 +152,7 @@ public class ServerPollingJob extends Job {
                 contentIntent,
                 FORM_UPDATE_NOTIFICATION_ID,
                 R.string.form_updates_available,
-                null);
+                null, false);   // smap add start
     }
 
     private void informAboutNewDownloadedForms(String title, HashMap<FormDetails, String> result) {
@@ -164,7 +164,7 @@ public class ServerPollingJob extends Job {
         NotificationUtils.showNotification(contentIntent,
                 FORM_UPDATE_NOTIFICATION_ID,
                 R.string.odk_auto_download_notification_title,
-                getContentText(result));
+                getContentText(result), false);     // add start
     }
 
     private void updateLastDetectedFormVersionHash(String formId, String formVersionHash) {

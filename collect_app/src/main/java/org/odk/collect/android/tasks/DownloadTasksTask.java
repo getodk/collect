@@ -195,7 +195,8 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
             NotificationUtils.showNotification(null,
                     NotificationActivity.NOTIFICATION_ID,
                     R.string.app_name,
-                    Collect.getInstance().getBaseContext().getString(R.string.smap_refresh_started));
+                    Collect.getInstance().getBaseContext().getString(R.string.smap_refresh_started),
+                    true);
 
             synchronise();      // Synchronise the phone with the server
         } finally {
@@ -211,7 +212,8 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
             NotificationUtils.showNotification(pendingNotify,
                     NotificationActivity.NOTIFICATION_ID,
                     R.string.app_name,
-                    message.toString().trim());
+                    message.toString().trim(),
+                    false);
 
             Collect.getInstance().setDownloading(false);
         }

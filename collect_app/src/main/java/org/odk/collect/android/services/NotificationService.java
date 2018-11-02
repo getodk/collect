@@ -92,7 +92,7 @@ public class NotificationService extends GcmListenerService {
             NotificationUtils.showNotification(null,
                     NotificationActivity.NOTIFICATION_ID,
                     R.string.app_name,
-                    getString(R.string.smap_server_changed));
+                    getString(R.string.smap_server_changed), false);    // Add start
         }
 
     }

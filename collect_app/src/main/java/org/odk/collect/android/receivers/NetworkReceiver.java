@@ -199,7 +199,7 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
         NotificationUtils.showNotification(pendingNotify,
                 NotificationActivity.NOTIFICATION_ID,
                 R.string.app_name,
-                message.toString().trim());
+                message.toString().trim(), false);  // add start
 
     }
     @Override
