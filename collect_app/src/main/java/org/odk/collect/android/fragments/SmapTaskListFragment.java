@@ -46,6 +46,7 @@ import android.widget.Toast;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.AboutActivity;
+import org.odk.collect.android.activities.FormChooserList;
 import org.odk.collect.android.activities.FormDownloadList;
 import org.odk.collect.android.activities.SmapMain;
 import org.odk.collect.android.adapters.SortDialogAdapter;
@@ -455,8 +456,11 @@ public class SmapTaskListFragment extends ListFragment
     }
 
     private void processEnterData() {
-        Intent i = new Intent(getContext(), org.odk.collect.android.activities.FormChooserList.class);
-        startActivityForResult(i, FORM_CHOOSER);
+        if (Collect.allowClick(getClass().getName())) {
+            Intent i = new Intent(getContext(),
+                    FormChooserList.class);
+            startActivity(i);
+        }
     }
 
     // Get new forms
