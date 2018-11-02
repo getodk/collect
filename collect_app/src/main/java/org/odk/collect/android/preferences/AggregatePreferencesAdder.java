@@ -12,7 +12,6 @@
  * the License.
  */
 
-
 package org.odk.collect.android.preferences;
 
 import android.preference.PreferenceFragment;
