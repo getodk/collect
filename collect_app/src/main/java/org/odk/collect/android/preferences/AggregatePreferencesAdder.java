@@ -20,6 +20,10 @@ import android.widget.Toast;
 
 import org.odk.collect.android.R;
 
+/**
+ * Extracted use case class to isolate and allow testing of functionality (in this
+ * case error handling). Originally contained in {@link ServerPreferencesFragment}.
+ **/
 class AggregatePreferencesAdder {
 
     private final PreferenceFragment fragment;
