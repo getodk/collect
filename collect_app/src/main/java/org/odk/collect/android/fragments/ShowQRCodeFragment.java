@@ -272,9 +272,9 @@ public class ShowQRCodeFragment extends Fragment {
             public void onFailure(Exception exception) {
                 if (exception instanceof GeneralSharedPreferences.ValidationException) {
                     ToastUtils.showLongToast(Collect.getInstance().getString(R.string.invalid_qrcode));
+                } else {
+                    Timber.e(exception);
                 }
-
-                Timber.e(exception);
             }
         });
     }
