@@ -1,35 +1,25 @@
 {
   "project_info": {
-    "project_number": "815932764578",
-    "firebase_url": "https://odk-collect-218822.firebaseio.com",
-    "project_id": "odk-collect-218822",
-    "storage_bucket": "odk-collect-218822.appspot.com"
+    "project_number": "895206029843",
+    "project_id": "opendatakit-collect-forks"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:815932764578:android:5e1d7c3c296329e8",
+        "mobilesdk_app_id": "1:895206029843:android:5e1d7c3c296329e8",
         "android_client_info": {
           "package_name": "org.odk.collect.android"
         }
       },
       "oauth_client": [
         {
-          "client_id": "815932764578-jlllfdglbta7fsbqfkkhj77baj9l5seb.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "org.odk.collect.android",
-            "certificate_hash": "df7c5f99ce623eb6d9f582b7e7fe6a5f44a875c9"
-          }
-        },
-        {
-          "client_id": "815932764578-psadf6ahmesb9nlctcdi8n6u3cs8dous.apps.googleusercontent.com",
+          "client_id": "895206029843-btufcdli1qptfd4sjrq5f0vdacsg68fj.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBDJKprJC5rSkHep5s7nJmgspSss1I6Lvg"
+          "current_key": "AIzaSyAD_MRym4ELgrqCJ4IGkPAdkfPXYX1WDeI"
         }
       ],
       "services": {
@@ -40,13 +30,8 @@
           }
         },
         "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "815932764578-psadf6ahmesb9nlctcdi8n6u3cs8dous.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "status": 1,
+          "other_platform_oauth_client": []
         },
         "ads_service": {
           "status": 2
