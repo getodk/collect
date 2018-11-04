@@ -16,9 +16,11 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -50,6 +52,7 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.views.AudioButton.AudioHandler;
 import org.odk.collect.android.views.ExpandedHeightGridView;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
+import org.opendatakit.httpclientandroidlib.client.cache.Resource;
 
 import java.io.File;
 import java.util.List;
@@ -67,10 +70,13 @@ import timber.log.Timber;
 @SuppressLint("ViewConstructor")
 public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
 
-    // The RGB value for the orange background
+    /* The RGB value for the orange background (obsolete)
     public static final int ORANGE_RED_VAL = 255;
     public static final int ORANGE_GREEN_VAL = 140;
-    public static final int ORANGE_BLUE_VAL = 0;
+    public static final int ORANGE_BLUE_VAL = 0; */
+
+    // Using Resource Color highContrastHighlight instead of RGB Values to guarantee consistency
+    private final int BACKGROUND_ORANGE = getResources().getColor(R.color.highContrastHighlight);
 
     private static final int HORIZONTAL_PADDING = 7;
     private static final int VERTICAL_PADDING = 5;
@@ -299,8 +305,7 @@ public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
                     imageViews[i].setBackgroundColor(0);
                 }
                 selected[position] = true;
-                imageViews[position].setBackgroundColor(Color.rgb(ORANGE_RED_VAL, ORANGE_GREEN_VAL,
-                        ORANGE_BLUE_VAL));
+                imageViews[position].setBackgroundColor(BACKGROUND_ORANGE);
 
                 if (quickAdvance && listener != null) {
                     listener.advance();
@@ -322,8 +327,7 @@ public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
 
             selected[i] = match.equals(s);
             if (selected[i]) {
-                imageViews[i].setBackgroundColor(Color.rgb(ORANGE_RED_VAL, ORANGE_GREEN_VAL,
-                        ORANGE_BLUE_VAL));
+                imageViews[i].setBackgroundColor(BACKGROUND_ORANGE);
             }
         }
 

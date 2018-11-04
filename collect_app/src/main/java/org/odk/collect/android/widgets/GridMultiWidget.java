@@ -67,10 +67,13 @@ import timber.log.Timber;
 @SuppressLint("ViewConstructor")
 public class GridMultiWidget extends QuestionWidget implements MultiChoiceWidget {
 
-    // The RGB value for the orange background
+    /* The RGB value for the orange background (obsolete)
     public static final int ORANGE_RED_VAL = 255;
     public static final int ORANGE_GREEN_VAL = 140;
-    public static final int ORANGE_BLUE_VAL = 0;
+    public static final int ORANGE_BLUE_VAL = 0; */
+
+    // Using Resource Color highContrastHighlight instead of RGB Values to guarantee consistency
+    private final int BACKGROUND_ORANGE = getResources().getColor(R.color.highContrastHighlight);
 
     private static final int HORIZONTAL_PADDING = 7;
     private static final int VERTICAL_PADDING = 5;
@@ -292,8 +295,7 @@ public class GridMultiWidget extends QuestionWidget implements MultiChoiceWidget
                     if (audioHandlers[lastClickPosition] != null) {
                         stopAudio();
                     }
-                    imageViews[position].setBackgroundColor(Color.rgb(ORANGE_RED_VAL, ORANGE_GREEN_VAL,
-                            ORANGE_BLUE_VAL));
+                    imageViews[position].setBackgroundColor(BACKGROUND_ORANGE);
                     if (audioHandlers[position] != null) {
                         audioHandlers[position].playAudio(getContext());
                     }
@@ -325,8 +327,7 @@ public class GridMultiWidget extends QuestionWidget implements MultiChoiceWidget
 
             selected[i] = found;
             if (selected[i]) {
-                imageViews[i].setBackgroundColor(Color.rgb(ORANGE_RED_VAL, ORANGE_GREEN_VAL,
-                        ORANGE_BLUE_VAL));
+                imageViews[i].setBackgroundColor(BACKGROUND_ORANGE);
             }
 
         }
