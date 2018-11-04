@@ -289,7 +289,6 @@ public class Collect extends Application implements HasActivityInjector {
         if (tracker == null) {
             GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
             tracker = analytics.newTracker(R.xml.global_tracker);
-            // R.xml.global_tracker
         }
         return tracker;
     }
