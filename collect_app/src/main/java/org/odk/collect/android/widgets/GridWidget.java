@@ -72,7 +72,7 @@ public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
     public static final int ORANGE_BLUE_VAL = 0; */
 
     // Using Resource Color highContrastHighlight instead of RGB Values to guarantee consistency
-    private final int BACKGROUND_ORANGE = getResources().getColor(R.color.highContrastHighlight);
+    private final int bgOrange = getResources().getColor(R.color.highContrastHighlight);
 
     private static final int HORIZONTAL_PADDING = 7;
     private static final int VERTICAL_PADDING = 5;
@@ -301,7 +301,7 @@ public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
                     imageViews[i].setBackgroundColor(0);
                 }
                 selected[position] = true;
-                imageViews[position].setBackgroundColor(BACKGROUND_ORANGE);
+                imageViews[position].setBackgroundColor(bgOrange);
 
                 if (quickAdvance && listener != null) {
                     listener.advance();
@@ -323,7 +323,7 @@ public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
 
             selected[i] = match.equals(s);
             if (selected[i]) {
-                imageViews[i].setBackgroundColor(BACKGROUND_ORANGE);
+                imageViews[i].setBackgroundColor(bgOrange);
             }
         }
 
