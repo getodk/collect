@@ -68,24 +68,24 @@ public class FormsDao {
         return getFormsCursor(null, selection, selectionArgs, order);
     }
 
-    private CursorLoader getFormsCursorLoader(String sortOrder, boolean uniqueByFormId) {
-        return getFormsCursorLoader(null, null, sortOrder, uniqueByFormId);
+    private CursorLoader getFormsCursorLoader(String sortOrder, boolean newestByFormId) {
+        return getFormsCursorLoader(null, null, sortOrder, newestByFormId);
     }
 
     /**
      * Returns a loader filtered by the specified charSequence in the specified sortOrder. If
-     * uniqueByFormId is true, only the most recently-downloaded version of each form is included.
+     * newestByFormId is true, only the most recently-downloaded version of each form is included.
      */
-    public CursorLoader getFormsCursorLoader(CharSequence charSequence, String sortOrder, boolean uniqueByFormId) {
+    public CursorLoader getFormsCursorLoader(CharSequence charSequence, String sortOrder, boolean newestByFormId) {
         CursorLoader cursorLoader;
 
         if (charSequence.length() == 0) {
-            cursorLoader = getFormsCursorLoader(sortOrder, uniqueByFormId);
+            cursorLoader = getFormsCursorLoader(sortOrder, newestByFormId);
         } else {
             String selection = FormsProviderAPI.FormsColumns.DISPLAY_NAME + " LIKE ?";
             String[] selectionArgs = new String[]{"%" + charSequence + "%"};
 
-            cursorLoader = getFormsCursorLoader(selection, selectionArgs, sortOrder, uniqueByFormId);
+            cursorLoader = getFormsCursorLoader(selection, selectionArgs, sortOrder, newestByFormId);
         }
         return cursorLoader;
     }
@@ -96,10 +96,10 @@ public class FormsDao {
 
     /**
      * Builds and returns a new CursorLoader, passing on the configuration parameters. If
-     * uniqueByFormID is true, only the most recently-downloaded version of each form is included.
+     * newestByFormID is true, only the most recently-downloaded version of each form is included.
      */
-    private CursorLoader getFormsCursorLoader(String selection, String[] selectionArgs, String sortOrder, boolean uniqueByFormId) {
-        Uri formUri = uniqueByFormId ? FormsProviderAPI.FormsColumns.UNIQUE_FORMS_BY_FORMID_URI
+    private CursorLoader getFormsCursorLoader(String selection, String[] selectionArgs, String sortOrder, boolean newestByFormId) {
+        Uri formUri = newestByFormId ? FormsProviderAPI.FormsColumns.CONTENT_NEWEST_FORMS_BY_FORMID_URI
                 : FormsProviderAPI.FormsColumns.CONTENT_URI;
 
         return new CursorLoader(Collect.getInstance(), formUri, null, selection, selectionArgs, sortOrder);
