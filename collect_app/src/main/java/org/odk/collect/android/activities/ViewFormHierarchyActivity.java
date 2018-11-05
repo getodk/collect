@@ -39,8 +39,6 @@ public class ViewFormHierarchyActivity extends FormHierarchyActivity {
      */
     @Override
     void configureButtons(FormController formController) {
-        formController.stepToOuterScreenEvent();
-
         jumpPreviousButton.setOnClickListener(v -> goUpLevel());
 
         Button exitButton = findViewById(R.id.exitButton);
