@@ -66,7 +66,6 @@ import timber.log.Timber;
 @SuppressLint("ViewConstructor")
 public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
 
-    // Using Resource Color highContrastHighlight instead of RGB Values to guarantee consistency
     private final int bgOrange = getResources().getColor(R.color.highContrastHighlight);
 
     private static final int HORIZONTAL_PADDING = 7;
