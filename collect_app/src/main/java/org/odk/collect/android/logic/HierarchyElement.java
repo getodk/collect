@@ -23,13 +23,13 @@ import java.util.ArrayList;
 public class HierarchyElement {
     private final ArrayList<HierarchyElement> children = new ArrayList<>();
 
-    private int type;
+    private Type type;
     private final FormIndex formIndex;
     private final String primaryText;
     private final String secondaryText;
     private Drawable icon;
 
-    public HierarchyElement(String primaryText, String secondaryText, Drawable icon, int type, FormIndex formIndex) {
+    public HierarchyElement(String primaryText, String secondaryText, Drawable icon, Type type, FormIndex formIndex) {
         this.primaryText = primaryText;
         this.secondaryText = secondaryText;
         this.icon = icon;
@@ -57,11 +57,11 @@ public class HierarchyElement {
         return formIndex;
     }
 
-    public int getType() {
+    public Type getType() {
         return type;
     }
 
-    public void setType(int newType) {
+    public void setType(Type newType) {
         type = newType;
     }
 
@@ -71,5 +71,12 @@ public class HierarchyElement {
 
     public void addChild(HierarchyElement h) {
         children.add(h);
+    }
+
+    public enum Type {
+        CHILD,
+        EXPANDED,
+        COLLAPSED,
+        QUESTION;
     }
 }

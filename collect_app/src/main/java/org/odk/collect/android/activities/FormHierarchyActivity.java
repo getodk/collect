@@ -64,11 +64,6 @@ import timber.log.Timber;
  * Buttons at the bottom of the screen allow users to navigate the form.
  */
 public class FormHierarchyActivity extends CollectAbstractActivity {
-    protected static final int CHILD = 1;
-    protected static final int EXPANDED = 2;
-    protected static final int COLLAPSED = 3;
-    protected static final int QUESTION = 4;
-
     List<HierarchyElement> formList;
     TextView path;
 
@@ -295,7 +290,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                             String answerDisplay = FormEntryPromptUtils.getAnswerText(fp, this, formController);
                             formList.add(
                                     new HierarchyElement(FormEntryPromptUtils.markQuestionIfIsRequired(label, fp.isRequired()), answerDisplay, null,
-                                            QUESTION, fp.getIndex()));
+                                            HierarchyElement.Type.QUESTION, fp.getIndex()));
                         }
                         break;
                     case FormEntryController.EVENT_GROUP:
@@ -323,7 +318,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                             HierarchyElement group =
                                     new HierarchyElement(getLabel(fc), null, ContextCompat
                                             .getDrawable(this, R.drawable.expander_ic_minimized),
-                                            COLLAPSED, fc.getIndex());
+                                            HierarchyElement.Type.COLLAPSED, fc.getIndex());
                             formList.add(group);
                         }
                         String repeatLabel = getLabel(fc);
@@ -337,7 +332,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                         repeatLabel += " (" + (fc.getMultiplicity() + 1) + ")\u200E";
                         // Add this group name to the drop down list for this repeating group.
                         HierarchyElement h = formList.get(formList.size() - 1);
-                        h.addChild(new HierarchyElement(repeatLabel, null, null, CHILD, fc.getIndex()));
+                        h.addChild(new HierarchyElement(repeatLabel, null, null, HierarchyElement.Type.CHILD, fc.getIndex()));
                         break;
                 }
                 event =
@@ -372,7 +367,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
 
         switch (element.getType()) {
             case EXPANDED:
-                element.setType(COLLAPSED);
+                element.setType(HierarchyElement.Type.COLLAPSED);
                 ArrayList<HierarchyElement> children = element.getChildren();
                 for (int i = 0; i < children.size(); i++) {
                     formList.remove(position + 1);
@@ -380,7 +375,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                 element.setIcon(ContextCompat.getDrawable(this, R.drawable.expander_ic_minimized));
                 break;
             case COLLAPSED:
-                element.setType(EXPANDED);
+                element.setType(HierarchyElement.Type.EXPANDED);
                 ArrayList<HierarchyElement> children1 = element.getChildren();
                 for (int i = 0; i < children1.size(); i++) {
                     Timber.i("adding child: %s", children1.get(i).getFormIndex());
