@@ -22,11 +22,14 @@ import org.javarosa.core.model.FormIndex;
 import org.odk.collect.android.R;
 import org.odk.collect.android.logic.FormController;
 
-public class ViewFormHierarchyActivity extends FormHierarchyActivity {
+/**
+ * Displays the structure of a form along with the answers for the current instance. Disables all
+ * features that allow the user to edit the form instance.
+ */
+public class ViewOnlyFormHierarchyActivity extends FormHierarchyActivity {
     /**
-     * A view-only hierarchy doesn't allow the user to jump into the form-filling view so the
-     * buttons to jump to the beginning and to the end of the form are hidden. There is an extra
-     * button that allows the user to exit to the previous activity.
+     * Hides buttons to jump to the beginning and to the end of the form instance to edit it. Adds
+     * an extra exit button that exits this activity.
      */
     @Override
     void configureButtons(FormController formController) {
@@ -45,8 +48,7 @@ public class ViewFormHierarchyActivity extends FormHierarchyActivity {
     }
 
     /**
-     * A view-only hierarchy doesn't allow the user to click on individual questions to jump into
-     * the form-filling view.
+     * Prevents the user from clicking on individual questions to jump into the form-filling view.
      */
     @Override
     void onQuestionClicked(FormIndex index) {
@@ -54,7 +56,7 @@ public class ViewFormHierarchyActivity extends FormHierarchyActivity {
     }
 
     /**
-     * A view-only hierarchy should not log an audit event when the user exits the activity.
+     * Prevents logging an audit event when the user exits the activity.
      */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {

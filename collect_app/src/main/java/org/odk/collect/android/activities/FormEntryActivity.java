@@ -2381,7 +2381,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                             return; // so we don't show the intro screen before jumping to the hierarchy
                         } else {
                             if (ApplicationConstants.FormModes.VIEW_SENT.equalsIgnoreCase(formMode)) {
-                                startActivity(new Intent(this, ViewFormHierarchyActivity.class));
+                                startActivity(new Intent(this, ViewOnlyFormHierarchyActivity.class));
                             }
                             finish();
                         }
