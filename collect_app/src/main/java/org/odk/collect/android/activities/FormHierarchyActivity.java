@@ -70,7 +70,12 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
      * by the expand/collapse behavior in {@link #onElementClick(HierarchyElement)}.
      */
     private List<HierarchyElement> elementsToDisplay;
-    TextView path;
+
+    /**
+     * The label shown at the top of a hierarchy screen for a repeat instance. Set by
+     * {@link #getCurrentPath()}.
+     */
+    private TextView groupPathTextView;
 
     FormIndex startIndex;
     private FormIndex currentIndex;
@@ -106,7 +111,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
 
         setTitle(formController.getFormTitle());
 
-        path = findViewById(R.id.pathtext);
+        groupPathTextView = findViewById(R.id.pathtext);
 
         jumpPreviousButton = findViewById(R.id.jumpPreviousButton);
         jumpBeginningButton = findViewById(R.id.jumpBeginningButton);
@@ -166,6 +171,9 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
         refreshView();
     }
 
+    /**
+     * Builds a string representing the path of the current group. Each level is separated by a <.
+     */
     private String getCurrentPath() {
         FormController formController = Collect.getInstance().getFormController();
         FormIndex index = formController.getFormIndex();
@@ -232,11 +240,11 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                 formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
                 contextGroupRef =
                         formController.getFormIndex().getReference().getParentRef().toString(true);
-                path.setVisibility(View.GONE);
+                groupPathTextView.setVisibility(View.GONE);
                 jumpPreviousButton.setEnabled(false);
             } else {
-                path.setVisibility(View.VISIBLE);
-                path.setText(getCurrentPath());
+                groupPathTextView.setVisibility(View.VISIBLE);
+                groupPathTextView.setText(getCurrentPath());
                 jumpPreviousButton.setEnabled(true);
             }
 
