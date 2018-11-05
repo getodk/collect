@@ -66,11 +66,6 @@ import timber.log.Timber;
 @SuppressLint("ViewConstructor")
 public class GridMultiWidget extends QuestionWidget implements MultiChoiceWidget {
 
-    /* The RGB value for the orange background (obsolete)
-    public static final int ORANGE_RED_VAL = 255;
-    public static final int ORANGE_GREEN_VAL = 140;
-    public static final int ORANGE_BLUE_VAL = 0; */
-
     // Using Resource Color highContrastHighlight instead of RGB Values to guarantee consistency
     private final int bgOrange = getResources().getColor(R.color.highContrastHighlight);
 
