@@ -373,18 +373,7 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity {
                 element.setIcon(ContextCompat.getDrawable(this, R.drawable.expander_ic_maximized));
                 break;
             case QUESTION:
-                Collect.getInstance().getFormController().jumpToIndex(index);
-                if (Collect.getInstance().getFormController().indexIsInFieldList()) {
-                    try {
-                        Collect.getInstance().getFormController().stepToPreviousScreenEvent();
-                    } catch (JavaRosaException e) {
-                        Timber.d(e);
-                        createErrorDialog(e.getCause().getMessage());
-                        return;
-                    }
-                }
-                setResult(RESULT_OK);
-                finish();
+                onQuestionClicked(index);
                 return;
             case CHILD:
                 Collect.getInstance().getFormController().jumpToIndex(element.getFormIndex());
@@ -395,6 +384,25 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity {
 
         recyclerView.setAdapter(new HierarchyListAdapter(formList, this::onElementClick));
         ((LinearLayoutManager) recyclerView.getLayoutManager()).scrollToPositionWithOffset(position, 0);
+    }
+
+    /**
+     * Handles clicks on a question. Jumps to the form filling view with the selected question shown.
+     * If the selected question is in a field list, show the entire field list.
+     */
+    private void onQuestionClicked(FormIndex index) {
+        Collect.getInstance().getFormController().jumpToIndex(index);
+        if (Collect.getInstance().getFormController().indexIsInFieldList()) {
+            try {
+                Collect.getInstance().getFormController().stepToPreviousScreenEvent();
+            } catch (JavaRosaException e) {
+                Timber.d(e);
+                createErrorDialog(e.getCause().getMessage());
+                return;
+            }
+        }
+        setResult(RESULT_OK);
+        finish();
     }
 
     /**
