@@ -987,7 +987,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                             0, null, false, true);
                 }
 
-                Intent i = new Intent(this, EditFormHierarchyActivity.class);
+                Intent i = new Intent(this, FormHierarchyActivity.class);
                 startActivityForResult(i, RequestCodes.HIERARCHY_ACTIVITY);
                 return true;
             case R.id.menu_preferences:
@@ -2377,7 +2377,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
                             formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_RESUME, 0, null, false, true);
                             formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.HIERARCHY, 0, null, false, true);
-                            startActivity(new Intent(this, EditFormHierarchyActivity.class));
+                            startActivity(new Intent(this, FormHierarchyActivity.class));
                             return; // so we don't show the intro screen before jumping to the hierarchy
                         } else {
                             if (ApplicationConstants.FormModes.VIEW_SENT.equalsIgnoreCase(formMode)) {

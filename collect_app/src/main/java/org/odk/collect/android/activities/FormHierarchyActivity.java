@@ -46,8 +46,24 @@ import java.util.List;
 
 import timber.log.Timber;
 
-public abstract class FormHierarchyActivity extends CollectAbstractActivity {
-
+/**
+ * Displays the structure of a form along with the answers for the current instance. Different form
+ * elements are displayed in the following ways:
+ * - Questions each take up a row with their full label shown and their answers below
+ * - Non-repeat groups are not represented at all
+ * - Repeat groups are initially shown as collapsed and are expanded when tapped, revealing instances
+ * of that repeat
+ * - Repeat instances are displayed with their label and a count after (e.g. My group (1))
+ *
+ * Tapping on a repeat instance shows all the questions in that repeat instance using the display
+ * rules above.
+ *
+ * Although the user gets the impression of navigating "into" a repeat, the view is refreshed in
+ * {@link #refreshView()} rather than another activity/fragment being added to the backstack.
+ *
+ * Buttons at the bottom of the screen allow users to navigate the form.
+ */
+public class FormHierarchyActivity extends CollectAbstractActivity {
     protected static final int CHILD = 1;
     protected static final int EXPANDED = 2;
     protected static final int COLLAPSED = 3;
