@@ -124,13 +124,18 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
         configureButtons(formController);
         refreshView();
 
-        // Kinda slow, but works. This scrolls to the last question the user was looking at.
+        // Scroll to the last question the user was looking at
+        // TODO: avoid another iteration through all displayed elements
         if (recyclerView != null && recyclerView.getAdapter() != null && recyclerView.getAdapter().getItemCount() > 0) {
             emptyView.setVisibility(View.GONE);
             recyclerView.post(() -> {
                 int position = 0;
+                // Iterate over all the elements currently displayed looking for a match with the
+                // startIndex which can either represent a question or a field list.
                 for (HierarchyElement hierarchyElement : elementsToDisplay) {
-                    if (shouldScrollToTheGivenIndex(hierarchyElement.getFormIndex(), formController)) {
+                    FormIndex indexToCheck = hierarchyElement.getFormIndex();
+                    if (startIndex.equals(indexToCheck)
+                            || (formController.indexIsInFieldList(startIndex) && indexToCheck.toString().startsWith(startIndex.toString()))) {
                         position = elementsToDisplay.indexOf(hierarchyElement);
                         break;
                     }
@@ -162,11 +167,6 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
             setResult(RESULT_OK);
             finish();
         });
-    }
-
-    private boolean shouldScrollToTheGivenIndex(FormIndex formIndex, FormController formController) {
-        return startIndex.equals(formIndex)
-                || (formController.indexIsInFieldList(startIndex) && formIndex.toString().startsWith(startIndex.toString()));
     }
 
     protected void goUpLevel() {
