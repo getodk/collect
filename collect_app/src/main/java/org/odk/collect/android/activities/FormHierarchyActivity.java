@@ -58,6 +58,9 @@ import timber.log.Timber;
  * Tapping on a repeat instance shows all the questions in that repeat instance using the display
  * rules above.
  *
+ * Tapping on a question sets the app-wide current question to that question and terminates the
+ * activity, returning to {@link FormEntryActivity}.
+ *
  * Although the user gets the impression of navigating "into" a repeat, the view is refreshed in
  * {@link #refreshView()} rather than another activity/fragment being added to the backstack.
  *
@@ -83,7 +86,14 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
      */
     private FormIndex startIndex;
 
+    /**
+     * The index of the question that is being displayed in the hierarchy. On first launch, it is
+     * the same as {@link #startIndex}. It can then become the index of a repeat instance.
+     * TODO: Is keeping this as a field necessary? I believe what it is used for is to send the user
+     * to edit a question that caused an error in the hierarchy.
+     */
     private FormIndex currentIndex;
+
     protected Button jumpPreviousButton;
     protected Button jumpBeginningButton;
     protected Button jumpEndButton;
@@ -192,6 +202,11 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
         return ODKView.getGroupsPath(groups.toArray(new FormEntryCaption[groups.size()]));
     }
 
+    /**
+     * Rebuilds the view to reflect the elements that should be displayed based on the
+     * FormController's current index. This index is either set prior to the activity opening or
+     * mutated by {@link #onElementClick(HierarchyElement)} if a repeat instance was tapped.
+     */
     public void refreshView() {
         try {
             FormController formController = Collect.getInstance().getFormController();
@@ -358,7 +373,6 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
 
             recyclerView.setAdapter(new HierarchyListAdapter(elementsToDisplay, this::onElementClick));
 
-            // set the controller back to the current index in case the user hits 'back'
             formController.jumpToIndex(currentIndex);
         } catch (Exception e) {
             Timber.e(e);
