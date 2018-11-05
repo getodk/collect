@@ -77,7 +77,12 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
      */
     private TextView groupPathTextView;
 
-    FormIndex startIndex;
+    /**
+     * The index of the question or the field list the FormController was set to when the hierarchy
+     * was accessed. Used to jump the user back to where they were if applicable.
+     */
+    private FormIndex startIndex;
+
     private FormIndex currentIndex;
     protected Button jumpPreviousButton;
     protected Button jumpBeginningButton;
@@ -106,7 +111,6 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
             return;
         }
 
-        // We use a static FormEntryController to make jumping faster.
         startIndex = formController.getFormIndex();
 
         setTitle(formController.getFormTitle());
