@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
@@ -25,6 +24,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.HierarchyListAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.JavaRosaException;
+import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.HierarchyElement;
 
 import java.util.ArrayList;
@@ -32,26 +32,21 @@ import java.util.ArrayList;
 import timber.log.Timber;
 
 public class ViewFormHierarchyActivity extends FormHierarchyActivity {
-
+    /**
+     * A view-only hierarchy doesn't allow the user to jump into the form-filling view so the
+     * buttons to jump to the beginning and to the end of the form are hidden. There is an extra
+     * button that allows the user to exit to the previous activity.
+     */
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    void configureButtons(FormController formController) {
+        formController.stepToOuterScreenEvent();
 
-        // super.onCreate() can call finish() if it finds the FormController to be null
-        // in that case, we want to shortcut this method, and let the Activity finish itself
-        if (isFinishing()) {
-            return;
-        }
-
-        Collect.getInstance().getFormController().stepToOuterScreenEvent();
+        jumpPreviousButton.setOnClickListener(v -> goUpLevel());
 
         Button exitButton = findViewById(R.id.exitButton);
-        exitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setResult(RESULT_OK);
-                finish();
-            }
+        exitButton.setOnClickListener(v -> {
+            setResult(RESULT_OK);
+            finish();
         });
 
         exitButton.setVisibility(View.VISIBLE);
