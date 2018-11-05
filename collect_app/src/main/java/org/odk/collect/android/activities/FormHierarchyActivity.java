@@ -34,6 +34,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.HierarchyListAdapter;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.HierarchyElement;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
@@ -336,7 +337,65 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity {
         }
     }
 
-    protected abstract void onElementClick(HierarchyElement element);
+    /**
+     * Handles clicks on a specific row in the hierarchy view. Clicking on a:
+     * - group makes it toggle between expanded and collapsed
+     * - question jumps to the form filling view with that question shown. If the question is in a
+     * field list, shows that entire field list.
+     * - group's child element causes this hierarchy view to be refreshed with that element's
+     * questions shown
+     */
+    public void onElementClick(HierarchyElement element) {
+        int position = formList.indexOf(element);
+        FormIndex index = element.getFormIndex();
+        if (index == null) {
+            goUpLevel();
+            return;
+        }
+
+        switch (element.getType()) {
+            case EXPANDED:
+                element.setType(COLLAPSED);
+                ArrayList<HierarchyElement> children = element.getChildren();
+                for (int i = 0; i < children.size(); i++) {
+                    formList.remove(position + 1);
+                }
+                element.setIcon(ContextCompat.getDrawable(this, R.drawable.expander_ic_minimized));
+                break;
+            case COLLAPSED:
+                element.setType(EXPANDED);
+                ArrayList<HierarchyElement> children1 = element.getChildren();
+                for (int i = 0; i < children1.size(); i++) {
+                    Timber.i("adding child: %s", children1.get(i).getFormIndex());
+                    formList.add(position + 1 + i, children1.get(i));
+
+                }
+                element.setIcon(ContextCompat.getDrawable(this, R.drawable.expander_ic_maximized));
+                break;
+            case QUESTION:
+                Collect.getInstance().getFormController().jumpToIndex(index);
+                if (Collect.getInstance().getFormController().indexIsInFieldList()) {
+                    try {
+                        Collect.getInstance().getFormController().stepToPreviousScreenEvent();
+                    } catch (JavaRosaException e) {
+                        Timber.d(e);
+                        createErrorDialog(e.getCause().getMessage());
+                        return;
+                    }
+                }
+                setResult(RESULT_OK);
+                finish();
+                return;
+            case CHILD:
+                Collect.getInstance().getFormController().jumpToIndex(element.getFormIndex());
+                setResult(RESULT_OK);
+                refreshView();
+                return;
+        }
+
+        recyclerView.setAdapter(new HierarchyListAdapter(formList, this::onElementClick));
+        ((LinearLayoutManager) recyclerView.getLayoutManager()).scrollToPositionWithOffset(position, 0);
+    }
 
     /**
      * Creates and displays dialog with the given errorMsg.
