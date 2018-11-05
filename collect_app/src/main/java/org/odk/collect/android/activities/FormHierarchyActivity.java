@@ -64,7 +64,12 @@ import timber.log.Timber;
  * Buttons at the bottom of the screen allow users to navigate the form.
  */
 public class FormHierarchyActivity extends CollectAbstractActivity {
-    List<HierarchyElement> formList;
+    /**
+     * The questions and repeats at the current level. If a repeat is expanded, also includes the
+     * instances of that repeat. Recreated every time {@link #refreshView()} is called. Modified
+     * by the expand/collapse behavior in {@link #onElementClick(HierarchyElement)}.
+     */
+    private List<HierarchyElement> elementsToDisplay;
     TextView path;
 
     FormIndex startIndex;
@@ -115,9 +120,9 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
             emptyView.setVisibility(View.GONE);
             recyclerView.post(() -> {
                 int position = 0;
-                for (HierarchyElement hierarchyElement : formList) {
+                for (HierarchyElement hierarchyElement : elementsToDisplay) {
                     if (shouldScrollToTheGivenIndex(hierarchyElement.getFormIndex(), formController)) {
-                        position = formList.indexOf(hierarchyElement);
+                        position = elementsToDisplay.indexOf(hierarchyElement);
                         break;
                     }
                 }
@@ -185,7 +190,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
             // display
             // everything enclosed within that group.
             String contextGroupRef = "";
-            formList = new ArrayList<>();
+            elementsToDisplay = new ArrayList<>();
 
             // If we're currently at a repeat node, record the name of the node and step to the next
             // node to display.
@@ -288,7 +293,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                             // show the question if it is an editable field.
                             // or if it is read-only and the label is not blank.
                             String answerDisplay = FormEntryPromptUtils.getAnswerText(fp, this, formController);
-                            formList.add(
+                            elementsToDisplay.add(
                                     new HierarchyElement(FormEntryPromptUtils.markQuestionIfIsRequired(label, fp.isRequired()), answerDisplay, null,
                                             HierarchyElement.Type.QUESTION, fp.getIndex()));
                         }
@@ -319,7 +324,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                                     new HierarchyElement(getLabel(fc), null, ContextCompat
                                             .getDrawable(this, R.drawable.expander_ic_minimized),
                                             HierarchyElement.Type.COLLAPSED, fc.getIndex());
-                            formList.add(group);
+                            elementsToDisplay.add(group);
                         }
                         String repeatLabel = getLabel(fc);
                         if (fc.getFormElement().getChildren().size() == 1 && fc.getFormElement().getChild(0) instanceof GroupDef) {
@@ -331,7 +336,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                         }
                         repeatLabel += " (" + (fc.getMultiplicity() + 1) + ")\u200E";
                         // Add this group name to the drop down list for this repeating group.
-                        HierarchyElement h = formList.get(formList.size() - 1);
+                        HierarchyElement h = elementsToDisplay.get(elementsToDisplay.size() - 1);
                         h.addChild(new HierarchyElement(repeatLabel, null, null, HierarchyElement.Type.CHILD, fc.getIndex()));
                         break;
                 }
@@ -339,7 +344,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                         formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
             }
 
-            recyclerView.setAdapter(new HierarchyListAdapter(formList, this::onElementClick));
+            recyclerView.setAdapter(new HierarchyListAdapter(elementsToDisplay, this::onElementClick));
 
             // set the controller back to the current index in case the user hits 'back'
             formController.jumpToIndex(currentIndex);
@@ -358,7 +363,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
      * questions shown
      */
     public void onElementClick(HierarchyElement element) {
-        int position = formList.indexOf(element);
+        int position = elementsToDisplay.indexOf(element);
         FormIndex index = element.getFormIndex();
         if (index == null) {
             goUpLevel();
@@ -370,7 +375,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                 element.setType(HierarchyElement.Type.COLLAPSED);
                 ArrayList<HierarchyElement> children = element.getChildren();
                 for (int i = 0; i < children.size(); i++) {
-                    formList.remove(position + 1);
+                    elementsToDisplay.remove(position + 1);
                 }
                 element.setIcon(ContextCompat.getDrawable(this, R.drawable.expander_ic_minimized));
                 break;
@@ -379,7 +384,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                 ArrayList<HierarchyElement> children1 = element.getChildren();
                 for (int i = 0; i < children1.size(); i++) {
                     Timber.i("adding child: %s", children1.get(i).getFormIndex());
-                    formList.add(position + 1 + i, children1.get(i));
+                    elementsToDisplay.add(position + 1 + i, children1.get(i));
 
                 }
                 element.setIcon(ContextCompat.getDrawable(this, R.drawable.expander_ic_maximized));
@@ -394,7 +399,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                 return;
         }
 
-        recyclerView.setAdapter(new HierarchyListAdapter(formList, this::onElementClick));
+        recyclerView.setAdapter(new HierarchyListAdapter(elementsToDisplay, this::onElementClick));
         ((LinearLayoutManager) recyclerView.getLayoutManager()).scrollToPositionWithOffset(position, 0);
     }
 
