@@ -23,7 +23,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -92,37 +91,10 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity {
         path = findViewById(R.id.pathtext);
 
         jumpPreviousButton = findViewById(R.id.jumpPreviousButton);
-        jumpPreviousButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goUpLevel();
-            }
-        });
-
         jumpBeginningButton = findViewById(R.id.jumpBeginningButton);
-        jumpBeginningButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                formController.getTimerLogger().exitView();
-                formController.jumpToIndex(FormIndex.createBeginningOfFormIndex());
-
-                setResult(RESULT_OK);
-                finish();
-            }
-        });
-
         jumpEndButton = findViewById(R.id.jumpEndButton);
-        jumpEndButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                formController.getTimerLogger().exitView();
-                formController.jumpToIndex(FormIndex.createEndOfFormIndex());
 
-                setResult(RESULT_OK);
-                finish();
-            }
-        });
-
+        configureButtons(formController);
         refreshView();
 
         // Kinda slow, but works. This scrolls to the last question the user was looking at.
@@ -139,6 +111,30 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity {
                 ((LinearLayoutManager) recyclerView.getLayoutManager()).scrollToPositionWithOffset(position, 0);
             });
         }
+    }
+
+
+    /**
+     * Configure the navigation buttons at the bottom of the screen.
+     */
+    void configureButtons(FormController formController) {
+        jumpPreviousButton.setOnClickListener(v -> goUpLevel());
+
+        jumpBeginningButton.setOnClickListener(v -> {
+            formController.getTimerLogger().exitView();
+            formController.jumpToIndex(FormIndex.createBeginningOfFormIndex());
+
+            setResult(RESULT_OK);
+            finish();
+        });
+
+        jumpEndButton.setOnClickListener(v -> {
+            formController.getTimerLogger().exitView();
+            formController.jumpToIndex(FormIndex.createEndOfFormIndex());
+
+            setResult(RESULT_OK);
+            finish();
+        });
     }
 
     private boolean shouldScrollToTheGivenIndex(FormIndex formIndex, FormController formController) {
