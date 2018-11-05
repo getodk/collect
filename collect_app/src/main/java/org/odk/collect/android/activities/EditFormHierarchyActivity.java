@@ -20,16 +20,5 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.FormController;
 
 public class EditFormHierarchyActivity extends FormHierarchyActivity {
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        switch (keyCode) {
-            case KeyEvent.KEYCODE_BACK:
-                FormController fc = Collect.getInstance().getFormController();
-                if (fc != null) {
-                    fc.getTimerLogger().exitView();
-                    fc.jumpToIndex(startIndex);
-                }
-        }
-        return super.onKeyDown(keyCode, event);
-    }
+
 }

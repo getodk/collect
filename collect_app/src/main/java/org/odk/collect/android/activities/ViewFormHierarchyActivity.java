@@ -14,22 +14,13 @@
 
 package org.odk.collect.android.activities;
 
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.LinearLayoutManager;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 
 import org.javarosa.core.model.FormIndex;
 import org.odk.collect.android.R;
-import org.odk.collect.android.adapters.HierarchyListAdapter;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.logic.FormController;
-import org.odk.collect.android.logic.HierarchyElement;
-
-import java.util.ArrayList;
-
-import timber.log.Timber;
 
 public class ViewFormHierarchyActivity extends FormHierarchyActivity {
     /**
@@ -53,55 +44,20 @@ public class ViewFormHierarchyActivity extends FormHierarchyActivity {
         jumpEndButton.setVisibility(View.GONE);
     }
 
+    /**
+     * A view-only hierarchy doesn't allow the user to click on individual questions to jump into
+     * the form-filling view.
+     */
     @Override
-    public void onElementClick(HierarchyElement element) {
-        int position = formList.indexOf(element);
-        FormIndex index = element.getFormIndex();
-        if (index == null) {
-            goUpLevel();
-            return;
-        }
+    void onQuestionClicked(FormIndex index) {
+        // Do nothing
+    }
 
-        switch (element.getType()) {
-            case EXPANDED:
-                element.setType(COLLAPSED);
-                ArrayList<HierarchyElement> children = element.getChildren();
-                for (int i = 0; i < children.size(); i++) {
-                    formList.remove(position + 1);
-                }
-                element.setIcon(ContextCompat.getDrawable(this, R.drawable.expander_ic_minimized));
-                break;
-            case COLLAPSED:
-                element.setType(EXPANDED);
-                ArrayList<HierarchyElement> children1 = element.getChildren();
-                for (int i = 0; i < children1.size(); i++) {
-                    Timber.i("adding child: %s", children1.get(i).getFormIndex());
-                    formList.add(position + 1 + i, children1.get(i));
-
-                }
-                element.setIcon(ContextCompat.getDrawable(this, R.drawable.expander_ic_maximized));
-                break;
-            case QUESTION:
-                Collect.getInstance().getFormController().jumpToIndex(index);
-                if (Collect.getInstance().getFormController().indexIsInFieldList()) {
-                    try {
-                        Collect.getInstance().getFormController().stepToPreviousScreenEvent();
-                    } catch (JavaRosaException e) {
-                        Timber.d(e);
-                        createErrorDialog(e.getCause().getMessage());
-                        return;
-                    }
-                }
-                setResult(RESULT_OK);
-                return;
-            case CHILD:
-                Collect.getInstance().getFormController().jumpToIndex(element.getFormIndex());
-                setResult(RESULT_OK);
-                refreshView();
-                return;
-        }
-
-        recyclerView.setAdapter(new HierarchyListAdapter(formList, this::onElementClick));
-        ((LinearLayoutManager) recyclerView.getLayoutManager()).scrollToPositionWithOffset(position, 0);
+    /**
+     * A view-only hierarchy should not log an audit event when the user exits the activity.
+     */
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        return super.onKeyDown(keyCode, event);
     }
 }

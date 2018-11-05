@@ -22,6 +22,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -390,7 +391,7 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity {
      * Handles clicks on a question. Jumps to the form filling view with the selected question shown.
      * If the selected question is in a field list, show the entire field list.
      */
-    private void onQuestionClicked(FormIndex index) {
+    void onQuestionClicked(FormIndex index) {
         Collect.getInstance().getFormController().jumpToIndex(index);
         if (Collect.getInstance().getFormController().indexIsInFieldList()) {
             try {
@@ -403,6 +404,23 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity {
         }
         setResult(RESULT_OK);
         finish();
+    }
+
+    /**
+     * When the device back button is pressed, go back to the previous activity, NOT the previous
+     * level in the hierarchy as the "Go Up" button does.
+     */
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_BACK:
+                FormController fc = Collect.getInstance().getFormController();
+                if (fc != null) {
+                    fc.getTimerLogger().exitView();
+                    fc.jumpToIndex(startIndex);
+                }
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     /**
