@@ -391,10 +391,6 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
     public void onElementClick(HierarchyElement element) {
         int position = elementsToDisplay.indexOf(element);
         FormIndex index = element.getFormIndex();
-        if (index == null) {
-            goUpLevel();
-            return;
-        }
 
         switch (element.getType()) {
             case EXPANDED:
