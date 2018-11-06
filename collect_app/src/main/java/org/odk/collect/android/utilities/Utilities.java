@@ -749,9 +749,7 @@ public class Utilities {
         StringBuilder selection = new StringBuilder();
         ArrayList<String> instanceKeys = new ArrayList<String>();
 
-        if (result == null) {
-            message.append(Collect.getInstance().getString(R.string.odk_auth_auth_fail));
-        } else {
+        if (result != null) {   // smap - ignore null results
 
             for (String key : result.keySet()) {
                 try {
