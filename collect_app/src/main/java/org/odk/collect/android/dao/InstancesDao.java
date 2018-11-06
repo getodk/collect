@@ -129,7 +129,9 @@ public class InstancesDao {
     }
 
     public Cursor getFinalizedInstancesCursor() {
-        String selection = InstanceProviderAPI.InstanceColumns.STATUS + "=? or " + InstanceProviderAPI.InstanceColumns.STATUS + "=?";
+        String selection = InstanceProviderAPI.InstanceColumns.DELETED_DATE + " IS NULL and ("  // smap
+                + InstanceProviderAPI.InstanceColumns.STATUS + "=? or "
+                + InstanceProviderAPI.InstanceColumns.STATUS + "=? )";
         String[] selectionArgs = {InstanceProviderAPI.STATUS_COMPLETE, InstanceProviderAPI.STATUS_SUBMISSION_FAILED};
         String sortOrder = InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC";
 
@@ -137,7 +139,9 @@ public class InstancesDao {
     }
 
     public CursorLoader getFinalizedInstancesCursorLoader(String sortOrder) {
-        String selection = InstanceProviderAPI.InstanceColumns.STATUS + "=? or " + InstanceProviderAPI.InstanceColumns.STATUS + "=?";
+        String selection = InstanceProviderAPI.InstanceColumns.DELETED_DATE + " IS NULL and ("  // smap
+                + InstanceProviderAPI.InstanceColumns.STATUS
+                + "=? or " + InstanceProviderAPI.InstanceColumns.STATUS + "=? )";
         String[] selectionArgs = {InstanceProviderAPI.STATUS_COMPLETE, InstanceProviderAPI.STATUS_SUBMISSION_FAILED};
 
         return getInstancesCursorLoader(null, selection, selectionArgs, sortOrder);
@@ -151,7 +155,8 @@ public class InstancesDao {
             String selection =
                     "(" + InstanceProviderAPI.InstanceColumns.STATUS + "=? or "
                             + InstanceProviderAPI.InstanceColumns.STATUS + "=?) and "
-                            + InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " LIKE ?";
+                            + InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " LIKE ? and "
+                            + InstanceProviderAPI.InstanceColumns.DELETED_DATE + " is null";    // smap
             String[] selectionArgs = {
                     InstanceProviderAPI.STATUS_COMPLETE,
                     InstanceProviderAPI.STATUS_SUBMISSION_FAILED,
