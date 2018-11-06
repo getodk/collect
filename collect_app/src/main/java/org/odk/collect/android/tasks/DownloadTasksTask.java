@@ -533,7 +533,8 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
     private InstanceUploaderTask.Outcome submitCompletedForms() {
        
         String selection = InstanceColumns.SOURCE + "=? and (" + InstanceColumns.STATUS + "=? or " + 
-        		InstanceColumns.STATUS + "=?)";
+        		InstanceColumns.STATUS + "=?)" +
+                " and " + InstanceColumns.DELETED_DATE + " is null ";
         String selectionArgs[] = {
         		Utilities.getSource(),
         		InstanceProviderAPI.STATUS_COMPLETE,
