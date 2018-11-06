@@ -63,7 +63,8 @@ public class FileManagerTabs extends CollectAbstractActivity {
         // Attach the view pager to the tab strip
         slidingTabLayout.setDistributeEvenly(true);
         slidingTabLayout.setFontColor(android.R.color.white);
-        slidingTabLayout.setBackgroundColor(Color.DKGRAY);
+        slidingTabLayout.setBackgroundColor(getResources().getColor(R.color.tabBackground));    // smap
+        //slidingTabLayout.setBackgroundColor(Color.DKGRAY);  // smap
         slidingTabLayout.setViewPager(viewPager);
     }
 
