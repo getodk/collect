@@ -5,5 +5,5 @@ public interface HttpCredentialsInterface {
 
     String getPassword();
 
-    boolean isEqualTo(HttpCredentialsInterface credentialsInterface);
+    boolean equals(HttpCredentialsInterface credentialsInterface);
 }

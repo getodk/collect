@@ -21,7 +21,7 @@ public class HttpCredentials implements HttpCredentialsInterface {
     }
 
     @Override
-    public boolean isEqualTo(HttpCredentialsInterface credentialsInterface) {
+    public boolean equals(HttpCredentialsInterface credentialsInterface) {
         return getUsername().equals(credentialsInterface.getUsername()) &&
                 getPassword().equals(credentialsInterface.getPassword());
     }
