@@ -317,7 +317,7 @@ public class InstancesDao {
                     int displaySubtextColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.DISPLAY_SUBTEXT);
                     int deletedDateColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.DELETED_DATE);
                     int repeatColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.T_REPEAT);                        // smap
-                    int updateidColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.T_UPDATED);                     // smap
+                    int updateidColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.T_UPDATEID);                     // smap
                     int locationTriggerColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.T_LOCATION_TRIGGER);     // smap
                     int surveyNotesColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.T_SURVEY_NOTES);             // smap
                     int assignmentIdColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.T_ASS_ID);                  // smap
