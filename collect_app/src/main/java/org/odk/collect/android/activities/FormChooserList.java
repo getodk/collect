@@ -227,8 +227,8 @@ public class FormChooserList extends FormListActivity implements
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         showProgressBar();
 
-        boolean uniqueByFormId = GeneralSharedPreferences.getInstance().getBoolean(PreferenceKeys.KEY_HIDE_OLD_FORM_VERSIONS, false);
-        return new FormsDao().getFormsCursorLoader(getFilterText(), getSortingOrder(), uniqueByFormId);
+        boolean newestByFormId = GeneralSharedPreferences.getInstance().getBoolean(PreferenceKeys.KEY_HIDE_OLD_FORM_VERSIONS, false);
+        return new FormsDao().getFormsCursorLoader(getFilterText(), getSortingOrder(), newestByFormId);
     }
 
     @Override

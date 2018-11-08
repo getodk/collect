@@ -50,3 +50,6 @@ out/
 .externalNativeBuild/
 .navigation/
 captures/
+
+# Config for the official ODK Collect build
+collect_app/src/odkCollectRelease/

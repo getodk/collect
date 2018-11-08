@@ -30,6 +30,8 @@ import android.provider.MediaStore.Images;
 import android.provider.OpenableColumns;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -2288,6 +2290,26 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         if (saveToDiskTask != null) {
             saveToDiskTask.setFormSavedListener(this);
+        }
+    }
+
+    @Override
+    protected void onResumeFragments() {
+        super.onResumeFragments();
+
+        /*
+          Make sure the progress dialog is dismissed.
+          In most cases that dialog is dismissed in MediaLoadingTask#onPostExecute() but if the app
+          is in the background when MediaLoadingTask#onPostExecute() is called then the dialog
+          can not be dismissed. In such a case we need to make sure it's dismissed in order
+          to avoid blocking the UI.
+         */
+        if (!mediaLoadingFragment.isMediaLoadingTaskRunning()) {
+            Fragment progressDialogFragment =
+                    getSupportFragmentManager().findFragmentByTag(ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
+            if (progressDialogFragment != null) {
+                ((DialogFragment) progressDialogFragment).dismiss();
+            }
         }
     }
 
