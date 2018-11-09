@@ -64,42 +64,44 @@ public class SurveyNotesActivity extends CollectAbstractActivity {
 
     @Override
     protected void onStart() {
-    	super.onStart();
+        super.onStart();
 
         FormController formController = Collect.getInstance().getFormController();
         EditText editText = (EditText) findViewById(R.id.survey_notes);
 
-        String notes = formController.getSurveyNotes();
-        String xpath = formController.getXPath(formController.getFormIndex());
-        String qname = "";
-        int qIdx = xpath.lastIndexOf('/');
-        if(qIdx >= 0) {
-            qname = xpath.substring(qIdx + 1);
-        }
-        if(qname.endsWith("[1]")) {
-            qname = qname.substring(0, qname.length() - 3);
-        }
-        if(notes == null) {
-            notes = "";
-        }
+        if (formController != null) {
+            String notes = formController.getSurveyNotes();
+            String xpath = formController.getXPath(formController.getFormIndex());
+            String qname = "";
+            int qIdx = xpath.lastIndexOf('/');
+            if (qIdx >= 0) {
+                qname = xpath.substring(qIdx + 1);
+            }
+            if (qname.endsWith("[1]")) {
+                qname = qname.substring(0, qname.length() - 3);
+            }
+            if (notes == null) {
+                notes = "";
+            }
 
-        if(qname.length() > 0 && !notes.contains(qname) && notes.length() > 0) {
-            notes += "\n\r\n\r[" + qname + "]\n\r";
-        } else if(qname.length() > 0 && !notes.contains(qname)) {
-            notes += "[" + qname + "]\n\r";
-        }
+            if (qname.length() > 0 && !notes.contains(qname) && notes.length() > 0) {
+                notes += "\n\r\n\r[" + qname + "]\n\r";
+            } else if (qname.length() > 0 && !notes.contains(qname)) {
+                notes += "[" + qname + "]\n\r";
+            }
 
-        editText.setText(notes, TextView.BufferType.EDITABLE);
-        int offset = notes.indexOf("[" + qname + "]") + qname.length() + 4;
-        int nextComment = notes.indexOf('[', offset);
-        int cursorLocn;
-        if(nextComment >= 0) {
-            cursorLocn = nextComment - 1;
-        } else {
-            cursorLocn = notes.length();
-        }
+            editText.setText(notes, TextView.BufferType.EDITABLE);
+            int offset = notes.indexOf("[" + qname + "]") + qname.length() + 4;
+            int nextComment = notes.indexOf('[', offset);
+            int cursorLocn;
+            if (nextComment >= 0) {
+                cursorLocn = nextComment - 1;
+            } else {
+                cursorLocn = notes.length();
+            }
 
-        editText.setSelection(cursorLocn);
+            editText.setSelection(cursorLocn);
+        }
     }
 
 }
