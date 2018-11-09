@@ -414,28 +414,14 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
 
         switch (element.getType()) {
             case EXPANDED:
-                element.setType(HierarchyElement.Type.COLLAPSED);
-                ArrayList<HierarchyElement> children = element.getChildren();
-                for (int i = 0; i < children.size(); i++) {
-                    elementsToDisplay.remove(position + 1);
-                }
-                element.setIcon(ContextCompat.getDrawable(this, R.drawable.expander_ic_minimized));
-                break;
             case COLLAPSED:
-                element.setType(HierarchyElement.Type.EXPANDED);
-                ArrayList<HierarchyElement> children1 = element.getChildren();
-                for (int i = 0; i < children1.size(); i++) {
-                    Timber.i("adding child: %s", children1.get(i).getFormIndex());
-                    elementsToDisplay.add(position + 1 + i, children1.get(i));
-
-                }
-                element.setIcon(ContextCompat.getDrawable(this, R.drawable.expander_ic_maximized));
+                refreshView();
                 break;
             case QUESTION:
                 onQuestionClicked(index);
                 return;
             case CHILD:
-                Collect.getInstance().getFormController().jumpToIndex(element.getFormIndex());
+                Collect.getInstance().getFormController().jumpToIndex(index);
                 setResult(RESULT_OK);
                 refreshView();
                 return;
