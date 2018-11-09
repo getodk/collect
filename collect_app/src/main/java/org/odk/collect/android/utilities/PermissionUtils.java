@@ -59,7 +59,7 @@ public class PermissionUtils {
      *                 permission checking.
      * @param action   is a listener that provides the calling component with the permission result.
      */
-    public static void requestStoragePermissions(@NonNull Activity activity, @NonNull PermissionListener action) {
+    public void requestStoragePermissions(@NonNull Activity activity, @NonNull PermissionListener action) {
 
         MultiplePermissionsListener multiplePermissionsListener = new MultiplePermissionsListener() {
             @Override
@@ -89,7 +89,7 @@ public class PermissionUtils {
                 .check();
     }
 
-    public static void requestCameraPermission(@NonNull Activity activity, @NonNull PermissionListener action) {
+    public void requestCameraPermission(@NonNull Activity activity, @NonNull PermissionListener action) {
         com.karumi.dexter.listener.single.PermissionListener permissionListener = new com.karumi.dexter.listener.single.PermissionListener() {
             @Override
             public void onPermissionGranted(PermissionGrantedResponse response) {
@@ -115,8 +115,8 @@ public class PermissionUtils {
                 .withErrorListener(error -> Timber.i(error.name()))
                 .check();
     }
-  
-    public static void requestLocationPermissions(@NonNull Activity activity, @NonNull PermissionListener action) {
+
+    public void requestLocationPermissions(@NonNull Activity activity, @NonNull PermissionListener action) {
         MultiplePermissionsListener multiplePermissionsListener = new MultiplePermissionsListener() {
             @Override
             public void onPermissionsChecked(MultiplePermissionsReport report) {
@@ -143,7 +143,7 @@ public class PermissionUtils {
                 .check();
     }
 
-    public static void requestRecordAudioPermission(@NonNull Activity activity, @NonNull PermissionListener action) {
+    public void requestRecordAudioPermission(@NonNull Activity activity, @NonNull PermissionListener action) {
         com.karumi.dexter.listener.single.PermissionListener permissionListener = new com.karumi.dexter.listener.single.PermissionListener() {
             @Override
             public void onPermissionGranted(PermissionGrantedResponse response) {
@@ -170,7 +170,7 @@ public class PermissionUtils {
                 .check();
     }
 
-    public static void requestCameraAndRecordAudioPermissions(@NonNull Activity activity, @NonNull PermissionListener action) {
+    public void requestCameraAndRecordAudioPermissions(@NonNull Activity activity, @NonNull PermissionListener action) {
         MultiplePermissionsListener multiplePermissionsListener = new MultiplePermissionsListener() {
             @Override
             public void onPermissionsChecked(MultiplePermissionsReport report) {
@@ -197,7 +197,7 @@ public class PermissionUtils {
                 .check();
     }
 
-    public static void requestGetAccountsPermission(@NonNull Activity activity, @NonNull PermissionListener action) {
+    public void requestGetAccountsPermission(@NonNull Activity activity, @NonNull PermissionListener action) {
         com.karumi.dexter.listener.single.PermissionListener permissionListener = new com.karumi.dexter.listener.single.PermissionListener() {
             @Override
             public void onPermissionGranted(PermissionGrantedResponse response) {
@@ -224,7 +224,7 @@ public class PermissionUtils {
                 .check();
     }
 
-    public static void requestSendSMSPermission(@NonNull Activity activity, @NonNull PermissionListener action) {
+    public void requestSendSMSPermission(@NonNull Activity activity, @NonNull PermissionListener action) {
         com.karumi.dexter.listener.single.PermissionListener permissionListener = new com.karumi.dexter.listener.single.PermissionListener() {
             @Override
             public void onPermissionGranted(PermissionGrantedResponse response) {
@@ -251,7 +251,7 @@ public class PermissionUtils {
                 .check();
     }
 
-    public static void requestReadPhoneStatePermission(@NonNull Activity activity, @NonNull PermissionListener action, boolean displayPermissionDeniedDialog) {
+    public void requestReadPhoneStatePermission(@NonNull Activity activity, @NonNull PermissionListener action, boolean displayPermissionDeniedDialog) {
         com.karumi.dexter.listener.single.PermissionListener permissionListener = new com.karumi.dexter.listener.single.PermissionListener() {
             @Override
             public void onPermissionGranted(PermissionGrantedResponse response) {
