@@ -61,8 +61,6 @@ import timber.log.Timber;
 
 import static android.os.Build.MODEL;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
-import static org.odk.collect.android.utilities.PermissionUtils.requestCameraAndRecordAudioPermissions;
-import static org.odk.collect.android.utilities.PermissionUtils.requestCameraPermission;
 
 /**
  * Widget that allows user to take pictures, sounds or video and add them to the
@@ -321,7 +319,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
         switch (id) {
             case R.id.capture_video:
                 if (selfie) {
-                    requestCameraAndRecordAudioPermissions((FormEntryActivity) getContext(), new PermissionListener() {
+                    getPermissionUtils().requestCameraAndRecordAudioPermissions((FormEntryActivity) getContext(), new PermissionListener() {
                         @Override
                         public void granted() {
                             captureVideo();
@@ -332,7 +330,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
                         }
                     });
                 } else {
-                    requestCameraPermission((FormEntryActivity) getContext(), new PermissionListener() {
+                    getPermissionUtils().requestCameraPermission((FormEntryActivity) getContext(), new PermissionListener() {
                         @Override
                         public void granted() {
                             captureVideo();

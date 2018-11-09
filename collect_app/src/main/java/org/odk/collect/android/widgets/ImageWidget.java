@@ -37,7 +37,6 @@ import java.io.File;
 import java.util.Locale;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
-import static org.odk.collect.android.utilities.PermissionUtils.requestCameraPermission;
 
 /**
  * Widget that allows user to take pictures, sounds or video and add them to the form.
@@ -119,7 +118,7 @@ public class ImageWidget extends BaseImageWidget {
     public void onButtonClick(int buttonId) {
         switch (buttonId) {
             case R.id.capture_image:
-                requestCameraPermission((FormEntryActivity) getContext(), new PermissionListener() {
+                getPermissionUtils().requestCameraPermission((FormEntryActivity) getContext(), new PermissionListener() {
                     @Override
                     public void granted() {
                         captureImage();

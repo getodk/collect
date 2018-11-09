@@ -44,7 +44,6 @@ import java.text.DecimalFormat;
 import java.util.Locale;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
-import static org.odk.collect.android.utilities.PermissionUtils.requestLocationPermissions;
 
 /**
  * GeoPointWidget is the widget that allows the user to get GPS readings.
@@ -278,7 +277,7 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
 
     @Override
     public void onButtonClick(int buttonId) {
-        requestLocationPermissions((FormEntryActivity) getContext(), new PermissionListener() {
+        getPermissionUtils().requestLocationPermissions((FormEntryActivity) getContext(), new PermissionListener() {
             @Override
             public void granted() {
                 startGeoPoint();

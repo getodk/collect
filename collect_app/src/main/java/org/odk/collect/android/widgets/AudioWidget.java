@@ -45,7 +45,6 @@ import java.util.Locale;
 import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
-import static org.odk.collect.android.utilities.PermissionUtils.requestRecordAudioPermission;
 
 /**
  * Widget that allows user to take pictures, sounds or video and add them to the
@@ -227,7 +226,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
     public void onButtonClick(int buttonId) {
         switch (buttonId) {
             case R.id.capture_audio:
-                requestRecordAudioPermission((FormEntryActivity) getContext(), new PermissionListener() {
+                getPermissionUtils().requestRecordAudioPermission((FormEntryActivity) getContext(), new PermissionListener() {
                     @Override
                     public void granted() {
                         captureAudio();

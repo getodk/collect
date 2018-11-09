@@ -47,7 +47,7 @@ public class PermissionUtils {
      */
     private final Activity activity;
 
-    PermissionUtils(@NonNull Activity activity) {
+    public PermissionUtils(@NonNull Activity activity) {
         this.activity = activity;
     }
 

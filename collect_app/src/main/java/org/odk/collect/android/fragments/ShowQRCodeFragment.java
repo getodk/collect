@@ -54,6 +54,7 @@ import org.odk.collect.android.preferences.PreferenceSaver;
 import org.odk.collect.android.utilities.CompressionUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
+import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.QRCodeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
@@ -77,7 +78,6 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_PASSWORD;
-import static org.odk.collect.android.utilities.PermissionUtils.requestCameraPermission;
 import static org.odk.collect.android.utilities.QRCodeUtils.QR_CODE_FILEPATH;
 
 public class ShowQRCodeFragment extends Fragment {
@@ -161,7 +161,7 @@ public class ShowQRCodeFragment extends Fragment {
 
     @OnClick(R.id.btnScan)
     void scanButtonClicked() {
-        requestCameraPermission(getActivity(), new PermissionListener() {
+        new PermissionUtils(getActivity()).requestCameraPermission(getActivity(), new PermissionListener() {
             @Override
             public void granted() {
                 IntentIntegrator.forFragment(ShowQRCodeFragment.this)

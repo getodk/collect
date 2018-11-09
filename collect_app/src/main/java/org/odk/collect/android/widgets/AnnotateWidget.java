@@ -39,7 +39,6 @@ import java.util.Locale;
 import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
 import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
-import static org.odk.collect.android.utilities.PermissionUtils.requestCameraPermission;
 
 /**
  * Image widget that supports annotations on the image.
@@ -121,7 +120,7 @@ public class AnnotateWidget extends BaseImageWidget {
     public void onButtonClick(int buttonId) {
         switch (buttonId) {
             case R.id.capture_image:
-                requestCameraPermission((FormEntryActivity) getContext(), new PermissionListener() {
+                getPermissionUtils().requestCameraPermission((FormEntryActivity) getContext(), new PermissionListener() {
                     @Override
                     public void granted() {
                         captureImage();

@@ -36,7 +36,6 @@ import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
-import static org.odk.collect.android.utilities.PermissionUtils.requestLocationPermissions;
 
 /**
  * GeoTraceWidget allows the user to collect a trace of GPS points as the
@@ -132,7 +131,7 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
 
     @Override
     public void onButtonClick(int buttonId) {
-        requestLocationPermissions((FormEntryActivity) getContext(), new PermissionListener() {
+        getPermissionUtils().requestLocationPermissions((FormEntryActivity) getContext(), new PermissionListener() {
             @Override
             public void granted() {
                 waitForData();

@@ -32,7 +32,6 @@ import org.odk.collect.android.listeners.PermissionListener;
 import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
-import static org.odk.collect.android.utilities.PermissionUtils.requestCameraPermission;
 
 /**
  * Widget that allows user to invoke the aligned-image camera to take pictures and add them to the
@@ -132,7 +131,7 @@ public class AlignedImageWidget extends BaseImageWidget {
     public void onButtonClick(int buttonId) {
         switch (buttonId) {
             case R.id.capture_image:
-                requestCameraPermission((FormEntryActivity) getContext(), new PermissionListener() {
+                getPermissionUtils().requestCameraPermission((FormEntryActivity) getContext(), new PermissionListener() {
                     @Override
                     public void granted() {
                         captureImage();

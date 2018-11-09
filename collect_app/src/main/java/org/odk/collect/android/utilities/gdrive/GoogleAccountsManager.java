@@ -36,12 +36,12 @@ import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.ServerPreferencesFragment;
+import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 
 import java.util.Collections;
 
 import static org.odk.collect.android.utilities.DialogUtils.showDialog;
-import static org.odk.collect.android.utilities.PermissionUtils.requestGetAccountsPermission;
 
 public class GoogleAccountsManager {
     public static final int REQUEST_ACCOUNT_PICKER = 1000;
@@ -124,7 +124,7 @@ public class GoogleAccountsManager {
 
     public void chooseAccountAndRequestPermissionIfNeeded() {
         if (activity != null) {
-            requestGetAccountsPermission(activity, new PermissionListener() {
+            new PermissionUtils(getActivity()).requestGetAccountsPermission(activity, new PermissionListener() {
                 @Override
                 public void granted() {
                     chooseAccount();
