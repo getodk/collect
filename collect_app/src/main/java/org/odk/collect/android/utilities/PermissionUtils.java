@@ -41,8 +41,14 @@ import timber.log.Timber;
 
 public class PermissionUtils {
 
-    private PermissionUtils() {
+    /**
+     * Required for context and spawning of Dexter's activity that handles
+     * permission checking.
+     */
+    private final Activity activity;
 
+    PermissionUtils(@NonNull Activity activity) {
+        this.activity = activity;
     }
 
     /**
