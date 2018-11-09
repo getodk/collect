@@ -32,7 +32,6 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaManager;
@@ -226,7 +225,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
     public void onButtonClick(int buttonId) {
         switch (buttonId) {
             case R.id.capture_audio:
-                getPermissionUtils().requestRecordAudioPermission((FormEntryActivity) getContext(), new PermissionListener() {
+                getPermissionUtils().requestRecordAudioPermission(new PermissionListener() {
                     @Override
                     public void granted() {
                         captureAudio();

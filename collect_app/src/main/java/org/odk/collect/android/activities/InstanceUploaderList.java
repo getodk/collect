@@ -138,7 +138,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
             showAllMode = savedInstanceState.getBoolean(SHOW_ALL_MODE);
         }
 
-        new PermissionUtils(this).requestStoragePermissions(this, new PermissionListener() {
+        new PermissionUtils(this).requestStoragePermissions(new PermissionListener() {
             @Override
             public void granted() {
                 init();
@@ -315,7 +315,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
         Transport transport = Transport.fromPreference(GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE));
 
         if (transport.equals(Transport.Sms) || buttonId == R.id.sms_upload_button) {
-            new PermissionUtils(this).requestSendSMSPermission(this, new PermissionListener() {
+            new PermissionUtils(this).requestSendSMSPermission(new PermissionListener() {
                 @Override
                 public void granted() {
                     smsService.submitForms(instanceIds);
@@ -345,7 +345,7 @@ public class InstanceUploaderList extends InstanceListActivity implements
                 Intent i = new Intent(this, InstanceUploaderActivity.class);
                 i.putExtra(FormEntryActivity.KEY_INSTANCES, instanceIds);
                 // Not required but without this permission a Device ID attached to a request will be empty.
-                new PermissionUtils(this).requestReadPhoneStatePermission(this, new PermissionListener() {
+                new PermissionUtils(this).requestReadPhoneStatePermission(new PermissionListener() {
                     @Override
                     public void granted() {
                         startActivityForResult(i, INSTANCE_UPLOADER);

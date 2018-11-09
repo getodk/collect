@@ -161,7 +161,7 @@ public class ShowQRCodeFragment extends Fragment {
 
     @OnClick(R.id.btnScan)
     void scanButtonClicked() {
-        new PermissionUtils(getActivity()).requestCameraPermission(getActivity(), new PermissionListener() {
+        new PermissionUtils(getActivity()).requestCameraPermission(new PermissionListener() {
             @Override
             public void granted() {
                 IntentIntegrator.forFragment(ShowQRCodeFragment.this)

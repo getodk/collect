@@ -40,7 +40,6 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CaptureSelfieVideoActivity;
 import org.odk.collect.android.activities.CaptureSelfieVideoActivityNewApi;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.GeneralKeys;
@@ -319,7 +318,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
         switch (id) {
             case R.id.capture_video:
                 if (selfie) {
-                    getPermissionUtils().requestCameraAndRecordAudioPermissions((FormEntryActivity) getContext(), new PermissionListener() {
+                    getPermissionUtils().requestCameraAndRecordAudioPermissions(new PermissionListener() {
                         @Override
                         public void granted() {
                             captureVideo();
@@ -330,7 +329,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
                         }
                     });
                 } else {
-                    getPermissionUtils().requestCameraPermission((FormEntryActivity) getContext(), new PermissionListener() {
+                    getPermissionUtils().requestCameraPermission(new PermissionListener() {
                         @Override
                         public void granted() {
                             captureVideo();

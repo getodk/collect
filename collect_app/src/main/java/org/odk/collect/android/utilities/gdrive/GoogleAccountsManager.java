@@ -124,7 +124,7 @@ public class GoogleAccountsManager {
 
     public void chooseAccountAndRequestPermissionIfNeeded() {
         if (activity != null) {
-            new PermissionUtils(getActivity()).requestGetAccountsPermission(activity, new PermissionListener() {
+            new PermissionUtils(activity).requestGetAccountsPermission(new PermissionListener() {
                 @Override
                 public void granted() {
                     chooseAccount();

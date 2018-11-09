@@ -35,7 +35,7 @@ public class FormMetadataFragment extends BasePreferenceFragment {
         initNormalPrefs();
 
         if (savedInstanceState == null) {
-            new PermissionUtils(getActivity()).requestReadPhoneStatePermission(getActivity(), new PermissionListener() {
+            new PermissionUtils(getActivity()).requestReadPhoneStatePermission(new PermissionListener() {
                 @Override
                 public void granted() {
                     initDangerousPrefs();
