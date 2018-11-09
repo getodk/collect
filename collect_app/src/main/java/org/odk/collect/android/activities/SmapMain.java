@@ -263,6 +263,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
         if (listener != null) {
             try {
                 unregisterReceiver(listener);
+                unregisterReceiver(networkReceiver);
                 listener = null;
             } catch (Exception e) {
                 Timber.e("Error on unregister: " + e.getMessage());
