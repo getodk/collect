@@ -281,38 +281,45 @@ public class PermissionUtils {
     }
 
     public static boolean checkIfStoragePermissionsGranted(Context context) {
-        int read = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE);
-        int write = ContextCompat.checkSelfPermission(context, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-        return read == PackageManager.PERMISSION_GRANTED && write == PackageManager.PERMISSION_GRANTED;
+        return checkIfPermissionsGranted(context,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE);
     }
 
     public static boolean checkIfCameraPermissionGranted(Context context) {
-        return ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
+        return checkIfPermissionsGranted(context, Manifest.permission.CAMERA);
     }
 
     public static boolean checkIfLocationPermissionsGranted(Context context) {
-        int accessFineLocation = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION);
-        int accessCoarseLocation = ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_COARSE_LOCATION);
-
-        return accessFineLocation == PackageManager.PERMISSION_GRANTED
-                && accessCoarseLocation == PackageManager.PERMISSION_GRANTED;
+        return checkIfPermissionsGranted(context,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION);
     }
 
     public static boolean checkIfCameraAndRecordAudioPermissionsGranted(Context context) {
-        int cameraPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA);
-        int recordAudioPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO);
-
-        return cameraPermission == PackageManager.PERMISSION_GRANTED
-                && recordAudioPermission == PackageManager.PERMISSION_GRANTED;
+        return checkIfPermissionsGranted(context,
+                Manifest.permission.CAMERA,
+                Manifest.permission.RECORD_AUDIO);
     }
 
     public static boolean checkIfGetAccountsPermissionGranted(Context context) {
-        return ContextCompat.checkSelfPermission(context, Manifest.permission.GET_ACCOUNTS) == PackageManager.PERMISSION_GRANTED;
+        return checkIfPermissionsGranted(context, Manifest.permission.GET_ACCOUNTS);
     }
 
     public static boolean checkIfReadPhoneStatePermissionGranted(Context context) {
-        return ContextCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED;
+        return checkIfPermissionsGranted(context, Manifest.permission.READ_PHONE_STATE);
+    }
+
+    /**
+     * Returns true only if all of the requested permissions are granted to Collect, otherwise false
+     */
+    private static boolean checkIfPermissionsGranted(Context context, String... permissions) {
+        for (String permission : permissions) {
+            if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
