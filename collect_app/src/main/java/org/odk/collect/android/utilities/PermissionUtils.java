@@ -10,6 +10,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 
 import com.karumi.dexter.Dexter;
+import com.karumi.dexter.DexterBuilder;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
@@ -278,6 +279,61 @@ public class PermissionUtils {
                 ).withListener(permissionListener)
                 .withErrorListener(error -> Timber.i(error.name()))
                 .check();
+    }
+
+    private void requestPermission(@NonNull PermissionListener listener, String... permissions) {
+        DexterBuilder builder = null;
+
+        if (permissions.length == 1) {
+            builder = createSinglePermissionRequest(listener, permissions[0]);
+        } else if (permissions.length > 1) {
+            builder = createMultiplePermissionsRequest(listener, permissions);
+        }
+
+        if (builder != null) {
+            builder.withErrorListener(error -> Timber.i(error.name())).check();
+        }
+    }
+
+    private DexterBuilder createSinglePermissionRequest(PermissionListener listener, String permission) {
+        return Dexter.withActivity(activity)
+                .withPermission(permission)
+                .withListener(new com.karumi.dexter.listener.single.PermissionListener() {
+                    @Override
+                    public void onPermissionGranted(PermissionGrantedResponse response) {
+                        listener.granted();
+                    }
+
+                    @Override
+                    public void onPermissionDenied(PermissionDeniedResponse response) {
+                        listener.denied();
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+                        token.continuePermissionRequest();
+                    }
+                });
+    }
+
+    private DexterBuilder createMultiplePermissionsRequest(PermissionListener listener, String[] permissions) {
+        return Dexter.withActivity(activity)
+                .withPermissions(permissions)
+                .withListener(new MultiplePermissionsListener() {
+                    @Override
+                    public void onPermissionsChecked(MultiplePermissionsReport report) {
+                        if (report.areAllPermissionsGranted()) {
+                            listener.granted();
+                        } else {
+                            listener.denied();
+                        }
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                        token.continuePermissionRequest();
+                    }
+                });
     }
 
     public static boolean checkIfStoragePermissionsGranted(Context context) {
