@@ -52,11 +52,88 @@ public class PermissionUtils {
         this.activity = activity;
     }
 
+    public static boolean checkIfStoragePermissionsGranted(Context context) {
+        return checkIfPermissionsGranted(context,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+    }
+
+    public static boolean checkIfCameraPermissionGranted(Context context) {
+        return checkIfPermissionsGranted(context, Manifest.permission.CAMERA);
+    }
+
+    public static boolean checkIfLocationPermissionsGranted(Context context) {
+        return checkIfPermissionsGranted(context,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION);
+    }
+
+    public static boolean checkIfCameraAndRecordAudioPermissionsGranted(Context context) {
+        return checkIfPermissionsGranted(context,
+                Manifest.permission.CAMERA,
+                Manifest.permission.RECORD_AUDIO);
+    }
+
+    public static boolean checkIfGetAccountsPermissionGranted(Context context) {
+        return checkIfPermissionsGranted(context, Manifest.permission.GET_ACCOUNTS);
+    }
+
+    public static boolean checkIfReadPhoneStatePermissionGranted(Context context) {
+        return checkIfPermissionsGranted(context, Manifest.permission.READ_PHONE_STATE);
+    }
+
+    /**
+     * Returns true only if all of the requested permissions are granted to Collect, otherwise false
+     */
+    private static boolean checkIfPermissionsGranted(Context context, String... permissions) {
+        for (String permission : permissions) {
+            if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Checks to see if an activity is one of the entry points to the app i.e
+     * an activity that has a view action that can launch the app.
+     *
+     * @param activity that has permission requesting code.
+     * @return true if the activity is an entry point to the app.
+     */
+    public static boolean isEntryPointActivity(CollectAbstractActivity activity) {
+
+        List<Class<?>> activities = new ArrayList<>();
+        activities.add(FormEntryActivity.class);
+        activities.add(InstanceChooserList.class);
+        activities.add(FormChooserList.class);
+        activities.add(InstanceUploaderList.class);
+        activities.add(SplashScreenActivity.class);
+        activities.add(FormDownloadList.class);
+        activities.add(InstanceUploaderActivity.class);
+
+        for (Class<?> act : activities) {
+            if (activity.getClass().equals(act)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static void finishAllActivities(Activity activity) {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            activity.finishAndRemoveTask();
+        } else {
+            activity.finishAffinity();
+        }
+    }
+
     /**
      * Checks to see if the user granted Collect the permissions necessary for reading
      * and writing to storage and if not utilizes the permissions API to request them.
      *
-     * @param action   is a listener that provides the calling component with the permission result.
+     * @param action is a listener that provides the calling component with the permission result.
      */
     public void requestStoragePermissions(@NonNull PermissionListener action) {
         requestPermissions(new PermissionListener() {
@@ -235,83 +312,6 @@ public class PermissionUtils {
                         token.continuePermissionRequest();
                     }
                 });
-    }
-
-    public static boolean checkIfStoragePermissionsGranted(Context context) {
-        return checkIfPermissionsGranted(context,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE);
-    }
-
-    public static boolean checkIfCameraPermissionGranted(Context context) {
-        return checkIfPermissionsGranted(context, Manifest.permission.CAMERA);
-    }
-
-    public static boolean checkIfLocationPermissionsGranted(Context context) {
-        return checkIfPermissionsGranted(context,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION);
-    }
-
-    public static boolean checkIfCameraAndRecordAudioPermissionsGranted(Context context) {
-        return checkIfPermissionsGranted(context,
-                Manifest.permission.CAMERA,
-                Manifest.permission.RECORD_AUDIO);
-    }
-
-    public static boolean checkIfGetAccountsPermissionGranted(Context context) {
-        return checkIfPermissionsGranted(context, Manifest.permission.GET_ACCOUNTS);
-    }
-
-    public static boolean checkIfReadPhoneStatePermissionGranted(Context context) {
-        return checkIfPermissionsGranted(context, Manifest.permission.READ_PHONE_STATE);
-    }
-
-    /**
-     * Returns true only if all of the requested permissions are granted to Collect, otherwise false
-     */
-    private static boolean checkIfPermissionsGranted(Context context, String... permissions) {
-        for (String permission : permissions) {
-            if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * Checks to see if an activity is one of the entry points to the app i.e
-     * an activity that has a view action that can launch the app.
-     *
-     * @param activity that has permission requesting code.
-     * @return true if the activity is an entry point to the app.
-     */
-    public static boolean isEntryPointActivity(CollectAbstractActivity activity) {
-
-        List<Class<?>> activities = new ArrayList<>();
-        activities.add(FormEntryActivity.class);
-        activities.add(InstanceChooserList.class);
-        activities.add(FormChooserList.class);
-        activities.add(InstanceUploaderList.class);
-        activities.add(SplashScreenActivity.class);
-        activities.add(FormDownloadList.class);
-        activities.add(InstanceUploaderActivity.class);
-
-        for (Class<?> act : activities) {
-            if (activity.getClass().equals(act)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public static void finishAllActivities(Activity activity) {
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            activity.finishAndRemoveTask();
-        } else {
-            activity.finishAffinity();
-        }
     }
 
     private void showAdditionalExplanation(int title, int message, int drawable, @NonNull PermissionListener action) {
