@@ -65,7 +65,7 @@ public class PermissionUtils {
                 if (report.areAllPermissionsGranted()) {
                     action.granted();
                 } else {
-                    showAdditionalExplanation(activity, R.string.storage_runtime_permission_denied_title,
+                    showAdditionalExplanation(R.string.storage_runtime_permission_denied_title,
                             R.string.storage_runtime_permission_denied_desc, R.drawable.sd, action);
                 }
             }
@@ -96,7 +96,7 @@ public class PermissionUtils {
 
             @Override
             public void onPermissionDenied(PermissionDeniedResponse response) {
-                showAdditionalExplanation(activity, R.string.camera_runtime_permission_denied_title,
+                showAdditionalExplanation(R.string.camera_runtime_permission_denied_title,
                         R.string.camera_runtime_permission_denied_desc, R.drawable.ic_photo_camera, action);
             }
 
@@ -121,7 +121,7 @@ public class PermissionUtils {
                 if (report.areAllPermissionsGranted()) {
                     action.granted();
                 } else {
-                    showAdditionalExplanation(activity, R.string.location_runtime_permissions_denied_title,
+                    showAdditionalExplanation(R.string.location_runtime_permissions_denied_title,
                             R.string.location_runtime_permissions_denied_desc, R.drawable.ic_place_black, action);
                 }
             }
@@ -150,7 +150,7 @@ public class PermissionUtils {
 
             @Override
             public void onPermissionDenied(PermissionDeniedResponse response) {
-                showAdditionalExplanation(activity, R.string.record_audio_runtime_permission_denied_title,
+                showAdditionalExplanation(R.string.record_audio_runtime_permission_denied_title,
                         R.string.record_audio_runtime_permission_denied_desc, R.drawable.ic_mic, action);
             }
 
@@ -175,7 +175,7 @@ public class PermissionUtils {
                 if (report.areAllPermissionsGranted()) {
                     action.granted();
                 } else {
-                    showAdditionalExplanation(activity, R.string.camera_runtime_permission_denied_title,
+                    showAdditionalExplanation(R.string.camera_runtime_permission_denied_title,
                             R.string.camera_runtime_permission_denied_desc, R.drawable.ic_photo_camera, action);
                 }
             }
@@ -204,7 +204,7 @@ public class PermissionUtils {
 
             @Override
             public void onPermissionDenied(PermissionDeniedResponse response) {
-                showAdditionalExplanation(activity, R.string.get_accounts_runtime_permission_denied_title,
+                showAdditionalExplanation(R.string.get_accounts_runtime_permission_denied_title,
                         R.string.get_accounts_runtime_permission_denied_desc, R.drawable.ic_get_accounts, action);
             }
 
@@ -231,7 +231,7 @@ public class PermissionUtils {
 
             @Override
             public void onPermissionDenied(PermissionDeniedResponse response) {
-                showAdditionalExplanation(activity, R.string.send_sms_runtime_permission_denied_title,
+                showAdditionalExplanation(R.string.send_sms_runtime_permission_denied_title,
                         R.string.send_sms_runtime_permission_denied_desc, R.drawable.ic_sms, action);
             }
 
@@ -259,7 +259,7 @@ public class PermissionUtils {
             @Override
             public void onPermissionDenied(PermissionDeniedResponse response) {
                 if (displayPermissionDeniedDialog) {
-                    showAdditionalExplanation(activity, R.string.read_phone_state_runtime_permission_denied_title,
+                    showAdditionalExplanation(R.string.read_phone_state_runtime_permission_denied_title,
                             R.string.read_phone_state_runtime_permission_denied_desc, R.drawable.ic_phone, action);
                 } else {
                     action.denied();
@@ -350,17 +350,15 @@ public class PermissionUtils {
         }
     }
 
-    private static void showAdditionalExplanation(@NonNull Activity activity, int title,
-                                                  int message, int drawable,
-                                                  @NonNull PermissionListener action) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.Theme_AppCompat_Light_Dialog);
-
-        builder.setTitle(title)
+    private void showAdditionalExplanation(int title, int message, int drawable, @NonNull PermissionListener action) {
+        AlertDialog alertDialog = new AlertDialog.Builder(activity, R.style.Theme_AppCompat_Light_Dialog)
+                .setTitle(title)
                 .setMessage(message)
                 .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> action.denied())
                 .setCancelable(false)
-                .setIcon(drawable);
+                .setIcon(drawable)
+                .create();
 
-        DialogUtils.showDialog(builder.create(), activity);
+        DialogUtils.showDialog(alertDialog, activity);
     }
 }
