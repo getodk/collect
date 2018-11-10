@@ -675,4 +675,8 @@ public abstract class QuestionWidget
     public PermissionUtils getPermissionUtils() {
         return permissionUtils;
     }
+
+    public void setPermissionUtils(PermissionUtils permissionUtils) {
+        this.permissionUtils = permissionUtils;
+    }
 }

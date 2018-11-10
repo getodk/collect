@@ -1,6 +1,10 @@
 package org.odk.collect.android.widgets.interfaces;
 
+import android.widget.Button;
+
 import org.javarosa.core.model.data.IAnswerData;
+
+import java.util.List;
 
 /**
  * @author James Knight
@@ -16,4 +20,6 @@ public interface Widget {
     void cancelWaitingForData();
 
     boolean isWaitingForData();
+
+    List<Button> getSimpleButtonList();
 }
