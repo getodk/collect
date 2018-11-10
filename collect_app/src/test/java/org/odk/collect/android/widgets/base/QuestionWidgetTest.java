@@ -25,6 +25,7 @@ public abstract class QuestionWidgetTest<W extends Widget, A extends IAnswerData
 
     protected Random random = new Random();
     private W widget;
+    private W actualWidget;
 
     @Mock
     public FormIndex formIndex;
@@ -42,9 +43,28 @@ public abstract class QuestionWidgetTest<W extends Widget, A extends IAnswerData
         return getNextAnswer();
     }
 
+    /**
+     * @return Real {@link Widget} object if present otherwise creates one
+     * <p>
+     * This should be used for mutating the {@link org.odk.collect.android.widgets.QuestionWidget}
+     */
+    public W getActualWidget() {
+        if (actualWidget == null) {
+            actualWidget = createWidget();
+        }
+
+        return actualWidget;
+    }
+
+    /**
+     * @return {@link org.mockito.Spy} of the {@link #actualWidget}
+     * <p>
+     * This should be unless we want to mutate {@link org.odk.collect.android.widgets.QuestionWidget}
+     * This is because a spy is not the real object and changing it won't have any effect on the real object
+     */
     public W getWidget() {
         if (widget == null) {
-            widget = spy(createWidget());
+            widget = spy(getActualWidget());
         }
 
         return widget;
