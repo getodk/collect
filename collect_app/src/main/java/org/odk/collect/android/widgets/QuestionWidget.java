@@ -83,7 +83,7 @@ public abstract class QuestionWidget
     private final View guidanceTextLayout;
     private final View textLayout;
     private final TextView warningText;
-    private final PermissionUtils permissionUtils;
+    private PermissionUtils permissionUtils;
     private static final String GUIDANCE_EXPANDED_STATE = "expanded_state";
     private AtomicBoolean expanded;
     private Bundle state;
@@ -95,10 +95,10 @@ public abstract class QuestionWidget
 
         themeUtils = new ThemeUtils(context);
         playColor = themeUtils.getAccentColor();
-        permissionUtils = new PermissionUtils((FormEntryActivity) getContext());
 
         if (context instanceof FormEntryActivity) {
             state = ((FormEntryActivity) context).getState();
+            permissionUtils = new PermissionUtils((FormEntryActivity) getContext());
         }
 
         if (context instanceof DependencyProvider) {
