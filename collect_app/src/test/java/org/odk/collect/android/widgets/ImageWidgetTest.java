@@ -1,6 +1,9 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Intent;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.widget.Button;
 
@@ -9,6 +12,8 @@ import net.bytebuddy.utility.RandomString;
 import org.javarosa.core.model.data.StringData;
 import org.junit.Before;
 import org.mockito.Mock;
+import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.R;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
 
@@ -56,7 +61,6 @@ public class ImageWidgetTest extends FileWidgetTest<ImageWidget> {
         when(file.exists()).thenReturn(true);
         when(file.getName()).thenReturn(fileName);
     }
-
 
     @Override
     protected Intent getExpectedIntent(Button clickedButton, boolean permissionGranted) {
