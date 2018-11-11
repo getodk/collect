@@ -250,7 +250,7 @@ public class PermissionUtils {
         }, Manifest.permission.READ_PHONE_STATE);
     }
 
-    public void requestSendSMSAndReadPhoneStatePermissions(Activity activity, @NonNull PermissionListener action) {
+    protected void requestSendSMSAndReadPhoneStatePermissions(Activity activity, @NonNull PermissionListener action) {
         requestPermissions(activity, new PermissionListener() {
             @Override
             public void granted() {
@@ -320,7 +320,7 @@ public class PermissionUtils {
                 });
     }
 
-    private void showAdditionalExplanation(Activity activity, int title, int message, int drawable, @NonNull PermissionListener action) {
+    protected void showAdditionalExplanation(Activity activity, int title, int message, int drawable, @NonNull PermissionListener action) {
         AlertDialog alertDialog = new AlertDialog.Builder(activity, R.style.PermissionAlertDialogTheme)
                 .setTitle(title)
                 .setMessage(message)
