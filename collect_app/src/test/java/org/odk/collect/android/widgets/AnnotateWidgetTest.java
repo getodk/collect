@@ -2,6 +2,8 @@ package org.odk.collect.android.widgets;
 
 import android.content.ComponentName;
 import android.content.Intent;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.widget.Button;
 
@@ -10,6 +12,9 @@ import net.bytebuddy.utility.RandomString;
 import org.javarosa.core.model.data.StringData;
 import org.mockito.Mock;
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.R;
+import org.odk.collect.android.activities.DrawActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
 
@@ -57,20 +62,21 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
         switch (clickedButton.getId()) {
             case R.id.capture_image:
                 if (permissionGranted) {
-                    intent = new Intent();
-                    intent.setComponent(new ComponentName(ODK_CAMERA_INTENT_PACKAGE, ODK_CAMERA_TAKE_PICTURE_INTENT_COMPONENT));
-                    intent.putExtra(FILE_PATH_EXTRA, Collect.CACHE_PATH);
-                    intent.putExtra(DIMENSIONS_EXTRA, new int[6]);
-                    intent.putExtra(RETAKE_OPTION_EXTRA, false);
+                    intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                 }
                 break;
+
+            /* We aren't checking for storage permissions as without that permission
+             * FormEntryActivity cannot be started */
             case R.id.choose_image:
-
-                /* We aren't checking for storage permissions as without that permission
-                 * FormEntryActivity cannot be started */
-
                 intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("image/*");
+                break;
+            case R.id.markup_image:
+                intent = new Intent(activity, DrawActivity.class);
+                intent.putExtra(DrawActivity.OPTION, DrawActivity.OPTION_ANNOTATE);
+                intent.putExtra(DrawActivity.EXTRA_OUTPUT, Uri.fromFile(new File(Collect.TMPFILE_PATH)));
+                intent.putExtra(DrawActivity.SCREEN_ORIENTATION, 0);
                 break;
         }
         return intent;
