@@ -67,9 +67,9 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.logic.PropertyManager.PROPMGR_USERNAME;
 import static org.odk.collect.android.logic.PropertyManager.SCHEME_USERNAME;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_APP_LANGUAGE;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FONT_SIZE;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_APP_LANGUAGE;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_FONT_SIZE;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_USERNAME;
 
 /**
  * The Open Data Kit Collect application.

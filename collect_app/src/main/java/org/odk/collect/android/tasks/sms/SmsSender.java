@@ -11,7 +11,7 @@ import android.telephony.SmsManager;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.events.SmsRxEvent;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.tasks.sms.models.Message;
 import org.odk.collect.android.tasks.sms.models.SmsSubmission;
@@ -51,7 +51,7 @@ public class SmsSender {
 
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
 
-        String gateway = settings.getString(PreferenceKeys.KEY_SMS_GATEWAY, null);
+        String gateway = settings.getString(GeneralKeys.KEY_SMS_GATEWAY, null);
 
         SmsSubmission model = submissionManager.getSubmissionModel(instanceId);
 

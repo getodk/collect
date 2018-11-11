@@ -37,7 +37,7 @@ import android.preference.PreferenceManager;
 import org.odk.collect.android.R;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceGoogleSheetsUploaderTask;
 import org.odk.collect.android.utilities.ArrayUtils;
@@ -125,7 +125,7 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
             // ensure we have a google account selected
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
             String googleUsername = prefs.getString(
-                    PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT, null);
+                    GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT, null);
             if (googleUsername == null || googleUsername.equals("")) {
                 showDialog(GOOGLE_USER_DIALOG);
                 return;

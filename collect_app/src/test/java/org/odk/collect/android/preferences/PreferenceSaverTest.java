@@ -10,8 +10,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PASSWORD;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SERVER_URL;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_PASSWORD;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_SERVER_URL;
 
 @RunWith(RobolectricTestRunner.class)
 public class PreferenceSaverTest {

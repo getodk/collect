@@ -29,7 +29,7 @@ import org.odk.collect.android.map.GoogleMapFragment;
 import org.odk.collect.android.map.MapFragment;
 import org.odk.collect.android.map.MapPoint;
 import org.odk.collect.android.map.OsmMapFragment;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoShapeWidget;
@@ -84,7 +84,7 @@ public class GeoShapeActivity extends CollectAbstractActivity implements IRegist
     }
 
     public MapFragment createMapFragment() {
-        String mapSdk = getIntent().getStringExtra(PreferenceKeys.KEY_MAP_SDK);
+        String mapSdk = getIntent().getStringExtra(GeneralKeys.KEY_MAP_SDK);
         return (mapSdk == null || mapSdk.equals(PREF_VALUE_GOOGLE_MAPS)) ?
             new GoogleMapFragment() : new OsmMapFragment();
     }

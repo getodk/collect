@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 
-public final class PreferenceKeys {
+public final class GeneralKeys {
 
     // aggregate_preferences.xml
     public static final String KEY_SERVER_URL               = "server_url";
@@ -136,7 +136,7 @@ public final class PreferenceKeys {
 
     public static final HashMap<String, Object> GENERAL_KEYS = getHashMap();
 
-    private PreferenceKeys() {
+    private GeneralKeys() {
 
     }
 

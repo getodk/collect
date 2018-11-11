@@ -31,7 +31,7 @@ import java.io.IOException;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_IMAGE_SIZE;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_IMAGE_SIZE;
 import static org.odk.collect.android.utilities.ApplicationConstants.XML_OPENROSA_NAMESPACE;
 
 public class ImageConverter {

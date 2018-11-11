@@ -34,7 +34,7 @@ import com.google.api.services.drive.DriveScopes;
 import org.odk.collect.android.R;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.ServerPreferencesFragment;
 import org.odk.collect.android.utilities.ThemeUtils;
 
@@ -117,7 +117,7 @@ public class GoogleAccountsManager {
 
     public void setSelectedAccountName(String accountName) {
         if (accountName != null) {
-            preferences.save(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT, accountName);
+            preferences.save(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT, accountName);
             selectAccount(accountName);
         }
     }
@@ -153,7 +153,7 @@ public class GoogleAccountsManager {
     @NonNull
     public String getSelectedAccount() {
         Account[] googleAccounts = credential.getAllAccounts();
-        String account = (String) preferences.get(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
+        String account = (String) preferences.get(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
 
         if (googleAccounts != null && googleAccounts.length > 0) {
             for (Account googleAccount : googleAccounts) {
@@ -162,7 +162,7 @@ public class GoogleAccountsManager {
                 }
             }
 
-            preferences.reset(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
+            preferences.reset(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
         }
 
         return "";

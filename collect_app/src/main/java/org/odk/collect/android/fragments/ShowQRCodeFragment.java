@@ -76,7 +76,7 @@ import timber.log.Timber;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PASSWORD;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_PASSWORD;
 import static org.odk.collect.android.utilities.PermissionUtils.requestCameraPermission;
 import static org.odk.collect.android.utilities.QRCodeUtils.QR_CODE_FILEPATH;
 

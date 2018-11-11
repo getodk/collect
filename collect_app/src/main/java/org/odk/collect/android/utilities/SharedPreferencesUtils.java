@@ -33,8 +33,8 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.preferences.AdminKeys.ALL_KEYS;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
-import static org.odk.collect.android.preferences.PreferenceKeys.GENERAL_KEYS;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PASSWORD;
+import static org.odk.collect.android.preferences.GeneralKeys.GENERAL_KEYS;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_PASSWORD;
 
 public final class SharedPreferencesUtils {
 

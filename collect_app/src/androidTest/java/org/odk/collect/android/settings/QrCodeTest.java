@@ -43,10 +43,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.odk.collect.android.preferences.PreferenceKeys.GENERAL_KEYS;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SHOW_SPLASH;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
+import static org.odk.collect.android.preferences.GeneralKeys.GENERAL_KEYS;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_SHOW_SPLASH;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_USERNAME;
 
 @RunWith(AndroidJUnit4.class)
 public class QrCodeTest {

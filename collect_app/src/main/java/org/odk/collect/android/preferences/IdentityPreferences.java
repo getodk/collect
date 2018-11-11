@@ -24,7 +24,7 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 
 import org.odk.collect.android.R;
 
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_ANALYTICS;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_ANALYTICS;
 
 public class IdentityPreferences extends BasePreferenceFragment {
 

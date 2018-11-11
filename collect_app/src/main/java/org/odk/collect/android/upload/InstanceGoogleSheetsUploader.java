@@ -41,7 +41,7 @@ import org.odk.collect.android.dto.Instance;
 import org.odk.collect.android.exception.BadUrlException;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.utilities.UrlUtils;
 import org.odk.collect.android.utilities.gdrive.DriveHelper;
@@ -159,7 +159,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
         // if we didn't find one in the content provider, try to get from settings
         return urlString == null
-                ? (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_GOOGLE_SHEETS_URL)
+                ? (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_GOOGLE_SHEETS_URL)
                 : urlString;
     }
 
