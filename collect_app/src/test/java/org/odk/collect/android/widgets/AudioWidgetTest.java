@@ -1,22 +1,27 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import net.bytebuddy.utility.RandomString;
 
 import org.javarosa.core.model.data.StringData;
 import org.mockito.Mock;
+import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaUtil;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
-import org.robolectric.RuntimeEnvironment;
 
 import java.io.File;
 
+import static android.provider.MediaStore.Audio.Media.RECORD_SOUND_ACTION;
+import static android.provider.MediaStore.EXTRA_OUTPUT;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -44,7 +49,7 @@ public class AudioWidgetTest extends FileWidgetTest<AudioWidget> {
     @Override
     public AudioWidget createWidget() {
         when(audioController.getPlayerLayout(any(ViewGroup.class))).thenReturn(mock(View.class));
-        return new AudioWidget(RuntimeEnvironment.application, formEntryPrompt, fileUtil, mediaUtil, audioController);
+        return new AudioWidget(activity, formEntryPrompt, fileUtil, mediaUtil, audioController);
     }
 
     @NonNull
@@ -80,5 +85,28 @@ public class AudioWidgetTest extends FileWidgetTest<AudioWidget> {
 
         when(firstFile.exists()).thenReturn(true);
         when(firstFile.getName()).thenReturn(destinationName);
+    }
+
+    @Override
+    protected Intent getExpectedIntent(Button clickedButton, boolean permissionGranted) {
+        Intent intent = null;
+
+        switch (clickedButton.getId()) {
+            case R.id.capture_audio:
+                if (permissionGranted) {
+                    intent = new Intent(RECORD_SOUND_ACTION);
+                    intent.putExtra(EXTRA_OUTPUT, MediaStore.Audio.Media.EXTERNAL_CONTENT_URI.toString());
+                }
+                break;
+            case R.id.choose_sound:
+
+                /* We aren't checking for storage permissions as without that permission
+                 * FormEntryActivity cannot be started */
+
+                intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("audio/*");
+                break;
+        }
+        return intent;
     }
 }

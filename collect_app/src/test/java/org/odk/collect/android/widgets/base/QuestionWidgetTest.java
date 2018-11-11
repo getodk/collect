@@ -1,5 +1,6 @@
 package org.odk.collect.android.widgets.base;
 
+import android.app.Activity;
 import android.support.annotation.NonNull;
 
 import org.javarosa.core.model.FormIndex;
@@ -11,6 +12,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.widgets.ItemsetWidgetTest;
 import org.odk.collect.android.widgets.interfaces.Widget;
+import org.robolectric.Robolectric;
 
 import java.util.Random;
 
@@ -24,6 +26,7 @@ public abstract class QuestionWidgetTest<W extends Widget, A extends IAnswerData
         extends WidgetTest {
 
     protected Random random = new Random();
+    protected Activity activity = Robolectric.setupActivity(Activity.class);
     private W widget;
     private W actualWidget;
 
