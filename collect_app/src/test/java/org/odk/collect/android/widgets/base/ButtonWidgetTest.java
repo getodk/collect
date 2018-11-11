@@ -82,7 +82,7 @@ public abstract class ButtonWidgetTest<W extends ButtonWidget, A extends IAnswer
      * 1. If a permission is required before triggering activity, then the intent should only be
      * launched if the permissions are granted, otherwise not.
      * <p>
-     * 2. Assert that the triggered intent has expected ACTION, EXTRAS and TYPE
+     * 2. Assert that the triggered intent has expected COMPONENT, ACTION, EXTRAS and TYPE
      */
     private void assertIntentEquals(Intent expectedIntent, Intent launchedIntent) {
 
@@ -92,6 +92,9 @@ public abstract class ButtonWidgetTest<W extends ButtonWidget, A extends IAnswer
 
         assertNotNull(expectedIntent);
         assertNotNull(launchedIntent);
+
+        assertEquals(expectedIntent.getPackage(), launchedIntent.getPackage());
+        assertEquals(expectedIntent.getClass(), launchedIntent.getClass());
         assertEquals(expectedIntent.getAction(), launchedIntent.getAction());
         assertEquals(expectedIntent.getType(), launchedIntent.getType());
         assertBundleEquals(expectedIntent.getExtras(), launchedIntent.getExtras());
@@ -111,12 +114,23 @@ public abstract class ButtonWidgetTest<W extends ButtonWidget, A extends IAnswer
         assertNotNull(actualBundle);
         assertEquals(expectedBundle.size(), actualBundle.size());
 
+        // assert that (key, value) pair is in both bundles
         for (String expectedKey : expectedBundle.keySet()) {
             Object expectedValue = expectedBundle.get(expectedKey);
             Object actualValue = actualBundle.get(expectedKey);
 
-            // assert that (key, value) pair is in both bundles
-            assertEquals(expectedValue, actualValue);
+            /*
+             * Iterate through each value if value is an int array
+             *
+             * Required because of {@link AlignedImageWidget#DIMENSIONS_EXTRA}
+             */
+            if (expectedValue instanceof int[]) {
+                for (int i = 0; i < ((int[]) expectedValue).length; i++) {
+                    assertEquals(((int[]) expectedValue)[i], ((int[]) actualValue)[i]);
+                }
+            } else {
+                assertEquals(expectedValue, actualValue);
+            }
         }
     }
 }
