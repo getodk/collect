@@ -1,14 +1,19 @@
 package org.odk.collect.android.widgets;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.widget.Button;
 
 import net.bytebuddy.utility.RandomString;
 
 import org.javarosa.core.model.data.StringData;
 import org.junit.Before;
 import org.mockito.Mock;
+import org.odk.collect.android.R;
+import org.odk.collect.android.activities.DrawActivity;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
-import org.robolectric.RuntimeEnvironment;
 
 import java.io.File;
 
@@ -27,7 +32,7 @@ public class SignatureWidgetTest extends FileWidgetTest<SignatureWidget> {
     @NonNull
     @Override
     public SignatureWidget createWidget() {
-        return new SignatureWidget(RuntimeEnvironment.application, formEntryPrompt);
+        return new SignatureWidget(activity, formEntryPrompt);
     }
 
     @NonNull
@@ -51,5 +56,19 @@ public class SignatureWidgetTest extends FileWidgetTest<SignatureWidget> {
     protected void prepareForSetAnswer() {
         when(file.exists()).thenReturn(true);
         when(file.getName()).thenReturn(fileName);
+    }
+
+    @Override
+    protected Intent getExpectedIntent(Button clickedButton, boolean permissionGranted) {
+        Intent intent = null;
+
+        switch (clickedButton.getId()) {
+            case R.id.simple_button:
+                intent = new Intent(activity, DrawActivity.class);
+                intent.putExtra(DrawActivity.OPTION, DrawActivity.OPTION_SIGNATURE);
+                intent.putExtra(DrawActivity.EXTRA_OUTPUT, Uri.fromFile(new File(Collect.TMPFILE_PATH)));
+                break;
+        }
+        return intent;
     }
 }
