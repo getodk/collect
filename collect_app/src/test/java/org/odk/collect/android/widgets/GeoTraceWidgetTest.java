@@ -1,21 +1,30 @@
 package org.odk.collect.android.widgets;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.widget.Button;
 
 import org.javarosa.core.model.data.StringData;
 import org.junit.Before;
+import org.odk.collect.android.R;
+import org.odk.collect.android.ShadowPlayServicesUtil;
+import org.odk.collect.android.activities.GeoTraceActivity;
+import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.widgets.base.BinaryWidgetTest;
-import org.robolectric.RuntimeEnvironment;
+import org.robolectric.annotation.Config;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
+import static org.odk.collect.android.widgets.GeoTraceWidget.GOOGLE_MAP_KEY;
+import static org.odk.collect.android.widgets.GeoTraceWidget.TRACE_LOCATION;
 
 /**
  * @author James Knight
  */
 
+@Config(shadows = {ShadowPlayServicesUtil.class})
 public class GeoTraceWidgetTest extends BinaryWidgetTest<GeoTraceWidget, StringData> {
 
     private List<double[]> initialDoubles;
@@ -29,7 +38,7 @@ public class GeoTraceWidgetTest extends BinaryWidgetTest<GeoTraceWidget, StringD
     @NonNull
     @Override
     public GeoTraceWidget createWidget() {
-        return new GeoTraceWidget(RuntimeEnvironment.application, formEntryPrompt);
+        return new GeoTraceWidget(activity, formEntryPrompt);
     }
 
     @Override
@@ -103,5 +112,20 @@ public class GeoTraceWidgetTest extends BinaryWidgetTest<GeoTraceWidget, StringD
         }
 
         return b.toString();
+    }
+
+    @Override
+    protected Intent getExpectedIntent(Button clickedButton, boolean permissionGranted) {
+        Intent intent = null;
+        switch (clickedButton.getId()) {
+            case R.id.simple_button:
+                if (permissionGranted) {
+                    intent = new Intent(activity, GeoTraceActivity.class);
+                    intent.putExtra(TRACE_LOCATION, "");
+                    intent.putExtra(PreferenceKeys.KEY_MAP_SDK, GOOGLE_MAP_KEY);
+                }
+                break;
+        }
+        return intent;
     }
 }
