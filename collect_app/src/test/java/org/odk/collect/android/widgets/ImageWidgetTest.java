@@ -1,14 +1,16 @@
 package org.odk.collect.android.widgets;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.widget.Button;
 
 import net.bytebuddy.utility.RandomString;
 
 import org.javarosa.core.model.data.StringData;
 import org.junit.Before;
 import org.mockito.Mock;
+import org.odk.collect.android.R;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
-import org.robolectric.RuntimeEnvironment;
 
 import java.io.File;
 
@@ -27,7 +29,7 @@ public class ImageWidgetTest extends FileWidgetTest<ImageWidget> {
     @NonNull
     @Override
     public ImageWidget createWidget() {
-        return new ImageWidget(RuntimeEnvironment.application, formEntryPrompt);
+        return new ImageWidget(activity, formEntryPrompt);
     }
 
     @NonNull
@@ -53,5 +55,24 @@ public class ImageWidgetTest extends FileWidgetTest<ImageWidget> {
 
         when(file.exists()).thenReturn(true);
         when(file.getName()).thenReturn(fileName);
+    }
+
+
+    @Override
+    protected Intent getExpectedIntent(Button clickedButton, boolean permissionGranted) {
+        Intent intent = null;
+
+        switch (clickedButton.getId()) {
+            case R.id.capture_image:
+                if (permissionGranted) {
+                    intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                }
+                break;
+            case R.id.choose_image:
+                intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/*");
+                break;
+        }
+        return intent;
     }
 }
