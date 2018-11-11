@@ -27,9 +27,10 @@ import com.google.zxing.WriterException;
 import org.json.JSONException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.preferences.PreferenceSaver;
 import org.odk.collect.android.utilities.QRCodeUtils;
-import org.odk.collect.android.utilities.SharedPreferencesUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -91,7 +92,7 @@ public class QrCodeTest {
         assertNotEquals(resultIfAllSharedPreferencesAreDefault, result);
 
         // update shared preferences using the QrCode
-        SharedPreferencesUtils.savePreferencesFromJSON(result, null);
+        new PreferenceSaver(GeneralSharedPreferences.getInstance(), AdminSharedPreferences.getInstance()).fromJSON(result, null);
 
         // assert that values have updated properly
         assertPreferenceHaveDefaultValue(keys, false);

@@ -79,13 +79,8 @@ public class GeneralSharedPreferences {
         save(key, defaultValue);
     }
 
-    public GeneralSharedPreferences save(String key, @Nullable Object value) throws ValidationException {
+    public GeneralSharedPreferences save(String key, @Nullable Object value) {
         Editor editor = sharedPreferences.edit();
-
-        Object defaultValue = GENERAL_KEYS.get(key);
-        if (defaultValue != null && value != null && !defaultValue.getClass().isAssignableFrom(value.getClass())) {
-            throw new ValidationException();
-        }
 
         if (value == null || value instanceof String) {
             if (key.equals(KEY_PERIODIC_FORM_UPDATES_CHECK) && get(KEY_PERIODIC_FORM_UPDATES_CHECK) != value) {
