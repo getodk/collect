@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="show_password">Zobrazit heslo</string>
   <string name="activity_not_found">Nenalezena žádná aktivita k řešení: %s</string>
   <string name="view_image">Zobrazit obrázek</string>
@@ -281,7 +281,7 @@
   <string name="no_google_account">Není vybrán žádný účet Google!</string>
   <string name="google_set_account">Vybrali jste Tabulky Google jako svůj server, vyberte prosím odpovídající účet Google ve Všeobecných nastaveních a pokračujte</string>
   <string name="media_upload_error">Nepodařilo se nahrát soubor médií, který neexistuje.%1$s </string>
-    <string name="odk_permissions_fail">automatické odeslání oprávnění ODK selhalo, ujistěte se, že jste udělili všechna požadovaná oprávnění</string>
+  <string name="odk_permissions_fail">automatické odeslání oprávnění ODK selhalo, ujistěte se, že jste udělili všechna požadovaná oprávnění</string>
   <string name="odk_auto_note">Výsledky automatického odesílání ODK</string>
   <string name="odk_auto_download_notification_title">Výsledky automatického stahování ODK</string>
   <string name="notification_error">Chyba při zobrazení oznámení</string>
@@ -624,12 +624,6 @@
   <string name="sms_no_message">Tento formulář nemá žádné dotazy se značkami SMS.</string>
   <string name="sms_encrypted_message">Šifrované formuláře nelze odeslat jako SMS.</string>
   <string name="sms_last_submission_on_date_at_time">\"Poslední pokus o podání\" EEE, MMM dd, yyyy\"na\" HH:mm</string>
-  <plurals name="sms_sending">
-    <item quantity="one">Odeslání formuláře jako jediné zprávy.</item>
-    <item quantity="few">Odeslání formuláře, odeslání %1$d zpráv z %2$d</item>
-    <item quantity="many">Odeslání formuláře, odeslání %1$dzpráv z %2$d</item>
-    <item quantity="other">Odeslání formuláře, odeslání %1$d zpráv z %2$d</item>
-  </plurals>
   <string name="sms_sent_on_date_at_time">\"Odesláno jako SMS na\" EEE, MMM dd, rrrr \"v\" HH: mm</string>
   <string name="sms_submission_queued">Čekající k odeslání.</string>
   <string name="sms_submissions_notif_title">Odesílání SMS</string>

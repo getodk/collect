@@ -251,7 +251,7 @@
   <string name="drive_get_file">Duke ngarkuar %1$s dhe file-t media.</string>
   <string name="no_google_account">Nuk keni përzgjedhur një llogari në Google!</string>
   <string name="google_set_account">Keni përzgjedhur Google Sheets si server, lutemi, zjidhni një llogari në  Google në parametrat e përgjithshëm përpara se të vazhdoni.</string>
-    <string name="notification_error">Gabim në shfaqjen e tekstit të njoftimit</string>
+  <string name="notification_error">Gabim në shfaqjen e tekstit të njoftimit</string>
   <string name="delete_after_send">Fshi formularët pasi të nisen</string>
   <string name="delete_after_send_summary">Fshi formularët e finalizuar dhe mediat pasi të jenë ngarkuar në server</string>
   <string name="change_server_url">URL e serverit</string>

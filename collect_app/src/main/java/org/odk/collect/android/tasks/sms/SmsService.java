@@ -380,6 +380,8 @@ public class SmsService {
                 case RESULT_OK_OTHERS_PENDING:
                     return context.getResources().getQuantityString(R.plurals.sms_sending, (int) progress.getTotalCount(), progress.getCompletedCount(), progress.getTotalCount());
                 case RESULT_QUEUED:
+                case RESULT_SENDING:
+                case RESULT_MESSAGE_READY:
                     return context.getString(R.string.sms_submission_queued);
                 case RESULT_OK:
                     return new SimpleDateFormat(context.getString(R.string.sms_sent_on_date_at_time),
