@@ -222,7 +222,7 @@ dependencies {
         exclude group: 'joda-time'
         exclude group: 'org.slf4j'
     }
-    implementation "com.karumi:dexter:4.2.0"
+    implementation "com.karumi:dexter:5.0.0"
     implementation "org.osmdroid:osmdroid-android:5.6.4"
     implementation "org.slf4j:slf4j-android:1.6.1-RC1"
     implementation("com.google.api-client:google-api-client-android:1.22.0") {
