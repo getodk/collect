@@ -72,6 +72,7 @@ public abstract class ButtonWidgetTest<W extends ButtonWidget, A extends IAnswer
      *  @param clickedButton     The button which was clicked
      * @param permissionGranted Whether permission was granted while triggering the button
      */
+    @SuppressWarnings("PMD.EmptyMethodInAbstractClassShouldBeAbstract")
     protected Intent getExpectedIntent(Button clickedButton, boolean permissionGranted) {
         return null;
     }

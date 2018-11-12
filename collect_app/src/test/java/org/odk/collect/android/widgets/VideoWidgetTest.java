@@ -103,9 +103,9 @@ public class VideoWidgetTest extends FileWidgetTest<VideoWidget> {
         switch (clickedButton.getId()) {
             case R.id.capture_video:
                 if (permissionGranted) {
-                    intent = new Intent(android.provider.MediaStore.ACTION_VIDEO_CAPTURE);
-                    intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, MediaStore.Video.Media.EXTERNAL_CONTENT_URI.toString());
-                    intent.putExtra(android.provider.MediaStore.EXTRA_VIDEO_QUALITY, 1);
+                    intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, MediaStore.Video.Media.EXTERNAL_CONTENT_URI.toString());
+                    intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
                 }
                 break;
             case R.id.choose_video:
