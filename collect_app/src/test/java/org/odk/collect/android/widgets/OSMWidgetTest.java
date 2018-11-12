@@ -1,6 +1,8 @@
 package org.odk.collect.android.widgets;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.widget.Button;
 
 import com.google.common.collect.ImmutableList;
 
@@ -12,11 +14,12 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.osm.OSMTag;
 import org.junit.Before;
 import org.mockito.Mock;
+import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.widgets.base.BinaryWidgetTest;
-import org.robolectric.RuntimeEnvironment;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import static org.mockito.Mockito.when;
 
@@ -38,7 +41,7 @@ public class OSMWidgetTest extends BinaryWidgetTest<OSMWidget, StringData> {
     @NonNull
     @Override
     public OSMWidget createWidget() {
-        return new OSMWidget(RuntimeEnvironment.application, formEntryPrompt);
+        return new OSMWidget(activity, formEntryPrompt);
     }
 
     @NonNull
@@ -77,5 +80,17 @@ public class OSMWidgetTest extends BinaryWidgetTest<OSMWidget, StringData> {
         when(questionDef.getOsmTags()).thenReturn(ImmutableList.<OSMTag>of());
 
         fileName = RandomString.make();
+    }
+
+    @Override
+    protected Intent getExpectedIntent(Button clickedButton, boolean permissionGranted) {
+        Intent launchIntent = new Intent(Intent.ACTION_SEND);
+        launchIntent.setType(CollectServerClient.getPlainTextMimeType());
+        launchIntent.putExtra("FORM_ID", "0");
+        launchIntent.putExtra("INSTANCE_ID", "");
+        launchIntent.putExtra("INSTANCE_DIR", instancePath.getParent());
+        launchIntent.putExtra("FORM_FILE_NAME", "test");
+        launchIntent.putStringArrayListExtra("TAG_KEYS", new ArrayList<>());
+        return launchIntent;
     }
 }

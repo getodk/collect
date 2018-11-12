@@ -129,7 +129,7 @@ public abstract class ButtonWidgetTest<W extends ButtonWidget, A extends IAnswer
                     assertEquals(((int[]) expectedValue)[i], ((int[]) actualValue)[i]);
                 }
             } else {
-                assertEquals(expectedValue, actualValue);
+                assertEquals("Value mismatch for extra key: " + expectedKey + "\n", expectedValue, actualValue);
             }
         }
     }
