@@ -424,10 +424,14 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
         Intent intent = new Intent("android.intent.action.VIEW");
         File file = new File(getInstanceFolder() + File.separator + binaryName);
 
-        Uri uri =
-                FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", file);
+        Uri uri = null;
+        try {
+            uri = FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", file);
+            FileUtils.grantFileReadPermissions(intent, uri, getContext());
+        } catch (IllegalArgumentException e) {
+            Timber.e(e);
+        }
 
-        FileUtils.grantFileReadPermissions(intent, uri, getContext());
         intent.setDataAndType(uri, "video/*");
         try {
             getContext().startActivity(intent);

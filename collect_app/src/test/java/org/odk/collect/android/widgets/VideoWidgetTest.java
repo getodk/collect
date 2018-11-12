@@ -1,18 +1,20 @@
 package org.odk.collect.android.widgets;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.widget.Button;
 
 import net.bytebuddy.utility.RandomString;
 
 import org.javarosa.core.model.data.StringData;
 import org.junit.Before;
 import org.mockito.Mock;
+import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaUtil;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
-import org.robolectric.RuntimeEnvironment;
 
 import java.io.File;
 
@@ -40,7 +42,7 @@ public class VideoWidgetTest extends FileWidgetTest<VideoWidget> {
     @NonNull
     @Override
     public VideoWidget createWidget() {
-        return new VideoWidget(RuntimeEnvironment.application, formEntryPrompt, fileUtil, mediaUtil);
+        return new VideoWidget(activity, formEntryPrompt, fileUtil, mediaUtil);
     }
 
     @NonNull
@@ -82,7 +84,7 @@ public class VideoWidgetTest extends FileWidgetTest<VideoWidget> {
         when(formEntryPrompt.isReadOnly()).thenReturn(false);
 
         when(mediaUtil.getPathFromUri(
-                RuntimeEnvironment.application,
+                activity,
                 uri,
                 MediaStore.Video.Media.DATA)
 
@@ -93,5 +95,28 @@ public class VideoWidgetTest extends FileWidgetTest<VideoWidget> {
                 .thenReturn(file);
 
         when(file.getName()).thenReturn(destinationName);
+    }
+
+    @Override
+    protected Intent getExpectedIntent(Button clickedButton, boolean permissionGranted) {
+        Intent intent = null;
+        switch (clickedButton.getId()) {
+            case R.id.capture_video:
+                if (permissionGranted) {
+                    intent = new Intent(android.provider.MediaStore.ACTION_VIDEO_CAPTURE);
+                    intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, MediaStore.Video.Media.EXTERNAL_CONTENT_URI.toString());
+                    intent.putExtra(android.provider.MediaStore.EXTRA_VIDEO_QUALITY, 1);
+                }
+                break;
+            case R.id.choose_video:
+                intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("video/*");
+                break;
+            case R.id.play_video:
+                intent = new Intent("android.intent.action.VIEW");
+                intent.setDataAndType(null, "video/*");
+                break;
+        }
+        return intent;
     }
 }
