@@ -89,7 +89,7 @@ public class MediaLoadingTask extends AsyncTask<Uri, Void, File> {
     @Override
     protected void onPostExecute(File result) {
         Fragment prev = formEntryActivity.get().getSupportFragmentManager().findFragmentByTag(ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
-        if (prev != null) {
+        if (prev != null && !formEntryActivity.get().isInstanceStateSaved()) {
             ((DialogFragment) prev).dismiss();
         }
 

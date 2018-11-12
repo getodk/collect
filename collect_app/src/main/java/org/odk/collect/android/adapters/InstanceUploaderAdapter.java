@@ -169,11 +169,8 @@ public class InstanceUploaderAdapter extends CursorAdapter {
             case RESULT_QUEUED:
             case RESULT_OK_OTHERS_PENDING:
             case RESULT_SENDING:
-                viewHolder.statusIcon.setImageResource(R.drawable.message_text_outline);
-                break;
-
             case RESULT_MESSAGE_READY:
-                viewHolder.statusIcon.setImageResource(R.drawable.pencil);
+                viewHolder.statusIcon.setImageResource(R.drawable.message_text_outline);
                 break;
 
             default:
