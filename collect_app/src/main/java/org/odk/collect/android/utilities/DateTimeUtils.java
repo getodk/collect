@@ -42,7 +42,7 @@ public class DateTimeUtils {
         DateFormat dateFormatter;
         locale = locale == null ? Locale.getDefault() : locale;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            String format = android.text.format.DateFormat.getBestDateTimePattern(locale, getDateTimeSkeleton(containsTime, datePickerDetails));
+            String format = android.text.format.DateFormat.getBestDateTimePattern(locale, getDateTimePattern(containsTime, datePickerDetails));
             dateFormatter = new SimpleDateFormat(format, locale);
         } else {
             dateFormatter = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
@@ -104,19 +104,19 @@ public class DateTimeUtils {
         return String.format(context.getString(R.string.custom_date), customDateText, gregorianDateText);
     }
 
-    private static String getDateTimeSkeleton(boolean containsTime, DatePickerDetails datePickerDetails) {
-        String dateSkeleton;
+    private static String getDateTimePattern(boolean containsTime, DatePickerDetails datePickerDetails) {
+        String datePattern;
         if (containsTime) {
-            dateSkeleton = "yyyyMMMMdd HHmm";
+            datePattern = "yyyyMMMMdd HHmm";
         } else {
-            dateSkeleton = "yyyyMMMMdd";
+            datePattern = "yyyyMMMMdd";
         }
         if (datePickerDetails.isMonthYearMode()) {
-            dateSkeleton = "yyyyMMMM";
+            datePattern = "yyyyMMMM";
         } else if (datePickerDetails.isYearMode()) {
-            dateSkeleton = "yyyy";
+            datePattern = "yyyy";
         }
-        return dateSkeleton;
+        return datePattern;
     }
 
     public static LocalDateTime skipDaylightSavingGapIfExists(LocalDateTime date) {
