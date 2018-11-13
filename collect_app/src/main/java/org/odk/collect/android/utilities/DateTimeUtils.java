@@ -45,13 +45,13 @@ public class DateTimeUtils {
             String format = android.text.format.DateFormat.getBestDateTimePattern(locale, getDateTimePattern(containsTime, datePickerDetails));
             dateFormatter = new SimpleDateFormat(format, locale);
         } else {
-            dateFormatter = DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.DEFAULT, locale);
+            dateFormatter = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
         }
         return dateFormatter.format(date);
     }
 
     private static String getCustomDateTimeLabel(Date date, DatePickerDetails datePickerDetails, boolean containsTime, Context context) {
-        String gregorianDateText = getGregorianDateTimeLabel(date, datePickerDetails, containsTime, Locale.US);
+        String gregorianDateText = getGregorianDateTimeLabel(date, datePickerDetails, containsTime, Locale.getDefault());
 
         DateTime customDate;
         String[] monthArray;
@@ -107,12 +107,12 @@ public class DateTimeUtils {
     private static String getDateTimePattern(boolean containsTime, DatePickerDetails datePickerDetails) {
         String datePattern;
         if (containsTime) {
-            datePattern = "yyyyMMMdd HHmm";
+            datePattern = "yyyyMMMMdd HHmm";
         } else {
-            datePattern = "yyyyMMMdd";
+            datePattern = "yyyyMMMMdd";
         }
         if (datePickerDetails.isMonthYearMode()) {
-            datePattern = "yyyyMMM";
+            datePattern = "yyyyMMMM";
         } else if (datePickerDetails.isYearMode()) {
             datePattern = "yyyy";
         }
@@ -134,7 +134,7 @@ public class DateTimeUtils {
         DatePickerDetails.DatePickerType datePickerType = DatePickerDetails.DatePickerType.GREGORIAN;
         DatePickerDetails.DatePickerMode datePickerMode = DatePickerDetails.DatePickerMode.CALENDAR;
         if (appearance != null) {
-            appearance = appearance.toLowerCase(Locale.US);
+            appearance = appearance.toLowerCase(Locale.getDefault());
             if (appearance.contains("ethiopian")) {
                 datePickerType = DatePickerDetails.DatePickerType.ETHIOPIAN;
                 datePickerMode = DatePickerDetails.DatePickerMode.SPINNERS;
