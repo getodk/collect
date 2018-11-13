@@ -86,6 +86,14 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
     private String contextGroupRef;
 
     /**
+     * The ref to the repeat group we want to render children for.
+     *
+     * If this is non-null, we will render an intermediary "picker" view
+     * showing the children of the given repeat group.
+     */
+    private String repeatGroupPickerRef;
+
+    /**
      * The index of the question or the field list the FormController was set to when the hierarchy
      * was accessed. Used to jump the user back to where they were if applicable.
      */
@@ -258,6 +266,10 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
         return formController.getFormIndex().getReference().getParentRef().toString(true);
     }
 
+    private String getUnindexedGroupRef(FormIndex index) {
+        return index.getReference().toString(false);
+    }
+
     /**
      * Rebuilds the view to reflect the elements that should be displayed based on the
      * FormController's current index. This index is either set prior to the activity opening or
@@ -271,6 +283,8 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
             currentIndex = formController.getFormIndex();
 
             elementsToDisplay = new ArrayList<>();
+
+            boolean shouldShowRepeatGroupPicker = repeatGroupPickerRef != null;
 
             jumpToHierarchyStartIndex(currentIndex);
 
@@ -333,6 +347,9 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
 
                 switch (event) {
                     case FormEntryController.EVENT_QUESTION:
+                        if (shouldShowRepeatGroupPicker) {
+                            break;
+                        }
 
                         FormEntryPrompt fp = formController.getQuestionPrompt();
                         String label = getLabel(fp);
@@ -365,7 +382,25 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                         // Only the [0] emits the repeat header.
                         // Every one displays the descend-into action element.
 
-                        if (fc.getMultiplicity() == 0) {
+                        if (shouldShowRepeatGroupPicker) {
+                            // Don't render other groups' children.
+                            if (!repeatGroupRef.startsWith(repeatGroupPickerRef)) {
+                                break;
+                            }
+
+                            String repeatLabel = getLabel(fc);
+                            if (fc.getFormElement().getChildren().size() == 1 && fc.getFormElement().getChild(0) instanceof GroupDef) {
+                                formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
+                                FormEntryCaption fc2 = formController.getCaptionPrompt();
+                                if (getLabel(fc2) != null) {
+                                    repeatLabel = getLabel(fc2);
+                                }
+                            }
+                            repeatLabel += " (" + (fc.getMultiplicity() + 1) + ")\u200E";
+
+                            HierarchyElement childElement = new HierarchyElement(repeatLabel, null, null, HierarchyElement.Type.CHILD, fc.getIndex());
+                            elementsToDisplay.add(childElement);
+                        } else if (fc.getMultiplicity() == 0) {
                             // Display the repeat header for the group.
                             HierarchyElement group =
                                     new HierarchyElement(getLabel(fc), null, ContextCompat
@@ -373,18 +408,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                                             HierarchyElement.Type.COLLAPSED, fc.getIndex());
                             elementsToDisplay.add(group);
                         }
-                        String repeatLabel = getLabel(fc);
-                        if (fc.getFormElement().getChildren().size() == 1 && fc.getFormElement().getChild(0) instanceof GroupDef) {
-                            formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
-                            FormEntryCaption fc2 = formController.getCaptionPrompt();
-                            if (getLabel(fc2) != null) {
-                                repeatLabel = getLabel(fc2);
-                            }
-                        }
-                        repeatLabel += " (" + (fc.getMultiplicity() + 1) + ")\u200E";
-                        // Add this group name to the drop down list for this repeating group.
-                        HierarchyElement h = elementsToDisplay.get(elementsToDisplay.size() - 1);
-                        h.addChild(new HierarchyElement(repeatLabel, null, null, HierarchyElement.Type.CHILD, fc.getIndex()));
+
                         break;
                 }
                 event =
@@ -415,12 +439,14 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
         switch (element.getType()) {
             case EXPANDED:
             case COLLAPSED:
+                repeatGroupPickerRef = getUnindexedGroupRef(index);
                 refreshView();
                 break;
             case QUESTION:
                 onQuestionClicked(index);
                 return;
             case CHILD:
+                repeatGroupPickerRef = null;
                 Collect.getInstance().getFormController().jumpToIndex(index);
                 setResult(RESULT_OK);
                 refreshView();
