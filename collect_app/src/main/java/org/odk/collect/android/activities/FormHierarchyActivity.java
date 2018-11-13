@@ -193,7 +193,14 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
     }
 
     protected void goUpLevel() {
-        Collect.getInstance().getFormController().stepToOuterScreenEvent();
+        boolean shouldShowRepeatGroupPicker = repeatGroupPickerRef != null;
+
+        if (shouldShowRepeatGroupPicker) {
+            // Simply exit the picker.
+            repeatGroupPickerRef = null;
+        } else {
+            Collect.getInstance().getFormController().stepToOuterScreenEvent();
+        }
 
         refreshView();
     }
@@ -298,6 +305,12 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
             } else {
                 groupPathTextView.setVisibility(View.VISIBLE);
                 groupPathTextView.setText(getCurrentPath());
+                jumpPreviousButton.setEnabled(true);
+            }
+
+            // We might be at the beginning FormIndex, but if showing the picker,
+            // you always need to be able to go up.
+            if (shouldShowRepeatGroupPicker) {
                 jumpPreviousButton.setEnabled(true);
             }
 
