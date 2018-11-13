@@ -105,6 +105,12 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
      */
     private FormIndex currentIndex;
 
+    /**
+     * The index of the screen that is being displayed in the hierarchy
+     * (either the root of the form or a repeat group).
+     */
+    private FormIndex screenIndex;
+
     protected Button jumpPreviousButton;
     protected Button jumpBeginningButton;
     protected Button jumpEndButton;
@@ -191,12 +197,18 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
     }
 
     protected void goUpLevel() {
+        FormController formController = Collect.getInstance().getFormController();
         boolean shouldShowRepeatGroupPicker = repeatGroupPickerRef != null;
 
         if (shouldShowRepeatGroupPicker) {
             // Simply exit the picker.
             repeatGroupPickerRef = null;
         } else {
+            // Toggle the picker if coming from an inner repeat group.
+            if (formController.getEvent(screenIndex) == FormEntryController.EVENT_REPEAT) {
+                repeatGroupPickerRef = getUnindexedGroupRef(screenIndex);
+            }
+
             Collect.getInstance().getFormController().stepToOuterScreenEvent();
         }
 
@@ -232,6 +244,9 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
         // display everything enclosed within that group.
         contextGroupRef = "";
 
+        // Save the index to the screen itself, before potentially moving into it.
+        screenIndex = startIndex;
+
         // If we're currently at a repeat node, record the name of the node and step to the next
         // node to display.
         if (formController.getEvent() == FormEntryController.EVENT_REPEAT) {
@@ -243,6 +258,9 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
             while (!isScreenEvent(formController, potentialStartIndex)) {
                 potentialStartIndex = formController.stepIndexOut(potentialStartIndex);
             }
+
+            screenIndex = potentialStartIndex;
+
             if (potentialStartIndex == null) {
                 // check to see if the question is at the first level of the hierarchy. If it
                 // is, display the root level from the beginning.
