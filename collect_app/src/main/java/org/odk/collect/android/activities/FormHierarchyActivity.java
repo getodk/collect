@@ -221,10 +221,12 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
     }
 
     /**
-     * Finds the start of this hierarchy view based on where the user came from.
+     * Goes to the start of the hierarchy view based on where the user came from.
+     * Backs out until the index is at the beginning of a repeat group or the beginning of the form.
      */
-    private void jumpToHierarchyStartIndex(FormIndex startIndex) {
+    private void jumpToHierarchyStartIndex() {
         FormController formController = Collect.getInstance().getFormController();
+        FormIndex startIndex = formController.getFormIndex();
 
         // If we're not at the first level, we're inside a repeated group so we want to only
         // display everything enclosed within that group.
@@ -237,10 +239,8 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
             formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
         } else {
             FormIndex potentialStartIndex = formController.stepIndexOut(startIndex);
-            // If we have a 'group' tag, we want to step back until we hit a repeat or the
-            // beginning.
-            while (potentialStartIndex != null
-                    && formController.getEvent(potentialStartIndex) == FormEntryController.EVENT_GROUP) {
+            // Step back until we hit a repeat or the beginning.
+            while (!isScreenEvent(formController, potentialStartIndex)) {
                 potentialStartIndex = formController.stepIndexOut(potentialStartIndex);
             }
             if (potentialStartIndex == null) {
@@ -261,6 +261,18 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                 formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
             }
         }
+    }
+
+    /**
+     * Returns true if the event is an enclosing repeat or the start of the form.
+     * See {@link FormController#stepToOuterScreenEvent} for more context.
+     */
+    private boolean isScreenEvent(FormController formController, FormIndex index) {
+        // Beginning of form.
+        if (index == null) return true;
+
+        int event = formController.getEvent(index);
+        return event == FormEntryController.EVENT_REPEAT;
     }
 
     private String getGroupRef(FormController formController) {
@@ -292,7 +304,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
 
             boolean shouldShowRepeatGroupPicker = repeatGroupPickerRef != null;
 
-            jumpToHierarchyStartIndex(currentIndex);
+            jumpToHierarchyStartIndex();
 
             int event = formController.getEvent();
             if (event == FormEntryController.EVENT_BEGINNING_OF_FORM) {
