@@ -461,7 +461,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                             // Display the repeat header for the group.
                             HierarchyElement group = new HierarchyElement(
                                     getLabel(fc), getString(R.string.repeatable_group_label),
-                                    null, HierarchyElement.Type.COLLAPSED, fc.getIndex());
+                                    null, HierarchyElement.Type.PARENT, fc.getIndex());
                             elementsToDisplay.add(group);
                         }
 
@@ -493,14 +493,13 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
         FormIndex index = element.getFormIndex();
 
         switch (element.getType()) {
-            case EXPANDED:
-            case COLLAPSED:
-                repeatGroupPickerIndex = index;
-                refreshView();
-                break;
             case QUESTION:
                 onQuestionClicked(index);
                 return;
+            case PARENT:
+                repeatGroupPickerIndex = index;
+                refreshView();
+                break;
             case CHILD:
                 repeatGroupPickerIndex = null;
                 Collect.getInstance().getFormController().jumpToIndex(index);

@@ -28,12 +28,6 @@ import java.util.ArrayList;
  */
 public class HierarchyElement {
     /**
-     * Repeat instances (always of type {@link Type#CHILD}) if this element is a repeat
-     * ({@link Type#COLLAPSED} or {@link Type#EXPANDED}). Not relevant otherwise.
-     */
-    private final ArrayList<HierarchyElement> children = new ArrayList<>();
-
-    /**
      * The type and state of this element. See {@link Type}.
      */
     @NonNull
@@ -58,8 +52,7 @@ public class HierarchyElement {
     private final String secondaryText;
 
     /**
-     * The collapsed or expanded icon if this element is a repeat ({@link Type#COLLAPSED} or
-     * {@link Type#EXPANDED}). Not relevant otherwise.
+     * An optional icon.
      */
     @Nullable
     private Drawable icon;
@@ -106,14 +99,6 @@ public class HierarchyElement {
         type = newType;
     }
 
-    public ArrayList<HierarchyElement> getChildren() {
-        return children;
-    }
-
-    public void addChild(HierarchyElement h) {
-        children.add(h);
-    }
-
     /**
      * The type and state of this element.
      */
@@ -124,18 +109,13 @@ public class HierarchyElement {
         CHILD,
 
         /**
-         * A repeat that should be displayed as expanded.
+         * A repeat.
          */
-        EXPANDED,
-
-        /**
-         * A repeat that should be displayed as collapsed.
-         */
-        COLLAPSED,
+        PARENT,
 
         /**
          * A question.
          */
-        QUESTION;
+        QUESTION
     }
 }
