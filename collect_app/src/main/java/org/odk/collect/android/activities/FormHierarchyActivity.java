@@ -22,6 +22,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -216,7 +217,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
     }
 
     /**
-     * Builds a string representing the path of the current group. Each level is separated by a <.
+     * Builds a string representing the path of the current group. Each level is separated by `>`.
      */
     private String getCurrentPath() {
         FormController formController = Collect.getInstance().getFormController();
@@ -229,7 +230,17 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
             groups.add(0, formController.getCaptionPrompt(index));
             index = formController.stepIndexOut(index);
         }
-        return ODKView.getGroupsPath(groups.toArray(new FormEntryCaption[groups.size()]));
+
+        String path = ODKView.getGroupsPath(groups.toArray(new FormEntryCaption[groups.size()]));
+
+        boolean shouldShowRepeatGroupPicker = repeatGroupPickerIndex != null;
+        if (shouldShowRepeatGroupPicker) {
+            FormEntryCaption fc = formController.getCaptionPrompt(repeatGroupPickerIndex);
+            String label = getLabel(fc);
+            return TextUtils.isEmpty(path) ? label : path + " > " + label;
+        } else {
+            return path;
+        }
     }
 
     /**
