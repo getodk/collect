@@ -137,9 +137,6 @@
     <Match>
         <Bug pattern="SIC_INNER_SHOULD_BE_STATIC_NEEDS_THIS" />
     </Match>
-    <Match>
-        <Bug pattern="URF_UNREAD_FIELD" />
-    </Match>
 
     <!-- Dodgy code Warnings -->
     <Match>
