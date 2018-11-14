@@ -102,8 +102,6 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
     /**
      * The index of the question that is being displayed in the hierarchy. On first launch, it is
      * the same as {@link #startIndex}. It can then become the index of a repeat instance.
-     * TODO: Is keeping this as a field necessary? I believe what it is used for is to send the user
-     * to edit a question that caused an error in the hierarchy.
      */
     private FormIndex currentIndex;
 
@@ -286,7 +284,8 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
         try {
             FormController formController = Collect.getInstance().getFormController();
 
-            // Record the current index so we can return to the same place if the user hits 'back'.
+            // Save the current index so we can return to the problematic question
+            // in the event of an error.
             currentIndex = formController.getFormIndex();
 
             elementsToDisplay = new ArrayList<>();
