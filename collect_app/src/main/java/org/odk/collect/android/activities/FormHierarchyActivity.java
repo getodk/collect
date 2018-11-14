@@ -211,11 +211,19 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
     private void updateOptionsMenu() {
         // Not ready yet. Menu will be updated automatically once it's been prepared.
         if (optionsMenu == null) return;
+
+        boolean shouldShowPicker = shouldShowRepeatGroupPicker();
+        optionsMenu.findItem(R.id.menu_add_child).setVisible(shouldShowPicker).setEnabled(shouldShowPicker);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.menu_add_child:
+                FormIndex repeatPromptIndex = getRepeatPromptIndex(repeatGroupPickerIndex);
+                exitToIndex(repeatPromptIndex);
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -299,6 +307,36 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
         boolean hideLastMultiplicity = shouldShowRepeatGroupPicker();
 
         return ODKView.getGroupsPath(groups.toArray(new FormEntryCaption[groups.size()]), hideLastMultiplicity);
+    }
+
+    /**
+     * Return the index of the "prompt" to add a new child to the given repeat group.
+     */
+    private FormIndex getRepeatPromptIndex(FormIndex repeatIndex) {
+        FormController formController = Collect.getInstance().getFormController();
+        FormIndex originalIndex = formController.getFormIndex();
+
+        formController.jumpToIndex(repeatIndex);
+        String repeatRef = getGroupRef(repeatIndex).toString(false);
+        String testRef = "";
+
+        // There may be nested repeat groups within this group; skip over those.
+        while (!repeatRef.equals(testRef)) {
+            if (formController.getEvent() == FormEntryController.EVENT_END_OF_FORM) {
+                Timber.w("Failed to find repeat prompt, got end of form instead.");
+                break;
+            }
+
+            formController.stepToNextEvent(FormEntryController.EVENT_PROMPT_NEW_REPEAT);
+            testRef = getGroupRef(formController.getFormIndex()).toString(false);
+        }
+
+        FormIndex result = formController.getFormIndex();
+
+        // Reset to where we started from.
+        formController.jumpToIndex(originalIndex);
+
+        return result;
     }
 
     /**
@@ -620,6 +658,15 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                 return;
             }
         }
+        setResult(RESULT_OK);
+        finish();
+    }
+
+    /**
+     * Jumps to the form filling view with the given index shown.
+     */
+    void exitToIndex(FormIndex index) {
+        Collect.getInstance().getFormController().jumpToIndex(index);
         setResult(RESULT_OK);
         finish();
     }

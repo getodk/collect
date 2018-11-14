@@ -638,6 +638,19 @@ public class FormController {
     }
 
     /**
+     * Move the current form index to the next event of the given type
+     * (or the end if none is found).
+     */
+    public int stepToNextEvent(int eventType) {
+        int event = getEvent();
+        do {
+            if (event == FormEntryController.EVENT_END_OF_FORM) break;
+            event = stepToNextEvent(FormController.STEP_OVER_GROUP);
+        } while (event != eventType);
+        return event;
+    }
+
+    /**
      * Move the current form index to the index of the first displayable group
      * (that is, a repeatable group or a visible group),
      * or to the start of the form.
