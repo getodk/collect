@@ -23,6 +23,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -110,6 +112,11 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
      */
     private FormIndex screenIndex;
 
+    /**
+     * The toolbar menu.
+     */
+    private Menu optionsMenu;
+
     protected Button jumpPreviousButton;
     protected Button jumpBeginningButton;
     protected Button jumpEndButton;
@@ -183,6 +190,34 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
     private void restoreInstanceState(Bundle state) {
         if (state != null) {
             repeatGroupPickerIndex = (FormIndex) state.getSerializable(REPEAT_GROUP_PICKER_INDEX_KEY);
+        }
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.form_hierarchy_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+
+        optionsMenu = menu;
+        updateOptionsMenu();
+
+        return true;
+    }
+
+    private void updateOptionsMenu() {
+        // Not ready yet. Menu will be updated automatically once it's been prepared.
+        if (optionsMenu == null) return;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
@@ -364,6 +399,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
             elementsToDisplay = new ArrayList<>();
 
             jumpToHierarchyStartIndex();
+            updateOptionsMenu();
 
             int event = formController.getEvent();
 
