@@ -459,10 +459,9 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                             elementsToDisplay.add(childElement);
                         } else if (fc.getMultiplicity() == 0) {
                             // Display the repeat header for the group.
-                            HierarchyElement group =
-                                    new HierarchyElement(getLabel(fc), null, ContextCompat
-                                            .getDrawable(this, R.drawable.expander_ic_minimized),
-                                            HierarchyElement.Type.COLLAPSED, fc.getIndex());
+                            HierarchyElement group = new HierarchyElement(
+                                    getLabel(fc), getString(R.string.repeatable_group_label),
+                                    null, HierarchyElement.Type.COLLAPSED, fc.getIndex());
                             elementsToDisplay.add(group);
                         }
 
