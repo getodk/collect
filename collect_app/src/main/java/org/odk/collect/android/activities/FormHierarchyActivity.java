@@ -86,12 +86,12 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
     private String contextGroupRef;
 
     /**
-     * The ref to the repeat group we want to render children for.
+     * The index of the repeat group we want to render children for.
      *
      * If this is non-null, we will render an intermediary "picker" view
      * showing the children of the given repeat group.
      */
-    private String repeatGroupPickerRef;
+    private FormIndex repeatGroupPickerIndex;
 
     /**
      * The index of the question or the field list the FormController was set to when the hierarchy
@@ -198,15 +198,15 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
 
     protected void goUpLevel() {
         FormController formController = Collect.getInstance().getFormController();
-        boolean shouldShowRepeatGroupPicker = repeatGroupPickerRef != null;
+        boolean shouldShowRepeatGroupPicker = repeatGroupPickerIndex != null;
 
         if (shouldShowRepeatGroupPicker) {
             // Simply exit the picker.
-            repeatGroupPickerRef = null;
+            repeatGroupPickerIndex = null;
         } else {
             // Toggle the picker if coming from an inner repeat group.
             if (formController.getEvent(screenIndex) == FormEntryController.EVENT_REPEAT) {
-                repeatGroupPickerRef = getUnindexedGroupRef(screenIndex);
+                repeatGroupPickerIndex = screenIndex;
             }
 
             Collect.getInstance().getFormController().stepToOuterScreenEvent();
@@ -320,7 +320,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
 
             elementsToDisplay = new ArrayList<>();
 
-            boolean shouldShowRepeatGroupPicker = repeatGroupPickerRef != null;
+            boolean shouldShowRepeatGroupPicker = repeatGroupPickerIndex != null;
 
             jumpToHierarchyStartIndex();
 
@@ -424,6 +424,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
 
                         if (shouldShowRepeatGroupPicker) {
                             // Don't render other groups' children.
+                            String repeatGroupPickerRef = getUnindexedGroupRef(repeatGroupPickerIndex);
                             if (!repeatGroupRef.startsWith(repeatGroupPickerRef)) {
                                 break;
                             }
@@ -479,14 +480,14 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
         switch (element.getType()) {
             case EXPANDED:
             case COLLAPSED:
-                repeatGroupPickerRef = getUnindexedGroupRef(index);
+                repeatGroupPickerIndex = index;
                 refreshView();
                 break;
             case QUESTION:
                 onQuestionClicked(index);
                 return;
             case CHILD:
-                repeatGroupPickerRef = null;
+                repeatGroupPickerIndex = null;
                 Collect.getInstance().getFormController().jumpToIndex(index);
                 setResult(RESULT_OK);
                 refreshView();
