@@ -325,21 +325,19 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
             jumpToHierarchyStartIndex();
 
             int event = formController.getEvent();
+
             if (event == FormEntryController.EVENT_BEGINNING_OF_FORM) {
-                // The beginning of form has no valid prompt to display.
                 formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
                 contextGroupRef = getParentGroupRef(formController);
+            }
+
+            if (event == FormEntryController.EVENT_BEGINNING_OF_FORM && !shouldShowRepeatGroupPicker) {
+                // The beginning of form has no valid prompt to display.
                 groupPathTextView.setVisibility(View.GONE);
                 jumpPreviousButton.setEnabled(false);
             } else {
                 groupPathTextView.setVisibility(View.VISIBLE);
                 groupPathTextView.setText(getCurrentPath());
-                jumpPreviousButton.setEnabled(true);
-            }
-
-            // We might be at the beginning FormIndex, but if showing the picker,
-            // you always need to be able to go up.
-            if (shouldShowRepeatGroupPicker) {
                 jumpPreviousButton.setEnabled(true);
             }
 
