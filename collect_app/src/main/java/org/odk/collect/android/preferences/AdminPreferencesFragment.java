@@ -16,7 +16,6 @@ package org.odk.collect.android.preferences;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -152,7 +151,10 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
         if (fragment != null) {
             getActivity().getFragmentManager()
                     .beginTransaction()
-                    .setCustomAnimations(R.animator.push_left_in_fragment,R.animator.push_left_out_fragment,R.animator.push_right_in_fragment,R.animator.push_right_out_fragment)
+                    .setCustomAnimations(R.animator.push_left_in_fragment,
+                            R.animator.push_left_out_fragment,
+                            R.animator.push_right_in_fragment,
+                            R.animator.push_right_out_fragment)
                     .replace(android.R.id.content, fragment)
                     .addToBackStack(null)
                     .commit();

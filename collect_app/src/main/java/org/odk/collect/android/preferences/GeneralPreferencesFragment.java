@@ -22,7 +22,7 @@ import android.preference.Preference;
 import android.preference.PreferenceScreen;
 import android.support.annotation.Nullable;
 import android.view.View;
-import android.view.animation.AnimationUtils;
+
 
 import org.odk.collect.android.R;
 
@@ -85,7 +85,10 @@ public class GeneralPreferencesFragment extends BasePreferenceFragment implement
             getActivity()
                     .getFragmentManager()
                     .beginTransaction()
-                    .setCustomAnimations(R.animator.push_left_in_fragment,R.animator.push_left_out_fragment,R.animator.push_right_in_fragment,R.animator.push_right_out_fragment)
+                    .setCustomAnimations(R.animator.push_left_in_fragment,
+                            R.animator.push_left_out_fragment,
+                            R.animator.push_right_in_fragment,
+                            R.animator.push_right_out_fragment)
                     .replace(android.R.id.content, fragment)
                     .addToBackStack(null)
                     .commit();
