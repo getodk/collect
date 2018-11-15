@@ -197,14 +197,20 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
         });
     }
 
+    /**
+     * Navigates "up" in the form hierarchy.
+     */
     protected void goUpLevel() {
         FormController formController = Collect.getInstance().getFormController();
 
+        // If `repeatGroupPickerIndex` is set it means we're currently displaying
+        // a list of repeat instances. If we unset `repeatGroupPickerIndex`,
+        // we will go back up to the previous screen.
         if (shouldShowRepeatGroupPicker()) {
-            // Simply exit the picker.
+            // Exit the picker.
             repeatGroupPickerIndex = null;
         } else {
-            // Toggle the picker if coming from an inner repeat group.
+            // Enter the picker if coming from a repeat group.
             if (formController.getEvent(screenIndex) == FormEntryController.EVENT_REPEAT) {
                 repeatGroupPickerIndex = screenIndex;
             }
