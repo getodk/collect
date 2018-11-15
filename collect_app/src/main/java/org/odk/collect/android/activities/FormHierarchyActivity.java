@@ -199,9 +199,8 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
 
     protected void goUpLevel() {
         FormController formController = Collect.getInstance().getFormController();
-        boolean shouldShowRepeatGroupPicker = repeatGroupPickerIndex != null;
 
-        if (shouldShowRepeatGroupPicker) {
+        if (shouldShowRepeatGroupPicker()) {
             // Simply exit the picker.
             repeatGroupPickerIndex = null;
         } else {
@@ -233,8 +232,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
 
         String path = ODKView.getGroupsPath(groups.toArray(new FormEntryCaption[groups.size()]));
 
-        boolean shouldShowRepeatGroupPicker = repeatGroupPickerIndex != null;
-        if (shouldShowRepeatGroupPicker) {
+        if (shouldShowRepeatGroupPicker()) {
             FormEntryCaption fc = formController.getCaptionPrompt(repeatGroupPickerIndex);
             String label = getLabel(fc);
             return TextUtils.isEmpty(path) ? label : path + " > " + label;
@@ -320,6 +318,10 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
         return index.getReference().toString(false);
     }
 
+    private boolean shouldShowRepeatGroupPicker() {
+        return repeatGroupPickerIndex != null;
+    }
+
     /**
      * Rebuilds the view to reflect the elements that should be displayed based on the
      * FormController's current index. This index is either set prior to the activity opening or
@@ -335,8 +337,6 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
 
             elementsToDisplay = new ArrayList<>();
 
-            boolean shouldShowRepeatGroupPicker = repeatGroupPickerIndex != null;
-
             jumpToHierarchyStartIndex();
 
             int event = formController.getEvent();
@@ -346,7 +346,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                 contextGroupRef = getParentGroupRef(formController);
             }
 
-            if (event == FormEntryController.EVENT_BEGINNING_OF_FORM && !shouldShowRepeatGroupPicker) {
+            if (event == FormEntryController.EVENT_BEGINNING_OF_FORM && !shouldShowRepeatGroupPicker()) {
                 // The beginning of form has no valid prompt to display.
                 groupPathTextView.setVisibility(View.GONE);
                 jumpPreviousButton.setEnabled(false);
@@ -403,7 +403,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
 
                 switch (event) {
                     case FormEntryController.EVENT_QUESTION:
-                        if (shouldShowRepeatGroupPicker) {
+                        if (shouldShowRepeatGroupPicker()) {
                             break;
                         }
 
@@ -438,7 +438,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                         // Only the [0] emits the repeat header.
                         // Every one displays the descend-into action element.
 
-                        if (shouldShowRepeatGroupPicker) {
+                        if (shouldShowRepeatGroupPicker()) {
                             // Don't render other groups' children.
                             String repeatGroupPickerRef = getUnindexedGroupRef(repeatGroupPickerIndex);
                             if (!currentUnindexedRef.startsWith(repeatGroupPickerRef)) {
