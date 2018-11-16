@@ -23,7 +23,6 @@ import android.preference.PreferenceScreen;
 import android.support.annotation.Nullable;
 import android.view.View;
 
-
 import org.odk.collect.android.R;
 
 import java.util.Collection;
