@@ -28,7 +28,12 @@ import android.widget.ListView;
 
 import org.odk.collect.android.R;
 
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.logic.FormController;
 import timber.log.Timber;
+
+import static android.content.DialogInterface.BUTTON_NEGATIVE;
+import static android.content.DialogInterface.BUTTON_POSITIVE;
 
 /**
  * Reusable code between dialogs for keeping consistency
@@ -76,6 +81,41 @@ public final class DialogUtils {
         } catch (Exception e) {
             Timber.e(e);
         }
+    }
+
+    /**
+     * Creates a confirm/cancel dialog for deleting repeats.
+     */
+    public static void createDeleteRepeatConfirmDialog(Context context, Runnable onDeleted, Runnable onCanceled) {
+        FormController formController = Collect.getInstance().getFormController();
+        String name = formController.getLastRepeatedGroupName();
+        int repeatcount = formController.getLastRepeatedGroupRepeatCount();
+        if (repeatcount != -1) {
+            name += " (" + (repeatcount + 1) + ")";
+        }
+        android.support.v7.app.AlertDialog alertDialog = new android.support.v7.app.AlertDialog.Builder(context).create();
+        alertDialog.setTitle(context.getString(R.string.delete_repeat_ask));
+        alertDialog.setMessage(context.getString(R.string.delete_repeat_confirm, name));
+        DialogInterface.OnClickListener quitListener = (dialog, i) -> {
+            switch (i) {
+                case BUTTON_POSITIVE: // yes
+                    formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.DELETE_REPEAT, 0, null, false, true);
+                    formController.deleteRepeat();
+
+                    if (onDeleted != null) onDeleted.run();
+
+                    break;
+
+                case BUTTON_NEGATIVE: // no
+                    if (onCanceled != null) onCanceled.run();
+
+                    break;
+            }
+        };
+        alertDialog.setCancelable(false);
+        alertDialog.setButton(BUTTON_POSITIVE, context.getString(R.string.discard_group), quitListener);
+        alertDialog.setButton(BUTTON_NEGATIVE, context.getString(R.string.delete_repeat_no), quitListener);
+        alertDialog.show();
     }
 
     /**
