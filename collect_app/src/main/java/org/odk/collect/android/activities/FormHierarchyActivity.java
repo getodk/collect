@@ -39,6 +39,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.HierarchyElement;
+import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.views.ODKView;
 
@@ -199,6 +200,9 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
         FormController formController = Collect.getInstance().getFormController();
         boolean isAtBeginning = formController.isCurrentQuestionFirstInForm() && !shouldShowRepeatGroupPicker();
 
+        boolean isInRepeat = !isAtBeginning && screenIndex != null && formController.getEvent(screenIndex) == FormEntryController.EVENT_REPEAT;
+        optionsMenu.findItem(R.id.menu_delete_child).setVisible(isInRepeat).setEnabled(isInRepeat);
+
         boolean shouldShowPicker = shouldShowRepeatGroupPicker();
         optionsMenu.findItem(R.id.menu_add_child).setVisible(shouldShowPicker).setEnabled(shouldShowPicker);
 
@@ -209,6 +213,12 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.menu_delete_child:
+                DialogUtils.createDeleteRepeatConfirmDialog(this, () -> {
+                    goUpLevel();
+                }, null);
+                return true;
+
             case R.id.menu_add_child:
                 FormIndex repeatPromptIndex = getRepeatPromptIndex(repeatGroupPickerIndex);
                 exitToIndex(repeatPromptIndex);
