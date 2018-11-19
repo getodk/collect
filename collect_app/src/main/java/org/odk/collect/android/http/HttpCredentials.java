@@ -30,8 +30,8 @@ public class HttpCredentials implements HttpCredentialsInterface {
             return true;
         }
 
-        return (((HttpCredentials)obj).getUsername().equals(getUsername()) &&
-                ((HttpCredentials)obj).getPassword().equals(getPassword()));
+        return ((HttpCredentials) obj).getUsername().equals(getUsername()) &&
+                ((HttpCredentials) obj).getPassword().equals(getPassword());
     }
 
     @Override
