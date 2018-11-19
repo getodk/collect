@@ -59,7 +59,7 @@ public class ViewOnlyFormHierarchyActivity extends FormHierarchyActivity {
      * Prevents logging an audit event when the user exits the activity.
      */
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        return super.onKeyDown(keyCode, event);
+    public void onBackPressed() {
+        onBackPressedWithoutLogger();
     }
 }

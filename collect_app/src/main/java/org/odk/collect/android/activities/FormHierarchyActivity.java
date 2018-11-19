@@ -449,16 +449,18 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
      * level in the hierarchy as the "Go Up" button does.
      */
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        switch (keyCode) {
-            case KeyEvent.KEYCODE_BACK:
-                FormController fc = Collect.getInstance().getFormController();
-                if (fc != null) {
-                    fc.getTimerLogger().exitView();
-                    fc.jumpToIndex(startIndex);
-                }
+    public void onBackPressed() {
+        FormController formController = Collect.getInstance().getFormController();
+        if (formController != null) {
+            formController.getTimerLogger().exitView();
+            formController.jumpToIndex(startIndex);
         }
-        return super.onKeyDown(keyCode, event);
+
+        onBackPressedWithoutLogger();
+    }
+
+    protected void onBackPressedWithoutLogger() {
+        super.onBackPressed();
     }
 
     /**
