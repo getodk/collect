@@ -25,7 +25,13 @@ public class HttpCredentials implements HttpCredentialsInterface {
         if (obj == null) {
             return false;
         }
-        return super.equals(obj);
+
+        if (super.equals(obj)) {
+            return true;
+        }
+
+        return (((HttpCredentials)obj).getUsername().equals(getUsername()) &&
+                ((HttpCredentials)obj).getPassword().equals(getPassword()));
     }
 
     @Override
