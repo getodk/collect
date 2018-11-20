@@ -89,7 +89,6 @@ public class PropertyManager implements IPropertyManager {
         Timber.i("calling constructor");
 
         Collect.getInstance().getComponent().inject(this);
-
         try {
             // Device-defined properties
             TelephonyManager telMgr = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
@@ -109,7 +108,8 @@ public class PropertyManager implements IPropertyManager {
         initUserDefined(prefs, KEY_METADATA_EMAIL,       PROPMGR_EMAIL,         SCHEME_MAILTO);
     }
 
-    private IdAndPrefix findDeviceId(Context context, TelephonyManager telephonyManager) {
+    // telephonyManager.getDeviceId() requires permission READ_PHONE_STATE (ISSUE #2506). Permission should be handled or exception caught.
+    private IdAndPrefix findDeviceId(Context context, TelephonyManager telephonyManager) throws SecurityException {
         final String androidIdName = Settings.Secure.ANDROID_ID;
         String deviceId = telephonyManager.getDeviceId();
         String scheme = null;

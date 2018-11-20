@@ -1,5 +1,6 @@
 package org.odk.collect.android.location.client;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
@@ -112,6 +113,7 @@ class GoogleLocationClient
         }
     }
 
+    @SuppressLint("MissingPermission") // Permission checks for location services handled in widgets
     public void requestLocationUpdates(@NonNull LocationListener locationListener) {
         if (!isMonitoringLocation()) {
             fusedLocationProviderApi.requestLocationUpdates(googleApiClient, createLocationRequest(), this);
@@ -135,6 +137,7 @@ class GoogleLocationClient
     }
 
     @Override
+    @SuppressLint("MissingPermission") // Permission checks for location services handled in widgets
     public Location getLastLocation() {
         // We need to block if the Client isn't already connected:
         if (!googleApiClient.isConnected()) {

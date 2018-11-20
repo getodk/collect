@@ -16,6 +16,7 @@
 
 package org.odk.collect.android.fragments;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Fragment;
@@ -536,6 +537,8 @@ public class Camera2Fragment extends Fragment
     /**
      * Opens the camera specified by {@link Camera2Fragment#cameraId}.
      */
+
+    @SuppressLint("MissingPermission") // Permission is handled in ImageWidget,
     private void openCamera(int width, int height) {
         setUpCameraOutputs(width, height);
         configureTransform(width, height);

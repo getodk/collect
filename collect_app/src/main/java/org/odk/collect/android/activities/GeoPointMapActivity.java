@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.activities;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -182,6 +183,7 @@ public class GeoPointMapActivity extends CollectAbstractActivity implements OnMa
         return new DecimalFormat("#.##").format(f);
     }
 
+    @SuppressLint("MissingPermission") // Permission handled in Constructor
     private void setupMap(GoogleMap googleMap) {
         map = googleMap;
         if (map == null) {
