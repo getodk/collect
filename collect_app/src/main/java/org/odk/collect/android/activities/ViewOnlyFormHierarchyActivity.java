@@ -46,6 +46,16 @@ public class ViewOnlyFormHierarchyActivity extends FormHierarchyActivity {
         jumpEndButton.setVisibility(View.GONE);
     }
 
+    @Override
+    protected void toggleDeleteButton(boolean isEnabled) {
+        // Disabled.
+    }
+
+    @Override
+    protected void toggleAddButton(boolean isEnabled) {
+        // Disabled.
+    }
+
     /**
      * Prevents the user from clicking on individual questions to jump into the form-filling view.
      */
