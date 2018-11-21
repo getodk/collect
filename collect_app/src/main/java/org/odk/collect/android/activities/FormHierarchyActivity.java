@@ -17,7 +17,6 @@ package org.odk.collect.android.activities;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -302,7 +301,9 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
      */
     private boolean isScreenEvent(FormController formController, FormIndex index) {
         // Beginning of form.
-        if (index == null) return true;
+        if (index == null) {
+            return true;
+        }
 
         int event = formController.getEvent(index);
         return event == FormEntryController.EVENT_REPEAT;
