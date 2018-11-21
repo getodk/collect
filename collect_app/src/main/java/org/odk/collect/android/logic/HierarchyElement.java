@@ -20,8 +20,6 @@ import android.support.annotation.Nullable;
 
 import org.javarosa.core.model.FormIndex;
 
-import java.util.ArrayList;
-
 /**
  * Represents a question or repeat to be shown in
  * {@link org.odk.collect.android.activities.FormHierarchyActivity}.
