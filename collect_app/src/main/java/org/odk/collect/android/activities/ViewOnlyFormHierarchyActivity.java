@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 
