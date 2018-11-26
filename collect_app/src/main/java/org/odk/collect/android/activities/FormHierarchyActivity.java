@@ -50,9 +50,9 @@ import timber.log.Timber;
  * elements are displayed in the following ways:
  * - Questions each take up a row with their full label shown and their answers below
  * - Non-repeat groups are not represented at all
- * - Repeat groups are initially shown as collapsed and are expanded when tapped, revealing instances
- * of that repeat
- * - Repeat instances are displayed with their label and a count after (e.g. My group (1))
+ * - Repeat groups are initially shown as a "header" which takes you to a "picker" when tapped,
+ *   revealing instances of that repeat
+ * - Repeat instances are displayed with their label and index (e.g. `My group (1)`)
  *
  * Tapping on a repeat instance shows all the questions in that repeat instance using the display
  * rules above.
@@ -61,15 +61,14 @@ import timber.log.Timber;
  * activity, returning to {@link FormEntryActivity}.
  *
  * Although the user gets the impression of navigating "into" a repeat, the view is refreshed in
- * {@link #refreshView()} rather than another activity/fragment being added to the backstack.
+ * {@link #refreshView()} rather than another activity/fragment being added to the back stack.
  *
  * Buttons at the bottom of the screen allow users to navigate the form.
  */
 public class FormHierarchyActivity extends CollectAbstractActivity {
     /**
-     * The questions and repeats at the current level. If a repeat is expanded, also includes the
-     * instances of that repeat. Recreated every time {@link #refreshView()} is called. Modified
-     * by the expand/collapse behavior in {@link #onElementClick(HierarchyElement)}.
+     * The questions and repeats at the current level.
+     * Recreated every time {@link #refreshView()} is called.
      */
     private List<HierarchyElement> elementsToDisplay;
 
@@ -486,12 +485,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
     }
 
     /**
-     * Handles clicks on a specific row in the hierarchy view. Clicking on a:
-     * - group makes it toggle between expanded and collapsed
-     * - question jumps to the form filling view with that question shown. If the question is in a
-     * field list, shows that entire field list.
-     * - group's child element (instance) causes this hierarchy view to be refreshed with that element's
-     * questions shown
+     * Handles clicks on a specific row in the hierarchy view.
      */
     public void onElementClick(HierarchyElement element) {
         int position = elementsToDisplay.indexOf(element);
@@ -502,10 +496,12 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                 onQuestionClicked(index);
                 return;
             case PARENT:
+                // Show the picker.
                 repeatGroupPickerIndex = index;
                 refreshView();
                 break;
             case CHILD:
+                // Hide the picker.
                 repeatGroupPickerIndex = null;
                 Collect.getInstance().getFormController().jumpToIndex(index);
                 setResult(RESULT_OK);
