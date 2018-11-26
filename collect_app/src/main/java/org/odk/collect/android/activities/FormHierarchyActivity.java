@@ -86,10 +86,8 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
     private String contextGroupRef;
 
     /**
-     * The index of the repeat group we want to render children for.
-     *
-     * If this is non-null, we will render an intermediary "picker" view
-     * showing the children of the given repeat group.
+     * If this index is non-null, we will render an intermediary "picker" view
+     * showing the instances of the given repeat group.
      */
     private FormIndex repeatGroupPickerIndex;
 
@@ -446,7 +444,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                         // Every one displays the descend-into action element.
 
                         if (shouldShowRepeatGroupPicker()) {
-                            // Don't render other groups' children.
+                            // Don't render other groups' instances.
                             String repeatGroupPickerRef = getUnindexedGroupRef(repeatGroupPickerIndex);
                             if (!currentUnindexedRef.startsWith(repeatGroupPickerRef)) {
                                 break;
@@ -462,8 +460,8 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                             }
                             repeatLabel += " (" + (fc.getMultiplicity() + 1) + ")\u200E";
 
-                            HierarchyElement childElement = new HierarchyElement(repeatLabel, null, null, HierarchyElement.Type.CHILD, fc.getIndex());
-                            elementsToDisplay.add(childElement);
+                            HierarchyElement instance = new HierarchyElement(repeatLabel, null, null, HierarchyElement.Type.CHILD, fc.getIndex());
+                            elementsToDisplay.add(instance);
                         } else if (fc.getMultiplicity() == 0) {
                             // Display the repeat header for the group.
                             HierarchyElement group = new HierarchyElement(
@@ -492,7 +490,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
      * - group makes it toggle between expanded and collapsed
      * - question jumps to the form filling view with that question shown. If the question is in a
      * field list, shows that entire field list.
-     * - group's child element causes this hierarchy view to be refreshed with that element's
+     * - group's child element (instance) causes this hierarchy view to be refreshed with that element's
      * questions shown
      */
     public void onElementClick(HierarchyElement element) {
