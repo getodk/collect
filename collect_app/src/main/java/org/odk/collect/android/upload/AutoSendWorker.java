@@ -44,7 +44,7 @@ import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
@@ -106,7 +106,7 @@ public class AutoSendWorker extends Worker {
         }
 
         GeneralSharedPreferences settings = GeneralSharedPreferences.getInstance();
-        String protocol = (String) settings.get(PreferenceKeys.KEY_PROTOCOL);
+        String protocol = (String) settings.get(GeneralKeys.KEY_PROTOCOL);
 
         InstanceUploader uploader;
         Map<String, String> resultMessagesByInstanceId = new HashMap<>();
@@ -155,7 +155,7 @@ public class AutoSendWorker extends Worker {
                 // perhaps another worker. It also feels like this could fail and if so should be
                 // communicated to the user. Maybe successful delete should also be communicated?
                 if (InstanceUploader.formShouldBeAutoDeleted(instance.getJrFormId(),
-                        (boolean) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_DELETE_AFTER_SEND))) {
+                        (boolean) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_DELETE_AFTER_SEND))) {
                     Uri deleteForm = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, instance.getDatabaseId().toString());
                     Collect.getInstance().getContentResolver().delete(deleteForm, null, null);
                 }
@@ -193,7 +193,7 @@ public class AutoSendWorker extends Worker {
             return false;
         }
 
-        String autosend = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_AUTOSEND);
+        String autosend = (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_AUTOSEND);
         boolean sendwifi = autosend.equals("wifi_only");
         boolean sendnetwork = autosend.equals("cellular_only");
         if (autosend.equals("wifi_and_cellular")) {

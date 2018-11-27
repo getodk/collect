@@ -5,9 +5,9 @@ import org.json.JSONObject;
 
 import java.util.Map;
 
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOSEND;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOSEND_NETWORK;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOSEND_WIFI;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_AUTOSEND;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_AUTOSEND_NETWORK;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_AUTOSEND_WIFI;
 
 /**
  * Migrates existing autosend_wifi and autosend_network preference values to autosend

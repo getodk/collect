@@ -29,7 +29,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.AdminKeys;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.utilities.ResetUtility;
@@ -72,8 +72,8 @@ public class ResetAppStateTestCase {
         resetAppState(Collections.singletonList(ResetUtility.ResetAction.RESET_PREFERENCES));
 
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
-        assertEquals(settings.getString(PreferenceKeys.KEY_USERNAME, ""), "");
-        assertEquals(settings.getString(PreferenceKeys.KEY_PASSWORD, ""), "");
+        assertEquals(settings.getString(GeneralKeys.KEY_USERNAME, ""), "");
+        assertEquals(settings.getString(GeneralKeys.KEY_PASSWORD, ""), "");
         assertTrue(settings.getBoolean(AdminKeys.KEY_VIEW_SENT, true));
 
         assertEquals(0, getFormsCount());
@@ -130,12 +130,12 @@ public class ResetAppStateTestCase {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
         settings
                 .edit()
-                .putString(PreferenceKeys.KEY_USERNAME, username)
-                .putString(PreferenceKeys.KEY_PASSWORD, password)
+                .putString(GeneralKeys.KEY_USERNAME, username)
+                .putString(GeneralKeys.KEY_PASSWORD, password)
                 .apply();
 
-        assertEquals(username, settings.getString(PreferenceKeys.KEY_USERNAME, null));
-        assertEquals(password, settings.getString(PreferenceKeys.KEY_PASSWORD, null));
+        assertEquals(username, settings.getString(GeneralKeys.KEY_USERNAME, null));
+        assertEquals(password, settings.getString(GeneralKeys.KEY_PASSWORD, null));
 
         settings
                 .edit()

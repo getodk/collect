@@ -39,16 +39,16 @@ import java.util.TreeMap;
 import timber.log.Timber;
 
 import static android.app.Activity.RESULT_CANCELED;
-import static org.odk.collect.android.preferences.PreferenceKeys.GOOGLE_MAPS_BASEMAP_DEFAULT;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_APP_LANGUAGE;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_APP_THEME;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FONT_SIZE;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_MAP_BASEMAP;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_MAP_SDK;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_NAVIGATION;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SPLASH_PATH;
-import static org.odk.collect.android.preferences.PreferenceKeys.OSM_BASEMAP_KEY;
-import static org.odk.collect.android.preferences.PreferenceKeys.OSM_MAPS_BASEMAP_DEFAULT;
+import static org.odk.collect.android.preferences.GeneralKeys.GOOGLE_MAPS_BASEMAP_DEFAULT;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_APP_LANGUAGE;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_APP_THEME;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_FONT_SIZE;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_MAP_BASEMAP;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_MAP_SDK;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_NAVIGATION;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_SPLASH_PATH;
+import static org.odk.collect.android.preferences.GeneralKeys.OSM_BASEMAP_KEY;
+import static org.odk.collect.android.preferences.GeneralKeys.OSM_MAPS_BASEMAP_DEFAULT;
 
 public class UserInterfacePreferences extends BasePreferenceFragment {
 

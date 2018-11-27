@@ -24,7 +24,7 @@ import android.view.View;
 
 import org.odk.collect.android.R;
 
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PROTOCOL;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_PROTOCOL;
 
 public class ServerPreferences extends ServerPreferencesFragment {
 

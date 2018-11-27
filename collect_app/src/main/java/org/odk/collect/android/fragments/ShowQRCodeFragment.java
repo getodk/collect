@@ -48,11 +48,13 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.ActionListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
+import org.odk.collect.android.preferences.AdminSharedPreferences;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.preferences.PreferenceSaver;
 import org.odk.collect.android.utilities.CompressionUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.QRCodeUtils;
-import org.odk.collect.android.utilities.SharedPreferencesUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
@@ -74,7 +76,7 @@ import timber.log.Timber;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PASSWORD;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_PASSWORD;
 import static org.odk.collect.android.utilities.PermissionUtils.requestCameraPermission;
 import static org.odk.collect.android.utilities.QRCodeUtils.QR_CODE_FILEPATH;
 
@@ -256,7 +258,7 @@ public class ShowQRCodeFragment extends Fragment {
     }
 
     private void applySettings(String content) {
-        SharedPreferencesUtils.savePreferencesFromString(content, new ActionListener() {
+        new PreferenceSaver(GeneralSharedPreferences.getInstance(), AdminSharedPreferences.getInstance()).fromJSON(content, new ActionListener() {
             @Override
             public void onSuccess() {
                 Collect.getInstance().initProperties();
@@ -269,7 +271,11 @@ public class ShowQRCodeFragment extends Fragment {
 
             @Override
             public void onFailure(Exception exception) {
-                Timber.e(exception);
+                if (exception instanceof GeneralSharedPreferences.ValidationException) {
+                    ToastUtils.showLongToast(Collect.getInstance().getString(R.string.invalid_qrcode));
+                } else {
+                    Timber.e(exception);
+                }
             }
         });
     }

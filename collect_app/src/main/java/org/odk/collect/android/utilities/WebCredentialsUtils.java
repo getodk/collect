@@ -7,7 +7,7 @@ import android.support.annotation.Nullable;
 import org.odk.collect.android.http.HttpCredentials;
 import org.odk.collect.android.http.HttpCredentialsInterface;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.GeneralKeys;
 
 import java.net.URI;
 import java.util.HashMap;
@@ -30,8 +30,8 @@ public class WebCredentialsUtils {
     }
 
     public void saveCredentialsPreferences(String userName, String password) {
-        GeneralSharedPreferences.getInstance().save(PreferenceKeys.KEY_USERNAME, userName);
-        GeneralSharedPreferences.getInstance().save(PreferenceKeys.KEY_PASSWORD, password);
+        GeneralSharedPreferences.getInstance().save(GeneralKeys.KEY_USERNAME, userName);
+        GeneralSharedPreferences.getInstance().save(GeneralKeys.KEY_PASSWORD, password);
     }
 
     /**
@@ -59,21 +59,21 @@ public class WebCredentialsUtils {
         if (GeneralSharedPreferences.getInstance() == null) {
             return "";
         }
-        return (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_SERVER_URL);
+        return (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_SERVER_URL);
     }
 
     public String getPasswordFromPreferences() {
         if (GeneralSharedPreferences.getInstance() == null) {
             return "";
         }
-        return (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_PASSWORD);
+        return (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_PASSWORD);
     }
 
     public String getUserNameFromPreferences() {
         if (GeneralSharedPreferences.getInstance() == null) {
             return "";
         }
-        return (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_USERNAME);
+        return (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_USERNAME);
     }
 
     /**
