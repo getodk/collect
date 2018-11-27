@@ -199,14 +199,16 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
 
         FormController formController = Collect.getInstance().getFormController();
         boolean isAtBeginning = formController.isCurrentQuestionFirstInForm() && !shouldShowRepeatGroupPicker();
-
-        boolean isInRepeat = !isAtBeginning && screenIndex != null && formController.getEvent(screenIndex) == FormEntryController.EVENT_REPEAT;
-        toggleDeleteButton(isInRepeat);
-
         boolean shouldShowPicker = shouldShowRepeatGroupPicker();
-        toggleAddButton(shouldShowPicker);
+        boolean isInRepeat = !isAtBeginning && screenIndex != null && formController.getEvent(screenIndex) == FormEntryController.EVENT_REPEAT;
 
-        boolean shouldShowGoUp = shouldShowPicker || !isAtBeginning;
+        boolean shouldShowDelete = isInRepeat && !shouldShowPicker;
+        toggleDeleteButton(shouldShowDelete);
+
+        boolean shouldShowAdd = shouldShowPicker;
+        toggleAddButton(shouldShowAdd);
+
+        boolean shouldShowGoUp = !isAtBeginning || shouldShowPicker;
         toggleGoUpButton(shouldShowGoUp);
     }
 
