@@ -296,6 +296,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
         if (groups != null) {
             String longText;
             int multiplicity;
+            int nextMultiplicity = -1;
             int index = 1;
             // list all groups in one string
             for (FormEntryCaption group : groups) {
@@ -303,11 +304,17 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
                 longText = group.getLongText();
                 if (longText != null) {
                     path.append(longText);
-                    if (group.repeats() && multiplicity > 0) {
+                    if (nextMultiplicity > 0) {
                         path
                                 .append(" (")
-                                .append(multiplicity)
+                                .append(nextMultiplicity)
                                 .append(")\u200E");
+
+                        nextMultiplicity = -1;
+                    }
+                    if (group.repeats() && multiplicity > 0) {
+                        // Display the multiplicity on the next group (child instance).
+                        nextMultiplicity = multiplicity;
                     }
                     if (index < groups.length) {
                         path.append(" > ");
