@@ -69,12 +69,6 @@ import timber.log.Timber;
  */
 public class FormHierarchyActivity extends CollectAbstractActivity {
     /**
-     * XML 'appearance' attribute that denotes a group as being displayed
-     * in the hierarchy (rather than invisible).
-     */
-    public static String VISIBLE_GROUP_APPEARANCE = "visible";
-
-    /**
      * The questions and repeats at the current level.
      * Recreated every time {@link #refreshView()} is called.
      */
@@ -366,7 +360,6 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
     private void jumpToHierarchyStartIndex() {
         FormController formController = Collect.getInstance().getFormController();
         FormIndex startIndex = formController.getFormIndex();
-        int event = formController.getEvent();
 
         // If we're not at the first level, we're inside a repeated group so we want to only
         // display everything enclosed within that group.
@@ -375,14 +368,14 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
         // Save the index to the screen itself, before potentially moving into it.
         screenIndex = startIndex;
 
-        // If we're currently at a repeat node, record the name of the node and step to the next
+        // If we're currently at a displayable group, record the name of the node and step to the next
         // node to display.
-        if (event == FormEntryController.EVENT_REPEAT || event == FormEntryController.EVENT_GROUP) {
+        if (formController.isDisplayableGroup(startIndex)) {
             contextGroupRef = getGroupRef(formController);
             formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
         } else {
             FormIndex potentialStartIndex = formController.stepIndexOut(startIndex);
-            // Step back until we hit a repeat or the beginning.
+            // Step back until we hit a displayable group or the beginning.
             while (!isScreenEvent(formController, potentialStartIndex)) {
                 potentialStartIndex = formController.stepIndexOut(potentialStartIndex);
             }
@@ -394,15 +387,12 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                 // is, display the root level from the beginning.
                 formController.jumpToIndex(FormIndex.createBeginningOfFormIndex());
             } else {
-                // otherwise we're at a repeated group
+                // otherwise we're at a displayable group
                 formController.jumpToIndex(potentialStartIndex);
             }
 
-            event = formController.getEvent();
-
-            // now test again for repeat. This should be true at this point or we're at the
-            // beginning
-            if (event == FormEntryController.EVENT_REPEAT || event == FormEntryController.EVENT_GROUP) {
+            // Now test again. This should be true at this point or we're at the beginning.
+            if (formController.isDisplayableGroup(formController.getFormIndex())) {
                 contextGroupRef = getGroupRef(formController);
                 formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
             }
@@ -410,7 +400,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
     }
 
     /**
-     * Returns true if the event is an enclosing repeat, displayable group, or the start of the form.
+     * Returns true if the event is a displayable group or the start of the form.
      * See {@link FormController#stepToOuterScreenEvent} for more context.
      */
     private boolean isScreenEvent(FormController formController, FormIndex index) {
@@ -419,14 +409,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
             return true;
         }
 
-        int event = formController.getEvent(index);
-        return event == FormEntryController.EVENT_REPEAT
-                || (event == FormEntryController.EVENT_GROUP && isVisibleGroup(index));
-    }
-
-    private boolean isVisibleGroup(FormIndex groupIndex) {
-        FormController formController = Collect.getInstance().getFormController();
-        return VISIBLE_GROUP_APPEARANCE.equals(formController.getAppearanceAttr(groupIndex));
+        return formController.isDisplayableGroup(index);
     }
 
     private String getGroupRef(FormController formController) {
@@ -550,7 +533,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                     case FormEntryController.EVENT_GROUP: {
                         // Only display groups with a specific appearance attribute.
                         FormIndex index = formController.getFormIndex();
-                        if (isVisibleGroup(index)) {
+                        if (formController.isDisplayableGroup(index)) {
                             FormEntryCaption caption = formController.getCaptionPrompt();
                             HierarchyElement groupElement = new HierarchyElement(getLabel(caption), getString(R.string.group_label), null, HierarchyElement.Type.GROUP, caption.getIndex());
                             elementsToDisplay.add(groupElement);

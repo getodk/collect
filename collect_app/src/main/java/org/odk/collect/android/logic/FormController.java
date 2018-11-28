@@ -86,6 +86,12 @@ public class FormController {
     private static final String AUDIT = "audit";
     public static final String AUDIT_FILE_NAME = "audit.csv";
 
+    /**
+     * XML 'appearance' attribute that denotes a group as being displayed
+     * in the hierarchy (rather than invisible).
+     */
+    public static String VISIBLE_GROUP_APPEARANCE = "visible";
+
     /*
      * Store the timerLogger object with the form controller state
      */
@@ -661,29 +667,41 @@ public class FormController {
     }
 
     /**
-     * Move the current form index to the index of the first enclosing repeat
+     * Move the current form index to the index of the first displayable group
+     * (that is, a repeatable group or a visible group),
      * or to the start of the form.
      */
     public int stepToOuterScreenEvent() {
-        FormIndex index = stepIndexOut(getFormIndex());
-        int currentEvent = getEvent();
+        FormIndex index = getFormIndex();
 
-        // Step out of any group indexes that are present.
+        // Step out once to begin with if we're coming from a question.
+        if (getEvent() == FormEntryController.EVENT_QUESTION) {
+            index = stepIndexOut(index);
+        }
+
+        // Save where we started from.
+        FormIndex startIndex = index;
+
+        // Step out once more no matter what.
+        index = stepIndexOut(index);
+
+        // Step out of any group indexes that are present, unless they're visible.
         while (index != null
-                && getEvent(index) == FormEntryController.EVENT_GROUP) {
+                && getEvent(index) == FormEntryController.EVENT_GROUP
+                && !isDisplayableGroup(index)) {
             index = stepIndexOut(index);
         }
 
         if (index == null) {
             jumpToIndex(FormIndex.createBeginningOfFormIndex());
         } else {
-            if (currentEvent == FormEntryController.EVENT_REPEAT) {
-                // We were at a repeat, so stepping back brought us to then previous level
+            if (isDisplayableGroup(startIndex)) {
+                // We were at a displayable group, so stepping back brought us to the previous level
                 jumpToIndex(index);
             } else {
                 // We were at a question, so stepping back brought us to either:
-                // The beginning. or The start of a repeat. So we need to step
-                // out again to go passed the repeat.
+                // The beginning, or the start of a displayable group. So we need to step
+                // out again to go past the group.
                 index = stepIndexOut(index);
                 if (index == null) {
                     jumpToIndex(FormIndex.createBeginningOfFormIndex());
@@ -693,6 +711,15 @@ public class FormController {
             }
         }
         return getEvent();
+    }
+
+    /**
+     * Returns true if the index is either a repeatable group or a visible group.
+     */
+    public boolean isDisplayableGroup(FormIndex index) {
+        return getEvent(index) == FormEntryController.EVENT_REPEAT ||
+                (getEvent(index) == FormEntryController.EVENT_GROUP
+                && VISIBLE_GROUP_APPEARANCE.equals(getAppearanceAttr(index)));
     }
 
     public static class FailedConstraint {
