@@ -373,14 +373,7 @@ public class FormController {
     }
 
     private boolean repeatIsFieldList(FormIndex index) {
-        // if this isn't a group, return right away
-        IFormElement element = formEntryController.getModel().getForm().getChild(index);
-        if (!(element instanceof GroupDef)) {
-            return false;
-        }
-
-        GroupDef gd = (GroupDef) element; // exceptions?
-        return ODKView.FIELD_LIST.equalsIgnoreCase(gd.getAppearanceAttr());
+        return groupIsFieldList(index);
     }
 
     /**
