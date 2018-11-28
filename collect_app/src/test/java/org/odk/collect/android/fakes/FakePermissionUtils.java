@@ -1,4 +1,4 @@
-package org.odk.collect.android.mocks;
+package org.odk.collect.android.fakes;
 
 import android.app.Activity;
 import android.support.annotation.NonNull;
@@ -12,11 +12,11 @@ import org.odk.collect.android.utilities.PermissionUtils;
  *
  * @author Shobhit Agarwal
  */
-public class MockedPermissionUtils extends PermissionUtils {
+public class FakePermissionUtils extends PermissionUtils {
 
     private boolean isPermissionGranted;
 
-    public MockedPermissionUtils(@NonNull Activity activity) {
+    public FakePermissionUtils(@NonNull Activity activity) {
         super(activity);
     }
 

@@ -7,7 +7,7 @@ import android.widget.Button;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.junit.Test;
-import org.odk.collect.android.mocks.MockedPermissionUtils;
+import org.odk.collect.android.fakes.FakePermissionUtils;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 import org.robolectric.shadow.api.Shadow;
@@ -24,10 +24,10 @@ import static org.robolectric.Shadows.shadowOf;
 public abstract class ButtonWidgetTest<W extends ButtonWidget, A extends IAnswerData>
         extends QuestionWidgetTest<W, A> {
 
-    private final MockedPermissionUtils permissionUtils;
+    private final FakePermissionUtils permissionUtils;
 
     ButtonWidgetTest() {
-        permissionUtils = new MockedPermissionUtils(Shadow.newInstanceOf(Activity.class));
+        permissionUtils = new FakePermissionUtils(Shadow.newInstanceOf(Activity.class));
     }
 
     private void stubAllRuntimePermissionsGranted(boolean isGranted) {
