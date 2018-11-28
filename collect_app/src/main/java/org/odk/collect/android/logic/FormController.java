@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.logic;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.google.android.gms.analytics.HitBuilders;
@@ -368,12 +369,24 @@ public class FormController {
             return false;
         }
 
-        GroupDef gd = (GroupDef) element; // exceptions?
-        return ODKView.FIELD_LIST.equalsIgnoreCase(gd.getAppearanceAttr());
+        return ODKView.FIELD_LIST.equalsIgnoreCase(element.getAppearanceAttr());
     }
 
     private boolean repeatIsFieldList(FormIndex index) {
         return groupIsFieldList(index);
+    }
+
+    /**
+     * Returns the `appearance` attribute of the current index, if any.
+     */
+    public String getAppearanceAttr(@NonNull FormIndex index) {
+        // FormDef can't have an appearance, it would throw an exception.
+        if (index.isBeginningOfFormIndex()) {
+            return null;
+        }
+
+        IFormElement element = formEntryController.getModel().getForm().getChild(index);
+        return element.getAppearanceAttr();
     }
 
     /**
