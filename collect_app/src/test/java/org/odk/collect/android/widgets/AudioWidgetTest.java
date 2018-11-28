@@ -7,7 +7,6 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import net.bytebuddy.utility.RandomString;
 
@@ -21,8 +20,6 @@ import org.odk.collect.android.widgets.base.FileWidgetTest;
 
 import java.io.File;
 
-import static android.provider.MediaStore.Audio.Media.RECORD_SOUND_ACTION;
-import static android.provider.MediaStore.EXTRA_OUTPUT;
 import static org.junit.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -87,29 +84,6 @@ public class AudioWidgetTest extends FileWidgetTest<AudioWidget> {
 
         when(firstFile.exists()).thenReturn(true);
         when(firstFile.getName()).thenReturn(destinationName);
-    }
-
-    @Override
-    protected Intent getExpectedIntent(Button clickedButton, boolean permissionGranted) {
-        Intent intent = null;
-
-        switch (clickedButton.getId()) {
-            case R.id.capture_audio:
-                if (permissionGranted) {
-                    intent = new Intent(RECORD_SOUND_ACTION);
-                    intent.putExtra(EXTRA_OUTPUT, MediaStore.Audio.Media.EXTERNAL_CONTENT_URI.toString());
-                }
-                break;
-            case R.id.choose_sound:
-
-                /* We aren't checking for storage permissions as without that permission
-                 * FormEntryActivity cannot be started */
-
-                intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("audio/*");
-                break;
-        }
-        return intent;
     }
 
     @Test

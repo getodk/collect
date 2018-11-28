@@ -6,7 +6,6 @@ import android.provider.MediaStore;
 import android.content.Intent;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.widget.Button;
 
 import net.bytebuddy.utility.RandomString;
 
@@ -63,24 +62,6 @@ public class ImageWidgetTest extends FileWidgetTest<ImageWidget> {
 
         when(file.exists()).thenReturn(true);
         when(file.getName()).thenReturn(fileName);
-    }
-
-    @Override
-    protected Intent getExpectedIntent(Button clickedButton, boolean permissionGranted) {
-        Intent intent = null;
-
-        switch (clickedButton.getId()) {
-            case R.id.capture_image:
-                if (permissionGranted) {
-                    intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                }
-                break;
-            case R.id.choose_image:
-                intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("image/*");
-                break;
-        }
-        return intent;
     }
 
     @Test

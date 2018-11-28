@@ -2,7 +2,6 @@ package org.odk.collect.android.widgets;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.widget.Button;
 
 import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.GeoPointData;
@@ -12,15 +11,11 @@ import org.mockito.Mock;
 import org.odk.collect.android.R;
 import org.odk.collect.android.ShadowPlayServicesUtil;
 import org.odk.collect.android.activities.GeoPointActivity;
-import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.widgets.base.BinaryWidgetTest;
 import org.robolectric.annotation.Config;
 
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.widgets.GeoPointWidget.ACCURACY_THRESHOLD;
-import static org.odk.collect.android.widgets.GeoPointWidget.DRAGGABLE_ONLY;
-import static org.odk.collect.android.widgets.GeoPointWidget.READ_ONLY;
 
 /**
  * @author James Knight
@@ -94,25 +89,6 @@ public class GeoPointWidgetTest extends BinaryWidgetTest<GeoPointWidget, GeoPoin
         }
 
         return b.toString();
-    }
-
-    // todo: add more tests for different appearances
-    @Override
-    protected Intent getExpectedIntent(Button clickedButton, boolean permissionGranted) {
-        Intent intent = null;
-
-        switch (clickedButton.getId()) {
-            case R.id.get_point:
-            case R.id.get_location:
-                if (permissionGranted) {
-                    intent = new Intent(activity, GeoPointMapActivity.class);
-                    intent.putExtra(READ_ONLY, false);
-                    intent.putExtra(DRAGGABLE_ONLY, true);
-                    intent.putExtra(ACCURACY_THRESHOLD, 5.0);
-                }
-                break;
-        }
-        return intent;
     }
 
     @Test

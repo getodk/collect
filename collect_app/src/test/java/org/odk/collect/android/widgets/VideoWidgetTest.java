@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.widget.Button;
 
 import net.bytebuddy.utility.RandomString;
 
@@ -97,29 +96,6 @@ public class VideoWidgetTest extends FileWidgetTest<VideoWidget> {
                 .thenReturn(file);
 
         when(file.getName()).thenReturn(destinationName);
-    }
-
-    @Override
-    protected Intent getExpectedIntent(Button clickedButton, boolean permissionGranted) {
-        Intent intent = null;
-        switch (clickedButton.getId()) {
-            case R.id.capture_video:
-                if (permissionGranted) {
-                    intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, MediaStore.Video.Media.EXTERNAL_CONTENT_URI.toString());
-                    intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
-                }
-                break;
-            case R.id.choose_video:
-                intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("video/*");
-                break;
-            case R.id.play_video:
-                intent = new Intent("android.intent.action.VIEW");
-                intent.setDataAndType(null, "video/*");
-                break;
-        }
-        return intent;
     }
 
     @Test

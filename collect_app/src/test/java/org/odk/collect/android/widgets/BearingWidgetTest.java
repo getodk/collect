@@ -1,8 +1,6 @@
 package org.odk.collect.android.widgets;
 
-import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.widget.Button;
 
 import net.bytebuddy.utility.RandomString;
 
@@ -43,11 +41,5 @@ public class BearingWidgetTest extends BinaryWidgetTest<BearingWidget, StringDat
     public void setUp() throws Exception {
         super.setUp();
         barcodeData = RandomString.make();
-    }
-
-    @Override
-    protected Intent getExpectedIntent(Button clickedButton, boolean permissionGranted) {
-        // TODO: mock availability of sensors and return a valid intent
-        return null;
     }
 }
