@@ -1871,7 +1871,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         alertDialog.setCancelable(false);
         alertDialog.setButton(BUTTON_POSITIVE, getString(R.string.ok), errorListener);
         beenSwiped = false;
-        alertDialog.show();
+        if (!this.isFinishing()) {     // smap only show dialog if the activity is not finishing
+            alertDialog.show();
+        }
     }
 
     /**

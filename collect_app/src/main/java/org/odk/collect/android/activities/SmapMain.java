@@ -289,7 +289,9 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     public void processGetTask() {
 
         mProgressMsg = getString(R.string.smap_synchronising);
-        showDialog(PROGRESS_DIALOG);
+        if(!this.isFinishing()) {
+            showDialog(PROGRESS_DIALOG);
+        }
         mDownloadTasks = new DownloadTasksTask();
         mDownloadTasks.setDownloaderListener(this, this);
         mDownloadTasks.execute();
