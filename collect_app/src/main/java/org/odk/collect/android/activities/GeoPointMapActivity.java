@@ -50,7 +50,7 @@ import java.text.DecimalFormat;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.utilities.PermissionUtils.checkIfLocationPermissionsGranted;
+import static org.odk.collect.android.utilities.PermissionUtils.isLocationPermissionGranted;
 
 /**
  * Version of the GeoPointMapActivity that uses the new Maps v2 API and Fragments to enable
@@ -108,7 +108,7 @@ public class GeoPointMapActivity extends CollectAbstractActivity implements OnMa
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!checkIfLocationPermissionsGranted(this)) {
+        if (!isLocationPermissionGranted(this)) {
             finish();
             return;
         }

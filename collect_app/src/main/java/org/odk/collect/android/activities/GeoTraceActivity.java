@@ -46,7 +46,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-import static org.odk.collect.android.utilities.PermissionUtils.checkIfLocationPermissionsGranted;
+import static org.odk.collect.android.utilities.PermissionUtils.isLocationPermissionGranted;
 
 public class GeoTraceActivity extends CollectAbstractActivity implements IRegisterReceiver {
     public static final String PREF_VALUE_GOOGLE_MAPS = "google_maps";
@@ -113,7 +113,7 @@ public class GeoTraceActivity extends CollectAbstractActivity implements IRegist
             restoredTimeUnitsIndex = savedInstanceState.getInt(TIME_UNITS_KEY, 0);
         }
 
-        if (!checkIfLocationPermissionsGranted(this)) {
+        if (!isLocationPermissionGranted(this)) {
             finish();
             return;
         }

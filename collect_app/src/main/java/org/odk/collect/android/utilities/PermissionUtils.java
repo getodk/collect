@@ -52,40 +52,40 @@ public class PermissionUtils {
         this.activity = activity;
     }
 
-    public static boolean checkIfStoragePermissionsGranted(Context context) {
-        return checkIfPermissionsGranted(context,
+    public static boolean isStoragePermissionGranted(Context context) {
+        return isPermissionGranted(context,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE);
     }
 
-    public static boolean checkIfCameraPermissionGranted(Context context) {
-        return checkIfPermissionsGranted(context, Manifest.permission.CAMERA);
+    public static boolean isCameraPermissionGranted(Context context) {
+        return isPermissionGranted(context, Manifest.permission.CAMERA);
     }
 
-    public static boolean checkIfLocationPermissionsGranted(Context context) {
-        return checkIfPermissionsGranted(context,
+    public static boolean isLocationPermissionGranted(Context context) {
+        return isPermissionGranted(context,
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION);
     }
 
-    public static boolean checkIfCameraAndRecordAudioPermissionsGranted(Context context) {
-        return checkIfPermissionsGranted(context,
+    public static boolean isCameraAndRecordAudioPermissionsGranted(Context context) {
+        return isPermissionGranted(context,
                 Manifest.permission.CAMERA,
                 Manifest.permission.RECORD_AUDIO);
     }
 
-    public static boolean checkIfGetAccountsPermissionGranted(Context context) {
-        return checkIfPermissionsGranted(context, Manifest.permission.GET_ACCOUNTS);
+    public static boolean isGetAccountsPermissionGranted(Context context) {
+        return isPermissionGranted(context, Manifest.permission.GET_ACCOUNTS);
     }
 
-    public static boolean checkIfReadPhoneStatePermissionGranted(Context context) {
-        return checkIfPermissionsGranted(context, Manifest.permission.READ_PHONE_STATE);
+    public static boolean isReadPhoneStatePermissionGranted(Context context) {
+        return isPermissionGranted(context, Manifest.permission.READ_PHONE_STATE);
     }
 
     /**
      * Returns true only if all of the requested permissions are granted to Collect, otherwise false
      */
-    private static boolean checkIfPermissionsGranted(Context context, String... permissions) {
+    private static boolean isPermissionGranted(Context context, String... permissions) {
         for (String permission : permissions) {
             if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
                 return false;

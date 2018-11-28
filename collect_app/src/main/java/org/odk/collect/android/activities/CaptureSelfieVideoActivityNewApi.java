@@ -26,7 +26,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.fragments.Camera2VideoFragment;
 import org.odk.collect.android.utilities.ToastUtils;
 
-import static org.odk.collect.android.utilities.PermissionUtils.checkIfCameraAndRecordAudioPermissionsGranted;
+import static org.odk.collect.android.utilities.PermissionUtils.isCameraAndRecordAudioPermissionsGranted;
 
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class CaptureSelfieVideoActivityNewApi extends Activity {
@@ -35,7 +35,7 @@ public class CaptureSelfieVideoActivityNewApi extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!checkIfCameraAndRecordAudioPermissionsGranted(this)) {
+        if (!isCameraAndRecordAudioPermissionsGranted(this)) {
             finish();
             return;
         }
