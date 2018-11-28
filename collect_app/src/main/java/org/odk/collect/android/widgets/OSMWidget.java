@@ -86,7 +86,7 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
         osmFileName = prompt.getAnswerText();
 
         // Setup Launch OpenMapKit Button
-        launchOpenMapKitButton = getSimpleButton(ViewIds.generateViewId());
+        launchOpenMapKitButton = getSimpleButton(R.id.simple_button);
 
         // Button Styling
         if (osmFileName != null) {

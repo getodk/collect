@@ -421,7 +421,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
     }
 
     private void playVideoFile() {
-        Intent intent = new Intent("android.intent.action.VIEW");
+        Intent intent = new Intent(Intent.ACTION_VIEW);
         File file = new File(getInstanceFolder() + File.separator + binaryName);
 
         Uri uri = null;

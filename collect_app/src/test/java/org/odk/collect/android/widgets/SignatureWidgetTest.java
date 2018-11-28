@@ -9,6 +9,7 @@ import net.bytebuddy.utility.RandomString;
 
 import org.javarosa.core.model.data.StringData;
 import org.junit.Before;
+import org.junit.Test;
 import org.mockito.Mock;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.DrawActivity;
@@ -70,5 +71,14 @@ public class SignatureWidgetTest extends FileWidgetTest<SignatureWidget> {
                 break;
         }
         return intent;
+    }
+
+    @Test
+    public void buttonsShouldLaunchCorrectIntents() {
+        stubAllRuntimePermissionsGranted(true);
+
+        Intent intent = getIntentLaunchedByClick(R.id.simple_button);
+        assertComponentEquals(activity, DrawActivity.class, intent);
+        assertExtraEquals(DrawActivity.OPTION, DrawActivity.OPTION_SIGNATURE, intent);
     }
 }

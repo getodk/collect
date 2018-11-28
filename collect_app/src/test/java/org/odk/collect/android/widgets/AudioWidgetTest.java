@@ -12,6 +12,7 @@ import android.widget.Button;
 import net.bytebuddy.utility.RandomString;
 
 import org.javarosa.core.model.data.StringData;
+import org.junit.Test;
 import org.mockito.Mock;
 import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.FileUtil;
@@ -22,6 +23,7 @@ import java.io.File;
 
 import static android.provider.MediaStore.Audio.Media.RECORD_SOUND_ACTION;
 import static android.provider.MediaStore.EXTRA_OUTPUT;
+import static org.junit.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -108,5 +110,23 @@ public class AudioWidgetTest extends FileWidgetTest<AudioWidget> {
                 break;
         }
         return intent;
+    }
+
+    @Test
+    public void buttonsShouldLaunchCorrectIntents() {
+        stubAllRuntimePermissionsGranted(true);
+
+        Intent intent = getIntentLaunchedByClick(R.id.capture_audio);
+        assertActionEquals(MediaStore.Audio.Media.RECORD_SOUND_ACTION, intent);
+
+        intent = getIntentLaunchedByClick(R.id.choose_sound);
+        assertActionEquals(Intent.ACTION_GET_CONTENT, intent);
+    }
+
+    @Test
+    public void buttonsShouldNotLaunchIntentsWhenPermissionsDenied() {
+        stubAllRuntimePermissionsGranted(false);
+
+        assertNull(getIntentLaunchedByClick(R.id.capture_audio));
     }
 }

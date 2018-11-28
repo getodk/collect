@@ -7,13 +7,16 @@ import android.widget.Button;
 import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.GeoPointData;
 import org.junit.Before;
+import org.junit.Test;
 import org.mockito.Mock;
 import org.odk.collect.android.R;
 import org.odk.collect.android.ShadowPlayServicesUtil;
+import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.widgets.base.BinaryWidgetTest;
 import org.robolectric.annotation.Config;
 
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.widgets.GeoPointWidget.ACCURACY_THRESHOLD;
 import static org.odk.collect.android.widgets.GeoPointWidget.DRAGGABLE_ONLY;
@@ -110,5 +113,24 @@ public class GeoPointWidgetTest extends BinaryWidgetTest<GeoPointWidget, GeoPoin
                 break;
         }
         return intent;
+    }
+
+    @Test
+    public void buttonsShouldLaunchCorrectIntents() {
+        stubAllRuntimePermissionsGranted(true);
+
+        Intent intent = getIntentLaunchedByClick(R.id.get_point);
+        assertComponentEquals(activity, GeoPointActivity.class, intent);
+
+        intent = getIntentLaunchedByClick(R.id.get_location);
+        assertComponentEquals(activity, GeoPointActivity.class, intent);
+    }
+
+    @Test
+    public void buttonsShouldNotLaunchIntentsWhenPermissionsDenied() {
+        stubAllRuntimePermissionsGranted(false);
+
+        assertNull(getIntentLaunchedByClick(R.id.get_point));
+        assertNull(getIntentLaunchedByClick(R.id.get_location));
     }
 }

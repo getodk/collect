@@ -6,6 +6,7 @@ import android.widget.Button;
 
 import org.javarosa.core.model.data.StringData;
 import org.junit.Before;
+import org.junit.Test;
 import org.odk.collect.android.R;
 import org.odk.collect.android.ShadowPlayServicesUtil;
 import org.odk.collect.android.activities.GeoTraceActivity;
@@ -16,6 +17,7 @@ import org.robolectric.annotation.Config;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.widgets.GeoTraceWidget.GOOGLE_MAP_KEY;
 import static org.odk.collect.android.widgets.GeoTraceWidget.TRACE_LOCATION;
@@ -127,5 +129,20 @@ public class GeoTraceWidgetTest extends BinaryWidgetTest<GeoTraceWidget, StringD
                 break;
         }
         return intent;
+    }
+
+    @Test
+    public void buttonsShouldLaunchCorrectIntents() {
+        stubAllRuntimePermissionsGranted(true);
+
+        Intent intent = getIntentLaunchedByClick(R.id.simple_button);
+        assertComponentEquals(activity, GeoTraceActivity.class, intent);
+    }
+
+    @Test
+    public void buttonsShouldNotLaunchIntentsWhenPermissionsDenied() {
+        stubAllRuntimePermissionsGranted(false);
+
+        assertNull(getIntentLaunchedByClick(R.id.simple_button));
     }
 }

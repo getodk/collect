@@ -7,6 +7,7 @@ import android.widget.Button;
 import org.javarosa.core.model.data.GeoPointData;
 import org.javarosa.core.model.data.StringData;
 import org.junit.Before;
+import org.junit.Test;
 import org.odk.collect.android.R;
 import org.odk.collect.android.ShadowPlayServicesUtil;
 import org.odk.collect.android.activities.GeoShapeActivity;
@@ -17,6 +18,7 @@ import org.robolectric.annotation.Config;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.widgets.GeoShapeWidget.GOOGLE_MAP_KEY;
 import static org.odk.collect.android.widgets.GeoShapeWidget.SHAPE_LOCATION;
@@ -129,5 +131,20 @@ public class GeoShapeWidgetTest extends BinaryWidgetTest<GeoShapeWidget, StringD
                 break;
         }
         return intent;
+    }
+
+    @Test
+    public void buttonsShouldLaunchCorrectIntents() {
+        stubAllRuntimePermissionsGranted(true);
+
+        Intent intent = getIntentLaunchedByClick(R.id.simple_button);
+        assertComponentEquals(activity, GeoShapeActivity.class, intent);
+    }
+
+    @Test
+    public void buttonsShouldNotLaunchIntentsWhenPermissionsDenied() {
+        stubAllRuntimePermissionsGranted(false);
+
+        assertNull(getIntentLaunchedByClick(R.id.simple_button));
     }
 }

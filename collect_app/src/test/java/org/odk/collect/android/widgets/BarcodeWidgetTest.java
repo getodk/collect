@@ -10,9 +10,12 @@ import net.bytebuddy.utility.RandomString;
 
 import org.javarosa.core.model.data.StringData;
 import org.junit.Before;
+import org.junit.Test;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
 import org.odk.collect.android.widgets.base.BinaryWidgetTest;
+
+import static org.junit.Assert.assertNull;
 
 /**
  * @author James Knight
@@ -66,5 +69,20 @@ public class BarcodeWidgetTest extends BinaryWidgetTest<BarcodeWidget, StringDat
                 break;
         }
         return intent;
+    }
+
+    @Test
+    public void buttonsShouldLaunchCorrectIntents() {
+        stubAllRuntimePermissionsGranted(true);
+
+        Intent intent = getIntentLaunchedByClick(R.id.simple_button);
+        assertComponentEquals(activity, ScannerWithFlashlightActivity.class, intent);
+    }
+
+    @Test
+    public void buttonsShouldNotLaunchIntentsWhenPermissionsDenied() {
+        stubAllRuntimePermissionsGranted(false);
+
+        assertNull(getIntentLaunchedByClick(R.id.simple_button));
     }
 }

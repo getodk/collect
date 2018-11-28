@@ -13,7 +13,9 @@ import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.osm.OSMTag;
 import org.junit.Before;
+import org.junit.Test;
 import org.mockito.Mock;
+import org.odk.collect.android.R;
 import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.widgets.base.BinaryWidgetTest;
@@ -92,5 +94,13 @@ public class OSMWidgetTest extends BinaryWidgetTest<OSMWidget, StringData> {
         launchIntent.putExtra("FORM_FILE_NAME", "test");
         launchIntent.putStringArrayListExtra("TAG_KEYS", new ArrayList<>());
         return launchIntent;
+    }
+
+    @Test
+    public void buttonsShouldLaunchCorrectIntents() {
+        stubAllRuntimePermissionsGranted(true);
+
+        Intent intent = getIntentLaunchedByClick(R.id.simple_button);
+        assertActionEquals(Intent.ACTION_SEND, intent);
     }
 }

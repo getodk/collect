@@ -1,6 +1,8 @@
 package org.odk.collect.android.widgets.base;
 
 import android.app.Activity;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -30,7 +32,7 @@ public abstract class ButtonWidgetTest<W extends ButtonWidget, A extends IAnswer
         permissionUtils = new FakePermissionUtils(Shadow.newInstanceOf(Activity.class));
     }
 
-    private void stubAllRuntimePermissionsGranted(boolean isGranted) {
+    protected void stubAllRuntimePermissionsGranted(boolean isGranted) {
         permissionUtils.setPermissionGranted(isGranted);
         ((QuestionWidget) getActualWidget()).setPermissionUtils(permissionUtils);
     }
@@ -69,7 +71,7 @@ public abstract class ButtonWidgetTest<W extends ButtonWidget, A extends IAnswer
     /**
      * Get the expected {@link Intent} from the widget which will be launched
      *
-     *  @param clickedButton     The button which was clicked
+     * @param clickedButton     The button which was clicked
      * @param permissionGranted Whether permission was granted while triggering the button
      */
     @SuppressWarnings("PMD.EmptyMethodInAbstractClassShouldBeAbstract")
@@ -133,5 +135,30 @@ public abstract class ButtonWidgetTest<W extends ButtonWidget, A extends IAnswer
                 assertEquals("Value mismatch for extra key: " + expectedKey + "\n", expectedValue, actualValue);
             }
         }
+    }
+
+    protected Intent getIntentLaunchedByClick(int buttonId) {
+        ((QuestionWidget) getWidget()).findViewById(buttonId).performClick();
+        return shadowOf(activity).getNextStartedActivity();
+    }
+
+    protected void assertComponentEquals(String pkg, String cls, Intent intent) {
+        assertEquals(new ComponentName(pkg, cls), intent.getComponent());
+    }
+
+    protected void assertComponentEquals(Context context, Class<?> cls, Intent intent) {
+        assertEquals(new ComponentName(context, cls), intent.getComponent());
+    }
+
+    protected void assertActionEquals(String expectedAction, Intent intent) {
+        assertEquals(expectedAction, intent.getAction());
+    }
+
+    protected void assertTypeEquals(String type, Intent intent) {
+        assertEquals(type, intent.getType());
+    }
+
+    protected void assertExtraEquals(String key, Object value, Intent intent) {
+        assertEquals(intent.getExtras().get(key), value);
     }
 }
