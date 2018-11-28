@@ -69,6 +69,12 @@ import timber.log.Timber;
  */
 public class FormHierarchyActivity extends CollectAbstractActivity {
     /**
+     * XML 'appearance' attribute that denotes a group as being displayed
+     * in the hierarchy (rather than invisible).
+     */
+    public static String VISIBLE_GROUP_APPEARANCE = "visible";
+
+    /**
      * The questions and repeats at the current level.
      * Recreated every time {@link #refreshView()} is called.
      */
@@ -415,12 +421,12 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
 
         int event = formController.getEvent(index);
         return event == FormEntryController.EVENT_REPEAT
-                || (event == FormEntryController.EVENT_GROUP && isDisplayableGroup(index));
+                || (event == FormEntryController.EVENT_GROUP && isVisibleGroup(index));
     }
 
-    private boolean isDisplayableGroup(FormIndex groupIndex) {
+    private boolean isVisibleGroup(FormIndex groupIndex) {
         FormController formController = Collect.getInstance().getFormController();
-        return "nested".equals(formController.getAppearanceAttr(groupIndex));
+        return VISIBLE_GROUP_APPEARANCE.equals(formController.getAppearanceAttr(groupIndex));
     }
 
     private String getGroupRef(FormController formController) {
@@ -544,7 +550,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                     case FormEntryController.EVENT_GROUP: {
                         // Only display groups with a specific appearance attribute.
                         FormIndex index = formController.getFormIndex();
-                        if (isDisplayableGroup(index)) {
+                        if (isVisibleGroup(index)) {
                             FormEntryCaption caption = formController.getCaptionPrompt();
                             HierarchyElement groupElement = new HierarchyElement(getLabel(caption), getString(R.string.group_label), null, HierarchyElement.Type.GROUP, caption.getIndex());
                             elementsToDisplay.add(groupElement);
