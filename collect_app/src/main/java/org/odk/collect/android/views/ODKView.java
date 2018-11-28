@@ -286,6 +286,10 @@ public class ODKView extends FrameLayout implements OnLongClickListener {
         }
     }
 
+    /**
+     * Builds a string representing the 'path' of the list of groups.
+     * Each level is separated by `>`.
+     */
     @NonNull
     public static String getGroupsPath(FormEntryCaption[] groups) {
         StringBuilder path = new StringBuilder("");

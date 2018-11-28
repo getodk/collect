@@ -21,7 +21,6 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -298,7 +297,8 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
     }
 
     /**
-     * Builds a string representing the path of the current group. Each level is separated by `>`.
+     * Returns a string representing the 'path' of the current screen.
+     * Each level is separated by `>`.
      */
     private String getCurrentPath() {
         FormController formController = Collect.getInstance().getFormController();
@@ -307,20 +307,17 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
         index = formController.stepIndexOut(index);
 
         List<FormEntryCaption> groups = new ArrayList<>();
+
+        if (shouldShowRepeatGroupPicker()) {
+            groups.add(formController.getCaptionPrompt(repeatGroupPickerIndex));
+        }
+
         while (index != null) {
             groups.add(0, formController.getCaptionPrompt(index));
             index = formController.stepIndexOut(index);
         }
 
-        String path = ODKView.getGroupsPath(groups.toArray(new FormEntryCaption[groups.size()]));
-
-        if (shouldShowRepeatGroupPicker()) {
-            FormEntryCaption fc = formController.getCaptionPrompt(repeatGroupPickerIndex);
-            String label = getLabel(fc);
-            return TextUtils.isEmpty(path) ? label : path + " > " + label;
-        } else {
-            return path;
-        }
+        return ODKView.getGroupsPath(groups.toArray(new FormEntryCaption[groups.size()]));
     }
 
     /**
