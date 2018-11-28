@@ -303,8 +303,11 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
     private String getCurrentPath() {
         FormController formController = Collect.getInstance().getFormController();
         FormIndex index = formController.getFormIndex();
-        // move to enclosing group...
-        index = formController.stepIndexOut(index);
+
+        if (formController.getEvent(index) == FormEntryController.EVENT_QUESTION) {
+            // move to enclosing group...
+            index = formController.stepIndexOut(index);
+        }
 
         List<FormEntryCaption> groups = new ArrayList<>();
 
