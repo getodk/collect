@@ -517,7 +517,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                 }
 
                 switch (event) {
-                    case FormEntryController.EVENT_QUESTION:
+                    case FormEntryController.EVENT_QUESTION: {
                         if (shouldShowRepeatGroupPicker()) {
                             break;
                         }
@@ -533,14 +533,17 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                                             HierarchyElement.Type.QUESTION, fp.getIndex()));
                         }
                         break;
-                    case FormEntryController.EVENT_GROUP:
+                    }
+                    case FormEntryController.EVENT_GROUP: {
                         // ignore group events
                         break;
-                    case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
+                    }
+                    case FormEntryController.EVENT_PROMPT_NEW_REPEAT: {
                         // this would display the 'add new repeat' dialog
                         // ignore it.
                         break;
-                    case FormEntryController.EVENT_REPEAT:
+                    }
+                    case FormEntryController.EVENT_REPEAT: {
                         FormEntryCaption fc = formController.getCaptionPrompt();
                         // push this repeat onto the stack.
                         repeatGroupRef = currentRef;
@@ -581,6 +584,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                         }
 
                         break;
+                    }
                 }
                 event =
                         formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
