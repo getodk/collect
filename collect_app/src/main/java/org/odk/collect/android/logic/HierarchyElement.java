@@ -112,6 +112,11 @@ public class HierarchyElement {
         PARENT,
 
         /**
+         * A displayable group.
+         */
+        GROUP,
+
+        /**
          * A question.
          */
         QUESTION

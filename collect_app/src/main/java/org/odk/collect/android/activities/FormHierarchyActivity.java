@@ -535,7 +535,17 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                         break;
                     }
                     case FormEntryController.EVENT_GROUP: {
-                        // ignore group events
+                        // Only display groups with a specific appearance attribute.
+                        FormIndex index = formController.getFormIndex();
+                        if ("nested".equals(formController.getAppearanceAttr(index))) {
+                            FormEntryCaption caption = formController.getCaptionPrompt();
+                            HierarchyElement groupElement = new HierarchyElement(getLabel(caption), getString(R.string.group_label), null, HierarchyElement.Type.GROUP, caption.getIndex());
+                            elementsToDisplay.add(groupElement);
+
+                            // Skip to the next item outside the group.
+                            formController.forceStepOverGroup();
+                        }
+
                         break;
                     }
                     case FormEntryController.EVENT_PROMPT_NEW_REPEAT: {
@@ -615,6 +625,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                 repeatGroupPickerIndex = index;
                 refreshView();
                 break;
+            case GROUP:
             case CHILD:
                 // Hide the picker.
                 repeatGroupPickerIndex = null;
