@@ -336,7 +336,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
 
         // There may be nested repeat groups within this group; skip over those.
         while (!repeatRef.equals(testRef)) {
-            if (formController.getEvent() != FormEntryController.EVENT_END_OF_FORM) {
+            if (formController.getEvent() == FormEntryController.EVENT_END_OF_FORM) {
                 Timber.w("Failed to find repeat prompt, got end of form instead.");
                 break;
             }
@@ -345,12 +345,12 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
             testRef = getUnindexedGroupRef(formController.getFormIndex());
         }
 
-        FormIndex endIndex = formController.getFormIndex();
+        FormIndex result = formController.getFormIndex();
 
         // Reset to where we started from.
         formController.jumpToIndex(originalIndex);
 
-        return endIndex;
+        return result;
     }
 
     /**
