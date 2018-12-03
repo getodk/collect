@@ -85,6 +85,7 @@ public class RankingListAdapter extends Adapter<ItemViewHolder> {
     public List<String> getValues() {
         return values;
     }
+
     public FormIndex getFormIndex() {
         return formIndex;
     }
