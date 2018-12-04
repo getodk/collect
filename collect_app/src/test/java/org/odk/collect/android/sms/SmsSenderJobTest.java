@@ -6,8 +6,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.injection.DaggerTestComponent;
-import org.odk.collect.android.injection.TestComponent;
+import org.odk.collect.android.injection.DaggerTestDependencyComponent;
+import org.odk.collect.android.injection.TestDependencyComponent;
 import org.odk.collect.android.sms.base.BaseSmsTest;
 import org.odk.collect.android.sms.base.SampleData;
 import org.odk.collect.android.tasks.sms.SmsSender;
@@ -46,7 +46,7 @@ public class SmsSenderJobTest extends BaseSmsTest {
         /**
          * Setting up dagger to utilize test dependencies across the app.
          */
-        TestComponent testComponent = DaggerTestComponent.builder().application(RuntimeEnvironment.application).build();
+        TestDependencyComponent testComponent = DaggerTestDependencyComponent.builder().application(RuntimeEnvironment.application).build();
         ((Collect) RuntimeEnvironment.application).setComponent(testComponent);
         testComponent.inject(this);
 

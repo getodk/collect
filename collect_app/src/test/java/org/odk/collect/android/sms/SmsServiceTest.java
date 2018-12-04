@@ -10,8 +10,8 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.events.RxEventBus;
-import org.odk.collect.android.injection.DaggerTestComponent;
-import org.odk.collect.android.injection.TestComponent;
+import org.odk.collect.android.injection.DaggerTestDependencyComponent;
+import org.odk.collect.android.injection.TestDependencyComponent;
 import org.odk.collect.android.logic.FormInfo;
 import org.odk.collect.android.sms.base.BaseSmsTest;
 import org.odk.collect.android.sms.base.SampleData;
@@ -57,7 +57,7 @@ public class SmsServiceTest extends BaseSmsTest {
         /*
          * Setting up dagger to utilize test dependencies across the app.
          */
-        TestComponent testComponent = DaggerTestComponent.builder().application(RuntimeEnvironment.application).build();
+        TestDependencyComponent testComponent = DaggerTestDependencyComponent.builder().application(RuntimeEnvironment.application).build();
         ((Collect) RuntimeEnvironment.application).setComponent(testComponent);
         testComponent.inject(this);
 

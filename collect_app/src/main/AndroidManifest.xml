@@ -266,10 +266,6 @@ the specific language governing permissions and limitations under the License.
             android:name="com.google.android.maps"
             android:required="false" />
 
-        <activity
-            android:name=".location.GeoActivity"
-            android:configChanges="orientation"
-            android:exported="true" />
         <activity android:name=".activities.WebViewActivity" />
         <activity android:name=".activities.CaptureSelfieVideoActivity" />
         <activity android:name=".activities.CaptureSelfieVideoActivityNewApi" />

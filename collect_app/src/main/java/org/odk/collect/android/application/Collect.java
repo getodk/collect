@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.application;
 
-import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.IntentFilter;
@@ -43,8 +42,8 @@ import net.danlew.android.joda.JodaTimeAndroid;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.external.ExternalDataManager;
-import org.odk.collect.android.injection.config.AppComponent;
-import org.odk.collect.android.injection.config.DaggerAppComponent;
+import org.odk.collect.android.injection.config.AppDependencyComponent;
+import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
 import org.odk.collect.android.jobs.CollectJobCreator;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
@@ -63,10 +62,6 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.util.Locale;
 
-import javax.inject.Inject;
-
-import dagger.android.DispatchingAndroidInjector;
-import dagger.android.HasActivityInjector;
 import timber.log.Timber;
 
 import static org.odk.collect.android.logic.PropertyManager.PROPMGR_USERNAME;
@@ -82,7 +77,7 @@ import static org.odk.collect.android.tasks.sms.SmsSender.SMS_SEND_ACTION;
  *
  * @author carlhartung
  */
-public class Collect extends Application implements HasActivityInjector {
+public class Collect extends Application {
 
     // Storage paths
     public static final String ODK_ROOT = Environment.getExternalStorageDirectory()
@@ -109,10 +104,7 @@ public class Collect extends Application implements HasActivityInjector {
     private FormController formController;
     private ExternalDataManager externalDataManager;
     private Tracker tracker;
-    private AppComponent applicationComponent;
-
-    @Inject
-    DispatchingAndroidInjector<Activity> androidInjector;
+    private AppDependencyComponent applicationComponent;
 
     public static Collect getInstance() {
         return singleton;
@@ -228,11 +220,8 @@ public class Collect extends Application implements HasActivityInjector {
         super.onCreate();
         singleton = this;
 
-        applicationComponent = DaggerAppComponent.builder()
-                .application(this)
-                .build();
+        setupDagger();
 
-        applicationComponent.inject(this);
         NotificationUtils.createNotificationChannel(singleton);
 
         registerReceiver(new SmsSentBroadcastReceiver(), new IntentFilter(SMS_SEND_ACTION));
@@ -267,6 +256,14 @@ public class Collect extends Application implements HasActivityInjector {
         }
 
         setupLeakCanary();
+    }
+
+    private void setupDagger() {
+        applicationComponent = DaggerAppDependencyComponent.builder()
+                .application(this)
+                .build();
+
+        applicationComponent.inject(this);
     }
 
     protected RefWatcher setupLeakCanary() {
@@ -347,11 +344,11 @@ public class Collect extends Application implements HasActivityInjector {
         return allowClick;
     }
 
-    public AppComponent getComponent() {
+    public AppDependencyComponent getComponent() {
         return applicationComponent;
     }
 
-    public void setComponent(AppComponent applicationComponent) {
+    public void setComponent(AppDependencyComponent applicationComponent) {
         this.applicationComponent = applicationComponent;
     }
 
@@ -381,10 +378,5 @@ public class Collect extends Application implements HasActivityInjector {
                         .setCategory("NullFormControllerEvent")
                         .setAction(action)
                         .build());
-    }
-
-    @Override
-    public DispatchingAndroidInjector<Activity> activityInjector() {
-        return androidInjector;
     }
 }

@@ -9,36 +9,40 @@ import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.fragments.DataManagerList;
 import org.odk.collect.android.http.CollectServerClient;
-import org.odk.collect.android.injection.ActivityBuilder;
-import org.odk.collect.android.injection.config.scopes.PerApplication;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.ServerPreferencesFragment;
 import org.odk.collect.android.tasks.InstanceServerUploaderTask;
-import org.odk.collect.android.tasks.sms.SmsSentBroadcastReceiver;
 import org.odk.collect.android.tasks.sms.SmsNotificationReceiver;
 import org.odk.collect.android.tasks.sms.SmsSender;
+import org.odk.collect.android.tasks.sms.SmsSentBroadcastReceiver;
 import org.odk.collect.android.tasks.sms.SmsService;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.DownloadFormListUtils;
 import org.odk.collect.android.utilities.FormDownloader;
 
+import javax.inject.Singleton;
+
 import dagger.BindsInstance;
 import dagger.Component;
-import dagger.android.support.AndroidSupportInjectionModule;
 
 /**
- * Primary module, bootstraps the injection system and
- * injects the main Collect instance here.
- * <p>
- * Shouldn't be modified unless absolutely necessary.
- */
-@PerApplication
+ * Dagger component for the application. Should include
+ * application level Dagger Modules and be built with Application
+ * object.
+ *
+ * Add an `inject(MyClass myClass)` method here for objects you want
+ * to inject into so Dagger knows to wire it up.
+ *
+ * Annotated with @Singleton so modules can include @Singletons that will
+ * be retained at an application level (as this an instance of this components
+ * is owned by the Application object).
+ **/
+
+@Singleton
 @Component(modules = {
-        AndroidSupportInjectionModule.class,
-        AppModule.class,
-        ActivityBuilder.class
+        AppDependencyModule.class
 })
-public interface AppComponent {
+public interface AppDependencyComponent {
 
     @Component.Builder
     interface Builder {
@@ -46,7 +50,7 @@ public interface AppComponent {
         @BindsInstance
         Builder application(Application application);
 
-        AppComponent build();
+        AppDependencyComponent build();
     }
 
     void inject(Collect collect);

@@ -3,29 +3,25 @@ package org.odk.collect.android.injection;
 import android.app.Application;
 
 import org.odk.collect.android.http.CollectServerClientTest;
-import org.odk.collect.android.injection.config.AppComponent;
-import org.odk.collect.android.injection.config.scopes.PerApplication;
+import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.sms.SmsSenderJobTest;
 import org.odk.collect.android.sms.SmsServiceTest;
 
 import dagger.BindsInstance;
 import dagger.Component;
-import dagger.android.support.AndroidSupportInjectionModule;
 
-@PerApplication
 @Component(modules = {
-        AndroidSupportInjectionModule.class,
-        TestModule.class,
-        ActivityBuilder.class
+        TestModule.class
 })
-public interface TestComponent extends AppComponent {
+public interface TestDependencyComponent extends AppDependencyComponent {
+
     @Component.Builder
     interface Builder {
 
         @BindsInstance
-        TestComponent.Builder application(Application application);
+        TestDependencyComponent.Builder application(Application application);
 
-        TestComponent build();
+        TestDependencyComponent build();
     }
 
     void inject(SmsSenderJobTest smsSenderJobTest);

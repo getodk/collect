@@ -24,7 +24,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.injection.config.AppComponent;
+import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.ThemeUtils;
 
@@ -65,7 +65,7 @@ public abstract class CollectAbstractActivity extends AppCompatActivity {
         }
     }
 
-    public AppComponent getComponent() {
+    public AppDependencyComponent getComponent() {
         return Collect.getInstance().getComponent();
     }
 

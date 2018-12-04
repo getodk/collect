@@ -12,7 +12,6 @@ import org.odk.collect.android.http.HttpClientConnection;
 import org.odk.collect.android.http.OpenRosaHttpInterface;
 import org.odk.collect.android.http.mock.MockHttpClientConnection;
 import org.odk.collect.android.http.mock.MockHttpClientConnectionError;
-import org.odk.collect.android.injection.config.scopes.PerApplication;
 import org.odk.collect.android.tasks.sms.SmsSubmissionManager;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
@@ -61,7 +60,6 @@ public class TestModule {
         return application;
     }
 
-    @PerApplication
     @Provides
     RxEventBus provideRxEventBus() {
         return new RxEventBus();

@@ -10,22 +10,21 @@ import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.http.HttpClientConnection;
 import org.odk.collect.android.http.OpenRosaHttpInterface;
-import org.odk.collect.android.injection.ViewModelBuilder;
-import org.odk.collect.android.injection.config.architecture.ViewModelFactoryModule;
-import org.odk.collect.android.injection.config.scopes.PerApplication;
 import org.odk.collect.android.tasks.sms.SmsSubmissionManager;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
+
+import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
 
 /**
- * Add Application level providers here, i.e. if you want to
- * inject something into the Collect instance.
+ * Add Application level dependency providers here (annotated with @Provides),
+ * i.e. if you want to inject something into the Collect instance.
  */
-@Module(includes = {ViewModelFactoryModule.class, ViewModelBuilder.class})
-public class AppModule {
+@Module
+public class AppDependencyModule {
 
     @Provides
     SmsManager provideSmsManager() {
@@ -52,24 +51,24 @@ public class AppModule {
         return new FormsDao();
     }
 
-    @PerApplication
     @Provides
+    @Singleton
     RxEventBus provideRxEventBus() {
         return new RxEventBus();
     }
 
     @Provides
-    public OpenRosaHttpInterface provideHttpInterface() {
+    OpenRosaHttpInterface provideHttpInterface() {
         return new HttpClientConnection();
     }
 
     @Provides
-    public CollectServerClient provideCollectServerClient(OpenRosaHttpInterface httpInterface, WebCredentialsUtils webCredentialsUtils) {
+    CollectServerClient provideCollectServerClient(OpenRosaHttpInterface httpInterface, WebCredentialsUtils webCredentialsUtils) {
         return new CollectServerClient(httpInterface, webCredentialsUtils);
     }
 
     @Provides
-    public WebCredentialsUtils provideWebCredentials() {
+    WebCredentialsUtils provideWebCredentials() {
         return new WebCredentialsUtils();
     }
 
