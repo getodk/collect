@@ -86,10 +86,6 @@ public class RankingListAdapter extends Adapter<ItemViewHolder> {
         return values;
     }
 
-    public FormIndex getFormIndex() {
-        return formIndex;
-    }
-
     public static class ItemViewHolder extends ViewHolder {
 
         final Context context;
