@@ -120,7 +120,7 @@ public class SmsSubmissionManager implements SmsSubmissionManagerContract {
     }
 
     public void clearSubmissions() {
-        preferences.edit().clear().apply();
+        editor.clear().apply();
     }
 
     public Map<String, ?> getAll() {

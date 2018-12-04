@@ -65,14 +65,15 @@ public class ResetDialogPreference extends DialogPreference implements CompoundB
         layers = view.findViewById(R.id.layers);
         cache = view.findViewById(R.id.cache);
         osmDroid = view.findViewById(R.id.osmdroid);
+        smsSubmissionsHistory = view.findViewById(R.id.sms_submissions_history);
+
         preferences.setOnCheckedChangeListener(this);
-        smsSubmissionsHistory.setOnCheckedChangeListener(this);
         instances.setOnCheckedChangeListener(this);
         forms.setOnCheckedChangeListener(this);
         layers.setOnCheckedChangeListener(this);
         cache.setOnCheckedChangeListener(this);
         osmDroid.setOnCheckedChangeListener(this);
-        smsSubmissionsHistory = view.findViewById(R.id.sms_submissions_history);
+        smsSubmissionsHistory.setOnCheckedChangeListener(this);
 
         super.onBindDialogView(view);
     }
