@@ -302,12 +302,12 @@ public class FormsDaoTest {
     private void resetAppState() {
         List<Integer> resetActions = Arrays.asList(
                 ResetUtility.ResetAction.RESET_PREFERENCES,
-                ResetUtility.ResetAction.RESET_SMS_SUBMISSIONS_HISTORY,
                 ResetUtility.ResetAction.RESET_INSTANCES,
                 ResetUtility.ResetAction.RESET_FORMS,
                 ResetUtility.ResetAction.RESET_LAYERS,
                 ResetUtility.ResetAction.RESET_CACHE,
-                ResetUtility.ResetAction.RESET_OSM_DROID
+                ResetUtility.ResetAction.RESET_OSM_DROID,
+                ResetUtility.ResetAction.RESET_SMS_SUBMISSIONS_HISTORY
         );
 
         List<Integer> failedResetActions = new ResetUtility().reset(InstrumentationRegistry.getTargetContext(), resetActions);

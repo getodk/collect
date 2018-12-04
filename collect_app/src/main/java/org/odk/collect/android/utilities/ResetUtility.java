@@ -54,9 +54,6 @@ public class ResetUtility {
                 case ResetAction.RESET_PREFERENCES:
                     resetPreferences(context);
                     break;
-                case ResetAction.RESET_SMS_SUBMISSIONS_HISTORY:
-                    resetSMSSubmissionsHistory();
-                    break;
                 case ResetAction.RESET_INSTANCES:
                     resetInstances();
                     break;
@@ -77,6 +74,9 @@ public class ResetUtility {
                     if (deleteFolderContents(Configuration.getInstance().getOsmdroidTileCache().getPath())) {
                         failedResetActions.remove(failedResetActions.indexOf(ResetAction.RESET_OSM_DROID));
                     }
+                    break;
+                case ResetAction.RESET_SMS_SUBMISSIONS_HISTORY:
+                    resetSMSSubmissionsHistory();
                     break;
             }
         }
@@ -150,11 +150,11 @@ public class ResetUtility {
 
     public static class ResetAction {
         public static final int RESET_PREFERENCES = 0;
-        public static final int RESET_SMS_SUBMISSIONS_HISTORY = 1;
-        public static final int RESET_INSTANCES = 2;
-        public static final int RESET_FORMS = 3;
-        public static final int RESET_LAYERS = 4;
-        public static final int RESET_CACHE = 5;
-        public static final int RESET_OSM_DROID = 6;
+        public static final int RESET_INSTANCES = 1;
+        public static final int RESET_FORMS = 2;
+        public static final int RESET_LAYERS = 3;
+        public static final int RESET_CACHE = 4;
+        public static final int RESET_OSM_DROID = 5;
+        public static final int RESET_SMS_SUBMISSIONS_HISTORY = 6;
     }
 }

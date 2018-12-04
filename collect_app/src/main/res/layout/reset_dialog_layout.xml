@@ -47,17 +47,6 @@ limitations under the License.
             android:drawableRight="?android:attr/listChoiceIndicatorMultiple" />
 
         <CheckBox
-            android:id="@+id/sms_submissions_history"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/reset_sms_submissions_history"
-            android:padding="5dp"
-            android:button="@null"
-            android:background="?android:attr/selectableItemBackground"
-            android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
-            android:drawableRight="?android:attr/listChoiceIndicatorMultiple" />
-
-        <CheckBox
             android:id="@+id/instances"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -106,6 +95,17 @@ limitations under the License.
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/reset_osm_tiles"
+            android:padding="5dp"
+            android:button="@null"
+            android:background="?android:attr/selectableItemBackground"
+            android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
+            android:drawableRight="?android:attr/listChoiceIndicatorMultiple" />
+
+        <CheckBox
+            android:id="@+id/sms_submissions_history"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/reset_sms_submissions_history"
             android:padding="5dp"
             android:button="@null"
             android:background="?android:attr/selectableItemBackground"
