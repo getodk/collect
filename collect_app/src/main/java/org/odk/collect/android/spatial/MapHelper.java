@@ -244,6 +244,7 @@ public class MapHelper {
                     }
                 }
                 selectedLayer = item;
+                setBasemap();
                 break;
             default:
                 File[] spFiles = getFileFromSelectedItem(item);
