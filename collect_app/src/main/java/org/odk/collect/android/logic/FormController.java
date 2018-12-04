@@ -90,7 +90,7 @@ public class FormController {
      * XML 'appearance' attribute that denotes a group as being displayed
      * in the hierarchy (rather than invisible).
      */
-    public static String VISIBLE_GROUP_APPEARANCE = "visible";
+    public static String VISIBLE_GROUP_APPEARANCE = "hierarchy-visible";
 
     /*
      * Store the timerLogger object with the form controller state
