@@ -36,6 +36,8 @@ import dagger.Component;
  * Annotated with @Singleton so modules can include @Singletons that will
  * be retained at an application level (as this an instance of this components
  * is owned by the Application object).
+ *
+ * To read more about Dagger visit: https://google.github.io/dagger/users-guide
  **/
 
 @Singleton

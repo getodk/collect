@@ -88,12 +88,12 @@ public class TestModule {
     }
 
     @Provides
-    public OpenRosaHttpInterface provideHttpInterface() {
+    OpenRosaHttpInterface provideHttpInterface() {
         return new HttpClientConnection();
     }
 
     @Provides
-    public WebCredentialsUtils provideWebCredentials() {
+    WebCredentialsUtils provideWebCredentials() {
         return new WebCredentialsUtils();
     }
 
