@@ -42,16 +42,16 @@ public class DateTimeUtils {
         DateFormat dateFormatter;
         locale = locale == null ? Locale.getDefault() : locale;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            String format = android.text.format.DateFormat.getBestDateTimePattern(locale, getDateTimePattern(containsTime, datePickerDetails));
+            String format = android.text.format.DateFormat.getBestDateTimePattern(locale, getDateTimeSkeleton(containsTime, datePickerDetails));
             dateFormatter = new SimpleDateFormat(format, locale);
         } else {
-            dateFormatter = DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.DEFAULT, locale);
+            dateFormatter = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
         }
         return dateFormatter.format(date);
     }
 
     private static String getCustomDateTimeLabel(Date date, DatePickerDetails datePickerDetails, boolean containsTime, Context context) {
-        String gregorianDateText = getGregorianDateTimeLabel(date, datePickerDetails, containsTime, Locale.US);
+        String gregorianDateText = getGregorianDateTimeLabel(date, datePickerDetails, containsTime, Locale.getDefault());
 
         DateTime customDate;
         String[] monthArray;
@@ -104,19 +104,19 @@ public class DateTimeUtils {
         return String.format(context.getString(R.string.custom_date), customDateText, gregorianDateText);
     }
 
-    private static String getDateTimePattern(boolean containsTime, DatePickerDetails datePickerDetails) {
-        String datePattern;
+    private static String getDateTimeSkeleton(boolean containsTime, DatePickerDetails datePickerDetails) {
+        String dateSkeleton;
         if (containsTime) {
-            datePattern = "yyyyMMMdd HHmm";
+            dateSkeleton = "yyyyMMMMdd HHmm";
         } else {
-            datePattern = "yyyyMMMdd";
+            dateSkeleton = "yyyyMMMMdd";
         }
         if (datePickerDetails.isMonthYearMode()) {
-            datePattern = "yyyyMMM";
+            dateSkeleton = "yyyyMMMM";
         } else if (datePickerDetails.isYearMode()) {
-            datePattern = "yyyy";
+            dateSkeleton = "yyyy";
         }
-        return datePattern;
+        return dateSkeleton;
     }
 
     public static LocalDateTime skipDaylightSavingGapIfExists(LocalDateTime date) {
@@ -134,7 +134,7 @@ public class DateTimeUtils {
         DatePickerDetails.DatePickerType datePickerType = DatePickerDetails.DatePickerType.GREGORIAN;
         DatePickerDetails.DatePickerMode datePickerMode = DatePickerDetails.DatePickerMode.CALENDAR;
         if (appearance != null) {
-            appearance = appearance.toLowerCase(Locale.US);
+            appearance = appearance.toLowerCase(Locale.getDefault());
             if (appearance.contains("ethiopian")) {
                 datePickerType = DatePickerDetails.DatePickerType.ETHIOPIAN;
                 datePickerMode = DatePickerDetails.DatePickerMode.SPINNERS;
