@@ -17,7 +17,6 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -67,10 +66,7 @@ import timber.log.Timber;
 @SuppressLint("ViewConstructor")
 public class GridMultiWidget extends QuestionWidget implements MultiChoiceWidget {
 
-    // The RGB value for the orange background
-    public static final int ORANGE_RED_VAL = 255;
-    public static final int ORANGE_GREEN_VAL = 140;
-    public static final int ORANGE_BLUE_VAL = 0;
+    private final int bgOrange = getResources().getColor(R.color.highContrastHighlight);
 
     private static final int HORIZONTAL_PADDING = 7;
     private static final int VERTICAL_PADDING = 5;
@@ -292,8 +288,7 @@ public class GridMultiWidget extends QuestionWidget implements MultiChoiceWidget
                     if (audioHandlers[lastClickPosition] != null) {
                         stopAudio();
                     }
-                    imageViews[position].setBackgroundColor(Color.rgb(ORANGE_RED_VAL, ORANGE_GREEN_VAL,
-                            ORANGE_BLUE_VAL));
+                    imageViews[position].setBackgroundColor(bgOrange);
                     if (audioHandlers[position] != null) {
                         audioHandlers[position].playAudio(getContext());
                     }
@@ -325,8 +320,7 @@ public class GridMultiWidget extends QuestionWidget implements MultiChoiceWidget
 
             selected[i] = found;
             if (selected[i]) {
-                imageViews[i].setBackgroundColor(Color.rgb(ORANGE_RED_VAL, ORANGE_GREEN_VAL,
-                        ORANGE_BLUE_VAL));
+                imageViews[i].setBackgroundColor(bgOrange);
             }
 
         }

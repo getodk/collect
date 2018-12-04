@@ -43,7 +43,7 @@ import org.odk.collect.android.activities.CaptureSelfieVideoActivityNewApi;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.FileUtils;
@@ -383,7 +383,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
 
         // request high resolution if configured for that...
         boolean highResolution = settings.getBoolean(
-                PreferenceKeys.KEY_HIGH_RESOLUTION,
+                GeneralKeys.KEY_HIGH_RESOLUTION,
                 VideoWidget.DEFAULT_HIGH_RESOLUTION);
         if (highResolution) {
             i.putExtra(android.provider.MediaStore.EXTRA_VIDEO_QUALITY, 1);

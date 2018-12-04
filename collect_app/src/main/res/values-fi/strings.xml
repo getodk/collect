@@ -281,7 +281,6 @@
   <string name="no_google_account">Ei valittua Google-tiliä!</string>
   <string name="google_set_account">Palvelimesi on Google Sheets, valitse vastaava Google-tili yleisasetuksissa ennen jatkamista</string>
   <string name="media_upload_error">Palvelimelle ei voida siirtää tiedostoa, jota ei ole olemassa: %1$s</string>
-  <string name="odk_auth_auth_fail">Automaattisen ODK-lähetyksen vahvistus epäonnistui, varmista että asetuksesi ovat oikein</string>
   <string name="odk_permissions_fail">Automaattisella ODK-lähetyksellä lupavirhe, varmista että olet antanut sovellukselle kaikki tarvittavat luvat</string>
   <string name="odk_auto_note">ODK automaattisen lähetyksen tulokset</string>
   <string name="odk_auto_download_notification_title">ODK automaattisen lataamisen tulokset</string>
@@ -294,6 +293,7 @@
   <string name="send_in_progress">Taustalähetys käynnissä, yritä hetken kuluttua uudestaan</string>
   <string name="sheets_max_columns">Maksimimäärä sarakkeita on 255, lomakkeessasi on %s, eikä sitä voida lähettää työkirjaan. </string>
   <string name="invalid_sheet_id">Virheellinen lehden id: %1$s</string>
+  <string name="missing_submission_url">Lähetykseen tarvittava URL puuttuu</string>
   <string name="google_sheets_access_denied">Pääsy estetty. Varmista että taulukon omistaja on myöntänyt muokkausoikeudet.</string>
   <string name="google_sheets_missing_columns">Työkirjasta puuttuvat seuraavat sarakkeet: %1$s</string>
   <string name="password_error_whitespace">Salasanan alussa tai lopussa ei saa olla välilyöntimerkkejä</string>
@@ -627,7 +627,7 @@
   <string name="sms_last_submission_on_date_at_time">\'Viimeisin lähetysyritys\' EEE dd MMM yyyy \'kello\' HH:mm</string>
   <plurals name="sms_sending">
     <item quantity="one">Lähetetään lomaketta yhtenä viestinä.</item>
-    <item quantity="other">Lähetetään lomaketta, viesti %1$d! / %2$d</item>
+    <item quantity="other">Lähetetään lomaketta, lähetetään viestiä %1$d / %2$d</item>
   </plurals>
   <string name="sms_sent_on_date_at_time">\'Lähetetty SMS-viestinä\' EEE dd MMM yyyy \'kello\' HH:mm</string>
   <string name="sms_submission_queued">Lähetysjonossa.</string>
@@ -638,14 +638,9 @@
   <string name="transport_type_both">Valitse lähettäessä</string>
   <string name="seconds">Sekunteja</string>
   <string name="rank_items">Järjestä</string>
-  <string name="image_not_saved">Kuvaa ei voida tallentaa vastauskerran tiedoston ongelman vuoksi.</string>
   <string name="loading_form_failed">Lomaketta ladatessa tapahtui virhe. Ole hyvä ja yritä uudestaan.</string>
   <string name="missing_google_account_dialog_title">Google-tiliä ei ole asetettu</string>
   <string name="missing_google_account_dialog_desc">Lähettääksesi lomakkeita Google Sheets -palvelun kautta sinun on asetettava Google-tili palvelinasetuksissa.</string>
   <string name="sms_invalid_phone_number_description">Aseta vastaanottopuhelinnumero SMS-lähetyksille tai vaihda siirtotapaa.</string>
-  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
-  <string name="current_predicate_warning">Tämä kysymys ei tule olemaan yhteensopiva ODK Collect -sovelluksen tulevien versioiden kanssa, koska se käyttää current() -funktiota valintasuodatuksessa. \n\nVarmista, että tämän kyselyn tehnyt henkilö lukee yksityiskohdat alla ja tekee tarvittavat muutokset.</string>
-  <string name="current_predicate_warning_title">Toimenpiteitä tarvitaan</string>
-  <string name="current_predicate_forum">Lue yksityiskohdat</string>
-  <string name="current_predicate_continue">Jatka</string>
+  <string name="notification_channel_name">Yleiset ilmoitukset</string>
 </resources>

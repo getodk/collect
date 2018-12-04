@@ -5,11 +5,11 @@ import android.content.SharedPreferences;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_EMAIL;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_MIGRATED;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_USERNAME;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_EMAIL;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_MIGRATED;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_USERNAME;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_USERNAME;
 
 /** Migrates existing preference values to metadata */
 public class FormMetadataMigrator {

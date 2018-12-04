@@ -82,6 +82,7 @@ public class GeoPointOsmMapActivity extends BaseGeoMapActivity implements Locati
     private boolean setClear;
     private boolean isDragged;
     private ImageButton showLocationButton;
+    private ImageButton clearPointButton;
 
     private int locationCount;
 
@@ -165,8 +166,7 @@ public class GeoPointOsmMapActivity extends BaseGeoMapActivity implements Locati
         reloadLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                map.getOverlays().add(marker);
-                setClear = false;
+                addMarker(marker);
                 latLng = new GeoPoint(location.getLatitude(), location.getLongitude());
                 marker.setPosition(latLng);
                 captureLocation = true;
@@ -223,7 +223,8 @@ public class GeoPointOsmMapActivity extends BaseGeoMapActivity implements Locati
             }
         });
 
-        ImageButton clearPointButton = findViewById(R.id.clear);
+        clearPointButton = findViewById(R.id.clear);
+        clearPointButton.setEnabled(false);
         clearPointButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -234,9 +235,7 @@ public class GeoPointOsmMapActivity extends BaseGeoMapActivity implements Locati
                     //locationStatus.setVisibility(View.VISIBLE);
                 }
                 locationStatus.setVisibility(View.VISIBLE);
-                map.getOverlays().remove(marker);
-                marker.remove(map);
-                setClear = true;
+                removeMarker(marker);
                 isDragged = false;
                 captureLocation = false;
                 draggable = intentDraggable;
@@ -279,7 +278,7 @@ public class GeoPointOsmMapActivity extends BaseGeoMapActivity implements Locati
 
         if (latLng != null) {
             marker.setPosition(latLng);
-            map.getOverlays().add(marker);
+            addMarker(marker);
             map.invalidate();
             captureLocation = true;
             foundFirstLocation = true;
@@ -406,7 +405,7 @@ public class GeoPointOsmMapActivity extends BaseGeoMapActivity implements Locati
                 showLocationButton.setEnabled(true);
                 if (!captureLocation & !setClear) {
                     latLng = new GeoPoint(this.location.getLatitude(), this.location.getLongitude());
-                    map.getOverlays().add(marker);
+                    addMarker(marker);
                     marker.setPosition(latLng);
                     captureLocation = true;
                     reloadLocationButton.setEnabled(true);
@@ -480,9 +479,8 @@ public class GeoPointOsmMapActivity extends BaseGeoMapActivity implements Locati
         marker.setDraggable(true);
         latLng = geoPoint;
         isDragged = true;
-        setClear = false;
         captureLocation = true;
-        map.getOverlays().add(marker);
+        addMarker(marker);
         return false;
     }
 
@@ -541,6 +539,21 @@ public class GeoPointOsmMapActivity extends BaseGeoMapActivity implements Locati
                 }
             }, 200);
         }
+    }
+
+    // add the marker and enable the trash button.
+    private void addMarker(Marker marker) {
+        map.getOverlays().add(marker);
+        clearPointButton.setEnabled(true);
+        setClear = false;
+    }
+
+    // remove the marker and disable the trash button.
+    private void removeMarker(Marker marker) {
+        map.getOverlays().remove(marker);
+        marker.remove(map);
+        clearPointButton.setEnabled(false);
+        setClear = true;
     }
 
     private void showGPSDisabledAlertToUser() {

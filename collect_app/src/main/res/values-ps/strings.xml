@@ -148,5 +148,4 @@
   <string name="hide_old_form_versions_setting_summary">یواځې نوې نسخه به په خالي فارم کې راښکاره شي</string>
   <!--Sms submission-->
   <string name="seconds">ثانیه</string>
-  <!--Text for temporary notification of upcoming change. Please do not translate "current()".-->
 </resources>

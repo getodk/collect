@@ -31,7 +31,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.GeoTraceActivity;
 import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
@@ -63,7 +63,7 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
         layout.setOrientation(LinearLayout.VERTICAL);
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        mapSDK = sharedPreferences.getString(PreferenceKeys.KEY_MAP_SDK, GOOGLE_MAP_KEY);
+        mapSDK = sharedPreferences.getString(GeneralKeys.KEY_MAP_SDK, GOOGLE_MAP_KEY);
 
         answerDisplay = getCenteredAnswerTextView();
 
@@ -92,7 +92,7 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
         }
         Intent intent = new Intent(getContext(), GeoTraceActivity.class)
             .putExtra(TRACE_LOCATION, answerDisplay.getText().toString())
-            .putExtra(PreferenceKeys.KEY_MAP_SDK, mapSDK);
+            .putExtra(GeneralKeys.KEY_MAP_SDK, mapSDK);
         ((Activity) getContext()).startActivityForResult(intent, RequestCodes.GEOTRACE_CAPTURE);
     }
 

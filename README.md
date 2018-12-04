@@ -33,6 +33,9 @@ ODK Collect renders forms that are compliant with the [ODK XForms standard](http
 ## Release cycle
 New versions of ODK Collect are generally released on the last Sunday of a month. We freeze commits to the master branch on the preceding Wednesday (except for bug fixes). Releases can be requested by any community member and generally happen every 2 months. [@yanokwa](https://github.com/yanokwa) pushes the releases to the Play Store.
 
+## Suggesting new features
+We try to make sure that all issues in the issue tracker are as close to fully specified as possible so that they can be closed by a pull request. Feature suggestions should be described [in the forum Features category](https://forum.opendatakit.org/c/features) and discussed by the broader user community. Once there is a clear way forward, issues should be filed on the relevant repositories. More controversial features will be discussed as part of the Technical Steering Committee's [roadmapping process](https://github.com/opendatakit/governance/tree/master/TSC1#roadmapping).
+
 ## Setting up your development environment
 
 1. Download and install [Git](https://git-scm.com/downloads) and add it to your PATH
@@ -171,7 +174,10 @@ RELEASE_STORE_PASSWORD=secure-store-password
 RELEASE_KEY_ALIAS=key-alias
 RELEASE_KEY_PASSWORD=secure-alias-password
 ```
-To generate official signed releases, you'll need the keystore file, the keystore passwords, a configured `secrets.properties` file, and then run `./gradlew assembleRelease`. If successful, a signed release will be at `collect_app/build/outputs/apk`.
+
+Maintainers also have a `google-services.json` file in the `collect_app/src/odkCollectRelease` folder. The contents of the file are similar to the contents of `collect_app/src/google-services.json`.
+
+To generate official signed releases, you'll need the keystore file, the keystore passwords, a configured `collect_app/secrets.properties` file, and a configured `collect_app/src/odkCollectRelease/google-services.json` file. Then run `./gradlew assembleOdkCollectRelease`. If successful, a signed release will be at `collect_app/build/outputs/apk`.
 
 ## Troubleshooting
 

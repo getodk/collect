@@ -1,5 +1,6 @@
 package org.odk.collect.android.location.client;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
@@ -83,6 +84,7 @@ class AndroidLocationClient
     }
 
     @Override
+    @SuppressLint("MissingPermission") // Permission checks for location services handled in widgets
     public void requestLocationUpdates(@NonNull LocationListener locationListener) {
         if (!isConnected) {
             // This is to maintain expected behavior across LocationClient implementations.
@@ -112,6 +114,7 @@ class AndroidLocationClient
     }
 
     @Override
+    @SuppressLint("MissingPermission") // Permission checks for location services handled in widgets
     public Location getLastLocation() {
         String provider = getProvider();
         if (provider != null) {

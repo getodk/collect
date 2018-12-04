@@ -7,7 +7,7 @@ import android.support.annotation.Nullable;
 import org.odk.collect.android.http.HttpCredentials;
 import org.odk.collect.android.http.HttpCredentialsInterface;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.GeneralKeys;
 
 import java.net.URI;
 import java.util.HashMap;
@@ -30,10 +30,20 @@ public class WebCredentialsUtils {
     }
 
     public void saveCredentialsPreferences(String userName, String password) {
-        GeneralSharedPreferences.getInstance().save(PreferenceKeys.KEY_USERNAME, userName);
-        GeneralSharedPreferences.getInstance().save(PreferenceKeys.KEY_PASSWORD, password);
+        GeneralSharedPreferences.getInstance().save(GeneralKeys.KEY_USERNAME, userName);
+        GeneralSharedPreferences.getInstance().save(GeneralKeys.KEY_PASSWORD, password);
     }
 
+    /**
+     * Forgets the temporary credentials saved in memory for a particular host. This is used when an
+     * activity that does some work requiring authentication is called with intent extras specifying
+     * credentials. Once the work is done, the temporary credentials are cleared so that different
+     * ones can be used on a later request.
+     *
+     * TODO: is this necessary in all cases it's used? Maybe it's needed if we want to be able to do
+     * an authenticated call followed by an anonymous one but even then, can't we pass in null
+     * username and password if the intent extras aren't set?
+     */
     public void clearCredentials(@NonNull String url) {
         if (url.isEmpty()) {
             return;
@@ -49,21 +59,21 @@ public class WebCredentialsUtils {
         if (GeneralSharedPreferences.getInstance() == null) {
             return "";
         }
-        return (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_SERVER_URL);
+        return (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_SERVER_URL);
     }
 
     public String getPasswordFromPreferences() {
         if (GeneralSharedPreferences.getInstance() == null) {
             return "";
         }
-        return (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_PASSWORD);
+        return (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_PASSWORD);
     }
 
     public String getUserNameFromPreferences() {
         if (GeneralSharedPreferences.getInstance() == null) {
             return "";
         }
-        return (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_USERNAME);
+        return (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_USERNAME);
     }
 
     /**

@@ -85,7 +85,7 @@ public class AboutActivity extends CollectAbstractActivity implements
 
     @Override
     public void onClick(int position) {
-        if (Collect.allowClick()) {
+        if (Collect.allowClick(getClass().getName())) {
             switch (position) {
                 case 0:
                     websiteTabHelper.openUri(this, websiteUri);

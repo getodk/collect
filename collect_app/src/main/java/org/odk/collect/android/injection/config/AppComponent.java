@@ -13,8 +13,7 @@ import org.odk.collect.android.injection.ActivityBuilder;
 import org.odk.collect.android.injection.config.scopes.PerApplication;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.ServerPreferencesFragment;
-import org.odk.collect.android.receivers.NetworkReceiver;
-import org.odk.collect.android.tasks.InstanceServerUploader;
+import org.odk.collect.android.tasks.InstanceServerUploaderTask;
 import org.odk.collect.android.tasks.sms.SmsSentBroadcastReceiver;
 import org.odk.collect.android.tasks.sms.SmsNotificationReceiver;
 import org.odk.collect.android.tasks.sms.SmsSender;
@@ -70,15 +69,13 @@ public interface AppComponent {
 
     void inject(FormEntryActivity formEntryActivity);
 
-    void inject(InstanceServerUploader uploader);
+    void inject(InstanceServerUploaderTask uploader);
 
     void inject(CollectServerClient collectClient);
 
     void inject(ServerPreferencesFragment serverPreferencesFragment);
 
     void inject(FormDownloader formDownloader);
-
-    void inject(NetworkReceiver networkReceiver);
 
     void inject(DownloadFormListUtils downloadFormListUtils);
 

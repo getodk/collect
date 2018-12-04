@@ -71,7 +71,7 @@ public class DateTimeUtils {
         String customDateText = "";
 
         SimpleDateFormat df = new SimpleDateFormat("HH:mm", Locale.getDefault());
-        if (datePickerDetails.isNepaliType()) {
+        if (datePickerDetails.isBikramSambatType()) {
             BikramSambatDate bikramSambatDate;
             try {
                 Calendar calendar = Calendar.getInstance();
@@ -144,8 +144,8 @@ public class DateTimeUtils {
             } else if (appearance.contains("islamic")) {
                 datePickerType = DatePickerDetails.DatePickerType.ISLAMIC;
                 datePickerMode = DatePickerDetails.DatePickerMode.SPINNERS;
-            } else if (appearance.contains("nepali")) {
-                datePickerType = DatePickerDetails.DatePickerType.NEPALI;
+            } else if (appearance.contains("bikram-sambat")) {
+                datePickerType = DatePickerDetails.DatePickerType.BIKRAM_SAMBAT;
                 datePickerMode = DatePickerDetails.DatePickerMode.SPINNERS;
             } else if (appearance.contains("no-calendar")) {
                 datePickerMode = DatePickerDetails.DatePickerMode.SPINNERS;

@@ -22,7 +22,7 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.GuidanceHint;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.utilities.ActivityAvailability;
 
 import java.io.File;
@@ -88,7 +88,7 @@ public class GuidanceHintFormTest {
     @Ignore
     @Test
     public void guidanceVisibilityContentTest() {
-        GeneralSharedPreferences.getInstance().save(PreferenceKeys.KEY_GUIDANCE_HINT, GuidanceHint.Yes.toString());
+        GeneralSharedPreferences.getInstance().save(GeneralKeys.KEY_GUIDANCE_HINT, GuidanceHint.Yes.toString());
 
         FormEntryPrompt prompt = Collect.getInstance().getFormController().getQuestionPrompt();
 

@@ -14,10 +14,7 @@
 
 package org.odk.collect.android.widgets;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 
 import com.google.android.gms.analytics.HitBuilders;
 
@@ -26,8 +23,6 @@ import org.javarosa.core.model.ItemsetBinding;
 import org.javarosa.core.model.QuestionDef;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.xpath.expr.XPathExpression;
-import org.odk.collect.android.R;
-import org.odk.collect.android.activities.WebViewActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.ExternalDataUtil;
 
@@ -84,8 +79,8 @@ public class WidgetFactory {
                             questionWidget = new CopticDateWidget(context, fep);
                         } else if (appearance.contains("islamic")) {
                             questionWidget = new IslamicDateWidget(context, fep);
-                        } else if (appearance.contains("nepali")) {
-                            questionWidget = new NepaliDateWidget(context, fep);
+                        } else if (appearance.contains("bikram-sambat")) {
+                            questionWidget = new BikramSambatDateWidget(context, fep);
                         } else {
                             questionWidget = new DateWidget(context, fep);
                         }
@@ -226,11 +221,7 @@ public class WidgetFactory {
                 } else {
                     questionWidget = new SelectOneWidget(context, fep, appearance.contains("quick"));
                 }
-
-                if (logChoiceFilterAnalytics(fep.getQuestion())) {
-                    showCurrentPredicateAlert(context);
-                }
-
+                logChoiceFilterAnalytics(fep.getQuestion());
                 break;
             case Constants.CONTROL_SELECT_MULTI:
                 // search() appearance/function (not part of XForms spec) added by SurveyCTO gets
@@ -266,11 +257,7 @@ public class WidgetFactory {
                 } else {
                     questionWidget = new SelectMultiWidget(context, fep);
                 }
-
-                if (logChoiceFilterAnalytics(fep.getQuestion())) {
-                    showCurrentPredicateAlert(context);
-                }
-
+                logChoiceFilterAnalytics(fep.getQuestion());
                 break;
             case Constants.CONTROL_RANK:
                 questionWidget = new RankingWidget(context, fep);
@@ -279,16 +266,21 @@ public class WidgetFactory {
                 questionWidget = new TriggerWidget(context, fep);
                 break;
             case Constants.CONTROL_RANGE:
-                switch (fep.getDataType()) {
-                    case Constants.DATATYPE_INTEGER:
-                        questionWidget = new RangeIntegerWidget(context, fep);
-                        break;
-                    case Constants.DATATYPE_DECIMAL:
-                        questionWidget = new RangeDecimalWidget(context, fep);
-                        break;
-                    default:
-                        questionWidget = new StringWidget(context, fep, readOnlyOverride);
-                        break;
+
+                if (appearance.startsWith("rating")) {
+                    questionWidget = new RatingWidget(context, fep);
+                } else {
+                    switch (fep.getDataType()) {
+                        case Constants.DATATYPE_INTEGER:
+                            questionWidget = new RangeIntegerWidget(context, fep);
+                            break;
+                        case Constants.DATATYPE_DECIMAL:
+                            questionWidget = new RangeDecimalWidget(context, fep);
+                            break;
+                        default:
+                            questionWidget = new StringWidget(context, fep, readOnlyOverride);
+                            break;
+                    }
                 }
                 break;
             default:
@@ -301,12 +293,10 @@ public class WidgetFactory {
 
     /**
      * Log analytics event each time a question with a choice filter is accessed, identifying
-     * choice filters with relative expressions. This will inform communication around the fix
-     * for a long-standing bug in JavaRosa: https://github.com/opendatakit/javarosa/issues/293
-     *
-     * @return True if a predicate with current() was found, false otherwise
+     * choice filters with relative expressions. This was initially introduced to inform messaging
+     * around a long-standing bug in JavaRosa: https://github.com/opendatakit/javarosa/issues/293
      */
-    private static boolean logChoiceFilterAnalytics(QuestionDef question) {
+    private static void logChoiceFilterAnalytics(QuestionDef question) {
         ItemsetBinding itemsetBinding = question.getDynamicChoices();
 
         if (itemsetBinding != null && itemsetBinding.nodesetRef != null) {
@@ -316,7 +306,7 @@ public class WidgetFactory {
 
                     if (predicates != null) {
                         for (XPathExpression predicate : predicates) {
-                            String actionName = predicate.toString().contains("current") ?
+                            String actionName = predicate.toString().contains("func-expr:current") ?
                                     "CurrentPredicate" : "NonCurrentPredicate";
 
                             Collect.getInstance().getDefaultTracker()
@@ -325,47 +315,10 @@ public class WidgetFactory {
                                     .setAction(actionName)
                                     .setLabel(Collect.getCurrentFormIdentifierHash())
                                     .build());
-
-                            if (predicate.toString().contains("current")) {
-                                return true;
-                            }
                         }
                     }
                 }
             }
         }
-        return false;
-    }
-
-    /**
-     * Show an alert explaining the upcoming change in current() predicates.
-     */
-    private static void showCurrentPredicateAlert(Context context) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(R.string.current_predicate_warning_title);
-        builder.setMessage(R.string.current_predicate_warning);
-
-        DialogInterface.OnClickListener forumClickListener = (dialog, id) -> {
-            Intent intent = new Intent(context, WebViewActivity.class);
-            intent.putExtra("url", "https://forum.opendatakit.org/t/15122");
-            context.startActivity(intent);
-
-            Collect.getInstance().getDefaultTracker()
-                    .send(new HitBuilders.EventBuilder()
-                    .setCategory("Itemset")
-                    .setAction("CurrentChangeViewed")
-                    .setLabel(Collect.getCurrentFormIdentifierHash())
-                    .build());
-        };
-
-        builder.setPositiveButton(R.string.current_predicate_forum, forumClickListener);
-
-        DialogInterface.OnClickListener okClickListener = (dialog, id) -> {
-            dialog.dismiss();
-        };
-
-        builder.setNegativeButton(R.string.current_predicate_continue, okClickListener);
-        AlertDialog dialog = builder.create();
-        dialog.show();
     }
 }

@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 
-public final class PreferenceKeys {
+public final class GeneralKeys {
 
     // aggregate_preferences.xml
     public static final String KEY_SERVER_URL               = "server_url";
@@ -85,6 +85,7 @@ public final class PreferenceKeys {
         // aggregate_preferences.xml
         hashMap.put(KEY_SERVER_URL,                 Collect.getInstance().getString(R.string.default_server_url));
         hashMap.put(KEY_USERNAME,                   "");
+        hashMap.put(KEY_PASSWORD,                   "");
         // form_management_preferences.xml
         hashMap.put(KEY_AUTOSEND,                   AUTOSEND_OFF);
         hashMap.put(KEY_GUIDANCE_HINT,              GUIDANCE_HINT_OFF);
@@ -135,7 +136,7 @@ public final class PreferenceKeys {
 
     public static final HashMap<String, Object> GENERAL_KEYS = getHashMap();
 
-    private PreferenceKeys() {
+    private GeneralKeys() {
 
     }
 

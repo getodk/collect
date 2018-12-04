@@ -39,6 +39,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import timber.log.Timber;
 
@@ -50,10 +51,14 @@ public class FormsProvider extends ContentProvider {
 
     private static final int FORMS = 1;
     private static final int FORM_ID = 2;
+    // Forms unique by ID, keeping only the latest one downloaded
+    private static final int NEWEST_FORMS_BY_FORM_ID = 3;
 
     private static final UriMatcher URI_MATCHER;
 
-    private FormsDatabaseHelper getDbHelper() {
+    private static FormsDatabaseHelper dbHelper;
+
+    private synchronized FormsDatabaseHelper getDbHelper() {
         // wrapper to test and reset/set the dbHelper based upon the attachment state of the device.
         try {
             Collect.createODKDirs();
@@ -61,7 +66,11 @@ public class FormsProvider extends ContentProvider {
             return null;
         }
 
-        return new FormsDatabaseHelper();
+        if (dbHelper == null) {
+            dbHelper = new FormsDatabaseHelper();
+        }
+
+        return dbHelper;
     }
 
     @Override
@@ -90,23 +99,32 @@ public class FormsProvider extends ContentProvider {
         qb.setProjectionMap(sFormsProjectionMap);
         qb.setStrict(true);
 
-        switch (URI_MATCHER.match(uri)) {
-            case FORMS:
-                break;
-
-            case FORM_ID:
-                qb.appendWhere(FormsColumns._ID + "="
-                        + uri.getPathSegments().get(1));
-                break;
-
-            default:
-                throw new IllegalArgumentException("Unknown URI " + uri);
-        }
-
         Cursor c = null;
+        String groupBy = null;
         FormsDatabaseHelper formsDatabaseHelper = getDbHelper();
         if (formsDatabaseHelper != null) {
-            c = qb.query(formsDatabaseHelper.getReadableDatabase(), projection, selection, selectionArgs, null, null, sortOrder);
+            switch (URI_MATCHER.match(uri)) {
+                case FORMS:
+                    break;
+
+                case FORM_ID:
+                    qb.appendWhere(FormsColumns._ID + "="
+                            + uri.getPathSegments().get(1));
+                    break;
+
+                // Only include the latest form that was downloaded with each form_id
+                case NEWEST_FORMS_BY_FORM_ID:
+                    Map<String, String> filteredProjectionMap = new HashMap<>(sFormsProjectionMap);
+                    filteredProjectionMap.put(FormsColumns.DATE, "MAX(" + FormsColumns.DATE + ")");
+
+                    qb.setProjectionMap(filteredProjectionMap);
+                    groupBy = FormsColumns.JR_FORM_ID;
+                    break;
+
+                default:
+                    throw new IllegalArgumentException("Unknown URI " + uri);
+            }
+            c = qb.query(formsDatabaseHelper.getReadableDatabase(), projection, selection, selectionArgs, groupBy, null, sortOrder);
 
             // Tell the cursor what uri to watch, so it knows when its source data changes
             c.setNotificationUri(getContext().getContentResolver(), uri);
@@ -119,6 +137,7 @@ public class FormsProvider extends ContentProvider {
     public String getType(@NonNull Uri uri) {
         switch (URI_MATCHER.match(uri)) {
             case FORMS:
+            case NEWEST_FORMS_BY_FORM_ID:
                 return FormsColumns.CONTENT_TYPE;
 
             case FORM_ID:
@@ -533,10 +552,14 @@ public class FormsProvider extends ContentProvider {
         return newWhereArgs;
     }
 
+    // Leading slashes are removed from paths to support minSdkVersion < 18:
+    // https://developer.android.com/reference/android/content/UriMatcher
     static {
         URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
-        URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, "forms", FORMS);
-        URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, "forms/#", FORM_ID);
+        URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, FormsColumns.CONTENT_URI.getPath().replaceAll("^/+", ""), FORMS);
+        URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, FormsColumns.CONTENT_URI.getPath().replaceAll("^/+", "") + "/#", FORM_ID);
+        // Only available for query and type
+        URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, FormsColumns.CONTENT_NEWEST_FORMS_BY_FORMID_URI.getPath().replaceAll("^/+", ""), NEWEST_FORMS_BY_FORM_ID);
 
         sFormsProjectionMap = new HashMap<>();
         sFormsProjectionMap.put(FormsColumns._ID, FormsColumns._ID);

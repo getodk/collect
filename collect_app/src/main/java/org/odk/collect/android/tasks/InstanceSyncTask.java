@@ -29,7 +29,7 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.exception.EncryptionException;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.logic.FormController;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.utilities.EncryptionUtils;
@@ -142,7 +142,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
 
                 final boolean instanceSyncFlag = PreferenceManager.getDefaultSharedPreferences(
                         Collect.getInstance().getApplicationContext()).getBoolean(
-                        PreferenceKeys.KEY_INSTANCE_SYNC, true);
+                        GeneralKeys.KEY_INSTANCE_SYNC, true);
 
                 int counter = 0;
                 // Begin parsing and add them to the content provider
