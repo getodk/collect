@@ -72,6 +72,18 @@
     <Match>
         <Bug pattern="SE_COMPARATOR_SHOULD_BE_SERIALIZABLE" />
     </Match>
+    <Match>
+        <Bug pattern="ES_COMPARING_STRINGS_WITH_EQ" />
+    </Match>
+    <Match>
+        <Bug pattern="OS_OPEN_STREAM_EXCEPTION_PATH" />
+    </Match>
+    <Match>
+        <Bug pattern="SE_NO_SERIALVERSIONID" />
+    </Match>
+    <Match>
+        <Bug pattern="RR_NOT_CHECKED" />
+    </Match>
 
     <!-- Correctness -->
     <Match>
@@ -100,10 +112,16 @@
     <Match>
         <Bug pattern="MS_PKGPROTECT" />
     </Match>
+    <Match>
+        <Bug pattern="MS_FINAL_PKGPROTECT" />
+    </Match>
 
     <!-- Multithreaded correctness -->
     <Match>
         <Bug pattern="IS2_INCONSISTENT_SYNC" />
+    </Match>
+    <Match>
+        <Bug pattern="LI_LAZY_INIT_STATIC" />
     </Match>
 
     <!-- Performance Warnings -->
@@ -113,7 +131,12 @@
     <Match>
         <Bug pattern="WMI_WRONG_MAP_ITERATOR" />
     </Match>
-
+    <Match>
+        <Bug pattern="SIC_INNER_SHOULD_BE_STATIC_ANON" />
+    </Match>
+    <Match>
+        <Bug pattern="SIC_INNER_SHOULD_BE_STATIC_NEEDS_THIS" />
+    </Match>
 
     <!-- Dodgy code Warnings -->
     <Match>
@@ -130,6 +153,39 @@
     </Match>
     <Match>
         <Bug pattern="SF_SWITCH_FALLTHROUGH" />
+    </Match>
+    <Match>
+        <Bug pattern="BC_UNCONFIRMED_CAST_OF_RETURN_VALUE" />
+    </Match>
+    <Match>
+        <Bug pattern="BC_UNCONFIRMED_CAST" />
+    </Match>
+    <Match>
+        <Bug pattern="UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" />
+    </Match>
+    <Match>
+        <Bug pattern="REC_CATCH_EXCEPTION" />
+    </Match>
+    <Match>
+        <Bug pattern="PZLA_PREFER_ZERO_LENGTH_ARRAYS" />
+    </Match>
+    <Match>
+        <Bug pattern="NS_NON_SHORT_CIRCUIT" />
+    </Match>
+    <Match>
+        <Bug pattern="RI_REDUNDANT_INTERFACES" />
+    </Match>
+    <Match>
+        <Bug pattern="Warnings_STYLE" />
+    </Match>
+    <Match>
+        <Bug pattern="FE_FLOATING_POINT_EQUALITY" />
+    </Match>
+    <Match>
+        <Bug pattern="DB_DUPLICATE_SWITCH_CLAUSES" />
+    </Match>
+    <Match>
+        <Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE" />
     </Match>
 
 </FindBugsFilter>

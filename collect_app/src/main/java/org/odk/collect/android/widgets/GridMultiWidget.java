@@ -145,8 +145,7 @@ public class GridMultiWidget extends QuestionWidget implements MultiChoiceWidget
             String audioURI =
                     prompt.getSpecialFormSelectChoiceText(sc, FormEntryCaption.TEXT_FORM_AUDIO);
             if (audioURI != null) {
-                audioHandlers[i] = new AudioHandler(prompt.getIndex(), sc.getValue(), audioURI,
-                        getPlayer());
+                audioHandlers[i] = new AudioHandler(audioURI, getPlayer());
             } else {
                 audioHandlers[i] = null;
             }

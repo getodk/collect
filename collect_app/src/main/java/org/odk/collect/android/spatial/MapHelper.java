@@ -75,7 +75,6 @@ public class MapHelper {
     private static final String OPENMAP_CARTODB_DARKMATTER = "openmap_cartodb_darkmatter";
     private int selectedLayer;
 
-    public static String[] geofileTypes = new String[]{".mbtiles", ".kml", ".kmz"};
     private static final String SLASH = File.separator;
 
     private TilesOverlay osmTileOverlay;

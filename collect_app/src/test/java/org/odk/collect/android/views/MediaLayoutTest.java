@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import junit.framework.Assert;
 
-import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.junit.Before;
@@ -35,7 +34,6 @@ public class MediaLayoutTest {
     private final String imageURI;
     private final String videoURI;
 
-    private FormIndex formIndex;
     private MediaPlayer mediaPlayer;
     private ReferenceManager referenceManager;
     private FileReference reference;
@@ -71,7 +69,6 @@ public class MediaLayoutTest {
 
     @Before
     public void setUp() throws InvalidReferenceException {
-        formIndex = mock(FormIndex.class);
         mediaPlayer = mock(MediaPlayer.class);
         reference = mock(FileReference.class);
         referenceManager = mock(ReferenceManager.class);
@@ -100,7 +97,7 @@ public class MediaLayoutTest {
         Assert.assertEquals(VISIBLE, mediaLayout.getVisibility());
         assertVisibility(GONE, audioButton, videoButton, imageView, missingImage, divider);
 
-        mediaLayout.setAVT(formIndex, "", textView, audioURI, imageURI, videoURI, null, mediaPlayer);
+        mediaLayout.setAVT(textView, audioURI, imageURI, videoURI, null, mediaPlayer);
 
         // we do not check for the validity of the URIs for the audio and video while loading MediaLayout
         assertVisibility(audioURI == null ? GONE : VISIBLE, audioButton);
