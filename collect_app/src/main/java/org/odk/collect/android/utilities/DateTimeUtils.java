@@ -45,7 +45,7 @@ public class DateTimeUtils {
             String format = android.text.format.DateFormat.getBestDateTimePattern(locale, getDateTimeSkeleton(containsTime, datePickerDetails));
             dateFormatter = new SimpleDateFormat(format, locale);
         } else {
-            dateFormatter = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
+            dateFormatter = DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.DEFAULT, locale);
         }
         return dateFormatter.format(date);
     }
@@ -134,7 +134,7 @@ public class DateTimeUtils {
         DatePickerDetails.DatePickerType datePickerType = DatePickerDetails.DatePickerType.GREGORIAN;
         DatePickerDetails.DatePickerMode datePickerMode = DatePickerDetails.DatePickerMode.CALENDAR;
         if (appearance != null) {
-            appearance = appearance.toLowerCase(Locale.getDefault());
+            appearance = appearance.toLowerCase(Locale.US);
             if (appearance.contains("ethiopian")) {
                 datePickerType = DatePickerDetails.DatePickerType.ETHIOPIAN;
                 datePickerMode = DatePickerDetails.DatePickerMode.SPINNERS;
