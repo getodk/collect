@@ -17,6 +17,7 @@ package org.odk.collect.android.activities;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -459,13 +460,16 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                             }
                             repeatLabel += " (" + (fc.getMultiplicity() + 1) + ")\u200E";
 
-                            HierarchyElement instance = new HierarchyElement(repeatLabel, null, null, HierarchyElement.Type.REPEAT_INSTANCE, fc.getIndex());
+                            HierarchyElement instance = new HierarchyElement(
+                                    repeatLabel, null,
+                                    null, HierarchyElement.Type.REPEAT_INSTANCE, fc.getIndex());
                             elementsToDisplay.add(instance);
                         } else if (fc.getMultiplicity() == 0) {
                             // Display the repeat header for the group.
                             HierarchyElement group = new HierarchyElement(
                                     getLabel(fc), getString(R.string.repeatable_group_label),
-                                    null, HierarchyElement.Type.REPEATABLE_GROUP, fc.getIndex());
+                                    ContextCompat.getDrawable(this, R.drawable.ic_repeat),
+                                    HierarchyElement.Type.REPEATABLE_GROUP, fc.getIndex());
                             elementsToDisplay.add(group);
                         }
 
