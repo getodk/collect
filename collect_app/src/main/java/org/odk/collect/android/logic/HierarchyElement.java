@@ -101,19 +101,8 @@ public class HierarchyElement {
      * The type and state of this element.
      */
     public enum Type {
-        /**
-         * A repeat instance.
-         */
-        CHILD,
-
-        /**
-         * A repeat.
-         */
-        PARENT,
-
-        /**
-         * A question.
-         */
-        QUESTION
+        QUESTION,
+        REPEATABLE_GROUP,
+        REPEAT_INSTANCE
     }
 }
