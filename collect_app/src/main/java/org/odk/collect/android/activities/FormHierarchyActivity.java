@@ -307,11 +307,11 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
     }
 
     private String getGroupRef(FormController formController) {
-        return formController.getFormIndex().getReference().toString(true);
+        return formController.getFormIndex().getReference().toString();
     }
 
     private String getParentGroupRef(FormController formController) {
-        return formController.getFormIndex().getReference().getParentRef().toString(true);
+        return formController.getFormIndex().getReference().getParentRef().toString();
     }
 
     private String getUnindexedGroupRef(FormController formController) {
