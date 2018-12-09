@@ -102,6 +102,7 @@ public class RankingWidgetDialog extends DialogFragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putSerializable(VALUES, (Serializable) rankingListAdapter.getValues());
+        outState.putSerializable(FORM_INDEX, formIndex);
         super.onSaveInstanceState(outState);
     }
 
