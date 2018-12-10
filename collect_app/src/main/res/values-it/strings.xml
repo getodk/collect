@@ -1,7 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <string name="show_password">Mostra password</string>
-  <string name="activity_not_found">Nessuna attività trovata per gestire: %s</string>
+  <string name="activity_not_found">Nessuna attività trovata da gestire: %s</string>
+  <string name="view_image">Visualizza Immagine</string>
+  <string name="annotate_image">Annota Immagine</string>
+  <string name="signature_capture">Firma</string>
+  <string name="view_video">Mostra Video</string>
+  <string name="choose_audio">Seleziona Audio</string>
   <string name="add_another">Aggiungi gruppo</string>
   <string name="add_another_repeat">Aggiungere un altro \"%s\" gruppo?</string>
   <string name="add_repeat">Aggiungere un nuovo \"%s\" gruppo ?</string>
@@ -42,6 +47,7 @@
   <string name="discard_answer">Rimuovere la risposta</string>
   <string name="discard_group">Rimuovere il gruppo</string>
   <string name="download">Scarica Selezionato</string>
+  <string name="download_forms_result">Scarica Risultati</string>
   <string name="downloading_data">Si sta connettendo al server</string>
   <string name="do_not_change">Annulla</string>
   <string name="do_not_exit">Annulla</string>
@@ -66,18 +72,20 @@
   <string name="get_location">Registra Posizione</string>
   <string name="provider_disabled_error">Attenzione, i Sistemi di Posizionamento sono disabilitati!</string>
   <string name="invalid_answer_error">Spiacenti, questa risposta non è valida!</string>
+  <string name="invalid_space_in_answer_singular">Attenzione: ci sono degli spazi nel valore sottostante %s </string>
+  <string name="invalid_space_in_answer_plural">Attenzione: ci sono degli spazi nei valori sottostanti %s </string>
   <string name="jump_to_beginning">Vai all\'inizio</string>
   <string name="jump_to_end">Vai alla fine</string>
-  <string name="jump_to_previous">Vai sopra</string>
+  <string name="jump_to_previous">Vai al livello superiore</string>
   <string name="leave_repeat_yes">Non aggiungere</string>
   <string name="leaving_repeat_ask">Aggiungere un altro gruppo?</string>
-  <string name="list_failed_with_error">Elenco dei moduli fallito. %s.</string>
+  <string name="list_failed_with_error">Errore visualizzazione Elenco Moduli %s.</string>
   <string name="loading_form">Caricamento Modulo</string>
   <string name="load_remote_form_error">Errore nel recupero Elenco Moduli.</string>
   <string name="location_provider_accuracy">Utilizzando %1$s. Precisione%2$s m.</string>
-  <string name="location_accuracy">Precisione è %1$s m</string>
+  <string name="location_accuracy">Precisione: %1$s m</string>
   <string name="main_menu">Menu principale</string>
-  <string name="main_menu_details">La raccolta dei dati resa più facile…</string>
+  <string name="main_menu_details">Raccogliere dati non è mai stato così facile!</string>
   <string name="manage_files">Elimina Modulo Salvato</string>
   <string name="mark_finished">Segna Modulo come Completato</string>
   <string name="noselect_error">Spiacenti, non hai selezionato alcun modulo!</string>
@@ -145,9 +153,11 @@
   <string name="file_fetch_failed">Errore: %2$s (%3$s) su %1$s</string>
   <string name="fetching_manifest">%s. Ottenendo \'Manifest\' da XML</string>
   <string name="success">Successo</string>
+  <string name="failures">Errori</string>
   <string name="no_forms_uploaded">Spiacenti, nessun modulo è stato caricato.</string>
   <string name="upload_results">Risultati del caricamento</string>
   <string name="xform_parse_error">XForm errore di parsing per %1$s: %2$s mancante o non valido.</string>
+  <string name="choose_file">Seleziona File</string>
   <string name="choose_sound">Seleziona Suono</string>
   <string name="choose_video">Seleziona Video</string>
   <string name="choose_image">Seleziona Foto</string>
@@ -216,6 +226,7 @@
   <string name="constraint_behavior_on_swipe">Convalida scorrendo il dito in avanti</string>
   <string name="constraint_behavior_on_finalize">Ritarda Convalida fino a quando Completato</string>
   <string name="view_change_location">Vedi o Cambia Posizione</string>
+  <string name="change_location">Cambiare Localizzazione</string>
   <string name="open_url">Apri URL</string>
   <string name="get_bearing">Registra Bussola</string>
   <string name="replace_bearing">Sostituisci Bussola</string>
@@ -263,7 +274,9 @@
   <string name="drive_get_file">Caricamento %1$s e media files.</string>
   <string name="no_google_account">Nessun Account Google selezionato!</string>
   <string name="google_set_account">Hai selezionato Google Sheets come tuo server. Perpiacere seleziona un corrispondente account Google nelle Impostazioni Generali prima di procedere.</string>
-  <string name="odk_auth_auth_fail">Autenticazione ODK per invio automatico fallita, per favore verificare che i parametri di configurazione siano corretti.</string>
+  <string name="media_upload_error">Errore! il file di supporto da caricare non esiste: %1$s</string>
+  <string name="odk_auto_note">Invio automatico dei risultati ODK</string>
+  <string name="odk_auto_download_notification_title">Download automatico dei risultati ODK</string>
   <string name="notification_error">Errore di visualizzazione nella notifica</string>
   <string name="delete_after_send">Elimina dopo invio</string>
   <string name="delete_after_send_summary">Elimina moduli finalizzati e media dopo l\'\'invio al server</string>
@@ -279,6 +292,10 @@
   <string name="username_error_whitespace">Spazi vuoti all\'inizio e alla fine delle username non sono ammessi</string>
   <string name="google_play_services_error_occured">Impossibile accedere a Google Maps. Il Servizio di Google Play è installato?</string>
   <string name="about_preferences">Informazioni</string>
+  <string name="tell_your_friends">Condividi ODK Collect</string>
+  <string name="tell_your_friends_msg">I tuoi colleghi stanno ancora raccogliendo dati con carta e penna? Condividi ODK Collect con loro!</string>
+  <string name="leave_a_review">Lascia un commento su Play Store</string>
+  <string name="leave_a_review_msg">Il tuo commento (speriamo positivo) aumenta la visibilità dell\'applicazione su Play Store</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">Mappatura</string>
   <string name="map_sdk_selector_title">Mappatura SDK</string>
@@ -308,7 +325,6 @@
   <string name="select_geotrace_mode">Seleziona Modalità Geo-tracciatura</string>
   <string name="start">Inizia</string>
   <string name="enable_gps">Abilita GPS</string>
-  <string name="enable_gps_message">Il GPS è disabilitato nel tuo dispositivo. Vuoi abilitarlo?</string>
   <string name="geotrace_title">Geo-tracciatura</string>
   <string name="polygon_save">Salva come Poligono</string>
   <string name="polyline_save">Salva come Polilinea</string>
@@ -320,7 +336,6 @@
   <string name="geo_exit_warning">Vuoi scartare le modifiche e ritornare ad ODK?</string>
   <string name="polygon_validator">Devi avere almeno 3 punti per creare un Poligono</string>
   <string name="clear">Cancella</string>
-  <string name="polyline_polygon_text">Salva Geo-tracciatura come</string>
   <string name="manual_mode">Modalità manuale</string>
   <string name="automatic_mode">Modalità automatica</string>
   <string name="geoshape_instruction">Premi a lungo per posizionare il segno</string>
@@ -426,12 +441,52 @@
   <string name="no_time_selected">Nessun orario selezionato</string>
   <string name="import_settings">Parametri di configurazione per Importare/Esportare</string>
   <string name="qr_code">Codice QR</string>
+  <string name="scan_qrcode">Scansiona il codice con l\'altro dispositivo</string>
+  <string name="successfully_imported_settings">Impostazioni importate con successo</string>
+  <string name="encoding_max_limit">Numero massimo di caratteri raggiunto: codice QR non può essere generato per tutte le impostazioni</string>
+  <string name="share">Condividi</string>
+  <string name="select_qrcode">Seleziona codice dalla memoria SD - scheda</string>
   <string name="turn_on_flashlight">Accendere il flash</string>
   <string name="turn_off_flashlight">Spegnere il flash</string>
   <string name="user_settings">Impostazioni utente</string>
   <string name="autosend_selector_title">Invio automatico</string>
+  <string name="guidance_no">No</string>
   <string name="server_settings_title">Server</string>
   <string name="server">Server</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <string name="custom_date">%1$s (%2$s)</string>
+  <string name="moving_backwards_title">Sfoglia indietro</string>
+  <string name="moving_backwards_disabled_title">Sfoglia indietro disabilitato</string>
+  <string name="moving_backwards_enabled_title">Sfoglia indietro abilitato</string>
+  <string name="yes">Sì</string>
+  <string name="no">No</string>
+  <string name="newer_version_of_a_form_info">Questo è un aggiornamento di un form che hai già</string>
+  <string name="svg_file_does_not_exist">Il file SVG non esiste!</string>
+  <string name="start_video_capture_instruction">Tocca lo schermo per iniziare a registrare</string>
+  <string name="stop_video_capture_instruction">Registrazione avviata. Per fermare, tocca lo schermo</string>
+  <string name="no_columns_to_upload">Nessuna colonna nel file caricato</string>
+  <string name="storage_runtime_permission_denied_title">Autorizzazione all\'uso della memoria</string>
+  <string name="location_runtime_permissions_denied_title">Autorizzazione all\'uso dei servizi di localizzazione</string>
+  <string name="location_runtime_permissions_denied_desc">Senza queste autorizzazioni Collect non può registrare la tua posizione. Prova di nuovo quando hai autorizzato l\'uso dei servizi di localizzazione</string>
+  <string name="camera_runtime_permission_denied_title">Autorizzazione uso fotocamera</string>
+  <string name="camera_runtime_permission_denied_desc">Senza questa autorizzazione Collect non può usare la fotocamera. Prova di nuovo quando hai autorizzato l\'uso della fotocamera</string>
+  <string name="record_audio_runtime_permission_denied_title">Autorizzazione uso microfono</string>
+  <string name="record_audio_runtime_permission_denied_desc">Senza questa autorizzazione Collect non può registrare i suoni. Prova di nuovo quando hai autorizzato l\'uso del microfono</string>
+  <string name="get_accounts_runtime_permission_denied_title">Autorizzazione uso account</string>
+  <string name="get_accounts_runtime_permission_denied_desc">Senza questa autorizzazione Collect non può accedere al tuo account. Prova di nuovo quando hai autorizzato l\'accesso al tuo account</string>
+  <string name="send_sms_runtime_permission_denied_title">Autorizzazione invio SMS</string>
+  <string name="send_sms_runtime_permission_denied_desc">Senza questa autorizzazione Collect non può inviare SMS. Prova di nuovo quando hai autorizzato l\'invio di SMS</string>
+  <string name="form_update_category">Aggiornamento Modulo</string>
+  <string name="never">Mai</string>
+  <string name="every_fifteen_minutes">Ogni 15 minuti</string>
+  <string name="every_one_hour">Ogni ora</string>
+  <string name="every_six_hours">Ogni 6 ore</string>
+  <string name="every_24_hours">Ogni 24 ore</string>
+  <string name="form_updates_available">Aggiornamenti Modulo disponibili</string>
+  <string name="automatic_download">Download automatico</string>
+  <string name="sms_invalid_phone_number">Numero di telefono non valido!</string>
   <!--Sms submission-->
+  <string name="transport_type_sms">SMS</string>
+  <string name="seconds">Secondi</string>
+  <string name="rank_items">Ordina gli elementi</string>
 </resources>

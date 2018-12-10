@@ -25,14 +25,15 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.v4.widget.NestedScrollView;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
@@ -74,7 +75,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  * @author carlhartung
  */
 @SuppressLint("ViewConstructor")
-public class ODKView extends ScrollView implements OnLongClickListener {
+public class ODKView extends FrameLayout implements OnLongClickListener {
 
     private final LinearLayout view;
     private final LinearLayout.LayoutParams layout;
@@ -85,6 +86,8 @@ public class ODKView extends ScrollView implements OnLongClickListener {
     public ODKView(Context context, final FormEntryPrompt[] questionPrompts,
             FormEntryCaption[] groups, boolean advancingPage) {
         super(context);
+
+        inflate(getContext(), R.layout.nested_scroll_view, this); // keep in an xml file to enable the vertical scrollbar
 
         widgets = new ArrayList<>();
 
@@ -207,7 +210,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
             view.addView(qw, layout);
         }
 
-        addView(view);
+        ((NestedScrollView) findViewById(R.id.odk_view_container)).addView(view);
 
         // see if there is an autoplay option.
         // Only execute it during forward swipes through the form
@@ -248,10 +251,6 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         for (QuestionWidget q : widgets) {
             q.recycleDrawables();
         }
-    }
-
-    protected void onScrollChanged(int l, int t, int oldl, int oldt) {
-        Collect.getInstance().getActivityLogger().logScrollAction(this, t - oldt);
     }
 
     /**
@@ -476,7 +475,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
             // postDelayed is needed because otherwise scrolling may not work as expected in case when
             // answers are validated during form finalization.
             new Handler().postDelayed(() -> {
-                scrollTo(0, qw.getTop());
+                findViewById(R.id.odk_view_container).scrollTo(0, qw.getTop());
 
                 ValueAnimator va = new ValueAnimator();
                 if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {

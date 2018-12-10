@@ -281,7 +281,7 @@
   <string name="no_google_account">Kein Google-Konto ausgewählt!</string>
   <string name="google_set_account">Sie haben Google Sheets als Server ausgewählt. Bitte geben Sie unter den Einstellungen ein Google-Konto an, bevor Sie fortfahren.</string>
   <string name="media_upload_error">Nicht vorhandene Mediendatei konnte nicht hochgeladen werden: %1$s</string>
-  <string name="odk_auth_auth_fail">Auto-Send-Authentifizierungsfehler, bitte überprüfen Sie Ihre Einstellungen.</string>
+  <string name="odk_permissions_fail">ODK Auto-Send Berechtigungsfehler, bitte stellen Sie sicher, dass Sie alle benötigten Berechtigungen erteilt haben</string>
   <string name="odk_auto_note">ODK Auto-Send-Ergebnisse</string>
   <string name="odk_auto_download_notification_title">ODK Auto-Download-Ergebnisse</string>
   <string name="notification_error">Fehler beim Anzeigen des Benachrichtigungstextes</string>
@@ -293,6 +293,7 @@
   <string name="send_in_progress">Sendevorgang läuft im Hintergrund. Bitte versuchen Sie es später nochmal.</string>
   <string name="sheets_max_columns">Max. Anzahl an Spalten ist 255. Ihr Formular hat %s Spalten. Tabelle konnte nicht hochgeladen werden.</string>
   <string name="invalid_sheet_id">Ungültige Sheet ID: %1$s</string>
+  <string name="missing_submission_url">Fehlende Einsendungs-URL</string>
   <string name="google_sheets_access_denied">Zugriff verweigert. Bitte stellen Sie sicher, dass der Tabellen-Besitzer Ihnen eine Zugriffsberechtigung erteilt hat.</string>
   <string name="google_sheets_missing_columns">Die folgenden Spalten fehlen in der Tabelle: %1$s</string>
   <string name="password_error_whitespace">Leerzeichen am Anfang und Ende von Passwörtern nicht erlaubt</string>
@@ -332,7 +333,6 @@
   <string name="select_geotrace_mode">GeoTrace-Modus auswählen</string>
   <string name="start">Start</string>
   <string name="enable_gps">GPS aktivieren</string>
-  <string name="enable_gps_message">GPS ist auf ihrem Gerät deaktiviert. Möchten Sie es aktivieren?</string>
   <string name="geotrace_title">GeoTrace</string>
   <string name="polygon_save">Als Polygon speichern</string>
   <string name="polyline_save">Als Polyline speichern</string>
@@ -345,7 +345,6 @@
   <string name="polygon_validator">Min. 3 Punkte notwendig um ein Polygon zu erzeugen</string>
   <string name="polyline_validator">Min. 2 Punkte notwendig um eine Polylinie zu erzeugen</string>
   <string name="clear">Löschen</string>
-  <string name="polyline_polygon_text">GeoTrace speichern als</string>
   <string name="manual_mode">Manueller Modus</string>
   <string name="automatic_mode">Automatischer Modus</string>
   <string name="geoshape_instruction">Lange Drücken um eine Markierung zu platzieren.</string>
@@ -589,6 +588,12 @@
   <string name="camera_runtime_permission_denied_desc">Ohne diese Berechtigung kann Collect nicht auf die Kamera zugreifen. Bitte versuchen Sie es erneut, wenn Sie dazu bereit sind die Berechtigung zu erteilen.</string>
   <string name="record_audio_runtime_permission_denied_title">Audioaufzeichnungsberechtigung</string>
   <string name="record_audio_runtime_permission_denied_desc">Ohne diese Berechtigungen kann Collect nicht auf das Mikrofon zugreifen. Bitte versuchen Sie es erneut, wenn Sie bereit dazu sind die Berechtigungen zu erteilen.</string>
+  <string name="get_accounts_runtime_permission_denied_title">Kontoberechtigungen abfragen</string>
+  <string name="get_accounts_runtime_permission_denied_desc">Ohne diese Berechtigung kann Collect nicht auf die Konten zugreifen. Bitte versuchen Sie es erneut, wenn Sie dazu bereit sind die Berechtigung zu erteilen.</string>
+  <string name="send_sms_runtime_permission_denied_title">SMS-Versand-Berechtigung</string>
+  <string name="send_sms_runtime_permission_denied_desc">Ohne diese Berechtigung kann Collect keine SMS versenden. Bitte versuchen Sie es erneut, wenn Sie dazu bereit sind die Berechtigung zu erteilen.</string>
+  <string name="read_phone_state_runtime_permission_denied_title">Berechtigung Telefonstatus abrufen</string>
+  <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect macht keine Telefonanrufe aber benötigt Zugriff auf bestimmte Eigenschaften ihres Geräts, wie die Telefonnummer und Geräte-ID.</string>
   <string name="form_update_category">Formular-Update</string>
   <string name="periodic_form_updates_check_title">Periodischer Formular-Update-Check</string>
   <string name="never">Nie</string>
@@ -621,8 +626,8 @@
   <string name="sms_encrypted_message">Verschlüsselte Formulare können nicht per SMS eingesendet werden.</string>
   <string name="sms_last_submission_on_date_at_time">\'Letzter Einsendeversuch am\' EEE, MMM dd, yyyy \'um\' HH:mm</string>
   <plurals name="sms_sending">
-    <item quantity="one">Formular als einzelne Nachricht einsenden.</item>
-    <item quantity="other">Formulareinsendung, sende Nachricht %1$d! von %2$d</item>
+    <item quantity="one">Formulareinsendung als einzelne Nachricht.</item>
+    <item quantity="other">Formulareinsendung, sende Nachricht %1$d von %2$d</item>
   </plurals>
   <string name="sms_sent_on_date_at_time">\'Als SMS versendet am\' EEE, MMM dd, yyyy \'um\' HH:mm</string>
   <string name="sms_submission_queued">Eingereiht zur Einsendung.</string>
@@ -633,6 +638,9 @@
   <string name="transport_type_both">Beim Senden auswählen</string>
   <string name="seconds">Sekunden</string>
   <string name="rank_items">Rangfolge festlegen</string>
-  <string name="image_not_saved">Das Bild kann nicht gespeichert werden, wegen eines Problems mit der zugehörigen Instanz-Datei.</string>
   <string name="loading_form_failed">Beim Laden des Formulars ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.</string>
+  <string name="missing_google_account_dialog_title">Google-Konto nicht eingestellt</string>
+  <string name="missing_google_account_dialog_desc">Um Formulare über Google Tabellen einzureichen, müssen Sie ihr Google-Konto bei den Server-Einstellungen einrichten.</string>
+  <string name="sms_invalid_phone_number_description">Ziel-Telefonnummer für SMS-Versand einstellen oder Übertragungsart ändern.</string>
+  <string name="notification_channel_name">Allgemeine Benachrichtigungen</string>
 </resources>

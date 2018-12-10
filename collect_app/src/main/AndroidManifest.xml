@@ -161,7 +161,13 @@ the specific language governing permissions and limitations under the License.
                 <data android:mimeType="vnd.android.cursor.dir/vnd.odk.form" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.FormDownloadList" />
+        <activity android:name=".activities.FormDownloadList">
+            <intent-filter>
+                <action android:name="org.odk.collect.android.FORM_DOWNLOAD" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="vnd.android.cursor.dir/vnd.odk.form" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".activities.FileManagerTabs"
             android:configChanges="orientation|screenSize" />
@@ -178,12 +184,19 @@ the specific language governing permissions and limitations under the License.
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.InstanceUploaderActivity" />
+        <activity
+            android:name=".activities.InstanceUploaderActivity">
+            <intent-filter>
+                <action android:name="org.odk.collect.android.INSTANCE_UPLOAD" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="vnd.android.cursor.dir/vnd.odk.instance" />
+            </intent-filter>
+        </activity>
         <activity android:name=".activities.AboutActivity" />
         <activity android:name=".preferences.PreferencesActivity" />
         <activity android:name=".preferences.AdminPreferencesActivity" />
-        <activity android:name=".activities.ViewFormHierarchyActivity" />
-        <activity android:name=".activities.EditFormHierarchyActivity" />
+        <activity android:name=".activities.FormHierarchyActivity" />
+        <activity android:name=".activities.ViewOnlyFormHierarchyActivity" />
         <activity android:name=".activities.GeoPointActivity" />
         <activity
             android:name=".activities.GeoPointMapActivity"
@@ -192,16 +205,10 @@ the specific language governing permissions and limitations under the License.
             android:name=".activities.GeoPointOsmMapActivity"
             android:configChanges="orientation" />
         <activity
-            android:name=".activities.GeoShapeOsmMapActivity"
+            android:name=".activities.GeoShapeActivity"
             android:configChanges="orientation" />
         <activity
-            android:name=".activities.GeoShapeGoogleMapActivity"
-            android:configChanges="orientation" />
-        <activity
-            android:name=".activities.GeoTraceOsmMapActivity"
-            android:configChanges="orientation" />
-        <activity
-            android:name=".activities.GeoTraceGoogleMapActivity"
+            android:name=".activities.GeoTraceActivity"
             android:configChanges="orientation" />
         <activity android:name=".activities.BearingActivity" />
         <activity
@@ -228,16 +235,6 @@ the specific language governing permissions and limitations under the License.
         <activity android:name=".activities.CaptureSelfieActivity" />
         <activity android:name=".activities.CaptureSelfieActivityNewApi" />
 
-        <receiver
-            android:name=".receivers.NetworkReceiver"
-            android:enabled="true">
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="org.odk.collect.android.FormSaved" />
-            </intent-filter>
-        </receiver>
         <!--
         Register AnalyticsReceiver and AnalyticsService to support background
         dispatching on non-Google Play devices.
@@ -279,11 +276,6 @@ the specific language governing permissions and limitations under the License.
         <activity android:name=".activities.WebViewActivity" />
         <activity android:name=".activities.CaptureSelfieVideoActivity" />
         <activity android:name=".activities.CaptureSelfieVideoActivityNewApi" />
-
-        <!-- External apps can request form downloads -->
-        <service
-            android:name=".services.FormDownloadService"
-            android:exported="true" />
 
         <receiver
             android:name=".tasks.sms.SmsSentBroadcastReceiver"

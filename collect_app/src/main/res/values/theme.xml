@@ -20,7 +20,7 @@
         <item name="android:fontFamily">@string/font_family_regular</item>
         <item name="android:panelBackground">@android:color/white</item>
         <item name="searchViewStyle">@style/SearchViewTheme.Dark</item>
-        <item name="iconColor">@color/darkIconColor</item>
+        <item name="iconColor">@color/defaultDarkIconColor</item>
         <item name="rankItemColor">@color/darkRankItemColor</item>
         <item name="android:textDirection" tools:targetApi="17">locale</item>
         <item name="warningColor">@color/red</item>
@@ -61,7 +61,7 @@
         <item name="android:panelBackground">@android:color/white</item>
         <item name="alertDialogTheme">@style/AlertDialogTheme.Light</item>
         <item name="searchViewStyle">@style/SearchViewTheme.Light</item>
-        <item name="iconColor">@color/lightIconColor</item>
+        <item name="iconColor">@color/defaultLightIconColor</item>
         <item name="rankItemColor">@color/lightRankItemColor</item>
         <item name="android:textDirection" tools:targetApi="17">locale</item>
         <item name="warningColor">@color/red</item>

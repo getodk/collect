@@ -2,6 +2,7 @@ package org.odk.collect.android.injection;
 
 import android.app.Application;
 
+import org.odk.collect.android.http.CollectServerClientTest;
 import org.odk.collect.android.injection.config.AppComponent;
 import org.odk.collect.android.injection.config.scopes.PerApplication;
 import org.odk.collect.android.sms.SmsSenderJobTest;
@@ -30,4 +31,6 @@ public interface TestComponent extends AppComponent {
     void inject(SmsSenderJobTest smsSenderJobTest);
 
     void inject(SmsServiceTest smsServiceTest);
+
+    void inject(CollectServerClientTest collectServerClientTest);
 }

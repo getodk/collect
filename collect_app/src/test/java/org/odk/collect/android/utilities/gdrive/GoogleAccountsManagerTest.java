@@ -1,5 +1,7 @@
 package org.odk.collect.android.utilities.gdrive;
 
+import android.accounts.Account;
+import android.app.Activity;
 import android.content.Intent;
 
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
@@ -8,30 +10,34 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.preferences.ServerPreferencesFragment;
+import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.reflect.Whitebox;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
+import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 /**
  * @author Shobhit Agarwal
  */
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({GoogleAccountCredential.class, ThemeUtils.class})
+@PrepareForTest({GoogleAccountCredential.class, ThemeUtils.class, PermissionUtils.class})
 public class GoogleAccountsManagerTest {
 
     @Mock
@@ -42,6 +48,10 @@ public class GoogleAccountsManagerTest {
     private Intent mockIntent;
     @Mock
     private ThemeUtils mockThemeUtils;
+    @Mock
+    private ServerPreferencesFragment fragment;
+    @Mock
+    private Activity activity;
 
     private TestGoogleAccountSelectionListener listener;
     private GoogleAccountsManager googleAccountsManager;
@@ -55,39 +65,52 @@ public class GoogleAccountsManagerTest {
      */
 
     private void stubSavedAccount(String accountName) {
-        when(mockPreferences.get(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT)).thenReturn(accountName);
+        when(mockPreferences.get(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT)).thenReturn(accountName);
+        stubAccount(accountName);
     }
 
     private void stubCredential() {
-        doAnswer(new Answer() {
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                currentAccount = invocation.getArgument(0);
-                return null;
-            }
+        doAnswer(invocation -> {
+            currentAccount = invocation.getArgument(0);
+            return null;
         }).when(mockedCredential).setSelectedAccountName(anyString());
     }
 
+    private void stubAccount(String name) {
+        Account account = mock(Account.class);
+        Whitebox.setInternalState(account, "name", name);
+        doReturn(new Account[]{account}).when(mockedCredential).getAllAccounts();
+    }
+
+    private void removeAccounts() {
+        doReturn(null).when(mockedCredential).getAllAccounts();
+    }
+
+    private void mockPermissionUtils() {
+        mockStatic(PermissionUtils.class, invocation -> {
+            Whitebox.invokeMethod(googleAccountsManager, "chooseAccount");
+            return null;
+        });
+    }
+
     private void stubPreferences() {
-        doAnswer(new Answer() {
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                if (invocation.getArgument(0).equals(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT)) {
-                    savedAccount = invocation.getArgument(1);
-                }
-                return null;
+        doAnswer(invocation -> {
+            if (invocation.getArgument(0).equals(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT)) {
+                savedAccount = invocation.getArgument(1);
             }
+            return null;
         }).when(mockPreferences).save(anyString(), anyString());
     }
 
     @Before
     public void setup() {
-        googleAccountsManager = spy(new GoogleAccountsManager(mockedCredential, mockPreferences, mockIntent, mockThemeUtils));
+        googleAccountsManager = spy(new GoogleAccountsManager(mockedCredential, mockPreferences, mockIntent, mockThemeUtils, activity, fragment));
         listener = new TestGoogleAccountSelectionListener();
         googleAccountsManager.setListener(listener);
 
         stubCredential();
         stubPreferences();
+        mockPermissionUtils();
     }
 
     @Test
@@ -102,8 +125,20 @@ public class GoogleAccountsManagerTest {
     }
 
     @Test
+    public void returnNullWhenAccountIsDeleted() {
+        //asserting that account exists.
+        stubSavedAccount(EXPECTED_ACCOUNT);
+        assertEquals(EXPECTED_ACCOUNT, googleAccountsManager.getSelectedAccount());
+
+        //removing the account simulates the deletion of the account via Google account settings.
+        removeAccounts();
+
+        assertEquals(googleAccountsManager.getSelectedAccount(), "");
+        assertNull(savedAccount);
+    }
+
+    @Test
     public void returnBlankWhenAccountNameIsNotSaved() {
-        stubSavedAccount("");
         assertEquals("", googleAccountsManager.getSelectedAccount());
         assertNull(currentAccount);
     }
@@ -133,7 +168,6 @@ public class GoogleAccountsManagerTest {
 
     @Test
     public void displayAccountPickerDialogInAutoChooseWhenNoAccountIsNotAvailableTest() {
-        stubSavedAccount("");
         googleAccountsManager.chooseAccountAndRequestPermissionIfNeeded();
 
         assertNull(listener.getAccountName());
@@ -153,7 +187,6 @@ public class GoogleAccountsManagerTest {
 
     @Test
     public void setAccountNameTest() {
-        stubSavedAccount("");
 
         assertNull(currentAccount);
         assertEquals("", googleAccountsManager.getSelectedAccount());

@@ -6,23 +6,20 @@ import android.content.res.TypedArray;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.annotation.Config;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotSame;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_APP_THEME;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_APP_THEME;
 
 /**
  * Unit tests for checking the behaviour of updating themes from User Interface settings
  */
 
-@Config(constants = BuildConfig.class)
 @RunWith(RobolectricTestRunner.class)
 public class ThemeUtilsTests {
 

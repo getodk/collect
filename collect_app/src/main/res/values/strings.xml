@@ -1,5 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<!--
+<?xml version='1.0' encoding='UTF-8'?><!--
     Copyright (C) 2009 University of Washington Licensed under the Apache
     License, Version 2.0 (the "License"); you may not use this file except
     in compliance with the License. You may obtain a copy of the License
@@ -10,8 +9,7 @@
     the specific language governing permissions and limitations under the
     License.
 -->
-<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation"
-           tools:locale="en">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation" tools:locale="en">
     <string name="show_password">Show password</string>
     <string name="activity_not_found">No activity found to handle: %s</string>
     <string name="view_image">View Image</string>
@@ -288,7 +286,6 @@
     <string name="no_google_account">No Google Account Selected!</string>
     <string name="google_set_account">You have selected Google Sheets as your server, please select a corresponding Google account in the General Settings before continuing</string>
     <string name="media_upload_error">Failed to upload media file that does not exist: %1$s</string>
-    <string name="odk_auth_auth_fail">ODK auto send authentication failure, please make sure your settings are correct</string>
     <string name="odk_permissions_fail">ODK auto send permission failure, please make sure your have granted all required permissions</string>
     <string name="odk_auto_note">ODK auto-send results</string>
     <string name="odk_auto_download_notification_title">ODK auto-download results</string>
@@ -301,6 +298,7 @@
     <string name="send_in_progress">Background send running, please try again shortly</string>
     <string name="sheets_max_columns">Max number of columns is 255, your form has %s. Unable to upload to spreadsheet.</string>
     <string name="invalid_sheet_id">invalid sheet id: %1$s</string>
+    <string name="missing_submission_url">Missing submission URL</string>
     <string name="google_sheets_access_denied">Access denied. Please make sure the spreadsheet owner has granted you edit permission.</string>
     <string name="google_sheets_missing_columns">Spreadsheet is missing the following columns: %1$s</string>
     <string name="password_error_whitespace">Leading or trailing whitespace not allowed in passwords</string>
@@ -342,7 +340,6 @@
     <string name="select_geotrace_mode">"Select GeoTrace Mode"</string>
     <string name="start">Start</string>
     <string name="enable_gps">Enable GPS</string>
-    <string name="enable_gps_message">"GPS is disabled in your device. Would you like to enable it?"</string>
     <string name="geotrace_title">GeoTrace</string>
     <string name="polygon_save">Save as Polygon</string>
     <string name="polyline_save">Save as Polyline</string>
@@ -355,7 +352,6 @@
     <string name="polygon_validator">Must have at least 3 points to create Polygon</string>
     <string name="polyline_validator">Must have at least 2 points to create Polyline</string>
     <string name="clear">Clear</string>
-    <string name="polyline_polygon_text">Save GeoTrace As</string>
     <string name="manual_mode">Manual Mode</string>
     <string name="automatic_mode">Automatic Mode</string>
     <string name="geoshape_instruction">Long press to place marks.</string>
@@ -606,6 +602,8 @@
     <string name="get_accounts_runtime_permission_denied_desc">Without this permission Collect can\'t access accounts. Please try again when you are ready to grant it.</string>
     <string name="send_sms_runtime_permission_denied_title">Send SMS permission</string>
     <string name="send_sms_runtime_permission_denied_desc">Without this permission Collect can\'t send SMS messages. Please try again when you are ready to grant it.</string>
+    <string name="read_phone_state_runtime_permission_denied_title">Read phone state permission</string>
+    <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect does not make calls but it needs to access certain properties about your device such as the phone number and device ID.</string>
     <string name="form_update_category">Form update</string>
     <string name="periodic_form_updates_check_title">Periodic form updates check</string>
     <string name="never">Never</string>
@@ -640,7 +638,7 @@
     <string name="sms_last_submission_on_date_at_time">\'Last submission attempt at\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
     <plurals name="sms_sending">
         <item quantity="one">Submitting form as a single message.</item>
-        <item quantity="other">Submitting form, sending message %1$d! of %2$d</item>
+        <item quantity="other">Submitting form, sending message %1$d of %2$d</item>
     </plurals>
     <string name="sms_sent_on_date_at_time">\'Sent as SMS on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
     <string name="sms_submission_queued">Queued for submission.</string>
@@ -651,9 +649,10 @@
     <string name="transport_type_both">Select on send</string>
     <string name="seconds">Seconds</string>
     <string name="rank_items">Rank items</string>
-    <string name="image_not_saved">The image can not be saved because of a problem with the corresponding instance file.</string>
     <string name="loading_form_failed">An error occurred while loading the form. Please try again.</string>
+    <string name="missing_google_account_dialog_title">Google account not set</string>
+    <string name="missing_google_account_dialog_desc">To submit forms via Google Sheets you have to set up your Google account in the Server settings.</string>
     <string name="sms_invalid_phone_number_description">Set a destination phone number for SMS submissions or change your transport type.</string>
-    <string name="google_invalid_account_title">Google account missing</string>
-    <string name="google_invalid_account_description">Please select a Google account or change your server type.</string>
+    <string name="notification_channel_name">General notifications</string>
+    <string name="corrupt_imported_preferences_error">Current settings are corrupt. From the admin settings, reset settings or import working ones.</string>
 </resources>

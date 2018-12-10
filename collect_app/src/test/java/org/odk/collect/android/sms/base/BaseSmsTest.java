@@ -7,7 +7,7 @@ import android.preference.PreferenceManager;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.tasks.sms.SmsSubmissionManager;
 import org.odk.collect.android.tasks.sms.models.SmsSubmission;
 import org.robolectric.RuntimeEnvironment;
@@ -46,6 +46,6 @@ public abstract class BaseSmsTest {
 
     public void setDefaultGateway() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(RuntimeEnvironment.application);
-        settings.edit().putString(PreferenceKeys.KEY_SMS_GATEWAY, GATEWAY).commit();
+        settings.edit().putString(GeneralKeys.KEY_SMS_GATEWAY, GATEWAY).commit();
     }
 }

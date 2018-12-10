@@ -20,8 +20,10 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.activities.FormChooserList;
+import org.odk.collect.android.activities.FormDownloadList;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.InstanceChooserList;
+import org.odk.collect.android.activities.InstanceUploaderActivity;
 import org.odk.collect.android.activities.InstanceUploaderList;
 import org.odk.collect.android.activities.SplashScreenActivity;
 import org.odk.collect.android.listeners.PermissionListener;
@@ -59,17 +61,8 @@ public class PermissionUtils {
                 if (report.areAllPermissionsGranted()) {
                     action.granted();
                 } else {
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.Theme_AppCompat_Light_Dialog);
-
-                    builder.setTitle(R.string.storage_runtime_permission_denied_title)
-                            .setMessage(R.string.storage_runtime_permission_denied_desc)
-                            .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
-                                action.denied();
-                            })
-                            .setCancelable(false)
-                            .setIcon(R.drawable.sd)
-                            .show();
+                    showAdditionalExplanation(activity, R.string.storage_runtime_permission_denied_title,
+                            R.string.storage_runtime_permission_denied_desc, R.drawable.sd, action);
                 }
             }
 
@@ -99,14 +92,8 @@ public class PermissionUtils {
 
             @Override
             public void onPermissionDenied(PermissionDeniedResponse response) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.Theme_AppCompat_Light_Dialog);
-
-                builder.setTitle(R.string.camera_runtime_permission_denied_title)
-                        .setMessage(R.string.camera_runtime_permission_denied_desc)
-                        .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> action.denied())
-                        .setCancelable(false)
-                        .setIcon(R.drawable.ic_photo_camera)
-                        .show();
+                showAdditionalExplanation(activity, R.string.camera_runtime_permission_denied_title,
+                        R.string.camera_runtime_permission_denied_desc, R.drawable.ic_photo_camera, action);
             }
 
             @Override
@@ -130,15 +117,8 @@ public class PermissionUtils {
                 if (report.areAllPermissionsGranted()) {
                     action.granted();
                 } else {
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.Theme_AppCompat_Light_Dialog);
-
-                    builder.setTitle(R.string.location_runtime_permissions_denied_title)
-                            .setMessage(R.string.location_runtime_permissions_denied_desc)
-                            .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> action.denied())
-                            .setCancelable(false)
-                            .setIcon(R.drawable.ic_place_black)
-                            .show();
+                    showAdditionalExplanation(activity, R.string.location_runtime_permissions_denied_title,
+                            R.string.location_runtime_permissions_denied_desc, R.drawable.ic_place_black, action);
                 }
             }
 
@@ -166,14 +146,8 @@ public class PermissionUtils {
 
             @Override
             public void onPermissionDenied(PermissionDeniedResponse response) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.Theme_AppCompat_Light_Dialog);
-
-                builder.setTitle(R.string.record_audio_runtime_permission_denied_title)
-                        .setMessage(R.string.record_audio_runtime_permission_denied_desc)
-                        .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> action.denied())
-                        .setCancelable(false)
-                        .setIcon(R.drawable.ic_mic)
-                        .show();
+                showAdditionalExplanation(activity, R.string.record_audio_runtime_permission_denied_title,
+                        R.string.record_audio_runtime_permission_denied_desc, R.drawable.ic_mic, action);
             }
 
             @Override
@@ -190,6 +164,33 @@ public class PermissionUtils {
                 .check();
     }
 
+    public static void requestCameraAndRecordAudioPermissions(@NonNull Activity activity, @NonNull PermissionListener action) {
+        MultiplePermissionsListener multiplePermissionsListener = new MultiplePermissionsListener() {
+            @Override
+            public void onPermissionsChecked(MultiplePermissionsReport report) {
+                if (report.areAllPermissionsGranted()) {
+                    action.granted();
+                } else {
+                    showAdditionalExplanation(activity, R.string.camera_runtime_permission_denied_title,
+                            R.string.camera_runtime_permission_denied_desc, R.drawable.ic_photo_camera, action);
+                }
+            }
+
+            @Override
+            public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                token.continuePermissionRequest();
+            }
+        };
+
+        Dexter.withActivity(activity)
+                .withPermissions(
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.RECORD_AUDIO
+                ).withListener(multiplePermissionsListener)
+                .withErrorListener(error -> Timber.i(error.name()))
+                .check();
+    }
+
     public static void requestGetAccountsPermission(@NonNull Activity activity, @NonNull PermissionListener action) {
         com.karumi.dexter.listener.single.PermissionListener permissionListener = new com.karumi.dexter.listener.single.PermissionListener() {
             @Override
@@ -199,14 +200,8 @@ public class PermissionUtils {
 
             @Override
             public void onPermissionDenied(PermissionDeniedResponse response) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.Theme_AppCompat_Light_Dialog);
-
-                builder.setTitle(R.string.get_accounts_runtime_permission_denied_title)
-                        .setMessage(R.string.get_accounts_runtime_permission_denied_desc)
-                        .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> action.denied())
-                        .setCancelable(false)
-                        .setIcon(R.drawable.ic_get_accounts)
-                        .show();
+                showAdditionalExplanation(activity, R.string.get_accounts_runtime_permission_denied_title,
+                        R.string.get_accounts_runtime_permission_denied_desc, R.drawable.ic_get_accounts, action);
             }
 
             @Override
@@ -232,14 +227,8 @@ public class PermissionUtils {
 
             @Override
             public void onPermissionDenied(PermissionDeniedResponse response) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.Theme_AppCompat_Light_Dialog);
-
-                builder.setTitle(R.string.send_sms_runtime_permission_denied_title)
-                        .setMessage(R.string.send_sms_runtime_permission_denied_desc)
-                        .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> action.denied())
-                        .setCancelable(false)
-                        .setIcon(R.drawable.ic_sms)
-                        .show();
+                showAdditionalExplanation(activity, R.string.send_sms_runtime_permission_denied_title,
+                        R.string.send_sms_runtime_permission_denied_desc, R.drawable.ic_sms, action);
             }
 
             @Override
@@ -251,6 +240,37 @@ public class PermissionUtils {
         Dexter.withActivity(activity)
                 .withPermission(
                         Manifest.permission.SEND_SMS
+                ).withListener(permissionListener)
+                .withErrorListener(error -> Timber.i(error.name()))
+                .check();
+    }
+
+    public static void requestReadPhoneStatePermission(@NonNull Activity activity, @NonNull PermissionListener action, boolean displayPermissionDeniedDialog) {
+        com.karumi.dexter.listener.single.PermissionListener permissionListener = new com.karumi.dexter.listener.single.PermissionListener() {
+            @Override
+            public void onPermissionGranted(PermissionGrantedResponse response) {
+                action.granted();
+            }
+
+            @Override
+            public void onPermissionDenied(PermissionDeniedResponse response) {
+                if (displayPermissionDeniedDialog) {
+                    showAdditionalExplanation(activity, R.string.read_phone_state_runtime_permission_denied_title,
+                            R.string.read_phone_state_runtime_permission_denied_desc, R.drawable.ic_phone, action);
+                } else {
+                    action.denied();
+                }
+            }
+
+            @Override
+            public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+                token.continuePermissionRequest();
+            }
+        };
+
+        Dexter.withActivity(activity)
+                .withPermission(
+                        Manifest.permission.READ_PHONE_STATE
                 ).withListener(permissionListener)
                 .withErrorListener(error -> Timber.i(error.name()))
                 .check();
@@ -275,8 +295,20 @@ public class PermissionUtils {
                 && accessCoarseLocation == PackageManager.PERMISSION_GRANTED;
     }
 
+    public static boolean checkIfCameraAndRecordAudioPermissionsGranted(Context context) {
+        int cameraPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA);
+        int recordAudioPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO);
+
+        return cameraPermission == PackageManager.PERMISSION_GRANTED
+                && recordAudioPermission == PackageManager.PERMISSION_GRANTED;
+    }
+
     public static boolean checkIfGetAccountsPermissionGranted(Context context) {
         return ContextCompat.checkSelfPermission(context, Manifest.permission.GET_ACCOUNTS) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public static boolean checkIfReadPhoneStatePermissionGranted(Context context) {
+        return ContextCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED;
     }
 
     /**
@@ -294,6 +326,8 @@ public class PermissionUtils {
         activities.add(FormChooserList.class);
         activities.add(InstanceUploaderList.class);
         activities.add(SplashScreenActivity.class);
+        activities.add(FormDownloadList.class);
+        activities.add(InstanceUploaderActivity.class);
 
         for (Class<?> act : activities) {
             if (activity.getClass().equals(act)) {
@@ -310,5 +344,19 @@ public class PermissionUtils {
         } else {
             activity.finishAffinity();
         }
+    }
+
+    private static void showAdditionalExplanation(@NonNull Activity activity, int title,
+                                                  int message, int drawable,
+                                                  @NonNull PermissionListener action) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.Theme_AppCompat_Light_Dialog);
+
+        builder.setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> action.denied())
+                .setCancelable(false)
+                .setIcon(drawable);
+
+        DialogUtils.showDialog(builder.create(), activity);
     }
 }

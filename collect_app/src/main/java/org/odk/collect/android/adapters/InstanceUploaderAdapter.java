@@ -33,7 +33,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_TRANSPORT_TYPE;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_TRANSPORT_TYPE;
 import static org.odk.collect.android.provider.InstanceProviderAPI.STATUS_SUBMISSION_FAILED;
 import static org.odk.collect.android.provider.InstanceProviderAPI.STATUS_SUBMITTED;
 import static org.odk.collect.android.tasks.sms.SmsService.RESULT_MESSAGE_READY;
@@ -99,11 +99,9 @@ public class InstanceUploaderAdapter extends CursorAdapter {
         switch (status) {
 
             case STATUS_SUBMISSION_FAILED:
-                if (isSmsSubmission) {
-                    viewHolder.statusIcon.setImageResource(R.drawable.message_alert);
-                } else {
-                    viewHolder.statusIcon.setImageResource(R.drawable.exclamation);
-                }
+
+                viewHolder.statusIcon.setImageResource(R.drawable.exclamation);
+
                 break;
 
             case STATUS_SUBMITTED:
@@ -171,15 +169,12 @@ public class InstanceUploaderAdapter extends CursorAdapter {
             case RESULT_QUEUED:
             case RESULT_OK_OTHERS_PENDING:
             case RESULT_SENDING:
+            case RESULT_MESSAGE_READY:
                 viewHolder.statusIcon.setImageResource(R.drawable.message_text_outline);
                 break;
 
-            case RESULT_MESSAGE_READY:
-                viewHolder.statusIcon.setImageResource(R.drawable.pencil);
-                break;
-
             default:
-                viewHolder.statusIcon.setImageResource(R.drawable.message_alert);
+                viewHolder.statusIcon.setImageResource(R.drawable.exclamation);
                 break;
         }
     }

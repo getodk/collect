@@ -1,6 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+  <string name="show_password">پاس ورڈ  دکھائیں</string>
   <string name="activity_not_found">‎%s‏  کو کر نے کیلیے کوئی سرگرمی نہی پا ئ گئ</string>
+  <string name="view_image">تصویر دیکھیں</string>
   <string name="add_another">گروپ شامل کر یں</string>
   <string name="add_another_repeat">ایک اور \"‎%s‏\" گروپ شامل کریں</string>
   <string name="add_repeat">نیا \"‎%s‏\" گروپ شامل کریں</string>

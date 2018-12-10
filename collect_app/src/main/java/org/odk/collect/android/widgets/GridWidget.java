@@ -17,7 +17,6 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -43,7 +42,6 @@ import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
@@ -68,10 +66,7 @@ import timber.log.Timber;
 @SuppressLint("ViewConstructor")
 public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
 
-    // The RGB value for the orange background
-    public static final int ORANGE_RED_VAL = 255;
-    public static final int ORANGE_GREEN_VAL = 140;
-    public static final int ORANGE_BLUE_VAL = 0;
+    private final int bgOrange = getResources().getColor(R.color.highContrastHighlight);
 
     private static final int HORIZONTAL_PADDING = 7;
     private static final int VERTICAL_PADDING = 5;
@@ -154,8 +149,7 @@ public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
             String audioURI =
                     prompt.getSpecialFormSelectChoiceText(sc, FormEntryCaption.TEXT_FORM_AUDIO);
             if (audioURI != null) {
-                audioHandlers[i] = new AudioHandler(prompt.getIndex(), sc.getValue(), audioURI,
-                        getPlayer());
+                audioHandlers[i] = new AudioHandler(audioURI, getPlayer());
             } else {
                 audioHandlers[i] = null;
             }
@@ -300,11 +294,7 @@ public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
                     imageViews[i].setBackgroundColor(0);
                 }
                 selected[position] = true;
-                Collect.getInstance().getActivityLogger().logInstanceAction(this,
-                        "onItemClick.select",
-                        items.get(position).getValue(), getFormEntryPrompt().getIndex());
-                imageViews[position].setBackgroundColor(Color.rgb(ORANGE_RED_VAL, ORANGE_GREEN_VAL,
-                        ORANGE_BLUE_VAL));
+                imageViews[position].setBackgroundColor(bgOrange);
 
                 if (quickAdvance && listener != null) {
                     listener.advance();
@@ -326,8 +316,7 @@ public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
 
             selected[i] = match.equals(s);
             if (selected[i]) {
-                imageViews[i].setBackgroundColor(Color.rgb(ORANGE_RED_VAL, ORANGE_GREEN_VAL,
-                        ORANGE_BLUE_VAL));
+                imageViews[i].setBackgroundColor(bgOrange);
             }
         }
 

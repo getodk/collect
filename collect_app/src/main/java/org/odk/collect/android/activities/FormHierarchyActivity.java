@@ -23,7 +23,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -35,6 +34,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.HierarchyListAdapter;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.HierarchyElement;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
@@ -45,18 +45,54 @@ import java.util.List;
 
 import timber.log.Timber;
 
-public abstract class FormHierarchyActivity extends CollectAbstractActivity {
+/**
+ * Displays the structure of a form along with the answers for the current instance. Different form
+ * elements are displayed in the following ways:
+ * - Questions each take up a row with their full label shown and their answers below
+ * - Non-repeat groups are not represented at all
+ * - Repeat groups are initially shown as collapsed and are expanded when tapped, revealing instances
+ * of that repeat
+ * - Repeat instances are displayed with their label and a count after (e.g. My group (1))
+ *
+ * Tapping on a repeat instance shows all the questions in that repeat instance using the display
+ * rules above.
+ *
+ * Tapping on a question sets the app-wide current question to that question and terminates the
+ * activity, returning to {@link FormEntryActivity}.
+ *
+ * Although the user gets the impression of navigating "into" a repeat, the view is refreshed in
+ * {@link #refreshView()} rather than another activity/fragment being added to the backstack.
+ *
+ * Buttons at the bottom of the screen allow users to navigate the form.
+ */
+public class FormHierarchyActivity extends CollectAbstractActivity {
+    /**
+     * The questions and repeats at the current level. If a repeat is expanded, also includes the
+     * instances of that repeat. Recreated every time {@link #refreshView()} is called. Modified
+     * by the expand/collapse behavior in {@link #onElementClick(HierarchyElement)}.
+     */
+    private List<HierarchyElement> elementsToDisplay;
 
-    protected static final int CHILD = 1;
-    protected static final int EXPANDED = 2;
-    protected static final int COLLAPSED = 3;
-    protected static final int QUESTION = 4;
+    /**
+     * The label shown at the top of a hierarchy screen for a repeat instance. Set by
+     * {@link #getCurrentPath()}.
+     */
+    private TextView groupPathTextView;
 
-    List<HierarchyElement> formList;
-    TextView path;
+    /**
+     * The index of the question or the field list the FormController was set to when the hierarchy
+     * was accessed. Used to jump the user back to where they were if applicable.
+     */
+    private FormIndex startIndex;
 
-    FormIndex startIndex;
+    /**
+     * The index of the question that is being displayed in the hierarchy. On first launch, it is
+     * the same as {@link #startIndex}. It can then become the index of a repeat instance.
+     * TODO: Is keeping this as a field necessary? I believe what it is used for is to send the user
+     * to edit a question that caused an error in the hierarchy.
+     */
     private FormIndex currentIndex;
+
     protected Button jumpPreviousButton;
     protected Button jumpBeginningButton;
     protected Button jumpEndButton;
@@ -84,65 +120,32 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity {
             return;
         }
 
-        // We use a static FormEntryController to make jumping faster.
         startIndex = formController.getFormIndex();
 
         setTitle(formController.getFormTitle());
 
-        path = findViewById(R.id.pathtext);
+        groupPathTextView = findViewById(R.id.pathtext);
 
         jumpPreviousButton = findViewById(R.id.jumpPreviousButton);
-        jumpPreviousButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Collect.getInstance().getActivityLogger().logInstanceAction(this, "goUpLevelButton",
-                        "click");
-                goUpLevel();
-            }
-        });
-
         jumpBeginningButton = findViewById(R.id.jumpBeginningButton);
-        jumpBeginningButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Collect.getInstance().getActivityLogger().logInstanceAction(this, "jumpToBeginning",
-                        "click");
-                FormController fc = Collect.getInstance().getFormController();
-                if (fc != null) {
-                    fc.getTimerLogger().exitView();
-                    fc.jumpToIndex(FormIndex.createBeginningOfFormIndex());
-                }
-                setResult(RESULT_OK);
-                finish();
-            }
-        });
-
         jumpEndButton = findViewById(R.id.jumpEndButton);
-        jumpEndButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Collect.getInstance().getActivityLogger().logInstanceAction(this, "jumpToEnd",
-                        "click");
-                FormController fc = Collect.getInstance().getFormController();
-                if (fc != null) {
-                    fc.getTimerLogger().exitView();
-                    fc.jumpToIndex(FormIndex.createEndOfFormIndex());
-                }
-                setResult(RESULT_OK);
-                finish();
-            }
-        });
 
+        configureButtons(formController);
         refreshView();
 
-        // Kinda slow, but works. This scrolls to the last question the user was looking at.
+        // Scroll to the last question the user was looking at
+        // TODO: avoid another iteration through all displayed elements
         if (recyclerView != null && recyclerView.getAdapter() != null && recyclerView.getAdapter().getItemCount() > 0) {
             emptyView.setVisibility(View.GONE);
             recyclerView.post(() -> {
                 int position = 0;
-                for (HierarchyElement hierarchyElement : formList) {
-                    if (shouldScrollToTheGivenIndex(hierarchyElement.getFormIndex(), formController)) {
-                        position = formList.indexOf(hierarchyElement);
+                // Iterate over all the elements currently displayed looking for a match with the
+                // startIndex which can either represent a question or a field list.
+                for (HierarchyElement hierarchyElement : elementsToDisplay) {
+                    FormIndex indexToCheck = hierarchyElement.getFormIndex();
+                    if (startIndex.equals(indexToCheck)
+                            || (formController.indexIsInFieldList(startIndex) && indexToCheck.toString().startsWith(startIndex.toString()))) {
+                        position = elementsToDisplay.indexOf(hierarchyElement);
                         break;
                     }
                 }
@@ -151,21 +154,28 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity {
         }
     }
 
-    private boolean shouldScrollToTheGivenIndex(FormIndex formIndex, FormController formController) {
-        return startIndex.equals(formIndex)
-                || (formController.indexIsInFieldList(startIndex) && formIndex.toString().startsWith(startIndex.toString()));
-    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Collect.getInstance().getActivityLogger().logOnStart(this);
-    }
+    /**
+     * Configure the navigation buttons at the bottom of the screen.
+     */
+    void configureButtons(FormController formController) {
+        jumpPreviousButton.setOnClickListener(v -> goUpLevel());
 
-    @Override
-    protected void onStop() {
-        Collect.getInstance().getActivityLogger().logOnStop(this);
-        super.onStop();
+        jumpBeginningButton.setOnClickListener(v -> {
+            formController.getTimerLogger().exitView();
+            formController.jumpToIndex(FormIndex.createBeginningOfFormIndex());
+
+            setResult(RESULT_OK);
+            finish();
+        });
+
+        jumpEndButton.setOnClickListener(v -> {
+            formController.getTimerLogger().exitView();
+            formController.jumpToIndex(FormIndex.createEndOfFormIndex());
+
+            setResult(RESULT_OK);
+            finish();
+        });
     }
 
     protected void goUpLevel() {
@@ -174,6 +184,9 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity {
         refreshView();
     }
 
+    /**
+     * Builds a string representing the path of the current group. Each level is separated by a <.
+     */
     private String getCurrentPath() {
         FormController formController = Collect.getInstance().getFormController();
         FormIndex index = formController.getFormIndex();
@@ -188,6 +201,11 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity {
         return ODKView.getGroupsPath(groups.toArray(new FormEntryCaption[groups.size()]));
     }
 
+    /**
+     * Rebuilds the view to reflect the elements that should be displayed based on the
+     * FormController's current index. This index is either set prior to the activity opening or
+     * mutated by {@link #onElementClick(HierarchyElement)} if a repeat instance was tapped.
+     */
     public void refreshView() {
         try {
             FormController formController = Collect.getInstance().getFormController();
@@ -198,7 +216,7 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity {
             // display
             // everything enclosed within that group.
             String contextGroupRef = "";
-            formList = new ArrayList<>();
+            elementsToDisplay = new ArrayList<>();
 
             // If we're currently at a repeat node, record the name of the node and step to the next
             // node to display.
@@ -240,11 +258,11 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity {
                 formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
                 contextGroupRef =
                         formController.getFormIndex().getReference().getParentRef().toString(true);
-                path.setVisibility(View.GONE);
+                groupPathTextView.setVisibility(View.GONE);
                 jumpPreviousButton.setEnabled(false);
             } else {
-                path.setVisibility(View.VISIBLE);
-                path.setText(getCurrentPath());
+                groupPathTextView.setVisibility(View.VISIBLE);
+                groupPathTextView.setText(getCurrentPath());
                 jumpPreviousButton.setEnabled(true);
             }
 
@@ -301,9 +319,9 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity {
                             // show the question if it is an editable field.
                             // or if it is read-only and the label is not blank.
                             String answerDisplay = FormEntryPromptUtils.getAnswerText(fp, this, formController);
-                            formList.add(
+                            elementsToDisplay.add(
                                     new HierarchyElement(FormEntryPromptUtils.markQuestionIfIsRequired(label, fp.isRequired()), answerDisplay, null,
-                                            QUESTION, fp.getIndex()));
+                                            HierarchyElement.Type.QUESTION, fp.getIndex()));
                         }
                         break;
                     case FormEntryController.EVENT_GROUP:
@@ -331,8 +349,8 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity {
                             HierarchyElement group =
                                     new HierarchyElement(getLabel(fc), null, ContextCompat
                                             .getDrawable(this, R.drawable.expander_ic_minimized),
-                                            COLLAPSED, fc.getIndex());
-                            formList.add(group);
+                                            HierarchyElement.Type.COLLAPSED, fc.getIndex());
+                            elementsToDisplay.add(group);
                         }
                         String repeatLabel = getLabel(fc);
                         if (fc.getFormElement().getChildren().size() == 1 && fc.getFormElement().getChild(0) instanceof GroupDef) {
@@ -344,17 +362,16 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity {
                         }
                         repeatLabel += " (" + (fc.getMultiplicity() + 1) + ")\u200E";
                         // Add this group name to the drop down list for this repeating group.
-                        HierarchyElement h = formList.get(formList.size() - 1);
-                        h.addChild(new HierarchyElement(repeatLabel, null, null, CHILD, fc.getIndex()));
+                        HierarchyElement h = elementsToDisplay.get(elementsToDisplay.size() - 1);
+                        h.addChild(new HierarchyElement(repeatLabel, null, null, HierarchyElement.Type.CHILD, fc.getIndex()));
                         break;
                 }
                 event =
                         formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
             }
 
-            recyclerView.setAdapter(new HierarchyListAdapter(formList, this::onElementClick));
+            recyclerView.setAdapter(new HierarchyListAdapter(elementsToDisplay, this::onElementClick));
 
-            // set the controller back to the current index in case the user hits 'back'
             formController.jumpToIndex(currentIndex);
         } catch (Exception e) {
             Timber.e(e);
@@ -362,16 +379,93 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity {
         }
     }
 
-    protected abstract void onElementClick(HierarchyElement element);
+    /**
+     * Handles clicks on a specific row in the hierarchy view. Clicking on a:
+     * - group makes it toggle between expanded and collapsed
+     * - question jumps to the form filling view with that question shown. If the question is in a
+     * field list, shows that entire field list.
+     * - group's child element causes this hierarchy view to be refreshed with that element's
+     * questions shown
+     */
+    public void onElementClick(HierarchyElement element) {
+        int position = elementsToDisplay.indexOf(element);
+        FormIndex index = element.getFormIndex();
+
+        switch (element.getType()) {
+            case EXPANDED:
+                element.setType(HierarchyElement.Type.COLLAPSED);
+                ArrayList<HierarchyElement> children = element.getChildren();
+                for (int i = 0; i < children.size(); i++) {
+                    elementsToDisplay.remove(position + 1);
+                }
+                element.setIcon(ContextCompat.getDrawable(this, R.drawable.expander_ic_minimized));
+                break;
+            case COLLAPSED:
+                element.setType(HierarchyElement.Type.EXPANDED);
+                ArrayList<HierarchyElement> children1 = element.getChildren();
+                for (int i = 0; i < children1.size(); i++) {
+                    Timber.i("adding child: %s", children1.get(i).getFormIndex());
+                    elementsToDisplay.add(position + 1 + i, children1.get(i));
+
+                }
+                element.setIcon(ContextCompat.getDrawable(this, R.drawable.expander_ic_maximized));
+                break;
+            case QUESTION:
+                onQuestionClicked(index);
+                return;
+            case CHILD:
+                Collect.getInstance().getFormController().jumpToIndex(element.getFormIndex());
+                setResult(RESULT_OK);
+                refreshView();
+                return;
+        }
+
+        recyclerView.setAdapter(new HierarchyListAdapter(elementsToDisplay, this::onElementClick));
+        ((LinearLayoutManager) recyclerView.getLayoutManager()).scrollToPositionWithOffset(position, 0);
+    }
+
+    /**
+     * Handles clicks on a question. Jumps to the form filling view with the selected question shown.
+     * If the selected question is in a field list, show the entire field list.
+     */
+    void onQuestionClicked(FormIndex index) {
+        Collect.getInstance().getFormController().jumpToIndex(index);
+        if (Collect.getInstance().getFormController().indexIsInFieldList()) {
+            try {
+                Collect.getInstance().getFormController().stepToPreviousScreenEvent();
+            } catch (JavaRosaException e) {
+                Timber.d(e);
+                createErrorDialog(e.getCause().getMessage());
+                return;
+            }
+        }
+        setResult(RESULT_OK);
+        finish();
+    }
+
+    /**
+     * When the device back button is pressed, go back to the previous activity, NOT the previous
+     * level in the hierarchy as the "Go Up" button does.
+     */
+    @Override
+    public void onBackPressed() {
+        FormController formController = Collect.getInstance().getFormController();
+        if (formController != null) {
+            formController.getTimerLogger().exitView();
+            formController.jumpToIndex(startIndex);
+        }
+
+        onBackPressedWithoutLogger();
+    }
+
+    protected void onBackPressedWithoutLogger() {
+        super.onBackPressed();
+    }
 
     /**
      * Creates and displays dialog with the given errorMsg.
      */
     protected void createErrorDialog(String errorMsg) {
-        Collect.getInstance()
-                .getActivityLogger()
-                .logInstanceAction(this, "createErrorDialog", "show.");
-
         AlertDialog alertDialog = new AlertDialog.Builder(this).create();
 
         alertDialog.setIcon(android.R.drawable.ic_dialog_info);
@@ -382,8 +476,6 @@ public abstract class FormHierarchyActivity extends CollectAbstractActivity {
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
                     case DialogInterface.BUTTON_POSITIVE:
-                        Collect.getInstance().getActivityLogger()
-                                .logInstanceAction(this, "createErrorDialog", "OK");
                         FormController formController = Collect.getInstance().getFormController();
                         formController.jumpToIndex(currentIndex);
                         break;

@@ -291,7 +291,6 @@
   <string name="select_geotrace_mode">Selecciona Mòdus GeoTraça</string>
   <string name="start">Comença</string>
   <string name="enable_gps">Activa GPS</string>
-  <string name="enable_gps_message">El GPS esta desactivat al teu dispositiu. Vols activar-lo?</string>
   <string name="geotrace_title">GeoTraça</string>
   <string name="polygon_save">Desa com Poligon</string>
   <string name="polyline_save">Desa com polilínea</string>
@@ -303,7 +302,6 @@
   <string name="geo_exit_warning">Descartar canvis i tornar a ODK?</string>
   <string name="polygon_validator">Per crear un polígon calen mínim 3 punts </string>
   <string name="clear">Neteja</string>
-  <string name="polyline_polygon_text">Desa GeoTraça com</string>
   <string name="manual_mode">Mòdus Manual</string>
   <string name="automatic_mode">Mòdus Automàtic</string>
   <string name="geoshape_instruction">Prem una estona per situar marques.</string>

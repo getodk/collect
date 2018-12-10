@@ -205,8 +205,6 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
 
         @Override
         public void clickImage(String context) {
-            Collect.getInstance().getActivityLogger().logInstanceAction(this, context,
-                    "click", getFormEntryPrompt().getIndex());
             Intent i = new Intent("android.intent.action.VIEW");
             Uri uri = MediaUtils.getImageUriFromMediaProvider(
                     getInstanceFolder() + File.separator + binaryName);
@@ -243,11 +241,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
 
         @Override
         public void clickImage(String context) {
-            if (Collect.allowClick()) {
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(this, context, "click",
-                                getFormEntryPrompt().getIndex());
+            if (Collect.allowClick(getClass().getName())) {
                 launchDrawActivity();
             }
         }
@@ -288,8 +282,6 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
 
         @Override
         public void chooseImage(@IdRes final int stringResource) {
-            Collect.getInstance().getActivityLogger().logInstanceAction(this, "chooseButton",
-                    "click", getFormEntryPrompt().getIndex());
             errorTextView.setVisibility(View.GONE);
             Intent i = new Intent(Intent.ACTION_GET_CONTENT);
             i.setType("image/*");

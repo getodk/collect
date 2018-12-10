@@ -16,7 +16,6 @@
 
 package org.odk.collect.android.adapters;
 
-import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView.Adapter;
@@ -26,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.SelectChoice;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.RankingListAdapter.ItemViewHolder;
@@ -40,29 +40,30 @@ import java.util.List;
 public class RankingListAdapter extends Adapter<ItemViewHolder> {
 
     private final List<String> values;
-    private final FormController formController;
+    private final FormIndex formIndex;
 
-    public RankingListAdapter(List<String> values) {
+    public RankingListAdapter(List<String> values, FormIndex formIndex) {
         this.values = new ArrayList<>(values);
-        formController = Collect.getInstance().getFormController();
+        this.formIndex = formIndex;
     }
 
     @NonNull
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ItemViewHolder(parent.getContext(), LayoutInflater.from(parent.getContext()).inflate(R.layout.ranking_item, parent, false));
+        return new ItemViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.ranking_item, parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull final ItemViewHolder holder, int position) {
+        FormController formController = Collect.getInstance().getFormController();
         String itemName = formController != null
-                ? formController.getQuestionPrompt().getSelectChoiceText(getItem(values.get(position)))
+                ? formController.getQuestionPrompt(formIndex).getSelectChoiceText(getItem(formController, values.get(position)))
                 : values.get(position);
         holder.textView.setText(itemName);
     }
 
-    private SelectChoice getItem(String value) {
-        for (SelectChoice item : formController.getQuestionPrompt().getSelectChoices()) {
+    private SelectChoice getItem(FormController formController, String value) {
+        for (SelectChoice item : formController.getQuestionPrompt(formIndex).getSelectChoices()) {
             if (item.getValue().equals(value)) {
                 return item;
             }
@@ -86,16 +87,14 @@ public class RankingListAdapter extends Adapter<ItemViewHolder> {
 
     public static class ItemViewHolder extends ViewHolder {
 
-        final Context context;
         final TextView textView;
         final ThemeUtils themeUtils;
 
-        ItemViewHolder(Context context, View itemView) {
+        ItemViewHolder(View itemView) {
             super(itemView);
-            this.context = context;
             textView = itemView.findViewById(R.id.rank_item_text);
             textView.setTextSize(Collect.getQuestionFontsize());
-            themeUtils = new ThemeUtils(context);
+            themeUtils = new ThemeUtils(itemView.getContext());
         }
 
         public void onItemSelected() {

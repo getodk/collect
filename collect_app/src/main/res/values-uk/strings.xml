@@ -281,7 +281,7 @@
   <string name="no_google_account">Не вибраний жоден обліковий запис Google!</string>
   <string name="google_set_account">Ви обрали своїм сервером Google Сторінки, для продовження, будь ласка, вкажіть відповідний обліковий запис Google в Загальних налаштуваннях</string>
   <string name="media_upload_error">Помилка завантаження неіснуючого медіа файлу: %1$s</string>
-  <string name="odk_auth_auth_fail">Помилка авторизації під час автоматичного надсилання, будь ласка, перевірте налаштування</string>
+  <string name="odk_permissions_fail">Помилка автоматичного надсилання, будь ласка, перевірте надання всіх необхідних дозволів</string>
   <string name="odk_auto_note">Результати автонадсилання ODK</string>
   <string name="odk_auto_download_notification_title">Результати автозавантаження ODK</string>
   <string name="notification_error">Помилка відображення тексту оповіщення</string>
@@ -293,6 +293,7 @@
   <string name="send_in_progress">Зпущений тіньовий процес відправки, будь ласка, спробуйте знову пізніше</string>
   <string name="sheets_max_columns">Максимальна кількість колонок - 255, ваша анкета містить %s. Неможливо вивантажити в Сторінки.</string>
   <string name="invalid_sheet_id">пошкоджена сторінка id: %1$s</string>
+  <string name="missing_submission_url">Відсутній URL для надсилання</string>
   <string name="google_sheets_access_denied">Відмова доступу. Будь ласка, переконайтесь, що власник Сторінок надав вам дозвіл на внесення змін.</string>
   <string name="google_sheets_missing_columns">В Сторінках пропущена наступна колонка: %1$s</string>
   <string name="password_error_whitespace">в паролях заборонені початкові та кінцеві пробіли</string>
@@ -332,7 +333,6 @@
   <string name="select_geotrace_mode">Обрати режим ГеоМаршруту</string>
   <string name="start">Почати</string>
   <string name="enable_gps">Увімкнути GPS</string>
-  <string name="enable_gps_message">GPS на Вашому пристрої вимкнено. Бажаєте увімкнути?</string>
   <string name="geotrace_title">ГеоМаршрут</string>
   <string name="polygon_save">Зберегти як багатокутник</string>
   <string name="polyline_save">Зберегти як ламану лінію</string>
@@ -345,7 +345,6 @@
   <string name="polygon_validator">Для багатокутника необхідно мінімум 3 точки</string>
   <string name="polyline_validator">Для створення лінії необхідні принаймні дві точки</string>
   <string name="clear">Очистити</string>
-  <string name="polyline_polygon_text">Зберегти ГеоМаршрут як</string>
   <string name="manual_mode">Ручний режим</string>
   <string name="automatic_mode">Автоматичний режим</string>
   <string name="geoshape_instruction">Довге натискання для розміщення позначок.</string>
@@ -589,6 +588,12 @@
   <string name="camera_runtime_permission_denied_desc">Без цього дозволу Collect не має доступу до камери. Будь ласка, спробуйте знову коли будете готові надати його.</string>
   <string name="record_audio_runtime_permission_denied_title">Дозвіл на аудіозапис</string>
   <string name="record_audio_runtime_permission_denied_desc">Без цього дозволу Collect не має доступу до мікрофону. Будь ласка, спробуйте знову коли будете готові надати його.</string>
+  <string name="get_accounts_runtime_permission_denied_title">Отримати дозволи облікового запису</string>
+  <string name="get_accounts_runtime_permission_denied_desc">Без цього дозволу Collect не має доступу до облікових записів. Будь ласка, спробуйте знову коли будете готові надати його.</string>
+  <string name="send_sms_runtime_permission_denied_title">Дозвіл надсилати повідомлення</string>
+  <string name="send_sms_runtime_permission_denied_desc">Без цього дозволу Collect не може надсилати повідомлення. Будь ласка, спробуйте знову коли будете готові надати його.</string>
+  <string name="read_phone_state_runtime_permission_denied_title">Сатус телефону</string>
+  <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect не робить телефонних дзвінків але потребує доступу до певних властивостей вашого пристрою як то номер телефну та ID пристрою</string>
   <string name="form_update_category">Оновлення анкети</string>
   <string name="periodic_form_updates_check_title">Періодична перерівка оновлень анкет</string>
   <string name="never">Ніколи</string>
@@ -620,11 +625,11 @@
   <string name="sms_no_message">Ця анкета не має питань з позначками повідомлень.</string>
   <string name="sms_encrypted_message">Зашифровані анкети не можуть бути відправлені як повідомлення.</string>
   <string name="sms_last_submission_on_date_at_time">\'Остання спроба відправки\' EEE, MMM dd, yyyy \'в\' HH:mm</string>
-  <plurals name="sms_sending" tools:ignore="ImpliedQuantity">
-    <item quantity="one">Надсилання анкети як в одному повідомленні.</item>
-    <item quantity="few">Надсилання анкети, повдомлення %1$d! з %2$d</item>
-    <item quantity="many">Надсилання анкети, повдомлення %1$d! з %2$d</item>
-    <item quantity="other">Надсилання анкети, повдомлення %1$d! з %2$d</item>
+  <plurals name="sms_sending">
+    <item quantity="one" tools:ignore="ImpliedQuantity">Надсилання анкети як повдомлення.</item>
+    <item quantity="few">Надсилання анкети, повдомлення %1$d з %2$d</item>
+    <item quantity="many">Надсилання анкети, повдомлення %1$d з %2$d</item>
+    <item quantity="other">Надсилання анкети, повдомлення %1$d з %2$d</item>
   </plurals>
   <string name="sms_sent_on_date_at_time">\'Надіслана як повідомлення\' EEE, MMM dd, yyyy \'о\' HH:mm</string>
   <string name="sms_submission_queued">Черга на надсилання.</string>
@@ -635,6 +640,9 @@
   <string name="transport_type_both">Обрати та надіслати</string>
   <string name="seconds">Секунди</string>
   <string name="rank_items">Засоби оцінки</string>
-  <string name="image_not_saved">Зображення не може бути збережене через проблеми з файлом відповідної анкети.</string>
   <string name="loading_form_failed">Під час завантаження анкети виникла помилка. Будь ласка спробуйте знову.</string>
+  <string name="missing_google_account_dialog_title">Нема облікового запису Google</string>
+  <string name="missing_google_account_dialog_desc">Щоб надіслати анкету через Google Таблиці Ви повинні налаштувати обліковий запис Google в налаштуваннях сервера.</string>
+  <string name="sms_invalid_phone_number_description">Вкажіть номер телефону для надсиланнячерез повідомлення або замініть тип відправки.</string>
+  <string name="notification_channel_name">Загальні сповіщення</string>
 </resources>

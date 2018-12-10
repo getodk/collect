@@ -19,14 +19,19 @@ the License.
     <!-- Dark Theme Palette -->
     <color name="darkPrimaryTextColor">@android:color/white</color>
     <color name="darkPopupDialogColor">#3f3f3f</color>
-    <color name="darkIconColor">@android:color/white</color>
+    <color name="defaultDarkIconColor">@android:color/white</color>
     <color name="darkRankItemColor">@android:color/black</color>
+    <color name="darkIconColorDisabled">#aaaaaa</color>
+    <color name="darkIconColorEnabled">@android:color/white</color>
 
     <!-- Light Theme Palette -->
     <color name="lightPrimaryTextColor">@android:color/black</color>
-    <color name="lightIconColor">@android:color/black</color>
+    <color name="defaultLightIconColor">@android:color/black</color>
     <color name="lightRankItemColor">#EEEEEE</color>
     <color name="lightAccentColor">#2196F3</color>
+    <color name="lightIconColorDisabled">#aaaaaa</color>
+    <color name="lightIconColorEnabled">@android:color/black</color>
 
+    <color name="highContrastHighlight">#ff8c00</color>
     <color name="displaySubtextColor">#4CAF50</color>
 </resources>

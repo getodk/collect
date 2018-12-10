@@ -23,10 +23,10 @@ import org.javarosa.core.model.osm.OSMTagItem;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
-import org.opendatakit.httpclientandroidlib.entity.ContentType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -101,7 +101,6 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
         } else {
             launchOpenMapKitButton.setText(getContext().getString(R.string.capture_osm));
         }
-        launchOpenMapKitButton.setEnabled(!prompt.isReadOnly());
 
         osmFileNameHeaderTextView = new TextView(context);
         osmFileNameHeaderTextView.setId(ViewIds.generateViewId());
@@ -133,10 +132,6 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
         answerLayout.addView(osmFileNameTextView);
         addAnswerView(answerLayout);
 
-        // Hide Launch button if read-only
-        if (prompt.isReadOnly()) {
-            launchOpenMapKitButton.setVisibility(View.GONE);
-        }
         errorTextView.setVisibility(View.GONE);
     }
 
@@ -144,7 +139,7 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
         try {
             //launch with intent that sends plain text
             Intent launchIntent = new Intent(Intent.ACTION_SEND);
-            launchIntent.setType(ContentType.TEXT_PLAIN.getMimeType());
+            launchIntent.setType(CollectServerClient.getPlainTextMimeType());
 
             //send form id
             launchIntent.putExtra("FORM_ID", String.valueOf(formId));
@@ -224,9 +219,6 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
     @Override
     public void onButtonClick(int buttonId) {
         launchOpenMapKitButton.setBackgroundColor(OSM_BLUE);
-        Collect.getInstance().getActivityLogger().logInstanceAction(this,
-                "launchOpenMapKitButton",
-                "click", getFormEntryPrompt().getIndex());
         errorTextView.setVisibility(View.GONE);
         launchOpenMapKit();
     }

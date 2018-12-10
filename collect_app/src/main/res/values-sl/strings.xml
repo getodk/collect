@@ -242,6 +242,7 @@
   <string name="ext_search_return_error">Iskalnik je vrnil objekt tipa \'%s\'.</string>
   <string name="ext_import_generic_error">Ne morem uvoziti podatkov iz %1$s. Razlog %2$s</string>
   <string name="ext_import_progress_message">Nalagam podatke iz \'%1$s\'. Počakaj prosim %2$s.</string>
+  <string name="ext_import_cancelled_message">Branje podatkov prekinjeno!</string>
   <string name="ext_import_finalizing_message">Zaključujem prednaložene podatke …</string>
   <string name="ext_import_completed_message">Branje podatkov končano!</string>
   <string name="ext_not_initialized_error">ExternalDataManager ni bil inicializiran.</string>
@@ -277,7 +278,6 @@
   <string name="no_google_account">Google račun ni izbran!</string>
   <string name="google_set_account">Za svoj strežnik ste izbrali Googlove tabele, pred nadaljevanjem prosim izberite ustrezen Google Račun v splošnih nastavitvah</string>
   <string name="media_upload_error">Medijske datoteke %1$s ni bilo mogoče naložiti, ker ne obstaja.</string>
-  <string name="odk_auth_auth_fail">Pri ODK samodejnem pošiljanju ni uspela prijava, prosim preveri nastavitve.</string>
   <string name="odk_auto_note">Rezultati ODK samodejnega pošiljanja</string>
   <string name="odk_auto_download_notification_title">Rezultati ODK samodejnega prenosa</string>
   <string name="notification_error">Napaka pri prikazu obvestila</string>
@@ -293,7 +293,6 @@
   <string name="satellite">Satelit</string>
   <string name="start">Začni</string>
   <string name="enable_gps">Omogoči GPS</string>
-  <string name="enable_gps_message">GPS v napravi je onemogočen. Želite omogočiti?</string>
   <string name="gps_enable_message">GPS v napravi je onemogočen. Želite omogočiti?</string>
   <string name="minutes">Minute</string>
   <string name="geo_clear_warning">Funkcija je že narejena. Želite izbrisati funkcijo?</string>
@@ -374,12 +373,6 @@
   <string name="sms_no_message">Ta obrazec nima nobenega vprašanja s SMS oznako</string>
   <string name="sms_encrypted_message">Šifriranih obrazcev ni moč predložiti kot SMS sporočilo.</string>
   <string name="sms_last_submission_on_date_at_time">\'Zadnji poskus predložitve na\' EEE, MMM dd, yyyy \'ob\' HH:mm</string>
-  <plurals name="sms_sending" tools:ignore="ImpliedQuantity">
-    <item quantity="one">Oddajam obrazec kot eno samo sporočilo. </item>
-    <item quantity="two">Oddajam obrazec, pošiljam sporočilo številka %1$d! od %2$d</item>
-    <item quantity="few">Oddajam obrazec, pošiljam sporočilo številka %1$d! od %2$d</item>
-    <item quantity="other">Oddajam obrazec, pošiljam sporočilo številka %1$d! od %2$d</item>
-  </plurals>
   <string name="sms_sent_on_date_at_time">\'Poslano kot SMS sporočilo na\' EEE, MMM dd, yyyy \'ob\' HH:mm</string>
   <string name="sms_submissions_notif_title">Predložitve preko SMS sporočil</string>
   <string name="sms_submissions_notif_description">Trenutno se oddaja več obrazcev.</string>

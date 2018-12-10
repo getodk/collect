@@ -112,9 +112,6 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
             formController.postProcessInstance();
         }
 
-        Collect.getInstance().getActivityLogger().logInstanceAction(this, "save",
-                Boolean.toString(markCompleted));
-
         // close all open databases of external data.
         Collect.getInstance().getExternalDataManager().close();
 
@@ -363,7 +360,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
         // not we can delete the plaintext media files.
         //
         // Handle the fall-out for a failed "submission.xml" rename
-        // in the InstanceUploader task.  Leftover plaintext media
+        // in the InstanceUploaderTask task.  Leftover plaintext media
         // files are handled during form deletion.
 
         // delete the restore Xml file.

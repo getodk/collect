@@ -35,7 +35,7 @@ import com.google.android.gms.maps.model.TileOverlayOptions;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.osmdroid.tileprovider.IRegisterReceiver;
 import org.osmdroid.tileprovider.tilesource.ITileSource;
@@ -75,7 +75,6 @@ public class MapHelper {
     private static final String OPENMAP_CARTODB_DARKMATTER = "openmap_cartodb_darkmatter";
     private int selectedLayer;
 
-    public static String[] geofileTypes = new String[]{".mbtiles", ".kml", ".kmz"};
     private static final String SLASH = File.separator;
 
     private TilesOverlay osmTileOverlay;
@@ -108,11 +107,11 @@ public class MapHelper {
     }
 
     private static String getGoogleBasemap() {
-        return sharedPreferences.getString(PreferenceKeys.KEY_MAP_BASEMAP, GOOGLE_MAP_STREETS);
+        return sharedPreferences.getString(GeneralKeys.KEY_MAP_BASEMAP, GOOGLE_MAP_STREETS);
     }
 
     private static String getOsmBasemap() {
-        return sharedPreferences.getString(PreferenceKeys.KEY_MAP_BASEMAP, OPENMAP_STREETS);
+        return sharedPreferences.getString(GeneralKeys.KEY_MAP_BASEMAP, OPENMAP_STREETS);
     }
 
     public void setBasemap() {
@@ -138,7 +137,7 @@ public class MapHelper {
 
                     break;
             }
-        } else {
+        } else if (osmMap != null) {
             //OSMMAP
             String basemap = getOsmBasemap();
 
@@ -152,11 +151,11 @@ public class MapHelper {
                 case OPENMAP_USGS_SAT:
                     tileSource = tileFactory.getUsgsSat();
                     break;
-                    
+
                 case OPENMAP_USGS_IMG:
                     tileSource = tileFactory.getUsgsImg();
                     break;
-                    
+
                 case OPENMAP_STAMEN_TERRAIN:
                     tileSource = tileFactory.getStamenTerrain();
                     break;

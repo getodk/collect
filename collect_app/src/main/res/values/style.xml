@@ -7,6 +7,14 @@
         <item name="android:textAppearance">@style/TextAppearance.AppCompat</item>
     </style>
 
+    <style name="CustomImageButtonLight" parent="Widget.AppCompat.ImageButton">
+        <item name="android:tint">@color/light_theme_tint_list</item>
+    </style>
+
+    <style name="CustomImageButtonDark" parent="Widget.AppCompat.ImageButton">
+        <item name="android:tint">@color/dark_theme_tint_list</item>
+    </style>
+
     <style name="emptyViewStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
@@ -37,14 +45,14 @@
 
     <style name="MediaButtonStyle">
         <item name="android:background">#ddd</item>
-        <item name="android:paddingBottom">12px</item>
-        <item name="android:paddingLeft">22px</item>
-        <item name="android:paddingRight">22px</item>
-        <item name="android:paddingTop">12px</item>
-        <item name="android:layout_marginLeft">6px</item>
-        <item name="android:layout_marginTop">0px</item>
-        <item name="android:layout_marginRight">6px</item>
-        <item name="android:layout_marginBottom">0px</item>
+        <item name="android:paddingBottom">5dp</item>
+        <item name="android:paddingLeft">9dp</item>
+        <item name="android:paddingRight">9dp</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:layout_marginLeft">2dp</item>
+        <item name="android:layout_marginTop">0dp</item>
+        <item name="android:layout_marginRight">2dp</item>
+        <item name="android:layout_marginBottom">0dp</item>
     </style>
 
 </resources>

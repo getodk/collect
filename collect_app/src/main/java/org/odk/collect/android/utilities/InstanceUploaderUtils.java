@@ -22,7 +22,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public class InstanceUploaderUtils {
 
@@ -31,17 +31,27 @@ public class InstanceUploaderUtils {
     private InstanceUploaderUtils() {
     }
 
-    public static String getUploadResultMessage(Cursor results, HashMap<String, String> result) {
+
+    /**
+     * Returns a formatted message including submission results for all the filled forms accessible
+     * through instancesProcessed in the following structure:
+     *
+     * Form name 1 - result
+     *
+     * Form name 2 - result
+     */
+    public static String getUploadResultMessage(Cursor instancesProcessed,
+                                                Map<String, String> resultMessagesByInstanceId) {
         StringBuilder queryMessage = new StringBuilder();
         try {
-            if (results != null && results.getCount() > 0) {
-                results.moveToPosition(-1);
-                while (results.moveToNext()) {
+            if (instancesProcessed != null && instancesProcessed.getCount() > 0) {
+                instancesProcessed.moveToPosition(-1);
+                while (instancesProcessed.moveToNext()) {
                     String name =
-                            results.getString(
-                                    results.getColumnIndex(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME));
-                    String id = results.getString(results.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID));
-                    String text = localizeDefaultAggregateSuccessfulText(result.get(id));
+                            instancesProcessed.getString(
+                                    instancesProcessed.getColumnIndex(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME));
+                    String id = instancesProcessed.getString(instancesProcessed.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID));
+                    String text = localizeDefaultAggregateSuccessfulText(resultMessagesByInstanceId.get(id));
                     queryMessage
                             .append(name)
                             .append(" - ")
@@ -50,8 +60,8 @@ public class InstanceUploaderUtils {
                 }
             }
         } finally {
-            if (results != null) {
-                results.close();
+            if (instancesProcessed != null) {
+                instancesProcessed.close();
             }
         }
         return String.valueOf(queryMessage);

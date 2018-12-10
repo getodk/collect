@@ -192,7 +192,6 @@
   <string name="save_point">অবস্থান সংরক্ষণ</string>
   <string name="start">শুরু</string>
   <string name="enable_gps">GPS সক্ষম</string>
-  <string name="enable_gps_message">জিপিএস বার্তা সক্রিয় করা</string>
   <string name="gps_enable_message">জিপিএস বার্তা সক্রিয় করা</string>
   <string name="minutes">মিনিট</string>
   <string name="clear">মুছে ফেলুন।</string>

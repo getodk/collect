@@ -23,7 +23,6 @@
             android:id="@+id/imageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="2px"
             android:scaleType="fitStart"
             android:visibility="gone" />
 
@@ -31,7 +30,7 @@
             android:id="@+id/missingImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="10px"
+            android:padding="4dp"
             android:visibility="gone"
             tools:text="media missing" />
     </LinearLayout>

@@ -22,7 +22,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
 
 import java.util.HashMap;
@@ -30,7 +30,7 @@ import java.util.HashMap;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_EDIT_SAVED;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_COMPLETED_DEFAULT;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_COMPLETED_DEFAULT;
 
 @RunWith(AndroidJUnit4.class)
 public class SharedPreferencesTest {
@@ -38,7 +38,7 @@ public class SharedPreferencesTest {
     @Test
     public void generalDefaultSharedPreferencesTest() {
         GeneralSharedPreferences.getInstance().loadDefaultPreferences();
-        HashMap<String, Object> defaultValues = PreferenceKeys.GENERAL_KEYS;
+        HashMap<String, Object> defaultValues = GeneralKeys.GENERAL_KEYS;
 
         GeneralSharedPreferences generalSharedPreferences = GeneralSharedPreferences.getInstance();
         for (String key : SharedPreferencesUtils.getAllGeneralKeys()) {
@@ -61,7 +61,7 @@ public class SharedPreferencesTest {
         GeneralSharedPreferences.getInstance().save(KEY_COMPLETED_DEFAULT, false);
 
         GeneralSharedPreferences.getInstance().reloadPreferences();
-        HashMap<String, Object> defaultValues = PreferenceKeys.GENERAL_KEYS;
+        HashMap<String, Object> defaultValues = GeneralKeys.GENERAL_KEYS;
 
         GeneralSharedPreferences generalSharedPreferences = GeneralSharedPreferences.getInstance();
         for (String key : SharedPreferencesUtils.getAllGeneralKeys()) {

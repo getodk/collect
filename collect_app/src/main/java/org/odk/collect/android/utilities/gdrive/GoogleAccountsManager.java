@@ -16,16 +16,13 @@ package org.odk.collect.android.utilities.gdrive;
 
 import android.accounts.Account;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.http.HttpTransport;
@@ -34,32 +31,32 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.drive.DriveScopes;
 
+import org.odk.collect.android.R;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.preferences.ServerPreferencesFragment;
 import org.odk.collect.android.utilities.ThemeUtils;
 
 import java.util.Collections;
 
-import timber.log.Timber;
-
+import static org.odk.collect.android.utilities.DialogUtils.showDialog;
 import static org.odk.collect.android.utilities.PermissionUtils.requestGetAccountsPermission;
 
-public class GoogleAccountsManager implements GoogleApiClient.OnConnectionFailedListener {
-
+public class GoogleAccountsManager {
     public static final int REQUEST_ACCOUNT_PICKER = 1000;
-    private static final int RESOLVE_CONNECTION_REQUEST_CODE = 5555;
+    public static final int REQUEST_AUTHORIZATION = 1001;
 
     @Nullable
     private Fragment fragment;
     @Nullable
     private Activity activity;
     @Nullable
-    private GoogleAccountSelectionListener listener;
-    @Nullable
     private HttpTransport transport;
     @Nullable
     private JsonFactory jsonFactory;
+    @Nullable
+    private GoogleAccountSelectionListener listener;
 
     private Intent intentChooseAccount;
     private Context context;
@@ -91,11 +88,16 @@ public class GoogleAccountsManager implements GoogleApiClient.OnConnectionFailed
     public GoogleAccountsManager(@NonNull GoogleAccountCredential credential,
                                  @NonNull GeneralSharedPreferences preferences,
                                  @NonNull Intent intentChooseAccount,
-                                 @NonNull ThemeUtils themeUtils) {
+                                 @NonNull ThemeUtils themeUtils,
+                                 @NonNull Activity activity,
+                                 @NonNull Fragment fragment
+    ) {
         this.credential = credential;
         this.preferences = preferences;
         this.intentChooseAccount = intentChooseAccount;
         this.themeUtils = themeUtils;
+        this.fragment = fragment;
+        this.activity = activity;
     }
 
     private void initCredential(@NonNull Context context) {
@@ -115,7 +117,7 @@ public class GoogleAccountsManager implements GoogleApiClient.OnConnectionFailed
 
     public void setSelectedAccountName(String accountName) {
         if (accountName != null) {
-            preferences.save(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT, accountName);
+            preferences.save(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT, accountName);
             selectAccount(accountName);
         }
     }
@@ -132,8 +134,6 @@ public class GoogleAccountsManager implements GoogleApiClient.OnConnectionFailed
                 public void denied() {
                 }
             });
-        } else {
-            chooseAccount();
         }
     }
 
@@ -142,12 +142,52 @@ public class GoogleAccountsManager implements GoogleApiClient.OnConnectionFailed
         if (autoChooseAccount && !accountName.isEmpty()) {
             selectAccount(accountName);
         } else {
-            showAccountPickerDialog();
+            if (fragment != null && fragment instanceof ServerPreferencesFragment) {
+                showAccountPickerDialog();
+            } else {
+                showSettingsDialog();
+            }
         }
     }
 
+    @NonNull
     public String getSelectedAccount() {
-        return (String) preferences.get(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
+        Account[] googleAccounts = credential.getAllAccounts();
+        String account = (String) preferences.get(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
+
+        if (googleAccounts != null && googleAccounts.length > 0) {
+            for (Account googleAccount : googleAccounts) {
+                if (googleAccount.name.equals(account)) {
+                    return account;
+                }
+            }
+
+            preferences.reset(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
+        }
+
+        return "";
+    }
+
+    private void showSettingsDialog() {
+        AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
+                .setIcon(android.R.drawable.ic_dialog_info)
+                .setTitle(R.string.missing_google_account_dialog_title)
+                .setMessage(R.string.missing_google_account_dialog_desc)
+                .setOnCancelListener(dialog -> {
+                    dialog.dismiss();
+                    if (activity != null) {
+                        activity.finish();
+                    }
+                })
+                .setPositiveButton(context.getString(R.string.ok), (dialog, which) -> {
+                    dialog.dismiss();
+                    if (activity != null) {
+                        activity.finish();
+                    }
+                })
+                .create();
+
+        showDialog(alertDialog, getActivity());
     }
 
     public void showAccountPickerDialog() {
@@ -158,8 +198,6 @@ public class GoogleAccountsManager implements GoogleApiClient.OnConnectionFailed
 
         if (fragment != null) {
             fragment.startActivityForResult(intentChooseAccount, REQUEST_ACCOUNT_PICKER);
-        } else if (activity != null) {
-            activity.startActivityForResult(intentChooseAccount, REQUEST_ACCOUNT_PICKER);
         }
     }
 
@@ -170,9 +208,9 @@ public class GoogleAccountsManager implements GoogleApiClient.OnConnectionFailed
         }
     }
 
-    public Account getAccountPickerCurrentAccount() {
+    private Account getAccountPickerCurrentAccount() {
         String selectedAccountName = getSelectedAccount();
-        if (selectedAccountName == null || selectedAccountName.isEmpty()) {
+        if (selectedAccountName.isEmpty()) {
             Account[] googleAccounts = credential.getAllAccounts();
             if (googleAccounts != null && googleAccounts.length > 0) {
                 selectedAccountName = googleAccounts[0].name;
@@ -185,19 +223,6 @@ public class GoogleAccountsManager implements GoogleApiClient.OnConnectionFailed
 
     public boolean isGoogleAccountSelected() {
         return credential.getSelectedAccountName() != null;
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        if (connectionResult.hasResolution()) {
-            try {
-                connectionResult.startResolutionForResult(activity, RESOLVE_CONNECTION_REQUEST_CODE);
-            } catch (IntentSender.SendIntentException e) {
-                Timber.e(e);
-            }
-        } else {
-            GooglePlayServicesUtil.getErrorDialog(connectionResult.getErrorCode(), activity, 0).show();
-        }
     }
 
     public DriveHelper getDriveHelper() {

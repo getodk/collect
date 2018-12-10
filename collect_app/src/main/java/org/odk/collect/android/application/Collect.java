@@ -40,7 +40,6 @@ import net.danlew.android.joda.JodaTimeAndroid;
 
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
-import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.injection.config.AppComponent;
 import org.odk.collect.android.injection.config.DaggerAppComponent;
@@ -51,15 +50,12 @@ import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.FormMetadataMigrator;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.utilities.AuthDialogUtility;
+import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
+import org.odk.collect.android.utilities.NotificationUtils;
 import org.odk.collect.android.utilities.PRNGFixes;
-import org.opendatakit.httpclientandroidlib.client.CookieStore;
-import org.opendatakit.httpclientandroidlib.client.CredentialsProvider;
-import org.opendatakit.httpclientandroidlib.client.protocol.HttpClientContext;
-import org.opendatakit.httpclientandroidlib.protocol.BasicHttpContext;
-import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.util.Locale;
 
@@ -71,9 +67,9 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.logic.PropertyManager.PROPMGR_USERNAME;
 import static org.odk.collect.android.logic.PropertyManager.SCHEME_USERNAME;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_APP_LANGUAGE;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FONT_SIZE;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_APP_LANGUAGE;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_FONT_SIZE;
+import static org.odk.collect.android.preferences.GeneralKeys.KEY_USERNAME;
 
 /**
  * The Open Data Kit Collect application.
@@ -91,22 +87,17 @@ public class Collect extends Application implements HasActivityInjector {
     public static final String METADATA_PATH = ODK_ROOT + File.separator + "metadata";
     public static final String TMPFILE_PATH = CACHE_PATH + File.separator + "tmp.jpg";
     public static final String TMPDRAWFILE_PATH = CACHE_PATH + File.separator + "tmpDraw.jpg";
-    public static final String LOG_PATH = ODK_ROOT + File.separator + "log";
     public static final String DEFAULT_FONTSIZE = "21";
     public static final int DEFAULT_FONTSIZE_INT = 21;
     public static final String OFFLINE_LAYERS = ODK_ROOT + File.separator + "layers";
     public static final String SETTINGS = ODK_ROOT + File.separator + "settings";
 
+    public static final int CLICK_DEBOUNCE_MS = 1000;
+
     public static String defaultSysLanguage;
     private static Collect singleton;
     private static long lastClickTime;
-
-    @Inject
-    protected CookieStore cookieStore;
-    @Inject
-    protected CredentialsProvider credsProvider;
-
-    private ActivityLogger activityLogger;
+    private static String lastClickName;
 
     @Nullable
     private FormController formController;
@@ -186,10 +177,6 @@ public class Collect extends Application implements HasActivityInjector {
         return false;
     }
 
-    public ActivityLogger getActivityLogger() {
-        return activityLogger;
-    }
-
     @Nullable
     public FormController getFormController() {
         return formController;
@@ -230,30 +217,6 @@ public class Collect extends Application implements HasActivityInjector {
         MultiDex.install(this);
     }
 
-    /**
-     * Construct and return a session context with shared cookieStore and credsProvider so a user
-     * does not have to re-enter login information.
-     */
-    public synchronized HttpContext getHttpContext() {
-
-        // context holds authentication state machine, so it cannot be
-        // shared across independent activities.
-        HttpContext localContext = new BasicHttpContext();
-
-        localContext.setAttribute(HttpClientContext.COOKIE_STORE, cookieStore);
-        localContext.setAttribute(HttpClientContext.CREDS_PROVIDER, credsProvider);
-
-        return localContext;
-    }
-
-    public CredentialsProvider getCredentialsProvider() {
-        return credsProvider;
-    }
-
-    public CookieStore getCookieStore() {
-        return cookieStore;
-    }
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -264,6 +227,8 @@ public class Collect extends Application implements HasActivityInjector {
                 .build();
 
         applicationComponent.inject(this);
+
+        NotificationUtils.createNotificationChannel(singleton);
 
         try {
             JobManager
@@ -287,7 +252,6 @@ public class Collect extends Application implements HasActivityInjector {
 
         initProperties();
 
-        AuthDialogUtility.setWebCredentialsFromPreferences();
         if (BuildConfig.BUILD_TYPE.equals("odkCollectRelease")) {
             Timber.plant(new CrashReportingTree());
         } else {
@@ -353,7 +317,6 @@ public class Collect extends Application implements HasActivityInjector {
         }
 
         FormController.initializeJavaRosa(mgr);
-        activityLogger = new ActivityLogger(mgr.getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID));
     }
 
     // This method reloads shared preferences in order to load default values for new preferences
@@ -362,13 +325,16 @@ public class Collect extends Application implements HasActivityInjector {
         AdminSharedPreferences.getInstance().reloadPreferences();
     }
 
-    // Preventing multiple clicks, using threshold of 1000 ms
-    public static boolean allowClick() {
+    // Debounce multiple clicks within the same screen
+    public static boolean allowClick(String className) {
         long elapsedRealtime = SystemClock.elapsedRealtime();
-        boolean allowClick = (lastClickTime == 0 || lastClickTime == elapsedRealtime) // just for tests
-                || elapsedRealtime - lastClickTime > 1000;
+        boolean isSameClass = className.equals(lastClickName);
+        boolean isBeyondThreshold = elapsedRealtime - lastClickTime > CLICK_DEBOUNCE_MS;
+        boolean isBeyondTestThreshold = lastClickTime == 0 || lastClickTime == elapsedRealtime; // just for tests
+        boolean allowClick = !isSameClass || isBeyondThreshold || isBeyondTestThreshold;
         if (allowClick) {
             lastClickTime = elapsedRealtime;
+            lastClickName = className;
         }
         return allowClick;
     }
@@ -379,6 +345,26 @@ public class Collect extends Application implements HasActivityInjector {
 
     public void setComponent(AppComponent applicationComponent) {
         this.applicationComponent = applicationComponent;
+    }
+
+    /**
+     * Gets a unique, privacy-preserving identifier for the current form.
+     *
+     * @return md5 hash of the form title, a space, the form ID
+     */
+    public static String getCurrentFormIdentifierHash() {
+        String formIdentifier = "";
+        FormController formController = getInstance().getFormController();
+        if (formController != null) {
+            if (formController.getFormDef() != null) {
+                String formID = formController.getFormDef().getMainInstance()
+                        .getRoot().getAttributeValue("", "id");
+                formIdentifier = formController.getFormTitle() + " " + formID;
+            }
+        }
+
+        return FileUtils.getMd5Hash(
+                new ByteArrayInputStream(formIdentifier.getBytes()));
     }
 
     @Override

@@ -251,7 +251,6 @@
   <string name="drive_get_file">Duke ngarkuar %1$s dhe file-t media.</string>
   <string name="no_google_account">Nuk keni përzgjedhur një llogari në Google!</string>
   <string name="google_set_account">Keni përzgjedhur Google Sheets si server, lutemi, zjidhni një llogari në  Google në parametrat e përgjithshëm përpara se të vazhdoni.</string>
-  <string name="odk_auth_auth_fail">Autentikimi i dërgimit automatik të ODK dështoi, lutemi sigurohuni që parametrat janë të saktë.</string>
   <string name="notification_error">Gabim në shfaqjen e tekstit të njoftimit</string>
   <string name="delete_after_send">Fshi formularët pasi të nisen</string>
   <string name="delete_after_send_summary">Fshi formularët e finalizuar dhe mediat pasi të jenë ngarkuar në server</string>
@@ -283,7 +282,6 @@
   <string name="select_geotrace_mode">Përzgjidh mënyrën GeoTrace</string>
   <string name="start">Fillo</string>
   <string name="enable_gps">Aktivizo GPS-in</string>
-  <string name="enable_gps_message">GPS-i në telefonin tuaj është i ç\'aktivizuar. A do të donit ta aktivizonit?</string>
   <string name="geotrace_title">GeoTrace</string>
   <string name="polygon_save">Ruaj si Poligon</string>
   <string name="polyline_save">Ruaj si Polyline</string>
@@ -295,7 +293,6 @@
   <string name="geo_exit_warning">Elimino ndryshimet dhe kthehu në ODK?</string>
   <string name="polygon_validator">Duhen së paku 3 pika për të krijuar Poligonin</string>
   <string name="clear">Pastro</string>
-  <string name="polyline_polygon_text">Ruaj GeoTrace si</string>
   <string name="manual_mode">Manuale</string>
   <string name="automatic_mode">Automatike</string>
   <string name="geoshape_instruction">Shtyp për pak sekonda për të vendosur shenjë.</string>

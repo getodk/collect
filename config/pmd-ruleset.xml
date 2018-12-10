@@ -40,7 +40,6 @@
         <exclude name="CommentDefaultAccessModifier" />
         <exclude name="ConfusingTernary" />
         <exclude name="DefaultPackage" />
-        <exclude name="EmptyMethodInAbstractClassShouldBeAbstract" />
         <exclude name="FieldDeclarationsShouldBeAtStartOfClass" />
         <exclude name="LongVariable" />
         <exclude name="LocalVariableCouldBeFinal" />
@@ -129,7 +128,7 @@
         <exclude name="InsufficientStringBufferDeclaration" />
         <exclude name="OptimizableToArrayCall" />
         <exclude name="SimplifyStartsWith" />
-        <exclude name="TooFewBranchesForASwitchStatement" />
+        <exclude name="TooFewBranchesForASwitchStatement" /> <!-- Decided not to use in #2564 -->
         <exclude name="UseStringBufferForStringAppends" />
     </rule>
 </ruleset>

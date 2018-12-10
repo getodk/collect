@@ -303,7 +303,6 @@
   <string name="select_geotrace_mode">Wybierz Tryb GeoTrace</string>
   <string name="start">Zacznij</string>
   <string name="enable_gps">Włącz GPS</string>
-  <string name="enable_gps_message">GPS jest jest wyłączony na twoim urządzeniu. Czy chciałbyś go włączyć?</string>
   <string name="geotrace_title">GeoTrace</string>
   <string name="polygon_save">Zapisz jako wielokąt</string>
   <string name="polyline_save">Zapis jako łamana</string>
@@ -315,7 +314,6 @@
   <string name="geo_exit_warning">Usunąć zmiany i wrócić do ODK?</string>
   <string name="polygon_validator">Wymagane są przynajmniej 3 punkty aby utworzyć wielokąt</string>
   <string name="clear">Wyczyść</string>
-  <string name="polyline_polygon_text">Zapisz GeoTrace Jako</string>
   <string name="manual_mode">Tryb Ręczny</string>
   <string name="automatic_mode">Tryb Automatyczny</string>
   <string name="geoshape_instruction">Długo naciśnij aby umieścić znacznik.</string>

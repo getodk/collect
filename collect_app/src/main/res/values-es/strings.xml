@@ -31,7 +31,7 @@
   <string name="clear_answer">Borrar respuesta</string>
   <string name="clear_answer_ask">¿Borrar esta respuesta?</string>
   <string name="clear_answer_no">Cancelar</string>
-  <string name="data">F. CON DATOS</string>
+  <string name="data">F. LLENOS</string>
   <string name="data_saved_error">¡Atención, el formulario no se ha guardado correctamente!</string>
   <string name="data_saved_ok">Formulario guardado correctamente</string>
   <string name="save_point_error">Error al guardar punto de recuperación: %s</string>
@@ -62,11 +62,11 @@
   <string name="fetching_file">Obteniendo %1$s.\n\nFormulario %2$s de %3$s formulario(s).</string>
   <string name="file_deleted_error">¡%1$s de %2$s formulario(s) seleccionados no se borraron!</string>
   <string name="file_deleted_ok">¡%s formulario(s) se borraron correctamente!</string>
-  <string name="file_delete_in_progress">¡disculpe, una acción de borrar esta todavía en progreso!</string>
+  <string name="file_delete_in_progress">¡Disculpe, una acción de borrar esta todavía en progreso!</string>
   <string name="file_invalid">Archivo: %s es invalido.</string>
   <string name="file_missing">Archivo: %s falta.</string>
   <string name="finished_disk_scan">Exploración finalizada. Todos los formularios cargados.</string>
-  <string name="forms">F. EN BLANCO</string>
+  <string name="forms">F. VACIOS</string>
   <string name="getting_location">Cargando la Ubicación</string>
   <string name="get_barcode">Escanear Codigo de Barras</string>
   <string name="get_forms">Obtener Formulario en Blanco</string>
@@ -224,8 +224,8 @@
   <string name="buttons_navigation">Use los botones adelante/atrás</string>
   <string name="swipe_buttons_navigation">Use deslizar y botones</string>
   <string name="launch_printer">Iniciar Impresión</string>
-  <string name="no_printer">La impresora solicitado no está instalado. Por favor, instale la impresora.</string>
-  <string name="constraint_behavior">Comportamiento del proceso de restricciones</string>
+  <string name="no_printer">La impresora solicitado no está instalada. Por favor, instale la impresora.</string>
+  <string name="constraint_behavior">Manejo de las restricciones</string>
   <string name="constraint_behavior_on_swipe">Validar al desplazar hacia delante.</string>
   <string name="constraint_behavior_on_finalize">Postponer validación hasta el final</string>
   <string name="view_change_location">Ver o cambiar de localización</string>
@@ -263,10 +263,10 @@
   <string name="survey_loading_reading_csv_message">Leyendo archivos CSV…</string>
   <string name="survey_saving_validating_message">Validando respuestas…</string>
   <string name="survey_saving_collecting_message">Colectando datos…</string>
-  <string name="survey_saving_saving_message">Salvando en tarjeta SD </string>
+  <string name="survey_saving_saving_message">Guardando en tarjeta SD </string>
   <string name="survey_saving_finalizing_message">FInalizando en tarjeta SD</string>
   <string name="survey_saving_encrypting_message">Encriptando datos…</string>
-  <string name="high_resolution_summary">Activa grabación de vídeos en HD</string>
+  <string name="high_resolution_summary">Grabar vídeos en HD</string>
   <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">Mi Drive</string>
@@ -283,7 +283,7 @@
   <string name="no_google_account">!Cuenta Google no Seleccionada¡</string>
   <string name="google_set_account">Ha seleccionado Google Sheets como servidor, por favor, seleccionar la correspondiente cuenta Google en Características Generales antes de continuar</string>
   <string name="media_upload_error">Falla en subida de archivo multimedia. No existe: %1$s</string>
-  <string name="odk_auth_auth_fail">Falla de autenticación en envío automático. Favor verificar sus ajustes en servidor</string>
+  <string name="odk_permissions_fail">Falla en permiso de auto envío. Asegúrese de haber otorgado todos los permisos requeridos. </string>
   <string name="odk_auto_note">ODK resultados de auto-envío</string>
   <string name="odk_auto_download_notification_title">ODK resultados de auto-descarga</string>
   <string name="notification_error">Error al mostrar texto de la notificación</string>
@@ -292,9 +292,10 @@
   <string name="change_server_url">URL del Servidor</string>
   <string name="google_search_browse">Busca en formularios. O selecciona  \'My Drive\' debajo para visualizar.</string>
   <string name="google_sheets_url">URL alterno para envío</string>
-  <string name="send_in_progress">Envio funcionando, reintentar en breve</string>
+  <string name="send_in_progress">Otro envío funcionando, reintentar en breve</string>
   <string name="sheets_max_columns">Máximo de columnas = 255, su formulario tiene %s. No se puede subir la hoja.</string>
   <string name="invalid_sheet_id">id de hoja inválido:  %1$s</string>
+  <string name="missing_submission_url">Falta URL para envío </string>
   <string name="google_sheets_access_denied">Acceso denegado. Por favor, asegúrese de que el propietario de la hoja de cálculo le ha concedido permisos de edición.</string>
   <string name="google_sheets_missing_columns">Faltan las siguientes columnas de la hoja: %1$s</string>
   <string name="password_error_whitespace">Espacios delante o detras no permitidos en claves</string>
@@ -334,11 +335,10 @@
   <string name="select_geotrace_mode">Seleccione modo GeoLínea</string>
   <string name="start">Iniciar</string>
   <string name="enable_gps">Activar el GPS</string>
-  <string name="enable_gps_message">El GPS esta deshabilitado en su dispositivo. ¿Activar?</string>
   <string name="geotrace_title">GeoLínea</string>
   <string name="polygon_save">Guardar como polígono</string>
-  <string name="polyline_save">Guardar como polilínea</string>
-  <string name="gps_enable_message">El GPS esta deshabilitado en su dispositivo. ¿Le gustaría activarlo?</string>
+  <string name="polyline_save">Guardar como Polilínea</string>
+  <string name="gps_enable_message">GPS esta deshabilitado. ¿Activar?</string>
   <string name="select_offline_layer">Seleccione la capa sin conexión</string>
   <string name="polygon_or_polyline">Guardar GeoLínea como</string>
   <string name="minutes">Minutos</string>
@@ -347,7 +347,6 @@
   <string name="polygon_validator">Debe tener al menos 3 puntos para crear un polígono</string>
   <string name="polyline_validator">Deben existir al menos 2 puntos para crear una Polilínea</string>
   <string name="clear">Limpiar</string>
-  <string name="polyline_polygon_text">Guardar GeoLínea como</string>
   <string name="manual_mode">Modo Manual</string>
   <string name="automatic_mode">Modo Automático </string>
   <string name="geoshape_instruction">Mantenga presionado para colocar marcas.</string>
@@ -498,7 +497,7 @@
   <string name="cellular_autosend">Solo con Datos Móviles</string>
   <string name="wifi_cellular_autosend">Wifi o Datos Móviles</string>
   <string name="map_basemap_behavior_title">Mapa Base</string>
-  <string name="form_management_preferences">Gestión de formulario</string>
+  <string name="form_management_preferences">Manejo de formularios</string>
   <string name="form_submission_category">Enviar formulario</string>
   <string name="form_filling_category">Llenado de Formularios</string>
   <string name="high_resolution_title">Video de alta resolución</string>
@@ -507,7 +506,7 @@
   <string name="user_and_device_identity_title">Metadatos del formulario</string>
   <string name="constraint_behavior_title">Manejo de restricciones</string>
   <string name="show_splash_title">Imagen inicial en pantalla</string>
-  <string name="server_settings_title">Servidor</string>
+  <string name="server_settings_title">Servidor - Usuario</string>
   <string name="type">Tipo</string>
   <string name="form_entry">Desmarque para ocultar el formulario</string>
   <string name="use_device_language">Usar el idioma del dispositivo</string>
@@ -591,6 +590,12 @@
   <string name="camera_runtime_permission_denied_desc">Sin este permiso la aplicación no puede acceder a la cámara. Intente de nuevo cuando esté el permiso.</string>
   <string name="record_audio_runtime_permission_denied_title">Permiso de Grabación de Audio</string>
   <string name="record_audio_runtime_permission_denied_desc">Sin este permiso la aplicación no puede acceder al micrófono. Intente de nuevo cuando esté el permiso.</string>
+  <string name="get_accounts_runtime_permission_denied_title">Obtener permiso de la cuenta</string>
+  <string name="get_accounts_runtime_permission_denied_desc">Sin los permisos no se puede acceder las cuentas. Intente de nuevo cuando haya otorgado los permisos.</string>
+  <string name="send_sms_runtime_permission_denied_title">Enviar permiso SMS</string>
+  <string name="send_sms_runtime_permission_denied_desc">Sin los permisos no se puede enviar SMS. Intente de nuevo cuando haya otorgado los permisos.</string>
+  <string name="read_phone_state_runtime_permission_denied_title">Lea el permiso del estado del teléfono</string>
+  <string name="read_phone_state_runtime_permission_denied_desc">La aplicación  no hace llamadas pero necesita acceso a ciertas propiedades del teléfono como el número telefónico y el IMEI.</string>
   <string name="form_update_category">Actualizar Formulario</string>
   <string name="periodic_form_updates_check_title">Buscar actualizaciones de formularios</string>
   <string name="never">Nunca</string>
@@ -623,8 +628,8 @@
   <string name="sms_encrypted_message">Formularios encriptados no pueden ser enviados vía SMS</string>
   <string name="sms_last_submission_on_date_at_time">\'Ultimo intento de envío a\' EEE, MMM dd, yyyy \' \' HH:mm</string>
   <plurals name="sms_sending">
-    <item quantity="one">Formulario enviado como un sólo mensaje</item>
-    <item quantity="other">Enviando formulario, trasmitiendo mensaje %1$d! de %2$d</item>
+    <item quantity="one">Submitting form as a single message.</item>
+    <item quantity="other">Enviando formulario, enviando mensaje %1$d de %2$d</item>
   </plurals>
   <string name="sms_sent_on_date_at_time">\'Enviado como SMS en\' EEE, MMM dd, yyyy \' \' HH:mm</string>
   <string name="sms_submission_queued">En cola para envío</string>
@@ -635,6 +640,9 @@
   <string name="transport_type_both">Seleccionar al Enviar</string>
   <string name="seconds">Segundos</string>
   <string name="rank_items">Ranking de Items</string>
-  <string name="image_not_saved">La imagen no se puede guardar debido a un problema con el archivo de instancia correspondiente.</string>
   <string name="loading_form_failed">Ocurrió un error al cargar el formulario. Por favor intente de nuevo.</string>
+  <string name="missing_google_account_dialog_title">No se ha definido una cuenta de Google</string>
+  <string name="missing_google_account_dialog_desc">Para enviar formularios vía Google Sheets debe definir una cuenta de Google en ajustes de servidor.</string>
+  <string name="sms_invalid_phone_number_description">Especifique un número telefónico para el envío de SMS o cambie el tipo de transporte</string>
+  <string name="notification_channel_name">Notificaciones generales</string>
 </resources>

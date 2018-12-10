@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.activities;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -30,7 +31,6 @@ import android.view.Window;
 import com.google.android.gms.location.LocationListener;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.location.client.LocationClient;
 import org.odk.collect.android.location.client.LocationClients;
 import org.odk.collect.android.utilities.GeoPointUtils;
@@ -113,8 +113,6 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
     protected void onStart() {
         super.onStart();
         locationClient.start();
-
-        Collect.getInstance().getActivityLogger().logOnStart(this);
     }
 
     @Override
@@ -146,8 +144,6 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
     @Override
     protected void onStop() {
         locationClient.stop();
-
-        Collect.getInstance().getActivityLogger().logOnStop(this);
         super.onStop();
     }
 
@@ -160,6 +156,7 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
 
     // LocationClientListener:
 
+    @SuppressLint("MissingPermission") // Checking Permissions handled in constructor
     @Override
     public void onClientStart() {
         locationClient.requestLocationUpdates(this);
@@ -192,8 +189,6 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
      */
     @SuppressWarnings("deprecation")
     private void setupLocationDialog() {
-        Collect.getInstance().getActivityLogger().logInstanceAction(this, "setupLocationDialog",
-                "show");
         // dialog displayed while fetching gps location
         locationDialog = new ProgressDialog(this);
 
@@ -209,13 +204,9 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case DialogInterface.BUTTON_POSITIVE:
-                                Collect.getInstance().getActivityLogger().logInstanceAction(this,
-                                        "acceptLocation", "OK");
                                 returnLocation();
                                 break;
                             case DialogInterface.BUTTON_NEGATIVE:
-                                Collect.getInstance().getActivityLogger().logInstanceAction(this,
-                                        "cancelLocation", "cancel");
                                 location = null;
                                 finish();
                                 break;
@@ -288,6 +279,7 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
     }
 
     @Override
+    @SuppressLint("MissingPermission")
     public void onGpsStatusChanged(int event) {
         if (event == GpsStatus.GPS_EVENT_SATELLITE_STATUS) {
             LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);

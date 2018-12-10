@@ -33,6 +33,9 @@ ODK Collect renders forms that are compliant with the [ODK XForms standard](http
 ## Release cycle
 New versions of ODK Collect are generally released on the last Sunday of a month. We freeze commits to the master branch on the preceding Wednesday (except for bug fixes). Releases can be requested by any community member and generally happen every 2 months. [@yanokwa](https://github.com/yanokwa) pushes the releases to the Play Store.
 
+## Suggesting new features
+We try to make sure that all issues in the issue tracker are as close to fully specified as possible so that they can be closed by a pull request. Feature suggestions should be described [in the forum Features category](https://forum.opendatakit.org/c/features) and discussed by the broader user community. Once there is a clear way forward, issues should be filed on the relevant repositories. More controversial features will be discussed as part of the Technical Steering Committee's [roadmapping process](https://github.com/opendatakit/governance/tree/master/TSC1#roadmapping).
+
 ## Setting up your development environment
 
 1. Download and install [Git](https://git-scm.com/downloads) and add it to your PATH
@@ -45,9 +48,22 @@ New versions of ODK Collect are generally released on the last Sunday of a month
 
         git clone https://github.com/YOUR-GITHUB-USERNAME/collect
 
- If you prefer not to use the command line, you can use Android Studio to create a new project from version control using `https://github.com/YOUR-GITHUB-USERNAME/collect`. 
+    If you prefer not to use the command line, you can use Android Studio to create a new project from version control using `https://github.com/YOUR-GITHUB-USERNAME/collect`.
 
-1. Open the project in the folder of your clone from Android Studio. To run the project, click on the green arrow at the top of the screen. The emulator is very slow so we generally recommend using a physical device when possible.
+1. Open the project in the folder of your clone from Android Studio. To run the project, click on the green arrow at the top of the screen.
+
+1. Make sure you can run unit tests by running everything under `collect_app/src/test/java` in Android Studio or on the command line:
+
+    ```
+    ./gradlew testDebug
+    ```
+
+1. Make sure you can run instrumented tests by running everything under `collect_app/src/androidTest/java` in Android Studio or on the command line:
+
+    ```
+    ./gradlew connectedAndroidTest
+    ```
+    **Note:** You can see the emulator setup used on CI in  `.circleci/config.yml`.
 
 ## Testing a form without a server
 When you first run Collect, it is set to download forms from [https://opendatakit.appspot.com/](https://opendatakit.appspot.com/), the demo server. You can sometimes verify your changes with those forms but it can also be helpful to put a specific test form on your device. Here are some options for that:
@@ -65,11 +81,11 @@ When you first run Collect, it is set to download forms from [https://opendataki
 
 ## Using APIs for local development
 
-To run functionality that makes API calls from your debug-signed builds, you may need to get an API key or otherwise authorize your app.
+To run functionality that makes API calls from your debug-signed builds, you may need to get an API key or otherwise authorize your app. The API keys included in the source code are the ones used for releases and they only work with release builds signed with the release keys.
 
 **Google Drive and Sheets APIs** - Follow the instructions in the "Generate the signing certificate fingerprint and register your application" section from [here](https://developers.google.com/drive/android/auth). Enable the Google Drive API [here](https://console.developers.google.com/apis/api/drive/). Enable the Google Sheets API [here](https://console.developers.google.com/apis/api/sheets.googleapis.com).
 
-**Google Maps API** - Follow the instructions [here](https://developers.google.com/maps/documentation/android-api/signup) and paste your key in the `AndroidManifest` as the value for `com.google.android.geo.API_KEY`. Please be sure not to commit your personal API key to a branch that you will submit a pull request for.
+**Google Maps API** - Getting a Google Maps API key now requires providing a credit card number. As of October 2018, there is some free API usage provided and the card will not be charged without explicit user approval. You should carefully read the terms before providing a credit card number. Once you have created a billing account, follow the instructions [here](https://developers.google.com/maps/documentation/android-api/signup) and paste your key in the `AndroidManifest` as the value for `com.google.android.geo.API_KEY`. Please be sure not to commit your personal API key to a branch that you will submit a pull request for.
 
 
 ## Debugging JavaRosa
@@ -106,7 +122,7 @@ implementation (project(path: ':javarosa-master')) {
 	```gradle
 	compile files('/path/to/javarosa/build/libs/opendatakit-javarosa-x.y.z-SNAPSHOT.jar')
 	```
- 
+
 ## Contributing code
 Any and all contributions to the project are welcome. ODK Collect is used across the world primarily by organizations with a social purpose so you can have real impact!
 
@@ -158,7 +174,10 @@ RELEASE_STORE_PASSWORD=secure-store-password
 RELEASE_KEY_ALIAS=key-alias
 RELEASE_KEY_PASSWORD=secure-alias-password
 ```
-To generate official signed releases, you'll need the keystore file, the keystore passwords, a configured `secrets.properties` file, and then run `./gradlew assembleRelease`. If successful, a signed release will be at `collect_app/build/outputs/apk`.
+
+Maintainers also have a `google-services.json` file in the `collect_app/src/odkCollectRelease` folder. The contents of the file are similar to the contents of `collect_app/src/google-services.json`.
+
+To generate official signed releases, you'll need the keystore file, the keystore passwords, a configured `collect_app/secrets.properties` file, and a configured `collect_app/src/odkCollectRelease/google-services.json` file. Then run `./gradlew assembleOdkCollectRelease`. If successful, a signed release will be at `collect_app/build/outputs/apk`.
 
 ## Troubleshooting
 
@@ -198,3 +217,8 @@ You may have a mismatch between the embedded Android SDK Java and the JDK instal
 `
 
 Note that this change might cause problems with other Java-based applications (e.g., if you uninstall Android Studio).
+
+#### gradlew Failure: `java.lang.NullPointerException (no error message).`
+If you encounter the `java.lang.NullPointerException (no error message).` when running `gradlew`, please make sure your Java version for this project is Java 8.
+
+This can be configured under **File > Project Structure** in Android Studio, or by editing `$USER_HOME/.gradle/gradle.properties` to set `org.gradle.java.home=(path to JDK home)` for command-line use.

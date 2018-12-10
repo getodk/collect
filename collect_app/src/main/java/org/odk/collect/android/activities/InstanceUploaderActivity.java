@@ -17,7 +17,6 @@ package org.odk.collect.android.activities;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -26,11 +25,13 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.fragments.dialogs.SimpleDialog;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
+import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.tasks.InstanceServerUploader;
+import org.odk.collect.android.tasks.InstanceServerUploaderTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ArrayUtils;
 import org.odk.collect.android.utilities.AuthDialogUtility;
+import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
 
 import java.util.ArrayList;
@@ -40,6 +41,8 @@ import java.util.Iterator;
 import java.util.Set;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.utilities.PermissionUtils.requestStoragePermissions;
 
 /**
  * Activity to upload completed forms.
@@ -55,31 +58,61 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
     private static final String ALERT_MSG = "alertmsg";
     private static final String TO_SEND = "tosend";
 
+    private static final boolean EXIT = true;
+
     private ProgressDialog progressDialog;
 
     private String alertMsg;
 
-    private InstanceServerUploader instanceServerUploader;
+    private InstanceServerUploaderTask instanceServerUploaderTask;
 
     // maintain a list of what we've yet to send, in case we're interrupted by auth requests
     private Long[] instancesToSend;
 
-    // maintain a list of what we've sent, in case we're interrupted by auth requests
-    private HashMap<String, String> uploadedInstances;
+    // URL specified when authentication is requested or specified from intent extra as override
     private String url;
+
+    // Set from intent extras
+    private String username;
+    private String password;
+    private Boolean deleteInstanceAfterUpload;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Timber.i("onCreate: %s", savedInstanceState == null ? "creating" : "re-initializing");
 
-        alertMsg = getString(R.string.please_wait);
+        // This activity is accessed directly externally
+        requestStoragePermissions(this, new PermissionListener() {
+            @Override
+            public void granted() {
+                // must be at the beginning of any activity that can be called from an external intent
+                try {
+                    Collect.createODKDirs();
+                } catch (RuntimeException e) {
+                    DialogUtils.showDialog(DialogUtils.createErrorDialog(InstanceUploaderActivity.this,
+                            e.getMessage(), EXIT), InstanceUploaderActivity.this);
+                    return;
+                }
 
-        uploadedInstances = new HashMap<String, String>();
+                init(savedInstanceState);
+            }
+
+            @Override
+            public void denied() {
+                // The activity has to finish because ODK Collect cannot function without these permissions.
+                finish();
+            }
+        });
+
+    }
+
+    private void init(Bundle savedInstanceState) {
+        alertMsg = getString(R.string.please_wait);
 
         setTitle(getString(R.string.send_data));
 
-        // get any simple saved state...
+        // Get simple saved state
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(ALERT_MSG)) {
                 alertMsg = savedInstanceState.getString(ALERT_MSG);
@@ -88,20 +121,43 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
             url = savedInstanceState.getString(AUTH_URI);
         }
 
-        // and if we are resuming, use the TO_SEND list of not-yet-sent submissions
+        Bundle dataBundle;
+
+        // If we are resuming, use the TO_SEND list of not-yet-sent submissions
         // Otherwise, construct the list from the incoming intent value
-        long[] selectedInstanceIDs = null;
+        long[] selectedInstanceIDs;
         if (savedInstanceState != null && savedInstanceState.containsKey(TO_SEND)) {
             selectedInstanceIDs = savedInstanceState.getLongArray(TO_SEND);
+            dataBundle = savedInstanceState;
         } else {
-            // get instances to upload...
-            Intent intent = getIntent();
-            selectedInstanceIDs = intent.getLongArrayExtra(FormEntryActivity.KEY_INSTANCES);
+            selectedInstanceIDs = getIntent().getLongArrayExtra(FormEntryActivity.KEY_INSTANCES);
+            dataBundle = getIntent().getExtras();
+        }
+
+        // An external application can temporarily override destination URL, username, password
+        // and whether instances should be deleted after submission by specifying intent extras.
+        if (dataBundle != null && dataBundle.containsKey(ApplicationConstants.BundleKeys.URL)) {
+            // TODO: I think this means redirection from a URL set through an extra is not supported
+            url = dataBundle.getString(ApplicationConstants.BundleKeys.URL);
+
+            // Remove trailing slashes (only necessary for the intent case but doesn't hurt on resume)
+            while (url != null && url.endsWith("/")) {
+                url = url.substring(0, url.length() - 1);
+            }
+
+            if (dataBundle.containsKey(ApplicationConstants.BundleKeys.USERNAME)
+                    && dataBundle.containsKey(ApplicationConstants.BundleKeys.PASSWORD)) {
+                username = dataBundle.getString(ApplicationConstants.BundleKeys.USERNAME);
+                password = dataBundle.getString(ApplicationConstants.BundleKeys.PASSWORD);
+            }
+
+            if (dataBundle.containsKey(ApplicationConstants.BundleKeys.DELETE_INSTANCE_AFTER_SUBMISSION)) {
+                deleteInstanceAfterUpload = dataBundle.getBoolean(ApplicationConstants.BundleKeys.DELETE_INSTANCE_AFTER_SUBMISSION);
+            }
         }
 
         instancesToSend = ArrayUtils.toObject(selectedInstanceIDs);
 
-        // at this point, we don't expect this to be empty...
         if (instancesToSend.length == 0) {
             Timber.e("onCreate: No instances to upload!");
             // drop through -- everything will process through OK
@@ -109,30 +165,46 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
             Timber.i("onCreate: Beginning upload of %d instances!", instancesToSend.length);
         }
 
-        // get the task if we've changed orientations. If it's null it's a new upload.
-        instanceServerUploader = (InstanceServerUploader) getLastCustomNonConfigurationInstance();
-        if (instanceServerUploader == null) {
-            // setup dialog and upload task
+        // Get the task if there was a configuration change but the app did not go out of memory.
+        // If the app went out of memory, the task is null but the simple state was saved so
+        // the task status is reconstructed from that state.
+        instanceServerUploaderTask = (InstanceServerUploaderTask) getLastCustomNonConfigurationInstance();
+
+        if (instanceServerUploaderTask == null) {
+            // set up dialog and upload task
             showDialog(PROGRESS_DIALOG);
-            instanceServerUploader = new InstanceServerUploader();
+            instanceServerUploaderTask = new InstanceServerUploaderTask();
+
+            if (url != null) {
+                instanceServerUploaderTask.setCompleteDestinationUrl(url + Collect.getInstance().getString(R.string.default_odk_submission));
+
+                if (deleteInstanceAfterUpload != null) {
+                    instanceServerUploaderTask.setDeleteInstanceAfterSubmission(deleteInstanceAfterUpload);
+                }
+
+                String host = Uri.parse(url).getHost();
+                if (host != null) {
+                    // We do not need to clear the cookies since they are cleared before any request is made and the Credentials provider is used
+                    if (password != null && username != null) {
+                        instanceServerUploaderTask.setCustomUsername(username);
+                        instanceServerUploaderTask.setCustomPassword(password);
+                    }
+                }
+            }
 
             // register this activity with the new uploader task
-            instanceServerUploader.setUploaderListener(this);
-            instanceServerUploader.execute(instancesToSend);
+            instanceServerUploaderTask.setUploaderListener(this);
+            instanceServerUploaderTask.execute(instancesToSend);
         }
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        Collect.getInstance().getActivityLogger().logOnStart(this);
-    }
-
-    @Override
     protected void onResume() {
-        Timber.i("onResume: Resuming upload of %d instances!", instancesToSend.length);
-        if (instanceServerUploader != null) {
-            instanceServerUploader.setUploaderListener(this);
+        if (instancesToSend != null) {
+            Timber.i("onResume: Resuming upload of %d instances!", instancesToSend.length);
+        }
+        if (instanceServerUploaderTask != null) {
+            instanceServerUploaderTask.setUploaderListener(this);
         }
         super.onResume();
     }
@@ -143,23 +215,26 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
         outState.putString(ALERT_MSG, alertMsg);
         outState.putString(AUTH_URI, url);
         outState.putLongArray(TO_SEND, ArrayUtils.toPrimitive(instancesToSend));
+
+        if (url != null) {
+            outState.putString(ApplicationConstants.BundleKeys.URL, url);
+
+            if (username != null && password != null) {
+                outState.putString(ApplicationConstants.BundleKeys.USERNAME, username);
+                outState.putString(ApplicationConstants.BundleKeys.PASSWORD, password);
+            }
+        }
     }
 
     @Override
     public Object onRetainCustomNonConfigurationInstance() {
-        return instanceServerUploader;
-    }
-
-    @Override
-    protected void onStop() {
-        Collect.getInstance().getActivityLogger().logOnStop(this);
-        super.onStop();
+        return instanceServerUploaderTask;
     }
 
     @Override
     protected void onDestroy() {
-        if (instanceServerUploader != null) {
-            instanceServerUploader.setUploaderListener(null);
+        if (instanceServerUploaderTask != null) {
+            instanceServerUploaderTask.setUploaderListener(null);
         }
         super.onDestroy();
     }
@@ -213,9 +288,11 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
             message = getString(R.string.no_forms_uploaded);
         }
 
+        // If the activity is paused or in the process of pausing, don't show the dialog
         if (!isInstanceStateSaved()) {
             createUploadInstancesResultDialog(message.trim());
         } else {
+            // Clean up
             finish();
         }
     }
@@ -230,19 +307,14 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
     protected Dialog onCreateDialog(int id) {
         switch (id) {
             case PROGRESS_DIALOG:
-                Collect.getInstance().getActivityLogger().logAction(this,
-                        "onCreateDialog.PROGRESS_DIALOG", "show");
-
                 progressDialog = new ProgressDialog(this);
                 DialogInterface.OnClickListener loadingButtonListener =
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Collect.getInstance().getActivityLogger().logAction(this,
-                                        "onCreateDialog.PROGRESS_DIALOG", "cancel");
                                 dialog.dismiss();
-                                instanceServerUploader.cancel(true);
-                                instanceServerUploader.setUploaderListener(null);
+                                instanceServerUploaderTask.cancel(true);
+                                instanceServerUploaderTask.setUploaderListener(null);
                                 finish();
                             }
                         };
@@ -256,38 +328,48 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
             case AUTH_DIALOG:
                 Timber.i("onCreateDialog(AUTH_DIALOG): for upload of %d instances!",
                         instancesToSend.length);
-                Collect.getInstance().getActivityLogger().logAction(this,
-                        "onCreateDialog.AUTH_DIALOG", "show");
 
-                return new AuthDialogUtility().createDialog(this, this, this.url);
+                AuthDialogUtility authDialogUtility = new AuthDialogUtility();
+                if (username != null && password != null && url != null) {
+                    authDialogUtility.setCustomUsername(username);
+                    authDialogUtility.setCustomPassword(password);
+                }
+
+                return authDialogUtility.createDialog(this, this, this.url);
         }
 
         return null;
     }
 
+    /**
+     * Prompts the user for credentials for the server at the given URL. Once credentials are
+     * provided, starts a new upload task with just the instances that were not yet reached.
+     *
+     * messagesByInstanceIdAttempted makes it possible to identify the instances that were part
+     * of the latest submission attempt. The database provides generic status which could have come
+     * from an unrelated submission attempt.
+     */
     @Override
-    public void authRequest(Uri url, HashMap<String, String> doneSoFar) {
+    public void authRequest(Uri url, HashMap<String, String> messagesByInstanceIdAttempted) {
         if (progressDialog.isShowing()) {
             // should always be showing here
             progressDialog.dismiss();
         }
 
-        // add our list of completed uploads to "completed"
-        // and remove them from our toSend list.
-        ArrayList<Long> workingSet = new ArrayList<Long>();
+        // Remove sent instances from instances to send
+        ArrayList<Long> workingSet = new ArrayList<>();
         Collections.addAll(workingSet, instancesToSend);
-        if (doneSoFar != null) {
-            Set<String> uploadedInstances = doneSoFar.keySet();
+        if (messagesByInstanceIdAttempted != null) {
+            Set<String> uploadedInstances = messagesByInstanceIdAttempted.keySet();
 
             for (String uploadedInstance : uploadedInstances) {
                 Long removeMe = Long.valueOf(uploadedInstance);
                 boolean removed = workingSet.remove(removeMe);
                 if (removed) {
-                    Timber.i("%d was already sent, removing from queue before restarting task",
+                    Timber.i("%d was already attempted, removing from queue before restarting task",
                             removeMe);
                 }
             }
-            this.uploadedInstances.putAll(doneSoFar);
         }
 
         // and reconstruct the pending set of instances to send
@@ -298,12 +380,12 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
         instancesToSend = updatedToSend;
 
         this.url = url.toString();
+
+        /** Once credentials are provided in the dialog, {@link #updatedCredentials()} is called */
         showDialog(AUTH_DIALOG);
     }
 
     private void createUploadInstancesResultDialog(String message) {
-        Collect.getInstance().getActivityLogger().logAction(this, "createUploadInstancesResultDialog", "show");
-
         String dialogTitle = getString(R.string.upload_results);
         String buttonTitle = getString(R.string.ok);
 
@@ -314,11 +396,18 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
     @Override
     public void updatedCredentials() {
         showDialog(PROGRESS_DIALOG);
-        instanceServerUploader = new InstanceServerUploader();
+        instanceServerUploaderTask = new InstanceServerUploaderTask();
 
         // register this activity with the new uploader task
-        instanceServerUploader.setUploaderListener(this);
-        instanceServerUploader.execute(instancesToSend);
+        instanceServerUploaderTask.setUploaderListener(this);
+        // In the case of credentials set via intent extras, the credentials are stored in the
+        // global WebCredentialsUtils but the task also needs to know what server to set to
+        // TODO: is this really needed here? When would the task not have gotten a server set in
+        // init already?
+        if (url != null) {
+            instanceServerUploaderTask.setCompleteDestinationUrl(url + Collect.getInstance().getString(R.string.default_odk_submission), false);
+        }
+        instanceServerUploaderTask.execute(instancesToSend);
     }
 
     @Override

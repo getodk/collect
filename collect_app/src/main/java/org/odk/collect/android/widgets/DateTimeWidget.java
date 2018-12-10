@@ -51,6 +51,8 @@ public class DateTimeWidget extends QuestionWidget implements BinaryWidget {
             dateWidget = new CopticDateWidget(context, prompt);
         } else if (appearance != null && appearance.contains("islamic")) {
             dateWidget = new IslamicDateWidget(context, prompt);
+        } else if (appearance != null && appearance.contains("bikram-sambat")) {
+            dateWidget = new BikramSambatDateWidget(context, prompt);
         } else {
             dateWidget = new DateWidget(context, prompt);
         }

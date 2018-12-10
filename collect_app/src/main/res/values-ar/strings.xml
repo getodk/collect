@@ -268,7 +268,6 @@
   <string name="drive_get_file">الحصول على %1$s وملفات الوسائط.</string>
   <string name="no_google_account">لم يتم اختيار حساب جوجل!</string>
   <string name="google_set_account">لقد قمت باختيار صفحات الجوجل كخادم لك، أرجو اختيار حساب الجوجل  المتوافق عن طريق الاعدادت العامة قبل الاستمرار</string>
-  <string name="odk_auth_auth_fail">فشل في عملية التحقق من بيانات المصادقة</string>
   <string name="notification_error">خطأ في عرض اشعار النص</string>
   <string name="delete_after_send">حذف بعد الارسال</string>
   <string name="delete_after_send_summary">حذف الاستمارة النهائية والوسائط المتعددة بعد ارسالها الى الخادم</string>
@@ -311,7 +310,6 @@
   <string name="select_geotrace_mode">اختيار وضع الـ Trace</string>
   <string name="start">أبداء</string>
   <string name="enable_gps">تفعيل ال GPS</string>
-  <string name="enable_gps_message">خاصية الـ GPS غير مفعلة في جهازك هل تريد تفعيلها ؟</string>
   <string name="geotrace_title">Trace</string>
   <string name="polygon_save">حفظ الـ Polygon</string>
   <string name="polyline_save">حفظ الـ Polyline</string>
@@ -323,7 +321,6 @@
   <string name="geo_exit_warning">تجاهل التعديلات والعودة الى ODK؟</string>
   <string name="polygon_validator">يجب توفر 3 نقاط GeoPoint لانشاء Polygon</string>
   <string name="clear">الغاء</string>
-  <string name="polyline_polygon_text">حفظ GeoTrace كـ</string>
   <string name="manual_mode">الوضع اليدوي</string>
   <string name="automatic_mode">الوضع الآلي</string>
   <string name="geoshape_instruction">انقر مطولاً لانشاء علامة</string>

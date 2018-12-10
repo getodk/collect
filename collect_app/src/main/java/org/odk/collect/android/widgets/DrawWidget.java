@@ -47,14 +47,10 @@ public class DrawWidget extends BaseImageWidget {
     protected void setUpLayout() {
         super.setUpLayout();
         drawButton = getSimpleButton(getContext().getString(R.string.draw_image));
-        drawButton.setEnabled(!getFormEntryPrompt().isReadOnly());
 
         answerLayout.addView(drawButton);
         answerLayout.addView(errorTextView);
 
-        if (getFormEntryPrompt().isReadOnly()) {
-            drawButton.setVisibility(View.GONE);
-        }
         errorTextView.setVisibility(View.GONE);
     }
 

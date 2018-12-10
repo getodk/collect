@@ -21,18 +21,11 @@ import android.text.Editable;
 import android.text.Selection;
 import android.text.TextWatcher;
 import android.util.TypedValue;
-import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 
-import org.javarosa.core.model.SelectChoice;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.utilities.ViewIds;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 
 /**
  * A base widget class which is responsible for sharing the code used by simple select widgets like
@@ -64,7 +57,7 @@ public abstract class SelectTextWidget extends SelectWidget {
         params.setMargins(7, 5, 7, 5);
         searchStr.setLayoutParams(params);
         setupChangeListener();
-        addAnswerView(searchStr);
+        answerLayout.addView(searchStr, 0);
 
         String searchText = null;
         if (getState() != null) {
@@ -100,40 +93,7 @@ public abstract class SelectTextWidget extends SelectWidget {
         });
     }
 
+    @SuppressWarnings("PMD.EmptyMethodInAbstractClassShouldBeAbstract")
     protected void doSearch(String searchStr) {
-        // First check if there is nothing on search
-        if (searchStr == null || searchStr.trim().length() == 0) {
-            createFilteredOptions(items, null);
-        } else { // Create a List with items that are relevant to the search text
-            List<SelectChoice> searchedItems = new ArrayList<>();
-            List<Integer> tagList = new ArrayList<>();
-            searchStr = searchStr.toLowerCase(Locale.US);
-            for (int i = 0; i < items.size(); i++) {
-                String choiceText = getFormEntryPrompt().getSelectChoiceText(items.get(i)).toLowerCase(Locale.US);
-                if (choiceText.contains(searchStr)) {
-                    searchedItems.add(items.get(i));
-                    tagList.add(i);
-                }
-            }
-            createFilteredOptions(searchedItems, tagList);
-        }
-    }
-
-    private void createFilteredOptions(List<SelectChoice> searchedItems, List<Integer> tagList) {
-        removeView(answerLayout);
-        answerLayout.removeAllViews();
-
-        if (searchedItems != null && !searchedItems.isEmpty()) {
-            addButtonsToLayout(tagList);
-        }
-
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
-        params.addRule(RelativeLayout.BELOW, searchStr.getId());
-        params.setMargins(10, 0, 10, 0);
-        addView(answerLayout, params);
-    }
-
-    protected void addButtonsToLayout(List<Integer> tagList) {
     }
 }

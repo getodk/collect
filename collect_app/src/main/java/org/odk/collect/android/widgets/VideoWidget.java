@@ -27,6 +27,7 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore.Video;
 import android.support.annotation.NonNull;
+import android.support.v4.content.FileProvider;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -35,15 +36,17 @@ import android.widget.Toast;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CaptureSelfieVideoActivity;
 import org.odk.collect.android.activities.CaptureSelfieVideoActivityNewApi;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.FileUtil;
+import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaManager;
 import org.odk.collect.android.utilities.MediaUtil;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -58,6 +61,7 @@ import timber.log.Timber;
 
 import static android.os.Build.MODEL;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
+import static org.odk.collect.android.utilities.PermissionUtils.requestCameraAndRecordAudioPermissions;
 import static org.odk.collect.android.utilities.PermissionUtils.requestCameraPermission;
 
 /**
@@ -105,10 +109,8 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
         selfie = appearance != null && (appearance.equalsIgnoreCase("selfie") || appearance.equalsIgnoreCase("new-front"));
 
         captureButton = getSimpleButton(getContext().getString(R.string.capture_video), R.id.capture_video);
-        captureButton.setEnabled(!prompt.isReadOnly());
 
         chooseButton = getSimpleButton(getContext().getString(R.string.choose_video), R.id.choose_video);
-        chooseButton.setEnabled(!prompt.isReadOnly());
 
         playButton = getSimpleButton(getContext().getString(R.string.play_video), R.id.play_video);
 
@@ -283,10 +285,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
     }
 
     private void hideButtonsIfNeeded() {
-        if (getFormEntryPrompt().isReadOnly()) {
-            captureButton.setVisibility(View.GONE);
-            chooseButton.setVisibility(View.GONE);
-        } else if (selfie || (getFormEntryPrompt().getAppearanceHint() != null
+        if (selfie || (getFormEntryPrompt().getAppearanceHint() != null
                 && getFormEntryPrompt().getAppearanceHint().toLowerCase(Locale.ENGLISH).contains("new"))) {
             chooseButton.setVisibility(View.GONE);
         }
@@ -321,16 +320,29 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
     public void onButtonClick(int id) {
         switch (id) {
             case R.id.capture_video:
-                requestCameraPermission((FormEntryActivity) getContext(), new PermissionListener() {
-                    @Override
-                    public void granted() {
-                        captureVideo();
-                    }
+                if (selfie) {
+                    requestCameraAndRecordAudioPermissions((FormEntryActivity) getContext(), new PermissionListener() {
+                        @Override
+                        public void granted() {
+                            captureVideo();
+                        }
 
-                    @Override
-                    public void denied() {
-                    }
-                });
+                        @Override
+                        public void denied() {
+                        }
+                    });
+                } else {
+                    requestCameraPermission((FormEntryActivity) getContext(), new PermissionListener() {
+                        @Override
+                        public void granted() {
+                            captureVideo();
+                        }
+
+                        @Override
+                        public void denied() {
+                        }
+                    });
+                }
                 break;
             case R.id.choose_video:
                 chooseVideo();
@@ -342,10 +354,6 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
     }
 
     private void captureVideo() {
-        Collect.getInstance()
-                .getActivityLogger()
-                .logInstanceAction(this, "captureButton",
-                        "click", getFormEntryPrompt().getIndex());
         Intent i;
         if (selfie) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -375,7 +383,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
 
         // request high resolution if configured for that...
         boolean highResolution = settings.getBoolean(
-                PreferenceKeys.KEY_HIGH_RESOLUTION,
+                GeneralKeys.KEY_HIGH_RESOLUTION,
                 VideoWidget.DEFAULT_HIGH_RESOLUTION);
         if (highResolution) {
             i.putExtra(android.provider.MediaStore.EXTRA_VIDEO_QUALITY, 1);
@@ -395,10 +403,6 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
     }
 
     private void chooseVideo() {
-        Collect.getInstance()
-                .getActivityLogger()
-                .logInstanceAction(this, "chooseButton",
-                        "click", getFormEntryPrompt().getIndex());
         Intent i = new Intent(Intent.ACTION_GET_CONTENT);
         i.setType("video/*");
         // Intent i =
@@ -420,16 +424,16 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
     }
 
     private void playVideoFile() {
-        Collect.getInstance()
-                .getActivityLogger()
-                .logInstanceAction(this, "playButton",
-                        "click", getFormEntryPrompt().getIndex());
-        Intent i = new Intent("android.intent.action.VIEW");
-        File f = new File(getInstanceFolder() + File.separator
-                + binaryName);
-        i.setDataAndType(Uri.fromFile(f), "video/*");
+        Intent intent = new Intent("android.intent.action.VIEW");
+        File file = new File(getInstanceFolder() + File.separator + binaryName);
+
+        Uri uri =
+                FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", file);
+
+        FileUtils.grantFileReadPermissions(intent, uri, getContext());
+        intent.setDataAndType(uri, "video/*");
         try {
-            getContext().startActivity(i);
+            getContext().startActivity(intent);
         } catch (ActivityNotFoundException e) {
             Toast.makeText(
                     getContext(),

@@ -281,7 +281,7 @@
   <string name="no_google_account">Není vybrán žádný účet Google!</string>
   <string name="google_set_account">Vybrali jste Tabulky Google jako svůj server, vyberte prosím odpovídající účet Google ve Všeobecných nastaveních a pokračujte</string>
   <string name="media_upload_error">Nepodařilo se nahrát soubor médií, který neexistuje.%1$s </string>
-  <string name="odk_auth_auth_fail">selhání  automatického odesílání při ověřování ODK, ujistěte se, že vaše nastavení jsou správná</string>
+  <string name="odk_permissions_fail">automatické odeslání oprávnění ODK selhalo, ujistěte se, že jste udělili všechna požadovaná oprávnění</string>
   <string name="odk_auto_note">Výsledky automatického odesílání ODK</string>
   <string name="odk_auto_download_notification_title">Výsledky automatického stahování ODK</string>
   <string name="notification_error">Chyba při zobrazení oznámení</string>
@@ -332,7 +332,6 @@
   <string name="select_geotrace_mode">Vybrat GeoTrace mód</string>
   <string name="start">Začít</string>
   <string name="enable_gps">Zapnout GPS</string>
-  <string name="enable_gps_message">GPS je v přístroji zakázáno. Chcete jej povolit?</string>
   <string name="geotrace_title">GeoTrace</string>
   <string name="polygon_save">Uložit jako polygon</string>
   <string name="polyline_save">Uložit jako Polyline</string>
@@ -345,7 +344,6 @@
   <string name="polygon_validator">Musí mít alespoň 3 body pro vytvoření polygonu</string>
   <string name="polyline_validator">Musí mít alespoň 2 body k vytvoření křivky</string>
   <string name="clear">Vymazat</string>
-  <string name="polyline_polygon_text">Uložit GeoTrace jako</string>
   <string name="manual_mode">Ruční režim</string>
   <string name="automatic_mode">Automatický režim</string>
   <string name="geoshape_instruction">Dlouhým stisknutím umístěte značky.</string>
@@ -589,6 +587,12 @@
   <string name="camera_runtime_permission_denied_desc">Bez tohoto povolení nelze přistupovat k fotoaparátu. Zkuste to prosím znovu, když jste připraveni jej udělit.</string>
   <string name="record_audio_runtime_permission_denied_title">Oprávnění k nahrávání zvuku</string>
   <string name="record_audio_runtime_permission_denied_desc">Bez tohoto povolení nelze získat přístup k mikrofonu. Zkuste to prosím znovu, když jste připraveni jej udělit.</string>
+  <string name="get_accounts_runtime_permission_denied_title">Získat oprávnění k účtům</string>
+  <string name="get_accounts_runtime_permission_denied_desc">Bez tohoto povolení Collect nemůže přistupovat k účtům. Zkuste to prosím znovu, až budete  připraveni jej udělit.</string>
+  <string name="send_sms_runtime_permission_denied_title">Odeslat povolení SMS</string>
+  <string name="send_sms_runtime_permission_denied_desc">Bez tohoto povolení Collect nemůže odesílat zprávy SMS. Zkuste to prosím znovu, až budete  připraveni jej udělit.</string>
+  <string name="read_phone_state_runtime_permission_denied_title">Přečtěte si povolení k telefonu</string>
+  <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect neprovádí volání, ale potřebuje přístup k určitým vlastnostem vašeho zařízení, jako je například telefonní číslo a device ID.</string>
   <string name="form_update_category">Aktualizace formuláře</string>
   <string name="periodic_form_updates_check_title">Pravidelná kontrola aktualizací formulářů</string>
   <string name="never">Nikdy</string>
@@ -614,17 +618,12 @@
   <string name="sms_invalid_phone_number">Neplatné telefonní číslo!</string>
   <!--Sms submission-->
   <string name="sms_no_reception">\'Nepodařilo se\" EEE, MMM dd, rrrr \"v\" HH:mm \"kvůli žádnému příjmu\"</string>
+  <string name="sms_no_number">\'Nepodařilo se \"EEE, MMM dd, yyyy\" v \"HH:mm\" kvůli žádnému telefonnímu číslu. \"</string>
   <string name="sms_fatal_error">\'Nepodařilo se\" EEE, MMM dd, rrrr \"v\" HH:mm</string>
   <string name="sms_airplane_mode">\'Nepodařilo se\" EEE, MMM dd, rrrr \"v\" HH:mm \"v důsledku zapnutí režimu Letadlo.\"</string>
   <string name="sms_no_message">Tento formulář nemá žádné dotazy se značkami SMS.</string>
   <string name="sms_encrypted_message">Šifrované formuláře nelze odeslat jako SMS.</string>
   <string name="sms_last_submission_on_date_at_time">\"Poslední pokus o podání\" EEE, MMM dd, yyyy\"na\" HH:mm</string>
-  <plurals name="sms_sending">
-    <item quantity="one">Odeslání formuláře jako jediné zprávy.</item>
-    <item quantity="few">Odeslání formuláře, odeslání %1$d zpráv z %2$d</item>
-    <item quantity="many">Odeslání formuláře, odeslání %1$dzpráv z %2$d</item>
-    <item quantity="other">Odeslání formuláře, odeslání %1$d zpráv z %2$d</item>
-  </plurals>
   <string name="sms_sent_on_date_at_time">\"Odesláno jako SMS na\" EEE, MMM dd, rrrr \"v\" HH: mm</string>
   <string name="sms_submission_queued">Čekající k odeslání.</string>
   <string name="sms_submissions_notif_title">Odesílání SMS</string>
@@ -634,6 +633,8 @@
   <string name="transport_type_both">Vybrat možnost odeslání</string>
   <string name="seconds">Vteřin</string>
   <string name="rank_items">Pořadí položek</string>
-  <string name="image_not_saved">Obraz nelze uložit z důvodu problému s odpovídajícím instančním souborem.</string>
   <string name="loading_form_failed">Během načítání formuláře došlo k chybě. Prosím zkuste to znovu.</string>
+  <string name="missing_google_account_dialog_title">Účet Google není nastaven</string>
+  <string name="missing_google_account_dialog_desc">Chcete-li odeslat formuláře prostřednictvím tabulek Google, musíte nastavit účet Google v nastavení serveru.</string>
+  <string name="sms_invalid_phone_number_description">Nastavte cílové telefonní číslo pro odesílání SMS nebo změňte typ transportu.</string>
 </resources>
