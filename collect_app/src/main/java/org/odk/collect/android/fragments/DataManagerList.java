@@ -138,7 +138,7 @@ public class DataManagerList extends InstanceListFragment
         int[] view = new int[]{R.id.text1, R.id.text2};
 
         listAdapter = new SimpleCursorAdapter(getActivity(),
-                R.layout.two_item_multiple_choice, null, data, view);
+                R.layout.form_chooser_list_item_multiple_choice, null, data, view);
         setListAdapter(listAdapter);
         checkPreviouslyCheckedItems();
     }

@@ -41,7 +41,7 @@ public class FormDownloadListAdapter extends ArrayAdapter {
 
     public FormDownloadListAdapter(Context context, ArrayList<HashMap<String, String>> filteredFormList,
                                    HashMap<String, FormDetails> formIdsToDetails) {
-        super(context, R.layout.two_item_multiple_choice, filteredFormList);
+        super(context, R.layout.form_chooser_list_item_multiple_choice, filteredFormList);
         this.filteredFormList = filteredFormList;
         this.formIdsToDetails = formIdsToDetails;
     }
@@ -62,7 +62,7 @@ public class FormDownloadListAdapter extends ArrayAdapter {
         if (row == null) {
             holder = new ViewHolder();
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row = inflater.inflate(R.layout.two_item_multiple_choice, parent, false);
+            row = inflater.inflate(R.layout.form_chooser_list_item_multiple_choice, parent, false);
 
             holder.text1 = row.findViewById(R.id.text1);
             holder.text2 = row.findViewById(R.id.text2);

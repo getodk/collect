@@ -201,9 +201,9 @@ public class InstanceChooserList extends InstanceListActivity implements
         };
 
         if (editMode) {
-            listAdapter = new SimpleCursorAdapter(this, R.layout.two_item, null, data, view);
+            listAdapter = new SimpleCursorAdapter(this, R.layout.form_chooser_list_item, null, data, view);
         } else {
-            listAdapter = new ViewSentListAdapter(this, R.layout.two_item, null, data, view);
+            listAdapter = new ViewSentListAdapter(this, R.layout.form_chooser_list_item, null, data, view);
         }
         listView.setAdapter(listAdapter);
     }

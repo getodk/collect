@@ -41,7 +41,7 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
     private final List<DriveListItem> items;
 
     public FileArrayAdapter(Context context, List<DriveListItem> filteredDriveList) {
-        super(context, R.layout.two_item_image, filteredDriveList);
+        super(context, R.layout.form_chooser_list_item_google_drive, filteredDriveList);
         items = filteredDriveList;
     }
 
@@ -87,7 +87,7 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
         final ViewHolder holder;
         View view;
         if (convertView == null) {
-            view = LayoutInflater.from(getContext()).inflate(R.layout.two_item_image, parent, false);
+            view = LayoutInflater.from(getContext()).inflate(R.layout.form_chooser_list_item_google_drive, parent, false);
             holder = new ViewHolder(view);
             view.setTag(holder);
         } else {
