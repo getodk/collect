@@ -20,7 +20,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
@@ -64,14 +63,11 @@ public class ViewSentListAdapter extends SimpleCursorAdapter {
         }
 
         TextView visibilityOffCause = view.findViewById(R.id.text4);
-        ImageView visibleOff = view.findViewById(R.id.visible_off);
         Long date = getCursor().getLong(getCursor().getColumnIndex(InstanceProviderAPI.InstanceColumns.DELETED_DATE));
 
-        visibleOff.setScaleX(0.9f);
-        visibleOff.setScaleY(0.9f);
         if (date != 0 || !formExists || isFormEncrypted) {
+            view.setEnabled(false);
             visibilityOffCause.setVisibility(View.VISIBLE);
-            visibleOff.setVisibility(View.VISIBLE);
 
             if (date != 0) {
                 visibilityOffCause.setText(
@@ -83,9 +79,10 @@ public class ViewSentListAdapter extends SimpleCursorAdapter {
                 visibilityOffCause.setText(context.getString(R.string.encrypted_form));
             }
         } else {
+            view.setEnabled(true);
             visibilityOffCause.setVisibility(View.GONE);
-            visibleOff.setVisibility(View.GONE);
         }
+
         return view;
     }
 }

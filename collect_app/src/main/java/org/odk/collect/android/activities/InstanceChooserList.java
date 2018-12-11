@@ -30,6 +30,7 @@ import android.widget.AdapterView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
+import android.widget.Toast;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.ViewSentListAdapter;
 import org.odk.collect.android.application.Collect;
@@ -130,7 +131,7 @@ public class InstanceChooserList extends InstanceListActivity implements
                     ContentUris.withAppendedId(InstanceColumns.CONTENT_URI,
                             c.getLong(c.getColumnIndex(InstanceColumns._ID)));
 
-            if (view.findViewById(R.id.visible_off).getVisibility() != View.VISIBLE) {
+            if (view.isEnabled()) {
                 String action = getIntent().getAction();
                 if (Intent.ACTION_PICK.equals(action)) {
                     // caller is waiting on a picked form
@@ -162,6 +163,9 @@ public class InstanceChooserList extends InstanceListActivity implements
                     startActivity(intent);
                 }
                 finish();
+            } else {
+                TextView visibilityOffCause = view.findViewById(R.id.text4);
+                Toast.makeText(this, visibilityOffCause.getText(), Toast.LENGTH_SHORT).show();
             }
         }
     }
