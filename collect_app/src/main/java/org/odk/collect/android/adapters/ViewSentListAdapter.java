@@ -62,12 +62,19 @@ public class ViewSentListAdapter extends SimpleCursorAdapter {
             }
         }
 
+        TextView titleText = view.findViewById(R.id.text1);
+        TextView subtitleText = view.findViewById(R.id.text2);
         TextView visibilityOffCause = view.findViewById(R.id.text4);
         Long date = getCursor().getLong(getCursor().getColumnIndex(InstanceProviderAPI.InstanceColumns.DELETED_DATE));
 
         if (date != 0 || !formExists || isFormEncrypted) {
             view.setEnabled(false);
             visibilityOffCause.setVisibility(View.VISIBLE);
+
+            // Material design "disabled" opacity is 38%.
+            titleText.setAlpha(0.38f);
+            subtitleText.setAlpha(0.38f);
+            visibilityOffCause.setAlpha(0.38f);
 
             if (date != 0) {
                 visibilityOffCause.setText(
