@@ -62,7 +62,7 @@ public class FormChooserList extends FormListActivity implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.chooser_list_layout);
+        setContentView(R.layout.form_chooser_list);
 
         setTitle(getString(R.string.enter_data));
 

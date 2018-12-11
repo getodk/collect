@@ -111,7 +111,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     public void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.drive_layout);
+        setContentView(R.layout.google_drive_list);
 
         setProgressBarVisibility(true);
         initToolbar();
