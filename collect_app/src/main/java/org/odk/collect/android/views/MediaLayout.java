@@ -34,7 +34,6 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.BuildConfig;
@@ -179,8 +178,7 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
         }
     }
 
-    public void setAVT(FormIndex index, String selectionDesignator, TextView text,
-                       String audioURI, String imageURI, String videoURI,
+    public void setAVT(TextView text, String audioURI, String imageURI, String videoURI,
                        String bigImageURI, MediaPlayer player) {
         this.bigImageURI = bigImageURI;
         this.player = player;
@@ -193,7 +191,7 @@ public class MediaLayout extends RelativeLayout implements View.OnClickListener 
         // Setup audio button
         if (audioURI != null) {
             audioButton.setVisibility(VISIBLE);
-            audioButton.init(index, selectionDesignator, audioURI, player);
+            audioButton.init(audioURI, player);
             audioButton.setOnClickListener(this);
         }
 

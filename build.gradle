@@ -10,7 +10,7 @@ buildscript {
         classpath 'com.google.gms:google-services:4.0.1'         
         classpath 'org.ow2.asm:asm:6.0' // https://github.com/jacoco/jacoco/issues/639#issuecomment-355424756
         classpath 'org.jacoco:org.jacoco.core:0.8.0'
-        classpath 'io.fabric.tools:gradle:1.25.2'
+        classpath 'io.fabric.tools:gradle:1.25.4'
     }
 }
 

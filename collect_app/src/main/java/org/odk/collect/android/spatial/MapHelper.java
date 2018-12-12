@@ -69,6 +69,9 @@ public class MapHelper {
     private static final String OPENMAP_STAMEN_TERRAIN = "openmap_stamen_terrain";
     private static final String OPENMAP_CARTODB_POSITRON = "openmap_cartodb_positron";
     private static final String OPENMAP_CARTODB_DARKMATTER = "openmap_cartodb_darkmatter";
+    private int selectedLayer;
+
+    private static final String SLASH = File.separator;
 
     private int selectedLayer;
     private TilesOverlay osmTileOverlay;
