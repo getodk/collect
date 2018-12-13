@@ -12,6 +12,7 @@
 
     <style name="BaseDarkAppTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="primaryTextColor">@color/darkPrimaryTextColor</item>
+        <item name="secondaryTextColor">@color/darkSecondaryTextColor</item>
         <item name="android:scrollbarThumbHorizontal">@drawable/thumb</item>
         <item name="android:scrollbarThumbVertical">@drawable/thumb</item>
         <item name="android:scrollbarSize">1.75mm</item>
@@ -51,6 +52,7 @@
 
     <style name="BaseLightAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="primaryTextColor">@color/lightPrimaryTextColor</item>
+        <item name="secondaryTextColor">@color/lightSecondaryTextColor</item>
         <item name="android:scrollbarThumbHorizontal">@drawable/thumb</item>
         <item name="android:scrollbarThumbVertical">@drawable/thumb</item>
         <item name="android:scrollbarSize">1.75mm</item>
