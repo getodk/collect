@@ -8,7 +8,6 @@ OR CONDITIONS OF ANY KIND, either express or implied. See the License for
 the specific language governing permissions and limitations under the License. -->
 <org.odk.collect.android.views.TwoItemMultipleChoiceView
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -24,54 +23,7 @@ the specific language governing permissions and limitations under the License. -
             android:layout_above="@+id/checkbox"
             android:layout_centerHorizontal="true">
 
-        <TextView
-                android:id="@+id/text1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_toLeftOf="@+id/checkbox"
-                android:layout_toStartOf="@+id/checkbox"
-                android:gravity="center_vertical"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                tools:text="text1"/>
-
-        <TextView
-                android:id="@+id/text3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/text1"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:visibility="gone"/>
-
-        <TextView
-                android:id="@+id/text2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/text3"
-                android:layout_toLeftOf="@+id/checkbox"
-                android:layout_toStartOf="@+id/checkbox"
-                android:gravity="center_vertical"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                tools:text="text2"/>
-
-        <TextView
-                android:id="@+id/update_info"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/text2"
-                android:layout_toLeftOf="@+id/checkbox"
-                android:layout_toStartOf="@+id/checkbox"
-                android:text="@string/newer_version_of_a_form_info"
-                android:visibility="gone"
-                android:textColor="#4CAF50"/>
+        <include layout="@layout/form_chooser_list_item_text"/>
 
         <CheckBox
                 android:id="@+id/checkbox"

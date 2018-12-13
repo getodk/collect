@@ -8,6 +8,8 @@
             android:layout_alignParentTop="true"
             android:layout_toEndOf="@+id/image"
             android:layout_toRightOf="@+id/image"
+            android:layout_toLeftOf="@+id/checkbox"
+            android:layout_toStartOf="@+id/checkbox"
             android:gravity="center_vertical"
             android:textAppearance="@style/ListItemPrimaryTextStyle"/>
 
@@ -18,6 +20,8 @@
             android:layout_below="@+id/text1"
             android:layout_toEndOf="@+id/image"
             android:layout_toRightOf="@+id/image"
+            android:layout_toLeftOf="@+id/checkbox"
+            android:layout_toStartOf="@+id/checkbox"
             android:textAppearance="@style/ListItemSecondaryTextStyle"
             android:visibility="gone"/>
 
@@ -28,6 +32,8 @@
             android:layout_below="@+id/text3"
             android:layout_toEndOf="@+id/image"
             android:layout_toRightOf="@+id/image"
+            android:layout_toLeftOf="@+id/checkbox"
+            android:layout_toStartOf="@+id/checkbox"
             android:gravity="center_vertical"
             android:textAppearance="@style/ListItemSecondaryTextStyle"/>
 
@@ -38,8 +44,24 @@
             android:layout_below="@+id/text2"
             android:layout_toEndOf="@+id/image"
             android:layout_toRightOf="@+id/image"
+            android:layout_toLeftOf="@+id/checkbox"
+            android:layout_toStartOf="@+id/checkbox"
             android:gravity="center_vertical"
             android:textAppearance="@style/ListItemSecondaryTextStyle"
+            android:visibility="gone"/>
+
+    <TextView
+            android:id="@+id/update_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text2"
+            android:layout_toEndOf="@+id/image"
+            android:layout_toRightOf="@+id/image"
+            android:layout_toLeftOf="@+id/checkbox"
+            android:layout_toStartOf="@+id/checkbox"
+            android:text="@string/newer_version_of_a_form_info"
+            android:textAppearance="@style/ListItemSecondaryTextStyle"
+            android:textColor="#4CAF50"
             android:visibility="gone"/>
 
 </merge>
