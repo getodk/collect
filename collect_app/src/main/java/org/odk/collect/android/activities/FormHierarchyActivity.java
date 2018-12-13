@@ -90,6 +90,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
      * showing the instances of the given repeat group.
      */
     private FormIndex repeatGroupPickerIndex;
+    private static final String REPEAT_GROUP_PICKER_INDEX_KEY = "REPEAT_GROUP_PICKER_INDEX_KEY";
 
     /**
      * The index of the question or the field list the FormController was set to when the hierarchy
@@ -147,6 +148,9 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
         jumpEndButton = findViewById(R.id.jumpEndButton);
 
         configureButtons(formController);
+
+        restoreInstanceState(savedInstanceState);
+
         refreshView();
 
         // Scroll to the last question the user was looking at
@@ -170,6 +174,18 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
         }
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable(REPEAT_GROUP_PICKER_INDEX_KEY, repeatGroupPickerIndex);
+        super.onSaveInstanceState(outState);
+    }
+
+    protected void restoreInstanceState(Bundle state) {
+        if (state == null) {
+            return;
+        }
+        repeatGroupPickerIndex = (FormIndex) state.getSerializable(REPEAT_GROUP_PICKER_INDEX_KEY);
+    }
 
     /**
      * Configure the navigation buttons at the bottom of the screen.
