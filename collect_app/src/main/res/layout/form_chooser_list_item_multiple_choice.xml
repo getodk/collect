@@ -23,6 +23,8 @@ the specific language governing permissions and limitations under the License. -
             android:layout_above="@+id/checkbox"
             android:layout_centerHorizontal="true">
 
+        <include layout="@layout/form_chooser_list_item_icon"/>
+
         <include layout="@layout/form_chooser_list_item_text"/>
 
         <CheckBox
