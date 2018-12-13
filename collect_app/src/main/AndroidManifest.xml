@@ -276,22 +276,5 @@ the specific language governing permissions and limitations under the License.
         <activity android:name=".activities.WebViewActivity" />
         <activity android:name=".activities.CaptureSelfieVideoActivity" />
         <activity android:name=".activities.CaptureSelfieVideoActivityNewApi" />
-
-        <receiver
-            android:name=".tasks.sms.SmsSentBroadcastReceiver"
-            android:enabled="true"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="org.odk.collect.android.COLLECT_SMS_SEND_ACTION" />
-            </intent-filter>
-        </receiver>
-        <receiver
-            android:name=".tasks.sms.SmsNotificationReceiver"
-            android:enabled="true"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="org.odk.collect.android.COLLECT_SMS_NOTIFICATION_ACTION" />
-            </intent-filter>
-        </receiver>
     </application>
 </manifest>
