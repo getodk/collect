@@ -107,12 +107,12 @@ public class DateTimeUtils {
     private static String getDateTimeSkeleton(boolean containsTime, DatePickerDetails datePickerDetails) {
         String dateSkeleton;
         if (containsTime) {
-            dateSkeleton = "yyyyMMMMdd HHmm";
+            dateSkeleton = "yyyyMMMdd HHmm";
         } else {
-            dateSkeleton = "yyyyMMMMdd";
+            dateSkeleton = "yyyyMMMdd";
         }
         if (datePickerDetails.isMonthYearMode()) {
-            dateSkeleton = "yyyyMMMM";
+            dateSkeleton = "yyyyMMM";
         } else if (datePickerDetails.isYearMode()) {
             dateSkeleton = "yyyy";
         }
