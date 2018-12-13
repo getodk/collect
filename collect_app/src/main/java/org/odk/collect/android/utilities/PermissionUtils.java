@@ -276,6 +276,33 @@ public class PermissionUtils {
                 .check();
     }
 
+    public static void requestSendSMSAndReadPhoneStatePermissions(@NonNull Activity activity, @NonNull PermissionListener action) {
+        MultiplePermissionsListener multiplePermissionsListener = new MultiplePermissionsListener() {
+            @Override
+            public void onPermissionsChecked(MultiplePermissionsReport report) {
+                if (report.areAllPermissionsGranted()) {
+                    action.granted();
+                } else {
+                    showAdditionalExplanation(activity, R.string.send_sms_runtime_permission_denied_title,
+                            R.string.send_sms_runtime_permission_denied_desc, R.drawable.ic_sms, action);
+                }
+            }
+
+            @Override
+            public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                token.continuePermissionRequest();
+            }
+        };
+
+        Dexter.withActivity(activity)
+                .withPermissions(
+                        Manifest.permission.SEND_SMS,
+                        Manifest.permission.READ_PHONE_STATE
+                ).withListener(multiplePermissionsListener)
+                .withErrorListener(error -> Timber.i(error.name()))
+                .check();
+    }
+
     public static boolean checkIfStoragePermissionsGranted(Context context) {
         int read = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE);
         int write = ContextCompat.checkSelfPermission(context, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);

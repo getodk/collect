@@ -24,6 +24,7 @@ import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
@@ -73,6 +74,7 @@ import static org.odk.collect.android.preferences.GeneralKeys.KEY_SUBMISSION_TRA
 import static org.odk.collect.android.tasks.sms.SmsSender.SMS_INSTANCE_ID;
 import static org.odk.collect.android.utilities.PermissionUtils.finishAllActivities;
 import static org.odk.collect.android.utilities.PermissionUtils.requestReadPhoneStatePermission;
+import static org.odk.collect.android.utilities.PermissionUtils.requestSendSMSAndReadPhoneStatePermissions;
 import static org.odk.collect.android.utilities.PermissionUtils.requestSendSMSPermission;
 import static org.odk.collect.android.utilities.PermissionUtils.requestStoragePermissions;
 
@@ -317,16 +319,30 @@ public class InstanceUploaderList extends InstanceListActivity implements
         Transport transport = Transport.fromPreference(GeneralSharedPreferences.getInstance().get(KEY_SUBMISSION_TRANSPORT_TYPE));
 
         if (transport.equals(Transport.Sms) || buttonId == R.id.sms_upload_button) {
-            requestSendSMSPermission(this, new PermissionListener() {
-                @Override
-                public void granted() {
-                    smsService.submitForms(instanceIds);
-                }
+            // https://issuetracker.google.com/issues/66979952
+            if (android.os.Build.VERSION.SDK_INT == Build.VERSION_CODES.O) {
+                requestSendSMSAndReadPhoneStatePermissions(this, new PermissionListener() {
+                    @Override
+                    public void granted() {
+                        smsService.submitForms(instanceIds);
+                    }
 
-                @Override
-                public void denied() {
-                }
-            });
+                    @Override
+                    public void denied() {
+                    }
+                });
+            } else {
+                requestSendSMSPermission(this, new PermissionListener() {
+                    @Override
+                    public void granted() {
+                        smsService.submitForms(instanceIds);
+                    }
+
+                    @Override
+                    public void denied() {
+                    }
+                });
+            }
         } else {
 
             String server = (String) GeneralSharedPreferences.getInstance().get(KEY_PROTOCOL);
