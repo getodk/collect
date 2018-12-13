@@ -508,13 +508,12 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
      * Handles clicks on a specific row in the hierarchy view.
      */
     public void onElementClick(HierarchyElement element) {
-        int position = elementsToDisplay.indexOf(element);
         FormIndex index = element.getFormIndex();
 
         switch (element.getType()) {
             case QUESTION:
                 onQuestionClicked(index);
-                return;
+                break;
             case REPEATABLE_GROUP:
                 // Show the picker.
                 repeatGroupPickerIndex = index;
@@ -526,11 +525,8 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                 Collect.getInstance().getFormController().jumpToIndex(index);
                 setResult(RESULT_OK);
                 refreshView();
-                return;
+                break;
         }
-
-        recyclerView.setAdapter(new HierarchyListAdapter(elementsToDisplay, this::onElementClick));
-        ((LinearLayoutManager) recyclerView.getLayoutManager()).scrollToPositionWithOffset(position, 0);
     }
 
     /**
