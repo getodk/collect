@@ -20,6 +20,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
@@ -62,6 +63,8 @@ public class ViewSentListAdapter extends SimpleCursorAdapter {
             }
         }
 
+        ImageView imageView = view.findViewById(R.id.image);
+
         TextView titleText = view.findViewById(R.id.text1);
         TextView subtitleText = view.findViewById(R.id.text2);
         TextView visibilityOffCause = view.findViewById(R.id.text4);
@@ -75,6 +78,7 @@ public class ViewSentListAdapter extends SimpleCursorAdapter {
             titleText.setAlpha(0.38f);
             subtitleText.setAlpha(0.38f);
             visibilityOffCause.setAlpha(0.38f);
+            imageView.setAlpha(0.38f);
 
             if (date != 0) {
                 visibilityOffCause.setText(
