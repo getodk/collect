@@ -76,7 +76,9 @@ the License.
             android:layout_above="@+id/buttonholder"
             android:layout_below="@id/toolbar"
             android:paddingTop="8dp"
-            android:paddingBottom="8dp"/>
+            android:paddingBottom="8dp"
+            android:divider="@drawable/list_item_divider"
+            android:dividerHeight="1px"/>
 
     <TextView
             android:id="@android:id/empty"
