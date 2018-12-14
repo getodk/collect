@@ -11,14 +11,12 @@ the specific language governing permissions and limitations under the License. -
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="?android:attr/listPreferredItemHeight"
         android:orientation="horizontal"
-        android:paddingBottom="8dip"
-        android:paddingEnd="8dip"
-        android:paddingLeft="8dip"
-        android:paddingRight="8dip"
-        android:paddingStart="8dip"
-        android:paddingTop="4dip">
+        android:minHeight="56dp"
+        android:paddingBottom="16dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="16dp">
 
     <RelativeLayout
             android:layout_width="match_parent"
