@@ -9,6 +9,8 @@
         android:paddingRight="16dp"
         android:paddingTop="16dp">
 
+    <!-- Material Design reference: https://material.io/design/components/lists.html#specs -->
+
     <include layout="@layout/form_chooser_list_item_icon"/>
 
     <include layout="@layout/form_chooser_list_item_text"/>

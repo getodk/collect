@@ -17,6 +17,8 @@ the specific language governing permissions and limitations under the License. -
         android:paddingRight="16dp"
         android:paddingTop="16dp">
 
+    <!-- Material Design reference: https://material.io/design/components/lists.html#specs -->
+
     <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

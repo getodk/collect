@@ -2,6 +2,7 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- Material Design reference: https://material.io/design/components/lists.html#specs -->
+
     <ImageView
             android:id="@+id/image"
             android:src="@drawable/form_state_blank"
