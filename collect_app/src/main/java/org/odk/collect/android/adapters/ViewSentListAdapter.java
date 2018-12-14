@@ -64,6 +64,7 @@ public class ViewSentListAdapter extends SimpleCursorAdapter {
         }
 
         ImageView imageView = view.findViewById(R.id.image);
+        setImageFromStatus(imageView);
 
         TextView titleText = view.findViewById(R.id.text1);
         TextView subtitleText = view.findViewById(R.id.text2);
@@ -95,5 +96,24 @@ public class ViewSentListAdapter extends SimpleCursorAdapter {
         }
 
         return view;
+    }
+
+    private void setImageFromStatus(ImageView imageView) {
+        String formStatus = getCursor().getString(getCursor().getColumnIndex(InstanceProviderAPI.InstanceColumns.STATUS));
+
+        switch (formStatus) {
+            case InstanceProviderAPI.STATUS_INCOMPLETE:
+                imageView.setImageResource(R.drawable.form_state_saved);
+                break;
+            case InstanceProviderAPI.STATUS_COMPLETE:
+                imageView.setImageResource(R.drawable.form_state_finalized);
+                break;
+            case InstanceProviderAPI.STATUS_SUBMITTED:
+                imageView.setImageResource(R.drawable.form_state_submitted);
+                break;
+            case InstanceProviderAPI.STATUS_SUBMISSION_FAILED:
+                imageView.setImageResource(R.drawable.form_state_failed);
+                break;
+        }
     }
 }
