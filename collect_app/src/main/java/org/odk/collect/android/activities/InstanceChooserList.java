@@ -27,12 +27,11 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import android.widget.Toast;
 import org.odk.collect.android.R;
-import org.odk.collect.android.adapters.ViewSentListAdapter;
+import org.odk.collect.android.adapters.InstanceListCursorAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.DiskSyncListener;
@@ -204,11 +203,9 @@ public class InstanceChooserList extends InstanceListActivity implements
                 R.id.text1, R.id.text2, R.id.text4
         };
 
-        if (editMode) {
-            listAdapter = new SimpleCursorAdapter(this, R.layout.form_chooser_list_item, null, data, view);
-        } else {
-            listAdapter = new ViewSentListAdapter(this, R.layout.form_chooser_list_item, null, data, view);
-        }
+        boolean shouldCheckDisabled = !editMode;
+        listAdapter = new InstanceListCursorAdapter(
+                this, R.layout.form_chooser_list_item, null, data, view, shouldCheckDisabled);
         listView.setAdapter(listAdapter);
     }
 

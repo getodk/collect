@@ -33,17 +33,27 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class ViewSentListAdapter extends SimpleCursorAdapter {
+public class InstanceListCursorAdapter extends SimpleCursorAdapter {
     private final Context context;
+    private final boolean shouldCheckDisabled;
 
-    public ViewSentListAdapter(Context context, int layout, Cursor c, String[] from, int[] to) {
+    public InstanceListCursorAdapter(Context context, int layout, Cursor c, String[] from, int[] to, boolean shouldCheckDisabled) {
         super(context, layout, c, from, to);
         this.context = context;
+        this.shouldCheckDisabled = shouldCheckDisabled;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = super.getView(position, convertView, parent);
+
+        ImageView imageView = view.findViewById(R.id.image);
+        setImageFromStatus(imageView);
+
+        // Some form lists never contain disabled items; if so, we're done.
+        if (!shouldCheckDisabled) {
+            return view;
+        }
 
         String formId = getCursor().getString(getCursor().getColumnIndex(InstanceProviderAPI.InstanceColumns.JR_FORM_ID));
         Cursor cursor = new FormsDao().getFormsCursorForFormId(formId);
@@ -62,9 +72,6 @@ public class ViewSentListAdapter extends SimpleCursorAdapter {
                 cursor.close();
             }
         }
-
-        ImageView imageView = view.findViewById(R.id.image);
-        setImageFromStatus(imageView);
 
         TextView titleText = view.findViewById(R.id.text1);
         TextView subtitleText = view.findViewById(R.id.text2);
