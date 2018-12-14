@@ -180,7 +180,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
         super.onSaveInstanceState(outState);
     }
 
-    protected void restoreInstanceState(Bundle state) {
+    private void restoreInstanceState(Bundle state) {
         if (state == null) {
             return;
         }
