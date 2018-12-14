@@ -181,10 +181,9 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
     }
 
     private void restoreInstanceState(Bundle state) {
-        if (state == null) {
-            return;
+        if (state != null) {
+            repeatGroupPickerIndex = (FormIndex) state.getSerializable(REPEAT_GROUP_PICKER_INDEX_KEY);
         }
-        repeatGroupPickerIndex = (FormIndex) state.getSerializable(REPEAT_GROUP_PICKER_INDEX_KEY);
     }
 
     /**
