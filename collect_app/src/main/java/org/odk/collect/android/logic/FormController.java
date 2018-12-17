@@ -90,7 +90,7 @@ public class FormController {
      * XML 'appearance' attribute that denotes a group as being displayed
      * in the hierarchy (rather than invisible).
      */
-    public static String VISIBLE_GROUP_APPEARANCE = "hierarchy-visible";
+    public static final String VISIBLE_GROUP_APPEARANCE = "hierarchy-visible";
 
     /*
      * Store the timerLogger object with the form controller state
@@ -526,8 +526,8 @@ public class FormController {
      * It always steps over the group.
      */
     public int forceStepOverGroup() {
-        if ((getEvent() == FormEntryController.EVENT_GROUP
-                || getEvent() == FormEntryController.EVENT_REPEAT)) {
+        if (getEvent() == FormEntryController.EVENT_GROUP
+                || getEvent() == FormEntryController.EVENT_REPEAT) {
             return stepOverGroup();
         } else {
             return formEntryController.stepToNextEvent();
