@@ -57,7 +57,7 @@ import static org.odk.collect.android.utilities.PermissionUtils.checkIfLocationP
  *
  * @author jonnordling@gmail.com
  */
-public class GeoPointOsmMapActivity extends CollectAbstractActivity implements LocationListener,
+public class GeoPointOsmMapActivity extends BaseGeoMapActivity implements LocationListener,
         Marker.OnMarkerDragListener, MapEventsReceiver, IRegisterReceiver,
         LocationClient.LocationClientListener {
 
@@ -85,8 +85,6 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
     private ImageButton clearPointButton;
 
     private int locationCount;
-
-    private MapHelper helper;
 
     private AlertDialog zoomDialog;
     private View zoomDialogView;
@@ -129,7 +127,7 @@ public class GeoPointOsmMapActivity extends CollectAbstractActivity implements L
         map = findViewById(R.id.omap);
         if (helper == null) {
             // For testing:
-            helper = new MapHelper(this, map, this);
+            helper = new MapHelper(this, map, this, selectedLayer);
 
             map.setMultiTouchControls(true);
             map.setBuiltInZoomControls(true);

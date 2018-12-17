@@ -48,7 +48,7 @@ import java.util.concurrent.TimeUnit;
 
 import static org.odk.collect.android.utilities.PermissionUtils.checkIfLocationPermissionsGranted;
 
-public class GeoTraceActivity extends CollectAbstractActivity implements IRegisterReceiver {
+public class GeoTraceActivity extends BaseGeoMapActivity implements IRegisterReceiver {
     public static final String PREF_VALUE_GOOGLE_MAPS = "google_maps";
     public static final String MAP_CENTER_KEY = "map_center";
     public static final String MAP_ZOOM_KEY = "map_zoom";
@@ -64,7 +64,6 @@ public class GeoTraceActivity extends CollectAbstractActivity implements IRegist
     private ScheduledFuture schedulerHandler;
 
     private MapFragment map;
-    private MapHelper helper;
     private int featureId = -1;  // will be a positive featureId once map is ready
     private String originalTraceString = "";
 
@@ -177,9 +176,9 @@ public class GeoTraceActivity extends CollectAbstractActivity implements IRegist
 
         map = newMapFragment;
         if (map instanceof GoogleMapFragment) {
-            helper = new MapHelper(this, ((GoogleMapFragment) map).getGoogleMap());
+            helper = new MapHelper(this, ((GoogleMapFragment) map).getGoogleMap(), selectedLayer);
         } else if (map instanceof OsmMapFragment) {
-            helper = new MapHelper(this, ((OsmMapFragment) map).getMapView(), this);
+            helper = new MapHelper(this, ((OsmMapFragment) map).getMapView(), this, selectedLayer);
         }
         helper.setBasemap();
 
