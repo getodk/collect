@@ -211,7 +211,9 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
 
     private void updateOptionsMenu() {
         // Not ready yet. Menu will be updated automatically once it's been prepared.
-        if (optionsMenu == null) return;
+        if (optionsMenu == null) {
+            return;
+        }
 
         FormController formController = Collect.getInstance().getFormController();
         boolean isAtBeginning = formController.isCurrentQuestionFirstInForm() && !shouldShowRepeatGroupPicker();

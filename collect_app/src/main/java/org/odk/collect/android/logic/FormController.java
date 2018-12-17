@@ -644,9 +644,12 @@ public class FormController {
     public int stepToNextEvent(int eventType) {
         int event = getEvent();
         do {
-            if (event == FormEntryController.EVENT_END_OF_FORM) break;
+            if (event == FormEntryController.EVENT_END_OF_FORM) {
+                break;
+            }
             event = stepToNextEvent(FormController.STEP_OVER_GROUP);
         } while (event != eventType);
+
         return event;
     }
 
