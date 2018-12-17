@@ -366,7 +366,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity {
                 break;
             }
 
-            formController.stepToNextEvent(FormEntryController.EVENT_PROMPT_NEW_REPEAT);
+            formController.stepToNextEventType(FormEntryController.EVENT_PROMPT_NEW_REPEAT);
             testRef = getGroupRef(formController.getFormIndex()).toString(false);
         }
 

@@ -641,7 +641,7 @@ public class FormController {
      * Move the current form index to the next event of the given type
      * (or the end if none is found).
      */
-    public int stepToNextEvent(int eventType) {
+    public int stepToNextEventType(int eventType) {
         int event = getEvent();
         do {
             if (event == FormEntryController.EVENT_END_OF_FORM) {
