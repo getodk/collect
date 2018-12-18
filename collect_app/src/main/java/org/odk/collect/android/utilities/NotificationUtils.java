@@ -30,7 +30,6 @@ public class NotificationUtils {
 
     private static final String CHANNEL_ID = "collect_notification_channel";
     public static final int FORM_UPDATE_NOTIFICATION_ID = 0;
-    public static final int AUTO_SEND_NOTIFICATION_ID = 1328974928;
 
     private NotificationUtils() {
     }
