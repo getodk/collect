@@ -19,11 +19,10 @@ the specific language governing permissions and limitations under the License. -
 
     <!-- Material Design reference: https://material.io/design/components/lists.html#specs -->
 
-    <RelativeLayout
+    <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/checkbox"
-            android:layout_centerHorizontal="true">
+            android:layout_height="wrap_content">
 
         <include layout="@layout/form_chooser_list_item_icon"/>
 
@@ -31,6 +30,6 @@ the specific language governing permissions and limitations under the License. -
 
         <include layout="@layout/form_chooser_list_item_checkbox"/>
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </org.odk.collect.android.views.TwoItemMultipleChoiceView>

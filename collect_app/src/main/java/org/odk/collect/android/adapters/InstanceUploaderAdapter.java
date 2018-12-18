@@ -75,6 +75,7 @@ public class InstanceUploaderAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
         ViewHolder viewHolder = (ViewHolder) view.getTag();
 
+        viewHolder.progressBar.setVisibility(View.VISIBLE);
         viewHolder.progressBar.setProgressPercent(0, false);
 
         viewHolder.displayName.setText(cursor.getString(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME)));
