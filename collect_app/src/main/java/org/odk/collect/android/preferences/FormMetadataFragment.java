@@ -11,6 +11,7 @@ import android.view.View;
 import org.odk.collect.android.R;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.logic.PropertyManager;
+import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.Validator;
 
@@ -23,7 +24,6 @@ import static org.odk.collect.android.logic.PropertyManager.PROPMGR_USERNAME;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_EMAIL;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_PHONENUMBER;
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_METADATA_USERNAME;
-import static org.odk.collect.android.utilities.PermissionUtils.requestReadPhoneStatePermission;
 
 public class FormMetadataFragment extends BasePreferenceFragment {
     @Override
@@ -35,7 +35,7 @@ public class FormMetadataFragment extends BasePreferenceFragment {
         initNormalPrefs();
 
         if (savedInstanceState == null) {
-            requestReadPhoneStatePermission(getActivity(), new PermissionListener() {
+            new PermissionUtils(getActivity()).requestReadPhoneStatePermission(new PermissionListener() {
                 @Override
                 public void granted() {
                     initDangerousPrefs();
