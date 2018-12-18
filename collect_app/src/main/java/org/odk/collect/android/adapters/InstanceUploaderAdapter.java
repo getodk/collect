@@ -3,14 +3,12 @@ package org.odk.collect.android.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
@@ -22,7 +20,6 @@ import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.tasks.sms.SmsService;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.tasks.sms.models.SmsSubmission;
-import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.views.ProgressBar;
 
 import javax.inject.Inject;
@@ -77,9 +74,6 @@ public class InstanceUploaderAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         ViewHolder viewHolder = (ViewHolder) view.getTag();
-
-        GradientDrawable shapeDrawable = (GradientDrawable) viewHolder.imageBackground.getBackground();
-        shapeDrawable.setColor(new ThemeUtils(context).getAccentColor());
 
         viewHolder.progressBar.setProgressPercent(0, false);
 
@@ -187,8 +181,6 @@ public class InstanceUploaderAdapter extends CursorAdapter {
     }
 
     static class ViewHolder {
-        @BindView(R.id.image_background)
-        LinearLayout imageBackground;
         @BindView(R.id.text1)
         TextView displayName;
         @BindView(R.id.text2)
@@ -197,7 +189,7 @@ public class InstanceUploaderAdapter extends CursorAdapter {
         CheckBox checkbox;
         @BindView(R.id.progress_bar)
         ProgressBar progressBar;
-        @BindView(R.id.status_icon)
+        @BindView(R.id.image)
         ImageView statusIcon;
         @BindView(R.id.close_box)
         ImageView closeButton;
