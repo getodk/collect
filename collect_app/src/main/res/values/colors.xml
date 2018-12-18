@@ -21,6 +21,7 @@ the License.
     <color name="darkSecondaryTextColor">#99ffffff</color>
     <color name="darkPopupDialogColor">#3f3f3f</color>
     <color name="defaultDarkIconColor">#deffffff</color>
+    <color name="darkDividerColor">#1effffff</color>
     <color name="darkRankItemColor">@android:color/black</color>
     <color name="darkIconColorDisabled">#61ffffff</color>
     <color name="darkIconColorEnabled">#deffffff</color>
@@ -29,6 +30,7 @@ the License.
     <color name="lightPrimaryTextColor">#de000000</color>
     <color name="lightSecondaryTextColor">#99000000</color>
     <color name="defaultLightIconColor">#de000000</color>
+    <color name="lightDividerColor">#1e000000</color>
     <color name="lightRankItemColor">#EEEEEE</color>
     <color name="lightAccentColor">#2196F3</color>
     <color name="lightIconColorDisabled">#61000000</color>
