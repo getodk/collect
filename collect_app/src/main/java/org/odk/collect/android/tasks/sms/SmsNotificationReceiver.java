@@ -27,7 +27,7 @@ import static org.odk.collect.android.utilities.NotificationUtils.CHANNEL_ID;
 
 public class SmsNotificationReceiver extends BroadcastReceiver {
     public static final String SMS_NOTIFICATION_ACTION = "org.odk.collect.android.COLLECT_SMS_NOTIFICATION_ACTION";
-    public static final String SMS_NOTIFICATION_GROUP = "org.odk.collect.android.COLLECT_SMS_NOTIFICATION_GROUP";
+    private static final String SMS_NOTIFICATION_GROUP = "org.odk.collect.android.COLLECT_SMS_NOTIFICATION_GROUP";
     private static final int SUMMARY_ID = 4324;
     private int resultCode;
 
