@@ -92,19 +92,16 @@ public class InstanceUploaderAdapter extends CursorAdapter {
         String status = cursor.getString(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.STATUS));
 
         switch (status) {
-
             case STATUS_SUBMISSION_FAILED:
-
-                viewHolder.statusIcon.setImageResource(R.drawable.exclamation);
-
+                viewHolder.statusIcon.setImageResource(R.drawable.form_state_failed);
                 break;
 
             case STATUS_SUBMITTED:
-                viewHolder.statusIcon.setImageResource(R.drawable.check);
+                viewHolder.statusIcon.setImageResource(R.drawable.form_state_submitted);
                 break;
 
             default:
-                viewHolder.statusIcon.setImageResource(R.drawable.pencil);
+                viewHolder.statusIcon.setImageResource(R.drawable.form_state_finalized);
         }
 
         if (isSmsSubmission) {
@@ -155,21 +152,20 @@ public class InstanceUploaderAdapter extends CursorAdapter {
     }
 
     private void setSmsSubmissionStateIcons(int smsStatus, ViewHolder viewHolder) {
-
         switch (smsStatus) {
             case Activity.RESULT_OK:
-                viewHolder.statusIcon.setImageResource(R.drawable.check);
+                viewHolder.statusIcon.setImageResource(R.drawable.form_state_submitted);
                 break;
 
             case RESULT_QUEUED:
             case RESULT_OK_OTHERS_PENDING:
             case RESULT_SENDING:
             case RESULT_MESSAGE_READY:
-                viewHolder.statusIcon.setImageResource(R.drawable.message_text_outline);
+                viewHolder.statusIcon.setImageResource(R.drawable.form_state_sending);
                 break;
 
             default:
-                viewHolder.statusIcon.setImageResource(R.drawable.exclamation);
+                viewHolder.statusIcon.setImageResource(R.drawable.form_state_failed);
                 break;
         }
     }
