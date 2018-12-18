@@ -25,10 +25,10 @@ the specific language governing permissions and limitations under the License. -
 
     <ImageView
             android:id="@+id/close_box"
-            android:layout_width="25dp"
-            android:layout_height="30dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:layout_gravity="center_vertical"
             android:visibility="gone"
-            app:srcCompat="@drawable/close_box_outline"/>
+            app:srcCompat="@drawable/ic_cancel"/>
 
 </org.odk.collect.android.views.TwoItemMultipleChoiceView>
