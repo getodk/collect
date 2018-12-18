@@ -15,15 +15,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="@dimen/instance_list_icon_layout_margin"
-                android:layout_marginRight="@dimen/instance_list_icon_layout_margin"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
                 android:background="@drawable/instance_list_icon_background">
 
             <ImageView
                     android:id="@+id/status_icon"
-                    android:layout_width="@dimen/instance_list_icon_size"
-                    android:layout_height="@dimen/instance_list_icon_size"
-                    android:layout_margin="@dimen/instance_list_icon_margin"/>
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="10dp"/>
 
         </LinearLayout>
 
@@ -32,12 +32,12 @@
                 android:layout_height="wrap_content"
                 android:minHeight="?android:attr/listPreferredItemHeight"
                 android:orientation="horizontal"
-                android:paddingBottom="@dimen/instance_list_text_padding"
-                android:paddingEnd="@dimen/instance_list_text_padding"
-                android:paddingLeft="@dimen/instance_list_text_padding"
-                android:paddingRight="@dimen/instance_list_text_padding"
-                android:paddingStart="@dimen/instance_list_text_padding"
-                android:paddingTop="@dimen/instance_list_text_padding">
+                android:paddingBottom="8dp"
+                android:paddingEnd="8dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingStart="8dp"
+                android:paddingTop="8dp">
 
             <RelativeLayout
                     android:id="@+id/text_holder"
@@ -51,8 +51,8 @@
 
                 <ImageView
                         android:id="@+id/close_box"
-                        android:layout_width="@dimen/instance_list_close_width"
-                        android:layout_height="@dimen/instance_list_close_height"
+                        android:layout_width="25dp"
+                        android:layout_height="30dp"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
@@ -67,7 +67,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/text_holder"
-                    android:layout_marginTop="@dimen/instance_list_icon_top_bottom_margin"/>
+                    android:layout_marginTop="5dp"/>
 
         </RelativeLayout>
 
