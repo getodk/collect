@@ -63,7 +63,7 @@
             android:layout_toStartOf="@+id/checkbox"
             android:text="@string/newer_version_of_a_form_info"
             android:textAppearance="@style/ListItemSecondaryTextStyle"
-            android:textColor="#4CAF50"
+            android:textColor="@color/displaySubtextColor"
             android:visibility="gone"/>
 
 </merge>

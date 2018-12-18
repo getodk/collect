@@ -189,9 +189,9 @@ public class InstanceUploaderAdapter extends CursorAdapter {
     static class ViewHolder {
         @BindView(R.id.image_background)
         LinearLayout imageBackground;
-        @BindView(R.id.display_name)
+        @BindView(R.id.text1)
         TextView displayName;
-        @BindView(R.id.display_subtext)
+        @BindView(R.id.text2)
         TextView displaySubtext;
         @BindView(R.id.checkbox)
         CheckBox checkbox;
