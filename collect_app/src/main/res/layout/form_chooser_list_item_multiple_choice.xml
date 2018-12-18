@@ -8,6 +8,7 @@ OR CONDITIONS OF ANY KIND, either express or implied. See the License for
 the specific language governing permissions and limitations under the License. -->
 <org.odk.collect.android.views.TwoItemMultipleChoiceView
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -29,6 +30,14 @@ the specific language governing permissions and limitations under the License. -
         <include layout="@layout/form_chooser_list_item_text"/>
 
         <include layout="@layout/form_chooser_list_item_checkbox"/>
+
+        <ImageView
+            android:id="@+id/close_box"
+            android:layout_width="25dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
+            android:visibility="gone"
+            app:srcCompat="@drawable/close_box_outline"/>
 
     </LinearLayout>
 
