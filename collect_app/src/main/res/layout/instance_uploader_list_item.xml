@@ -3,59 +3,49 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:minHeight="56dp"
+        android:paddingBottom="16dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="16dp">
 
-    <LinearLayout
+    <!-- Material Design reference: https://material.io/design/components/lists.html#specs -->
+
+    <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_above="@+id/checkbox"
+            android:layout_centerHorizontal="true">
 
         <include layout="@layout/form_chooser_list_item_icon"/>
 
-        <RelativeLayout
+        <include layout="@layout/form_chooser_list_item_text"/>
+
+        <org.odk.collect.android.views.ProgressBar
+                android:id="@+id/progress_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="?android:attr/listPreferredItemHeight"
-                android:orientation="horizontal"
-                android:paddingBottom="8dp"
-                android:paddingEnd="8dp"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:paddingStart="8dp"
-                android:paddingTop="8dp">
+                android:layout_marginTop="12dp"
+                android:layout_toEndOf="@+id/image"
+                android:layout_toRightOf="@+id/image"
+                android:layout_toLeftOf="@+id/checkbox"
+                android:layout_toStartOf="@+id/checkbox"/>
 
-            <RelativeLayout
-                    android:id="@+id/text_holder"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true">
+        <include layout="@layout/form_chooser_list_item_checkbox"/>
 
-                <include layout="@layout/form_chooser_list_item_text"/>
+        <ImageView
+                android:id="@+id/close_box"
+                android:layout_width="25dp"
+                android:layout_height="30dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"
+                android:visibility="gone"
+                app:srcCompat="@drawable/close_box_outline"/>
 
-                <include layout="@layout/form_chooser_list_item_checkbox"/>
-
-                <ImageView
-                        android:id="@+id/close_box"
-                        android:layout_width="25dp"
-                        android:layout_height="30dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_gravity="center_vertical"
-                        android:visibility="gone"
-                        app:srcCompat="@drawable/close_box_outline"/>
-
-            </RelativeLayout>
-
-            <org.odk.collect.android.views.ProgressBar
-                    android:id="@+id/progress_bar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/text_holder"
-                    android:layout_marginTop="5dp"/>
-
-        </RelativeLayout>
-
-    </LinearLayout>
+    </RelativeLayout>
 
 </org.odk.collect.android.views.TwoItemMultipleChoiceView>
