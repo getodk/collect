@@ -213,7 +213,9 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
      */
     private void getResultsFromApi() {
         if (!accountsManager.isGoogleAccountSelected()) {
-            accountsManager.chooseAccountAndRequestPermissionIfNeeded();
+            if (!accountsManager.chooseAccountAndRequestPermissionIfNeeded()) {
+                onBackPressed();
+            }
         } else {
             if (isDeviceOnline()) {
                 toDownload.clear();

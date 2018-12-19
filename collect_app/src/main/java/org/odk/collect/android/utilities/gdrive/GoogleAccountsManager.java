@@ -66,6 +66,7 @@ public class GoogleAccountsManager {
     private GeneralSharedPreferences preferences;
     private ThemeUtils themeUtils;
     private boolean autoChooseAccount = true;
+    private boolean isaccountspermissiongranted;
 
     public GoogleAccountsManager(@NonNull Activity activity) {
         this.activity = activity;
@@ -122,19 +123,22 @@ public class GoogleAccountsManager {
         }
     }
 
-    public void chooseAccountAndRequestPermissionIfNeeded() {
+    public boolean chooseAccountAndRequestPermissionIfNeeded() {
         if (activity != null) {
             requestGetAccountsPermission(activity, new PermissionListener() {
                 @Override
                 public void granted() {
                     chooseAccount();
+                    isaccountspermissiongranted = true;
                 }
 
                 @Override
                 public void denied() {
+                    isaccountspermissiongranted = false;
                 }
             });
         }
+        return isaccountspermissiongranted;
     }
 
     private void chooseAccount() {
