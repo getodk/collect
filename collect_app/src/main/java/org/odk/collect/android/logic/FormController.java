@@ -60,6 +60,8 @@ import java.util.List;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.utilities.ApplicationConstants.Namespaces.XML_OPENDATAKIT_NAMESPACE;
+
 /**
  * This class is a wrapper for Javarosa's FormEntryController. In theory, if you wanted to replace
  * javarosa as the form engine, you should only need to replace the methods in this file. Also, we
@@ -1154,9 +1156,9 @@ public class FormController {
 
                 TreeElement auditElement = v.get(0);
 
-                String locationPriority = auditElement.getBindAttributeValue("http://www.opendatakit.org/xforms", "location-priority");
-                String locationInterval = auditElement.getBindAttributeValue("http://www.opendatakit.org/xforms", "location-interval");
-                String locationAge = auditElement.getBindAttributeValue("http://www.opendatakit.org/xforms", "location-age");
+                String locationPriority = auditElement.getBindAttributeValue(XML_OPENDATAKIT_NAMESPACE, "location-priority");
+                String locationInterval = auditElement.getBindAttributeValue(XML_OPENDATAKIT_NAMESPACE, "location-interval");
+                String locationAge = auditElement.getBindAttributeValue(XML_OPENDATAKIT_NAMESPACE, "location-age");
 
                 audit = new Audit(locationPriority, locationInterval, locationAge);
 
