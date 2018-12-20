@@ -350,6 +350,7 @@ public class Collect extends Application {
 
     public void setComponent(AppDependencyComponent applicationComponent) {
         this.applicationComponent = applicationComponent;
+        applicationComponent.inject(this);
     }
 
     /**

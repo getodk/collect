@@ -1,10 +1,11 @@
 package org.odk.collect.android.injection.config;
 
 import android.app.Application;
+import android.telephony.SmsManager;
 
 import org.odk.collect.android.activities.FormDownloadList;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.activities.InstanceUploaderList;
+import org.odk.collect.android.activities.InstanceUploaderListActivity;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.fragments.DataManagerList;
@@ -16,6 +17,7 @@ import org.odk.collect.android.tasks.sms.SmsNotificationReceiver;
 import org.odk.collect.android.tasks.sms.SmsSender;
 import org.odk.collect.android.tasks.sms.SmsSentBroadcastReceiver;
 import org.odk.collect.android.tasks.sms.SmsService;
+import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.DownloadFormListUtils;
 import org.odk.collect.android.utilities.FormDownloader;
@@ -24,6 +26,7 @@ import javax.inject.Singleton;
 
 import dagger.BindsInstance;
 import dagger.Component;
+import dagger.android.AndroidInjectionModule;
 
 /**
  * Dagger component for the application. Should include
@@ -52,6 +55,8 @@ public interface AppDependencyComponent {
         @BindsInstance
         Builder application(Application application);
 
+        Builder appDependencyModule(AppDependencyModule testDependencyModule);
+
         AppDependencyComponent build();
     }
 
@@ -64,8 +69,6 @@ public interface AppDependencyComponent {
     void inject(SmsSentBroadcastReceiver smsSentBroadcastReceiver);
 
     void inject(SmsNotificationReceiver smsNotificationReceiver);
-
-    void inject(InstanceUploaderList instanceUploaderList);
 
     void inject(InstanceUploaderAdapter instanceUploaderAdapter);
 
@@ -88,4 +91,10 @@ public interface AppDependencyComponent {
     void inject(AuthDialogUtility authDialogUtility);
   
     void inject(FormDownloadList formDownloadList);
+
+    void inject(InstanceUploaderListActivity activity);
+
+    SmsManager smsManager();
+
+    SmsSubmissionManagerContract smsSubmissionManagerContract();
 }

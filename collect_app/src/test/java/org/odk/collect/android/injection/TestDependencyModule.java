@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import android.telephony.SmsManager;
 
+import com.google.android.gms.analytics.Tracker;
+
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.events.RxEventBus;
@@ -14,9 +16,11 @@ import org.odk.collect.android.http.mock.MockHttpClientConnection;
 import org.odk.collect.android.http.mock.MockHttpClientConnectionError;
 import org.odk.collect.android.tasks.sms.SmsSubmissionManager;
 import org.odk.collect.android.tasks.sms.contracts.SmsSubmissionManagerContract;
+import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import javax.inject.Named;
+import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
@@ -31,7 +35,7 @@ import static org.mockito.Mockito.when;
  * running on the Shadows of Robolectric.
  */
 @Module
-public class TestModule {
+public class TestDependencyModule {
 
     @Provides
     SmsManager provideSmsManager() {
@@ -97,4 +101,14 @@ public class TestModule {
         return new WebCredentialsUtils();
     }
 
+    @Provides
+    @Singleton
+    Tracker providesTracker(Application application) {
+        return mock(Tracker.class);
+    }
+
+    @Provides
+    public PermissionUtils providesPermissionUtils() {
+        return new PermissionUtils();
+    }
 }

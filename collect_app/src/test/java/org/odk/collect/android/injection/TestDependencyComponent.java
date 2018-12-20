@@ -7,12 +7,15 @@ import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.sms.SmsSenderJobTest;
 import org.odk.collect.android.sms.SmsServiceTest;
 
+import javax.inject.Singleton;
+
 import dagger.BindsInstance;
 import dagger.Component;
 
 @Component(modules = {
-        TestModule.class
+        TestDependencyModule.class
 })
+@Singleton
 public interface TestDependencyComponent extends AppDependencyComponent {
 
     @Component.Builder

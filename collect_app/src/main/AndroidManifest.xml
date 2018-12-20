@@ -175,7 +175,7 @@ the specific language governing permissions and limitations under the License.
             android:name=".activities.GoogleSheetsUploaderActivity"
             android:configChanges="orientation|screenSize" />
         <activity
-            android:name=".activities.InstanceUploaderList"
+            android:name=".activities.InstanceUploaderListActivity"
             android:configChanges="orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
