@@ -82,7 +82,7 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
         Timber.i("onCreate: %s", savedInstanceState == null ? "creating" : "re-initializing");
 
         // This activity is accessed directly externally
-        new PermissionUtils(this).requestStoragePermissions(new PermissionListener() {
+        new PermissionUtils().requestStoragePermissions(this, new PermissionListener() {
             @Override
             public void granted() {
                 // must be at the beginning of any activity that can be called from an external intent

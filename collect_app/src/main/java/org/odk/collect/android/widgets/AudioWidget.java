@@ -225,7 +225,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
     public void onButtonClick(int buttonId) {
         switch (buttonId) {
             case R.id.capture_audio:
-                getPermissionUtils().requestRecordAudioPermission(new PermissionListener() {
+                getPermissionUtils().requestRecordAudioPermission((Activity) getContext(), new PermissionListener() {
                     @Override
                     public void granted() {
                         captureAudio();

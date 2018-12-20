@@ -42,16 +42,6 @@ import timber.log.Timber;
 
 public class PermissionUtils {
 
-    /**
-     * Required for context and spawning of Dexter's activity that handles
-     * permission checking.
-     */
-    private final Activity activity;
-
-    public PermissionUtils(@NonNull Activity activity) {
-        this.activity = activity;
-    }
-
     public static boolean areStoragePermissionsGranted(Context context) {
         return isPermissionGranted(context,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -133,10 +123,11 @@ public class PermissionUtils {
      * Checks to see if the user granted Collect the permissions necessary for reading
      * and writing to storage and if not utilizes the permissions API to request them.
      *
+     * @param activity needed for requesting permissions
      * @param action is a listener that provides the calling component with the permission result.
      */
-    public void requestStoragePermissions(@NonNull PermissionListener action) {
-        requestPermissions(new PermissionListener() {
+    public void requestStoragePermissions(Activity activity, @NonNull PermissionListener action) {
+        requestPermissions(activity, new PermissionListener() {
             @Override
             public void granted() {
                 action.granted();
@@ -144,14 +135,14 @@ public class PermissionUtils {
 
             @Override
             public void denied() {
-                showAdditionalExplanation(R.string.storage_runtime_permission_denied_title,
+                showAdditionalExplanation(activity, R.string.storage_runtime_permission_denied_title,
                         R.string.storage_runtime_permission_denied_desc, R.drawable.sd, action);
             }
         }, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE);
     }
 
-    public void requestCameraPermission(@NonNull PermissionListener action) {
-        requestPermissions(new PermissionListener() {
+    public void requestCameraPermission(Activity activity, @NonNull PermissionListener action) {
+        requestPermissions(activity, new PermissionListener() {
             @Override
             public void granted() {
                 action.granted();
@@ -159,14 +150,14 @@ public class PermissionUtils {
 
             @Override
             public void denied() {
-                showAdditionalExplanation(R.string.camera_runtime_permission_denied_title,
+                showAdditionalExplanation(activity, R.string.camera_runtime_permission_denied_title,
                         R.string.camera_runtime_permission_denied_desc, R.drawable.ic_photo_camera, action);
             }
         }, Manifest.permission.CAMERA);
     }
 
-    public void requestLocationPermissions(@NonNull PermissionListener action) {
-        requestPermissions(new PermissionListener() {
+    public void requestLocationPermissions(Activity activity, @NonNull PermissionListener action) {
+        requestPermissions(activity, new PermissionListener() {
             @Override
             public void granted() {
                 action.granted();
@@ -174,14 +165,14 @@ public class PermissionUtils {
 
             @Override
             public void denied() {
-                showAdditionalExplanation(R.string.location_runtime_permissions_denied_title,
+                showAdditionalExplanation(activity, R.string.location_runtime_permissions_denied_title,
                         R.string.location_runtime_permissions_denied_desc, R.drawable.ic_place_black, action);
             }
         }, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION);
     }
 
-    public void requestRecordAudioPermission(@NonNull PermissionListener action) {
-        requestPermissions(new PermissionListener() {
+    public void requestRecordAudioPermission(Activity activity, @NonNull PermissionListener action) {
+        requestPermissions(activity, new PermissionListener() {
             @Override
             public void granted() {
                 action.granted();
@@ -189,14 +180,14 @@ public class PermissionUtils {
 
             @Override
             public void denied() {
-                showAdditionalExplanation(R.string.record_audio_runtime_permission_denied_title,
+                showAdditionalExplanation(activity, R.string.record_audio_runtime_permission_denied_title,
                         R.string.record_audio_runtime_permission_denied_desc, R.drawable.ic_mic, action);
             }
         }, Manifest.permission.RECORD_AUDIO);
     }
 
-    public void requestCameraAndRecordAudioPermissions(@NonNull PermissionListener action) {
-        requestPermissions(new PermissionListener() {
+    public void requestCameraAndRecordAudioPermissions(Activity activity, @NonNull PermissionListener action) {
+        requestPermissions(activity, new PermissionListener() {
             @Override
             public void granted() {
                 action.granted();
@@ -204,14 +195,14 @@ public class PermissionUtils {
 
             @Override
             public void denied() {
-                showAdditionalExplanation(R.string.camera_runtime_permission_denied_title,
+                showAdditionalExplanation(activity, R.string.camera_runtime_permission_denied_title,
                         R.string.camera_runtime_permission_denied_desc, R.drawable.ic_photo_camera, action);
             }
         }, Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO);
     }
 
-    public void requestGetAccountsPermission(@NonNull PermissionListener action) {
-        requestPermissions(new PermissionListener() {
+    public void requestGetAccountsPermission(Activity activity, @NonNull PermissionListener action) {
+        requestPermissions(activity, new PermissionListener() {
             @Override
             public void granted() {
                 action.granted();
@@ -219,14 +210,14 @@ public class PermissionUtils {
 
             @Override
             public void denied() {
-                showAdditionalExplanation(R.string.get_accounts_runtime_permission_denied_title,
+                showAdditionalExplanation(activity, R.string.get_accounts_runtime_permission_denied_title,
                         R.string.get_accounts_runtime_permission_denied_desc, R.drawable.ic_get_accounts, action);
             }
         }, Manifest.permission.GET_ACCOUNTS);
     }
 
-    public void requestSendSMSPermission(@NonNull PermissionListener action) {
-        requestPermissions(new PermissionListener() {
+    public void requestSendSMSPermission(Activity activity, @NonNull PermissionListener action) {
+        requestPermissions(activity, new PermissionListener() {
             @Override
             public void granted() {
                 action.granted();
@@ -234,14 +225,14 @@ public class PermissionUtils {
 
             @Override
             public void denied() {
-                showAdditionalExplanation(R.string.send_sms_runtime_permission_denied_title,
+                showAdditionalExplanation(activity, R.string.send_sms_runtime_permission_denied_title,
                         R.string.send_sms_runtime_permission_denied_desc, R.drawable.ic_sms, action);
             }
         }, Manifest.permission.SEND_SMS);
     }
 
-    public void requestReadPhoneStatePermission(@NonNull PermissionListener action, boolean displayPermissionDeniedDialog) {
-        requestPermissions(new PermissionListener() {
+    public void requestReadPhoneStatePermission(Activity activity, boolean displayPermissionDeniedDialog, @NonNull PermissionListener action) {
+        requestPermissions(activity, new PermissionListener() {
             @Override
             public void granted() {
                 action.granted();
@@ -250,7 +241,7 @@ public class PermissionUtils {
             @Override
             public void denied() {
                 if (displayPermissionDeniedDialog) {
-                    showAdditionalExplanation(R.string.read_phone_state_runtime_permission_denied_title,
+                    showAdditionalExplanation(activity, R.string.read_phone_state_runtime_permission_denied_title,
                             R.string.read_phone_state_runtime_permission_denied_desc, R.drawable.ic_phone, action);
                 } else {
                     action.denied();
@@ -259,8 +250,8 @@ public class PermissionUtils {
         }, Manifest.permission.READ_PHONE_STATE);
     }
 
-    public void requestSendSMSAndReadPhoneStatePermissions(@NonNull PermissionListener action) {
-        requestPermissions(new PermissionListener() {
+    public void requestSendSMSAndReadPhoneStatePermissions(Activity activity, @NonNull PermissionListener action) {
+        requestPermissions(activity, new PermissionListener() {
             @Override
             public void granted() {
                 action.granted();
@@ -268,19 +259,19 @@ public class PermissionUtils {
 
             @Override
             public void denied() {
-                showAdditionalExplanation(R.string.send_sms_runtime_permission_denied_title,
+                showAdditionalExplanation(activity, R.string.send_sms_runtime_permission_denied_title,
                         R.string.send_sms_runtime_permission_denied_desc, R.drawable.ic_sms, action);
             }
         }, Manifest.permission.SEND_SMS, Manifest.permission.READ_PHONE_STATE);
     }
 
-    private void requestPermissions(@NonNull PermissionListener listener, String... permissions) {
+    private void requestPermissions(Activity activity, @NonNull PermissionListener listener, String... permissions) {
         DexterBuilder builder = null;
 
         if (permissions.length == 1) {
-            builder = createSinglePermissionRequest(listener, permissions[0]);
+            builder = createSinglePermissionRequest(activity, permissions[0], listener);
         } else if (permissions.length > 1) {
-            builder = createMultiplePermissionsRequest(listener, permissions);
+            builder = createMultiplePermissionsRequest(activity, listener, permissions);
         }
 
         if (builder != null) {
@@ -288,7 +279,7 @@ public class PermissionUtils {
         }
     }
 
-    private DexterBuilder createSinglePermissionRequest(PermissionListener listener, String permission) {
+    private DexterBuilder createSinglePermissionRequest(Activity activity, String permission, PermissionListener listener) {
         return Dexter.withActivity(activity)
                 .withPermission(permission)
                 .withListener(new com.karumi.dexter.listener.single.PermissionListener() {
@@ -309,7 +300,7 @@ public class PermissionUtils {
                 });
     }
 
-    private DexterBuilder createMultiplePermissionsRequest(PermissionListener listener, String[] permissions) {
+    private DexterBuilder createMultiplePermissionsRequest(Activity activity, PermissionListener listener, String[] permissions) {
         return Dexter.withActivity(activity)
                 .withPermissions(permissions)
                 .withListener(new MultiplePermissionsListener() {
@@ -329,7 +320,7 @@ public class PermissionUtils {
                 });
     }
 
-    private void showAdditionalExplanation(int title, int message, int drawable, @NonNull PermissionListener action) {
+    private void showAdditionalExplanation(Activity activity, int title, int message, int drawable, @NonNull PermissionListener action) {
         AlertDialog alertDialog = new AlertDialog.Builder(activity, R.style.PermissionAlertDialogTheme)
                 .setTitle(title)
                 .setMessage(message)

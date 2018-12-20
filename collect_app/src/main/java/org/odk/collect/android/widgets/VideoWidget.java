@@ -318,7 +318,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
         switch (id) {
             case R.id.capture_video:
                 if (selfie) {
-                    getPermissionUtils().requestCameraAndRecordAudioPermissions(new PermissionListener() {
+                    getPermissionUtils().requestCameraAndRecordAudioPermissions((Activity) getContext(), new PermissionListener() {
                         @Override
                         public void granted() {
                             captureVideo();
@@ -329,7 +329,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
                         }
                     });
                 } else {
-                    getPermissionUtils().requestCameraPermission(new PermissionListener() {
+                    getPermissionUtils().requestCameraPermission((Activity) getContext(), new PermissionListener() {
                         @Override
                         public void granted() {
                             captureVideo();

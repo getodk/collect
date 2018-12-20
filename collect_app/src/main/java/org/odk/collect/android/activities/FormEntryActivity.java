@@ -350,7 +350,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             mediaLoadingFragment = (MediaLoadingFragment) getFragmentManager().findFragmentByTag(TAG_MEDIA_LOADING_FRAGMENT);
         }
 
-        new PermissionUtils(this).requestStoragePermissions(new PermissionListener() {
+        new PermissionUtils().requestStoragePermissions(this, new PermissionListener() {
             @Override
             public void granted() {
                 // must be at the beginning of any activity that can be called from an external intent
@@ -2340,7 +2340,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         final FormController formController = task.getFormController();
         if (formController != null) {
             if (readPhoneStatePermissionRequestNeeded) {
-                new PermissionUtils(this).requestReadPhoneStatePermission(new PermissionListener() {
+                new PermissionUtils().requestReadPhoneStatePermission(this, true, new PermissionListener() {
                     @Override
                     public void granted() {
                         readPhoneStatePermissionRequestNeeded = false;
@@ -2352,7 +2352,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     public void denied() {
                         finish();
                     }
-                }, true);
+                });
             } else {
                 formLoaderTask.setFormLoaderListener(null);
                 FormLoaderTask t = formLoaderTask;

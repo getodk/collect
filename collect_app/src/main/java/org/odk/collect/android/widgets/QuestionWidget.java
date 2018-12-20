@@ -98,7 +98,7 @@ public abstract class QuestionWidget
 
         if (context instanceof FormEntryActivity) {
             state = ((FormEntryActivity) context).getState();
-            permissionUtils = new PermissionUtils((FormEntryActivity) getContext());
+            permissionUtils = new PermissionUtils();
         }
 
         if (context instanceof DependencyProvider) {
