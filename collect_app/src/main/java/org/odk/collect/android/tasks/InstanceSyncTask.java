@@ -252,7 +252,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
         File instanceXml = new File(candidateInstance);
         if (!new File(instanceXml.getParentFile(), "submission.xml.enc").exists()) {
             Uri uri = Uri.parse(InstanceColumns.CONTENT_URI + "/" + instanceCursor.getInt(instanceCursor.getColumnIndex(BaseColumns._ID)));
-            FormController.InstanceMetadata instanceMetadata = new FormController.InstanceMetadata(getInstanceIdFromInstance(candidateInstance), null, false);
+            FormController.InstanceMetadata instanceMetadata = new FormController.InstanceMetadata(getInstanceIdFromInstance(candidateInstance), null, null);
             EncryptionUtils.EncryptedFormInformation formInfo = EncryptionUtils.getEncryptedFormInformation(uri, instanceMetadata);
 
             if (formInfo != null) {

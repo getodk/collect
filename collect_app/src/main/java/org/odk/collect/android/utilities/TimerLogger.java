@@ -167,7 +167,7 @@ public class TimerLogger {
          * The timer logger is enabled if the meta section of the form contains a logging entry
          *      <orx:audit />
          */
-        timerEnabled = formController.getSubmissionMetadata().audit;
+        timerEnabled = formController.getSubmissionMetadata().audit != null;
 
         if (timerEnabled) {
             filename = AUDIT_FILE_NAME;

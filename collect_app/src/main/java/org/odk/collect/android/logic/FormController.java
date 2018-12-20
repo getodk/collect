@@ -101,9 +101,9 @@ public class FormController {
     public static final class InstanceMetadata {
         public final String instanceId;
         public final String instanceName;
-        public final boolean audit;
+        public final Audit audit;
 
-        public InstanceMetadata(String instanceId, String instanceName, boolean audit) {
+        public InstanceMetadata(String instanceId, String instanceName, Audit audit) {
             this.instanceId = instanceId;
             this.instanceName = instanceName;
             this.audit = audit;
@@ -1119,7 +1119,7 @@ public class FormController {
 
         String instanceId = null;
         String instanceName = null;
-        boolean audit = false;
+        Audit audit = null;
 
         if (e != null) {
             List<TreeElement> v;
@@ -1152,10 +1152,17 @@ public class FormController {
                                 .setLabel(Collect.getCurrentFormIdentifierHash())
                                 .build());
 
-                audit = true;
+                TreeElement auditElement = v.get(0);
+
+                String locationPriority = auditElement.getBindAttributeValue("http://www.opendatakit.org/xforms", "location-priority");
+                String locationInterval = auditElement.getBindAttributeValue("http://www.opendatakit.org/xforms", "location-interval");
+                String locationAge = auditElement.getBindAttributeValue("http://www.opendatakit.org/xforms", "location-age");
+
+                audit = new Audit(locationPriority, locationInterval, locationAge);
+
                 IAnswerData answerData = new StringData();
                 answerData.setValue(AUDIT_FILE_NAME);
-                v.get(0).setValue(answerData);
+                auditElement.setValue(answerData);
             }
         }
 
