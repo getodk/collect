@@ -284,7 +284,7 @@ public class TimerLogger {
 
             Event[] eventArray = events.toArray(new Event[events.size()]);
             if (timerlogFile != null) {
-                saveTask = new TimerSaveTask(timerlogFile).execute(eventArray);
+                saveTask = new TimerSaveTask(timerlogFile, audit.collectLocationCoordinates()).execute(eventArray);
             } else {
                 Timber.e("timerlogFile null when attempting to write events.");
             }

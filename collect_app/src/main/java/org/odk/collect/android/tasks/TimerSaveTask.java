@@ -17,10 +17,14 @@ import timber.log.Timber;
  */
 public class TimerSaveTask extends AsyncTask<TimerLogger.Event, Void, Void> {
     private final @NonNull File file;
-    private static final String TIMING_CSV_HEADER = "event, node, start, end";
+    private final boolean collectLocationCoordinates;
 
-    public TimerSaveTask(File file) {
+    private static final String TIMING_CSV_HEADER = "event, node, start, end";
+    private static final String TIMING_CSV_HEADER_WITH_LOCATION_COORDINATES = TIMING_CSV_HEADER + ", latitude, longitude, accuracy";
+
+    public TimerSaveTask(File file, boolean collectLocationCoordinates) {
         this.file = file;
+        this.collectLocationCoordinates = collectLocationCoordinates;
     }
 
     @Override
@@ -31,7 +35,7 @@ public class TimerSaveTask extends AsyncTask<TimerLogger.Event, Void, Void> {
             boolean newFile = !file.exists();
             fw = new FileWriter(file, true);
             if (newFile) {
-                fw.write(TIMING_CSV_HEADER + "\n");
+                fw.write(getHeader());
             }
             if (params.length > 0) {
                 for (TimerLogger.Event ev : params) {
@@ -53,5 +57,11 @@ public class TimerSaveTask extends AsyncTask<TimerLogger.Event, Void, Void> {
             }
         }
         return null;
+    }
+
+    private String getHeader() {
+        return collectLocationCoordinates
+                ? TIMING_CSV_HEADER_WITH_LOCATION_COORDINATES + "\n"
+                : TIMING_CSV_HEADER + "\n";
     }
 }
