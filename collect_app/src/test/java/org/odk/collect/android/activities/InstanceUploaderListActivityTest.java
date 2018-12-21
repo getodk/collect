@@ -12,10 +12,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.injection.config.AppDependencyComponent;
-import org.odk.collect.android.injection.config.AppDependencyModule;
-import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.PermissionUtils;
 import org.robolectric.Robolectric;
@@ -29,6 +25,7 @@ import androidx.work.WorkManager;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.odk.collect.android.support.RobolectricHelpers.overrideAppDependencyModule;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
@@ -41,23 +38,10 @@ public class InstanceUploaderListActivityTest {
         WorkManager.initialize(RuntimeEnvironment.application, new Configuration.Builder().build());
 
         tracker = mock(Tracker.class);
-
-        AppDependencyComponent testComponent = DaggerAppDependencyComponent.builder()
-                .application(RuntimeEnvironment.application)
-                .appDependencyModule(new AppDependencyModule() {
-
-                    @Override
-                    public Tracker providesTracker(Application application) {
-                        return tracker;
-                    }
-
-                    @Override
-                    public PermissionUtils providesPermissionUtils() {
-                        return new AlwaysGrantStoragePermissionsPermissionUtils();
-                    }
-                })
-                .build();
-        ((Collect) RuntimeEnvironment.application).setComponent(testComponent);
+        overrideAppDependencyModule(new AppDependencyModule(
+                tracker,
+                new AlwaysGrantStoragePermissionsPermissionUtils()
+        ));
     }
 
     @Test
@@ -74,7 +58,28 @@ public class InstanceUploaderListActivityTest {
                 .build());
     }
 
-    private class AlwaysGrantStoragePermissionsPermissionUtils extends PermissionUtils {
+    private static class AppDependencyModule extends org.odk.collect.android.injection.config.AppDependencyModule {
+
+        private final Tracker tracker;
+        private final PermissionUtils permissionUtils;
+
+        private AppDependencyModule(Tracker tracker, PermissionUtils permissionUtils) {
+            this.tracker = tracker;
+            this.permissionUtils = permissionUtils;
+        }
+
+        @Override
+        public Tracker providesTracker(Application application) {
+            return tracker;
+        }
+
+        @Override
+        public PermissionUtils providesPermissionUtils() {
+            return permissionUtils;
+        }
+    }
+
+    private static class AlwaysGrantStoragePermissionsPermissionUtils extends PermissionUtils {
 
         @Override
         public void requestStoragePermissions(Activity activity, @NonNull PermissionListener action) {

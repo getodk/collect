@@ -6,12 +6,10 @@ import android.telephony.SmsManager;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.events.RxEventBus;
-import org.odk.collect.android.injection.DaggerTestDependencyComponent;
-import org.odk.collect.android.injection.TestDependencyComponent;
+import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.logic.FormInfo;
 import org.odk.collect.android.sms.base.BaseSmsTest;
 import org.odk.collect.android.sms.base.SampleData;
@@ -28,42 +26,43 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import javax.inject.Inject;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.odk.collect.android.support.RobolectricHelpers.getApplicationComponent;
+import static org.odk.collect.android.support.RobolectricHelpers.overrideAppDependencyModule;
 import static org.odk.collect.android.utilities.FileUtil.getSmsInstancePath;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
 public class SmsServiceTest extends BaseSmsTest {
-    @Inject
+
     SmsSubmissionManagerContract submissionManager;
-    @Inject
     SmsManager smsManager;
-    private StubSmsService smsService;
-    @Inject
     InstancesDao instancesDao;
-    @Inject
     FormsDao formsDao;
-    @Inject
     RxEventBus eventBus;
+
+    private StubSmsService smsService;
 
     @Before
     public void setUp() {
+        instancesDao = mock(InstancesDao.class);
+        formsDao = mock(FormsDao.class);
+        when(formsDao.isFormEncrypted(anyString(), anyString())).thenReturn(false);
 
-        /*
-         * Setting up dagger to utilize test dependencies across the app.
-         */
-        TestDependencyComponent testComponent = DaggerTestDependencyComponent.builder().application(RuntimeEnvironment.application).build();
-        ((Collect) RuntimeEnvironment.application).setComponent(testComponent);
-        testComponent.inject(this);
+        overrideAppDependencyModule(new AppDependencyModule(instancesDao, formsDao));
+
+        submissionManager = getApplicationComponent().smsSubmissionManagerContract();
+        smsManager = getApplicationComponent().smsManager();
+        eventBus = getApplicationComponent().rxEventBus();
+        smsService = new StubSmsService(smsManager, submissionManager, instancesDao, RuntimeEnvironment.application, eventBus, formsDao);
 
         setDefaultGateway();
-
-        smsService = new StubSmsService(smsManager, submissionManager, instancesDao, RuntimeEnvironment.application, eventBus, formsDao);
     }
 
     @Test
@@ -117,6 +116,27 @@ public class SmsServiceTest extends BaseSmsTest {
         @Override
         protected void startSendMessagesJob(String instanceId) {
             new SmsSender(RuntimeEnvironment.application, instanceId).send();
+        }
+    }
+
+    private static class AppDependencyModule extends org.odk.collect.android.injection.config.AppDependencyModule {
+
+        private final InstancesDao instancesDao;
+        private final FormsDao formsDao;
+
+        AppDependencyModule(InstancesDao instancesDao, FormsDao formsDao) {
+            this.instancesDao = instancesDao;
+            this.formsDao = formsDao;
+        }
+
+        @Override
+        public InstancesDao provideInstancesDao() {
+            return instancesDao;
+        }
+
+        @Override
+        public FormsDao provideFormsDao() {
+            return formsDao;
         }
     }
 }

@@ -46,12 +46,12 @@ public class AppDependencyModule {
     }
 
     @Provides
-    InstancesDao provideInstancesDao() {
+    public InstancesDao provideInstancesDao() {
         return new InstancesDao();
     }
 
     @Provides
-    FormsDao provideFormsDao() {
+    public FormsDao provideFormsDao() {
         return new FormsDao();
     }
 

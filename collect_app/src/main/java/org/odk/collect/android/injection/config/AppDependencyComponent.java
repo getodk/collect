@@ -8,6 +8,7 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.InstanceUploaderListActivity;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.fragments.DataManagerList;
 import org.odk.collect.android.http.CollectServerClient;
 import org.odk.collect.android.logic.PropertyManager;
@@ -26,7 +27,6 @@ import javax.inject.Singleton;
 
 import dagger.BindsInstance;
 import dagger.Component;
-import dagger.android.AndroidInjectionModule;
 
 /**
  * Dagger component for the application. Should include
@@ -39,6 +39,10 @@ import dagger.android.AndroidInjectionModule;
  * Annotated with @Singleton so modules can include @Singletons that will
  * be retained at an application level (as this an instance of this components
  * is owned by the Application object).
+ *
+ * If you need to call a provider directly from the component (in a test
+ * for example) you can add a method with the type you are looking to fetch
+ * (`MyType myType()`) to this interface.
  *
  * To read more about Dagger visit: https://google.github.io/dagger/users-guide
  **/
@@ -97,4 +101,6 @@ public interface AppDependencyComponent {
     SmsManager smsManager();
 
     SmsSubmissionManagerContract smsSubmissionManagerContract();
+
+    RxEventBus rxEventBus();
 }
