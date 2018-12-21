@@ -16,7 +16,7 @@ This is a living document. If you see something that could be improved, edit thi
 ## Submitting a pull request
 To contribute code to ODK Collect, you will need to open a [pull request](https://help.github.com/articles/about-pull-requests/) which will be reviewed by the community and then merged into the core project. Generally, a pull request is submitted when a unit of work is considered complete but it can sometimes be helpful to share ideas through a work in progress (WIP) pull request ([learn more](#work-in-progress-pull-requests)).
 
-1. [Set up your development environment](https://github.com/opendatakit/collect#setting-up-your-development-environment). 
+1. [Set up your development environment](https://github.com/opendatakit/collect#setting-up-your-development-environment).
 
 1. To make sure you have the latest version of the code, set up this repository as [a remote for your fork](https://help.github.com/articles/configuring-a-remote-for-a-fork/) and then [sync your fork](https://help.github.com/articles/syncing-a-fork/).
 
@@ -33,7 +33,7 @@ To contribute code to ODK Collect, you will need to open a [pull request](https:
 1. Push changes to your fork at any time to make them publicly available:
 
         git push
-        
+
 1. Once you have completed your code changes, verify that you have followed the [style guidelines](https://github.com/opendatakit/collect/blob/master/CONTRIBUTING.md#style-guidelines).
 
 1. When your changes are ready to be added to the core ODK Collect project, [open a pull request](https://help.github.com/articles/creating-a-pull-request/). Make sure to set the base fork to `opendatakit/collect`. Describe your changes in the comment, refer to any relevant issues using [keywords for closing issues](https://help.github.com/articles/closing-issues-via-commit-messages/) and tag any person you think might need to know about the changes.
@@ -95,19 +95,81 @@ In addition to contributing code, you can help to triage issues. This can includ
 Follow the [Android style rules](http://source.android.com/source/code-style.html) and the [Google Java style guide](https://google.github.io/styleguide/javaguide.html).
 
 ## UI Components Style guidelines
-Ensure that the added UI components are compatible with both light and dark themes. 
-Follow the below points to get the color for coloring the UI components like text and icons instead of directly using color values (eg. #000000 or R.color.colorName). 
+Ensure that the added UI components are compatible with both light and dark themes.
+Follow the below points to get the color for coloring the UI components like text and icons instead of directly using color values (eg. #000000 or R.color.colorName).
 
 UI Component | Java | Xml _(layouts, drawables, vectors)_:
---- | --- | ---  
-text color | themeUtils.getPrimaryTextColor() | ?primaryTextColor  
-accent color | themeUtils.getAccentColor() | ?colorAccent  
-icon color | themeUtils.getIconColor() | ?iconColor  
-  
+--- | --- | ---
+text color | themeUtils.getPrimaryTextColor() | ?primaryTextColor
+accent color | themeUtils.getAccentColor() | ?colorAccent
+icon color | themeUtils.getIconColor() | ?iconColor
+
 ## Strings
 Always use [string resources](https://developer.android.com/guide/topics/resources/string-resource.html) instead of literal strings. This ensures wording consistency across the project and also enables full translation of the app. Only make changes to the base `res/values/strings.xml` English file and not to the other language files. The translated files are generated from [Transifex](https://www.transifex.com/opendatakit/collect/) where translations can be submitted by the community. Names of software packages or other untranslatable strings should be placed in `res/values/untranslated.xml`.
+
+## Dependency injection
+
+As much as possible to facilitate simpler, more modular and more testable components you should follow the Dependency Inversion principle in Collect Code. An example tutorial on this concept can be found [here](https://www.seadowg.com/dip-lesson/).
+
+Because many Android components don't allow us control over their constructors Collect uses [Dagger](https://google.github.io/dagger/) to 'inject' dependencies. The configuration for Dagger can be found in `AppDepdendencyComponent`.
+
+While it's important to also read the Dagger documentation we've provided some basic instructions on how to use Dagger within Collect below.
+
+### Providing dependencies
+
+To declare a new dependency that objects can inject add a `@Provider` method to the `AppDepedencyModule`:
+
+```java
+@Provider
+public MyDependency providesMyDependency() {
+    return MyDependency();
+}
+```
+
+You can also have Dagger return the same instance every time (i.e. a Singleton) by annotating the method with `@Singleton` as well.
+
+### Injecting dependencies into Activity/Fragment objects
+
+To inject a dependency into the Activity you first need to make Dagger aware it's injecting into that Activity by adding an `inject` to the `AppDependencyComponent` (if it's not already there):
+
+```java
+void inject(MyActivity activity);
+```
+
+Then define a field with the `@Inject` annotation in your Activity:
+
+```java
+@Inject
+MyDependency dependency;
+```
+
+To have Dagger inject the dependency you need to hook the injection into the Activity's `onCreate` (as this is the first part of the lifecycle we have access to):
+
+```java
+public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(bundle);
+    getComponent().inject(this);
+}
+```
+
+### Swapping out dependencies in tests
+
+To swap out depdendencies in a Robolectric test you can override the module the Application object uses to inject objects using provided helpers:
+
+```java
+@Before
+public void setup() {
+    MyDependency mocked = mock(MyDependency.class);
+    RobolectricHelpers.overrideAppDependencyModule(new AppDepedencyModule() {
+      @Override
+      public MyDependency providesMyDependency() {
+        return mocked;
+      }
+    });
+}
+```
 
 ## Code from external sources
 ODK Collect is released under the [Apache 2.0 license](https://www.apache.org/licenses/LICENSE-2.0). Please make sure that any code you include is an OSI-approved [permissive license](https://opensource.org/faq#permissive). **Please note that if no license is specified for a piece of code or if it has an incompatible license such as GPL, using it puts the project at legal risk**.
 
-Sites with compatible licenses (including [StackOverflow](http://stackoverflow.com/)) will sometimes provide exactly the code snippet needed to solve a problem. You are encouraged to use such snippets in ODK Collect as long as you attribute them by including a direct link to the source. In addition to complying with the content license, this provides useful context for anyone reading the code. 
+Sites with compatible licenses (including [StackOverflow](http://stackoverflow.com/)) will sometimes provide exactly the code snippet needed to solve a problem. You are encouraged to use such snippets in ODK Collect as long as you attribute them by including a direct link to the source. In addition to complying with the content license, this provides useful context for anyone reading the code.
